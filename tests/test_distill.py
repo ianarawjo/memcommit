@@ -22,6 +22,10 @@ from memcommit.distill import (
     analyze_distill,
     distill_execution_policy,
 )
+from memcommit.distill_goal_fit import (
+    DISTILL_GOAL_FIT_OPERATION,
+    DISTILL_GOAL_FIT_PAYLOAD_MARKER,
+)
 from memcommit.distill_application import DistillApplyRequest, DistillRequest
 from memcommit.distill_config import DistillSemanticConfig
 from memcommit.distill_runtime import execute_distill, execute_distill_apply
@@ -47,13 +51,28 @@ runner = CliRunner()
 
 
 class DistillProvider:
-    def __init__(self, response=None):
+    def __init__(self, response=None, *, goal_fit_response=None):
         self.response = response
+        self.goal_fit_response = goal_fit_response
         self.calls: list[tuple[str, dict[str, object]]] = []
+        self.goal_fit_calls: list[tuple[str, dict[str, object]]] = []
 
     def complete(self, prompt, *, operation, output_schema=None):
-        assert operation == DISTILL_OPERATION
         assert output_schema is not None
+        if operation == DISTILL_GOAL_FIT_OPERATION:
+            self.goal_fit_calls.append((prompt, output_schema))
+            payload = json.loads(
+                prompt.split(DISTILL_GOAL_FIT_PAYLOAD_MARKER, 1)[1]
+            )
+            aliases = [item["rule_id"] for item in payload["rules"]]
+            response = self.goal_fit_response or {
+                "verdict": "FIT",
+                "reason": "Every proposed Rule is relevant to the Goal.",
+                "considered_rule_ids": aliases,
+                "material_rule_ids": [],
+            }
+            return json.dumps(response)
+        assert operation == DISTILL_OPERATION
         self.calls.append((prompt, output_schema))
         payload = json.loads(prompt.split(DISTILL_PAYLOAD_MARKER, 1)[1])
         aliases = [item["memory_id"] for item in payload["source"]["memories"]]
@@ -116,6 +135,53 @@ def test_distill_accepts_goal_and_context_evidence_as_one_rule_frame():
     assert analysis.outside_memory_uids == ()
     payload = json.loads(provider.calls[0][0].split(DISTILL_PAYLOAD_MARKER, 1)[1])
     assert payload["goal"] == "Recommend a setting for a family conversation."
+    assert analysis.goal_fit is not None
+    assert analysis.goal_fit.verdict == "FIT"
+    assert analysis.goal_fit.considered_rule_uids == (rule.uid,)
+    fit_payload = json.loads(
+        provider.goal_fit_calls[0][0].split(
+            DISTILL_GOAL_FIT_PAYLOAD_MARKER, 1
+        )[1]
+    )
+    assert fit_payload == {
+        "contract_version": 1,
+        "goal": "Recommend a setting for a family conversation.",
+        "rules": [
+            {
+                "rule_id": "r000001",
+                "content": rule.content,
+            }
+        ],
+    }
+
+
+def test_distill_without_goal_skips_goal_fit_audit():
+    _context, frame = _frame()
+    provider = DistillProvider()
+
+    analysis = analyze_distill(frame, goal=None, provider=provider)
+
+    assert analysis.goal_fit is None
+    assert provider.goal_fit_calls == []
+
+
+def test_distill_goal_fit_rejects_incomplete_rule_coverage():
+    _context, frame = _frame()
+    provider = DistillProvider(
+        goal_fit_response={
+            "verdict": "FIT",
+            "reason": "The provider silently skipped the proposed Rule.",
+            "considered_rule_ids": [],
+            "material_rule_ids": [],
+        }
+    )
+
+    with pytest.raises(DistillError, match="omitted, duplicated, or reordered"):
+        analyze_distill(
+            frame,
+            goal="Recommend a setting for a family conversation.",
+            provider=provider,
+        )
 
 
 def test_distill_rejects_silent_source_omission():
@@ -285,6 +351,75 @@ def test_execute_and_apply_distill_create_new_result_and_preserve_source(
     assert metadata["source_context"] == source.name
     assert metadata["rules"][0]["support_memory_uids"] == [first.uid]
     assert metadata["rules"][0]["boundary_memory_uids"] == [second.uid]
+    assert metadata["goal_fit"]["verdict"] == "FIT"
+
+
+def test_distill_not_fit_goal_audit_blocks_apply(isolated_store):
+    store = MemoryStore()
+    source = ops.init("distill/not-fit")
+    ops.add(source, "A quiet setting supported a long conversation.")
+    store.save(source)
+    provider = DistillProvider(
+        goal_fit_response={
+            "verdict": "NOT_FIT",
+            "reason": "The proposed Rule conflicts with the requested setting.",
+            "considered_rule_ids": ["r000001"],
+            "material_rule_ids": ["r000001"],
+        }
+    )
+    result = execute_distill(
+        DistillRequest(
+            context_locator=source.name,
+            goal="Recommend only outdoor settings.",
+        ),
+        store=store,
+        provider_factory=lambda: provider,
+    )
+
+    assert result.analysis.goal_fit is not None
+    assert result.analysis.goal_fit.verdict == "NOT_FIT"
+    with pytest.raises(DistillError, match="do not fit the Goal"):
+        execute_distill_apply(
+            DistillApplyRequest(result=result, output_name="distill/not-fit-result"),
+            store=store,
+        )
+    assert not store.context_exists("distill/not-fit-result")
+
+
+def test_distill_undetermined_goal_audit_does_not_block_apply(isolated_store):
+    store = MemoryStore()
+    source = ops.init("distill/undetermined")
+    ops.add(source, "A quiet setting supported a long conversation.")
+    store.save(source)
+    provider = DistillProvider(
+        goal_fit_response={
+            "verdict": "UNDETERMINED",
+            "reason": "The Goal leaves the intended setting ambiguous.",
+            "considered_rule_ids": ["r000001"],
+            "material_rule_ids": ["r000001"],
+        }
+    )
+    result = execute_distill(
+        DistillRequest(
+            context_locator=source.name,
+            goal="Recommend the appropriate setting.",
+        ),
+        store=store,
+        provider_factory=lambda: provider,
+    )
+
+    receipt = execute_distill_apply(
+        DistillApplyRequest(
+            result=result,
+            output_name="distill/undetermined-result",
+        ),
+        store=store,
+    )
+
+    assert result.analysis.goal_fit is not None
+    assert result.analysis.goal_fit.verdict == "UNDETERMINED"
+    assert receipt.result_memory_uids
+    assert store.context_exists("distill/undetermined-result")
 
 
 def test_distill_exact_prepared_analysis_avoids_provider_construction(
@@ -616,14 +751,15 @@ def test_ground_distill_rejects_candidate_change_during_provider(
 
     class ConcurrentProvider(DistillProvider):
         def complete(self, prompt, *, operation, output_schema=None):
-            changed = store.load_direct(candidates.name)
-            changed.add(
-                Memory(
-                    uid="00000000-0000-4000-8000-000000000213",
-                    content="A concurrent candidate proposition.",
+            if operation == DISTILL_OPERATION:
+                changed = store.load_direct(candidates.name)
+                changed.add(
+                    Memory(
+                        uid="00000000-0000-4000-8000-000000000213",
+                        content="A concurrent candidate proposition.",
+                    )
                 )
-            )
-            store.save(changed)
+                store.save(changed)
             return super().complete(
                 prompt,
                 operation=operation,

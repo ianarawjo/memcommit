@@ -21,11 +21,14 @@ from memcommit.store import MemoryStore
 from tests.elaborate_validation_support import (
     passing_elaborate_validation_response,
 )
+from tests.distill_goal_fit_support import passing_distill_goal_fit_response
 
 
 class AgentSemanticProvider:
     def complete(self, prompt, *, operation, output_schema=None):
-        validation = passing_elaborate_validation_response(prompt, operation)
+        validation = passing_distill_goal_fit_response(prompt, operation)
+        if validation is None:
+            validation = passing_elaborate_validation_response(prompt, operation)
         if validation is not None:
             return validation
         if operation == "fit_propositions":

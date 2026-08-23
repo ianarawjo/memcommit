@@ -23,14 +23,18 @@ from memcommit.store import MemoryStore
 from tests.elaborate_validation_support import (
     passing_elaborate_validation_response,
 )
+from tests.distill_goal_fit_support import passing_distill_goal_fit_response
 
 
 class SemanticProvider:
     def complete(self, prompt, *, operation, output_schema=None):
         assert output_schema is not None
-        validation = passing_elaborate_validation_response(prompt, operation)
-        if validation is not None:
-            return validation
+        distill_validation = passing_distill_goal_fit_response(prompt, operation)
+        if distill_validation is not None:
+            return distill_validation
+        elaborate_validation = passing_elaborate_validation_response(prompt, operation)
+        if elaborate_validation is not None:
+            return elaborate_validation
         if operation == "fit_propositions":
             payload = json.loads(prompt.split(FIT_JUDGMENT_PAYLOAD_MARKER, 1)[1])
             question = payload["questions"][0]

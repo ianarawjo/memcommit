@@ -27,6 +27,7 @@ from memcommit.store import MemoryStore
 from tests.elaborate_validation_support import (
     passing_elaborate_validation_response,
 )
+from tests.distill_goal_fit_support import passing_distill_goal_fit_response
 
 
 LONG_RULE = (
@@ -40,6 +41,9 @@ LONG_RULE = (
 
 class _LongDistillProvider:
     def complete(self, prompt, *, operation, output_schema=None):
+        validation = passing_distill_goal_fit_response(prompt, operation)
+        if validation is not None:
+            return validation
         assert operation == DISTILL_OPERATION
         payload = json.loads(prompt.split(DISTILL_PAYLOAD_MARKER, 1)[1])
         aliases = [item["memory_id"] for item in payload["source"]["memories"]]

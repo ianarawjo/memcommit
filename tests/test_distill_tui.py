@@ -8,6 +8,7 @@ from prompt_toolkit.output import DummyOutput
 from memcommit.context import Context, Memory
 from memcommit.context_targeting.tui.picker import ContextMemoryRow
 from memcommit.distill import DistillAnalysis, DistilledRule
+from memcommit.distill_goal_fit import DistillGoalFit
 from memcommit.distill_application import (
     DistillRequest,
     DistillResult,
@@ -57,6 +58,14 @@ def _result(*, descendants: bool = False) -> DistillResult:
             ),
         ),
         outside_memory_uids=(),
+        goal_fit=DistillGoalFit(
+            verdict="FIT",
+            reason="The proposed Rule is relevant to and compatible with the Goal.",
+            considered_rule_uids=(
+                "00000000-0000-4000-8000-000000000031",
+            ),
+            material_rule_uids=(),
+        ),
     )
     return DistillResult(
         analysis=analysis,

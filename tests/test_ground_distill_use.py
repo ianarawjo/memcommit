@@ -18,6 +18,7 @@ from memcommit.ground import (
 )
 from memcommit.ground_distill import execute_ground_distill, freeze_ground_distill
 from memcommit.store import MemoryStore
+from tests.distill_goal_fit_support import passing_distill_goal_fit_response
 
 
 class CapturingDistillProvider:
@@ -25,6 +26,9 @@ class CapturingDistillProvider:
         self.payloads: list[dict[str, object]] = []
 
     def complete(self, prompt, *, operation, output_schema=None):
+        validation = passing_distill_goal_fit_response(prompt, operation)
+        if validation is not None:
+            return validation
         payload = json.loads(prompt.split(DISTILL_PAYLOAD_MARKER, 1)[1])
         self.payloads.append(payload)
         memories = payload["source"]["memories"]

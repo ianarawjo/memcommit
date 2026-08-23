@@ -26,6 +26,7 @@ from memcommit.distill import (
     DistilledRule,
 )
 from memcommit.distill_application import DistillResult
+from memcommit.distill_goal_fit import DistillGoalFit
 from memcommit.fit_judgment import FitAssessment
 from memcommit.forget_application import ForgetAnalysisRequest, run_forget_analysis
 from memcommit.forget_application import FrozenForgetSource
@@ -42,6 +43,7 @@ from memcommit.resolve_application import (
 from memcommit.summarize import collect_summary_frame
 from memcommit.summarize_application import FrozenSummarySource
 from memcommit.store import MemoryStore, context_record_digest
+from tests.distill_goal_fit_support import passing_distill_goal_fit_response
 
 
 runner = CliRunner(mix_stderr=False)
@@ -88,6 +90,9 @@ class _ForgetProvider:
 
 class _DistillProvider:
     def complete(self, prompt, *, operation, output_schema=None):
+        validation = passing_distill_goal_fit_response(prompt, operation)
+        if validation is not None:
+            return validation
         assert operation == DISTILL_OPERATION
         payload = json.loads(prompt.split(DISTILL_PAYLOAD_MARKER, 1)[1])
         aliases = [memory["memory_id"] for memory in payload["source"]["memories"]]
@@ -243,6 +248,14 @@ def _distill_result() -> DistillResult:
             ),
         ),
         outside_memory_uids=(),
+        goal_fit=DistillGoalFit(
+            verdict="FIT",
+            reason="The proposed Rule is relevant to and compatible with the Goal.",
+            considered_rule_uids=(
+                "00000000-0000-4000-8000-000000000131",
+            ),
+            material_rule_uids=(),
+        ),
     )
     return DistillResult(
         analysis=analysis,

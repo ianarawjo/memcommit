@@ -25,11 +25,17 @@ from memcommit.distill_elaborate_reference import (
     distill_elaborate_reference_payload,
     render_distill_elaborate_reference_examples,
 )
+from memcommit.distill_goal_fit import (
+    DistillGoalFit,
+    DistillGoalFitError,
+    DistillGoalFitRule,
+    audit_distill_goal_fit,
+)
 from memcommit.summarize import SummaryFrame
 
 
 DISTILL_OPERATION = "distill_context"
-DISTILL_PROVIDER_CONTRACT_VERSION = 7
+DISTILL_PROVIDER_CONTRACT_VERSION = 8
 DISTILL_PAYLOAD_MARKER = "DISTILL CONTEXT PAYLOAD:\n"
 
 
@@ -130,6 +136,27 @@ class DistilledRule:
             raise DistillError("Distilled Rule evidence must be unique and disjoint.")
 
 
+def _validate_distill_evidence_coverage(
+    source: SummaryFrame,
+    rules: tuple[DistilledRule, ...],
+    outside_memory_uids: tuple[str, ...],
+) -> None:
+    available = {item.memory_uid for item in source.sources}
+    cited = {
+        uid
+        for rule in rules
+        for uid in (*rule.support_memory_uids, *rule.boundary_memory_uids)
+    }
+    outside = set(outside_memory_uids)
+    if len(outside_memory_uids) != len(outside):
+        raise DistillError("Distill outside evidence contains duplicates.")
+    if cited & outside or cited | outside != available:
+        raise DistillError(
+            "Distill must account for every Source Memory exactly as cited "
+            "evidence or outside the proposed Rules."
+        )
+
+
 @dataclass(frozen=True)
 class DistillAnalysis:
     """One complete, non-mutating Distill proposal."""
@@ -140,6 +167,7 @@ class DistillAnalysis:
     overview: str
     rules: tuple[DistilledRule, ...]
     outside_memory_uids: tuple[str, ...]
+    goal_fit: DistillGoalFit | None = None
     semantic_config: DistillSemanticConfig = DEFAULT_DISTILL_SEMANTIC_CONFIG
     provider_contract_version: int = DISTILL_PROVIDER_CONTRACT_VERSION
 
@@ -152,23 +180,25 @@ class DistillAnalysis:
             not isinstance(self.goal, str) or not self.goal.strip()
         ):
             raise DistillError("Distill Goal must be nonempty text when supplied.")
+        if self.goal is None and self.goal_fit is not None:
+            raise DistillError("Distill without a Goal cannot carry a Goal Fit audit.")
+        if self.goal is not None and not isinstance(self.goal_fit, DistillGoalFit):
+            raise DistillError("Distill with a Goal requires a Goal Fit audit.")
         if not isinstance(self.overview, str) or not self.overview.strip():
             raise DistillError("Distill overview must be nonempty text.")
         if len({rule.content.casefold() for rule in self.rules}) != len(self.rules):
             raise DistillError("Distill returned duplicate Rule contents.")
-        available = {source.memory_uid for source in self.source.sources}
-        cited = {
-            uid
-            for rule in self.rules
-            for uid in (*rule.support_memory_uids, *rule.boundary_memory_uids)
-        }
-        outside = set(self.outside_memory_uids)
-        if len(self.outside_memory_uids) != len(outside):
-            raise DistillError("Distill outside evidence contains duplicates.")
-        if cited & outside or cited | outside != available:
+        _validate_distill_evidence_coverage(
+            self.source,
+            self.rules,
+            self.outside_memory_uids,
+        )
+        if self.goal_fit is not None and self.goal_fit.considered_rule_uids != tuple(
+            rule.uid for rule in self.rules
+        ):
             raise DistillError(
-                "Distill must account for every Source Memory exactly as cited "
-                "evidence or outside the proposed Rules."
+                "Distill Goal Fit must consider every proposed Rule exactly once "
+                "and in order."
             )
         if self.provider_contract_version != DISTILL_PROVIDER_CONTRACT_VERSION:
             raise DistillError("Unsupported Distill provider contract version.")
@@ -193,6 +223,19 @@ class DistillAnalysis:
                 for rule in self.rules
             ],
             "outside_memory_uids": list(self.outside_memory_uids),
+            "goal_fit": (
+                None
+                if self.goal_fit is None
+                else {
+                    "verdict": self.goal_fit.verdict,
+                    "reason": self.goal_fit.reason,
+                    "considered_rule_uids": list(
+                        self.goal_fit.considered_rule_uids
+                    ),
+                    "material_rule_uids": list(self.goal_fit.material_rule_uids),
+                    "contract_version": self.goal_fit.contract_version,
+                }
+            ),
             "semantic_config": {
                 "max_rules": self.semantic_config.max_rules,
                 "rule_text_limit": self.semantic_config.rule_text_limit,
@@ -235,6 +278,18 @@ def validate_distill_analysis(
     for rule in analysis.rules:
         _text(rule.content, "Rule content", limit=config.rule_text_limit)
         _text(rule.rationale, "Rule rationale", limit=config.rationale_limit)
+
+
+def ensure_distill_goal_fit_allows_add(analysis: DistillAnalysis) -> None:
+    """Block publication only when the complete Rule set does not fit its Goal."""
+
+    if not isinstance(analysis, DistillAnalysis):
+        raise TypeError("Distill Goal Fit requires a DistillAnalysis.")
+    if analysis.goal_fit is not None and analysis.goal_fit.verdict == "NOT_FIT":
+        raise DistillError(
+            "The proposed Distill Rules do not fit the Goal; no generated "
+            "Memories were added."
+        )
 
 
 def _strict_json_object(pairs: list[tuple[str, object]]) -> dict[str, object]:
@@ -562,15 +617,30 @@ def analyze_distill(
         outside_uids = tuple(by_alias[alias] for alias in outside_aliases)
     except KeyError as error:
         raise DistillError("Distill cited an unavailable outside Memory.") from error
+    frozen_rules = tuple(rules)
+    _validate_distill_evidence_coverage(frame, frozen_rules, outside_uids)
+    overview = _text(decoded["overview"], "overview", limit=config.overview_limit)
+    goal_fit: DistillGoalFit | None = None
+    if normalized_goal is not None:
+        try:
+            goal_fit = audit_distill_goal_fit(
+                normalized_goal,
+                tuple(
+                    DistillGoalFitRule(uid=rule.uid, content=rule.content)
+                    for rule in frozen_rules
+                ),
+                provider=provider,
+            )
+        except DistillGoalFitError as error:
+            raise DistillError(str(error)) from error
     analysis = DistillAnalysis(
         uid=analysis_uid,
         source=frame,
         goal=normalized_goal,
-        overview=_text(
-            decoded["overview"], "overview", limit=config.overview_limit
-        ),
-        rules=tuple(rules),
+        overview=overview,
+        rules=frozen_rules,
         outside_memory_uids=outside_uids,
+        goal_fit=goal_fit,
         semantic_config=config,
     )
     validate_distill_analysis(analysis, config=config)

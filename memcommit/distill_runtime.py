@@ -10,7 +10,12 @@ import uuid
 
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.context_naming import validate_portable_context_name
-from memcommit.distill import DistillError, DistillProvider
+from memcommit.distill import (
+    DistillAnalysis,
+    DistillError,
+    DistillProvider,
+    ensure_distill_goal_fit_allows_add,
+)
 from memcommit.distill_application import (
     DistillApplyReceipt,
     DistillApplyRequest,
@@ -128,6 +133,19 @@ class PreparedDistillAdd:
     source_port: LocalMemoryStoreDistillSourcePort
 
 
+def _goal_fit_record(analysis: DistillAnalysis) -> dict[str, object] | None:
+    goal_fit = analysis.goal_fit
+    if goal_fit is None:
+        return None
+    return {
+        "contract_version": goal_fit.contract_version,
+        "verdict": goal_fit.verdict,
+        "reason": goal_fit.reason,
+        "considered_rule_uids": list(goal_fit.considered_rule_uids),
+        "material_rule_uids": list(goal_fit.material_rule_uids),
+    }
+
+
 def prepare_distill_add(
     request: DistillRequest,
     *,
@@ -175,6 +193,7 @@ def apply_prepared_distill_add(
     analysis = prepared.result.analysis
     if not analysis.rules:
         raise DistillError("Distill produced no supported Rules to add.")
+    ensure_distill_goal_fit_allows_add(analysis)
     current = prepared.source_port.revalidate(prepared.result.frozen_source)
     if current.digest != analysis.source.digest or current != analysis.source:
         raise DistillError(
@@ -207,7 +226,7 @@ def apply_prepared_distill_add(
         contents=tuple(rule.content for rule in analysis.rules),
         source_bindings=source_bindings,
         operation_args={
-            "version": 2,
+            "version": 3,
             "analysis_uid": analysis.uid,
             "analysis_digest": analysis.digest,
             "provider_contract_version": analysis.provider_contract_version,
@@ -228,6 +247,7 @@ def apply_prepared_distill_add(
             ),
             "goal": analysis.goal,
             "goal_digest": goal_digest,
+            "goal_fit": _goal_fit_record(analysis),
             "rules": result_records,
             "outside_memory_uids": list(analysis.outside_memory_uids),
         },
@@ -342,7 +362,7 @@ class MemoryStoreDistillOutputPort:
                 command="distill",
                 args={
                     "context_creation": {
-                        "version": 1,
+                        "version": 2,
                         "context_uid": output.uid,
                         "context_name": output.name,
                     },
@@ -368,6 +388,7 @@ class MemoryStoreDistillOutputPort:
                         ),
                         "goal": analysis.goal,
                         "goal_digest": goal_digest,
+                        "goal_fit": _goal_fit_record(analysis),
                         "result_context": output.name,
                         "rules": result_records,
                         "outside_memory_uids": list(analysis.outside_memory_uids),

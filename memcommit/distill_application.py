@@ -11,6 +11,7 @@ from memcommit.distill import (
     DistillError,
     DistillProvider,
     analyze_distill,
+    ensure_distill_goal_fit_allows_add,
     validate_distill_analysis,
     validate_distill_input,
     validate_distill_provider_plan,
@@ -164,4 +165,5 @@ def apply_distill(
 
     if not request.result.analysis.rules:
         raise DistillError("Distill produced no supported Rules to materialize.")
+    ensure_distill_goal_fit_allows_add(request.result.analysis)
     return output_port.materialize(request, source_port=source_port)

@@ -13,11 +13,16 @@ import memcommit.commands.impact_process_local as impact_process_local
 import memcommit.ops as ops
 from memcommit.cli import app
 from memcommit.distill import DISTILL_OPERATION, DISTILL_PAYLOAD_MARKER
+from memcommit.distill_goal_fit import (
+    DISTILL_GOAL_FIT_OPERATION,
+    DISTILL_GOAL_FIT_PAYLOAD_MARKER,
+)
 from memcommit.elaborate import ELABORATE_OPERATION, ELABORATE_PAYLOAD_MARKER
 from memcommit.store import MemoryStore, context_record_digest
 from tests.elaborate_validation_support import (
     passing_elaborate_validation_response,
 )
+from tests.distill_goal_fit_support import passing_distill_goal_fit_response
 
 
 runner = CliRunner()
@@ -148,6 +153,9 @@ class _DistillProvider:
     calls: list[dict[str, object]] = []
 
     def complete(self, prompt, *, operation, output_schema=None):
+        validation = passing_distill_goal_fit_response(prompt, operation)
+        if validation is not None:
+            return validation
         assert operation == DISTILL_OPERATION
         payload = json.loads(prompt.split(DISTILL_PAYLOAD_MARKER, 1)[1])
         type(self).calls.append(payload)
@@ -369,6 +377,68 @@ def test_distill_endpoint_matrix_adds_to_existing_target(
         line.startswith(("RECEIPT ·", "CHECKPOINT ·", "RECOVERY ·"))
         for line in result.output.splitlines()
     )
+
+
+def test_distill_goal_not_fit_blocks_direct_add(
+    isolated_store,
+    monkeypatch,
+) -> None:
+    store = MemoryStore()
+    source = _create(
+        store,
+        "goal-fit/source",
+        "Apple trades as AAPL on Nasdaq.",
+        "Microsoft trades as MSFT on Nasdaq.",
+    )
+    target = _create(store, "goal-fit/target", "Existing target content.")
+    store.set_current(target.name)
+
+    class _NotFitProvider(_DistillProvider):
+        def complete(self, prompt, *, operation, output_schema=None):
+            if operation == DISTILL_GOAL_FIT_OPERATION:
+                payload = json.loads(
+                    prompt.split(DISTILL_GOAL_FIT_PAYLOAD_MARKER, 1)[1]
+                )
+                aliases = [rule["rule_id"] for rule in payload["rules"]]
+                return json.dumps(
+                    {
+                        "verdict": "NOT_FIT",
+                        "reason": "The proposed ticker Rule conflicts with the Goal.",
+                        "considered_rule_ids": aliases,
+                        "material_rule_ids": aliases,
+                    }
+                )
+            return super().complete(
+                prompt,
+                operation=operation,
+                output_schema=output_schema,
+            )
+
+    monkeypatch.setattr(
+        distill_command,
+        "connect_semantic_provider",
+        _NotFitProvider,
+    )
+
+    result = runner.invoke(
+        app,
+        [
+            "distill",
+            "--from",
+            source.name,
+            "--to",
+            target.name,
+            "--goal",
+            "Recommend only a non-ticker identifier.",
+        ],
+    )
+
+    assert result.exit_code == 1
+    assert "do not fit the Goal" in result.output
+    assert [
+        memory.content for memory in store.load_direct(target.name).memories.values()
+    ] == ["Existing target content."]
+    assert store.list_checkpoints(target.name) == []
 
 
 @pytest.mark.parametrize("operation", ("elaborate", "distill"))

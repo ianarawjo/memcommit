@@ -85,6 +85,7 @@ def _distill_document():
     from memcommit.context import Context, Memory
     from memcommit.distill import DistillAnalysis, DistilledRule
     from memcommit.distill_application import DistillResult
+    from memcommit.distill_goal_fit import DistillGoalFit
     from memcommit.interfaces.tui.operations.distill.adapter import project_distill_result
     from memcommit.summarize import collect_summary_scope
     from memcommit.summarize_application import FrozenSummarySource
@@ -120,6 +121,14 @@ def _distill_document():
             ),
         ),
         outside_memory_uids=(),
+        goal_fit=DistillGoalFit(
+            verdict="FIT",
+            reason="The proposed Rule is relevant to and compatible with the Goal.",
+            considered_rule_uids=(
+                "00000000-0000-4000-8000-000000000104",
+            ),
+            material_rule_uids=(),
+        ),
     )
     return project_distill_result(
         DistillResult(

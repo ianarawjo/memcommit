@@ -28,6 +28,15 @@ even when a Goal exists. Top-down proposal generation is owned by Elaborate:
 a Goal may suggest Rules, and Rules may suggest Case propositions, but those
 outputs remain explicitly unverified.
 
+When a Goal is present, Distill runs one second, whole-result Goal Fit audit
+after the evidence-bound Rule set has been decoded. The audit asks only whether
+every proposed Rule is materially relevant to and compatible with the Goal.
+It does not turn Goal text into evidence, require the Goal wording to reappear
+as a Rule, or invent a missing Rule. The result is `FIT`, `NOT_FIT`, or
+`UNDETERMINED`; `NOT_FIT` blocks every Add path, while `UNDETERMINED` remains a
+recorded non-blocking judgment. This asymmetry preserves Goal-as-focus meaning
+while preventing a known incompatible proposal from being published.
+
 This separates neighboring operations:
 
 - Summarize produces process-local comprehension.
@@ -65,6 +74,12 @@ appear in a Rule's support or boundary fields. Provider contract version 6
 prevented prepared results from the earlier unreferenced prompt or partial
 form audit from replaying under that stricter meaning. Version 7 removes the
 arbitrary default Rule-count ceiling.
+
+Provider contract version 8 adds the exhaustive post-generation Goal Fit
+record. Its decoder requires every proposed Rule exactly once and in order;
+`NOT_FIT` and `UNDETERMINED` must identify the material Rule UIDs. An empty
+supported Rule set is deterministically `FIT` because a relevance focus cannot
+itself authorize a Rule and there is no proposal to contradict it.
 
 Distill is `WHOLE_FRAME_ONLY`. Relations among any Source propositions can
 change the complete Rule set, so an oversized frame is rejected instead of
@@ -117,6 +132,8 @@ checkpoint only while the exact Source bindings and Target digest still match.
 Source and Target may be identical: one digest then protects the shared
 pre-image, and the provider never sees output from its own turn. Repeating the
 command is intentionally a fresh derivation over the now-larger Context.
+When a Goal exists, publication additionally requires that its frozen Goal Fit
+audit is present and is not `NOT_FIT`.
 
 `mem impact distill` accepts the same endpoint matrix and prepares the same
 exact proposal without writing a Memory or checkpoint. This explicit Impact
@@ -201,7 +218,9 @@ Target names, Source scope/digest, Goal digest, provider contract, Rule
 evidence, outside evidence, analysis digest, and exact result Memory UIDs. A
 distinct Source remains unchanged. When Source equals Target, only the new
 Rules change it. The compatibility require-new Apply retains its earlier
-checkpoint contract.
+checkpoint contract. Version-3 Distill operation metadata also records the
+Goal Fit verdict, reason, complete considered Rule UIDs, and material Rule UIDs
+without adding another participant-facing report.
 
 The current runtime rejects any granted Source before provider connection.
 Visibility or `READ` alone does not authorize derivation or retention. A later
@@ -218,6 +237,8 @@ prompt that an agent or pipeline cannot answer.
 
 - no persisted Distill hidden receipt/prewarm installer;
 - no safe subset or ancestor cache projection;
+- Goal Fit is a bounded semantic reading audit, not proof of factual truth or
+  evidence completeness; `UNDETERMINED` intentionally does not block Add;
 - no durable Distill review session or resume path;
 - no granted-frame derivation;
 - no TUI Goal editor; and
