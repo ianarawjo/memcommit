@@ -7,26 +7,31 @@ items and applying provider-confirmed semantic equivalence. That made the
 obvious command fail for a Context containing two Memories with the same text:
 `mem dedup` demanded an opaque finder handoff instead of removing the copy.
 
-`mem dedup [CONTEXT]` and `MemCommitClient.dedup(context_name)` now have one
-provider-free meaning. They examine direct items through a role-specific exact
-identity key, retain the first occurrence UID in the Context's explicit item
-order, remove every later occurrence in that group, and record the whole
-change in one checkpoint. With no operand the command uses the Context that
-was current when the command began. Existing Context locator syntax is
-resolved through the shared locator boundary.
+`mem dedup [CONTEXT]` and `MemCommitClient.dedup(context_name)` have one
+provider-free meaning. Direct reach examines one Context; recursive reach
+freezes the selected local lexical subtree and examines every member as an
+independent direct frame. In either shape, Dedup uses a role-specific exact
+identity key, retains the first occurrence UID in each Context's explicit item
+order, and removes every later occurrence in that Context-local group. With no
+operand the command uses the Context that was current when the command began.
+Existing Context locator syntax is resolved through the shared locator
+boundary.
 
 ```text
-direct Context
+direct Context or frozen local lexical subtree
+  -> independent direct frame per Context
   -> same-role exact identity groups
   -> first-in-Context survivor per group
-  -> reference and freshness validation
-  -> one atomic removal checkpoint
+  -> complete graph reference and freshness validation
+  -> one atomic command unit, with one checkpoint per changed Context
 ```
 
 There is no semantic provider call, candidate screen, survivor picker,
 finding receipt, or second `--apply` invocation. The command invocation is the
 approval boundary, matching other immediately Undoable deterministic commands.
 A no-op prints that no exact duplicates exist and creates no checkpoint.
+Recursive publication is exception-atomic and binds all changed checkpoints
+with one operation UID, so `mem undo` restores the command as one unit.
 
 ## Invariants
 
@@ -46,8 +51,9 @@ A no-op prints that no exact duplicates exist and creates no checkpoint.
   their authorization and execution contract is distinct.
 - The earliest direct occurrence retains its exact role, UID, provenance, and
   position. Later same-role exact occurrences are removed.
-- Every exact group in the frozen Context is applied together or nothing is
-  published. A changed Context digest fails before mutation.
+- Every exact group in the frozen direct or lexical scope is applied together
+  or nothing is published. A changed Context digest or subtree membership
+  fails before mutation.
 - An inbound `MemoryRef` to any would-be removed owned Memory UID blocks the
   whole command. Retargeting a reference is not inferred merely because
   content is equal.
@@ -80,5 +86,12 @@ Hidden `consolidate` remains only the exact Dedun review replay route.
 - Automatically migrating inbound references was rejected for version 1. A
   reference names identity, not just current text, so migration needs its own
   reviewed contract.
-- Cross-Context grouping is intentionally out of scope. Exact Dedup changes one
-  direct Context per invocation.
+- Cross-Context grouping is intentionally out of scope. Recursive Dedup may
+  change several Context records in one invocation, but the direct items in
+  each Context form a separate identity frame; matching content in a parent
+  and child never creates one group.
+- Recursive Apply never follows Embed or Reference edges and never crosses a
+  granted public namespace boundary. Read-only Find Duplicates may report
+  readable granted lexical descendants, while mutating them requires separate
+  exact invocations because one command cannot claim atomicity across authority
+  stores.

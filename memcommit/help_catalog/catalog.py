@@ -259,10 +259,10 @@ _OPERATIONS = (
         "dedup",
         "Remove same-role exact duplicates (dup) immediately, retaining the "
         "first existing UID for each role-specific identity group.",
-        "Direct Context items -> role-aware exact groups -> atomic removal",
+        "Direct Context frames -> role-aware exact groups -> atomic removal",
         ExecutionKind.DETERMINISTIC,
-        "Deletes later exact copies in one checkpoint; no provider or TUI",
-        "One exact direct Context; cross-role items never merge and inbound references block Memory removal",
+        "Deletes later exact copies in one command unit; no provider or TUI",
+        "Exact root or local lexical subtree; Contexts and roles never merge and inbound references block Memory removal",
     ),
     _operation(
         "dedun",
@@ -295,7 +295,7 @@ _OPERATIONS = (
         "Direct Context items -> role-aware exact DUP groups",
         ExecutionKind.DETERMINISTIC,
         "Creates an exact-duplicate report without editing the Source",
-        "One exact direct Context",
+        "Exact root or readable lexical subtree; every Context remains an independent frame",
     ),
     _operation(
         "find-redundancies",

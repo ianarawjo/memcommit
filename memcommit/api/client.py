@@ -495,12 +495,18 @@ class MemCommitClient:
     def find_duplicates(
         self,
         context_name: str | None = None,
+        *,
+        include_descendants: bool = False,
     ) -> ExactDuplicateFindResult:
-        """Find exact direct-Memory duplicate groups without mutation."""
+        """Find exact groups in one direct or lexical Context scope."""
 
         from memcommit.api._operations.exact_duplicates import find_duplicates_exact
 
-        return find_duplicates_exact(self._runtime, context_name)
+        return find_duplicates_exact(
+            self._runtime,
+            context_name,
+            include_descendants=include_descendants,
+        )
 
     def find_ambiguities(
         self,
@@ -562,12 +568,21 @@ class MemCommitClient:
             candidate_uid=candidate_uid,
         )
 
-    def dedup(self, context_name: str | None = None) -> ExactDedupResult:
-        """Remove same-role exact duplicate direct items in one checkpoint."""
+    def dedup(
+        self,
+        context_name: str | None = None,
+        *,
+        include_descendants: bool = False,
+    ) -> ExactDedupResult:
+        """Remove exact groups from one direct or atomic lexical scope."""
 
         from memcommit.api._operations.exact_dedup import dedup_exact
 
-        return dedup_exact(self._runtime, context_name)
+        return dedup_exact(
+            self._runtime,
+            context_name,
+            include_descendants=include_descendants,
+        )
 
     def plan_dedun(
         self,

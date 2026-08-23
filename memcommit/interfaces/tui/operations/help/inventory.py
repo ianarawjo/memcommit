@@ -450,6 +450,7 @@ COMMAND_FORMS = {
     "dedup": (
         "mem dedup (remove exact duplicates from the current Context)",
         "mem dedup [context] (remove exact duplicates from one explicit Context)",
+        "mem dedup [context] -r (atomically deduplicate each local lexical Context frame)",
     ),
     "dedun": (
         "mem dedun (immediately resolve exact plus semantic DUN groups in the current Context)",
@@ -623,6 +624,7 @@ COMMAND_FORMS = {
     "find-duplicates": (
         "mem find-duplicates (report exact duplicates in the current Context)",
         "mem find-duplicates [context] (report exact duplicates in one explicit Context)",
+        "mem find-duplicates [context] -r (report each readable lexical Context independently)",
         "mem find-duplicates --context [context] (compatibility alias)",
     ),
     "find-redundancies": (

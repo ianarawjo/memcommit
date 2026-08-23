@@ -185,7 +185,7 @@
           "docs/dedup-callable-boundary-matrix.md",
           "docs/dedup-design-rationale.md"
         ],
-        "reason": "The direct CLI and public Python routes enter one provider-free role-aware exact application boundary that retains first-in-Context occurrence UIDs, never merges roles, and removes later same-identity Memory, Embed, or Reference copies in one checkpoint."
+        "reason": "The CLI and public Python routes enter one provider-free role-aware exact application boundary for direct or local lexical reach, retain first-in-Context occurrence UIDs without cross-Context or cross-role grouping, and publish recursive changes atomically as one Undoable command unit."
       },
       "delete": {
         "evidence": [
@@ -200,7 +200,7 @@
           "docs/find-duplicates-callable-boundary-matrix.md",
           "docs/dedup-design-rationale.md"
         ],
-        "reason": "The direct CLI and public Python routes share one provider-free role-aware exact-group analysis for eligible Memory, Embed, and Reference items and publish a complete typed read-only report without mutation or checkpoint creation."
+        "reason": "The CLI and public Python routes share one provider-free role-aware exact-group analysis for direct or readable lexical reach, preserve each Context as an independent Memory, Embed, and Reference frame, and publish a complete typed read-only report without mutation or checkpoint creation."
       },
       "find-redundancies": {
         "evidence": [

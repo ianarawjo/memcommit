@@ -94,11 +94,14 @@ selected Context record.
 | `profile grant create` | resource root | frozen resource subtree | none |
 | `profile grant update` | replace with root | refreeze current subtree | omission preserves the existing frozen scope |
 | `find` / ordinary `query` / `summarize` | both traversal axes false | lexical descendants and embedded traversal | operation-specific axis flags override the preset |
+| `find-duplicates` / `dedup` | one exact direct Context | each lexical Context in the frozen subtree, judged independently | recursive Dedup remains within one local Store and never follows embeds |
 | `compare` / `meld` / `update` / `sever` | every endpoint root | every endpoint subtree | role-qualified long flags override individual endpoints |
 | directional Update `impact` | both endpoint roots | both endpoint subtrees | role-qualified flags; saved-session and Atomize routes reject presets |
 
-Atomize, Forget, and the quality finders remain direct-only rather than
-recognizing a recursive option that has no executable meaning.
+Atomize, Forget, and the semantic quality finders remain direct-only rather
+than recognizing a recursive option that has no executable meaning. Exact
+Find Duplicates and Dedup are different: they can enumerate a lexical subtree
+without changing the direct, role-aware identity frame used for each Context.
 
 ## Safety and compatibility boundaries
 

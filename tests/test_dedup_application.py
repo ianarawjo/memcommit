@@ -839,6 +839,46 @@ def test_cli_dedup_removes_only_exact_content_without_review(isolated_store):
     assert store.list_checkpoints(context.name)[0]["command"] == "dedup"
 
 
+def test_cli_dedup_recursive_reports_and_applies_independent_context_frames(
+    isolated_store,
+):
+    store = MemoryStore()
+    root = ops.init("dedup/cli-tree")
+    root_first = ops.add(root, "root exact")
+    root_later = ops.add(root, "root exact")
+    child = ops.init("dedup/cli-tree/child")
+    child_first = ops.add(child, "child exact")
+    child_later = ops.add(child, "child exact")
+    store.save(root)
+    store.save(child)
+    store.set_current(root.name)
+
+    result = runner.invoke(app, ["dedup", root.name, "--recursive"])
+
+    assert result.exit_code == 0, result.output
+    assert (
+        "removed 2 exact duplicate direct item(s) from 2 of 2 Context(s)"
+        in result.output
+    )
+    assert "recovery: mem undo (one command unit)" in result.output
+    assert tuple(store.load_direct(root.name).memories) == (root_first.uid,)
+    assert root_later.uid not in store.load_direct(root.name).memories
+    assert tuple(store.load_direct(child.name).memories) == (child_first.uid,)
+    assert child_later.uid not in store.load_direct(child.name).memories
+
+
+def test_cli_dedup_rejects_conflicting_common_scope_flags(isolated_store):
+    store = MemoryStore()
+    context = ops.init("dedup/cli-scope-error")
+    store.save(context)
+    store.set_current(context.name)
+
+    result = runner.invoke(app, ["dedup", "--direct", "--recursive"])
+
+    assert result.exit_code == 2
+    assert "Choose either --direct/-d or --recursive/-r" in result.stderr
+
+
 def test_help_teaches_exact_dedup_read_only_redundancy_and_applying_dedun():
     root_help = runner.invoke(app, ["--help"])
     dedun_help = runner.invoke(app, ["dedun", "--help"])

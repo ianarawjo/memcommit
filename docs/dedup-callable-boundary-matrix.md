@@ -9,15 +9,18 @@ separately under Find Duplicates, Find Redundancies, and Dedun.
 
 | Route | Public input | Application entry | Result/effect |
 | --- | --- | --- | --- |
-| CLI | `mem dedup [CONTEXT]` | shared locator freeze, then `apply_exact_dedup` | short no-op or checkpoint receipt |
-| Public Python | `MemCommitClient.dedup(context_name)` | `api._operations.exact_dedup.dedup_exact`, then `apply_exact_dedup` | typed `ExactDedupResult` |
+| CLI | `mem dedup [CONTEXT] [-d\|-r]` | shared locator/scope freeze, then direct or batch `apply_exact_dedup_scope` | short no-op or one atomic command receipt |
+| Public Python | `MemCommitClient.dedup(context_name, include_descendants=...)` | `api._operations.exact_dedup.dedup_exact`, then the same scope boundary | typed aggregate `ExactDedupResult` with per-Context effects |
 
 Both routes converge on the pure role-aware detector in
 `memcommit.direct_item_duplicates` and the Apply boundary in
 `memcommit.exact_dedup`; the compatibility
 `memcommit.exact_dedup_application` module re-exports its terminal-independent
-grouping and Apply boundary. Neither applying route constructs a provider,
-TUI, survivor choice, or semantic receipt.
+grouping and Apply boundary. Recursive reach enumerates lexical names only,
+keeps groups Context-local, and publishes changed records through
+`save_context_command_batch` after binding the complete local graph and
+namespace. Neither applying route constructs a provider, TUI, survivor choice,
+or semantic receipt.
 
 ## Shared behavior evidence
 
@@ -34,6 +37,10 @@ TUI, survivor choice, or semantic receipt.
 | stale Context | digest mismatch fails before mutation |
 | inbound reference | the complete operation fails and creates no checkpoint |
 | successful mutation | one `exact-dedup-v2` checkpoint with typed groups; recovery is `mem undo` |
+| recursive grouping | each Context retains an independent earliest UID; equal parent/child content never joins one group |
+| recursive freshness | every subtree member, local graph record, and namespace member is frozen before the first write |
+| recursive publication | one checkpoint per changed Context, one operation UID, exception rollback, and one command-unit Undo |
+| granted boundary | read-only recursive discovery may include readable public descendants; recursive Apply fails before crossing a Grant |
 
 The implementation and tests named in `docs/dedup-design-rationale.md` retain
 these invariants. The public Python result and CLI text are projections, not

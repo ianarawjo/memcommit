@@ -859,6 +859,35 @@ def test_cli_exact_duplicate_report_keeps_each_disposition_row_self_contained(
     ) in result.output
 
 
+def test_cli_find_duplicates_recursive_keeps_groups_under_context_headings(
+    isolated_store,
+):
+    store = MemoryStore()
+    root = ops.init("quality/exact-tree")
+    root_first = ops.add(root, "root duplicate")
+    root_later = ops.add(root, "root duplicate")
+    child = ops.init("quality/exact-tree/child")
+    child_first = ops.add(child, "child duplicate")
+    child_later = ops.add(child, "child duplicate")
+    store.save(root)
+    store.save(child)
+    store.set_current(root.name)
+
+    result = runner.invoke(app, ["find-duplicates", root.name, "-r"])
+
+    assert result.exit_code == 0, result.output
+    assert "2 Contexts checked" in result.output
+    assert "2 exact groups" in result.output
+    assert "CONTEXT 1/2 · quality/exact-tree" in result.output
+    assert "CONTEXT 2/2 · quality/exact-tree/child" in result.output
+    assert root_first.uid in store.load_direct(root.name).memories
+    assert root_later.uid in store.load_direct(root.name).memories
+    assert child_first.uid in store.load_direct(child.name).memories
+    assert child_later.uid in store.load_direct(child.name).memories
+    assert store.list_checkpoints(root.name) == []
+    assert store.list_checkpoints(child.name) == []
+
+
 def test_cli_finders_are_read_only_and_each_use_one_provider_call(
     isolated_store,
     monkeypatch,

@@ -6,8 +6,7 @@ from typing import Annotated, Optional
 
 import typer
 
-import memcommit.ops as ops
-from memcommit.authority.access import GrantedReadStore, resolve_context_access
+from memcommit.authority.access import resolve_context_access
 from memcommit.command_attempts import annotate_read_report_attempt
 from memcommit.commands.context_operand import (
     ContextOperandSnapshot,
@@ -17,6 +16,14 @@ from memcommit.commands.findings_render import (
     plural,
     render_cleanup_member,
     render_heading,
+)
+from memcommit.context_targeting.presets import (
+    ContextScopePreset,
+    resolve_scope_preset,
+)
+from memcommit.exact_dedup import (
+    ExactDuplicateContextReport,
+    find_exact_duplicate_scope,
 )
 from memcommit.interfaces.console.identity import collision_safe_uid_prefixes
 from memcommit.interfaces.console.text import display_escape_text
@@ -42,6 +49,25 @@ def cmd(
             help="Context to inspect (defaults to current)",
         ),
     ] = None,
+    direct: Annotated[
+        bool,
+        typer.Option(
+            "--direct",
+            "-d",
+            help="Inspect direct items in the exact Context root only (default)",
+        ),
+    ] = False,
+    recursive: Annotated[
+        bool,
+        typer.Option(
+            "--recursive",
+            "-r",
+            help=(
+                "Inspect each readable lexical descendant as an independent "
+                "direct Context frame"
+            ),
+        ),
+    ] = False,
 ) -> None:
     """Report exact duplicate groups without provider access or mutation."""
 
@@ -49,6 +75,11 @@ def cmd(
         context_name = choose_context_operand(
             context_operand,
             option=context_name,
+        )
+        preset = resolve_scope_preset(
+            direct=direct,
+            recursive=recursive,
+            default=ContextScopePreset.DIRECT,
         )
     except ValueError as error:
         typer.secho(
@@ -66,19 +97,20 @@ def cmd(
             current_name=snapshot.current_name,
             required_permission="READ",
         )
-        context = (
-            GrantedReadStore(access).load_direct(access.display_name)
-            if access.is_granted
-            else access.store.load_direct(access.context_name)
+        scope = find_exact_duplicate_scope(
+            store,
+            access,
+            include_descendants=preset is ContextScopePreset.RECURSIVE,
         )
-        report = ops.find_duplicates(context)
         annotate_read_report_attempt(
             ReadReportTarget(
                 operation="find-duplicates",
-                context_names=(access.display_name,),
+                context_names=tuple(
+                    frame.context_name for frame in scope.contexts
+                ),
                 target_names=(access.display_name,),
                 selection_mode="SINGLE",
-                ranges=("DIRECT",),
+                ranges=("RECURSIVE" if scope.include_descendants else "DIRECT",),
             )
         )
     except (
@@ -97,17 +129,51 @@ def cmd(
         )
         raise typer.Exit(1)
 
-    context_label = display_escape_text(access.display_name)
+    if scope.include_descendants:
+        render_heading(
+            operation_label="Find Duplicates",
+            context_name=display_escape_text(scope.root_name),
+            facts=(
+                plural(len(scope.contexts), "Context") + " checked",
+                plural(scope.item_count, "direct item") + " checked",
+                plural(scope.group_count, "exact group"),
+                plural(scope.duplicate_count, "proposed absorption"),
+            ),
+        )
+        for index, frame in enumerate(scope.contexts, start=1):
+            typer.echo()
+            typer.secho(
+                f"CONTEXT {index}/{len(scope.contexts)} · "
+                f"{display_escape_text(frame.context_name)}",
+                bold=True,
+            )
+            _render_context_report(frame)
+        if scope.group_count:
+            typer.echo("\n  Read-only report. Apply exact cleanup with mem dedup -r.")
+        return
+
+    frame = scope.contexts[0]
+    report = frame.report
     render_heading(
         operation_label="Find Duplicates",
-        context_name=context_label,
+        context_name=display_escape_text(frame.context_name),
         facts=(
             plural(report.item_count, "direct item") + " checked",
             plural(len(report.groups), "exact group"),
             plural(report.duplicate_count, "proposed absorption"),
         ),
     )
+    _render_context_report(frame)
+    if report.groups:
+        typer.echo("\n  Read-only report. Apply exact cleanup with mem dedup.")
+
+
+def _render_context_report(frame: ExactDuplicateContextReport) -> None:
+    """Render groups from one direct Context without implying cross-frame DUN."""
+
+    report = frame.report
     if not report.groups:
+        typer.echo("  No exact duplicate direct items.")
         return
 
     for index, group in enumerate(report.groups, start=1):
@@ -129,7 +195,6 @@ def cmd(
                 uid_prefixes[uid],
                 content=group.content if group.content is not None else group.summary,
             )
-    typer.echo("\n  Read-only report. Apply exact cleanup with mem dedup.")
 
 
 __all__ = ["cmd"]
