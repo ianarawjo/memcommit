@@ -103,21 +103,76 @@ Rules-plus-Examples route and cannot be combined with any Context endpoint.
 The provider also returns the exact counterexample subset for every
 `VIOLATES` or `PARTIALLY_CONFORMS` judgment. A violating judgment's cited
 evidence is entirely nonconforming; a partial judgment has both conforming and
-nonconforming cited cases. The host validates those relations rather than
-trying to recover counterexamples from explanatory prose. This case identity
-is retained in Conformance schema version 2. Version-1 saved reports remain
-readable, but honestly carry no reconstructed counterexample detail because
-their evidence list did not distinguish supporting cases from counterexamples.
+nonconforming cited Examples. The host validates those relations rather than
+trying to recover counterexamples from explanatory prose.
 
-The direct Context report keeps the Rule account compact: one
-`RULE_ALIAS · RULE CONTENT · STATUS` row per Rule, followed only when necessary
-by a `NONCONFORMING CASES` section. Each counterexample is one
-`[MEMORY_ALIAS] MEMORY CONTENT [RULE_ALIASES]` row, so the content and the Rules
-it violates can be scanned without opening a nested evidence block. Evidence
-lists and provider reasons remain in the typed report but are not repeated in
-this projection. The outside-judgment boundary is shown only when nonempty.
-This keeps an all-conforming result scannable while making failures actionable
-by case rather than by undifferentiated evidence volume.
+Conformance contract version 2 strengthens two parts of that result. First,
+each Rule must cite every target Memory to which it applies or plausibly
+applies. Omission from one Rule judgment now means that Rule does not govern
+that Example; a Memory in the report-wide outside set is governed by no
+supplied Rule. Second, every clear counterexample carries its own compact
+single-sentence reason. A Rule-wide reason cannot safely explain several
+different failures when each Example breaks a different clause.
+
+These relations let the host derive one whole-Rules status per Example without
+asking the provider for a second potentially inconsistent judgment list:
+
+- any exact counterexample makes the Example `VIOLATES`;
+- otherwise, any applicable `INSUFFICIENT_EVIDENCE` Rule makes it unresolved;
+- otherwise, applicable conforming evidence makes it `CONFORMS`; and
+- a Memory governed by no Rule is `NOT_APPLICABLE`.
+
+Violation takes precedence because one failed applicable Rule is enough to
+exclude an Example from the conforming numerator. In the absence of a
+violation, unresolved applicability takes precedence over positive evidence;
+the host must not count a partly undecidable Example as conforming. Rule and
+Example `N/A` rows are excluded from their respective denominators and counted
+separately.
+
+Conformance schema version 3 stores each counterexample identity together with
+its exact reason. Version 2 saved reports remain readable with their exact
+counterexample identities and no invented case-specific reason. Version 1
+reports remain readable without reconstructed counterexample detail. New
+reports use `conformance-v2`; compatible saved schema-1/2 `conformance-v1`
+reports remain valid historical evidence.
+
+### Asymmetric compact terminal receipt
+
+The direct Context projection follows Fit's compact receipt grammar rather
+than a result-workbench overview. A clean result is exactly one logical line:
+
+```text
+CONFORMANCE · 26/26 EXAMPLES CONFORM · 1/1 RULES MET · [EXAMPLES practice/1] · [RULES practice/2]
+```
+
+`EXAMPLES CONFORM` names the judged Target side. `RULES MET` is deliberately
+asymmetric: Rules do not themselves conform; the applicable target evidence
+meets them. A report-wide provider-authored overview, `WHAT MEM UNDERSTOOD`,
+and `ASSESSMENT OVERVIEW` are absent from this projection because a clean
+sentence such as “all 26 match” merely repeats the two fractions and verdict.
+The serialized `overview` field remains as a deterministic host summary for
+schema and Audit compatibility; the provider no longer authors it.
+
+Only a nonconforming or unresolved relationship adds another logical line. A
+clear counterexample is Example-first and keeps its exact reason inline:
+
+```text
+! VIOLATES · [EXAMPLE m000014] A Is apple · [RULE r1] Use lowercase letters. · WHY · “A” is uppercase; r1 requires a lowercase letter.
+```
+
+An `INSUFFICIENT_EVIDENCE` relationship uses the same one-line shape and a
+`?` marker. `NOT_APPLICABLE` contributes only to the compact `N/A` counts; it
+is not an issue row. Each untrusted name, body, and reason is display-escaped
+so embedded newlines and controls cannot create a fabricated second result
+line. A terminal may visually wrap one long logical line at its viewport edge;
+the renderer itself does not add a continuation line, separate `WHY` row,
+blank separator, or failure-section heading.
+
+The typed report still retains complete Rule judgments, all applicable
+evidence identities, exact outside identities, aggregate reasons, provider
+identity, and case-specific reasons. Compact presentation therefore does not
+weaken coverage or turn absence of a visible issue into proof of general
+correctness.
 
 Both Contexts are frozen from one command-start locator snapshot and
 revalidated after the provider turn. The first implementation accepts local

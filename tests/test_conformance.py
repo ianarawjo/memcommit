@@ -139,10 +139,9 @@ def test_context_conformance_judges_each_rule_and_accounts_every_memory():
     )
     provider = Provider(
         {
-            "overview": "The Context conforms to both applicable Rules.",
             "judgments": [
-                {"rule_id": "r1", "status": "CONFORMS", "evidence_memory_ids": ["m000001", "m000002"], "nonconforming_memory_ids": [], "reason": "Both use initials."},
-                {"rule_id": "r2", "status": "CONFORMS", "evidence_memory_ids": ["m000002"], "nonconforming_memory_ids": [], "reason": "Class B uses .B."},
+                {"rule_id": "r1", "status": "CONFORMS", "evidence_memory_ids": ["m000001", "m000002"], "nonconforming_cases": [], "reason": "Both use initials."},
+                {"rule_id": "r2", "status": "CONFORMS", "evidence_memory_ids": ["m000002"], "nonconforming_cases": [], "reason": "Class B uses .B."},
             ],
             "outside_memory_ids": ["m000003"],
         }
@@ -155,7 +154,16 @@ def test_context_conformance_judges_each_rule_and_accounts_every_memory():
 
     assert provider.calls[0][1] == CONTEXT_CONFORMANCE_OPERATION
     assert [item.status for item in report.context_judgments] == ["CONFORMS", "CONFORMS"]
+    assert [item.status for item in report.context_example_judgments] == [
+        "CONFORMS",
+        "CONFORMS",
+        "NOT_APPLICABLE",
+    ]
     assert report.outside_subject_uids == (subjects[2].uid,)
+    assert check_conformance_command.render_conformance(report).startswith(
+        "CONFORMANCE · 2/2 EXAMPLES CONFORM · 2/2 RULES MET · "
+        "[EXAMPLES ticker/examples] · [RULES ticker/rules] · 1 EXAMPLE N/A"
+    )
     assert ConformanceReport.from_dict(report.to_dict()) == report
 
 
@@ -180,20 +188,24 @@ def test_context_conformance_renders_rule_summary_and_exact_failing_cases():
     )
     provider = Provider(
         {
-            "overview": "One case violates the initial-letter Rule.",
             "judgments": [
                 {
                     "rule_id": "r1",
                     "status": "CONFORMS",
                     "evidence_memory_ids": ["m000001", "m000002"],
-                    "nonconforming_memory_ids": [],
+                    "nonconforming_cases": [],
                     "reason": "Both cases use the required shape.",
                 },
                 {
                     "rule_id": "r2",
                     "status": "PARTIALLY_CONFORMS",
                     "evidence_memory_ids": ["m000001", "m000002"],
-                    "nonconforming_memory_ids": ["m000002"],
+                    "nonconforming_cases": [
+                        {
+                            "memory_id": "m000002",
+                            "reason": "The word apple does not begin with b.",
+                        }
+                    ],
                     "reason": "The second word does not begin with b.",
                 },
             ],
@@ -210,17 +222,21 @@ def test_context_conformance_renders_rule_summary_and_exact_failing_cases():
     )
     rendered = check_conformance_command.render_conformance(report)
 
+    assert "ASSESSMENT OVERVIEW" not in rendered
+    assert "WHAT MEM UNDERSTOOD" not in rendered
     assert (
-        "r1 · Use exactly three tokens with lowercase is. · CONFORMS"
+        "CONFORMANCE · 1/2 EXAMPLES CONFORM · 1/2 RULES MET · "
+        "[EXAMPLES letters/examples] · [RULES letters/rules]"
         in rendered
     )
     assert (
-        "r2 · The word must begin with the initial letter. · "
-        "PARTIALLY_CONFORMS"
+        "! VIOLATES · [EXAMPLE m000002] b is apple · "
+        "[RULE r2] The word must begin with the initial letter. · WHY · "
+        "The word apple does not begin with b."
         in rendered
     )
-    assert "NONCONFORMING CASES · 1" in rendered
-    assert "[m000002] b is apple [r2]" in rendered
+    assert len(rendered.splitlines()) == 2
+    assert "NONCONFORMING CASES" not in rendered
     assert "  RULE ·" not in rendered
     assert "  EVIDENCE ·" not in rendered
     assert "  WHY ·" not in rendered
@@ -239,13 +255,12 @@ def test_context_conformance_still_reads_schema_one_without_case_details():
         subjects=(subject,),
         provider=Provider(
             {
-                "overview": "The case conforms.",
                 "judgments": [
                     {
                         "rule_id": "r1",
                         "status": "CONFORMS",
                         "evidence_memory_ids": ["m000001"],
-                        "nonconforming_memory_ids": [],
+                        "nonconforming_cases": [],
                         "reason": "It follows the Rule.",
                     }
                 ],
@@ -255,14 +270,101 @@ def test_context_conformance_still_reads_schema_one_without_case_details():
     )
     legacy = report.to_dict()
     legacy["schema_version"] = 1
+    legacy["ruleset_version"] = "conformance-v1"
     for judgment in legacy["context_judgments"]:
-        judgment.pop("nonconforming_subject_uids")
+        judgment.pop("nonconforming_cases")
 
     restored = ConformanceReport.from_dict(legacy)
 
     assert restored.schema_version == 1
     assert restored.context_judgments[0].nonconforming_subject_uids == ()
     assert restored.to_dict() == legacy
+
+
+def test_context_conformance_still_reads_schema_two_case_identities():
+    rule = _rule("Use lowercase letters.")
+    subject = ConformanceSubject(
+        _uid(), "m000001", "A is apple", linked_rule_uids=(rule.uid,)
+    )
+    report = check_context_conformance(
+        source_label="legacy/examples",
+        rules_label="legacy/rules",
+        rules=(rule,),
+        subjects=(subject,),
+        provider=Provider(
+            {
+                "judgments": [
+                    {
+                        "rule_id": "r1",
+                        "status": "VIOLATES",
+                        "evidence_memory_ids": ["m000001"],
+                        "nonconforming_cases": [
+                            {
+                                "memory_id": "m000001",
+                                "reason": "The initial letter is uppercase.",
+                            }
+                        ],
+                        "reason": "The observed initial is uppercase.",
+                    }
+                ],
+                "outside_memory_ids": [],
+            }
+        ),
+    )
+    schema_two = report.to_dict()
+    schema_two["schema_version"] = 2
+    schema_two["ruleset_version"] = "conformance-v1"
+    for judgment in schema_two["context_judgments"]:
+        cases = judgment.pop("nonconforming_cases")
+        judgment["nonconforming_subject_uids"] = [
+            case["subject_uid"] for case in cases
+        ]
+
+    restored = ConformanceReport.from_dict(schema_two)
+
+    assert restored.schema_version == 2
+    assert restored.context_judgments[0].nonconforming_subject_uids == (
+        subject.uid,
+    )
+    assert restored.context_judgments[0].nonconforming_cases[0].reason is None
+    assert restored.to_dict() == schema_two
+
+
+def test_context_conformance_renders_unresolved_example_reason_inline():
+    rule = _rule("Use the reviewed publication date.")
+    subject = ConformanceSubject(
+        _uid(), "m000001", "Publish it next Friday.", linked_rule_uids=(rule.uid,)
+    )
+    report = check_context_conformance(
+        source_label="dates/examples",
+        rules_label="dates/rules",
+        rules=(rule,),
+        subjects=(subject,),
+        provider=Provider(
+            {
+                "judgments": [
+                    {
+                        "rule_id": "r1",
+                        "status": "INSUFFICIENT_EVIDENCE",
+                        "evidence_memory_ids": ["m000001"],
+                        "nonconforming_cases": [],
+                        "reason": "The reviewed publication date is not supplied.",
+                    }
+                ],
+                "outside_memory_ids": [],
+            }
+        ),
+    )
+
+    rendered = check_conformance_command.render_conformance(report)
+
+    assert rendered.splitlines() == [
+        "CONFORMANCE · 0/1 EXAMPLES CONFORM · 0/1 RULES MET · "
+        "[EXAMPLES dates/examples] · [RULES dates/rules]",
+        "? INSUFFICIENT_EVIDENCE · [EXAMPLE m000001] Publish it next Friday. · "
+        "[RULE r1] Use the reviewed publication date. · WHY · "
+        "The reviewed publication date is not supplied.",
+    ]
 
 
 def test_context_conformance_rejects_silent_target_omission():
@@ -273,9 +375,8 @@ def test_context_conformance_rejects_silent_target_omission():
     )
     provider = Provider(
         {
-            "overview": "Incomplete.",
             "judgments": [
-                {"rule_id": "r1", "status": "CONFORMS", "evidence_memory_ids": ["m000001"], "nonconforming_memory_ids": [], "reason": "One."}
+                {"rule_id": "r1", "status": "CONFORMS", "evidence_memory_ids": ["m000001"], "nonconforming_cases": [], "reason": "One."}
             ],
             "outside_memory_ids": [],
         }
@@ -295,13 +396,12 @@ def test_context_conformance_rejects_observed_status_without_evidence():
     )
     provider = Provider(
         {
-            "overview": "Unsupported conformance claim.",
             "judgments": [
                 {
                     "rule_id": "r1",
                     "status": "CONFORMS",
                     "evidence_memory_ids": [],
-                    "nonconforming_memory_ids": [],
+                    "nonconforming_cases": [],
                     "reason": "No evidence was cited.",
                 }
             ],
@@ -394,13 +494,12 @@ def test_check_conformance_cli_runs_the_shared_context_core(
     store.create_context(rules)
     provider = Provider(
         {
-            "overview": "The example follows the Rule.",
             "judgments": [
                 {
                     "rule_id": "r1",
                     "status": "CONFORMS",
                     "evidence_memory_ids": ["m000001"],
-                    "nonconforming_memory_ids": [],
+                    "nonconforming_cases": [],
                     "reason": "NSE uses the three initials.",
                 }
             ],
@@ -419,16 +518,16 @@ def test_check_conformance_cli_runs_the_shared_context_core(
     )
 
     assert result.exit_code == 0, result.output
-    assert "CHECK CONFORMANCE · CONTEXT" in result.output
     assert (
-        "r1 · Use uppercase initials for multiword names. · CONFORMS"
+        "CONFORMANCE · 1/1 EXAMPLES CONFORM · 1/1 RULES MET · "
+        "[EXAMPLES ticker/examples] · [RULES ticker/rules]"
         in result.output
     )
     assert "  RULE ·" not in result.output
     assert "  EVIDENCE ·" not in result.output
     assert "  WHY ·" not in result.output
     assert "OUTSIDE RULE JUDGMENTS" not in result.output
-    assert "STATUS · REPORT READY" in result.output
+    assert result.output.count("\n") == 1
 
 
 def _install_context_conformance_cli_fixture(monkeypatch):
@@ -441,13 +540,12 @@ def _install_context_conformance_cli_fixture(monkeypatch):
     store.create_context(rules)
     provider = Provider(
         {
-            "overview": "The example follows the Rule.",
             "judgments": [
                 {
                     "rule_id": "r1",
                     "status": "CONFORMS",
                     "evidence_memory_ids": ["m000001"],
-                    "nonconforming_memory_ids": [],
+                    "nonconforming_cases": [],
                     "reason": "NSE uses the three initials.",
                 }
             ],
@@ -482,9 +580,8 @@ def test_check_conformance_role_and_direction_aliases_share_context_route(
     result = CliRunner().invoke(app, ["check-conformance", *arguments])
 
     assert result.exit_code == 0, result.output
-    assert "CHECK CONFORMANCE · CONTEXT" in result.output
-    assert "SUBJECT · ticker/examples" in result.output
-    assert "RULES · ticker/rules · 1" in result.output
+    assert "[EXAMPLES ticker/examples]" in result.output
+    assert "[RULES ticker/rules]" in result.output
     assert len(provider.calls) == 1
 
 
@@ -511,8 +608,8 @@ def test_check_conformance_alias_endpoints_fill_from_one_current_snapshot(
     result = CliRunner().invoke(app, ["check-conformance", *arguments])
 
     assert result.exit_code == 0, result.output
-    assert "SUBJECT · ticker/examples" in result.output
-    assert "RULES · ticker/rules · 1" in result.output
+    assert "[EXAMPLES ticker/examples]" in result.output
+    assert "[RULES ticker/rules]" in result.output
     assert len(provider.calls) == 1
 
 
@@ -614,13 +711,12 @@ class AuditProvider:
         assert operation == CONTEXT_CONFORMANCE_OPERATION
         return json.dumps(
             {
-                "overview": "The frozen Context conforms.",
                 "judgments": [
                     {
                         "rule_id": "r1",
                         "status": "CONFORMS",
                         "evidence_memory_ids": ["m000001", "m000002"],
-                        "nonconforming_memory_ids": [],
+                        "nonconforming_cases": [],
                         "reason": "Both Memories follow the Rule.",
                     }
                 ],

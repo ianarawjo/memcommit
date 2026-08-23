@@ -21,7 +21,77 @@ from memcommit.store import MemoryStore
 
 
 def render_conformance(report: ConformanceReport) -> str:
-    """Render compact judgments and expose exact nonconforming cases."""
+    """Render one compact receipt plus issue-only Context relationship rows."""
+
+    if report.mode == "CONTEXT" and report.context_example_judgments:
+        examples = report.context_example_judgments
+        applicable_examples = tuple(
+            item for item in examples if item.status != "NOT_APPLICABLE"
+        )
+        applicable_rules = tuple(
+            item
+            for item in report.context_judgments
+            if item.status != "NOT_APPLICABLE"
+        )
+        example_n_a = len(examples) - len(applicable_examples)
+        rule_n_a = len(report.context_judgments) - len(applicable_rules)
+        summary = (
+            "CONFORMANCE · "
+            f"{sum(item.status == 'CONFORMS' for item in applicable_examples)}/"
+            f"{len(applicable_examples)} EXAMPLES CONFORM · "
+            f"{sum(item.status == 'CONFORMS' for item in applicable_rules)}/"
+            f"{len(applicable_rules)} RULES MET · "
+            f"[EXAMPLES {display_escape_text(report.source_label)}] · "
+            f"[RULES {display_escape_text(report.rules_label)}]"
+        )
+        if example_n_a:
+            summary += (
+                f" · {example_n_a} "
+                f"{'EXAMPLE' if example_n_a == 1 else 'EXAMPLES'} N/A"
+            )
+        if rule_n_a:
+            summary += (
+                f" · {rule_n_a} "
+                f"{'RULE' if rule_n_a == 1 else 'RULES'} N/A"
+            )
+
+        lines = [summary]
+        rule_by_uid = {rule.uid: rule for rule in report.rules}
+        subject_by_uid = {subject.uid: subject for subject in report.subjects}
+        for judgment in report.context_judgments:
+            rule = rule_by_uid[judgment.rule_uid]
+            for case in judgment.nonconforming_cases:
+                subject = subject_by_uid[case.subject_uid]
+                lines.append(
+                    "! VIOLATES · "
+                    f"[EXAMPLE {display_escape_text(subject.alias)}] "
+                    f"{display_escape_text(subject.content)} · "
+                    f"[RULE {display_escape_text(rule.alias)}] "
+                    f"{display_escape_text(rule.content)} · WHY · "
+                    f"{display_escape_text(case.reason or judgment.reason)}"
+                )
+            if judgment.status == "INSUFFICIENT_EVIDENCE":
+                uncertain_subjects = tuple(
+                    subject_by_uid[uid] for uid in judgment.evidence_subject_uids
+                )
+                if uncertain_subjects:
+                    for subject in uncertain_subjects:
+                        lines.append(
+                            "? INSUFFICIENT_EVIDENCE · "
+                            f"[EXAMPLE {display_escape_text(subject.alias)}] "
+                            f"{display_escape_text(subject.content)} · "
+                            f"[RULE {display_escape_text(rule.alias)}] "
+                            f"{display_escape_text(rule.content)} · WHY · "
+                            f"{display_escape_text(judgment.reason)}"
+                        )
+                else:
+                    lines.append(
+                        "? INSUFFICIENT_EVIDENCE · "
+                        f"[RULE {display_escape_text(rule.alias)}] "
+                        f"{display_escape_text(rule.content)} · WHY · "
+                        f"{display_escape_text(judgment.reason)}"
+                    )
+        return "\n".join(lines)
 
     identity = report.provider_identity
     lines = [
@@ -31,7 +101,7 @@ def render_conformance(report: ConformanceReport) -> str:
         f"RULES · {safe_terminal_text(report.rules_label)} · {len(report.rules)}",
         "PROVIDER · " + (identity.display_name() if identity is not None else "UNRECORDED"),
         "",
-        "WHAT MEM UNDERSTOOD",
+        "ASSESSMENT OVERVIEW",
         safe_terminal_text(report.overview),
         "",
     ]

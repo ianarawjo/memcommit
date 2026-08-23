@@ -17,10 +17,7 @@ from datetime import datetime, timezone
 from typing import Callable, Literal
 
 from memcommit.context import Context, Memory
-from memcommit.conformance import (
-    CONFORMANCE_RULESET_VERSION,
-    ConformanceReport,
-)
+from memcommit.conformance import ConformanceReport
 from memcommit.findings import (
     AmbiguityFinding,
     AmbiguityReport,
@@ -666,7 +663,6 @@ class QualityAuditSession:
         if conformance is not None:
             if (
                 conformance.mode != "CONTEXT"
-                or conformance.ruleset_version != CONFORMANCE_RULESET_VERSION
                 or conformance.source_label != source.context_name
                 or conformance.provider_identity is None
             ):
