@@ -24,6 +24,7 @@ from memcommit.rationale_rules import (
 )
 from memcommit.rationale_semantic import (
     RATIONALE_PROVENANCE_OPERATION,
+    RATIONALE_PROVENANCE_REPAIR_OPERATION,
     RationaleSynthesisError,
     rationale_provenance_payload,
     synthesize_rationale_provenance,
@@ -113,11 +114,39 @@ class _CapturingProvider:
         self.schemas: list[dict[str, object]] = []
 
     def complete(self, prompt, *, operation, output_schema=None):
-        assert operation == RATIONALE_PROVENANCE_OPERATION
+        assert operation in {
+            RATIONALE_PROVENANCE_OPERATION,
+            RATIONALE_PROVENANCE_REPAIR_OPERATION,
+        }
         assert output_schema is not None
         self.prompts.append(prompt)
         self.schemas.append(output_schema)
         return json.dumps({"provenance": self.provenance}, ensure_ascii=False)
+
+
+class _SequenceProvider:
+    def __init__(self, *provenances: str):
+        self.provenances = provenances
+        self.prompts: list[str] = []
+        self.operations: list[str] = []
+        self.schemas: list[dict[str, object]] = []
+
+    def complete(self, prompt, *, operation, output_schema=None):
+        expected_operation = (
+            RATIONALE_PROVENANCE_OPERATION
+            if not self.prompts
+            else RATIONALE_PROVENANCE_REPAIR_OPERATION
+        )
+        assert operation == expected_operation
+        assert output_schema is not None
+        index = len(self.prompts)
+        self.prompts.append(prompt)
+        self.operations.append(operation)
+        self.schemas.append(output_schema)
+        return json.dumps(
+            {"provenance": self.provenances[index]},
+            ensure_ascii=False,
+        )
 
 
 def _case(case_id: str) -> dict[str, object]:
@@ -133,7 +162,7 @@ def test_every_rule_exact_case_and_known_wrong_enters_the_production_prompt():
     prompt = rationale_ruleset_prompt_payload()
 
     assert authored["ruleset_version"] == RATIONALE_RULESET_VERSION
-    assert len(authored["rules"]) == 14
+    assert len(authored["rules"]) == 15
     assert prompt == {
         "ruleset_version": RATIONALE_RULESET_VERSION,
         "rules": authored["rules"],
@@ -193,6 +222,10 @@ def test_refinement_cases_encode_excerpt_operation_and_context_movement_rules():
     )
     assert "KEEP_TARGET" in rules["R14_MERGE_DISPOSITION"]["invariant"]
     assert (
+        "preferred target"
+        in rules["R15_LENGTH_HEADROOM_AND_REPAIR"]["invariant"]
+    )
+    assert (
         "this “don't edit the draft immediately” instruction"
         in cases["atomize-parent-to-selected-and-sibling"]["expected"]["provenance"]
     )
@@ -225,6 +258,7 @@ def test_long_history_reads_every_event_but_compresses_material_phases():
 
     assert projection.text == expected
     assert projection.length == 37
+    assert len(provider.prompts) == 1
     assert "remove–undo–redo–undo cycle" in projection.text
     assert "should” to “must" not in projection.text
     prompt_payload = json.loads(provider.prompts[0].split("RATIONALE PAYLOAD:\n", 1)[1])
@@ -290,6 +324,109 @@ def test_payload_uses_aliases_but_retains_parent_and_sibling_context():
     assert request["events"][0]["before"][0]["memory_id"] != "selected"
     assert "c9e05f9a" not in json.dumps(payload)
     assert request["warnings"] == []
+
+
+@pytest.mark.parametrize(
+    ("limit", "target"),
+    [(1, 1), (2, 1), (9, 8), (10, 9), (11, 9), (40, 36), (80, 72), (120, 108)],
+)
+def test_payload_aims_ten_percent_below_any_hard_limit(limit, target):
+    payload = rationale_provenance_payload(
+        _case_trace(_case("direct-add-remove-undo")),
+        limit=limit,
+        unit=RationaleLimitUnit.WORDS,
+    )
+
+    assert payload["request"]["length"] == {
+        "target": target,
+        "limit": limit,
+        "unit": "words",
+    }
+
+
+def test_over_limit_draft_gets_one_complete_trace_length_repair():
+    case = _case("direct-add-remove-undo")
+    rejected = next(
+        item["provenance"]
+        for item in case["known_wrong"]
+        if "R15_LENGTH_HEADROOM_AND_REPAIR" in item["violates"]
+    )
+    repaired = case["expected"]["provenance"]
+    provider = _SequenceProvider(rejected, repaired)
+    factory_calls: list[object] = []
+
+    def provider_factory():
+        factory_calls.append(object())
+        return provider
+
+    projection = synthesize_rationale_provenance(
+        _case_trace(case),
+        provider_factory=provider_factory,
+    )
+
+    assert projection.text == repaired
+    assert projection.length == 14
+    assert len(factory_calls) == 1
+    assert len(provider.prompts) == 2
+    assert provider.operations == [
+        RATIONALE_PROVENANCE_OPERATION,
+        RATIONALE_PROVENANCE_REPAIR_OPERATION,
+    ]
+    first_payload = json.loads(
+        provider.prompts[0].split("RATIONALE PAYLOAD:\n", 1)[1]
+    )
+    repair_payload = json.loads(
+        provider.prompts[1].split("RATIONALE PAYLOAD:\n", 1)[1]
+    )
+    assert first_payload["request"]["length"] == {
+        "target": 36,
+        "limit": 40,
+        "unit": "words",
+    }
+    assert repair_payload["request"] == first_payload["request"]
+    assert repair_payload["ruleset"] == first_payload["ruleset"]
+    assert repair_payload["repair"] == {
+        "reason": "OVER_LIMIT",
+        "rejected_provenance": rejected,
+        "measured_length": 41,
+        "target": 36,
+        "limit": 40,
+        "unit": "words",
+    }
+    assert "single allowed length-repair turn" in provider.prompts[1]
+
+
+def test_length_repair_runs_at_most_once():
+    case = _case("direct-add-remove-undo")
+    overflow = next(
+        item["provenance"]
+        for item in case["known_wrong"]
+        if "R15_LENGTH_HEADROOM_AND_REPAIR" in item["violates"]
+    )
+    provider = _SequenceProvider(overflow, overflow)
+
+    with pytest.raises(RationaleSynthesisError, match="after one whole-Trace"):
+        synthesize_rationale_provenance(
+            _case_trace(case),
+            provider_factory=lambda: provider,
+        )
+
+    assert len(provider.prompts) == 2
+
+
+def test_non_length_validation_failure_does_not_retry():
+    provider = _SequenceProvider(
+        "CREATED via chunk → REMOVED via undo",
+        "This response must not be requested.",
+    )
+
+    with pytest.raises(RationaleSynthesisError, match="non-narrative"):
+        synthesize_rationale_provenance(
+            _case_trace(_case("direct-add-remove-undo")),
+            provider_factory=lambda: provider,
+        )
+
+    assert len(provider.prompts) == 1
 
 
 def test_hidden_history_returns_without_connecting_a_provider():

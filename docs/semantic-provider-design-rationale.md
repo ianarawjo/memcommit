@@ -12,8 +12,8 @@ selects another provider.
 semantic operation
   → freeze configured provider/model once
   → construct the existing bounded prompt and JSON Schema
-  → make exactly one provider completion
-  → validate the returned text with the operation's existing local parser
+  → make the operation-declared bounded completion sequence (normally one)
+  → validate every returned text with the operation's existing local parser
   → preserve the operation's existing review and mutation boundary
 ```
 
@@ -92,8 +92,12 @@ parser.
 Malformed, truncated, empty, duplicated-envelope, oversized, unknown-ID, or
 out-of-scope output fails closed. The adapter does not silently remove schema
 constraints, make a hidden repair completion, or fall back to Codex or another
-model. Those behaviors would violate both the one-provider-call contract and
-the interpretability of a model comparison.
+model. An operation may own a versioned, bounded refinement sequence above the
+adapter: Rationale, for example, permits one same-provider, whole-Trace rewrite
+only after its local decoder measures a valid narrative above the hard length
+bound. Each turn remains separately observable and validated, and the rejected
+draft is never published. This preserves model-comparison interpretability
+without making generic transport guess which errors are repairable.
 
 An isolated subscription-backed synthetic probe also confirmed that the
 installed Codex CLI accepts `gpt-5.6-luna` with reasoning effort `low` and

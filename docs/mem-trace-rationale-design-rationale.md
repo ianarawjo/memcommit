@@ -11,10 +11,12 @@ only the current text does not answer two provenance questions:
 3. Which independently writable occurrence did a later Merge create or reuse?
 
 Rationale freezes retained Trace evidence, then asks one bounded semantic turn
-to express that evidence as compact natural-language provenance. The narrative
-must explain the selected content's source context, recorded derivation, and
-later lifecycle without inventing author intent or importing present-day
-purpose. If history is absent or hidden, no provider is connected.
+to express that evidence as compact natural-language provenance. Only when a
+structurally valid first draft exceeds the hard presentation bound may the same
+frozen Trace enter one bounded compression turn. The narrative must explain the
+selected content's source context, recorded derivation, and later lifecycle
+without inventing author intent or importing present-day purpose. If history is
+absent or hidden, no provider is connected.
 
 ## Command contract
 
@@ -39,9 +41,11 @@ projection rather than invoking another CLI command. Log always prints that
 projection, while Trace may open its interactive workbench in a TTY.
 Neither command changes Contexts, checkpoints, saved semantic analyses,
 proposals, active state, or provider-derived caches. Rationale gives the exact
-whole retained Trace to one provider turn under the versioned natural-provenance
-ruleset and validates one bounded paragraph. Compare's source-row Rationale
-action enters the same ruleset, payload, schema, and decoder.
+whole retained Trace to an initial provider turn under the versioned
+natural-provenance ruleset and validates one bounded paragraph. A valid
+over-limit draft may cause exactly one operation-owned repair turn over that
+same Trace; no first draft is published. Compare's source-row Rationale action
+enters the same ruleset, payload, schema, decoder, and repair boundary.
 
 ### Recorded Merge UID handoff
 
@@ -350,22 +354,29 @@ paragraph. For the motivating `practice/source` trace, the expected receipt is:
 Memory; undo removed it, redo restored it, and remove later deleted it.
 ```
 
-The whole Trace component enters one provider call. Parent and sibling states
-may establish the origin context, but an event containing only sibling UIDs is
-not narrated as a selected-Memory transition. The prose preserves recorded
-chronology while omitting raw event labels, arrows, transition counts,
+The whole Trace component enters the initial provider call and, only after a
+validated length overflow, the one allowed repair call. Parent and sibling
+states may establish the origin context, but an event containing only sibling
+UIDs is not narrated as a selected-Memory transition. The prose preserves
+recorded chronology while omitting raw event labels, arrows, transition counts,
 timestamps, checkpoint IDs, and an operation inventory. A textual role such as
 `hesitation` is permitted when the selected wording and its placement support
 it; `placeholder intent`, usefulness judgments, and unrecorded removal reasons
 remain forbidden.
 
 The ordinary human bound is 40 whitespace-delimited words. `--limit N` changes
-the positive bound up to 100,000 and `--unit characters|bytes|words` chooses the
-measurement. The provider must produce one or two complete sentences within
-that exact bound. The decoder rejects an over-limit or mechanically clipped
-narrative instead of truncating a valid sentence after generation. JSON keeps
-the complete typed Trace and the validated `provenance_projection`, including
-its ruleset version, exact bound, unit, and measured length.
+the positive hard bound up to 100,000 and `--unit characters|bytes|words`
+chooses the measurement. Every first draft receives the generalized preferred
+target `max(1, floor(limit × 0.9))`: 40 aims for 36 words, 80 for 72, and 120
+for 108, while a complete result between that soft target and the hard bound
+remains valid. A structurally valid draft above the hard bound is not clipped
+or published. Rationale sends its measured length, rejected draft, and complete
+frozen Trace through one freshly preflighted compression turn using the same
+provider snapshot, ruleset, schema, and decoder. A second overflow fails closed;
+invalid JSON, non-narrative text, transport failure, and other errors do not
+trigger repair. JSON keeps the complete typed Trace and the final validated
+`provenance_projection`, including its ruleset version, hard bound, unit, and
+measured length.
 
 Within that bound, discriminating evidence has an explicit priority. The
 narrative first preserves short exact before-and-after excerpts, then the
@@ -440,11 +451,21 @@ receives the complete connected Trace with opaque Memory aliases and the typed
 disposition, while exact durable UIDs remain in Trace JSON and the human Trace
 row rather than being copied into generated prose.
 
+Ruleset version 5 separates the generalized 90% first-draft target from the hard
+acceptance bound and adds one explicit full-Trace repair for length overflow.
+Its direct Add → Remove → Undo calibration now includes a grounded but rejected
+41-word adjacent narrative and the exact 14-word compact result. The repair
+draft is untrusted output, not new provenance evidence. Narratives such as the
+existing 37- and 38-word exact cases remain valid under the 40-word hard bound;
+missing a soft target alone never spends a second provider turn.
+
 `tests/test_rationale_rules.py` proves that every authored item enters the
 production prompt, executes all eight available-history canonical cases
 through the production payload/schema/decoder, carries Context and warnings,
-keeps all 15 long-history events provider-visible, and rejects raw event chains
-and over-limit prose.
+keeps all 15 long-history events provider-visible, and rejects raw event chains.
+It also proves generalized 90% target rounding, one 41-word-to-14-word
+whole-Trace repair, one-call acceptance above the soft target, no retry for
+malformed output, and fail-closed rejection after a second overflow.
 
 #### `EXAMPLE-01` coverage
 
@@ -465,7 +486,8 @@ they must not be counted as unseen evaluation evidence.
 | `rationale.provenance.long-material-phases` | 15-event whole Trace → semantic prompt/schema/decoder | Add, ten Edits, Remove/Undo/Redo/Undo | exact 37-word origin → material edit phase → presence-cycle narrative | `PROVIDER_VISIBLE` | ruleset case `long-edit-run-with-remove-undo-redo`; isolated actual-command re-execution |
 | `rationale.provenance.grant-hidden` | readable granted Memory → application receipt | owner history unavailable | `hidden by Grant`, zero provider calls | `HOST_ONLY` | ruleset case `grant-hidden-history`; authority test |
 | `rationale.provenance.decoder-chain-rejection` | provider response → strict decoder | raw event-label arrow chain | rejected as non-narrative | `HOST_ONLY` | `test_provider_output_must_be_complete_narrative_within_the_exact_bound` |
-| `rationale.provenance.decoder-bound-rejection` | provider response → strict decoder | complete-looking paragraph beyond requested unit | rejected without clipping | `HOST_ONLY` | same production-decoder test |
+| `rationale.provenance.overflow-repair` | initial response + same whole Trace → repair prompt/schema/decoder | grounded 41-word Add/Remove/Undo draft above a 40-word hard bound | exact 14-word compact provenance, with the first draft unpublished | `PROVIDER_VISIBLE` | ruleset case `direct-add-remove-undo`; `test_over_limit_draft_gets_one_complete_trace_length_repair` |
+| `rationale.provenance.second-overflow-rejection` | repair response → strict decoder | second complete-looking paragraph beyond the requested unit | rejected without clipping or a third turn | `HOST_ONLY` | `test_length_repair_runs_at_most_once` |
 
 The [180×52 compact Rationale capture](screenshots/mem-rationale-compact-20260820/README.md)
 records target selection, the direct natural-provenance receipt, and read-only store
@@ -476,12 +498,12 @@ records the actual task-1 Source and Target UID routes, the complete
 Move/Replace/Merge chain, and a plain read-only verification with the current
 Context unchanged.
 
-The focused capture verifies the 180×52 color selector, one semantic provider
-turn after target confirmation, the compact receipt, and read-only store
-verification. Unit and decoder edge cases are exact text/JSON contracts because
-they do not add a materially distinct full-screen interaction. No path reads or
-writes the legacy contextual-inference cache, and Context content remains
-unchanged.
+The focused capture verifies the 180×52 color selector, the ordinary one-turn
+under-limit path after target confirmation, the compact receipt, and read-only
+store verification. The overflow repair has no intermediate TUI state and is
+therefore an exact prompt/decoder contract rather than a synthetic screen.
+No path reads or writes the legacy contextual-inference cache, and Context
+content remains unchanged.
 
 ## Evidence labels
 

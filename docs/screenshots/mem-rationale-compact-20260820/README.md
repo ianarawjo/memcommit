@@ -16,9 +16,9 @@ selection.
   motivating retained Trace before Rationale starts
 - PTY: `180` columns × `52` rows, verified inside the child
 - Environment: `TERM=xterm-256color`, `COLORTERM=truecolor`, `NO_COLOR` unset
-- Provider/cache boundary: one deterministic capture provider receives the
-  production whole-Trace payload and complete version-4 ruleset after target selection;
-  the capture verifies exactly one call and no legacy inference-cache access
+- Provider/cache boundary: the recorded images used the complete version-4
+  ruleset; the current deterministic capture harness validates version 5 for
+  the same under-limit path, exactly one call, and no legacy inference-cache access
 - Renderer: cumulative real PTY ANSI streams replayed through `pyte` and drawn
   at the full `1832×1124` Menlo canvas with Apple SD Gothic Neo supplying only
   Hangul glyphs; raw `.typescript` and plain `.txt` evidence are retained beside

@@ -144,8 +144,9 @@ The staged rollout is:
    `EXAMPLE-01` operation set: the exact `Um...` parent/split/Undo/Redo/Remove
    case, direct Add/Remove/Undo, Atomize parent-to-two-results,
    Distill-then-Edit, branch inheritance, and 15-event material-phase
-   compression are `PROVIDER_VISIBLE`;
-   Grant-hidden and malformed/over-bound decoder cases remain `HOST_ONLY`.
+   compression are `PROVIDER_VISIBLE`; the direct case also binds the
+   41-word-overflow → compact-repair prompt variant. Grant-hidden, malformed
+   output, and a second over-bound repair response remain `HOST_ONLY`.
 2. Add the focused example table whenever an operation matrix is reviewed or
    materially changed. Missing rows remain explicit work rather than a
    fabricated complete state.

@@ -91,6 +91,7 @@ def _run_child(scenario: str) -> None:
                 assert output_schema is not None
                 payload = json.loads(prompt.split("RATIONALE PAYLOAD:\n", 1)[1])
                 assert payload["request"]["length"] == {
+                    "target": max(1, (limit * 90) // 100),
                     "limit": limit,
                     "unit": raw_unit,
                 }

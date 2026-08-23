@@ -157,6 +157,15 @@ and fail closed above it. Lightweight Compare uses a distinct source-linked
 matrix and never substitutes for the exhaustive deep Compare basis used by
 Meld.
 
+Rationale's output-length repair does not stage or partition its evidence. The
+initial prompt and the one permitted overflow repair each contain the complete
+same frozen Trace; the repair additionally carries the rejected draft and its
+measured length. The operation runs a fresh whole-frame budget preflight for
+that exact second payload, publishes neither partial output nor the first
+draft, and fails rather than truncating the Trace when the repair payload no
+longer fits. A valid response above the generalized 90% target but within the
+hard bound remains a one-call result.
+
 Update records the complete theoretical workload of one addition per Source
 plus one mutually exclusive edit or removal per Target, but does not confuse
 that candidate-derived maximum with provider capacity. Its output schema and

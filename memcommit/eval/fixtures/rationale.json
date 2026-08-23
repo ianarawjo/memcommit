@@ -1,7 +1,7 @@
 {
   "command": "rationale",
   "schema_version": 2,
-  "ruleset_version": "rationale-natural-provenance-v4",
+  "ruleset_version": "rationale-natural-provenance-v5",
   "description": "Exact natural-language provenance rules and production calibration cases. Every case is prompt-visible and a regression contract; known-wrong narratives mark adjacent factual and presentation failures.",
   "rules": [
     {
@@ -73,6 +73,11 @@
       "id": "R14_MERGE_DISPOSITION",
       "title": "Explain what Merge did to the Target occurrence",
       "invariant": "Use the recorded Merge disposition exactly: NEW copied the Source into a fresh Target occurrence while retaining Source; ALREADY_PRESENT found the related Target occurrence already present and created no occurrence; TAKE_SOURCE replaced the existing Target content from Source; KEEP_TARGET retained the existing Target content and did not materialize the Source content there."
+    },
+    {
+      "id": "R15_LENGTH_HEADROOM_AND_REPAIR",
+      "title": "Aim below the hard bound and repair only overflow",
+      "invariant": "Treat the preferred target as first-draft headroom and the requested limit as the hard acceptance bound. A complete narrative above the preferred target but within the hard bound remains valid. When given one rejected over-limit draft, reread the complete frozen Trace and rewrite it compactly without clipping or treating the draft as new evidence; never exceed the hard bound."
     }
   ],
   "cases": [
@@ -270,19 +275,24 @@
           }
         ],
         "warnings": [],
-        "limit": 24,
+        "limit": 40,
         "unit": "words"
       },
       "expected": {
         "status": "AVAILABLE",
         "provenance": "This Memory was added directly, later removed, and restored when that removal was undone.",
-        "rule_ids": ["R01_COMPLETE_RETAINED_LINEAGE", "R04_CHRONOLOGICAL_LIFECYCLE", "R06_NATURAL_NARRATIVE", "R07_COMPACT_COMPLETE"]
+        "rule_ids": ["R01_COMPLETE_RETAINED_LINEAGE", "R04_CHRONOLOGICAL_LIFECYCLE", "R06_NATURAL_NARRATIVE", "R07_COMPACT_COMPLETE", "R15_LENGTH_HEADROOM_AND_REPAIR"]
       },
       "known_wrong": [
         {
           "provenance": "This Memory currently exists.",
           "violates": ["R01_COMPLETE_RETAINED_LINEAGE", "R04_CHRONOLOGICAL_LIFECYCLE"],
           "reason": "The endpoint alone hides both the removal and its undo."
+        },
+        {
+          "provenance": "The selected Memory entered the Context through a direct Add and stayed there until Remove deleted it. Undo then reversed that removal, restored the same Memory to the Context, and left its original wording available again as the current retained state.",
+          "violates": ["R07_COMPACT_COMPLETE", "R15_LENGTH_HEADROOM_AND_REPAIR"],
+          "reason": "The grounded 41-word draft exceeds the 40-word hard bound and must be rewritten from the complete Trace rather than published or clipped."
         }
       ]
     },

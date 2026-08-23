@@ -13,7 +13,7 @@ import unicodedata
 from memcommit.provenance import EventKind
 
 
-RATIONALE_RULESET_VERSION = "rationale-natural-provenance-v4"
+RATIONALE_RULESET_VERSION = "rationale-natural-provenance-v5"
 RATIONALE_RULESET_FIXTURE = "rationale.json"
 DEFAULT_RATIONALE_PROVENANCE_LIMIT = 40
 MAX_RATIONALE_PROVENANCE_LIMIT = 100_000
