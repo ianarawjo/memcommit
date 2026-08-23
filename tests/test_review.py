@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 import pytest
 from prompt_toolkit.input.defaults import create_pipe_input
@@ -9,13 +10,14 @@ from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
+import memcommit.commands.review as review_command
+import memcommit.commands.review_resolution_shell as review_resolution_shell
 from memcommit.cli import app
-from memcommit.commands.review_shell import (
-    RESPONSE_LABEL,
+from memcommit.interfaces.cli.review import (
     render_review_snapshot,
-    run_review_shell,
-    safe_terminal_text,
 )
+from memcommit.interfaces.console.text import safe_terminal_text
+from memcommit.interfaces.tui.workbenches.review import RESPONSE_LABEL
 from memcommit.commands.review_resolution_shell import (
     review_resolution_view,
     run_review_resolution_shell,
@@ -36,6 +38,17 @@ from memcommit.store import MemoryStore
 
 runner = CliRunner()
 PAYLOAD_MARKER = "QUALITY FIND PAYLOAD:\n"
+
+
+def test_review_has_one_live_common_response_host() -> None:
+    command_source = Path(review_command.__file__).read_text(encoding="utf-8")
+
+    assert (
+        review_command.run_review_shell
+        is review_resolution_shell.run_review_resolution_shell
+    )
+    assert "commands.review_shell" not in command_source
+    assert not (Path(review_command.__file__).parent / "review_shell.py").exists()
 
 
 class PayloadProvider:
@@ -136,6 +149,26 @@ def test_common_review_response_frame_persists_choice_and_comment():
     response = result.response_for(first.uid)
     assert response.selected_choice_uid == session.items[0].choices[1].uid
     assert response.text == "교직원 출입구의 자격 규칙이다."
+    assert saved
+
+
+def test_common_review_escape_closes_from_the_root_and_saves() -> None:
+    ctx, report, _first, _third = _context_and_report()
+    session = create_ambiguity_review(ctx, report)
+    saved: list[dict[str, object]] = []
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b")
+        returned = run_review_resolution_shell(
+            session,
+            ctx,
+            save=lambda value: saved.append(value.to_dict()),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert returned is session
     assert saved
 
 
@@ -266,91 +299,6 @@ def test_store_wraps_malformed_json_types_as_review_errors(
 
     with pytest.raises(ValueError, match="invalid"):
         MemoryStore().load_review_session()
-
-
-def test_prompt_shell_accepts_candidate_plus_korean_comment_and_right_arrow():
-    ctx, report, first, third = _context_and_report()
-    session = create_ambiguity_review(ctx, report)
-    saved: list[dict[str, object]] = []
-
-    with create_pipe_input() as pipe_input:
-        # Select reading 2, focus the only response field, type a refinement,
-        # save-and-next, then quit from the second issue.
-        pipe_input.send_text("2\r추가로 교직원만 출입할 수 있다.\x13q")
-        result = run_review_shell(
-            session,
-            ctx,
-            save=lambda value: saved.append(value.to_dict()),
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
-
-    first_response = result.response_for(first.uid)
-    assert first_response.selected_choice_uid.endswith(":reading:2")
-    assert first_response.text == "추가로 교직원만 출입할 수 있다."
-    assert result.cursor_uid == third.uid
-    assert saved
-
-    second_session = create_ambiguity_review(ctx, report)
-    with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\x1b[Cq")
-        run_review_shell(
-            second_session,
-            ctx,
-            save=lambda value: None,
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
-    assert second_session.cursor_uid == third.uid
-
-
-def test_prompt_shell_escape_closes_from_the_root_review_surface():
-    ctx, report, _, _ = _context_and_report()
-    session = create_ambiguity_review(ctx, report)
-    saved: list[dict[str, object]] = []
-
-    with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\x1b")
-        result = run_review_shell(
-            session,
-            ctx,
-            save=lambda value: saved.append(value.to_dict()),
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
-
-    assert result is session
-    assert saved
-
-
-def test_prompt_shell_rejects_oversized_response_without_silent_truncation(
-    monkeypatch,
-):
-    ctx, report, first, third = _context_and_report()
-    session = create_ambiguity_review(ctx, report)
-    monkeypatch.setattr(
-        "memcommit.commands.review_shell.REVIEW_RESPONSE_CHAR_LIMIT",
-        5,
-    )
-
-    with create_pipe_input() as pipe_input:
-        # The first save is rejected at six characters. The reviewer removes
-        # one character and explicitly saves the complete five-character text.
-        pipe_input.send_text("\r123456\x13\x7f\x13q")
-        run_review_shell(
-            session,
-            ctx,
-            save=lambda value: None,
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
-
-    assert session.response_for(first.uid).text == "12345"
-    assert session.cursor_uid == third.uid
 
 
 def test_cli_creates_snapshot_resumes_without_provider_and_never_mutates(

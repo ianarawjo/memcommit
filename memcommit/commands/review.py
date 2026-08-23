@@ -26,11 +26,11 @@ from memcommit.applied_checkpoint_review import (
 )
 from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.context_operand import ContextOperandSnapshot
-from memcommit.commands.review_shell import (
-    ReviewCancelled,
+from memcommit.interfaces.cli.review import (
     render_review_snapshot,
     visible_ordinal_index,
 )
+from memcommit.interfaces.tui.workbenches.review import ReviewCancelled
 from memcommit.commands.review_resolution_shell import (
     run_review_resolution_shell as run_review_shell,
 )
