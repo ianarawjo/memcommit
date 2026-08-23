@@ -649,8 +649,8 @@ def cmd(
             "--yes",
             "-y",
             help=(
-                "Apply an explicit --save-as or --in-place materialization "
-                "without confirmation"
+                "Bypass --save-as location review; accepted with --in-place "
+                "for compatibility"
             ),
         ),
     ] = False,
@@ -975,36 +975,29 @@ def cmd(
         )
     else:
         typer.secho(
-            "Saved the translation view before materialization review.",
+            "Saved the translation view for materialization.",
             fg=typer.colors.CYAN,
         )
     _render_preview(plan, destination_name=destination_name)
-    if not yes:
-        if destination_name is None:
-            confirmation = (
-                f"Add {len(plan.proposals)} translated "
-                f"{'copy' if len(plan.proposals) == 1 else 'copies'}?"
-            )
-            approved = typer.confirm(confirmation, default=False)
-        else:
-            from memcommit.commands.save_location_review import (
-                review_save_location,
-            )
+    # --in-place is already an exact checkpointed mutation request. Only a
+    # fresh destination needs the editable Save Location review.
+    if destination_name is not None and not yes:
+        from memcommit.commands.save_location_review import (
+            review_save_location,
+        )
 
-            reviewed_destination = review_save_location(
-                destination_name,
-                validate=store.assert_context_creatable,
-                apply_label="create translated Context",
-            )
-            approved = reviewed_destination is not None
-            if reviewed_destination is not None:
-                destination_name = reviewed_destination
-        if not approved:
+        reviewed_destination = review_save_location(
+            destination_name,
+            validate=store.assert_context_creatable,
+            apply_label="create translated Context",
+        )
+        if reviewed_destination is None:
             typer.echo(
                 "Aborted — the translation view remains saved; "
                 "no Context changes made."
             )
             return
+        destination_name = reviewed_destination
 
     try:
         if store.current_context_name() != plan.context_name:

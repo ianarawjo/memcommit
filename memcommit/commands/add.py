@@ -155,8 +155,8 @@ def cmd(
         )
         raise typer.Exit(1)
 
-    # Capture global navigation once before file, stdin, paste, or confirmation
-    # can yield control. Relative target meaning stays stable for this command.
+    # Capture global navigation once before file, stdin, or paste intake can
+    # yield control. Relative target meaning stays stable for this command.
     store = MemoryStore()
     current_name = store.current_context_name()
     port = MemoryStoreAddTargetPort(store, current_name=current_name)
@@ -217,13 +217,8 @@ def cmd(
             count = len(contents)
             noun = "line" if count == 1 else "lines"
             typer.secho(f"[{count} {noun} pasted]", dim=True)
-            if not typer.confirm(
-                f"Add {count} {'Memory' if count == 1 else 'Memories'} "
-                f"to '{frozen_target.context_name}'?",
-                default=False,
-            ):
-                typer.echo("Aborted — no changes made.")
-                return
+            # The explicit paste mode plus its F2/Ctrl-D finish action is the
+            # approval boundary; the resulting Add remains one Undo unit.
             request = AddRequest(
                 context_locator=context_name,
                 contents=contents,

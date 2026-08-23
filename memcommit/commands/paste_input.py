@@ -106,7 +106,7 @@ def capture_paste(
         noun = "line" if count == 1 else "lines"
         status = (
             f"[{count} {noun} pasted]  "
-            f"F2/Ctrl-D: review  Esc/Ctrl-C: cancel"
+            f"F2/Ctrl-D: add  Esc/Ctrl-C: cancel"
         )
         return [
             (

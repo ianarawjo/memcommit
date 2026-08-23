@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import sys
 from typing import Annotated, Optional
 
 import typer
@@ -410,13 +409,9 @@ def cmd(
         if automatic_result and not (save_as is not None and apply):
             render_distill_receipt(result)
 
-        should_apply = apply
-        if save_as is not None and not apply and sys.stdin.isatty() and sys.stdout.isatty():
-            should_apply = typer.confirm(
-                f"Create '{save_as}' from these exact {len(result.analysis.rules)} Rules?",
-                default=False,
-            )
-        if should_apply:
+        # Terminal interactivity must not broaden compatibility --save-as
+        # into publication; only the explicit --apply operand crosses it.
+        if apply:
             assert save_as is not None
             receipt = execute_distill_apply(
                 DistillApplyRequest(result=result, output_name=save_as),

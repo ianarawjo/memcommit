@@ -91,6 +91,8 @@ mem translate --to English --in-place
 `--save-as` creates a derived Context. `--in-place` retains the historical
 bilingual-sibling operation. Those modes allocate result UIDs and record
 checkpoints because they change the Memory graph; they cannot be combined.
+The explicit `--in-place` option is the complete approval for its checkpointed
+mutation and does not open a second `y/N` prompt.
 
 ## Semantic target and exact identity
 
@@ -313,7 +315,9 @@ direct edit, revalidates the replacement as an exact fresh ordinary Context
 name, and returns to the same apply choice without another provider turn.
 `--yes` deliberately bypasses this review and remains bound to the exact CLI
 operand. In-place translation omits the card because it updates the already
-reviewed source Context rather than creating a distinct result.
+reviewed source Context rather than creating a distinct result. It applies
+immediately after rendering the informational translation preview; `--yes`
+remains accepted with `--in-place` only so existing scripts keep working.
 
 The current checkpoint provenance schemas retain one response digest field.
 For a staged provider-only translation this is the digest of the canonical

@@ -55,6 +55,7 @@ def test_capture_paste_collects_bracketed_payload_without_rendering_it():
     )
     rendered = "".join(output.writes)
     assert "Paste text" in rendered
+    assert "F2/Ctrl-D: add" in rendered
     assert "private first line" not in rendered
     assert "private second line" not in rendered
     assert "private third line" not in rendered
@@ -120,10 +121,11 @@ def test_add_paste_saves_in_order_with_one_checkpoint_and_no_echo(
     payload = "  first private fact  \n\n* second private fact\n세 번째 사실"
     monkeypatch.setattr(add, "capture_paste", lambda: payload)
 
-    result = invoke("add", "--paste", stdin="y\n")
+    result = invoke("add", "--paste")
 
     assert result.exit_code == 0
     assert "[3 lines pasted]" in result.output
+    assert "[y/N]" not in result.output
     assert "Added 3 Memories to 'intake'." in result.output
     assert "first private fact" not in result.output
     assert "second private fact" not in result.output
@@ -174,7 +176,7 @@ def test_add_paste_reloads_context_before_saving(
 
     monkeypatch.setattr(add, "capture_paste", capture_after_concurrent_update)
 
-    result = invoke("add", "--paste", stdin="y\n")
+    result = invoke("add", "--paste")
 
     assert result.exit_code == 0
     assert [
@@ -200,14 +202,14 @@ def test_add_paste_rejects_context_recreated_during_capture(
         capture_after_context_replacement,
     )
 
-    result = invoke("add", "--paste", stdin="y\n")
+    result = invoke("add", "--paste")
 
     assert result.exit_code == 1
     assert "was replaced while paste mode was open" in result.output
     assert direct_memories("intake") == []
 
 
-def test_add_paste_rejected_confirmation_does_not_mutate(
+def test_add_paste_finish_commits_without_a_second_confirmation(
     isolated_store,
     monkeypatch,
 ):
@@ -217,16 +219,18 @@ def test_add_paste_rejected_confirmation_does_not_mutate(
     monkeypatch.setattr(
         add,
         "capture_paste",
-        lambda: "do not store this",
+        lambda: "store this immediately",
     )
 
-    result = invoke("add", "--paste", stdin="n\n")
+    result = invoke("add", "--paste")
 
     assert result.exit_code == 0
-    assert "Aborted — no changes made." in result.output
-    assert "do not store this" not in result.output
-    assert direct_memories("intake") == []
-    assert len(store.list_checkpoints("intake")) == checkpoint_count
+    assert "[y/N]" not in result.output
+    assert "store this immediately" not in result.output
+    assert [memory.content for memory in direct_memories("intake")] == [
+        "store this immediately"
+    ]
+    assert len(store.list_checkpoints("intake")) == checkpoint_count + 1
 
 
 @pytest.mark.parametrize(

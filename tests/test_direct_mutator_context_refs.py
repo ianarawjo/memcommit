@@ -68,7 +68,7 @@ def test_add_paste_reload_preserves_unresolved_context_ref(
     store, name, _, reference_uid = _dangling_parent()
     monkeypatch.setattr(add_command, "capture_paste", lambda: "pasted")
 
-    result = runner.invoke(app, ["add", "--paste"], input="y\n")
+    result = runner.invoke(app, ["add", "--paste"])
 
     assert result.exit_code == 0, result.output
     _assert_context_ref(store, name, reference_uid)

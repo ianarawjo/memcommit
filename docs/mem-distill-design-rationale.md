@@ -8,8 +8,10 @@ The ordinary standalone route now freezes an existing Target before inference
 and atomically adds the complete supported Rule set without an `--apply` gate.
 `mem impact distill` owns process-local preview. The former require-new
 `--save-as`/`--apply` route remains executable as a compatibility boundary but
-is no longer the primary command contract. A persisted hidden-prewarm artifact
-and a durable review session are not implemented.
+is no longer the primary command contract. Its hidden `--save-as` form is
+always read-only unless the same invocation includes `--apply`; terminal
+interactivity never inserts a second `y/N` decision. A persisted
+hidden-prewarm artifact and a durable review session are not implemented.
 
 ## Meaning and direction
 
@@ -205,6 +207,12 @@ The current runtime rejects any granted Source before provider connection.
 Visibility or `READ` alone does not authorize derivation or retention. A later
 grant adapter must explicitly satisfy `DERIVE`, `EXPORT`, retained-analysis,
 target acceptance, and freshness requirements.
+
+The compatibility require-new form treats `--apply` as the complete
+publication approval. `--save-as` without `--apply` renders the proposed name
+as `READY TO CREATE` and leaves it absent in both terminals and noninteractive
+hosts. This keeps one command contract across TTY boundaries and avoids a
+prompt that an agent or pipeline cannot answer.
 
 ## Remaining limits
 

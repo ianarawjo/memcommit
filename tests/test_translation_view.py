@@ -418,7 +418,7 @@ def test_declined_materialization_keeps_view_but_creates_no_context(
     assert load_translation_catalog(source.uid, "English") is not None
 
 
-def test_yes_requires_materialization_while_explicit_in_place_remains(
+def test_yes_requires_materialization_while_explicit_in_place_applies_immediately(
     isolated_store,
     monkeypatch,
 ):
@@ -443,10 +443,11 @@ def test_yes_requires_materialization_while_explicit_in_place_remains(
     _patch_provider(monkeypatch, provider)
     applied = runner.invoke(
         app,
-        ["translate", "--to", "English", "--in-place", "--yes"],
+        ["translate", "--to", "English", "--in-place"],
     )
 
     assert applied.exit_code == 0
+    assert "[y/N]" not in applied.output
     loaded = store.load_direct(source.name)
     loaded_uids = loaded.ordered_uids()
     assert loaded_uids[0] == source_uid

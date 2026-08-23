@@ -818,7 +818,7 @@ def test_mem_distill_applies_the_exact_rendered_proposal(
     assert len(store.load_direct(source.name).order) == 2
 
 
-def test_mem_distill_save_as_without_apply_remains_read_only(
+def test_mem_distill_save_as_without_apply_never_prompts_and_remains_read_only(
     isolated_store,
     monkeypatch,
 ):
@@ -846,12 +846,22 @@ def test_mem_distill_save_as_without_apply_remains_read_only(
         lambda: provider,
     )
 
+    def forbidden_confirm(*args, **kwargs):
+        raise AssertionError("Distill must not open a y/N prompt")
+
+    monkeypatch.setattr(
+        distill_command.typer,
+        "confirm",
+        forbidden_confirm,
+    )
+
     result = runner.invoke(
         app,
         ["distill", source.name, "--save-as", "distill/preview-rules"],
     )
 
     assert result.exit_code == 0, result.output
+    assert "[y/N]" not in result.output
     assert "READY TO CREATE" in result.output
     assert not store.context_exists("distill/preview-rules")
 
