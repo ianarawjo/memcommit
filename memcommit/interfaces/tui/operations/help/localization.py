@@ -62,8 +62,8 @@ _FR = {
         "Une ou plusieurs Memories directes possèdent déjà des limites de phrase ou de structure claires qui doivent devenir des Memories distinctes.",
     ),
     "clear": _copy(
-        "Supprimer après confirmation tous les éléments directs du Context courant ou indiqué.",
-        "Vider un Context tout en conservant le Context lui-même.",
+        "Supprimer immédiatement tous les éléments directs du Context courant ou indiqué, ou de son sous-arbre local avec --recursive ; Undo peut restaurer la commande.",
+        "Vider un Context ou un sous-arbre local tout en conservant chaque Context.",
     ),
     "compare": _copy(
         "Comparer les Memories de deux Contexts et indiquer ce qu’ils partagent, ce qui diffère et ce qui n’apparaît que d’un côté.",
@@ -313,8 +313,8 @@ _ZH = {
         "一个或多个直接 Memory 已有清晰的句子或结构边界，需要将其变为独立 Memory 时。",
     ),
     "clear": _copy(
-        "确认后移除当前或指定 Context 中的所有直接项目。",
-        "保留 Context 本身但清空其内容时。",
+        "立即移除当前或指定 Context 中的所有直接项目；使用 --recursive 时清空其本地词法子树，Undo 可恢复整条命令。",
+        "保留每个 Context，同时清空一个 Context 或本地词法子树时。",
     ),
     "compare": _copy(
         "比较两个 Context 中的 Memory，报告共同点、差异以及仅存在于一侧的内容。",
@@ -560,8 +560,8 @@ _KO = {
         "하나 이상의 직접 Memory에 이미 분명한 문장 또는 구조 경계가 있고 이를 별도 Memory로 만들 때.",
     ),
     "clear": _copy(
-        "현재 또는 지정한 Context의 모든 직접 항목을 즉시 제거하며 Undo로 복구할 수 있습니다.",
-        "Context 자체는 유지하면서 그 안을 비울 때.",
+        "현재 또는 지정한 Context의 모든 직접 항목을 즉시 제거하며, --recursive를 사용하면 로컬 lexical subtree 전체를 한 번의 Undo로 복구할 수 있게 비웁니다.",
+        "각 Context는 유지하면서 Context 하나 또는 로컬 lexical subtree를 비울 때.",
     ),
     "compare": _copy(
         "두 Context의 Memory를 비교하여 공통점, 차이점, 한쪽에만 있는 내용을 보고합니다.",
@@ -811,8 +811,8 @@ _MN = {
         "Нэг буюу хэд хэдэн шууд Memory нь тусдаа Memory болгох тодорхой өгүүлбэрийн эсвэл бүтцийн хилтэй үед.",
     ),
     "clear": _copy(
-        "Баталгаажуулсны дараа одоогийн эсвэл заасан Context-ийн бүх шууд зүйлийг арилгана.",
-        "Context-г өөрийг нь үлдээн доторхыг хоослох үед.",
+        "Одоогийн эсвэл заасан Context-ийн бүх шууд зүйлийг нэн даруй арилгана; --recursive нь локал lexical дэд модыг цэвэрлэж, Undo бүх командыг сэргээнэ.",
+        "Context бүрийг хадгалан нэг Context эсвэл локал lexical дэд модыг хоослох үед.",
     ),
     "compare": _copy(
         "Хоёр Context-ийн Memory-г харьцуулж, нийтлэг, ялгаатай болон зөвхөн нэг талд буй зүйлсийг мэдээлнэ.",

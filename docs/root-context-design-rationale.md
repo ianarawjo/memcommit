@@ -197,11 +197,25 @@ The Root Context may directly contain:
 Its direct item order and checkpoint history remain independent from all
 descendant Contexts.
 
-## 7. `clear` and `delete` Are Exact-Context Operations
+## 7. `clear` and `delete` Are Exact-Context Operations by Default
 
 `mem clear construction-updates` removes the Root Context's direct Memory,
 MemoryRef, and embedded Context entries. It does not delete descendant Context
 files.
+
+The explicit recursive form empties the materialized local lexical subtree as
+one checkpointed command:
+
+```bash
+mem clear construction-updates --recursive
+```
+
+It removes the direct items of `construction-updates` and each existing
+`construction-updates/...` Context while retaining every Context and its
+checkpoint history. It does not follow embedded Context edges, and one
+`mem undo` restores every changed member as one command unit. The root itself
+must exist; clear never synthesizes a missing namespace parent from a path
+prefix.
 
 `mem delete construction-updates` removes only:
 
@@ -221,7 +235,7 @@ construction-updates/event-relocations/
 If the deleted Root Context is current, the current Context is cleared. If a
 descendant is current, that descendant remains current.
 
-Deletion stages the exact Context file and checkpoint directory under temporary
+Deletion remains exact-only. It stages the exact Context file and checkpoint directory under temporary
 names in the same directory before removing them. Descendant directories are
 never passed to recursive deletion.
 

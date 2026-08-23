@@ -41,6 +41,7 @@ mem impact atomize [LOCATOR]
 mem atomize [LOCATOR]
 mem forget INSTRUCTION --context LOCATOR
 mem clear [LOCATOR]
+mem clear [LOCATOR] --recursive
 mem delete LOCATOR
 mem remove LOCATOR
 mem merge LOCATOR [LOCATOR]
@@ -53,6 +54,11 @@ These commands use `memcommit.context_locator.resolve_context_locator` for
 their existing-Context operands, normally through the command-entry
 `ContextOperandSnapshot` that freezes one active-Context base for the complete
 invocation.
+
+Clear's recursive form resolves its root through that same snapshot, then
+freezes the materialized local lexical descendants of the canonical result.
+The raw locator is never reused for membership, checkpoint identity, output,
+or Undo reconstruction.
 
 `RESULT_NAME` in the three-operand Meld form is deliberately not an
 existing-Context locator: the symmetric Result may be created, so it remains

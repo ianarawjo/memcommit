@@ -4722,6 +4722,14 @@ class MemoryStore:
                                 f"Context '{context.name}' changed before the "
                                 "command could be saved."
                             )
+                        # Validate the entire write set before the first
+                        # publication. Rollback still protects unexpected I/O
+                        # failures, while a locked later Context must fail the
+                        # complete command without a provisional earlier save.
+                        self._assert_context_record_change_allowed(
+                            current,
+                            context,
+                        )
                         original_records[context.name] = current.to_dict()
 
                     created: list[tuple[str, Checkpoint]] = []

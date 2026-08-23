@@ -23,7 +23,7 @@ BEST_FOR_BY_OPERATION = {
         "One or more direct Memories already have clear sentence or structural "
         "boundaries that should become separate Memories."
     ),
-    "clear": "Emptying a Context while retaining the Context itself.",
+    "clear": "Emptying a Context or local lexical subtree while retaining every Context.",
     "compare": (
         "Comparing two Contexts as a whole to understand where they align and differ."
     ),

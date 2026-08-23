@@ -457,6 +457,13 @@ def _restored_command(unit: ContextCommandUnit) -> str:
         target = args.get("context") or operand_context or context_name
         return _with_context(command, target if isinstance(target, str) else None)
     if unit.command == "clear":
+        tree = args.get("clear_tree")
+        if (
+            isinstance(tree, Mapping)
+            and tree.get("include_descendants") is True
+            and isinstance(tree.get("root"), str)
+        ):
+            return f"mem clear {_command_arg(tree['root'])} --recursive"
         target = args.get("context") or context_name
         if isinstance(target, str):
             return f"mem clear {_command_arg(target)}"

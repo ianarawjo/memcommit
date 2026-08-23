@@ -1987,10 +1987,152 @@ class TestClear:
         assert "Redid command: mem clear ctx" in redone.output
         assert not MemoryStore().load_current().memories
 
+    def test_recursive_clear_is_one_undoable_command_and_ignores_embeds(
+        self,
+        isolated_store,
+    ):
+        assert invoke("init", "tree").exit_code == 0
+        assert invoke("add", "root item").exit_code == 0
+        assert invoke("init", "tree/child").exit_code == 0
+        assert invoke("add", "child item").exit_code == 0
+        assert invoke("init", "tree/empty").exit_code == 0
+        assert invoke("init", "outside").exit_code == 0
+        assert invoke("add", "outside survives").exit_code == 0
+        assert invoke("embed", "outside", "--into", "tree").exit_code == 0
+
+        cleared = invoke("clear", "tree", "-r")
+
+        assert cleared.exit_code == 0, cleared.output
+        assert "Continue?" not in cleared.output
+        assert "Cleared 3 item(s) from 2 of 3 Context(s)" in cleared.output
+        assert "Undo can restore this command as one unit" in cleared.output
+        store = MemoryStore()
+        assert not store.load_direct("tree").memories
+        assert not store.load_direct("tree/child").memories
+        assert not store.load_direct("tree/empty").memories
+        assert [
+            item.content for item in store.load_direct("outside").iter_items()
+        ] == ["outside survives"]
+
+        undone = invoke("undo")
+
+        assert undone.exit_code == 0, undone.output
+        assert "Undid command: mem clear tree --recursive" in undone.output
+        assert "Affected Contexts: 2" in undone.output
+        assert len(store.load_direct("tree").memories) == 2
+        assert [
+            item.content for item in store.load_direct("tree/child").iter_items()
+        ] == ["child item"]
+        assert not store.load_direct("tree/empty").memories
+        assert [
+            item.content for item in store.load_direct("outside").iter_items()
+        ] == ["outside survives"]
+
+        redone = invoke("redo")
+
+        assert redone.exit_code == 0, redone.output
+        assert "Redid command: mem clear tree --recursive" in redone.output
+        assert not store.load_direct("tree").memories
+        assert not store.load_direct("tree/child").memories
+
+    def test_recursive_clear_fails_without_partial_writes(
+        self,
+        isolated_store,
+    ):
+        assert invoke("init", "tree").exit_code == 0
+        assert invoke("add", "root stays").exit_code == 0
+        assert invoke("init", "tree/child").exit_code == 0
+        assert invoke("add", "child stays").exit_code == 0
+        assert invoke("lock", "context", "tree/child").exit_code == 0
+
+        result = invoke("clear", "tree", "--recursive")
+
+        assert result.exit_code == 1
+        assert "tree/child" in (result.output + result.stderr)
+        assert "locked against changes" in (result.output + result.stderr)
+        store = MemoryStore()
+        assert [
+            item.content for item in store.load_direct("tree").iter_items()
+        ] == ["root stays"]
+        assert [
+            item.content for item in store.load_direct("tree/child").iter_items()
+        ] == ["child stays"]
+        for name in ("tree", "tree/child"):
+            assert not any(
+                checkpoint.get("command") == "clear"
+                for checkpoint in store.list_checkpoints(name)
+            )
+
+    def test_recursive_clear_retains_a_canonical_empty_root_in_undo_receipt(
+        self,
+        isolated_store,
+    ):
+        assert invoke("init", "tree").exit_code == 0
+        assert invoke("init", "tree/child").exit_code == 0
+        assert invoke("add", "child item").exit_code == 0
+
+        cleared = invoke("clear", "..", "-r")
+
+        assert cleared.exit_code == 0, cleared.output
+        assert "1 of 2 Context(s) under 'tree'" in cleared.output
+        store = MemoryStore()
+        assert not store.load_direct("tree").memories
+        assert not store.load_direct("tree/child").memories
+
+        undone = invoke("undo")
+
+        assert undone.exit_code == 0, undone.output
+        assert "Undid command: mem clear tree --recursive" in undone.output
+        assert [
+            item.content for item in store.load_direct("tree/child").iter_items()
+        ] == ["child item"]
+
+    def test_recursive_clear_rolls_back_an_interrupted_batch(
+        self,
+        isolated_store,
+        monkeypatch,
+    ):
+        assert invoke("init", "tree").exit_code == 0
+        assert invoke("add", "root stays").exit_code == 0
+        assert invoke("init", "tree/child").exit_code == 0
+        assert invoke("add", "child stays").exit_code == 0
+        original_save = MemoryStore._save_locked
+        clear_writes = 0
+
+        def fail_second_clear(store, context, checkpoint, **kwargs):
+            nonlocal clear_writes
+            if checkpoint is not None and checkpoint.command == "clear":
+                clear_writes += 1
+                if clear_writes == 2:
+                    raise OSError("simulated recursive clear write failure")
+            return original_save(store, context, checkpoint, **kwargs)
+
+        monkeypatch.setattr(MemoryStore, "_save_locked", fail_second_clear)
+
+        result = invoke("clear", "tree", "--recursive")
+
+        assert result.exit_code == 1
+        assert "simulated recursive clear write failure" in (
+            result.output + result.stderr
+        )
+        store = MemoryStore()
+        assert [
+            item.content for item in store.load_direct("tree").iter_items()
+        ] == ["root stays"]
+        assert [
+            item.content for item in store.load_direct("tree/child").iter_items()
+        ] == ["child stays"]
+        for name in ("tree", "tree/child"):
+            assert not any(
+                checkpoint.get("command") == "clear"
+                for checkpoint in store.list_checkpoints(name)
+            )
+
     def test_clear_help_hides_legacy_force_option(self):
         result = invoke("clear", "--help")
         assert result.exit_code == 0
         assert "--force" not in result.output
+        assert "--recursive" in result.output
 
     def test_clear_fails_with_no_current_context(self, isolated_store):
         result = invoke("clear")

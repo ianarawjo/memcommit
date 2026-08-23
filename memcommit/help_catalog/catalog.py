@@ -105,11 +105,11 @@ _OPERATIONS = (
     ),
     _operation(
         "clear",
-        "Immediately remove all direct items from the current or explicit Context; Undo can restore them.",
-        "Context direct items -> empty Context",
+        "Immediately remove all direct items from one Context or, with --recursive, its local lexical subtree; Undo can restore the command.",
+        "Context or local lexical subtree direct items -> empty retained Contexts",
         ExecutionKind.DETERMINISTIC,
-        "Checkpointed Context change with command-unit Undo/Redo",
-        "One exact Context",
+        "Checkpointed command-unit change with one-turn Undo/Redo",
+        "One exact Context by default; optional local lexical descendants",
     ),
     _operation(
         "compare",

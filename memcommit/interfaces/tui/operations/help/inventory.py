@@ -484,6 +484,7 @@ COMMAND_FORMS = {
     "clear": (
         "mem clear (immediately clear the current Context; Undo can restore)",
         "mem clear [context] (immediately clear one explicit Context; Undo can restore)",
+        "mem clear [context] -r (immediately clear its local lexical subtree as one Undoable command)",
     ),
     "compare": (
         "mem compare (choose peers for a transient concise summary)",
