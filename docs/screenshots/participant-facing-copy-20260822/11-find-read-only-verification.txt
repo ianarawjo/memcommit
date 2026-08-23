@@ -1,0 +1,2 @@
+PTY · 180 COLUMNS × 52 ROWS                                                                                                                                                         
+FIND CLOSED · READ ONLY · NO SOURCE MUTATION
