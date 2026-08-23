@@ -163,7 +163,7 @@ def test_compact_choice_is_discarded_on_close_instead_of_saved_as_a_draft():
     assert saved == []
 
 
-def test_compact_response_accepts_direct_multiline_guidance_process_locally():
+def test_compact_response_is_a_direct_inline_form_field():
     item = replace(_item("retention", "Retention period"), commentable=True)
     view = replace(
         _view(),
@@ -175,8 +175,7 @@ def test_compact_response_accepts_direct_multiline_guidance_process_locally():
     with create_pipe_input() as pipe_input:
         pipe_input.send_text(
             "\x1b[B" * 3
-            + "\rKeep 45 days for audit logs.\x0aDelete other copies.\r"
-            + "\x1b[B\r"
+            + "Keep 45 days for audit logs only.\r\r"
         )
         action = run_resolution_workbench_shell(
             view,
@@ -192,9 +191,7 @@ def test_compact_response_accepts_direct_multiline_guidance_process_locally():
     assert action.kind == "SUBMIT_ITEM"
     assert action.item_uid == "retention"
     assert action.option_uid == "retention:recommended"
-    assert action.comment == (
-        "Keep 45 days for audit logs.\nDelete other copies."
-    )
+    assert action.comment == "Keep 45 days for audit logs only."
     assert saved == []
 
 
@@ -204,7 +201,7 @@ def test_compact_response_escape_discards_unsaved_text_before_root_close():
     saved: list[tuple[str, str | None, str]] = []
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\x1b[B" * 3 + "\rtemporary direction\x1b\x1b")
+        pipe_input.send_text("\x1b[B" * 3 + "temporary direction\x1b\x1b")
         action = run_resolution_workbench_shell(
             view,
             compact_decisions=True,
@@ -231,8 +228,7 @@ def test_compact_response_uses_one_whole_set_revision_turn_when_available():
     with create_pipe_input() as pipe_input:
         pipe_input.send_text(
             "\x1b[B" * 3
-            + "\rPreserve 30 days for audit logs only.\r"
-            + "\x1b[B\r"
+            + "Preserve 30 days for audit logs only.\r\r"
         )
         action = run_resolution_workbench_shell(
             view,

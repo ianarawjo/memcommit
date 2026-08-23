@@ -1,12 +1,12 @@
- MELD NEEDS INPUT · < 2/2 >                                                                                                                                                         
- CONFLICT · Access window                                                                                                                                                           
- Which access window should the policy use?                                                                                                                                         
-✓ A · Allow access during staffed hours. · Recommended                                                                                                                              
-  B · Allow access at any time.                                                                                                                                                     
+ MELD NEEDS INPUT · < 1/2 >                                                                                                                                                         
+ CONFLICT · Retention period                                                                                                                                                        
+ Which retention period should the policy use?                                                                                                                                      
+✓ A · Keep records for 30 days. · Recommended                                                                                                                                       
+  B · Keep records for 90 days.                                                                                                                                                     
   Preserve both · Retain both readings with their exact scopes.                                                                                                                     
                                                                                                                                                                                     
   RESPONSE ·    ›                                                                                                                                                                   
                                                                                                                                                                                     
   APPLY ALL · 2/2 READY                                                                                                                                                             
                                                                                                                                                                                     
- ←/→ issue · ↑/↓ move · Enter select/apply · Esc close
+ Type directly · Enter/↓ next · ↑ previous · Esc leave

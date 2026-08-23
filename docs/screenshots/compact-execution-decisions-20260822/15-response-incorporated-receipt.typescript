@@ -1,0 +1,74 @@
+$ mem meld advisor-a advisor-b policy
+PTY 180 52
+[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;2;244;245;247;1m MELD NEEDS INPUT · < 1/2 >[0m
+[0m CONFLICT · Retention period[0m
+[0;38;2;244;245;247m Which retention period should the policy use?[0m
+[0;38;2;16;36;47;48;2;139;213;255;1m✓ A · Keep records for 30 days. · Recommended[0m
+[0m  B · Keep records for 90 days.[0m
+[0m  Preserve both · Retain both readings with their exact scopes.[0m
+[0m [0m
+[0m  RESPONSE ·    ›[0m
+
+[0m  APPLY ALL · 2/2 READY[0m
+[0m [0m
+[0m ←/→ issue · ↑/↓ move · Enter select/apply · Esc close[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[0m [47A[0m[?25l[A[0;38;2;16;36;47;48;2;139;213;255m✓ A · Keep records for 30 days. · Recommended[0m
+
+
+
+[0;38;2;16;36;47;48;2;139;213;255;1m  RESPONSE · [0m
+
+
+
+[C[0mType dir[Cctly ·[CEnt[Cr/↓ [Cext[C· ↑ previous[7Cleav[4A[35D[0m[?12l[?25h[?25l[16D[0;38;2;16;36;47;48;2;139;213;255;1m✓ RESPONSE[C· [3C[0mPreserve 30 days for audit logs only.[0m
+
+[2C[0mCONTINUE · 2/2 READY[0m[K[2A[33C[0m[?12l[?25h[?25l[55D[0;38;2;16;36;47;48;2;139;213;255m  ✓ RESPONSE · [0m
+
+[0;38;2;16;36;47;48;2;139;213;255;1m  CONTINUE · 2/2 READY[0m
+
+[C[0m←/→ issu[C · ↑/↓[Cmov[C · E[Cter[Cselect/apply[7Cclos[11A[53D[0m[J[0m[?7h[?1049l[?2004l
+MELD RESPONSE INCORPORATED · PROVIDER REVISION REQUIRED
+RESPONSE · PRESERVE 30 DAYS FOR AUDIT LOGS ONLY
+SOURCE · advisor-a + advisor-b · UNCHANGED
+TARGET · policy · UNCHANGED · NO CHECKPOINT
+NEXT · REVIEW REVISED PROPOSAL BEFORE APPLY
+REPORT · RETAINED · mem review meld --session capture-meld-session

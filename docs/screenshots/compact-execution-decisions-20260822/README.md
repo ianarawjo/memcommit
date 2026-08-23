@@ -30,21 +30,21 @@ during execution.
 | `05-left-returns-first-conflict.png` | `Left` | Issue 1/2 returns without losing issue 2's process-local choice | None |
 | `06-down-preserve-both-focus.png` | `Down`, `Down` | `Preserve both` is the visible arrow-key target while Recommended remains checked | None |
 | `07-enter-stages-preserve-both.png` | `Enter` | `Preserve both` receives the retained check for this run | None |
-| `08-response-row-focus.png` | `Down` | `RESPONSE · Add a direction…` is a distinct arrow-key target, not an `Other` choice | None |
+| `08-response-row-focus.png` | `Down` | The caret enters the always-visible `RESPONSE · ›` row directly; choices and Apply remain on screen | None |
 | `09-apply-row-ready.png` | `Down` | A blank line separates item judgment from `APPLY ALL · 2/2 READY`; no `A`, Defer, or draft action appears | None |
 | `10-applied-receipt.png` | `Enter` | Apply runs immediately and the compact receipt exposes the report Review route; no second confirmation screen appears | Target checkpoint (fixture receipt) |
 | `11-read-only-verification.png` | `v` | Both reviewed choices, retained report, zero unresolved requirements, and no extra provider call | None |
-| `12-response-editor.png` | New run, `Down` ×3, `Enter` | The shared multiline `RESPONSE` field opens in place; choices and report are not replaced by a separate screen | None |
-| `13-response-multiline-text.png` | Exact text, `Ctrl-J`, exact text | A two-line direct direction is visible before submission | None |
-| `14-response-staged.png` | `Enter` | The direct response is compacted to one checked row and remains process-local | None |
-| `15-continue-response.png` | `Down` | The final row honestly changes to `CONTINUE`; custom semantic guidance cannot bypass the provider revision turn | None |
-| `16-response-incorporated-receipt.png` | `Enter` | Meld consumes the response without mutating Source or target and requires review of the revised proposal | None |
-| `17-close-discards-process-local-response.png` | New run, open Response, enter temporary text, `Enter`, `Esc` | Closing discards the staged compact response and recommendation without saving a draft | None |
+| `12-response-inline-focus.png` | New run, `Down` ×3 | RESPONSE receives the caret on the existing form; no editor screen or extra Enter is required | None |
+| `13-response-inline-text.png` | Exact text | The response is edited directly while every choice and Continue remain visible | None |
+| `14-continue-response.png` | `Enter` | Enter confirms the inline field and advances to `CONTINUE`; semantic guidance cannot bypass the provider revision turn | None |
+| `15-response-incorporated-receipt.png` | `Enter` | Meld consumes the response without mutating Source or target and requires review of the revised proposal | None |
+| `16-close-discards-process-local-response.png` | New run, `Down` ×3, temporary text, `Esc`, `Esc` | First Escape leaves the field; the second closes and discards the process-local response without saving a draft | None |
 
 The three runs demonstrate that arrows and Enter are the complete interaction
 grammar and one separated Apply row is the only confirmation. The conditional
-Response row uses the same grammar; Enter saves, `Ctrl-J` inserts a newline,
-and Escape returns. Numeric choice keys and direct `L`, `A`, `D`, and `P`
+Response row is a one-line field in that same form: typing edits directly,
+Enter or Down advances, Up returns, and Escape leaves it. Multiline guidance
+remains available in explicit Review. Numeric choice keys and direct `L`, `A`, `D`, and `P`
 actions are deliberately inert. A
 recommendation is selected only when the operation explicitly types it;
 option order is never treated as recommendation. Defer, Preserve-all, and

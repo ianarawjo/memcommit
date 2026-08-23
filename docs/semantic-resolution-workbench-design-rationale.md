@@ -204,19 +204,22 @@ separated Apply row is the single explicit mutation boundary. The complete
 report remains a Review concern and
 does not reappear as a second confirmation screen.
 
-An answerable compact item also exposes one unboxed `RESPONSE` row after its
-authored choices. This is not a fabricated `Other` choice: Enter opens the
-shared multiline field in place, Enter stages its text, `Ctrl-J` inserts a
-newline, and Escape returns without using the edit. A response remains
-independent from the checked choice so a person can qualify the recommended
-direction instead of losing it merely by entering the field. The operation
-adapter still decides whether text refines a semantic turn or supplies exact
-custom result wording. Both the choice and response stay process-local until
-Continue consumes them; closing the execution surface does not create a saved
-draft. Existing custom result text is not mistaken for a newly pending
-comment. Resolve, Merge, Dedun, and any other exact action without an
-item-response contract omit this row rather than accepting text they cannot
-honor.
+An answerable compact item also exposes one unboxed, directly writable
+`RESPONSE · ›` row after its authored choices. This is not a fabricated
+`Other` choice or a launcher for another screen: moving onto the row focuses
+its one-line input while the choices and Apply row remain visible. Typing edits
+the process-local response immediately, Left/Right moves its caret, Enter or
+Down advances to the next row, Up returns to the preceding choice, and Escape
+leaves the field. Longer multiline composition remains available in explicit
+Review. A response stays independent from the checked choice so a person can
+qualify the recommended direction instead of losing it merely by focusing the
+field. The operation adapter still decides whether text refines a semantic
+turn or supplies exact custom result wording. Both the choice and response
+stay process-local until Continue consumes them; closing the execution surface
+does not create a saved draft. Existing custom result text is not mistaken for
+a newly pending comment. Resolve, Merge, Dedun, and any other exact action
+without an item-response contract omit this row rather than accepting text
+they cannot honor.
 
 ## Common contract
 

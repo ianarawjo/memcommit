@@ -4,49 +4,9 @@
 ✓ A · Allow access during staffed hours. · Recommended                                                                                                                              
   B · Allow access at any time.                                                                                                                                                     
   Preserve both · Retain both readings with their exact scopes.                                                                                                                     
-  RESPONSE · Add a direction…                                                                                                                                                       
+                                                                                                                                                                                    
+  RESPONSE ·    ›                                                                                                                                                                   
                                                                                                                                                                                     
   APPLY ALL · 2/2 READY                                                                                                                                                             
                                                                                                                                                                                     
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
- ←/→ issue · ↑/↓ move · Enter select/respond/apply · Esc close
+ ←/→ issue · ↑/↓ move · Enter select/apply · Esc close

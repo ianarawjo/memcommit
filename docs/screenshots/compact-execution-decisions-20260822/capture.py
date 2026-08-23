@@ -358,28 +358,21 @@ def _capture_response() -> None:
         child.expect("MELD NEEDS INPUT")
         _settle(child)
         child.send(DOWN * 3)
-        child.send("\r")
         _settle(child)
-        _snapshot(recorder, "12-response-editor")
+        _snapshot(recorder, "12-response-inline-focus")
 
         child.send("Preserve 30 days for audit logs only.")
-        child.sendcontrol("j")
-        child.send("Delete operational copies after 7 days.")
         _settle(child)
-        _snapshot(recorder, "13-response-multiline-text")
+        _snapshot(recorder, "13-response-inline-text")
 
         child.send("\r")
         _settle(child)
-        _snapshot(recorder, "14-response-staged")
-
-        child.send(DOWN)
-        _settle(child)
-        _snapshot(recorder, "15-continue-response")
+        _snapshot(recorder, "14-continue-response")
 
         child.send("\r")
         child.expect("NEXT .* REVIEW REVISED PROPOSAL BEFORE APPLY")
         child.expect(pexpect.EOF)
-        _snapshot(recorder, "16-response-incorporated-receipt")
+        _snapshot(recorder, "15-response-incorporated-receipt")
     finally:
         if child.isalive():
             child.close(force=True)
@@ -391,13 +384,12 @@ def _capture_close() -> None:
         child.expect("MELD NEEDS INPUT")
         _settle(child)
         child.send(DOWN * 3)
-        child.send("\r")
         child.send("Temporary direction")
-        child.send("\r")
+        child.send("\x1b")
         child.send("\x1b")
         child.expect("DRAFT .* NOT SAVED")
         child.expect(pexpect.EOF)
-        _snapshot(recorder, "17-close-discards-process-local-response")
+        _snapshot(recorder, "16-close-discards-process-local-response")
     finally:
         if child.isalive():
             child.close(force=True)
