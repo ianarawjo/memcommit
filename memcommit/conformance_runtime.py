@@ -24,7 +24,13 @@ from memcommit.context_locator import (
 from memcommit.context_targeting.loading import (
     resolve_local_direct_memory_locator,
 )
-from memcommit.context_targeting.memory_focus import is_memory_uid_selector
+from memcommit.context_targeting.model import (
+    DirectMemoryLocator,
+    ExistingContextOperand,
+)
+from memcommit.context_targeting.resolution import (
+    parse_auto_typed_context_memory_operand,
+)
 from memcommit.ground import GroundSession, is_bound_ground_schema
 from memcommit.store import (
     MemoryStore,
@@ -150,17 +156,12 @@ def freeze_conformance_rules_operand(
             rules=(rule,),
         )
 
-    context_locator, separator, selector = text.rpartition(":")
-    qualified_memory = bool(separator and is_memory_uid_selector(selector))
-    if qualified_memory and not context_locator:
-        raise ConformanceError(
-            "A qualified Conformance Rule Memory requires CONTEXT:UID_OR_PREFIX."
-        )
-    if is_memory_uid_selector(text) or qualified_memory:
+    parsed = parse_auto_typed_context_memory_operand(text)
+    if isinstance(parsed, DirectMemoryLocator):
         memory_operand = (
-            f"{context_locator}:{selector.casefold()}"
-            if qualified_memory
-            else text.casefold()
+            f"{parsed.context_locator}:{parsed.memory_selector.casefold()}"
+            if parsed.context_locator is not None
+            else parsed.memory_selector.casefold()
         )
         target = resolve_local_direct_memory_locator(
             store,
@@ -184,7 +185,8 @@ def freeze_conformance_rules_operand(
             memory_digest=_memory_digest(memory),
         )
 
-    canonical_name = resolve_context_locator(text, current=current_name)
+    assert isinstance(parsed, ExistingContextOperand)
+    canonical_name = resolve_context_locator(parsed.locator, current=current_name)
     if store.context_exists(canonical_name):
         context = store.load_direct(canonical_name)
         memories = _direct_memories(context)
@@ -198,12 +200,13 @@ def freeze_conformance_rules_operand(
             context_uid=context.uid,
             context_digest=context_record_digest(context),
         )
-    if is_relative_context_locator(text):
+    if is_relative_context_locator(parsed.locator):
         raise ConformanceError(
-            f"Conformance Rules Context locator {text!r} does not exist locally."
+            f"Conformance Rules Context locator {parsed.locator!r} does not "
+            "exist locally."
         )
 
-    rule = _literal_rule(text)
+    rule = _literal_rule(parsed.locator)
     return FrozenConformanceRulesOperand(
         kind="TEXT",
         label=f"TEXT {rule.content}",

@@ -70,7 +70,7 @@ content.
 
 ## Interface projections
 
-The existing direct `mem show` syntax and text are preserved by a plain CLI
+The existing direct `mem show` text is preserved by a plain CLI
 presenter under `memcommit.interfaces.cli.show`. Recursive output begins with
 aggregate direct-item counts, then renders the same full direct Context form
 once per scoped Context. Reach is shown separately from access so a granted
@@ -80,6 +80,17 @@ runtime, maps errors, and renders the result. Show currently has no interactive
 TUI route; this scope extension does not invent one.
 The Find dialogue's exact read-only `mem show` subprocess follow-up continues
 through the same CLI boundary.
+
+The CLI positional operand now auto-types as an existing Context locator or a
+direct item. `mem show task-1` therefore opens Context `task-1` even when the
+current Context is `practice/greetings`; `mem show UID` finds one unique
+ordinary-local direct owner; and `mem show CONTEXT:UID` states the owner
+explicitly. Non-UUID text first preserves the established current direct-name
+route for embedded Context and query-view rows, then falls back to Context
+lookup. `--context` remains the explicit disambiguator and the qualified READ
+route. The CLI normalizes every form into the same `ShowRequest`; the Python
+and agent contracts deliberately retain separate `selector` and
+`context_name` fields instead of exposing shell-oriented overloading.
 
 `MemCommitClient.show(selector=None, context_name=None)` projects the same
 snapshot to immutable public DTOs and stable Show-specific errors. The
@@ -107,7 +118,8 @@ distinguish a Memory from an opaque query view.
 - Show does not grant QUERY execution; the separate Query operation owns that
   provider and publication lifecycle.
 - Show does not search for a selector across recursive Contexts or add history
-  semantics.
+  semantics. Bare UUID-shaped discovery finds an exact direct owner before the
+  Show request is constructed; it is not recursive scope traversal.
 - Show does not cache live Context content; each call reads its authorized
   current Store snapshot.
 - The public and agent result can legitimately contain complete readable

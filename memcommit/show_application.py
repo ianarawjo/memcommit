@@ -16,6 +16,14 @@ class ShowInputError(ShowError):
     """The requested direct-item selector is malformed or ambiguous."""
 
 
+class ShowItemNotFoundError(ShowInputError):
+    """One selector matched no direct item in its selected owner."""
+
+
+class ShowDirectItemScopeError(ShowInputError):
+    """A direct-item target was combined with recursive Context reach."""
+
+
 @dataclass(frozen=True, slots=True)
 class ShowRequest:
     """One Context-scope or direct-item inspection request.
@@ -46,7 +54,7 @@ class ShowRequest:
         if self.selector is not None and (
             self.include_descendants or self.follow_embeds
         ):
-            raise ShowInputError(
+            raise ShowDirectItemScopeError(
                 "Recursive Show scope cannot be combined with a direct-item "
                 "selector."
             )
@@ -157,7 +165,7 @@ def _selected_value(
         )
     )
     if not matches:
-        raise ShowInputError(
+        raise ShowItemNotFoundError(
             f"No direct item matching '{selector}' in context '{context.name}'."
         )
     if len(matches) > 1:
@@ -233,7 +241,9 @@ __all__ = [
     "ShowContextSnapshot",
     "ShowEmbeddedContext",
     "ShowError",
+    "ShowDirectItemScopeError",
     "ShowInputError",
+    "ShowItemNotFoundError",
     "ShowItem",
     "ShowMemory",
     "ShowMemoryReference",

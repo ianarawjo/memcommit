@@ -9,12 +9,17 @@ digest-bound same-UID sidecar catalog, renders that representation, and exits:
 ```bash
 mem translate
 mem translate --to French
+mem translate task-123 --to English
 mem translate ac827aaa --to en-CA
+mem translate task-123:ac827aaa --to en-CA
 mem translate --to English --refresh
 ```
 
-`--to` defaults to `English`. One UID or unique UID prefix narrows the view to
-one directly owned Memory. An exact stored projection is reused without
+`--to` defaults to `English`. The optional positional target uses the shared
+Context/direct-Memory grammar: a Context locator selects that direct frame, a
+bare public UUID-shaped UID or prefix finds one unique ordinary-local direct
+owner, and `CONTEXT:UID` states the owner explicitly. A Memory target narrows
+the view to one directly owned Memory. An exact stored projection is reused without
 contacting the provider. `--refresh` deliberately obtains and publishes a new
 provider translation even when the existing representation is an exact match.
 It never overwrites a manually edited or imported representation.
@@ -46,6 +51,14 @@ the current Context, or allocate a result UID. In particular, translating a
 Context named `task-123` no longer implicitly consumes a `task-123-en` Context
 name. The translated strings are representations of existing Memories, not
 new Memory occurrences.
+
+An explicit noncurrent Context or uniquely owned Memory is valid for this
+read-oriented saved view and does not switch current. Materialization remains
+more restrictive: `--save-as` and `--in-place` require the selected Source to
+be the command-start current Context and reject a noncurrent target before a
+provider is connected. That preserves the existing source/current
+revalidation and final-switch contract rather than granting cross-Context
+mutation through positional auto-typing.
 
 ## Provider and curated layers
 

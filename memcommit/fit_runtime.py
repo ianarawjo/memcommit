@@ -20,8 +20,14 @@ from memcommit.context_locator import (
 )
 from memcommit.context_targeting.memory_focus import (
     MemoryFocusError,
-    is_memory_uid_selector,
     resolve_memory_focus,
+)
+from memcommit.context_targeting.model import (
+    DirectMemoryLocator,
+    ExistingContextOperand,
+)
+from memcommit.context_targeting.resolution import (
+    parse_auto_typed_context_memory_operand,
 )
 from memcommit.context_targeting.readable_catalog import (
     freeze_profile_readable_context_catalog,
@@ -401,36 +407,29 @@ def run_stored_source_fit(
             add_literal(operand.removeprefix("text:"))
             continue
 
-        context_locator, separator, selector = operand.rpartition(":")
-        if separator and is_memory_uid_selector(selector):
-            if not context_locator:
-                raise FitSourceError(
-                    "A qualified Fit Memory operand requires CONTEXT:UID_OR_PREFIX."
-                )
+        parsed = parse_auto_typed_context_memory_operand(operand)
+        if isinstance(parsed, DirectMemoryLocator):
             select_memory(
                 FitMemorySourceRequest(
-                    selector=selector.casefold(),
-                    context_locator=context_locator,
+                    selector=parsed.memory_selector.casefold(),
+                    context_locator=parsed.context_locator,
                 )
             )
             continue
-        if is_memory_uid_selector(operand):
-            select_memory(
-                FitMemorySourceRequest(
-                    selector=operand.casefold(),
-                )
-            )
-            continue
-
-        canonical_name = resolve_context_locator(operand, current=current_name)
+        assert isinstance(parsed, ExistingContextOperand)
+        canonical_name = resolve_context_locator(
+            parsed.locator,
+            current=current_name,
+        )
         if canonical_name in all_readable_names():
-            select_context(operand)
+            select_context(parsed.locator)
             continue
-        if is_relative_context_locator(operand):
+        if is_relative_context_locator(parsed.locator):
             raise FitSourceError(
-                f"Fit Context locator {operand!r} is outside the readable namespace."
+                f"Fit Context locator {parsed.locator!r} is outside the readable "
+                "namespace."
             )
-        add_literal(operand)
+        add_literal(parsed.locator)
 
     for memory_source in request.memory_sources:
         select_memory(memory_source)

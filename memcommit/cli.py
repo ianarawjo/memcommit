@@ -129,6 +129,11 @@ app.command("ls", hidden=True)(list_memories.cmd)
 app.command(
     "show",
     help=operation_summary("show"),
+    epilog=(
+        "The positional target auto-types an existing Context, UUID-shaped "
+        "direct item, or CONTEXT:UID. --context remains the explicit Context "
+        "route and also qualifies a direct-item selector."
+    ),
 )(show.cmd)
 app.command(
     "contexts",

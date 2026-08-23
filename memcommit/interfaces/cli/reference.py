@@ -9,13 +9,14 @@ import typer
 from memcommit.context_targeting.loading import (
     resolve_local_direct_memory_locator,
 )
+from memcommit.context_targeting.model import DirectMemoryLocator
 from memcommit.context_targeting.operands import choose_endpoint_operand
 from memcommit.context_targeting.presets import (
     ContextScopePreset,
     resolve_scope_preset,
 )
 from memcommit.context_targeting.resolution import (
-    is_direct_memory_locator_operand,
+    parse_auto_typed_context_memory_operand,
 )
 from memcommit.interfaces.console.text import display_escape_text
 from memcommit.interfaces.console.terminal import is_interactive_terminal
@@ -183,10 +184,15 @@ def cmd(
         request = frozen_plan.request
     else:
         try:
-            memory_mode = not source_from_option and is_direct_memory_locator_operand(
-                source_item,
-                explicit_context=memory_owner,
+            parsed_source = (
+                parse_auto_typed_context_memory_operand(
+                    source_item,
+                    explicit_memory_context=memory_owner,
+                )
+                if not source_from_option
+                else None
             )
+            memory_mode = isinstance(parsed_source, DirectMemoryLocator)
             if memory_mode:
                 if direct or recursive:
                     typer.secho(

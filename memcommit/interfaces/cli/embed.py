@@ -9,9 +9,10 @@ import typer
 from memcommit.context_targeting.loading import (
     resolve_local_direct_memory_locator,
 )
+from memcommit.context_targeting.model import DirectMemoryLocator
 from memcommit.context_targeting.operands import choose_endpoint_operand
 from memcommit.context_targeting.resolution import (
-    is_direct_memory_locator_operand,
+    parse_auto_typed_context_memory_operand,
 )
 from memcommit.embed_application import (
     EmbedPlacement,
@@ -191,10 +192,15 @@ def cmd(
             )
             raise typer.Exit(1)
         try:
-            if not source_from_option and is_direct_memory_locator_operand(
-                source_item,
-                explicit_context=memory_owner,
-            ):
+            parsed_source = (
+                parse_auto_typed_context_memory_operand(
+                    source_item,
+                    explicit_memory_context=memory_owner,
+                )
+                if not source_from_option
+                else None
+            )
+            if isinstance(parsed_source, DirectMemoryLocator):
                 memory_target = resolve_local_direct_memory_locator(
                     port.store,
                     source_item,

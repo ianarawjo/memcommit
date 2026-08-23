@@ -209,6 +209,11 @@ one argv item: the shell removes them, so quoted and unquoted copies of the
 same one-word value cannot have different types. A literal that collides with
 a Context name or UID shape therefore uses `text:VALUE`.
 
+The Context-versus-Memory portion of this decision uses the shared
+`context_targeting` typed operand parser also consumed by other mixed-target
+commands. Fit owns only the additional readable-catalog Context check and
+literal-text fallback; it does not maintain a second UID/owner grammar.
+
 `--memory` and `--context` remain repeatable explicit members of the same
 proposition set for scripts, short Memory prefixes, source-looking literal
 diagnostics, and legacy UUID-shaped Context names. They are not background or

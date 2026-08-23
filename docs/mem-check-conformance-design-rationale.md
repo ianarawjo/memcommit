@@ -122,6 +122,11 @@ typed frame linkage; this does not fabricate a durable Memory or provenance
 claim. The compact source label distinguishes these forms as
 `RULES MEMORY CONTEXT:UID` or `RULES TEXT VALUE`.
 
+The preceding Context-versus-Memory classification is the common
+`context_targeting` typed operand parser used by the other mixed-target CLI
+routes. Conformance retains only its operation-specific `text:` escape,
+literal Rule fallback, and Source-role validation.
+
 The provider also returns the exact counterexample subset for every
 `VIOLATES` or `PARTIALLY_CONFORMS` judgment. A violating judgment's cited
 evidence is entirely nonconforming; a partial judgment has both conforming and

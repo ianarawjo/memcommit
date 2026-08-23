@@ -1625,7 +1625,7 @@ class TestShow:
         result = invoke("show", "missing")
 
         assert result.exit_code == 1
-        assert "No direct item matching" in result.stderr
+        assert "No Context or direct item matches 'missing'" in result.stderr
 
     def test_fails_for_ambiguous_uid_prefix(self, isolated_store):
         from memcommit.context import Memory as Mem

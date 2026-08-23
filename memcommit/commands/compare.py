@@ -52,8 +52,9 @@ from memcommit.context_targeting.presets import (
     resolve_descendant_scopes,
     resolve_scope_preset,
 )
+from memcommit.context_targeting.model import DirectMemoryLocator
 from memcommit.context_targeting.resolution import (
-    is_direct_memory_locator_operand,
+    parse_auto_typed_context_memory_operand,
 )
 from memcommit.infrastructure.providers.profile_routes import (
     ProfileProviderRoutesError,
@@ -402,12 +403,18 @@ def cmd(
         reference_is_auto_memory = bool(
             auto_type_positionals
             and from_ is not None
-            and is_direct_memory_locator_operand(from_)
+            and isinstance(
+                parse_auto_typed_context_memory_operand(from_),
+                DirectMemoryLocator,
+            )
         )
         compared_is_auto_memory = bool(
             auto_type_positionals
             and to is not None
-            and is_direct_memory_locator_operand(to)
+            and isinstance(
+                parse_auto_typed_context_memory_operand(to),
+                DirectMemoryLocator,
+            )
         )
         if reference_is_auto_memory and reference_memory is not None:
             raise CompareCommandError(

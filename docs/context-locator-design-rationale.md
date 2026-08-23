@@ -26,7 +26,7 @@ mem sever [--source LOCATOR | --from LOCATOR]
            [--save-as RESULT_NAME | --to RESULT_NAME]
 mem list [LOCATOR]
 mem ls [LOCATOR]
-mem show [SELECTOR] --context LOCATOR
+mem show [LOCATOR | ITEM | LOCATOR:ITEM] [--context LOCATOR]
 mem log [--memory SELECTOR] --context LOCATOR
 mem revert [CHECKPOINT] --context LOCATOR
 mem trace [SELECTOR] --context LOCATOR
@@ -39,8 +39,10 @@ mem resolve [LOCATOR | MEMORY | LOCATOR:MEMORY ...]
 mem resolve [--context LOCATOR] [--memory [LOCATOR:]MEMORY ...]
 mem query SELECTOR --context LOCATOR
 mem review [KIND] --context LOCATOR
-mem impact atomize [LOCATOR]
-mem atomize [LOCATOR]
+mem impact atomize [LOCATOR | MEMORY | LOCATOR:MEMORY]
+mem atomize [LOCATOR | MEMORY | LOCATOR:MEMORY]
+mem chunk [LOCATOR | MEMORY | LOCATOR:MEMORY] [--context LOCATOR]
+mem translate [LOCATOR | MEMORY | LOCATOR:MEMORY]
 mem forget INSTRUCTION --context LOCATOR
 mem clear [LOCATOR]
 mem clear [LOCATOR] --recursive
@@ -161,8 +163,11 @@ table as the authored cross-operation rule:
 
 | Operation family | Zero Context operands | Positional form | Compatibility options |
 | --- | --- | --- | --- |
-| `atomize`, `impact atomize` | Use current Context | `[CONTEXT]` | `--context CONTEXT` |
+| `atomize`, `impact atomize` | Use current Context | auto-typed `[CONTEXT | MEMORY | CONTEXT:MEMORY]`; a Memory target focuses one exact directly owned Memory | `--context CONTEXT`; `--memory UID` retains explicit short-prefix focus |
 | `audit`, `dedun`, `find-{ambiguities,duplicates,redundancies,conflicts}` | Use current Context | `[CONTEXT]` | `--context CONTEXT` |
+| `chunk` | Chunk every direct Memory in current Context | auto-typed `[CONTEXT | MEMORY | CONTEXT:MEMORY]`; a Memory target chunks only that row | `--context CONTEXT` forces a positional selector to be Memory-owned by that Context |
+| `translate` | Translate the current Context's direct Memories | auto-typed `[CONTEXT | MEMORY | CONTEXT:MEMORY]`; a Memory target narrows the same-UID view | no separate Context option; `--to` still names the semantic translation target |
+| `show` | Show the current Context | `[CONTEXT | ITEM | CONTEXT:ITEM]`; a bare UUID-shaped item finds one unique ordinary-local direct owner, while a current direct named row retains precedence over a same-spelled Context | `--context CONTEXT` names the Context when no ITEM is supplied and explicitly owns ITEM otherwise |
 | `resolve` | Use current Context, unless bare Memory operands uniquely locate one local owner | mixed `CONTEXT`, UUID-shaped `MEMORY`, and `CONTEXT:MEMORY`; every owner must canonicalize to one Context | `--context CONTEXT`, repeatable `--memory [CONTEXT:]UID`; short Memory prefixes require `--memory` or qualification |
 | `compare` | Open new A/B endpoint setup | auto-typed `PEER` uses current as Reference; auto-typed `REFERENCE PEER` is fully explicit; each endpoint accepts Context, UUID-shaped Memory, or `CONTEXT:MEMORY` | explicitly Context-typed `--from REFERENCE`, `--to PEER`; `--reference-memory`/`--compared-memory` retain short-prefix focus; `--sessions` opens saved analyses |
 | `branch` | Open compact Source/new-target setup | `RESULT_NAME` creates from current | `--from SOURCE` chooses one existing local Source; Result remains a new identifier |
@@ -235,6 +240,28 @@ evidence. Existing UUID-shaped Contexts use `--from`/`--to`, and prefixes
 shorter than the public eight-character Memory shape use the explicit Memory
 options or a qualified locator.
 
+Atomize, Impact Atomize, Chunk, and Translate use that same shape classifier.
+Their bare Memory operands require one unique ordinary-local direct owner, so
+the active local Context receives no hidden priority. Chunk alone preserves an
+already selected nonlocal public Grant current pointer as the explicit owner,
+because that authority-bearing row is intentionally absent from local global
+enumeration. Their Context operands retain ordinary current-relative
+resolution. Translate permits a noncurrent explicit Context or Memory for its
+read-oriented saved view, but its `--save-as` and
+`--in-place` materialization routes require that exact Source to remain current
+and fail before provider connection otherwise. This preserves Translate's
+existing state-switch and compare-and-swap boundary instead of turning operand
+convenience into cross-Context mutation authority.
+
+Show extends the grammar from direct Memory to any direct item because its
+typed result can safely represent MemoryRef, embedded Context, and query-view
+rows. A bare UUID-shaped item still uses strict unique ordinary-local owner
+discovery; a qualified owner uses Show's existing READ/Grant path. Non-UID text
+first preserves Show's established current direct named-item lookup, then
+falls back to an existing Context locator. `--context` is the explicit
+disambiguator, and recursive reach is accepted only when the resolved operand
+is a Context.
+
 ## Reuse rule and rollout boundary
 
 When a CLI operand locates an **existing ordinary Context**, it should use the
@@ -256,7 +283,9 @@ The resolver must not be applied indiscriminately:
   values define new canonical identifiers; they are not existing-Context
   locators. Branch's separate `--from` value is an existing-Context locator.
 - Memory selectors, embedded-item selectors, requirement targets, and
-  query-only source selectors have different namespaces.
+  query-only source selectors have different namespaces. An operation that
+  explicitly accepts `Context | Memory` may reuse the shared typed union, but
+  this does not turn a Memory-only or query-only operand into a Context locator.
 - Embed's `--before` and `--after` values select direct items inside the already
   resolved target Context. They are not existing-Context locators and never
   receive dot-segment resolution.

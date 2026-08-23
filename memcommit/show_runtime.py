@@ -15,9 +15,20 @@ from memcommit.authority.access import (
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.context_snapshot import ContextSnapshotRef
 from memcommit.context_locator import resolve_context_locator
-from memcommit.context_targeting.model import ContextScope
+from memcommit.context_targeting.loading import (
+    DirectItemNotFoundError,
+    resolve_local_direct_item_locator,
+)
+from memcommit.context_targeting.model import (
+    ContextScope,
+    DirectMemoryLocator,
+    ExistingContextOperand,
+)
 from memcommit.context_targeting.readable_catalog import ReadableContextCatalog
-from memcommit.context_targeting.resolution import expand_lexical_context_names
+from memcommit.context_targeting.resolution import (
+    expand_lexical_context_names,
+    parse_auto_typed_context_memory_operand,
+)
 from memcommit.profile_config import ProfileRegistry
 from memcommit.profiles import (
     ProfileError,
@@ -26,8 +37,10 @@ from memcommit.profiles import (
 )
 from memcommit.show_application import (
     ShowContextSnapshot,
+    ShowDirectItemScopeError,
     ShowEmbeddedContext,
     ShowInputError,
+    ShowItemNotFoundError,
     ShowMemory,
     ShowMemoryReference,
     ShowQueryView,
@@ -522,7 +535,11 @@ def execute_show(
 ) -> ShowResult:
     """Capture current once and inspect through one explicit Store boundary."""
 
-    current_context_name = store.current_context_name()
+    current_context_name = (
+        request.current_context_name
+        if request.current_context_name is not None
+        else store.current_context_name()
+    )
     return show(
         replace(request, current_context_name=current_context_name),
         port=MemoryStoreShowPort(
@@ -533,4 +550,106 @@ def execute_show(
     )
 
 
-__all__ = ["MemoryStoreShowPort", "execute_show"]
+def execute_show_cli_operand(
+    operand: str | None,
+    *,
+    context_name: str | None,
+    include_descendants: bool,
+    follow_embeds: bool,
+    store: MemoryStore,
+    allow_grants: bool,
+    registry: ProfileRegistry | None = None,
+) -> ShowResult:
+    """Resolve Show's positional Context/direct-item grammar once.
+
+    Explicit ``--context`` retains its compatibility meaning: with an operand
+    it forces direct-item selection inside that owner, and without one it names
+    the Context itself.  A bare UUID-shaped operand uses the shared strict local
+    direct-item catalog; a qualified operand names its owner explicitly.  Other
+    text first preserves Show's established current direct-name selection, then
+    falls back to an existing Context locator such as ``task-1`` or ``../peer``.
+    """
+
+    current_context_name = store.current_context_name()
+
+    def execute(request: ShowRequest) -> ShowResult:
+        return execute_show(
+            replace(request, current_context_name=current_context_name),
+            store=store,
+            allow_grants=allow_grants,
+            registry=registry,
+        )
+
+    if operand is None or context_name is not None:
+        return execute(
+            ShowRequest(
+                context_name=context_name,
+                selector=operand,
+                include_descendants=include_descendants,
+                follow_embeds=follow_embeds,
+            )
+        )
+
+    parsed = parse_auto_typed_context_memory_operand(operand)
+    if isinstance(parsed, DirectMemoryLocator):
+        if include_descendants or follow_embeds:
+            raise ShowDirectItemScopeError(
+                "--recursive/-r cannot be combined with a direct-item selector."
+            )
+        if parsed.context_locator is not None:
+            return execute(
+                ShowRequest(
+                    context_name=parsed.context_locator,
+                    selector=parsed.memory_selector,
+                )
+            )
+        try:
+            target = resolve_local_direct_item_locator(
+                store,
+                parsed.memory_selector,
+                current=current_context_name,
+            )
+        except DirectItemNotFoundError as local_error:
+            # A current attached Grant may expose a row outside the enumerable
+            # ordinary-local owner catalog. Preserve the established exact
+            # current-row route without broadening global Grant enumeration.
+            if current_context_name is None:
+                raise local_error
+            try:
+                return execute(ShowRequest(selector=parsed.memory_selector))
+            except ShowItemNotFoundError:
+                raise local_error
+        return execute(
+            ShowRequest(
+                context_name=target.context_name,
+                selector=target.item_uid,
+            )
+        )
+
+    assert isinstance(parsed, ExistingContextOperand)
+    if current_context_name is not None:
+        try:
+            direct_item = execute(ShowRequest(selector=operand))
+        except ShowItemNotFoundError:
+            pass
+        else:
+            if include_descendants or follow_embeds:
+                raise ShowDirectItemScopeError(
+                    "--recursive/-r cannot be combined with a direct-item selector."
+                )
+            return direct_item
+    try:
+        return execute(
+            ShowRequest(
+                context_name=parsed.locator,
+                include_descendants=include_descendants,
+                follow_embeds=follow_embeds,
+            )
+        )
+    except FileNotFoundError as error:
+        raise ShowInputError(
+            f"No Context or direct item matches {operand!r}."
+        ) from error
+
+
+__all__ = ["MemoryStoreShowPort", "execute_show", "execute_show_cli_operand"]

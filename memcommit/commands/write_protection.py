@@ -12,8 +12,9 @@ from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.context_targeting.loading import (
     resolve_local_direct_memory_locator,
 )
+from memcommit.context_targeting.model import DirectMemoryLocator
 from memcommit.context_targeting.resolution import (
-    is_direct_memory_locator_operand,
+    parse_auto_typed_context_memory_operand,
 )
 from memcommit.interfaces.console.text import (
     display_escape_text,
@@ -255,7 +256,8 @@ def _change_auto_target_protection(
 
     store = MemoryStore()
     snapshot = ContextOperandSnapshot.capture(store)
-    if is_direct_memory_locator_operand(target_operand):
+    parsed = parse_auto_typed_context_memory_operand(target_operand)
+    if isinstance(parsed, DirectMemoryLocator):
         if direct or recursive:
             typer.secho(
                 "Error: --direct/-d and --recursive/-r apply only to a Context target.",
@@ -285,7 +287,7 @@ def _change_auto_target_protection(
         )
         return
     _change_context_protection(
-        target_operand,
+        parsed.locator,
         protected=protected,
         recursive=_recursive_scope(direct=direct, recursive=recursive),
         store=store,

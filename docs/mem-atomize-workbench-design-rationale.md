@@ -107,6 +107,11 @@ mem atomize --save
 mem atomize --save-as NEW_CONTEXT
 mem atomize --sessions
     -> retain advanced explicit workbench, destination, and saved-work routes
+
+mem atomize [INPUT | MEMORY | INPUT:MEMORY]
+mem impact atomize [INPUT | MEMORY | INPUT:MEMORY]
+    -> share one auto-typed positional target; a Memory form focuses one exact
+       directly owned source occurrence
 ```
 
 `mem impact atomize` is the primary preview entry point because the risky

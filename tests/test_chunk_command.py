@@ -89,6 +89,48 @@ def test_chunk_context_option_does_not_change_or_mutate_current_context(
     assert [memory.content for memory in target_after] == ["Split this.", "Split that."]
 
 
+def test_chunk_auto_types_bare_context_operand(isolated_store):
+    store = MemoryStore()
+    current = ops.init("current")
+    target = ops.init("work/target")
+    original = ops.add(target, "Split this. Split that.")
+    for context in (current, target):
+        store.save(context)
+    store.set_current(current.name)
+
+    result = runner.invoke(app, ["chunk", target.name])
+
+    assert result.exit_code == 0, result.output + result.stderr
+    assert "Context 'work/target'" in result.output
+    assert store.current_context_name() == current.name
+    after = _direct_memories(store, target.name)
+    assert original.uid not in {memory.uid for memory in after}
+    assert [memory.content for memory in after] == ["Split this.", "Split that."]
+
+
+def test_chunk_auto_types_bare_memory_and_finds_its_owner(isolated_store):
+    store = MemoryStore()
+    target = ops.init("work/target")
+    selected = ops.add(target, "Alpha. beta continues.")
+    other = ops.add(target, "Other. memory stays.")
+    current = ops.init("current")
+    for context in (target, current):
+        store.save(context)
+    store.set_current(current.name)
+
+    result = runner.invoke(app, ["chunk", selected.uid[:8]])
+
+    assert result.exit_code == 0, result.output + result.stderr
+    assert "in Context 'work/target'" in result.output
+    after = _direct_memories(store, target.name)
+    assert [memory.content for memory in after] == [
+        "Alpha.",
+        "beta continues.",
+        "Other. memory stays.",
+    ]
+    assert other.uid == after[-1].uid
+
+
 def test_chunk_one_memory_uses_sentence_default_in_explicit_context(isolated_store):
     store = MemoryStore()
     current = ops.init("current")

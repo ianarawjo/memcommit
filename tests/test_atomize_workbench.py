@@ -233,6 +233,33 @@ def _patch_provider(monkeypatch, provider):
     )
 
 
+def test_atomize_auto_types_bare_memory_and_finds_its_owner(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source = ops.init("atomize/source")
+    selected = ops.add(source, "Use the same NFC for staff access.")
+    ops.add(source, "The visitor entrance closes at five.")
+    current = ops.init("atomize/current")
+    for context in (source, current):
+        store.save(context)
+    store.set_current(current.name)
+    provider = AggregateProvider()
+    _patch_provider(monkeypatch, provider)
+
+    result = runner.invoke(app, ["atomize", selected.uid[:8]])
+
+    assert result.exit_code == 0, result.output
+    analysis = store.load_atomize_analysis(source.uid)
+    assert analysis is not None
+    assert analysis.context_name == source.name
+    assert analysis.memory_count == 1
+    assert tuple(item.memory_uid for item in analysis.items) == (selected.uid,)
+    assert store.current_context_name() == current.name
+    assert len(provider.payloads) == 1
+
+
 def test_aggregate_atomize_extends_only_the_concrete_codex_timeout():
     provider = CodexChatGPTProvider(
         binary=Path("/unused/codex"),

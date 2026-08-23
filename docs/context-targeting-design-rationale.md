@@ -20,13 +20,19 @@ there is intentionally no profile-wide “last Scope” preference.
 `memcommit.context_targeting` is the concept package for the shared family:
 
 - `model.py` owns operation-neutral targeting values and cardinality types,
-  including an exact direct-Memory target as its canonical owner Context name
-  plus durable Memory UID.
+  including a raw existing-Context operand, a canonical Context target, an
+  exact direct-Memory target, and the broader direct-item coordinate used by
+  read operations. Exact item targets always retain their canonical owner
+  Context rather than leaving owner discovery implicit.
 - `resolution.py` owns pure canonical name-prefix expansion and the shared
-  `UID` / `CONTEXT:UID` direct-Memory locator grammar.
+  `UID` / `CONTEXT:UID` direct-Memory locator grammar. It also owns the pure
+  storage-independent classifier for an overloaded `Context | Memory`
+  positional operand.
 - `loading.py` loads one root and merges its lexical descendants for existing
   Compare, Update, Meld, and related application paths. It also resolves a
-  direct-Memory locator against a strict complete ordinary-local direct graph.
+  direct-Memory locator against a strict complete ordinary-local direct graph,
+  completes a local auto-typed Context/Memory target, and offers the sibling
+  all-direct-item owner lookup needed by Show.
 - `search.py` loads one or more searchable roots and independently controls
   embedded-Context traversal and authorized activity artifacts for Find and
   ordinary Query.
@@ -85,6 +91,37 @@ single strict load and require exactly one matching Memory. They never prefer
 the current Context, traverse embeds, treat a MemoryRef as ownership, or inspect
 Grant/query content. Ambiguity reports every canonical `CONTEXT:FULL_UID`
 candidate so the next request can state its owner explicitly.
+
+The overloaded positional grammar is now one typed pipeline rather than a
+collection of command-local boolean branches. `parse_auto_typed_context_memory_operand`
+first returns either `ExistingContextOperand` or `DirectMemoryLocator` without
+reading storage. New Context roots reserve the public eight-or-more-character
+UUID-prefix shape and Context names forbid `:`, so this classification does not
+depend on which Contexts happen to exist. A local-only caller may then use
+`resolve_local_context_memory_target` to obtain either a canonical
+`ContextTarget` or an exact `DirectMemoryTarget`. Compare, Resolve, Lock and
+Unlock, Embed, Reference, Fit, Conformance, Atomize, Impact Atomize, Chunk,
+Translate, and Show now consume that common classification rather than
+reimplementing its shape rules.
+
+This reuse has three deliberate semantic domains:
+
+- ordinary `Context | directly owned Memory` operands use the common typed
+  parser and an operation-appropriate resolver;
+- Show and Delete may select any direct item, so they retain operation-owned
+  name and destructive-ambiguity policy while reusing the common owner/UID
+  coordinate mechanics; and
+- Fit and Conformance additionally accept literal text, so `text:` and the
+  final literal fallback remain their adapter responsibility after the common
+  Context/Memory shape classification.
+
+A bare Memory-shaped operand may enumerate only strict ordinary-local direct
+records and must have one unique owner. A qualified owner may instead be
+resolved by an operation's Grant-aware access port. The shared local resolver
+does not enumerate Grants, follow Embed edges, open MemoryRefs or query-only
+content, or confer mutation authority. This split prevents a convenient
+positional grammar from silently broadening the operation's readable or
+writable namespace.
 
 Every tree that exposes the shared preview controller also uses one shared
 visibility hint. Lowercase `m` toggles direct-item rows only for the Context at
@@ -151,6 +188,15 @@ the common name editor and selector do not infer creation, copying, saving, or
 authority from those strings. New Context names remain exact lexical values,
 not existing-Context locators, even when their editor also offers an existing
 parent tree for placement.
+
+Automatic positional typing applies only when an operation explicitly accepts
+the union of existing Context and direct Memory. A Context-only operand, a
+Memory-only option, a new Context identifier, provider output, and a persisted
+canonical name keep their declared types and do not pass through the automatic
+classifier. Where an operation exposes explicit role options, they remain the
+escape hatch when a legacy UUID-shaped Context name or a short Memory prefix
+cannot be inferred safely from shape; qualification supplies the same escape
+hatch for a short Memory selector on commands such as Translate.
 
 The composed Context-name editor is not the smallest reusable unit. An
 `ExactNameInputControl` can be embedded without a box, while

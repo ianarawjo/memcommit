@@ -458,7 +458,7 @@ COMMAND_FORMS = {
     ),
     "atomize": (
         "mem atomize (atomize the current Context now; inspect the saved analysis with mem review)",
-        "mem atomize [context] (atomize one explicit Context now)",
+        "mem atomize [target] (auto-type one Context or direct Memory)",
         "mem atomize --context [context] (compatibility alias)",
         "mem atomize --sessions (enter the interactive Atomize session launcher)",
         'mem atomize --evaluate "[issue]" (directional atomic review)',
@@ -483,10 +483,10 @@ COMMAND_FORMS = {
     ),
     "chunk": (
         "mem chunk (immediately split all splittable direct Memories in the current Context; Undo can restore)",
-        "mem chunk [memory_selector] (split one direct Memory by sentences)",
+        "mem chunk [target] (auto-type one Context or direct Memory)",
         "mem chunk --context [context] (all splittable direct Memories in one Context)",
-        "mem chunk [memory_selector] --context [context] --method [method] (sentences, clauses, paragraphs, or markdown_headers)",
-        "mem chunk [memory_selector] --break-on [punctuation] --min-chars 200 --max-chars 1000 (compose literal and size boundaries)",
+        "mem chunk [memory_selector] --context [context] --method [method] (explicit Memory owner and method)",
+        "mem chunk [target] --break-on [punctuation] --min-chars 200 --max-chars 1000 (compose literal and size boundaries)",
     ),
     "clear": (
         "mem clear (immediately clear the current Context; Undo can restore)",
@@ -638,7 +638,7 @@ COMMAND_FORMS = {
     "impact": (
         "mem impact --sessions (browse every durable artifact inspectable through Impact)",
         "mem impact atomize (preview atomization of the current Context)",
-        "mem impact atomize [context] (preview atomization of one Context)",
+        "mem impact atomize [target] (auto-type one Context or direct Memory)",
         "mem impact atomize --context [context] (compatibility alias)",
         "mem impact atomize --sessions (browse saved Atomize analyses)",
         "mem impact atomize --session [uid] (reopen one exact saved Atomize analysis)",
@@ -869,7 +869,7 @@ COMMAND_FORMS = {
     ),
     "show": (
         "mem show (show the direct contents of the current Context)",
-        "mem show [item] (show one direct item)",
+        "mem show [target] (auto-type one Context or direct item)",
         "mem show --context [context] (show an explicit Context's direct contents)",
         "mem show [item] --context [context] (show an item in an explicit Context)",
     ),
@@ -894,9 +894,9 @@ COMMAND_FORMS = {
     ),
     "translate": (
         "mem translate (show/save a default-English view of the current Context)",
-        "mem translate [memory_selector] (show/save one default-English Memory view)",
+        "mem translate [target] (auto-type one Context or direct Memory)",
         "mem translate --to [language] (show/save a current-Context view)",
-        "mem translate [memory_selector] --to [language] (show/save one Memory view)",
+        "mem translate [target] --to [language] (show/save one Context or Memory view)",
         "mem translate --save-as [result_context] (default-English new Context and switch)",
         "mem translate [memory_selector] --save-as [result_context] (new Context replacing one Memory; switch)",
         "mem translate --to [language] --save-as [result_context] (new translated Context and switch)",

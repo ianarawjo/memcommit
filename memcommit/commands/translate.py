@@ -10,6 +10,12 @@ import typer
 
 import memcommit.ops as ops
 from memcommit.commands.command_progress import progressing_provider_factory
+from memcommit.commands.context_operand import ContextOperandSnapshot
+from memcommit.context_targeting.loading import resolve_local_context_memory_target
+from memcommit.context_targeting.model import (
+    ContextTarget,
+    DirectMemoryTarget,
+)
 from memcommit.interfaces.console.text import (
     safe_terminal_text,
 )
@@ -545,8 +551,8 @@ def cmd(
         Optional[str],
         typer.Argument(
             help=(
-                "Optional UID (or unambiguous prefix) of one direct Memory; "
-                "omit to translate every direct Memory"
+                "Auto-typed existing Context, Memory UID/prefix, or "
+                "CONTEXT:UID; omit to translate the current Context"
             )
         ),
     ] = None,
@@ -687,12 +693,41 @@ def cmd(
                 "--yes applies only with --save-as CONTEXT or --in-place. "
                 "Bare 'mem translate' saves a view without changing a Context."
             )
-        direct_ctx = store.load_current_direct()
+        context_snapshot = ContextOperandSnapshot.capture(store)
+        auto_target = (
+            resolve_local_context_memory_target(
+                store,
+                selector,
+                current=context_snapshot.current_name,
+            )
+            if selector is not None
+            else None
+        )
+        selected_operand: str | None = None
+        if isinstance(auto_target, DirectMemoryTarget):
+            source_name = auto_target.context_name
+            selected_operand = auto_target.memory_uid
+        elif isinstance(auto_target, ContextTarget):
+            source_name = auto_target.context_name
+        else:
+            source_name = context_snapshot.current_name
+        if source_name is None:
+            raise TranslateError(
+                "No current context. Pass a Context or run 'mem init <name>' first."
+            )
+        direct_ctx = store.load_direct(source_name)
         language = validate_translation_target(target_language)
         selected_memory_uid = resolve_translation_selector(
             direct_ctx,
-            selector,
+            selected_operand,
         )
+        if (save_as is not None or in_place) and (
+            context_snapshot.current_name != direct_ctx.name
+        ):
+            raise TranslateError(
+                "Translation materialization requires the selected Source to be "
+                "the current Context; switch to it first."
+            )
         selector_required = any(
             (edit, set_text is not None, verify, unverify, reset)
         )
@@ -700,7 +735,7 @@ def cmd(
             raise TranslateError(
                 "This translation action requires one direct Memory UID."
             )
-        if input_file is not None and selector is not None:
+        if input_file is not None and selected_memory_uid is not None:
             raise TranslateError(
                 "--input carries exact source UIDs and cannot use a selector."
             )

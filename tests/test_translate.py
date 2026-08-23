@@ -90,6 +90,81 @@ def _patch_provider(monkeypatch, provider):
     )
 
 
+def test_cli_auto_types_explicit_context_without_switching_current(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source = ops.init("translate/source")
+    ops.add(source, "첫 번째")
+    ops.add(source, "두 번째")
+    current = ops.init("translate/current")
+    for context in (source, current):
+        store.save(context)
+    store.set_current(current.name)
+    provider = PayloadProvider()
+    _patch_provider(monkeypatch, provider)
+
+    result = runner.invoke(app, ["translate", source.name])
+
+    assert result.exit_code == 0, result.output
+    assert "Translation view: 'translate/source'" in result.output
+    assert len(provider.calls) == 1
+    assert len(provider.calls[0][3]["memories"]) == 2
+    assert store.current_context_name() == current.name
+
+
+def test_cli_auto_types_bare_memory_and_finds_its_owner(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source = ops.init("translate/source")
+    selected = ops.add(source, "선택된 메모리")
+    ops.add(source, "선택되지 않은 메모리")
+    current = ops.init("translate/current")
+    for context in (source, current):
+        store.save(context)
+    store.set_current(current.name)
+    provider = PayloadProvider()
+    _patch_provider(monkeypatch, provider)
+
+    result = runner.invoke(app, ["translate", selected.uid[:8]])
+
+    assert result.exit_code == 0, result.output
+    assert "Translation view: 'translate/source'" in result.output
+    assert len(provider.calls) == 1
+    assert [
+        memory["content"] for memory in provider.calls[0][3]["memories"]
+    ] == [selected.content]
+    assert store.current_context_name() == current.name
+
+
+def test_explicit_noncurrent_materialization_fails_before_provider(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source = ops.init("translate/source")
+    ops.add(source, "원문")
+    current = ops.init("translate/current")
+    for context in (source, current):
+        store.save(context)
+    store.set_current(current.name)
+    provider = PayloadProvider()
+    _patch_provider(monkeypatch, provider)
+
+    result = runner.invoke(
+        app,
+        ["translate", source.name, "--save-as", "translate/result", "--yes"],
+    )
+
+    assert result.exit_code == 1
+    assert "requires the selected Source to be the current Context" in result.stderr
+    assert provider.calls == []
+    assert not store.context_exists("translate/result")
+
+
 def test_plan_uses_one_call_and_restores_context_order_from_model_ids():
     ctx = ops.init("ordered")
     first = ops.add(ctx, "도서관 후문은 닫힌다.")

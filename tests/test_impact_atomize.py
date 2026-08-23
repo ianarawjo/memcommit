@@ -218,6 +218,41 @@ def test_focused_atomize_save_as_preserves_unselected_memories(
     ]
 
 
+def test_impact_atomize_auto_types_bare_memory_and_finds_its_owner(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source = ops.init("impact/source")
+    selected = ops.add(source, "Parking closes. The stairwell stays open.")
+    neighbor = ops.add(source, "Security remains on site.")
+    current = ops.init("impact/current")
+    for context in (source, current):
+        store.save(context)
+    store.set_current(current.name)
+    provider = AtomizeProvider(_all_atomic)
+    monkeypatch.setattr(
+        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+
+    result = runner.invoke(app, ["impact", "atomize", selected.uid[:8]])
+
+    assert result.exit_code == 0, result.output
+    analysis = store.load_atomize_analysis(source.uid)
+    assert analysis is not None
+    assert analysis.context_name == source.name
+    assert analysis.memory_count == 1
+    assert tuple(item.memory_uid for item in analysis.items) == (selected.uid,)
+    assert [item["content"] for item in provider.calls[0][3]["memories"]] == [
+        selected.content
+    ]
+    assert [
+        item["content"] for item in provider.calls[0][3]["context_evidence"]
+    ] == [neighbor.content]
+    assert store.current_context_name() == current.name
+
+
 def test_atomize_overview_prompt_requires_short_report_paragraphs() -> None:
     ctx = ops.init("overview/report-contract")
     ops.add(ctx, "The main entrance closes at 5 p.m.")

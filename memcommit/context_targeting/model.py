@@ -10,6 +10,35 @@ from typing import Literal
 ContextSelectionMode = Literal["SINGLE", "MULTIPLE"]
 
 
+@dataclass(frozen=True, slots=True)
+class ExistingContextOperand:
+    """One CLI operand whose semantic role is an existing Context locator.
+
+    The value is intentionally still raw locator text.  Canonicalization needs
+    the command-start current-Context snapshot and therefore remains a later
+    resolution step shared by every operand in one invocation.
+    """
+
+    locator: str
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.locator, str) or not self.locator:
+            raise ValueError(
+                "An existing-Context operand requires a nonempty locator."
+            )
+
+
+@dataclass(frozen=True, slots=True)
+class ContextTarget:
+    """One canonical existing ordinary-local Context selected by an operand."""
+
+    context_name: str
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.context_name, str) or not self.context_name:
+            raise ValueError("A Context target requires a canonical name.")
+
+
 @dataclass(frozen=True)
 class ContextScope:
     """One frozen set of Context names and its lexical descendant policy.
@@ -67,6 +96,31 @@ class DirectMemoryTarget:
         ):
             raise ValueError(
                 "A direct Memory target requires a Context name and exact uid."
+            )
+
+
+@dataclass(frozen=True, slots=True)
+class DirectItemTarget:
+    """One exact direct item plus the canonical Context that owns its row.
+
+    Unlike :class:`DirectMemoryTarget`, this coordinate may identify a Memory,
+    MemoryRef, embedded Context, or query view.  The common locator layer owns
+    only the coordinate; read, mutation, and concealment semantics remain with
+    the calling operation.
+    """
+
+    context_name: str
+    item_uid: str
+
+    def __post_init__(self) -> None:
+        if (
+            not isinstance(self.context_name, str)
+            or not self.context_name
+            or not isinstance(self.item_uid, str)
+            or not self.item_uid
+        ):
+            raise ValueError(
+                "A direct item target requires a Context name and exact uid."
             )
 
 

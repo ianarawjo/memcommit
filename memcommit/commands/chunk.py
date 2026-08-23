@@ -14,6 +14,14 @@ from memcommit.authority.access import (
 from memcommit.chunking import ChunkMethod, chunk_content
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.context import AutoCheckpoint, Memory
+from memcommit.context_targeting.loading import resolve_local_direct_memory_locator
+from memcommit.context_targeting.model import (
+    DirectMemoryLocator,
+    ExistingContextOperand,
+)
+from memcommit.context_targeting.resolution import (
+    parse_auto_typed_context_memory_operand,
+)
 from memcommit.interfaces.console.text import display_escape_text
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
@@ -51,8 +59,8 @@ def cmd(
         Optional[str],
         typer.Argument(
             help=(
-                "UID (or unambiguous prefix) of one direct Memory; omit to "
-                "chunk every splittable direct Memory in the target Context"
+                "Auto-typed existing Context, Memory UID/prefix, or "
+                "CONTEXT:UID; omit to chunk the current Context"
             ),
         ),
     ] = None,
@@ -113,6 +121,39 @@ def cmd(
     active_store = MemoryStore()
     snapshot = ContextOperandSnapshot.capture(active_store)
     try:
+        parsed_operand = (
+            parse_auto_typed_context_memory_operand(
+                memory_selector,
+                explicit_memory_context=context_name,
+            )
+            if memory_selector is not None
+            else None
+        )
+        if isinstance(parsed_operand, DirectMemoryLocator):
+            if parsed_operand.context_locator is None:
+                if (
+                    snapshot.current_name is not None
+                    and not active_store.context_exists(snapshot.current_name)
+                ):
+                    # A virtual current pointer is already an explicit public
+                    # Grant selection. Preserve that authority-bearing owner;
+                    # the ordinary-local global catalog cannot enumerate it.
+                    context_name = snapshot.current_name
+                    memory_selector = parsed_operand.memory_selector
+                else:
+                    target = resolve_local_direct_memory_locator(
+                        active_store,
+                        parsed_operand.memory_selector,
+                        current=snapshot.current_name,
+                    )
+                    context_name = target.context_name
+                    memory_selector = target.memory_uid
+            else:
+                context_name = parsed_operand.context_locator
+                memory_selector = parsed_operand.memory_selector
+        elif isinstance(parsed_operand, ExistingContextOperand):
+            context_name = parsed_operand.locator
+            memory_selector = None
         access = resolve_context_access(
             active_store,
             context_name,

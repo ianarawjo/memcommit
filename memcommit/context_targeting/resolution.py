@@ -5,10 +5,17 @@ from __future__ import annotations
 from collections.abc import Sequence
 
 from memcommit.context_targeting.memory_focus import is_memory_uid_selector
-from memcommit.context_targeting.model import ContextScope, DirectMemoryLocator
+from memcommit.context_targeting.model import (
+    ContextScope,
+    DirectMemoryLocator,
+    ExistingContextOperand,
+)
 
 
 DIRECT_MEMORY_LOCATOR_SEPARATOR = ":"
+
+
+AutoTypedContextMemoryOperand = ExistingContextOperand | DirectMemoryLocator
 
 
 def is_direct_memory_locator_operand(
@@ -70,6 +77,33 @@ def parse_direct_memory_locator(
         memory_selector=memory_selector,
         context_locator=context_locator,
     )
+
+
+def parse_auto_typed_context_memory_operand(
+    operand: object,
+    *,
+    explicit_memory_context: str | None = None,
+) -> AutoTypedContextMemoryOperand:
+    """Classify one shared positional Context/direct-Memory operand.
+
+    New Context roots reserve the public UUID-prefix shape and Context names
+    cannot contain ``:``, so classification is storage-independent.  An
+    explicit Memory owner makes even a short selector unambiguously Memory.
+    Callers canonicalize the returned Context locator or resolve the returned
+    Memory locator under their own authority and loading rules.
+    """
+
+    if not isinstance(operand, str) or not operand:
+        raise ValueError("An automatic Context/Memory operand must be nonempty text.")
+    if is_direct_memory_locator_operand(
+        operand,
+        explicit_context=explicit_memory_context,
+    ):
+        return parse_direct_memory_locator(
+            operand,
+            explicit_context=explicit_memory_context,
+        )
+    return ExistingContextOperand(operand)
 
 
 def order_context_names_by_hierarchy(

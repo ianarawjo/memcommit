@@ -65,7 +65,19 @@ from memcommit.commands.update_render import (
     render_plan,
     run_update_workbench,
 )
-from memcommit.context_targeting.loading import load_context_scope
+from memcommit.context_targeting.loading import (
+    load_context_scope,
+    resolve_local_context_memory_target,
+)
+from memcommit.context_targeting.model import (
+    ContextTarget,
+    DirectMemoryLocator,
+    DirectMemoryTarget,
+    ExistingContextOperand,
+)
+from memcommit.context_targeting.resolution import (
+    parse_auto_typed_context_memory_operand,
+)
 from memcommit.context_targeting.presets import (
     ContextScopePreset,
     legacy_root_only_option_alias,
@@ -1091,6 +1103,7 @@ def _dispatch_impact(
             ),
         ),
     ] = False,
+    auto_context_memory_operand: str | None = None,
 ) -> None:
     """Preview a new plan or inspect saved Impact before an optional Apply handoff."""
     scope_flags_supplied = (
@@ -1128,6 +1141,7 @@ def _dispatch_impact(
                 or target_name is not None
                 or context_name is not None
                 or memory_selector is not None
+                or auto_context_memory_operand is not None
                 or source_memory is not None
                 or target_memory is not None
                 or with_review
@@ -1164,7 +1178,21 @@ def _dispatch_impact(
         try:
             store = MemoryStore(create=False)
             context_snapshot = ContextOperandSnapshot.capture(store)
-            canonical_context_name = context_snapshot.resolve_or_current(context_name)
+            if auto_context_memory_operand is not None:
+                auto_target = resolve_local_context_memory_target(
+                    store,
+                    auto_context_memory_operand,
+                    current=context_snapshot.current_name,
+                )
+                canonical_context_name = auto_target.context_name
+                if isinstance(auto_target, DirectMemoryTarget):
+                    memory_selector = auto_target.memory_uid
+                else:
+                    assert isinstance(auto_target, ContextTarget)
+            else:
+                canonical_context_name = context_snapshot.resolve_or_current(
+                    context_name
+                )
             if not canonical_context_name:
                 raise AtomizeImpactError(
                     "No current context. Pass --context or run 'mem init <name>' first."
@@ -1370,8 +1398,11 @@ def atomize_impact_cmd(
     context_operand: Annotated[
         Optional[str],
         typer.Argument(
-            metavar="CONTEXT",
-            help="Context to analyze (defaults to current)",
+            metavar="TARGET",
+            help=(
+                "Auto-typed existing Context, Memory UID/prefix, or "
+                "CONTEXT:UID (defaults to current Context)"
+            ),
         ),
     ] = None,
     context_name: Annotated[
@@ -1426,10 +1457,32 @@ def atomize_impact_cmd(
     """Preview one Context's exhaustive Atomize classification and splits."""
 
     try:
-        context_name = choose_context_operand(
-            context_operand,
-            option=context_name,
+        parsed_operand = (
+            parse_auto_typed_context_memory_operand(context_operand)
+            if context_operand is not None
+            else None
         )
+        if isinstance(parsed_operand, DirectMemoryLocator):
+            if context_name is not None:
+                raise ValueError(
+                    "Auto-typed Memory cannot be combined with --context; use "
+                    "CONTEXT:UID or --context CONTEXT --memory UID."
+                )
+            if memory_selector is not None:
+                raise ValueError(
+                    "Memory was supplied both positionally and with --memory."
+                )
+            context_name = parsed_operand.context_locator
+            memory_selector = parsed_operand.memory_selector
+        else:
+            context_name = choose_context_operand(
+                (
+                    parsed_operand.locator
+                    if isinstance(parsed_operand, ExistingContextOperand)
+                    else None
+                ),
+                option=context_name,
+            )
     except ValueError as error:
         _usage_error(str(error))
 
@@ -1439,6 +1492,7 @@ def atomize_impact_cmd(
         sessions=sessions,
         context_name=context_name,
         memory_selector=memory_selector,
+        auto_context_memory_operand=context_operand,
         show_all=show_all,
         with_review=with_review,
         refresh=refresh,

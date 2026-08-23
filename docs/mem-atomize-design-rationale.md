@@ -37,6 +37,16 @@ quality finding reads all direct Memories in the selected Context as a local
 interpretation frame. The reason for that asymmetry is documented in
 [`memory-quality-judgment-theory-and-decision-history.md`](memory-quality-judgment-theory-and-decision-history.md).
 
+The optional positional target uses the shared existing-Context/direct-Memory
+grammar. `mem atomize CONTEXT` targets that direct Context frame, `mem atomize
+UID` finds one uniquely owned ordinary-local direct Memory, and `mem atomize
+CONTEXT:UID` states its owner explicitly. `mem impact atomize` uses the same
+typing for its non-applying route. A focused Memory remains the only actionable
+source occurrence; its neighboring direct Memories may support Context-only
+interpretation but do not enter the replacement set. `--context` and
+`--memory` remain explicit compatibility forms for role clarity, short Memory
+prefixes, and legacy UUID-shaped Context names.
+
 ### Saved-work selection
 
 The saved-work selector adds a separate discovery route:

@@ -17,15 +17,28 @@ Chunk has one Context mutation boundary and two target ranges:
   Context;
 - `mem chunk --context CONTEXT` does the same in one explicit local Context or
   granted view;
-- `mem chunk MEMORY_SELECTOR` splits one directly owned Memory in the current
-  Context; and
+- `mem chunk CONTEXT` splits every directly owned Memory in that existing
+  Context without switching current;
+- `mem chunk MEMORY_SELECTOR` finds one uniquely owned ordinary-local direct
+  Memory even when its owner is not current;
+- `mem chunk CONTEXT:MEMORY_SELECTOR` states that direct owner explicitly; and
 - `mem chunk MEMORY_SELECTOR --context CONTEXT` selects one direct Memory in
   the explicit Context.
 
-The Context operand is resolved once against the current-Context snapshot. A
-Context-scoped run freezes one ordered split plan, displays the canonical public
-target, and immediately publishes every replacement in one Context save and
-checkpoint. The command invocation is the complete approval boundary; the
+The positional operand uses the shared Context/direct-Memory classifier. A
+Context-shaped value remains an existing Context locator; a bare public
+UUID-shaped selector scans one strict ordinary-local direct graph and requires
+one unique owner; and `CONTEXT:UID` or `--context CONTEXT` explicitly supplies
+the owner. A granted Context can be selected explicitly through Chunk's normal
+authority port, but bare Memory discovery does not enumerate Grants. When the
+current pointer is itself a nonlocal public Grant selection, a bare Memory
+selector retains that already explicit authority-bearing owner instead of
+pretending the ordinary-local catalog could rediscover it. The current Context
+is captured once and every relative owner is resolved against that snapshot.
+
+A Context-scoped run freezes one ordered split plan, displays the canonical
+public target, and immediately publishes every replacement in one Context save
+and checkpoint. The command invocation is the complete approval boundary; the
 displayed plan is useful effect visibility, not a second decision prompt.
 Memories that produce zero or one chunk are retained with
 their existing UID and position. Embedded Contexts, immutable Memory

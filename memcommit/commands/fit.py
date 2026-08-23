@@ -7,6 +7,7 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.commands.command_progress import CommandProgress
+from memcommit.context_targeting.resolution import parse_direct_memory_locator
 from memcommit.fit import FitError, FitReport
 from memcommit.fit_application import (
     FitMemorySourceRequest,
@@ -46,16 +47,13 @@ def _memory_source_operand(value: str) -> FitMemorySourceRequest:
     text = value.strip()
     if not text:
         raise FitSourceError("A Fit Memory selector must be nonblank.")
-    if ":" not in text:
-        return FitMemorySourceRequest(selector=text)
-    context_locator, selector = text.rsplit(":", 1)
-    if not context_locator or not selector:
-        raise FitSourceError(
-            "Fit --memory expects UID_OR_PREFIX or CONTEXT:UID_OR_PREFIX."
-        )
+    try:
+        locator = parse_direct_memory_locator(text)
+    except ValueError as error:
+        raise FitSourceError(str(error)) from error
     return FitMemorySourceRequest(
-        selector=selector,
-        context_locator=context_locator,
+        selector=locator.memory_selector,
+        context_locator=locator.context_locator,
     )
 
 

@@ -71,6 +71,16 @@ from memcommit.commands.context_operand import (
     ContextOperandSnapshot,
     choose_context_operand,
 )
+from memcommit.context_targeting.loading import resolve_local_context_memory_target
+from memcommit.context_targeting.model import (
+    ContextTarget,
+    DirectMemoryLocator,
+    DirectMemoryTarget,
+    ExistingContextOperand,
+)
+from memcommit.context_targeting.resolution import (
+    parse_auto_typed_context_memory_operand,
+)
 from memcommit.review import (
     atomize_review_declared_frames,
     atomize_review_matches_analysis,
@@ -278,8 +288,11 @@ def cmd(
     context_operand: Annotated[
         Optional[str],
         typer.Argument(
-            metavar="CONTEXT",
-            help="Context to atomize now (defaults to current)",
+            metavar="TARGET",
+            help=(
+                "Auto-typed existing Context, Memory UID/prefix, or "
+                "CONTEXT:UID (defaults to current Context)"
+            ),
         ),
     ] = None,
     save: Annotated[
@@ -397,10 +410,33 @@ def cmd(
 ) -> None:
     """Atomize the current Context or use an explicit advanced route."""
     try:
-        context_name = choose_context_operand(
-            context_operand,
-            option=context_name,
+        parsed_operand = (
+            parse_auto_typed_context_memory_operand(context_operand)
+            if context_operand is not None
+            else None
         )
+        if isinstance(parsed_operand, DirectMemoryLocator):
+            if context_name is not None:
+                raise ValueError(
+                    "Auto-typed Memory cannot be combined with --context; use "
+                    "CONTEXT:UID or --context CONTEXT --memory UID."
+                )
+            if memory_selector is not None:
+                raise ValueError(
+                    "Memory was supplied both positionally and with --memory."
+                )
+            context_name = parsed_operand.context_locator
+            memory_selector = parsed_operand.memory_selector
+        else:
+            positional_context = (
+                parsed_operand.locator
+                if isinstance(parsed_operand, ExistingContextOperand)
+                else None
+            )
+            context_name = choose_context_operand(
+                positional_context,
+                option=context_name,
+            )
     except ValueError as error:
         typer.secho(
             f"Atomize error: {display_escape_text(str(error))}",
@@ -541,6 +577,18 @@ def cmd(
             )
             return
         context_snapshot = ContextOperandSnapshot.capture(store)
+        if context_operand is not None:
+            auto_target = resolve_local_context_memory_target(
+                store,
+                context_operand,
+                current=context_snapshot.current_name,
+            )
+            if isinstance(auto_target, DirectMemoryTarget):
+                context_name = auto_target.context_name
+                memory_selector = auto_target.memory_uid
+            else:
+                assert isinstance(auto_target, ContextTarget)
+                context_name = auto_target.context_name
         name = context_snapshot.resolve_or_current(context_name)
         if not name:
             raise AtomizeImpactError(

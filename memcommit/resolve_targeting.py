@@ -10,9 +10,12 @@ from memcommit.context_targeting.loading import (
     LocalDirectMemoryLocatorStore,
     resolve_local_direct_memory_locator,
 )
-from memcommit.context_targeting.model import DirectMemoryLocator
+from memcommit.context_targeting.model import (
+    DirectMemoryLocator,
+    ExistingContextOperand,
+)
 from memcommit.context_targeting.resolution import (
-    is_direct_memory_locator_operand,
+    parse_auto_typed_context_memory_operand,
     parse_direct_memory_locator,
 )
 from memcommit.resolve_application import ResolveError
@@ -56,10 +59,14 @@ def normalize_resolve_cli_targets(
             context_locators.append(locator.context_locator)
 
     for operand in auto_operands:
-        if is_direct_memory_locator_operand(operand):
-            add_memory_operand(operand)
+        parsed = parse_auto_typed_context_memory_operand(operand)
+        if isinstance(parsed, DirectMemoryLocator):
+            memory_locators.append(parsed)
+            if parsed.context_locator is not None:
+                context_locators.append(parsed.context_locator)
         else:
-            context_locators.append(operand)
+            assert isinstance(parsed, ExistingContextOperand)
+            context_locators.append(parsed.locator)
 
     for operand in memory_operands:
         add_memory_operand(operand)
