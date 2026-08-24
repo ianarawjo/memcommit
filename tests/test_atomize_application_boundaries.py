@@ -12,6 +12,7 @@ import json
 from pathlib import Path
 
 import typer
+import pytest
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
@@ -45,6 +46,8 @@ class _AllAtomicProvider:
     """Return one exhaustive, decision-free Atomize assessment."""
 
     def complete(self, prompt, *, operation, output_schema=None):
+        if operation == "find_duplicates":
+            return json.dumps({"findings": []})
         assert operation == "impact_atomize"
         assert output_schema is not None
         payload = json.loads(prompt.split(_PAYLOAD_MARKER, 1)[1])
@@ -83,10 +86,18 @@ class _OneCompositeProvider:
     """Split one exact two-clause Memory with grounded child evidence."""
 
     def complete(self, prompt, *, operation, output_schema=None):
+        if operation == "find_duplicates":
+            return json.dumps({"findings": []})
         assert operation == "impact_atomize"
         assert output_schema is not None
         payload = json.loads(prompt.split(_PAYLOAD_MARKER, 1)[1])
         candidate_id = payload["memories"][0]["candidate_id"]
+        if payload.get("phase") == "normal_form_validation":
+            return _AllAtomicProvider().complete(
+                prompt,
+                operation=operation,
+                output_schema=output_schema,
+            )
         return json.dumps(
             {
                 "overview": {
@@ -134,6 +145,14 @@ def _open_all_atomic_session(store: MemoryStore):
         provider_factory=_AllAtomicProvider,
     )
     return context, memory, opened
+
+
+@pytest.fixture(autouse=True)
+def _normal_form_provider(monkeypatch):
+    monkeypatch.setattr(
+        "memcommit.commands.atomize.connect_codex_chatgpt_provider",
+        _AllAtomicProvider,
+    )
 
 
 def test_all_atomic_apply_records_a_deliberate_no_change_checkpoint(
@@ -253,7 +272,10 @@ def test_retry_recovers_terminal_receipt_from_exact_atomize_checkpoint(
         analysis=opened.analysis,
         expected_workbench=opened.workbench,
     )
-    materialized = MemoryStoreAtomizeOutputPort(store).materialize(
+    materialized = MemoryStoreAtomizeOutputPort(
+        store,
+        provider_factory=_AllAtomicProvider,
+    ).materialize(
         snapshot,
         atomize_application_audit(snapshot.analysis, snapshot.workbench),
     )
@@ -346,7 +368,7 @@ def test_save_as_prepublication_failure_leaves_no_context_or_hidden_analysis(
         raise AtomizeImpactError("injected prepublication failure")
 
     monkeypatch.setattr(
-        "memcommit.atomize_runtime.apply_atomize_analysis",
+        "memcommit.atomize_normal_form.apply_atomize_analysis",
         reject_apply,
     )
 
@@ -457,7 +479,10 @@ def test_receipt_recovery_does_not_overwrite_later_context_edits(
         analysis=opened.analysis,
         expected_workbench=opened.workbench,
     )
-    materialized = MemoryStoreAtomizeOutputPort(store).materialize(
+    materialized = MemoryStoreAtomizeOutputPort(
+        store,
+        provider_factory=_AllAtomicProvider,
+    ).materialize(
         snapshot,
         atomize_application_audit(snapshot.analysis, snapshot.workbench),
     )

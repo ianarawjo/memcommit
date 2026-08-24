@@ -2,8 +2,8 @@
 
 ## Design prompt
 
-The refinement pipeline needs an explicit atomization stage before
-deduplication. The intended model combines:
+The refinement pipeline needs an explicit Atomize command that composes
+semantic chunking with deduplication. The intended model combines:
 
 - the Zettelkasten intuition that one note should contain one addressable idea;
 - the semantic distinction between a proposition and a compound proposition;
@@ -28,9 +28,12 @@ UID with full content, while Review item titles show the UID with a bounded
 content preview before the exact source detail.
 `mem atomize --context INPUT`, `--save`, `--save-as`, and `--sessions` remain
 advanced compatibility routes for explicit workbench, destination, and saved-
-artifact workflows. A second, independent semantic validator remains
-future work, so application is a deliberate research-prototype action rather
-than a claim of semantic proof. The later quality-finding stages intentionally
+artifact workflows. Apply now defines the Atomize result as **semantic chunk +
+Dedun**: it projects the reviewed split in memory, runs the existing typed
+Dedun application policy on that projection, and semantically verifies the
+affected final Memories before publishing anything. This is still a bounded
+research-prototype verification, not a theorem that no possible omission
+exists. The later quality-finding stages intentionally
 use a different evidence boundary: atomization protects one source occurrence
 and does not borrow neighboring Memories as hidden source evidence, while
 quality finding reads all direct Memories in the selected Context as a local
@@ -117,7 +120,8 @@ not created during review. `mem atomize --save` uses that saved route:
 `INPUT=OUTPUT` applies in place; a distinct Output takes the existing
 require-new save-as path. Reopening through Impact, Review, direct Atomize, or
 the launcher therefore shares one analysis/workbench and one Output plan
-without another provider call. An already materialized exact Output is
+without rerunning the initial analysis. Apply still runs its advertised Dedun
+and final normal-form calls. An already materialized exact Output is
 recognized through its copied analysis UID and checkpoint; an occupied but
 unrelated name fails closed. Because save-as copies the immutable analysis UID
 to Output for provenance, the saved-work catalog collapses that copy into the
@@ -125,10 +129,12 @@ single Input-owned workbench session instead of presenting two sessions or
 rejecting UID-based resume as ambiguous.
 
 Save As is one user operation and one Context-creation command unit. Atomize
-builds the derived Context and applies the complete reviewed transform in
-memory; the unmodified branch baseline is provenance, not a visible Context or
-checkpoint. Only the final atomized Context is published, with one `atomize`
-checkpoint carrying an exact `context_creation` and Source-baseline receipt.
+builds the derived Context, applies the complete reviewed transform, Deduns the
+unpublished result, and verifies its affected normal form in memory; the
+unmodified branch baseline is provenance, not a visible Context or checkpoint.
+Only the final atomized Context is published, with one `atomize` checkpoint
+carrying an exact `context_creation`, Source-baseline receipt, embedded Dedun
+evidence, and validation digest.
 Legacy histories that already contain separate `init` and `atomize`
 checkpoints are not regrouped or reinterpreted. A person who deliberately
 wants two operations can still run `mem branch A B` and then apply Atomize to
@@ -162,10 +168,10 @@ memory identity and safe independent revision, not maximal syntactic
 fragmentation.
 
 Occurrence identity and semantic equivalence are different. If a raw Memory
-says `P. P.`, it contains two explicit occurrences even though both express
-the same commitment. Atomization exposes both occurrences as children so the
-dedup stage can later show why one is absorbed. It must not silently convert
-two source occurrences into one.
+says `P. P.`, the semantic-chunk phase first exposes both source occurrences as
+children. The composed Dedun phase then records why one existing result UID is
+selected and the other is absorbed. The checkpoint must retain both the split
+lineage and Dedun evidence; it may not silently collapse the occurrences.
 
 The semantic class and the proposed action are kept separate:
 
@@ -210,9 +216,9 @@ case, and checkpoint can say why a boundary was chosen.
 | `A05_MINIMAL_EXPANSION` | Repeating an explicit subject or qualifier and repairing grammar are allowed only as needed to make a child stand alone. | No stylistic normalization during atomization. |
 | `A06_NO_HIDDEN_CONTEXT` | Neighboring Memories and undeclared Context assumptions are not evidence. | Deictic content without an explicit frame becomes `UNCERTAIN`. |
 | `A07_RETAIN_NON_CLAIMS` | Headings, questions, and process notes remain addressable. | Classify and retain; do not fabricate propositions. |
-| `A08_PRESERVE_OCCURRENCES` | Atomization preserves every source occurrence, including repeated claims. | Duplicate removal belongs to `mem dedup`. |
+| `A08_PRESERVE_OCCURRENCES` | Semantic chunking exposes every source occurrence, including repeated claims. | The composed Dedun phase may absorb an exposed duplicate only with typed evidence. |
 | `A09_SIZE_IS_LINT` | Length can request review but cannot prove atomicity. | Never split solely because a threshold was crossed. |
-| `A10_STAGE_BOUNDARY` | Atomization does not deduplicate, reconcile, normalize, classify audiences, or place. | Later stages remain observable. |
+| `A10_STAGE_BOUNDARY` | The semantic chunk proposal does not itself deduplicate, reconcile, normalize, classify audiences, or place. | Atomize composes Dedun after projection; other stages remain separate and observable. |
 
 ### Operators and relations
 
@@ -681,11 +687,21 @@ while in-place `--save` has no location editor because it is defined to update
 the selected source Context.
 
 Both require the latest preview to match the Context UID, name, ordered
-direct-Memory digest, and current source contents. `COMPOSITE` sources are
-replaced in place with fresh child UIDs. `ATOMIC`, `UNCERTAIN`, and
-`NON_PROPOSITIONAL` items preserve their existing UID and content. The apply
-checkpoint records the analysis UID and explicit `KEEP`, `PRESERVE`, and
-`SPLIT` relations for later trace. When the active atomize workbench contains
+direct-Memory digest, and current source contents. Apply first clones that
+exact Context. `COMPOSITE` sources are replaced in the clone with fresh child
+UIDs; `ATOMIC`, `UNCERTAIN`, and `NON_PROPOSITIONAL` items initially preserve
+their existing UID and content. The complete projected direct-Memory frame is
+then passed through the ordinary Find Redundancies → typed handoff → Dedun
+plan/projection boundary. The first Context-ordered member is retained unless
+a focused component includes an unchanged neighboring Memory, which is
+preferred over an affected generated result. The affected surviving Memories
+must revalidate as `ATOMIC` or `NON_PROPOSITIONAL`, and a second redundancy
+scan must return no affected finding. Any failure publishes nothing.
+
+The apply checkpoint records the analysis UID, explicit `KEEP`, `PRESERVE`,
+and `SPLIT` relations, provisional child contents, complete Dedun component
+evidence, absorbed-to-survivor mappings, and final validation digest for later
+trace. When the active atomize workbench contains
 eligible unary responses, application additionally requires the analysis's
 recorded workbench UID and response digest to match; unincorporated responses
 block application. Pair-shaped conflict responses remain staged for future
@@ -712,10 +728,10 @@ leave an embedded `context_ref` unresolved while a mutating load restores it;
 the unchanged Memories on either side must retain the same atomize identity
 and order in both views.
 
-In-place save creates one checkpoint and blocks only an inbound `memory_ref`
-whose target Context UID is the selected Context and whose target Memory UID is
-one of the sources that would be split. References to unchanged Memories do not
-block it. Save-as does not remove those source Memories: it creates a fresh
+In-place save creates one checkpoint and blocks an inbound `memory_ref` whose
+target Context UID is the selected Context and whose target Memory UID would be
+removed by either the split or composed Dedun effect. References to surviving
+Memories do not block it. Save-as does not remove those source Memories: it creates a fresh
 Context UID and publishes only the final atomized state, so references to the
 unchanged source Context remain valid. The source baseline remains explicit in
 checkpoint provenance without becoming an independently undoable state.
@@ -754,11 +770,17 @@ key. Contexts created by current commands satisfy this requirement. A legacy
 Context with a noncanonical identity can still be inspected and deleted, but
 it cannot persist an atomize preview until its identity is migrated.
 
-The actual apply path trusts the same one-shot semantic proposal after strict
-local revalidation. It does not pretend that the proposal has passed an
-independent semantic judge.
+Provider work runs against an unpublished clone before the command lock is
+reacquired. Publication then reloads and compare-and-sets the original Source
+digest, scans inbound references for every removed existing UID, and writes the
+verified clone once. The production output ports require this provider-backed
+normal-form projection; no adapter may publish the former structural-only
+intermediate state. A retry first recognizes the exact schema-v4 checkpoint, so
+it performs neither provider work nor a duplicate write. Schema-v3 checkpoints
+remain readable only for migration and exact recovery of already-published
+history.
 
-### Future independently validated plan
+### Normal-form evidence and remaining independent proof
 
 The semantic provider returns opaque call-local IDs. Real Context and Memory
 UIDs remain in a local allowlist. Ruleset and profile identity are both part
@@ -823,16 +845,27 @@ profile fields other than `fingerprint`. The ruleset itself receives a
 separate digest when its rules move from this rationale into a loadable
 artifact.
 
-The stored child UIDs are allocated locally only after approval. Preview
-creates no checkpoint. For an in-place application, the target design reloads
+The child UIDs are allocated locally in the unpublished Apply projection.
+Preview creates no checkpoint. For an in-place application, the implementation reloads
 the Context, verifies every UID and fingerprint, checks all Contexts for an
 inbound `memory_ref` that targets a planned split source in this Context, then
 replaces each confirmed composite at its original position with contiguous
 fresh children. Save-as preserves the source Context and therefore does not
 need to retarget its inbound references.
 
-One approved direct-Context batch creates exactly one checkpoint. The
-checkpoint records the shared operation ID and:
+One approved direct-Context batch creates exactly one checkpoint. The command
+unit follows:
+
+```text
+reviewed semantic chunk → typed Dedun projection → final semantic/redundancy verification → one atomize publication
+```
+
+It deliberately does not call the standalone Dedun Store adapter, because
+that would expose a second checkpoint and make one user invocation require two
+Undo operations. The reused boundary is Dedun's request, component planning,
+survivor validation, and pure projection policy; the outer Atomize command owns
+publication, receipt, recovery, and Undo. The checkpoint records the shared
+operation ID and:
 
 ```text
 source UID and fingerprint
@@ -843,14 +876,13 @@ ruleset version and reason codes
 ```
 
 Version 1 blocks an in-place application if any `memory_ref` targets a split
-source in the selected Context. A one-to-many replacement has no single safe
+source or an existing Memory that Dedun would absorb. A replacement has no single safe
 automatic retarget. It does not block references to Memories that remain
 unchanged, and save-as leaves all source targets intact. The first apply path
-is explicitly single-writer. The current store has no global compare-and-swap
-or lock spanning the inbound-reference scan, checkpoint, and Context
-replacement, so it cannot promise concurrent safety. Multi-writer support
-requires such a transaction boundary and a race test; it must not be inferred
-from the stale-plan check alone.
+is explicitly single-writer: the store-wide command lock spans the strict
+inbound-reference scan, Source digest comparison, checkpoint, and Context
+replacement. Provider work stays outside that lock on the unpublished clone;
+the final digest comparison rejects any intervening Source change.
 
 ## Golden regression contract
 
@@ -867,6 +899,16 @@ expected.qa                 = canonical source-occurrence Q/A ledger,
                               including source spans, predicate, speech act,
                               scope slots, and declared-frame IDs
 ```
+
+Ordinary Profiles continue to quote the eligible golden cases as production
+calibration. Study Profiles use the same named rules and strict decoder but do
+not quote Atomize, Ambiguity, or Conflict fixture cases in live task turns.
+That rules-only boundary is independent from evaluation, which still consumes
+the selected calibration corpus, and is documented in
+[`study-semantic-prompt-policy-design-rationale.md`](study-semantic-prompt-policy-design-rationale.md).
+Saved Study analysis schema 6 and exact prewarm schema 2 bind the prompt-policy
+ID so an older full-example result cannot silently stand in for a rules-only
+provider turn.
 
 The fixture includes:
 
@@ -909,6 +951,10 @@ Implemented operation tests cover the current preview-and-apply boundary:
 - preview creates zero Context checkpoints but updates one per-Context analysis
   artifact and one per-Context workbench artifact;
 - in-place apply creates exactly one checkpoint;
+- the same checkpoint contains the split and typed Dedun evidence, and one
+  `mem undo` restores the complete pre-command Context;
+- final semantic or redundancy verification failure creates no checkpoint and
+  publishes no partial split or absorption;
 - save-as leaves the source unchanged and creates exactly one destination
   checkpoint containing the final atomized state;
 - one Undo removes that created Context into the validated command archive and
@@ -927,8 +973,9 @@ Implemented operation tests cover the current preview-and-apply boundary:
 - provider responses with unknown IDs, missing fields, extra fields, duplicate
   keys, or ungrounded spans are rejected as a whole.
 - `mem impact atomize`, bare `mem atomize`, and `mem review atomize` reuse the
-  same compatible analysis/workbench without duplicate provider calls; bare
-  Atomize applies it, while Impact and Review remain non-applying;
+  same compatible analysis/workbench without rerunning the initial proposal;
+  bare Atomize runs its distinct Dedun and final-validation calls before Apply,
+  while Impact and Review remain non-applying;
 - an applied analysis remains reconstructible in read-only `mem review` even
   though in-place splits changed the live direct-Memory digest;
 - the direct receipt renders full safe terminal text for at most three split
@@ -955,8 +1002,7 @@ Implemented operation tests cover the current preview-and-apply boundary:
 - applied reviewed context and citations remain traceable after a later
   explicit reanalysis replaces the latest analysis artifact.
 
-Future independent-validator and semantic regression tests must additionally
-cover:
+Further independent-validator and semantic regression tests should cover:
 
 - source occurrence coverage, reconstruction, single-focus, and scope
   preservation as independently judged checks rather than properties asserted
@@ -1177,18 +1223,19 @@ build_claim_ledger(source, declared_frame)
 Candidate generation may use sentence boundaries, conjunctions, bullets, and
 size lint. None of those heuristics may bypass the ledger and validation pass.
 
-The implementation now separates the saved `mem impact atomize` preview from
-the explicit `mem atomize --save` and `--save-as` transformations. It uses the
-golden corpus as calibration and labels the absence of a second independent
-semantic judge rather than silently implying one. The existing `mem chunk`
-remains a deterministic text-splitting primitive; it is not renamed or treated
-as this semantic operation.
+The implementation separates the saved `mem impact atomize` preview from the
+explicit `mem atomize --save` and `--save-as` transformations. The latter
+compose the reviewed semantic chunk, existing Dedun application policy, and a
+fresh final semantic/redundancy verification before one publication. The
+existing `mem chunk` remains a deterministic text-splitting primitive; it is
+not renamed or treated as this semantic operation.
 
 ## Intentional non-goals
 
-Atomization does not:
+The semantic-chunk phase does not:
 
-- decide which duplicate should survive;
+- decide which duplicate should survive; the composed typed Dedun policy owns
+  that choice;
 - invent or autonomously resolve conflicting or missing scope; only an
   explicitly reviewed per-Memory declared frame may supply it for reanalysis;
 - improve wording beyond minimal stand-alone repair;

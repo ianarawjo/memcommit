@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass, replace
 import hashlib
 import json
+from typing import Callable
 
 import memcommit.ops as ops
 from memcommit.atomize import (
@@ -12,8 +13,10 @@ from memcommit.atomize import (
     AtomizeAnalysisSession,
     AtomizeApplyResult,
     AtomizeImpactError,
-    apply_atomize_analysis,
+    AtomizeNormalFormAudit,
+    AtomizeProvider,
 )
+from memcommit.atomize_normal_form import project_atomize_normal_form
 from memcommit.atomize_application import (
     AtomizeApplicationAudit,
     AtomizeApplicationError,
@@ -162,6 +165,7 @@ class MemoryStoreAtomizeOutputPort:
     """Create, recover, or compensate one local in-place Atomize checkpoint."""
 
     store: MemoryStore
+    provider_factory: Callable[[], AtomizeProvider]
 
     @staticmethod
     def _checkpoint_args(
@@ -178,6 +182,15 @@ class MemoryStoreAtomizeOutputPort:
             "split_count": result.split_count,
             "child_count": result.child_count,
             "preserved_count": result.preserved_count,
+            **(
+                {
+                    "normal_form_verified": True,
+                    "dedun_group_count": result.normal_form.dedun_group_count,
+                    "absorbed_count": result.normal_form.absorbed_count,
+                }
+                if result.normal_form is not None
+                else {}
+            ),
             **audit.checkpoint_fields(),
             "trace": result.trace_metadata(),
         }
@@ -188,12 +201,17 @@ class MemoryStoreAtomizeOutputPort:
         result: AtomizeApplyResult,
         audit: AtomizeApplicationAudit,
     ) -> str:
-        return (
+        base = (
             f"Applied atomize [{analysis.uid[:8]}]: "
             f"{result.split_count} splits -> {result.child_count} children; "
             f"{result.preserved_count} preserved; "
-            f"{audit.unresolved_at_apply_count} unresolved at apply"
         )
+        if result.normal_form is not None:
+            base += (
+                f"{result.normal_form.dedun_group_count} Dedun groups; "
+                f"{result.normal_form.absorbed_count} absorbed; "
+            )
+        return base + f"{audit.unresolved_at_apply_count} unresolved at apply"
 
     @staticmethod
     def _result_from_checkpoint(
@@ -207,10 +225,14 @@ class MemoryStoreAtomizeOutputPort:
                 "The recorded Atomize checkpoint is incomplete."
             )
         trace = args.get("trace")
-        if not isinstance(trace, dict) or trace.get("schema_version") != 3:
+        if (
+            not isinstance(trace, dict)
+            or trace.get("schema_version") not in {3, 4}
+        ):
             raise AtomizeApplicationError(
                 "The recorded Atomize checkpoint has incompatible trace data."
             )
+        trace_schema = trace["schema_version"]
         changes = trace.get("changes")
         if not isinstance(changes, list) or len(changes) != len(analysis.items):
             raise AtomizeApplicationError(
@@ -229,6 +251,35 @@ class MemoryStoreAtomizeOutputPort:
         output_memories = {
             item.uid: item for item in output.iter_items() if isinstance(item, Memory)
         }
+        normal_form: AtomizeNormalFormAudit | None = None
+        absorbed_to_survivor: dict[str, str] = {}
+        if trace_schema == 4:
+            try:
+                normal_form = AtomizeNormalFormAudit.from_dict(
+                    trace.get("normal_form")
+                )
+            except AtomizeImpactError as error:
+                raise AtomizeApplicationError(str(error)) from error
+            if normal_form.validation_context_digest != direct_context_digest(output):
+                raise AtomizeApplicationError(
+                    "The recorded Atomize normal-form digest changed."
+                )
+            absorbed_to_survivor = dict(normal_form.absorbed_to_survivor)
+            if any(
+                absorbed_uid in output_memories
+                or survivor_uid not in output_memories
+                for absorbed_uid, survivor_uid in absorbed_to_survivor.items()
+            ):
+                raise AtomizeApplicationError(
+                    "The recorded Atomize absorption result changed."
+                )
+            if any(
+                uid not in output_memories
+                for uid in normal_form.validation_memory_uids
+            ):
+                raise AtomizeApplicationError(
+                    "The recorded Atomize validation scope changed."
+                )
         declared_frames = {
             frame.memory_uid: frame for frame in analysis.declared_frames
         }
@@ -264,14 +315,45 @@ class MemoryStoreAtomizeOutputPort:
                     raise AtomizeApplicationError(
                         "The recorded Atomize split has an invalid child count."
                     )
-                result_contents = tuple(
-                    output_memories[uid].content
-                    for uid in result_uids
-                    if uid in output_memories
+                raw_result_contents = change.get("result_contents")
+                if trace_schema == 4 and (
+                    not isinstance(raw_result_contents, list)
+                    or any(
+                        not isinstance(content, str)
+                        for content in raw_result_contents
+                    )
+                ):
+                    raise AtomizeApplicationError(
+                        "The recorded Atomize split contents are invalid."
+                    )
+                result_contents = (
+                    tuple(raw_result_contents)
+                    if trace_schema == 4
+                    else tuple(
+                        output_memories[uid].content
+                        for uid in result_uids
+                        if uid in output_memories
+                    )
                 )
                 if result_contents != tuple(child.content for child in item.children):
                     raise AtomizeApplicationError(
                         "The recorded Atomize split children changed."
+                    )
+                if any(
+                    uid not in output_memories
+                    and uid not in absorbed_to_survivor
+                    for uid in result_uids
+                ) or any(
+                    uid in output_memories
+                    and output_memories[uid].content != content
+                    for uid, content in zip(
+                        result_uids,
+                        result_contents,
+                        strict=True,
+                    )
+                ):
+                    raise AtomizeApplicationError(
+                        "The recorded Atomize split disposition changed."
                     )
             else:
                 if result_uids != [item.memory_uid]:
@@ -279,11 +361,22 @@ class MemoryStoreAtomizeOutputPort:
                         "The recorded preserved Atomize identity changed."
                     )
                 current = output_memories.get(item.memory_uid)
-                if current is None or current.content != item.content:
+                if (
+                    current is None
+                    and item.memory_uid not in absorbed_to_survivor
+                ) or (
+                    current is not None and current.content != item.content
+                ):
                     raise AtomizeApplicationError(
                         "The recorded preserved Atomize Memory changed."
                     )
                 result_contents = (item.content,)
+                if trace_schema == 4 and change.get("result_contents") != [
+                    item.content
+                ]:
+                    raise AtomizeApplicationError(
+                        "The recorded preserved Atomize content changed."
+                    )
             applied_items.append(
                 AppliedAtomizeItem(
                     source_uid=item.memory_uid,
@@ -298,6 +391,17 @@ class MemoryStoreAtomizeOutputPort:
                     source_review_digest=analysis.source_review_digest,
                 )
             )
+        if normal_form is not None:
+            affected_uids = {
+                uid for applied in applied_items for uid in applied.result_uids
+            }
+            expected_final_uids = {
+                absorbed_to_survivor.get(uid, uid) for uid in affected_uids
+            }
+            if set(normal_form.validation_memory_uids) != expected_final_uids:
+                raise AtomizeApplicationError(
+                    "The recorded Atomize validation scope is incomplete."
+                )
         return AtomizeApplyResult(
             analysis_uid=analysis.uid,
             split_count=sum(
@@ -312,6 +416,7 @@ class MemoryStoreAtomizeOutputPort:
                 item.classification != "COMPOSITE" for item in analysis.items
             ),
             items=tuple(applied_items),
+            normal_form=normal_form,
         )
 
     def _matching_checkpoint(
@@ -364,16 +469,12 @@ class MemoryStoreAtomizeOutputPort:
     ) -> AtomizeMaterialization | None:
         return self._matching_checkpoint(snapshot, audit)
 
-    def _inbound_split_references(
+    def _inbound_removed_references(
         self,
         analysis: AtomizeAnalysisSession,
+        removed_uids: set[str],
     ) -> list[tuple[str, MemoryRef]]:
-        split_uids = {
-            item.memory_uid
-            for item in analysis.items
-            if item.classification == "COMPOSITE"
-        }
-        if not split_uids:
+        if not removed_uids:
             return []
         inbound: list[tuple[str, MemoryRef]] = []
         for context in self.store.load_direct_context_graph_strict():
@@ -381,7 +482,7 @@ class MemoryStoreAtomizeOutputPort:
                 if (
                     isinstance(item, MemoryRef)
                     and item.target_context_uid == analysis.context_uid
-                    and item.target_memory_uid in split_uids
+                    and item.target_memory_uid in removed_uids
                 ):
                     inbound.append((context.name, item))
         return inbound
@@ -392,28 +493,50 @@ class MemoryStoreAtomizeOutputPort:
         audit: AtomizeApplicationAudit,
     ) -> AtomizeMaterialization:
         analysis = snapshot.analysis
-        # The command lock makes the strict inbound-reference scan and the
-        # target CAS one ordered Context command. It also prevents two
-        # all-preserved applications from creating duplicate checkpoints even
-        # though their Context bytes are extensionally identical.
+        source = self.store.load_for_update(analysis.context_name)
+        source_digest = context_record_digest(source)
+        normal_form = project_atomize_normal_form(
+            source,
+            analysis,
+            self.provider_factory,
+        )
+        projected = normal_form.context
+        result = normal_form.result
+        removed_uids = {
+            item.memory_uid
+            for item in analysis.items
+            if item.classification == "COMPOSITE"
+        } | set(normal_form.absorbed_uids)
+
+        # Provider work completes on an unpublished projection. The command
+        # lock then makes the strict inbound-reference scan, Source CAS, and
+        # sole checkpoint one ordered Context command.
         with self.store._command_write_lock():  # noqa: SLF001
             recovered = self._matching_checkpoint(snapshot, audit)
             if recovered is not None:
                 return recovered
-            inbound = self._inbound_split_references(analysis)
+            current = self.store.load_for_update(analysis.context_name)
+            if context_record_digest(current) != source_digest:
+                raise AtomizeImpactError(
+                    "The Atomize Source changed during normal-form planning; "
+                    "no Context change was published."
+                )
+            inbound = self._inbound_removed_references(
+                analysis,
+                removed_uids,
+            )
             if inbound:
                 locations = ", ".join(
                     f"{owner}#{reference.uid[:8]}"
                     for owner, reference in inbound
                 )
                 raise AtomizeImpactError(
-                    "Cannot split a Memory with inbound memory references in "
+                    "Cannot replace or absorb a Memory with inbound memory "
+                    "references in "
                     f"version 1: {locations}."
                 )
-            context = self.store.load_for_update(analysis.context_name)
-            result = apply_atomize_analysis(context, analysis)
             checkpoint = self.store._save_command_locked(  # noqa: SLF001
-                context,
+                projected,
                 AutoCheckpoint(
                     command="atomize",
                     args=self._checkpoint_args(analysis, result, audit),
@@ -430,7 +553,7 @@ class MemoryStoreAtomizeOutputPort:
                 )
             return AtomizeMaterialization(
                 result=result,
-                context_name=context.name,
+                context_name=projected.name,
                 checkpoint_uid=checkpoint.uid,
                 created=True,
             )
@@ -518,6 +641,7 @@ class MemoryStoreAtomizeSaveAsOutputPort:
     """Publish a final derived Context once, with no visible baseline copy."""
 
     store: MemoryStore
+    provider_factory: Callable[[], AtomizeProvider]
 
     @staticmethod
     def _source_workbench_record(
@@ -864,9 +988,16 @@ class MemoryStoreAtomizeSaveAsOutputPort:
                 else None
             )
         output_analysis = replace(snapshot.analysis, **output_fields)
-        # Structural application completes in memory. Until the final Context
-        # write below, only a hidden derived analysis may exist.
-        result = apply_atomize_analysis(output, output_analysis)
+        # The complete semantic normal form remains unpublished until the one
+        # final Context creation below. The output port requires a provider so
+        # no adapter can publish the legacy structural-only intermediate form.
+        normal_form = project_atomize_normal_form(
+            output,
+            output_analysis,
+            self.provider_factory,
+        )
+        output = normal_form.context
+        result = normal_form.result
         checkpoint_args = self._checkpoint_args(
             snapshot,
             output_analysis,
@@ -1026,13 +1157,17 @@ def execute_atomize_session_apply(
     request: AtomizePersistedApplyRequest,
     *,
     store: MemoryStore,
+    provider_factory: Callable[[], AtomizeProvider],
 ) -> AtomizePersistedApplyResult:
     """Apply one accepted revision through the production Store adapters."""
 
     return run_atomize_session_apply(
         request,
         repository=MemoryStoreAtomizeSessionRepository(store),
-        output_port=MemoryStoreAtomizeOutputPort(store),
+        output_port=MemoryStoreAtomizeOutputPort(
+            store,
+            provider_factory=provider_factory,
+        ),
     )
 
 
@@ -1040,11 +1175,15 @@ def execute_atomize_save_as(
     request: AtomizeSaveAsRequest,
     *,
     store: MemoryStore,
+    provider_factory: Callable[[], AtomizeProvider],
 ) -> AtomizeSaveAsResult:
     """Create or recover one final Save As output through Store adapters."""
 
     return run_atomize_save_as(
         request,
         repository=MemoryStoreAtomizeSessionRepository(store),
-        output_port=MemoryStoreAtomizeSaveAsOutputPort(store),
+        output_port=MemoryStoreAtomizeSaveAsOutputPort(
+            store,
+            provider_factory=provider_factory,
+        ),
     )

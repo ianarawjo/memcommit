@@ -58,13 +58,30 @@ class ReviewedAtomizeProvider:
         self.payloads: list[dict] = []
 
     def complete(self, prompt, *, operation, output_schema=None):
+        if operation == "find_duplicates":
+            return json.dumps({"findings": []})
         assert operation == "impact_atomize"
         payload = json.loads(prompt.split(PAYLOAD_MARKER, 1)[1])
-        self.payloads.append(payload)
+        validating = payload.get("phase") == "normal_form_validation"
+        if not validating:
+            self.payloads.append(payload)
         memory = payload["memories"][0]
         candidate_id = memory["candidate_id"]
         declared_frame = memory["declared_frame"]
-        if declared_frame is None:
+        if validating:
+            result = {
+                "items": [
+                    {
+                        "candidate_id": candidate["candidate_id"],
+                        "classification": "ATOMIC",
+                        "reason_codes": ["A01_ONE_FOCUS"],
+                        "children": [],
+                        "reason": "The result has one independently revisable focus.",
+                    }
+                    for candidate in payload["memories"]
+                ]
+            }
+        elif declared_frame is None:
             result = {
                 "items": [
                     {
@@ -129,6 +146,8 @@ class ReviewedAtomizeProvider:
 
 class AllAtomicProvider:
     def complete(self, prompt, *, operation, output_schema=None):
+        if operation == "find_duplicates":
+            return json.dumps({"findings": []})
         assert operation == "impact_atomize"
         payload = json.loads(prompt.split(PAYLOAD_MARKER, 1)[1])
         return json.dumps(
@@ -194,6 +213,10 @@ def test_atomize_review_comment_is_persisted_reanalyzed_and_applied(
     provider = ReviewedAtomizeProvider()
     monkeypatch.setattr(
         "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.atomize.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     context_before = store._context_file(ctx.name).read_bytes()
@@ -295,10 +318,11 @@ def test_atomize_review_comment_is_persisted_reanalyzed_and_applied(
     assert not store.context_exists("atomize/draft")
     assert store._context_file(ctx.name).read_bytes() == context_before
     resolved = store.load_direct("atomize/resolved")
+    resolved_memories = [
+        item for item in resolved.iter_items() if isinstance(item, Memory)
+    ]
     assert [
-        item.content
-        for item in resolved.iter_items()
-        if isinstance(item, Memory)
+        item.content for item in resolved_memories
     ] == [
         "Staff can enter using the staff-door NFC credential.",
         "Students cannot enter using the staff-door NFC credential.",
@@ -327,22 +351,35 @@ def test_atomize_review_comment_is_persisted_reanalyzed_and_applied(
     assert later_preview.exit_code == 0, later_preview.output
 
     trace = runner.invoke(
-        app, ["trace", memory.uid[:8], "--verbose", "--plain"]
+        app,
+        [
+            "trace",
+            f"{ctx.name}:{memory.uid[:8]}",
+            "--verbose",
+            "--plain",
+        ],
     )
     assert trace.exit_code == 0, trace.output
     assert "Reviewed declared context/comment" in trace.output
     assert comment in trace.output
     assert "Requested because:" in trace.output
-    assert "Applied citations for" in trace.output
+    assert "Source spans:" in trace.output
     assert "Declared-frame spans: staff-door NFC credential" in trace.output
 
     rationale = runner.invoke(
         app,
-        ["rationale", memory.uid[:8]],
+        [
+            "rationale",
+            f"atomize/resolved:{resolved_memories[0].uid[:8]}",
+        ],
     )
     rationale_json = runner.invoke(
         app,
-        ["rationale", memory.uid[:8], "--json"],
+        [
+            "rationale",
+            f"atomize/resolved:{resolved_memories[0].uid[:8]}",
+            "--json",
+        ],
     )
     assert rationale.exit_code == 0, rationale.output
     assert "PROVENANCE" in rationale.output
@@ -688,12 +725,16 @@ def test_multiple_atomize_comments_share_one_source_analysis_and_stay_per_memory
 
     class Provider:
         def complete(self, prompt, *, operation, output_schema=None):
+            if operation == "find_duplicates":
+                return json.dumps({"findings": []})
             payload = json.loads(prompt.split(PAYLOAD_MARKER, 1)[1])
-            calls.append(payload)
+            validating = payload.get("phase") == "normal_form_validation"
+            if not validating:
+                calls.append(payload)
             reviewed = all(
                 memory["declared_frame"] is not None
                 for memory in payload["memories"]
-            )
+            ) or validating
             return json.dumps(
                 _aggregate_response(payload, {
                     "items": [
@@ -723,6 +764,10 @@ def test_multiple_atomize_comments_share_one_source_analysis_and_stay_per_memory
 
     monkeypatch.setattr(
         "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        Provider,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.atomize.connect_codex_chatgpt_provider",
         Provider,
     )
     assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0

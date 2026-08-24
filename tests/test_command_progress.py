@@ -138,3 +138,37 @@ def test_progressing_provider_factory_starts_only_when_provider_is_requested(
     assert calls == ["connected"]
     assert "MEM UPDATE · 1/2 · CONNECTING PROVIDER . · 0s" in output
     assert "MEM UPDATE · 2/2 · PLANNING CHANGES . · 0s" in output
+
+
+def test_progressing_provider_factory_spans_repeated_provider_requests(
+    monkeypatch,
+):
+    stream = TTYBuffer()
+
+    def build_progress(operation, stage, *, total):
+        return CommandProgress(
+            operation,
+            stage,
+            total=total,
+            stream=stream,
+            interval=60,
+        )
+
+    monkeypatch.setattr(
+        "memcommit.interfaces.console.progress.CommandProgress",
+        build_progress,
+    )
+    calls = []
+    with progressing_provider_factory(
+        "atomize",
+        "normalizing atomized output",
+        lambda: calls.append("connected") or object(),
+    ) as connect:
+        connect()
+        connect()
+        connect()
+
+    output = stream.getvalue()
+    assert calls == ["connected", "connected", "connected"]
+    assert output.count("NORMALIZING ATOMIZED OUTPUT") == 3
+    assert output.endswith("\r")

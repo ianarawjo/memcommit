@@ -43,25 +43,40 @@ class _Provider:
         self.calls = 0
 
     def complete(self, prompt, *, operation, output_schema=None):
+        if operation == "find_duplicates":
+            assert output_schema is not None
+            self.calls += 1
+            return json.dumps({"findings": []})
         assert operation == "impact_atomize"
         assert output_schema is not None
         self.calls += 1
         payload = json.loads(prompt.split(_PAYLOAD_MARKER, 1)[1])
         items = []
         for source in payload["memories"]:
-            left, right = source["content"].split(" and ", 1)
-            items.append(
-                {
-                    "candidate_id": source["candidate_id"],
-                    "classification": "COMPOSITE",
-                    "reason_codes": ["A01_ONE_FOCUS"],
-                    "children": [
-                        {"content": left, "source_spans": [left]},
-                        {"content": right, "source_spans": [right]},
-                    ],
-                    "reason": "The source contains two independent facts.",
-                }
-            )
+            if payload.get("phase") == "normal_form_validation":
+                items.append(
+                    {
+                        "candidate_id": source["candidate_id"],
+                        "classification": "ATOMIC",
+                        "reason_codes": ["A01_ONE_FOCUS"],
+                        "children": [],
+                        "reason": "The result has one independent focus.",
+                    }
+                )
+            else:
+                left, right = source["content"].split(" and ", 1)
+                items.append(
+                    {
+                        "candidate_id": source["candidate_id"],
+                        "classification": "COMPOSITE",
+                        "reason_codes": ["A01_ONE_FOCUS"],
+                        "children": [
+                            {"content": left, "source_spans": [left]},
+                            {"content": right, "source_spans": [right]},
+                        ],
+                        "reason": "The source contains two independent facts.",
+                    }
+                )
         aliases = [source["candidate_id"] for source in payload["memories"]]
         return json.dumps(
             {
@@ -149,6 +164,9 @@ def _receipt(*, recovered: bool = False) -> AtomizeStructuralApplyResult:
         split_count=1,
         child_count=2,
         preserved_count=0,
+        dedun_group_count=1,
+        absorbed_count=1,
+        normal_form_verified=True,
         application_mode="REVIEWED",
         unresolved_at_apply_count=0,
         items=(
@@ -177,6 +195,9 @@ def _save_as_receipt(*, recovered: bool = False) -> AtomizeSaveAsApplyResult:
         split_count=receipt.split_count,
         child_count=receipt.child_count,
         preserved_count=receipt.preserved_count,
+        dedun_group_count=receipt.dedun_group_count,
+        absorbed_count=receipt.absorbed_count,
+        normal_form_verified=receipt.normal_form_verified,
         application_mode=receipt.application_mode,
         unresolved_at_apply_count=receipt.unresolved_at_apply_count,
         items=receipt.items,
@@ -228,7 +249,7 @@ def test_open_calls_one_public_method_and_projects_cache_and_effect(
     assert result["apply_as_is"] == {
         "allowed": True,
         "expected_version": _VERSION,
-        "provider_used": False,
+        "provider_used": True,
         "effect": "CONTEXT_CHECKPOINT",
     }
     json.dumps(response)
@@ -450,7 +471,7 @@ def test_schema_is_fresh_strict_and_names_both_effect_boundaries():
         "^[0-9a-f]{64}$"
     )
     assert "Reanalysis uses the provider" in schema["description"]
-    assert "final application do not" in schema["description"]
+    assert "final application runs normal-form verification" in schema["description"]
 
 
 def test_real_registry_open_saved_apply_and_retry_use_one_provider_and_checkpoint(
@@ -500,7 +521,7 @@ def test_real_registry_open_saved_apply_and_retry_use_one_provider_and_checkpoin
     assert opened["result"]["provider_used"] is True
     assert resumed["result"]["origin"] == "SAVED"
     assert resumed["result"]["cache_used"] is True
-    assert provider.calls == 1
+    assert provider.calls == 4
     assert applied["result"]["recovered"] is False
     assert retried["result"]["recovered"] is True
     assert retried["result"]["checkpoint_uid"] == applied["result"]["checkpoint_uid"]
@@ -592,7 +613,7 @@ def test_real_registry_review_reanalysis_save_as_and_retry_are_exact(
     assert saved["result"]["recovered"] is False
     assert retried["result"]["recovered"] is True
     assert retried["result"]["checkpoint_uid"] == saved["result"]["checkpoint_uid"]
-    assert provider.calls == 2
+    assert provider.calls == 5
     assert len(store.list_checkpoints("atomize/agent-output")) == 1
 
 

@@ -1123,32 +1123,41 @@ def cmd(
             analysis=session,
             expected_workbench=workbench,
         )
-        if save_as is not None:
-            applied = execute_atomize_save_as(
-                AtomizeSaveAsRequest(
-                    snapshot=snapshot,
-                    destination_name=save_as,
-                    expected_current=context_snapshot.current_name,
-                ),
-                store=store,
-            )
-            applied_session = applied.output_analysis
-            result = applied.materialization.result
-            applied_name = applied.materialization.context_name
-            created = True
-            recovered_application = applied.recovered
-            application_audit = applied.audit.checkpoint_fields()
-        else:
-            applied = execute_atomize_session_apply(
-                AtomizePersistedApplyRequest(snapshot=snapshot),
-                store=store,
-            )
-            result = applied.materialization.result
-            applied_session = session
-            applied_name = applied.materialization.context_name
-            created = False
-            recovered_application = applied.recovered
-            application_audit = applied.audit.checkpoint_fields()
+        # Apply may connect for Dedun discovery and final normal-form checks.
+        # Start lazily so exact checkpoint recovery remains visibly silent.
+        with progressing_provider_factory(
+            "ATOMIZE",
+            "normalizing atomized output",
+            connect_codex_chatgpt_provider,
+        ) as provider_factory:
+            if save_as is not None:
+                applied = execute_atomize_save_as(
+                    AtomizeSaveAsRequest(
+                        snapshot=snapshot,
+                        destination_name=save_as,
+                        expected_current=context_snapshot.current_name,
+                    ),
+                    store=store,
+                    provider_factory=provider_factory,
+                )
+                applied_session = applied.output_analysis
+                result = applied.materialization.result
+                applied_name = applied.materialization.context_name
+                created = True
+                recovered_application = applied.recovered
+                application_audit = applied.audit.checkpoint_fields()
+            else:
+                applied = execute_atomize_session_apply(
+                    AtomizePersistedApplyRequest(snapshot=snapshot),
+                    store=store,
+                    provider_factory=provider_factory,
+                )
+                result = applied.materialization.result
+                applied_session = session
+                applied_name = applied.materialization.context_name
+                created = False
+                recovered_application = applied.recovered
+                application_audit = applied.audit.checkpoint_fields()
     except (
         FileNotFoundError,
         OSError,

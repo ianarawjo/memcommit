@@ -51,17 +51,22 @@ class _Provider:
         self.hook = hook
 
     def complete(self, prompt, *, operation, output_schema=None):
+        if operation == "find_duplicates":
+            assert output_schema is not None
+            self.calls += 1
+            return json.dumps({"findings": []})
         assert operation == "impact_atomize"
         assert output_schema is not None
         self.calls += 1
         payload = json.loads(prompt.split(_PAYLOAD_MARKER, 1)[1])
         self.payloads.append(payload)
-        if self.hook is not None:
+        validating = payload.get("phase") == "normal_form_validation"
+        if self.hook is not None and not validating:
             self.hook()
         records = []
         for item in payload["memories"]:
             content = item["content"]
-            if self.uncertain:
+            if self.uncertain and not validating:
                 records.append(
                     {
                         "candidate_id": item["candidate_id"],
@@ -71,7 +76,7 @@ class _Provider:
                         "reason": "The source needs context before splitting.",
                     }
                 )
-            elif self.composite:
+            elif self.composite and not validating:
                 left, right = content.split(" and ", 1)
                 records.append(
                     {
@@ -271,23 +276,17 @@ def test_apply_as_is_records_one_checkpoint_and_exact_retry_recovers(
     ]
 
 
-def test_saved_version_apply_is_provider_free_and_retryable(isolated_store):
-    client, store, context, _memory, _provider = _client_and_context(
+def test_saved_version_apply_runs_normal_form_once_and_is_retryable(isolated_store):
+    client, store, context, _memory, provider = _client_and_context(
         composite=True
     )
     proposal = client.open_atomize_analysis(context.name)
-    provider_free = MemCommitClient(
-        root=store.store_dir,
-        semantic_provider_factory=lambda: (_ for _ in ()).throw(
-            AssertionError("version-bound Apply opened a provider")
-        ),
-    )
 
-    first = provider_free.apply_saved_atomize_as_is(
+    first = client.apply_saved_atomize_as_is(
         context.name,
         expected_version=proposal.version,
     )
-    retry = provider_free.apply_saved_atomize_as_is(
+    retry = client.apply_saved_atomize_as_is(
         context.name,
         expected_version=proposal.version,
     )
@@ -295,6 +294,8 @@ def test_saved_version_apply_is_provider_free_and_retryable(isolated_store):
     assert first.recovered is False
     assert retry.recovered is True
     assert retry.checkpoint_uid == first.checkpoint_uid
+    assert first.normal_form_verified is True
+    assert provider.calls == 4
     assert len(store.list_checkpoints(context.name)) == 1
 
 
@@ -547,7 +548,7 @@ def test_save_as_uses_reviewed_plan_and_exact_retry(isolated_store):
         item.content for item in store.load_direct(applied.context_name).iter_items()
     ] == ["The library closes at five", "the cafe closes at six."]
     assert len(store.list_checkpoints(applied.context_name)) == 1
-    assert provider.calls == 1
+    assert provider.calls == 4
 
 
 def test_compound_response_apply_supports_in_place_and_save_as(isolated_store):
@@ -572,7 +573,7 @@ def test_compound_response_apply_supports_in_place_and_save_as(isolated_store):
     assert in_place.proposal.origin == "PROVIDER"
     assert in_place.application.context_name == context.name
     assert len(store.list_checkpoints(context.name)) == 1
-    assert provider.calls == 2
+    assert provider.calls == 5
 
     save_client, save_store, save_source, save_memory, save_provider = (
         _client_and_context(
@@ -604,7 +605,7 @@ def test_compound_response_apply_supports_in_place_and_save_as(isolated_store):
     assert save_as.application.context_name == "atomize/compound-save-output"
     assert save_store.load_direct(save_source.name).to_dict() == source_before
     assert len(save_store.list_checkpoints("atomize/compound-save-output")) == 1
-    assert save_provider.calls == 2
+    assert save_provider.calls == 5
 
 
 def test_all_preserved_apply_still_records_deliberate_completion(

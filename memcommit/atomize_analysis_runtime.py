@@ -24,6 +24,7 @@ from memcommit.atomize_application import AtomizeSessionSnapshot
 from memcommit.atomize_workbench import create_atomize_workbench
 from memcommit.context import Context
 from memcommit.query_provider import CodexChatGPTProvider
+from memcommit.semantic_prompt_policy import resolve_semantic_prompt_policy
 from memcommit.store import MemoryStore
 from memcommit.study_prewarm.atomize import find_declared_atomize_prewarm
 
@@ -191,10 +192,17 @@ class MemoryStoreAtomizeAnalysisOpenPort:
     def _prepared(
         self,
         request: AtomizeAnalysisOpenRequest,
+        *,
+        prompt_policy_id: str,
     ) -> tuple[AtomizeAnalysisSession | None, str | None]:
         if not request.allow_prepared:
             return None, request.output_context_name
         if self.prepared_analysis_override is not None:
+            if (
+                self.prepared_analysis_override.prompt_policy_id
+                != prompt_policy_id
+            ):
+                return None, request.output_context_name
             return self.prepared_analysis_override, (
                 request.output_context_name or self.prepared_output_name
             )
@@ -203,6 +211,8 @@ class MemoryStoreAtomizeAnalysisOpenPort:
             context=request.context,
         )
         if match is None:
+            return None, request.output_context_name
+        if match.analysis.prompt_policy_id != prompt_policy_id:
             return None, request.output_context_name
         return match.analysis, (
             request.output_context_name or match.output_context_name
@@ -215,6 +225,7 @@ class MemoryStoreAtomizeAnalysisOpenPort:
         provider_factory: AtomizeProviderFactory,
     ) -> AtomizeAnalysisOpenResult:
         context = request.context
+        prompt_policy_id = resolve_semantic_prompt_policy().policy_id
         existing = self.store.load_atomize_analysis(context.uid)
         requested_uids = _requested_memory_uids(
             context,
@@ -223,6 +234,7 @@ class MemoryStoreAtomizeAnalysisOpenPort:
         existing_scope_matches = (
             existing is not None
             and tuple(item.memory_uid for item in existing.items) == requested_uids
+            and existing.prompt_policy_id == prompt_policy_id
         )
         if existing is not None and not request.refresh and existing_scope_matches:
             if (
@@ -261,7 +273,10 @@ class MemoryStoreAtomizeAnalysisOpenPort:
                 origin="SAVED",
             )
 
-        prepared_analysis, effective_prepared_output = self._prepared(request)
+        prepared_analysis, effective_prepared_output = self._prepared(
+            request,
+            prompt_policy_id=prompt_policy_id,
+        )
         if prepared_analysis is not None and not request.refresh:
             prepared_uids = tuple(
                 item.memory_uid for item in prepared_analysis.items

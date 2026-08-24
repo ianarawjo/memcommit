@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from contextlib import contextmanager
 from dataclasses import replace
 from pathlib import Path
 
@@ -71,6 +72,8 @@ class AggregateProvider:
         self.payloads: list[dict] = []
 
     def complete(self, prompt, *, operation, output_schema=None):
+        if operation == "find_duplicates":
+            return json.dumps({"findings": []})
         assert operation == "impact_atomize"
         assert set(output_schema["required"]) == {
             "overview",
@@ -78,13 +81,15 @@ class AggregateProvider:
             "quality_issues",
         }
         payload = json.loads(prompt.split(PAYLOAD_MARKER, 1)[1])
-        self.payloads.append(payload)
+        validating = payload.get("phase") == "normal_form_validation"
+        if not validating:
+            self.payloads.append(payload)
         memories = payload["memories"]
         first = memories[0]
         reviewed = first["declared_frame"] is not None
         items = []
         for index, memory in enumerate(memories):
-            if index == 0 and not reviewed:
+            if index == 0 and not reviewed and not validating:
                 classification = "UNCERTAIN"
                 reason_codes = ["A06_NO_HIDDEN_CONTEXT"]
                 reason = (
@@ -174,14 +179,29 @@ class SplitProvider:
         self.payloads: list[dict] = []
 
     def complete(self, prompt, *, operation, output_schema=None):
+        if operation == "find_duplicates":
+            return json.dumps({"findings": []})
         assert operation == "impact_atomize"
         payload = json.loads(prompt.split(PAYLOAD_MARKER, 1)[1])
-        self.payloads.append(payload)
+        validating = payload.get("phase") == "normal_form_validation"
+        if not validating:
+            self.payloads.append(payload)
         memories = payload["memories"]
         items = []
         source_ids = []
         for memory in memories:
             source_ids.append(memory["candidate_id"])
+            if validating:
+                items.append(
+                    {
+                        "candidate_id": memory["candidate_id"],
+                        "classification": "ATOMIC",
+                        "reason_codes": ["A01_ONE_FOCUS"],
+                        "children": [],
+                        "reason": "The result has one independent focus.",
+                    }
+                )
+                continue
             first, second = memory["content"].split(" | ", 1)
             items.append(
                 {
@@ -227,6 +247,17 @@ def _patch_provider(monkeypatch, provider):
         "memcommit.commands.impact.connect_codex_chatgpt_provider",
         lambda: provider,
     )
+    monkeypatch.setattr(
+        "memcommit.commands.atomize.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+
+
+@pytest.fixture(autouse=True)
+def _default_apply_provider(monkeypatch):
+    """Directly opened sessions still need the final semantic Apply endpoint."""
+
+    provider = AggregateProvider()
     monkeypatch.setattr(
         "memcommit.commands.atomize.connect_codex_chatgpt_provider",
         lambda: provider,
@@ -596,6 +627,64 @@ def test_bare_interactive_atomize_applies_the_current_context_without_a_session(
     workbench = store.load_atomize_workbench(analysis)
     assert workbench is not None
     assert workbench.application is not None
+
+
+def test_bare_atomize_reports_final_normal_form_provider_work(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    context = ops.init("temp/atomize-progress")
+    ops.add(
+        context,
+        "The library closes at five. | The cafe closes at six.",
+    )
+    store.save(context)
+    store.set_current(context.name)
+    provider = SplitProvider()
+    _patch_provider(monkeypatch, provider)
+
+    preview = runner.invoke(app, ["impact", "atomize"])
+    assert preview.exit_code == 0, preview.output
+
+    progress_boundaries = []
+
+    @contextmanager
+    def record_progress(operation, stage, provider_factory, **_options):
+        boundary = {
+            "operation": operation,
+            "stage": stage,
+            "provider_calls": 0,
+        }
+        progress_boundaries.append(boundary)
+
+        def connect():
+            boundary["provider_calls"] += 1
+            return provider_factory()
+
+        yield connect
+
+    monkeypatch.setattr(
+        atomize_command,
+        "progressing_provider_factory",
+        record_progress,
+    )
+
+    applied = runner.invoke(app, ["atomize"])
+
+    assert applied.exit_code == 0, applied.output
+    assert progress_boundaries == [
+        {
+            "operation": "ATOMIZE",
+            "stage": "analyzing memory structure",
+            "provider_calls": 0,
+        },
+        {
+            "operation": "ATOMIZE",
+            "stage": "normalizing atomized output",
+            "provider_calls": 3,
+        },
+    ]
 
 
 def test_bare_atomize_receipt_samples_content_and_applied_review_remains_complete(

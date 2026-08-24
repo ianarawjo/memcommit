@@ -9,7 +9,9 @@ real ~/.mem store.
 import json
 
 import pytest
+import memcommit.semantic_prompt_policy as semantic_prompt_policy_module
 import memcommit.store as store_module
+from memcommit.profile_config import virtual_authoring_registry
 
 
 class _RationaleFixtureProvider:
@@ -55,6 +57,17 @@ def replace_rationale_subscription_provider(monkeypatch):
 def disable_real_command_attempt_log(monkeypatch):
     """Keep ordinary CliRunner tests from publishing host audit records."""
     monkeypatch.setenv("MEMCOMMIT_TEST_DISABLE_ATTEMPT_LOG", "1")
+
+
+@pytest.fixture(autouse=True)
+def isolate_default_semantic_prompt_policy(monkeypatch):
+    """Keep ordinary tests independent of the developer's active Profile."""
+
+    monkeypatch.setattr(
+        semantic_prompt_policy_module,
+        "load_profile_registry",
+        virtual_authoring_registry,
+    )
 
 
 @pytest.fixture()

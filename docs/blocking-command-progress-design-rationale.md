@@ -44,7 +44,9 @@ its interactive command-wait projection:
 - Update planning uses the transient line; comment-driven replanning retains
   the previous reviewed report in the interactive wait. Directional Impact
   Update planning also retains the transient line.
-- Atomize analysis from Atomize or Impact, plus Atomize grounding turns.
+- Atomize analysis from Atomize or Impact, Atomize grounding turns, and final
+  normal-form Apply. Apply progress starts only when Dedun or verification
+  requests a provider, so exact checkpoint recovery remains silent.
 - Meld initial analysis uses the transient line. Later issue or whole-set turns,
   including Review handoffs that re-enter the same Meld controller, retain the
   previous reviewed report in the interactive wait.

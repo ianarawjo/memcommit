@@ -52,6 +52,7 @@ EventKind = Literal[
 ]
 
 TRACE_METADATA_SCHEMA_VERSION = 3
+TRACE_METADATA_NORMAL_FORM_SCHEMA_VERSION = 4
 TRACE_METADATA_REVIEWED_LEGACY_SCHEMA_VERSION = 2
 TRACE_METADATA_LEGACY_SCHEMA_VERSION = 1
 
@@ -2094,7 +2095,7 @@ def _atomize_evidence(
     args: dict,
 ) -> tuple[tuple[TraceChildEvidence, ...], dict[str, str] | None] | None:
     """Validate optional reviewed evidence without weakening lineage checks."""
-    if set(record) != {
+    expected_record_keys = {
         "kind",
         "classification",
         "source_uids",
@@ -2103,7 +2104,10 @@ def _atomize_evidence(
         "reason_codes",
         "child_evidence",
         "review_evidence",
-    }:
+    }
+    if schema_version == TRACE_METADATA_NORMAL_FORM_SCHEMA_VERSION:
+        expected_record_keys.add("result_contents")
+    if set(record) != expected_record_keys:
         return None
     classification = record["classification"]
     expected_kind = {
@@ -2115,6 +2119,7 @@ def _atomize_evidence(
     if schema_version not in {
         TRACE_METADATA_REVIEWED_LEGACY_SCHEMA_VERSION,
         TRACE_METADATA_SCHEMA_VERSION,
+        TRACE_METADATA_NORMAL_FORM_SCHEMA_VERSION,
     }:
         return None
     if (
@@ -2283,6 +2288,7 @@ def _explicit_trace_events(
             TRACE_METADATA_LEGACY_SCHEMA_VERSION,
             TRACE_METADATA_REVIEWED_LEGACY_SCHEMA_VERSION,
             TRACE_METADATA_SCHEMA_VERSION,
+            TRACE_METADATA_NORMAL_FORM_SCHEMA_VERSION,
         }
         or not isinstance(metadata.get("changes"), list)
     ):
@@ -2303,6 +2309,25 @@ def _explicit_trace_events(
     consumed_before: set[str] = set()
     consumed_after: set[str] = set()
     warnings: list[str] = []
+    normal_form_absorptions: dict[str, str] = {}
+    if schema_version == TRACE_METADATA_NORMAL_FORM_SCHEMA_VERSION:
+        try:
+            from memcommit.atomize import AtomizeNormalFormAudit
+
+            normal_form = AtomizeNormalFormAudit.from_dict(
+                metadata.get("normal_form")
+            )
+        except (RuntimeError, TypeError, ValueError):
+            return (
+                [],
+                set(),
+                set(),
+                [
+                    f"Checkpoint [{checkpoint_uid[:8]}] has invalid Atomize "
+                    "normal-form metadata; snapshot differences were used instead."
+                ],
+            )
+        normal_form_absorptions = dict(normal_form.absorbed_to_survivor)
     for record in metadata["changes"]:
         if not isinstance(record, dict):
             warnings.append(
@@ -2331,15 +2356,51 @@ def _explicit_trace_events(
             )
             continue
 
-        involved_uids = set(source_uids) | set(result_uids)
-        if involved_uids & (
-            consumed_before | consumed_after
-        ) or not _trace_change_matches_snapshot(
-            kind=kind,
-            source_uids=source_uids,
-            result_uids=result_uids,
-            before=before,
-            after=after,
+        effective_result_uids = list(
+            dict.fromkeys(
+                normal_form_absorptions.get(uid, uid) for uid in result_uids
+            )
+        )
+        involved_before = set(source_uids)
+        involved_after = set(effective_result_uids)
+        normal_form_match = (
+            schema_version == TRACE_METADATA_NORMAL_FORM_SCHEMA_VERSION
+            and len(source_uids) == 1
+            and source_uids[0] in before.memories
+            and (
+                (
+                    kind == "SPLIT"
+                    and source_uids[0] not in after.memories
+                    and bool(effective_result_uids)
+                    and set(effective_result_uids) <= set(after.memories)
+                )
+                or (
+                    kind in {"KEEP", "PRESERVE"}
+                    and len(effective_result_uids) == 1
+                    and effective_result_uids[0] in after.memories
+                    and (
+                        source_uids[0] == effective_result_uids[0]
+                        or source_uids[0] not in after.memories
+                    )
+                )
+            )
+        )
+        if (
+            involved_before & consumed_before
+            or (
+                schema_version != TRACE_METADATA_NORMAL_FORM_SCHEMA_VERSION
+                and involved_after & consumed_after
+            )
+            or not (
+                normal_form_match
+                or _trace_change_matches_snapshot(
+                    kind=kind,
+                    source_uids=source_uids,
+                    result_uids=result_uids,
+                    before=before,
+                    after=after,
+                )
+            )
         ):
             warnings.append(
                 f"Checkpoint [{checkpoint_uid[:8]}] trace metadata does not "
@@ -2348,7 +2409,9 @@ def _explicit_trace_events(
             continue
 
         before_states = tuple(before.memories[uid] for uid in source_uids)
-        after_states = tuple(after.memories[uid] for uid in result_uids)
+        after_states = tuple(
+            after.memories[uid] for uid in effective_result_uids
+        )
 
         event_kind: EventKind = {
             "KEEP": "ATOMIZE_KEEP",
@@ -2356,11 +2419,14 @@ def _explicit_trace_events(
             "SPLIT": "SPLIT",
             "ABSORB": "ABSORBED",
         }[kind]
+        if kind in {"KEEP", "PRESERVE"} and result_uids != effective_result_uids:
+            event_kind = "ABSORBED"
         child_evidence: tuple[TraceChildEvidence, ...] = ()
         review_evidence: dict[str, str] | None = None
         if schema_version in {
             TRACE_METADATA_REVIEWED_LEGACY_SCHEMA_VERSION,
             TRACE_METADATA_SCHEMA_VERSION,
+            TRACE_METADATA_NORMAL_FORM_SCHEMA_VERSION,
         }:
             parsed_evidence = _atomize_evidence(
                 record,
@@ -2422,7 +2488,7 @@ def _explicit_trace_events(
             )
         )
         consumed_before.update(source_uids)
-        consumed_after.update(result_uids)
+        consumed_after.update(effective_result_uids)
 
     return events, consumed_before, consumed_after, warnings
 

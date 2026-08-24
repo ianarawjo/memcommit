@@ -12,7 +12,8 @@ matching Atomize command installs the prepared analysis through the ordinary
 boundary and creates a blank run-local workbench. It imports no review
 responses, grounding state, application state, or checkpoints. The CLI
 discloses a first-use auto-Apply as
-`ANALYSIS · EXACT PREWARM · PROVIDER NOT CALLED`; advanced preview routes
+`ANALYSIS · EXACT PREWARM · INITIAL ANALYSIS REUSED`; Dedun and final
+normal-form verification still run before publication. Advanced preview routes
 retain the `EXACT PREWARM · CURRENT` origin. Explicit refresh and any changed input
 retain the ordinary live path. Within the shared Study cache-quality contract,
 an exact or component-wise higher cached Codex identity may satisfy the
@@ -895,7 +896,10 @@ Application must bind the checkpoint to the exact reviewed analysis and record
 source-to-result lineage, preserved or split status, evidence spans, and
 review provenance needed by `mem trace` and `mem rationale`.
 
-Trace metadata v3 binds a declared frame's Memory UID, workbench issue UID,
+Trace metadata v4 adds provisional result contents, typed Dedun evidence,
+absorbed-to-survivor mappings, and the final validation digest so a hidden
+split→absorb transition remains reconstructible from the single outer
+checkpoint. Trace metadata v3 binds a declared frame's Memory UID, workbench issue UID,
 source-analysis UID, uncertainty reason, and text in one digest. This prevents
 an issue identity from being changed while retaining a valid text-only
 checksum. Trace metadata v2 remains readable through its legacy text-digest
@@ -977,6 +981,11 @@ Automatically rerunning when a command is reopened appears convenient but
 breaks the connection between what the user saw, what they answered, and what
 will be saved. Semantic nondeterminism makes an implicit replacement unsafe.
 Resume is silent and stable; reanalysis is explicit and identifiable.
+Final Apply is a separate advertised semantic boundary: it reuses the saved
+proposal but runs Dedun discovery and normal-form verification on an
+unpublished projection. The CLI keeps one transient progress line alive across
+that complete provider-backed boundary. It starts lazily so exact checkpoint
+recovery remains provider-free and visibly silent.
 
 ### Generic `AFFECTED` topics or unsupported counts
 
@@ -1003,7 +1012,8 @@ The following decisions are stable enough to guide implementation and tests:
   both launcher routes. The compact UID remains a recognition label; the full
   UID in the command is the executable identity.
 - `mem atomize` and `mem review atomize` resume the same compatible saved
-  analysis and workbench state without another provider call. TTY bare
+  analysis and workbench state without rerunning the initial analysis. Apply
+  separately runs its normal-form provider calls; Review does not. TTY bare
   `mem review` selects among all saved Review-capable sessions; its Atomize row
   resumes the exact selected analysis. Non-TTY and explicit snapshot/response
   forms retain the older compatibility fallback.

@@ -297,16 +297,20 @@ def resolve_ruleset() -> dict[str, object]:
     return deepcopy(_loaded_ruleset())
 
 
-def resolve_ruleset_prompt_payload() -> dict[str, object]:
-    """Project the complete authored ruleset into every Resolve semantic turn."""
+def resolve_ruleset_prompt_payload(
+    *,
+    include_cases: bool = True,
+) -> dict[str, object]:
+    """Project rules and optionally authored cases into one semantic turn."""
 
     data = resolve_ruleset()
     return {
         "ruleset_version": data["ruleset_version"],
         "rules": data["rules"],
-        # All canonical and known-wrong cases are deliberate production
-        # calibration. A future held-out corpus must live in a separate file.
-        "cases": data["cases"],
+        # General Profiles retain the original production calibration. Study
+        # Profiles deliberately use the same normative rules without examples
+        # so latency and task behavior are not dominated by the fixture corpus.
+        "cases": data["cases"] if include_cases else [],
     }
 
 
@@ -319,13 +323,15 @@ def resolve_rule_ids() -> tuple[str, ...]:
     return tuple(str(rule["id"]) for rule in rules if isinstance(rule, dict))
 
 
-def resolve_ruleset_item_count() -> int:
-    """Count authored rule/case records for the independent item budget axis."""
+def resolve_ruleset_item_count(*, include_cases: bool = True) -> int:
+    """Count prompt-visible rule/case records for the item budget axis."""
 
     data = _loaded_ruleset()
     rules = data["rules"]
     cases = data["cases"]
     assert isinstance(rules, list) and isinstance(cases, list)
+    if not include_cases:
+        return len(rules)
     return len(rules) + sum(
         1
         + len(case["source"])

@@ -10,7 +10,8 @@ payload.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from collections.abc import Mapping, Sequence
+from dataclasses import dataclass, replace
 import hashlib
 import json
 import os
@@ -250,7 +251,9 @@ def _load_registry_root(
         with path.open(encoding="utf-8") as file:
             raw = json.load(file, object_pairs_hook=_strict_object)
     except (OSError, json.JSONDecodeError, ValueError) as error:
-        raise StudyPrewarmRegistryError("Cannot read Study prewarm registry.") from error
+        raise StudyPrewarmRegistryError(
+            "Cannot read Study prewarm registry."
+        ) from error
     registry = StudyPrewarmRegistry.from_dict(raw)
     if validate_artifacts:
         for entry in registry.entries:
@@ -357,13 +360,19 @@ def load_artifact(store_root: Path, entry: StudyPrewarmEntry) -> dict[str, objec
     if root is None:
         raise StudyPrewarmRegistryError("Study prewarm registry is unavailable.")
     path = root / entry.artifact
-    if not path.is_file() or path.is_symlink() or file_digest(path) != entry.artifact_sha256:
+    if (
+        not path.is_file()
+        or path.is_symlink()
+        or file_digest(path) != entry.artifact_sha256
+    ):
         raise StudyPrewarmRegistryError("Study prewarm artifact changed after lookup.")
     try:
         with path.open(encoding="utf-8") as file:
             value = json.load(file, object_pairs_hook=_strict_object)
     except (OSError, json.JSONDecodeError, ValueError) as error:
-        raise StudyPrewarmRegistryError("Cannot read Study prewarm artifact.") from error
+        raise StudyPrewarmRegistryError(
+            "Cannot read Study prewarm artifact."
+        ) from error
     if not isinstance(value, dict):
         raise StudyPrewarmRegistryError("Study prewarm artifact is invalid.")
     return value
@@ -520,13 +529,16 @@ def publish_artifact(
         raise StudyPrewarmRegistryError("Study prewarm directory is unsafe.")
     artifact_relative = f"artifacts/{operation.lower()}/{key}.json"
     artifact_path = root / artifact_relative
-    serialized = json.dumps(
-        artifact,
-        ensure_ascii=False,
-        allow_nan=False,
-        indent=2,
-        sort_keys=True,
-    ) + "\n"
+    serialized = (
+        json.dumps(
+            artifact,
+            ensure_ascii=False,
+            allow_nan=False,
+            indent=2,
+            sort_keys=True,
+        )
+        + "\n"
+    )
     artifact_sha256 = hashlib.sha256(serialized.encode("utf-8")).hexdigest()
     entry = StudyPrewarmEntry(
         key=key,
@@ -538,9 +550,7 @@ def publish_artifact(
         enabled=True,
     )
     previous = (
-        _load_registry_root(root, validate_artifacts=True)
-        if root.exists()
-        else None
+        _load_registry_root(root, validate_artifacts=True) if root.exists() else None
     )
     if previous is not None and previous.baseline_profile_uid != baseline_profile_uid:
         raise StudyPrewarmRegistryError(
@@ -549,13 +559,18 @@ def publish_artifact(
     entries = list(previous.entries if previous is not None else ())
     matching = [item for item in entries if item.key == key]
     if matching:
-        if matching != [entry] or artifact_path.read_text(encoding="utf-8") != serialized:
+        if (
+            matching != [entry]
+            or artifact_path.read_text(encoding="utf-8") != serialized
+        ):
             raise StudyPrewarmRegistryError(
                 "A different prewarm already occupies this exact key."
             )
         return entry
     if artifact_path.exists():
-        raise StudyPrewarmRegistryError("Unregistered prewarm artifact path is occupied.")
+        raise StudyPrewarmRegistryError(
+            "Unregistered prewarm artifact path is occupied."
+        )
     _write_json_atomic(artifact_path, artifact)
     registry = StudyPrewarmRegistry(
         baseline_profile_uid=baseline_profile_uid,
@@ -567,3 +582,137 @@ def publish_artifact(
     if restored is None or entry not in restored.entries:
         raise StudyPrewarmRegistryError("Published prewarm could not be reloaded.")
     return entry
+
+
+def replace_operation_artifacts(
+    store_root: Path,
+    *,
+    baseline_profile_uid: str,
+    replacements: Mapping[
+        PrewarmOperation,
+        Sequence[tuple[str, str, dict[str, object]]],
+    ],
+) -> StudyPrewarmRegistry:
+    """Atomically switch complete operation families to regenerated entries.
+
+    Artifact files are immutable by key and may be written before the registry
+    switch.  The one atomic registry-file replacement is the publication
+    boundary: a failed generation leaves the previously declared set active.
+    Replaced entries remain digest-bound but disabled so a later generation can
+    reconstruct the original finite declaration without exposing stale caches
+    to participant operations.
+    """
+
+    root = registry_root(store_root)
+    if bundle_reference_path(store_root).exists():
+        raise StudyPrewarmRegistryError(
+            "Cannot replace artifacts in a shared Study bundle reference."
+        )
+    if not replacements:
+        raise StudyPrewarmRegistryError("No Study prewarm replacements were supplied.")
+    previous = _load_registry_root(root, validate_artifacts=True)
+    if previous.baseline_profile_uid != baseline_profile_uid:
+        raise StudyPrewarmRegistryError(
+            "Cannot replace prewarms from a different Study baseline."
+        )
+
+    replaced_operations = frozenset(replacements)
+    entries = [
+        (
+            replace(entry, enabled=False)
+            if entry.operation in replaced_operations
+            else entry
+        )
+        for entry in previous.entries
+    ]
+    entry_indexes = {entry.key: index for index, entry in enumerate(entries)}
+    desired_keys: set[str] = set()
+
+    for operation, artifacts in replacements.items():
+        if operation not in {
+            "COMPARE",
+            "UPDATE",
+            "MELD_DIRECTIONAL",
+            "MELD_RESOLUTION",
+            "SEVER",
+            "ATOMIZE",
+            "SUMMARIZE",
+        }:
+            raise StudyPrewarmRegistryError("Unknown Study prewarm operation.")
+        if not artifacts:
+            raise StudyPrewarmRegistryError(
+                f"Replacement for {operation} contains no artifacts."
+            )
+        for task, key, artifact in artifacts:
+            artifact_relative = f"artifacts/{operation.lower()}/{key}.json"
+            serialized = (
+                json.dumps(
+                    artifact,
+                    ensure_ascii=False,
+                    allow_nan=False,
+                    indent=2,
+                    sort_keys=True,
+                )
+                + "\n"
+            )
+            artifact_sha256 = hashlib.sha256(serialized.encode("utf-8")).hexdigest()
+            candidate = StudyPrewarmEntry.from_dict(
+                {
+                    "key": key,
+                    "operation": operation,
+                    "task": task,
+                    "policy": "EXACT_PREWARM",
+                    "artifact": artifact_relative,
+                    "artifact_sha256": artifact_sha256,
+                    "enabled": True,
+                }
+            )
+            if key in desired_keys:
+                raise StudyPrewarmRegistryError(
+                    "Regenerated Study prewarm keys must be unique."
+                )
+            desired_keys.add(key)
+            existing_index = entry_indexes.get(key)
+            if existing_index is not None:
+                existing = entries[existing_index]
+                existing_path = root / existing.artifact
+                if (
+                    existing.operation != operation
+                    or existing.task != task
+                    or existing.artifact != artifact_relative
+                    or existing.artifact_sha256 != artifact_sha256
+                    or existing_path.read_text(encoding="utf-8") != serialized
+                ):
+                    raise StudyPrewarmRegistryError(
+                        "A different prewarm already occupies a regenerated key."
+                    )
+                entries[existing_index] = replace(existing, enabled=True)
+                continue
+
+            artifact_path = root / artifact_relative
+            if artifact_path.exists():
+                if (
+                    not artifact_path.is_file()
+                    or artifact_path.is_symlink()
+                    or artifact_path.read_text(encoding="utf-8") != serialized
+                ):
+                    raise StudyPrewarmRegistryError(
+                        "An unregistered prewarm path conflicts with regeneration."
+                    )
+            else:
+                _write_json_atomic(artifact_path, artifact)
+            entry_indexes[key] = len(entries)
+            entries.append(candidate)
+
+    registry = StudyPrewarmRegistry(
+        baseline_profile_uid=baseline_profile_uid,
+        entries=tuple(entries),
+    )
+    # Only this metadata switch changes which artifact generation is callable.
+    _write_json_atomic(root / REGISTRY_FILE_NAME, registry.to_dict())
+    restored = _load_registry_root(root, validate_artifacts=True)
+    if restored != registry:
+        raise StudyPrewarmRegistryError(
+            "Regenerated Study prewarm registry could not be reloaded."
+        )
+    return restored

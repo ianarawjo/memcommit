@@ -228,14 +228,17 @@ def comparison_summary_ruleset() -> dict[str, object]:
     return deepcopy(_loaded_ruleset())
 
 
-def comparison_summary_ruleset_prompt_payload() -> dict[str, object]:
-    """Project normative exact and known-wrong cases into every provider turn."""
+def comparison_summary_ruleset_prompt_payload(
+    *,
+    include_cases: bool = True,
+) -> dict[str, object]:
+    """Project rules and optionally authored cases into one provider turn."""
 
     data = comparison_summary_ruleset()
     return {
         "ruleset_version": data["ruleset_version"],
         "rules": data["rules"],
-        "cases": data["cases"],
+        "cases": data["cases"] if include_cases else [],
     }
 
 

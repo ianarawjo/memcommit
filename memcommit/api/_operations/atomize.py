@@ -497,6 +497,7 @@ def apply_atomize_as_is(
         applied = execute_atomize_session_apply(
             AtomizePersistedApplyRequest(snapshot=snapshot),
             store=runtime.store,
+            provider_factory=lambda: _provider(runtime),
         )
     except ConcurrentContextUpdateError as error:
         raise_public(AtomizeConflictError, error)
@@ -516,6 +517,13 @@ def apply_atomize_as_is(
         split_count=result.split_count,
         child_count=result.child_count,
         preserved_count=result.preserved_count,
+        dedun_group_count=(
+            0 if result.normal_form is None else result.normal_form.dedun_group_count
+        ),
+        absorbed_count=(
+            0 if result.normal_form is None else result.normal_form.absorbed_count
+        ),
+        normal_form_verified=result.normal_form is not None,
         application_mode=applied.audit.application_mode,
         unresolved_at_apply_count=applied.audit.unresolved_at_apply_count,
         items=_applied_items(result),
@@ -737,6 +745,7 @@ def save_saved_atomize_as(
                 expected_current=expected_current,
             ),
             store=runtime.store,
+            provider_factory=lambda: _provider(runtime),
         )
         result = applied.materialization.result
         return AtomizeSaveAsApplyResult(
@@ -749,6 +758,17 @@ def save_saved_atomize_as(
             split_count=result.split_count,
             child_count=result.child_count,
             preserved_count=result.preserved_count,
+            dedun_group_count=(
+                0
+                if result.normal_form is None
+                else result.normal_form.dedun_group_count
+            ),
+            absorbed_count=(
+                0
+                if result.normal_form is None
+                else result.normal_form.absorbed_count
+            ),
+            normal_form_verified=result.normal_form is not None,
             application_mode=applied.audit.application_mode,
             unresolved_at_apply_count=applied.audit.unresolved_at_apply_count,
             items=_applied_items(result),

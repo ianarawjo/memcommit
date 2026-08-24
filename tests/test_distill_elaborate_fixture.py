@@ -6,6 +6,8 @@ import json
 from pathlib import Path
 import re
 
+import memcommit.distill as distill_module
+import memcommit.elaborate as elaborate_module
 from memcommit.context import Context, Memory
 from memcommit.distill import DISTILL_PAYLOAD_MARKER, analyze_distill
 from memcommit.distill_elaborate_reference import (
@@ -16,10 +18,11 @@ from memcommit.distill_elaborate_reference import (
 from memcommit.elaborate import ELABORATE_PAYLOAD_MARKER
 from memcommit.elaborate_application import ElaborateRequest
 from memcommit.elaborate_runtime import execute_elaborate
-from memcommit.summarize import collect_summary_frame
+from memcommit.semantic_prompt_policy import GENERAL_SEMANTIC_PROMPT_POLICY
 from tests.elaborate_validation_support import (
     passing_elaborate_validation_response,
 )
+from memcommit.summarize import collect_summary_frame
 
 
 FIXTURE_PATH = (
@@ -289,7 +292,19 @@ def test_packaged_reference_loader_exposes_three_complete_prompt_families() -> N
     )
 
 
-def test_every_distill_and_elaborate_prompt_quotes_all_reference_families() -> None:
+def test_every_distill_and_elaborate_prompt_quotes_all_reference_families(
+    monkeypatch,
+) -> None:
+    monkeypatch.setattr(
+        distill_module,
+        "resolve_semantic_prompt_policy",
+        lambda: GENERAL_SEMANTIC_PROMPT_POLICY,
+    )
+    monkeypatch.setattr(
+        elaborate_module,
+        "resolve_semantic_prompt_policy",
+        lambda: GENERAL_SEMANTIC_PROMPT_POLICY,
+    )
     cafe = _family("cafe-order")
 
     class PromptCapturingDistillProvider:

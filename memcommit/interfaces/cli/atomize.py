@@ -125,12 +125,21 @@ def render_atomize_apply_result(
         f"ATOMIZE APPLIED · {context_name}",
         bold=True,
     )
-    typer.echo(
+    normal_form = getattr(result, "normal_form", None)
+    effects = (
         f"EFFECTS · SPLIT {result.split_count} · "
         f"CHILDREN {result.child_count} · KEEP {result.preserved_count}"
     )
+    if normal_form is not None:
+        effects += (
+            f" · DEDUN GROUPS {normal_form.dedun_group_count}"
+            f" · ABSORBED {normal_form.absorbed_count}"
+        )
+    typer.echo(effects)
+    if normal_form is not None:
+        typer.echo("NORMAL FORM · SEMANTIC CHUNK + DEDUN · VERIFIED")
     if exact_prewarm:
-        typer.echo("ANALYSIS · EXACT PREWARM · PROVIDER NOT CALLED")
+        typer.echo("ANALYSIS · EXACT PREWARM · INITIAL ANALYSIS REUSED")
     if unresolved_at_apply_count:
         typer.secho(
             f"JUDGMENTS · {unresolved_at_apply_count} unresolved "
@@ -197,8 +206,8 @@ def _render_item(item: AtomizeItem) -> None:
         _render_children(item)
         typer.secho(
             "         Status: SAVED PREVIEW — explicit --save/--save-as "
-            "applies this locally validated proposal; no second semantic "
-            "judge runs in this prototype.",
+            "projects this split, applies typed Dedun policy, and verifies "
+            "the affected semantic normal form before one publication.",
             dim=True,
         )
     typer.secho(

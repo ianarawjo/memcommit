@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from dataclasses import replace
 from datetime import datetime, timezone
 import json
 import uuid
@@ -8,6 +9,8 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.config as config_module
+import memcommit.atomize as atomize_module
+import memcommit.atomize_analysis_runtime as atomize_analysis_runtime_module
 import memcommit.ops as ops
 import memcommit.study_prewarm.atomize as atomize_prewarm_module
 from memcommit.atomize import create_atomize_analysis, impact_atomize
@@ -21,6 +24,8 @@ from memcommit.profile_config import (
     STUDY_RUN_PARTICIPANT_SOURCE_KIND,
 )
 from memcommit.store import MemoryStore
+from memcommit.semantic_prompt_policy import STUDY_SEMANTIC_PROMPT_POLICY
+from memcommit.semantic_prompt_policy import GENERAL_PROMPT_POLICY_ID
 from memcommit.study_prewarm.atomize import (
     build_atomize_prewarm_artifact,
     find_declared_atomize_prewarm,
@@ -39,9 +44,38 @@ PAYLOAD_MARKER = "ATOMIZE IMPACT PAYLOAD:\n"
 
 class CompositeProvider:
     def complete(self, prompt, *, operation, output_schema=None):
+        if operation == "find_duplicates":
+            return json.dumps({"findings": []})
         assert operation == "impact_atomize"
         payload = json.loads(prompt.split(PAYLOAD_MARKER, 1)[1])
         source = payload["memories"][0]
+        if payload.get("phase") == "normal_form_validation":
+            return json.dumps(
+                {
+                    "overview": {
+                        "understood": {
+                            "text": "The final Memories each have one focus.",
+                            "source_ids": [
+                                memory["candidate_id"]
+                                for memory in payload["memories"]
+                            ],
+                        },
+                        "changed": {"text": "", "source_ids": []},
+                        "unresolved": {"text": "", "source_ids": []},
+                    },
+                    "items": [
+                        {
+                            "candidate_id": memory["candidate_id"],
+                            "classification": "ATOMIC",
+                            "reason_codes": ["A01_ONE_FOCUS"],
+                            "children": [],
+                            "reason": "The result has one independent focus.",
+                        }
+                        for memory in payload["memories"]
+                    ],
+                    "quality_issues": [],
+                }
+            )
         return json.dumps(
             {
                 "overview": {
@@ -97,12 +131,22 @@ def _profile(baseline_uid: str) -> ProfileEntry:
 
 
 def _fixture(tmp_path, monkeypatch, root):
+    monkeypatch.setattr(
+        atomize_module,
+        "resolve_semantic_prompt_policy",
+        lambda: STUDY_SEMANTIC_PROMPT_POLICY,
+    )
+    monkeypatch.setattr(
+        atomize_analysis_runtime_module,
+        "resolve_semantic_prompt_policy",
+        lambda: STUDY_SEMANTIC_PROMPT_POLICY,
+    )
     monkeypatch.setattr(config_module, "CONFIG_FILE", tmp_path / "config.json")
     Config().update(
         {
             "semantic_provider": "codex_chatgpt",
             "codex_chatgpt_model": "gpt-5.6-sol",
-            "codex_chatgpt_reasoning_effort": "medium",
+            "codex_chatgpt_reasoning_effort": "none",
         }
     )
     store = MemoryStore(root=root)
@@ -127,7 +171,7 @@ def _fixture(tmp_path, monkeypatch, root):
         analysis=analysis,
         provider="codex_chatgpt",
         model="gpt-5.6-sol",
-        reasoning="medium",
+        reasoning="none",
         offline_provider_seconds=22.81,
     )
     publish_artifact(
@@ -187,7 +231,7 @@ def test_exact_atomize_registry_installs_and_reopens_without_provider(
     assert is_installed_atomize_prewarm(store, opened.analysis)
 
 
-def test_exact_atomize_cli_auto_applies_and_discloses_zero_provider(
+def test_exact_atomize_cli_reuses_analysis_then_verifies_normal_form(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -202,16 +246,15 @@ def test_exact_atomize_cli_auto_applies_and_discloses_zero_provider(
     )
     monkeypatch.setattr(
         "memcommit.commands.atomize.connect_codex_chatgpt_provider",
-        lambda: (_ for _ in ()).throw(
-            AssertionError("prewarmed CLI opened a provider")
-        ),
+        CompositeProvider,
     )
 
     result = runner.invoke(app, ["atomize", "--context", "practice/source"])
 
     assert result.exit_code == 0, result.stderr or result.output
     assert "ATOMIZE APPLIED · practice/source" in result.output
-    assert "ANALYSIS · EXACT PREWARM · PROVIDER NOT CALLED" in result.output
+    assert "ANALYSIS · EXACT PREWARM · INITIAL ANALYSIS REUSED" in result.output
+    assert "NORMAL FORM · SEMANTIC CHUNK + DEDUN · VERIFIED" in result.output
 
 
 def test_exact_single_memory_focus_reuses_equivalent_atomize_prewarm(
@@ -343,7 +386,7 @@ def test_exact_atomize_installation_rolls_back_partial_workbench_save(
     assert not store._atomize_workbench_path(source.uid).exists()
 
 
-def test_higher_quality_atomize_cache_installs_for_lower_request(
+def test_study_atomize_cache_ignores_lower_mutable_reasoning_default(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -397,7 +440,7 @@ def test_exact_description_wins_over_legacy_compatible_duplicate(
         analysis=prepared,
         provider="codex_chatgpt",
         model="gpt-5.6-sol",
-        reasoning="medium",
+        reasoning="none",
         offline_provider_seconds=1.0,
     )
     publish_artifact(
@@ -429,7 +472,7 @@ def test_exact_description_wins_over_legacy_compatible_duplicate(
     assert match.entry_key != legacy_key
 
 
-def test_lower_quality_atomize_cache_is_an_explicit_skip(
+def test_study_atomize_cache_ignores_higher_mutable_reasoning_default(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -446,6 +489,66 @@ def test_lower_quality_atomize_cache_is_an_explicit_skip(
     )
 
     assert installed.declared == 1
-    assert installed.installed == 0
+    assert installed.installed == 1
+    assert installed.skipped_configuration == 0
+    assert find_declared_atomize_prewarm(store=store, context=source) is not None
+
+
+def test_legacy_full_example_atomize_prewarm_is_skipped(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    store, profile, registry, source, prepared = _fixture(
+        tmp_path, monkeypatch, isolated_store
+    )
+    description = store.load_direct("practice/description")
+    legacy_analysis = replace(
+        prepared,
+        prompt_policy_id=GENERAL_PROMPT_POLICY_ID,
+    )
+    _key, legacy_artifact = build_atomize_prewarm_artifact(
+        task_description=description,
+        analysis=prepared,
+        provider="codex_chatgpt",
+        model="gpt-5.6-sol",
+        reasoning="none",
+        offline_provider_seconds=1.0,
+    )
+    legacy_artifact["schema_version"] = 1
+    legacy_artifact.pop("prompt_policy_id")
+    legacy_artifact["analysis"] = legacy_analysis.to_dict()
+    legacy_artifact["analysis_digest"] = atomize_prewarm_module.payload_digest(
+        legacy_artifact["analysis"]
+    )
+    legacy_key = atomize_prewarm_module.payload_digest(
+        atomize_prewarm_module._legacy_key_material(
+            task_description=legacy_artifact["task_description"],
+            analysis=legacy_analysis,
+            provider=legacy_artifact["provider"],
+            model=legacy_artifact["model"],
+            reasoning=legacy_artifact["reasoning"],
+        )
+    )
+    legacy_artifact["key"] = legacy_key
+    publish_artifact(
+        isolated_store,
+        baseline_profile_uid=profile.source["baseline_profile_uid"],
+        operation="ATOMIZE",
+        task="tutorial",
+        key=legacy_key,
+        artifact=legacy_artifact,
+    )
+
+    installed = install_declared_atomize_prewarms(
+        store=store,
+        profile=profile,
+        registry_snapshot=registry,
+    )
+
+    assert installed.declared == 2
+    assert installed.installed == 1
     assert installed.skipped_configuration == 1
-    assert find_declared_atomize_prewarm(store=store, context=source) is None
+    match = find_declared_atomize_prewarm(store=store, context=source)
+    assert match is not None
+    assert match.analysis.prompt_policy_id == STUDY_SEMANTIC_PROMPT_POLICY.policy_id

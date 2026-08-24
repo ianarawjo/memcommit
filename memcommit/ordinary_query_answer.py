@@ -24,6 +24,7 @@ from memcommit.semantic_execution import (
     json_budget,
     plan_semantic_execution,
 )
+from memcommit.semantic_prompt_policy import resolve_semantic_prompt_policy
 
 
 ORDINARY_QUERY_OPERATION = "ordinary query"
@@ -439,12 +440,29 @@ def _build_prompt(
     evidence: Sequence[FindAnswerEvidence],
 ) -> tuple[str, dict[str, object]]:
     schema = ordinary_query_output_schema(evidence)
+    prompt_policy = resolve_semantic_prompt_policy()
     payload_value = {
         "question": question,
         "complete_frozen_corpus": _evidence_payload(evidence),
     }
+    if not prompt_policy.include_authored_examples:
+        payload_value["prompt_policy"] = prompt_policy.to_prompt_record()
     payload = json.dumps(payload_value, ensure_ascii=False)
-    case_examples = json.dumps(_PROVIDER_VISIBLE_CASE_EXAMPLES, ensure_ascii=False)
+    example_instruction = (
+        "The following authored cases demonstrate the method. Their aliases "
+        "and contents are schematic examples, are not current evidence, and "
+        "must never be returned unless the current schema separately allows "
+        "the same alias. Apply their semantic distinctions to the current "
+        "payload rather than copying their facts.\n"
+        "ORDINARY QUERY PROVIDER-VISIBLE METHOD EXAMPLES:\n"
+        + json.dumps(_PROVIDER_VISIBLE_CASE_EXAMPLES, ensure_ascii=False)
+        + "\n\n"
+        if prompt_policy.include_authored_examples
+        else (
+            "No authored method examples are included in this Study turn. "
+            "Apply the outcome and block rules directly.\n\n"
+        )
+    )
     prompt = (
         f"ORDINARY QUERY PROVIDER CONTRACT VERSION "
         f"{ORDINARY_QUERY_PROVIDER_CONTRACT_VERSION}.\n"
@@ -517,14 +535,8 @@ def _build_prompt(
         "the prose, a References heading, or a bibliography. The host validates "
         "aliases, assigns stable numeric citations by first use, and renders the "
         "Reference blocks. Put no line breaks inside a block.\n"
-        "The following authored cases demonstrate the method. Their aliases "
-        "and contents are schematic examples, are not current evidence, and "
-        "must never be returned unless the current schema separately allows "
-        "the same alias. Apply their semantic distinctions to the current "
-        "payload rather than copying their facts.\n"
-        "ORDINARY QUERY PROVIDER-VISIBLE METHOD EXAMPLES:\n"
-        + case_examples
-        + "\n\nReturn exactly one JSON object matching the supplied schema.\n\n"
+        + example_instruction
+        + "Return exactly one JSON object matching the supplied schema.\n\n"
         "ORDINARY QUERY PAYLOAD:\n" + payload
     )
     return prompt, schema

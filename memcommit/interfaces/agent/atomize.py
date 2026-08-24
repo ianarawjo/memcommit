@@ -300,7 +300,7 @@ def _analysis_result(
                 result.in_place_apply_allowed and not result.application_completed
             ),
             "expected_version": result.version,
-            "provider_used": False,
+            "provider_used": True,
             "effect": "CONTEXT_CHECKPOINT",
         },
         "save_as": {
@@ -308,7 +308,7 @@ def _analysis_result(
                 not result.in_place_apply_allowed and not result.application_completed
             ),
             "expected_version": result.version,
-            "provider_used": False,
+            "provider_used": True,
             "effect": "CONTEXT_CHECKPOINT",
         },
         "incorporate_and_apply": {
@@ -349,11 +349,14 @@ def _apply_result(
         "split_count": result.split_count,
         "child_count": result.child_count,
         "preserved_count": result.preserved_count,
+        "dedun_group_count": result.dedun_group_count,
+        "absorbed_count": result.absorbed_count,
+        "normal_form_verified": result.normal_form_verified,
         "application_mode": result.application_mode,
         "unresolved_at_apply_count": result.unresolved_at_apply_count,
         "items": _lineage_items(result),
         "recovered": result.recovered,
-        "provider_used": False,
+        "provider_used": not result.recovered,
         "effect": "CONTEXT_CHECKPOINT",
         "created_context": isinstance(result, AtomizeSaveAsApplyResult),
     }
@@ -571,7 +574,8 @@ def atomize_agent_tool_schema() -> JsonObject:
             "exact responses and Output plans; incorporate unary responses; "
             "then apply in place or publish the reviewed require-new Save As. "
             "Every saved action is version-bound. Reanalysis uses the provider; "
-            "review edits and final application do not."
+            "review edits do not, while final application runs normal-form "
+            "verification before publication."
         ),
         "parameters": {
             "type": "object",

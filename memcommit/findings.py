@@ -29,6 +29,7 @@ from memcommit.semantic_execution import (
     SemanticExecutionPolicy,
     plan_semantic_execution,
 )
+from memcommit.semantic_prompt_policy import resolve_semantic_prompt_policy
 
 
 QUALITY_INPUT_CHAR_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
@@ -366,6 +367,26 @@ def _load_calibration_cases(filename: str) -> list[object]:
     return data["cases"]
 
 
+def _prompt_calibration_cases(
+    filename: str,
+) -> tuple[dict[str, object] | None, list[object]]:
+    """Return one frozen policy record and its active prompt projection."""
+
+    policy = resolve_semantic_prompt_policy()
+    return (
+        (
+            policy.to_prompt_record()
+            if not policy.include_authored_examples
+            else None
+        ),
+        (
+            _load_calibration_cases(filename)
+            if policy.include_authored_examples
+            else []
+        ),
+    )
+
+
 def _ensure_payload_size(payload: str, operation: str) -> None:
     policy = _findings_execution_policy(operation)
     plan = plan_semantic_execution(
@@ -586,6 +607,9 @@ def find_redundancies(
     findings = list(mechanical)
 
     if len(semantic_candidates) >= 2:
+        prompt_policy, calibration_cases = _prompt_calibration_cases(
+            "duplicates.json"
+        )
         candidate_by_id = {
             candidate.candidate_id: candidate for candidate in semantic_candidates
         }
@@ -643,12 +667,17 @@ def find_redundancies(
             ),
             payload={
                 "operation": "find_duplicates",
+                **(
+                    {"prompt_policy": prompt_policy}
+                    if prompt_policy is not None
+                    else {}
+                ),
                 "context": {
                     "name": ctx.name,
                     "direct_memory_count": len(candidates),
                 },
                 "memories": _memory_payload(semantic_candidates),
-                "calibration_cases": _load_calibration_cases("duplicates.json"),
+                "calibration_cases": calibration_cases,
             },
             schema=_findings_schema(
                 item_schema,
@@ -798,6 +827,16 @@ def find_ambiguities(
         ],
         "additionalProperties": False,
     }
+    prompt_policy, calibration_cases = _prompt_calibration_cases("ambiguity.json")
+    has_examples = bool(calibration_cases)
+    ordinary_resolution_example = (
+        "For example, 'the main entrance closes at 5' followed by 'after that "
+        "time a card is required' resolves the time for this quality scan, and "
+        "'if it does not work, call' ordinarily continues a preceding card/NFC "
+        "failure sequence. "
+        if has_examples
+        else ""
+    )
     records = _call_once(
         provider_factory=provider_factory,
         operation="find_ambiguities",
@@ -812,11 +851,9 @@ def find_ambiguities(
             "and shared scope against every supplied Memory. A target that is "
             "not self-contained is not thereby ambiguous: when the Context "
             "supplies one usable reading and no operational decision changes, "
-            "it is clean SINGLE/NONE and must be omitted. For example, 'the "
-            "main entrance closes at 5' followed by 'after that time a card is "
-            "required' resolves the time for this quality scan, and 'if it "
-            "does not work, call' ordinarily continues a preceding card/NFC "
-            "failure sequence. SINGLE/REQUIRED is valid only when the complete "
+            "it is clean SINGLE/NONE and must be omitted. "
+            + ordinary_resolution_example
+            + "SINGLE/REQUIRED is valid only when the complete "
             "Context still lacks information necessary to perform or reliably "
             "verify an explicit operation, not for optional precision or "
             "wayfinding.\n\n"
@@ -845,9 +882,14 @@ def find_ambiguities(
         ),
         payload={
             "operation": "find_ambiguities",
+            **(
+                {"prompt_policy": prompt_policy}
+                if prompt_policy is not None
+                else {}
+            ),
             "context": {"name": ctx.name},
             "memories": _memory_payload(candidates),
-            "calibration_cases": _load_calibration_cases("ambiguity.json"),
+            "calibration_cases": calibration_cases,
         },
         schema=_findings_schema(item_schema, max_items=len(candidates)),
     )
@@ -992,6 +1034,7 @@ def find_conflicts(
         ],
         "additionalProperties": False,
     }
+    prompt_policy, calibration_cases = _prompt_calibration_cases("conflict.json")
     records = _call_once(
         provider_factory=provider_factory,
         operation="find_conflicts",
@@ -1014,10 +1057,15 @@ def find_conflicts(
         ),
         payload={
             "operation": "find_conflicts",
+            **(
+                {"prompt_policy": prompt_policy}
+                if prompt_policy is not None
+                else {}
+            ),
             "context": {"name": ctx.name},
             "memories": _memory_payload(candidates),
             "pairs": _pair_payload(pairs),
-            "calibration_cases": _load_calibration_cases("conflict.json"),
+            "calibration_cases": calibration_cases,
         },
         schema=_findings_schema(item_schema, max_items=len(pairs)),
     )

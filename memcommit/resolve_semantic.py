@@ -42,6 +42,7 @@ from memcommit.semantic_execution import (
     json_budget,
     plan_semantic_execution,
 )
+from memcommit.semantic_prompt_policy import resolve_semantic_prompt_policy
 
 
 RESOLVE_OPERATION = "resolve_candidates"
@@ -314,12 +315,15 @@ def _generation_payload(
     initial_fit: FitAssessment | None,
     mutable_aliases: tuple[str, ...],
 ) -> dict[str, object]:
-    return {
+    prompt_policy = resolve_semantic_prompt_policy()
+    payload: dict[str, object] = {
         "operation": RESOLVE_OPERATION,
         "target_fit": frame.request.target_fit,
         "allowed_effects": list(frame.allowed_effects),
         "guidance": frame.request.guidance,
-        "ruleset": resolve_ruleset_prompt_payload(),
+        "ruleset": resolve_ruleset_prompt_payload(
+            include_cases=prompt_policy.include_authored_examples,
+        ),
         "initial_fit": {
             "verdict": initial_fit.verdict if initial_fit is not None else "NO",
             "reason": initial_fit.reason if initial_fit is not None else "preflight",
@@ -331,6 +335,9 @@ def _generation_payload(
         },
         "memories": _frame_payload(frame, mutable_aliases=mutable_aliases),
     }
+    if not prompt_policy.include_authored_examples:
+        payload["prompt_policy"] = prompt_policy.to_prompt_record()
+    return payload
 
 
 def _plan_generation(
@@ -356,6 +363,21 @@ def _plan_generation(
 
 
 def _generation_prompt(payload: dict[str, object]) -> str:
+    ruleset = payload.get("ruleset")
+    has_cases = bool(ruleset.get("cases")) if isinstance(ruleset, dict) else False
+    calibration_instruction = (
+        "The ruleset contains the complete named rules, canonical exact "
+        "input/effect/output cases, and known-wrong adjacent outputs. Treat every "
+        "case as normative production calibration: preserve its exact result for "
+        "that exact source and generalize its semantic boundary rather than copying "
+        "surface words blindly. Never imitate known_wrong. "
+        if has_cases
+        else (
+            "The ruleset contains the complete named Resolve rules. Apply those "
+            "rules directly; no authored calibration cases are part of this Study "
+            "turn. "
+        )
+    )
     return (
         "You are the automatic interpretation planner for the Resolve Fit-repair "
         "operation. The complete supplied Memory frame currently Fits as MAY or "
@@ -370,12 +392,9 @@ def _generation_prompt(payload: dict[str, object]) -> str:
         "target; YES is stricter. "
         "Internally identify every incompatibility point, group overlapping points, "
         "and describe each group as an Issue with its members, selected ordinary "
-        "interpretation, exact basis, and any assumptions. The ruleset contains the "
-        "complete named rules, canonical exact input/effect/output cases, and "
-        "known-wrong adjacent outputs. Treat every case as normative production "
-        "calibration: preserve its exact result for that exact source and generalize "
-        "its semantic boundary rather than copying surface words blindly. Never "
-        "imitate known_wrong. Use only the supplied Memory content and explicit "
+        "interpretation, exact basis, and any assumptions. "
+        + calibration_instruction
+        + "Use only the supplied Memory content and explicit "
         "guidance; do not import facts, "
         "verify reality, normalize style, or improve unrelated prose.\n\n"
         "Choose a reasonable joint interpretation, not a deletion path. For a safe "
@@ -840,10 +859,13 @@ def _verification_payload(
     candidates: tuple[_GeneratedCandidate, ...],
 ) -> dict[str, object]:
     alias_by_uid = {memory.uid: memory.alias for memory in frame.memories}
-    return {
+    prompt_policy = resolve_semantic_prompt_policy()
+    payload: dict[str, object] = {
         "target_fit": frame.request.target_fit,
         "guidance": frame.request.guidance,
-        "ruleset": resolve_ruleset_prompt_payload(),
+        "ruleset": resolve_ruleset_prompt_payload(
+            include_cases=prompt_policy.include_authored_examples,
+        ),
         "original_memories": [
             {"memory_id": memory.alias, "content": memory.content}
             for memory in frame.memories
@@ -894,6 +916,9 @@ def _verification_payload(
             for candidate in candidates
         ],
     }
+    if not prompt_policy.include_authored_examples:
+        payload["prompt_policy"] = prompt_policy.to_prompt_record()
+    return payload
 
 
 def _verify_candidates(
@@ -912,14 +937,24 @@ def _verify_candidates(
         item_count=(
             len(frame.memories)
             + sum(len(item.effects) for item in candidates)
-            + resolve_ruleset_item_count()
+            + resolve_ruleset_item_count(
+                include_cases=resolve_semantic_prompt_policy().include_authored_examples
+            )
         ),
+    )
+    ruleset = payload.get("ruleset")
+    has_cases = bool(ruleset.get("cases")) if isinstance(ruleset, dict) else False
+    ruleset_description = (
+        "complete exact-case ruleset and its normative calibration"
+        if has_cases
+        else "complete named rules without authored Study calibration examples"
     )
     prompt = (
         "You are the independent grounding and information-preservation verifier "
         "for Resolve plans. Judge each exact plan separately against the complete "
-        "original Memory frame, complete exact-case ruleset, and explicit guidance. "
-        "Every canonical and known-wrong case is normative calibration. The Issue "
+        "original Memory frame, "
+        + ruleset_description
+        + ", and explicit guidance. The Issue "
         "list is an index into that whole frame, not a smaller evidence boundary. "
         "grounded is true "
         "only when every selected interpretation and every created or revised claim "
@@ -1046,7 +1081,10 @@ class ProviderResolveSemanticPort:
         _plan_generation(
             payload,
             schema,
-            item_count=len(frame.memories) + resolve_ruleset_item_count(),
+            item_count=len(frame.memories)
+            + resolve_ruleset_item_count(
+                include_cases=resolve_semantic_prompt_policy().include_authored_examples
+            ),
         )
 
     def analyze(
@@ -1101,7 +1139,10 @@ class ProviderResolveSemanticPort:
         _plan_generation(
             payload,
             schema,
-            item_count=len(frame.memories) + resolve_ruleset_item_count(),
+            item_count=len(frame.memories)
+            + resolve_ruleset_item_count(
+                include_cases=resolve_semantic_prompt_policy().include_authored_examples
+            ),
         )
         decoded = _complete_json(
             provider,

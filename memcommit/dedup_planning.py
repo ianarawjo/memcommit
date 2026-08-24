@@ -4,14 +4,21 @@ from __future__ import annotations
 
 import hashlib
 import json
+from typing import TYPE_CHECKING
 
 from memcommit.dedup_application import (
     DedupComponent,
     DedupEvidence,
     DedupMember,
     DedupRequest,
+    FrozenDedupPlan,
+    DEDUP_CONTRACT_VERSION,
 )
 from memcommit.context import Memory
+from memcommit.direct_item_duplicates import ExactDuplicateGroup
+
+if TYPE_CHECKING:
+    from memcommit.update import GrantedUpdateTarget
 
 
 def _component_uid(
@@ -134,4 +141,98 @@ def build_dedup_components(
     return tuple(components)
 
 
-__all__ = ["build_dedup_components"]
+def dedup_plan_revision(
+    request: DedupRequest,
+    *,
+    context_uid: str,
+    context_name: str,
+    display_name: str,
+    context_digest: str,
+    component_uids: tuple[str, ...],
+    exact_item_groups: tuple[ExactDuplicateGroup, ...],
+) -> str:
+    """Bind one Dedun plan to its complete projected direct-item frame."""
+
+    payload = {
+        "contract": DEDUP_CONTRACT_VERSION,
+        "context": {
+            "uid": context_uid,
+            "name": context_name,
+            "display_name": display_name,
+            "digest": context_digest,
+        },
+        "components": list(component_uids),
+        "exact_item_groups": [
+            {
+                "item_kind": group.item_kind,
+                "survivor_uid": group.survivor_uid,
+                "absorbed_uids": list(group.absorbed_uids),
+                "summary": group.summary,
+            }
+            for group in exact_item_groups
+        ],
+        "handoffs": [handoff.uid for handoff in request.handoffs],
+    }
+    return hashlib.sha256(
+        json.dumps(
+            payload,
+            ensure_ascii=False,
+            separators=(",", ":"),
+            sort_keys=True,
+        ).encode("utf-8")
+    ).hexdigest()
+
+
+def freeze_dedup_plan(
+    request: DedupRequest,
+    memories: tuple[Memory, ...],
+    *,
+    context_uid: str,
+    context_name: str,
+    display_name: str,
+    context_digest: str,
+    direct_memory_digest: str,
+    exact_item_groups: tuple[ExactDuplicateGroup, ...] = (),
+    granted_binding: "GrantedUpdateTarget | None" = None,
+) -> FrozenDedupPlan:
+    """Freeze Dedun policy for a stored or unpublished exact Context frame."""
+
+    source = request.source
+    if (
+        source.context_uid != context_uid
+        or source.display_name != display_name
+        or source.direct_memory_digest != direct_memory_digest
+    ):
+        from memcommit.dedup_application import DedupConflictError
+
+        raise DedupConflictError(
+            "The confirmed duplicate Source changed. Run the finder again."
+        )
+    components = build_dedup_components(request, memories)
+    revision = dedup_plan_revision(
+        request,
+        context_uid=context_uid,
+        context_name=context_name,
+        display_name=display_name,
+        context_digest=context_digest,
+        component_uids=tuple(component.uid for component in components),
+        exact_item_groups=exact_item_groups,
+    )
+    return FrozenDedupPlan(
+        request=request,
+        context_uid=context_uid,
+        context_name=context_name,
+        display_name=display_name,
+        context_digest=context_digest,
+        revision=revision,
+        components=components,
+        exact_item_groups=exact_item_groups,
+        granted_binding=granted_binding,
+    )
+
+
+__all__ = [
+    "build_dedup_components",
+    "dedup_plan_revision",
+    "freeze_dedup_plan",
+]

@@ -145,28 +145,45 @@ def load_distill_elaborate_reference_families(
     return tuple(families)
 
 
-def distill_elaborate_reference_payload() -> dict[str, object]:
-    """Return the prompt-visible pairing without current-run evidence aliases."""
+def distill_elaborate_reference_payload(
+    *,
+    include_examples: bool = True,
+) -> dict[str, object]:
+    """Return the authored pairing, or an explicit rules-only projection."""
 
     return {
-        "role": "QUOTED_REFERENCE_EXAMPLES",
+        "role": (
+            "QUOTED_REFERENCE_EXAMPLES"
+            if include_examples
+            else "AUTHORED_EXAMPLES_OMITTED"
+        ),
         "families": [
             {
                 "family_id": family.family_id,
                 "example_memories": list(family.example_memories),
                 "rule_memories": list(family.rule_memories),
             }
-            for family in load_distill_elaborate_reference_families()
+            for family in (
+                load_distill_elaborate_reference_families()
+                if include_examples
+                else ()
+            )
         ],
     }
 
 
-@lru_cache(maxsize=1)
-def render_distill_elaborate_reference_examples() -> str:
-    """Render the complete authored pairs exactly once for prompt composition."""
+@lru_cache(maxsize=2)
+def render_distill_elaborate_reference_examples(
+    *,
+    include_examples: bool = True,
+) -> str:
+    """Render authored pairs, or no example block for a rules-only turn."""
+
+    if not include_examples:
+        return ""
 
     return REFERENCE_EXAMPLES_MARKER + json.dumps(
-        distill_elaborate_reference_payload(),
+        distill_elaborate_reference_payload(include_examples=True),
         ensure_ascii=False,
         separators=(",", ":"),
     )

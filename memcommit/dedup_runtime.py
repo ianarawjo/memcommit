@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import hashlib
-import json
 from dataclasses import dataclass
 
 from memcommit.authority.access import (
@@ -16,65 +14,20 @@ from memcommit.authority.access import (
 )
 from memcommit.context import AutoCheckpoint, Memory, MemoryRef
 from memcommit.dedup_application import (
-    DEDUP_CONTRACT_VERSION,
     DedupAuthorityError,
     DedupConflictError,
     DedupError,
+    DedupProjection,
     DedupReceipt,
     DedupRequest,
-    DedupSelection,
     FrozenDedupPlan,
-    validate_dedup_selections,
+    dedup_projection_record,
 )
-from memcommit.dedup_planning import build_dedup_components
-from memcommit.direct_item_duplicates import (
-    ExactDuplicateGroup,
-    find_exact_duplicate_groups,
-)
+from memcommit.dedup_planning import freeze_dedup_plan
+from memcommit.direct_item_duplicates import find_exact_duplicate_groups
 from memcommit.profile_config import ProfileRegistry
 from memcommit.review import direct_context_digest
 from memcommit.store import MemoryStore, context_record_digest
-
-
-def _revision(
-    request: DedupRequest,
-    *,
-    context_uid: str,
-    context_name: str,
-    display_name: str,
-    context_digest: str,
-    component_uids: tuple[str, ...],
-    exact_item_groups: tuple[ExactDuplicateGroup, ...],
-) -> str:
-    payload = {
-        "contract": DEDUP_CONTRACT_VERSION,
-        "context": {
-            "uid": context_uid,
-            "name": context_name,
-            "display_name": display_name,
-            "digest": context_digest,
-        },
-        "components": list(component_uids),
-        "exact_item_groups": [
-            {
-                "item_kind": group.item_kind,
-                "survivor_uid": group.survivor_uid,
-                "absorbed_uids": list(group.absorbed_uids),
-                "summary": group.summary,
-            }
-            for group in exact_item_groups
-        ],
-        "handoffs": [handoff.uid for handoff in request.handoffs],
-    }
-    return hashlib.sha256(
-        json.dumps(
-            payload,
-            ensure_ascii=False,
-            separators=(",", ":"),
-            sort_keys=True,
-        ).encode("utf-8")
-    ).hexdigest()
-
 
 @dataclass
 class MemoryStoreDedupPort:
@@ -138,7 +91,6 @@ class MemoryStoreDedupPort:
         memories = tuple(
             item for item in context.iter_items() if isinstance(item, Memory)
         )
-        components = build_dedup_components(request, memories)
         exact_item_groups = (
             tuple(
                 group
@@ -149,22 +101,14 @@ class MemoryStoreDedupPort:
             else ()
         )
         digest = context_record_digest(context)
-        return FrozenDedupPlan(
-            request=request,
+        return freeze_dedup_plan(
+            request,
+            memories,
             context_uid=context.uid,
             context_name=context.name,
             display_name=access.display_name,
             context_digest=digest,
-            revision=_revision(
-                request,
-                context_uid=context.uid,
-                context_name=context.name,
-                display_name=access.display_name,
-                context_digest=digest,
-                component_uids=tuple(component.uid for component in components),
-                exact_item_groups=exact_item_groups,
-            ),
-            components=components,
+            direct_memory_digest=direct_context_digest(context),
             exact_item_groups=exact_item_groups,
             granted_binding=(
                 freeze_granted_context_binding(access)
@@ -219,32 +163,30 @@ class MemoryStoreDedupPort:
     def apply(
         self,
         plan: FrozenDedupPlan,
-        selections: tuple[DedupSelection, ...],
+        projection: DedupProjection,
     ) -> DedupReceipt:
-        if not isinstance(plan, FrozenDedupPlan) or any(
-            not isinstance(selection, DedupSelection) for selection in selections
+        if not isinstance(plan, FrozenDedupPlan) or not isinstance(
+            projection,
+            DedupProjection,
         ):
-            raise TypeError("Dedun Apply requires a frozen plan and selections.")
-        selections = validate_dedup_selections(plan, selections)
-        semantic_survivor_uids = tuple(
-            selection.survivor_uid for selection in selections
-        )
+            raise TypeError("Dedun Apply requires a frozen plan and projection.")
+        selections = projection.selections
+        semantic_member_uids = {
+            member.uid for component in plan.components for member in component.members
+        }
         semantic_absorbed_uids = tuple(
-            member.uid
-            for component, selection in zip(plan.components, selections)
-            for member in component.members
-            if member.uid != selection.survivor_uid
+            uid
+            for uid in projection.absorbed_uids
+            if uid in semantic_member_uids
         )
-        exact_survivor_uids = tuple(
-            group.survivor_uid for group in plan.exact_item_groups
-        )
-        exact_absorbed_uids = tuple(
-            uid for group in plan.exact_item_groups for uid in group.absorbed_uids
-        )
-        survivor_uids = semantic_survivor_uids + exact_survivor_uids
-        absorbed_uids = semantic_absorbed_uids + exact_absorbed_uids
-        if not absorbed_uids:
-            raise DedupError("Dedun Apply requires at least one absorbed direct item.")
+        memory_exact_absorbed_uids = {
+            uid
+            for group in plan.exact_item_groups
+            if group.item_kind == "MEMORY"
+            for uid in group.absorbed_uids
+        }
+        survivor_uids = projection.survivor_uids
+        absorbed_uids = projection.absorbed_uids
         access = self._revalidated_access(plan)
         with authorized_context_mutation(
             access,
@@ -266,12 +208,7 @@ class MemoryStoreDedupPort:
                     context_uid=plan.context_uid,
                     absorbed_uids={
                         *semantic_absorbed_uids,
-                        *(
-                            uid
-                            for group in plan.exact_item_groups
-                            if group.item_kind == "MEMORY"
-                            for uid in group.absorbed_uids
-                        ),
+                        *memory_exact_absorbed_uids,
                     },
                 )
                 if inbound:
@@ -295,61 +232,7 @@ class MemoryStoreDedupPort:
                     AutoCheckpoint(
                         command="dedun",
                         args={
-                            "contract": DEDUP_CONTRACT_VERSION,
-                            "revision": plan.revision,
-                            "selections": [
-                                {
-                                    "component_uid": selection.component_uid,
-                                    "survivor_uid": selection.survivor_uid,
-                                }
-                                for selection in selections
-                            ],
-                            # Review is a terminal evidence projection, so the
-                            # checkpoint must carry the exact judged groups—not
-                            # only pointers to process-local finder artifacts.
-                            "components": [
-                                {
-                                    "component_uid": component.uid,
-                                    "survivor_uid": selection.survivor_uid,
-                                    "members": [
-                                        {
-                                            "uid": member.uid,
-                                            "content": member.content,
-                                            "ordinal": member.ordinal,
-                                            "selected": (
-                                                member.uid == selection.survivor_uid
-                                            ),
-                                        }
-                                        for member in component.members
-                                    ],
-                                    "evidence": [
-                                        {
-                                            "finding_uid": item.finding_uid,
-                                            "handoff_uid": item.handoff_uid,
-                                            "left_uid": item.left_uid,
-                                            "right_uid": item.right_uid,
-                                            "relation": item.relation,
-                                            "reason": item.reason,
-                                        }
-                                        for item in component.evidence
-                                    ],
-                                }
-                                for component, selection in zip(
-                                    plan.components, selections, strict=True
-                                )
-                            ],
-                            "exact_item_groups": [
-                                {
-                                    "item_kind": group.item_kind,
-                                    "survivor_uid": group.survivor_uid,
-                                    "absorbed_uids": list(group.absorbed_uids),
-                                    "summary": group.summary,
-                                }
-                                for group in plan.exact_item_groups
-                            ],
-                            "redundancy_evidence_uids": [
-                                handoff.uid for handoff in plan.request.handoffs
-                            ],
+                            **dedup_projection_record(plan, projection),
                             **grant_checkpoint_args(access),
                         },
                         description=(

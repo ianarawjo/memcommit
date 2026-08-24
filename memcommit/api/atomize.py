@@ -131,6 +131,9 @@ class AtomizeStructuralApplyResult:
     split_count: int
     child_count: int
     preserved_count: int
+    dedun_group_count: int
+    absorbed_count: int
+    normal_form_verified: bool
     application_mode: str
     unresolved_at_apply_count: int
     items: tuple[AtomizeAppliedItemResult, ...]
@@ -159,6 +162,9 @@ class AtomizeSaveAsApplyResult:
     split_count: int
     child_count: int
     preserved_count: int
+    dedun_group_count: int
+    absorbed_count: int
+    normal_form_verified: bool
     application_mode: str
     unresolved_at_apply_count: int
     items: tuple[AtomizeAppliedItemResult, ...]

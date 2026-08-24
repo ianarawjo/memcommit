@@ -242,6 +242,93 @@ class DedupReceipt:
     exact_item_groups: tuple[ExactDuplicateGroup, ...] = ()
 
 
+@dataclass(frozen=True)
+class DedupProjection:
+    """Provider-free complete survivor effect before Store publication.
+
+    Standalone Dedun publishes this effect through ``DedupPort``. Composite
+    operations may instead apply the same reviewed effect to an unpublished
+    Context projection and let the outer user command own the sole checkpoint.
+    """
+
+    selections: tuple[DedupSelection, ...]
+    survivor_uids: tuple[str, ...]
+    absorbed_uids: tuple[str, ...]
+    exact_item_groups: tuple[ExactDuplicateGroup, ...] = ()
+
+
+def dedup_projection_record(
+    plan: FrozenDedupPlan,
+    projection: DedupProjection,
+) -> dict[str, object]:
+    """Serialize the complete reviewed Dedun effect without Store metadata."""
+
+    if not isinstance(plan, FrozenDedupPlan) or not isinstance(
+        projection,
+        DedupProjection,
+    ):
+        raise TypeError("Dedun evidence projection requires typed inputs.")
+    selections = projection.selections
+    return {
+        "contract": DEDUP_CONTRACT_VERSION,
+        "revision": plan.revision,
+        "selections": [
+            {
+                "component_uid": selection.component_uid,
+                "survivor_uid": selection.survivor_uid,
+            }
+            for selection in selections
+        ],
+        # This evidence remains complete when an outer operation owns the
+        # checkpoint; otherwise composition would erase why a UID disappeared.
+        "components": [
+            {
+                "component_uid": component.uid,
+                "survivor_uid": selection.survivor_uid,
+                "members": [
+                    {
+                        "uid": member.uid,
+                        "content": member.content,
+                        "ordinal": member.ordinal,
+                        "selected": member.uid == selection.survivor_uid,
+                    }
+                    for member in component.members
+                ],
+                "evidence": [
+                    {
+                        "finding_uid": item.finding_uid,
+                        "handoff_uid": item.handoff_uid,
+                        "left_uid": item.left_uid,
+                        "right_uid": item.right_uid,
+                        "relation": item.relation,
+                        "reason": item.reason,
+                    }
+                    for item in component.evidence
+                ],
+            }
+            for component, selection in zip(
+                plan.components,
+                selections,
+                strict=True,
+            )
+        ],
+        "exact_item_groups": [
+            {
+                "item_kind": group.item_kind,
+                "survivor_uid": group.survivor_uid,
+                "absorbed_uids": list(group.absorbed_uids),
+                "summary": group.summary,
+            }
+            for group in projection.exact_item_groups
+        ],
+        "redundancy_evidence_uids": [
+            handoff.uid for handoff in plan.request.handoffs
+        ],
+        "survivor_uids": list(projection.survivor_uids),
+        "absorbed_uids": list(projection.absorbed_uids),
+    }
+
+
 class DedupPort(Protocol):
     """Freeze and atomically apply one confirmed duplicate request."""
 
@@ -251,7 +338,7 @@ class DedupPort(Protocol):
     def apply(
         self,
         plan: FrozenDedupPlan,
-        selections: tuple[DedupSelection, ...],
+        projection: DedupProjection,
     ) -> DedupReceipt:
         """Apply one exact complete survivor set or publish nothing."""
 
@@ -346,6 +433,39 @@ def recommended_dedup_selections(
     )
 
 
+def project_dedup(
+    plan: FrozenDedupPlan,
+    selections: tuple[DedupSelection, ...],
+) -> DedupProjection:
+    """Return the exact complete Dedun effect without publishing a checkpoint."""
+
+    exact = validate_dedup_selections(plan, selections)
+    semantic_survivor_uids = tuple(
+        selection.survivor_uid for selection in exact
+    )
+    semantic_absorbed_uids = tuple(
+        member.uid
+        for component, selection in zip(plan.components, exact, strict=True)
+        for member in component.members
+        if member.uid != selection.survivor_uid
+    )
+    exact_survivor_uids = tuple(
+        group.survivor_uid for group in plan.exact_item_groups
+    )
+    exact_absorbed_uids = tuple(
+        uid for group in plan.exact_item_groups for uid in group.absorbed_uids
+    )
+    absorbed_uids = semantic_absorbed_uids + exact_absorbed_uids
+    if not absorbed_uids:
+        raise DedupError("Dedun Apply requires at least one absorbed direct item.")
+    return DedupProjection(
+        selections=exact,
+        survivor_uids=semantic_survivor_uids + exact_survivor_uids,
+        absorbed_uids=absorbed_uids,
+        exact_item_groups=plan.exact_item_groups,
+    )
+
+
 def prepare_dedup(request: DedupRequest, *, port: DedupPort) -> FrozenDedupPlan:
     if not isinstance(request, DedupRequest):
         raise TypeError("Dedun requires a typed request.")
@@ -360,8 +480,7 @@ def apply_dedup(
 ) -> DedupReceipt:
     """Validate and atomically apply one complete survivor selection."""
 
-    exact = validate_dedup_selections(plan, selections)
-    return port.apply(plan, exact)
+    return port.apply(plan, project_dedup(plan, selections))
 
 
 __all__ = [
@@ -374,13 +493,16 @@ __all__ = [
     "DedupEvidence",
     "DedupMember",
     "DedupPort",
+    "DedupProjection",
     "DedupReceipt",
     "DedupRequest",
     "DedupSelection",
     "FrozenDedupPlan",
     "apply_dedup",
+    "dedup_projection_record",
     "dedup_resolution_case",
     "prepare_dedup",
+    "project_dedup",
     "recommended_dedup_selections",
     "validate_dedup_selections",
 ]

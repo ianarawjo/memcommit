@@ -36,6 +36,18 @@ runner = CliRunner(mix_stderr=False)
 PAYLOAD_MARKER = "ATOMIZE IMPACT PAYLOAD:\n"
 
 
+@pytest.fixture(autouse=True)
+def _share_cli_atomize_provider(monkeypatch):
+    """Saved Apply uses the same fake endpoint configured for its preview."""
+
+    from memcommit.commands import impact as impact_command
+
+    monkeypatch.setattr(
+        "memcommit.commands.atomize.connect_codex_chatgpt_provider",
+        lambda: impact_command.connect_codex_chatgpt_provider(),
+    )
+
+
 def _aggregate_response(payload: dict, response: dict) -> dict:
     """Wrap legacy item-focused fakes in the current one-shot envelope."""
     candidate_ids = [memory["candidate_id"] for memory in payload["memories"]]
@@ -65,9 +77,17 @@ class AtomizeProvider:
         self.calls: list[tuple[str, str, dict[str, object], dict]] = []
 
     def complete(self, prompt, *, operation, output_schema=None):
+        if operation == "find_duplicates":
+            payload = json.loads(prompt.split("QUALITY FIND PAYLOAD:\n", 1)[1])
+            self.calls.append((prompt, operation, output_schema, payload))
+            return json.dumps({"findings": []})
         payload = json.loads(prompt.split(PAYLOAD_MARKER, 1)[1])
         self.calls.append((prompt, operation, output_schema, payload))
-        response = self.responder(payload)
+        response = (
+            _all_atomic(payload)
+            if payload.get("phase") == "normal_form_validation"
+            else self.responder(payload)
+        )
         if isinstance(response, dict) and set(response) == {"items"}:
             response = _aggregate_response(payload, response)
         return response if isinstance(response, str) else json.dumps(response)
@@ -76,6 +96,84 @@ class AtomizeProvider:
 class ForbiddenProvider:
     def __call__(self):
         raise AssertionError("provider should not be connected")
+
+
+class AtomizeNormalFormProvider:
+    """Exercise split, semantic Dedun, and final validation in one fixture."""
+
+    def __init__(self):
+        self.operations: list[str] = []
+
+    def complete(self, prompt, *, operation, output_schema=None):
+        self.operations.append(operation)
+        if operation == "find_duplicates":
+            payload = json.loads(prompt.split("QUALITY FIND PAYLOAD:\n", 1)[1])
+            by_content = {
+                item["content"]: item["candidate_id"]
+                for item in payload["memories"]
+            }
+            findings = []
+            if "hi" in by_content and "hi." in by_content:
+                findings.append(
+                    {
+                        "candidate_ids": [by_content["hi"], by_content["hi."]],
+                        "relation": "SEMANTIC_EQUIVALENT",
+                        "reason": "The punctuation-only variants are substitutable.",
+                    }
+                )
+            return json.dumps({"findings": findings})
+
+        assert operation == "impact_atomize"
+        payload = json.loads(prompt.split(PAYLOAD_MARKER, 1)[1])
+        items = []
+        for memory in payload["memories"]:
+            if memory["content"] == "hi. Bye.":
+                items.append(
+                    _item(
+                        memory["candidate_id"],
+                        "COMPOSITE",
+                        children=[
+                            {"content": "hi.", "source_spans": ["hi."]},
+                            {"content": "Bye.", "source_spans": ["Bye."]},
+                        ],
+                    )
+                )
+            else:
+                items.append(_item(memory["candidate_id"]))
+        return json.dumps(_aggregate_response(payload, {"items": items}))
+
+
+class RejectingNormalFormProvider(AtomizeNormalFormProvider):
+    def complete(self, prompt, *, operation, output_schema=None):
+        if operation != "impact_atomize":
+            return super().complete(
+                prompt,
+                operation=operation,
+                output_schema=output_schema,
+            )
+        payload = json.loads(prompt.split(PAYLOAD_MARKER, 1)[1])
+        if payload.get("phase") != "normal_form_validation":
+            return super().complete(
+                prompt,
+                operation=operation,
+                output_schema=output_schema,
+            )
+        self.operations.append(operation)
+        return json.dumps(
+            _aggregate_response(
+                payload,
+                {
+                    "items": [
+                        _item(
+                            memory["candidate_id"],
+                            "UNCERTAIN",
+                            reason_codes=["A06_NO_HIDDEN_CONTEXT"],
+                        )
+                        for memory in payload["memories"]
+                    ]
+                },
+            )
+        )
 
 
 def _item(
@@ -216,6 +314,131 @@ def test_focused_atomize_save_as_preserves_unselected_memories(
         "Parking closes.",
         "The stairwell stays open.",
     ]
+
+
+def test_atomize_publishes_split_and_dedun_as_one_undo_unit(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source = ops.init("atomize/normal-form")
+    ops.add(source, "hi")
+    ops.add(source, "hi. Bye.")
+    store.save(
+        source,
+        AutoCheckpoint(
+            command="init",
+            args={"name": source.name},
+            description=f"Initialized context '{source.name}'",
+        ),
+    )
+    store.set_current(source.name)
+    before = source.to_dict()
+    provider = AtomizeNormalFormProvider()
+    monkeypatch.setattr(
+        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.atomize.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+
+    preview = runner.invoke(app, ["impact", "atomize"])
+    applied = runner.invoke(app, ["atomize", "--save"])
+
+    assert preview.exit_code == 0, preview.output
+    assert applied.exit_code == 0, applied.output
+    assert "DEDUN GROUPS 1 · ABSORBED 1" in applied.output
+    assert "NORMAL FORM · SEMANTIC CHUNK + DEDUN · VERIFIED" in applied.output
+    assert [
+        item.content for item in store.load_direct(source.name).iter_items()
+    ] == ["hi", "Bye."]
+    atomize_checkpoints = [
+        checkpoint
+        for checkpoint in store.list_checkpoints(source.name)
+        if checkpoint["command"] == "atomize"
+    ]
+    assert len(atomize_checkpoints) == 1
+    checkpoint = atomize_checkpoints[0]
+    assert checkpoint["args"]["normal_form_verified"] is True
+    assert checkpoint["args"]["dedun_group_count"] == 1
+    assert checkpoint["args"]["absorbed_count"] == 1
+    assert checkpoint["args"]["trace"]["schema_version"] == 4
+    assert provider.operations == [
+        "impact_atomize",
+        "find_duplicates",
+        "impact_atomize",
+        "find_duplicates",
+    ]
+
+    undone = runner.invoke(app, ["undo"])
+    assert undone.exit_code == 0, undone.output
+    assert store.load_direct(source.name).to_dict() == before
+
+
+def test_atomize_normal_form_failure_publishes_no_partial_split(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source = ops.init("atomize/rejected-normal-form")
+    ops.add(source, "hi")
+    ops.add(source, "hi. Bye.")
+    store.save(source)
+    store.set_current(source.name)
+    before = store.load_direct(source.name).to_dict()
+    checkpoints_before = store.list_checkpoints(source.name)
+    provider = RejectingNormalFormProvider()
+    monkeypatch.setattr(
+        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.atomize.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+
+    assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
+    rejected = runner.invoke(app, ["atomize", "--save"])
+
+    assert rejected.exit_code == 1
+    assert "did not reach semantic chunk normal form" in rejected.stderr
+    assert store.load_direct(source.name).to_dict() == before
+    assert store.list_checkpoints(source.name) == checkpoints_before
+
+
+def test_focused_atomize_dedun_prefers_unchanged_neighbor(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source = ops.init("atomize/focused-normal-form")
+    existing = ops.add(source, "hi")
+    selected = ops.add(source, "hi. Bye.")
+    store.save(source)
+    store.set_current(source.name)
+    provider = AtomizeNormalFormProvider()
+    monkeypatch.setattr(
+        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.atomize.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+
+    preview = runner.invoke(
+        app,
+        ["impact", "atomize", "--memory", selected.uid[:8]],
+    )
+    applied = runner.invoke(app, ["atomize", "--save"])
+
+    assert preview.exit_code == 0, preview.output
+    assert applied.exit_code == 0, applied.output
+    final = tuple(store.load_direct(source.name).iter_items())
+    assert [item.content for item in final] == ["hi", "Bye."]
+    assert final[0].uid == existing.uid
 
 
 def test_impact_atomize_auto_types_bare_memory_and_finds_its_owner(
@@ -1165,7 +1388,10 @@ def test_planned_atomize_output_is_shared_and_save_materializes_it_once(
     )
     assert repeated.exit_code == 0, repeated.output
     assert "already applied" in repeated.output
-    assert len(provider.calls) == 1
+    assert [call[1] for call in provider.calls] == [
+        "impact_atomize",
+        "impact_atomize",
+    ]
 
     diverged_output = store.load_direct("planned/output")
     ops.add(diverged_output, "A local follow-up was added after Atomize.")
@@ -1181,7 +1407,7 @@ def test_planned_atomize_output_is_shared_and_save_materializes_it_once(
     assert "already applied" in repeated_after_divergence.output
     assert len(store.list_checkpoints("planned/output")) == checkpoints_after_divergence
     assert atomize_session_entries(store)[0].status == "APPLIED"
-    assert len(provider.calls) == 1
+    assert len(provider.calls) == 2
 
 
 def test_atomize_save_as_rejects_conflicts_and_preserves_published_failure(
@@ -1250,7 +1476,7 @@ def test_atomize_save_as_rejects_conflicts_and_preserves_published_failure(
         raise AtomizeImpactError("injected apply failure")
 
     monkeypatch.setattr(
-        "memcommit.atomize_runtime.apply_atomize_analysis",
+        "memcommit.atomize_normal_form.apply_atomize_analysis",
         fail_apply,
     )
     failed = runner.invoke(app, ["atomize", "--save-as", "rolled-back"])
@@ -1460,7 +1686,7 @@ def test_atomize_save_as_preserves_concurrent_current_selection(
         return apply_analysis(context, analysis)
 
     monkeypatch.setattr(
-        "memcommit.atomize_runtime.apply_atomize_analysis",
+        "memcommit.atomize_normal_form.apply_atomize_analysis",
         switch_then_apply,
     )
 

@@ -30,7 +30,7 @@ READY TO CHANGE
    The staff-only entrance requires the same physical NFC card and does not accept app authentication.
    Why: Make the user's confirmed scope extension source-locally explicit.
 
-Apply the exact complete proposal with:
+Apply the reviewed proposal with:
   mem atomize --accept-grounding
 Or continue discussing with: mem atomize --reply "..."
 Keep without changing Memories: mem atomize --keep-review-only

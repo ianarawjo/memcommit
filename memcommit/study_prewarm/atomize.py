@@ -32,6 +32,10 @@ from memcommit.profiles import (
     _STUDY_PRACTICE_DESCRIPTION_TASK_UID,
 )
 from memcommit.review import direct_context_digest
+from memcommit.semantic_prompt_policy import (
+    GENERAL_PROMPT_POLICY_ID,
+    STUDY_PROMPT_POLICY_ID,
+)
 from memcommit.store import MemoryStore, context_record_digest
 from memcommit.study_prewarm.installations import (
     INSTALLATIONS_DIRECTORY_NAME,
@@ -53,7 +57,7 @@ from memcommit.study_prewarm.registry import (
 
 
 ATOMIZE_ARTIFACT_KIND = "STUDY_ATOMIZE_EXACT_PREWARM"
-ATOMIZE_ARTIFACT_SCHEMA_VERSION = 1
+ATOMIZE_ARTIFACT_SCHEMA_VERSION = 2
 _LEGACY_PRACTICE_PROVENANCE_UID = "5faaf0a4-d5b8-54d0-af25-c056e9058c98"
 _LEGACY_PRACTICE_PROVENANCE_CONTENT = (
     "The practice source is a synthetic editing request supplied for this "
@@ -197,6 +201,7 @@ def _key_material(
         "reasoning": reasoning,
         "provider_contract_version": ATOMIZE_PROVIDER_CONTRACT_VERSION,
         "ruleset_version": ATOMIZE_RULESET_VERSION,
+        "prompt_policy_id": analysis.prompt_policy_id,
         "task_description": task_description,
         "source": {
             "context_uid": analysis.context_uid,
@@ -214,6 +219,27 @@ def _key_material(
     }
 
 
+def _legacy_key_material(
+    *,
+    task_description: dict[str, str],
+    analysis: AtomizeAnalysisSession,
+    provider: object,
+    model: object,
+    reasoning: object,
+) -> dict[str, object]:
+    """Reconstruct schema-v1 keys so old full-example artifacts can be skipped."""
+
+    material = _key_material(
+        task_description=task_description,
+        analysis=analysis,
+        provider=provider,
+        model=model,
+        reasoning=reasoning,
+    )
+    material.pop("prompt_policy_id")
+    return material
+
+
 def build_atomize_prewarm_artifact(
     *,
     task_description: Context,
@@ -228,6 +254,7 @@ def build_atomize_prewarm_artifact(
     if (
         analysis.context_name != "practice/source"
         or analysis.ruleset_version != ATOMIZE_RULESET_VERSION
+        or analysis.prompt_policy_id != STUDY_PROMPT_POLICY_ID
         or analysis.declared_frames
         or analysis.source_review_uid is not None
         or analysis.source_review_digest is not None
@@ -274,6 +301,7 @@ def build_atomize_prewarm_artifact(
         "reasoning": reasoning,
         "provider_contract_version": ATOMIZE_PROVIDER_CONTRACT_VERSION,
         "ruleset_version": ATOMIZE_RULESET_VERSION,
+        "prompt_policy_id": analysis.prompt_policy_id,
         "task_description": description,
         "offline_provider_seconds": float(offline_provider_seconds),
         "analysis_digest": _analysis_digest(analysis),
@@ -295,7 +323,7 @@ def _validate_artifact(
     *,
     entry_key: str,
 ) -> tuple[AtomizeAnalysisSession, dict[str, str]]:
-    expected = {
+    common_expected = {
         "kind",
         "schema_version",
         "key",
@@ -311,15 +339,29 @@ def _validate_artifact(
         "analysis_digest",
         "analysis",
     }
+    schema_version = value.get("schema_version")
+    legacy = schema_version == 1
+    expected = (
+        common_expected
+        if legacy
+        else common_expected | {"prompt_policy_id"}
+    )
+    prompt_policy_id = (
+        GENERAL_PROMPT_POLICY_ID
+        if legacy
+        else value.get("prompt_policy_id")
+    )
     if set(value) != expected or (
         value.get("kind") != ATOMIZE_ARTIFACT_KIND
-        or value.get("schema_version") != ATOMIZE_ARTIFACT_SCHEMA_VERSION
+        or schema_version not in {1, ATOMIZE_ARTIFACT_SCHEMA_VERSION}
         or value.get("key") != entry_key
         or value.get("task") != "tutorial"
         or value.get("operation") != "ATOMIZE"
         or value.get("provider_contract_version")
         != ATOMIZE_PROVIDER_CONTRACT_VERSION
         or value.get("ruleset_version") != ATOMIZE_RULESET_VERSION
+        or prompt_policy_id
+        not in {GENERAL_PROMPT_POLICY_ID, STUDY_PROMPT_POLICY_ID}
     ):
         raise StudyPrewarmRegistryError("Declared Atomize prewarm is invalid.")
     provider = value.get("provider")
@@ -353,13 +395,19 @@ def _validate_artifact(
     if (
         analysis.context_name != "practice/source"
         or analysis.ruleset_version != ATOMIZE_RULESET_VERSION
+        or analysis.prompt_policy_id != prompt_policy_id
         or analysis.declared_frames
         or not _analysis_has_complete_source_ledger(analysis)
-        or value.get("analysis_digest") != _analysis_digest(analysis)
+        or value.get("analysis_digest")
+        != (
+            payload_digest(value.get("analysis"))
+            if legacy
+            else _analysis_digest(analysis)
+        )
     ):
         raise StudyPrewarmRegistryError("Declared Atomize analysis digest is stale.")
     expected_key = payload_digest(
-        _key_material(
+        (_legacy_key_material if legacy else _key_material)(
             task_description=description,  # type: ignore[arg-type]
             analysis=analysis,
             provider=provider,
@@ -458,6 +506,8 @@ def find_declared_atomize_prewarm(
             continue
         artifact = load_artifact(store.store_dir, entry)
         analysis, description = _validate_artifact(artifact, entry_key=entry.key)
+        if analysis.prompt_policy_id != STUDY_PROMPT_POLICY_ID:
+            continue
         cached_identity = (
             artifact.get("provider"),
             artifact.get("model"),
@@ -556,6 +606,12 @@ def install_declared_atomize_prewarms(
             artifact,
             entry_key=entry.key,
         )
+        if analysis.prompt_policy_id != STUDY_PROMPT_POLICY_ID:
+            # Schema-v1 artifacts were produced with the old full-example
+            # prompt. Keep them readable for migration diagnostics, but never
+            # install them as a rules-only Study provider substitute.
+            skipped += 1
+            continue
         cached_identity = (
             artifact.get("provider"),
             artifact.get("model"),
