@@ -24,7 +24,7 @@ from memcommit.comparison_provider import (
 from memcommit.comparison_store import save_comparison_analysis
 from memcommit.meld import meld_canonical_digest
 from memcommit.meld_restart_application import MeldRestartRequest
-from memcommit.meld_runtime import execute_meld_restart
+from memcommit.operations.meld.runtime import execute_meld_restart
 
 
 class _ComparisonProvider:

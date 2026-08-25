@@ -842,7 +842,7 @@ def _assess_and_save(
     provider_factory,
     expected_session_digest: str | None,
 ) -> MeldSession:
-    from memcommit.meld_runtime import (
+    from memcommit.operations.meld.runtime import (
         execute_prepared_meld_turn,
         prepare_pending_meld_turn,
     )
@@ -905,8 +905,8 @@ def _accept(
 ) -> tuple[bool, str, int]:
     """Hand one explicitly accepted Meld to the operation-owned Apply service."""
 
-    from memcommit.meld_application import MeldApplyRequest
-    from memcommit.meld_runtime import execute_meld_apply
+    from memcommit.operations.meld.application import MeldApplyRequest
+    from memcommit.operations.meld.runtime import execute_meld_apply
 
     receipt = execute_meld_apply(
         MeldApplyRequest(
@@ -966,7 +966,7 @@ def _run_interactive(
 ) -> MeldSession:
     """Run issue and whole-set turns through one shared interactive shell."""
     from memcommit.commands.resolution_workbench_shell import ResolutionDestination
-    from memcommit.meld_runtime import (
+    from memcommit.operations.meld.runtime import (
         execute_meld_destination_change,
         execute_meld_preservation,
         execute_meld_session_defer,
@@ -1167,7 +1167,7 @@ def start_reviewed_symmetric_meld(
         raise MeldCommandError(
             "The symmetric Meld result must differ from both source Contexts."
         )
-    from memcommit.meld_runtime import execute_meld_start
+    from memcommit.operations.meld.runtime import execute_meld_start
 
     session = execute_meld_start(
         MeldStartRequest(
@@ -1994,7 +1994,7 @@ def cmd(
                 baseline_memory=baseline_memory,
                 incoming_text=incoming_text,
             )
-            from memcommit.meld_runtime import (
+            from memcommit.operations.meld.runtime import (
                 execute_meld_start,
                 prepare_meld_start,
             )
@@ -2080,7 +2080,7 @@ def cmd(
                 baseline_memory=baseline_memory,
                 incoming_text=incoming_text,
             )
-            from memcommit.meld_runtime import (
+            from memcommit.operations.meld.runtime import (
                 execute_meld_restart,
                 prepare_meld_restart,
             )
@@ -2188,7 +2188,7 @@ def cmd(
                 "The saved Meld session changed after this command was reviewed. "
                 "Reopen it and rebuild the turn command."
             )
-        from memcommit.meld_runtime import (
+        from memcommit.operations.meld.runtime import (
             execute_meld_preservation,
             execute_meld_session_defer,
         )

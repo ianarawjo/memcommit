@@ -80,7 +80,7 @@ from memcommit.meld_provider import (
     meld_turn_request_digest,
     meld_output_schema,
 )
-from memcommit.meld_runtime import prepare_meld_start
+from memcommit.operations.meld.runtime import prepare_meld_start
 from memcommit.meld_start_application import MeldStartRequest
 from memcommit.update import GrantedUpdateTarget
 from memcommit.meld_choice_branches import MeldChoiceBranchSet

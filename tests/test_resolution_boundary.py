@@ -66,7 +66,7 @@ def test_meld_resolution_application_does_not_import_runtime_or_interfaces():
     forbidden = (
         "memcommit.commands",
         "memcommit.interfaces",
-        "memcommit.meld_runtime",
+        "memcommit.operations.meld.runtime",
         "memcommit.store",
         "prompt_toolkit",
         "typer",

@@ -29,7 +29,7 @@ from memcommit.meld import (
     MeldError as CoreMeldError,
     meld_canonical_digest,
 )
-from memcommit.meld_application import MeldApplyRequest
+from memcommit.operations.meld.application import MeldApplyRequest
 from memcommit.meld_provider import MeldProviderError
 from memcommit.meld_resolution_application import (
     MeldResolutionError,
@@ -37,7 +37,7 @@ from memcommit.meld_resolution_application import (
     prepare_meld_resolution_turn,
 )
 from memcommit.meld_restart_application import MeldRestartError, MeldRestartRequest
-from memcommit.meld_runtime import (
+from memcommit.operations.meld.runtime import (
     execute_meld_apply,
     execute_meld_preservation,
     execute_prepared_meld_turn,

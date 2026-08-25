@@ -80,6 +80,7 @@ blocked = (
     'memcommit.ground_distill',
     'memcommit.ground_elaborate',
     'memcommit.meld_application',
+    'memcommit.meld_runtime',
     'memcommit.operations.add.application',
     'memcommit.operations.add.runtime',
     'memcommit.operations.atomize.application',
@@ -97,6 +98,8 @@ blocked = (
     'memcommit.operations.fit.runtime',
     'memcommit.operations.forget.application',
     'memcommit.operations.forget.runtime',
+    'memcommit.operations.meld.application',
+    'memcommit.operations.meld.runtime',
     'memcommit.operations.reference.application',
     'memcommit.operations.reference.runtime',
     'memcommit.operations.sever.application',
@@ -207,6 +210,9 @@ assert 'memcommit.api._operations.compare' not in sys.modules
 assert 'memcommit.api._operations.meld' not in sys.modules
 assert 'memcommit.comparison_execution' not in sys.modules
 assert 'memcommit.meld_application' not in sys.modules
+assert 'memcommit.meld_runtime' not in sys.modules
+assert 'memcommit.operations.meld.application' not in sys.modules
+assert 'memcommit.operations.meld.runtime' not in sys.modules
 """,
         environment=environment,
     )
@@ -276,6 +282,9 @@ assert 'memcommit.api._operations.fit' not in sys.modules
 assert 'memcommit.api._operations.distill' not in sys.modules
 assert 'memcommit.api._operations.elaborate' not in sys.modules
 assert 'memcommit.meld_application' not in sys.modules
+assert 'memcommit.meld_runtime' not in sys.modules
+assert 'memcommit.operations.meld.application' not in sys.modules
+assert 'memcommit.operations.meld.runtime' not in sys.modules
 assert 'memcommit.operations.query.ordinary_application' not in sys.modules
 assert 'memcommit.ground_distill' not in sys.modules
 """,
@@ -318,6 +327,9 @@ assert 'memcommit.api._operations.fit' not in sys.modules
 assert 'memcommit.api._operations.distill' not in sys.modules
 assert 'memcommit.api._operations.elaborate' not in sys.modules
 assert 'memcommit.meld_application' not in sys.modules
+assert 'memcommit.meld_runtime' not in sys.modules
+assert 'memcommit.operations.meld.application' not in sys.modules
+assert 'memcommit.operations.meld.runtime' not in sys.modules
 """,
         environment=environment,
     )
@@ -346,7 +358,10 @@ except MeldContextError:
 else:
     raise AssertionError('missing Meld target unexpectedly opened')
 assert 'memcommit.api._operations.meld' in sys.modules
-assert 'memcommit.meld_application' in sys.modules
+assert 'memcommit.operations.meld.application' in sys.modules
+assert 'memcommit.operations.meld.runtime' in sys.modules
+assert 'memcommit.meld_application' not in sys.modules
+assert 'memcommit.meld_runtime' not in sys.modules
 assert 'memcommit.api._operations.add' not in sys.modules
 assert 'memcommit.operations.add.application' not in sys.modules
 assert 'memcommit.operations.add.runtime' not in sys.modules
@@ -392,6 +407,9 @@ assert 'memcommit.api._operations.query' not in sys.modules
 assert 'memcommit.operations.query.ordinary_application' not in sys.modules
 assert 'memcommit.api._operations.meld' not in sys.modules
 assert 'memcommit.meld_application' not in sys.modules
+assert 'memcommit.meld_runtime' not in sys.modules
+assert 'memcommit.operations.meld.application' not in sys.modules
+assert 'memcommit.operations.meld.runtime' not in sys.modules
 """,
         environment=environment,
     )
@@ -433,6 +451,9 @@ assert 'memcommit.api._operations.query' not in sys.modules
 assert 'memcommit.operations.query.ordinary_application' not in sys.modules
 assert 'memcommit.api._operations.meld' not in sys.modules
 assert 'memcommit.meld_application' not in sys.modules
+assert 'memcommit.meld_runtime' not in sys.modules
+assert 'memcommit.operations.meld.application' not in sys.modules
+assert 'memcommit.operations.meld.runtime' not in sys.modules
 assert 'memcommit.api._operations.update' not in sys.modules
 assert 'memcommit.update_planning_application' not in sys.modules
 """,
@@ -517,6 +538,9 @@ assert 'memcommit.ground_elaborate' not in sys.modules
 assert 'memcommit.ground_distill' not in sys.modules
 assert 'memcommit.distill_application' not in sys.modules
 assert 'memcommit.meld_application' not in sys.modules
+assert 'memcommit.meld_runtime' not in sys.modules
+assert 'memcommit.operations.meld.application' not in sys.modules
+assert 'memcommit.operations.meld.runtime' not in sys.modules
 """,
         environment=environment,
     )

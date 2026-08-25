@@ -11,13 +11,16 @@ import pytest
 import memcommit.comparison_execution as comparison_execution
 import memcommit.meld_assessment_application as meld_assessment_application
 import memcommit.meld_restart_application as meld_restart_application
-import memcommit.meld_runtime as meld_runtime
+import memcommit.operations.meld.runtime as meld_runtime
 import memcommit.meld_session_application as meld_session_application
 import memcommit.meld_start_application as meld_start_application
 from memcommit.authority.access import ContextAccess
 from memcommit.context import Context, Memory
 from memcommit.meld import meld_canonical_digest
 from memcommit.meld_restart_application import MeldRestartRequest
+
+
+PACKAGE_ROOT = Path(__file__).resolve().parents[1] / "memcommit"
 
 
 @pytest.mark.parametrize(
@@ -54,7 +57,7 @@ def test_meld_execution_modules_have_no_terminal_or_command_dependencies(module)
 
 
 def test_meld_command_contains_no_target_or_session_publication_primitive():
-    command_path = Path(meld_runtime.__file__).with_name("commands") / "meld.py"
+    command_path = PACKAGE_ROOT / "commands" / "meld.py"
     source = command_path.read_text(encoding="utf-8")
 
     assert all(
@@ -70,7 +73,7 @@ def test_meld_command_contains_no_target_or_session_publication_primitive():
 
 
 def test_meld_command_contains_no_initial_cache_or_provisional_session_logic():
-    command_path = Path(meld_runtime.__file__).with_name("commands") / "meld.py"
+    command_path = PACKAGE_ROOT / "commands" / "meld.py"
     source = command_path.read_text(encoding="utf-8")
 
     assert all(
@@ -88,7 +91,7 @@ def test_meld_command_contains_no_initial_cache_or_provisional_session_logic():
 
 
 def test_meld_command_calls_the_operation_owned_apply_service_directly():
-    command_path = Path(meld_runtime.__file__).with_name("commands") / "meld.py"
+    command_path = PACKAGE_ROOT / "commands" / "meld.py"
     source = command_path.read_text(encoding="utf-8")
 
     assert "execute_meld_apply(" in source
@@ -97,7 +100,7 @@ def test_meld_command_calls_the_operation_owned_apply_service_directly():
 
 
 def test_python_client_uses_the_operation_owned_meld_resolution_boundary():
-    client_path = Path(meld_runtime.__file__).with_name("api") / "client.py"
+    client_path = PACKAGE_ROOT / "api" / "client.py"
     operation_path = client_path.with_name("_operations") / "meld.py"
     source = client_path.read_text(encoding="utf-8")
     if operation_path.exists():

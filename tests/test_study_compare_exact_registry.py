@@ -9,7 +9,7 @@ from typer.testing import CliRunner
 
 import memcommit.config as config_module
 import memcommit.api._operations.compare as compare_operation
-import memcommit.meld_runtime as meld_runtime
+import memcommit.operations.meld.runtime as meld_runtime
 import memcommit.ops as ops
 import memcommit.store as store_module
 from memcommit.cli import app

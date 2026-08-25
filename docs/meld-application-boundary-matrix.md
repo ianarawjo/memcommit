@@ -1,5 +1,7 @@
 # Meld application boundary matrix
 
+Last reviewed: 2026-08-25.
+
 ## Status
 
 `VERIFIED` for the currently implemented CLI, TUI, public Python, agent, and
@@ -14,6 +16,29 @@ Meld must produce the same authorized, cache-aware, versioned result whether
 it is invoked through the CLI, Python facade, or agent tool. Terminal adapters
 may collect values and present progress or review state, but they are not an
 independent source of provider, cache, session, or Apply behavior.
+
+## Package ownership
+
+The canonical terminal-independent owners now live together under
+`memcommit.operations.meld`. `application.py` owns the exact reviewed Apply
+request, route classification, port, result, and receipt validation;
+`runtime.py` owns Store and Grant access, complete block/reconciliation work,
+provider/cache preparation, session CAS, Apply transactions, checkpoints, and
+recovery. API and command adapters import those operation-owned modules
+directly.
+
+The historical `memcommit.meld_application` and `memcommit.meld_runtime`
+paths remain behavior-free module-identity aliases for import-order,
+monkeypatch, and serialized-global compatibility. Importing
+`memcommit.operations.meld` alone remains lazy. New production consumers use
+the canonical paths; compatibility aliases are not alternate implementation
+owners.
+
+This relocation changes physical ownership only. It does not change block
+planning or reconciliation, authority, saved-session schemas or CAS,
+provider/cache behavior, Apply transactions, checkpoint and recovery evidence,
+receipts, command grammar, or TUI interaction. Existing Meld PTY evidence
+therefore remains valid without a screenshot refresh.
 
 ## Post-TUI completion audit (2026-08-15)
 
