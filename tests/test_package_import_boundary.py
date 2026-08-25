@@ -70,6 +70,8 @@ blocked = (
     'memcommit.ground_elaborate',
     'memcommit.meld_application',
     'memcommit.operations.query.ordinary_application',
+    'memcommit.operations.embed.application',
+    'memcommit.operations.embed.runtime',
     'memcommit.operations.reference.application',
     'memcommit.operations.reference.runtime',
     'memcommit.reference_application',

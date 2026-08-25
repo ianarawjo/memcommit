@@ -21,7 +21,7 @@ from memcommit.context_targeting.operands import choose_endpoint_operand
 from memcommit.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
 )
-from memcommit.embed_application import (
+from memcommit.operations.embed.application import (
     EmbedPlacement,
     EmbedRequest,
     EmbedResult,
@@ -31,7 +31,7 @@ from memcommit.embed_application import (
     run_embed,
     run_memory_embed,
 )
-from memcommit.embed_runtime import MemoryStoreEmbedPort
+from memcommit.operations.embed.runtime import MemoryStoreEmbedPort
 from memcommit.interfaces.console.terminal import is_interactive_terminal
 from memcommit.interfaces.console.text import display_escape_text, safe_terminal_text
 from memcommit.interfaces.tui.operations.embed import choose_embed_setup

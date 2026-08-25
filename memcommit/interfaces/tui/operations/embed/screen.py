@@ -72,7 +72,7 @@ from memcommit.interfaces.tui.core.theme import (
     SEMANTIC_VIEWER_STYLE,
 )
 from memcommit.context import Context
-from memcommit.embed_application import (
+from memcommit.operations.embed.application import (
     EmbedPlacement,
     EmbedRequest,
     FrozenEmbedPlan,

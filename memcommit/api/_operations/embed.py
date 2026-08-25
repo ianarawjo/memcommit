@@ -18,12 +18,12 @@ from memcommit.api.errors import (
     EmbedInputError,
     EmbedStorageError,
 )
-from memcommit.embed_application import (
+from memcommit.operations.embed.application import (
     EmbedError as ApplicationEmbedError,
     EmbedRequest,
     MemoryEmbedRequest,
 )
-from memcommit.embed_runtime import execute_embed, execute_memory_embed
+from memcommit.operations.embed.runtime import execute_embed, execute_memory_embed
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
 from memcommit.store import ConcurrentContextUpdateError

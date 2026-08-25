@@ -68,7 +68,10 @@ def test_embed_rejects_source_renamed_after_load(isolated_store, monkeypatch):
         _rename(store, "old", "new")
         original_embed(child, parent, **kwargs)
 
-    monkeypatch.setattr("memcommit.embed_runtime.ops.embed", rename_then_embed)
+    monkeypatch.setattr(
+        "memcommit.operations.embed.runtime.ops.embed",
+        rename_then_embed,
+    )
 
     result = runner.invoke(app, ["embed", "old", "--into", owner.name])
 

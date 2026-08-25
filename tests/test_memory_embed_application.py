@@ -10,7 +10,7 @@ from typer.testing import CliRunner
 import memcommit.ops as ops
 from memcommit.cli import app
 from memcommit.context import Memory, MemoryRef
-from memcommit.embed_application import (
+from memcommit.operations.embed.application import (
     EmbedError,
     EmbedPlacement,
     FrozenMemoryEmbedPlan,
@@ -18,7 +18,7 @@ from memcommit.embed_application import (
     MemoryEmbedResult,
     run_memory_embed,
 )
-from memcommit.embed_runtime import MemoryStoreEmbedPort
+from memcommit.operations.embed.runtime import MemoryStoreEmbedPort
 from memcommit.interfaces.tui.operations.embed import choose_embed_setup
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
