@@ -1,5 +1,11 @@
 # Immediate Context clear design rationale
 
+Clear's request/result contract and all authority, subtree-freeze, checkpoint,
+and durable mutation behavior are owned by `memcommit.operations.clear`.
+`memcommit.commands.clear` now retains only argument syntax, one current-name
+snapshot, and terminal presentation. The focused boundary and preserved
+compatibility are recorded in `clear-application-boundary-matrix.md`.
+
 ## Problem
 
 `mem clear` used to print the number of direct items in one Context and require
