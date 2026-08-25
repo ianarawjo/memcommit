@@ -21,6 +21,7 @@ from memcommit.commands.memory_report_recents import (
     MemoryReportSelectAction,
     choose_memory_report_recent,
 )
+from memcommit.commands.history_target import resolve_explicit_context_history_target
 from memcommit.interfaces.tui.viewers.read_only import (
     interactive_report_terminal,
 )
@@ -32,6 +33,13 @@ from memcommit.granted_provenance import (
     GrantedMemoryTraceReport,
     build_granted_memory_trace,
 )
+from memcommit.context_history import (
+    ContextTraceReport,
+    build_context_trace,
+    current_context_trace,
+)
+from memcommit.context_rationale import synthesize_context_rationale
+from memcommit.context_targeting.model import ContextTarget
 from memcommit.context_targeting.report_items import (
     parse_memory_report_locator,
     resolve_local_memory_report_target,
@@ -195,13 +203,43 @@ def render_reference_rationale(
             typer.echo(f"  {display_escape_text(warning)}")
 
 
+def render_context_rationale(
+    report: ContextTraceReport,
+    projection: RationaleNarrativeProjection,
+    *,
+    verbose: bool = False,
+) -> None:
+    """Render the semantic explanation of one whole Context timeline."""
+
+    typer.secho(
+        f"Rationale · {display_escape_text(report.context_name)}",
+        bold=True,
+    )
+    if verbose:
+        typer.secho(f"Context UID: {report.context_uid}", dim=True)
+    typer.secho("\nCONTEXT", bold=True)
+    typer.echo(
+        f"  {len(report.current)} direct Memor"
+        f"{'y' if len(report.current) == 1 else 'ies'}"
+        f" · {len(report.events)} retained operation"
+        f"{'s' if len(report.events) != 1 else ''}"
+    )
+    if projection.status is RationaleNarrativeStatus.HIDDEN:
+        typer.secho("\nRATIONALE — hidden by Grant", bold=True)
+    elif projection.status is RationaleNarrativeStatus.EMPTY:
+        typer.secho("\nRATIONALE — no retained history", bold=True)
+    else:
+        typer.secho("\nRATIONALE", bold=True)
+        typer.echo("  " + safe_terminal_text(projection.text))
+
+
 def cmd(
     selector: Annotated[
         Optional[str],
         typer.Argument(
             help=(
-                "Memory/MemoryRef UID/prefix or CONTEXT:UID. Omit to select "
-                "from the current readable Context or its descendants"
+                "CONTEXT, Memory/MemoryRef UID/prefix, or CONTEXT:UID. "
+                "Omit to select a Memory from the current readable Context"
             )
         ),
     ] = None,
@@ -251,7 +289,7 @@ def cmd(
         typer.Option("--json", help="Emit structured rationale evidence as JSON"),
     ] = False,
 ) -> None:
-    """Explain where one Memory came from and how it changed over time."""
+    """Explain how one Context or Memory evolved over time."""
     try:
         unit = validate_rationale_limit(limit, unit)
     except RationaleRulesError as error:
@@ -264,6 +302,60 @@ def cmd(
         if selector is None and as_json:
             raise RationaleError("JSON output requires an explicit item UID.")
         explicit_context = context_name is not None
+        if selector is not None and not explicit_context:
+            explicit_target = resolve_explicit_context_history_target(
+                selector,
+                current_context=context_snapshot.current_name,
+                available_context_names=store.list_context_names(),
+            )
+            if isinstance(explicit_target, ContextTarget):
+                access = resolve_context_access(
+                    store,
+                    explicit_target.context_name,
+                    current_name=context_snapshot.current_name,
+                    required_permission="READ",
+                )
+                context_report = (
+                    current_context_trace(
+                        access.store.load_direct(access.context_name),
+                        warnings=(
+                            "Authority history is outside this granted READ view.",
+                        ),
+                    )
+                    if access.is_granted
+                    else build_context_trace(access.store, access.context_name)
+                )
+                with progressing_provider_factory(
+                    "RATIONALE",
+                    "writing Context rationale",
+                    connect_semantic_provider,
+                ) as provider_factory:
+                    context_projection = synthesize_context_rationale(
+                        context_report,
+                        provider_factory=provider_factory,
+                        history_available=not access.is_granted,
+                        limit=limit,
+                        unit=unit,
+                    )
+                if as_json:
+                    typer.echo(
+                        json.dumps(
+                            {
+                                "target": "CONTEXT",
+                                "trace": context_report.to_dict(),
+                                "rationale_projection": context_projection.to_dict(),
+                            },
+                            ensure_ascii=False,
+                            indent=2,
+                        )
+                    )
+                else:
+                    render_context_rationale(
+                        context_report,
+                        context_projection,
+                        verbose=verbose,
+                    )
+                return
         if selector is None and not explicit_context and interactive_report_terminal():
             launch = choose_memory_report_recent(store, operation="rationale")
             if launch is None:

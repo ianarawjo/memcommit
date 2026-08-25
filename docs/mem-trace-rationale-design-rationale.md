@@ -822,6 +822,38 @@ an atomize candidate, or a copied Memory.
 
 This is a tested command-path invariant, not operating-system confidentiality.
 
+## Context as a report subject
+
+An explicit positional existing Context is a complete Trace or Rationale
+subject. This is not descendant selection and does not collapse the Context
+into one synthetic Memory. `mem trace CONTEXT` projects every retained
+checkpoint operation, every direct-Memory change under that operation,
+zero-change checkpoints, any final unrecorded live-state gap, and the current
+direct state. Its primary axis is the Context's operation chronology; the same
+mechanical Memory diff renderer may be reused inside an event without changing
+that subject.
+
+The positional grammar remains typed and backward compatible. An existing
+Context name wins; a bare UUID-shaped value remains a Memory selector;
+`CONTEXT:UID` and `UID --context CONTEXT` remain exact Memory coordinates. A
+non-UUID value that is not an existing Context fails as a Context locator and
+may show canonical `Did you mean?` candidates from the frozen visible catalog,
+but similarity never selects a target. Omitting the positional operand keeps
+the established Memory-selection flow.
+
+`mem rationale CONTEXT` applies `WHOLE_FRAME_ONLY` semantic execution to that
+complete Context Trace. It explains material evolution rather than summarizing
+current content, and it may attribute a reason only when a recorded command,
+description, or before/after relationship supports it. Checkpoint order alone
+does not prove intent. An authority-owned local Context can expose retained
+history; a granted READ view can expose only current content and must return a
+hidden-history projection without connecting a provider.
+
+Context Trace's `--tui` route reads one bounded lineage document. It does not
+open a checkpoint picker: browsing a sequence of pairwise checkpoint results
+would duplicate Diff's subject instead of presenting the Context-wide time
+axis. Diff remains the exact one-checkpoint-versus-predecessor inspection tool.
+
 ## Alternatives rejected
 
 - **Text-similarity lineage:** rejected because equal wording does not establish

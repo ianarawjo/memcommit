@@ -24,6 +24,11 @@ from memcommit.commands.memory_report_recents import (
     MemoryReportSelectAction,
     choose_memory_report_recent,
 )
+from memcommit.commands.history_target import resolve_explicit_context_history_target
+from memcommit.commands.context_trace_projection import (
+    format_context_trace_report,
+    open_context_trace_viewer,
+)
 from memcommit.interfaces.tui.viewers.read_only import interactive_report_terminal
 from memcommit.commands.trace_projection import (
     DEFAULT_TRACE_OPERATION_LIMIT,
@@ -39,6 +44,8 @@ from memcommit.granted_provenance import (
     GrantedMemoryTraceReport,
     build_granted_memory_trace,
 )
+from memcommit.context_history import ContextTraceReport, build_context_trace
+from memcommit.context_targeting.model import ContextTarget
 from memcommit.context_targeting.report_items import (
     parse_memory_report_locator,
     resolve_local_memory_report_target,
@@ -67,6 +74,33 @@ def render_trace(
 
     typer.echo(
         format_compact_trace_report(
+            report,
+            verbose=verbose,
+            limit=limit,
+        )
+    )
+
+
+def _present_context_trace(
+    report: ContextTraceReport,
+    *,
+    as_json: bool,
+    tui: bool,
+    verbose: bool,
+    limit: int | None,
+) -> None:
+    """Present one whole lineage without introducing checkpoint selection."""
+
+    if as_json:
+        typer.echo(json.dumps(report.to_dict(), ensure_ascii=False, indent=2))
+        return
+    if tui:
+        if not interactive_report_terminal():
+            raise ProvenanceError("--tui requires an interactive terminal.")
+        open_context_trace_viewer(report, verbose=verbose, limit=limit)
+        return
+    typer.echo(
+        format_context_trace_report(
             report,
             verbose=verbose,
             limit=limit,
@@ -232,8 +266,8 @@ def cmd(
         Optional[str],
         typer.Argument(
             help=(
-                "Memory/MemoryRef UID/prefix or CONTEXT:UID. Omit to select "
-                "from the current Context or its descendants"
+                "CONTEXT, Memory/MemoryRef UID/prefix, or CONTEXT:UID. "
+                "Omit to select a Memory from the current Context or descendants"
             )
         ),
     ] = None,
@@ -292,7 +326,7 @@ def cmd(
         ),
     ] = False,
 ) -> None:
-    """Show recorded and safely reconstructed content lineage."""
+    """Show one Context lineage or one Memory's retained provenance."""
     if plain and tui:
         typer.secho(
             "Trace error: choose either --plain or --tui, not both.",
@@ -314,6 +348,30 @@ def cmd(
         if selector is None and as_json:
             raise ProvenanceError("JSON output requires an explicit item UID.")
         explicit_context = context_name is not None
+        if selector is not None and not explicit_context:
+            explicit_target = resolve_explicit_context_history_target(
+                selector,
+                current_context=context_snapshot.current_name,
+                available_context_names=store.list_context_names(),
+            )
+            if isinstance(explicit_target, ContextTarget):
+                history_context = load_retained_history_context(
+                    store,
+                    context_locator=explicit_target.context_name,
+                    current_name=context_snapshot.current_name,
+                )
+                context_report = build_context_trace(
+                    store,
+                    history_context.storage_name,
+                )
+                _present_context_trace(
+                    context_report,
+                    as_json=as_json,
+                    tui=tui,
+                    verbose=verbose,
+                    limit=operation_limit,
+                )
+                return
         if selector is None and not explicit_context and interactive_report_terminal():
             launch = choose_memory_report_recent(store, operation="trace")
             if launch is None:

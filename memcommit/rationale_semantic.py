@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 import json
 from typing import Callable, Protocol
 import unicodedata
@@ -369,6 +369,31 @@ def _parse_projection(
     )
 
 
+def rationale_output_schema(
+    *,
+    limit: int,
+    unit: RationaleLimitUnit,
+) -> dict[str, object]:
+    """Expose the shared structured-output contract to typed rationale subjects."""
+
+    return _output_schema(limit=limit, unit=unit)
+
+
+def parse_rationale_projection(
+    raw: object,
+    *,
+    limit: int,
+    unit: RationaleLimitUnit,
+    ruleset_version: str = RATIONALE_RULESET_VERSION,
+) -> RationaleNarrativeProjection:
+    """Validate one narrative while retaining the subject's ruleset identity."""
+
+    return replace(
+        _parse_projection(raw, limit=limit, unit=unit),
+        ruleset_version=ruleset_version,
+    )
+
+
 def synthesize_rationale_provenance(
     trace: TraceReport,
     *,
@@ -468,6 +493,8 @@ __all__ = [
     "RationaleNarrativeProjection",
     "RationaleSemanticProvider",
     "RationaleSynthesisError",
+    "parse_rationale_projection",
+    "rationale_output_schema",
     "rationale_provenance_payload",
     "synthesize_rationale_provenance",
 ]
