@@ -144,6 +144,26 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
         in by_operation["translate"].application_modules
     )
     assert (
+        "memcommit.operations.chunk.application"
+        in by_operation["chunk"].application_modules
+    )
+    assert (
+        "memcommit.operations.clear.runtime"
+        in by_operation["clear"].application_modules
+    )
+    assert (
+        "memcommit.operations.contexts.runtime"
+        in by_operation["contexts"].application_modules
+    )
+    assert (
+        "memcommit.operations.undo.runtime"
+        in by_operation["undo"].application_modules
+    )
+    assert (
+        "memcommit.operations.redo.runtime"
+        in by_operation["redo"].application_modules
+    )
+    assert (
         "memcommit.operations.distill.application"
         in by_operation["distill"].application_modules
     )
@@ -166,7 +186,9 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
     assert "show" in by_operation["show"].public_methods
     assert "memcommit.interfaces.agent.show" in by_operation["show"].agent_modules
     assert by_operation["show"].curated_state == "CLOSED"
-    assert by_operation["branch"].curated_state == "UNREVIEWED"
+    for operation in ("branch", "chunk", "clear", "contexts", "undo", "redo"):
+        assert by_operation[operation].curated_state == "CLOSED"
+    assert by_operation["translate"].curated_state == "MIXED"
     assert {record.curated_state for record in snapshot.operations} == {
         "CLOSED",
         "MIXED",
@@ -190,7 +212,10 @@ def test_curated_classification_covers_all_operations_conservatively() -> None:
     assert len(classified) == len(set(classified))
     assert {"embed", "forget", "reference"} <= states["CLOSED"]
     assert "update" in states["MIXED"]
-    assert "branch" in states["UNREVIEWED"]
+    assert {"branch", "chunk", "clear", "contexts", "undo", "redo"} <= states[
+        "CLOSED"
+    ]
+    assert {"translate", "update"} <= states["MIXED"]
 
 
 def test_checked_in_catalog_is_current() -> None:
