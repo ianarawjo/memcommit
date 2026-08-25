@@ -84,7 +84,7 @@ from memcommit.quality_finding_handoff import (
     quality_finding_handoff,
     quality_finding_handoffs,
 )
-from memcommit.dedup_application import DEDUP_ELIGIBLE_RELATIONS
+from memcommit.operations.dedup.application import DEDUP_ELIGIBLE_RELATIONS
 from memcommit.source_projection.presentation import SourceDisplayValue
 from memcommit.store import MemoryStore
 from memcommit.read_report import (

@@ -37,14 +37,14 @@ from memcommit.query_provider import (
 from memcommit.store import MemoryStore
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
-from memcommit.dedup_application import (
+from memcommit.operations.dedup.application import (
     DEDUP_ELIGIBLE_RELATIONS,
     DedupRequest,
     apply_dedup,
     prepare_dedup,
     recommended_dedup_selections,
 )
-from memcommit.dedup_runtime import MemoryStoreDedupPort
+from memcommit.operations.dedup.runtime import MemoryStoreDedupPort
 from memcommit.dedun_scope import (
     DedunScopeReceipt,
     apply_recursive_dedun_scope,

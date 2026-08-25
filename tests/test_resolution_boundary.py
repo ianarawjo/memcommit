@@ -105,7 +105,7 @@ def test_merge_cli_and_tui_depend_on_the_typed_application_contract():
     ("application_name", "tui_path", "cli_path", "public_path", "agent_path"),
     (
         (
-            "memcommit.dedup_application",
+            "memcommit.operations.dedup.application",
             PACKAGE / "interfaces" / "tui" / "operations" / "dedup" / "screen.py",
             PACKAGE / "interfaces" / "cli" / "dedup.py",
             PACKAGE / "api" / "_operations" / "dedup.py",
@@ -127,7 +127,10 @@ def test_deterministic_resolution_adapters_keep_one_application_owner(
     public_path: Path,
     agent_path: Path,
 ):
-    application_path = PACKAGE / f"{application_name.rsplit('.', 1)[1]}.py"
+    application_path = (
+        PACKAGE
+        / Path(*application_name.removeprefix("memcommit.").split("."))
+    ).with_suffix(".py")
     forbidden_application_imports = (
         "memcommit.commands",
         "memcommit.interfaces",

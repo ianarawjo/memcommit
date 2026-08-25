@@ -10,7 +10,7 @@ from memcommit.context import AutoCheckpoint, Memory, MemoryRef
 from memcommit.context_targeting.model import ContextScope
 from memcommit.context_targeting.readable_catalog import ReadableContextCatalog
 from memcommit.context_targeting.resolution import expand_lexical_context_names
-from memcommit.dedup_application import (
+from memcommit.operations.dedup.application import (
     DEDUP_CONTRACT_VERSION,
     DEDUP_ELIGIBLE_RELATIONS,
     DedupConflictError,
@@ -22,7 +22,7 @@ from memcommit.dedup_application import (
     recommended_dedup_selections,
     validate_dedup_selections,
 )
-from memcommit.dedup_runtime import MemoryStoreDedupPort
+from memcommit.operations.dedup.runtime import MemoryStoreDedupPort
 from memcommit.profile_config import ProfileRegistry
 from memcommit.quality_find_workbench import QualityFindSourceFrame
 from memcommit.quality_finding_handoff import QualityFindingSource

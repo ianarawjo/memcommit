@@ -7,7 +7,7 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.clipboard import write_system_clipboard
-from memcommit.dedup_application import (
+from memcommit.operations.dedup.application import (
     DedupConflictError,
     DedupError,
     DedupRequest,
@@ -15,7 +15,7 @@ from memcommit.dedup_application import (
     apply_dedup,
     prepare_dedup,
 )
-from memcommit.dedup_runtime import MemoryStoreDedupPort
+from memcommit.operations.dedup.runtime import MemoryStoreDedupPort
 from memcommit.interfaces.cli.dedup import (
     render_dedup_plan_plain,
     render_dedup_receipt,

@@ -6,7 +6,7 @@ import hashlib
 import json
 from typing import TYPE_CHECKING
 
-from memcommit.dedup_application import (
+from memcommit.operations.dedup.application import (
     DedupComponent,
     DedupEvidence,
     DedupMember,
@@ -62,7 +62,7 @@ def build_dedup_components(
     }
     missing = sorted(requested_uids - set(memory_by_uid))
     if missing:
-        from memcommit.dedup_application import DedupConflictError
+        from memcommit.operations.dedup.application import DedupConflictError
 
         raise DedupConflictError(
             "Confirmed duplicate Memories are no longer directly owned by the "
@@ -203,7 +203,7 @@ def freeze_dedup_plan(
         or source.display_name != display_name
         or source.direct_memory_digest != direct_memory_digest
     ):
-        from memcommit.dedup_application import DedupConflictError
+        from memcommit.operations.dedup.application import DedupConflictError
 
         raise DedupConflictError(
             "The confirmed duplicate Source changed. Run the finder again."

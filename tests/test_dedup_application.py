@@ -24,7 +24,7 @@ from memcommit.context_snapshot import (
     ContextSnapshotRef,
     context_snapshot_digest,
 )
-from memcommit.dedup_application import (
+from memcommit.operations.dedup.application import (
     DedupAuthorityError,
     DedupConflictError,
     DedupError,
@@ -34,7 +34,7 @@ from memcommit.dedup_application import (
     prepare_dedup,
     recommended_dedup_selections,
 )
-from memcommit.dedup_runtime import MemoryStoreDedupPort
+from memcommit.operations.dedup.runtime import MemoryStoreDedupPort
 from memcommit.direct_item_duplicates import find_exact_duplicate_groups
 from memcommit.findings import DuplicateFinding, DuplicateReport
 from memcommit.interfaces.agent import (

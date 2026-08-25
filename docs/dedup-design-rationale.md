@@ -64,6 +64,15 @@ with one operation UID, so `mem undo` restores the command as one unit.
 
 ## Semantic redundancy finder and Dedun
 
+The historically named `dedup_application` and `dedup_runtime` modules now
+have their canonical implementation home under `memcommit.operations.dedup`.
+Their former flat paths are module-identity compatibility aliases, while new
+production consumers import the operation package. This is a location-only
+change for the reviewed redundancy contracts shared with Dedun and composite
+operations: it does not move `dedun_scope`, make semantic inference part of
+exact Dedup, or change either operation's public identity, evidence, Apply, or
+recovery boundary.
+
 Differently stored wording is not an exact duplicate. `mem find-duplicates`
 owns the provider-free, read-only exact-DUP report. `mem find-redundancies`
 owns the complete exact-plus-semantic DUN report, and `mem dedun` reuses that

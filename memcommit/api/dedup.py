@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from memcommit.dedup_application import FrozenDedupPlan
+    from memcommit.operations.dedup.application import FrozenDedupPlan
 
 
 @dataclass(frozen=True)

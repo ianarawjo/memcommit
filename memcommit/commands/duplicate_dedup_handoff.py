@@ -3,12 +3,12 @@
 from __future__ import annotations
 
 from memcommit.clipboard import write_system_clipboard
-from memcommit.dedup_application import (
+from memcommit.operations.dedup.application import (
     DedupRequest,
     apply_dedup,
     prepare_dedup,
 )
-from memcommit.dedup_runtime import MemoryStoreDedupPort
+from memcommit.operations.dedup.runtime import MemoryStoreDedupPort
 from memcommit.interfaces.tui.operations.dedup import run_dedup_tui
 from memcommit.quality_finding_handoff import QualityFindingHandoff
 from memcommit.store import MemoryStore

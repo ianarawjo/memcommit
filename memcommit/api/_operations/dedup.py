@@ -22,7 +22,7 @@ from memcommit.api.errors import (
     SemanticInputError,
     SemanticStorageError,
 )
-from memcommit.dedup_application import (
+from memcommit.operations.dedup.application import (
     DedupAuthorityError,
     DedupConflictError,
     DedupError,
@@ -31,7 +31,7 @@ from memcommit.dedup_application import (
     apply_dedup as apply_core_dedup,
     prepare_dedup,
 )
-from memcommit.dedup_runtime import MemoryStoreDedupPort
+from memcommit.operations.dedup.runtime import MemoryStoreDedupPort
 from memcommit.profile_config import (
     ProfileConfigError,
     load_profile_registry,

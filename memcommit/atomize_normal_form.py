@@ -22,7 +22,7 @@ from memcommit.atomize import (
     impact_atomize,
 )
 from memcommit.context import Context, Memory
-from memcommit.dedup_application import (
+from memcommit.operations.dedup.application import (
     DedupRequest,
     DedupSelection,
     dedup_projection_record,

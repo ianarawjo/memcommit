@@ -45,3 +45,21 @@ or semantic receipt.
 The implementation and tests named in `docs/dedup-design-rationale.md` retain
 these invariants. The public Python result and CLI text are projections, not
 second application implementations.
+
+## Ownership relocation boundary
+
+`memcommit.operations.dedup.application` and
+`memcommit.operations.dedup.runtime` are the canonical owners of the
+historically named reviewed-redundancy contracts that Dedun and composite
+operations consume. The flat `memcommit.dedup_application` and
+`memcommit.dedup_runtime` paths remain identity-preserving compatibility
+aliases, so either import order, existing monkeypatches, and serialized globals
+reach the same module objects. Production consumers import the operation
+package directly.
+
+This ownership-only relocation does not reclassify exact Dedup or absorb
+Dedun. Provider-free exact detection and Apply remain owned by
+`direct_item_duplicates` and `exact_dedup`; Dedun's analysis, lexical-scope
+publication, command, adapters, and evidence remain separate consumers of the
+reviewed redundancy core. No relation, survivor, authority, reference,
+checkpoint, transaction, interface, or route-state behavior changes.

@@ -18,8 +18,8 @@ from memcommit.dedun_scope import (
     freeze_recursive_dedun_scope,
     prepare_recursive_dedun_scope,
 )
-from memcommit.dedup_application import DedupConflictError
-from memcommit.dedup_runtime import MemoryStoreDedupPort
+from memcommit.operations.dedup.application import DedupConflictError
+from memcommit.operations.dedup.runtime import MemoryStoreDedupPort
 from memcommit.findings import DuplicateReport, FindingsError
 from memcommit.redundancy_scope import analyze_independent_redundancy_scope
 from memcommit.store import MemoryStore
