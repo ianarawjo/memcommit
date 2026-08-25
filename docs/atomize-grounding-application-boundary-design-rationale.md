@@ -16,18 +16,29 @@ adapter without importing `memcommit.commands`.
 
 ## Boundary
 
-The operation is now divided into four responsibilities:
+The Grounding slice is now divided into four responsibilities:
 
-- `memcommit.atomize_grounding_application` owns typed Start, Reply, Keep, and
-  Accept requests, the port contract, application receipts, and result checks.
-- `memcommit.atomize_grounding_runtime` adapts that contract to `MemoryStore`,
-  the semantic provider, CAS-style freshness checks, Context mutation,
-  checkpoint recovery, and durable dialogue receipts.
+- `memcommit.operations.atomize.grounding_application` owns typed Start, Reply,
+  Keep, and Accept requests, the port contract, application receipts, and
+  result checks.
+- `memcommit.operations.atomize.grounding_runtime` adapts that contract to
+  `MemoryStore`, the semantic provider, CAS-style freshness checks, Context
+  mutation, checkpoint recovery, and durable dialogue receipts.
 - `memcommit.interfaces.cli.atomize_grounding` renders a saved dialogue without
   provider or Store access.
 - `memcommit.commands.atomize_grounding` preserves the historical Python import
   surface as a thin compatibility facade. `memcommit.commands.atomize` uses the
   typed application/runtime boundary directly.
+
+The former flat `memcommit.atomize_grounding_application` and
+`memcommit.atomize_grounding_runtime` paths remain behavior-free
+module-identity aliases for old imports, monkeypatch targets, and serialized
+globals. Production consumers use the canonical operation package directly.
+Co-location under `operations.atomize` does not merge Grounding with primary
+Atomize application/materialization or with the Analysis open/cache slice:
+each keeps its existing request, provider, authority, Apply, and receipt
+contract. Consolidating those distinct contracts is an explicit non-goal of
+this ownership-only relocation.
 
 The CLI supplies its transient provider-progress wrapper when it constructs the
 runtime port. Consequently the runtime can use progress in `mem atomize` while

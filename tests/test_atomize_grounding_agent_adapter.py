@@ -297,6 +297,8 @@ def test_adapter_imports_only_public_api_and_shared_agent_contract():
                 "memcommit.commands",
                 "memcommit.atomize_grounding_application",
                 "memcommit.atomize_grounding_runtime",
+                "memcommit.operations.atomize.grounding_application",
+                "memcommit.operations.atomize.grounding_runtime",
                 "memcommit.store",
                 "memcommit.interfaces.mcp",
             )

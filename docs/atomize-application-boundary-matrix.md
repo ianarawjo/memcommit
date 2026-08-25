@@ -235,9 +235,9 @@ The package groups related ownership without merging slice contracts. Primary
 structural application remains in `application` / `runtime`; analysis open,
 reuse, reanalysis, provider/cache, and pair-publication policy remains in
 `analysis_application` / `analysis_runtime`; and `atomize_grounding_*` remains
-outside the package as the owner of grounding dialogue and mixed edit/add
-Apply. No slice may acquire another slice's authority merely from their shared
-package location.
+in the sibling `grounding_application` / `grounding_runtime` modules as the
+owner of grounding dialogue and mixed edit/add Apply. No slice may acquire
+another slice's authority merely from their shared package location.
 
 The opaque session revision binds the immutable analysis record and complete
 workbench record, including response state, Output plan, and any application

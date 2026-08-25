@@ -157,7 +157,8 @@ def test_analysis_and_grounding_remain_separate_atomize_slices() -> None:
         / "memcommit/operations/atomize/analysis_application.py"
     ).read_text(encoding="utf-8")
     grounding_application = (
-        REPOSITORY_ROOT / "memcommit/atomize_grounding_application.py"
+        REPOSITORY_ROOT
+        / "memcommit/operations/atomize/grounding_application.py"
     ).read_text(encoding="utf-8")
 
     assert "memcommit.atomize_analysis_application" not in primary

@@ -6,7 +6,7 @@ from typing import Callable
 
 from memcommit.atomize import AtomizeAnalysisSession
 from memcommit.atomize_grounding import AtomizeGroundingSession
-from memcommit.atomize_grounding_application import (
+from memcommit.operations.atomize.grounding_application import (
     AtomizeGroundingApplicationError,
     GroundingAcceptRequest,
     GroundingApplyResult,
@@ -19,7 +19,7 @@ from memcommit.atomize_grounding_application import (
     run_atomize_grounding_start,
 )
 from memcommit.atomize_grounding_provider import AtomizeGroundingProvider
-from memcommit.atomize_grounding_runtime import (
+from memcommit.operations.atomize.grounding_runtime import (
     MemoryStoreAtomizeGroundingPort,
     assert_current_grounding_bindings,
 )

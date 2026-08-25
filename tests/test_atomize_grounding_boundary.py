@@ -9,7 +9,7 @@ import uuid
 
 import pytest
 
-from memcommit.atomize_grounding_application import (
+from memcommit.operations.atomize.grounding_application import (
     AtomizeGroundingApplicationError,
     GroundingKeepRequest,
     run_atomize_grounding_keep,
@@ -19,7 +19,9 @@ from memcommit.atomize_grounding import (
     AtomizeGroundingBindings,
     AtomizeGroundingSession,
 )
-from memcommit.atomize_grounding_runtime import MemoryStoreAtomizeGroundingPort
+from memcommit.operations.atomize.grounding_runtime import (
+    MemoryStoreAtomizeGroundingPort,
+)
 from memcommit.store import MemoryStore
 
 
@@ -39,8 +41,8 @@ def _imports(path: Path) -> set[str]:
 
 def test_grounding_application_and_runtime_do_not_import_commands() -> None:
     for relative in (
-        "memcommit/atomize_grounding_application.py",
-        "memcommit/atomize_grounding_runtime.py",
+        "memcommit/operations/atomize/grounding_application.py",
+        "memcommit/operations/atomize/grounding_runtime.py",
     ):
         imports = _imports(ROOT / relative)
         assert not any(name.startswith("memcommit.commands") for name in imports)
