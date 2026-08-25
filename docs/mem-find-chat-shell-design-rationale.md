@@ -275,3 +275,13 @@ remains caller-owned, while primary/related headings, Context grouping,
 multiline indentation, and terminal escaping are common policy. The styled
 one-shot CLI uses the same grouping primitive while retaining Typer-owned bold
 Context headings.
+
+## Search-result presentation ownership
+
+The operation-neutral grouped text presenter is owned by
+`memcommit.interfaces.cli.search_results`. Its implementation was moved there
+without changing grouping, ordering, text, escaping, signatures, defaults, or
+exceptions. `memcommit.commands.search_result_present` remains a whole-module
+compatibility alias to the same module object, preserving legacy imports,
+wildcard-visible names, dataclass identity, and monkeypatch behavior while new
+clean consumers import the interface-owned path directly.

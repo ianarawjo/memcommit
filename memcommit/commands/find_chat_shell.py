@@ -50,7 +50,7 @@ from memcommit.commands.command_progress import (
     busy_suffix,
 )
 from memcommit.commands.session_help import bind_session_help
-from memcommit.commands.search_result_present import (
+from memcommit.interfaces.cli.search_results import (
     SearchResultViewRow,
     render_grouped_search_results,
 )
