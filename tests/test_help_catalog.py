@@ -877,7 +877,7 @@ def test_final_help_categories_match_their_reviewed_runtime_boundaries():
     assert log.summary == (
         "Print or search recorded Context, Memory, and Profile history."
     )
-    assert diff.flow == "Context checkpoint or active Update -> diff report"
+    assert diff.flow == "One Context checkpoint or active Update -> diff report"
     assert undo.summary == "Undo the most recent recorded command as one unit."
     assert "every Context and Memory change" in undo.effect
     assert revert.summary.startswith("Restore the current or an explicit local Context")

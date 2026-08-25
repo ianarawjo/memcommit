@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import difflib
 import json
-import sys
 from typing import Annotated
 
 import typer
@@ -20,7 +19,6 @@ from memcommit.memory_diff import (
     memory_diff_lines,
     update_operation_change,
 )
-from memcommit.commands.diff_browser import browse_diff
 from memcommit.commands.checkpoint_diff import render_checkpoint_revision_cli
 from memcommit.commands.history_present import checkpoint_picker_entries
 from memcommit.commands.update_render import render_plan
@@ -40,10 +38,6 @@ from memcommit.update import (
     count_operations,
     session_matches,
 )
-
-
-def _interactive_terminal() -> bool:
-    return sys.stdin.isatty() and sys.stdout.isatty()
 
 
 def _short_uid_map(session: UpdateSession) -> dict[str, str]:
@@ -510,13 +504,7 @@ def cmd(
             typer.secho(f"Diff error: {error}", fg=typer.colors.RED, err=True)
             raise typer.Exit(1)
 
-    if history_requested and (
-        checkpoint_selector is not None
-        or raw
-        or stat
-        or verbose
-        or not _interactive_terminal()
-    ):
+    if history_requested:
         try:
             canonical_context = resolve_context_locator(
                 context_locator,
@@ -558,30 +546,6 @@ def cmd(
     except (OSError, ValueError) as error:
         typer.secho(f"Diff error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
-    if context_locator is not None or (
-        not raw and not stat and not verbose and _interactive_terminal()
-    ):
-        browser_session = (
-            session
-            if session is not None
-            and session.status in {"staged", "applied", "undone"}
-            else None
-        )
-        try:
-            browse_diff(
-                store,
-                session=browser_session,
-                context_locator=context_locator,
-            )
-        except (OSError, RuntimeError, ValueError) as error:
-            typer.secho(
-                f"Diff browser error: {error}",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
-        return
-
     if session is None:
         typer.secho(
             "Diff error: no local update. Run 'mem update --to <context>' "

@@ -24,8 +24,8 @@ evidence uses a production Update application, whose contract actually permits
 
 ## Shared revision contract
 
-`checkpoint_revision_detail_renderer` is the sole interactive checkpoint
-detail renderer for ordinary local Diff and Revert. For one checkpoint it
+`checkpoint_revision_detail_renderer` is the shared checkpoint detail renderer
+for line-oriented Diff and interactive Revert. For one checkpoint it
 freezes:
 
 - the persisted `command_before` image when available, otherwise the preceding
@@ -82,6 +82,23 @@ that matches both namespaces is rejected with the explicit `--context` and
 `--checkpoint` disambiguation forms rather than being guessed. A unique
 `--checkpoint` may likewise infer its owning local Context; ambiguity never
 prefers the current Context or the newest history.
+
+## One-shot Diff boundary
+
+`mem diff` has no TTY-only history browser. A Context target returns its newest
+checkpoint revision, an explicit checkpoint target returns that exact
+revision, and no target returns the one saved Update record. The same command
+therefore has identical semantic output in a terminal, pipe, test runner, or
+agent-mediated invocation. A terminal may still scroll a long report, but
+scrolling does not create a target-selection state.
+
+Every checkpoint report labels its unit as
+`CHECKPOINT · THIS CHECKPOINT VS PREVIOUS`. Diff answers what changed at one
+revision; it never presents the checkpoint catalog as though that catalog were
+part of the comparison. Earlier checkpoint discovery and whole-Context
+chronology belong to `mem trace CONTEXT`, whose rows expose exact checkpoint
+identities that can be passed back to Diff. This keeps shared rendering without
+collapsing two different report subjects into one interaction.
 
 ## Revert target scope and approval
 

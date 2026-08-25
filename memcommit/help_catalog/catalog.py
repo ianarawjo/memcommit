@@ -160,11 +160,11 @@ _OPERATIONS = (
     ),
     _operation(
         "diff",
-        "Show the differences recorded by a Context checkpoint or the active Update.",
-        "Context checkpoint or active Update -> diff report",
+        "Show one checkpoint-versus-previous diff or the active Update.",
+        "One Context checkpoint or active Update -> diff report",
         ExecutionKind.DETERMINISTIC,
         "Read-only",
-        "One exact Context or active Update",
+        "One exact checkpoint or active Update",
     ),
     _operation(
         "distill",

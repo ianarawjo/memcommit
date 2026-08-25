@@ -95,25 +95,13 @@ def test_diff_requires_a_local_update(isolated_store):
     assert not isolated_store.exists()
 
 
-def test_tty_diff_can_browse_context_history_without_a_saved_update(
+def test_diff_without_a_target_or_saved_update_has_no_browser_fallback(
     isolated_store,
-    monkeypatch,
 ):
-    opened = []
-    monkeypatch.setattr(
-        "memcommit.commands.diff._interactive_terminal",
-        lambda: True,
-    )
-
-    def browse(store_arg, *, session, context_locator):
-        opened.append((session, context_locator))
-
-    monkeypatch.setattr("memcommit.commands.diff.browse_diff", browse)
-
     result = runner.invoke(app, ["diff"])
 
-    assert result.exit_code == 0, result.output
-    assert opened == [(None, None)]
+    assert result.exit_code == 1
+    assert "no local update" in result.stderr
 
 
 def test_diff_renders_readable_semantic_edit_addition_and_provenance(
@@ -249,52 +237,35 @@ def test_diff_is_read_only_and_does_not_depend_on_current_context(
     assert after == before
 
 
-def test_diff_opens_current_scoped_browser_in_a_tty(
+def test_diff_returns_the_saved_update_without_a_tty_browser(
     isolated_store,
-    monkeypatch,
 ):
     store = MemoryStore()
-    session, _, _, _ = _stage(store)
-    opened = []
-    monkeypatch.setattr(
-        "memcommit.commands.diff._interactive_terminal",
-        lambda: True,
-    )
-    def browse(store_arg, *, session, context_locator):
-        opened.append((store_arg.store_dir, session, context_locator))
-
-    monkeypatch.setattr("memcommit.commands.diff.browse_diff", browse)
+    _stage(store)
 
     result = runner.invoke(app, ["diff"])
 
     assert result.exit_code == 0, result.output
-    # The Diff browser owns the one-time current-Context snapshot; the CLI
-    # passes no Profile-wide selection request of its own.
-    assert opened == [(store.store_dir, session, None)]
-    assert "Update preview" not in result.output
+    assert "STAGED" in result.output
+    assert "PLANNED CHANGES" in result.output
 
 
-def test_diff_context_operand_bypasses_location_selection(
+def test_diff_context_operand_returns_latest_checkpoint_without_selection(
     isolated_store,
-    monkeypatch,
 ):
     store = MemoryStore()
-    session, _, _, _ = _stage(store)
-    opened = []
-
-    def browse(store_arg, *, session, context_locator):
-        opened.append((store_arg.store_dir, session, context_locator))
-
-    monkeypatch.setattr("memcommit.commands.diff.browse_diff", browse)
-    monkeypatch.setattr(
-        "memcommit.commands.diff._interactive_terminal",
-        lambda: True,
+    _stage(store)
+    checkpoint = store.checkpoint(
+        store.load("campus-wiki"),
+        command="checkpoint",
     )
 
     result = runner.invoke(app, ["diff", "campus-wiki"])
 
     assert result.exit_code == 0, result.output
-    assert opened == [(store.store_dir, session, "campus-wiki")]
+    assert "UNIT        CHECKPOINT · THIS CHECKPOINT VS PREVIOUS" in result.output
+    assert f"CHECKPOINT  {checkpoint.uid}" in result.output
+    assert "CONTEXT     campus-wiki" in result.output
 
 
 def test_diff_context_operand_renders_latest_checkpoint_stat_noninteractively(

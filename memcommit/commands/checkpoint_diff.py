@@ -396,6 +396,7 @@ def render_checkpoint_revision_cli(
     action = checkpoint.get("command")
     action = action if isinstance(action, str) and action else "checkpoint"
     header = [
+        "UNIT        CHECKPOINT · THIS CHECKPOINT VS PREVIOUS",
         f"CHECKPOINT  {entry.uid}",
         f"CONTEXT     {context_name}",
         f"ACTION      {action}",
@@ -417,7 +418,11 @@ def render_checkpoint_revision_cli(
         verbose_uids=verbose,
     )(entry)
     fragments = detail.content if isinstance(detail, HistoryDetailView) else detail
-    return f"CONTEXT     {context_name}\n" + "".join(text for _style, text in fragments).rstrip()
+    return (
+        "UNIT        CHECKPOINT · THIS CHECKPOINT VS PREVIOUS\n"
+        f"CONTEXT     {context_name}\n"
+        + "".join(text for _style, text in fragments).rstrip()
+    )
 
 
 def checkpoint_diff_detail_renderer(
