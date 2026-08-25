@@ -4,7 +4,6 @@ import typer
 
 import memcommit.ops as ops
 from memcommit.command_attempts import annotate_command_outcome
-from memcommit.commands.batch_input import parse_edit_lines, read_text_input
 from memcommit.authority.access import (
     authorized_context_mutation,
     grant_checkpoint_args,
@@ -18,6 +17,7 @@ from memcommit.edit_application import (
     run_edit,
 )
 from memcommit.edit_runtime import MemoryStoreEditPort
+from memcommit.interfaces.cli.batch_input import parse_edit_lines, read_text_input
 from memcommit.interfaces.console.terminal import is_interactive_terminal
 from memcommit.interfaces.console.text import safe_terminal_text
 from memcommit.interfaces.tui.operations.edit import choose_edit_setup

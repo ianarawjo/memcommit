@@ -15,17 +15,20 @@ from memcommit.operations.add.application import (
     run_add,
 )
 from memcommit.operations.add.runtime import MemoryStoreAddTargetPort
-from memcommit.commands.batch_input import parse_add_lines, read_text_input
 from memcommit.authority.access import (
     context_access_display_facts,
     resolve_context_access,
 )
-from memcommit.commands.paste_input import PasteCancelled, capture_paste
 from memcommit.context_targeting.catalog import freeze_granted_context_navigation
 from memcommit.context_targeting.operands import choose_endpoint_operand
 from memcommit.interfaces.cli.add import render_add_plain
+from memcommit.interfaces.cli.batch_input import parse_add_lines, read_text_input
 from memcommit.interfaces.console.errors import render_cli_error
 from memcommit.interfaces.console.terminal import is_interactive_terminal
+from memcommit.interfaces.tui.components.paste_input import (
+    PasteCancelled,
+    capture_paste,
+)
 from memcommit.interfaces.tui.operations.add import AddTuiSetup, run_add_tui
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError

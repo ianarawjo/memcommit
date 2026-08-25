@@ -1,55 +1,11 @@
-"""Shared file/stdin loading for line-oriented structural commands."""
+"""Compatibility alias for interface-owned line-oriented batch input."""
 
-from pathlib import Path
+from __future__ import annotations
+
 import sys
 
+from memcommit.interfaces.cli import batch_input as _batch_input
 
-def read_text_input(source: str) -> str:
-    """Read UTF-8 text from *source*, where ``-`` means standard input."""
-    if source == "-":
-        try:
-            return sys.stdin.read()
-        except OSError as error:
-            raise ValueError(f"Could not read standard input: {error}") from error
-
-    try:
-        # newline="" preserves the source's physical line endings in the
-        # provenance record while splitlines() still accepts all of them.
-        with open(Path(source), encoding="utf-8", newline="") as file:
-            return file.read()
-    except (OSError, UnicodeError) as error:
-        raise ValueError(f"Could not read input '{source}': {error}") from error
-
-
-def parse_add_lines(text: str) -> list[str]:
-    """Return stripped, non-empty physical lines as Memory contents."""
-    contents = [line.strip() for line in text.splitlines() if line.strip()]
-    if not contents:
-        raise ValueError("Input contains no non-empty lines.")
-    return contents
-
-
-def parse_edit_lines(text: str) -> list[tuple[str, str]]:
-    """
-    Parse ``UID<TAB>replacement content`` records.
-
-    Empty physical lines are ignored.  The selector is stripped, while the
-    replacement after the first tab is preserved exactly.
-    """
-    edits: list[tuple[str, str]] = []
-    for line_number, line in enumerate(text.splitlines(), 1):
-        if not line.strip():
-            continue
-        if "\t" not in line:
-            raise ValueError(
-                f"Line {line_number}: expected UID<TAB>replacement content."
-            )
-        selector, content = line.split("\t", 1)
-        selector = selector.strip()
-        if not selector:
-            raise ValueError(f"Line {line_number}: Memory UID is empty.")
-        edits.append((selector, content))
-
-    if not edits:
-        raise ValueError("Input contains no edit records.")
-    return edits
+# Preserve one implementation module so legacy-path monkeypatches keep changing
+# the globals used by callers imported through the interface-owned path.
+sys.modules[__name__] = _batch_input
