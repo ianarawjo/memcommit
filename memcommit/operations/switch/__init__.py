@@ -1,0 +1,1 @@
+"""Switch operation implementation ownership."""

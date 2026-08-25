@@ -1,6 +1,6 @@
 # Switch application boundary
 
-Last reviewed: 2026-08-16.
+Last reviewed: 2026-08-23.
 
 ## Purpose
 
@@ -13,10 +13,14 @@ process-local `P` picker importing another command's implementation.
 
 This slice separates three contracts without changing their meaning:
 
-1. `switch_application.py` owns one typed current-pointer transition;
-2. `switch_runtime.py` supplies Store and Grant infrastructure; and
+1. `operations/switch/application.py` owns one typed current-pointer transition;
+2. `operations/switch/runtime.py` supplies Store and Grant infrastructure; and
 3. the CLI and TUI adapters parse, select, and render without reconstructing
    locator, authority, or CAS policy.
+
+The former top-level application and runtime paths remain module-identity
+aliases. This ownership-only relocation changes no request, result, error,
+authorization, Store effect, command output, or TUI interaction contract.
 
 It does not add a Python or agent API, a current-Ground pointer, fuzzy Context
 search, a checkpoint, or Undo/Redo support.
@@ -70,10 +74,10 @@ separate Branch operation.
 | Interactive Switch shape | `interfaces/tui/operations/switch` | Converts one frozen picker result into `SwitchContextRequest`; it performs no load, authorization, or write. |
 | Shared Context tree, direct-item preview, focus, and clipboard | `context_targeting/tui/picker.py` | Returns a Context name or read-only targeting value; it owns no operational role or Store continuation. |
 | Legacy picker imports | `commands/context_picker.py` | Behavior-free compatibility exports only; production callers use the neutral owner directly. |
-| Global versus explicit-relative name semantics | `switch_application.py` | Bare names remain canonical global names. Only `.`, `..`, `./...`, and `../...` resolve against the command-start current snapshot. |
-| Previous/next navigation meaning | `current_context_navigation.py` + `switch_application.py` | Uses bounded actual pointer-transition history, never lexical catalog adjacency; direct selection clears forward history. |
-| Exact lexical-parent requirement | `switch_application.py` through `SwitchContextPort.local_context_exists` | A missing lexical parent is never inferred from an Embed edge. |
-| Local/Grant READ resolution and target loading | `switch_runtime.py` | A visible public name is selectable only when its exact route authorizes ordinary READ. QUERY-only rows remain orientation-only. |
+| Global versus explicit-relative name semantics | `operations/switch/application.py` | Bare names remain canonical global names. Only `.`, `..`, `./...`, and `../...` resolve against the command-start current snapshot. |
+| Previous/next navigation meaning | `current_context_navigation.py` + `operations/switch/application.py` | Uses bounded actual pointer-transition history, never lexical catalog adjacency; direct selection clears forward history. |
+| Exact lexical-parent requirement | `operations/switch/application.py` through `SwitchContextPort.local_context_exists` | A missing lexical parent is never inferred from an Embed edge. |
+| Local/Grant READ resolution and target loading | `operations/switch/runtime.py` | A visible public name is selectable only when its exact route authorizes ordinary READ. QUERY-only rows remain orientation-only. |
 | Local target/current CAS | `MemoryStore.set_current_context_if` | Binds the target UID/digest and the command-start current pointer. |
 | Granted current publication | `authority_grant_snapshot_lock` plus `set_current_virtual_context_if` | Reauthorizes the exact public route under the registry lock before writing the virtual pointer. |
 | Success rendering | `interfaces/cli/switch.py` | Preserves `Switched to context ...` and `Already on ...` output. |
@@ -85,7 +89,7 @@ separate Branch operation.
 | `APP-01` application entry | `VERIFIED` for current routes | Explicit CLI, interactive Switch, and checkout compatibility all enter `SwitchContextRequest` and `execute_switch_context`. |
 | `APP-02` locator/targeting | `VERIFIED` for Switch | One current snapshot, explicit relative grammar, canonical target identity, and the shared picker are tested. |
 | `APP-03` authority/freshness | `VERIFIED` for Switch | READ is required; local target UID/digest and current pointer are CAS-bound; granted routes reauthorize under the registry lock. |
-| `IMPORT-01` assembly | `CHARACTERIZED` | Application/runtime modules import no Typer, prompt-toolkit, command, or unrelated operation adapters. No public package export is added. |
+| `IMPORT-01` assembly | `CHARACTERIZED` | Operation-owned application/runtime modules import no Typer, prompt-toolkit, command, or unrelated operation adapters. Top-level compatibility paths alias the same module objects, and the operation package adds no eager export. |
 | `SEM-01` provider | `N/A` | Switch is deterministic and never constructs or calls a semantic provider. |
 | `CACHE-01` prepared reuse | `N/A` | There is no semantic result to cache or project. |
 | `SESSION-01` saved analysis | `N/A` | Picker state is process-local; Switch creates no saved analysis/session. |

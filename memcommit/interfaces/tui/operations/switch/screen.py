@@ -10,7 +10,7 @@ from memcommit.context_targeting.tui.picker import (
     choose_context,
 )
 from memcommit.interfaces.tui.operations.switch.model import SwitchTuiSetup
-from memcommit.switch_application import SwitchContextRequest
+from memcommit.operations.switch.application import SwitchContextRequest
 
 
 SwitchChooser = Callable[..., str | ContextSubtreeSelection | ContextMemorySelection | None]

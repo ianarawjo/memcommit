@@ -23,12 +23,12 @@ from memcommit.store import MemoryStore
 from memcommit.source_projection.presentation import (
     SourceDisplayValue,
 )
-from memcommit.switch_application import (
+from memcommit.operations.switch.application import (
     SwitchContextError,
     SwitchContextRequest,
     resolve_switch_context_name,
 )
-from memcommit.switch_runtime import execute_switch_context, prepare_switch
+from memcommit.operations.switch.runtime import execute_switch_context, prepare_switch
 
 
 _GrantedPickerState = GrantedContextNavigation
