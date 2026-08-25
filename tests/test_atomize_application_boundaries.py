@@ -1,4 +1,4 @@
-"""Characterize Atomize's structural Apply boundary before extraction.
+"""Characterize Atomize's operation-owned structural Apply boundary.
 
 These tests exercise the typed application/runtime junction together with its
 command adapter. They freeze Atomize's operation-owned no-op decision and the
@@ -16,8 +16,8 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
-from memcommit.atomize_application import atomize_application_audit
-from memcommit.atomize_runtime import (
+from memcommit.operations.atomize.application import atomize_application_audit
+from memcommit.operations.atomize.runtime import (
     MemoryStoreAtomizeSessionRepository,
     MemoryStoreAtomizeOutputPort,
     capture_atomize_session_snapshot,

@@ -1561,7 +1561,9 @@ def test_atomize_save_as_retry_completes_receipt_without_duplicate_checkpoint(
     isolated_store,
     monkeypatch,
 ):
-    from memcommit.atomize_runtime import MemoryStoreAtomizeSessionRepository
+    from memcommit.operations.atomize.runtime import (
+        MemoryStoreAtomizeSessionRepository,
+    )
 
     store = MemoryStore()
     source = ops.init("retry-source")

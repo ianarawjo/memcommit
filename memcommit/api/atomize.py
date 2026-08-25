@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Literal
 
 if TYPE_CHECKING:
-    from memcommit.atomize_application import AtomizeSessionSnapshot
+    from memcommit.operations.atomize.application import AtomizeSessionSnapshot
 
 
 @dataclass(frozen=True)

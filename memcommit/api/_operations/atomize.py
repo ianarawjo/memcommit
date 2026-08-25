@@ -35,7 +35,7 @@ from memcommit.atomize_analysis_application import (
     AtomizeAnalysisOpenRequest,
 )
 from memcommit.atomize_analysis_runtime import execute_atomize_analysis_open
-from memcommit.atomize_application import (
+from memcommit.operations.atomize.application import (
     AtomizeApplicationError,
     AtomizeOutputPlanRequest,
     AtomizePersistedApplyRequest,
@@ -43,7 +43,7 @@ from memcommit.atomize_application import (
     AtomizeSaveAsRequest,
     AtomizeSessionSnapshot,
 )
-from memcommit.atomize_runtime import (
+from memcommit.operations.atomize.runtime import (
     capture_current_atomize_session_snapshot_at_version,
     capture_atomize_session_snapshot,
     capture_atomize_session_snapshot_at_version,

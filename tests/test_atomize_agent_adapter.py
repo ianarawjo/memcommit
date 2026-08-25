@@ -693,6 +693,7 @@ def test_adapter_imports_only_public_api_and_shared_agent_contract():
                 "memcommit.commands",
                 "memcommit.atomize_runtime",
                 "memcommit.atomize_application",
+                "memcommit.operations.atomize",
                 "memcommit.store",
                 "memcommit.interfaces.mcp",
             )

@@ -56,10 +56,11 @@ render compact command receipt (effect counts + typed unresolved-judgment
 count + receipt/checkpoint identities + `mem review atomize` handoff)
 ```
 
-`memcommit.atomize_application` owns provider-free response/Output edits and
-both application lifecycles, and imports no terminal adapter or Store.
-`memcommit.atomize_runtime` owns the Store session repository, strict graph
-preflight, checkpoint reconstruction, materialization, and compensation. The
+`memcommit.operations.atomize.application` owns provider-free response/Output
+edits and both application lifecycles, and imports no terminal adapter or
+Store. `memcommit.operations.atomize.runtime` owns the Store session
+repository, strict graph preflight, checkpoint reconstruction,
+materialization, and compensation. The
 Context/checkpoint and workbench receipt remain separate
 atomic files, but the application result treats them as one synchronous
 outcome: it re-reads late success, compensates an uncommitted new checkpoint,
@@ -192,10 +193,10 @@ AtomizeSessionSnapshot(analysis, workbench, opaque revision)
 
 Suggested ownership:
 
-- `memcommit.atomize_application`: implemented typed requests/results,
+- `memcommit.operations.atomize.application`: implemented typed requests/results,
   lifecycle ordering, idempotence, audit projection, and port protocols; no
   Typer, prompt-toolkit, Store paths, or Study fixture imports.
-- `memcommit.atomize_runtime`: local Context capture, strict graph preflight,
+- `memcommit.operations.atomize.runtime`: local Context capture, strict graph preflight,
   session repository, Context materialization, compensation, and
   interrupted-Apply recovery.
 - `memcommit.atomize_analysis_application`: implemented typed analysis-open
@@ -209,6 +210,21 @@ Suggested ownership:
 - existing `memcommit.atomize`, `atomize_workbench`, and grounding modules:
   semantic/domain records and their operation-specific validation; schemas are
   not merged merely because lifecycle mechanics become common.
+
+The flat `memcommit.atomize_application` and `memcommit.atomize_runtime`
+paths remain identity-preserving compatibility aliases. Importing either old
+or canonical path first therefore reaches the same module globals, preserving
+existing monkeypatches and serialized globals while production consumers use
+the operation package directly. This relocation changes no session schema,
+provider call, whole-frame constraint, reconciliation, authority, CAS,
+checkpoint, compensation, or receipt behavior.
+
+This package owns only the primary structural application lifecycle.
+`atomize_analysis_application` / `atomize_analysis_runtime` continue to own
+analysis open, reuse, reanalysis, provider/cache, and pair-publication policy;
+the `atomize_grounding_*` slice continues to own grounding dialogue and its
+mixed edit/add Apply. Neither adjacent slice is moved into or reimplemented by
+the primary operation package.
 
 The opaque session revision binds the immutable analysis record and complete
 workbench record, including response state, Output plan, and any application

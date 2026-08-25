@@ -26,7 +26,7 @@ from memcommit import (
     MemCommitClient,
 )
 from memcommit.atomize import create_atomize_analysis, impact_atomize
-from memcommit.atomize_runtime import capture_atomize_session_snapshot
+from memcommit.operations.atomize.runtime import capture_atomize_session_snapshot
 from memcommit.api.errors import AtomizeExecutionError
 from memcommit.context import Memory
 from memcommit.store import MemoryStore

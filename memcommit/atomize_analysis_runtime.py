@@ -20,7 +20,7 @@ from memcommit.atomize_analysis_application import (
     AtomizeProviderFactory,
     run_atomize_analysis_open,
 )
-from memcommit.atomize_application import AtomizeSessionSnapshot
+from memcommit.operations.atomize.application import AtomizeSessionSnapshot
 from memcommit.atomize_workbench import create_atomize_workbench
 from memcommit.context import Context
 from memcommit.query_provider import CodexChatGPTProvider

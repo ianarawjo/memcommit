@@ -15,12 +15,12 @@ from memcommit.atomize import (
 )
 from memcommit.atomize_analysis_application import AtomizeAnalysisOpenRequest
 from memcommit.atomize_analysis_runtime import execute_atomize_analysis_open
-from memcommit.atomize_application import (
+from memcommit.operations.atomize.application import (
     AtomizeOutputPlanRequest,
     AtomizePersistedApplyRequest,
     AtomizeSaveAsRequest,
 )
-from memcommit.atomize_runtime import (
+from memcommit.operations.atomize.runtime import (
     capture_atomize_session_snapshot,
     execute_atomize_output_plan_update,
     execute_atomize_save_as,
