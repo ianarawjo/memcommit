@@ -19,8 +19,12 @@ from memcommit.profile_config import (
     ProfileRegistry,
     STUDY_RUN_PARTICIPANT_SOURCE_KIND,
 )
-from memcommit.sever import SeverCandidate, SeverSession, sever_frame_digest
-from memcommit.sever_store import SeverSessionStore
+from memcommit.operations.sever.model import (
+    SeverCandidate,
+    SeverSession,
+    sever_frame_digest,
+)
+from memcommit.operations.sever.session_store import SeverSessionStore
 from memcommit.store import MemoryStore
 from memcommit.study_prewarm.registry import (
     StudyPrewarmRegistryError,

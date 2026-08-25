@@ -32,7 +32,7 @@ from memcommit.semantic_disclosure import (
 )
 from memcommit.profile_config import ProfileRegistry
 from memcommit.profiles import ProfileError, authority_grant_snapshot_lock
-from memcommit.sever import (
+from memcommit.operations.sever.model import (
     SeverApplication,
     SeverContextBinding,
     SeverMemory,
@@ -64,8 +64,8 @@ from memcommit.operations.sever.application import (
     run_sever_session_open,
     run_sever_session_start,
 )
-from memcommit.sever_provider import SeverProviderError
-from memcommit.sever_store import SeverSessionStore
+from memcommit.operations.sever.provider import SeverProviderError
+from memcommit.operations.sever.session_store import SeverSessionStore
 from memcommit.store import MemoryStore, _write_json_atomic, context_record_digest
 from memcommit.study_prewarm.sever import find_installed_projectable_sever_prewarm
 from memcommit.update import GrantedUpdateTarget

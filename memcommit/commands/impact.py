@@ -425,7 +425,7 @@ def _saved_sever_impact(
         list_sever_session_catalog,
         reload_selected_sever_session,
     )
-    from memcommit.sever_store import SeverSessionStore
+    from memcommit.operations.sever.session_store import SeverSessionStore
 
     sessions = SeverSessionStore(store)
     catalog = list_sever_session_catalog(sessions)

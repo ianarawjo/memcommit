@@ -1,4 +1,4 @@
-"""Ownership and compatibility paths for Sever application execution."""
+"""Ownership and compatibility paths for the complete Sever operation."""
 
 from __future__ import annotations
 
@@ -14,6 +14,22 @@ import pytest
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 MODULE_PAIRS = (
+    (
+        "memcommit.sever",
+        "memcommit.operations.sever.model",
+    ),
+    (
+        "memcommit.sever_provider",
+        "memcommit.operations.sever.provider",
+    ),
+    (
+        "memcommit.sever_store",
+        "memcommit.operations.sever.session_store",
+    ),
+    (
+        "memcommit.sever_resolution_adapter",
+        "memcommit.operations.sever.resolution_adapter",
+    ),
     (
         "memcommit.sever_application",
         "memcommit.operations.sever.application",
@@ -60,6 +76,22 @@ assert sys.modules[{canonical_name!r}] is canonical
 
 
 def test_sever_legacy_paths_expose_the_canonical_contract() -> None:
+    legacy_model = importlib.import_module("memcommit.sever")
+    canonical_model = importlib.import_module("memcommit.operations.sever.model")
+    legacy_provider = importlib.import_module("memcommit.sever_provider")
+    canonical_provider = importlib.import_module(
+        "memcommit.operations.sever.provider"
+    )
+    legacy_store = importlib.import_module("memcommit.sever_store")
+    canonical_store = importlib.import_module(
+        "memcommit.operations.sever.session_store"
+    )
+    legacy_resolution = importlib.import_module(
+        "memcommit.sever_resolution_adapter"
+    )
+    canonical_resolution = importlib.import_module(
+        "memcommit.operations.sever.resolution_adapter"
+    )
     legacy_application = importlib.import_module("memcommit.sever_application")
     canonical_application = importlib.import_module(
         "memcommit.operations.sever.application"
@@ -69,6 +101,17 @@ def test_sever_legacy_paths_expose_the_canonical_contract() -> None:
         "memcommit.operations.sever.runtime"
     )
 
+    assert legacy_model is canonical_model
+    assert legacy_model.SeverSession is canonical_model.SeverSession
+    assert legacy_provider is canonical_provider
+    assert legacy_provider.analyze_sever is canonical_provider.analyze_sever
+    assert legacy_store is canonical_store
+    assert legacy_store.SeverSessionStore is canonical_store.SeverSessionStore
+    assert legacy_resolution is canonical_resolution
+    assert (
+        legacy_resolution.SeverResolutionWorkbenchAdapter
+        is canonical_resolution.SeverResolutionWorkbenchAdapter
+    )
     assert legacy_application is canonical_application
     assert (
         legacy_application.SeverAnalysisRequest
@@ -91,7 +134,14 @@ def test_sever_legacy_paths_expose_the_canonical_contract() -> None:
 
 @pytest.mark.parametrize(
     "relative_path",
-    ("memcommit/sever_application.py", "memcommit/sever_runtime.py"),
+    (
+        "memcommit/sever.py",
+        "memcommit/sever_provider.py",
+        "memcommit/sever_store.py",
+        "memcommit/sever_resolution_adapter.py",
+        "memcommit/sever_application.py",
+        "memcommit/sever_runtime.py",
+    ),
 )
 def test_sever_legacy_facades_define_no_behavior(relative_path: str) -> None:
     path = REPOSITORY_ROOT / relative_path
@@ -110,6 +160,10 @@ import memcommit.operations.sever
 
 assert "memcommit.operations.sever.application" not in sys.modules
 assert "memcommit.operations.sever.runtime" not in sys.modules
+assert "memcommit.operations.sever.model" not in sys.modules
+assert "memcommit.operations.sever.provider" not in sys.modules
+assert "memcommit.operations.sever.session_store" not in sys.modules
+assert "memcommit.operations.sever.resolution_adapter" not in sys.modules
 """
 
     subprocess.run(
@@ -129,14 +183,41 @@ def test_pre_relocation_sever_request_global_loads_through_alias() -> None:
     assert restored is canonical.SeverAnalysisRequest
 
 
+def test_pre_relocation_sever_session_global_loads_through_alias() -> None:
+    canonical = importlib.import_module("memcommit.operations.sever.model")
+
+    restored = pickle.loads(b"cmemcommit.sever\nSeverSession\n.")
+
+    assert restored is canonical.SeverSession
+
+
 def test_production_sever_consumers_use_the_operation_owner() -> None:
     relative_paths = (
+        "memcommit/commands/impact.py",
+        "memcommit/commands/impact_catalog.py",
+        "memcommit/commands/impact_sessions.py",
+        "memcommit/commands/review.py",
+        "memcommit/commands/review_sessions.py",
         "memcommit/commands/sever.py",
+        "memcommit/commands/sever_sessions.py",
+        "memcommit/operations/sever/application.py",
+        "memcommit/operations/sever/provider.py",
+        "memcommit/operations/sever/resolution_adapter.py",
         "memcommit/study_prewarm/sever.py",
+        "memcommit/operations/sever/session_store.py",
         "memcommit/operations/sever/runtime.py",
+        "memcommit/review_report_adapters.py",
+        "memcommit/store.py",
+    )
+    legacy_imports = (
+        "from memcommit.sever import",
+        "from memcommit.sever_provider import",
+        "from memcommit.sever_resolution_adapter import",
+        "from memcommit.sever_store import",
+        "from memcommit.sever_application import",
+        "from memcommit.sever_runtime import",
     )
 
     for relative_path in relative_paths:
         source = (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
-        assert "from memcommit.sever_application import" not in source
-        assert "from memcommit.sever_runtime import" not in source
+        assert not [legacy for legacy in legacy_imports if legacy in source]

@@ -7,8 +7,12 @@ from dataclasses import dataclass
 from typing import Literal, Protocol
 
 from memcommit.application_flow import run_application_flow
-from memcommit.sever import SeverContextBinding, SeverSelection, SeverSession
-from memcommit.sever_provider import analyze_sever
+from memcommit.operations.sever.model import (
+    SeverContextBinding,
+    SeverSelection,
+    SeverSession,
+)
+from memcommit.operations.sever.provider import analyze_sever
 
 
 class SeverApplicationError(RuntimeError):

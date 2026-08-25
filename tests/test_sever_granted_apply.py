@@ -21,7 +21,7 @@ from memcommit.profiles import (
     delete_authority_grant,
     update_authority_grant,
 )
-from memcommit.sever import SeverCandidate, SeverSession
+from memcommit.operations.sever.model import SeverCandidate, SeverSession
 from memcommit.operations.sever.application import (
     SeverAnalysisRequest,
     SeverAnalysisResult,
@@ -34,7 +34,7 @@ from memcommit.operations.sever.runtime import (
     execute_sever_session_apply,
     execute_sever_session_start,
 )
-from memcommit.sever_store import SeverSessionStore
+from memcommit.operations.sever.session_store import SeverSessionStore
 from memcommit.store import MemoryStore
 
 

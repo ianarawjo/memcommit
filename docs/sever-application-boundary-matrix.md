@@ -3,7 +3,7 @@
 ## Status
 
 `VERIFIED` for the internal application and APPLY-01 boundary, reviewed
-2026-08-21.
+2026-08-25.
 
 Sever is the second operation slice used to test the target application
 architecture after Summarize. Its semantic analysis, private saved-session
@@ -78,21 +78,39 @@ SeverPersistedApplyResult
 
 ## Dependency direction
 
-`memcommit.operations.sever.application` depends only on the Sever
-domain/session and provider-decoder contracts. It does not import terminal or
-command modules. `memcommit.operations.sever.runtime` implements Store, Grant,
-cache, provider-attempt,
-destination-validation, private-session, and checkpoint ports. Grant mechanics temporarily remain under
-`memcommit.authority.access`; that transitional dependency is confined
-to the runtime adapter, as it is for the Summarize slice.
+`memcommit.operations.sever.model` owns the durable review vocabulary, exact
+JSON validation, record digests, and Source/Criteria frame bindings.
+`memcommit.operations.sever.provider` owns the operation-specific whole-frame
+prompt and strict selective-curation decoder. Keeping these contracts separate
+from `application` makes the application flow depend on validated Sever values
+without making generic semantic execution or provider connection responsible
+for Sever's decision meaning.
 
-The former flat `memcommit.sever_application` and
-`memcommit.sever_runtime` paths are behavior-free module-identity aliases.
-They preserve old imports, monkeypatch targets, and serialized globals while
-all production consumers import the operation package directly. This is an
-ownership-only relocation: whole-frame curation, authority, session CAS,
-Apply compensation, terminal behavior, and the recorded TUI evidence are
-unchanged.
+`memcommit.operations.sever.session_store` owns only the private session file
+layout, locking, and digest CAS. Result materialization remains in
+`memcommit.operations.sever.runtime`, because a private review receipt and an
+ordinary Context mutation have different recovery and authority boundaries.
+`memcommit.operations.sever.resolution_adapter` is the pure projection from a
+validated session into shared Resolution values; keyboard, focus, rendering,
+and terminal lifecycle remain under the interfaces and command layers.
+
+`memcommit.operations.sever.application` therefore depends only on the
+operation-owned model and provider-decoder contracts. It does not import
+terminal or command modules. `memcommit.operations.sever.runtime` implements
+Store, Grant, cache, provider-attempt, destination-validation, private-session,
+and checkpoint ports. Grant mechanics temporarily remain under
+`memcommit.authority.access`; that transitional dependency is confined to the
+runtime adapter, as it is for the Summarize slice.
+
+The former flat `memcommit.sever`, `memcommit.sever_provider`,
+`memcommit.sever_store`, `memcommit.sever_resolution_adapter`,
+`memcommit.sever_application`, and `memcommit.sever_runtime` paths are
+behavior-free module-identity aliases. They preserve old imports, monkeypatch
+targets, and serialized globals while all production consumers import the
+operation package directly. This is an ownership-only relocation: durable JSON,
+whole-frame curation, authority, session CAS, Apply compensation, terminal
+behavior, and the recorded TUI evidence are unchanged. No screenshot refresh
+is required because no visible or interactive state changed.
 
 `memcommit.commands.sever` retains thin `_start` and `_apply` compatibility
 facades because existing internal tests historically called the analysis-only

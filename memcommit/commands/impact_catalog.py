@@ -21,7 +21,7 @@ from memcommit.interfaces.tui.components.operation_launcher.session import (
     SessionPickerEntry,
     choose_session,
 )
-from memcommit.sever_store import SeverSessionStore
+from memcommit.operations.sever.session_store import SeverSessionStore
 from memcommit.store import MemoryStore
 from memcommit.update_receipt_store import UpdateReceiptStore
 

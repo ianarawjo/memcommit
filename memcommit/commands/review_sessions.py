@@ -25,7 +25,7 @@ from memcommit.interfaces.tui.components.operation_launcher.session import (
     choose_session,
 )
 from memcommit.commands.sever_sessions import list_sever_session_catalog
-from memcommit.sever_store import SeverSessionStore
+from memcommit.operations.sever.session_store import SeverSessionStore
 from memcommit.quality_audit_store import QualityAuditStore
 from memcommit.store import MemoryStore
 from memcommit.update_receipt_store import UpdateReceiptStore

@@ -15,8 +15,8 @@ from memcommit.memory_diff import update_operation_change
 from memcommit.meld import MeldSession
 from memcommit.meld_resolution_adapter import MeldResolutionWorkbenchAdapter
 from memcommit.resolution_workbench import ResolutionWorkbenchView
-from memcommit.sever import SeverSession
-from memcommit.sever_resolution_adapter import (
+from memcommit.operations.sever.model import SeverSession
+from memcommit.operations.sever.resolution_adapter import (
     SeverResolutionWorkbenchAdapter,
     sever_memory_changes,
 )

@@ -21,12 +21,12 @@ from memcommit.derived_policy import (
     authorize_derived_transfer,
 )
 from memcommit.profile_config import ProfileEntry, ProfileRegistry, study_run_identity
-from memcommit.sever import (
+from memcommit.operations.sever.model import (
     SEVER_SCHEMA_VERSION,
     SeverContextBinding,
     SeverSession,
 )
-from memcommit.sever_provider import SEVER_PROVIDER_CONTRACT_VERSION
+from memcommit.operations.sever.provider import SEVER_PROVIDER_CONTRACT_VERSION
 from memcommit.store import (
     MemoryStore,
     _write_json_atomic,

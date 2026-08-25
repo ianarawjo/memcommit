@@ -47,7 +47,7 @@ from memcommit.query_provider import (
     connect_codex_chatgpt_provider,
 )
 from memcommit.resolution_workbench import ResolutionNavigation
-from memcommit.sever import (
+from memcommit.operations.sever.model import (
     SeverError,
     SeverSelection,
     SeverSession,
@@ -64,8 +64,8 @@ from memcommit.operations.sever.application import (
     SeverPersistedApplyRequest,
     SeverSessionSnapshot,
 )
-from memcommit.sever_provider import SeverProviderError
-from memcommit.sever_resolution_adapter import (
+from memcommit.operations.sever.provider import SeverProviderError
+from memcommit.operations.sever.resolution_adapter import (
     SeverResolutionWorkbenchAdapter,
     sever_memory_changes,
 )
@@ -79,7 +79,7 @@ from memcommit.operations.sever.runtime import (
     execute_sever_session_open,
     execute_sever_session_start,
 )
-from memcommit.sever_store import SeverSessionStore
+from memcommit.operations.sever.session_store import SeverSessionStore
 from memcommit.store import MemoryStore
 
 

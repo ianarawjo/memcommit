@@ -343,7 +343,7 @@ def _run_sever_report(
         reload_selected_sever_session,
     )
     from memcommit.review_report_adapters import sever_review_report
-    from memcommit.sever_store import SeverSessionStore
+    from memcommit.operations.sever.session_store import SeverSessionStore
 
     sessions = SeverSessionStore(store)
     catalog = list_sever_session_catalog(sessions)

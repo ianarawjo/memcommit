@@ -11,7 +11,7 @@ import pytest
 
 import memcommit.commands.sever as sever_command
 import memcommit.ops as ops
-from memcommit.sever import (
+from memcommit.operations.sever.model import (
     SeverApplication,
     SeverCandidate,
     SeverContextBinding,
@@ -40,7 +40,7 @@ from memcommit.operations.sever.application import (
     run_sever_session_open,
     run_sever_session_start,
 )
-from memcommit.sever_provider import SEVER_PAYLOAD_MARKER
+from memcommit.operations.sever.provider import SEVER_PAYLOAD_MARKER
 import memcommit.operations.sever.runtime as sever_runtime
 from memcommit.operations.sever.runtime import (
     execute_sever_analysis,
@@ -51,7 +51,7 @@ from memcommit.operations.sever.runtime import (
     execute_sever_session_open,
     execute_sever_session_start,
 )
-from memcommit.sever_store import SeverSessionStore
+from memcommit.operations.sever.session_store import SeverSessionStore
 from memcommit.store import ConcurrentContextUpdateError, MemoryStore
 
 

@@ -33,18 +33,18 @@ from memcommit.resolution_workbench import (
     ResolutionNavigation,
     ResolutionWorkbenchAction,
 )
-from memcommit.sever import (
+from memcommit.operations.sever.model import (
     SEVER_SCHEMA_VERSION,
     SeverApplication,
     SeverSession,
     sever_record_digest,
 )
-from memcommit.sever_provider import SEVER_PAYLOAD_MARKER
-from memcommit.sever_resolution_adapter import (
+from memcommit.operations.sever.provider import SEVER_PAYLOAD_MARKER
+from memcommit.operations.sever.resolution_adapter import (
     SeverResolutionWorkbenchAdapter,
     sever_memory_changes,
 )
-from memcommit.sever_store import SeverSessionStore
+from memcommit.operations.sever.session_store import SeverSessionStore
 from memcommit.store import MemoryStore
 
 

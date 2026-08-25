@@ -1,1 +1,1 @@
-"""Operation-owned Sever application and runtime boundaries."""
+"""Operation-owned Sever model, execution, persistence, and review boundaries."""

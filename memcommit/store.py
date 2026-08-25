@@ -8543,8 +8543,11 @@ class MemoryStore:
             CommandRestoreResult,
             command_restore_metadata,
         )
-        from memcommit.sever import SeverApplication, sever_record_digest
-        from memcommit.sever_store import SeverSessionStore
+        from memcommit.operations.sever.model import (
+            SeverApplication,
+            sever_record_digest,
+        )
+        from memcommit.operations.sever.session_store import SeverSessionStore
 
         if (
             unit.command != "sever"
@@ -8842,8 +8845,8 @@ class MemoryStore:
             or record.get("output") != change.context_name
         ):
             raise ValueError("Self-save Sever checkpoint has no valid session receipt.")
-        from memcommit.sever import SeverApplication
-        from memcommit.sever_store import SeverSessionStore
+        from memcommit.operations.sever.model import SeverApplication
+        from memcommit.operations.sever.session_store import SeverSessionStore
 
         sessions = SeverSessionStore(self)
         session = sessions.load(session_uid)
@@ -8895,7 +8898,7 @@ class MemoryStore:
 
                 self._save_update_session(path, UpdateSession.from_dict(value))
             return
-        from memcommit.sever_store import SeverSessionStore
+        from memcommit.operations.sever.session_store import SeverSessionStore
 
         sever_sessions = SeverSessionStore(self)
         if path.parent == sever_sessions.directory:
