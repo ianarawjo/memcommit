@@ -9,7 +9,7 @@ from typer.testing import CliRunner
 import memcommit.commands.fit as fit_command
 import memcommit.ops as ops
 from memcommit.cli import app
-from memcommit.fit import (
+from memcommit.operations.fit.ground_report import (
     FIT_SCHEMA_VERSION,
     FitError,
     FitExample,
@@ -17,7 +17,7 @@ from memcommit.fit import (
     FitRule,
     fit_ground_examples,
 )
-from memcommit.fit_coherence import (
+from memcommit.operations.fit.coherence import (
     FIT_COHERENCE_OPERATION,
     FIT_COHERENCE_PAYLOAD_MARKER,
 )
@@ -25,8 +25,8 @@ from memcommit.operations.fit.runtime import (
     execute_and_save_ground_fit,
     freeze_ground_fit,
 )
-from memcommit.fit_judgment import FIT_JUDGMENT_PAYLOAD_MARKER
-from memcommit.fit_store import FitStore
+from memcommit.operations.fit.judgment import FIT_JUDGMENT_PAYLOAD_MARKER
+from memcommit.operations.fit.store import FitStore
 from memcommit.ground import (
     GroundTargetSpec,
     bind_ground_workbench,

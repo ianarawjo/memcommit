@@ -8,7 +8,7 @@ import json
 from typing import Callable
 
 from memcommit.context import Context
-from memcommit.fit import (
+from memcommit.operations.fit.ground_report import (
     FIT_RULESET_VERSION,
     FIT_SCHEMA_VERSION,
     FitError,
@@ -18,7 +18,7 @@ from memcommit.fit import (
     FitRule,
     fit_ground_examples,
 )
-from memcommit.fit_coherence import (
+from memcommit.operations.fit.coherence import (
     FitCoherenceError,
     FitCoherenceSubject,
     FitContextFrame,

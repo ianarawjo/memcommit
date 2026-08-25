@@ -9,7 +9,7 @@ import typer
 from memcommit.clipboard import write_system_clipboard
 from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.context_operand import ContextOperandSnapshot
-from memcommit.fit_judgment import FitJudgmentError
+from memcommit.operations.fit.judgment import FitJudgmentError
 from memcommit.interfaces.cli.resolve import (
     render_resolve_plain,
     render_resolve_receipt,

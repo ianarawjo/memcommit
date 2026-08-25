@@ -23,7 +23,7 @@ from memcommit.api.resolve import (
     ResolveEffectResult,
     ResolveIssueResult,
 )
-from memcommit.fit_judgment import FitJudgmentError
+from memcommit.operations.fit.judgment import FitJudgmentError
 from memcommit.context_locator import resolve_context_locator
 from memcommit.profile_config import (
     ProfileConfigError,

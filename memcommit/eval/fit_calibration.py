@@ -12,7 +12,7 @@ import hashlib
 import json
 from pathlib import Path
 
-from memcommit.fit_judgment import (
+from memcommit.operations.fit.judgment import (
     FitBatchAnalysis,
     FitJudgmentProvider,
     FitProposition,

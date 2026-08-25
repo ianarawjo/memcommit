@@ -8,7 +8,7 @@ import typer
 
 from memcommit.commands.command_progress import CommandProgress
 from memcommit.context_targeting.resolution import parse_direct_memory_locator
-from memcommit.fit import FitError, FitReport
+from memcommit.operations.fit.ground_report import FitError, FitReport
 from memcommit.operations.fit.application import (
     FitMemorySourceRequest,
     FitPropositionsRequest,
@@ -16,7 +16,7 @@ from memcommit.operations.fit.application import (
     FitResult,
     FitStoredSourcesRequest,
 )
-from memcommit.fit_judgment import FitJudgmentError, FitProposition
+from memcommit.operations.fit.judgment import FitJudgmentError, FitProposition
 from memcommit.operations.fit.runtime import (
     FitSourceError,
     run_fit_with_store,

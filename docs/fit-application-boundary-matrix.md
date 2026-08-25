@@ -24,17 +24,24 @@ AUTO-FIT projection.
 `memcommit.operations.fit.application` is the canonical owner of Fit's typed
 requests and results, and `memcommit.operations.fit.runtime` owns the
 MemoryStore/provider adapter used by the standalone command and named Ground.
-API, CLI, Ground, and presentation consumers import those operation-owned
-modules directly. The former `memcommit.fit_application` and
-`memcommit.fit_runtime` paths are behavior-free module-identity aliases so old
-imports, monkeypatch targets, and serialized globals continue to resolve to
-the same objects regardless of import order.
+The same package also owns the supporting contracts:
+`memcommit.operations.fit.judgment` owns the reusable role-neutral semantic
+judgment, `memcommit.operations.fit.coherence` owns exhaustive Ground graph
+checks, `memcommit.operations.fit.ground_report` owns the historical
+Rule–Example report and its public compatibility exports, and
+`memcommit.operations.fit.store` owns immutable receipt persistence. Resolve,
+Conflict, Impact, Elaborate, Ground, API, CLI, and presentation consumers
+import these operation-owned modules directly. Cross-operation reuse does not
+make those consumers co-owners of Fit's YES/MAY/NO meaning.
 
-This relocation deliberately leaves the reusable semantic judgment,
-coherence, immutable receipt, and provider protocols in their established
-`fit`, `fit_judgment`, `fit_coherence`, and `fit_store` modules. It changes no
-authority, whole-frame planning, freshness, publication, or terminal behavior,
-so the recorded interactive evidence does not require regeneration.
+The former `memcommit.fit`, `memcommit.fit_judgment`,
+`memcommit.fit_coherence`, `memcommit.fit_store`,
+`memcommit.fit_application`, and `memcommit.fit_runtime` paths are
+behavior-free module-identity aliases so old imports, monkeypatch targets, and
+serialized globals continue to resolve to the same objects regardless of
+import order. This relocation changes no judgment polarity, provider prompt,
+authority, whole-frame planning, freshness, publication, or terminal
+behavior, so the recorded interactive evidence does not require regeneration.
 
 ## Boundary matrix
 

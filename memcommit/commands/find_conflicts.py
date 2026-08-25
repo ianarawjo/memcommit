@@ -33,7 +33,7 @@ from memcommit.interfaces.console.text import (
 )
 from memcommit.interfaces.console.identity import collision_safe_uid_prefixes
 from memcommit.findings import FindingsError
-from memcommit.fit_judgment import FitJudgmentError
+from memcommit.operations.fit.judgment import FitJudgmentError
 from memcommit.query_provider import (
     QueryProviderError,
     connect_codex_chatgpt_provider,

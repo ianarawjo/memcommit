@@ -78,8 +78,8 @@ from memcommit.ground import (
     GroundSession,
     is_bound_ground_schema,
 )
-from memcommit.fit import FitJudgment, FitReport
-from memcommit.fit_store import GroundFitReceipt
+from memcommit.operations.fit.ground_report import FitJudgment, FitReport
+from memcommit.operations.fit.store import GroundFitReceipt
 from memcommit.interfaces.fit import fit_fraction, fit_mark
 from memcommit.operations.fit.application import FitResult
 from memcommit.ground_turn_dialogue import (

@@ -14,7 +14,7 @@ import json
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Literal, Protocol
 
-from memcommit.fit_judgment import FitAssessment
+from memcommit.operations.fit.judgment import FitAssessment
 from memcommit.resolution import (
     ResolutionAttempt,
     ResolutionBinding,

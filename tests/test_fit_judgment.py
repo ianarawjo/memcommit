@@ -9,7 +9,7 @@ from typer.testing import CliRunner
 
 import memcommit.commands.fit as fit_command
 from memcommit.cli import app
-from memcommit.fit_judgment import (
+from memcommit.operations.fit.judgment import (
     FIT_JUDGMENT_PAYLOAD_MARKER,
     FitJudgmentError,
     FitProposition,

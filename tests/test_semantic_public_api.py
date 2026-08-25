@@ -18,7 +18,7 @@ from memcommit.api import (
 )
 from memcommit.distill import DISTILL_PAYLOAD_MARKER
 from memcommit.elaborate import ELABORATE_PAYLOAD_MARKER
-from memcommit.fit_judgment import FIT_JUDGMENT_PAYLOAD_MARKER
+from memcommit.operations.fit.judgment import FIT_JUDGMENT_PAYLOAD_MARKER
 from memcommit.store import MemoryStore
 from tests.elaborate_validation_support import (
     passing_elaborate_validation_response,

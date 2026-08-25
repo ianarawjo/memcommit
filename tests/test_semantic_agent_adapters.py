@@ -8,7 +8,7 @@ import memcommit.ops as ops
 from memcommit.api import MemCommitClient
 from memcommit.distill import DISTILL_PAYLOAD_MARKER
 from memcommit.elaborate import ELABORATE_PAYLOAD_MARKER
-from memcommit.fit_judgment import FIT_JUDGMENT_PAYLOAD_MARKER
+from memcommit.operations.fit.judgment import FIT_JUDGMENT_PAYLOAD_MARKER
 from memcommit.interfaces.agent import (
     DISTILL_AGENT_TOOL_NAME,
     ELABORATE_AGENT_CONTRACT_VERSION,

@@ -12,7 +12,7 @@ from memcommit.eval.fit_calibration import (
     load_fit_calibration,
     run_fit_calibration,
 )
-from memcommit.fit_judgment import FIT_JUDGMENT_PAYLOAD_MARKER
+from memcommit.operations.fit.judgment import FIT_JUDGMENT_PAYLOAD_MARKER
 
 
 def test_fit_calibration_is_balanced_reviewed_consumed_corpus() -> None:

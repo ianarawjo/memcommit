@@ -36,7 +36,7 @@ from memcommit.context_targeting.readable_catalog import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.derived_policy import authorize_combination
-from memcommit.fit import (
+from memcommit.operations.fit.ground_report import (
     FIT_RULESET_VERSION,
     FIT_SCHEMA_VERSION,
     FitError,
@@ -46,7 +46,7 @@ from memcommit.fit import (
     FitRule,
     fit_ground_examples,
 )
-from memcommit.fit_coherence import (
+from memcommit.operations.fit.coherence import (
     FitCoherenceError,
     FrozenGroundCoherence,
     execute_ground_coherence,
@@ -63,7 +63,7 @@ from memcommit.operations.fit.application import (
     FitResult,
     FitStoredSourcesRequest,
 )
-from memcommit.fit_judgment import (
+from memcommit.operations.fit.judgment import (
     FitAnalysis,
     FitProposition,
     FitQuestion,
@@ -81,7 +81,7 @@ from memcommit.ground_workspace_runtime import (
     ground_workspace_exists,
     load_ground_workspace,
 )
-from memcommit.fit_store import FitStore
+from memcommit.operations.fit.store import FitStore
 from memcommit.profiles import authority_grant_snapshot_lock
 from memcommit.store import (
     MemoryStore,

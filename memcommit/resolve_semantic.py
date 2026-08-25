@@ -8,7 +8,7 @@ import re
 import uuid
 from dataclasses import dataclass
 
-from memcommit.fit_judgment import (
+from memcommit.operations.fit.judgment import (
     FitAssessment,
     FitProposition,
     FitQuestion,

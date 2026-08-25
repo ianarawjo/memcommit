@@ -16,7 +16,10 @@ from memcommit.operations.fit.application import (
     FitMemorySourceRequest,
     FitStoredSourcesRequest,
 )
-from memcommit.fit_judgment import FIT_JUDGMENT_PAYLOAD_MARKER, FitProposition
+from memcommit.operations.fit.judgment import (
+    FIT_JUDGMENT_PAYLOAD_MARKER,
+    FitProposition,
+)
 from memcommit.operations.fit.runtime import FitSourceError, run_stored_source_fit
 from memcommit.profile_config import (
     AUTHORING_PROFILE_NAME,

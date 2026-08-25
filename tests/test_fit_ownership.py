@@ -15,6 +15,22 @@ import pytest
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 MODULE_PAIRS = (
     (
+        "memcommit.fit",
+        "memcommit.operations.fit.ground_report",
+    ),
+    (
+        "memcommit.fit_judgment",
+        "memcommit.operations.fit.judgment",
+    ),
+    (
+        "memcommit.fit_coherence",
+        "memcommit.operations.fit.coherence",
+    ),
+    (
+        "memcommit.fit_store",
+        "memcommit.operations.fit.store",
+    ),
+    (
         "memcommit.fit_application",
         "memcommit.operations.fit.application",
     ),
@@ -60,6 +76,18 @@ assert sys.modules[{canonical_name!r}] is canonical
 
 
 def test_fit_legacy_paths_expose_the_canonical_contract() -> None:
+    legacy_report = importlib.import_module("memcommit.fit")
+    canonical_report = importlib.import_module(
+        "memcommit.operations.fit.ground_report"
+    )
+    legacy_judgment = importlib.import_module("memcommit.fit_judgment")
+    canonical_judgment = importlib.import_module("memcommit.operations.fit.judgment")
+    legacy_coherence = importlib.import_module("memcommit.fit_coherence")
+    canonical_coherence = importlib.import_module(
+        "memcommit.operations.fit.coherence"
+    )
+    legacy_store = importlib.import_module("memcommit.fit_store")
+    canonical_store = importlib.import_module("memcommit.operations.fit.store")
     legacy_application = importlib.import_module("memcommit.fit_application")
     canonical_application = importlib.import_module(
         "memcommit.operations.fit.application"
@@ -67,6 +95,17 @@ def test_fit_legacy_paths_expose_the_canonical_contract() -> None:
     legacy_runtime = importlib.import_module("memcommit.fit_runtime")
     canonical_runtime = importlib.import_module("memcommit.operations.fit.runtime")
 
+    assert legacy_report is canonical_report
+    assert legacy_report.FitReport is canonical_report.FitReport
+    assert legacy_judgment is canonical_judgment
+    assert legacy_judgment.FitProposition is canonical_judgment.FitProposition
+    assert legacy_coherence is canonical_coherence
+    assert (
+        legacy_coherence.FitCoherenceReport
+        is canonical_coherence.FitCoherenceReport
+    )
+    assert legacy_store is canonical_store
+    assert legacy_store.FitStore is canonical_store.FitStore
     assert legacy_application is canonical_application
     assert (
         legacy_application.FitPropositionsRequest
@@ -84,7 +123,14 @@ def test_fit_legacy_paths_expose_the_canonical_contract() -> None:
 
 @pytest.mark.parametrize(
     "relative_path",
-    ("memcommit/fit_application.py", "memcommit/fit_runtime.py"),
+    (
+        "memcommit/fit.py",
+        "memcommit/fit_judgment.py",
+        "memcommit/fit_coherence.py",
+        "memcommit/fit_store.py",
+        "memcommit/fit_application.py",
+        "memcommit/fit_runtime.py",
+    ),
 )
 def test_fit_legacy_facades_define_no_behavior(relative_path: str) -> None:
     path = REPOSITORY_ROOT / relative_path
@@ -103,6 +149,10 @@ import memcommit.operations.fit
 
 assert "memcommit.operations.fit.application" not in sys.modules
 assert "memcommit.operations.fit.runtime" not in sys.modules
+assert "memcommit.operations.fit.ground_report" not in sys.modules
+assert "memcommit.operations.fit.judgment" not in sys.modules
+assert "memcommit.operations.fit.coherence" not in sys.modules
+assert "memcommit.operations.fit.store" not in sys.modules
 """
 
     subprocess.run(
@@ -112,28 +162,70 @@ assert "memcommit.operations.fit.runtime" not in sys.modules
     )
 
 
-def test_pre_relocation_fit_request_global_loads_through_alias() -> None:
-    canonical = importlib.import_module("memcommit.operations.fit.application")
+@pytest.mark.parametrize(
+    "legacy_module,canonical_module,global_name",
+    (
+        ("memcommit.fit", "memcommit.operations.fit.ground_report", "FitReport"),
+        (
+            "memcommit.fit_judgment",
+            "memcommit.operations.fit.judgment",
+            "FitProposition",
+        ),
+        (
+            "memcommit.fit_coherence",
+            "memcommit.operations.fit.coherence",
+            "FitCoherenceReport",
+        ),
+        ("memcommit.fit_store", "memcommit.operations.fit.store", "FitStore"),
+        (
+            "memcommit.fit_application",
+            "memcommit.operations.fit.application",
+            "FitPropositionsRequest",
+        ),
+    ),
+)
+def test_pre_relocation_fit_global_loads_through_alias(
+    legacy_module: str,
+    canonical_module: str,
+    global_name: str,
+) -> None:
+    canonical = importlib.import_module(canonical_module)
 
-    restored = pickle.loads(
-        b"cmemcommit.fit_application\nFitPropositionsRequest\n."
-    )
+    restored = pickle.loads(f"c{legacy_module}\n{global_name}\n.".encode())
 
-    assert restored is canonical.FitPropositionsRequest
+    assert restored is getattr(canonical, global_name)
 
 
 def test_production_fit_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "memcommit/api/_operations/fit.py",
+        "memcommit/api/_operations/resolve.py",
         "memcommit/interfaces/cli/fit.py",
         "memcommit/interfaces/fit.py",
         "memcommit/commands/fit.py",
+        "memcommit/commands/find_conflicts.py",
         "memcommit/commands/ground.py",
         "memcommit/commands/ground_named_shell.py",
+        "memcommit/commands/impact_process_local.py",
+        "memcommit/commands/resolve.py",
+        "memcommit/elaborate.py",
+        "memcommit/eval/fit_calibration.py",
+        "memcommit/ground_workspace_fit.py",
+        "memcommit/operations/fit/application.py",
         "memcommit/operations/fit/runtime.py",
+        "memcommit/operations/resolve/application.py",
+        "memcommit/resolve_semantic.py",
+    )
+    legacy_imports = (
+        "from memcommit.fit import",
+        "from memcommit.fit_judgment import",
+        "from memcommit.fit_coherence import",
+        "from memcommit.fit_store import",
+        "from memcommit.fit_application import",
+        "from memcommit.fit_runtime import",
     )
 
     for relative_path in relative_paths:
         source = (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
-        assert "from memcommit.fit_application import" not in source
-        assert "from memcommit.fit_runtime import" not in source
+        for legacy_import in legacy_imports:
+            assert legacy_import not in source

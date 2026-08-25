@@ -4,12 +4,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.fit import FitStatus
+from memcommit.operations.fit.ground_report import FitStatus
 from memcommit.operations.fit.application import (
     FitPropositionsResult,
     FitResult,
 )
-from memcommit.fit_coherence import FitCoherenceFinding, FitCoherenceReport
+from memcommit.operations.fit.coherence import FitCoherenceFinding, FitCoherenceReport
 from memcommit.interfaces.console.text import display_escape_text
 
 

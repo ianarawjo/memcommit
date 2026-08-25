@@ -28,7 +28,7 @@ from memcommit.elaborate import (
 from memcommit.operations.elaborate.application import ElaborateRequest
 from memcommit.elaborate_config import ElaborateSemanticConfig
 from memcommit.operations.elaborate.runtime import execute_elaborate
-from memcommit.fit_judgment import (
+from memcommit.operations.fit.judgment import (
     FIT_JUDGMENT_OPERATION,
     FIT_JUDGMENT_PAYLOAD_MARKER,
 )

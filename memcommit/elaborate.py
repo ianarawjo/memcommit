@@ -36,7 +36,7 @@ from memcommit.semantic_execution import (
     plan_semantic_execution,
 )
 from memcommit.semantic_prompt_policy import resolve_semantic_prompt_policy
-from memcommit.fit_judgment import (
+from memcommit.operations.fit.judgment import (
     FIT_JUDGMENT_MAX_ITEMS,
     FIT_JUDGMENT_MAX_QUESTIONS,
     FIT_JUDGMENT_TEXT_LIMIT,

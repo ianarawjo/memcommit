@@ -5,8 +5,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal
 
-from memcommit.fit import FitReport
-from memcommit.fit_judgment import FitAnalysis, FitProposition
+from memcommit.operations.fit.ground_report import FitReport
+from memcommit.operations.fit.judgment import FitAnalysis, FitProposition
 
 
 @dataclass(frozen=True)
