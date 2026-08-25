@@ -22,12 +22,18 @@ The Help compatibility module aliases the interface-owned module instead of
 copying its namespace. This preserves module-level patching used by tests and
 embedders while keeping one set of implementation globals.
 
+The operation-neutral read-only table follows the same module-alias boundary:
+its implementation lives under `memcommit.interfaces.tui.components.table`,
+while `memcommit.commands.tui_table` resolves to that exact module. The move is
+ownership-only; table geometry, text, exceptions, and selected-cell styling
+remain unchanged.
+
 ## Enforcement
 
 `tests/test_tui_interface_dependency.py` parses every Python module under
 `memcommit/interfaces` and rejects absolute imports from `memcommit.commands`.
-The same test verifies object identity across the compatibility paths for the
-smaller shared controls.
+The same test verifies object or module identity across the compatibility paths
+for the smaller shared controls and terminal table.
 
 ## Deliberate limits
 

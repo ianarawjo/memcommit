@@ -80,7 +80,7 @@ from memcommit.interfaces.console.terminal import (
 from memcommit.interfaces.console.text import (
     safe_terminal_text,
 )
-from memcommit.commands.tui_table import (
+from memcommit.interfaces.tui.components.table import (
     RenderedTuiTable,
     SelectedTableCellProcessor,
     TuiTableColumn,

@@ -61,8 +61,11 @@ def test_legacy_command_paths_preserve_interface_object_identity() -> None:
     new_inventory = importlib.import_module(
         "memcommit.interfaces.tui.operations.help.inventory"
     )
+    old_table = importlib.import_module("memcommit.commands.tui_table")
+    new_table = importlib.import_module("memcommit.interfaces.tui.components.table")
 
     assert old_inventory is new_inventory
+    assert old_table is new_table
     assert old_save is new_save
     assert old_help is new_help
     assert old_trace is new_trace

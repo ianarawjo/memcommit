@@ -3,7 +3,7 @@ from prompt_toolkit.document import Document
 from prompt_toolkit.layout.controls import BufferControl
 from prompt_toolkit.layout.processors import TransformationInput
 
-from memcommit.commands.tui_table import (
+from memcommit.interfaces.tui.components.table import (
     SelectedTableCellProcessor,
     TuiTableColumn,
     TuiTableRow,
