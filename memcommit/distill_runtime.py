@@ -36,12 +36,12 @@ from memcommit.semantic_add_runtime import (
     freeze_semantic_add_target,
 )
 from memcommit.store import MemoryStore, context_record_digest
-from memcommit.summarize_application import (
+from memcommit.operations.summarize.application import (
     FrozenSummarySource,
     SummarizeRequest,
     SummarySourcePort,
 )
-from memcommit.summarize_runtime import MemoryStoreSummarySourcePort
+from memcommit.operations.summarize.runtime import MemoryStoreSummarySourcePort
 
 
 class DistillProviderFactory(Protocol):

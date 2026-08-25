@@ -52,8 +52,8 @@ from memcommit.profiles import (
     delete_authority_grant,
 )
 from memcommit.store import MemoryStore
-from memcommit.summarize_application import SummarizeRequest
-from memcommit.summarize_runtime import execute_summarize
+from memcommit.operations.summarize.application import SummarizeRequest
+from memcommit.operations.summarize.runtime import execute_summarize
 from memcommit.semantic.changes import RemoveChange
 from memcommit.source_projection.model import SourceAccess
 from memcommit.source_projection.presentation import source_display_text

@@ -15,8 +15,8 @@ from memcommit.study_prewarm.summarize import (
     build_summarize_prewarm_artifact,
 )
 from memcommit.summarize import collect_summary_frame
-from memcommit.summarize_application import SummarizeRequest
-from memcommit.summarize_runtime import run_summarize_with_store
+from memcommit.operations.summarize.application import SummarizeRequest
+from memcommit.operations.summarize.runtime import run_summarize_with_store
 from memcommit.understanding import UnderstandingSummary
 
 

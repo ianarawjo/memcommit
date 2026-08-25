@@ -31,8 +31,8 @@ from memcommit.profile_config import (
 )
 from memcommit.profiles import create_authority_grant, update_authority_grant
 from memcommit.store import MemoryStore
-from memcommit.summarize_application import SummarizeRequest
-from memcommit.summarize_runtime import execute_summarize
+from memcommit.operations.summarize.application import SummarizeRequest
+from memcommit.operations.summarize.runtime import execute_summarize
 
 
 runner = CliRunner(mix_stderr=False)

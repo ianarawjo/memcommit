@@ -20,7 +20,7 @@ from memcommit.interfaces.tui.workbenches.context_summary import (
     ContextSummaryWorkbenchView,
     run_context_summary_workbench,
 )
-from memcommit.summarize_application import SummarizeRequest, SummarizeResult
+from memcommit.operations.summarize.application import SummarizeRequest, SummarizeResult
 
 
 def run_summarize_tui(

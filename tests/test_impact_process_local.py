@@ -44,7 +44,7 @@ from memcommit.operations.resolve.application import (
     ResolveRequest,
 )
 from memcommit.summarize import collect_summary_frame
-from memcommit.summarize_application import FrozenSummarySource
+from memcommit.operations.summarize.application import FrozenSummarySource
 from memcommit.store import MemoryStore, context_record_digest
 from tests.distill_goal_fit_support import passing_distill_goal_fit_response
 

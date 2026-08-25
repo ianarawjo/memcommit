@@ -12,14 +12,14 @@ import pytest
 import memcommit.ops as ops
 from memcommit.context import Context, Memory
 from memcommit.summarize import SummarizeError, collect_summary_frame
-import memcommit.summarize_application as summarize_application
-from memcommit.summarize_application import (
+import memcommit.operations.summarize.application as summarize_application
+from memcommit.operations.summarize.application import (
     FrozenSummarySource,
     SummarizeRequest,
     run_summarize,
 )
-from memcommit.summarize_runtime import execute_summarize
-import memcommit.summarize_runtime as summarize_runtime
+from memcommit.operations.summarize.runtime import execute_summarize
+import memcommit.operations.summarize.runtime as summarize_runtime
 from memcommit.store import MemoryStore
 from memcommit.understanding import UnderstandingSummary
 

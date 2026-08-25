@@ -20,7 +20,7 @@ from memcommit.distill_config import (
     DEFAULT_DISTILL_SEMANTIC_CONFIG,
     DistillSemanticConfig,
 )
-from memcommit.summarize_application import (
+from memcommit.operations.summarize.application import (
     FrozenSummarySource,
     SummarizeRequest,
     SummarySourcePort,

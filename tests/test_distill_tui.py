@@ -20,7 +20,7 @@ from memcommit.interfaces.tui.operations.distill import (
     run_distill_tui,
 )
 from memcommit.summarize import collect_summary_scope
-from memcommit.summarize_application import FrozenSummarySource
+from memcommit.operations.summarize.application import FrozenSummarySource
 
 
 def _result(*, descendants: bool = False) -> DistillResult:

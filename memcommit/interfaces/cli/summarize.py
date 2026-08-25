@@ -6,7 +6,7 @@ import typer
 
 from memcommit.interfaces.console.text import display_escape_text
 from memcommit.interfaces.summarize import summarize_scope_label
-from memcommit.summarize_application import SummarizeResult
+from memcommit.operations.summarize.application import SummarizeResult
 
 
 def render_summarize_plain(result: SummarizeResult) -> None:

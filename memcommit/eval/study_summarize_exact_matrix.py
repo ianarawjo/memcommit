@@ -49,8 +49,8 @@ from memcommit.study_prewarm.summarize import (
     summarize_prewarm_key,
 )
 from memcommit.summarize import SummaryFrame, summarize_frame
-from memcommit.summarize_application import SummarizeRequest
-from memcommit.summarize_runtime import MemoryStoreSummarySourcePort
+from memcommit.operations.summarize.application import SummarizeRequest
+from memcommit.operations.summarize.runtime import MemoryStoreSummarySourcePort
 
 
 KIND = "STUDY_SUMMARIZE_EXACT_MATRIX"

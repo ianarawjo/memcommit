@@ -23,7 +23,7 @@ from memcommit.summarize import (
     collect_summary_scope,
 )
 from memcommit.store import MemoryStore
-from memcommit.summarize_application import SummarizeResult
+from memcommit.operations.summarize.application import SummarizeResult
 from memcommit.understanding import (
     UnderstandingSummary,
     parse_source_linked_understanding,

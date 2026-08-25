@@ -12,7 +12,7 @@ a process-local selection and then present the same typed result. These are
 internal boundaries, not yet a stable public
 Python API.
 
-Last reviewed: 2026-08-21.
+Last reviewed: 2026-08-25.
 
 ## Objective and non-goals
 
@@ -61,6 +61,29 @@ reverse dependency. Moving it is deferred until a second vertical slice proves
 the same owner and lifecycle; this slice must not copy or partially migrate the
 shared Grant rules.
 
+## Package ownership
+
+The canonical terminal-independent owners now live under
+`memcommit.operations.summarize`. `application.py` owns the typed request,
+frozen Source, provider-session protocol, freshness check, and read-only
+result. `runtime.py` owns Store and Grant projection, exact Study lookup,
+configured-provider composition, and the production execution adapters.
+CLI, TUI, bootstrap, Distill, Ground, prewarm/eval, and other production
+consumers import those operation-owned modules directly.
+
+The historical `memcommit.summarize_application` and
+`memcommit.summarize_runtime` paths remain behavior-free module-identity
+aliases for import-order, monkeypatch, and serialized-global compatibility.
+Importing `memcommit.operations.summarize` alone remains lazy. New production
+code uses the canonical package paths; compatibility aliases do not become a
+second implementation owner.
+
+This relocation changes physical ownership only. It does not alter frame
+collection, direct/recursive axes, READ or Grant authority, provider timing,
+Study exact-artifact eligibility, source revalidation, typed result or receipt
+shape, console routing, clipboard behavior, or TUI interaction. The existing
+ordered PTY evidence therefore remains valid without a screenshot refresh.
+
 ## Current dependency path
 
 ```text
@@ -105,7 +128,7 @@ mem summarize argv
 
 | Callable | Current owner | Intended layer | Inputs/result | External effects | Authority/disclosure | Cache/receipt | Config/secrets | Callers | Evidence | Migration state |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `memcommit.summarize_application:run_summarize` | Summarize application module | Application | `SummarizeRequest` + ports -> `SummarizeResult` | Through injected ports only | Source port freezes READ-authorized evidence before exact lookup or provider session | Optional exact prepared lookup; no durable local result | Receives injected lookup/session; reads no config or secret directly | CLI now; future Python/agent adapters | `tests/test_summarize_application.py` | `VERIFIED` internal boundary |
+| `memcommit.operations.summarize.application:run_summarize` | Summarize operation application module | Application | `SummarizeRequest` + ports -> `SummarizeResult` | Through injected ports only | Source port freezes READ-authorized evidence before exact lookup or provider session | Optional exact prepared lookup; no durable local result | Receives injected lookup/session; reads no config or secret directly | CLI now; future Python/agent adapters | `tests/test_summarize_application.py` | `VERIFIED` internal boundary |
 | `SummarizeRequest` / `SummarizeResult` | Summarize application module | Application contract | Typed request and read-only typed result | None | Carries locator/reach in and public source facts out; no Grant or credential object | Exposes digest/count, not a durable receipt | None | Application and adapters | Direct application tests | `CHARACTERIZED`, internal |
 | `SummarySourcePort.freeze` | Protocol in application module; `MemoryStoreSummarySourcePort` implementation | Application port / infrastructure adapter | Request -> frozen `SummaryFrame` + opaque token | Context/Profile/Grant reads in production implementation | Resolves locator and READ before Memory content can reach provider; a recursive local root uses one catalog containing local and READ-granted public names | None | No provider secret | `run_summarize` | CLI, direct production, recursive/direct, mixed local/granted, and granted-projection tests | `VERIFIED` production adapter; shared Grant location deferred |
 | `SummarySourcePort.revalidate` | Protocol in application module; `MemoryStoreSummarySourcePort` implementation | Application port / infrastructure adapter | Frozen source -> current frame | Context/Profile/Grant reads | Revalidates every selected granted public-name binding, the selected Context identities, and source digest before result publication | None | None | `run_summarize` | local source-change, mixed-scope Grant revocation, and Grant-revision tests | `VERIFIED` production adapter; shared Grant location deferred |

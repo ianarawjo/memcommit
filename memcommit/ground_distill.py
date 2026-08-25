@@ -33,7 +33,10 @@ from memcommit.ground_workspace_projection import (
 )
 from memcommit.store import MemoryStore, ground_session_record_digest
 from memcommit.summarize import SummaryFrame, collect_summary_scope
-from memcommit.summarize_application import FrozenSummarySource, SummarizeRequest
+from memcommit.operations.summarize.application import (
+    FrozenSummarySource,
+    SummarizeRequest,
+)
 
 
 class GroundDistillProviderFactory(Protocol):

@@ -23,7 +23,7 @@ from memcommit.interfaces.tui.operations.summarize import (
     SummarizeTuiSetup,
     run_summarize_tui,
 )
-from memcommit.summarize_application import SummarizeRequest, SummarizeResult
+from memcommit.operations.summarize.application import SummarizeRequest, SummarizeResult
 
 
 SummarizeConsoleResult: TypeAlias = SummarizeResult | SummarizeTuiOutcome

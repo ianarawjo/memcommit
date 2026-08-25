@@ -93,11 +93,15 @@ blocked = (
     'memcommit.operations.reference.runtime',
     'memcommit.operations.sever.application',
     'memcommit.operations.sever.runtime',
+    'memcommit.operations.summarize.application',
+    'memcommit.operations.summarize.runtime',
     'memcommit.operations.update.application',
     'memcommit.reference_application',
     'memcommit.sever_application',
     'memcommit.sever_runtime',
     'memcommit.show_application',
+    'memcommit.summarize_application',
+    'memcommit.summarize_runtime',
     'memcommit.update_application',
 )
 assert MemCommitClient.__name__ == 'MemCommitClient'

@@ -6,7 +6,7 @@ import uuid
 
 import pytest
 
-import memcommit.summarize_runtime as summarize_runtime
+import memcommit.operations.summarize.runtime as summarize_runtime
 from memcommit.context import Context, GrantedContextLink, Memory
 from memcommit.authority.access import ContextAccess
 from memcommit.context_targeting.search import load_readable_search_roots

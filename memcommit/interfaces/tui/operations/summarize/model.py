@@ -8,7 +8,7 @@ from dataclasses import dataclass, field
 from memcommit.context_targeting.tui.picker import ContextMemoryRow
 from memcommit.context_targeting.tui.reach import ContextReachViewMode
 from memcommit.source_projection.presentation import SourceDisplayValue
-from memcommit.summarize_application import SummarizeResult
+from memcommit.operations.summarize.application import SummarizeResult
 
 
 @dataclass(frozen=True)

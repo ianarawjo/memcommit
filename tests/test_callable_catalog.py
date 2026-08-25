@@ -68,7 +68,10 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
     by_operation = {record.operation: record for record in snapshot.operations}
 
     assert "memcommit.current_context_application" in by_operation["pwd"].application_modules
-    assert "memcommit.summarize_application" in by_operation["summarize"].application_modules
+    assert (
+        "memcommit.operations.summarize.application"
+        in by_operation["summarize"].application_modules
+    )
     assert "memcommit.interfaces.tui.operations.summarize.screen" in by_operation["summarize"].tui_modules
     assert "query_ordinary" in by_operation["query"].public_methods
     assert "memcommit.interfaces.agent.query" in by_operation["query"].agent_modules
