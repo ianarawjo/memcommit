@@ -14,7 +14,6 @@ from memcommit.applied_checkpoint_review import (
     CHECKPOINT_REVIEW_OPERATIONS,
     list_applied_checkpoint_reviews,
 )
-from memcommit.commands.audit_sessions import audit_session_entries
 from memcommit.commands.atomize_sessions import atomize_session_entries
 from memcommit.commands.compare_sessions import comparison_session_entries
 from memcommit.commands.ground_session_picker import session_picker_location
@@ -24,6 +23,7 @@ from memcommit.interfaces.tui.components.operation_launcher.session import (
     SessionPickerEntry,
     choose_session,
 )
+from memcommit.interfaces.tui.operations.audit.catalog import audit_session_entries
 from memcommit.commands.sever_sessions import list_sever_session_catalog
 from memcommit.operations.sever.session_store import SeverSessionStore
 from memcommit.quality_audit_store import QualityAuditStore

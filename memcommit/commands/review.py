@@ -240,7 +240,7 @@ def _run_audit_review(
     """Open one exact saved Audit without rerunning any finder."""
 
     from memcommit.commands.audit import run_quality_audit_review
-    from memcommit.commands.audit_sessions import audit_session_entries
+    from memcommit.interfaces.tui.operations.audit.catalog import audit_session_entries
     from memcommit.interfaces.tui.operations.audit import (
         render_quality_audit_review_snapshot,
     )
