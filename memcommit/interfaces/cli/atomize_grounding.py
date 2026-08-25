@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
-from memcommit.atomize import AtomizeAnalysisSession
-from memcommit.atomize_grounding import AtomizeGroundingSession
-from memcommit.atomize_workbench import project_atomize_workbench_findings
+from memcommit.operations.atomize.domain import AtomizeAnalysisSession
+from memcommit.operations.atomize.grounding import AtomizeGroundingSession
+from memcommit.operations.atomize.workbench import project_atomize_workbench_findings
 from memcommit.interfaces.console.text import safe_terminal_text
 
 

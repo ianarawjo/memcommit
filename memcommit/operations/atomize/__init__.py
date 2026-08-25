@@ -1,1 +1,1 @@
-"""Operation-owned primary Atomize application and runtime boundaries."""
+"""Operation-owned Atomize domain, application, runtime, and projections."""

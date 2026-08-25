@@ -18,7 +18,7 @@ from memcommit.api.errors import (
     AtomizeGroundingProviderFailure,
     AtomizeGroundingStorageError,
 )
-from memcommit.atomize_grounding import (
+from memcommit.operations.atomize.grounding import (
     AtomizeGroundingError as CoreAtomizeGroundingError,
     AtomizeGroundingSession,
     atomize_grounding_canonical_digest,
@@ -34,7 +34,7 @@ from memcommit.operations.atomize.grounding_application import (
     run_atomize_grounding_reply,
     run_atomize_grounding_start,
 )
-from memcommit.atomize_grounding_provider import AtomizeGroundingProviderError
+from memcommit.operations.atomize.grounding_provider import AtomizeGroundingProviderError
 from memcommit.operations.atomize.grounding_runtime import (
     MemoryStoreAtomizeGroundingPort,
     assert_current_grounding_bindings,

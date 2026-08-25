@@ -584,7 +584,7 @@ def create_ambiguity_review(
 def create_atomize_review(ctx: Context, analysis) -> ReviewSession:
     """Create a comment surface for one current saved atomize analysis."""
     # Imported lazily because atomize itself uses direct_context_digest.
-    from memcommit.atomize import (
+    from memcommit.operations.atomize.domain import (
         AtomizeAnalysisSession,
         atomize_analysis_matches_context,
     )
@@ -642,7 +642,7 @@ def atomize_review_matches_analysis(
     analysis,
 ) -> bool:
     """Return whether comments describe this exact atomize analysis/frame."""
-    from memcommit.atomize import (
+    from memcommit.operations.atomize.domain import (
         AtomizeAnalysisSession,
         atomize_analysis_matches_context,
     )

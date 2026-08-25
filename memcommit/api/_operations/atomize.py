@@ -29,7 +29,7 @@ from memcommit.api.errors import (
     AtomizeProviderFailure,
     AtomizeStorageError,
 )
-from memcommit.atomize import AtomizeImpactError
+from memcommit.operations.atomize.domain import AtomizeImpactError
 from memcommit.operations.atomize.analysis_application import (
     AtomizeAnalysisApplicationError,
     AtomizeAnalysisOpenRequest,
@@ -54,7 +54,7 @@ from memcommit.operations.atomize.runtime import (
     execute_atomize_save_as,
     execute_atomize_session_apply,
 )
-from memcommit.atomize_workbench import (
+from memcommit.operations.atomize.workbench import (
     ATOMIZE_WORKBENCH_RESPONSE_CHAR_LIMIT,
     AtomizeWorkbenchError,
     atomize_workbench_declared_frames,

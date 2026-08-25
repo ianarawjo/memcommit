@@ -669,7 +669,7 @@ def _grounding_change_evidence(
     ):
         return {}, "has malformed grounding evidence"
 
-    from memcommit.atomize_grounding import (
+    from memcommit.operations.atomize.grounding import (
         AtomizeGroundingChangeSet,
         AtomizeGroundingError,
         AtomizeGroundingSession,
@@ -2210,7 +2210,7 @@ def _atomize_evidence(
         valid_review_item = review_item_uid == memory_uid
         expected_digest = hashlib.sha256(text.encode("utf-8")).hexdigest()
     else:
-        from memcommit.atomize import atomize_declared_frame_digest
+        from memcommit.operations.atomize.domain import atomize_declared_frame_digest
 
         valid_review_item = review_item_uid in {
             memory_uid,
@@ -2312,7 +2312,7 @@ def _explicit_trace_events(
     normal_form_absorptions: dict[str, str] = {}
     if schema_version == TRACE_METADATA_NORMAL_FORM_SCHEMA_VERSION:
         try:
-            from memcommit.atomize import AtomizeNormalFormAudit
+            from memcommit.operations.atomize.domain import AtomizeNormalFormAudit
 
             normal_form = AtomizeNormalFormAudit.from_dict(
                 metadata.get("normal_form")
@@ -3736,7 +3736,7 @@ def _analysis_attachments(
     component: set[str],
     events: Iterable[TraceEvent],
 ) -> tuple[tuple[TraceAnalysis, ...], list[str]]:
-    from memcommit.atomize import atomize_analysis_matches_context
+    from memcommit.operations.atomize.domain import atomize_analysis_matches_context
 
     try:
         session = store.load_atomize_analysis(ctx.uid)

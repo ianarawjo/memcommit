@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Callable
 
-from memcommit.atomize import (
+from memcommit.operations.atomize.domain import (
     AtomizeAnalysisSession,
     AtomizeFrameOrigin,
     AtomizeProvider,

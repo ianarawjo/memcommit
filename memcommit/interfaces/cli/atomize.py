@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import typer
 
-from memcommit.atomize import (
+from memcommit.operations.atomize.domain import (
     AtomizeAnalysisSession,
     AtomizeImpactReport,
     AtomizeItem,

@@ -2714,7 +2714,7 @@ class MemoryStore:
 
     def load_atomize_analysis(self, context_uid: str):
         """Return one Context's latest saved atomize preview, or None."""
-        from memcommit.atomize import (
+        from memcommit.operations.atomize.domain import (
             AtomizeAnalysisSession,
             AtomizeImpactError,
         )
@@ -2748,7 +2748,7 @@ class MemoryStore:
     def save_atomize_analysis(self, session) -> None:
         """Atomically persist a validated, non-applying atomize preview."""
 
-        from memcommit.atomize import AtomizeAnalysisSession
+        from memcommit.operations.atomize.domain import AtomizeAnalysisSession
 
         if not isinstance(session, AtomizeAnalysisSession):
             raise TypeError("Expected an AtomizeAnalysisSession.")
@@ -2759,7 +2759,7 @@ class MemoryStore:
     def _save_atomize_analysis_locked(self, session) -> None:
         """Persist one analysis while its Context-scoped CAS lock is held."""
 
-        from memcommit.atomize import (
+        from memcommit.operations.atomize.domain import (
             AtomizeAnalysisSession,
             AtomizeImpactError,
         )
@@ -2813,8 +2813,8 @@ class MemoryStore:
 
     def load_atomize_workbench(self, analysis):
         """Load mutable state only against one exact saved analysis."""
-        from memcommit.atomize import AtomizeAnalysisSession
-        from memcommit.atomize_workbench import (
+        from memcommit.operations.atomize.domain import AtomizeAnalysisSession
+        from memcommit.operations.atomize.workbench import (
             AtomizeWorkbenchError,
             AtomizeWorkbenchSession,
             atomize_workbench_issue_projection,
@@ -2856,7 +2856,7 @@ class MemoryStore:
     @_profile_write_guarded
     def save_atomize_workbench(self, session) -> None:
         """Atomically persist one Context-bound mutable workbench."""
-        from memcommit.atomize_workbench import AtomizeWorkbenchSession
+        from memcommit.operations.atomize.workbench import AtomizeWorkbenchSession
 
         if not isinstance(session, AtomizeWorkbenchSession):
             raise TypeError("Expected an AtomizeWorkbenchSession.")
@@ -2865,7 +2865,7 @@ class MemoryStore:
 
     def _save_atomize_workbench_locked(self, session) -> None:
         """Persist one workbench while its Context-scoped CAS lock is held."""
-        from memcommit.atomize_workbench import (
+        from memcommit.operations.atomize.workbench import (
             AtomizeWorkbenchError,
             AtomizeWorkbenchSession,
             atomize_workbench_issue_projection,
@@ -2969,7 +2969,7 @@ class MemoryStore:
 
     def load_atomize_grounding_session(self, context_uid: str):
         """Return one Context's latest atomize grounding dialogue, if any."""
-        from memcommit.atomize_grounding import (
+        from memcommit.operations.atomize.grounding import (
             AtomizeGroundingError,
             AtomizeGroundingSession,
         )
@@ -3002,7 +3002,7 @@ class MemoryStore:
     @_profile_write_guarded
     def save_atomize_grounding_session(self, session) -> None:
         """Atomically persist one strict Context-bound grounding dialogue."""
-        from memcommit.atomize_grounding import (
+        from memcommit.operations.atomize.grounding import (
             AtomizeGroundingError,
             AtomizeGroundingSession,
         )
@@ -3061,7 +3061,7 @@ class MemoryStore:
         context_uid: str,
     ) -> list:
         """Load immutable terminal dialogues for one exact Context."""
-        from memcommit.atomize_grounding import (
+        from memcommit.operations.atomize.grounding import (
             AtomizeGroundingError,
             AtomizeGroundingSession,
         )
@@ -8075,8 +8075,8 @@ class MemoryStore:
     def _restore_atomize_context_creation_command_locked(self, unit, direction: str):
         """Undo/Redo one final Atomize Save As output and its Source receipt."""
 
-        from memcommit.atomize import AtomizeAnalysisSession
-        from memcommit.atomize_workbench import atomize_workbench_record_digest
+        from memcommit.operations.atomize.domain import AtomizeAnalysisSession
+        from memcommit.operations.atomize.workbench import atomize_workbench_record_digest
         from memcommit.command_history import (
             CommandRestoreResult,
             command_restore_metadata,

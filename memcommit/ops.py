@@ -29,7 +29,7 @@ from memcommit.context import Context, Information, Memory, MemoryRef, QueryCont
 from memcommit.context_naming import validate_portable_context_name
 
 if TYPE_CHECKING:
-    from memcommit.atomize import (
+    from memcommit.operations.atomize.domain import (
         AtomizeImpactReport,
         AtomizeProvider,
     )
@@ -932,7 +932,7 @@ def impact_atomize(
     memory_selector: str | None = None,
 ) -> "AtomizeImpactReport":
     """Preview direct-Memory atomization without mutating *ctx*."""
-    from memcommit.atomize import impact_atomize as _impact_atomize
+    from memcommit.operations.atomize.domain import impact_atomize as _impact_atomize
 
     return _impact_atomize(
         ctx,

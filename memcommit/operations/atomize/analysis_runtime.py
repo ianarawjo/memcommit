@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass, replace
 from typing import Callable
 
-from memcommit.atomize import (
+from memcommit.operations.atomize.domain import (
     AtomizeAnalysisSession,
     AtomizeImpactError,
     AtomizeProvider,
@@ -21,7 +21,7 @@ from memcommit.operations.atomize.analysis_application import (
     run_atomize_analysis_open,
 )
 from memcommit.operations.atomize.application import AtomizeSessionSnapshot
-from memcommit.atomize_workbench import create_atomize_workbench
+from memcommit.operations.atomize.workbench import create_atomize_workbench
 from memcommit.context import Context
 from memcommit.query_provider import CodexChatGPTProvider
 from memcommit.semantic_prompt_policy import resolve_semantic_prompt_policy
@@ -61,7 +61,7 @@ def _requested_memory_uids(
     # Keeping the import at the activated edge lets the extracted application
     # boundary remain compatible with profiles that expose only whole-Context
     # Atomize.
-    from memcommit.atomize import select_atomize_candidates
+    from memcommit.operations.atomize.domain import select_atomize_candidates
 
     return tuple(
         candidate.memory.uid

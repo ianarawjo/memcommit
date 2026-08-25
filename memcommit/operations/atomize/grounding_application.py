@@ -5,10 +5,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Callable, ContextManager, Protocol
 
-from memcommit.atomize import AtomizeAnalysisSession
-from memcommit.atomize_grounding import AtomizeGroundingSession
-from memcommit.atomize_grounding_provider import AtomizeGroundingProvider
-from memcommit.atomize_workbench import AtomizeWorkbenchSession
+from memcommit.operations.atomize.domain import AtomizeAnalysisSession
+from memcommit.operations.atomize.grounding import AtomizeGroundingSession
+from memcommit.operations.atomize.grounding_provider import AtomizeGroundingProvider
+from memcommit.operations.atomize.workbench import AtomizeWorkbenchSession
 from memcommit.context import Context
 
 

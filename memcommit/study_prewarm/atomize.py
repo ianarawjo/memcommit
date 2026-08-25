@@ -8,7 +8,7 @@ import hashlib
 import json
 from pathlib import Path
 
-from memcommit.atomize import (
+from memcommit.operations.atomize.domain import (
     ATOMIZE_PROVIDER_CONTRACT_VERSION,
     ATOMIZE_RULESET_VERSION,
     AtomizeAnalysisSession,

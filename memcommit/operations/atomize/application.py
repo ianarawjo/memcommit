@@ -6,11 +6,11 @@ import copy
 from dataclasses import dataclass
 from typing import Protocol
 
-from memcommit.atomize import (
+from memcommit.operations.atomize.domain import (
     AtomizeAnalysisSession,
     AtomizeApplyResult,
 )
-from memcommit.atomize_workbench import (
+from memcommit.operations.atomize.workbench import (
     ATOMIZE_WORKBENCH_RESPONSE_CHAR_LIMIT,
     AtomizeWorkbenchResponse,
     AtomizeWorkbenchSession,

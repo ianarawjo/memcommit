@@ -5,8 +5,8 @@ from contextlib import nullcontext
 import hashlib
 from dataclasses import dataclass
 
-from memcommit.atomize import AtomizeAnalysisSession
-from memcommit.atomize_grounding import (
+from memcommit.operations.atomize.domain import AtomizeAnalysisSession
+from memcommit.operations.atomize.grounding import (
     AtomizeGroundingAnchor,
     AtomizeGroundingBindings,
     AtomizeGroundingChangeSet,
@@ -15,7 +15,7 @@ from memcommit.atomize_grounding import (
     atomize_grounding_canonical_digest,
     atomize_grounding_context_digest,
 )
-from memcommit.atomize_grounding_provider import (
+from memcommit.operations.atomize.grounding_provider import (
     assess_atomize_grounding_turn,
 )
 from memcommit.operations.atomize.grounding_application import (
@@ -28,7 +28,7 @@ from memcommit.operations.atomize.grounding_application import (
     GroundingReplyRequest,
     GroundingStartRequest,
 )
-from memcommit.atomize_workbench import (
+from memcommit.operations.atomize.workbench import (
     AtomizeWorkbenchFinding,
     AtomizeWorkbenchSession,
     atomize_workbench_response_digest,

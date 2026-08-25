@@ -8,7 +8,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.atomize import (
+from memcommit.operations.atomize.domain import (
     AtomizeAnalysisSession,
     AtomizeImpactError,
     atomize_analysis_matches_context,
@@ -41,7 +41,7 @@ from memcommit.operations.atomize.grounding_runtime import (
     MemoryStoreAtomizeGroundingPort,
     assert_current_grounding_bindings,
 )
-from memcommit.atomize_workbench import (
+from memcommit.operations.atomize.workbench import (
     AtomizeWorkbenchError,
     atomize_workbench_declared_frames,
     atomize_workbench_response_digest,

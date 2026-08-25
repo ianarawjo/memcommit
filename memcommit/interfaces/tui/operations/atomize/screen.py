@@ -9,12 +9,12 @@ from typing import TYPE_CHECKING
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.atomize import AtomizeAnalysisSession
-from memcommit.atomize_resolution_adapter import (
+from memcommit.operations.atomize.domain import AtomizeAnalysisSession
+from memcommit.operations.atomize.resolution_adapter import (
     AtomizeResolutionWorkbenchAdapter,
 )
-from memcommit.atomize_result_adapter import AtomizeResultWorkbenchAdapter
-from memcommit.atomize_workbench import (
+from memcommit.operations.atomize.result_adapter import AtomizeResultWorkbenchAdapter
+from memcommit.operations.atomize.workbench import (
     ATOMIZE_WORKBENCH_RESPONSE_CHAR_LIMIT,
     AtomizeWorkbenchFinding,
     AtomizeWorkbenchSession,

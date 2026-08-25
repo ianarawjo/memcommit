@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from typing import Callable
 
-from memcommit.atomize import AtomizeAnalysisSession
-from memcommit.atomize_grounding import AtomizeGroundingSession
+from memcommit.operations.atomize.domain import AtomizeAnalysisSession
+from memcommit.operations.atomize.grounding import AtomizeGroundingSession
 from memcommit.operations.atomize.grounding_application import (
     AtomizeGroundingApplicationError,
     GroundingAcceptRequest,
@@ -18,12 +18,12 @@ from memcommit.operations.atomize.grounding_application import (
     run_atomize_grounding_reply,
     run_atomize_grounding_start,
 )
-from memcommit.atomize_grounding_provider import AtomizeGroundingProvider
+from memcommit.operations.atomize.grounding_provider import AtomizeGroundingProvider
 from memcommit.operations.atomize.grounding_runtime import (
     MemoryStoreAtomizeGroundingPort,
     assert_current_grounding_bindings,
 )
-from memcommit.atomize_workbench import AtomizeWorkbenchSession
+from memcommit.operations.atomize.workbench import AtomizeWorkbenchSession
 from memcommit.commands.command_progress import progressing_provider_factory
 from memcommit.context import Context
 from memcommit.interfaces.cli.atomize_grounding import render_grounding_session

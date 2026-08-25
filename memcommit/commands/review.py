@@ -9,10 +9,10 @@ from typing import Annotated, Optional
 import typer
 
 import memcommit.ops as ops
-from memcommit.atomize import (
+from memcommit.operations.atomize.domain import (
     AtomizeImpactError,
 )
-from memcommit.atomize_workbench import (
+from memcommit.operations.atomize.workbench import (
     AtomizeWorkbenchError,
     atomize_workbench_issue_projection,
     create_atomize_workbench,

@@ -8,7 +8,7 @@ import json
 from typing import Callable
 
 import memcommit.ops as ops
-from memcommit.atomize import (
+from memcommit.operations.atomize.domain import (
     AppliedAtomizeItem,
     AtomizeAnalysisSession,
     AtomizeApplyResult,
@@ -16,7 +16,7 @@ from memcommit.atomize import (
     AtomizeNormalFormAudit,
     AtomizeProvider,
 )
-from memcommit.atomize_normal_form import project_atomize_normal_form
+from memcommit.operations.atomize.normal_form import project_atomize_normal_form
 from memcommit.operations.atomize.application import (
     AtomizeApplicationAudit,
     AtomizeApplicationError,
@@ -34,7 +34,7 @@ from memcommit.operations.atomize.application import (
     run_atomize_session_apply,
     run_atomize_save_as,
 )
-from memcommit.atomize_workbench import (
+from memcommit.operations.atomize.workbench import (
     AtomizeWorkbenchSession,
     atomize_workbench_record_digest,
 )

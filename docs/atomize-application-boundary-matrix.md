@@ -12,6 +12,35 @@ classifications, Study fixtures, saved schemas, and ordinary TUI navigation.
 The stable public projection exposes the same exact-version lifecycle rather
 than asking Python or agent adapters to reconstruct command-owned policy.
 
+## Support-module ownership
+
+The semantic records and pure projections that make those application slices
+possible now live beside them under `memcommit.operations.atomize`.  The
+canonical modules are `domain`, `workbench`, `grounding`,
+`grounding_provider`, `grounding_meld_adapter`, `normal_form`,
+`result_adapter`, and `resolution_adapter`.  This keeps the complete Atomize
+concept family under one owner while preserving distinct responsibilities:
+the domain and persisted interaction records remain independent of Store,
+provider decoding remains non-mutating, normal-form planning publishes no
+state, and the result and resolution adapters remain read-only projections.
+
+The former flat module names remain identity-preserving compatibility aliases.
+Importing an old or canonical path first therefore reaches the same module
+globals, so historical monkeypatches and serialized Python globals do not
+split from production imports.  The historical `atomize_workflow` facade and
+command/interface adapters are deliberately outside this relocation: the
+workflow only preserves an older calling shape over the existing analysis
+application/runtime boundary, while commands and interfaces retain composition
+and presentation rather than semantic ownership.
+
+This is an ownership-only relocation.  It does not change analysis,
+workbench, or grounding schema versions; `MAP_PLUS_GLOBAL` or
+`BLOCK_RELATIONS` planning; the prohibition on staged execution; complete
+frame exposure; strict provider alias decoding; review digests; CAS and
+checkpoint behavior; Dedun-backed normal-form validation; public command
+signatures; or any rendered terminal state.  Existing screenshots therefore
+remain valid and are not refreshed for this change.
+
 ## Current execution junction
 
 Atomize separates semantic records, strict provider decoding, mutable

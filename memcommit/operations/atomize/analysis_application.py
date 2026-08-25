@@ -5,13 +5,13 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Callable, Literal, Protocol
 
-from memcommit.atomize import (
+from memcommit.operations.atomize.domain import (
     AtomizeAnalysisSession,
     AtomizeFrameOrigin,
     AtomizeProvider,
     atomize_analysis_matches_context,
 )
-from memcommit.atomize_workbench import (
+from memcommit.operations.atomize.workbench import (
     AtomizeWorkbenchSession,
     atomize_workbench_issue_projection,
 )

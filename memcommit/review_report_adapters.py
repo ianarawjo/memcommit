@@ -4,9 +4,9 @@ from __future__ import annotations
 
 from dataclasses import replace
 
-from memcommit.atomize import AtomizeAnalysisSession
-from memcommit.atomize_resolution_adapter import AtomizeResolutionWorkbenchAdapter
-from memcommit.atomize_workbench import AtomizeWorkbenchSession
+from memcommit.operations.atomize.domain import AtomizeAnalysisSession
+from memcommit.operations.atomize.resolution_adapter import AtomizeResolutionWorkbenchAdapter
+from memcommit.operations.atomize.workbench import AtomizeWorkbenchSession
 from memcommit.comparison import ComparisonAnalysis, comparison_canonical_digest
 from memcommit.comparison_present import render_comparison
 from memcommit.meld import MeldSession
@@ -82,7 +82,7 @@ def atomize_review_report(
     workbench: AtomizeWorkbenchSession,
 ) -> ReviewReportController:
     """Expose Atomize findings and saved clarification responses."""
-    from memcommit.atomize_result_adapter import AtomizeResultWorkbenchAdapter
+    from memcommit.operations.atomize.result_adapter import AtomizeResultWorkbenchAdapter
     from memcommit.interfaces.tui.workbenches.result import (
         render_result_workbench_snapshot,
     )

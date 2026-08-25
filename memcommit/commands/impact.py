@@ -11,7 +11,7 @@ import typer
 
 from memcommit.commands.command_group import CanonicalCommandGroup
 
-from memcommit.atomize import (
+from memcommit.operations.atomize.domain import (
     AtomizeFrameOrigin,
     AtomizeImpactError,
     atomize_analysis_matches_context,
@@ -23,7 +23,7 @@ from memcommit.operations.atomize.analysis_application import (
 from memcommit.operations.atomize.analysis_runtime import (
     execute_atomize_analysis_open,
 )
-from memcommit.atomize_workbench import (
+from memcommit.operations.atomize.workbench import (
     AtomizeWorkbenchError,
     atomize_workbench_declared_frames,
     atomize_workbench_response_digest,
