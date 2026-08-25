@@ -1,0 +1,32 @@
+LIVE COLOR PTY · 52 180                                                                                                                                                             
+PROFILE · ISOLATED CAPTURE · CURRENT · practice/rules                                                                                                                               
+                                                                                                                                                                                    
+$ /Users/KimMunyeong/.local/bin/mem trace practice/rules --tui --all                                                                                                                
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ CONTEXT LINEAGE ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃  Added: "e is elderberry"                                                                                                                                                       ^┃
+┃  + [ADD] [MEMORY b7cb3281] e is elderberry                                                                                                                                       ┃
+┃                                                                                                                                                                                  ┃
+┃add [CHECKPOINT 9c069786]  2026-08-25 09:10 · 1 MEMORY CHANGE                                                                                                                     ┃
+┃  Added: "d is date"                                                                                                                                                              ┃
+┃  + [ADD] [MEMORY 6d0b572b] d is date                                                                                                                                             ┃
+┃                                                                                                                                                                                  ┃
+┃edit [CHECKPOINT 74961089]  2026-08-25 09:10 · 1 MEMORY CHANGE                                                                                                                    ┃
+┃  Edited memory [1a41ece3]                                                                                                                                                        ┃
+┃  - [EDIT] [MEMORY 1a41ece3] c is cherry                                                                                                                                          ┃
+┃  + [EDIT] [MEMORY 1a41ece3] c is clementine                                                                                                                                      ┃
+┃                                                                                                                                                                                  ┃
+┃add [CHECKPOINT 823bb878]  2026-08-25 09:10 · 1 MEMORY CHANGE                                                                                                                     ┃
+┃  Added: "c is cherry"                                                                                                                                                            ┃
+┃  + [ADD] [MEMORY 1a41ece3] c is cherry                                                                                                                                           ┃
+┃                                                                                                                                                                                  ┃
+┃add [CHECKPOINT 75a003f4]  2026-08-25 09:10 · 1 MEMORY CHANGE                                                                                                                     ┃
+┃  Added: "b is banana"                                                                                                                                                            ┃
+┃  + [ADD] [MEMORY c6537de9] b is banana                                                                                                                                           ┃
+┃                                                                                                                                                                                  ┃
+┃add [CHECKPOINT e86116c3]  2026-08-25 09:10 · 1 MEMORY CHANGE                                                                                                                     ┃
+┃  Added: "a is apple"                                                                                                                                                             ┃
+┃  + [ADD] [MEMORY 364d3c97] a is apple                                                                                                                                            ┃
+┃                                                                                                                                                                                  ┃
+┃init [CHECKPOINT 1dfa9a76]  2026-08-25 09:10 · 0 MEMORY CHANGES                                                                                                                  v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ TRACE REPORT · ↑/↓ scroll · PgUp/PgDn page · Home/End · Esc/Backspace/Q close · read-only

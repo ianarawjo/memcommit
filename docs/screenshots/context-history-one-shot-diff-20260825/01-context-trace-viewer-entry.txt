@@ -1,0 +1,32 @@
+LIVE COLOR PTY · 52 180                                                                                                                                                             
+PROFILE · ISOLATED CAPTURE · CURRENT · practice/rules                                                                                                                               
+                                                                                                                                                                                    
+$ /Users/KimMunyeong/.local/bin/mem trace practice/rules --tui --all                                                                                                                
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ CONTEXT LINEAGE ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃TRACE · practice/rules                                                                                                                                                           ^┃
+┃[CONTEXT] · 12 OPERATIONS · 11 MEMORY CHANGES · LATEST FIRST                                                                                                                      ┃
+┃                                                                                                                                                                                  ┃
+┃add [CHECKPOINT 43773be1]  2026-08-25 09:10 · 1 MEMORY CHANGE                                                                                                                     ┃
+┃  Added: "j is jujube"                                                                                                                                                            ┃
+┃  + [ADD] [MEMORY 5c40f954] j is jujube                                                                                                                                           ┃
+┃                                                                                                                                                                                  ┃
+┃add [CHECKPOINT 6eb33181]  2026-08-25 09:10 · 1 MEMORY CHANGE                                                                                                                     ┃
+┃  Added: "i is ita palm"                                                                                                                                                          ┃
+┃  + [ADD] [MEMORY 8a513d72] i is ita palm                                                                                                                                         ┃
+┃                                                                                                                                                                                  ┃
+┃add [CHECKPOINT 7d973b7f]  2026-08-25 09:10 · 1 MEMORY CHANGE                                                                                                                     ┃
+┃  Added: "h is honeydew"                                                                                                                                                          ┃
+┃  + [ADD] [MEMORY b3faacbb] h is honeydew                                                                                                                                         ┃
+┃                                                                                                                                                                                  ┃
+┃add [CHECKPOINT a5e3c4a6]  2026-08-25 09:10 · 1 MEMORY CHANGE                                                                                                                     ┃
+┃  Added: "g is grape"                                                                                                                                                             ┃
+┃  + [ADD] [MEMORY 3793bf37] g is grape                                                                                                                                            ┃
+┃                                                                                                                                                                                  ┃
+┃add [CHECKPOINT f5d11b75]  2026-08-25 09:10 · 1 MEMORY CHANGE                                                                                                                     ┃
+┃  Added: "f is fig"                                                                                                                                                               ┃
+┃  + [ADD] [MEMORY c011a171] f is fig                                                                                                                                              ┃
+┃                                                                                                                                                                                  ┃
+┃add [CHECKPOINT 74c6216a]  2026-08-25 09:10 · 1 MEMORY CHANGE                                                                                                                     ┃
+┃  Added: "e is elderberry"                                                                                                                                                       v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ TRACE REPORT · ↑/↓ scroll · PgUp/PgDn page · Home/End · Esc/Backspace/Q close · read-only

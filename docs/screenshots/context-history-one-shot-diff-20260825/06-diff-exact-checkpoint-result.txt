@@ -1,0 +1,19 @@
+LIVE COLOR PTY · 52 180                                                                                                                                                             
+PROFILE · ISOLATED CAPTURE · CURRENT · practice/rules                                                                                                                               
+                                                                                                                                                                                    
+$ /Users/KimMunyeong/.local/bin/mem diff 74961089-ee87-479d-9673-b92f9bbd9720                                                                                                       
+UNIT        CHECKPOINT · THIS CHECKPOINT VS PREVIOUS                                                                                                                                
+CONTEXT     practice/rules                                                                                                                                                          
+ CHECKPOINT  74961089-ee87-479d-9673-b92f9bbd9720                                                                                                                                   
+ ACTION      edit                                                                                                                                                                   
+ DESCRIPTION Edited memory [1a41ece3]                                                                                                                                               
+                                                                                                                                                                                    
+ REVISION DIFF · RESULT 3 DIRECT ITEMS                                                                                                                                              
+ SUMMARY · 2 kept · 0 added · 1 edited · 0 removed                                                                                                                                  
+                                                                                                                                                                                    
+   [KEEP]   [364d3c97] a is apple                                                                                                                                                   
+   [KEEP]   [c6537de9] b is banana                                                                                                                                                  
+ - [EDIT]   [1a41ece3] c is cherry                                                                                                                                                  
+ + [EDIT]   [1a41ece3] c is clementine                                                                                                                                              
+                                                                                                                                                                                    
+EXACT CHECKPOINT DIFF VERIFIED · EXIT 0 · READ-ONLY

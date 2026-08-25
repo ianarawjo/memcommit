@@ -1,0 +1,7 @@
+LIVE COLOR PTY · 52 180
+PROFILE · ISOLATED CAPTURE · CURRENT · practice/rules
+
+$ /Users/KimMunyeong/.local/bin/mem diff pracitce/rules --stat
+[31mDiff error: Diff target 'pracitce/rules' is neither an existing Context nor an available checkpoint UID. Did you mean 'practice/rules'?[0m
+
+TYPO FAILURE VERIFIED · EXIT 1 · READ-ONLY

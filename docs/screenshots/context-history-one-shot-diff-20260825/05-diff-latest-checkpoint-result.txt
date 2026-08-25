@@ -1,0 +1,25 @@
+LIVE COLOR PTY · 52 180                                                                                                                                                             
+PROFILE · ISOLATED CAPTURE · CURRENT · practice/rules                                                                                                                               
+                                                                                                                                                                                    
+$ /Users/KimMunyeong/.local/bin/mem diff practice/rules                                                                                                                             
+UNIT        CHECKPOINT · THIS CHECKPOINT VS PREVIOUS                                                                                                                                
+CONTEXT     practice/rules                                                                                                                                                          
+ CHECKPOINT  43773be1-b5d9-4ded-bde8-59858d7ae9f8                                                                                                                                   
+ ACTION      add                                                                                                                                                                    
+ DESCRIPTION Added: "j is jujube"                                                                                                                                                   
+                                                                                                                                                                                    
+ REVISION DIFF · RESULT 10 DIRECT ITEMS                                                                                                                                             
+ SUMMARY · 9 kept · 1 added · 0 edited · 0 removed                                                                                                                                  
+                                                                                                                                                                                    
+   [KEEP]   [364d3c97] a is apple                                                                                                                                                   
+   [KEEP]   [c6537de9] b is banana                                                                                                                                                  
+   [KEEP]   [1a41ece3] c is clementine                                                                                                                                              
+   [KEEP]   [6d0b572b] d is date                                                                                                                                                    
+   [KEEP]   [b7cb3281] e is elderberry                                                                                                                                              
+   [KEEP]   [c011a171] f is fig                                                                                                                                                     
+   [KEEP]   [3793bf37] g is grape                                                                                                                                                   
+   [KEEP]   [b3faacbb] h is honeydew                                                                                                                                                
+   [KEEP]   [8a513d72] i is ita palm                                                                                                                                                
+ + [ADD]    [5c40f954] j is jujube                                                                                                                                                  
+                                                                                                                                                                                    
+LATEST CHECKPOINT DIFF VERIFIED · EXIT 0 · READ-ONLY
