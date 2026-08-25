@@ -14,6 +14,20 @@ common contract on a report redesign.
 
 ## Contract
 
+The operation-neutral report values and controller are owned by
+`memcommit.reviewing.report`. That shared owner knows how to remove application
+capabilities from a frozen Resolution view and how to expose exact report text;
+it does not import Compare, Meld, Sever, Atomize, or Update. Each operation
+continues to own the adapter that supplies its artifact identity, report kind,
+evidence, response behavior, and persistence lifecycle. The historical
+`memcommit.review_report` path is an identity alias so existing imports and
+serialized globals resolve to the same classes without creating a second
+implementation.
+
+This is an ownership-only relocation. It does not change report text, focus or
+response behavior, provider use, application authority, persistence, or the
+separate operation adapters.
+
 An operation supplies a revision-bound `ReviewReport` with:
 
 - operation, artifact UID, and revision identity;

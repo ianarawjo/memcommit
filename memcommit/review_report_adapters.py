@@ -11,7 +11,7 @@ from memcommit.comparison import ComparisonAnalysis, comparison_canonical_digest
 from memcommit.comparison_present import render_comparison
 from memcommit.meld import MeldSession
 from memcommit.meld_resolution_adapter import MeldResolutionWorkbenchAdapter
-from memcommit.review_report import ReviewReportController
+from memcommit.reviewing.report import ReviewReportController
 from memcommit.sever import SeverSession
 from memcommit.sever_resolution_adapter import SeverResolutionWorkbenchAdapter
 from memcommit.update import UpdateSession
