@@ -11,7 +11,11 @@ name input, creation planning, checkpoint policy, Store execution, and console
 rendering all lived in `commands/init.py`.
 
 This extraction moves the use case behind one typed application request and
-result while preserving that Store transaction. A later shared naming update
+result while preserving that Store transaction. Its implementation is now
+owned by `memcommit.operations.context_init`; the former top-level application
+and runtime paths remain true module aliases for compatibility. This ownership
+relocation changes no request, result, validation, checkpoint, transaction,
+output, or interaction behavior. A later shared naming update
 reserves complete root names that have the public Memory UUID/prefix-selector
 shape; it changes neither the ordinary Context schema nor checkpoint schema,
 and existing legacy names remain readable.
@@ -52,10 +56,10 @@ typed data; it is not yet a stable public Python API.
 | CLI argument parsing and cancellation text | `commands/init.py` | No request is executed after TUI cancellation. |
 | Suggested exact-name editing | `interfaces/tui/operations/context_init` over the shared Context name editor | Returns a request only; creates, loads, switches, and persists nothing. |
 | Successful human-readable output | `interfaces/cli/context_init.py` | Preserves the established single and `--parents` receipts. |
-| Parent-prefix expansion | `context_init_application.py` | Ordered lexical prefixes end at the requested leaf. No embedded-Context relation is created. |
-| Require-new versus reuse policy | `context_init_application.py` | Exact mode requires the sole Context to be new; `--parents` may reuse any valid existing prefix, including the leaf. |
-| Initial checkpoint arguments and descriptions | `context_init_application.py` | Exact mode records `name`; parent mode additionally records `parents` and `requested_name` for every created prefix. |
-| Context construction and name validation | `context_init_runtime.py` over `context_naming.py` | Production uses the existing in-memory `ops.init` factory and the shared new-identity validator, including the UUID-selector reservation. |
+| Parent-prefix expansion | `operations/context_init/application.py` | Ordered lexical prefixes end at the requested leaf. No embedded-Context relation is created. |
+| Require-new versus reuse policy | `operations/context_init/application.py` | Exact mode requires the sole Context to be new; `--parents` may reuse any valid existing prefix, including the leaf. |
+| Initial checkpoint arguments and descriptions | `operations/context_init/application.py` | Exact mode records `name`; parent mode additionally records `parents` and `requested_name` for every created prefix. |
+| Context construction and name validation | `operations/context_init/runtime.py` over `context_naming.py` | Production uses the existing in-memory `ops.init` factory and the shared new-identity validator, including the UUID-selector reservation. |
 | Locks, symlink checks, atomic batch rollback, and current CAS | `MemoryStore.create_missing_contexts` | All names remain locked through creation, rollback, and the final state write. |
 
 ## Durable invariants

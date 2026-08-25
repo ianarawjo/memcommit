@@ -2,11 +2,11 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.context_init_application import (
+from memcommit.operations.context_init.application import (
     ContextInitError,
     ContextInitRequest,
 )
-from memcommit.context_init_runtime import (
+from memcommit.operations.context_init.runtime import (
     execute_context_init,
     prepare_context_init,
 )
