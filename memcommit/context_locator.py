@@ -1,6 +1,10 @@
 """Pure lexical resolution for CLI operands that locate existing Contexts."""
 from __future__ import annotations
 
+from collections.abc import Sequence
+
+from memcommit.name_suggestions import canonical_name_suggestions
+
 
 def is_relative_context_locator(locator: str) -> bool:
     """Return whether a locator explicitly opts into current-relative lookup."""
@@ -64,3 +68,33 @@ def resolve_context_locator(
             "root, which is not a Context."
         )
     return "/".join(parts)
+
+
+def suggest_context_locators(
+    locator: str,
+    *,
+    current: str | None,
+    available_names: Sequence[str],
+) -> tuple[str, ...]:
+    """Suggest existing canonical Contexts after exact interpretation fails.
+
+    This is deliberately separate from :func:`resolve_context_locator`:
+    similarity can improve a failure receipt, but it must never select or load
+    a Context. Relative input is compared in its resolved canonical namespace.
+    """
+
+    candidate = resolve_context_locator(locator, current=current)
+    names = tuple(dict.fromkeys(available_names))
+    if any(not isinstance(name, str) or not name for name in names):
+        raise ValueError("Context suggestion catalog contains an invalid name.")
+    return canonical_name_suggestions(
+        candidate,
+        {name: name for name in names},
+    )
+
+
+__all__ = [
+    "is_relative_context_locator",
+    "resolve_context_locator",
+    "suggest_context_locators",
+]
