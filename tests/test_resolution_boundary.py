@@ -71,7 +71,9 @@ def test_meld_resolution_application_does_not_import_runtime_or_interfaces():
         "prompt_toolkit",
         "typer",
     )
-    imports = _imports(PACKAGE / "meld_resolution_application.py")
+    imports = _imports(
+        PACKAGE / "operations" / "meld" / "resolution_application.py"
+    )
 
     assert not any(
         module == prefix or module.startswith(f"{prefix}.")
@@ -85,8 +87,8 @@ def test_meld_interfaces_enter_the_operation_owned_resolution_boundary():
     public_imports = _imports(PACKAGE / "api" / "_operations" / "meld.py")
     agent_imports = _imports(PACKAGE / "interfaces" / "agent" / "meld.py")
 
-    assert "memcommit.meld_resolution_application" in command_imports
-    assert "memcommit.meld_resolution_application" in public_imports
+    assert "memcommit.operations.meld.resolution_application" in command_imports
+    assert "memcommit.operations.meld.resolution_application" in public_imports
     assert "memcommit.api" in agent_imports
 
 

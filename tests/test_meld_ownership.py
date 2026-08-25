@@ -22,6 +22,63 @@ MODULE_PAIRS = (
         "memcommit.meld_runtime",
         "memcommit.operations.meld.runtime",
     ),
+    (
+        "memcommit.meld_application_flow",
+        "memcommit.operations.meld.application_flow",
+    ),
+    (
+        "memcommit.meld_session_application",
+        "memcommit.operations.meld.session_application",
+    ),
+    (
+        "memcommit.meld_start_application",
+        "memcommit.operations.meld.start_application",
+    ),
+    (
+        "memcommit.meld_restart_application",
+        "memcommit.operations.meld.restart_application",
+    ),
+    (
+        "memcommit.meld_assessment_application",
+        "memcommit.operations.meld.assessment_application",
+    ),
+    (
+        "memcommit.meld_resolution_application",
+        "memcommit.operations.meld.resolution_application",
+    ),
+)
+
+COMPATIBILITY_GLOBALS = (
+    (
+        "memcommit.meld_application_flow",
+        "memcommit.operations.meld.application_flow",
+        "MeldApplicationFlowPort",
+    ),
+    (
+        "memcommit.meld_session_application",
+        "memcommit.operations.meld.session_application",
+        "MeldSessionSnapshot",
+    ),
+    (
+        "memcommit.meld_start_application",
+        "memcommit.operations.meld.start_application",
+        "MeldStartRequest",
+    ),
+    (
+        "memcommit.meld_restart_application",
+        "memcommit.operations.meld.restart_application",
+        "MeldRestartRequest",
+    ),
+    (
+        "memcommit.meld_assessment_application",
+        "memcommit.operations.meld.assessment_application",
+        "FrozenMeldAssessment",
+    ),
+    (
+        "memcommit.meld_resolution_application",
+        "memcommit.operations.meld.resolution_application",
+        "MeldResolutionTurnRequest",
+    ),
 )
 
 
@@ -80,7 +137,10 @@ def test_meld_legacy_paths_expose_the_canonical_contract() -> None:
 
 @pytest.mark.parametrize(
     "relative_path",
-    ("memcommit/meld_application.py", "memcommit/meld_runtime.py"),
+    tuple(
+        f"{legacy_name.replace('.', '/')}.py"
+        for legacy_name, _canonical_name in MODULE_PAIRS
+    ),
 )
 def test_meld_legacy_facades_define_no_behavior(relative_path: str) -> None:
     path = REPOSITORY_ROOT / relative_path
@@ -99,6 +159,12 @@ import memcommit.operations.meld
 
 assert "memcommit.operations.meld.application" not in sys.modules
 assert "memcommit.operations.meld.runtime" not in sys.modules
+assert "memcommit.operations.meld.application_flow" not in sys.modules
+assert "memcommit.operations.meld.session_application" not in sys.modules
+assert "memcommit.operations.meld.start_application" not in sys.modules
+assert "memcommit.operations.meld.restart_application" not in sys.modules
+assert "memcommit.operations.meld.assessment_application" not in sys.modules
+assert "memcommit.operations.meld.resolution_application" not in sys.modules
 """
 
     subprocess.run(
@@ -125,15 +191,37 @@ def test_pre_relocation_meld_globals_load_through_aliases() -> None:
     assert restored_runtime_port is canonical_runtime.MemoryStoreMeldApplyPort
 
 
+@pytest.mark.parametrize(
+    "legacy_name,canonical_name,global_name",
+    COMPATIBILITY_GLOBALS,
+)
+def test_pre_relocation_meld_subapplication_globals_load_through_aliases(
+    legacy_name: str,
+    canonical_name: str,
+    global_name: str,
+) -> None:
+    restored = pickle.loads(
+        f"c{legacy_name}\n{global_name}\n.".encode("ascii")
+    )
+    canonical = importlib.import_module(canonical_name)
+
+    assert restored is getattr(canonical, global_name)
+
+
 def test_production_meld_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "memcommit/api/_operations/meld.py",
         "memcommit/commands/meld.py",
+        "memcommit/operations/meld/restart_application.py",
+        "memcommit/operations/meld/resolution_application.py",
         "memcommit/operations/meld/runtime.py",
+    )
+
+    legacy_modules = tuple(
+        legacy_name for legacy_name, _canonical_name in MODULE_PAIRS
     )
 
     for relative_path in relative_paths:
         path = REPOSITORY_ROOT / relative_path
         source = path.read_text(encoding="utf-8")
-        assert "from memcommit.meld_application import" not in source
-        assert "from memcommit.meld_runtime import" not in source
+        assert not [name for name in legacy_modules if name in source]

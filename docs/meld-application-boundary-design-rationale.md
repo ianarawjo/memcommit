@@ -10,22 +10,28 @@ adapters.
 
 ## Boundary
 
-Meld now separates three terminal-independent contracts:
+Meld now separates its terminal-independent contracts:
 
-- `meld_assessment_application` owns one frozen semantic turn, cache replay,
+- `memcommit.operations.meld.assessment_application` owns one frozen semantic
+  turn, cache replay,
   provider execution, one repair attempt, and all-or-nothing publication.
-- `meld_session_application` owns saved-session snapshots, pending dialogue
+- `memcommit.operations.meld.session_application` owns saved-session snapshots,
+  pending dialogue
   turns, defer, provider-free preservation, and destination-change requests.
-- `meld_resolution_application` projects a saved assessment into the common
+- `memcommit.operations.meld.resolution_application` projects a saved
+  assessment into the common
   Resolution contract, validates exact issue/option UIDs against its opaque
   version, and translates a valid choice to operation-owned provider guidance.
-- `meld_application` owns reviewed Apply routing. `meld_runtime` supplies the
+- `memcommit.operations.meld.application` owns reviewed Apply routing.
+  `memcommit.operations.meld.runtime` supplies the
   MemoryStore, Grant, checkpoint, recovery, cache, and provider adapters.
-- `meld_start_application` owns the canonical source/target request and
+- `memcommit.operations.meld.start_application` owns the canonical
+  source/target request and
   validates the resulting initial review. The runtime repeats source authority,
   transfer, Compare-basis, empty-target, and session-absence checks before it
   publishes either a directional review or a symmetric Result session.
-- `meld_restart_application` owns replacement of an existing target-bound
+- `memcommit.operations.meld.restart_application` owns replacement of an
+  existing target-bound
   review under an opaque expected version. Start and restart share the same
   authorization, Compare, cache, and construction runtime, but restart must
   observe the old session before provider construction and replace it by CAS.
@@ -130,8 +136,9 @@ The follow-up boundary previously converted a TUI option UID to an ordinal in
 the interface, then converted that ordinal back to provider text in the CLI.
 The CLI's scripted `--choice` path did the same independently, while Python and
 agent callers could submit only free-form text. The corrected boundary carries
-the exact option UID into `meld_resolution_application`; only that operation
-layer reads its frozen option text. Python exposes option UID and requires the
+the exact option UID into
+`memcommit.operations.meld.resolution_application`; only that operation layer
+reads its frozen option text. Python exposes option UID and requires the
 expected version for every comment, while the agent requires
 `expected_version` for comment, preserve, defer, and Apply. Apply alone accepts
 the exact reconstructed predecessor of an already applied receipt so a

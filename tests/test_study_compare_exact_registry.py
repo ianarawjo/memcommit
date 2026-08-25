@@ -29,7 +29,7 @@ from memcommit.config import Config
 from memcommit.context import Context, Memory
 from memcommit.context_targeting.loading import load_context_scope
 from memcommit.granted_comparison_store import recursive_comparison_projection
-from memcommit.meld_start_application import MeldStartRequest
+from memcommit.operations.meld.start_application import MeldStartRequest
 from memcommit.profile_config import (
     ProfileEntry,
     ProfileRegistry,

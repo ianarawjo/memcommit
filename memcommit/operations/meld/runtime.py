@@ -52,7 +52,7 @@ from memcommit.meld import (
     materialize_preservation_assessment,
     meld_canonical_digest,
 )
-from memcommit.meld_assessment_application import (
+from memcommit.operations.meld.assessment_application import (
     FrozenMeldAssessment,
     MeldAssessmentPort,
     MeldAssessmentResult,
@@ -79,14 +79,14 @@ from memcommit.meld_resolution_cache import (
     configured_meld_cache_identity,
     meld_resolution_cache_key,
 )
-from memcommit.meld_restart_application import (
+from memcommit.operations.meld.restart_application import (
     MeldRestartError,
     MeldRestartPort,
     MeldRestartRequest,
     MeldRestartResult,
     run_meld_restart,
 )
-from memcommit.meld_session_application import (
+from memcommit.operations.meld.session_application import (
     MeldDestinationPort,
     MeldDestinationRequest,
     MeldPreservationPort,
@@ -100,7 +100,7 @@ from memcommit.meld_session_application import (
     run_meld_session_defer,
     run_meld_session_open,
 )
-from memcommit.meld_start_application import (
+from memcommit.operations.meld.start_application import (
     MeldStartError,
     MeldStartOrigin,
     MeldStartPort,

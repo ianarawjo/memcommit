@@ -8,7 +8,7 @@
 second consumer through
 `memcommit.operations.sever.application.SeverSessionApplicationFlowPort`;
 Meld is the third consumer through
-`memcommit.meld_application_flow.MeldApplicationFlowPort`.
+`memcommit.operations.meld.application_flow.MeldApplicationFlowPort`.
 
 These vertical slices establish that the phase contract can serve target
 mutation, require-new result creation, and multi-owner reconciliation. They

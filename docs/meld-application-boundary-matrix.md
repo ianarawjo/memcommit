@@ -22,23 +22,35 @@ independent source of provider, cache, session, or Apply behavior.
 The canonical terminal-independent owners now live together under
 `memcommit.operations.meld`. `application.py` owns the exact reviewed Apply
 request, route classification, port, result, and receipt validation;
+`application_flow.py` owns the compatibility adapter to the shared phase flow;
+`session_application.py` owns saved snapshots, pending turns, preservation,
+defer, and destination changes; `start_application.py` and
+`restart_application.py` own their distinct typed construction and CAS
+replacement contracts; `assessment_application.py` owns one frozen cached or
+provider-backed semantic turn; and `resolution_application.py` owns the exact
+saved issue/option projection into a pending turn. These modules depend inward
+from Restart to Start and Resolution to Session, never back through a command.
 `runtime.py` owns Store and Grant access, complete block/reconciliation work,
 provider/cache preparation, session CAS, Apply transactions, checkpoints, and
 recovery. API and command adapters import those operation-owned modules
 directly.
 
-The historical `memcommit.meld_application` and `memcommit.meld_runtime`
-paths remain behavior-free module-identity aliases for import-order,
-monkeypatch, and serialized-global compatibility. Importing
-`memcommit.operations.meld` alone remains lazy. New production consumers use
-the canonical paths; compatibility aliases are not alternate implementation
-owners.
+The historical flat `memcommit.meld_*_application`,
+`memcommit.meld_application_flow`, and `memcommit.meld_runtime` paths remain
+behavior-free module-identity aliases for import-order, monkeypatch, and
+serialized-global compatibility. Importing `memcommit.operations.meld` alone
+remains lazy. New production consumers use the canonical paths; compatibility
+aliases are not alternate implementation owners.
 
 This relocation changes physical ownership only. It does not change block
 planning or reconciliation, authority, saved-session schemas or CAS,
 provider/cache behavior, Apply transactions, checkpoint and recovery evidence,
 receipts, command grammar, or TUI interaction. Existing Meld PTY evidence
 therefore remains valid without a screenshot refresh.
+Provider decoding, resolution-cache persistence, saved choice branches, the
+Resolution workbench adapter, and TUI presentation are intentionally not moved
+by this ownership-only change; their contracts and current locations remain a
+separate boundary.
 
 ## Post-TUI completion audit (2026-08-15)
 

@@ -9,15 +9,15 @@ from types import SimpleNamespace
 import pytest
 
 import memcommit.comparison_execution as comparison_execution
-import memcommit.meld_assessment_application as meld_assessment_application
-import memcommit.meld_restart_application as meld_restart_application
+import memcommit.operations.meld.assessment_application as meld_assessment_application
+import memcommit.operations.meld.restart_application as meld_restart_application
 import memcommit.operations.meld.runtime as meld_runtime
-import memcommit.meld_session_application as meld_session_application
-import memcommit.meld_start_application as meld_start_application
+import memcommit.operations.meld.session_application as meld_session_application
+import memcommit.operations.meld.start_application as meld_start_application
 from memcommit.authority.access import ContextAccess
 from memcommit.context import Context, Memory
 from memcommit.meld import meld_canonical_digest
-from memcommit.meld_restart_application import MeldRestartRequest
+from memcommit.operations.meld.restart_application import MeldRestartRequest
 
 
 PACKAGE_ROOT = Path(__file__).resolve().parents[1] / "memcommit"

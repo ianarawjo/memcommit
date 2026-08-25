@@ -14,7 +14,7 @@ from memcommit.api import (
     MeldStorageError,
     MemCommitClient,
 )
-from memcommit.meld_session_application import MeldSessionSnapshot
+from memcommit.operations.meld.session_application import MeldSessionSnapshot
 
 
 def _review_session():

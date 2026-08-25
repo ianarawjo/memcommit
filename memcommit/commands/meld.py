@@ -69,8 +69,8 @@ from memcommit.interfaces.console.text import (
     display_escape_text,
     safe_terminal_text,
 )
-from memcommit.meld_start_application import MeldStartRequest
-from memcommit.meld_restart_application import MeldRestartRequest
+from memcommit.operations.meld.restart_application import MeldRestartRequest
+from memcommit.operations.meld.start_application import MeldStartRequest
 from memcommit.interfaces.tui.core.text_layout import (
     elide_terminal_text,
     single_line_terminal_text,
@@ -846,7 +846,7 @@ def _assess_and_save(
         execute_prepared_meld_turn,
         prepare_pending_meld_turn,
     )
-    from memcommit.meld_session_application import PendingMeldTurn
+    from memcommit.operations.meld.session_application import PendingMeldTurn
 
     prepared = prepare_pending_meld_turn(
         PendingMeldTurn(
@@ -971,12 +971,12 @@ def _run_interactive(
         execute_meld_preservation,
         execute_meld_session_defer,
     )
-    from memcommit.meld_session_application import (
+    from memcommit.operations.meld.session_application import (
         MeldDestinationRequest,
         MeldSessionSnapshot,
         prepare_meld_preservation_turn,
     )
-    from memcommit.meld_resolution_application import (
+    from memcommit.operations.meld.resolution_application import (
         MeldResolutionTurnRequest,
         prepare_meld_resolution_turn,
     )
@@ -2192,11 +2192,11 @@ def cmd(
             execute_meld_preservation,
             execute_meld_session_defer,
         )
-        from memcommit.meld_session_application import (
+        from memcommit.operations.meld.session_application import (
             MeldSessionSnapshot,
             prepare_meld_preservation_turn,
         )
-        from memcommit.meld_resolution_application import (
+        from memcommit.operations.meld.resolution_application import (
             MeldResolutionTurnRequest,
             prepare_meld_resolution_turn,
         )
