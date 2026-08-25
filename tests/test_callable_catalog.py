@@ -144,6 +144,18 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
         in by_operation["translate"].application_modules
     )
     assert (
+        "memcommit.operations.translate.application"
+        in by_operation["translate"].application_modules
+    )
+    assert (
+        "memcommit.operations.translate.catalog_application"
+        in by_operation["translate"].application_modules
+    )
+    assert (
+        "memcommit.operations.translate.materialization"
+        in by_operation["translate"].application_modules
+    )
+    assert (
         "memcommit.operations.chunk.application"
         in by_operation["chunk"].application_modules
     )
@@ -188,7 +200,7 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
     assert by_operation["show"].curated_state == "CLOSED"
     for operation in ("branch", "chunk", "clear", "contexts", "undo", "redo"):
         assert by_operation[operation].curated_state == "CLOSED"
-    assert by_operation["translate"].curated_state == "MIXED"
+    assert by_operation["translate"].curated_state == "CLOSED"
     assert {record.curated_state for record in snapshot.operations} == {
         "CLOSED",
         "MIXED",
@@ -215,7 +227,8 @@ def test_curated_classification_covers_all_operations_conservatively() -> None:
     assert {"branch", "chunk", "clear", "contexts", "undo", "redo"} <= states[
         "CLOSED"
     ]
-    assert {"translate", "update"} <= states["MIXED"]
+    assert "translate" in states["CLOSED"]
+    assert "update" in states["MIXED"]
 
 
 def test_checked_in_catalog_is_current() -> None:

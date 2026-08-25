@@ -2,10 +2,9 @@
 
 ## Reviewed operation
 
-Translate has an operation-owned semantic and persistence core, but its only
-current CLI route still assembles several application policies inside
-`memcommit.commands.translate`. Its route classification is therefore
-`MIXED`, not `CLOSED`.
+Translate's CLI and historical in-memory compatibility routes now enter one
+typed terminal-independent application family. Its current route
+classification is `CLOSED`.
 
 | Concern | Current owner | Review conclusion |
 | --- | --- | --- |
@@ -13,9 +12,9 @@ current CLI route still assembles several application policies inside
 | In-memory translated materialization | `memcommit.operations.translate.runtime` | Operation-owned |
 | Same-UID provider/curated projection model | `memcommit.operations.translate.view` | Operation-owned |
 | Sidecar load, migration, CAS publication | `memcommit.operations.translate.view_store` | Operation-owned |
-| Catalog seed/reuse/refresh orchestration | `memcommit.commands.translate` | Not yet migrated |
-| Manual edit, verify, reset, import/export policy | `memcommit.commands.translate` | Not yet migrated |
-| Source targeting, provider selection, save-as/in-place transaction assembly | `memcommit.commands.translate` | Not yet migrated |
+| Request validation, targeting, reuse/refresh, provider timing | `memcommit.operations.translate.application` | Operation-owned |
+| Catalog seed, curated edit/verify/reset, import/export policy | `memcommit.operations.translate.catalog_application` and `application` | Operation-owned |
+| In-place/save-as checkpoints and final CAS | `memcommit.operations.translate.materialization` | Operation-owned |
 | ANSI rendering and CLI syntax | `memcommit.commands.translate` | Correct adapter concern only where presentation-specific |
 
 ## Preserved invariants
@@ -28,10 +27,18 @@ current CLI route still assembles several application policies inside
 - Same-UID view publication is CAS-bound and publishes no partial catalog.
 - Materialization remains explicit and revalidates the command-start current
   Source before checkpointed graph mutation.
+- Contradictory modes fail before Store or provider access, and the application
+  alone decides whether an exact saved view makes a provider call unnecessary.
+- Import file reading, export file creation, `$EDITOR`, provider progress, and
+  Save Location review are injected adapters; their outcomes enter typed
+  application validation before semantic or durable use.
 
-## Remaining migration
+## Adapter boundary
 
-A terminal-independent Translate application must own one typed request and
-result across saved-view open/create, curated mutations, import/export,
-provider refresh, and both materialization modes. Until that orchestration is
-removed from the command, ownership relocation alone is not route closure.
+The CLI retains argument declarations, safe file/stdin/stdout mechanics,
+terminal rendering, progress presentation, editor launch, and require-new
+Save Location review. It does not choose catalog provenance, provider reuse,
+curation semantics, import validity, checkpoint contents, or Apply ordering.
+No agent, MCP, or high-level public client Translate adapter is currently
+exposed; the historical `memcommit.ops` calls delegate to the same operation
+runtime and do not constitute a second route owner.

@@ -308,6 +308,13 @@
           "docs/undo-redo-application-boundary-matrix.md"
         ],
         "reason": "The CLI enters one fixed Undo adapter over the shared fail-closed granted-versus-local restoration selector and preserves one durable undo operation identity."
+      },
+      "translate": {
+        "evidence": [
+          "docs/mem-translate-design-rationale.md",
+          "docs/translate-application-boundary-matrix.md"
+        ],
+        "reason": "CLI and historical in-memory routes share typed targeting, saved-view reuse and refresh, curation, strict import/export, provider orchestration, sidecar CAS, and both checkpointed materialization boundaries under the Translate operation package."
       }
     },
     "MIXED": {
@@ -328,13 +335,6 @@
           "docs/session-endpoint-setup-design-rationale.md"
         ],
         "reason": "Apply policy and recovery are verified, but the remaining Update routes have not been traced into one complete reviewed application boundary."
-      },
-      "translate": {
-        "evidence": [
-          "docs/mem-translate-design-rationale.md",
-          "docs/translate-application-boundary-matrix.md"
-        ],
-        "reason": "Semantic planning, translated view models, sidecar CAS, and in-memory materialization are operation-owned, but the CLI still owns catalog, curation, import/export, provider, and materialization orchestration."
       }
     },
     "LEGACY": {},

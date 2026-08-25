@@ -3,22 +3,22 @@
 ## Implementation ownership
 
 `memcommit.operations.translate` is the canonical implementation owner for
-Translate. Its `runtime` module owns semantic planning and in-memory
-materialization, `view` owns the validated UID-preserving projection models,
-and `view_store` owns deterministic sidecar persistence and compare-and-swap
-publication. Production consumers import those narrow operation modules
-directly. The former `memcommit.translate`, `memcommit.translation_view`, and
+Translate. Its `application` module owns typed request validation, Source
+targeting, saved-view reuse/refresh, provider-call timing, curation, and mode
+orchestration; `catalog_application` owns import/export and catalog mutation
+contracts; `materialization` owns both checkpointed Apply transactions.
+`runtime`, `view`, and `view_store` retain semantic planning, strict projection
+models, and deterministic sidecar CAS respectively. Production consumers
+import those narrow operation modules directly. The former
+`memcommit.translate`, `memcommit.translation_view`, and
 `memcommit.translation_view_store` paths remain behavior-free module-identity
 aliases so existing imports, monkeypatch targets, and serialized globals
 continue to resolve to the same module objects regardless of import order.
 
-The route has now been reviewed and is classified `MIXED`. Semantic batching,
-view schemas, storage keys, and in-memory materialization are operation-owned,
-but the CLI module still owns catalog orchestration, curated edit/import/export
-policy, provider selection, and materialization transaction assembly. The
-exact migrated and remaining boundaries are recorded in
-`translate-application-boundary-matrix.md`; ownership relocation alone is not
-treated as route closure.
+The reviewed route is now `CLOSED`. The CLI owns only argv, terminal/file I/O,
+progress, editor launch, Save Location review, and rendering adapters; every
+semantic and durable decision enters the typed operation boundary recorded in
+`translate-application-boundary-matrix.md`.
 
 ## Status and current decision
 
