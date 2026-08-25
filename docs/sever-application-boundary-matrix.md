@@ -74,16 +74,25 @@ SeverPersistedApplyResult
 | Apply result | `SeverPersistedApplyResult` | Source CAS or require-new Context, checkpoint, APPLIED-session replacement, and exact compensation | interfaces receive the resulting snapshot | Source and Criteria bindings, candidates, save mode, output name, and grounded summary cannot change during Apply; a synchronous receipt failure publishes neither side |
 | Interrupted Apply | same persisted request | exact Context/checkpoint recovery in `MemoryStoreSeverOutputPort` | retry uses the ordinary Apply path | only a self-save post-image or other-save Result whose digest and Sever checkpoint match the accepted session is adopted; unrelated state is never overwritten |
 | Idempotence | `run_sever_session_apply` | output and repository ports are skipped for an already APPLIED snapshot | reopening an applied session remains read-only | a repeated application call creates no second mutation or session revision; exact interrupted recovery reports `created=False` |
-| Presentation | none | none | command wait, plain renderer, setup TUI, Resolution Workbench | `sever_application` imports no Typer, prompt-toolkit, TUI, or `commands.*` module |
+| Presentation | none | none | command wait, plain renderer, setup TUI, Resolution Workbench | `operations.sever.application` imports no Typer, prompt-toolkit, TUI, or `commands.*` module |
 
 ## Dependency direction
 
-`memcommit.sever_application` depends only on the Sever domain/session and
-provider-decoder contracts. It does not import terminal or command modules.
-`memcommit.sever_runtime` implements Store, Grant, cache, provider-attempt,
+`memcommit.operations.sever.application` depends only on the Sever
+domain/session and provider-decoder contracts. It does not import terminal or
+command modules. `memcommit.operations.sever.runtime` implements Store, Grant,
+cache, provider-attempt,
 destination-validation, private-session, and checkpoint ports. Grant mechanics temporarily remain under
 `memcommit.authority.access`; that transitional dependency is confined
 to the runtime adapter, as it is for the Summarize slice.
+
+The former flat `memcommit.sever_application` and
+`memcommit.sever_runtime` paths are behavior-free module-identity aliases.
+They preserve old imports, monkeypatch targets, and serialized globals while
+all production consumers import the operation package directly. This is an
+ownership-only relocation: whole-frame curation, authority, session CAS,
+Apply compensation, terminal behavior, and the recorded TUI evidence are
+unchanged.
 
 `memcommit.commands.sever` retains thin `_start` and `_apply` compatibility
 facades because existing internal tests historically called the analysis-only

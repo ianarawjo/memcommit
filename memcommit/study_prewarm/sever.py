@@ -406,7 +406,7 @@ def _capture_prepared_basis(
     # Import lazily because the production runtime consults this module for an
     # exact lookup after freezing ordinary inputs. The application boundary,
     # rather than the CLI command, owns the shared frame-capture contract.
-    from memcommit.sever_runtime import capture_sever_binding
+    from memcommit.operations.sever.runtime import capture_sever_binding
 
     source = capture_sever_binding(
         source_access,

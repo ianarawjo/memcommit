@@ -62,7 +62,7 @@ architectural-closure conclusion. `Curated state` comes from the reviewed
 | `revert` | `memcommit.commands.revert:cmd` | — | — | — | — | — | `COMMAND_ONLY` | `UNREVIEWED` |
 | `review` | `memcommit.commands.review:cmd` | — | — | — | — | — | `COMMAND_ONLY` | `UNREVIEWED` |
 | `search` | `memcommit.commands.find:cmd` | — | — | `search` | `memcommit.interfaces.agent.search` | — | `PARTIAL_SURFACE` | `MIXED` |
-| `sever` | `memcommit.commands.sever:cmd` | `memcommit.sever_application`<br>`memcommit.sever_runtime` | — | — | — | `docs/sever-application-boundary-matrix.md` | `BOUNDED_INTERNAL` | `CLOSED` |
+| `sever` | `memcommit.commands.sever:cmd` | `memcommit.operations.sever`<br>`memcommit.operations.sever.application`<br>`memcommit.operations.sever.runtime`<br>`memcommit.sever_application`<br>`memcommit.sever_runtime` | — | — | — | `docs/sever-application-boundary-matrix.md` | `BOUNDED_INTERNAL` | `CLOSED` |
 | `share` | `memcommit.commands.share:cmd` | — | — | — | — | — | `COMMAND_ONLY` | `UNREVIEWED` |
 | `shell-init` | `memcommit.commands.shell_init:cmd` | — | — | — | — | — | `COMMAND_ONLY` | `UNREVIEWED` |
 | `show` | `memcommit.commands.show:cmd` | `memcommit.show_application`<br>`memcommit.show_runtime` | — | `show` | `memcommit.interfaces.agent.show` | `docs/show-application-boundary-matrix.md` | `BOUNDED_INTERNAL` | `CLOSED` |

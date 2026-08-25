@@ -53,7 +53,7 @@ from memcommit.sever import (
     SeverSession,
 )
 from memcommit.interactive_command_review import sever_turn_command_review
-from memcommit.sever_application import (
+from memcommit.operations.sever.application import (
     SeverAnalysisProgress,
     SeverAnalysisRequest,
     SeverAnalysisResult,
@@ -69,7 +69,7 @@ from memcommit.sever_resolution_adapter import (
     SeverResolutionWorkbenchAdapter,
     sever_memory_changes,
 )
-from memcommit.sever_runtime import (
+from memcommit.operations.sever.runtime import (
     capture_sever_binding,
     execute_sever_analysis,
     execute_sever_apply,

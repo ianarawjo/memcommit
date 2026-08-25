@@ -22,13 +22,13 @@ from memcommit.profiles import (
     update_authority_grant,
 )
 from memcommit.sever import SeverCandidate, SeverSession
-from memcommit.sever_application import (
+from memcommit.operations.sever.application import (
     SeverAnalysisRequest,
     SeverAnalysisResult,
     SeverApplicationError,
     SeverPersistedApplyRequest,
 )
-from memcommit.sever_runtime import (
+from memcommit.operations.sever.runtime import (
     MemoryStoreSeverInputPort,
     MemoryStoreSeverOutputPort,
     execute_sever_session_apply,

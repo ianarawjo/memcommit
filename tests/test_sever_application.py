@@ -18,8 +18,8 @@ from memcommit.sever import (
     SeverMemory,
     SeverSession,
 )
-import memcommit.sever_application as sever_application
-from memcommit.sever_application import (
+import memcommit.operations.sever.application as sever_application
+from memcommit.operations.sever.application import (
     FrozenSeverInputs,
     SeverAnalysisProgress,
     SeverAnalysisRequest,
@@ -41,8 +41,8 @@ from memcommit.sever_application import (
     run_sever_session_start,
 )
 from memcommit.sever_provider import SEVER_PAYLOAD_MARKER
-import memcommit.sever_runtime as sever_runtime
-from memcommit.sever_runtime import (
+import memcommit.operations.sever.runtime as sever_runtime
+from memcommit.operations.sever.runtime import (
     execute_sever_analysis,
     execute_sever_apply,
     execute_sever_session_apply,
