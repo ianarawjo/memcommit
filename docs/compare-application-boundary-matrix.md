@@ -1,5 +1,22 @@
 # Compare application boundary matrix
 
+## Lightweight Summary implementation ownership
+
+The default transient Compare path is owned by
+`memcommit.operations.compare.summary`, `.summary_rules`,
+`.summary_provider`, and `.summary_application`. The former flat
+`memcommit.comparison_summary*` module paths are identity-preserving
+compatibility aliases so import order, monkeypatches, and pre-relocation pickle
+references resolve to the same canonical modules and classes. New production
+code imports the operation package directly.
+
+This ownership move does not combine the transient paragraph with the deep
+ledger lifecycle below. `comparison`, `comparison_provider`,
+`comparison_store`, `comparison_execution`, and
+`comparison_session_application` remain the owners of exhaustive Run, Open,
+and Refresh for now. Plain-text rendering also remains interface-owned and is
+not imported by the canonical Summary application or provider.
+
 ## Operation shape
 
 | Property | Contract |
@@ -16,6 +33,7 @@
 
 | Use case | Typed owner | Python | Agent / MCP | CLI / TUI |
 | --- | --- | --- | --- | --- |
+| Default transient summary | `operations.compare.summary_application.run_comparison_summary` | not exposed as the deep public API | not exposed as the deep agent API | default explicit endpoints or endpoint setup |
 | Run or reuse | `comparison_execution.ensure_comparison_analysis` | `compare_contexts` | `kind=run` | explicit endpoints or endpoint setup |
 | Open exact saved analysis | `comparison_session_application.open_comparison_session` | `open_comparison` | `kind=open` | saved-session picker |
 | Refresh reviewed analysis | `prepare_comparison_refresh` plus production execution | `refresh_comparison(expected_version=...)` | `kind=refresh` | explicit `--refresh` freezes the current slot at command start |

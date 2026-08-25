@@ -45,6 +45,29 @@ the provider answers the human reading task actually requested. Deep Compare
 is no longer hidden behind the default spelling, while Meld loses none of the
 coverage it requires.
 
+## Implementation ownership
+
+The transient contract has one canonical operation package:
+
+- `operations.compare.summary_rules` owns the versioned compact-relation
+  rules and checked-in fixture decoder;
+- `operations.compare.summary` owns the immutable bounded result;
+- `operations.compare.summary_provider` owns prompt planning, schema, and
+  strict decoding; and
+- `operations.compare.summary_application` owns COMBINE authorization,
+  provider invocation, and post-call source revalidation.
+
+The previous flat `comparison_summary*` paths are module-identity aliases for
+import and pickle compatibility, not alternate implementations. The package
+initializer performs no eager imports, so importing the operation namespace
+does not construct a provider or assemble either Compare contract.
+
+Plain-text rendering remains an interface concern. The ownership move does
+not relocate the presenter into the operation package, and none of the four
+canonical modules imports command or terminal code. It also deliberately
+leaves the exhaustive model, provider, stores, execution, session lifecycle,
+saved JSON, and Meld basis unchanged.
+
 ## Lightweight provider and evidence contract
 
 The summary request freezes the same exact ordered Context frames and optional

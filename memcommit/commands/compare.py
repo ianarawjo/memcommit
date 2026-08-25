@@ -11,10 +11,13 @@ from memcommit.comparison import (
     ComparisonError,
     ComparisonInput,
 )
-from memcommit.comparison_summary import ComparisonSummary, ComparisonSummaryError
-from memcommit.comparison_summary_application import run_comparison_summary
+from memcommit.operations.compare.summary import (
+    ComparisonSummary,
+    ComparisonSummaryError,
+)
+from memcommit.operations.compare.summary_application import run_comparison_summary
 from memcommit.comparison_summary_present import render_comparison_summary
-from memcommit.comparison_summary_provider import COMPARISON_SUMMARY_OPERATION
+from memcommit.operations.compare.summary_provider import COMPARISON_SUMMARY_OPERATION
 from memcommit.comparison_present import (
     render_comparison,
     render_comparison_receipt,
