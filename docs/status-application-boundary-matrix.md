@@ -22,11 +22,15 @@ checkpoint facts, and performs no provider or mutation lifecycle.
 
 | Callable | Current owner | Intended layer | Inputs/result | Effects | Authority/cache boundary | Evidence |
 | --- | --- | --- | --- | --- | --- | --- |
-| `inspect_status` | `memcommit.status_application` | Application | `StatusRequest` + `StatusSourcePort` → `StatusResult` | Through injected read port only | Owns bounded preview/history policy; no cache/session/receipt | direct application tests |
-| `MemoryStoreStatusSource.freeze` | `memcommit.status_runtime` | Infrastructure adapter | typed reach → `FrozenStatusFrame` | Store/Profile/Grant/checkpoint reads | Resolves READ before content projection; one registry generation | runtime, recursive, Grant tests |
-| `execute_status` | `memcommit.status_runtime` | Composition | request + explicit Store → typed result | Same read effects as source port | No terminal import or output | runtime no-output test |
+| `inspect_status` | `memcommit.operations.status.application` | Application | `StatusRequest` + `StatusSourcePort` → `StatusResult` | Through injected read port only | Owns bounded preview/history policy; no cache/session/receipt | direct application tests |
+| `MemoryStoreStatusSource.freeze` | `memcommit.operations.status.runtime` | Infrastructure adapter | typed reach → `FrozenStatusFrame` | Store/Profile/Grant/checkpoint reads | Resolves READ before content projection; one registry generation | runtime, recursive, Grant tests |
+| `execute_status` | `memcommit.operations.status.runtime` | Composition | request + explicit Store → typed result | Same read effects as source port | No terminal import or output | runtime no-output test |
 | `render_status` | `memcommit.interfaces.cli.status` | CLI presenter | typed result + display flags → text | stdout only | Cannot load Store, resolve authority, or change scope | CLI output tests |
 | `commands.status.cmd` | Typer adapter | CLI parsing/error boundary | flags → request and presenter | Store construction and terminal error reporting | Delegates all substantive read policy | command regressions |
+
+The implementation is owned by `memcommit.operations.status`; the former
+top-level application and runtime paths remain true module aliases so existing
+imports, object identities, and monkeypatch targets retain their behavior.
 
 ## Invariants
 

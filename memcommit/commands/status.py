@@ -13,12 +13,12 @@ from memcommit.context_targeting.presets import (
 from memcommit.interfaces.cli.status import render_status
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
-from memcommit.status_application import (
+from memcommit.operations.status.application import (
     NoCurrentStatusContextError,
     StatusError,
     StatusRequest,
 )
-from memcommit.status_runtime import execute_status
+from memcommit.operations.status.runtime import execute_status
 from memcommit.store import MemoryStore
 
 
