@@ -10,6 +10,17 @@ documented in
 [`mem-atomize-design-rationale.md`](mem-atomize-design-rationale.md).
 This document specifies only the directional A-to-B form.
 
+## CLI registry ownership
+
+The typed Impact route registry is owned by
+`memcommit.interfaces.cli.impact_registry`, alongside the other non-interactive
+CLI composition interfaces. The historical
+`memcommit.commands.impact_registry` path remains an exact module alias so old
+imports and monkeypatches observe the same module globals and registry objects.
+This is an ownership-only relocation: route order, lifecycle values, help text,
+validation and error behavior, and Typer command installation are unchanged.
+The active Impact command imports the interface owner directly.
+
 ## Intent
 
 These commands express a directional semantic operation with independently
