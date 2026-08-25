@@ -118,6 +118,19 @@ All pre-Revert checkpoints share one typed Revert receipt and complete
 result as one command unit: one `mem undo` or `mem redo` restores every member
 rather than consuming the Revert one Context at a time.
 
+## Terminal location-picker ownership
+
+The Context-first checkpoint location picker is owned by
+`memcommit.interfaces.tui.components.checkpoint_location`. Diff and Update
+checkpoint consumers import that interface path directly, while
+`memcommit.commands.history_location_picker` remains a compatibility alias to
+the same module object. The alias preserves legacy imports and monkeypatches
+without a second set of module globals.
+
+This is an ownership-only relocation. Callable signatures, defaults,
+validation and error messages, selection construction, TTY requirements,
+rendering, and key behavior remain unchanged.
+
 ## Alternatives and limitations
 
 Changing the first positional operand unconditionally from MESSAGE to CONTEXT

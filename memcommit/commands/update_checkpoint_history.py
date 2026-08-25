@@ -14,7 +14,9 @@ from memcommit.commands.history_picker import (
     HistoryPickerItem,
     choose_history,
 )
-from memcommit.commands.history_location_picker import choose_history_location
+from memcommit.interfaces.tui.components.checkpoint_location import (
+    choose_history_location,
+)
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )

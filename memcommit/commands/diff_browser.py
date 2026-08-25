@@ -15,7 +15,7 @@ from memcommit.context_targeting.tui.picker import (
     ContextMemoryRow,
     ContextSubtreeSelection,
 )
-from memcommit.commands.history_location_picker import (
+from memcommit.interfaces.tui.components.checkpoint_location import (
     CheckpointLocationSelection,
     choose_history_location,
 )
