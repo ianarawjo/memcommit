@@ -15,7 +15,7 @@ import json
 from typing import Any, Iterable, Literal, Sequence
 import uuid
 
-from memcommit.chunking import chunk_content
+from memcommit.operations.chunk.domain import chunk_content
 from memcommit.command_history import CommandHistoryError, branch_tree_receipt
 from memcommit.context import Context, Memory
 from memcommit.history import HistoryError, flatten_checkpoint_entries

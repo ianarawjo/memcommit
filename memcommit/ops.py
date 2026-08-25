@@ -1196,44 +1196,15 @@ def chunk(
     min_chars: int | None = None,
     max_chars: int | None = None,
 ) -> tuple[Memory, list[Memory]]:
-    """
-    Propose a chunked split of a Memory without mutating ctx.
+    """Compatibility adapter for operation-owned Chunk planning."""
 
-    Resolves *uid* (or an unambiguous prefix) to a Memory, applies the named
-    chunking method and optional literal/length constraints, and returns
-    ``(original_memory, new_memories)``.
+    from memcommit.operations.chunk.application import chunk as plan_chunk
 
-    When ``len(new_memories) <= 1`` the content could not be split further
-    with the chosen method — the caller should take no action.
-
-    Raises:
-        KeyError   — uid not found in ctx
-        ValueError — ambiguous prefix or unknown method name
-        TypeError  — uid resolves to a reference or embedded Context, not a Memory
-    """
-    from memcommit.chunking import chunk_content
-
-    matches = [k for k in ctx.memories if k.startswith(uid)]
-    if not matches:
-        raise KeyError(f"No item with uid starting with '{uid}'.")
-    if len(matches) > 1:
-        raise ValueError(
-            f"Ambiguous prefix '{uid}' matches {len(matches)} items: "
-            + ", ".join(m[:8] for m in matches)
-        )
-    full_uid = matches[0]
-    item = ctx.memories[full_uid]
-    if not isinstance(item, Memory):
-        raise TypeError(
-            f"'{uid[:8]}' is not a Memory directly owned by this Context — cannot chunk."
-        )
-
-    raw_chunks = chunk_content(
-        item.content,
+    return plan_chunk(
+        ctx,
+        uid,
         method,
         break_on=break_on,
         min_chars=min_chars,
         max_chars=max_chars,
     )
-    new_memories = [Memory(uid=str(uuid.uuid4()), content=c) for c in raw_chunks]
-    return item, new_memories

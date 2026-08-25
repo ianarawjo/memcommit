@@ -4,16 +4,15 @@ from typing import Annotated, Optional
 
 import typer
 
-import memcommit.ops as ops
 from memcommit.command_attempts import annotate_command_outcome
 from memcommit.authority.access import (
-    authorized_context_mutation,
-    grant_checkpoint_args,
     resolve_context_access,
 )
-from memcommit.chunking import ChunkMethod, chunk_content
+from memcommit.operations.chunk.application import chunk
+from memcommit.operations.chunk.domain import ChunkMethod, chunk_content
+from memcommit.operations.chunk.runtime import apply_chunk_proposals
 from memcommit.commands.context_operand import ContextOperandSnapshot
-from memcommit.context import AutoCheckpoint, Memory
+from memcommit.context import Memory
 from memcommit.context_targeting.loading import (
     resolve_local_context_memory_target,
     resolve_local_direct_memory_locator,
@@ -234,7 +233,7 @@ def cmd(
             max_chars=max_chars,
         )
         if memory_selector is not None:
-            original, chunks = ops.chunk(
+            original, chunks = chunk(
                 ctx,
                 memory_selector,
                 method,
@@ -251,7 +250,7 @@ def cmd(
             for item in ctx.iter_items():
                 if not isinstance(item, Memory):
                     continue
-                original, chunks = ops.chunk(
+                original, chunks = chunk(
                     ctx,
                     item.uid,
                     method,
@@ -329,53 +328,18 @@ def cmd(
 
     # Chunk is one checkpointed, Undoable command, so invoking it is the
     # approval boundary; only history-destroying deletion keeps a second prompt.
-    split_records: list[dict[str, object]] = []
-    for original, chunks in proposals:
-        original_position = ctx.ordered_uids().index(original.uid)
-        ctx.remove(original.uid)
-        for offset, chunk_memory in enumerate(chunks):
-            ctx.add(chunk_memory, position=original_position + offset)
-        split_records.append(
-            {
-                "uid": original.uid,
-                "chunk_uids": [chunk_memory.uid for chunk_memory in chunks],
-            }
-        )
-
-    checkpoint_args: dict[str, object] = {
-        "context": access.context_name,
-        "method": method.value,
-        **grant_checkpoint_args(access),
-    }
-    if break_on is not None:
-        checkpoint_args["break_on"] = break_on
-    if min_chars is not None:
-        checkpoint_args["min_chars"] = min_chars
-    if max_chars is not None:
-        checkpoint_args["max_chars"] = max_chars
-    if memory_selector is not None:
-        checkpoint_args["uid"] = proposals[0][0].uid
-    else:
-        # Exact parent/child identities let Trace reconstruct every split in a
-        # batch without guessing from repeated chunk contents.
-        checkpoint_args["splits"] = split_records
-
     try:
-        with authorized_context_mutation(
-            access,
-            required_permissions=("CREATE", "DELETE"),
-        ):
-            store.save(
-                ctx,
-                AutoCheckpoint(
-                    command="chunk",
-                    args=checkpoint_args,
-                    description=(
-                        f"Chunked {source_count} Memory(s) into {chunk_count} "
-                        f"Memories ({settings})"
-                    ),
-                ),
-            )
+        apply_chunk_proposals(
+            access=access,
+            context=ctx,
+            proposals=proposals,
+            method=method,
+            settings=settings,
+            memory_selector=memory_selector,
+            break_on=break_on,
+            min_chars=min_chars,
+            max_chars=max_chars,
+        )
     except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
         typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
