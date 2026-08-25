@@ -10,12 +10,12 @@ from typing import Iterator, Literal, Protocol
 
 from memcommit.context import Context, Memory
 from memcommit.distill import DistillError, DistillProvider
-from memcommit.distill_application import (
+from memcommit.operations.distill.application import (
     DistillRequest,
     DistillResult,
     run_distill,
 )
-from memcommit.distill_runtime import execute_distill
+from memcommit.operations.distill.runtime import execute_distill
 from memcommit.ground import (
     GROUND_PROPOSITION_SCHEMA_VERSION,
     GroundFrame,

@@ -5,7 +5,7 @@ from __future__ import annotations
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.elaborate_application import ElaborateResult
+from memcommit.operations.elaborate.application import ElaborateResult
 from memcommit.interfaces.tui.components.plain_text_clipboard import ClipboardWriter
 from memcommit.interfaces.tui.operations.elaborate.adapter import (
     project_elaborate_clipboard,

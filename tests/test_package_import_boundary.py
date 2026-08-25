@@ -70,7 +70,10 @@ blocked = (
     'memcommit.dedup_runtime',
     'memcommit.comparison_execution',
     'memcommit.distill_application',
+    'memcommit.distill_runtime',
     'memcommit.elaborate_application',
+    'memcommit.elaborate_runtime',
+    'memcommit.elaborate_add_runtime',
     'memcommit.embed_application',
     'memcommit.fit_application',
     'memcommit.fit_runtime',
@@ -97,6 +100,11 @@ blocked = (
     'memcommit.operations.atomize.runtime',
     'memcommit.operations.dedup.application',
     'memcommit.operations.dedup.runtime',
+    'memcommit.operations.distill.application',
+    'memcommit.operations.distill.runtime',
+    'memcommit.operations.elaborate.application',
+    'memcommit.operations.elaborate.runtime',
+    'memcommit.operations.elaborate.add_runtime',
     'memcommit.operations.query.ordinary_application',
     'memcommit.operations.embed.application',
     'memcommit.operations.embed.runtime',
@@ -255,9 +263,12 @@ for name in (
     'memcommit.atomize',
     'memcommit.update',
     'memcommit.distill',
-    'memcommit.distill_application',
+    'memcommit.operations.distill.application',
+    'memcommit.operations.distill.runtime',
     'memcommit.elaborate',
-    'memcommit.elaborate_application',
+    'memcommit.operations.elaborate.application',
+    'memcommit.operations.elaborate.runtime',
+    'memcommit.operations.elaborate.add_runtime',
 ):
     importlib.import_module(name)
 from memcommit.api import MemCommitClient
@@ -548,12 +559,20 @@ client = MemCommitClient(
 result = client.elaborate(goal='Confirm before acting.', number=1)
 assert result.rules[0].content == 'Confirm the option before acting.'
 assert 'memcommit.api._operations.elaborate' in sys.modules
-assert 'memcommit.elaborate_application' in sys.modules
+assert 'memcommit.operations.elaborate.application' in sys.modules
+assert 'memcommit.operations.elaborate.runtime' in sys.modules
+assert 'memcommit.operations.elaborate.add_runtime' not in sys.modules
+assert 'memcommit.elaborate_application' not in sys.modules
+assert 'memcommit.elaborate_runtime' not in sys.modules
+assert 'memcommit.elaborate_add_runtime' not in sys.modules
 assert 'memcommit.api._operations.ground_elaborate' not in sys.modules
 assert 'memcommit.api._operations.ground_distill' not in sys.modules
 assert 'memcommit.ground_elaborate' not in sys.modules
 assert 'memcommit.ground_distill' not in sys.modules
 assert 'memcommit.distill_application' not in sys.modules
+assert 'memcommit.distill_runtime' not in sys.modules
+assert 'memcommit.operations.distill.application' not in sys.modules
+assert 'memcommit.operations.distill.runtime' not in sys.modules
 assert 'memcommit.meld_application' not in sys.modules
 assert 'memcommit.meld_runtime' not in sys.modules
 assert 'memcommit.operations.meld.application' not in sys.modules

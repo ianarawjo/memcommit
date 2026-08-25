@@ -13,7 +13,7 @@ from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 import memcommit.commands.elaborate as elaborate_command
-import memcommit.elaborate_application as elaborate_application
+import memcommit.operations.elaborate.application as elaborate_application
 import memcommit.ops as ops
 from memcommit.cli import app
 from memcommit.conformance import CONTEXT_CONFORMANCE_OPERATION
@@ -25,9 +25,9 @@ from memcommit.elaborate import (
     ElaborateMode,
     ElaborateQualityPolicy,
 )
-from memcommit.elaborate_application import ElaborateRequest
+from memcommit.operations.elaborate.application import ElaborateRequest
 from memcommit.elaborate_config import ElaborateSemanticConfig
-from memcommit.elaborate_runtime import execute_elaborate
+from memcommit.operations.elaborate.runtime import execute_elaborate
 from memcommit.fit_judgment import (
     FIT_JUDGMENT_OPERATION,
     FIT_JUDGMENT_PAYLOAD_MARKER,

@@ -18,8 +18,8 @@ from memcommit.api.errors import (
 )
 from memcommit.api.semantic import DistillApplyResult, DistillProposal
 from memcommit.distill import DistillError
-from memcommit.distill_application import DistillApplyRequest, DistillRequest
-from memcommit.distill_runtime import execute_distill, execute_distill_apply
+from memcommit.operations.distill.application import DistillApplyRequest, DistillRequest
+from memcommit.operations.distill.runtime import execute_distill, execute_distill_apply
 from memcommit.query_provider import QueryProviderError
 
 

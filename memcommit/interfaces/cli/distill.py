@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import typer
 
-from memcommit.distill_application import DistillResult
+from memcommit.operations.distill.application import DistillResult
 from memcommit.interfaces.console.content_row import render_numbered_content_row
 from memcommit.interfaces.console.text import safe_terminal_text
 

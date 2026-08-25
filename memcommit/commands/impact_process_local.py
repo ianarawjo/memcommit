@@ -27,14 +27,14 @@ from memcommit.context_targeting.presets import (
     resolve_scope_preset,
 )
 from memcommit.distill import DistillError
-from memcommit.distill_application import DistillRequest, DistillResult
-from memcommit.distill_runtime import execute_distill, prepare_distill_add
+from memcommit.operations.distill.application import DistillRequest, DistillResult
+from memcommit.operations.distill.runtime import execute_distill, prepare_distill_add
 from memcommit.elaborate import ElaborateError, ElaborateMode
-from memcommit.elaborate_add_runtime import (
+from memcommit.operations.elaborate.add_runtime import (
     freeze_elaborate_context_source,
     prepare_elaborate_add,
 )
-from memcommit.elaborate_application import ElaborateRequest, ElaborateResult
+from memcommit.operations.elaborate.application import ElaborateRequest, ElaborateResult
 from memcommit.fit_judgment import FitJudgmentError
 from memcommit.operations.forget.application import (
     ForgetAnalysisRequest,

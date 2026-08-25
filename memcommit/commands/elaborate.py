@@ -11,8 +11,8 @@ from memcommit.clipboard import write_system_clipboard
 from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.elaborate import ElaborateError, ElaborateMode
-from memcommit.elaborate_application import ElaborateRequest, ElaborateResult
-from memcommit.elaborate_add_runtime import (
+from memcommit.operations.elaborate.application import ElaborateRequest, ElaborateResult
+from memcommit.operations.elaborate.add_runtime import (
     FrozenElaborateSource,
     PreparedElaborateAdd,
     apply_prepared_elaborate_add,

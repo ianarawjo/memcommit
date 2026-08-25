@@ -107,6 +107,22 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
     assert by_operation["help"].curated_state == "CLOSED"
     assert by_operation["switch"].curated_state == "CLOSED"
     assert (
+        "memcommit.operations.distill.application"
+        in by_operation["distill"].application_modules
+    )
+    assert (
+        "memcommit.operations.distill.runtime"
+        in by_operation["distill"].application_modules
+    )
+    assert (
+        "memcommit.operations.elaborate.application"
+        in by_operation["elaborate"].application_modules
+    )
+    assert (
+        "memcommit.operations.elaborate.add_runtime"
+        in by_operation["elaborate"].application_modules
+    )
+    assert (
         "memcommit.operations.show.application"
         in by_operation["show"].application_modules
     )

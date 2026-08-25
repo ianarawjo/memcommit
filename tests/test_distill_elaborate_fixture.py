@@ -16,8 +16,8 @@ from memcommit.distill_elaborate_reference import (
     load_distill_elaborate_reference_families,
 )
 from memcommit.elaborate import ELABORATE_PAYLOAD_MARKER
-from memcommit.elaborate_application import ElaborateRequest
-from memcommit.elaborate_runtime import execute_elaborate
+from memcommit.operations.elaborate.application import ElaborateRequest
+from memcommit.operations.elaborate.runtime import execute_elaborate
 from memcommit.semantic_prompt_policy import GENERAL_SEMANTIC_PROMPT_POLICY
 from tests.elaborate_validation_support import (
     passing_elaborate_validation_response,

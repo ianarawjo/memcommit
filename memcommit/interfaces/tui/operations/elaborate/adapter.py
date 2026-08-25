@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from memcommit.elaborate import ElaborateMode
-from memcommit.elaborate_application import ElaborateResult
+from memcommit.operations.elaborate.application import ElaborateResult
 from memcommit.interfaces.cli.elaborate import elaborate_result_text
 from memcommit.interfaces.console.text import safe_terminal_text
 from memcommit.interfaces.tui.operations.elaborate.model import (

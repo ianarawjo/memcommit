@@ -2,6 +2,24 @@
 
 Last reviewed: 2026-08-23.
 
+## Implementation ownership
+
+Distill and Elaborate now keep their executable use cases under distinct
+operation owners: `memcommit.operations.distill` owns Distill analysis,
+Source/Target freezing, provider composition, and atomic Rule publication,
+while `memcommit.operations.elaborate` owns Elaborate generation plus its
+Context-backed atomic Add preparation. Elaborate's provider-only runtime stays
+separate from `add_runtime`, so proposal-only public adapters do not acquire a
+storage dependency merely because the standalone CLI can publish. The former
+flat modules remain identity-preserving compatibility aliases for imported and
+pickled names, but production code imports the operation owners directly.
+
+This relocation intentionally does not merge the operations or change their
+whole-frame planning, exact prepared-result matching, authority, validation,
+or publication contracts. It changes implementation ownership and dependency
+direction only, so the existing behavior-focused PTY evidence does not require
+a screenshot refresh.
+
 | Concern | Distill | Elaborate | Evidence state |
 | --- | --- | --- | --- |
 | Meaning | Case/Example Context propositions → evidence-linked generative Rules, including common language, tone, expression, and notation; optional Goal focuses relevance and receives a non-generative whole-result Fit audit | Goal → at least one suggested Rule, or Rules → at least one suggested Case | `VERIFIED` against quoted café, lost-property, and Cloze reference families plus Goal Fit focused tests |

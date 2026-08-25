@@ -7,7 +7,7 @@ from collections.abc import Callable
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.distill_application import DistillRequest, DistillResult
+from memcommit.operations.distill.application import DistillRequest, DistillResult
 from memcommit.interfaces.console.terminal import require_interactive_terminal
 from memcommit.interfaces.tui.operations.distill.adapter import (
     project_distill_clipboard,

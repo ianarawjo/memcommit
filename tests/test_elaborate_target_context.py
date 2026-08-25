@@ -11,7 +11,7 @@ import memcommit.ops as ops
 from memcommit.authority.access import granted_context_link, resolve_context_access
 from memcommit.context import Context, QueryContextRef
 from memcommit.elaborate import ELABORATE_PAYLOAD_MARKER, ElaborateError
-from memcommit.elaborate_add_runtime import (
+from memcommit.operations.elaborate.add_runtime import (
     apply_prepared_elaborate_add,
     freeze_elaborate_context_source,
     prepare_elaborate_add,

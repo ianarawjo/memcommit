@@ -14,8 +14,8 @@ from memcommit.api.errors import (
 )
 from memcommit.api.semantic import ElaborateProposal
 from memcommit.elaborate import ElaborateError
-from memcommit.elaborate_application import ElaborateRequest
-from memcommit.elaborate_runtime import execute_elaborate
+from memcommit.operations.elaborate.application import ElaborateRequest
+from memcommit.operations.elaborate.runtime import execute_elaborate
 from memcommit.query_provider import QueryProviderError
 
 

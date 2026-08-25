@@ -11,7 +11,7 @@ from typer.testing import CliRunner
 
 import memcommit.ops as ops
 import memcommit.commands.distill as distill_command
-import memcommit.distill_application as distill_application
+import memcommit.operations.distill.application as distill_application
 from memcommit.cli import app
 from memcommit.commands.help_inventory import COMMAND_FORMS
 from memcommit.context import Context, Memory
@@ -26,9 +26,9 @@ from memcommit.distill_goal_fit import (
     DISTILL_GOAL_FIT_OPERATION,
     DISTILL_GOAL_FIT_PAYLOAD_MARKER,
 )
-from memcommit.distill_application import DistillApplyRequest, DistillRequest
+from memcommit.operations.distill.application import DistillApplyRequest, DistillRequest
 from memcommit.distill_config import DistillSemanticConfig
-from memcommit.distill_runtime import execute_distill, execute_distill_apply
+from memcommit.operations.distill.runtime import execute_distill, execute_distill_apply
 from memcommit.ground import (
     GroundTargetSpec,
     bind_ground_workbench,

@@ -28,12 +28,12 @@ from memcommit.context_targeting.tui.picker import (
 )
 from memcommit.context_naming import validate_portable_context_name
 from memcommit.distill import DistillError
-from memcommit.distill_application import (
+from memcommit.operations.distill.application import (
     DistillApplyRequest,
     DistillRequest,
     DistillResult,
 )
-from memcommit.distill_runtime import (
+from memcommit.operations.distill.runtime import (
     apply_prepared_distill_add,
     execute_distill,
     execute_distill_apply,

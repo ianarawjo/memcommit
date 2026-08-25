@@ -5,7 +5,7 @@ from __future__ import annotations
 import typer
 
 from memcommit.elaborate import ElaborateMode
-from memcommit.elaborate_application import ElaborateResult
+from memcommit.operations.elaborate.application import ElaborateResult
 from memcommit.interfaces.console.content_row import render_numbered_content_row
 from memcommit.interfaces.console.text import safe_terminal_text
 

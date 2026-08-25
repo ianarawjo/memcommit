@@ -9,7 +9,7 @@ from memcommit.context import Context, Memory
 from memcommit.context_targeting.tui.picker import ContextMemoryRow
 from memcommit.distill import DistillAnalysis, DistilledRule
 from memcommit.distill_goal_fit import DistillGoalFit
-from memcommit.distill_application import (
+from memcommit.operations.distill.application import (
     DistillRequest,
     DistillResult,
 )

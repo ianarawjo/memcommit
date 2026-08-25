@@ -5,8 +5,8 @@ from __future__ import annotations
 from collections.abc import Callable
 from typing import TypeAlias
 
-from memcommit.elaborate_application import ElaborateRequest, ElaborateResult
-from memcommit.distill_application import DistillRequest, DistillResult
+from memcommit.operations.elaborate.application import ElaborateRequest, ElaborateResult
+from memcommit.operations.distill.application import DistillRequest, DistillResult
 from memcommit.interfaces.cli.distill import render_distill_plain
 from memcommit.interfaces.cli.elaborate import render_elaborate_plain
 from memcommit.interfaces.cli.summarize import render_summarize_plain

@@ -16,8 +16,8 @@ from memcommit.elaborate import (
     ELABORATE_PAYLOAD_MARKER,
     ElaborateError,
 )
-from memcommit.elaborate_application import ElaborateRequest
-from memcommit.elaborate_runtime import execute_elaborate
+from memcommit.operations.elaborate.application import ElaborateRequest
+from memcommit.operations.elaborate.runtime import execute_elaborate
 from memcommit.store import MemoryStore
 from tests.elaborate_validation_support import (
     passing_elaborate_validation_response,

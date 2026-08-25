@@ -140,3 +140,4 @@ def test_exact_add_does_not_absorb_semantic_materialization_helpers() -> None:
         source = (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         assert "memcommit.semantic_add_runtime" not in source
         assert "memcommit.elaborate_add_runtime" not in source
+        assert "memcommit.operations.elaborate.add_runtime" not in source

@@ -13,8 +13,8 @@ from memcommit.elaborate import (
     ElaborateTargetContext,
     ElaborateTargetContextItem,
 )
-from memcommit.elaborate_application import ElaborateRequest, ElaborateResult
-from memcommit.elaborate_runtime import execute_elaborate
+from memcommit.operations.elaborate.application import ElaborateRequest, ElaborateResult
+from memcommit.operations.elaborate.runtime import execute_elaborate
 from memcommit.elaborate_target_context import (
     FrozenElaborateTargetContext,
     authorized_frozen_elaborate_target,

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.distill_application import DistillResult
+from memcommit.operations.distill.application import DistillResult
 from memcommit.interfaces.cli.distill import distill_result_text
 from memcommit.interfaces.console.text import safe_terminal_text
 from memcommit.interfaces.tui.operations.distill.model import (
