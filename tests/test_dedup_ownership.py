@@ -147,9 +147,9 @@ def test_exact_dedup_and_dedun_scope_remain_separate_owners() -> None:
     runtime = (
         REPOSITORY_ROOT / "memcommit/operations/dedup/runtime.py"
     ).read_text(encoding="utf-8")
-    exact = (REPOSITORY_ROOT / "memcommit/exact_dedup.py").read_text(
-        encoding="utf-8"
-    )
+    exact = (
+        REPOSITORY_ROOT / "memcommit/operations/exact_dedup/application.py"
+    ).read_text(encoding="utf-8")
     dedun_scope = (REPOSITORY_ROOT / "memcommit/dedun_scope.py").read_text(
         encoding="utf-8"
     )

@@ -14,14 +14,23 @@ the applying Dedup boundary.
 | CLI | `mem find-duplicates [--context CONTEXT] [-d\|-r]` | shared locator and readable-scope freeze, then per-Context `find_exact_duplicates` | complete Context-labelled exact groups; no mutation |
 | Public Python | `MemCommitClient.find_duplicates(context_name, include_descendants=...)` | `api._operations.exact_duplicates.find_duplicates_exact`, then the same scope core | aggregate `ExactDuplicateFindResult` plus per-Context results; no mutation |
 
-Both routes converge on `memcommit.exact_dedup.find_exact_duplicates` and its
-pure `memcommit.direct_item_duplicates` detector. They do not construct a
+Both routes converge on
+`memcommit.operations.exact_dedup.application.find_exact_duplicates` and its
+pure `memcommit.direct_item_duplicates` detector. The former
+`memcommit.exact_dedup` and `memcommit.exact_dedup_application` paths are
+identity-preserving compatibility aliases; production consumers import the
+operation owner. They do not construct a
 provider, normalize content, open a semantic workbench, create a checkpoint,
 or modify the global current Context. Recursive reach uses public lexical
 names, may include READ-granted descendants, and never follows Embed edges.
 Their Read Report
 operation identity is exactly `find-duplicates`; metadata from
 `find-redundancies` is rejected instead of canonicalized as an alias.
+
+This shared implementation home does not merge Find Duplicates with applying
+Dedup. Find Duplicates exposes only the frozen provider-free report, while
+Dedup alone invokes the authority, reference, checkpoint, and atomic
+publication portion of the same exact operation boundary.
 
 ## Relationship to DUN
 

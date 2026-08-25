@@ -14,9 +14,10 @@ separately under Find Duplicates, Find Redundancies, and Dedun.
 
 Both routes converge on the pure role-aware detector in
 `memcommit.direct_item_duplicates` and the Apply boundary in
-`memcommit.exact_dedup`; the compatibility
-`memcommit.exact_dedup_application` module re-exports its terminal-independent
-grouping and Apply boundary. Recursive reach enumerates lexical names only,
+`memcommit.operations.exact_dedup.application`. The former
+`memcommit.exact_dedup` and `memcommit.exact_dedup_application` paths are
+identity-preserving compatibility aliases for that terminal-independent
+grouping and Apply owner. Recursive reach enumerates lexical names only,
 keeps groups Context-local, and publishes changed records through
 `save_context_command_batch` after binding the complete local graph and
 namespace. Neither applying route constructs a provider, TUI, survivor choice,
@@ -48,6 +49,16 @@ second application implementations.
 
 ## Ownership relocation boundary
 
+`memcommit.operations.exact_dedup.application` is the canonical owner of the
+provider-free exact discovery, scope, receipt, and Apply implementation shared
+by exact Dedup and read-only Find Duplicates. The flat
+`memcommit.exact_dedup` and `memcommit.exact_dedup_application` paths remain
+module-identity aliases, so either import order, existing monkeypatches, and
+serialized globals reach the same implementation. Production consumers import
+the operation package directly. Keeping this reviewed implementation together
+is intentional for this ownership-only relocation; introducing a new port or
+runtime split would change more than its implementation home.
+
 `memcommit.operations.dedup.application` and
 `memcommit.operations.dedup.runtime` are the canonical owners of the
 historically named reviewed-redundancy contracts that Dedun and composite
@@ -57,9 +68,10 @@ aliases, so either import order, existing monkeypatches, and serialized globals
 reach the same module objects. Production consumers import the operation
 package directly.
 
-This ownership-only relocation does not reclassify exact Dedup or absorb
-Dedun. Provider-free exact detection and Apply remain owned by
-`direct_item_duplicates` and `exact_dedup`; Dedun's analysis, lexical-scope
+This ownership-only relocation does not reclassify exact Dedup, merge it with
+Find Duplicates, or absorb Dedun. Provider-free exact-key detection remains a
+shared primitive in `direct_item_duplicates`, while exact discovery and Apply
+are owned by `operations.exact_dedup`; Dedun's analysis, lexical-scope
 publication, command, adapters, and evidence remain separate consumers of the
 reviewed redundancy core. No relation, survivor, authority, reference,
 checkpoint, transaction, interface, or route-state behavior changes.

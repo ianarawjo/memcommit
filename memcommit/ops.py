@@ -39,7 +39,7 @@ if TYPE_CHECKING:
         DuplicateReport,
         FindingsProvider,
     )
-    from memcommit.exact_dedup import ExactDuplicateReport
+    from memcommit.operations.exact_dedup.application import ExactDuplicateReport
     from memcommit.search import PromptProvider, SearchMatch
     from memcommit.semantic.llm import LLMClient
     from memcommit.semantic.changes import ProposedChange
@@ -962,7 +962,7 @@ def find_duplicates(
     ctx: Context,
 ) -> "ExactDuplicateReport":
     """Find byte-identical direct-Memory groups without provider inference."""
-    from memcommit.exact_dedup import find_exact_duplicates
+    from memcommit.operations.exact_dedup.application import find_exact_duplicates
 
     return find_exact_duplicates(ctx)
 

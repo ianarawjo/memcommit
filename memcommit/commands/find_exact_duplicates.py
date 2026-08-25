@@ -21,7 +21,7 @@ from memcommit.context_targeting.presets import (
     ContextScopePreset,
     resolve_scope_preset,
 )
-from memcommit.exact_dedup import (
+from memcommit.operations.exact_dedup.application import (
     ExactDuplicateContextReport,
     find_exact_duplicate_scope,
 )

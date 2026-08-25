@@ -12,7 +12,7 @@ from memcommit.context_targeting.presets import (
     ContextScopePreset,
     resolve_scope_preset,
 )
-from memcommit.exact_dedup_application import (
+from memcommit.operations.exact_dedup.application import (
     ExactDedupError,
     apply_exact_dedup_scope,
 )

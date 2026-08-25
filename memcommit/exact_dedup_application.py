@@ -1,32 +1,8 @@
-"""Public application surface for provider-free exact Dedup."""
+"""Compatibility alias for the operation-owned exact Dedup application."""
 
-from memcommit.exact_dedup import (
-    EXACT_DEDUP_CONTRACT_VERSION,
-    ExactDedupError,
-    ExactDedupReceipt,
-    ExactDedupScopeReceipt,
-    ExactDuplicateContextReport,
-    ExactDuplicateGroup,
-    ExactDuplicateKind,
-    ExactDuplicateScopeReport,
-    apply_exact_dedup,
-    apply_exact_dedup_scope,
-    find_exact_duplicate_scope,
-    find_exact_duplicate_groups,
-)
+from importlib import import_module
+import sys
 
 
-__all__ = [
-    "EXACT_DEDUP_CONTRACT_VERSION",
-    "ExactDedupError",
-    "ExactDedupReceipt",
-    "ExactDedupScopeReceipt",
-    "ExactDuplicateContextReport",
-    "ExactDuplicateGroup",
-    "ExactDuplicateKind",
-    "ExactDuplicateScopeReport",
-    "apply_exact_dedup",
-    "apply_exact_dedup_scope",
-    "find_exact_duplicate_scope",
-    "find_exact_duplicate_groups",
-]
+_canonical = import_module("memcommit.operations.exact_dedup.application")
+sys.modules[__name__] = _canonical

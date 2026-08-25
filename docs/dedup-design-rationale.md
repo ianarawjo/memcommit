@@ -62,6 +62,23 @@ with one operation UID, so `mem undo` restores the command as one unit.
 - A successful mutation records contract `exact-dedup-v2`, item role, exact
   survivor and absorbed UIDs, and remains recoverable with `mem undo`.
 
+## Operation ownership
+
+The reviewed provider-free implementation now has one canonical home at
+`memcommit.operations.exact_dedup.application`. The historical
+`memcommit.exact_dedup` implementation path and the
+`memcommit.exact_dedup_application` public surface are module-identity aliases,
+so import order, monkeypatch targets, and serialized globals continue to reach
+the canonical module. New production imports use that owner directly.
+
+This move deliberately retains the complete exact discovery and Apply
+implementation in one application module. Splitting new ports or a runtime
+adapter while moving it would make authority and transaction design changes
+indistinguishable from the ownership relocation. Such a split may be reviewed
+separately; it is not evidence of this location-only change. The pure
+role-aware key detector remains in `memcommit.direct_item_duplicates` because
+semantic Dedun and quality-finding routes also consume it.
+
 ## Semantic redundancy finder and Dedun
 
 The historically named `dedup_application` and `dedup_runtime` modules now

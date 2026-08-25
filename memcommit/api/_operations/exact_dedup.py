@@ -19,7 +19,7 @@ from memcommit.api.errors import (
 )
 from memcommit.authority.access import resolve_context_access
 from memcommit.context_locator import resolve_context_locator
-from memcommit.exact_dedup_application import (
+from memcommit.operations.exact_dedup.application import (
     ExactDedupError,
     apply_exact_dedup_scope,
 )
