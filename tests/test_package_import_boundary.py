@@ -108,6 +108,8 @@ blocked = (
     'memcommit.operations.reference.runtime',
     'memcommit.operations.sever.application',
     'memcommit.operations.sever.runtime',
+    'memcommit.operations.show.application',
+    'memcommit.operations.show.runtime',
     'memcommit.operations.summarize.application',
     'memcommit.operations.summarize.runtime',
     'memcommit.operations.update.application',
@@ -115,6 +117,7 @@ blocked = (
     'memcommit.sever_application',
     'memcommit.sever_runtime',
     'memcommit.show_application',
+    'memcommit.show_runtime',
     'memcommit.summarize_application',
     'memcommit.summarize_runtime',
     'memcommit.update_application',
@@ -177,8 +180,10 @@ store.set_current(context.name)
 result = MemCommitClient(root=root).show()
 assert result.name == context.name
 assert 'memcommit.api._operations.show' in sys.modules
-assert 'memcommit.show_application' in sys.modules
-assert 'memcommit.show_runtime' in sys.modules
+assert 'memcommit.operations.show.application' in sys.modules
+assert 'memcommit.operations.show.runtime' in sys.modules
+assert 'memcommit.show_application' not in sys.modules
+assert 'memcommit.show_runtime' not in sys.modules
 assert 'memcommit.api._operations.add' not in sys.modules
 assert 'memcommit.api._operations.query' not in sys.modules
 assert 'memcommit.api._operations.compare' not in sys.modules

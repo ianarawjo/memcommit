@@ -106,7 +106,10 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
     assert by_operation["compare"].curated_state == "CLOSED"
     assert by_operation["help"].curated_state == "CLOSED"
     assert by_operation["switch"].curated_state == "CLOSED"
-    assert "memcommit.show_application" in by_operation["show"].application_modules
+    assert (
+        "memcommit.operations.show.application"
+        in by_operation["show"].application_modules
+    )
     assert "show" in by_operation["show"].public_methods
     assert "memcommit.interfaces.agent.show" in by_operation["show"].agent_modules
     assert by_operation["show"].curated_state == "CLOSED"

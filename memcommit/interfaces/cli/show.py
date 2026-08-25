@@ -9,7 +9,7 @@ import typer
 
 from memcommit.interfaces.console.text import display_escape_text, safe_terminal_text
 from memcommit.interfaces.console.theme import memory_object_color_rgb
-from memcommit.show_application import (
+from memcommit.operations.show.application import (
     ShowContextSnapshot,
     ShowEmbeddedContext,
     ShowMemory,

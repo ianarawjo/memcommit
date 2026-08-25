@@ -1,11 +1,35 @@
 # Show application boundary matrix
 
+Last reviewed: 2026-08-25.
+
 ## Closure statement
 
 Every currently implemented Show route enters one terminal-independent typed
 inspection boundary. The operation performs one live authorized read and has
 no provider, cache, session, Apply, receipt, checkpoint, Undo, or current-state
 mutation lifecycle.
+
+## Package ownership
+
+The canonical terminal-independent implementation now lives under
+`memcommit.operations.show`. `application.py` owns the typed request, frozen
+Context and item result contracts, direct selection, and read-only validation;
+`runtime.py` owns current-snapshot and locator resolution, readable catalog and
+Grant projection, traversal, direct-item lookup, and Store-backed freezing.
+CLI, Python, agent, MCP, and presentation adapters import those modules
+directly.
+
+The historical `memcommit.show_application` and `memcommit.show_runtime`
+paths remain behavior-free module-identity aliases. They preserve old imports,
+monkeypatch targets, and serialized globals without creating a second
+implementation owner, and importing `memcommit.operations.show` alone remains
+lazy.
+
+This relocation changes physical ownership only. It does not alter readable
+authority, query-only concealment, Context or Memory targeting, traversal,
+projection, public results, or the no-provider and no-durable-effect boundary.
+Later readable direct-item resolution must remain part of the same canonical
+runtime rather than being split across the compatibility path.
 
 | Route | Entry | Application path | Projection | Effect | Evidence |
 | --- | --- | --- | --- | --- | --- |

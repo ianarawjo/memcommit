@@ -27,7 +27,7 @@ from memcommit.profile_config import (
     profile_store_dir,
 )
 from memcommit.profiles import ProfileError
-from memcommit.show_application import (
+from memcommit.operations.show.application import (
     ShowContextSnapshot,
     ShowEmbeddedContext,
     ShowError as ApplicationShowError,
@@ -37,7 +37,7 @@ from memcommit.show_application import (
     ShowQueryView,
     ShowRequest,
 )
-from memcommit.show_runtime import execute_show
+from memcommit.operations.show.runtime import execute_show
 from memcommit.source_projection.model import SourceDisplayFacts
 
 

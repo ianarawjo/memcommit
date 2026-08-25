@@ -14,8 +14,8 @@ from memcommit.interfaces.cli.show import render_show
 from memcommit.interfaces.console.text import display_escape_text
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
-from memcommit.show_application import ShowDirectItemScopeError, ShowError
-from memcommit.show_runtime import execute_show_cli_operand
+from memcommit.operations.show.application import ShowDirectItemScopeError, ShowError
+from memcommit.operations.show.runtime import execute_show_cli_operand
 from memcommit.store import MemoryStore
 
 
