@@ -30,9 +30,9 @@ from memcommit.ground import (
     create_ground_session,
 )
 from memcommit.store import ConcurrentContextUpdateError, MemoryStore
-from memcommit.translate import plan_translation
-from memcommit.translation_view import TranslationCatalog, TranslationView
-from memcommit.translation_view_store import (
+from memcommit.operations.translate.runtime import plan_translation
+from memcommit.operations.translate.view import TranslationCatalog, TranslationView
+from memcommit.operations.translate.view_store import (
     load_translation_catalog,
     save_translation_catalog,
 )

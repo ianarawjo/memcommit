@@ -24,7 +24,7 @@ from memcommit.profile_config import (
 from memcommit.profiles import create_authority_grant, delete_authority_grant
 from memcommit.query_provider import QueryProviderError
 from memcommit.store import MemoryStore
-from memcommit.translation_view import (
+from memcommit.operations.translate.view import (
     TRANSLATION_ORIGIN_IMPORTED,
     TranslationCatalog,
 )

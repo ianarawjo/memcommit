@@ -17,7 +17,7 @@ from memcommit.eval.study_bundle import (
     build_study_bundle,
 )
 from memcommit.store import MemoryStore
-from memcommit.translation_view_store import load_translation_catalog
+from memcommit.operations.translate.view_store import load_translation_catalog
 
 
 EXPECTED_PROFILES = {

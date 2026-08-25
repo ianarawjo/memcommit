@@ -4010,12 +4010,12 @@ class MemoryStore:
 
     @staticmethod
     def _read_translation_records_for_rename() -> dict[str, dict[str, object]]:
-        from memcommit.translation_view import (
+        from memcommit.operations.translate.view import (
             TranslationCatalog,
             TranslationView,
             TranslationViewError,
         )
-        from memcommit.translation_view_store import (
+        from memcommit.operations.translate.view_store import (
             translation_catalog_path,
             translation_view_path,
             translation_views_dir,
@@ -4302,7 +4302,7 @@ class MemoryStore:
         translation_records = self._read_translation_records_for_rename()
         post_translation_records: dict[str, dict[str, object]] = {}
         translation_artifact_count = 0
-        from memcommit.translation_view import (
+        from memcommit.operations.translate.view import (
             TranslationCatalog,
             TranslationView,
             TranslationViewError,
@@ -4523,7 +4523,7 @@ class MemoryStore:
             restore_files[path] = path.read_bytes()
             changed_ground_paths.append((path, after))
         if prepared.translation_records:
-            from memcommit.translation_view_store import translation_views_dir
+            from memcommit.operations.translate.view_store import translation_views_dir
 
             translation_root = translation_views_dir()
             for filename, before in prepared.translation_records.items():
@@ -6200,7 +6200,7 @@ class MemoryStore:
             comparison_paths_for_context,
             delete_comparison_paths,
         )
-        from memcommit.translation_view_store import (
+        from memcommit.operations.translate.view_store import (
             delete_translation_view_paths,
             translation_view_paths_for_context,
         )

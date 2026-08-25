@@ -9,7 +9,7 @@ import pytest
 from memcommit.context import Memory
 from memcommit.search import SearchCandidate, rank_candidates
 from memcommit.semantic_execution import SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
-from memcommit.translate import plan_translation
+from memcommit.operations.translate.runtime import plan_translation
 
 
 def _large_text(marker: str) -> str:

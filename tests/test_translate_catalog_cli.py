@@ -12,13 +12,13 @@ from memcommit.cli import app
 from memcommit.context import AutoCheckpoint
 from memcommit.provenance import build_trace
 from memcommit.store import MemoryStore
-from memcommit.translation_view import (
+from memcommit.operations.translate.view import (
     TRANSLATION_ORIGIN_IMPORTED,
     TRANSLATION_ORIGIN_MANUAL,
     TRANSLATION_REVIEW_UNREVIEWED,
     TRANSLATION_REVIEW_VERIFIED,
 )
-from memcommit.translation_view_store import load_translation_catalog
+from memcommit.operations.translate.view_store import load_translation_catalog
 
 
 runner = CliRunner(mix_stderr=False)

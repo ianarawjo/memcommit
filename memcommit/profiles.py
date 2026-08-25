@@ -57,7 +57,7 @@ from memcommit.storage_permissions import (
     ensure_private_directory,
     open_private_exclusive,
 )
-from memcommit.translation_view import TranslationCatalog
+from memcommit.operations.translate.view import TranslationCatalog
 
 
 class ProfileError(RuntimeError):

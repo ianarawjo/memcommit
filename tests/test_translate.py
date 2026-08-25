@@ -18,7 +18,7 @@ from memcommit.context import (
 from memcommit.provenance import build_trace
 from memcommit.query_provider import QueryProviderError
 from memcommit.store import ConcurrentContextUpdateError, MemoryStore
-from memcommit.translate import (
+from memcommit.operations.translate.runtime import (
     TRANSLATE_CORPUS_CHAR_LIMIT,
     TRANSLATION_TARGET_CHAR_LIMIT,
     TranslateError,

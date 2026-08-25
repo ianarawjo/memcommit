@@ -17,7 +17,7 @@ from memcommit.flow_placeholder import (
 from memcommit.profile_config import GrantContextBinding, load_profile_registry
 from memcommit.profiles import GrantedContextView
 from memcommit.store import MemoryStore
-from memcommit.translation_view import (
+from memcommit.operations.translate.view import (
     TranslationCatalog,
     TranslationViewError,
 )

@@ -31,12 +31,12 @@ from memcommit.eval.study_fixtures import (
 )
 from memcommit.profile_config import GRANT_PERMISSIONS
 from memcommit.store import MemoryStore
-from memcommit.translation_view import (
+from memcommit.operations.translate.view import (
     TRANSLATION_ORIGIN_IMPORTED,
     TRANSLATION_REVIEW_UNREVIEWED,
     TranslationCatalog,
 )
-from memcommit.translation_view_store import save_translation_catalog
+from memcommit.operations.translate.view_store import save_translation_catalog
 
 
 _BUNDLE_NAMESPACE = uuid.UUID("50b72d54-cfbe-4f89-8f7f-1e6c785d8552")

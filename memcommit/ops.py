@@ -43,7 +43,7 @@ if TYPE_CHECKING:
     from memcommit.search import PromptProvider, SearchMatch
     from memcommit.semantic.llm import LLMClient
     from memcommit.semantic.changes import ProposedChange
-    from memcommit.translate import (
+    from memcommit.operations.translate.runtime import (
         DerivedTranslationApplyResult,
         TranslationApplyResult,
         TranslationPlan,
@@ -1148,7 +1148,7 @@ def translate(
     allocate_operation_uid: bool = True,
 ) -> "TranslationPlan":
     """Plan translations of directly owned Memories without mutating ctx."""
-    from memcommit.translate import plan_translation
+    from memcommit.operations.translate.runtime import plan_translation
 
     return plan_translation(
         ctx,
@@ -1164,7 +1164,7 @@ def apply_translation(
     plan: "TranslationPlan",
 ) -> "TranslationApplyResult":
     """Apply one exact translation plan to its unchanged direct Context."""
-    from memcommit.translate import apply_translation as apply_plan
+    from memcommit.operations.translate.runtime import apply_translation as apply_plan
 
     return apply_plan(ctx, plan)
 
@@ -1175,7 +1175,9 @@ def derive_translation_context(
     destination_name: str,
 ) -> "DerivedTranslationApplyResult":
     """Apply one exact plan as replacements in a new derived Context."""
-    from memcommit.translate import derive_translation_context as derive
+    from memcommit.operations.translate.runtime import (
+        derive_translation_context as derive,
+    )
 
     return derive(source, plan, destination_name)
 

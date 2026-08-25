@@ -1,5 +1,23 @@
 # `mem translate` design rationale
 
+## Implementation ownership
+
+`memcommit.operations.translate` is the canonical implementation owner for
+Translate. Its `runtime` module owns semantic planning and in-memory
+materialization, `view` owns the validated UID-preserving projection models,
+and `view_store` owns deterministic sidecar persistence and compare-and-swap
+publication. Production consumers import those narrow operation modules
+directly. The former `memcommit.translate`, `memcommit.translation_view`, and
+`memcommit.translation_view_store` paths remain behavior-free module-identity
+aliases so existing imports, monkeypatch targets, and serialized globals
+continue to resolve to the same module objects regardless of import order.
+
+This ownership-only relocation does not assert that Translate has a reviewed
+terminal-independent application boundary. It deliberately leaves provider
+selection, semantic batching, view schemas, storage keys, materialization,
+checkpoints, and command behavior unchanged; the operation route remains
+unreviewed until its complete callable and authority lifecycle is traced.
+
 ## Status and current decision
 
 Bare `mem translate` is a persisted, read-oriented language view. It translates

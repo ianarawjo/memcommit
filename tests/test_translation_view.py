@@ -15,8 +15,8 @@ from memcommit.context import (
     Context,
 )
 from memcommit.store import MemoryStore
-from memcommit.translate import plan_translation
-from memcommit.translation_view import (
+from memcommit.operations.translate.runtime import plan_translation
+from memcommit.operations.translate.view import (
     TRANSLATION_ORIGIN_MANUAL,
     TRANSLATION_REVIEW_UNREVIEWED,
     TRANSLATION_REVIEW_VERIFIED,
@@ -26,7 +26,7 @@ from memcommit.translation_view import (
     translation_catalog_record_digest,
     translation_view_record_digest,
 )
-from memcommit.translation_view_store import (
+from memcommit.operations.translate.view_store import (
     ConcurrentTranslationViewUpdateError,
     load_translation_catalog,
     load_translation_catalog_for_context,

@@ -41,14 +41,14 @@ from memcommit.query_provider import (
     connect_codex_chatgpt_provider,
 )
 from memcommit.store import MemoryStore, context_record_digest
-from memcommit.translate import (
+from memcommit.operations.translate.runtime import (
     TranslateError,
     TranslationPlan,
     resolve_translation_selector,
     translation_plan_matches_context,
     validate_translation_target,
 )
-from memcommit.translation_view import (
+from memcommit.operations.translate.view import (
     TRANSLATION_ORIGIN_IMPORTED,
     TRANSLATION_ORIGIN_MANUAL,
     TRANSLATION_REVIEW_UNREVIEWED,
@@ -57,7 +57,7 @@ from memcommit.translation_view import (
     TranslationViewError,
     translation_catalog_record_digest,
 )
-from memcommit.translation_view_store import (
+from memcommit.operations.translate.view_store import (
     ConcurrentTranslationViewUpdateError,
     load_translation_catalog_for_context,
     save_translation_catalog,

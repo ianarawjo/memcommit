@@ -30,7 +30,7 @@ from memcommit.store import (
     context_record_digest,
 )
 from memcommit.temporal_history import direct_memory_deltas
-from memcommit.translate import TRANSLATION_TARGET_CHAR_LIMIT
+from memcommit.operations.translate.runtime import TRANSLATION_TARGET_CHAR_LIMIT
 
 
 Evidence = Literal["RECORDED", "RECONSTRUCTED", "INFERRED", "UNRECORDED"]
