@@ -22,6 +22,7 @@ from memcommit.authority.access import (
 )
 from memcommit.commands.paste_input import PasteCancelled, capture_paste
 from memcommit.context_targeting.catalog import freeze_granted_context_navigation
+from memcommit.context_targeting.operands import choose_endpoint_operand
 from memcommit.interfaces.cli.add import render_add_plain
 from memcommit.interfaces.console.errors import render_cli_error
 from memcommit.interfaces.console.terminal import is_interactive_terminal
@@ -128,15 +129,36 @@ def cmd(
             help="Add one exact Memory; repeat the option to add a batch",
         ),
     ] = None,
+    to_context: Annotated[
+        Optional[str],
+        typer.Option(
+            "--to",
+            metavar="CONTEXT",
+            help="Target Context to receive the Memories",
+        ),
+    ] = None,
     context_name: Annotated[
         Optional[str],
         typer.Option(
             "--context",
             "-c",
-            help="Local Context or CREATE-granted view to receive the Memories",
+            metavar="CONTEXT",
+            help="Compatibility spelling for the Add target; equivalent to --to",
         ),
     ] = None,
 ) -> None:
+    try:
+        requested_context = choose_endpoint_operand(
+            None,
+            role="Add target",
+            options=(("--to", to_context), ("--context/-c", context_name)),
+        )
+    except ValueError as error:
+        # A mutating command must never let argv order silently choose which
+        # destination wins when preferred and compatibility spellings collide.
+        render_cli_error(error)
+        raise typer.Exit(1)
+
     explicit_memories = tuple(memories or ())
     source_count = sum(
         (
@@ -166,7 +188,7 @@ def cmd(
             setup = _prepare_add_tui_setup(
                 store,
                 current_name=current_name,
-                requested_context=context_name,
+                requested_context=requested_context,
             )
             tui_result = run_add_tui(
                 setup=setup,
@@ -179,7 +201,7 @@ def cmd(
             return
         if info is not None:
             request = AddRequest(
-                context_locator=context_name,
+                context_locator=requested_context,
                 contents=(info,),
                 source=AddSource(
                     mode="SINGLE",
@@ -190,7 +212,7 @@ def cmd(
             )
         elif explicit_memories:
             request = AddRequest(
-                context_locator=context_name,
+                context_locator=requested_context,
                 contents=explicit_memories,
                 source=AddSource(
                     mode="EXPLICIT_BATCH",
@@ -205,7 +227,7 @@ def cmd(
             )
         elif paste:
             frozen_target = prepare_add_target(
-                context_name,
+                requested_context,
                 target_port=port,
             )
             try:
@@ -220,7 +242,7 @@ def cmd(
             # The explicit paste mode plus its F2/Ctrl-D finish action is the
             # approval boundary; the resulting Add remains one Undo unit.
             request = AddRequest(
-                context_locator=context_name,
+                context_locator=requested_context,
                 contents=contents,
                 source=AddSource(
                     mode="PASTE",
@@ -233,7 +255,7 @@ def cmd(
             assert input_source is not None
             raw_text = read_text_input(input_source)
             request = AddRequest(
-                context_locator=context_name,
+                context_locator=requested_context,
                 contents=tuple(parse_add_lines(raw_text)),
                 source=AddSource(
                     mode="LINES",

@@ -1,6 +1,6 @@
 # Add callable and effect boundary matrix
 
-Last verified: 2026-08-16.
+Last verified: 2026-08-25.
 
 This matrix records ownership and effects for the first writable operation
 exposed through several adapters. A callable's layer determines where it may be
@@ -17,7 +17,7 @@ an interface.
 | `add_runtime.execute_add` | infrastructure composition | request + Store → result | same Store effects as port | no terminal or provider dependency | `VERIFIED` |
 | `interfaces.cli.add.render_add_plain` | CLI adapter | typed result + intake mode → terminal text | stdout only | no Store, authority, or mutation decisions | `VERIFIED` |
 | `interfaces.tui.operations.add.run_add_tui` | TUI adapter | frozen setup + application callback → result/cancel | process-local drafts and terminal I/O; callback only at To Do | cancellation and draft edits do not call application | `VERIFIED` |
-| `commands.add.cmd` | console composition | argv/TTY → typed request and presentation | intake reads, TUI/CLI, application effects | captures current once; file/paste parsing remains interface-owned | `VERIFIED` |
+| `commands.add.cmd` | console composition | argv/TTY → typed request and presentation | intake reads, TUI/CLI, application effects | `--to` is the preferred Target spelling; `--context`/`-c` remain compatible; duplicate spelling fails before Store access; captures current once; file/paste parsing remains interface-owned | `VERIFIED` |
 | `api.client.MemCommitClient.add_memories` | public Python facade | explicit text sequence + target → `AddMemoriesResult` | one application Add | explicit roots local-only; nonlocal Grant requires active Profile; stable errors | `VERIFIED` |
 | `interfaces.agent.add.AddAgentAdapter.invoke` | agent adapter | strict version-1 JSON object → JSON-safe receipt/error | exactly one public Add call after local validation | exact order/duplicates; complete receipt; no automatic mutation retry | `VERIFIED` |
 | `interfaces.agent.add.add_agent_tool_schema` | agent adapter | none → fresh function-tool schema | none | strict fields/version; duplicate Memory items remain legal | `VERIFIED` |
@@ -41,3 +41,18 @@ public facade. CLI and TUI point to the application/runtime boundary; the
 Python facade and agent projection point inward without importing either
 terminal adapter. MCP remains a projection of the frozen agent registry, and
 the Skill remains host guidance rather than an Add implementation or callable.
+
+## CLI Target spelling
+
+Add has one receiving Context, so `--to TARGET` names the operand by its role
+and is the preferred explicit spelling. The established `--context TARGET` and
+`-c TARGET` forms remain compatible because they already identify the same
+CREATE-authorized destination. Supplying `--to` together with either
+compatibility spelling fails before Store construction; argument order must not
+silently retarget a mutation.
+
+This role alias is deliberately asymmetric. Edit and Remove use
+`--context`/`-c` to qualify the owner of an existing Memory; they do not accept
+`--to`, which would misleadingly imply a destination, movement, or result
+Context. No target authority, locator resolution, receipt, or Add materialization
+behavior changes with the new spelling.

@@ -398,9 +398,9 @@ COMMAND_FORMS = {
         'mem add --memory "[memory_content]" --memory "[memory_content]" (add an explicit batch)',
         "mem add --input [file] (add one Memory per non-empty line)",
         "mem add --paste (paste one or more Memories)",
-        'mem add "[memory_content]" --context [context] (add to an explicit Context)',
-        "mem add --input [file] --context [context] (batch-add to an explicit Context)",
-        "mem add --paste --context [context] (paste into an explicit Context)",
+        'mem add "[memory_content]" --to [target_context] (add to an explicit Target)',
+        "mem add --input [file] --to [target_context] (batch-add to an explicit Target)",
+        "mem add --paste --to [target_context] (paste into an explicit Target)",
     ),
     "copy": (
         "mem copy (show the required Memory locator error)",

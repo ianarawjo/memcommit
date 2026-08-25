@@ -50,7 +50,7 @@ The participant performs directional operations against the ordinary wiki:
 ```bash
 mem switch participant/construction-updates
 mem ls campus-wiki
-mem add "..." --context campus-wiki
+mem add "..." --to campus-wiki
 mem edit MEMORY "..." --context campus-wiki
 ```
 
