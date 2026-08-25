@@ -14,11 +14,13 @@ from memcommit.context_targeting.tui.picker import (
     choose_context,
     context_memory_rows,
 )
-from memcommit.commands.context_reach_dialog import choose_context_reach
+from memcommit.interfaces.tui.components.context_reach_dialog import (
+    choose_context_reach,
+)
 from memcommit.commands.exact_command_review import ExactCommandReview
 from memcommit.commands.exact_command_review_shell import approve_exact_command
-from memcommit.commands.exact_name_dialog import choose_exact_name
-from memcommit.commands.flat_selection_dialog import choose_flat_option
+from memcommit.interfaces.tui.components.exact_name_dialog import choose_exact_name
+from memcommit.interfaces.tui.components.flat_selection_dialog import choose_flat_option
 from memcommit.commands.tui_primitives import ExactNameFieldView
 from memcommit.context import Memory, MemoryRef
 from memcommit.context_naming import validate_portable_context_name
