@@ -107,6 +107,43 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
     assert by_operation["help"].curated_state == "CLOSED"
     assert by_operation["switch"].curated_state == "CLOSED"
     assert (
+        "memcommit.operations.atomize.domain"
+        in by_operation["atomize"].application_modules
+    )
+    assert (
+        "memcommit.operations.compare.summary_application"
+        in by_operation["compare"].application_modules
+    )
+    for operation in ("dedup", "find-duplicates"):
+        assert (
+            "memcommit.operations.exact_dedup.application"
+            in by_operation[operation].application_modules
+        )
+    assert (
+        "memcommit.operations.fit.judgment"
+        in by_operation["fit"].application_modules
+    )
+    assert (
+        "memcommit.operations.help.lookup_application"
+        in by_operation["help"].application_modules
+    )
+    assert (
+        "memcommit.operations.meld.session_application"
+        in by_operation["meld"].application_modules
+    )
+    assert (
+        "memcommit.operations.query.reference_application"
+        in by_operation["query"].application_modules
+    )
+    assert (
+        "memcommit.operations.sever.model"
+        in by_operation["sever"].application_modules
+    )
+    assert (
+        "memcommit.operations.translate.runtime"
+        in by_operation["translate"].application_modules
+    )
+    assert (
         "memcommit.operations.distill.application"
         in by_operation["distill"].application_modules
     )

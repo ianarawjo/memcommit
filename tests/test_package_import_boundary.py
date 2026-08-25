@@ -66,9 +66,23 @@ blocked = (
     'memcommit.atomize_grounding_application',
     'memcommit.atomize_grounding_runtime',
     'memcommit.atomize_runtime',
+    'memcommit.atomize',
+    'memcommit.atomize_grounding',
+    'memcommit.atomize_grounding_provider',
+    'memcommit.atomize_meld_adapter',
+    'memcommit.atomize_normal_form',
+    'memcommit.atomize_resolution_adapter',
+    'memcommit.atomize_result_adapter',
+    'memcommit.atomize_workbench',
     'memcommit.dedup_application',
     'memcommit.dedup_runtime',
+    'memcommit.exact_dedup',
+    'memcommit.exact_dedup_application',
     'memcommit.comparison_execution',
+    'memcommit.comparison_summary',
+    'memcommit.comparison_summary_application',
+    'memcommit.comparison_summary_provider',
+    'memcommit.comparison_summary_rules',
     'memcommit.distill_application',
     'memcommit.distill_runtime',
     'memcommit.elaborate_application',
@@ -77,17 +91,42 @@ blocked = (
     'memcommit.embed_application',
     'memcommit.fit_application',
     'memcommit.fit_runtime',
+    'memcommit.fit',
+    'memcommit.fit_coherence',
+    'memcommit.fit_judgment',
+    'memcommit.fit_store',
     'memcommit.find_application',
     'memcommit.find_runtime',
     'memcommit.find_materialization_application',
     'memcommit.find_materialization_runtime',
     'memcommit.help_application',
+    'memcommit.help_lookup_application',
     'memcommit.forget_application',
     'memcommit.forget_runtime',
     'memcommit.ground_distill',
     'memcommit.ground_elaborate',
     'memcommit.meld_application',
     'memcommit.meld_runtime',
+    'memcommit.meld_application_flow',
+    'memcommit.meld_assessment_application',
+    'memcommit.meld_resolution_application',
+    'memcommit.meld_restart_application',
+    'memcommit.meld_session_application',
+    'memcommit.meld_start_application',
+    'memcommit.query_application',
+    'memcommit.query_runtime',
+    'memcommit.granted_query_application',
+    'memcommit.granted_query_runtime',
+    'memcommit.query_reference_application',
+    'memcommit.query_reference_runtime',
+    'memcommit.review_report',
+    'memcommit.sever',
+    'memcommit.sever_provider',
+    'memcommit.sever_resolution_adapter',
+    'memcommit.sever_store',
+    'memcommit.translate',
+    'memcommit.translation_view',
+    'memcommit.translation_view_store',
     'memcommit.literal_find_application',
     'memcommit.literal_find_runtime',
     'memcommit.operations.add.application',
@@ -98,8 +137,21 @@ blocked = (
     'memcommit.operations.atomize.grounding_application',
     'memcommit.operations.atomize.grounding_runtime',
     'memcommit.operations.atomize.runtime',
+    'memcommit.operations.atomize.domain',
+    'memcommit.operations.atomize.grounding',
+    'memcommit.operations.atomize.grounding_meld_adapter',
+    'memcommit.operations.atomize.grounding_provider',
+    'memcommit.operations.atomize.normal_form',
+    'memcommit.operations.atomize.resolution_adapter',
+    'memcommit.operations.atomize.result_adapter',
+    'memcommit.operations.atomize.workbench',
+    'memcommit.operations.compare.summary',
+    'memcommit.operations.compare.summary_application',
+    'memcommit.operations.compare.summary_provider',
+    'memcommit.operations.compare.summary_rules',
     'memcommit.operations.dedup.application',
     'memcommit.operations.dedup.runtime',
+    'memcommit.operations.exact_dedup.application',
     'memcommit.operations.distill.application',
     'memcommit.operations.distill.runtime',
     'memcommit.operations.elaborate.application',
@@ -110,16 +162,36 @@ blocked = (
     'memcommit.operations.embed.runtime',
     'memcommit.operations.fit.application',
     'memcommit.operations.fit.runtime',
+    'memcommit.operations.fit.coherence',
+    'memcommit.operations.fit.ground_report',
+    'memcommit.operations.fit.store',
     'memcommit.operations.forget.application',
     'memcommit.operations.forget.runtime',
     'memcommit.operations.find.literal_application',
     'memcommit.operations.find.literal_runtime',
     'memcommit.operations.meld.application',
     'memcommit.operations.meld.runtime',
+    'memcommit.operations.meld.application_flow',
+    'memcommit.operations.meld.assessment_application',
+    'memcommit.operations.meld.resolution_application',
+    'memcommit.operations.meld.restart_application',
+    'memcommit.operations.meld.session_application',
+    'memcommit.operations.meld.start_application',
+    'memcommit.operations.help.application',
+    'memcommit.operations.help.lookup_application',
+    'memcommit.operations.query.granted_application',
+    'memcommit.operations.query.granted_runtime',
+    'memcommit.operations.query.ordinary_runtime',
+    'memcommit.operations.query.reference_application',
+    'memcommit.operations.query.reference_runtime',
     'memcommit.operations.reference.application',
     'memcommit.operations.reference.runtime',
     'memcommit.operations.sever.application',
     'memcommit.operations.sever.runtime',
+    'memcommit.operations.sever.model',
+    'memcommit.operations.sever.provider',
+    'memcommit.operations.sever.resolution_adapter',
+    'memcommit.operations.sever.session_store',
     'memcommit.operations.show.application',
     'memcommit.operations.show.runtime',
     'memcommit.operations.search.application',
@@ -129,6 +201,10 @@ blocked = (
     'memcommit.operations.summarize.application',
     'memcommit.operations.summarize.runtime',
     'memcommit.operations.update.application',
+    'memcommit.operations.translate.runtime',
+    'memcommit.operations.translate.view',
+    'memcommit.operations.translate.view_store',
+    'memcommit.reviewing.report',
     'memcommit.reference_application',
     'memcommit.sever_application',
     'memcommit.sever_runtime',
@@ -228,7 +304,10 @@ result = client.describe_operation('compare')
 assert result.name == 'compare'
 assert not root.exists()
 assert 'memcommit.api._operations.help' in sys.modules
-assert 'memcommit.help_application' in sys.modules
+assert 'memcommit.operations.help.application' in sys.modules
+assert 'memcommit.operations.help.lookup_application' not in sys.modules
+assert 'memcommit.help_application' not in sys.modules
+assert 'memcommit.help_lookup_application' not in sys.modules
 assert 'memcommit.api._operations.add' not in sys.modules
 assert 'memcommit.api._operations.query' not in sys.modules
 assert 'memcommit.api._operations.compare' not in sys.modules
@@ -514,8 +593,16 @@ else:
 assert 'memcommit.api._operations.fit' in sys.modules
 assert 'memcommit.operations.fit.application' in sys.modules
 assert 'memcommit.operations.fit.runtime' in sys.modules
+assert 'memcommit.operations.fit.coherence' in sys.modules
+assert 'memcommit.operations.fit.ground_report' in sys.modules
+assert 'memcommit.operations.fit.judgment' in sys.modules
+assert 'memcommit.operations.fit.store' in sys.modules
 assert 'memcommit.fit_application' not in sys.modules
 assert 'memcommit.fit_runtime' not in sys.modules
+assert 'memcommit.fit' not in sys.modules
+assert 'memcommit.fit_coherence' not in sys.modules
+assert 'memcommit.fit_judgment' not in sys.modules
+assert 'memcommit.fit_store' not in sys.modules
 assert 'memcommit.api._operations.distill' not in sys.modules
 assert 'memcommit.api._operations.elaborate' not in sys.modules
 assert 'memcommit.api._operations.ground_distill' not in sys.modules
