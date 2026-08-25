@@ -12,11 +12,13 @@ directly. The former `memcommit.translate`, `memcommit.translation_view`, and
 aliases so existing imports, monkeypatch targets, and serialized globals
 continue to resolve to the same module objects regardless of import order.
 
-This ownership-only relocation does not assert that Translate has a reviewed
-terminal-independent application boundary. It deliberately leaves provider
-selection, semantic batching, view schemas, storage keys, materialization,
-checkpoints, and command behavior unchanged; the operation route remains
-unreviewed until its complete callable and authority lifecycle is traced.
+The route has now been reviewed and is classified `MIXED`. Semantic batching,
+view schemas, storage keys, and in-memory materialization are operation-owned,
+but the CLI module still owns catalog orchestration, curated edit/import/export
+policy, provider selection, and materialization transaction assembly. The
+exact migrated and remaining boundaries are recorded in
+`translate-application-boundary-matrix.md`; ownership relocation alone is not
+treated as route closure.
 
 ## Status and current decision
 

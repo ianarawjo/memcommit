@@ -16,6 +16,7 @@
       "docs/mem-check-conformance-design-rationale.md"
     ],
     "branch": [
+      "docs/branch-application-boundary-matrix.md",
       "docs/history-uid-presentation-design-rationale.md",
       "docs/mem-branch-design-rationale.md"
     ],
@@ -30,9 +31,11 @@
       "docs/context-locator-design-rationale.md"
     ],
     "chunk": [
+      "docs/chunk-application-boundary-matrix.md",
       "docs/mem-chunk-design-rationale.md"
     ],
     "clear": [
+      "docs/clear-application-boundary-matrix.md",
       "docs/mem-clear-design-rationale.md"
     ],
     "compare": [
@@ -50,6 +53,7 @@
     ],
     "config": [],
     "contexts": [
+      "docs/contexts-application-boundary-matrix.md",
       "docs/context-listing-design-rationale.md"
     ],
     "dedup": [
@@ -203,7 +207,10 @@
       "docs/read-report-lifecycle-design-rationale.md",
       "docs/mem-trace-rationale-design-rationale.md"
     ],
-    "redo": [],
+    "redo": [
+      "docs/semantic-apply-undo-design-rationale.md",
+      "docs/undo-redo-application-boundary-matrix.md"
+    ],
     "reference": [
       "docs/granted-derived-ownership-design-rationale.md",
       "docs/memory-reference-embed-semantics-design-rationale.md",
@@ -275,8 +282,14 @@
       "docs/read-report-lifecycle-design-rationale.md",
       "docs/mem-trace-rationale-design-rationale.md"
     ],
-    "translate": [],
-    "undo": [],
+    "translate": [
+      "docs/mem-translate-design-rationale.md",
+      "docs/translate-application-boundary-matrix.md"
+    ],
+    "undo": [
+      "docs/semantic-apply-undo-design-rationale.md",
+      "docs/undo-redo-application-boundary-matrix.md"
+    ],
     "unlock": [
       "docs/mem-write-protection-design-rationale.md"
     ],
