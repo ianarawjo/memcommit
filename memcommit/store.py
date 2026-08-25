@@ -1865,7 +1865,7 @@ class MemoryStore:
             operation_digest,
             session_matches,
         )
-        from memcommit.update_application import prepare_update_application
+        from memcommit.operations.update.application import prepare_update_application
         from memcommit.context_targeting.loading import load_context_scope
 
         if not isinstance(session, UpdateSession) or session.status != "staged":

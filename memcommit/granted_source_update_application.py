@@ -28,7 +28,7 @@ from memcommit.update import (
     operation_digest,
     session_matches,
 )
-from memcommit.update_application import prepare_update_application
+from memcommit.operations.update.application import prepare_update_application
 
 
 def apply_granted_source_staged_update(

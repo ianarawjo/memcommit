@@ -46,7 +46,7 @@ from memcommit.update import (
     required_grant_permissions,
     session_matches,
 )
-from memcommit.update_application import prepare_update_application
+from memcommit.operations.update.application import prepare_update_application
 
 
 def _authority_name(binding: GrantedUpdateTarget, public_name: str) -> str:

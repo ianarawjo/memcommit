@@ -14,7 +14,7 @@ from memcommit.update import (
     count_operations,
     plan_update,
 )
-from memcommit.update_application import prepare_update_application
+from memcommit.operations.update.application import prepare_update_application
 
 
 FIXTURE_PATH = (

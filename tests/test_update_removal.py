@@ -12,7 +12,7 @@ from memcommit.cli import app
 from memcommit.context import Context, MemoryRef, QueryContextRef
 from memcommit.store import MemoryStore
 from memcommit.update import RemoveOperation, UpdateError, UpdateSession, plan_update
-from memcommit.update_application import (
+from memcommit.operations.update.application import (
     UpdateApplicationError,
     prepare_update_application,
 )
