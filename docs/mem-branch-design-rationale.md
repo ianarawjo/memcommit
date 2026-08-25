@@ -41,6 +41,48 @@ The single `BRANCH` shape is not rendered as a MODE row. A mode selector is an
 interaction only when an operation has multiple shapes; the stable mode UID
 still exists in the typed draft.
 
+## Operation ownership
+
+Branch is now owned by the focused `memcommit.operations.branch` package.
+`application.py` owns the terminal-independent `BranchRequest`, the exact or
+lexical-subtree Source-to-target name plan, the publication port, and receipt
+validation. The request deliberately carries the local Context catalog frozen
+at command start: re-listing the namespace after an interactive setup would
+silently adopt a descendant created while the picker was open instead of
+letting the Store reject the reviewed Source range as stale.
+
+`runtime.py` owns the `MemoryStore` composition. It loads the planned Sources
+and their checkpoint histories, asks the domain operations to allocate fresh
+Context and Memory identities, constructs the complete Context and Memory
+lineage bindings, and publishes them through `create_branch_contexts`. That
+Store call remains the owner of graph locks, Source/history/current CAS checks,
+target collision checks, rollback, receipts, and whole-tree Undo/Redo. The
+application layer validates that the published Source-to-target mapping and
+selected current root exactly match its plan; it does not duplicate Store
+transaction mechanics.
+
+`memcommit.commands.branch` is consequently only the Typer and optional TUI
+adapter: it resolves flags and relative Source syntax against the command-start
+current Context, obtains an interactive selection when needed, invokes the
+operation, and renders the receipt. `mem checkout -b` continues to call that
+same adapter, so its shallow compatibility default is unchanged. There was no
+previous public `branch_application` or `branch_runtime` module to preserve as
+a facade.
+
+Branch remains separate from direct-Memory Copy and Move. Those operations
+transfer selected direct Memories into an existing local target; Branch
+requires a new Context root, may clone a complete lexical subtree, projects
+checkpoint history and internal pointers, changes the current Context, and
+owns one recoverable multi-Context command. Shared lineage and transaction
+mechanics stay in domain and Store components rather than making either
+operation package depend on the other.
+
+This relocation intentionally changes no visible command, setup screen,
+authority rule, identity rule, checkpoint receipt, transaction boundary, or
+route classification. Because the terminal states are unchanged, the existing
+ordered TUI capture set remains the applicable visual evidence and is not
+regenerated for this ownership-only change.
+
 ## Compact setup and shared component boundary
 
 Branch's interface adapter lives under

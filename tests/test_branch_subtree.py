@@ -315,7 +315,7 @@ def test_subtree_branch_rejects_new_descendant_after_snapshot(
         return result
 
     monkeypatch.setattr(
-        "memcommit.commands.branch.ops.branch_subtree",
+        "memcommit.operations.branch.runtime.ops.branch_subtree",
         add_descendant_then_branch,
     )
 
@@ -350,7 +350,7 @@ def test_subtree_branch_rejects_changed_descendant_history(
         return result
 
     monkeypatch.setattr(
-        "memcommit.commands.branch.ops.branch_subtree",
+        "memcommit.operations.branch.runtime.ops.branch_subtree",
         checkpoint_child_then_branch,
     )
 

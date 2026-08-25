@@ -2,31 +2,22 @@ from typing import Annotated, Optional
 
 import typer
 
-import memcommit.ops as ops
 from memcommit.commands.branch_dialog import choose_branch_creation
 from memcommit.context_locator import resolve_context_locator
-from memcommit.context_naming import validate_portable_context_name
-from memcommit.interfaces.console.text import (
-    display_escape_text,
-)
-from memcommit.context_targeting.model import ContextScope
 from memcommit.context_targeting.presets import (
     ContextScopePreset,
     legacy_root_only_option_alias,
     resolve_descendant_scopes,
     resolve_scope_preset,
 )
-from memcommit.context_targeting.resolution import expand_lexical_context_names
 from memcommit.context_targeting.tui.name_editor import suggest_fresh_context_name
-from memcommit.context import Memory
-from memcommit.memory_lineage import memory_content_sha256
-from memcommit.store import (
-    ContextBranchBinding,
-    ContextBranchMemoryBinding,
-    MemoryStore,
-    checkpoint_history_digest,
-    context_record_digest,
+from memcommit.interfaces.console.text import display_escape_text
+from memcommit.operations.branch.application import BranchRequest
+from memcommit.operations.branch.runtime import (
+    execute_branch,
+    prepare_branch,
 )
+from memcommit.store import MemoryStore
 
 
 def cmd(
@@ -85,8 +76,9 @@ def cmd(
         )
         raise typer.Exit(2)
     store = MemoryStore()
-    expected_current = store.current_context_name()
-    local_names = tuple(store.list_context_names())
+    setup = prepare_branch(store)
+    expected_current = setup.expected_current
+    local_names = setup.local_context_names
     if name is None:
         if direct or recursive or source_descendants is not None or from_ is not None:
             typer.secho(
@@ -165,66 +157,15 @@ def cmd(
         )
         raise typer.Exit(1)
     try:
-        validate_portable_context_name(name)
-        if store.context_exists(name):
-            raise FileExistsError(f"Context '{name}' already exists.")
-        source_names = expand_lexical_context_names(
-            ContextScope.create(
-                (source_name,),
+        result = execute_branch(
+            BranchRequest(
+                source_name=source_name,
+                target_name=name,
                 include_descendants=source_descendants,
+                expected_current=expected_current,
+                local_context_names=local_names,
             ),
-            local_names,
-        )
-        sources = tuple(store.load_for_update(value) for value in source_names)
-        histories = {value: store.list_checkpoints(value) for value in source_names}
-        targets = (
-            ops.branch_subtree(sources, source_name, name)
-            if source_descendants
-            else (ops.branch(sources[0], name),)
-        )
-        bindings = tuple(
-            ContextBranchBinding(
-                source_name=source.name,
-                expected_source_uid=source.uid,
-                expected_source_digest=context_record_digest(source),
-                expected_history_digest=checkpoint_history_digest(
-                    histories[source.name]
-                ),
-                target=target,
-                memories=tuple(
-                    ContextBranchMemoryBinding(
-                        source_uid=source_memory.uid,
-                        target_uid=target_memory.uid,
-                        source_content_sha256=memory_content_sha256(
-                            source_memory.content
-                        ),
-                        target_content_sha256=memory_content_sha256(
-                            target_memory.content
-                        ),
-                    )
-                    for source_memory, target_memory in zip(
-                        (
-                            item
-                            for item in source.iter_items()
-                            if isinstance(item, Memory)
-                        ),
-                        (
-                            item
-                            for item in target.iter_items()
-                            if isinstance(item, Memory)
-                        ),
-                        strict=True,
-                    )
-                ),
-            )
-            for source, target in zip(sources, targets, strict=True)
-        )
-        store.create_branch_contexts(
-            bindings,
-            source_root=source_name,
-            target_root=name,
-            include_descendants=source_descendants,
-            expected_current=expected_current,
+            store=store,
         )
     except (FileExistsError, FileNotFoundError, OSError, RuntimeError, ValueError) as e:
         typer.secho(
@@ -234,11 +175,10 @@ def cmd(
         )
         raise typer.Exit(1)
     if source_descendants:
-        descendant_count = len(source_names) - 1
         typer.secho(
             f"Branched subtree '{display_escape_text(source_name)}' → "
-            f"'{display_escape_text(name)}' · {len(source_names)} Context(s), "
-            f"{descendant_count} descendant(s); switched to its root.",
+            f"'{display_escape_text(name)}' · {result.context_count} Context(s), "
+            f"{result.descendant_count} descendant(s); switched to its root.",
             fg=typer.colors.GREEN,
         )
     else:

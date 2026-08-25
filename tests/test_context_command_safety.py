@@ -158,7 +158,10 @@ def test_branch_does_not_overwrite_concurrent_destination(
         store.create_context(competitor)
         return result
 
-    monkeypatch.setattr("memcommit.commands.branch.ops.branch", create_competitor)
+    monkeypatch.setattr(
+        "memcommit.operations.branch.runtime.ops.branch",
+        create_competitor,
+    )
 
     result = runner.invoke(app, ["branch", "feature"])
 
@@ -188,7 +191,10 @@ def test_branch_preserves_concurrent_current_selection(
         store.set_current("other")
         return result
 
-    monkeypatch.setattr("memcommit.commands.branch.ops.branch", switch_then_branch)
+    monkeypatch.setattr(
+        "memcommit.operations.branch.runtime.ops.branch",
+        switch_then_branch,
+    )
 
     result = runner.invoke(app, ["branch", "feature"])
 
@@ -305,7 +311,7 @@ def test_branch_rejects_history_changed_after_snapshot(
         return result
 
     monkeypatch.setattr(
-        "memcommit.commands.branch.ops.branch",
+        "memcommit.operations.branch.runtime.ops.branch",
         checkpoint_then_branch,
     )
 
