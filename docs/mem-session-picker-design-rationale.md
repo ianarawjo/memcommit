@@ -74,6 +74,14 @@ authoritative. The exact receipt remains process-local because rendering its
 zero-based argv elements exposed implementation structure without adding a
 useful recognition or review decision.
 
+Frozen Profile/Store orientation discovery is owned beside that component in
+`memcommit.interfaces.tui.components.operation_launcher.location`. The former
+`memcommit.commands.operation_launcher_location` path is a module-identity
+compatibility alias, including for callers that patch its Store or profile
+globals. This is an ownership-only relocation: Profile-before-Store row order,
+frozen-root matching, registry-unavailable handling, and read-only behavior are
+unchanged.
+
 Trace and Rationale reuse these frozen catalog mechanics only when completed
 recent report targets exist. Their pinned `SELECT A MEMORY` row is a navigation
 action, not a fabricated new session. When no recent target exists, the catalog

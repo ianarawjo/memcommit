@@ -12,7 +12,7 @@ from memcommit.clipboard import ClipboardError, write_system_clipboard
 from memcommit.command_attempts import annotate_read_report_attempt
 from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.context_operand import ContextOperandSnapshot
-from memcommit.commands.operation_launcher_location import (
+from memcommit.interfaces.tui.components.operation_launcher.location import (
     operation_launcher_orientation,
 )
 from memcommit.authority.access import (

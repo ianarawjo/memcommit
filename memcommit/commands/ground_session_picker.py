@@ -6,7 +6,7 @@ from datetime import datetime
 import re
 
 import memcommit.store as store_module
-from memcommit.commands.operation_launcher_location import (
+from memcommit.interfaces.tui.components.operation_launcher.location import (
     operation_launcher_orientation,
 )
 from memcommit.interfaces.tui.components.operation_launcher.session import (
