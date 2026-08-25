@@ -12,7 +12,7 @@ from memcommit.commands.context_operand import (
     ContextOperandSnapshot,
     choose_context_operand,
 )
-from memcommit.commands.findings_render import (
+from memcommit.interfaces.cli.quality_findings import (
     plural,
     render_cleanup_member,
     render_heading,

@@ -12,7 +12,7 @@ from memcommit.commands.context_operand import (
     choose_context_operand,
 )
 from memcommit.authority.access import GrantedReadStore, resolve_context_access
-from memcommit.commands.findings_render import (
+from memcommit.interfaces.cli.quality_findings import (
     render_heading,
     render_memory,
     render_question,
