@@ -27,8 +27,8 @@ from memcommit.interfaces.tui.operations.replace import (
 )
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
-from memcommit.replace_application import ReplaceError, ReplaceRequest
-from memcommit.replace_runtime import execute_replace_with_store
+from memcommit.operations.replace.application import ReplaceError, ReplaceRequest
+from memcommit.operations.replace.runtime import execute_replace_with_store
 from memcommit.store import MemoryStore
 
 

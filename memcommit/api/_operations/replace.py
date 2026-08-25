@@ -22,13 +22,13 @@ from memcommit.api.replace import (
     ReplaceSpanResult,
 )
 from memcommit.context_locator import resolve_context_locator
-from memcommit.replace_application import (
+from memcommit.operations.replace.application import (
     ReplaceError,
     ReplaceInputError as InternalReplaceInputError,
     ReplaceRequest,
     ReplaceStalePlanError,
 )
-from memcommit.replace_runtime import (
+from memcommit.operations.replace.runtime import (
     MemoryStoreReplacePort,
     execute_replace_plan,
 )
@@ -139,7 +139,7 @@ def plan_replace(
             ignore_case=ignore_case,
         )
         port = MemoryStoreReplacePort(runtime.store)
-        from memcommit.replace_application import plan_replace as prepare
+        from memcommit.operations.replace.application import plan_replace as prepare
 
         return _project_plan(prepare(request, port=port), port, runtime)
     except ReplaceStorageError:
