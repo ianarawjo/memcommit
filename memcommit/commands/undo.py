@@ -9,7 +9,7 @@ from memcommit.command_history import CommandHistoryError
 from memcommit.commands.restoration_present import (
     render_command_restore_receipt,
 )
-from memcommit.granted_update_application import restore_granted_update
+from memcommit.operations.undo.runtime import execute_undo
 from memcommit.store import MemoryStore
 
 
@@ -30,22 +30,7 @@ def cmd(
     del keep
     store = MemoryStore()
     try:
-        session = store.load_staged_update()
-        if (
-            session is not None
-            and session.status == "applied"
-            and session.granted_target is not None
-        ):
-            try:
-                result = restore_granted_update(store, session, "undo")
-            except CommandHistoryError as error:
-                if str(error) != "There is no recorded Context command to undo.":
-                    raise
-                # An old participant receipt must not mask a newer local
-                # command. Other authority failures remain fail-closed.
-                result = store.restore_recent_context_command("undo")
-        else:
-            result = store.restore_recent_context_command("undo")
+        result = execute_undo(store)
     except (
         CommandHistoryError,
         KeyError,

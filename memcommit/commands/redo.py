@@ -7,7 +7,7 @@ from memcommit.command_history import CommandHistoryError
 from memcommit.commands.restoration_present import (
     render_command_restore_receipt,
 )
-from memcommit.granted_update_application import restore_granted_update
+from memcommit.operations.redo.runtime import execute_redo
 from memcommit.store import MemoryStore
 
 
@@ -15,22 +15,7 @@ def cmd() -> None:
     """Redo one global checkpoint-producing command unit."""
     store = MemoryStore()
     try:
-        session = store.load_staged_update()
-        if (
-            session is not None
-            and session.status in {"applied", "undone"}
-            and session.granted_target is not None
-        ):
-            try:
-                result = restore_granted_update(store, session, "redo")
-            except CommandHistoryError as error:
-                if str(error) != "There is no recorded Context command to redo.":
-                    raise
-                # A stale granted receipt can coexist with a newer local Undo.
-                # Fall back only when its authority stack is definitely empty.
-                result = store.restore_recent_context_command("redo")
-        else:
-            result = store.restore_recent_context_command("redo")
+        result = execute_redo(store)
     except (
         CommandHistoryError,
         KeyError,

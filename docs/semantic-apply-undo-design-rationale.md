@@ -1,5 +1,13 @@
 # Semantic apply and command-unit Undo
 
+Undo and Redo now enter separate operation adapters under
+`memcommit.operations.undo` and `memcommit.operations.redo`. Their common
+granted-versus-local stack selection lives in
+`memcommit.operations.restoration`; command modules retain only syntax, error
+mapping, and receipt presentation. This shares the authority fallback
+invariant without collapsing the two durable operation identities. See
+`undo-redo-application-boundary-matrix.md`.
+
 ## Invariant
 
 An apply action is one command unit even when it writes both a Context and a

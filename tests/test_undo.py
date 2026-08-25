@@ -275,7 +275,7 @@ def test_empty_stale_granted_receipt_does_not_mask_local_undo(
     )()
     monkeypatch.setattr(MemoryStore, "load_staged_update", lambda _store: staged)
     monkeypatch.setattr(
-        "memcommit.commands.undo.restore_granted_update",
+        "memcommit.operations.restoration.runtime.restore_granted_update",
         lambda *_args: (_ for _ in ()).throw(
             CommandHistoryError(
                 "There is no recorded Context command to undo."
@@ -303,7 +303,7 @@ def test_empty_stale_granted_receipt_does_not_mask_local_redo(
     )()
     monkeypatch.setattr(MemoryStore, "load_staged_update", lambda _store: staged)
     monkeypatch.setattr(
-        "memcommit.commands.redo.restore_granted_update",
+        "memcommit.operations.restoration.runtime.restore_granted_update",
         lambda *_args: (_ for _ in ()).throw(
             CommandHistoryError(
                 "There is no recorded Context command to redo."
