@@ -7,7 +7,7 @@ import json
 from dataclasses import dataclass, field
 from typing import Literal, Protocol
 
-from memcommit.literal_find_application import (
+from memcommit.operations.find.literal_application import (
     LiteralFindRequest,
     LiteralFindSpan,
     compile_find_pattern,

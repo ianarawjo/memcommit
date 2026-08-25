@@ -5,8 +5,8 @@ from __future__ import annotations
 import memcommit.ops as ops
 from memcommit.authority.access import ContextAccess
 from memcommit.context_targeting.readable_catalog import ReadableContextCatalog
-from memcommit.literal_find_application import LiteralFindRequest
-from memcommit.literal_find_runtime import execute_literal_find
+from memcommit.operations.find.literal_application import LiteralFindRequest
+from memcommit.operations.find.literal_runtime import execute_literal_find
 from memcommit.store import MemoryStore
 
 

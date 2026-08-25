@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.literal_find_application import LiteralFindResult
+from memcommit.operations.find.literal_application import LiteralFindResult
 from memcommit.source_projection.presentation import SourceDisplayValue
 
 

@@ -50,7 +50,10 @@ from memcommit.interfaces.tui.operations.find.model import (
     LiteralFindTuiOutcome,
     LiteralFindTuiSetup,
 )
-from memcommit.literal_find_application import LiteralFindRequest, LiteralFindResult
+from memcommit.operations.find.literal_application import (
+    LiteralFindRequest,
+    LiteralFindResult,
+)
 
 
 LiteralFindRunner = Callable[[LiteralFindRequest], LiteralFindResult]

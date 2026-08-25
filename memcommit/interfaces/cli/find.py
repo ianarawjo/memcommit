@@ -4,7 +4,10 @@ from __future__ import annotations
 
 from memcommit.interfaces.literal_find import render_literal_find_reference_row
 from memcommit.interfaces.console.text import safe_terminal_text
-from memcommit.literal_find_application import LiteralFindMatch, LiteralFindResult
+from memcommit.operations.find.literal_application import (
+    LiteralFindMatch,
+    LiteralFindResult,
+)
 
 
 DEFAULT_LITERAL_FIND_PREVIEW_MATCHES = 10

@@ -17,7 +17,7 @@ from memcommit.interfaces.tui.components.paged_result import (
     PagedResultState,
     run_paged_result,
 )
-from memcommit.literal_find_application import LiteralFindResult
+from memcommit.operations.find.literal_application import LiteralFindResult
 
 
 def run_compact_literal_find_result(

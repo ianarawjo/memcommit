@@ -16,12 +16,12 @@ from memcommit.api.errors import (
 )
 from memcommit.api.find import FindMatchResult, FindResult, FindSpanResult
 from memcommit.context_locator import resolve_context_locator
-from memcommit.literal_find_application import (
+from memcommit.operations.find.literal_application import (
     LiteralFindError,
     LiteralFindInputError,
     LiteralFindRequest,
 )
-from memcommit.literal_find_runtime import execute_literal_find
+from memcommit.operations.find.literal_runtime import execute_literal_find
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
 

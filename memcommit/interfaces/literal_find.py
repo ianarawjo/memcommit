@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.literal_find_application import LiteralFindMatch
+from memcommit.operations.find.literal_application import LiteralFindMatch
 from memcommit.source_projection.model import SourceReferenceRow
 from memcommit.source_projection.presentation import (
     SourceReferenceLayout,

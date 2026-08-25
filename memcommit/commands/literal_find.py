@@ -36,12 +36,12 @@ from memcommit.interfaces.tui.operations.find import (
     run_compact_literal_find_result,
     run_literal_find_tui,
 )
-from memcommit.literal_find_application import (
+from memcommit.operations.find.literal_application import (
     LiteralFindError,
     LiteralFindRequest,
     LiteralFindResult,
 )
-from memcommit.literal_find_runtime import execute_literal_find
+from memcommit.operations.find.literal_runtime import execute_literal_find
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
 from memcommit.store import MemoryStore

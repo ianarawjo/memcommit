@@ -1,6 +1,6 @@
 # Find callable boundary matrix
 
-Last reviewed: 2026-08-16.
+Last reviewed: 2026-08-25.
 
 ## Purpose
 
@@ -30,6 +30,30 @@ agent/MCP memcommit_find ------------/          |
                                       /             \
                               plain presenter    TUI Viewer
 ```
+
+## Package ownership
+
+The canonical provider-free implementation now lives under
+`memcommit.operations.find`. `literal_application.py` owns the exact request,
+frozen Source frame, span and result contracts, pattern validation, and
+complete non-overlapping matching. `literal_runtime.py` owns readable catalog
+composition, lexical and embedded reach, MemoryRef resolution, and the Store
+adapter that freezes the authorized corpus before matching. CLI, TUI, Python,
+agent, MCP, and presentation adapters import those operation-owned modules
+directly.
+
+The historical `memcommit.literal_find_application` and
+`memcommit.literal_find_runtime` paths remain behavior-free module-identity
+aliases. Old imports, monkeypatch targets, and serialized globals therefore
+resolve to the same canonical module, while importing
+`memcommit.operations.find` alone remains lazy.
+
+This relocation names the implementation owner without changing public Find
+semantics. It does not absorb semantic Search's `memcommit.find_application`
+or `memcommit.find_runtime`, construct a provider, create a session, initiate
+Replace, or change readable authority, traversal, matching, counts, spans,
+presentation, or effect boundaries. Those separations are intentional
+non-goals of the ownership-only move.
 
 ## Boundary matrix
 

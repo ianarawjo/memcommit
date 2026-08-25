@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from memcommit.literal_find_application import (
+from memcommit.operations.find.literal_application import (
     FrozenLiteralFindSource,
     LiteralFindError,
     LiteralFindInputError,
@@ -157,7 +157,7 @@ def test_literal_find_application_does_not_depend_on_reference_presentation():
         return tuple(modules)
 
     application_imports = imported_modules(
-        root / "memcommit/literal_find_application.py"
+        root / "memcommit/operations/find/literal_application.py"
     )
     projection_imports = imported_modules(root / "memcommit/interfaces/literal_find.py")
 
@@ -165,7 +165,7 @@ def test_literal_find_application_does_not_depend_on_reference_presentation():
         name.startswith(("memcommit.interfaces", "memcommit.source_projection"))
         for name in application_imports
     )
-    assert "memcommit.literal_find_application" in projection_imports
+    assert "memcommit.operations.find.literal_application" in projection_imports
     assert "memcommit.source_projection.model" in projection_imports
     assert not any(
         name.startswith(
