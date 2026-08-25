@@ -62,7 +62,7 @@ from memcommit.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
 )
-from memcommit.memory_transfer_application import (
+from memcommit.operations.memory_transfer.application import (
     CopyMemoriesRequest,
     FrozenCopyMemoriesPlan,
     FrozenMoveMemoriesPlan,

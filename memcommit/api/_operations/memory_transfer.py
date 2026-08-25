@@ -23,7 +23,7 @@ from memcommit.api.memory_transfer import (
     MemoryTransferPlacementResult,
     MoveMemoriesReceipt,
 )
-from memcommit.memory_transfer_application import (
+from memcommit.operations.memory_transfer.application import (
     CopyMemoriesRequest,
     MemoryTransferAuthorityError as InternalMemoryTransferAuthorityError,
     MemoryTransferError as InternalMemoryTransferError,
@@ -32,7 +32,7 @@ from memcommit.memory_transfer_application import (
     run_copy,
     run_move,
 )
-from memcommit.memory_transfer_runtime import MemoryStoreMemoryTransferPort
+from memcommit.operations.memory_transfer.runtime import MemoryStoreMemoryTransferPort
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
 from memcommit.store import ConcurrentContextUpdateError

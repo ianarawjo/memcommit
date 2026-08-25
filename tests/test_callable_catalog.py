@@ -77,8 +77,14 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
         ("move", "move_memories"),
     ):
         route = by_operation[operation]
-        assert "memcommit.memory_transfer_application" in route.application_modules
-        assert "memcommit.memory_transfer_runtime" in route.application_modules
+        assert (
+            "memcommit.operations.memory_transfer.application"
+            in route.application_modules
+        )
+        assert (
+            "memcommit.operations.memory_transfer.runtime"
+            in route.application_modules
+        )
         assert (
             "memcommit.interfaces.tui.operations.memory_transfer.screen"
             in route.tui_modules

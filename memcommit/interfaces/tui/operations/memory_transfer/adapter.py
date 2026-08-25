@@ -13,13 +13,13 @@ from memcommit.authority.access import (
 from memcommit.context import Context
 from memcommit.context_targeting.catalog import freeze_granted_context_navigation
 from memcommit.context_targeting.tui.picker import context_memory_rows
-from memcommit.memory_transfer_application import (
+from memcommit.operations.memory_transfer.application import (
     FrozenCopyMemoriesPlan,
     FrozenMoveMemoriesPlan,
     prepare_copy,
     prepare_move,
 )
-from memcommit.memory_transfer_runtime import MemoryStoreMemoryTransferPort
+from memcommit.operations.memory_transfer.runtime import MemoryStoreMemoryTransferPort
 from memcommit.interfaces.tui.operations.memory_transfer.model import (
     MemoryTransferTuiSetup,
 )

@@ -7,7 +7,7 @@ from memcommit.context_targeting.readable_catalog import (
     freeze_profile_context_navigation,
 )
 from memcommit.interfaces.tui.operations.merge.model import MergeTuiSetup
-from memcommit.merge_runtime import MemoryStoreMergePort
+from memcommit.operations.merge.runtime import MemoryStoreMergePort
 
 
 def build_merge_tui_setup(

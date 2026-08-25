@@ -53,7 +53,7 @@ def test_merge_application_does_not_import_an_interface_adapter():
         "prompt_toolkit",
         "typer",
     )
-    imports = _imports(PACKAGE / "merge_application.py")
+    imports = _imports(PACKAGE / "operations" / "merge" / "application.py")
 
     assert not any(
         module == prefix or module.startswith(f"{prefix}.")
@@ -96,8 +96,8 @@ def test_merge_cli_and_tui_depend_on_the_typed_application_contract():
         PACKAGE / "interfaces" / "tui" / "operations" / "merge" / "resolution.py"
     )
 
-    assert "memcommit.merge_application" in cli_imports
-    assert "memcommit.merge_application" in tui_imports
+    assert "memcommit.operations.merge.application" in cli_imports
+    assert "memcommit.operations.merge.application" in tui_imports
     assert not any(module.startswith("memcommit.commands") for module in tui_imports)
 
 

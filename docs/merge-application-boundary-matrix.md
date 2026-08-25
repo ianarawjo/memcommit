@@ -47,6 +47,29 @@ application boundary.
 
 ## Extracted ownership
 
+The implementation is canonically grouped under one vertical package,
+`memcommit.operations.merge`: `application.py` owns the typed use case and
+`runtime.py` owns Store and Grant composition. Keeping these implementations as
+flat root modules would continue package-root growth and separate one operation
+from its canonical CLI and TUI adapters. A global horizontal application/runtime
+tree was rejected because it would scatter each operation across distant
+packages rather than make one reviewed slice inspectable in one place.
+
+The former top-level application and runtime paths remain true module-identity
+aliases instead of copied re-export tables. Importing in either order therefore
+returns the same implementation globals, and historical imports, monkeypatches,
+and serialized Python globals resolve through the canonical owner. Immediate
+removal of the old paths was rejected because the Python import surface is not
+versioned and downstream use is not fully inventoried. The package initializer
+stays lazy so importing `memcommit.operations.merge` alone does not eagerly load
+application or Store composition.
+
+This is an ownership-only relocation. It changes no direct/descendant meaning,
+authority, write-protection, conflict, freshness, checkpoint, lineage,
+serialization, terminal interaction, operation route state, or evidence
+membership. Existing ordered terminal captures therefore remain valid and are
+not refreshed for the move.
+
 | Callable | Layer | Responsibility |
 | --- | --- | --- |
 | `MergeRequest`, `FrozenMergePlan`, `MergeConflict`, `MergeResolution`, `MergeResult` | Application contract | Typed locator/reach input, mapping-qualified conflict identity, deterministic decision, reviewed binding, and durable result without Store or terminal objects. |

@@ -17,6 +17,39 @@ local Context, and none atomically removes selected Memories from their old
 owners while adding them to a new owner. Copy and Move fill that exact gap;
 they do not reinterpret Reference, Embed, Branch, Import, Merge, or Search.
 
+## Operation-package ownership and Branch boundary
+
+Copy and Move share one canonical implementation package because both operate
+on an ordered set of exact direct Memories and one existing local Target:
+
+```text
+memcommit/operations/memory_transfer/
+  application.py
+  runtime.py
+```
+
+The application owner defines both typed request/plan/result families and their
+complete validation/application order. The runtime owner composes Store, Grant,
+protection, link, checkpoint, and atomic multi-Context publication. CLI, TUI,
+and public Python adapters import these canonical owners directly. The former
+top-level application and runtime paths remain module-identity aliases so old
+imports, import-order-sensitive monkeypatches, and serialized Python globals
+reach the same implementation module rather than a copied re-export table.
+
+Branch remains a separate operation owner even though it also copies Memory
+values. Branch creates a new Context or lexical subtree, copies and projects
+checkpoint histories, records Context and Memory lineage, changes the current
+Context, and owns whole-tree Undo/Redo archives. Copy and Move instead transfer
+selected direct Memories into an already existing Target and never create or
+inherit a Context history. Their common fresh-identity, lineage, and atomic
+storage mechanics stay in shared domain/Store infrastructure; similarity of
+those mechanisms is not a reason to merge the two transaction contracts.
+
+This is an ownership-only relocation. It changes no Copy/Move route state,
+authority, identity, placement, link policy, checkpoint schema, terminal
+interaction, or evidence membership. Existing ordered TUI captures therefore
+remain valid and are not refreshed.
+
 ## Command contract
 
 Both operations accept one or more direct-Memory locators in caller order:
@@ -178,7 +211,8 @@ Memory.
 ## Callable and presentation boundaries
 
 CLI, public Python, agent, and MCP routes enter the same
-`memory_transfer_application` contract and `MemoryStoreMemoryTransferPort`.
+`memcommit.operations.memory_transfer.application` contract and
+`memcommit.operations.memory_transfer.runtime.MemoryStoreMemoryTransferPort`.
 The application returns typed placements, UID mappings, plan digests, link
 counts, and per-Context checkpoints. Machine routes do not parse terminal
 output and report that no semantic provider was used.

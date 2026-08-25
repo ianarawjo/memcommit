@@ -12,7 +12,7 @@ from memcommit.interfaces.tui.components.endpoint_setup import (
     run_endpoint_setup,
 )
 from memcommit.interfaces.tui.operations.merge.model import MergeTuiSetup
-from memcommit.merge_application import MergeReach, MergeRequest
+from memcommit.operations.merge.application import MergeReach, MergeRequest
 
 
 def merge_endpoint_setup_spec(setup: MergeTuiSetup) -> EndpointSetupSpec:

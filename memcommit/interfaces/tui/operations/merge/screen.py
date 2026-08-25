@@ -46,13 +46,13 @@ from memcommit.interfaces.tui.viewers.semantic import (
     SemanticViewerDocument,
     SemanticViewerSection,
 )
-from memcommit.merge_application import (
+from memcommit.operations.merge.application import (
     FrozenMergePlan,
     MergeError,
     MergeReach,
     MergeResult,
 )
-from memcommit.merge_runtime import merge_summary
+from memcommit.operations.merge.runtime import merge_summary
 from memcommit.session_workbench_navigation import SessionWorkbenchNavigation
 
 

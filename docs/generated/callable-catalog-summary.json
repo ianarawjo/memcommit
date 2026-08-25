@@ -1,12 +1,12 @@
 {
-  "callable_count": 11023,
+  "callable_count": 11001,
   "callable_kinds": {
     "async-function": 13,
-    "class": 1826,
-    "function": 8532,
+    "class": 1822,
+    "function": 8514,
     "lambda": 652
   },
-  "module_count": 856,
+  "module_count": 863,
   "operation_count": 66,
   "operation_curated_states": {
     "CLOSED": 30,
@@ -21,7 +21,7 @@
   },
   "visibility": {
     "local": 2271,
-    "private": 3538,
-    "public": 5214
+    "private": 3533,
+    "public": 5197
   }
 }

@@ -10,7 +10,7 @@ import uuid
 
 from memcommit.context import Context, Information, Memory, MemoryRef, QueryContextRef
 from memcommit.context_snapshot import ContextSnapshotRef
-from memcommit.merge_application import (
+from memcommit.operations.merge.application import (
     MergeAddition,
     MergeConflict,
     MergeConflictKind,

@@ -14,7 +14,7 @@ from memcommit.interfaces.console.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )
-from memcommit.memory_transfer_application import (
+from memcommit.operations.memory_transfer.application import (
     CopyMemoriesRequest,
     CopyMemoriesResult,
     MemoryTransferError,
@@ -23,7 +23,7 @@ from memcommit.memory_transfer_application import (
     run_copy,
     run_move,
 )
-from memcommit.memory_transfer_runtime import MemoryStoreMemoryTransferPort
+from memcommit.operations.memory_transfer.runtime import MemoryStoreMemoryTransferPort
 from memcommit.interfaces.tui.operations.memory_transfer import (
     choose_memory_transfer_setup,
 )

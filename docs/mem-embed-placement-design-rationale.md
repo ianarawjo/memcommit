@@ -205,10 +205,13 @@ component without inheriting Embed semantics.
 
 The component projects only the target's frozen direct-item sequence. It does
 not import a command adapter or gain storage, authority, or apply behavior.
-Older command screens still have legacy placement/review helpers. The common
-editable-command component is available to them, but migrating a frozen-plan
-review requires an operation-owned replan contract; Embed does not reach
-through those screens or reinterpret their approval boundary.
+The former `memcommit.commands.direct_item_placement` implementation is now a
+module-identity compatibility alias to this owner. The relocation deliberately
+retains the old import path while removing the second implementation and its
+independent globals. Older command screens may still have separate review
+helpers: migrating a frozen-plan review requires an operation-owned replan
+contract, and Embed does not reach through those screens or reinterpret their
+approval boundary.
 
 ## Alternatives and intentional non-goals
 

@@ -25,6 +25,14 @@ an action needs approval.  The operation adapter must keep the displayed
 identity adjacent to a typed frozen request, plan, or action and must validate
 that identity again at its mutation or dispatch boundary.
 
+The standalone full-screen approval surface is owned by
+`memcommit.interfaces.tui.components.exact_command_review.shell`. The former
+`memcommit.commands.exact_command_review_shell` path is a module-identity
+compatibility alias so legacy imports and monkeypatches reach the same globals.
+This is an ownership-only relocation: key bindings, rendering, validation,
+approval, cancellation, and terminal behavior are unchanged, so no interaction
+capture is refreshed for the move.
+
 The optional editable proposed-command layer is an always-visible,
 non-executing setup state. It owns one-line parsing and form presentation,
 while an operation adapter owns the complete argv grammar and an all-or-none
