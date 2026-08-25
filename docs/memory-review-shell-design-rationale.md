@@ -599,6 +599,21 @@ workbench themselves do not:
 These boundaries keep the first shell useful for the user study while making
 its evidence, mutations, and future claims inspectable.
 
+## Memory report picker ownership
+
+The shared read-only Memory report picker used by `mem trace` and
+`mem rationale` is owned by
+`memcommit.interfaces.tui.components.memory_report_picker`. The established
+`memcommit.commands.memory_picker` path remains an exact module alias so
+existing imports and legacy-path monkeypatches reach the same implementation
+globals.
+
+This is an ownership-only relocation. The implementation body moved without
+changes; picker state, Context reach, row projection, terminal checks,
+validation and error text, selection receipts, and cancellation behavior are
+unchanged. Trace and rationale may continue importing the compatibility path
+while their command modules are being changed for unrelated reasons.
+
 ## Shared terminal chrome
 
 Review now imports terminal sanitization and slot-based frame composition from
