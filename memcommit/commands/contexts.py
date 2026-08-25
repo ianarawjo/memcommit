@@ -1,16 +1,12 @@
 import typer
 
-from memcommit.context_naming import is_portable_context_name
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )
-from memcommit.context_targeting.catalog import (
-    freeze_granted_context_navigation,
-    grant_navigation_capability_text,
-)
-from memcommit.context_targeting.resolution import order_context_names_by_hierarchy
 from memcommit.interfaces.console.theme import SOURCE_CAPABILITY_RGB
-from memcommit.profile_config import ProfileConfigError, load_profile_registry
+from memcommit.operations.contexts.application import ContextCatalogEntry
+from memcommit.operations.contexts.runtime import load_contexts_catalog
+from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
 from memcommit.store import MemoryStore
 
@@ -31,101 +27,62 @@ def _current_marker(current: bool) -> str:
     return typer.style("* ", fg=typer.colors.GREEN, bold=True)
 
 
-def _owned_context_line(name: str, *, current: bool) -> str:
+def _owned_context_line(entry: ContextCatalogEntry) -> str:
     line = (
-        _current_marker(current)
+        _current_marker(entry.current)
         + _OWNED_PREFIX
         + _context_name(
-            name,
-            current=current,
+            entry.name,
+            current=entry.current,
         )
     )
-    if not is_portable_context_name(name):
+    if not entry.portable_name:
         line += "  LEGACY NAME · MIGRATION REQUIRED"
     return line
 
 
-def _granted_context_line(
-    name: str,
-    *,
-    current: bool,
-    capabilities: str,
-    authority_profile: str,
-) -> str:
+def _granted_context_line(entry: ContextCatalogEntry) -> str:
+    assert entry.capabilities is not None
+    assert entry.authority_profile is not None
     ownership = typer.style("GRANT", bold=True) + "  "
     access = typer.style(
-        capabilities,
+        entry.capabilities,
         fg=SOURCE_CAPABILITY_RGB,
         bold=True,
     )
     line = (
-        _current_marker(current)
+        _current_marker(entry.current)
         + ownership
-        + _context_name(name, current=current)
+        + _context_name(entry.name, current=entry.current)
         + "  "
         + access
         + " · FROM "
-        + display_escape_text(authority_profile)
+        + display_escape_text(entry.authority_profile)
     )
-    if not is_portable_context_name(name):
+    if not entry.portable_name:
         line += "  LEGACY GRANT NAME · RECREATE REQUIRED"
     return line
 
 
 def cmd() -> None:
     store = MemoryStore()
-    # The marker and catalog are one read-only view of the active name captured
-    # at command entry; another process may switch after this snapshot.
-    current = store.current_context_name()
-    names = store.list_context_names()
-    if not names:
-        typer.echo("No contexts yet. Run 'mem init <name>' to create one.")
-        return
     try:
-        granted_navigation = freeze_granted_context_navigation(store)
-        virtual_names = granted_navigation.names
+        catalog = load_contexts_catalog(store)
     except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
         typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
 
-    try:
-        registry = load_profile_registry()
-    except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
-        typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
-        raise typer.Exit(1)
-    profiles = {profile.uid: profile.name for profile in registry.profiles}
-    active_grants = tuple(
-        grant
-        for grant in registry.grants
-        if grant.grantee_profile_uid == registry.active.uid
-    )
-    local_names = frozenset(names)
-    public_names = order_context_names_by_hierarchy(
-        (*names, *(name for name in virtual_names if name not in local_names))
-    )
+    if not catalog.has_local_contexts:
+        typer.echo("No contexts yet. Run 'mem init <name>' to create one.")
+        return
     # Contexts is an orientation command, so a terminal receives the same
     # stable catalog as a pipe. Project the local-plus-Grant snapshot through
     # the same public-name hierarchy as Switch instead of creating a second,
     # ownership-grouped ordering; the GRANT prefix carries ownership meaning.
-    for name in public_names:
-        if name in local_names:
-            typer.echo(_owned_context_line(name, current=name == current))
-            continue
-        candidates = tuple(
-            grant
-            for grant in active_grants
-            if name == grant.public_name or name.startswith(grant.public_name + "/")
-        )
-        if not candidates:
-            continue
-        effective = max(
-            candidates,
-            key=lambda grant: len(grant.public_name.split("/")),
-        )
-        line = _granted_context_line(
-            name,
-            current=name == current,
-            capabilities=grant_navigation_capability_text(effective.permissions),
-            authority_profile=profiles[effective.authority_profile_uid],
+    for entry in catalog.entries:
+        line = (
+            _owned_context_line(entry)
+            if entry.ownership == "OWNED"
+            else _granted_context_line(entry)
         )
         typer.echo(line)
