@@ -12,7 +12,7 @@ import typer
 
 from memcommit.command_attempts import current_command_attempt_uid
 from memcommit.commands.command_progress import CommandProgress
-from memcommit.commands.command_group import CanonicalCommandGroup
+from memcommit.interfaces.cli.command_group import CanonicalCommandGroup
 from memcommit.commands.profile_group import ProfileAliasGroup
 from memcommit.commands.profile_picker import (
     ProfilePickerAction,

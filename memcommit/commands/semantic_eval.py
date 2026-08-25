@@ -12,7 +12,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.commands.command_group import CanonicalCommandGroup
+from memcommit.interfaces.cli.command_group import CanonicalCommandGroup
 
 from memcommit.interfaces.console.text import (
     display_escape_text,

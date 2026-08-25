@@ -42,6 +42,15 @@ evidence-ledger records. Click receives the canonical command name after
 resolution, so command Help renders canonical usage and the root attempt
 ledger records the canonical operation instead of the entered alias.
 
+The shared Click routing implementation is owned by
+`memcommit.interfaces.cli.command_group`. The historical
+`memcommit.commands.command_group` import is a true module alias, rather than
+a wrapper or copied export list. This preserves class and alias-map identity,
+including legacy-path monkeypatches, while command adapters may import the
+interface owner directly. The ownership move deliberately did not change
+accepted spellings, collision handling, suggestion order, stderr text, exit
+codes, or Typer/Click routing behavior.
+
 The Profile group resolves a known command alias before applying its existing
 `mem profile NAME` fallback. This keeps `mem profile archivestudy` attached to
 `archive-study` while other unknown tokens retain their meaning as Profile

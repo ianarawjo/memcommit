@@ -10,7 +10,7 @@ try:  # Typer 0.27+ vendors Click; older supported Typer releases do not.
 except ImportError:  # pragma: no cover - compatibility with older Typer
     import click
 
-from memcommit.commands.command_group import CanonicalCommandGroup
+from memcommit.interfaces.cli.command_group import CanonicalCommandGroup
 
 from memcommit.interfaces.console.errors import render_cli_error
 from memcommit.write_protection import (
