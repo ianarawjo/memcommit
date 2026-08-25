@@ -1,28 +1,8 @@
-"""Compatibility exports for ordinary Query application contracts.
+"""Compatibility alias for the operation-owned ordinary Query application."""
 
-New code imports :mod:`memcommit.operations.query.ordinary_application`.
-"""
+from importlib import import_module
+import sys
 
-from memcommit.operations.query.ordinary_application import (
-    FrozenOrdinaryQuerySource,
-    OrdinaryQueryObserver,
-    OrdinaryQueryProvider,
-    OrdinaryQueryProviderFactory,
-    OrdinaryQueryRequest,
-    OrdinaryQueryResponse,
-    OrdinaryQuerySourcePort,
-    OrdinaryQueryStage,
-    run_ordinary_query,
-)
 
-__all__ = [
-    "FrozenOrdinaryQuerySource",
-    "OrdinaryQueryObserver",
-    "OrdinaryQueryProvider",
-    "OrdinaryQueryProviderFactory",
-    "OrdinaryQueryRequest",
-    "OrdinaryQueryResponse",
-    "OrdinaryQuerySourcePort",
-    "OrdinaryQueryStage",
-    "run_ordinary_query",
-]
+_canonical = import_module("memcommit.operations.query.ordinary_application")
+sys.modules[__name__] = _canonical

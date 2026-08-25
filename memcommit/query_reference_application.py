@@ -1,28 +1,8 @@
-"""Compatibility exports for QueryContextRef application contracts.
+"""Compatibility alias for the operation-owned QueryContextRef application."""
 
-New code imports :mod:`memcommit.operations.query.reference_application`.
-"""
+from importlib import import_module
+import sys
 
-from memcommit.operations.query.reference_application import (
-    FrozenQueryReferenceSource,
-    QueryReferenceObserver,
-    QueryReferenceProvider,
-    QueryReferenceProviderFactory,
-    QueryReferenceRequest,
-    QueryReferenceResponse,
-    QueryReferenceSourcePort,
-    QueryReferenceStage,
-    run_query_reference,
-)
 
-__all__ = [
-    "FrozenQueryReferenceSource",
-    "QueryReferenceObserver",
-    "QueryReferenceProvider",
-    "QueryReferenceProviderFactory",
-    "QueryReferenceRequest",
-    "QueryReferenceResponse",
-    "QueryReferenceSourcePort",
-    "QueryReferenceStage",
-    "run_query_reference",
-]
+_canonical = import_module("memcommit.operations.query.reference_application")
+sys.modules[__name__] = _canonical

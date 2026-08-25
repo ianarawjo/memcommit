@@ -1,6 +1,6 @@
 # Query operation-package design rationale
 
-Last verified: 2026-08-22.
+Last verified: 2026-08-25.
 
 ## Motivation
 
@@ -37,12 +37,20 @@ the existing command compatibility helper import these owners directly.
 
 ## Compatibility boundary
 
-The former top-level modules remain as implementation-free re-export modules.
+The former top-level modules remain as implementation-free identity aliases.
 Existing Python callers can therefore keep imports such as
 `memcommit.query_application.OrdinaryQueryRequest`, while new repository code
-must import the operation package. Compatibility objects are the exact same
-class and function objects as their owners; there is no second implementation
-or wrapper execution path.
+must import the operation package. Importing an old or canonical path in either
+order now returns the same canonical module object, not merely the same exported
+class and function objects. Pre-relocation pickle globals continue to resolve
+through the old paths.
+
+This deliberately removes a separate compatibility-module namespace: module
+introspection reports the canonical owner, and a monkeypatch made through an
+old path affects that same owner. Query had no internal consumers of the old
+paths, so the alias change does not reroute production execution. The ordinary,
+granted, and reference modules remain distinct because module identity does not
+merge their readable-Context, Grant, and concealed-Source contracts.
 
 Keeping those exports was chosen over an immediate breaking move because the
 Python API is not yet versioned and downstream use is not fully inventoried.
@@ -71,10 +79,10 @@ span multiple distant trees and is harder to review operation by operation.
 ## Verification
 
 The ordinary, granted, reference, provider, and workbench tests exercise the
-same behavior through the new owners. A focused
-package test checks that every old public export is object-identical to the new
-owner, that the compatibility modules contain no functions or classes, and
-that internal Python modules do not import the old paths.
+same behavior through the new owners. A focused package test checks module
+identity in both import orders, old-path pickle loading, lazy package import,
+the absence of compatibility-file behavior, and that internal Python modules
+do not import the old paths.
 
 This is a path and ownership change only, so it introduces no new interactive
 state and requires no replacement TUI screenshot set.

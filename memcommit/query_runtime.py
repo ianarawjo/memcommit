@@ -1,18 +1,8 @@
-"""Compatibility exports for the ordinary Query runtime.
+"""Compatibility alias for the operation-owned ordinary Query runtime."""
 
-New code imports :mod:`memcommit.operations.query.ordinary_runtime`.
-"""
+from importlib import import_module
+import sys
 
-from memcommit.operations.query.ordinary_runtime import (
-    MemoryStoreOrdinaryQuerySourcePort,
-    OrdinaryQueryReadableAccess,
-    OrdinaryQueryReadableCatalog,
-    execute_ordinary_query,
-)
 
-__all__ = [
-    "MemoryStoreOrdinaryQuerySourcePort",
-    "OrdinaryQueryReadableAccess",
-    "OrdinaryQueryReadableCatalog",
-    "execute_ordinary_query",
-]
+_canonical = import_module("memcommit.operations.query.ordinary_runtime")
+sys.modules[__name__] = _canonical

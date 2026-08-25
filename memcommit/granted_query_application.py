@@ -1,28 +1,8 @@
-"""Compatibility exports for granted Query application contracts.
+"""Compatibility alias for the operation-owned granted Query application."""
 
-New code imports :mod:`memcommit.operations.query.granted_application`.
-"""
+from importlib import import_module
+import sys
 
-from memcommit.operations.query.granted_application import (
-    GrantedQueryObserver,
-    GrantedQueryProviderFactory,
-    GrantedQueryReadPort,
-    GrantedQueryRequest,
-    GrantedQueryResponse,
-    GrantedQueryStage,
-    GrantedQueryTarget,
-    PreparedGrantedQuery,
-    run_granted_query_read,
-)
 
-__all__ = [
-    "GrantedQueryObserver",
-    "GrantedQueryProviderFactory",
-    "GrantedQueryReadPort",
-    "GrantedQueryRequest",
-    "GrantedQueryResponse",
-    "GrantedQueryStage",
-    "GrantedQueryTarget",
-    "PreparedGrantedQuery",
-    "run_granted_query_read",
-]
+_canonical = import_module("memcommit.operations.query.granted_application")
+sys.modules[__name__] = _canonical

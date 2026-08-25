@@ -1,22 +1,8 @@
-"""Compatibility exports for the granted Query runtime.
+"""Compatibility alias for the operation-owned granted Query runtime."""
 
-New code imports :mod:`memcommit.operations.query.granted_runtime`.
-"""
+from importlib import import_module
+import sys
 
-from memcommit.operations.query.granted_runtime import (
-    CatalogLoader,
-    MemoryStoreGrantedQueryReadPort,
-    execute_granted_query_read,
-    execute_granted_query_request,
-    freeze_granted_query_targets,
-    resolve_granted_query_target,
-)
 
-__all__ = [
-    "CatalogLoader",
-    "MemoryStoreGrantedQueryReadPort",
-    "execute_granted_query_read",
-    "execute_granted_query_request",
-    "freeze_granted_query_targets",
-    "resolve_granted_query_target",
-]
+_canonical = import_module("memcommit.operations.query.granted_runtime")
+sys.modules[__name__] = _canonical
