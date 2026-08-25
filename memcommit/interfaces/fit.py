@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from memcommit.fit import FitStatus
-from memcommit.fit_application import (
+from memcommit.operations.fit.application import (
     FitPropositionsResult,
     FitResult,
 )

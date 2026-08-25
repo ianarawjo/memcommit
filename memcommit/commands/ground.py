@@ -125,7 +125,7 @@ from memcommit.ground_turn_dialogue import (
     ground_turn_aliases,
     interpret_ground_turn,
 )
-from memcommit.fit_runtime import execute_and_save_ground_fit
+from memcommit.operations.fit.runtime import execute_and_save_ground_fit
 from memcommit.fit_store import FitStore
 from memcommit.query_provider import connect_codex_chatgpt_provider
 from memcommit.context_naming import validate_portable_context_name

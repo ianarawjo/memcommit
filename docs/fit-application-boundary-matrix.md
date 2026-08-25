@@ -19,6 +19,23 @@ operation ledger. Fit has no standalone workbench or Viewer: its terminal
 contract is one compact receipt, while named Ground keeps its own embedded
 AUTO-FIT projection.
 
+## Operation ownership
+
+`memcommit.operations.fit.application` is the canonical owner of Fit's typed
+requests and results, and `memcommit.operations.fit.runtime` owns the
+MemoryStore/provider adapter used by the standalone command and named Ground.
+API, CLI, Ground, and presentation consumers import those operation-owned
+modules directly. The former `memcommit.fit_application` and
+`memcommit.fit_runtime` paths are behavior-free module-identity aliases so old
+imports, monkeypatch targets, and serialized globals continue to resolve to
+the same objects regardless of import order.
+
+This relocation deliberately leaves the reusable semantic judgment,
+coherence, immutable receipt, and provider protocols in their established
+`fit`, `fit_judgment`, `fit_coherence`, and `fit_store` modules. It changes no
+authority, whole-frame planning, freshness, publication, or terminal behavior,
+so the recorded interactive evidence does not require regeneration.
+
 ## Boundary matrix
 
 | Layer | Owns | Must not own |

@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import typer
 
-from memcommit.fit_application import FitPropositionsResult, FitResult
 from memcommit.interfaces.console.theme import (
     semantic_color_rgb,
     semantic_judgment_role,
@@ -14,6 +13,7 @@ from memcommit.interfaces.fit import (
     fit_receipt_lines,
     proposition_fit_receipt_lines,
 )
+from memcommit.operations.fit.application import FitPropositionsResult, FitResult
 
 
 def _render_receipt_line(

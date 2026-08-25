@@ -12,12 +12,12 @@ import memcommit.commands.fit as fit_command
 import memcommit.ops as ops
 from memcommit.cli import app
 from memcommit.context import Context, Memory
-from memcommit.fit_application import (
+from memcommit.operations.fit.application import (
     FitMemorySourceRequest,
     FitStoredSourcesRequest,
 )
 from memcommit.fit_judgment import FIT_JUDGMENT_PAYLOAD_MARKER, FitProposition
-from memcommit.fit_runtime import FitSourceError, run_stored_source_fit
+from memcommit.operations.fit.runtime import FitSourceError, run_stored_source_fit
 from memcommit.profile_config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,

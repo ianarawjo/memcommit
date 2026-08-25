@@ -21,7 +21,10 @@ from memcommit.fit_coherence import (
     FIT_COHERENCE_OPERATION,
     FIT_COHERENCE_PAYLOAD_MARKER,
 )
-from memcommit.fit_runtime import execute_and_save_ground_fit, freeze_ground_fit
+from memcommit.operations.fit.runtime import (
+    execute_and_save_ground_fit,
+    freeze_ground_fit,
+)
 from memcommit.fit_judgment import FIT_JUDGMENT_PAYLOAD_MARKER
 from memcommit.fit_store import FitStore
 from memcommit.ground import (

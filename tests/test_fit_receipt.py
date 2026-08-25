@@ -9,12 +9,16 @@ import click
 from click.testing import CliRunner
 
 from memcommit.fit import FitExample, FitJudgment, FitReport, FitRule
-from memcommit.fit_application import FitInputOrigin, FitPropositionsResult, FitResult
 from memcommit.fit_judgment import (
     FitAnalysis,
     FitAssessment,
     FitProposition,
     FitQuestion,
+)
+from memcommit.operations.fit.application import (
+    FitInputOrigin,
+    FitPropositionsResult,
+    FitResult,
 )
 from memcommit.fit_coherence import (
     FitCoherenceFinding,

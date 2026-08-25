@@ -65,6 +65,7 @@ blocked = (
     'memcommit.elaborate_application',
     'memcommit.embed_application',
     'memcommit.fit_application',
+    'memcommit.fit_runtime',
     'memcommit.help_application',
     'memcommit.forget_application',
     'memcommit.ground_distill',
@@ -75,6 +76,8 @@ blocked = (
     'memcommit.operations.query.ordinary_application',
     'memcommit.operations.embed.application',
     'memcommit.operations.embed.runtime',
+    'memcommit.operations.fit.application',
+    'memcommit.operations.fit.runtime',
     'memcommit.operations.reference.application',
     'memcommit.operations.reference.runtime',
     'memcommit.reference_application',
@@ -428,7 +431,10 @@ except SemanticInputError:
 else:
     raise AssertionError('empty Fit unexpectedly succeeded')
 assert 'memcommit.api._operations.fit' in sys.modules
-assert 'memcommit.fit_application' in sys.modules
+assert 'memcommit.operations.fit.application' in sys.modules
+assert 'memcommit.operations.fit.runtime' in sys.modules
+assert 'memcommit.fit_application' not in sys.modules
+assert 'memcommit.fit_runtime' not in sys.modules
 assert 'memcommit.api._operations.distill' not in sys.modules
 assert 'memcommit.api._operations.elaborate' not in sys.modules
 assert 'memcommit.api._operations.ground_distill' not in sys.modules

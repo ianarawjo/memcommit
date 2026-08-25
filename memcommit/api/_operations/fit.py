@@ -13,9 +13,9 @@ from memcommit.api.errors import (
     SemanticProviderFailure,
 )
 from memcommit.api.semantic import FitJudgmentResult, FitPropositionInput
-from memcommit.fit_application import FitPropositionsRequest
 from memcommit.fit_judgment import FitJudgmentError, FitProposition
-from memcommit.fit_runtime import run_proposition_fit
+from memcommit.operations.fit.application import FitPropositionsRequest
+from memcommit.operations.fit.runtime import run_proposition_fit
 from memcommit.query_provider import QueryProviderError
 
 
