@@ -147,6 +147,11 @@ def test_public_elaborate_uses_one_typed_entry_for_both_directions(isolated_stor
         rules=("Confirm the option before acting.",),
         number=1,
     )
+    strict_rules = client.elaborate(
+        rules=("Confirm the option before acting.",),
+        number=1,
+        strict=True,
+    )
 
     assert isinstance(goal, ElaborateProposal)
     assert goal.mode == "GOAL_TO_RULES"
@@ -155,8 +160,12 @@ def test_public_elaborate_uses_one_typed_entry_for_both_directions(isolated_stor
     assert rules.mode == "RULES_TO_CASES"
     assert len(rules.cases) == 1
     assert rules.cases[0].case_role == "FIT"
-    assert rules.cases[0].validation.source_fit == "YES"
-    assert rules.cases[0].validation.rule_conformance == "CONFORMS"
+    assert rules.quality_policy == "BEST_EFFORT"
+    assert rules.cases[0].validation is None
+    assert strict_rules.quality_policy == "STRICT"
+    assert strict_rules.cases[0].validation is not None
+    assert strict_rules.cases[0].validation.source_fit == "YES"
+    assert strict_rules.cases[0].validation.rule_conformance == "CONFORMS"
 
 
 def test_public_fit_accepts_role_typed_propositions_without_store_effect(

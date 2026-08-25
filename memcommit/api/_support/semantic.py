@@ -120,19 +120,24 @@ def project_elaborate(result) -> ElaborateProposal:
                     )
                     for check in case.rule_checks
                 ),
-                validation=ElaborateCaseValidationProposal(
-                    source_fit=case.validation.source_fit,
-                    source_fit_reason=case.validation.source_fit_reason,
-                    rule_conformance=case.validation.rule_conformance,
-                    conforming_source_rule_indexes=(
-                        case.validation.conforming_source_rule_indexes
-                    ),
+                validation=(
+                    None
+                    if case.validation is None
+                    else ElaborateCaseValidationProposal(
+                        source_fit=case.validation.source_fit,
+                        source_fit_reason=case.validation.source_fit_reason,
+                        rule_conformance=case.validation.rule_conformance,
+                        conforming_source_rule_indexes=(
+                            case.validation.conforming_source_rule_indexes
+                        ),
+                    )
                 ),
                 target_context_refs=case.target_context_refs,
             )
             for case in analysis.cases
         ),
         origin=result.origin,
+        quality_policy=analysis.quality_policy.value,
         target_context_name=(
             analysis.target_context.context_name
             if analysis.target_context is not None

@@ -683,6 +683,16 @@ def elaborate_cmd(
             help="Exact positive proposal count (default 3; no fixed maximum)",
         ),
     ] = None,
+    strict: Annotated[
+        bool,
+        typer.Option(
+            "--strict",
+            help=(
+                "Reject generated Cases unless independent Conformance and Fit "
+                "checks both pass"
+            ),
+        ),
+    ] = False,
 ) -> None:
     """Inspect the Memories Elaborate would add without saving them."""
 
@@ -702,6 +712,7 @@ def elaborate_cmd(
                 goal=goal,
                 rules=tuple(rule or ()),
                 number=number,
+                strict=strict,
             )
             resolved_source = None
             resolved_target = resolve_semantic_add_target(
@@ -721,6 +732,7 @@ def elaborate_cmd(
                 context_name=endpoints.source_name,
                 role=as_role,
                 number=number,
+                strict=strict,
             )
             request = frozen_source.request
             resolved_source = endpoints.source_name

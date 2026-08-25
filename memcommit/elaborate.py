@@ -49,13 +49,20 @@ from memcommit.fit_judgment import (
 
 
 ELABORATE_OPERATION = "elaborate"
-ELABORATE_PROVIDER_CONTRACT_VERSION = 10
+ELABORATE_PROVIDER_CONTRACT_VERSION = 11
 ELABORATE_PAYLOAD_MARKER = "ELABORATE PAYLOAD:\n"
 
 
 class ElaborateMode(str, Enum):
     GOAL_TO_RULES = "GOAL_TO_RULES"
     RULES_TO_CASES = "RULES_TO_CASES"
+
+
+class ElaborateQualityPolicy(str, Enum):
+    """How far generated Cases are independently quality-gated."""
+
+    BEST_EFFORT = "BEST_EFFORT"
+    STRICT = "STRICT"
 
 
 class ElaborateError(RuntimeError):
@@ -340,6 +347,7 @@ class ElaborateAnalysis:
     cases: tuple[ElaboratedCase, ...] = ()
     target_context: ElaborateTargetContext | None = None
     number: int | None = None
+    quality_policy: ElaborateQualityPolicy = ElaborateQualityPolicy.BEST_EFFORT
     semantic_config: ElaborateSemanticConfig = DEFAULT_ELABORATE_SEMANTIC_CONFIG
     provider_contract_version: int = ELABORATE_PROVIDER_CONTRACT_VERSION
 
@@ -385,15 +393,30 @@ class ElaborateAnalysis:
                 "Every Elaborate Case must check every source Rule exactly once "
                 "in input order."
             )
-        if any(
-            item.validation is None
-            or item.validation.conforming_source_rule_indexes
-            != required_rule_indexes
-            for item in self.cases
+        if not isinstance(self.quality_policy, ElaborateQualityPolicy):
+            raise ElaborateError("Elaborate analysis quality policy is invalid.")
+        if (
+            self.mode is ElaborateMode.GOAL_TO_RULES
+            and self.quality_policy is ElaborateQualityPolicy.STRICT
         ):
+            raise ElaborateError("Strict Elaborate applies only to Rules-to-Cases.")
+        if self.quality_policy is ElaborateQualityPolicy.STRICT:
+            if any(
+                item.validation is None
+                or item.validation.conforming_source_rule_indexes
+                != required_rule_indexes
+                for item in self.cases
+            ):
+                raise ElaborateError(
+                    "Every strict Elaborate Case must independently conform to every "
+                    "Source Rule and Fit the complete Source frame."
+                )
+        elif any(item.validation is not None for item in self.cases):
+            # Validation evidence changes the meaning of the result. Keeping it
+            # exclusive to STRICT prevents a receipt from implying a gate that
+            # the request did not ask to run.
             raise ElaborateError(
-                "Every Elaborate Case must independently conform to every Source "
-                "Rule and Fit the complete Source frame."
+                "Best-effort Elaborate Cases must not carry strict validation evidence."
             )
         if self.provider_contract_version != ELABORATE_PROVIDER_CONTRACT_VERSION:
             raise ElaborateError("Unsupported Elaborate provider contract version.")
@@ -478,6 +501,7 @@ class ElaborateAnalysis:
                 else self.target_context.prompt_record()
             ),
             "number": self.number,
+            "quality_policy": self.quality_policy.value,
             "semantic_config": {
                 "default_proposal_count": self.semantic_config.default_proposal_count,
                 "max_rule_proposals": self.semantic_config.max_rule_proposals,
@@ -555,7 +579,11 @@ def validate_elaborate_analysis(
             _text(
                 case.proposition,
                 "Case proposition",
-                limit=_case_validation_text_limit(config),
+                limit=(
+                    _case_validation_text_limit(config)
+                    if analysis.quality_policy is ElaborateQualityPolicy.STRICT
+                    else config.text_limit
+                ),
             )
             _text(
                 case.expected,
@@ -616,6 +644,7 @@ def _schema(
     target_context: ElaborateTargetContext | None,
     number: int,
     config: ElaborateSemanticConfig,
+    strict: bool = False,
 ) -> dict[str, object]:
     text = {"type": "string", "minLength": 1, "maxLength": config.text_limit}
     rationale = {
@@ -667,7 +696,9 @@ def _schema(
         case_text = {
             "type": "string",
             "minLength": 1,
-            "maxLength": _case_validation_text_limit(config),
+            "maxLength": (
+                _case_validation_text_limit(config) if strict else config.text_limit
+            ),
         }
         case_required = [
             "proposition",
@@ -736,6 +767,7 @@ def validate_elaborate_provider_plan(
     inputs: tuple[str, ...],
     target_context: ElaborateTargetContext | None = None,
     number: int | None = None,
+    strict: bool = False,
     config: ElaborateSemanticConfig = DEFAULT_ELABORATE_SEMANTIC_CONFIG,
 ) -> None:
     """Reject an oversized live request before provider construction."""
@@ -744,8 +776,12 @@ def validate_elaborate_provider_plan(
         raise ElaborateError("Elaborate provider planning requires normalized input.")
     if not isinstance(config, ElaborateSemanticConfig):
         raise TypeError("Elaborate requires an ElaborateSemanticConfig.")
+    if type(strict) is not bool:
+        raise ElaborateError("Elaborate strict must be a boolean.")
+    if strict and mode is ElaborateMode.GOAL_TO_RULES:
+        raise ElaborateError("Strict Elaborate applies only to Rules-to-Cases.")
     number = normalize_elaborate_number(mode=mode, number=number, config=config)
-    if mode is ElaborateMode.RULES_TO_CASES:
+    if strict and mode is ElaborateMode.RULES_TO_CASES:
         validation_items = number * (len(inputs) + 1)
         if (
             len(inputs) > CONFORMANCE_MAX_RULES
@@ -773,6 +809,7 @@ def validate_elaborate_provider_plan(
         target_context=target_context,
         number=number,
         config=config,
+        strict=strict,
     )
     expected = number
     prompt_policy = resolve_semantic_prompt_policy()
@@ -957,6 +994,7 @@ def analyze_elaborate(
     provider: ElaborateProvider,
     target_context: ElaborateTargetContext | None = None,
     number: int | None = None,
+    strict: bool = False,
     config: ElaborateSemanticConfig = DEFAULT_ELABORATE_SEMANTIC_CONFIG,
 ) -> ElaborateAnalysis:
     """Generate an exact positive count of unverified top-down proposals."""
@@ -966,6 +1004,10 @@ def analyze_elaborate(
         rules=rules,
         config=config,
     )
+    if type(strict) is not bool:
+        raise ElaborateError("Elaborate strict must be a boolean.")
+    if strict and mode is ElaborateMode.GOAL_TO_RULES:
+        raise ElaborateError("Strict Elaborate applies only to Rules-to-Cases.")
     number = normalize_elaborate_number(mode=mode, number=number, config=config)
     if target_context is not None and not isinstance(
         target_context, ElaborateTargetContext
@@ -981,6 +1023,7 @@ def analyze_elaborate(
         target_context=target_context,
         number=number,
         config=config,
+        strict=strict,
     )
     validate_elaborate_provider_plan(
         mode=mode,
@@ -988,6 +1031,7 @@ def analyze_elaborate(
         target_context=target_context,
         number=number,
         config=config,
+        strict=strict,
     )
     if mode is ElaborateMode.GOAL_TO_RULES:
         quantity = f"exactly {number}"
@@ -1156,7 +1200,9 @@ def analyze_elaborate(
             proposition = _text(
                 value["proposition"],
                 "Case proposition",
-                limit=_case_validation_text_limit(config),
+                limit=(
+                    _case_validation_text_limit(config) if strict else config.text_limit
+                ),
             )
             expected_value = _text(
                 value["expected"],
@@ -1238,20 +1284,21 @@ def analyze_elaborate(
                     target_context_refs=target_refs,
                 )
             )
-        validations = _validate_elaborated_cases(
-            analysis_uid=analysis_uid,
-            inputs=inputs,
-            cases=tuple(proposed_cases),
-            provider=provider,
-        )
-        proposed_cases = [
-            replace(case, validation=validation)
-            for case, validation in zip(
-                proposed_cases,
-                validations,
-                strict=True,
+        if strict:
+            validations = _validate_elaborated_cases(
+                analysis_uid=analysis_uid,
+                inputs=inputs,
+                cases=tuple(proposed_cases),
+                provider=provider,
             )
-        ]
+            proposed_cases = [
+                replace(case, validation=validation)
+                for case, validation in zip(
+                    proposed_cases,
+                    validations,
+                    strict=True,
+                )
+            ]
     analysis = ElaborateAnalysis(
         uid=analysis_uid,
         mode=mode,
@@ -1261,6 +1308,11 @@ def analyze_elaborate(
         cases=tuple(proposed_cases),
         target_context=target_context,
         number=number,
+        quality_policy=(
+            ElaborateQualityPolicy.STRICT
+            if strict
+            else ElaborateQualityPolicy.BEST_EFFORT
+        ),
         semantic_config=config,
     )
     validate_elaborate_analysis(analysis, config=config)
@@ -1273,6 +1325,7 @@ __all__ = [
     "ElaborateAnalysis",
     "ElaborateError",
     "ElaborateMode",
+    "ElaborateQualityPolicy",
     "ElaborateProvider",
     "ElaboratedCase",
     "ElaboratedCaseValidation",

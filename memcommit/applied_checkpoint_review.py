@@ -164,7 +164,20 @@ def _elaborate_lines(payload: dict[str, object]) -> list[str]:
         f"MODE · {_line(payload.get('mode', '(unknown)'))}",
         f"TARGET · {_line(payload.get('target_context') or '(unknown)')}",
         f"VERIFICATION · {_line(payload.get('verification', 'UNVERIFIED'))}",
+        "QUALITY · "
+        + _line(
+            payload.get("quality_policy")
+            or (
+                "STRICT"
+                if payload.get("case_validation")
+                == "INDEPENDENT_SOURCE_RULE_CONFORMANCE_AND_SOURCE_FIT"
+                else "BEST_EFFORT"
+            )
+        ),
     ]
+    case_validation = payload.get("case_validation")
+    if case_validation is not None:
+        lines.append(f"CASE VALIDATION · {_line(case_validation)}")
     overview = payload.get("overview")
     if overview:
         lines.extend(("", "PROPOSAL OVERVIEW", _line(overview)))

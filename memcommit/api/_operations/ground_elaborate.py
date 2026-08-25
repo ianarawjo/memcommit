@@ -30,6 +30,7 @@ def elaborate_ground(
     *,
     direction: str,
     number: int | None = None,
+    strict: bool = False,
 ) -> ElaborateProposal:
     """Project one exact Ground Goal or Rule set through Elaborate."""
 
@@ -45,6 +46,7 @@ def elaborate_ground(
             ground_name=ground_name,
             direction=direction,  # type: ignore[arg-type]
             number=number,
+            strict=strict,
         )
         result = execute_ground_elaborate(
             frozen,

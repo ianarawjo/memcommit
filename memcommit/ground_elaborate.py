@@ -68,13 +68,14 @@ def _request_from_ground(
     *,
     direction: GroundElaborateDirection,
     number: int | None = None,
+    strict: bool = False,
 ) -> ElaborateRequest:
     if not is_bound_ground_schema(session.schema_version):
         raise ElaborateError("Ground Elaborate requires a bound Ground.")
     if session.status != "OPEN":
         raise ElaborateError("Ground Elaborate requires an open Ground.")
     if direction == "GOAL_TO_RULES":
-        return ElaborateRequest(goal=session.goal, number=number)
+        return ElaborateRequest(goal=session.goal, number=number, strict=strict)
     if direction != "RULES_TO_CASES":
         raise ElaborateError("Ground Elaborate direction is invalid.")
     active_rules = tuple(
@@ -84,7 +85,7 @@ def _request_from_ground(
     )
     if not active_rules:
         raise ElaborateError("The Ground contains no active Rules to elaborate.")
-    return ElaborateRequest(rules=active_rules, number=number)
+    return ElaborateRequest(rules=active_rules, number=number, strict=strict)
 
 
 def _legacy_target_context(
@@ -125,6 +126,7 @@ def freeze_ground_elaborate(
     ground_name: str,
     direction: GroundElaborateDirection,
     number: int | None = None,
+    strict: bool = False,
 ) -> FrozenGroundElaborate:
     """Freeze the exact Ground input before semantic infrastructure opens."""
 
@@ -134,6 +136,7 @@ def freeze_ground_elaborate(
             workspace,
             direction=direction,
             number=number,
+            strict=strict,
         )
         target_lane = (
             workspace.rules if direction == "GOAL_TO_RULES" else workspace.examples
@@ -159,6 +162,7 @@ def freeze_ground_elaborate(
         session,
         direction=direction,
         number=number,
+        strict=strict,
     )
     return FrozenGroundElaborate(
         ground_name=session.contract_name,
@@ -176,6 +180,7 @@ def _request_from_ground_workspace(
     *,
     direction: GroundElaborateDirection,
     number: int | None = None,
+    strict: bool = False,
 ) -> tuple[ElaborateRequest, str]:
     if direction == "GOAL_TO_RULES":
         try:
@@ -189,7 +194,11 @@ def _request_from_ground_workspace(
             raise ElaborateError(
                 "Ground workspace Elaborate requires exactly one Goal Memory."
             )
-        request = ElaborateRequest(goal=memories[0].content, number=number)
+        request = ElaborateRequest(
+            goal=memories[0].content,
+            number=number,
+            strict=strict,
+        )
     elif direction == "RULES_TO_CASES":
         try:
             memories = project_ordinary_memories(
@@ -205,6 +214,7 @@ def _request_from_ground_workspace(
         request = ElaborateRequest(
             rules=tuple(item.content for item in memories),
             number=number,
+            strict=strict,
         )
     else:
         raise ElaborateError("Ground Elaborate direction is invalid.")
@@ -242,6 +252,7 @@ def execute_ground_elaborate(
             before_workspace,
             direction=frozen.direction,
             number=frozen.request.number,
+            strict=frozen.request.strict,
         )
         if (
             before_workspace.uid != frozen.ground_uid
@@ -268,6 +279,7 @@ def execute_ground_elaborate(
             after_workspace,
             direction=frozen.direction,
             number=frozen.request.number,
+            strict=frozen.request.strict,
         )
         if (
             after_workspace.uid != frozen.ground_uid
@@ -289,6 +301,7 @@ def execute_ground_elaborate(
             before,
             direction=frozen.direction,
             number=frozen.request.number,
+            strict=frozen.request.strict,
         )
         != frozen.request
     ):

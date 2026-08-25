@@ -92,6 +92,16 @@ def cmd(
             help="Exact positive proposal count (default 3; no fixed maximum)",
         ),
     ] = None,
+    strict: Annotated[
+        bool,
+        typer.Option(
+            "--strict",
+            help=(
+                "Reject generated Cases unless independent Conformance and Fit "
+                "checks both pass"
+            ),
+        ),
+    ] = False,
     ground: Annotated[
         Optional[str],
         typer.Option(
@@ -158,6 +168,7 @@ def cmd(
                 ground_name=ground,
                 direction="GOAL_TO_RULES" if from_goal else "RULES_TO_CASES",
                 number=number,
+                strict=strict,
             )
             request = frozen_ground.request
         else:
@@ -177,6 +188,7 @@ def cmd(
                     goal=goal,
                     rules=tuple(rule or ()),
                     number=number,
+                    strict=strict,
                 )
                 ordinary_target = resolve_semantic_add_target(
                     target_locator=target_name,
@@ -195,6 +207,7 @@ def cmd(
                     context_name=endpoints.source_name,
                     role=as_role,
                     number=number,
+                    strict=strict,
                 )
                 request = ordinary_source.request
                 ordinary_target = endpoints.target_name
@@ -257,6 +270,10 @@ def cmd(
         typer.echo(
             f"MODE · {prepared.result.analysis.mode.value} · "
             "VERIFICATION · UNVERIFIED"
+        )
+        typer.echo(
+            "QUALITY · "
+            + prepared.result.analysis.quality_policy.value.replace("_", " ")
         )
         typer.echo(
             f"SOURCE · {display_escape_text(source_label)} · "

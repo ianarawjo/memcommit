@@ -26,7 +26,7 @@ from memcommit.interfaces.agent.contract import (
 )
 
 
-ELABORATE_AGENT_CONTRACT_VERSION = 4
+ELABORATE_AGENT_CONTRACT_VERSION = 5
 ELABORATE_AGENT_TOOL_NAME = "memcommit_elaborate"
 ElaborateAgentKind = Literal[
     "goal_to_rules",
@@ -49,18 +49,19 @@ def _parse_request(payload: object) -> tuple[ElaborateAgentKind, dict[str, objec
         exact_fields(
             value,
             required={"version", "kind", "goal"},
-            optional=frozenset({"number"}),
+            optional=frozenset({"number", "strict"}),
             label="Goal Elaborate request",
         )
         return kind, {
             "goal": text_value(value["goal"], field="goal"),
             "number": _number_value(value.get("number")),
+            "strict": _strict_value(value.get("strict")),
         }
     if kind == "rules_to_cases":
         exact_fields(
             value,
             required={"version", "kind", "rules"},
-            optional=frozenset({"number"}),
+            optional=frozenset({"number", "strict"}),
             label="Rules Elaborate request",
         )
         raw = value["rules"]
@@ -69,18 +70,20 @@ def _parse_request(payload: object) -> tuple[ElaborateAgentKind, dict[str, objec
         return kind, {
             "rules": tuple(text_value(item, field="rules item") for item in raw),
             "number": _number_value(value.get("number")),
+            "strict": _strict_value(value.get("strict")),
         }
     if kind in {"ground_goal_to_rules", "ground_rules_to_cases"}:
         exact_fields(
             value,
             required={"version", "kind", "ground_name"},
-            optional=frozenset({"number"}),
+            optional=frozenset({"number", "strict"}),
             label="Ground Elaborate request",
         )
         return kind, {
             "ground_name": text_value(value["ground_name"], field="ground_name"),
             "direction": "GOAL_TO_RULES" if kind == "ground_goal_to_rules" else "RULES_TO_CASES",
             "number": _number_value(value.get("number")),
+            "strict": _strict_value(value.get("strict")),
         }
     raise AgentRequestError(
         "kind must be one of: goal_to_rules, rules_to_cases, "
@@ -93,6 +96,14 @@ def _number_value(value: object) -> int | None:
         return None
     if type(value) is not int or value <= 0:
         raise AgentRequestError("number must be a positive integer.")
+    return value
+
+
+def _strict_value(value: object) -> bool:
+    if value is None:
+        return False
+    if type(value) is not bool:
+        raise AgentRequestError("strict must be a boolean.")
     return value
 
 
@@ -136,19 +147,24 @@ def _serialize(result: ElaborateProposal) -> JsonObject:
                     }
                     for check in item.rule_checks
                 ],
-                "validation": {
-                    "source_fit": item.validation.source_fit,
-                    "source_fit_reason": item.validation.source_fit_reason,
-                    "rule_conformance": item.validation.rule_conformance,
-                    "conforming_source_rule_indexes": list(
-                        item.validation.conforming_source_rule_indexes
-                    ),
-                },
+                "validation": (
+                    None
+                    if item.validation is None
+                    else {
+                        "source_fit": item.validation.source_fit,
+                        "source_fit_reason": item.validation.source_fit_reason,
+                        "rule_conformance": item.validation.rule_conformance,
+                        "conforming_source_rule_indexes": list(
+                            item.validation.conforming_source_rule_indexes
+                        ),
+                    }
+                ),
                 "target_context_refs": list(item.target_context_refs),
             }
             for item in result.cases
         ],
         "origin": result.origin,
+        "quality_policy": result.quality_policy,
         "verification": result.verification,
         "target_context": (
             None
@@ -257,6 +273,7 @@ def elaborate_agent_tool_schema() -> JsonObject:
                         "type": "integer",
                         "minimum": 1,
                     },
+                    "strict": {"type": "boolean", "default": False},
                 },
             }
         )
@@ -274,6 +291,7 @@ def elaborate_agent_tool_schema() -> JsonObject:
                         "type": "integer",
                         "minimum": 1,
                     },
+                    "strict": {"type": "boolean", "default": False},
                 },
             }
         )
@@ -283,7 +301,9 @@ def elaborate_agent_tool_schema() -> JsonObject:
             "Propose unverified Rules from a Goal or Cases from Rules, using "
             "inline input or one exact Ground; omission of number requests exactly "
             "3 proposals, any supplied number must be a positive exact count with "
-            "no fixed maximum, and nothing is saved or accepted."
+            "no fixed maximum, and nothing is saved or accepted. Rules-to-Cases "
+            "is best-effort by default; strict=true adds independent Conformance "
+            "and Fit acceptance gates."
         ),
         "parameters": {"type": "object", "oneOf": branches},
     }

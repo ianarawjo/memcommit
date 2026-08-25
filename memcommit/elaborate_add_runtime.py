@@ -6,7 +6,11 @@ from dataclasses import dataclass
 from typing import Literal
 
 from memcommit.context import Memory
-from memcommit.elaborate import ElaborateError, ElaborateMode
+from memcommit.elaborate import (
+    ElaborateError,
+    ElaborateMode,
+    ElaborateQualityPolicy,
+)
 from memcommit.elaborate_application import ElaborateRequest, ElaborateResult
 from memcommit.elaborate_runtime import (
     ElaborateProviderFactory,
@@ -59,6 +63,7 @@ def freeze_elaborate_context_source(
     context_name: str,
     role: ElaborateContextRole,
     number: int | None = None,
+    strict: bool = False,
 ) -> FrozenElaborateSource:
     """Interpret ordinary direct Memories by invocation role, never by name."""
 
@@ -77,7 +82,11 @@ def freeze_elaborate_context_source(
             raise ElaborateError(
                 "Elaborate --as goal requires exactly one direct Source Memory."
             )
-        request = ElaborateRequest(goal=memories[0].content, number=number)
+        request = ElaborateRequest(
+            goal=memories[0].content,
+            number=number,
+            strict=strict,
+        )
     else:
         if not memories:
             raise ElaborateError(
@@ -86,6 +95,7 @@ def freeze_elaborate_context_source(
         request = ElaborateRequest(
             rules=tuple(item.content for item in memories),
             number=number,
+            strict=strict,
         )
     return FrozenElaborateSource(
         context_name=context.name,
@@ -245,14 +255,19 @@ def apply_prepared_elaborate_add(
             contents=contents,
             source_bindings=all_source_bindings,
             operation_args={
-                "version": 3,
+                "version": 4,
                 "analysis_uid": analysis.uid,
                 "analysis_digest": analysis.digest,
                 "mode": analysis.mode.value,
                 "number": analysis.number,
                 "verification": "UNVERIFIED",
+                "quality_policy": analysis.quality_policy.value,
                 "case_validation": (
-                    "INDEPENDENT_SOURCE_RULE_CONFORMANCE_AND_SOURCE_FIT"
+                    (
+                        "INDEPENDENT_SOURCE_RULE_CONFORMANCE_AND_SOURCE_FIT"
+                        if analysis.quality_policy is ElaborateQualityPolicy.STRICT
+                        else "NOT_RUN"
+                    )
                     if analysis.mode is ElaborateMode.RULES_TO_CASES
                     else None
                 ),

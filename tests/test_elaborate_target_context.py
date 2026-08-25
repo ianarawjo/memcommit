@@ -205,13 +205,12 @@ def test_target_ambient_follows_local_embeds_deduplicates_cycles_and_keeps_query
     assert context_record_digest(store.load_direct(source.name)) == source_digest
     checkpoint = store.list_checkpoints(target.name)[0]
     elaborate_receipt = checkpoint["args"]["elaborate"]
-    assert elaborate_receipt["version"] == 3
-    assert elaborate_receipt["case_validation"] == (
-        "INDEPENDENT_SOURCE_RULE_CONFORMANCE_AND_SOURCE_FIT"
-    )
+    assert elaborate_receipt["version"] == 4
+    assert elaborate_receipt["quality_policy"] == "BEST_EFFORT"
+    assert elaborate_receipt["case_validation"] == "NOT_RUN"
     assert elaborate_receipt["target_ambient"]["name"] == target.name
     assert elaborate_receipt["proposals"][0]["target_context_refs"] == ["t1", "t3"]
-    assert elaborate_receipt["proposals"][0]["validation"]["source_fit"] == "YES"
+    assert elaborate_receipt["proposals"][0]["validation"] is None
 
 
 def test_same_context_source_wins_and_is_not_resent_as_target_ambient(

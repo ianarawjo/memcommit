@@ -183,7 +183,6 @@ def test_semantic_agent_elaborate_accepts_an_exact_number(isolated_store):
             "number": 5,
         },
     )
-
     assert result["ok"] is True
     assert len(result["result"]["rules"]) == 5
     schema = next(
@@ -204,7 +203,7 @@ def test_semantic_agent_elaborate_exposes_case_validation(isolated_store):
     )
     registry = build_default_agent_tool_registry(client)
 
-    result = registry.invoke(
+    best_effort = registry.invoke(
         ELABORATE_AGENT_TOOL_NAME,
         {
             "version": ELABORATE_AGENT_CONTRACT_VERSION,
@@ -213,8 +212,22 @@ def test_semantic_agent_elaborate_exposes_case_validation(isolated_store):
             "number": 1,
         },
     )
+    result = registry.invoke(
+        ELABORATE_AGENT_TOOL_NAME,
+        {
+            "version": ELABORATE_AGENT_CONTRACT_VERSION,
+            "kind": "rules_to_cases",
+            "rules": ["Act only after explicit confirmation."],
+            "number": 1,
+            "strict": True,
+        },
+    )
 
+    assert best_effort["ok"] is True
+    assert best_effort["result"]["quality_policy"] == "BEST_EFFORT"
+    assert best_effort["result"]["cases"][0]["validation"] is None
     assert result["ok"] is True
+    assert result["result"]["quality_policy"] == "STRICT"
     validation = result["result"]["cases"][0]["validation"]
     assert validation["source_fit"] == "YES"
     assert validation["rule_conformance"] == "CONFORMS"

@@ -231,6 +231,8 @@ def test_elaborate_endpoint_matrix_adds_atomically(
     checkpoint = store.list_checkpoints(expected_target)[0]
     assert checkpoint["command"] == "elaborate"
     assert checkpoint["args"]["elaborate"]["effect"] == "ADD"
+    assert checkpoint["args"]["elaborate"]["quality_policy"] == "BEST_EFFORT"
+    assert checkpoint["args"]["elaborate"]["case_validation"] == "NOT_RUN"
     assert len(checkpoint["args"]["elaborate"]["result_memory_uids"]) == 3
     assert (
         f"REVIEW · mem review elaborate --receipt {checkpoint['uid']}" in result.output
@@ -266,14 +268,17 @@ def test_mem_elaborate_number_is_an_exact_cli_and_checkpoint_contract(
             source.name,
             "--n",
             "5",
+            "--strict",
         ],
     )
 
     assert result.exit_code == 0, result.output
     assert "EFFECTS · ADD 5 MEMORIES" in result.output
+    assert "QUALITY · STRICT" in result.output
     assert _ElaborateProvider.calls[0]["number"] == 5
     checkpoint = store.list_checkpoints(target.name)[0]
     assert checkpoint["args"]["elaborate"]["number"] == 5
+    assert checkpoint["args"]["elaborate"]["quality_policy"] == "STRICT"
 
 
 def test_elaborate_context_role_is_explicit_and_not_name_based(

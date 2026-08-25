@@ -84,6 +84,7 @@
     "elaborate": [
       "docs/distill-elaborate-generative-reduction-design-rationale.md",
       "docs/distill-elaborate-application-boundary-matrix.md",
+      "docs/mem-elaborate-design-rationale.md",
       "docs/execution-receipt-review-lifecycle-design-rationale.md"
     ],
     "embed": [

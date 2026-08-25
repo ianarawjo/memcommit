@@ -97,7 +97,7 @@ class ElaborateCaseProposal:
     rationale: str
     case_role: str
     rule_checks: tuple[ElaborateRuleCheckProposal, ...]
-    validation: ElaborateCaseValidationProposal
+    validation: ElaborateCaseValidationProposal | None
     target_context_refs: tuple[str, ...] = ()
 
 
@@ -119,6 +119,7 @@ class ElaborateProposal:
     rules: tuple[ElaborateRuleProposal, ...]
     cases: tuple[ElaborateCaseProposal, ...]
     origin: str
+    quality_policy: str = "BEST_EFFORT"
     verification: str = "UNVERIFIED"
     target_context_name: str | None = None
     target_context_items: tuple[ElaborateTargetContextItemProposal, ...] = ()

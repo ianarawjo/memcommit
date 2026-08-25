@@ -54,9 +54,10 @@
         "evidence": [
           "docs/distill-elaborate-generative-reduction-design-rationale.md",
           "docs/distill-elaborate-application-boundary-matrix.md",
+          "docs/mem-elaborate-design-rationale.md",
           "docs/execution-receipt-review-lifecycle-design-rationale.md"
         ],
-        "reason": "CLI, TUI, public, agent, MCP, Ground, provider, and prepared-result routes share the reviewed Elaborate application contract."
+        "reason": "CLI, TUI, public, agent, MCP, Ground, provider, and prepared-result routes share one explicit Elaborate quality policy: generation-only BEST_EFFORT by default and the former independent Conformance/Fit acceptance gates under strict mode."
       },
       "embed": {
         "evidence": [

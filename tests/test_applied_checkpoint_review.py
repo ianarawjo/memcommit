@@ -107,6 +107,45 @@ def test_review_command_opens_exact_applied_checkpoint_without_a_provider(
     assert "AFTER · The grounded reading." in result.output
 
 
+def test_elaborate_review_exposes_best_effort_quality_boundary(isolated_store):
+    store = MemoryStore()
+    context = ops.init("review/elaborate")
+    checkpoint = store.create_context(
+        context,
+        AutoCheckpoint(
+            command="elaborate",
+            args={
+                "elaborate": {
+                    "mode": "RULES_TO_CASES",
+                    "target_context": context.name,
+                    "verification": "UNVERIFIED",
+                    "quality_policy": "BEST_EFFORT",
+                    "case_validation": "NOT_RUN",
+                    "proposals": [
+                        {
+                            "content": "a is apple",
+                            "rationale": "A suggested Rule instantiation.",
+                            "validation": None,
+                        }
+                    ],
+                }
+            },
+            description="Added one best-effort Elaborate Case",
+        ),
+    )
+    assert checkpoint is not None
+
+    result = runner.invoke(
+        app,
+        ["review", "elaborate", "--receipt", checkpoint.uid[:8], "--snapshot"],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert "QUALITY · BEST_EFFORT" in result.output
+    assert "CASE VALIDATION · NOT_RUN" in result.output
+    assert "1. a is apple" in result.output
+
+
 def test_dedun_review_combines_survivor_identity_and_content_without_keep_row(
     isolated_store,
     monkeypatch,

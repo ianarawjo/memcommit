@@ -23,6 +23,7 @@ from memcommit.elaborate import (
     ELABORATE_PAYLOAD_MARKER,
     ElaborateError,
     ElaborateMode,
+    ElaborateQualityPolicy,
 )
 from memcommit.elaborate_application import ElaborateRequest
 from memcommit.elaborate_config import ElaborateSemanticConfig
@@ -67,8 +68,10 @@ class ElaborateProvider:
     def __init__(self, *, empty: bool = False):
         self.empty = empty
         self.calls: list[tuple[str, dict[str, object]]] = []
+        self.operations: list[str] = []
 
     def complete(self, prompt, *, operation, output_schema=None):
+        self.operations.append(operation)
         validation = passing_elaborate_validation_response(prompt, operation)
         if validation is not None:
             return validation
@@ -253,13 +256,9 @@ def test_rules_elaborate_to_diverse_unverified_case_propositions() -> None:
     assert "complete input Rule set together" in provider.calls[0][0]
     assert "not a reason to return an empty set" in provider.calls[0][0]
     assert result.analysis.number == 3
-    assert all(case.validation is not None for case in result.analysis.cases)
-    assert all(
-        case.validation.source_fit == "YES"
-        and case.validation.rule_conformance == "CONFORMS"
-        for case in result.analysis.cases
-        if case.validation is not None
-    )
+    assert result.analysis.quality_policy is ElaborateQualityPolicy.BEST_EFFORT
+    assert all(case.validation is None for case in result.analysis.cases)
+    assert provider.operations == [ELABORATE_OPERATION]
 
 
 def test_rules_elaborate_accepts_source_absent_values_when_they_fit() -> None:
@@ -281,6 +280,7 @@ def test_rules_elaborate_accepts_source_absent_values_when_they_fit() -> None:
         ElaborateRequest(
             rules=("Act only after explicit confirmation.",),
             number=1,
+            strict=True,
         ),
         provider_factory=lambda: provider,
     )
@@ -334,6 +334,7 @@ def test_rules_elaborate_rejects_a_case_that_fails_source_rule_conformance() -> 
             ElaborateRequest(
                 rules=("Act only after explicit confirmation.",),
                 number=1,
+                strict=True,
             ),
             provider_factory=RejectingProvider,
         )
@@ -381,6 +382,7 @@ def test_rules_elaborate_rejects_a_case_that_does_not_fit_the_source() -> None:
             ElaborateRequest(
                 rules=("Act only after explicit confirmation.",),
                 number=1,
+                strict=True,
             ),
             provider_factory=RejectingProvider,
         )
@@ -541,6 +543,8 @@ def test_elaborate_request_requires_exactly_one_direction() -> None:
         ElaborateRequest(goal="One Goal", number=-1)
     with pytest.raises(ElaborateError, match="positive integer"):
         ElaborateRequest(goal="One Goal", number=True)
+    with pytest.raises(ElaborateError, match="Strict Elaborate applies only"):
+        ElaborateRequest(goal="One Goal", strict=True)
 
 
 def test_elaborate_exact_prepared_lookup_avoids_provider() -> None:
@@ -563,6 +567,7 @@ def test_rules_elaborate_prepared_lookup_reuses_exact_validation() -> None:
     request = ElaborateRequest(
         rules=("Act only after explicit confirmation.",),
         number=1,
+        strict=True,
     )
     live = execute_elaborate(request, provider_factory=ElaborateProvider)
 
@@ -577,6 +582,29 @@ def test_rules_elaborate_prepared_lookup_reuses_exact_validation() -> None:
     assert prepared.analysis is live.analysis
     assert prepared.analysis.cases[0].validation is not None
     assert prepared.origin == "PREPARED_EXACT"
+
+
+def test_elaborate_prepared_result_must_match_quality_policy() -> None:
+    live = execute_elaborate(
+        ElaborateRequest(
+            rules=("Act only after explicit confirmation.",),
+            number=1,
+        ),
+        provider_factory=ElaborateProvider,
+    )
+
+    with pytest.raises(ElaborateError, match="does not exactly match"):
+        execute_elaborate(
+            ElaborateRequest(
+                rules=("Act only after explicit confirmation.",),
+                number=1,
+                strict=True,
+            ),
+            provider_factory=lambda: (_ for _ in ()).throw(
+                AssertionError("policy mismatch must fail before provider")
+            ),
+            prepared_lookup=lambda _request, _config: live.analysis,
+        )
 
 
 def test_elaborate_rejects_an_analysis_from_the_prior_provider_contract() -> None:
@@ -638,6 +666,7 @@ def test_elaborate_live_plan_rejects_oversized_input_before_provider() -> None:
         execute_elaborate(
             ElaborateRequest(
                 rules=("A" * 600_000, "B" * 600_000),
+                strict=True,
             ),
             provider_factory=provider_factory,
             config=config,
@@ -659,6 +688,7 @@ def test_rules_elaborate_rejects_oversized_validation_frame_before_provider() ->
             ElaborateRequest(
                 rules=("Apply the complete Rule.",),
                 number=1_001,
+                strict=True,
             ),
             provider_factory=provider_factory,
         )

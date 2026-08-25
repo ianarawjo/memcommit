@@ -10,6 +10,7 @@ from memcommit.elaborate import (
     ElaborateAnalysis,
     ElaborateError,
     ElaborateProvider,
+    ElaborateQualityPolicy,
     ElaborateTargetContext,
     normalize_elaborate_inputs,
     normalize_elaborate_number,
@@ -30,6 +31,7 @@ class ElaborateRequest:
     goal: str | None = None
     rules: tuple[str, ...] = ()
     number: int | None = None
+    strict: bool = False
 
     def __post_init__(self) -> None:
         if self.goal is not None and (
@@ -48,6 +50,10 @@ class ElaborateRequest:
             type(self.number) is not int or self.number <= 0
         ):
             raise ElaborateError("Elaborate number must be a positive integer.")
+        if type(self.strict) is not bool:
+            raise ElaborateError("Elaborate strict must be a boolean.")
+        if self.strict and self.goal is not None:
+            raise ElaborateError("Strict Elaborate applies only to Rules-to-Cases.")
 
 
 @dataclass(frozen=True)
@@ -100,6 +106,7 @@ def run_elaborate(
         goal=inputs[0] if mode.value == "GOAL_TO_RULES" else None,
         rules=inputs if mode.value == "RULES_TO_CASES" else (),
         number=number,
+        strict=request.strict,
     )
     analysis = (
         prepared_lookup(normalized, config)
@@ -114,6 +121,7 @@ def run_elaborate(
             inputs=inputs,
             target_context=target_context,
             number=number,
+            strict=normalized.strict,
             config=config,
         )
         with provider_session_factory() as provider:
@@ -123,6 +131,7 @@ def run_elaborate(
                 provider=provider,
                 target_context=target_context,
                 number=number,
+                strict=normalized.strict,
                 config=config,
             )
     elif (
@@ -130,6 +139,12 @@ def run_elaborate(
         or analysis.inputs != inputs
         or analysis.target_context != target_context
         or analysis.number != number
+        or analysis.quality_policy
+        is not (
+            ElaborateQualityPolicy.STRICT
+            if normalized.strict
+            else ElaborateQualityPolicy.BEST_EFFORT
+        )
     ):
         raise ElaborateError(
             "The prepared Elaborate analysis does not exactly match the request."
