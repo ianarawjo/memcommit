@@ -10,8 +10,8 @@ import memcommit.operations.summarize.runtime as summarize_runtime
 from memcommit.context import Context, GrantedContextLink, Memory
 from memcommit.authority.access import ContextAccess
 from memcommit.context_targeting.search import load_readable_search_roots
-from memcommit.find_application import FindSearchRequest
-from memcommit.find_runtime import execute_find_search
+from memcommit.operations.search.application import FindSearchRequest
+from memcommit.operations.search.runtime import execute_find_search
 from memcommit.meld import MeldError, MeldFrame
 from memcommit.semantic_disclosure import (
     SemanticDisclosureError,

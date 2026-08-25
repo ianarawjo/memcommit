@@ -167,8 +167,8 @@ def test_literal_find_does_not_absorb_semantic_search_or_interfaces() -> None:
     ).read_text(encoding="utf-8")
     combined = application_source + runtime_source
 
-    assert "memcommit.find_application" not in combined
-    assert "memcommit.find_runtime" not in combined
+    assert "memcommit.operations.search.application" not in combined
+    assert "memcommit.operations.search.runtime" not in combined
     assert "memcommit.commands" not in combined
     assert "memcommit.interfaces" not in combined
     assert "provider.complete" not in combined

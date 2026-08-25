@@ -18,11 +18,11 @@ from memcommit.api.errors import (
 )
 from memcommit.api.search import SearchItemResult, SearchResult
 from memcommit.context_locator import resolve_context_locator
-from memcommit.find_application import (
+from memcommit.operations.search.application import (
     FindSearchRequest,
     FindSearchResponse,
 )
-from memcommit.find_runtime import execute_find_search
+from memcommit.operations.search.runtime import execute_find_search
 from memcommit.history import HistoryError
 from memcommit.history_search import HistorySearchError
 from memcommit.profile_config import ProfileConfigError

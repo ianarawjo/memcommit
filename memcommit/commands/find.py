@@ -28,11 +28,11 @@ from memcommit.commands.find_chat_shell import (
 from memcommit.commands.find_search_workbench import (
     run_find_search_workbench,
 )
-from memcommit.find_materialization_application import (
+from memcommit.operations.search.materialization_application import (
     FindMaterializationError,
     FindMaterializationRequest,
 )
-from memcommit.find_materialization_runtime import (
+from memcommit.operations.search.materialization_runtime import (
     execute_find_materialization,
 )
 from memcommit.commands.command_progress import CommandProgress
@@ -71,12 +71,12 @@ from memcommit.find_answer_dialogue import (
 from memcommit.find_answer_references import (
     render_find_answer_references,
 )
-from memcommit.find_application import (
+from memcommit.operations.search.application import (
     FindSearchRequest,
     FindSearchResponse,
     FindSearchStage,
 )
-from memcommit.find_runtime import execute_find_search
+from memcommit.operations.search.runtime import execute_find_search
 from memcommit.find_scope_evidence import (
     collect_outside_context_evidence,
     compact_artifact_references,

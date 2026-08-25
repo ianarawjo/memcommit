@@ -80,7 +80,7 @@ from memcommit.context_targeting.tui.name_editor import (
 )
 from memcommit.selection import FlatMultiSelectionState, SelectionOption
 from memcommit.selection.tui.multiple import render_vertical_multi_choice_rows
-from memcommit.find_application import (
+from memcommit.operations.search.application import (
     FindSearchRequest,
     FindSearchResponse,
     FindSearchResult,

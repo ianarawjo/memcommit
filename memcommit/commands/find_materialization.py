@@ -2,14 +2,14 @@
 
 from __future__ import annotations
 
-from memcommit.find_application import FindSearchResponse
-from memcommit.find_materialization_application import (
+from memcommit.operations.search.application import FindSearchResponse
+from memcommit.operations.search.materialization_application import (
     FindMaterializationError,
     FindMaterializationMode,
     FindMaterializationRequest,
     FindMaterializationResult,
 )
-from memcommit.find_materialization_runtime import (
+from memcommit.operations.search.materialization_runtime import (
     FindMaterializationCatalog,
     execute_find_materialization,
 )

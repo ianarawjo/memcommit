@@ -1,6 +1,6 @@
 # Search application-boundary matrix
 
-Last reviewed: 2026-08-16.
+Last reviewed: 2026-08-25.
 
 ## Purpose
 
@@ -42,6 +42,31 @@ or materialization code. `memcommit.commands.find_search_workbench` retains
 compatibility imports for callers that historically obtained the request and
 response types from that module, but it no longer owns them. New internal code
 imports the application owner directly.
+
+## Package ownership
+
+The canonical semantic Search vertical now lives under
+`memcommit.operations.search`. `application.py` and `runtime.py` own the
+provider-backed read-only analysis request, frozen readable Source, ranking,
+and current-result execution. `materialization_application.py` and
+`materialization_runtime.py` own the separately reviewed COPY/REFERENCE
+request, live-source and authority revalidation, require-new publication,
+checkpoint, rollback, and receipt. Co-location makes the vertical discoverable
+without allowing analysis to publish or materialization to rerun inference.
+
+The historical `memcommit.find_application`, `memcommit.find_runtime`,
+`memcommit.find_materialization_application`, and
+`memcommit.find_materialization_runtime` paths remain behavior-free
+module-identity aliases. Old imports, monkeypatch targets, and serialized
+globals resolve to the canonical modules, while importing
+`memcommit.operations.search` alone remains lazy.
+
+This package is intentionally separate from provider-free Literal Find under
+`memcommit.operations.find`. The relocation changes no readable authority,
+provider disclosure, ranking, temporal/current result, selection,
+materialization, checkpoint, rollback, or public projection behavior. Later
+changes to Search mode routing must remain in the same canonical analysis
+owner rather than becoming compatibility-facade behavior.
 
 ## Boundary matrix
 
