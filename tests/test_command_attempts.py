@@ -50,7 +50,7 @@ def test_started_attempt_is_durable_before_command_completion(isolated_store):
     finish_command_attempt(active, status="INTERRUPTED", failure_kind="TestCleanup")
 
 
-def test_exceptional_completion_outcome_is_durable_and_v1_remains_readable(
+def test_command_text_and_outcome_are_durable_and_older_versions_remain_readable(
     isolated_store,
 ):
     active = begin_command_attempt(
@@ -58,6 +58,7 @@ def test_exceptional_completion_outcome_is_durable_and_v1_remains_readable(
         operation="chunk",
         stdin_tty=False,
         stdout_tty=False,
+        command_argv=("chunk", "two words"),
     )
     annotate_command_outcome("NO_CHANGE")
 
@@ -67,15 +68,25 @@ def test_exceptional_completion_outcome_is_durable_and_v1_remains_readable(
 
     finished = finish_command_attempt(active, status="COMPLETED")
     assert finished.outcome == "NO_CHANGE"
+    assert finished.command == "mem chunk 'two words'"
     encoded = finished.to_dict()
-    assert encoded["version"] == 2
+    assert encoded["version"] == 3
 
-    legacy = dict(encoded)
-    legacy["version"] = 1
-    legacy.pop("outcome")
-    restored = CommandAttempt.from_dict(legacy)
-    assert restored.status == "COMPLETED"
-    assert restored.outcome is None
+    version_two = dict(encoded)
+    version_two["version"] = 2
+    version_two.pop("command")
+    restored_two = CommandAttempt.from_dict(version_two)
+    assert restored_two.status == "COMPLETED"
+    assert restored_two.outcome == "NO_CHANGE"
+    assert restored_two.command is None
+
+    version_one = dict(version_two)
+    version_one["version"] = 1
+    version_one.pop("outcome")
+    restored_one = CommandAttempt.from_dict(version_one)
+    assert restored_one.status == "COMPLETED"
+    assert restored_one.outcome is None
+    assert restored_one.command is None
 
 
 def test_failure_supersedes_a_provisional_completion_outcome(isolated_store):
@@ -98,7 +109,10 @@ def test_failure_supersedes_a_provisional_completion_outcome(isolated_store):
     assert finished.outcome is None
 
 
-def test_root_logs_success_failure_and_never_raw_argv(isolated_store, monkeypatch):
+def test_root_logs_success_failure_and_complete_command_argv(
+    isolated_store,
+    monkeypatch,
+):
     _enable_attempt_log(monkeypatch)
 
     created = runner.invoke(app, ["init", "private-context-name"])
@@ -110,8 +124,10 @@ def test_root_logs_success_failure_and_never_raw_argv(isolated_store, monkeypatc
     assert [record.operation for record in records[:2]] == ["add", "init"]
     assert {record.status for record in records[:2]} == {"COMPLETED"}
     encoded = json.dumps([record.to_dict() for record in records], ensure_ascii=False)
-    assert "private Memory body" not in encoded
-    assert "private-context-name" not in encoded
+    assert records[0].command == "mem add 'private Memory body'"
+    assert records[1].command == "mem init private-context-name"
+    assert "private Memory body" in encoded
+    assert "private-context-name" in encoded
 
     invalid = runner.invoke(app, ["show", "missing-selector"])
     assert invalid.exit_code == 1
@@ -202,6 +218,8 @@ def test_operation_log_lists_prior_attempt_without_listing_itself(
     assert "COMPLETED" not in shown.output
     assert "NO CHANGE" in shown.output
     assert "init" in shown.output
+    assert "command=mem init working" in shown.output
+    assert "command=mem add 'unchanged content'" in shown.output
     assert "log" not in shown.output.split("Operation attempts", 1)[1]
     records = CommandAttemptLedger(isolated_store).list()
     assert [record.operation for record in records[:4]] == [

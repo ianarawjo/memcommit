@@ -1,10 +1,14 @@
-"""Content-free detailed action events for current ``init-study`` Profiles.
+"""Detailed action events for current ``init-study`` Profiles.
 
 Every Profile keeps the small command-attempt ledger.  This module adds a
 second, deliberately narrower surface only when immutable Profile provenance
 marks the active store as a current Study participant or granted-memory owner.
-It records command phases and non-text terminal interaction, never raw argv,
-Memory/query/composer text, provider prompts, responses, or credentials.
+It records command phases and non-text terminal interaction. A Study
+participant additionally retains the complete entered command argv and the
+typed request/ranking for focused Help. Granted-memory action logs and all
+other detailed Study events remain content-free; every Profile's separate
+command-attempt ledger retains its entered command. Provider prompts,
+responses, stdout, stderr, and interactive composer text remain excluded.
 """
 
 from __future__ import annotations
@@ -19,6 +23,7 @@ import math
 import os
 from pathlib import Path
 import re
+import shlex
 import sys
 import threading
 import time
@@ -59,6 +64,10 @@ _ACTION_FIELDS: dict[str, tuple[frozenset[str], frozenset[str]]] = {
         frozenset({"status"}),
         frozenset({"failure_kind", "exit_code"}),
     ),
+    "COMMAND_ENTERED": (
+        frozenset({"command"}),
+        frozenset(),
+    ),
     "KEY": (
         frozenset({"key", "count", "focus"}),
         frozenset(),
@@ -96,6 +105,14 @@ _ACTION_FIELDS: dict[str, tuple[frozenset[str], frozenset[str]]] = {
     ),
     "PROVIDER_TURN_FAILED": (
         frozenset({"operation", "provider", "failure_kind", "elapsed_seconds"}),
+        frozenset(),
+    ),
+    "HELP_LOOKUP_SUBMITTED": (
+        frozenset({"request"}),
+        frozenset(),
+    ),
+    "HELP_LOOKUP_COMPLETED": (
+        frozenset({"rank_1", "rank_2", "rank_3"}),
         frozenset(),
     ),
     "TUI_ACTION": (
@@ -153,6 +170,9 @@ _INT_FIELDS = frozenset(
 )
 _BOOL_FIELDS = frozenset({"stdin_tty", "stdout_tty", "paste", "has_schema"})
 _FLOAT_FIELDS = frozenset({"elapsed_seconds"})
+_RETAINED_TEXT_FIELDS = frozenset({"command", "request"})
+_HELP_LOOKUP_REQUEST_LIMIT = 4_000
+_COMMAND_TEXT_LIMIT = 16 * 1024 * 1024
 _UUID_FIELDS = frozenset(
     {"paired_profile_uid", "baseline_profile_uid", "other_profile_uid", "artifact_uid"}
 )
@@ -213,6 +233,18 @@ def _validate_data(action: str, data: object) -> dict[str, object]:
                 raise StudyActionError(f"Study action {key} is invalid.")
         elif key in _UUID_FIELDS:
             _canonical_uuid(value, field=key)
+        elif key in _RETAINED_TEXT_FIELDS:
+            limit = (
+                _HELP_LOOKUP_REQUEST_LIMIT
+                if key == "request"
+                else _COMMAND_TEXT_LIMIT
+            )
+            if (
+                not isinstance(value, str)
+                or not value.strip()
+                or len(value) > limit
+            ):
+                raise StudyActionError(f"Study action {key} is invalid.")
         else:
             _safe_token(value, field=key)
     if action == "COMMAND_FINISHED" and data["status"] not in _STATUSES:
@@ -261,6 +293,15 @@ class StudyActionEvent:
             raise StudyActionError("Study action elapsed time is invalid.")
         if _ACTION.fullmatch(self.action) is None:
             raise StudyActionError("Study action kind is invalid.")
+        if (
+            self.action == "COMMAND_ENTERED"
+            or self.action.startswith("HELP_LOOKUP_")
+        ) and self.profile_role != "PARTICIPANT":
+            # Raw command/Help wording is participant research material, not a
+            # reason to retain researcher/authority-side text in the pair.
+            raise StudyActionError(
+                "Content-bearing Study actions require the Participant Profile."
+            )
         _validate_data(self.action, self.data)
         return self
 
@@ -522,6 +563,7 @@ def begin_study_action_recording(
     operation: str,
     stdin_tty: bool,
     stdout_tty: bool,
+    command_argv: tuple[str, ...] | None = None,
 ) -> ActiveStudyActionRecording | None:
     """Begin detailed recording only for current Study run provenance."""
 
@@ -554,6 +596,15 @@ def begin_study_action_recording(
         stdout_tty=stdout_tty,
         **terminal,
     )
+    if identity.role == "PARTICIPANT" and command_argv is not None:
+        if any(not isinstance(argument, str) for argument in command_argv):
+            raise StudyActionError("Study command argv is invalid.")
+        # Shell quote spelling is lost before Click runs. shlex.join preserves
+        # exact argv boundaries in one reproducible POSIX command string.
+        active.append(
+            "COMMAND_ENTERED",
+            command=shlex.join(("mem", *command_argv)),
+        )
     _ACTIVE_STUDY_ACTIONS.set(active)
     return active
 
@@ -581,6 +632,38 @@ def record_study_action(event_kind: str, **data: object) -> StudyActionEvent | N
     if active is None:
         return None
     return active.append(event_kind, **data)
+
+
+def record_study_help_lookup_submitted(request: str) -> StudyActionEvent | None:
+    """Retain one focused Help request only for the Study participant."""
+
+    active = _ACTIVE_STUDY_ACTIONS.get()
+    if active is None or active.ledger.identity.role != "PARTICIPANT":
+        return None
+    return active.append("HELP_LOOKUP_SUBMITTED", request=request)
+
+
+def record_study_help_lookup_completed(
+    operations: tuple[str, ...],
+) -> StudyActionEvent | None:
+    """Retain the exact visible Help ranking paired with a submitted request."""
+
+    active = _ACTIVE_STUDY_ACTIONS.get()
+    if active is None or active.ledger.identity.role != "PARTICIPANT":
+        return None
+    if (
+        not isinstance(operations, tuple)
+        or len(operations) != 3
+        or any(not isinstance(operation, str) for operation in operations)
+        or len(set(operations)) != 3
+    ):
+        raise StudyActionError("Study Help lookup ranking is invalid.")
+    return active.append(
+        "HELP_LOOKUP_COMPLETED",
+        rank_1=operations[0],
+        rank_2=operations[1],
+        rank_3=operations[2],
+    )
 
 
 def record_study_action_for_profile(

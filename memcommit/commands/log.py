@@ -202,6 +202,10 @@ def _render_operation_attempts(attempts: Sequence[CommandAttempt]) -> None:
             f"  [{attempt.uid[:8]}] {display_escape_text(timestamp)}  "
             f"{operation}{suffix}"
         )
+        if attempt.command is not None:
+            typer.echo(
+                "      command=" + display_escape_text(attempt.command)
+            )
         sever = attempt.details.get("sever")
         if isinstance(sever, dict):
             source = sever.get("source_name")
@@ -253,7 +257,7 @@ def _render_study_actions(
     *,
     unavailable_sequences: int | None = None,
 ) -> None:
-    typer.secho("Study actions · recent first · content-free", bold=True)
+    typer.secho("Study actions · recent first", bold=True)
     if not events:
         typer.echo("  (no earlier Study actions)")
         return
@@ -316,7 +320,10 @@ def cmd(
         bool,
         typer.Option(
             "--operations",
-            help="Show Profile-scoped mem command attempts instead of Context checkpoints",
+            help=(
+                "Show Profile-scoped mem command attempts, including entered "
+                "commands, instead of Context checkpoints"
+            ),
         ),
     ] = False,
     actions: Annotated[
@@ -324,8 +331,8 @@ def cmd(
         typer.Option(
             "--actions",
             help=(
-                "Show detailed content-free actions for the active init-study "
-                "Profile"
+                "Show detailed actions for the active init-study Profile; "
+                "Participant command and Help lookup text are retained"
             ),
         ),
     ] = False,

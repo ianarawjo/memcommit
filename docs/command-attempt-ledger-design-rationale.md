@@ -19,7 +19,7 @@ ledger/command-attempts/ATTEMPT_UID.json
 This is an execution audit ledger, not a replacement for Context checkpoints,
 semantic sessions, provider-evaluation ledgers, or Undo/Redo receipts.
 Current Profiles created by `mem init-study` additionally use the narrower,
-content-free detailed telemetry described in
+Study-scoped detailed telemetry described in
 `docs/study-action-ledger-design-rationale.md`; ordinary Profiles do not.
 
 ## Lifecycle contract
@@ -32,12 +32,13 @@ and finalization are fsynced atomic file writes. If the whole process or
 machine stops before finalization, the retained `RUNNING` record is deliberate
 evidence of an incomplete attempt rather than a fabricated failure outcome.
 
-The record includes a random UID, top-level operation name, UTC start/end,
+The record includes a random UID, top-level operation name, complete entered
+argv reconstructed as one POSIX-quoted `mem ...` command, UTC start/end,
 monotonic elapsed duration, terminal-presence booleans, terminal status, and a
 bounded failure class/exit code. An exit-zero help or version path is a
 completed invocation. Nested command families such as `provider status` are
-recorded by their top-level operation (`provider`); raw token recovery is not
-used to guess whether later operands are subcommands.
+still classified by their top-level operation (`provider`), while the command
+field preserves every entered token.
 
 Version 2 adds one optional normal-completion outcome: `NO_CHANGE` or
 `CANCELLED`. This is a second axis, not a replacement for lifecycle status.
@@ -56,19 +57,31 @@ The initial rollout covers Chunk, Edit, Replace, Forget, and Share, whose
 receipts or explicit return paths already distinguish these outcomes. Version
 1 records remain readable with no outcome.
 
+Version 3 adds the reconstructed complete command. Version 1 and 2 records
+remain readable with no command because their historical argv cannot be
+recovered safely after the fact.
+
 The attempt is written to the Profile active when the root command starts.
 Consequently, a successful `mem profile` switch remains auditable in the old
 Profile rather than moving its own in-flight record to the newly selected
 Profile. This preserves a single storage and identity boundary for one
 attempt.
 
-## Privacy boundary
+## Retention and privacy boundary
 
-The generic root record never stores raw argv, stdout, stderr, cwd,
-environment variables, prompts, Memory text, query text, Ground comments,
-composer content, provider responses, or query-only routing/content. This is
-why a command such as `mem add "private text"` can be audited as an `add`
-attempt without copying the private text into a second durable surface.
+Every Profile now retains the complete entered command argv. Consequently a
+value supplied positionally or as an option—including Memory text, query text,
+a path, or a credential—is copied into the command-attempt ledger. The stored
+string preserves argv values and boundaries after shell expansion, not the
+person's original quote spelling, pre-expansion variables, shell redirections,
+or surrounding environment.
+
+The generic record still does not store stdin, prompt-toolkit composer input,
+stdout, stderr, cwd, environment variables, provider prompts/responses, or
+query-only content that was not present in argv. Participant Study actions
+duplicate the reconstructed command as `COMMAND_ENTERED` so the detailed event
+timeline remains self-contained; this does not broaden what the generic
+Profile ledger already retains.
 
 Operation enrichment is allowlisted and structurally validated rather than
 accepting arbitrary dictionaries. The first enrichment is Sever, which may
@@ -89,7 +102,8 @@ and fail closed when a record is malformed.
 
 `mem log` retains its Context-checkpoint meaning. `mem log --operations`
 selects the Profile command-attempt ledger and prints recent attempts with
-elapsed time. Normal `COMPLETED` rows have no status label. Exceptional
+their complete entered commands and elapsed time. Normal `COMPLETED` rows have
+no status label. Exceptional
 completion prints `NO CHANGE` or `CANCELLED`; failures and interruptions print
 `FAILED` or `INTERRUPTED`; an unfinalized `RUNNING` record prints
 `NOT FINALIZED` because the reader cannot prove that its process is still
@@ -113,8 +127,10 @@ review-action phases without changing the all-Profile attempt schema.
   exception.
 - Logging only semantic commands was rejected because parsing, authority,
   storage, and ordinary command failures are also operational evidence.
-- Raw argv logging was rejected because many commands accept private Memory or
-  dialogue text positionally.
+- Redacting argv was previously selected because many commands accept private
+  Memory or dialogue text positionally. Complete command reconstruction is now
+  retained intentionally so every Profile can reproduce what was invoked; the
+  larger privacy surface is an explicit tradeoff.
 - One append-only start event plus a separate terminal event was considered.
   Replacing one UID-addressed RUNNING record keeps inspection simple while
   still preserving process-loss evidence; it is not a cryptographically

@@ -18,6 +18,12 @@ the validated immutable `ProfileEntry.source` Study UID and role, never a
 display-name prefix. Renaming either Profile does not silently disable or
 broaden recording.
 
+Within the detailed Study ledger, content-bearing events are narrower again.
+Only the Participant duplicates the reconstructed full command and retains
+focused Help lookup wording/results. The granted-memory Study action ledger
+keeps content-free phases and interactions. Its generic command-attempt ledger,
+like every Profile's, still retains the complete command.
+
 ## Storage and correlation
 
 Each eligible Profile keeps append-only JSON Lines files under:
@@ -54,6 +60,8 @@ ledger's frozen-root rule.
 An eligible command records:
 
 - command start and finish, terminal presence and available terminal size;
+- for the Participant only, the complete entered argv reconstructed as one
+  safely POSIX-quoted `mem ...` command after shell expansion;
 - exact non-printable prompt-toolkit input such as Up, Down, Left, Right,
   Enter, Escape, Tab, Shift-Tab, Backspace, control keys, and paste boundaries;
 - stable names for non-text key variants whose prompt-toolkit wire value is not
@@ -71,6 +79,9 @@ An eligible command records:
 - content-free waiting Help actions, including opening/closing the shared
   inventory, the public command identifier whose forms were inspected, and
   whether the original result or error became ready while Help remained open.
+- for Participant focused Help, the normalized natural-language request and,
+  after successful validation, the exact three public operation IDs in their
+  visible rank order.
 
 The terminal recorder wraps the prompt-toolkit application session at the root
 command boundary, so existing TUIs do not need parallel arrow-key machinery.
@@ -84,14 +95,26 @@ gap-free attempt sequence.
 
 ## Privacy boundary
 
-The detailed ledger still does not store raw argv, printable keystrokes,
-Memory/query/composer text, provider prompts or responses, stdout/stderr,
-environment values, credentials, or query-only material. At the shared input
-boundary a printable `q`, `f`, or `p` could be either a shortcut or private
-text already buffered before a focus transition. Recording every printable
-key exactly would copy answers and authored Memories into a second durable
-surface. The shared recorder therefore redacts all printable input to counts;
-surfaces that know a shortcut's semantic result may publish an allowlisted
+The Participant action ledger is deliberately no longer content-free. Its
+`COMMAND_ENTERED` event can contain Memory text, query text, names, paths, or a
+credential if the person supplied that value as an argv operand. This is why
+event is restricted to immutable current-Study Participant provenance; the
+generic all-Profile command-attempt record now retains the same canonical
+command independently. The canonical string preserves argv values and
+boundaries, not the person's original quote spelling, aliases expanded by the
+shell, pre-expansion variables, or shell redirections.
+
+Focused Help additionally retains the normalized request as a typed event so
+the Study can relate participant wording to the exact ranked suggestions. It
+does not retain the complete catalog prompt or raw provider response.
+
+Printable input delivered later through prompt-toolkit remains redacted to
+character and line-break counts. At that shared input boundary a printable
+`q`, `f`, or `p` could be either a shortcut or private text already buffered
+before a focus transition, and the recorder cannot safely infer its meaning.
+Provider prompts and responses, stdout/stderr, environment values, stdin,
+clipboard contents, and terminal protocol responses are not retained. Surfaces
+that know a shortcut's semantic result may still publish an allowlisted
 `TUI_ACTION` instead.
 
 Provider character counts describe envelope size, not token usage or content.
@@ -102,7 +125,8 @@ cannot accidentally add private payloads.
 ## Inspection and failure behavior
 
 `mem log --actions` reads only the active current-Study Profile, prints recent
-events first, and omits its own in-flight attempt. `mem log --operations`
+events first (including Participant `COMMAND_ENTERED` and focused Help text),
+and omits its own in-flight attempt. `mem log --operations`
 continues to show the smaller ledger available in every Profile. `mem profile`
 groups a current Study pair under its immutable Study name and labels the two
 live Profiles `Participant` and `Granted memory`.
@@ -118,9 +142,10 @@ ledger finalization also fails.
 
 ## Alternatives and limitations
 
-- Expanding the generic ledger for every Profile was rejected because ordinary
-  authoring does not need interaction telemetry and should keep the smaller
-  privacy surface.
+- Duplicating raw commands into the granted-memory detailed action log remains
+  unnecessary because its generic command-attempt ledger already retains them.
+  The Participant duplicate is deliberate event-timeline evidence beside Help,
+  provider, input-count, review, and approval events.
 - Storing one combined Study log was rejected because the participant and
   authority are independently selectable store roots. Shared attempt and Study
   UIDs provide correlation without creating a third mutable store.

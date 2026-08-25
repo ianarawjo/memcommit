@@ -82,6 +82,10 @@ from memcommit.interfaces.tui.operations.help.study_copy_guard import (
     authored_study_help_fields,
     find_study_help_copy_match,
 )
+from memcommit.study_action_log import (
+    record_study_help_lookup_completed,
+    record_study_help_lookup_submitted,
+)
 
 
 COMMAND_ANNOTATIONS = {
@@ -2643,6 +2647,10 @@ def cmd(
                 request,
                 operations=catalog_operations,
             )
+            # Focused Help wording is a declared Study instrument. The recorder
+            # is a no-op outside the current Participant Profile, so ordinary
+            # Help adds no typed Study event beyond its generic command record.
+            record_study_help_lookup_submitted(plan.request)
             if (
                 active_profile_is_study()
                 and find_study_help_copy_match(
@@ -2665,6 +2673,9 @@ def cmd(
             with CommandProgress("help", "thinking", total=1):
                 provider = connect_help_provider()
                 operations = execute_help_lookup(plan, provider)
+            record_study_help_lookup_completed(
+                tuple(operation.name for operation in operations)
+            )
         except (
             HelpLookupError,
             ProfileConfigError,

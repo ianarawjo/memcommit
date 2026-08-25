@@ -1,8 +1,9 @@
-"""Content-free detailed action contracts for current Study Profiles."""
+"""Detailed action contracts for current Study Profiles."""
 
 from __future__ import annotations
 
 import json
+import shlex
 import uuid
 
 from prompt_toolkit.input.defaults import create_pipe_input
@@ -16,6 +17,8 @@ from memcommit.study_action_log import (
     StudyRecordingInput,
     begin_study_action_recording,
     finish_study_action_recording,
+    record_study_help_lookup_completed,
+    record_study_help_lookup_submitted,
     record_study_provider_turn,
 )
 
@@ -177,6 +180,76 @@ def test_provider_turn_records_only_sizes_and_status(tmp_path):
     assert completed.data["output_characters"] == len("private result")
     assert "private prompt" not in encoded
     assert "private result" not in encoded
+
+
+def test_participant_log_retains_full_command_and_focused_help_lookup(tmp_path):
+    store_dir = tmp_path / "store"
+    store_dir.mkdir()
+    attempt_uid = str(uuid.uuid4())
+    command_argv = ("help", "why are these alike?", "--plain")
+    active = begin_study_action_recording(
+        profile=_study_profile(),
+        store_dir=store_dir,
+        attempt_uid=attempt_uid,
+        operation="help",
+        stdin_tty=False,
+        stdout_tty=False,
+        command_argv=command_argv,
+    )
+    assert active is not None
+
+    submitted = record_study_help_lookup_submitted("why are these alike?")
+    completed = record_study_help_lookup_completed(("compare", "search", "query"))
+    finish_study_action_recording(active, status="COMPLETED")
+
+    events = StudyActionLedger(
+        _study_profile(),
+        store_dir=store_dir,
+    ).events_for_attempt(attempt_uid)
+    entered = next(event for event in events if event.action == "COMMAND_ENTERED")
+
+    assert entered.data == {"command": shlex.join(("mem", *command_argv))}
+    assert submitted is not None
+    assert submitted.data == {"request": "why are these alike?"}
+    assert completed is not None
+    assert completed.data == {
+        "rank_1": "compare",
+        "rank_2": "search",
+        "rank_3": "query",
+    }
+
+
+def test_granted_memory_log_does_not_retain_command_or_help_text(tmp_path):
+    store_dir = tmp_path / "store"
+    store_dir.mkdir()
+    attempt_uid = str(uuid.uuid4())
+    profile = _study_profile(role="GRANTED_MEMORY")
+    active = begin_study_action_recording(
+        profile=profile,
+        store_dir=store_dir,
+        attempt_uid=attempt_uid,
+        operation="help",
+        stdin_tty=False,
+        stdout_tty=False,
+        command_argv=("help", "private researcher wording"),
+    )
+    assert active is not None
+
+    assert record_study_help_lookup_submitted("private researcher wording") is None
+    assert record_study_help_lookup_completed(("query", "search", "help")) is None
+    finish_study_action_recording(active, status="COMPLETED")
+
+    events = StudyActionLedger(
+        profile,
+        store_dir=store_dir,
+    ).events_for_attempt(attempt_uid)
+    assert [event.action for event in events] == [
+        "COMMAND_STARTED",
+        "COMMAND_FINISHED",
+    ]
+    assert "private researcher wording" not in json.dumps(
+        [event.to_dict() for event in events]
+    )
 
 
 def test_rejected_event_does_not_advance_the_durable_sequence(tmp_path):

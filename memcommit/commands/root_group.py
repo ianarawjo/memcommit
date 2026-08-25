@@ -39,16 +39,23 @@ class MemCommandGroup(CanonicalCommandGroup):
         active_attempt = None
         active_study_actions = None
         command_store_dir = None
+        entered_argv: tuple[str, ...] | None = None
         if os.environ.get("MEMCOMMIT_TEST_DISABLE_ATTEMPT_LOG") != "1":
             from memcommit.command_attempts import begin_command_attempt
             from memcommit.store import MemoryStore
 
             # Typer 0.27 keeps the unresolved command token on the private
             # compatibility field, while older Click exposes the public
-            # property. Read either without touching later raw operands.
-            entered = tuple(getattr(ctx, "_protected_args", ())) or tuple(
+            # property. Combine it with the unparsed trailing operands before
+            # child dispatch so the audit record preserves the complete argv.
+            protected = tuple(getattr(ctx, "_protected_args", ())) or tuple(
                 getattr(ctx, "protected_args", ())
             )
+            trailing = tuple(getattr(ctx, "args", ()))
+            entered = (*protected, *trailing)
+            if any(not isinstance(argument, str) for argument in entered):
+                raise TypeError("Root command argv must contain only strings.")
+            entered_argv = tuple(entered)
             operation = "mem"
             if entered and isinstance(entered[0], str):
                 operation = self.canonical_command_name(ctx, entered[0]) or "mem"
@@ -58,6 +65,7 @@ class MemCommandGroup(CanonicalCommandGroup):
                 operation=operation,
                 stdin_tty=sys.stdin.isatty(),
                 stdout_tty=sys.stdout.isatty(),
+                command_argv=entered_argv,
             )
         try:
             if active_attempt is not None:
@@ -86,6 +94,7 @@ class MemCommandGroup(CanonicalCommandGroup):
                         operation=active_attempt.record.operation,
                         stdin_tty=active_attempt.record.stdin_tty,
                         stdout_tty=active_attempt.record.stdout_tty,
+                        command_argv=entered_argv,
                     )
             try:
                 if active_study_actions is None:

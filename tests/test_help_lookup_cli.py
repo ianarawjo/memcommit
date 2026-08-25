@@ -47,12 +47,27 @@ def test_help_request_renders_three_ordered_existing_description_when_rows(monke
         '{"operations":["compare","search","query"]}'
     )
     monkeypatch.setattr(inventory, "connect_help_provider", lambda: provider)
+    recorded: list[tuple[str, object]] = []
+    monkeypatch.setattr(
+        inventory,
+        "record_study_help_lookup_submitted",
+        lambda request: recorded.append(("submitted", request)),
+    )
+    monkeypatch.setattr(
+        inventory,
+        "record_study_help_lookup_completed",
+        lambda operations: recorded.append(("completed", operations)),
+    )
 
     result = _invoke("help", "compare two Contexts and find related Memories")
 
     assert result.exit_code == 0
     assert result.stderr == ""
     assert provider.calls == 1
+    assert recorded == [
+        ("submitted", "compare two Contexts and find related Memories"),
+        ("completed", ("compare", "search", "query")),
+    ]
     assert "mem compare ┬ Compare Memories in two Contexts" in result.stdout
     assert "└ WHEN · Comparing two Contexts as a whole" in result.stdout
     assert "mem search ┬ Semantically rank Memories" in result.stdout

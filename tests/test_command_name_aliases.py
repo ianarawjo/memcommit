@@ -9,7 +9,7 @@ from typer.testing import CliRunner
 
 from memcommit.cli import app
 from memcommit.command_attempts import CommandAttemptLedger
-from memcommit.commands.command_group import (
+from memcommit.interfaces.cli.command_group import (
     CanonicalCommandGroup,
     command_name_alias_collisions,
     resolve_canonical_command_name,
@@ -109,3 +109,4 @@ def test_attempt_ledger_records_canonical_name_for_alias(isolated_store, monkeyp
     assert result.exit_code == 0, result.output
     attempt = CommandAttemptLedger(isolated_store).list()[0]
     assert attempt.operation == "shell-init"
+    assert attempt.command == "mem shellinit"

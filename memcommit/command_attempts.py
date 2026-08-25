@@ -1,9 +1,9 @@
 """Profile-scoped audit records for every entered ``mem`` command.
 
-The attempt ledger records command lifecycle and bounded operation metadata,
-never raw argv or Memory/query/composer content.  A RUNNING record is
-published before command dispatch so process loss still leaves evidence that
-an attempt began; ordinary completion replaces that same file atomically.
+The attempt ledger records the complete entered argv, command lifecycle, and
+bounded operation metadata. A RUNNING record is published before command
+dispatch so process loss still leaves evidence that an attempt began; ordinary
+completion replaces that same file atomically.
 """
 from __future__ import annotations
 
@@ -15,6 +15,7 @@ import math
 import os
 from pathlib import Path
 import re
+import shlex
 import time
 from typing import Literal
 import uuid
@@ -28,6 +29,7 @@ _FINAL_STATUSES = frozenset({"COMPLETED", "FAILED", "INTERRUPTED"})
 _COMPLETION_OUTCOMES = frozenset({"NO_CHANGE", "CANCELLED"})
 _OPERATION = re.compile(r"[a-z0-9][a-z0-9-]{0,63}\Z")
 _SCOPE = frozenset({"THIS_CONTEXT_ONLY", "INCLUDE_DESCENDANTS"})
+_COMMAND_TEXT_LIMIT = 16 * 1024 * 1024
 
 
 class CommandAttemptError(RuntimeError):
@@ -58,6 +60,7 @@ def _safe_nonempty(value: object, *, field: str, limit: int = 512) -> str:
 class CommandAttempt:
     uid: str
     operation: str
+    command: str | None
     status: AttemptStatus
     started_at: str
     completed_at: str | None
@@ -78,6 +81,12 @@ class CommandAttempt:
             raise CommandAttemptError("Command attempt identity or time is invalid.") from error
         if canonical_uid != self.uid or _OPERATION.fullmatch(self.operation) is None:
             raise CommandAttemptError("Command attempt identity or operation is invalid.")
+        if self.command is not None and (
+            not isinstance(self.command, str)
+            or not self.command.strip()
+            or len(self.command) > _COMMAND_TEXT_LIMIT
+        ):
+            raise CommandAttemptError("Command attempt command is invalid.")
         if self.status not in {"RUNNING", *_FINAL_STATUSES}:
             raise CommandAttemptError("Command attempt status is invalid.")
         if self.status == "RUNNING":
@@ -106,9 +115,10 @@ class CommandAttempt:
     def to_dict(self) -> dict[str, object]:
         self.validated()
         return {
-            "version": 2,
+            "version": 3,
             "uid": self.uid,
             "operation": self.operation,
+            "command": self.command,
             "status": self.status,
             "started_at": self.started_at,
             "completed_at": self.completed_at,
@@ -144,6 +154,8 @@ class CommandAttempt:
             and set(value) == version_one_fields
             or version == 2
             and set(value) == {*version_one_fields, "outcome"}
+            or version == 3
+            and set(value) == {*version_one_fields, "outcome", "command"}
         ):
             raise CommandAttemptError("Command attempt record is invalid.")
         terminal = value.get("terminal")
@@ -152,6 +164,11 @@ class CommandAttempt:
         attempt = cls(
             uid=value.get("uid"),  # type: ignore[arg-type]
             operation=value.get("operation"),  # type: ignore[arg-type]
+            command=(
+                value.get("command")  # type: ignore[arg-type]
+                if version == 3
+                else None
+            ),
             status=value.get("status"),  # type: ignore[arg-type]
             started_at=value.get("started_at"),  # type: ignore[arg-type]
             completed_at=value.get("completed_at"),  # type: ignore[arg-type]
@@ -161,7 +178,7 @@ class CommandAttempt:
             details=value.get("details"),  # type: ignore[arg-type]
             outcome=(
                 value.get("outcome")  # type: ignore[arg-type]
-                if version == 2
+                if version in {2, 3}
                 else None
             ),
             failure=value.get("failure"),  # type: ignore[arg-type]
@@ -378,10 +395,20 @@ def begin_command_attempt(
     operation: str,
     stdin_tty: bool,
     stdout_tty: bool,
+    command_argv: tuple[str, ...] | None = None,
 ) -> ActiveCommandAttempt:
+    if command_argv is not None and any(
+        not isinstance(argument, str) for argument in command_argv
+    ):
+        raise CommandAttemptError("Command attempt argv is invalid.")
     attempt = CommandAttempt(
         uid=str(uuid.uuid4()),
         operation=operation,
+        command=(
+            None
+            if command_argv is None
+            else shlex.join(("mem", *command_argv))
+        ),
         status="RUNNING",
         started_at=_timestamp(),
         completed_at=None,
