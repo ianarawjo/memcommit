@@ -64,6 +64,13 @@ prints a static function. It does not modify `.zshrc`, install key bindings,
 inject terminal input, or change the current shell without explicit
 evaluation.
 
+The line-oriented command adapter is owned by
+`memcommit.interfaces.cli.shell_init`. The legacy
+`memcommit.commands.shell_init` path remains an import-only alias to the same
+module, command callback, and renderer objects. This ownership relocation does
+not change the generated zsh bytes, CLI registration, output streams, error
+text, or exit status.
+
 The selection is prefilled, not executed. This is important because commands
 have different argument requirements and some can change local state or call
 a provider without additional confirmation. The editable line preserves the

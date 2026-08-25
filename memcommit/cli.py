@@ -53,7 +53,6 @@ from memcommit.commands import (
     revert,
     share,
     sever,
-    shell_init,
     status,
     summarize,
     switch,
@@ -63,7 +62,7 @@ from memcommit.commands import (
     update,
     write_protection,
 )
-from memcommit.interfaces.cli import embed, memory_transfer, reference
+from memcommit.interfaces.cli import embed, memory_transfer, reference, shell_init
 from memcommit.commands.clear import cmd as clear_cmd
 from memcommit.commands.config import app as config_app
 from memcommit.commands.dev import app as dev_app
