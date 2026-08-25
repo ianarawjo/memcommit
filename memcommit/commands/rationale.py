@@ -238,8 +238,9 @@ def cmd(
         Optional[str],
         typer.Argument(
             help=(
-                "CONTEXT, Memory/MemoryRef UID/prefix, or CONTEXT:UID. "
-                "Omit to select a Memory from the current readable Context"
+                "select from the current readable Context or descendants when "
+                "omitted; otherwise accepts CONTEXT, Memory/MemoryRef UID/prefix, "
+                "or CONTEXT:UID"
             )
         ),
     ] = None,
