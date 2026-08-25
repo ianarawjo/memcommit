@@ -4,9 +4,9 @@ from __future__ import annotations
 
 import typer
 
-from memcommit.current_context_application import CurrentContextError
-from memcommit.current_context_runtime import read_current_context
 from memcommit.interfaces.cli.pwd import render_current_context
+from memcommit.operations.pwd.application import CurrentContextError
+from memcommit.operations.pwd.runtime import read_current_context
 from memcommit.store import MemoryStore
 
 

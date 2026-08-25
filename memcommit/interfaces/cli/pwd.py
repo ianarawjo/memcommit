@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import typer
 
-from memcommit.current_context_application import CurrentContextResult
+from memcommit.operations.pwd.application import CurrentContextResult
 
 
 def render_current_context(result: CurrentContextResult) -> None:

@@ -30,12 +30,18 @@ and operation-specific permission checks while keeping `pwd` deterministic.
 
 ## Layer boundary
 
-- `current_context_application.py` owns the terminal-independent reader
+- `operations/pwd/application.py` owns the terminal-independent reader
   protocol, typed result, and missing/invalid-state failures.
-- `current_context_runtime.py` adapts one explicit `MemoryStore` without
+- `operations/pwd/runtime.py` adapts one explicit `MemoryStore` without
   creating the Store or loading Context contents.
 - `interfaces/cli/pwd.py` renders the typed result as one line.
 - `commands/pwd.py` is the Typer error/exit-code and composition boundary.
+
+The former top-level application and runtime paths remain true module aliases,
+not copied re-export namespaces. This keeps existing imports, object identity,
+and monkeypatch behavior intact while grouping the unchanged implementation by
+operation. The relocation does not alter signatures, failures, Store access,
+output, or the command's authority boundary.
 
 No domain transform is introduced because `pwd` does not inspect or change a
 Context. It has no provider, cache, receipt, TUI, clipboard, or durable effect.

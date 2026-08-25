@@ -1,29 +1,10 @@
-"""MemoryStore infrastructure adapter for current Context orientation."""
+"""Compatibility alias for the operation-owned Pwd runtime adapter."""
 
 from __future__ import annotations
 
-from memcommit.current_context_application import (
-    CurrentContextResult,
-    get_current_context,
-)
-from memcommit.store import MemoryStore
+import sys
 
+from memcommit.operations.pwd import runtime as _runtime
 
-class MemoryStoreCurrentContextReader:
-    """Read navigation state without creating or loading Store contents."""
-
-    def __init__(self, store: MemoryStore):
-        self._store = store
-
-    def current_context_name(self) -> str | None:
-        # A read-only orientation check must not initialize ~/.mem merely to
-        # explain that no current Context exists.
-        if not self._store.state_file.is_file():
-            return None
-        return self._store.current_context_name()
-
-
-def read_current_context(store: MemoryStore) -> CurrentContextResult:
-    """Execute the current-Context use case against one explicit Store."""
-
-    return get_current_context(MemoryStoreCurrentContextReader(store))
+# A true module alias preserves patches to runtime globals through either path.
+sys.modules[__name__] = _runtime
