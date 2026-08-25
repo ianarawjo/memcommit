@@ -6,15 +6,15 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
-import memcommit.reference_runtime as reference_runtime
+import memcommit.operations.reference.runtime as reference_runtime
 from memcommit.cli import app
 from memcommit.context import Context, Memory, MemoryRef
 from memcommit.context_snapshot import ContextSnapshotRef
-from memcommit.reference_application import (
+from memcommit.operations.reference.application import (
     ContextReferenceRequest,
     ReferenceError,
 )
-from memcommit.reference_runtime import (
+from memcommit.operations.reference.runtime import (
     MemoryStoreReferencePort,
     execute_context_reference,
 )

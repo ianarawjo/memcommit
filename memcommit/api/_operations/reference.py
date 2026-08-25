@@ -16,12 +16,15 @@ from memcommit.api.errors import (
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
 from memcommit.api.reference import ContextReferenceResult, MemoryReferenceResult
-from memcommit.reference_application import (
+from memcommit.operations.reference.application import (
     ContextReferenceRequest,
     ReferenceError as ApplicationReferenceError,
     ReferenceRequest,
 )
-from memcommit.reference_runtime import execute_context_reference, execute_reference
+from memcommit.operations.reference.runtime import (
+    execute_context_reference,
+    execute_reference,
+)
 from memcommit.store import ConcurrentContextUpdateError
 
 

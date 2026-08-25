@@ -58,7 +58,7 @@ from memcommit.interfaces.tui.core.theme import (
     SEMANTIC_VIEWER_STYLE,
     focused_control_style,
 )
-from memcommit.reference_application import (
+from memcommit.operations.reference.application import (
     ContextReferenceRequest,
     FrozenContextReferencePlan,
     FrozenReferencePlan,

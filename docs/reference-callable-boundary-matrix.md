@@ -13,14 +13,34 @@ Reference route enters the same typed application/runtime boundary.
 
 | Concern or route | Owner | Invariant |
 | --- | --- | --- |
-| Snapshot requests, frozen plans, and durable receipts | `memcommit.reference_application` | Memory and Context units are explicitly typed independently of terminal, Store, provider, and adapter state. |
-| Locator snapshot, Source package, authority binding, content digest, Source locks, Target CAS, checkpoint | `memcommit.reference_runtime` | Every contributing local Context or exact Grant/authority Memory binding and the Target are frozen from one current-name snapshot and publish atomically. |
+| Snapshot requests, frozen plans, and durable receipts | `memcommit.operations.reference.application` | Memory and Context units are explicitly typed independently of terminal, Store, provider, and adapter state. |
+| Locator snapshot, Source package, authority binding, content digest, Source locks, Target CAS, checkpoint | `memcommit.operations.reference.runtime` | Every contributing local Context or exact Grant/authority Memory binding and the Target are frozen from one current-name snapshot and publish atomically. |
 | Immutable stored values | `memcommit.context.MemoryRef`, `memcommit.context_snapshot.ContextSnapshotRef`, `memcommit.ops` | `memory_snapshot_ref` stores one Memory; `context_snapshot_ref` stores a validated versioned Context package. Neither dereferences live storage after publication. |
 | CLI composition | `memcommit.interfaces.cli.reference` | `CONTEXT:UID` explicitly names one local or public Grant Memory owner; a bare UID/prefix searches ordinary-local direct owners only. With no ITEM, `--from` names a local Context Source; with a Memory ITEM, it remains an explicit local-or-public owner qualifier. `--into` and `--to` are equivalent Target spellings and duplicates fail before Store access. Other operands are local Context locators and `-d/-r` controls their scope. |
 | Interactive setup | `memcommit.interfaces.tui.operations.reference` | Explicit Context/Memory unit -> unit-owned Source control -> Context scope when applicable -> local Target -> reviewed exact command; Memory mode admits authorized public Sources while Context mode remains local, and the TUI owns no persistence. |
 | Stable Python API | `memcommit.api._operations.reference`, `memcommit.api.client` | `reference_memory` and `reference_context` return unit-specific typed receipts and share the public Reference error taxonomy; only an active-Profile client may consult Grants, while an explicitly rooted client remains local-only. |
 | Agent and MCP | `memcommit.interfaces.agent.reference`, registry projection | Version 2 is a strict tagged `memory`/`context` union; MCP exposes the same schema and result envelope. |
 | Read-only inspection | Show/List source projection | Snapshot and live Embed labels differ; snapshot content remains readable after Source change or deletion. |
+
+The focused `memcommit.operations.reference` package is the canonical owner of
+the durable Memory and Context Reference use case. Production API, CLI, and TUI
+adapters import its application and runtime modules directly. The previous
+flat `memcommit.reference_application` and `memcommit.reference_runtime` paths
+remain module-identity aliases, not parallel implementations. This preserves
+legacy import order, monkeypatch targets, and serialized Python globals while
+making new code discover the implementation through the operation package.
+
+Query Reference remains a Query-owned read boundary under
+`memcommit.operations.query`. It selects concealed Source material for one
+answer and publishes no durable snapshot, so sharing the word “reference” does
+not make it part of this package. Conversely, Memory and Context Reference stay
+together here because both freeze retained immutable bytes and publish one
+local Target checkpoint under the same authority and CAS lifecycle.
+
+This relocation intentionally changes no request, Grant permission, snapshot
+schema, Source or Target validation, transaction, checkpoint receipt, route
+classification, or visible terminal state. Existing ordered TUI captures
+therefore remain valid and are not regenerated for this ownership-only move.
 
 Bare Reference enters interactive setup only in a terminal. Outside a terminal,
 `SOURCE_CONTEXT [-d|-r]` selects Context mode and

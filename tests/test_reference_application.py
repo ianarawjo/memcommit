@@ -10,14 +10,14 @@ from typer.testing import CliRunner
 import memcommit.ops as ops
 from memcommit.cli import app
 from memcommit.context import Memory, MemoryRef
-from memcommit.reference_application import (
+from memcommit.operations.reference.application import (
     FrozenReferencePlan,
     ReferenceError,
     ReferenceRequest,
     ReferenceResult,
     run_reference,
 )
-from memcommit.reference_runtime import MemoryStoreReferencePort
+from memcommit.operations.reference.runtime import MemoryStoreReferencePort
 from memcommit.store import MemoryStore
 
 
