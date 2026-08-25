@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import typer
 
-from memcommit.delete_application import (
+from memcommit.operations.delete.application import (
     ContextDeleteResult,
     DeletedDirectItem,
     DirectItemDeleteResult,

@@ -2,11 +2,15 @@
 
 ## Decision
 
-`mem delete SELECTOR` and `mem remove SELECTOR` are complete command aliases.
+`mem delete SELECTOR...` and `mem remove SELECTOR...` are complete command aliases.
 Both spellings use the same arguments, options, target resolution, authority
-checks, mutation paths, and output. A selector can identify either an existing
-ordinary Context or one direct item in the active or explicitly supplied
-Context.
+checks, mutation paths, and output. Each selector can identify either an
+existing ordinary Context or one uniquely owned local direct item, and one
+explicit invocation may mix both target kinds in argv order. `--context`
+remains an optional owner qualifier for ambiguity, exact Context-like item
+names, and Grant-backed deletion; when supplied, it qualifies every selector
+as a direct item and disables ordinary Context selection. It is not required
+merely because a known UID belongs to a noncurrent Context.
 
 This unifies two deletion verbs without erasing the underlying safety boundary:
 deleting a Context still removes its complete checkpoint history and records a
@@ -44,15 +48,49 @@ rolled back. Treating a whole interactive curation session as one atomic Undo
 unit remains an intentional non-goal until a command-group transaction and its
 partial-failure semantics are designed explicitly.
 
+The explicit variadic form follows the same independent-commit contract. It
+first resolves and freezes every selector without mutation, rejects duplicate
+targets, and rejects a batch that selects both an ordinary Context and one of
+its direct items. A missing, ambiguous, unauthorized, or overlapping selector
+therefore prevents every requested effect. Different ordinary Contexts and
+direct items from different owners may be mixed freely; lexical parent and
+descendant Contexts remain independent records because deleting a parent
+preserves descendants.
+
+If the frozen batch contains one or more ordinary Contexts, the human CLI
+prints the irreversible warning for every such Context and asks for one shared
+confirmation before the first effect. After that approval it revalidates every
+Context identity/digest and direct-item owner/UID/content projection before
+publishing anything. `--force` skips only this shared human confirmation; it
+does not skip resolution, authority, protection, or freshness checks.
+
+Apply then follows argv order. Each direct item still creates its own normal
+checkpoint and each ordinary Context still creates its own lifecycle event.
+Multiple items in one owner are reloaded by their frozen full UID after each
+preceding checkpoint so their sequential CAS saves compose without selector
+retargeting or lost updates. This is deliberately not one atomic command group:
+if a later target changes concurrently or fails during Apply, earlier successful
+targets remain committed and their individual receipts remain truthful. A
+future atomic batch would need a durable transaction spanning Context records,
+checkpoint histories, lifecycle events, and derived-artifact cleanup; variadic
+argv alone does not imply that contract.
+
 ## Selector contract
 
 Without `--context`, one command-start snapshot of the active Context is used
-for both candidate domains:
+to resolve relative Context spellings, while the candidate domains remain
+deliberately distinct:
 
 - existing ordinary Contexts use the shared Context locator grammar, including
   `.`, `..`, `./...`, and `../...`;
-- direct items use exact UIDs, unambiguous UID prefixes, and the existing exact
-  names supported for context-like direct items.
+- direct-item UIDs and UID prefixes use the shared strict ordinary-local
+  direct-item locator, which searches every local owner with no priority for
+  Current and returns one exact `DirectItemTarget` only when the owner
+  coordinate is unique;
+- the existing exact-name grammar for embedded Context and Query View rows is
+  retained as a Delete-specific fallback in Current, or within the owner named
+  by `--context`, because those names also occupy the combined Context selector
+  namespace.
 
 If the same spelling selects both a Context and a direct item, the command
 fails closed. `--context CONTEXT` explicitly chooses the direct-item domain and
@@ -61,6 +99,21 @@ path. Context deletion is intentionally local: DELETE permission on a granted
 view authorizes deletion of direct authority items, not destruction of the
 authority's Context record and history.
 
+A unique bare UID therefore removes a noncurrent local item without changing
+global Current. If a prefix matches multiple direct items, Remove reports every
+candidate as `CONTEXT:UID`, publishes no mutation, and requires an explicit
+owner qualification. An exact full UID wins over longer prefix matches, but
+Current never wins an ambiguity merely because one candidate happens to be
+active.
+
+This lookup is not a Profile-wide content search. Its frozen catalog contains
+only ordinary local direct records, never resolved MemoryRef targets, embedded
+bodies, restorable snapshots, or Grant authority content. A malformed or
+unreadable local record fails the complete scan instead of silently shrinking
+the deletion namespace. Granted direct items still require `--context`, after
+which the established Grant-aware DELETE authorization path resolves and
+revalidates the authority owner.
+
 The Context confirmation and UID/digest compare-and-delete boundary remain in
 place under both command spellings. Direct-item deletion retains the historical
 noninteractive behavior of `mem remove`; `--force` matters only when the
@@ -68,13 +121,17 @@ resolved target is a Context.
 
 ## Application and callable boundary
 
-Both effects now enter `delete_application` through `delete_runtime` rather
-than being implemented by the command module. Direct-item removal freezes the
-authorized owner and full item UID before one normal checkpointed save. Context
-deletion first freezes a canonical local name, Context UID, record digest, and
-an effect-bound plan digest; Apply passes those values to the existing
-compare-and-delete Store primitive. The CLI/TUI, public Python, agent, and MCP
-routes project those same typed plans and receipts.
+Both effects now enter `memcommit.operations.delete.application` through
+`memcommit.operations.delete.runtime` rather than being implemented by the
+command module. The former top-level paths remain true module aliases for
+compatibility. Direct-item removal first compiles either a bare UID or a picker
+receipt into the same operation-neutral exact `DirectItemTarget`, then freezes
+the authorized owner and full item UID before one normal checkpointed save.
+Context deletion first freezes a
+canonical local name, Context UID, record digest, and an effect-bound plan
+digest; Apply passes those values to the existing compare-and-delete Store
+primitive. The CLI/TUI, public Python, agent, and MCP routes project those same
+typed plans and receipts.
 
 Approval deliberately remains outside the application contract. A human CLI
 prints the exact frozen irreversible effects and asks y/N unless `--force` is
@@ -105,7 +162,9 @@ promise that deleting a Context preserves descendants.
 The combined selector applies only to destructive CLI target selection. It
 does not make Memory UIDs into Context locators, reinterpret new Context names,
 or authorize deletion through a query-only route. The initial picker catalog
-contains locally owned ordinary Contexts and their direct items. Granted
+contains locally owned ordinary Contexts and their direct items; its
+Context-plus-full-UID receipt is normalized into the same exact target used by
+an explicit selector. Granted
 direct-item deletion remains available through an explicit selector and
 `--context`, preserving its exact Grant-aware authorization boundary without
 presenting an authority-owned Context as locally deletable.

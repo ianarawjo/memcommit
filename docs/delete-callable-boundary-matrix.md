@@ -1,6 +1,6 @@
 # Delete callable and effect boundary matrix
 
-Last verified: 2026-08-22.
+Last verified: 2026-08-24.
 
 ## Scope
 
@@ -14,16 +14,17 @@ different approval, receipt, and recovery contracts.
 
 | Callable | Owner | Input → output | Allowed effects | Required invariant | State |
 | --- | --- | --- | --- | --- | --- |
-| `delete_application.run_direct_item_delete` | application | selector + frozen runtime → `DirectItemDeleteResult` | delegates exactly one authorized mutation | full item UID is frozen before mutation; complete receipt names one checkpoint | `VERIFIED` |
-| `delete_application.prepare_context_delete` | application | existing Context locator + runtime → `FrozenContextDeletePlan` | target identity and record read only | canonical name, UID, record digest, irreversible effects, and plan digest form one review identity | `VERIFIED` |
-| `delete_application.apply_context_delete` | application | reviewed plan + owning runtime → `ContextDeleteResult` | delegates one exact permanent deletion | approval is not a boolean application input; Apply consumes the reviewed exact identity or fails stale | `VERIFIED` |
-| `delete_runtime.MemoryStoreDeletePort.freeze_item` | infrastructure | direct-item selector → authorized frozen target | Store/Profile/Grant reads | one command-start current snapshot; local or DELETE-granted owner; ambiguous selector fails closed | `VERIFIED` |
-| `delete_runtime.MemoryStoreDeletePort.remove_item` | infrastructure | frozen item → checkpointed result | one authorized Context save and `remove` checkpoint | full UID, owner UID/digest, Grant revision, protection, and Store CAS remain valid through save | `VERIFIED` |
-| `delete_runtime.MemoryStoreDeletePort.freeze_context` | infrastructure | ordinary local locator → frozen plan | local Store read | relative locator resolves once; a Grant never authorizes deletion of the authority Context | `VERIFIED` |
-| `delete_runtime.MemoryStoreDeletePort.delete_context` | infrastructure | frozen plan → lifecycle result | exact Context/history deletion, artifact cleanup, Profile lifecycle event | `delete_context_if` compares name, UID, and digest; descendants survive; committed cleanup failure returns a non-retryable committed receipt | `VERIFIED` |
+| `memcommit.operations.delete.application.run_direct_item_delete` | application | selector + frozen runtime → `DirectItemDeleteResult` | delegates exactly one authorized mutation | full item UID is frozen before mutation; complete receipt names one checkpoint | `VERIFIED` |
+| `memcommit.operations.delete.application.prepare_context_delete` | application | existing Context locator + runtime → `FrozenContextDeletePlan` | target identity and record read only | canonical name, UID, record digest, irreversible effects, and plan digest form one review identity | `VERIFIED` |
+| `memcommit.operations.delete.application.apply_context_delete` | application | reviewed plan + owning runtime → `ContextDeleteResult` | delegates one exact permanent deletion | approval is not a boolean application input; Apply consumes the reviewed exact identity or fails stale | `VERIFIED` |
+| `memcommit.context_targeting.loading.resolve_local_direct_item_locator` | shared targeting | bare or qualified local UID selector → exact `DirectItemTarget` | strict ordinary-local direct-record reads | bare lookup has no Current priority; exactly one direct owner coordinate; no nested, snapshot, or Grant content | `VERIFIED` |
+| `memcommit.operations.delete.runtime.MemoryStoreDeletePort.freeze_item` | infrastructure | direct-item selector → authorized frozen target | Store/Profile/Grant reads | bare local UID and picker paths converge on one exact shared coordinate; ambiguity fails closed; explicit Grant owners retain DELETE authorization | `VERIFIED` |
+| `memcommit.operations.delete.runtime.MemoryStoreDeletePort.remove_item` | infrastructure | frozen item → checkpointed result | one authorized Context save and `remove` checkpoint | full UID, owner UID/digest, Grant revision, protection, and Store CAS remain valid through save | `VERIFIED` |
+| `memcommit.operations.delete.runtime.MemoryStoreDeletePort.freeze_context` | infrastructure | ordinary local locator → frozen plan | local Store read | relative locator resolves once; a Grant never authorizes deletion of the authority Context | `VERIFIED` |
+| `memcommit.operations.delete.runtime.MemoryStoreDeletePort.delete_context` | infrastructure | frozen plan → lifecycle result | exact Context/history deletion, artifact cleanup, Profile lifecycle event | `delete_context_if` compares name, UID, and digest; descendants survive; committed cleanup failure returns a non-retryable committed receipt | `VERIFIED` |
 | `interfaces.cli.delete` | CLI adapter | typed plan/result → warning or terminal receipt | stdout/stderr only | human warning lists every irreversible effect; a committed cleanup warning still says deletion happened | `VERIFIED` |
 | `interfaces.tui.operations.delete` | TUI adapter | frozen local catalog + typed callback → picker receipt | terminal interaction and process-local focus only | display text is never re-parsed as a target; shared picker owns navigation mechanics | `VERIFIED` |
-| `commands.delete.cmd` | console composition | argv/TTY → application request and presentation | interface intake, optional human confirmation, application effects | one current snapshot; `--force` skips only the human Context confirmation; item removal never adds a second prompt | `VERIFIED` |
+| `commands.delete.cmd` | console composition | variadic argv/TTY → ordered application requests and presentation | interface intake, optional shared human confirmation, independently committed application effects | every selector is frozen before Apply; one current snapshot resolves every relative Context spelling; duplicates and owner/child overlap fail before mutation; `--force` skips only the human Context confirmation | `VERIFIED` |
 | `commands.remove.cmd` | compatibility facade | alias dispatch → canonical command composition | none independently | contains no behavior and preserves complete command parity | `VERIFIED` |
 | `api.client.MemCommitClient.remove_item` | public Python facade | exact selector + optional owner → immutable receipt | same checkpointed application mutation | stable typed error and no terminal import | `VERIFIED` |
 | `api.client.MemCommitClient.plan_context_delete` / `apply_context_delete` | public Python facade | Context locator → reviewed plan → lifecycle receipt | read-only plan, then exact permanent Apply | plan is client-bound and tamper-evident; caller chooses when to Apply | `VERIFIED` |
@@ -35,9 +36,10 @@ different approval, receipt, and recovery contracts.
 
 | Route | Review/approval owner | Durable success | Undo/retry contract |
 | --- | --- | --- | --- |
-| explicit CLI direct item | none beyond invocation | item removed and one `remove` checkpoint | Undoable; no y/N prompt |
+| explicit CLI direct item batch | none beyond invocation | each item removed in argv order with one `remove` checkpoint | independently Undoable in reverse order; no y/N prompt |
 | picker direct item | Enter on exact row | same checkpointed removal per Enter | each accepted row is independently Undoable |
-| explicit or picker Context in human CLI | CLI prints exact frozen effects and asks `Continue? [y/N]`, unless `--force` | Context record/history deleted; matching artifacts cleaned; lifecycle event retained | not Undoable; stale plan must be reselected; committed cleanup warning must not be retried as if deletion failed |
+| explicit mixed/Context batch in human CLI | CLI freezes the complete target set, prints every Context's exact effects, and asks once `Continue? [y/N]`, unless `--force` | effects apply in argv order; each Context record/history is deleted, matching artifacts cleaned, and one lifecycle event retained | each Context is not Undoable; batch is not atomic; stale pre-Apply revalidation publishes nothing, while a later Apply failure retains earlier truthful receipts |
+| picker Context in human CLI | CLI prints one exact frozen effect and asks `Continue? [y/N]`, unless `--force` | Context record/history deleted; matching artifacts cleaned; lifecycle event retained | not Undoable; stale plan must be reselected; committed cleanup warning must not be retried as if deletion failed |
 | public Python item | caller invokes `remove_item` | same checkpointed removal | typed `undoable=True` receipt |
 | public Python Context | caller reviews plan object and separately invokes Apply | same exact permanent deletion | typed `undoable=False` lifecycle receipt |
 | agent/MCP item | host normal mutable-tool policy | same checkpointed removal | `destructiveHint=false`; no implicit retry |
@@ -68,9 +70,15 @@ domain/Store. Application and runtime import no Typer, prompt-toolkit, command,
 or interface module. The public facade does not call the CLI, and the
 application does not call the public facade.
 
+The implementation is owned by `memcommit.operations.delete.application` and
+`memcommit.operations.delete.runtime`. The former top-level module paths are
+true module aliases, so legacy imports and monkeypatches resolve to those same
+implementation modules rather than to copied re-exports.
+
 This slice does not make Context deletion checkpoint-restorable, group a picker
-session into one Undo unit, permit authority-Context destruction through a
-Grant, or reinterpret `delete` and `remove` as different operations. A future
+session or variadic argv batch into one atomic Undo unit, permit
+authority-Context destruction through a Grant, or reinterpret `delete` and
+`remove` as different operations. A future
 cross-operation approval abstraction should be extracted only after another
 destructive operation demonstrates the same plan/Apply and host-annotation
 meaning.

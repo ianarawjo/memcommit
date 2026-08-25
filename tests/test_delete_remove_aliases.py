@@ -256,6 +256,222 @@ def test_picker_session_removes_multiple_items_until_closed(
     }
 
 
+@pytest.mark.parametrize("command", ("delete", "remove"))
+def test_explicit_batch_accepts_mixed_items_and_contexts_in_argv_order(
+    isolated_store,
+    command,
+):
+    store = MemoryStore()
+    owner = ops.init("owner")
+    first = ops.add(owner, "remove first")
+    second = ops.add(owner, "remove second")
+    store.create_context(owner)
+    store.create_context(ops.init("victim-one"))
+    store.create_context(ops.init("victim-two"))
+    store.set_current(owner.name)
+
+    result = runner.invoke(
+        app,
+        [
+            command,
+            first.uid[:8],
+            "victim-one",
+            second.uid[:8],
+            "victim-two",
+        ],
+        input="y\n",
+    )
+
+    assert result.exit_code == 0, result.output
+    assert result.output.count("Continue? [y/N]") == 1
+    assert not store.context_exists("victim-one")
+    assert not store.context_exists("victim-two")
+    assert store.load_direct(owner.name).memories == {}
+    assert [
+        checkpoint["command"] for checkpoint in store.list_checkpoints(owner.name)[:2]
+    ] == ["remove", "remove"]
+    receipts = (
+        f"Removed [{first.uid[:8]}]",
+        "Deleted context 'victim-one'",
+        f"Removed [{second.uid[:8]}]",
+        "Deleted context 'victim-two'",
+    )
+    positions = tuple(result.output.index(receipt) for receipt in receipts)
+    assert positions == tuple(sorted(positions))
+
+
+def test_explicit_batch_scopes_every_item_selector_with_context_option(
+    isolated_store,
+):
+    store = MemoryStore()
+    owner = ops.init("owner")
+    first = ops.add(owner, "remove first")
+    second = ops.add(owner, "remove second")
+    store.create_context(owner)
+
+    result = runner.invoke(
+        app,
+        [
+            "remove",
+            first.uid[:8],
+            second.uid[:8],
+            "--context",
+            owner.name,
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert store.load_direct(owner.name).memories == {}
+
+
+def test_explicit_batch_preflights_every_selector_before_first_change(
+    isolated_store,
+):
+    store = MemoryStore()
+    owner = ops.init("owner")
+    memory = ops.add(owner, "keep when a later selector is invalid")
+    store.create_context(owner)
+    store.set_current(owner.name)
+
+    result = runner.invoke(
+        app,
+        ["remove", memory.uid[:8], "missing-selector"],
+    )
+
+    assert result.exit_code == 1
+    assert "No Context or direct item matches 'missing-selector'" in result.stderr
+    assert memory.uid in store.load_direct(owner.name).memories
+    assert store.list_checkpoints(owner.name) == []
+
+
+def test_explicit_batch_rejects_duplicate_targets_before_first_change(
+    isolated_store,
+):
+    store = MemoryStore()
+    owner = ops.init("owner")
+    memory = ops.add(owner, "keep when selected twice")
+    store.create_context(owner)
+
+    result = runner.invoke(
+        app,
+        ["remove", memory.uid[:8], memory.uid],
+    )
+
+    assert result.exit_code == 1
+    assert "resolve to the same deletion target" in result.stderr
+    assert memory.uid in store.load_direct(owner.name).memories
+    assert store.list_checkpoints(owner.name) == []
+
+
+def test_explicit_batch_rejects_context_and_its_direct_item_before_change(
+    isolated_store,
+):
+    store = MemoryStore()
+    owner = ops.init("owner")
+    memory = ops.add(owner, "keep with its owner")
+    store.create_context(owner)
+
+    result = runner.invoke(
+        app,
+        ["remove", memory.uid[:8], owner.name],
+        input="y\n",
+    )
+
+    assert result.exit_code == 1
+    assert "selects Context 'owner' and direct item" in result.stderr
+    assert store.context_exists(owner.name)
+    assert memory.uid in store.load_direct(owner.name).memories
+    assert store.list_checkpoints(owner.name) == []
+
+
+def test_explicit_multi_context_cancel_is_read_only(isolated_store):
+    store = MemoryStore()
+    store.create_context(ops.init("victim-one"))
+    store.create_context(ops.init("victim-two"))
+
+    result = runner.invoke(
+        app,
+        ["delete", "victim-one", "victim-two"],
+        input="n\n",
+    )
+
+    assert result.exit_code == 1
+    assert result.output.count("Continue? [y/N]") == 1
+    assert store.context_exists("victim-one")
+    assert store.context_exists("victim-two")
+
+
+def test_explicit_batch_deletes_lexical_parent_and_descendant_contexts(
+    isolated_store,
+):
+    store = MemoryStore()
+    store.create_context(ops.init("tree"))
+    store.create_context(ops.init("tree/child"))
+
+    result = runner.invoke(
+        app,
+        ["delete", "tree", "tree/child", "--force"],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert not store.context_exists("tree")
+    assert not store.context_exists("tree/child")
+
+
+def test_explicit_batch_resolves_every_relative_context_from_one_snapshot(
+    isolated_store,
+):
+    store = MemoryStore()
+    store.create_context(ops.init("project/one"))
+    store.create_context(ops.init("project/two"))
+    store.set_current("project/one")
+
+    result = runner.invoke(
+        app,
+        ["delete", ".", "../two", "--force"],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert not store.context_exists("project/one")
+    assert not store.context_exists("project/two")
+
+
+def test_explicit_batch_revalidates_every_context_after_shared_approval(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    first = ops.init("victim-one")
+    second = ops.init("victim-two")
+    store.create_context(first)
+    store.create_context(second)
+
+    def replace_second_during_approval(*_args, **_kwargs):
+        store.delete(second.name)
+        replacement = ops.init(second.name)
+        ops.add(replacement, "replacement survives")
+        store.create_context(replacement)
+        return True
+
+    monkeypatch.setattr(
+        "memcommit.commands.delete.typer.confirm",
+        replace_second_during_approval,
+    )
+
+    result = runner.invoke(
+        app,
+        ["delete", first.name, second.name],
+    )
+
+    assert result.exit_code == 1
+    assert "changed after deletion was reviewed" in result.stderr
+    assert store.context_exists(first.name)
+    assert store.context_exists(second.name)
+    assert [item.content for item in store.load_direct(second.name).iter_items()] == [
+        "replacement survives"
+    ]
+
+
 def test_picker_item_failure_stays_in_footer_without_normal_output(
     isolated_store,
     monkeypatch,

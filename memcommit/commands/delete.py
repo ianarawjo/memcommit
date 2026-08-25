@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
+from dataclasses import dataclass
 from typing import Annotated, Optional
 
 import typer
@@ -11,15 +12,18 @@ from memcommit.context_targeting.tui.picker import (
     ContextPickerActionReceipt,
     choose_context,
 )
-from memcommit.delete_application import (
+from memcommit.context_targeting.loading import DirectItemAmbiguityError
+from memcommit.context_targeting.model import DirectItemTarget
+from memcommit.operations.delete.application import (
     DeleteError,
+    DeleteStalePlanError,
     DirectItemDeleteRequest,
     FrozenContextDeletePlan,
     FrozenDirectItemDeleteTarget,
     apply_context_delete,
     run_direct_item_delete,
 )
-from memcommit.delete_runtime import MemoryStoreDeletePort
+from memcommit.operations.delete.runtime import MemoryStoreDeletePort
 from memcommit.interfaces.cli.delete import (
     context_delete_warning,
     removed_item_description,
@@ -35,6 +39,14 @@ from memcommit.interfaces.tui.operations.delete import (
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
 from memcommit.store import MemoryStore
+
+
+@dataclass(frozen=True, slots=True)
+class _PreparedDeleteTarget:
+    """One argv selector bound to exactly one reviewed deletion target."""
+
+    selector: str
+    target: FrozenContextDeletePlan | FrozenDirectItemDeleteTarget
 
 
 def _choose_target(
@@ -133,6 +145,18 @@ def _item_target(
     )
 
 
+def _picked_item_target(
+    port: MemoryStoreDeletePort,
+    context_name: str,
+    item_uid: str,
+) -> FrozenDirectItemDeleteTarget:
+    """Normalize a picker receipt into the shared exact item coordinate."""
+
+    return port.freeze_local_item_target(
+        DirectItemTarget(context_name=context_name, item_uid=item_uid)
+    )
+
+
 def _delete_context(
     port: MemoryStoreDeletePort,
     plan: FrozenContextDeletePlan,
@@ -180,14 +204,187 @@ def _delete_item(
     render_removed_item(result)
 
 
-def cmd(
-    selector: Annotated[
-        Optional[str],
-        typer.Argument(
-            help=(
-                "Existing Context locator or direct-item UID/name selector; "
-                "omit to enter the shared Context/Memory picker"
+def _prepare_explicit_target(
+    store: MemoryStore,
+    snapshot: ContextOperandSnapshot,
+    port: MemoryStoreDeletePort,
+    selector: str,
+    context_name: str | None,
+) -> _PreparedDeleteTarget:
+    """Resolve one selector through the established combined target grammar."""
+
+    context_plan: FrozenContextDeletePlan | None = None
+    item_target: FrozenDirectItemDeleteTarget | None = None
+    context_error: Exception | None = None
+    item_error: Exception | None = None
+
+    if context_name is None:
+        try:
+            context_plan = _context_plan(store, snapshot, port, selector)
+        except (FileNotFoundError, OSError, ValueError) as error:
+            context_error = error
+
+    try:
+        item_target = _item_target(port, selector, context_name)
+    except (
+        DeleteError,
+        FileNotFoundError,
+        KeyError,
+        OSError,
+        ProfileConfigError,
+        ProfileError,
+        RuntimeError,
+        ValueError,
+    ) as error:
+        item_error = error
+
+    if context_plan is not None and item_target is not None:
+        raise ValueError(
+            "selector "
+            f"'{selector}' matches both Context "
+            f"'{context_plan.context_name}' and direct item "
+            f"[{item_target.item.uid[:8]}] in "
+            f"'{item_target.context_name}'. "
+            "Use --context to select the direct item explicitly."
+        )
+
+    if context_plan is not None:
+        # An ambiguous item prefix remains ambiguous in the combined namespace;
+        # never let an exact Context silently win that collision.
+        if isinstance(item_error, DirectItemAmbiguityError):
+            raise item_error
+        return _PreparedDeleteTarget(selector, context_plan)
+
+    if item_target is not None:
+        return _PreparedDeleteTarget(selector, item_target)
+
+    failure = item_error if item_error is not None else context_error
+    if failure is None:
+        raise ValueError(f"No Context or direct item matches '{selector}'.")
+    if context_name is None and isinstance(failure, KeyError):
+        raise ValueError(f"No Context or direct item matches '{selector}'.")
+    raise failure
+
+
+def _target_identity(
+    prepared: _PreparedDeleteTarget,
+) -> tuple[str, ...]:
+    target = prepared.target
+    if isinstance(target, FrozenContextDeletePlan):
+        return ("context", target.context_uid)
+    return ("item", target.context_uid, target.item.uid)
+
+
+def _validate_explicit_batch(
+    prepared_targets: tuple[_PreparedDeleteTarget, ...],
+) -> None:
+    """Reject duplicate and overlapping effects before publishing any change."""
+
+    seen: dict[tuple[str, ...], _PreparedDeleteTarget] = {}
+    for prepared in prepared_targets:
+        identity = _target_identity(prepared)
+        previous = seen.get(identity)
+        if previous is not None:
+            raise ValueError(
+                f"selectors '{previous.selector}' and '{prepared.selector}' "
+                "resolve to the same deletion target."
             )
+        seen[identity] = prepared
+
+    context_plans = {
+        target.context_uid: target
+        for prepared in prepared_targets
+        if isinstance((target := prepared.target), FrozenContextDeletePlan)
+    }
+    for prepared in prepared_targets:
+        target = prepared.target
+        if not isinstance(target, FrozenDirectItemDeleteTarget):
+            continue
+        owner_plan = context_plans.get(target.context_uid)
+        if owner_plan is None:
+            continue
+        raise ValueError(
+            f"batch selects Context '{owner_plan.context_name}' and direct item "
+            f"[{target.item.uid[:8]}] owned by that Context. Remove either the "
+            "Context selector or its direct-item selector."
+        )
+
+
+def _refresh_item_target(
+    port: MemoryStoreDeletePort,
+    prepared: FrozenDirectItemDeleteTarget,
+) -> FrozenDirectItemDeleteTarget:
+    """Reload one reviewed UID so same-owner batch checkpoints compose safely."""
+
+    try:
+        refreshed = port.freeze_item(
+            DirectItemDeleteRequest(
+                selector=prepared.item.uid,
+                context_locator=prepared.context_name,
+            )
+        )
+    except (
+        DeleteError,
+        FileNotFoundError,
+        KeyError,
+        OSError,
+        ProfileConfigError,
+        ProfileError,
+        RuntimeError,
+        ValueError,
+    ) as error:
+        raise DeleteStalePlanError(
+            f"Direct item [{prepared.item.uid[:8]}] in "
+            f"'{prepared.context_name}' changed after deletion was reviewed."
+        ) from error
+    if (
+        refreshed.context_name != prepared.context_name
+        or refreshed.context_uid != prepared.context_uid
+        or refreshed.item != prepared.item
+    ):
+        raise DeleteStalePlanError(
+            f"Direct item [{prepared.item.uid[:8]}] in "
+            f"'{prepared.context_name}' changed after deletion was reviewed."
+        )
+    return refreshed
+
+
+def _revalidate_explicit_batch(
+    port: MemoryStoreDeletePort,
+    prepared_targets: tuple[_PreparedDeleteTarget, ...],
+) -> None:
+    """Recheck every reviewed identity after approval and before first Apply."""
+
+    for prepared in prepared_targets:
+        target = prepared.target
+        if isinstance(target, FrozenDirectItemDeleteTarget):
+            _refresh_item_target(port, target)
+            continue
+        try:
+            refreshed = port.freeze_exact_context(target.context_name)
+        except (FileNotFoundError, OSError, RuntimeError, ValueError) as error:
+            raise DeleteStalePlanError(
+                f"Context '{target.context_name}' changed after deletion was reviewed."
+            ) from error
+        if (
+            refreshed.context_uid != target.context_uid
+            or refreshed.context_digest != target.context_digest
+            or refreshed.plan_digest != target.plan_digest
+        ):
+            raise DeleteStalePlanError(
+                f"Context '{target.context_name}' changed after deletion was reviewed."
+            )
+
+
+def cmd(
+    selectors: Annotated[
+        Optional[list[str]],
+        typer.Argument(
+            metavar="[SELECTOR]...",
+            help=(
+                "Existing Context locators or direct-item UID/name selectors; "
+                "omit to enter the shared Context/Memory picker"
+            ),
         ),
     ] = None,
     context_name: Annotated[
@@ -195,7 +392,10 @@ def cmd(
         typer.Option(
             "--context",
             "-c",
-            help="Context containing a direct item; disables Context selection",
+            help=(
+                "Context containing every selected direct item; disables "
+                "Context selection"
+            ),
         ),
     ] = None,
     force: Annotated[
@@ -203,11 +403,11 @@ def cmd(
         typer.Option(
             "-f",
             "--force",
-            help="Skip confirmation when the selector names a Context",
+            help="Skip confirmation when any selector names a Context",
         ),
     ] = False,
 ) -> None:
-    """Delete a Context or remove one direct item through one selector grammar."""
+    """Delete Contexts or direct items through one mixed selector grammar."""
 
     store = MemoryStore()
     snapshot = ContextOperandSnapshot.capture(store)
@@ -215,7 +415,7 @@ def cmd(
     # Context; approval cannot be retargeted by a later global switch.
     port = MemoryStoreDeletePort(store, current_name=snapshot.current_name)
 
-    if selector is None:
+    if not selectors:
         initial_target: str | ContextMemorySelection | None = None
         attempted_item_deletions = 0
         completed_deletions = 0
@@ -228,7 +428,8 @@ def cmd(
             attempted_item_deletions += 1
             remove_style = "class:impact.remove"
             try:
-                item_target = port.freeze_exact_local_item(
+                item_target = _picked_item_target(
+                    port,
                     selected_context_name,
                     selected_item_uid,
                 )
@@ -282,7 +483,8 @@ def cmd(
                 return
             if isinstance(selected, ContextMemorySelection):
                 try:
-                    picked_item_target = port.freeze_exact_local_item(
+                    picked_item_target = _picked_item_target(
+                        port,
                         selected.context_name,
                         selected.selector,
                     )
@@ -316,19 +518,18 @@ def cmd(
             _delete_context(port, picked_context_plan, force=force)
             completed_deletions += 1
 
-    context_plan: FrozenContextDeletePlan | None = None
-    item_target: FrozenDirectItemDeleteTarget | None = None
-    context_error: Exception | None = None
-    item_error: Exception | None = None
-
-    if context_name is None:
-        try:
-            context_plan = _context_plan(store, snapshot, port, selector)
-        except (FileNotFoundError, OSError, ValueError) as error:
-            context_error = error
-
     try:
-        item_target = _item_target(port, selector, context_name)
+        prepared_targets = tuple(
+            _prepare_explicit_target(
+                store,
+                snapshot,
+                port,
+                selector,
+                context_name,
+            )
+            for selector in selectors
+        )
+        _validate_explicit_batch(prepared_targets)
     except (
         DeleteError,
         FileNotFoundError,
@@ -339,43 +540,52 @@ def cmd(
         RuntimeError,
         ValueError,
     ) as error:
-        item_error = error
-
-    if context_plan is not None and item_target is not None:
-        typer.secho(
-            "Error: selector "
-            f"'{display_escape_text(selector)}' matches both Context "
-            f"'{display_escape_text(context_plan.context_name)}' and direct item "
-            f"[{item_target.item.uid[:8]}] in "
-            f"'{display_escape_text(item_target.context_name)}'. "
-            "Use --context to select the direct item explicitly.",
-            fg=typer.colors.RED,
-            err=True,
-        )
+        render_cli_error(error)
         raise typer.Exit(1)
 
-    if context_plan is not None:
-        # An ambiguous item prefix remains ambiguous in the combined namespace;
-        # never let an exact Context silently win that collision.
-        if isinstance(item_error, ValueError) and "Ambiguous" in str(item_error):
-            render_cli_error(item_error)
+    context_plans = tuple(
+        target
+        for prepared in prepared_targets
+        if isinstance((target := prepared.target), FrozenContextDeletePlan)
+    )
+    if context_plans and not force:
+        for plan in context_plans:
+            typer.echo(context_delete_warning(plan))
+        typer.confirm("Continue?", abort=True)
+
+    try:
+        _revalidate_explicit_batch(port, prepared_targets)
+    except (
+        DeleteError,
+        FileNotFoundError,
+        KeyError,
+        OSError,
+        ProfileConfigError,
+        ProfileError,
+        RuntimeError,
+        ValueError,
+    ) as error:
+        render_cli_error(error)
+        raise typer.Exit(1)
+
+    for prepared in prepared_targets:
+        target = prepared.target
+        if isinstance(target, FrozenContextDeletePlan):
+            # The complete irreversible set was already reviewed together.
+            _delete_context(port, target, force=True)
+            continue
+        try:
+            refreshed_item = _refresh_item_target(port, target)
+        except (
+            DeleteError,
+            FileNotFoundError,
+            KeyError,
+            OSError,
+            ProfileConfigError,
+            ProfileError,
+            RuntimeError,
+            ValueError,
+        ) as error:
+            render_cli_error(error)
             raise typer.Exit(1)
-        _delete_context(port, context_plan, force=force)
-        return
-
-    if item_target is not None:
-        _delete_item(port, item_target)
-        return
-
-    failure = item_error if context_name is not None else context_error or item_error
-    if failure is None:
-        message = f"No Context or direct item matches '{selector}'."
-    elif context_name is None and isinstance(
-        failure,
-        (KeyError, FileNotFoundError),
-    ):
-        message = f"No Context or direct item matches '{selector}'."
-    else:
-        message = str(failure)
-    render_cli_error(message)
-    raise typer.Exit(1)
+        _delete_item(port, refreshed_item)

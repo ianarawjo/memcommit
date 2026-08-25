@@ -59,6 +59,23 @@ def test_direct_item_delete_is_one_checkpointed_undoable_effect(tmp_path):
     assert checkpoint["command"] == "remove"
 
 
+def test_public_bare_item_selector_uses_the_shared_cross_context_locator(tmp_path):
+    root = tmp_path / "store"
+    store = MemoryStore(root=root)
+    owner = ops.init("owner")
+    memory = ops.add(owner, "remove me outside current")
+    store.create_context(owner)
+    store.create_context(ops.init("current"))
+    store.set_current("current")
+
+    receipt = MemCommitClient(root=root).remove_item(memory.uid[:8])
+
+    assert receipt.context_name == "owner"
+    assert receipt.item.uid == memory.uid
+    assert memory.uid not in store.load_direct("owner").memories
+    assert store.current_context_name() == "current"
+
+
 def test_context_delete_plan_is_read_only_and_preserves_descendants(tmp_path):
     store = _store(tmp_path)
     parent = ops.init("project")
@@ -212,7 +229,10 @@ def test_agent_and_mcp_split_delete_by_effect_and_require_exact_plan(tmp_path):
 
 @pytest.mark.parametrize(
     "path",
-    ("memcommit/delete_application.py", "memcommit/delete_runtime.py"),
+    (
+        "memcommit/operations/delete/application.py",
+        "memcommit/operations/delete/runtime.py",
+    ),
 )
 def test_delete_boundary_has_no_terminal_dependencies(path):
     root = Path(__file__).parents[1]
