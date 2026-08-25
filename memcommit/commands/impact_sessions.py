@@ -10,7 +10,7 @@ from memcommit.commands.resolution_workbench_shell import (
     resolution_seeded_report_fragments,
     run_resolution_workbench_shell,
 )
-from memcommit.impact_controller import ImpactController
+from memcommit.interfaces.tui.workbenches.impact import ImpactController
 from memcommit.memory_diff import update_operation_change
 from memcommit.meld import MeldSession
 from memcommit.meld_resolution_adapter import MeldResolutionWorkbenchAdapter

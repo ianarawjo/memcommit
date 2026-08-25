@@ -142,7 +142,7 @@ def run_meld_shell(
     from memcommit.meld_resolution_adapter import (
         MeldResolutionWorkbenchAdapter,
     )
-    from memcommit.impact_controller import ImpactController
+    from memcommit.interfaces.tui.workbenches.impact import ImpactController
     from memcommit.review_report_adapters import meld_review_report
 
     snapshot_hint = (

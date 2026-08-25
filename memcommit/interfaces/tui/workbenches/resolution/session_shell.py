@@ -102,7 +102,7 @@ from memcommit.interfaces.tui.components.focus import (
     SurfaceMoveResult,
     bind_surface_navigation,
 )
-from memcommit.impact_controller import ImpactController, ImpactView
+from memcommit.interfaces.tui.workbenches.impact import ImpactController, ImpactView
 from memcommit.memory_diff import MemoryChange, MemoryDiffSpan, memory_diff_lines
 from memcommit.resolution_workbench import (
     ResolutionNavigation,

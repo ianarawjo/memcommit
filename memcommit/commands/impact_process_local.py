@@ -49,7 +49,7 @@ from memcommit.operations.forget.runtime import (
     MemoryStoreForgetSourcePort,
     connect_forget_provider,
 )
-from memcommit.impact_controller import ImpactController
+from memcommit.interfaces.tui.workbenches.impact import ImpactController
 from memcommit.interfaces.console.text import display_escape_text
 from memcommit.interfaces.tui.operations.forget import choose_forget_setup
 from memcommit.memory_diff import MemoryChange

@@ -11,7 +11,7 @@ from memcommit.operations.forget.application import (
     run_forget_selection,
 )
 from memcommit.forget_review import ForgetSelection
-from memcommit.impact_controller import ImpactController
+from memcommit.interfaces.tui.workbenches.impact import ImpactController
 from memcommit.interfaces.tui.operations.forget.resolution import (
     ForgetResolutionWorkbenchAdapter,
     forget_memory_changes,
