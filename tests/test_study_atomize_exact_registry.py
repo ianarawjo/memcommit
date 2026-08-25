@@ -10,7 +10,7 @@ from typer.testing import CliRunner
 
 import memcommit.config as config_module
 import memcommit.atomize as atomize_module
-import memcommit.atomize_analysis_runtime as atomize_analysis_runtime_module
+import memcommit.operations.atomize.analysis_runtime as atomize_analysis_runtime_module
 import memcommit.ops as ops
 import memcommit.study_prewarm.atomize as atomize_prewarm_module
 from memcommit.atomize import create_atomize_analysis, impact_atomize

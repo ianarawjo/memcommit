@@ -153,7 +153,8 @@ def test_analysis_and_grounding_remain_separate_atomize_slices() -> None:
         )
     )
     analysis_application = (
-        REPOSITORY_ROOT / "memcommit/atomize_analysis_application.py"
+        REPOSITORY_ROOT
+        / "memcommit/operations/atomize/analysis_application.py"
     ).read_text(encoding="utf-8")
     grounding_application = (
         REPOSITORY_ROOT / "memcommit/atomize_grounding_application.py"

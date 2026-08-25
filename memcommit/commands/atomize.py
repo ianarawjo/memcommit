@@ -13,8 +13,8 @@ from memcommit.atomize import (
     AtomizeImpactError,
     atomize_analysis_matches_context,
 )
-from memcommit.atomize_analysis_application import AtomizeAnalysisOpenRequest
-from memcommit.atomize_analysis_runtime import execute_atomize_analysis_open
+from memcommit.operations.atomize.analysis_application import AtomizeAnalysisOpenRequest
+from memcommit.operations.atomize.analysis_runtime import execute_atomize_analysis_open
 from memcommit.operations.atomize.application import (
     AtomizeOutputPlanRequest,
     AtomizePersistedApplyRequest,

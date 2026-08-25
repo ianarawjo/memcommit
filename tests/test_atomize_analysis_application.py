@@ -14,8 +14,12 @@ from memcommit.atomize import (
     create_atomize_analysis,
     impact_atomize,
 )
-from memcommit.atomize_analysis_application import AtomizeAnalysisOpenRequest
-from memcommit.atomize_analysis_runtime import execute_atomize_analysis_open
+from memcommit.operations.atomize.analysis_application import (
+    AtomizeAnalysisOpenRequest,
+)
+from memcommit.operations.atomize.analysis_runtime import (
+    execute_atomize_analysis_open,
+)
 from memcommit.context import Memory
 from memcommit.store import MemoryStore
 from memcommit.study_prewarm.atomize import AtomizePrewarmMatch
@@ -113,7 +117,7 @@ def test_runtime_looks_up_hidden_prepared_analysis_before_provider(
         output_context_name="atomize/prepared-output",
     )
     monkeypatch.setattr(
-        "memcommit.atomize_analysis_runtime.find_declared_atomize_prewarm",
+        "memcommit.operations.atomize.analysis_runtime.find_declared_atomize_prewarm",
         lambda *, store, context: match,
     )
 
@@ -141,7 +145,7 @@ def test_disallowed_prepared_lookup_falls_through_to_provider(
     store = MemoryStore()
     context = _context(store)
     monkeypatch.setattr(
-        "memcommit.atomize_analysis_runtime.find_declared_atomize_prewarm",
+        "memcommit.operations.atomize.analysis_runtime.find_declared_atomize_prewarm",
         lambda **_kwargs: pytest.fail("disallowed prepared lookup was attempted"),
     )
     prepared = create_atomize_analysis(

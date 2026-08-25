@@ -212,7 +212,7 @@ def test_exact_hidden_prewarm_is_materialized_without_provider(
         output_context_name=context.name,
     )
     monkeypatch.setattr(
-        "memcommit.atomize_analysis_runtime.find_declared_atomize_prewarm",
+        "memcommit.operations.atomize.analysis_runtime.find_declared_atomize_prewarm",
         lambda *, store, context: match,
     )
     client = MemCommitClient(
@@ -234,7 +234,7 @@ def test_refresh_dominates_prepared_preference_and_calls_provider(
 ):
     client, _store, context, _memory, provider = _client_and_context()
     monkeypatch.setattr(
-        "memcommit.atomize_analysis_runtime.find_declared_atomize_prewarm",
+        "memcommit.operations.atomize.analysis_runtime.find_declared_atomize_prewarm",
         lambda **_kwargs: pytest.fail("refresh looked up a prepared analysis"),
     )
 
@@ -752,7 +752,7 @@ def test_public_client_keeps_structural_atomize_assembly_lazy(tmp_path):
                     "from pathlib import Path",
                     "from memcommit.api import AtomizeInputError, MemCommitClient",
                     "assert 'memcommit.api._operations.atomize' not in sys.modules",
-                    "assert 'memcommit.atomize_analysis_runtime' not in sys.modules",
+                    "assert 'memcommit.operations.atomize.analysis_runtime' not in sys.modules",
                     "client = MemCommitClient(root=Path(os.environ['MEMCOMMIT_ATOMIZE_IMPORT_ROOT']), create=True)",
                     "assert 'memcommit.api._operations.atomize' not in sys.modules",
                     "try:",
@@ -762,7 +762,7 @@ def test_public_client_keeps_structural_atomize_assembly_lazy(tmp_path):
                     "else:",
                     "    raise AssertionError('invalid Atomize input succeeded')",
                     "assert 'memcommit.api._operations.atomize' in sys.modules",
-                    "assert 'memcommit.atomize_analysis_runtime' in sys.modules",
+                    "assert 'memcommit.operations.atomize.analysis_runtime' in sys.modules",
                     "assert 'memcommit.api._operations.atomize_grounding' not in sys.modules",
                 )
             ),

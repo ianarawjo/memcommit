@@ -30,11 +30,13 @@ from memcommit.api.errors import (
     AtomizeStorageError,
 )
 from memcommit.atomize import AtomizeImpactError
-from memcommit.atomize_analysis_application import (
+from memcommit.operations.atomize.analysis_application import (
     AtomizeAnalysisApplicationError,
     AtomizeAnalysisOpenRequest,
 )
-from memcommit.atomize_analysis_runtime import execute_atomize_analysis_open
+from memcommit.operations.atomize.analysis_runtime import (
+    execute_atomize_analysis_open,
+)
 from memcommit.operations.atomize.application import (
     AtomizeApplicationError,
     AtomizeOutputPlanRequest,

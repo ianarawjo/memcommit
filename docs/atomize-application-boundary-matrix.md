@@ -67,12 +67,14 @@ outcome: it re-reads late success, compensates an uncommitted new checkpoint,
 and recovers an exact previously interrupted checkpoint without replaying the
 transformation.
 
-`memcommit.atomize_analysis_application` owns the open request/result, origin
-contract, and result validation without importing Store, commands, Typer, or
-prompt-toolkit. `memcommit.atomize_analysis_runtime` owns saved-pair lookup,
+`memcommit.operations.atomize.analysis_application` owns the open
+request/result, origin contract, and result validation without importing
+Store, commands, Typer, or prompt-toolkit.
+`memcommit.operations.atomize.analysis_runtime` owns saved-pair lookup,
 hidden-prewarm lookup, lazy provider connection, Context freshness recheck,
-pair publication, exact reanalysis pair-CAS, and synchronous restoration path. The legacy
-`atomize_workflow` module is now a compatibility facade over that boundary.
+pair publication, exact reanalysis pair-CAS, and synchronous restoration path.
+The legacy `atomize_workflow` module is now a compatibility facade over that
+boundary.
 
 ## Operation-owned decisions to preserve
 
@@ -199,10 +201,12 @@ Suggested ownership:
 - `memcommit.operations.atomize.runtime`: local Context capture, strict graph preflight,
   session repository, Context materialization, compensation, and
   interrupted-Apply recovery.
-- `memcommit.atomize_analysis_application`: implemented typed analysis-open
-  request/result, exact origin validation, and terminal-independent port.
-- `memcommit.atomize_analysis_runtime`: saved-pair and hidden-prewarm lookup,
-  lazy provider analysis, freshness recheck, and pair publication/restoration.
+- `memcommit.operations.atomize.analysis_application`: implemented typed
+  analysis-open request/result, exact origin validation, and
+  terminal-independent port.
+- `memcommit.operations.atomize.analysis_runtime`: saved-pair and
+  hidden-prewarm lookup, lazy provider analysis, freshness recheck, and pair
+  publication/restoration.
 - `memcommit.commands.atomize`: CLI/TUI composition, progress and receipts,
   mapping final workbench actions to the typed in-place or Save As use case;
   the command retains presentation policy but not either materialization
@@ -219,12 +223,21 @@ the operation package directly. This relocation changes no session schema,
 provider call, whole-frame constraint, reconciliation, authority, CAS,
 checkpoint, compensation, or receipt behavior.
 
-This package owns only the primary structural application lifecycle.
-`atomize_analysis_application` / `atomize_analysis_runtime` continue to own
-analysis open, reuse, reanalysis, provider/cache, and pair-publication policy;
-the `atomize_grounding_*` slice continues to own grounding dialogue and its
-mixed edit/add Apply. Neither adjacent slice is moved into or reimplemented by
-the primary operation package.
+The flat `memcommit.atomize_analysis_application` and
+`memcommit.atomize_analysis_runtime` paths are also identity-preserving
+compatibility aliases for their sibling canonical modules under
+`memcommit.operations.atomize`. The Analysis relocation retains the complete
+current runtime, including displaced-session archival and rollback, without
+changing provider/cache selection, refresh meaning, pair publication, session
+schema, semantic budgets, or reconciliation.
+
+The package groups related ownership without merging slice contracts. Primary
+structural application remains in `application` / `runtime`; analysis open,
+reuse, reanalysis, provider/cache, and pair-publication policy remains in
+`analysis_application` / `analysis_runtime`; and `atomize_grounding_*` remains
+outside the package as the owner of grounding dialogue and mixed edit/add
+Apply. No slice may acquire another slice's authority merely from their shared
+package location.
 
 The opaque session revision binds the immutable analysis record and complete
 workbench record, including response state, Output plan, and any application

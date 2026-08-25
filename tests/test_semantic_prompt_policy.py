@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 
 import memcommit.atomize as atomize_module
-import memcommit.atomize_analysis_runtime as atomize_runtime_module
+import memcommit.operations.atomize.analysis_runtime as atomize_runtime_module
 import memcommit.comparison_summary_provider as comparison_summary_module
 import memcommit.findings as findings_module
 import memcommit.ops as ops
