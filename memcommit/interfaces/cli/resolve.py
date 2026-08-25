@@ -5,7 +5,7 @@ from __future__ import annotations
 import typer
 
 from memcommit.interfaces.console.text import display_escape_text
-from memcommit.resolve_application import (
+from memcommit.operations.resolve.application import (
     ResolveAnalysis,
     ResolveReceipt,
 )

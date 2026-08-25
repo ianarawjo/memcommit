@@ -112,7 +112,7 @@ def test_merge_cli_and_tui_depend_on_the_typed_application_contract():
             PACKAGE / "interfaces" / "agent" / "dedup.py",
         ),
         (
-            "memcommit.resolve_application",
+            "memcommit.operations.resolve.application",
             PACKAGE / "interfaces" / "tui" / "operations" / "resolve" / "screen.py",
             PACKAGE / "interfaces" / "cli" / "resolve.py",
             PACKAGE / "api" / "_operations" / "resolve.py",

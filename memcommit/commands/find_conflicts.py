@@ -41,7 +41,7 @@ from memcommit.query_provider import (
 from memcommit.store import MemoryStore
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
-from memcommit.resolve_application import ResolveError
+from memcommit.operations.resolve.application import ResolveError
 from memcommit.quality_find_workbench import (
     QualityFindSourceFrame,
     create_quality_find_workbench,

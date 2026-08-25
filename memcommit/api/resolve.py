@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from memcommit.resolve_application import ResolveAnalysis
+    from memcommit.operations.resolve.application import ResolveAnalysis
 
 
 @dataclass(frozen=True)

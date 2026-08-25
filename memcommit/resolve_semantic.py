@@ -15,7 +15,7 @@ from memcommit.fit_judgment import (
     execute_fit_judgments,
     prepare_fit_judgments,
 )
-from memcommit.resolve_application import (
+from memcommit.operations.resolve.application import (
     FrozenResolveFrame,
     ResolveAnalysis,
     ResolveCandidate,

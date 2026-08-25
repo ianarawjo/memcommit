@@ -33,7 +33,7 @@ from memcommit.operations.forget.application import (
     FrozenForgetSource,
     run_forget_analysis,
 )
-from memcommit.resolve_application import (
+from memcommit.operations.resolve.application import (
     FrozenResolveFrame,
     ResolveAnalysis,
     ResolveCandidate,

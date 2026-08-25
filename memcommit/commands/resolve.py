@@ -25,13 +25,13 @@ from memcommit.interfaces.tui.operations.resolve import run_resolve_tui
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
 from memcommit.query_provider import QueryProviderError, connect_semantic_provider
-from memcommit.resolve_application import (
+from memcommit.operations.resolve.application import (
     ResolveError,
     ResolveRequest,
     apply_resolve,
     run_resolve,
 )
-from memcommit.resolve_runtime import MemoryStoreResolvePort
+from memcommit.operations.resolve.runtime import MemoryStoreResolvePort
 from memcommit.resolve_semantic import ProviderResolveSemanticPort
 from memcommit.resolve_targeting import normalize_resolve_cli_targets
 from memcommit.quality_finding_handoff import (

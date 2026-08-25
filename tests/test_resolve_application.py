@@ -41,7 +41,7 @@ from memcommit.interfaces.tui.operations.resolve import (
     resolve_candidate_exact_review,
     run_resolve_tui,
 )
-from memcommit.resolve_application import (
+from memcommit.operations.resolve.application import (
     ResolveConflictError,
     ResolveError,
     ResolveRequest,
@@ -49,7 +49,7 @@ from memcommit.resolve_application import (
     apply_resolve,
     run_resolve,
 )
-from memcommit.resolve_runtime import MemoryStoreResolvePort
+from memcommit.operations.resolve.runtime import MemoryStoreResolvePort
 from memcommit.resolve_rules import resolve_ruleset_prompt_payload
 from memcommit.resolve_semantic import ProviderResolveSemanticPort
 from memcommit.review import direct_context_digest

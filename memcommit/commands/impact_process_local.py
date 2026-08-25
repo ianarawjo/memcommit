@@ -61,14 +61,14 @@ from memcommit.quality_finding_handoff import (
     quality_finding_handoff_from_json,
 )
 from memcommit.query_provider import QueryProviderError, connect_semantic_provider
-from memcommit.resolve_application import (
+from memcommit.operations.resolve.application import (
     ResolveAnalysis,
     ResolveCandidate,
     ResolveError,
     ResolveRequest,
     run_resolve,
 )
-from memcommit.resolve_runtime import MemoryStoreResolvePort
+from memcommit.operations.resolve.runtime import MemoryStoreResolvePort
 from memcommit.resolve_semantic import ProviderResolveSemanticPort
 from memcommit.semantic_add_runtime import (
     resolve_semantic_add_endpoints,

@@ -28,7 +28,7 @@ from memcommit.quality_find_workbench import (
     QualityFindWorkbenchError,
     QualityFindWorkbenchSession,
 )
-from memcommit.resolve_application import (
+from memcommit.operations.resolve.application import (
     ResolveFitTarget,
     ResolveRequest,
     ResolveSourcePrecondition,

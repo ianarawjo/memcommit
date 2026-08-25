@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from memcommit.interfaces.cli.resolve import render_resolve_receipt
-from memcommit.resolve_application import ResolveReceipt
+from memcommit.operations.resolve.application import ResolveReceipt
 
 
 def test_resolve_receipt_names_exact_checkpoint_review(capsys) -> None:

@@ -32,7 +32,7 @@ from memcommit.profile_config import (
 )
 from memcommit.profiles import ProfileError
 from memcommit.query_provider import QueryProviderError
-from memcommit.resolve_application import (
+from memcommit.operations.resolve.application import (
     ResolveAnalysis,
     ResolveAuthorityError,
     ResolveConflictError,
@@ -47,7 +47,7 @@ from memcommit.quality_finding_handoff import (
     QualityFindingHandoffError,
     conflict_handoff_to_resolve_request,
 )
-from memcommit.resolve_runtime import MemoryStoreResolvePort
+from memcommit.operations.resolve.runtime import MemoryStoreResolvePort
 from memcommit.resolve_semantic import ProviderResolveSemanticPort
 from memcommit.store import ConcurrentContextUpdateError
 

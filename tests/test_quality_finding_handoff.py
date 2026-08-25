@@ -27,7 +27,7 @@ from memcommit.quality_finding_handoff import (
     quality_finding_handoff,
     quality_finding_handoffs,
 )
-from memcommit.resolve_application import ResolveError
+from memcommit.operations.resolve.application import ResolveError
 from memcommit.review import direct_context_digest
 
 

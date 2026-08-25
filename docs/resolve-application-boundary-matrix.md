@@ -1,6 +1,6 @@
 # Resolve application-boundary matrix
 
-Last reviewed: 2026-08-22.
+Last reviewed: 2026-08-25.
 
 ## Status
 
@@ -42,6 +42,28 @@ with duplicate-key rejection, derives every expected post-image from its exact
 effects, and projects every rule, canonical case, and known-wrong result into
 both production semantic prompts. This matrix records ownership and coverage;
 it does not become a second source for exact strings.
+
+## Package ownership
+
+The canonical terminal-independent owners now live together under
+`memcommit.operations.resolve`. `application.py` owns requests, frozen frames,
+semantic outcomes, exact-plan validation, and Apply orchestration;
+`runtime.py` owns Store, Grant, freshness, checkpoint, and atomic mutation
+adapters. API, CLI, quality-finding handoff, Impact, targeting, semantic, and
+TUI consumers import those operation-owned modules directly.
+
+The historical `memcommit.resolve_application` and
+`memcommit.resolve_runtime` paths remain behavior-free module-identity aliases
+for import-order, monkeypatch, and serialized-global compatibility. Importing
+the package alone does not eagerly load either implementation module. New
+production code must use the operation paths; the aliases are compatibility
+boundaries, not secondary owners.
+
+This relocation changes physical ownership only. It does not change the rule
+corpus, whole-frame Fit and planning calls, requested-effect authority,
+freshness or CAS behavior, apply-first policy, checkpoint evidence, receipts,
+or terminal interaction. Consequently the existing ordered PTY evidence
+remains valid and no screenshot refresh is required.
 
 ## Rule matrix
 
@@ -111,6 +133,10 @@ before, after, ordered result, rule list, rationale, and known-wrong result.
 
 ## Current non-goals
 
+- This ownership relocation does not consolidate `resolve_rules`,
+  `resolve_semantic`, or `resolve_targeting` into the package. They remain
+  separately reusable policy and adapter modules with canonical dependencies
+  directed toward the operation application contract.
 - The first rule corpus does not claim exhaustive natural-language coverage.
 - Resolve still materializes primitive CREATE/UPDATE/DELETE effects; it does
   not add a new durable relation object in this iteration.
