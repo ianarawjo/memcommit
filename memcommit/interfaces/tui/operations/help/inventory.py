@@ -58,8 +58,8 @@ from memcommit.help_catalog import (
     OperationTextDetail,
     compose_operation_help,
 )
-from memcommit.help_application import list_operation_help
-from memcommit.help_lookup_application import (
+from memcommit.operations.help.application import list_operation_help
+from memcommit.operations.help.lookup_application import (
     HelpLookupError,
     execute_help_lookup,
     prepare_help_lookup,

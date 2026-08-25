@@ -9,7 +9,7 @@ from typer.testing import CliRunner
 
 from memcommit.cli import app
 from memcommit.commands.command_progress import CommandProgress
-from memcommit.help_application import describe_operation
+from memcommit.operations.help.application import describe_operation
 from memcommit.interfaces.tui.operations.help import inventory
 from memcommit.query_provider import QueryProviderError
 

@@ -1,5 +1,7 @@
 # Help application boundary matrix
 
+Last reviewed: 2026-08-25.
+
 ## Closure statement
 
 Every currently implemented Help route reads the same 62-operation semantic
@@ -9,6 +11,27 @@ bounded provider-backed ID-selection turn, then renders only canonical catalog
 copy. No Help route opens a Store or authority source, reads Memory content,
 creates a session, executes a selected operation, or enters an Apply,
 checkpoint, or Undo lifecycle.
+
+## Implementation ownership
+
+The canonical terminal-independent Help implementation lives under
+`memcommit.operations.help`. `application.py` owns exact, provider-free catalog
+listing and detail lookup. `lookup_application.py` owns the frozen whole-catalog
+semantic selection plan and validates the provider's exact three-name result;
+provider connection remains outside the package in the terminal adapter.
+Production CLI, Python, agent, and MCP routes import those owners directly.
+
+The historical `memcommit.help_application` and
+`memcommit.help_lookup_application` paths remain behavior-free module-identity
+aliases. They preserve existing imports, monkeypatch targets, and serialized
+globals without creating parallel implementations. Importing
+`memcommit.operations.help` alone remains lazy.
+
+This relocation changes physical ownership only. It does not change catalog
+copy, exact-name validation, natural-language prompt or result cardinality,
+one-shot budget policy, provider routing, Study logging, projection, or the
+no-execution and no-Store boundary. Because no visible terminal state changes,
+the existing behavior-focused screenshots remain current.
 
 | Route | Entry | Application path | Projection | Effect | Evidence |
 | --- | --- | --- | --- | --- | --- |

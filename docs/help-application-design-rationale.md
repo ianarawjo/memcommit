@@ -21,7 +21,7 @@ catalog subset but does not generate substitute Help prose.
 
 ## Contract
 
-`memcommit.help_application` owns four read-only application actions:
+`memcommit.operations.help.application` owns four read-only application actions:
 
 - `list_operation_help()` returns one immutable alphabetized snapshot of all
   public operations;
@@ -48,11 +48,11 @@ detail before choosing a tool. The application boundary imports only
 connect a provider, read authority, use a cache, create a session, or publish a
 receipt.
 
-`memcommit.help_lookup_application` owns that bounded semantic selection. It
-freezes the complete public catalog, treats the request and catalog as
-untrusted provider data, and accepts only an ordered array of exactly three
-distinct operation names. Each candidate exposes the model to the canonical
-summary, best-for, flow, execution, effect, range, maturity, and only
+`memcommit.operations.help.lookup_application` owns that bounded semantic
+selection. It freezes the complete public catalog, treats the request and
+catalog as untrusted provider data, and accepts only an ordered array of
+exactly three distinct operation names. Each candidate exposes the model to
+the canonical summary, best-for, flow, execution, effect, range, maturity, and only
 tool-selection detail summaries. The model never returns descriptions,
 reasons, scores, forms, or commands. A short or empty array is invalid just as
 an unknown, duplicate, over-limit, explanatory, or malformed result is; the
@@ -66,6 +66,11 @@ before connecting the pinned `gpt-5.6-sol` provider with reasoning effort
 `none`. The lookup application receives that provider through a protocol and
 does not resolve a Profile, open a Store, read Memory content, create a
 session, or execute the selected operations.
+
+The former flat application paths remain module-identity compatibility aliases
+so old imports, monkeypatch targets, and serialized global references resolve
+to the canonical operation-owned modules. They contain no independent Help
+behavior, and production adapters depend on the canonical package directly.
 
 ## Interface projections
 

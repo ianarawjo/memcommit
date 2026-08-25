@@ -13,7 +13,7 @@ from memcommit.api.help import (
     HelpTextDetailResult,
     OperationHelpResult,
 )
-from memcommit.help_application import (
+from memcommit.operations.help.application import (
     HelpApplicationInputError,
     describe_operation as describe_application_operation,
     describe_operation_detail as describe_application_detail,

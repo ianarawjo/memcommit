@@ -13,7 +13,10 @@ from memcommit.api import (
     MemCommitClient,
     OperationHelpResult,
 )
-from memcommit.help_application import list_operation_details, list_operation_help
+from memcommit.operations.help.application import (
+    list_operation_details,
+    list_operation_help,
+)
 from memcommit.interfaces.agent.contract import (
     AgentRequestError,
     JsonObject,

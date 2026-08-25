@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from memcommit.help_application import (
+from memcommit.operations.help.application import (
     HelpApplicationInputError,
     describe_operation,
     describe_operation_detail,
@@ -78,7 +78,13 @@ def test_describe_rejects_nonexact_operation_names(operation_name):
 
 
 def test_application_boundary_has_no_store_provider_or_terminal_dependency():
-    path = Path(__file__).parents[1] / "memcommit" / "help_application.py"
+    path = (
+        Path(__file__).parents[1]
+        / "memcommit"
+        / "operations"
+        / "help"
+        / "application.py"
+    )
     tree = ast.parse(path.read_text(encoding="utf-8"))
     imported: list[str] = []
     for node in ast.walk(tree):
