@@ -151,9 +151,72 @@ def test_translate_owners_keep_the_existing_dependency_direction() -> None:
     store_source = (
         REPOSITORY_ROOT / "memcommit/operations/translate/view_store.py"
     ).read_text(encoding="utf-8")
+    application_source = (
+        REPOSITORY_ROOT / "memcommit/operations/translate/application.py"
+    ).read_text(encoding="utf-8")
+    catalog_application_source = (
+        REPOSITORY_ROOT
+        / "memcommit/operations/translate/catalog_application.py"
+    ).read_text(encoding="utf-8")
+    materialization_source = (
+        REPOSITORY_ROOT
+        / "memcommit/operations/translate/materialization.py"
+    ).read_text(encoding="utf-8")
 
     assert "memcommit.operations.translate.view" not in runtime_source
     assert "from memcommit.operations.translate.runtime import" in view_source
     assert "from memcommit.operations.translate.view import" in store_source
-    assert "memcommit.commands" not in runtime_source + view_source + store_source
-    assert "memcommit.interfaces" not in runtime_source + view_source + store_source
+    operation_sources = (
+        runtime_source
+        + view_source
+        + store_source
+        + application_source
+        + catalog_application_source
+        + materialization_source
+    )
+    assert "memcommit.commands" not in operation_sources
+    assert "memcommit.interfaces" not in operation_sources
+    assert "import typer" not in operation_sources
+
+
+def test_translate_command_is_only_an_io_and_presentation_adapter() -> None:
+    path = REPOSITORY_ROOT / "memcommit/commands/translate.py"
+    source = path.read_text(encoding="utf-8")
+    tree = ast.parse(source, filename=str(path))
+    imports = {
+        node.module
+        for node in ast.walk(tree)
+        if isinstance(node, ast.ImportFrom) and node.module is not None
+    }
+
+    assert "memcommit.operations.translate.application" in imports
+    assert "memcommit.operations.translate.materialization" in imports
+    assert "memcommit.context_targeting.loading" not in imports
+    assert "memcommit.operations.translate.view_store" not in imports
+    assert "memcommit.store" in imports
+    assert "import memcommit.ops" not in source
+    assert "AutoCheckpoint" not in source
+    assert "save_translation_catalog(" not in source
+    assert "load_translation_catalog_for_context(" not in source
+    assert "with_curated(" not in source
+    assert "with_review_status(" not in source
+    assert "create_context_with_sources(" not in source
+
+
+def test_translate_request_validation_precedes_store_access() -> None:
+    from memcommit.operations.translate.application import (
+        TranslateRequest,
+        prepare_translation,
+    )
+    from memcommit.operations.translate.runtime import TranslateError
+
+    class ClosedStore:
+        def __getattr__(self, name):
+            raise AssertionError(f"Store accessed before validation: {name}")
+
+    with pytest.raises(TranslateError, match="only one"):
+        prepare_translation(
+            ClosedStore(),  # type: ignore[arg-type]
+            TranslateRequest(edit=True, verify=True),
+            current_name="source",
+        )

@@ -1025,7 +1025,7 @@ def test_cli_does_not_publish_destination_if_source_changes_before_creation(
         return result
 
     monkeypatch.setattr(
-        "memcommit.commands.translate.ops.derive_translation_context",
+        "memcommit.operations.translate.materialization.derive_translation_context",
         derive_then_save_concurrently,
     )
     result = runner.invoke(
