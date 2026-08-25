@@ -332,22 +332,6 @@ def _plan_update_with_wait(
     )
 
 
-def _review_update_for_application_flow(
-    session: UpdateSession,
-    incorporate,
-    analysis_origin: str | None,
-) -> UpdateSession | None:
-    """Normalize the existing review API for the application flow adapter."""
-
-    if analysis_origin is None:
-        return review_update_application(session, incorporate=incorporate)
-    return review_update_application(
-        session,
-        incorporate=incorporate,
-        analysis_origin=analysis_origin,
-    )
-
-
 def _revise_update_with_wait(
     current: UpdateSession,
     source: Context,
@@ -383,6 +367,32 @@ def _revise_update_with_wait(
             target_descendants=current.target_include_descendants,
             guidance=guidance,
         ),
+    )
+
+
+def _review_granted_target_authority(
+    prepared: UpdateSession,
+    *,
+    analysis_origin: str | None,
+) -> UpdateSession | None:
+    """Approve or close one exact external-owner plan without revising it."""
+
+    if not _interactive_terminal():
+        return prepared
+
+    def reject_revision(
+        _current: UpdateSession,
+        _guidance: str,
+    ) -> UpdateSession:
+        raise RuntimeError(
+            "Granted Target approval cannot revise the Update plan."
+        )
+
+    return review_update_application(
+        prepared,
+        incorporate=reject_revision,
+        analysis_origin=analysis_origin,
+        allow_revision=False,
     )
 
 
@@ -905,27 +915,10 @@ def cmd(
                         update_prewarm_match.prepared_source_name
                     ),
                 )
-        def incorporate_comments(
-            current: UpdateSession,
-            guidance: str,
-        ) -> UpdateSession:
-            revised = _revise_update_with_wait(
-                current,
-                source,
-                target,
-                guidance,
-            )
-            # The comment turn replaces only the exact staged proposal it
-            # reviewed. A concurrent Update must never be overwritten.
-            store.save_staged_update(revised, expected_current=current)
-            return revised
 
         application = run_application_flow(
             session,
             port=UpdateApplicationFlowPort(
-                interactive=_interactive_terminal(),
-                decision_resolver=_review_update_for_application_flow,
-                incorporate=incorporate_comments,
                 local_applier=lambda reviewed: store.apply_staged_update(reviewed),
                 granted_source_applier=lambda reviewed: (
                     apply_granted_source_staged_update(store, reviewed)
@@ -933,7 +926,12 @@ def cmd(
                 granted_target_applier=lambda reviewed: (
                     apply_granted_staged_update(store, reviewed)
                 ),
-                analysis_origin=update_analysis_origin,
+                authority_reviewer=lambda prepared: (
+                    _review_granted_target_authority(
+                        prepared,
+                        analysis_origin=update_analysis_origin,
+                    )
+                ),
             ),
         )
         if application.status == "CANCELLED":

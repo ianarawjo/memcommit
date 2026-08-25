@@ -1,0 +1,11 @@
+$ mem meld capture/coffee-advice/study capture/coffee-advice/chat --to capture/coffee-advice/melded
+PTY · 180×52
+PROFILE · local capture · CURRENT · capture/coffee-advice/study
+MELD APPLIED · SYMMETRIC · capture/coffee-advice/melded
+EFFECTS · ADD 2 · EDIT 0
+RESULT MEMORIES · 2
+RECEIPT · 2adf1513-b314-4b25-92ca-a952da13e9e7
+CHECKPOINT · c55227e0-eb8e-43a3-be0a-aa955b8fece3
+REVIEW · mem review meld --session 2adf1513-b314-4b25-92ca-a952da13e9e7
+RECOVERY · mem undo
+CAPTURE GATE · PRESS V FOR READ-ONLY RESULT VERIFICATION

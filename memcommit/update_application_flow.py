@@ -8,12 +8,8 @@ from dataclasses import dataclass, replace
 from memcommit.update import UpdateSession
 
 
-UpdateIncorporate = Callable[[UpdateSession, str], UpdateSession]
-UpdateDecisionResolver = Callable[
-    [UpdateSession, UpdateIncorporate, str | None],
-    UpdateSession | None,
-]
 UpdateApplier = Callable[[UpdateSession], UpdateSession]
+UpdateAuthorityReviewer = Callable[[UpdateSession], UpdateSession | None]
 
 
 class UpdateApplicationFlowError(RuntimeError):
@@ -22,41 +18,36 @@ class UpdateApplicationFlowError(RuntimeError):
 
 @dataclass(frozen=True)
 class UpdateApplicationFlowPort:
-    """Adapt one staged Update to shared decision/application phase order."""
+    """Apply one complete plan, retaining only external-owner approval."""
 
-    interactive: bool
-    decision_resolver: UpdateDecisionResolver
-    incorporate: UpdateIncorporate
     local_applier: UpdateApplier
     granted_source_applier: UpdateApplier
     granted_target_applier: UpdateApplier
-    analysis_origin: str | None = None
-
-    def __post_init__(self) -> None:
-        if type(self.interactive) is not bool:
-            raise TypeError("Update interactive state must be boolean.")
+    authority_reviewer: UpdateAuthorityReviewer | None = None
 
     def decide(self, prepared: UpdateSession) -> UpdateSession | None:
-        """Resolve only execution-time Update choices and approval."""
+        """Skip semantic review while preserving a granted-target write gate."""
 
         if not isinstance(prepared, UpdateSession) or prepared.status != "staged":
             raise UpdateApplicationFlowError(
                 "Update application flow requires a staged session."
             )
-        if not self.interactive:
+        if prepared.granted_target is None or not prepared.operations:
             return prepared
-        decided = self.decision_resolver(
-            prepared,
-            self.incorporate,
-            self.analysis_origin,
-        )
-        if decided is None:
-            return None
-        if not isinstance(decided, UpdateSession) or decided.status != "staged":
+        if self.authority_reviewer is None:
             raise UpdateApplicationFlowError(
-                "Update decision resolver returned an invalid staged session."
+                "A granted Target mutation requires an authority reviewer."
             )
-        return decided
+        reviewed = self.authority_reviewer(prepared)
+        if reviewed is None:
+            return None
+        if not isinstance(reviewed, UpdateSession) or reviewed != prepared:
+            # Authority review may approve or close the exact frozen plan; it
+            # cannot disguise another provider turn as an approval decision.
+            raise UpdateApplicationFlowError(
+                "Update authority review returned a different staged plan."
+            )
+        return reviewed
 
     def apply(self, decided: UpdateSession) -> UpdateSession:
         """Dispatch by the mutation owner, then verify the durable receipt."""

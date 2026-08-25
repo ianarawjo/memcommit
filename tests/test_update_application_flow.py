@@ -10,6 +10,7 @@ import pytest
 
 from memcommit.application_flow import run_application_flow
 from memcommit.update import (
+    EditOperation,
     GrantedUpdateTarget,
     UpdateApplicationReceipt,
     UpdateSession,
@@ -57,6 +58,27 @@ def _unexpected(*_args, **_kwargs):
     raise AssertionError("unexpected Update application phase")
 
 
+def _grant_marker() -> GrantedUpdateTarget:
+    return cast(GrantedUpdateTarget, object())
+
+
+def _mutation_staged() -> UpdateSession:
+    return replace(
+        _staged(),
+        operations=(
+            EditOperation(
+                owner_context_uid="target-uid",
+                owner_context_name="target",
+                memory_uid="memory-uid",
+                old_content="old",
+                new_content="new",
+                source_refs=(),
+                reason="test mutation",
+            ),
+        ),
+    )
+
+
 @pytest.mark.parametrize(
     ("granted_source", "granted_target", "expected"),
     (
@@ -87,9 +109,6 @@ def test_update_flow_dispatches_by_the_actual_mutation_owner(
     result = run_application_flow(
         session,
         port=UpdateApplicationFlowPort(
-            interactive=False,
-            decision_resolver=_unexpected,
-            incorporate=_unexpected,
             local_applier=lambda reviewed: apply("local", reviewed),
             granted_source_applier=lambda reviewed: apply(
                 "granted-source", reviewed
@@ -97,6 +116,7 @@ def test_update_flow_dispatches_by_the_actual_mutation_owner(
             granted_target_applier=lambda reviewed: apply(
                 "granted-target", reviewed
             ),
+            authority_reviewer=lambda reviewed: reviewed,
         ),
     )
 
@@ -106,59 +126,56 @@ def test_update_flow_dispatches_by_the_actual_mutation_owner(
     assert calls == [expected]
 
 
-def test_interactive_update_can_replace_the_reviewed_revision_before_apply():
+def test_update_flow_has_no_intermediate_decision_or_cancel_phase():
     session = _staged()
-    revised = replace(session, uid=str(uuid.uuid4()))
-    observed: list[tuple[UpdateSession, str | None]] = []
-
-    def decide(prepared, incorporate, origin):
-        observed.append((prepared, origin))
-        return incorporate(prepared, "revise")
-
     port = UpdateApplicationFlowPort(
-        interactive=True,
-        decision_resolver=decide,
-        incorporate=lambda _current, guidance: revised
-        if guidance == "revise"
-        else _unexpected(),
         local_applier=_applied,
         granted_source_applier=_unexpected,
         granted_target_applier=_unexpected,
-        analysis_origin="EXACT_PREWARM",
     )
 
     result = run_application_flow(session, port=port)
 
-    assert observed == [(session, "EXACT_PREWARM")]
+    assert result.status == "APPLIED"
     assert result.prepared is session
-    assert result.decided is revised
-    assert result.applied == _applied(revised)
+    assert result.decided is session
+    assert result.applied == _applied(session)
 
 
-def test_interactive_cancel_keeps_apply_unreachable():
-    session = _staged()
+def test_granted_target_keeps_only_exact_authority_approval():
+    marker = _grant_marker()
+    session = replace(_mutation_staged(), granted_target=marker)
+    reviewed = []
     port = UpdateApplicationFlowPort(
-        interactive=True,
-        decision_resolver=lambda *_args: None,
-        incorporate=_unexpected,
+        local_applier=_unexpected,
+        granted_source_applier=_unexpected,
+        granted_target_applier=_applied,
+        authority_reviewer=lambda current: reviewed.append(current) or current,
+    )
+
+    result = run_application_flow(session, port=port)
+
+    assert reviewed == [session]
+    assert result.status == "APPLIED"
+
+
+def test_granted_target_authority_review_cannot_replace_the_plan():
+    session = replace(_mutation_staged(), granted_target=_grant_marker())
+    port = UpdateApplicationFlowPort(
         local_applier=_unexpected,
         granted_source_applier=_unexpected,
         granted_target_applier=_unexpected,
+        authority_reviewer=lambda current: replace(current, uid=str(uuid.uuid4())),
     )
 
-    result = run_application_flow(session, port=port)
-
-    assert result.status == "CANCELLED"
-    assert result.applied is None
+    with pytest.raises(UpdateApplicationFlowError, match="different staged plan"):
+        run_application_flow(session, port=port)
 
 
 def test_update_flow_rejects_a_receipt_for_a_different_review():
     session = _staged()
     different = replace(session, target_name="other-target")
     port = UpdateApplicationFlowPort(
-        interactive=False,
-        decision_resolver=_unexpected,
-        incorporate=_unexpected,
         local_applier=lambda _reviewed: _applied(different),
         granted_source_applier=_unexpected,
         granted_target_applier=_unexpected,
@@ -168,21 +185,16 @@ def test_update_flow_rejects_a_receipt_for_a_different_review():
         run_application_flow(session, port=port)
 
 
-def test_update_flow_rejects_non_staged_input_and_review_output():
+def test_update_flow_rejects_non_staged_input():
     session = _staged()
     port = UpdateApplicationFlowPort(
-        interactive=True,
-        decision_resolver=lambda *_args: replace(session, status="impact"),
-        incorporate=_unexpected,
         local_applier=_unexpected,
         granted_source_applier=_unexpected,
         granted_target_applier=_unexpected,
     )
 
-    with pytest.raises(UpdateApplicationFlowError, match="invalid staged"):
-        run_application_flow(session, port=port)
     with pytest.raises(UpdateApplicationFlowError, match="requires a staged"):
         run_application_flow(
             replace(session, status="impact"),
-            port=replace(port, interactive=False),
+            port=port,
         )

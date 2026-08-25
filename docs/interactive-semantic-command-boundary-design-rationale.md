@@ -128,3 +128,39 @@ final commandless Apply is now described as consuming a DECIDED execution
 session, and success returns a compact receipt. Public Review is not a TURN or
 final-Apply host; nonterminal Update, Meld, and Sever sessions resume through
 their owning command.
+
+## 2026-08-25 closed terminal execution
+
+The ordinary attached-terminal paths for Meld and Update no longer enter the
+START → TURN → Apply sequence described above. The command invocation is the
+submitted operation: once its initial semantic result is complete, a local
+Target advances directly through the existing freshness and application
+boundary. A provider wait may remain visible, but it is progress for that one
+command rather than a viewer or an invitation to submit another opinion.
+
+For symmetric Meld, the imported Compare analysis is already the exhaustive
+relation ledger. The default terminal path therefore performs no second
+provider turn. It coalesces an `EQUIVALENT` relation into one exact
+source-supported claim and preserves every member of every other relation as
+an independently revisable Memory. This is deliberately a small structural
+meld: it neither invents a synthesis nor chooses a winner for a conflict. The
+conservative materialization replaces turn zero in the same saved revision,
+then a local Result is applied and the command prints its receipt. Directional
+Meld applies an already decision-complete analysis; an unresolved directional
+analysis ends with an incomplete receipt rather than opening Responses.
+
+For Update, the first complete provider plan is the operation result. A local
+Target or a local Target derived from a granted read-only Source applies
+without opening the staged Impact/comment workbench. A mutating granted
+Target retains one narrow exact-plan ownership approval in a TTY, because the
+invocation alone must not silently authorize a write to another owner; that
+surface exposes Accept/close but not comment-driven revision. A zero-operation
+plan needs no approval because it publishes no Context mutation.
+
+The old TURN grammar remains callable for explicit compatibility routes such
+as `--comment`, `--choice`, `--preserve-all`, saved Review, and non-interactive
+Meld scripting. It is no longer the default attached-terminal experience.
+Ground remains conversational by design, and Sever retains its reviewed
+selection semantics. Resolve, Dedun, Distill, Forget, and Atomize already had
+closed ordinary CLI execution, so this change does not add a second execution
+mode to them.

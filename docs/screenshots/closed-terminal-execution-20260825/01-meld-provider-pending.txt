@@ -1,0 +1,4 @@
+$ mem meld capture/coffee-advice/study capture/coffee-advice/chat --to capture/coffee-advice/melded
+PTY · 180×52
+PROFILE · local capture · CURRENT · capture/coffee-advice/study
+MEM MELD · 2/2 · ANALYZING MELD TURN .. · 0s

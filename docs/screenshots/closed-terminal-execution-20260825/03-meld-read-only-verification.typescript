@@ -1,0 +1,21 @@
+$ mem meld capture/coffee-advice/study capture/coffee-advice/chat --to capture/coffee-advice/melded
+PTY · 180×52
+PROFILE · local capture · CURRENT · capture/coffee-advice/study
+MEM MELD · 1/2 · PREPARING ORDERED COMPARE BASIS . · 0sMEM MELD · 2/2 · ANALYZING MELD TURN . · 0s            MEM MELD · 2/2 · ANALYZING MELD TURN .. · 0sMEM MELD · 2/2 · ANALYZING MELD TURN … · 0s MEM MELD · 2/2 · ANALYZING MELD TURN . · 1sMEM MELD · 2/2 · ANALYZING MELD TURN .. · 1sMEM MELD · 2/2 · ANALYZING MELD TURN … · 1s                                            MELD APPLIED · SYMMETRIC · capture/coffee-advice/melded
+EFFECTS · ADD 2 · EDIT 0
+RESULT MEMORIES · 2
+RECEIPT · 2adf1513-b314-4b25-92ca-a952da13e9e7
+CHECKPOINT · c55227e0-eb8e-43a3-be0a-aa955b8fece3
+REVIEW · mem review meld --session 2adf1513-b314-4b25-92ca-a952da13e9e7
+RECOVERY · mem undo
+CAPTURE GATE · PRESS V FOR READ-ONLY RESULT VERIFICATION
+v
+
+READ-ONLY VERIFICATION · MELD
+  SESSION STATE · APPLIED
+  PROVIDER CALLS · 1
+  SAVED TURNS · 1
+  RESULT MEMORIES · 2
+  CHECKPOINTS · 1
+  [97112f56] A low coffee table makes focused work uncomfortable.
+  [3a019337] A scenic view matters most when choosing a cafe.

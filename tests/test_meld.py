@@ -824,6 +824,70 @@ def _patch_provider(monkeypatch, provider):
     )
 
 
+def test_default_tty_symmetric_meld_applies_without_a_response_turn(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    left, right, target = _task2_contexts(store)
+    comparison = load_comparison_analysis(left.uid, right.uid, store=store)
+    assert comparison is not None
+    session = MeldSession.create_symmetric_from_comparison(comparison, target)
+    store.save_meld_session(session)
+    monkeypatch.setattr(meld_command, "_interactive_terminal", lambda: True)
+    monkeypatch.setattr(
+        meld_command,
+        "_run_interactive",
+        lambda **_kwargs: pytest.fail("Meld opened a response workbench"),
+    )
+
+    applied = meld_command._complete_default_terminal_execution(
+        store=store,
+        session=session,
+    )
+
+    assert applied.state == "APPLIED"
+    assert len(applied.turns) == 1
+    assert applied.current_assessment is not None
+    assert applied.current_assessment.issues == ()
+    assert all(
+        relation.status == "RESOLVED"
+        for relation in applied.current_assessment.relations
+    )
+    assert {
+        memory.content
+        for memory in store.load_direct(target.name).memories.values()
+    } == {
+        memory.content for frame in applied.frames for memory in frame.memories
+    }
+
+
+def test_default_tty_meld_command_prints_the_applied_receipt_directly(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    left, right, target = _task2_contexts(store)
+    monkeypatch.setattr(meld_command, "_interactive_terminal", lambda: True)
+    monkeypatch.setattr(
+        meld_command,
+        "_run_interactive",
+        lambda **_kwargs: pytest.fail("Meld opened a response workbench"),
+    )
+
+    result = runner.invoke(
+        app,
+        ["meld", left.name, right.name, "--to", target.name],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert "MELD APPLIED · SYMMETRIC" in result.output
+    assert "MELD READY TO APPLY" not in result.output
+    applied = store.load_meld_session(target.uid)
+    assert applied is not None and applied.state == "APPLIED"
+    assert len(applied.turns) == 1
+
+
 def test_scripted_meld_turn_rejects_a_stale_reviewed_session(
     isolated_store,
     monkeypatch,

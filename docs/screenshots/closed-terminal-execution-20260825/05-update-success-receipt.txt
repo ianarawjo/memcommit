@@ -1,0 +1,10 @@
+$ mem update --from capture/update/new-guidance --to capture/update/campus-guide
+PTY · 180×52
+PROFILE · local capture · CURRENT · capture/update/new-guidance
+UPDATE APPLIED · capture/update/new-guidance → capture/update/campus-guide
+EFFECTS · ADD 0 · EDIT 1 · REMOVE 0
+RECEIPT · 297f579f-faa7-491a-9447-7c547b8aae1a
+CHECKPOINTS · capture/update/campus-guide [8fff0ba8-4a03-4047-ac77-529bced6f087]
+REVIEW · mem review update --session 297f579f-faa7-491a-9447-7c547b8aae1a
+RECOVERY · mem undo
+CAPTURE GATE · PRESS V FOR READ-ONLY TARGET VERIFICATION

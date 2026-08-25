@@ -21,7 +21,6 @@ from typing import Iterable, Literal
 from memcommit.comparison import (
     COMPARISON_DESCENDANT_SCHEMA_VERSION,
     COMPARISON_RULESET_VERSION,
-    COMPARISON_SCHEMA_VERSION,
     ComparisonAnalysis,
     ComparisonMemory,
     comparison_canonical_digest,
@@ -2166,6 +2165,41 @@ class MeldSession:
         self.state = "READY_TO_APPLY" if assessment.ready_to_apply else "AWAITING_REPLY"
         self._validate()
 
+    def complete_initial_preservation(self) -> None:
+        """Materialize one conservative symmetric result without a user turn.
+
+        Compare supplies the exhaustive relation ledger, while Meld owns the
+        target materialization.  Default terminal execution resolves that
+        boundary by coalescing equivalents and otherwise preserving each
+        source Memory independently; it must not fabricate a submitted
+        response merely to make the initial analysis applicable.
+        """
+
+        turn = self.current_turn
+        assessment = self.current_assessment
+        if (
+            self.mode != "SYMMETRIC"
+            or self.schema_version < MELD_SCHEMA_VERSION
+            or self.state != "AWAITING_REPLY"
+            or turn is None
+            or turn.sequence != 0
+            or assessment is None
+            or self.application is not None
+        ):
+            raise MeldError(
+                "Conservative Meld completion requires one unapplied initial "
+                "symmetric assessment."
+            )
+        completed = _relation_local_preservation_assessment(
+            self,
+            assessment,
+            turn_uid=turn.uid,
+            user_grounded=False,
+        )
+        self.turns = (*self.turns[:-1], replace(turn, assessment=completed))
+        self.state = "READY_TO_APPLY"
+        self._validate()
+
     def prepare_changes(self) -> MeldChangeSet:
         # The exact change set remains derivable after application so retry
         # recovery can verify the saved receipt and current target instead of
@@ -2472,15 +2506,32 @@ class MeldSession:
             and self.comparison_seed is not None
             and self.turns
             and self.turns[0].assessment is not None
-            and self.turns[0].assessment.to_dict()
-            != _comparison_meld_assessment(
+        ):
+            imported = _comparison_meld_assessment(
                 self.comparison_seed.analysis,
                 include_materialization_review=(
                     self.schema_version >= MELD_SCHEMA_VERSION
                 ),
-            ).to_dict()
-        ):
-            raise MeldError("Meld turn zero does not match its imported comparison.")
+            )
+            accepted_turn_zero = {meld_canonical_digest(imported.to_dict())}
+            if self.schema_version >= MELD_SCHEMA_VERSION:
+                accepted_turn_zero.add(
+                    meld_canonical_digest(
+                        _relation_local_preservation_assessment(
+                            self,
+                            imported,
+                            turn_uid=self.turns[0].uid,
+                            user_grounded=False,
+                        ).to_dict()
+                    )
+                )
+            if (
+                meld_canonical_digest(self.turns[0].assessment.to_dict())
+                not in accepted_turn_zero
+            ):
+                raise MeldError(
+                    "Meld turn zero does not match its imported comparison."
+                )
 
         if not self.turns:
             if self.state != "PENDING_ANALYSIS" or self.application is not None:
@@ -3007,23 +3058,14 @@ def meld_accounting(session: MeldSession) -> MeldAccounting:
     )
 
 
-def materialize_preservation_assessment(session: MeldSession) -> MeldAssessment:
-    """Build an exact provider-free preserve-all result for symmetric v3 Meld."""
-    if not isinstance(session, MeldSession):
-        raise TypeError("Expected a MeldSession.")
-    if session.mode != "SYMMETRIC" or session.schema_version < MELD_SCHEMA_VERSION:
-        raise MeldError(
-            "Provider-free preservation requires a symmetric schema v3 meld."
-        )
-    turn = session.current_turn
-    if turn is None or turn.assessment is not None or len(session.turns) < 2:
-        raise MeldError(
-            "Provider-free preservation requires one pending user meld turn."
-        )
-    prior = session.turns[-2].assessment
-    if prior is None:
-        raise MeldError("Provider-free preservation requires a prior assessment.")
-
+def _relation_local_preservation_assessment(
+    session: MeldSession,
+    basis: MeldAssessment,
+    *,
+    turn_uid: str,
+    user_grounded: bool,
+) -> MeldAssessment:
+    """Project one exhaustive relation ledger into minimal target Memories."""
     memory_by_key = {
         (frame.uid, memory.uid): memory
         for frame in session.frames
@@ -3031,7 +3073,7 @@ def materialize_preservation_assessment(session: MeldSession) -> MeldAssessment:
     }
     proposals: list[MeldProposal] = []
     namespace = uuid.UUID(session.uid)
-    for relation in prior.relations:
+    for relation in basis.relations:
         member_groups = (
             (relation.members,)
             if relation.kind == "EQUIVALENT"
@@ -3040,7 +3082,7 @@ def materialize_preservation_assessment(session: MeldSession) -> MeldAssessment:
         for member_index, members in enumerate(member_groups, start=1):
             first = members[0]
             memory = memory_by_key[(first.frame_uid, first.memory_uid)]
-            result_key = f"preserve:{turn.uid}:{relation.uid}:{member_index}"
+            result_key = f"preserve:{turn_uid}:{relation.uid}:{member_index}"
             proposals.append(
                 MeldProposal.from_dict(
                     {
@@ -3060,13 +3102,16 @@ def materialize_preservation_assessment(session: MeldSession) -> MeldAssessment:
                             "Equivalent source Memories were coalesced without "
                             "changing their supported claim."
                             if relation.kind == "EQUIVALENT"
-                            else "The user requested that this supported source "
-                            "distinction remain independently revisable."
+                            else "This supported source distinction remains "
+                            "independently revisable under the conservative "
+                            "Meld execution policy."
                         ),
                         "relation_uids": [relation.uid],
                         "source_members": [member.to_dict() for member in members],
                         "grounded_by_turn_uids": (
-                            [turn.uid] if relation.kind == "CONFLICT" else []
+                            [turn_uid]
+                            if user_grounded and relation.kind == "CONFLICT"
+                            else []
                         ),
                     }
                 )
@@ -3081,10 +3126,34 @@ def materialize_preservation_assessment(session: MeldSession) -> MeldAssessment:
             ),
             "relations": [
                 {**relation.to_dict(), "status": "RESOLVED"}
-                for relation in prior.relations
+                for relation in basis.relations
             ],
             "issues": [],
             "proposals": [proposal.to_dict() for proposal in proposals],
             "ready_to_apply": True,
         }
+    )
+
+
+def materialize_preservation_assessment(session: MeldSession) -> MeldAssessment:
+    """Build an exact provider-free preserve-all result for symmetric v3 Meld."""
+    if not isinstance(session, MeldSession):
+        raise TypeError("Expected a MeldSession.")
+    if session.mode != "SYMMETRIC" or session.schema_version < MELD_SCHEMA_VERSION:
+        raise MeldError(
+            "Provider-free preservation requires a symmetric schema v3 meld."
+        )
+    turn = session.current_turn
+    if turn is None or turn.assessment is not None or len(session.turns) < 2:
+        raise MeldError(
+            "Provider-free preservation requires one pending user meld turn."
+        )
+    prior = session.turns[-2].assessment
+    if prior is None:
+        raise MeldError("Provider-free preservation requires a prior assessment.")
+    return _relation_local_preservation_assessment(
+        session,
+        prior,
+        turn_uid=turn.uid,
+        user_grounded=True,
     )

@@ -290,6 +290,50 @@ def test_granted_target_update_retains_exact_final_review(monkeypatch):
     assert captured[0][1]["decision_free_behavior"] == "FINAL_REVIEW"
 
 
+def test_granted_target_authority_review_omits_semantic_revision_turn(monkeypatch):
+    source, _source_child, _source_memory, target, *_rest = _make_nested_pair()
+    staged = plan_update(
+        source,
+        target,
+        lambda: PlanProvider(_one_edit_response),
+        status="staged",
+    )
+    staged = replace(
+        staged,
+        granted_target=GrantedUpdateTarget(
+            public_name="shared/campus-wiki",
+            grantee_profile_uid="11111111-1111-4111-8111-111111111111",
+            authority_profile_uid="22222222-2222-4222-8222-222222222222",
+            attachment_context_uid="attachment-context",
+            attachment_context_name="shared",
+            grant_uid="33333333-3333-4333-8333-333333333333",
+            grant_revision=1,
+            grant_digest="a" * 64,
+            resource_uid=target.uid,
+            resource_name=target.name,
+            authority_context_name=target.name,
+            permissions=("READ", "UPDATE"),
+        ),
+    )
+    captured = []
+
+    def approve(view, **kwargs):
+        captured.append((view, kwargs))
+        return ResolutionWorkbenchAction(kind="ACCEPT")
+
+    monkeypatch.setattr(update_render, "run_resolution_workbench_shell", approve)
+
+    reviewed = update_render.review_update_application(
+        staged,
+        incorporate=lambda *_args: pytest.fail("revision callback was exposed"),
+        allow_revision=False,
+    )
+
+    assert reviewed is staged
+    assert captured[0][0].capabilities == frozenset({"ACCEPT"})
+    assert captured[0][1]["global_strategies"] == ()
+
+
 def test_granted_target_noop_auto_accepts_without_authority_review(monkeypatch):
     source, _source_child, _source_memory, target, *_rest = _make_nested_pair()
     staged = plan_update(
@@ -1189,7 +1233,7 @@ def test_impact_then_update_reuses_plan_and_materializes_local_fork(
     assert store.current_context_name() == TASK1_SOURCE
 
 
-def test_tty_update_keeps_stage_when_impact_apply_review_is_closed(
+def test_tty_update_applies_without_opening_an_opinion_submission_turn(
     isolated_store,
     monkeypatch,
 ):
@@ -1202,30 +1246,27 @@ def test_tty_update_keeps_stage_when_impact_apply_review_is_closed(
         lambda: PlanProvider(_one_edit_response),
     )
     monkeypatch.setattr(update_command, "_interactive_terminal", lambda: True)
-    reviewed = []
     monkeypatch.setattr(
-        update_command,
+        update_render,
         "review_update_application",
-        lambda session, *, incorporate: reviewed.append(session) or None,
+        lambda *_args, **_kwargs: pytest.fail("Update opened a review turn"),
     )
 
     result = runner.invoke(app, ["update", "--to", TASK1_TARGET])
 
     assert result.exit_code == 0, result.output
-    assert "UPDATE INCOMPLETE" in result.output
-    assert "No target changes were applied. Resume with mem update." in result.output
-    assert len(reviewed) == 1
-    staged = store.load_staged_update()
-    assert staged is not None
-    assert staged.status == "staged"
-    assert staged.application is None
+    assert "UPDATE APPLIED" in result.output
+    applied = store.load_staged_update()
+    assert applied is not None
+    assert applied.status == "applied"
+    assert applied.application is not None
     target_after = store.load_direct(TASK1_TARGET_CHILD)
-    assert target_after.memories[target_memory.uid].content == (
+    assert target_after.memories[target_memory.uid].content != (
         target_before.memories[target_memory.uid].content
     )
 
 
-def test_tty_update_incorporates_review_comment_before_applying(
+def test_tty_update_uses_only_the_initial_planning_wait_before_applying(
     isolated_store,
     monkeypatch,
 ):
@@ -1238,7 +1279,6 @@ def test_tty_update_incorporates_review_comment_before_applying(
         lambda: provider,
     )
     monkeypatch.setattr(update_command, "_interactive_terminal", lambda: True)
-    revisions: list[tuple[UpdateSession, UpdateSession]] = []
     wait_views = []
     progress_updates = []
 
@@ -1260,46 +1300,19 @@ def test_tty_update_incorporates_review_comment_before_applying(
 
     monkeypatch.setattr(update_command, "run_command_wait", wait)
 
-    def review(session, *, incorporate):
-        revised = incorporate(
-            session,
-            "Make the accessibility wording less absolute.",
-        )
-        revisions.append((session, revised))
-        return revised
-
-    monkeypatch.setattr(update_command, "review_update_application", review)
-
     result = runner.invoke(app, ["update", "--to", TASK1_TARGET])
 
     assert result.exit_code == 0, result.output
-    assert [call[1] for call in provider.calls] == [
-        "update planning",
-        "update revision",
-    ]
-    original, revised = revisions[0]
-    assert revised.uid != original.uid
+    assert [call[1] for call in provider.calls] == ["update planning"]
     applied = store.load_staged_update()
     assert applied is not None
     assert applied.status == "applied"
-    assert applied.uid == revised.uid
     assert [view[0:3] for view in wait_views] == [
-        ("UPDATE", "connecting provider", 2),
         ("UPDATE", "connecting provider", 2),
     ]
     assert wait_views[0][3:] == (None, None)
-
-    revision_report = wait_views[1][3]
-    assert revision_report.title == "PREVIOUS UPDATE REPORT"
-    assert "Staged update:" in revision_report.text
-    assert "PENDING REVISION · SUBMITTED" in (
-        revision_report.text
-    )
-    assert "Make the accessibility wording less absolute." in revision_report.text
-    assert "REVISION COMMENT · SUBMITTED" in wait_views[1][4].text
     assert progress_updates == [
         ("planning memory changes", 2),
-        ("incorporating review comments", 2),
     ]
 
 

@@ -110,6 +110,10 @@ class MeldCommandError(RuntimeError):
     """Safe user-facing orchestration failure."""
 
 
+def _interactive_terminal() -> bool:
+    return sys.stdin.isatty() and sys.stdout.isatty()
+
+
 def _session_command(session: MeldSession) -> str:
     """Return one explicit, portable command prefix for this saved meld."""
     left, right = session.frames
@@ -914,6 +918,44 @@ def _accept(
     return receipt.recovered, receipt.checkpoint_uid, receipt.result_count
 
 
+def _complete_default_terminal_execution(
+    *,
+    store: MemoryStore,
+    session: MeldSession,
+) -> MeldSession:
+    """Finish a normal terminal Meld without opening a response turn.
+
+    Symmetric Compare already supplies an exhaustive relation ledger.  Meld
+    materializes that ledger conservatively in the same initial turn, then
+    applies any decision-complete local result.  Granted-target writes retain
+    their explicit authority approval boundary, and unresolved directional
+    analyses remain terminal incomplete receipts rather than conversations.
+    """
+
+    if not _interactive_terminal():
+        return session
+    if session.mode == "SYMMETRIC" and session.state == "AWAITING_REPLY":
+        expected = meld_canonical_digest(session.to_dict())
+        session.complete_initial_preservation()
+        store.save_meld_session(
+            session,
+            expected_session_digest=expected,
+        )
+    if session.state == "READY_TO_APPLY" and session.granted_target is None:
+        _accept(
+            store=store,
+            session=session,
+            expected_session_digest=meld_canonical_digest(session.to_dict()),
+        )
+        applied = store.load_meld_session(session.target.context_uid)
+        if applied is None or applied.state != "APPLIED":
+            raise MeldCommandError(
+                "Meld Apply completed without a reloadable applied receipt."
+            )
+        session = applied
+    return session
+
+
 def _run_interactive(
     *,
     store: MemoryStore,
@@ -1143,13 +1185,7 @@ def start_reviewed_symmetric_meld(
             AssertionError("Symmetric Meld start connected a provider.")
         ),
     ).session
-    if sys.stdin.isatty() and sys.stdout.isatty():
-        session = _run_interactive(
-            store=store,
-            session=session,
-            provider_factory=provider_factory,
-        )
-    return session
+    return _complete_default_terminal_execution(store=store, session=session)
 
 
 def _meld_picker_entry(
@@ -1189,7 +1225,7 @@ def _resume_picked_meld(
         _assert_source_bindings(session, left_ctx, right_ctx)
         _assert_unapplied_target(session, target)
 
-    interactive_ran = sys.stdin.isatty() and sys.stdout.isatty()
+    interactive_ran = _interactive_terminal()
     terminal_session = session.state in {
         "APPLIED",
         "KEPT_REVIEW_ONLY",
@@ -1203,14 +1239,15 @@ def _resume_picked_meld(
             typer.echo("SOURCE · UNCHANGED")
             typer.echo("RESUME · mem meld --sessions")
         else:
-            session = _run_interactive(
+            session = _complete_default_terminal_execution(
                 store=store,
                 session=session,
-                provider_factory=connect_codex_chatgpt_provider,
             )
             if session.state == "APPLIED":
                 typer.echo(render_meld_receipt(session))
                 terminal_session = True
+            else:
+                typer.echo(render_meld_incomplete_receipt(session))
     else:
         typer.echo(
             render_meld_receipt(session)
@@ -1963,7 +2000,6 @@ def cmd(
             )
 
             prepared = prepare_meld_start(request, store=store)
-            meld_analysis_origin: str | None = None
             directional_prewarm_origin = (
                 prepared.directional_prewarm.origin
                 if prepared.directional_prewarm is not None
@@ -2009,14 +2045,10 @@ def cmd(
                 directional_prewarm_origin = (
                     started.origin if started.origin != "PROVIDER" else None
                 )
-                meld_analysis_origin = directional_prewarm_origin
-            if sys.stdin.isatty() and sys.stdout.isatty():
-                session = _run_interactive(
-                    store=store,
-                    session=session,
-                    provider_factory=connect_codex_chatgpt_provider,
-                    analysis_origin=meld_analysis_origin,
-                )
+            session = _complete_default_terminal_execution(
+                store=store,
+                session=session,
+            )
             if requested_mode == "DIRECTIONAL" and directional_prewarm_origin:
                 label = (
                     "EXACT PREWARM"
@@ -2090,15 +2122,10 @@ def cmd(
                     prepared=prepared,
                 )
             session = restarted.session
-            if sys.stdin.isatty() and sys.stdout.isatty():
-                session = _run_interactive(
-                    store=store,
-                    session=session,
-                    provider_factory=connect_codex_chatgpt_provider,
-                    analysis_origin=(
-                        restarted.origin if restarted.origin != "PROVIDER" else None
-                    ),
-                )
+            session = _complete_default_terminal_execution(
+                store=store,
+                session=session,
+            )
             typer.echo(
                 render_meld_receipt(session)
                 if session.state == "APPLIED"
@@ -2279,15 +2306,13 @@ def cmd(
             expanded_uid = _issue_selector(session, expand).uid
         interactive_ran = (
             expand is None
-            and sys.stdin.isatty()
-            and sys.stdout.isatty()
+            and _interactive_terminal()
             and session.state not in {"APPLIED", "KEPT_REVIEW_ONLY"}
         )
         if interactive_ran:
-            session = _run_interactive(
+            session = _complete_default_terminal_execution(
                 store=store,
                 session=session,
-                provider_factory=connect_codex_chatgpt_provider,
             )
         typer.echo(
             render_meld_receipt(session)
@@ -2301,7 +2326,11 @@ def cmd(
         )
         if interactive_ran:
             typer.secho(
-                "Interactive meld state saved.",
+                (
+                    "Meld completed without an opinion-submission turn."
+                    if session.state == "APPLIED"
+                    else "Meld ended without opening a response turn."
+                ),
                 fg=typer.colors.CYAN,
             )
         else:

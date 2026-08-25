@@ -99,8 +99,14 @@ def review_update_application(
     *,
     incorporate: Callable[[UpdateSession, str], UpdateSession],
     analysis_origin: str | None = None,
+    allow_revision: bool = True,
 ) -> UpdateSession | None:
-    """Return the exact accepted revision, or None when final Apply is closed."""
+    """Return the exact accepted revision, or None when final Apply is closed.
+
+    Normal local Update execution bypasses this surface.  Granted-target
+    mutation uses ``allow_revision=False`` so this remains a narrow ownership
+    approval instead of reopening semantic opinion submission.
+    """
 
     current = session
     while True:
@@ -119,7 +125,11 @@ def review_update_application(
                 if analysis_origin is not None
                 else "STAGED"
             ),
-            capabilities=frozenset({"SUBMIT_ITEM", "SUBMIT_ALL", "ACCEPT"}),
+            capabilities=(
+                frozenset({"SUBMIT_ITEM", "SUBMIT_ALL", "ACCEPT"})
+                if allow_revision
+                else frozenset({"ACCEPT"})
+            ),
             accept_enabled=True,
         )
         action = run_resolution_workbench_shell(
@@ -136,11 +146,15 @@ def review_update_application(
                 publishes_context_mutation=bool(current.operations),
             ).decision_free_behavior,
             global_strategies=(
-                ResolutionGlobalStrategy(
-                    "Revise from comments",
-                    "SUBMIT_ALL",
-                    "Revise the complete Update proposal from saved comments.",
-                ),
+                (
+                    ResolutionGlobalStrategy(
+                        "Revise from comments",
+                        "SUBMIT_ALL",
+                        "Revise the complete Update proposal from saved comments.",
+                    ),
+                )
+                if allow_revision
+                else ()
             ),
             impact_controller=_impact_controller(
                 view,
@@ -168,7 +182,7 @@ def review_update_application(
         )
         if action.kind == "ACCEPT":
             return current
-        if action.kind == "SUBMIT_ALL":
+        if action.kind == "SUBMIT_ALL" and allow_revision:
             current = incorporate(current, action.comment)
             # The revised plan came from a new semantic turn, so the original
             # provider-free cache origin no longer describes what is visible.
