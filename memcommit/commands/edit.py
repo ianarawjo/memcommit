@@ -10,13 +10,13 @@ from memcommit.authority.access import (
     resolve_context_access,
 )
 from memcommit.context import AutoCheckpoint
-from memcommit.edit_application import (
+from memcommit.operations.edit.application import (
     EditRequest,
     EditResult,
     FrozenEditPlan,
     run_edit,
 )
-from memcommit.edit_runtime import MemoryStoreEditPort
+from memcommit.operations.edit.runtime import MemoryStoreEditPort
 from memcommit.interfaces.cli.batch_input import parse_edit_lines, read_text_input
 from memcommit.interfaces.console.terminal import is_interactive_terminal
 from memcommit.interfaces.console.text import safe_terminal_text

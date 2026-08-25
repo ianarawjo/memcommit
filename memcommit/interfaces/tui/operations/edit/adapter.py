@@ -10,8 +10,8 @@ from memcommit.authority.access import context_access_display_facts
 from memcommit.context_targeting.catalog import freeze_granted_context_navigation
 from memcommit.context_targeting.model import DirectMemoryTarget
 from memcommit.context_targeting.tui.picker import context_memory_rows
-from memcommit.edit_application import FrozenEditPlan, prepare_edit
-from memcommit.edit_runtime import MemoryStoreEditPort
+from memcommit.operations.edit.application import FrozenEditPlan, prepare_edit
+from memcommit.operations.edit.runtime import MemoryStoreEditPort
 from memcommit.interfaces.tui.operations.edit.model import EditTuiSetup
 from memcommit.interfaces.tui.operations.edit.screen import run_edit_tui
 

@@ -16,8 +16,8 @@ positional selector or content.
 
 | Concern or route | Owner | Invariant |
 | --- | --- | --- |
-| Exact request, locator grammar, frozen plan, and receipt | `memcommit.edit_application` | Terminal-, Store-, and provider-independent values; `CONTEXT:UID` and `--context` are mutually exclusive; receipt must match the frozen Context, Memory, before value, and requested after value. |
-| UPDATE access, direct-Memory/profile search, drift check, save, checkpoint | `memcommit.edit_runtime.MemoryStoreEditPort` | Capture current once; freeze exact canonical Context UID/digest and full Memory UID/content; changed Context or Memory publishes nothing. Bare search enumerates ordinary local direct frames only. |
+| Exact request, locator grammar, frozen plan, and receipt | `memcommit.operations.edit.application` | Terminal-, Store-, and provider-independent values; `CONTEXT:UID` and `--context` are mutually exclusive; receipt must match the frozen Context, Memory, before value, and requested after value. The former `memcommit.edit_application` path remains a module-identity compatibility alias. |
+| UPDATE access, direct-Memory/profile search, drift check, save, checkpoint | `memcommit.operations.edit.runtime.MemoryStoreEditPort` | Capture current once; freeze exact canonical Context UID/digest and full Memory UID/content; changed Context or Memory publishes nothing. Bare search enumerates ordinary local direct frames only. The former `memcommit.edit_runtime` path remains a module-identity compatibility alias. |
 | Prefix grammar | `memcommit.ops.resolve_direct_memory` | Exact UID or one unambiguous prefix across direct items; MemoryRef, embedded Context, and query rows are never editable Memories. |
 | Explicit and batch CLI composition | `memcommit.commands.edit` | Positional selector/content routes to the exact application; `--input` retains atomic UID-tab-content batch parsing and its existing checkpoint. |
 | Interactive setup | `memcommit.interfaces.tui.operations.edit` | Shared direct-Memory selector -> prefilled multiline replacement -> proposed exact command -> `FrozenEditPlan`; process-local editing has no durable effect. |
