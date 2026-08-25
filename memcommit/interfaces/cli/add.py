@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import typer
 
-from memcommit.add_application import AddInputMode, AddResult
+from memcommit.operations.add.application import AddInputMode, AddResult
 from memcommit.interfaces.console.text import display_escape_text
 
 

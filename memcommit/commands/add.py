@@ -7,14 +7,14 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.add_application import (
+from memcommit.operations.add.application import (
     AddError,
     AddRequest,
     AddSource,
     prepare_add_target,
     run_add,
 )
-from memcommit.add_runtime import MemoryStoreAddTargetPort
+from memcommit.operations.add.runtime import MemoryStoreAddTargetPort
 from memcommit.commands.batch_input import parse_add_lines, read_text_input
 from memcommit.authority.access import (
     context_access_display_facts,

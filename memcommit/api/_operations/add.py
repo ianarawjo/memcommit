@@ -5,14 +5,14 @@ from __future__ import annotations
 from collections.abc import Sequence
 import json
 
-from memcommit.add_application import (
+from memcommit.operations.add.application import (
     AddError as ApplicationAddError,
     AddRequest,
     AddSource,
     run_add,
     validate_add_request,
 )
-from memcommit.add_runtime import MemoryStoreAddTargetPort
+from memcommit.operations.add.runtime import MemoryStoreAddTargetPort
 from memcommit.api._runtime import ClientRuntime
 from memcommit.api._support.errors import raise_public
 from memcommit.api.add import AddMemoriesResult, AddedMemoryResult
@@ -126,4 +126,3 @@ def add_memories(
 
 
 __all__ = ["add_memories"]
-

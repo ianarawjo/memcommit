@@ -59,6 +59,7 @@ blocked = (
     'memcommit.api._operations.reference',
     'memcommit.api._operations.show',
     'memcommit.add_application',
+    'memcommit.add_runtime',
     'memcommit.comparison_execution',
     'memcommit.distill_application',
     'memcommit.elaborate_application',
@@ -69,6 +70,8 @@ blocked = (
     'memcommit.ground_distill',
     'memcommit.ground_elaborate',
     'memcommit.meld_application',
+    'memcommit.operations.add.application',
+    'memcommit.operations.add.runtime',
     'memcommit.operations.query.ordinary_application',
     'memcommit.operations.embed.application',
     'memcommit.operations.embed.runtime',
@@ -230,7 +233,10 @@ except AddInputError:
 else:
     raise AssertionError('invalid Add input unexpectedly succeeded')
 assert 'memcommit.api._operations.add' in sys.modules
-assert 'memcommit.add_application' in sys.modules
+assert 'memcommit.operations.add.application' in sys.modules
+assert 'memcommit.operations.add.runtime' in sys.modules
+assert 'memcommit.add_application' not in sys.modules
+assert 'memcommit.add_runtime' not in sys.modules
 assert 'memcommit.api._operations.query' not in sys.modules
 assert 'memcommit.api._operations.meld' not in sys.modules
 assert 'memcommit.api._operations.compare' not in sys.modules
@@ -270,7 +276,10 @@ else:
 assert 'memcommit.api._operations.query' in sys.modules
 assert 'memcommit.operations.query.ordinary_application' in sys.modules
 assert 'memcommit.api._operations.add' not in sys.modules
+assert 'memcommit.operations.add.application' not in sys.modules
+assert 'memcommit.operations.add.runtime' not in sys.modules
 assert 'memcommit.add_application' not in sys.modules
+assert 'memcommit.add_runtime' not in sys.modules
 assert 'memcommit.api._operations.meld' not in sys.modules
 assert 'memcommit.api._operations.compare' not in sys.modules
 assert 'memcommit.api._operations.fit' not in sys.modules
@@ -307,7 +316,10 @@ else:
 assert 'memcommit.api._operations.meld' in sys.modules
 assert 'memcommit.meld_application' in sys.modules
 assert 'memcommit.api._operations.add' not in sys.modules
+assert 'memcommit.operations.add.application' not in sys.modules
+assert 'memcommit.operations.add.runtime' not in sys.modules
 assert 'memcommit.add_application' not in sys.modules
+assert 'memcommit.add_runtime' not in sys.modules
 assert 'memcommit.api._operations.query' not in sys.modules
 assert 'memcommit.operations.query.ordinary_application' not in sys.modules
 """,
@@ -340,7 +352,10 @@ else:
 assert 'memcommit.api._operations.compare' in sys.modules
 assert 'memcommit.comparison_execution' in sys.modules
 assert 'memcommit.api._operations.add' not in sys.modules
+assert 'memcommit.operations.add.application' not in sys.modules
+assert 'memcommit.operations.add.runtime' not in sys.modules
 assert 'memcommit.add_application' not in sys.modules
+assert 'memcommit.add_runtime' not in sys.modules
 assert 'memcommit.api._operations.query' not in sys.modules
 assert 'memcommit.operations.query.ordinary_application' not in sys.modules
 assert 'memcommit.api._operations.meld' not in sys.modules
@@ -375,7 +390,10 @@ else:
 assert 'memcommit.api._operations.forget' in sys.modules
 assert 'memcommit.forget_application' in sys.modules
 assert 'memcommit.api._operations.add' not in sys.modules
+assert 'memcommit.operations.add.application' not in sys.modules
+assert 'memcommit.operations.add.runtime' not in sys.modules
 assert 'memcommit.add_application' not in sys.modules
+assert 'memcommit.add_runtime' not in sys.modules
 assert 'memcommit.api._operations.query' not in sys.modules
 assert 'memcommit.operations.query.ordinary_application' not in sys.modules
 assert 'memcommit.api._operations.meld' not in sys.modules

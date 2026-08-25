@@ -9,12 +9,12 @@ an interface.
 
 | Callable | Owner | Input → output | Allowed effects | Required invariant | State |
 | --- | --- | --- | --- | --- | --- |
-| `add_application.validate_add_request` | application | `AddRequest` → validated request | none | complete nonblank ordered batch before target access | `VERIFIED` |
-| `add_application.prepare_add_target` | application | locator + target port → frozen target | target identity/authority read only | one canonical name and Context UID | `VERIFIED` |
-| `add_application.run_add` | application | request + port → `AddResult` | effects delegated once to port | receipt covers every exact input in order and the frozen target | `VERIFIED` |
-| `add_runtime.MemoryStoreAddTargetPort.freeze` | infrastructure | locator → frozen target/token | Store/Profile/Grant reads | one current snapshot; optional local-only boundary; CREATE authority | `VERIFIED` |
-| `add_runtime.MemoryStoreAddTargetPort.append` | infrastructure | frozen target + request → result | one authorized Context save and Add checkpoint | target UID/digest and Grant revalidation; no overwrite | `VERIFIED` |
-| `add_runtime.execute_add` | infrastructure composition | request + Store → result | same Store effects as port | no terminal or provider dependency | `VERIFIED` |
+| `operations.add.application.validate_add_request` | application | `AddRequest` → validated request | none | complete nonblank ordered batch before target access | `VERIFIED` |
+| `operations.add.application.prepare_add_target` | application | locator + target port → frozen target | target identity/authority read only | one canonical name and Context UID | `VERIFIED` |
+| `operations.add.application.run_add` | application | request + port → `AddResult` | effects delegated once to port | receipt covers every exact input in order and the frozen target | `VERIFIED` |
+| `operations.add.runtime.MemoryStoreAddTargetPort.freeze` | infrastructure | locator → frozen target/token | Store/Profile/Grant reads | one current snapshot; optional local-only boundary; CREATE authority | `VERIFIED` |
+| `operations.add.runtime.MemoryStoreAddTargetPort.append` | infrastructure | frozen target + request → result | one authorized Context save and Add checkpoint | target UID/digest and Grant revalidation; no overwrite | `VERIFIED` |
+| `operations.add.runtime.execute_add` | infrastructure composition | request + Store → result | same Store effects as port | no terminal or provider dependency | `VERIFIED` |
 | `interfaces.cli.add.render_add_plain` | CLI adapter | typed result + intake mode → terminal text | stdout only | no Store, authority, or mutation decisions | `VERIFIED` |
 | `interfaces.tui.operations.add.run_add_tui` | TUI adapter | frozen setup + application callback → result/cancel | process-local drafts and terminal I/O; callback only at To Do | cancellation and draft edits do not call application | `VERIFIED` |
 | `commands.add.cmd` | console composition | argv/TTY → typed request and presentation | intake reads, TUI/CLI, application effects | `--to` is the preferred Target spelling; `--context`/`-c` remain compatible; duplicate spelling fails before Store access; captures current once; file/paste parsing remains interface-owned | `VERIFIED` |
@@ -41,6 +41,17 @@ public facade. CLI and TUI point to the application/runtime boundary; the
 Python facade and agent projection point inward without importing either
 terminal adapter. MCP remains a projection of the frozen agent registry, and
 the Skill remains host guidance rather than an Add implementation or callable.
+
+The canonical implementation owner is `memcommit.operations.add`: its
+`application` module owns the terminal-independent request, validation, port,
+and receipt contracts, while its `runtime` module owns the Store and Grant
+adapter. The historical `memcommit.add_application` and
+`memcommit.add_runtime` paths are identity-preserving compatibility aliases,
+so either import order, existing monkeypatches, and serialized globals resolve
+to the same canonical module objects. Production adapters import the operation
+package directly. This relocation changes no intake, authority, checkpoint,
+CAS, output, or TUI behavior and does not absorb the separate semantic Add
+materialization helpers used by generative operations.
 
 ## CLI Target spelling
 

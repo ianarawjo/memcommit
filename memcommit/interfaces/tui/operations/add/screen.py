@@ -14,7 +14,7 @@ from prompt_toolkit.layout import Dimension, FormattedTextControl, Layout, Windo
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
-from memcommit.add_application import AddRequest, AddResult, AddSource
+from memcommit.operations.add.application import AddRequest, AddResult, AddSource
 from memcommit.context_targeting.tui.selector import (
     ContextSelectorControl,
     ContextSelectorView,
