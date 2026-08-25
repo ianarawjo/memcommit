@@ -82,13 +82,14 @@ emit the legacy Share-oriented terms.
 
 ## Setup and review
 
-With no operands in a TTY, Sever opens the three-pane
-Source–Criteria–Save Location setup directly. `mem sever --sessions` opens the
-shared saved-session launcher, whose New action delegates to that same setup.
-Source and Criteria reuse the ordinary Context namespace tree and independently select
-`THIS CONTEXT ONLY` or `INCLUDE DESCENDANTS`. Query-only rows remain visible
-but unavailable. Save Location accepts the selected Source for self-save only
-when Source is `THIS CONTEXT ONLY`; every other existing name is rejected.
+With no operands in a TTY, Sever opens the shared compact Endpoint Setup with
+directly editable Source, Criteria, and Result role rows. `mem sever --sessions`
+opens the shared saved-session launcher, whose New action delegates to that
+same setup. Source and Criteria expose the ordinary readable Context namespace
+through adjacent Browse controls and independently select `THIS CONTEXT ONLY`
+or `INCLUDE DESCENDANTS`. Query-only rows remain visible in Browse but
+unavailable. Result accepts the selected Source for self-save only when Source
+is `THIS CONTEXT ONLY`; every other existing name is rejected.
 Its initial other-save suggestion is derived from Source and
 Criteria, not from the first local catalog row: Mem finds their deepest shared
 path that is also an ordinary local Context and proposes `ANCESTOR/severed`.
@@ -96,12 +97,19 @@ If they share no local ancestor, it proposes the top-level `severed`; occupied
 suggestions receive a numeric suffix. This keeps a granted
 `task-3/remote/...` Source and local `task-3/local/...` Criteria oriented under
 `task-3/severed` without pretending the granted path is locally writable.
-Both input trees reuse the common lazy Memory-preview controller: lowercase
-`m` reveals the current readable Context and uppercase `M` reveals all visible
-readable Contexts. Revealed Memories are read-only viewport stops and cannot
-select their owning Source or Criteria. Query-only rows remain name-only, and
-preview loading neither changes the frozen Sever scope nor starts provider
-analysis.
+Both input rows reuse the common lazy Memory controller in explicit read-only
+mode. Their `MEMORY · READ ONLY` controls open the selected exact readable
+Context's direct Memories as viewport stops; Enter keeps the whole Context and
+cannot place a Memory UID in the typed setup receipt. Query-only rows remain
+name-only, and preview loading neither changes the frozen Sever scope nor
+starts provider analysis. The command-local 684-line screen was retired; the
+compatibility import now aliases `memcommit.interfaces.tui.operations.sever`.
+
+The ordered 180×52 color trace under
+[`screenshots/sever-shared-endpoint-setup-20260823/`](screenshots/sever-shared-endpoint-setup-20260823/README.md)
+records entry, independent Source range, read-only Memory evidence, Criteria
+Browse, exact self-save START review, a guarded pre-provider failure receipt,
+and read-only proof of no durable mutation.
 
 An explicit local TTY invocation whose provider recommendations already answer
 every required item follows the shared decision-free `AUTO_ACCEPT` policy and

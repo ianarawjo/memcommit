@@ -337,6 +337,7 @@ def run_compact_endpoint_setup(
                 and not descendants
                 and role_uid in memory_focuses
                 and role_allows_memory_focus(role_uid)
+                and not role.memory_preview_only
                 else None
             )
             values.append(
@@ -424,7 +425,7 @@ def run_compact_endpoint_setup(
         elif candidate in role.selectable_names:
             values = []
             if role.allow_new:
-                values.append("EMPTY · EXISTING")
+                values.append(role.existing_label)
             if candidate == role.current_context:
                 values.append("CURRENT")
             annotation = source_display_text(dict(role.annotations).get(candidate))
@@ -475,10 +476,13 @@ def run_compact_endpoint_setup(
 
     def render_memory(role_uid: str) -> StyleAndTextTuples:
         focused = get_app().layout.has_focus(memory_controls[role_uid])
+        role = role_by_uid[role_uid]
         descendants = reach_states[role_uid].include_descendants
         selected_memory = memory_focuses[role_uid].selected_memory_uid
         value = (
-            "WHOLE SUBTREE"
+            "READ ONLY"
+            if role.memory_preview_only
+            else "WHOLE SUBTREE"
             if descendants
             else selected_memory[:8]
             if selected_memory is not None
@@ -1007,6 +1011,11 @@ def run_compact_endpoint_setup(
         if memory_detail["role_uid"] != role_uid:
             open_memory(role_uid)
             return "HANDLED"
+        if role_by_uid[role_uid].memory_preview_only:
+            status["value"] = (
+                "Memory rows are read-only evidence; the whole Context remains selected."
+            )
+            return "HANDLED"
         selected = memory_focuses[role_uid].choose()
         memory_detail["role_uid"] = None
         status["value"] = (
@@ -1339,15 +1348,27 @@ def run_compact_endpoint_setup(
         if any(
             get_app().layout.has_focus(control) for control in memory_controls.values()
         ):
+            role_uid = focused_control_role(memory_controls)
+            preview_only = (
+                role_uid is not None and role_by_uid[role_uid].memory_preview_only
+            )
             if memory_detail["role_uid"] is not None:
                 return (
-                    " ↑/↓ Memory (edge continues by row) · Enter choose · "
+                    " ↑/↓ Memory evidence (edge continues by row) · "
+                    "Enter keeps whole Context · "
+                    "←/Esc close details"
+                    if preview_only
+                    else " ↑/↓ Memory (edge continues by row) · Enter choose · "
                     "←/Esc close details"
                 )
             return (
                 " ↑/↓ endpoint row · ←/→ row control · "
-                "Enter open Memory choices · "
-                "Tab next control · Esc cancel"
+                + (
+                    "Enter open read-only Memory evidence · "
+                    if preview_only
+                    else "Enter open Memory choices · "
+                )
+                + "Tab next control · Esc cancel"
             )
         if get_app().layout.has_focus(action_control):
             return (

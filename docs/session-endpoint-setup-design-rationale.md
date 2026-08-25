@@ -6,7 +6,7 @@ The shared SessionPicker gave Compare, Update, Meld, and Sever a consistent
 way to reopen saved work, but choosing **New** dropped into unrelated operand
 flows. Compare and Update opened sequential full-screen Context pickers, Meld
 first asked for a textual mode and then opened two or three different pickers,
-and Sever alone showed all of its roles together.
+and Sever alone maintained a second, operation-local three-pane implementation.
 
 Sequential prompts hide the operation shape while a person is choosing it.
 In particular, Meld does not visibly explain that directional and symmetric
@@ -23,11 +23,12 @@ operations into one semantic command.
 
 ## Implemented presentation
 
-One role-based setup shell stacks the operation's active inputs in data-flow
-order. Each existing-Context input embeds an independent `ContextTreeState`
-over one frozen catalog. New-name and existing-or-new result inputs use a
-role-specific editor or target pane rather than pretending a name under
-construction is an existing Context.
+One role-based Endpoint Setup component presents the operation's active inputs
+in data-flow order. The workbench layout embeds independent Context selectors;
+the compact-form layout keeps every exact operand directly editable and opens
+the same frozen selector through an adjacent Browse control. New-name and
+existing-or-new result inputs use role-specific exact-name state rather than
+pretending a name under construction is an existing Context.
 
 Meld adds a focused horizontal mode selector above those inputs:
 
@@ -61,7 +62,7 @@ The other initial configurations are:
 | Update | `SOURCE A → TARGET B` | A and B are existing Context trees; each has an independent, default-off reach control |
 | Meld, directional | `INCOMING A → BASELINE B` | A and B have independent, default-off reach controls; B remains the authoritative result target |
 | Meld, symmetric | `PEER A + PEER B → RESULT C` | A and B have independent, default-off reach controls; C is an eligible empty Context or a validated new exact name |
-| Sever | `SOURCE A × CRITERIA B → OUTPUT C` | A and B are existing Context trees with independent scope controls; C is a new exact name |
+| Sever | `SOURCE A × CRITERIA B → OUTPUT C` | A and B are readable Context roles with independent, default-on scope controls and read-only direct-Memory previews; C is either exact A for self-save or a validated new local name for other-save |
 
 Compare and Update freeze A and B from the same unified readable public
 namespace used by other read/source-selection commands. Ordinary local names
@@ -202,6 +203,13 @@ saved session, or start an operation.
 
 ## Focus and key grammar
 
+The workbench and compact-form layouts share one typed focus topology but use
+different local controls. The workbench keeps Context trees continuously
+visible. In the compact form, each role begins with an exact-name field;
+`Browse`, range, and Memory controls are peers on that row, while `Up`/`Down`
+move between role rows and the final action. The following tree-specific rules
+apply to the workbench or to an opened compact Browse detail.
+
 - The mode row, when present, is the first focusable region.
 - `Tab` and `Shift-Tab` move among the mode and active endpoint panes.
 - `Left` and `Right` change a focused horizontal choice; inside a Context tree
@@ -210,9 +218,9 @@ saved session, or start an operation.
   They move within a Context tree first, then cross its boundary into the
   role's descendant reach control when present and into the next role's first tree
   row. Reverse navigation enters the preceding tree at its last visible row.
-  The same boundary rule applies across Compare, Update, Meld, and Sever
-  because it lives in the common setup shell. It stops rather than wrapping at
-  the mode and Apply edges. A creatable role's new-name field follows its tree
+  The same top-to-bottom boundary rule applies across every Endpoint Setup
+  layout because it lives in the common shell. It stops rather than wrapping at
+  the mode and action edges. A workbench creatable role's new-name field follows its tree
   in this same visible run: Down from the tree's last row enters NEW, Up from
   NEW returns to that tree, and Down from NEW advances to the next control.
   Tab skips the editor when traversing panes, so Down from the role tree is
@@ -222,7 +230,8 @@ saved session, or start an operation.
   parent-locator role it instead selects that row as a placement aid. Before
   direct editing, this reparents the exact draft; after the first direct edit,
   the complete typed path remains unchanged and authoritative.
-- `m` toggles lazy direct-Memory previews below the current Context, while `M`
+- In the workbench, `m` toggles lazy direct-Memory previews below the current
+  Context, while `M`
   toggles them across the visible tree. `Up` and `Down` include each revealed
   Memory as a viewport stop so long content can be inspected without moving the
   retained endpoint. Preview-only roles keep those rows read-only: `Enter` and
@@ -232,8 +241,11 @@ saved session, or start an operation.
   Context, clears descendant reach, and places its exact UID in the draft.
   The checked marker is retained independently from the browsing cursor.
   Atomize Input, both Compare roles, both Update roles, and both Directional
-  Meld roles enable this behavior. Symmetric Meld, Sever, Forget, and Switch
-  remain preview-only. Context references, embedded Contexts, and query rows
+  Meld roles enable this behavior. Symmetric Meld, Forget, and Switch remain
+  preview-only in their existing surfaces. Compact Sever exposes the same
+  read-only contract through the Source and Criteria `MEMORY · READ ONLY`
+  controls: opening and navigating them may load evidence, but Enter cannot
+  stage a UID. Context references, embedded Contexts, and query rows
   are never selectable as direct Memories. The loader follows the caller's
   frozen readable or local-only catalog boundary; unavailable and query-only
   rows are never opened through this presentation shortcut.
@@ -243,10 +255,14 @@ saved session, or start an operation.
   Memory's preview also clears it. Thus the visible target and executable
   receipt cannot diverge after exploratory navigation.
 - A mode may opt each readable endpoint into one `THIS CONTEXT ONLY` versus
-  `INCLUDE DESCENDANTS` control below a separator. It is exact-only by default;
-  Left and Right choose the shared reach, while Enter or Space remains a
-  compatibility toggle. The control is in normal Tab order immediately after
-  its Context tree. Compare, Update, and both Meld modes enable it for A and B.
+  `INCLUDE DESCENDANTS` control below a separator. Its initial value is
+  operation-owned: Compare, Update, and Meld start exact, while Sever preserves
+  its established include-descendants default.
+  Workbench Left/Right chooses the shared reach; compact-form Left/Right moves
+  between visible row peers and Enter or Space toggles it. The control is in
+  normal Tab order immediately after its Context tree. Compare, Update, and
+  both Meld modes enable it for A and B; Sever enables it for Source and
+  Criteria.
 - Down from a creatable role's final tree row opens its one-line exact-name
   editor. Once the editor owns focus, the action row shows `ENTER CONFIRM`.
   Enter validates and confirms the exact name, projects it back into the role
@@ -257,11 +273,13 @@ saved session, or start an operation.
   parent-locator variant has no separate projected target row: its visible
   exact field is the draft, so Apply validates that current value even after a
   Tab exit.
-- A dedicated `APPLY` frame follows the endpoint panes in the Tab order. Its
-  left-aligned `[ PRESS ENTER TO APPLY ]` control makes the final action
-  visually distinct from both the endpoint trees and passive footer guidance. `Enter`
-  or `Space` on that focused control validates the complete setup and asks the
-  operation adapter to produce its typed receipt. There is no hidden finish
+- A dedicated action frame follows the endpoint panes in the Tab order. Its
+  left-aligned control makes the final setup action
+  visually distinct from both the endpoint trees and passive footer guidance.
+  For reviewed semantic starts, it renders the exact `START` command rather
+  than implying final materialization. `Enter` or `Space` on that focused
+  control validates the complete setup and asks the operation adapter to
+  produce its typed receipt. There is no hidden finish
   shortcut. Outside the new-name editor, `Q` or `Escape` cancels without
   creating or replacing anything.
 
@@ -285,8 +303,8 @@ An operation adapter converts the draft into an operation-owned typed receipt:
 - Branch: one existing local Source with exact-versus-lexical-subtree reach,
   plus one exact require-new target whose parent tree is only a placement aid;
   and
-- Sever: source/criteria names, both descendant-scope flags, and new output
-  name.
+- Sever: source/criteria names, both descendant-scope flags, and one output
+  name that is either exact Source for self-save or require-new for other-save.
 
 The adapter owns cross-role validation and user-facing role terminology. The
 operation then reloads and freezes authoritative state before provider work or
@@ -315,7 +333,8 @@ continues to own all consequential checks:
   distinct, eligible, empty/session-free when existing, or atomically
   creatable when new.
 - Sever freezes its independently scoped Source and Criteria projections and
-  requires a new Output at its established application boundary.
+  revalidates either exact-Source self-save or require-new Output other-save at
+  its established application boundary.
 
 Catalog selection is not authority. A setup receipt is not an Apply receipt.
 Every operation reloads the selected identities and performs its existing
@@ -337,14 +356,19 @@ The implementation has three layers:
    The role-based setup shell composes those controls with optional
    per-mode/per-role descendant controls, editors, focus, and process-local
    draft state.
-3. Compare, Update, and Meld adapters own role specs, typed receipts, semantic
-   validation, and orchestration. Sever retains its existing typed setup shell
-   while sharing the same Context reach component.
+3. Compare, Update, Meld, and Sever adapters own role specs, typed receipts,
+   semantic validation, and orchestration. Sever's command import is now a
+   behavior-free compatibility facade over
+   `memcommit.interfaces.tui.operations.sever`.
 
-These components live together under `memcommit.context_targeting.tui`.
-`ContextTreeState` remains the sole owner of namespace cursor and expansion
-mechanics, and `ContextSelectionState` remains the checked-value owner. The
-setup shell composes them rather than copying `mem switch` key logic.
+The Endpoint Setup composition lives under
+`memcommit.interfaces.tui.components.endpoint_setup` and imports the narrow
+Context targeting controls it needs. `ContextTreeState` remains the sole owner
+of namespace cursor and expansion mechanics, and `ContextSelectionState`
+remains the checked-value owner. The setup shell composes them rather than
+copying `mem switch` key logic. Its `memory_preview_only` role flag preserves
+Sever's former lazy evidence inspection without allowing a Memory cursor to
+enter the typed executable draft; other operations retain exact Memory focus.
 `SessionPicker` remains the saved-work launcher and does not absorb new session
 setup.
 
@@ -355,12 +379,13 @@ request to compose one new operation. Bare entry therefore opens endpoint
 setup directly; it never discovers or focuses a saved session first. Saved
 work is a separate, explicit route under `--sessions`.
 
-Compare, Meld, and Update use the role-based endpoint shell described above.
-Sever enters its existing typed Source–Criteria–Output setup, which already
-shares the Context reach control but has not yet migrated to the full role-pane
-shell. Choosing **New** from any of the four `--sessions` launchers delegates
-to the same operation-owned setup used by bare entry. The launcher cannot own
-a parallel creation flow.
+Compare, Meld, Sever, and Update use the role-based endpoint shell described
+above. Sever projects Source, Criteria, and Result through the compact form;
+its adapter validates distinct readable inputs, exact self-save scope, and
+fresh other-save naming before it returns the unchanged typed receipt.
+Choosing **New** from any of the four `--sessions` launchers delegates to the
+same operation-owned setup used by bare entry. The launcher cannot own a
+parallel creation flow.
 
 Setup remains process-local until it returns a typed receipt. Only then does
 the operation re-enter its normal explicit-operand boundary, where authority,
@@ -387,9 +412,11 @@ their ordinary bare work routes separate from explicit `--sessions` browsing.
 3. **Completed:** migrate Update and Compare new-session endpoint collection
    to fixed-mode role specs. Compare also accepts explicit `--from A --to B`
    so its selected A does not require changing the global current Context.
-4. **Deferred:** re-express Sever's entire stacked setup using the shared
-   role-pane shell. Its existing two-tree layout, typed receipt, scopes, and
-   new-only Output contract remain authoritative meanwhile.
+4. **Completed:** re-express Sever's Source, Criteria, and Result through the
+   shared compact role-pane shell. Preserve the typed receipt, independent
+   default-on scopes, lazy read-only Memory evidence, exact-command review,
+   exact-Source self-save rule, and fresh-name other-save rule while retiring
+   the 684-line command-local screen.
 
 Each step must keep non-TTY explicit forms stable and add pipe-input tests for
 focus, mode switching, hidden-C exclusion, tree-state independence, cancel,

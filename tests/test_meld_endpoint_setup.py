@@ -61,6 +61,7 @@ def test_meld_setup_projects_mode_dependent_shared_roles() -> None:
     assert spec.role_allows_memory_focus("DIRECTIONAL", "A") is True
     assert spec.roles[2].allow_new is True
     assert spec.roles[2].prefer_new is True
+    assert spec.roles[2].existing_label == "EMPTY · EXISTING"
     assert spec.action_label == "START MELD"
 
 

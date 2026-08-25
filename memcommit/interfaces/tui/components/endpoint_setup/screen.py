@@ -295,7 +295,11 @@ def run_endpoint_setup(
             ),
             title=lambda uid=role.uid: (
                 f"{safe_terminal_text(spec.role_label(selected_mode_uid(), uid))}"
-                " · MEMORY FOCUS"
+                + (
+                    " · MEMORY PREVIEW"
+                    if role_by_uid[uid].memory_preview_only
+                    else " · MEMORY FOCUS"
+                )
             ),
             is_focused=lambda uid=role.uid: get_app().layout.has_focus(
                 memory_controls[uid]
@@ -335,7 +339,9 @@ def run_endpoint_setup(
                 ),
                 memory_uid=(
                     memory_focuses[role_uid].selected_memory_uid
-                    if role_uid in memory_focuses and role_allows_memory_focus(role_uid)
+                    if role_uid in memory_focuses
+                    and role_allows_memory_focus(role_uid)
+                    and not role.memory_preview_only
                     else None
                 ),
             )
@@ -389,7 +395,9 @@ def run_endpoint_setup(
             )
             memory_uid = (
                 memory_focuses[role_uid].selected_memory_uid
-                if role_uid in memory_focuses and role_allows_memory_focus(role_uid)
+                if role_uid in memory_focuses
+                and role_allows_memory_focus(role_uid)
+                and not role.memory_preview_only
                 else None
             )
             range_suffix = (
@@ -402,7 +410,9 @@ def run_endpoint_setup(
             memory_suffix = ""
             if role_allows_memory_focus(role_uid):
                 memory_suffix = (
-                    f" · MEMORY {safe_terminal_text(memory_uid[:8])}"
+                    " · READ-ONLY MEMORY PREVIEW"
+                    if role.memory_preview_only
+                    else f" · MEMORY {safe_terminal_text(memory_uid[:8])}"
                     if memory_uid is not None
                     else " · WHOLE CONTEXT"
                 )
@@ -632,6 +642,11 @@ def run_endpoint_setup(
         if role_uid in reach_states and reach_states[role_uid].include_descendants:
             memory_focuses[role_uid].clear()
             status["value"] = "Focused Memory requires THIS CONTEXT ONLY."
+            return "HANDLED"
+        if role_by_uid[role_uid].memory_preview_only:
+            status["value"] = (
+                "Memory rows are read-only evidence; the whole Context remains selected."
+            )
             return "HANDLED"
         memory_focuses[role_uid].choose()
         status["value"] = ""

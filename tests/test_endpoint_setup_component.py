@@ -170,6 +170,18 @@ def test_endpoint_setup_rejects_hidden_initial_descendant_state() -> None:
         )
 
 
+def test_endpoint_setup_read_only_memory_preview_requires_a_memory_control() -> None:
+    with pytest.raises(ValueError, match="read-only Memory preview"):
+        EndpointSetupRole(
+            "A",
+            "A",
+            ("source",),
+            frozenset({"source"}),
+            "source",
+            memory_preview_only=True,
+        )
+
+
 def test_endpoint_setup_preserves_an_explicit_initial_role_range() -> None:
     spec = _independent_reach_spec()
     source, target = spec.roles
@@ -275,9 +287,7 @@ def _memory_focus_loader(
             "Target Memory.",
         ),
     )
-    return tuple(
-        memory for memory in memories if memory.context_name == context_name
-    )
+    return tuple(memory for memory in memories if memory.context_name == context_name)
 
 
 def test_endpoint_setup_returns_one_exact_memory_focus() -> None:
@@ -299,6 +309,45 @@ def test_endpoint_setup_returns_one_exact_memory_focus() -> None:
         include_descendants=False,
         memory_uid="11111111-1111-4111-8111-111111111111",
     )
+
+
+def test_endpoint_setup_read_only_memory_preview_cannot_enter_the_draft() -> None:
+    base = _memory_focus_spec()
+    source = base.roles[0]
+    spec = EndpointSetupSpec(
+        title=base.title,
+        subtitle=base.subtitle,
+        modes=base.modes,
+        initial_mode_uid=base.initial_mode_uid,
+        roles=(
+            EndpointSetupRole(
+                source.uid,
+                source.label,
+                source.names,
+                source.selectable_names,
+                source.selected_name,
+                allow_descendants=True,
+                allow_memory_focus=True,
+                memory_preview_only=True,
+                memory_height=8,
+            ),
+        ),
+    )
+
+    with create_pipe_input() as pipe_input:
+        # Context -> Range -> read-only Memory evidence. Move to one Memory and
+        # press Enter, then continue; the cursor must not become a typed UID.
+        pipe_input.send_text("\t\t\x1b[B\r\t\r")
+        returned = run_endpoint_setup(
+            spec,
+            memory_loader=_memory_focus_loader,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert returned is not None
+    assert returned.value("A") == EndpointSetupValue("A", "source")
 
 
 def test_endpoint_setup_descendant_reach_clears_memory_focus_immediately() -> None:
@@ -327,9 +376,7 @@ def test_endpoint_setup_context_choice_clears_memory_focus() -> None:
     with create_pipe_input() as pipe_input:
         # Select a Source Memory, return through Range to Context, choose the
         # other exact Context, then continue with its whole frame.
-        pipe_input.send_text(
-            "\t\t\x1b[B\r\x1b[Z\x1b[Z\x1b[B\r\t\t\t\r"
-        )
+        pipe_input.send_text("\t\t\x1b[B\r\x1b[Z\x1b[Z\x1b[B\r\t\t\t\r")
         returned = run_endpoint_setup(
             _memory_focus_spec(),
             memory_loader=_memory_focus_loader,
@@ -447,18 +494,14 @@ def test_endpoint_setup_clears_only_the_role_broadened_to_descendants() -> None:
     with create_pipe_input() as pipe_input:
         # Focus one Memory in each role, then broaden B only. A must remain an
         # exact focused Memory while B becomes a whole subtree.
-        pipe_input.send_text(
-            "\t\t\x1b[B\r\t\t\t\x1b[B\r\x1b[Z\x1b[C\t\t\r"
-        )
+        pipe_input.send_text("\t\t\x1b[B\r\t\t\t\x1b[B\r\x1b[Z\x1b[C\t\t\r")
         returned = run_endpoint_setup(
             spec,
             memory_loader=lambda _role_uid, context_name: (
                 EndpointSetupMemory(context_name, source_uid, "Source Memory."),
             )
             if context_name == "source"
-            else (
-                EndpointSetupMemory(context_name, target_uid, "Target Memory."),
-            ),
+            else (EndpointSetupMemory(context_name, target_uid, "Target Memory."),),
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,

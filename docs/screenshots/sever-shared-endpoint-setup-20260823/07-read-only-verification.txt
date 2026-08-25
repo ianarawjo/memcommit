@@ -1,0 +1,12 @@
+SEVER SETUP · READ-ONLY VERIFICATION                                                                                                                                                
+PTY · 180 COLUMNS × 52 ROWS                                                                                                                                                         
+PROFILE · ISOLATED EXPLICIT STORE · HOST GRANTS EXCLUDED                                                                                                                            
+CURRENT CONTEXT · capture/reference                                                                                                                                                 
+                                                                                                                                                                                    
+STORE DIGEST UNCHANGED · True                                                                                                                                                       
+CHECKPOINT COUNT UNCHANGED · True                                                                                                                                                   
+SEVER SESSION COUNT · 0                                                                                                                                                             
+SETUP RECEIPTS · 1                                                                                                                                                                  
+ACTUAL PROVIDER CALLS · 0                                                                                                                                                           
+                                                                                                                                                                                    
+VERIFICATION COMPLETE · NO DURABLE MUTATION

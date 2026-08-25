@@ -103,10 +103,12 @@ class EndpointSetupRole:
     allow_descendants: bool = False
     include_descendants: bool = False
     allow_memory_focus: bool = False
+    memory_preview_only: bool = False
     selected_memory_uid: str | None = None
     memory_height: int = 7
     allow_new: bool = False
     new_label: str = "CREATE NEW CONTEXT"
+    existing_label: str = "EXISTING"
     initial_new_name: str = ""
     prefer_new: bool = False
     new_name_validator: Callable[[str], object] | None = None
@@ -150,8 +152,15 @@ class EndpointSetupRole:
             raise ValueError(
                 "Endpoint role cannot include descendants without a range control."
             )
-        if type(self.allow_memory_focus) is not bool:
+        if (
+            type(self.allow_memory_focus) is not bool
+            or type(self.memory_preview_only) is not bool
+        ):
             raise TypeError("Endpoint role Memory-focus state must be boolean.")
+        if self.memory_preview_only and not self.allow_memory_focus:
+            raise ValueError(
+                "Endpoint role read-only Memory preview requires a Memory control."
+            )
         if (
             type(self.allow_new) is not bool
             or type(self.prefer_new) is not bool
@@ -161,7 +170,10 @@ class EndpointSetupRole:
         if (
             not isinstance(self.new_label, str)
             or not self.new_label
+            or not isinstance(self.existing_label, str)
+            or not self.existing_label
             or any(character in self.new_label for character in "\r\n")
+            or any(character in self.existing_label for character in "\r\n")
             or not isinstance(self.initial_new_name, str)
             or any(character in self.initial_new_name for character in "\r\n")
         ):
@@ -202,6 +214,10 @@ class EndpointSetupRole:
             if not self.allow_memory_focus:
                 raise ValueError(
                     "Endpoint role cannot retain Memory focus without a control."
+                )
+            if self.memory_preview_only:
+                raise ValueError(
+                    "A read-only Memory preview cannot retain a selected Memory."
                 )
             if self.include_descendants:
                 raise ValueError(

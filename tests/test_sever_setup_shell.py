@@ -1,24 +1,292 @@
-"""Contracts for the simultaneous three-pane Sever setup view."""
+"""Contracts for Sever's shared Endpoint Setup adapter and command facade."""
 
 from __future__ import annotations
 
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
+import pytest
 
-from memcommit.commands.sever_setup_shell import (
-    SeverSetupReceipt,
-    _shared_local_output_name,
-    choose_sever_setup,
-)
+import memcommit.commands.sever_setup_shell as sever_setup_facade
 from memcommit.commands.context_picker import ContextMemoryRow
+from memcommit.interfaces.tui.operations import sever as sever_tui
+from memcommit.interfaces.tui.operations.sever import (
+    SeverEndpointSelection,
+    SeverSetupReceipt,
+    SeverTuiSetup,
+    _shared_local_output_name,
+    choose_sever_endpoint_setup,
+    choose_sever_setup,
+    sever_endpoint_setup_spec,
+)
+from memcommit.interfaces.tui.components.endpoint_setup import (
+    EndpointSetupDraft,
+    EndpointSetupValue,
+)
+from memcommit.interfaces.tui.operations.sever.setup import _validate_sever_draft
 from memcommit.source_projection.model import SourceAccess, SourceDisplayFacts
 
 
-def test_three_pane_setup_stacks_roles_and_supplies_a_default_output() -> None:
+def _setup() -> SeverTuiSetup:
+    return SeverTuiSetup(
+        names=("personal-memory", "public-guidance"),
+        local_names=("personal-memory", "public-guidance"),
+        selectable_names=frozenset({"personal-memory", "public-guidance"}),
+        source_name="personal-memory",
+        criteria_name="public-guidance",
+        current_context="personal-memory",
+    )
+
+
+def test_sever_setup_projects_three_shared_roles_and_existing_defaults() -> None:
+    spec = sever_endpoint_setup_spec(_setup())
+
+    assert spec.screen_layout == "COMPACT_FORM"
+    assert spec.initial_mode_uid == "SEVER"
+    assert tuple(role.uid for role in spec.roles) == (
+        "SOURCE",
+        "CRITERIA",
+        "OUTPUT",
+    )
+    assert all(role.include_descendants for role in spec.roles[:2])
+    assert all(role.memory_preview_only for role in spec.roles[:2])
+    assert spec.roles[2].prefer_new is True
+    assert spec.roles[2].existing_label == "EXISTING"
+    assert spec.roles[2].initial_new_name == "severed"
+    assert spec.action_label == "START SEVER"
+
+
+def test_shared_role_pane_returns_the_default_other_save_receipt() -> None:
     with create_pipe_input() as pipe_input:
-        # Both trees begin on current. Confirm Source, move Criteria to the
-        # other root, confirm it, then review and approve the START command.
-        pipe_input.send_text("\r\x1b[B\r\r\r")
+        # Source -> Criteria -> Output -> exact START command.
+        pipe_input.send_text("\x1b[B" * 3 + "\r")
+        result = choose_sever_endpoint_setup(
+            _setup(),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result == SeverEndpointSelection(
+        source_name="personal-memory",
+        criteria_name="public-guidance",
+        output_name="severed",
+    )
+
+
+def test_query_only_row_is_visible_but_not_selectable_for_either_input() -> None:
+    setup = SeverTuiSetup(
+        names=("personal-memory", "government/qna", "public-guidance"),
+        local_names=("personal-memory",),
+        selectable_names=frozenset({"personal-memory", "public-guidance"}),
+        source_name="personal-memory",
+        criteria_name="public-guidance",
+        current_context="personal-memory",
+        annotations=(
+            (
+                "government/qna",
+                SourceDisplayFacts(
+                    access=SourceAccess.QUERY_GRANT,
+                    permissions=("QUERY",),
+                ),
+            ),
+            (
+                "public-guidance",
+                SourceDisplayFacts(
+                    access=SourceAccess.READ_GRANT,
+                    permissions=("READ", "DERIVE"),
+                ),
+            ),
+        ),
+    )
+    spec = sever_endpoint_setup_spec(setup)
+
+    assert "government/qna" in spec.roles[0].names
+    assert "government/qna" not in spec.roles[0].selectable_names
+    assert "government/qna" not in spec.roles[1].selectable_names
+
+
+def test_output_rejects_an_existing_peer_then_accepts_a_fresh_name() -> None:
+    with create_pipe_input() as pipe_input:
+        # Move to Output, submit the existing Source while Source still spans
+        # descendants, observe the rejected command, then repair the field.
+        pipe_input.send_text(
+            "\x1b[B\x1b[B\x15personal-memory\r\r\x1b[A\x15healthcare-draft\r\r"
+        )
+        result = choose_sever_endpoint_setup(
+            _setup(),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result is not None
+    assert result.output_name == "healthcare-draft"
+
+
+def test_output_accepts_source_as_an_exact_self_save_location() -> None:
+    with create_pipe_input() as pipe_input:
+        # Source input -> Browse -> Range; clear descendants, then move by rows
+        # through Criteria to Output and replace its suggested fresh name.
+        pipe_input.send_text("\t\t \x1b[B\x1b[B\x15personal-memory\r\r")
+        result = choose_sever_endpoint_setup(
+            _setup(),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result == SeverEndpointSelection(
+        source_name="personal-memory",
+        criteria_name="public-guidance",
+        output_name="personal-memory",
+        source_descendants=False,
+        criteria_descendants=True,
+    )
+
+
+def test_each_input_role_keeps_an_independent_descendant_toggle() -> None:
+    with create_pipe_input() as pipe_input:
+        # Clear Source descendants, move to Criteria and clear its independent
+        # range, then cross Output to the exact START command.
+        pipe_input.send_text("\t\t \x1b[B\t\t \x1b[B\x1b[B\r")
+        result = choose_sever_endpoint_setup(
+            _setup(),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result is not None
+    assert result.source_descendants is False
+    assert result.criteria_descendants is False
+
+
+def test_default_output_uses_a_fresh_suffix_when_the_first_name_exists() -> None:
+    assert (
+        _shared_local_output_name(
+            "personal-memory/source",
+            "personal-memory/criteria",
+            local_names=("personal-memory",),
+            occupied_names=frozenset({"personal-memory/severed"}),
+        )
+        == "personal-memory/severed-2"
+    )
+
+
+def test_granted_peers_default_under_their_shared_local_ancestor() -> None:
+    assert (
+        _shared_local_output_name(
+            "task-3/remote/guidance",
+            "task-3/local/guardrails",
+            local_names=("task-1", "task-3", "task-3/local/guardrails"),
+            occupied_names=frozenset(),
+        )
+        == "task-3/severed"
+    )
+
+
+def test_suggested_output_follows_untouched_source_and_criteria_fields() -> None:
+    setup = SeverTuiSetup(
+        names=("work", "work/source", "work/criteria"),
+        local_names=("work", "work/source", "work/criteria"),
+        selectable_names=frozenset({"work", "work/source", "work/criteria"}),
+        source_name="work/source",
+        criteria_name="work/criteria",
+    )
+    output_role = sever_endpoint_setup_spec(setup).roles[2]
+
+    assert output_role.new_name_suggester is not None
+    assert (
+        output_role.new_name_suggester(
+            {"SOURCE": "work/source", "CRITERIA": "work/criteria"}
+        )
+        == "work/severed"
+    )
+
+
+def test_shared_role_pane_can_be_cancelled_without_a_receipt() -> None:
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b")
+        result = choose_sever_endpoint_setup(
+            _setup(),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result is None
+
+
+def test_sever_memory_rows_remain_lazy_read_only_preview_evidence() -> None:
+    loaded: list[str] = []
+
+    def load(name: str):
+        loaded.append(name)
+        return (
+            ContextMemoryRow(
+                "11111111",
+                f"{name} content",
+                selector="11111111-1111-4111-8111-111111111111",
+            ),
+        )
+
+    with create_pipe_input() as pipe_input:
+        # Source input -> Browse -> Range -> Memory. Open, move to the Memory,
+        # and press Enter; preview-only mode must not stage its UID.
+        pipe_input.send_text("\t\t \t\r\x1b[B\rq")
+        result = choose_sever_endpoint_setup(
+            _setup(),
+            memory_loader=load,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result is None
+    assert loaded == ["personal-memory"]
+
+
+def test_sever_tui_setup_rejects_an_unusable_catalog() -> None:
+    with pytest.raises(ValueError, match="two selectable"):
+        SeverTuiSetup(
+            names=("local", "query-only"),
+            local_names=("local",),
+            selectable_names=frozenset({"local"}),
+            source_name="local",
+            criteria_name="query-only",
+        )
+
+
+def test_granted_source_cannot_be_presented_as_a_local_self_save() -> None:
+    setup = SeverTuiSetup(
+        names=("remote/source", "local/criteria"),
+        local_names=("local/criteria",),
+        selectable_names=frozenset({"remote/source", "local/criteria"}),
+        source_name="remote/source",
+        criteria_name="local/criteria",
+    )
+    draft = EndpointSetupDraft(
+        "SEVER",
+        (
+            EndpointSetupValue("SOURCE", "remote/source"),
+            EndpointSetupValue("CRITERIA", "local/criteria"),
+            EndpointSetupValue("OUTPUT", "remote/source", create=True),
+        ),
+    )
+
+    assert _validate_sever_draft(setup, draft) == (
+        "Self-save requires an ordinary local Source Context."
+    )
+
+
+def test_command_setup_path_is_an_import_only_compatibility_facade() -> None:
+    assert sever_setup_facade.choose_sever_setup is sever_tui.choose_sever_setup
+    assert sever_setup_facade.SeverSetupReceipt is SeverSetupReceipt
+
+
+def test_legacy_shaped_entry_uses_the_shared_role_pane() -> None:
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b[B" * 3 + "\r")
         result = choose_sever_setup(
             ("personal-memory", "public-guidance"),
             current="personal-memory",
@@ -32,171 +300,3 @@ def test_three_pane_setup_stacks_roles_and_supplies_a_default_output() -> None:
         criteria_name="public-guidance",
         output_name="severed",
     )
-
-
-def test_query_only_row_is_visible_but_cannot_be_selected_as_criteria() -> None:
-    with create_pipe_input() as pipe_input:
-        # Move from current to the government namespace, expand and enter its
-        # query-only child, and verify Enter cannot select it. Collapse back,
-        # move to public guidance, select it, then submit the default Output.
-        pipe_input.send_text(
-            "\r\x1b[B\x1b[C\x1b[C\r\x1b[D\x1b[D\x1b[B\r\r\r"
-        )
-        result = choose_sever_setup(
-            ("personal-memory",),
-            current="personal-memory",
-            virtual_names=("government/qna", "public-guidance"),
-            selectable_virtual_names=frozenset({"public-guidance"}),
-            annotations={
-                "government/qna": SourceDisplayFacts(
-                    access=SourceAccess.QUERY_GRANT,
-                    permissions=("QUERY",),
-                ),
-                "public-guidance": SourceDisplayFacts(
-                    access=SourceAccess.READ_GRANT,
-                    permissions=("READ", "DERIVE"),
-                ),
-            },
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
-
-    assert result is not None
-    assert result.criteria_name == "public-guidance"
-
-
-def test_output_pane_rejects_an_existing_context_name() -> None:
-    with create_pipe_input() as pipe_input:
-        # The first name submission remains in the editor because it already
-        # exists. Ctrl-U replaces it with a fresh exact name.
-        pipe_input.send_text(
-            "\r\x1b[B\r\x15personal-memory\r\x15healthcare-draft\r\r"
-        )
-        result = choose_sever_setup(
-            ("personal-memory", "public-guidance"),
-            current="personal-memory",
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
-
-    assert result is not None
-    assert result.output_name == "healthcare-draft"
-
-
-def test_output_pane_accepts_source_as_an_exact_self_save_location() -> None:
-    with create_pipe_input() as pipe_input:
-        # Source must first be narrowed to THIS CONTEXT ONLY. Select the other
-        # row as Criteria, then replace the suggested fresh name with Source.
-        pipe_input.send_text(
-            "\x1b[A\x1b[D\x1b[B\r\x1b[B\r"
-            "\x15personal-memory\r\r"
-        )
-        result = choose_sever_setup(
-            ("personal-memory", "public-guidance"),
-            current="personal-memory",
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
-
-    assert result is not None
-    assert result.source_name == "personal-memory"
-    assert not result.source_descendants
-    assert result.criteria_name == "public-guidance"
-    assert result.output_name == "personal-memory"
-
-
-def test_each_context_pane_has_an_independent_descendant_scope_toggle() -> None:
-    with create_pipe_input() as pipe_input:
-        # Up from the first Context enters Scope; Left chooses exact-only and
-        # Down returns to the tree. Repeat independently in Criteria.
-        pipe_input.send_text(
-            "\x1b[A\x1b[D\x1b[B\r"
-            "\x1b[A\x1b[D\x1b[B\x1b[B\r\r\r"
-        )
-        result = choose_sever_setup(
-            ("personal-memory", "public-guidance"),
-            current="personal-memory",
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
-
-    assert result is not None
-    assert not result.source_descendants
-    assert not result.criteria_descendants
-
-
-def test_default_output_uses_a_fresh_suffix_when_the_first_name_exists() -> None:
-    assert _shared_local_output_name(
-        "personal-memory/source",
-        "personal-memory/criteria",
-        local_names=("personal-memory",),
-        occupied_names=frozenset({"personal-memory/severed"}),
-    ) == "personal-memory/severed-2"
-
-
-def test_granted_peers_default_under_their_shared_local_ancestor() -> None:
-    assert _shared_local_output_name(
-        "task-3/remote/guidance",
-        "task-3/local/guardrails",
-        local_names=("task-1", "task-3", "task-3/local/guardrails"),
-        occupied_names=frozenset(),
-    ) == "task-3/severed"
-
-
-def test_left_and_right_reuse_switch_tree_navigation_for_nested_criteria() -> None:
-    with create_pipe_input() as pipe_input:
-        # Confirm Source, move to the collapsed criteria namespace, expand it,
-        # enter its child, select that exact Context, and submit Output.
-        pipe_input.send_text("\r\x1b[B\x1b[C\x1b[C\r\r\r")
-        result = choose_sever_setup(
-            ("personal-memory", "criteria/nested"),
-            current="personal-memory",
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
-
-    assert result is not None
-    assert result.criteria_name == "criteria/nested"
-
-
-def test_three_pane_setup_can_be_cancelled_without_a_receipt() -> None:
-    with create_pipe_input() as pipe_input:
-        pipe_input.send_text("q")
-        result = choose_sever_setup(
-            ("personal-memory", "public-guidance"),
-            current="personal-memory",
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
-
-    assert result is None
-
-
-def test_sever_setup_memory_preview_is_lazy_and_read_only() -> None:
-    loaded: list[str] = []
-
-    def load(name: str):
-        loaded.append(name)
-        return (ContextMemoryRow("memory abcdef12", f"{name} content"),)
-
-    with create_pipe_input() as pipe_input:
-        # Enter on the Memory must stay in Source. The second m therefore
-        # closes the cached Source preview instead of opening Criteria.
-        pipe_input.send_text("m\x1b[B\rmq")
-        result = choose_sever_setup(
-            ("personal-memory", "public-guidance"),
-            current="personal-memory",
-            memory_loader=load,
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
-
-    assert result is None
-    assert loaded == ["personal-memory"]
