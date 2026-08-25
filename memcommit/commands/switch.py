@@ -80,10 +80,39 @@ def cmd(
             )
         ),
     ] = None,
+    previous: Annotated[
+        bool,
+        typer.Option(
+            "-p",
+            "--previous",
+            help="Switch to the previous Context in navigation history",
+        ),
+    ] = False,
+    next_: Annotated[
+        bool,
+        typer.Option(
+            "-n",
+            "--next",
+            help="Switch to the next Context after moving backward",
+        ),
+    ] = False,
 ) -> None:
+    if previous and next_:
+        raise typer.BadParameter("--previous and --next cannot be used together.")
+    if name is not None and (previous or next_):
+        raise typer.BadParameter(
+            "A Context name cannot be combined with --previous or --next."
+        )
+
     store = MemoryStore()
     expected_current = store.current_context_name()
-    if name is None:
+    if previous or next_:
+        request = SwitchContextRequest(
+            selector=None,
+            expected_current=expected_current,
+            direction="PREVIOUS" if previous else "NEXT",
+        )
+    elif name is None:
         try:
             snapshot = prepare_switch(
                 store,
@@ -150,17 +179,22 @@ def cmd(
         )
 
     try:
-        target_name = resolve_switch_context_name(request)
+        target_name = (
+            resolve_switch_context_name(request)
+            if request.selector is not None
+            else None
+        )
         result = execute_switch_context(request, store=store)
     except SwitchContextError as error:
         typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
     except FileNotFoundError:
-        typer.secho(
-            f"Error: context '{target_name}' does not exist.",
-            fg=typer.colors.RED,
-            err=True,
+        message = (
+            f"context '{target_name}' does not exist."
+            if target_name is not None
+            else "saved navigation Context does not exist."
         )
+        typer.secho(f"Error: {message}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
     except (
         OSError,
@@ -169,8 +203,17 @@ def cmd(
         RuntimeError,
         ValueError,
     ) as e:
+        target_label = (
+            f"context '{target_name}'"
+            if target_name is not None
+            else (
+                "the previous Context"
+                if request.direction == "PREVIOUS"
+                else "the next Context"
+            )
+        )
         typer.secho(
-            f"Error: cannot switch to context '{target_name}': {e}",
+            f"Error: cannot switch to {target_label}: {e}",
             fg=typer.colors.RED,
             err=True,
         )

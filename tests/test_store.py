@@ -79,6 +79,24 @@ def test_set_and_get_current(isolated_store):
     assert store.current_context_name() == "alpha"
 
 
+def test_current_context_navigation_history_is_bounded(isolated_store):
+    store = MemoryStore()
+    alpha = ops.init("alpha")
+    beta = ops.init("beta")
+    store.save(alpha)
+    store.save(beta)
+
+    for index in range(70):
+        store.set_current("alpha" if index % 2 == 0 else "beta")
+
+    state = json.loads(store.state_file.read_text(encoding="utf-8"))
+
+    assert state["current"] == "beta"
+    assert state["context_navigation"]["version"] == 1
+    assert len(state["context_navigation"]["back"]) == 64
+    assert state["context_navigation"]["forward"] == []
+
+
 def test_set_current_context_if_rejects_deleted_and_recreated_target(
     isolated_store,
 ):

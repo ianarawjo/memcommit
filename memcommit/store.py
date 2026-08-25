@@ -28,6 +28,13 @@ from memcommit.context_naming import (
     RESERVED_CONTEXT_SEGMENTS,
     validate_portable_context_name,
 )
+from memcommit.current_context_navigation import (
+    ContextNavigationDirection,
+    apply_context_navigation,
+    context_navigation_target,
+    record_current_context_transition,
+    rewrite_context_navigation_names,
+)
 from memcommit.context_lifecycle import (
     ContextLifecycleEvent,
     PREVIOUS_CHECKPOINT_NONE,
@@ -1617,6 +1624,20 @@ class MemoryStore:
     def current_context_name(self) -> Optional[str]:
         return self._read_state().get("current")
 
+    def context_navigation_target(
+        self,
+        expected_current: str | None,
+        direction: ContextNavigationDirection,
+    ) -> str:
+        """Freeze one exact back/forward destination for later CAS publication."""
+
+        state = self._read_state()
+        if state.get("current") != expected_current:
+            raise ConcurrentContextUpdateError(
+                "The current Context changed before it could be switched."
+            )
+        return context_navigation_target(state, direction)
+
     def set_current(self, name: str) -> None:
         with self._context_graph_lock(exclusive=False):
             with self._context_write_lock(name):
@@ -1624,7 +1645,7 @@ class MemoryStore:
                     raise FileNotFoundError(f"Context '{name}' not found.")
                 with self._state_write_lock():
                     state = self._read_state()
-                    state["current"] = name
+                    record_current_context_transition(state, name)
                     self._write_state(state)
 
     def set_current_context_if(
@@ -1634,6 +1655,7 @@ class MemoryStore:
         *,
         expected_context_uid: str,
         expected_context_digest: str,
+        navigation_direction: ContextNavigationDirection | None = None,
     ) -> None:
         """CAS-switch to one exact Context while blocking save/delete/recreate."""
         if (
@@ -1665,13 +1687,22 @@ class MemoryStore:
                         raise ConcurrentContextUpdateError(
                             "The current Context changed before it could be switched."
                         )
-                    state["current"] = name
+                    if navigation_direction is None:
+                        record_current_context_transition(state, name)
+                    else:
+                        apply_context_navigation(
+                            state,
+                            direction=navigation_direction,
+                            target_name=name,
+                        )
                     self._write_state(state)
 
     def set_current_virtual_context_if(
         self,
         expected_current: str | None,
         name: str,
+        *,
+        navigation_direction: ContextNavigationDirection | None = None,
     ) -> None:
         """CAS-select one externally validated granted Context name.
 
@@ -1693,7 +1724,14 @@ class MemoryStore:
                 raise ConcurrentContextUpdateError(
                     "The current Context changed before it could be switched."
                 )
-            state["current"] = name
+            if navigation_direction is None:
+                record_current_context_transition(state, name)
+            else:
+                apply_context_navigation(
+                    state,
+                    direction=navigation_direction,
+                    target_name=name,
+                )
             self._write_state(state)
 
     # --- Semantic update sessions ---
@@ -4194,6 +4232,12 @@ class MemoryStore:
                 current_after = mapped_current
         post_state = copy.deepcopy(raw_state)
         post_state["current"] = current_after
+        rewrite_context_navigation_names(
+            post_state,
+            lambda candidate: (
+                _mapped_context_name(candidate, old_name, new_name) or candidate
+            ),
+        )
 
         pre_digest_by_uid = {
             str(record["uid"]): context_record_digest(record)
@@ -5545,7 +5589,7 @@ class MemoryStore:
                                         "Branch creation recorded no command "
                                         "checkpoint."
                                     )
-                            state["current"] = target_root
+                            record_current_context_transition(state, target_root)
                             self._write_state(state)
                         except Exception as error:
                             branch_error = error
@@ -5660,7 +5704,7 @@ class MemoryStore:
                                     "The current Context changed before the new "
                                     "Context could be selected."
                                 )
-                            state["current"] = make_current
+                            record_current_context_transition(state, make_current)
                             self._write_state(state)
                 except Exception as error:
                     rollback_error: Exception | None = None
@@ -6392,7 +6436,7 @@ class MemoryStore:
             with self._state_write_lock():
                 state = self._read_state()
                 if state.get("current") == name:
-                    state["current"] = None
+                    record_current_context_transition(state, None)
                     self._write_state(state)
 
         attempt_cleanup("current pointer", clear_current_pointer)
@@ -7337,7 +7381,10 @@ class MemoryStore:
                             state = self._read_state()
                             undo_original_state = dict(state)
                             if state.get("current") in name_set:
-                                state["current"] = receipt.current_before
+                                record_current_context_transition(
+                                    state,
+                                    receipt.current_before,
+                                )
                                 self._write_state(state)
                                 state_changed = True
                     except Exception:
@@ -7519,7 +7566,10 @@ class MemoryStore:
                             state = self._read_state()
                             redo_original_state = dict(state)
                             if state.get("current") == receipt.current_before:
-                                state["current"] = receipt.target_root
+                                record_current_context_transition(
+                                    state,
+                                    receipt.target_root,
+                                )
                                 self._write_state(state)
                                 state_changed = True
                     except Exception:
@@ -8275,7 +8325,10 @@ class MemoryStore:
                                 state = self._read_state()
                                 original_state = dict(state)
                                 if state.get("current") == change.context_name:
-                                    state["current"] = current_before
+                                    record_current_context_transition(
+                                        state,
+                                        current_before,
+                                    )
                                     self._write_state(state)
                                     state_changed = True
                         except Exception:
@@ -8441,7 +8494,10 @@ class MemoryStore:
                                 if state.get("current") == manifest.get(
                                     "current_before"
                                 ):
-                                    state["current"] = change.context_name
+                                    record_current_context_transition(
+                                        state,
+                                        change.context_name,
+                                    )
                                     self._write_state(state)
                                     state_changed = True
                         except Exception:
@@ -8627,7 +8683,7 @@ class MemoryStore:
                         with self._state_write_lock():
                             state = self._read_state()
                             if state.get("current") == change.context_name:
-                                state["current"] = None
+                                record_current_context_transition(state, None)
                                 self._write_state(state)
                     except Exception:
                         if session_saved:

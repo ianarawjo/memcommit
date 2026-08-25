@@ -1737,6 +1737,139 @@ class TestSwitch:
         assert result.exit_code == 0
         assert "Already on" in result.output
 
+    def test_previous_and_next_follow_actual_context_navigation(
+        self,
+        isolated_store,
+    ):
+        invoke("init", "alpha")
+        invoke("init", "beta")
+        invoke("init", "gamma")
+
+        previous = invoke("switch", "--previous")
+        assert previous.exit_code == 0, previous.output
+        assert "Switched to context 'beta'" in previous.output
+        assert MemoryStore().current_context_name() == "beta"
+
+        previous_again = invoke("switch", "-p")
+        assert previous_again.exit_code == 0, previous_again.output
+        assert "Switched to context 'alpha'" in previous_again.output
+        assert MemoryStore().current_context_name() == "alpha"
+
+        next_result = invoke("switch", "--next")
+        assert next_result.exit_code == 0, next_result.output
+        assert "Switched to context 'beta'" in next_result.output
+        assert MemoryStore().current_context_name() == "beta"
+
+    def test_direct_switch_after_previous_clears_forward_history(
+        self,
+        isolated_store,
+    ):
+        invoke("init", "alpha")
+        invoke("init", "beta")
+        invoke("init", "gamma")
+        invoke("switch", "-p")
+
+        direct = invoke("switch", "alpha")
+        assert direct.exit_code == 0, direct.output
+
+        no_next = invoke("switch", "-n")
+        assert no_next.exit_code == 1
+        assert "No next Context is available" in no_next.stderr
+        assert MemoryStore().current_context_name() == "alpha"
+
+    def test_previous_without_history_preserves_current(self, isolated_store):
+        invoke("init", "only")
+
+        result = invoke("switch", "-p")
+
+        assert result.exit_code == 1
+        assert "No previous Context is available" in result.stderr
+        assert MemoryStore().current_context_name() == "only"
+
+    def test_missing_saved_previous_context_fails_without_moving_current(
+        self,
+        isolated_store,
+    ):
+        invoke("init", "alpha")
+        invoke("init", "beta")
+        MemoryStore().delete("alpha")
+
+        result = invoke("switch", "--previous")
+
+        assert result.exit_code == 1
+        assert "Saved previous Context 'alpha' no longer exists" in result.stderr
+        assert MemoryStore().current_context_name() == "beta"
+
+    def test_rename_rewrites_saved_navigation_names(self, isolated_store):
+        invoke("init", "old")
+        invoke("init", "current")
+
+        renamed = invoke("rename", "old", "new", "--force")
+        previous = invoke("switch", "--previous")
+
+        assert renamed.exit_code == 0, renamed.output
+        assert previous.exit_code == 0, previous.output
+        assert "Switched to context 'new'" in previous.output
+        assert MemoryStore().current_context_name() == "new"
+
+    def test_previous_rejects_concurrently_changed_navigation_history(
+        self,
+        isolated_store,
+        monkeypatch,
+    ):
+        invoke("init", "alpha")
+        invoke("init", "beta")
+        invoke("init", "gamma")
+        original_switch = MemoryStore.set_current_context_if
+
+        def change_history_then_compare_and_set(
+            store,
+            expected_current,
+            name,
+            *,
+            expected_context_uid,
+            expected_context_digest,
+            navigation_direction=None,
+        ):
+            store.set_current("alpha")
+            store.set_current("gamma")
+            return original_switch(
+                store,
+                expected_current,
+                name,
+                expected_context_uid=expected_context_uid,
+                expected_context_digest=expected_context_digest,
+                navigation_direction=navigation_direction,
+            )
+
+        monkeypatch.setattr(
+            MemoryStore,
+            "set_current_context_if",
+            change_history_then_compare_and_set,
+        )
+
+        result = invoke("switch", "--previous")
+
+        assert result.exit_code == 1
+        assert "Context navigation changed" in result.stderr
+        assert MemoryStore().current_context_name() == "gamma"
+
+    def test_navigation_flags_are_mutually_exclusive_with_each_other_and_name(
+        self,
+        isolated_store,
+    ):
+        invoke("init", "alpha")
+        invoke("init", "beta")
+
+        both = invoke("switch", "--previous", "--next")
+        named = invoke("switch", "alpha", "--previous")
+
+        assert both.exit_code == 2
+        assert "cannot be used together" in both.stderr
+        assert named.exit_code == 2
+        assert "cannot be combined" in named.stderr
+        assert MemoryStore().current_context_name() == "beta"
+
 
 # ---------------------------------------------------------------------------
 # branch

@@ -906,6 +906,8 @@ COMMAND_FORMS = {
     "switch": (
         "mem switch (enter the interactive Context picker)",
         "mem switch [context] (explicit Context)",
+        "mem switch --previous (move backward in Context navigation history)",
+        "mem switch --next (move forward after moving backward)",
     ),
     "translate": (
         "mem translate (show/save a default-English view of the current Context)",

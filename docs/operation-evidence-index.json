@@ -267,7 +267,8 @@
     "switch": [
       "docs/switch-application-boundary-matrix.md",
       "docs/context-listing-design-rationale.md",
-      "docs/mem-switch-picker-design-rationale.md"
+      "docs/mem-switch-picker-design-rationale.md",
+      "docs/mem-switch-navigation-history-design-rationale.md"
     ],
     "trace": [
       "docs/read-report-lifecycle-design-rationale.md",

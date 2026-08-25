@@ -21,6 +21,12 @@ This slice separates three contracts without changing their meaning:
 It does not add a Python or agent API, a current-Ground pointer, fuzzy Context
 search, a checkpoint, or Undo/Redo support.
 
+The later navigation-history extension adds typed `PREVIOUS` and `NEXT` CLI
+routes without changing picker interaction. Its optional bounded state schema,
+actual-visit ordering, concurrency rules, and rejected lexical-order shortcut
+are recorded in
+[`mem-switch-navigation-history-design-rationale.md`](mem-switch-navigation-history-design-rationale.md).
+
 ## Call paths
 
 ```text
@@ -31,6 +37,13 @@ mem switch NAME
   -> READ resolution + target load + current/target CAS
   -> SwitchContextResult
   -> plain CLI presenter
+
+mem switch --previous | --next
+  -> typed history direction + command-start current
+  -> saved target resolution
+  -> the same READ resolution + target load
+  -> current/history CAS
+  -> SwitchContextResult
 
 mem switch
   -> frozen local/Grant navigation catalog
@@ -58,6 +71,7 @@ separate Branch operation.
 | Shared Context tree, direct-item preview, focus, and clipboard | `context_targeting/tui/picker.py` | Returns a Context name or read-only targeting value; it owns no operational role or Store continuation. |
 | Legacy picker imports | `commands/context_picker.py` | Behavior-free compatibility exports only; production callers use the neutral owner directly. |
 | Global versus explicit-relative name semantics | `switch_application.py` | Bare names remain canonical global names. Only `.`, `..`, `./...`, and `../...` resolve against the command-start current snapshot. |
+| Previous/next navigation meaning | `current_context_navigation.py` + `switch_application.py` | Uses bounded actual pointer-transition history, never lexical catalog adjacency; direct selection clears forward history. |
 | Exact lexical-parent requirement | `switch_application.py` through `SwitchContextPort.local_context_exists` | A missing lexical parent is never inferred from an Embed edge. |
 | Local/Grant READ resolution and target loading | `switch_runtime.py` | A visible public name is selectable only when its exact route authorizes ordinary READ. QUERY-only rows remain orientation-only. |
 | Local target/current CAS | `MemoryStore.set_current_context_if` | Binds the target UID/digest and the command-start current pointer. |
@@ -111,6 +125,9 @@ proves that the action does not create `state.json` or alter its bytes.
 7. Switch never mutates a Context, checkpoint, Ground, cache, or session.
 8. Ground direct selection remains process-local and cannot become an implicit
    Switch or binding continuation.
+9. Previous/next publication consumes only the exact command-time direction
+   target after normal READ validation; failure leaves both pointer and stacks
+   unchanged.
 
 ## Verification gate
 

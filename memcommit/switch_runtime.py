@@ -12,9 +12,11 @@ from memcommit.context_targeting.catalog import (
     GrantedContextNavigation,
     freeze_granted_context_navigation,
 )
+from memcommit.current_context_navigation import ContextNavigationDirection
 from memcommit.profiles import authority_grant_snapshot_lock
 from memcommit.store import MemoryStore
 from memcommit.switch_application import (
+    SwitchContextError,
     SwitchContextRequest,
     SwitchContextResult,
     SwitchContextTarget,
@@ -60,6 +62,41 @@ class MemoryStoreSwitchContextPort:
         expected_current: str | None,
         context_name: str,
     ) -> SwitchContextTarget:
+        return self._select(
+            expected_current=expected_current,
+            context_name=context_name,
+            navigation_direction=None,
+        )
+
+    def navigate(
+        self,
+        *,
+        expected_current: str | None,
+        direction: ContextNavigationDirection,
+    ) -> SwitchContextTarget:
+        context_name = self._store.context_navigation_target(
+            expected_current,
+            direction,
+        )
+        try:
+            return self._select(
+                expected_current=expected_current,
+                context_name=context_name,
+                navigation_direction=direction,
+            )
+        except FileNotFoundError as error:
+            label = "previous" if direction == "PREVIOUS" else "next"
+            raise SwitchContextError(
+                f"Saved {label} Context '{context_name}' no longer exists."
+            ) from error
+
+    def _select(
+        self,
+        *,
+        expected_current: str | None,
+        context_name: str,
+        navigation_direction: ContextNavigationDirection | None,
+    ) -> SwitchContextTarget:
         access = resolve_context_access(
             self._store,
             context_name,
@@ -83,17 +120,33 @@ class MemoryStoreSwitchContextPort:
                     required_permission="READ",
                     registry=registry,
                 )
-                self._store.set_current_virtual_context_if(
+                if navigation_direction is None:
+                    self._store.set_current_virtual_context_if(
+                        expected_current,
+                        context_name,
+                    )
+                else:
+                    self._store.set_current_virtual_context_if(
+                        expected_current,
+                        context_name,
+                        navigation_direction=navigation_direction,
+                    )
+        else:
+            if navigation_direction is None:
+                self._store.set_current_context_if(
                     expected_current,
                     context_name,
+                    expected_context_uid=target.uid,
+                    expected_context_digest=target._store_digest or "",
                 )
-        else:
-            self._store.set_current_context_if(
-                expected_current,
-                context_name,
-                expected_context_uid=target.uid,
-                expected_context_digest=target._store_digest or "",
-            )
+            else:
+                self._store.set_current_context_if(
+                    expected_current,
+                    context_name,
+                    expected_context_uid=target.uid,
+                    expected_context_digest=target._store_digest or "",
+                    navigation_direction=navigation_direction,
+                )
         return SwitchContextTarget(
             context_name=context_name,
             granted=access.is_granted,

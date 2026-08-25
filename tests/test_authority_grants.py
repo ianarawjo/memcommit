@@ -132,6 +132,25 @@ def test_unrelated_missing_context_is_not_reported_as_a_granted_view(
     assert "Granted view" not in checkout.stderr
 
 
+def test_switch_navigation_reauthorizes_local_and_granted_history_targets(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    _grant_fixture(isolated_store, tmp_path, monkeypatch)
+
+    granted = runner.invoke(app, ["switch", "campus-wiki"])
+    local = runner.invoke(app, ["switch", "--previous"])
+    granted_again = runner.invoke(app, ["switch", "--next"])
+
+    assert granted.exit_code == 0, granted.output
+    assert local.exit_code == 0, local.output
+    assert "Switched to context 'task-root'" in local.output
+    assert granted_again.exit_code == 0, granted_again.output
+    assert "Switched to context 'campus-wiki'" in granted_again.output
+    assert MemoryStore().current_context_name() == "campus-wiki"
+
+
 def test_ls_projects_read_view_and_masks_narrower_query_view(
     isolated_store,
     tmp_path,

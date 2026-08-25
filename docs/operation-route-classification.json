@@ -260,9 +260,10 @@
         "evidence": [
           "docs/switch-application-boundary-matrix.md",
           "docs/context-listing-design-rationale.md",
-          "docs/mem-switch-picker-design-rationale.md"
+          "docs/mem-switch-picker-design-rationale.md",
+          "docs/mem-switch-navigation-history-design-rationale.md"
         ],
-        "reason": "Explicit CLI, interactive picker, and checkout-compatible selection share one typed global/relative locator, READ authorization, target validation, and current-pointer CAS boundary."
+        "reason": "Explicit CLI, interactive picker, checkout-compatible selection, and bounded previous/next traversal share one typed global/relative/history target, READ authorization, target validation, and current-pointer/history CAS boundary."
       }
     },
     "MIXED": {

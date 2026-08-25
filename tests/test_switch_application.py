@@ -27,6 +27,7 @@ ROOT = Path(__file__).parents[1]
 class FakeSwitchPort:
     local_names: frozenset[str]
     selected: list[tuple[str | None, str]] = field(default_factory=list)
+    navigated: list[tuple[str | None, str]] = field(default_factory=list)
     returned_name: str | None = None
 
     def local_context_exists(self, context_name: str) -> bool:
@@ -41,6 +42,18 @@ class FakeSwitchPort:
         self.selected.append((expected_current, context_name))
         return SwitchContextTarget(
             context_name=self.returned_name or context_name,
+            granted=False,
+        )
+
+    def navigate(
+        self,
+        *,
+        expected_current: str | None,
+        direction: str,
+    ) -> SwitchContextTarget:
+        self.navigated.append((expected_current, direction))
+        return SwitchContextTarget(
+            context_name=self.returned_name or "previous",
             granted=False,
         )
 
@@ -88,6 +101,44 @@ def test_application_keeps_bare_name_global() -> None:
 
     assert result.context_name == "facilities"
     assert port.selected == [("organization/wiki", "facilities")]
+
+
+def test_application_routes_previous_navigation_without_locator_resolution() -> None:
+    port = FakeSwitchPort(
+        frozenset({"previous", "current"}),
+        returned_name="previous",
+    )
+
+    result = switch_context(
+        SwitchContextRequest(
+            selector=None,
+            expected_current="current",
+            direction="PREVIOUS",
+        ),
+        port=port,
+    )
+
+    assert port.selected == []
+    assert port.navigated == [("current", "PREVIOUS")]
+    assert result.previous_context_name == "current"
+    assert result.context_name == "previous"
+    assert result.changed is True
+
+
+@pytest.mark.parametrize(
+    "selector,direction",
+    ((None, None), ("alpha", "NEXT")),
+)
+def test_application_requires_exactly_one_selector_or_direction(
+    selector,
+    direction,
+) -> None:
+    with pytest.raises(SwitchContextError, match="exactly one"):
+        SwitchContextRequest(
+            selector=selector,
+            expected_current="current",
+            direction=direction,
+        )
 
 
 def test_application_rejects_relative_selector_without_current_before_port() -> None:
