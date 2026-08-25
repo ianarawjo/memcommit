@@ -215,6 +215,11 @@ physical-workspace view is deliberately read-only; exact CLI edit actions
 exercise the application boundary while the future conversational editor is
 rebuilt over the same use cases.
 
+Physical workspace and draft launcher projection is owned by
+`interfaces.tui.operations.ground_workspace.picker`. The former
+`commands.ground_workspace_picker` path is a module alias retained for import
+and monkeypatch compatibility; it does not contain a second implementation.
+
 - `interfaces.tui.operations.switch` interprets a row as a requested global
   current-Context change.
 - `interfaces.tui.operations.ground` interprets a row as a process-local

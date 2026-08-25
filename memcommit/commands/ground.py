@@ -28,7 +28,7 @@ from memcommit.commands.ground_session_picker import (
     list_ground_session_catalog,
     reload_selected_ground_session,
 )
-from memcommit.commands.ground_workspace_picker import (
+from memcommit.interfaces.tui.operations.ground_workspace.picker import (
     list_ground_workspace_draft_catalog,
     list_ground_workspace_catalog,
     reload_selected_ground_workspace_draft,
