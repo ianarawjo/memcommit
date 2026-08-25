@@ -19,7 +19,7 @@ from memcommit.interfaces.console.text import (
     safe_terminal_text,
 )
 from memcommit.context import Context
-from memcommit.forget_application import (
+from memcommit.operations.forget.application import (
     ForgetAnalysisRequest,
     ForgetApplyRequest,
     ForgetSessionSnapshot,
@@ -29,7 +29,7 @@ from memcommit.forget_application import (
     run_forget_analysis,
     run_forget_apply,
 )
-from memcommit.forget_runtime import (
+from memcommit.operations.forget.runtime import (
     MemoryStoreForgetSourcePort,
     connect_forget_provider,
 )

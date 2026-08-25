@@ -28,8 +28,11 @@ from memcommit.distill import (
 from memcommit.distill_application import DistillResult
 from memcommit.distill_goal_fit import DistillGoalFit
 from memcommit.fit_judgment import FitAssessment
-from memcommit.forget_application import ForgetAnalysisRequest, run_forget_analysis
-from memcommit.forget_application import FrozenForgetSource
+from memcommit.operations.forget.application import (
+    ForgetAnalysisRequest,
+    FrozenForgetSource,
+    run_forget_analysis,
+)
 from memcommit.resolve_application import (
     FrozenResolveFrame,
     ResolveAnalysis,

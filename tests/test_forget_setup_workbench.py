@@ -5,7 +5,7 @@ from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
-import memcommit.forget_runtime as forget_runtime
+import memcommit.operations.forget.runtime as forget_runtime
 from memcommit.cli import app
 from memcommit.commands import forget as forget_command
 from memcommit.commands.forget_setup_workbench import (

@@ -11,7 +11,7 @@ import pytest
 
 import memcommit.ops as ops
 from memcommit.context import AutoCheckpoint, Context, Memory
-from memcommit.forget_application import (
+from memcommit.operations.forget.application import (
     ForgetAnalysisRequest,
     ForgetApplicationError,
     ForgetApplyReceipt,
@@ -24,7 +24,7 @@ from memcommit.forget_application import (
     run_forget_revision,
     run_forget_selection,
 )
-from memcommit.forget_runtime import (
+from memcommit.operations.forget.runtime import (
     MemoryStoreForgetSourcePort,
     execute_forget_analysis,
 )
@@ -140,8 +140,13 @@ def _analysis(
 
 
 def test_forget_application_has_no_command_or_terminal_dependency() -> None:
-    for module_name in ("forget_application", "forget_runtime", "forget_provider"):
-        path = Path(__file__).parents[1] / "memcommit" / f"{module_name}.py"
+    relative_paths = (
+        "operations/forget/application.py",
+        "operations/forget/runtime.py",
+        "forget_provider.py",
+    )
+    for relative_path in relative_paths:
+        path = Path(__file__).parents[1] / "memcommit" / relative_path
         tree = ast.parse(path.read_text(encoding="utf-8"))
         imports = {
             node.module

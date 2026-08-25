@@ -68,6 +68,7 @@ blocked = (
     'memcommit.fit_runtime',
     'memcommit.help_application',
     'memcommit.forget_application',
+    'memcommit.forget_runtime',
     'memcommit.ground_distill',
     'memcommit.ground_elaborate',
     'memcommit.meld_application',
@@ -78,6 +79,8 @@ blocked = (
     'memcommit.operations.embed.runtime',
     'memcommit.operations.fit.application',
     'memcommit.operations.fit.runtime',
+    'memcommit.operations.forget.application',
+    'memcommit.operations.forget.runtime',
     'memcommit.operations.reference.application',
     'memcommit.operations.reference.runtime',
     'memcommit.reference_application',
@@ -391,7 +394,10 @@ except ForgetContextError:
 else:
     raise AssertionError('missing Forget Source unexpectedly analyzed')
 assert 'memcommit.api._operations.forget' in sys.modules
-assert 'memcommit.forget_application' in sys.modules
+assert 'memcommit.operations.forget.application' in sys.modules
+assert 'memcommit.operations.forget.runtime' in sys.modules
+assert 'memcommit.forget_application' not in sys.modules
+assert 'memcommit.forget_runtime' not in sys.modules
 assert 'memcommit.api._operations.add' not in sys.modules
 assert 'memcommit.operations.add.application' not in sys.modules
 assert 'memcommit.operations.add.runtime' not in sys.modules

@@ -19,7 +19,7 @@ from memcommit.api.forget import (
     ForgetCandidateResult,
     ForgetReviewResult,
 )
-from memcommit.forget_application import (
+from memcommit.operations.forget.application import (
     ForgetAnalysisRequest,
     ForgetApplicationError,
     ForgetApplyRequest,
@@ -32,7 +32,7 @@ from memcommit.forget_application import (
     run_forget_selection,
 )
 from memcommit.forget_review import ForgetReviewError
-from memcommit.forget_runtime import MemoryStoreForgetSourcePort
+from memcommit.operations.forget.runtime import MemoryStoreForgetSourcePort
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
 from memcommit.query_provider import QueryProviderError

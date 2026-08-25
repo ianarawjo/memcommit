@@ -1,6 +1,6 @@
 # Forget application-boundary matrix
 
-Last reviewed: 2026-08-16.
+Last reviewed: 2026-08-25.
 
 ## Status
 
@@ -46,6 +46,24 @@ run_forget_selection / run_forget_revision
 run_forget_apply
   explicit no-op, or authority + Source CAS + one checkpoint
 ```
+
+## Package ownership
+
+The canonical terminal-independent owners now live together under
+`memcommit.operations.forget`: `application.py` owns the typed request,
+frozen Source, process-local review lifecycle, and Apply contract, while
+`runtime.py` owns Store, Grant, provider-connection, checkpoint, and mutation
+adapters. API, CLI, Impact, and Forget workbench consumers import those
+operation-owned modules directly, so a command or presentation module is not
+an accidental route to the executable contract.
+
+The historical `memcommit.forget_application` and
+`memcommit.forget_runtime` paths remain module-identity aliases. They preserve
+old import order, monkeypatch targets, and serialized Python globals without
+creating a second implementation owner. Importing the package alone remains
+lazy. This is an ownership-only relocation: whole-frame selective curation,
+Source freshness, authority, checkpoint, review, Apply, and public adapter
+behavior are unchanged.
 
 ## Boundary matrix
 
@@ -102,11 +120,14 @@ dialogue as a portable token.
   removal. Granted authority remains frozen through the authority-store save.
 - Forget has no prepared-result cache. This extraction does not introduce one
   or treat another operation's cache proof as applicable.
+- The compatibility modules contain no behavior. New production code imports
+  `memcommit.operations.forget.application` or
+  `memcommit.operations.forget.runtime` directly.
 
 ## Verification evidence
 
-The current application/runtime, TUI-owner, and compatibility run passes 87
-tests covering:
+The current application/runtime, TUI-owner, ownership, and compatibility run
+passes 85 focused tests covering:
 
 - Source freeze before provider construction;
 - provider-free empty Source handling;
@@ -125,7 +146,9 @@ tests covering:
 The existing ordered Forget PTY sets remain the visual baseline because this
 stage changes execution ownership and physical module placement, not terminal
 topology or key behavior. Legacy setup and Resolution import paths are thin
-identity-preserving facades over `interfaces.tui.operations.forget`.
+identity-preserving facades over `interfaces.tui.operations.forget`; the flat
+application/runtime aliases likewise preserve identity without re-owning the
+implementation.
 
 ## Remaining work and non-goals
 

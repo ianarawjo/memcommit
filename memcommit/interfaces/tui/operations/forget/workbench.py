@@ -5,7 +5,7 @@ from __future__ import annotations
 from memcommit.application_review_policy import (
     ownership_aware_application_review,
 )
-from memcommit.forget_application import (
+from memcommit.operations.forget.application import (
     ForgetSelectionRequest,
     ForgetSessionSnapshot,
     run_forget_selection,

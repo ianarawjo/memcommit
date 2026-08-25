@@ -36,7 +36,7 @@ from memcommit.elaborate_add_runtime import (
 )
 from memcommit.elaborate_application import ElaborateRequest, ElaborateResult
 from memcommit.fit_judgment import FitJudgmentError
-from memcommit.forget_application import (
+from memcommit.operations.forget.application import (
     ForgetAnalysisRequest,
     ForgetAnalysisResult,
     run_forget_analysis,
@@ -45,7 +45,7 @@ from memcommit.forget_resolution_adapter import (
     ForgetResolutionWorkbenchAdapter,
     forget_memory_changes,
 )
-from memcommit.forget_runtime import (
+from memcommit.operations.forget.runtime import (
     MemoryStoreForgetSourcePort,
     connect_forget_provider,
 )

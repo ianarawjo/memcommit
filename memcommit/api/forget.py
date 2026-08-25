@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from memcommit.forget_application import ForgetSessionSnapshot
+    from memcommit.operations.forget.application import ForgetSessionSnapshot
 
 
 @dataclass(frozen=True)
