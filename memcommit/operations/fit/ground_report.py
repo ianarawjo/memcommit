@@ -16,7 +16,7 @@ import json
 from typing import Literal, Protocol
 import uuid
 
-from memcommit.conformance import (
+from memcommit.operations.conformance.model import (
     ConformanceRule,
     ConformanceSubject,
     check_case_conformance,

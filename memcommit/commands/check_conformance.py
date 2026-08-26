@@ -8,8 +8,8 @@ import typer
 
 from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.context_operand import ContextOperandSnapshot
-from memcommit.conformance import ConformanceError, ConformanceReport
-from memcommit.conformance_runtime import (
+from memcommit.operations.conformance.model import ConformanceError, ConformanceReport
+from memcommit.operations.conformance.runtime import (
     execute_context_conformance_with_rules_operand,
     execute_ground_conformance,
 )

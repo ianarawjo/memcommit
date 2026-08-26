@@ -45,8 +45,8 @@ from memcommit.interfaces.tui.operations.audit import (
 )
 from memcommit.interfaces.tui.viewers.semantic import run_semantic_viewer
 from memcommit.context import Context
-from memcommit.conformance import ConformanceError, check_context_conformance
-from memcommit.conformance_runtime import freeze_context_conformance
+from memcommit.operations.conformance.model import ConformanceError, check_context_conformance
+from memcommit.operations.conformance.runtime import freeze_context_conformance
 from memcommit.derived_policy import authorize_analysis_save
 from memcommit.findings import FindingsError, FindingsProvider
 from memcommit.profile_config import ProfileConfigError

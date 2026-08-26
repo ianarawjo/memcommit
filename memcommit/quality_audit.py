@@ -18,7 +18,7 @@ from datetime import datetime, timezone
 from typing import Callable, Literal
 
 from memcommit.context import Context, Memory
-from memcommit.conformance import ConformanceReport
+from memcommit.operations.conformance.model import ConformanceReport
 from memcommit.findings import (
     AmbiguityFinding,
     AmbiguityReport,

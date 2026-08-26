@@ -9,7 +9,7 @@ import json
 from typing import Protocol
 import uuid
 
-from memcommit.conformance import (
+from memcommit.operations.conformance.model import (
     CONFORMANCE_MAX_RULES,
     CONFORMANCE_MAX_SUBJECTS,
     CONFORMANCE_TEXT_LIMIT,
