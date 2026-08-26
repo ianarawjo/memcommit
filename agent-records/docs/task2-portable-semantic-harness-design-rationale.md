@@ -22,6 +22,23 @@ Sol is a reference provider, not Gold. Agreement with Sol and agreement with
 reviewed Gold are reported separately, including cases where both models make
 the same wrong decision.
 
+## Current support boundary (2026-08-26)
+
+The V5--V8 judge-replay branch completed its consumed-calibration role but did
+not pass the promotion boundary described below. Its live runners, CLI run and
+parity commands, read-only V5 adjudication queue, status rendering, and focused
+pytest contracts are therefore retired. Normal product behavior never depended
+on that branch, and keeping it executable would preserve a large unsupported
+research surface without a planned rerun.
+
+The immutable V5--V8 ledger JSON and the historical measurements in this note
+remain as research evidence. Task 2 discovery, classification, retrieval, and
+candidate-only evaluation remain supported and are intentional non-goals of
+this retirement. The enclosing `mem eval semantic` route also remains; only
+the reviewed judge-replay leaf was removed. Git history remains the source for
+reconstructing its exact executable implementation if that experiment is ever
+reopened.
+
 ## Reviewed Gold and its boundary
 
 The English sidecar partitions all 300 Memories into 138 reviewed hypergroups:

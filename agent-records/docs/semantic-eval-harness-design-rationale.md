@@ -28,6 +28,16 @@ Qwen failure is never silently replaced by Sol. A disagreement with Sol is
 never automatically promoted to either an error or a new expected result. The
 harness records schema-visible stage artifacts, not hidden chain of thought.
 
+### Retired Task 2 judge-replay leaf
+
+On 2026-08-26 the V5--V8 Task 2 judge-replay runners were retired after their
+consumed-calibration campaign ended below its promotion gate. The removal is
+limited to that leaf: its run/parity/adjudication/status surfaces and focused
+tests are no longer maintained, while the broader semantic harness and Task 2
+discovery, classification, retrieval, and candidate-only routes remain live.
+Historical ledgers and the measurements recorded in the Task 2 rationale are
+preserved rather than presented as currently runnable support.
+
 ## Motivation and success criterion
 
 Provider independence makes it possible to send the same completion contract
