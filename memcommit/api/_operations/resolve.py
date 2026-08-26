@@ -48,7 +48,7 @@ from memcommit.quality_finding_handoff import (
     conflict_handoff_to_resolve_request,
 )
 from memcommit.operations.resolve.runtime import MemoryStoreResolvePort
-from memcommit.resolve_semantic import ProviderResolveSemanticPort
+from memcommit.operations.resolve.semantic import ProviderResolveSemanticPort
 from memcommit.store import ConcurrentContextUpdateError
 
 

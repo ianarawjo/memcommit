@@ -13,7 +13,7 @@ from memcommit.quality_finding_handoff import (
 from memcommit.query_provider import connect_semantic_provider
 from memcommit.operations.resolve.application import apply_resolve, run_resolve
 from memcommit.operations.resolve.runtime import MemoryStoreResolvePort
-from memcommit.resolve_semantic import ProviderResolveSemanticPort
+from memcommit.operations.resolve.semantic import ProviderResolveSemanticPort
 from memcommit.store import MemoryStore
 
 

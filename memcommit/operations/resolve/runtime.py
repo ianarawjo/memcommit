@@ -30,7 +30,7 @@ from memcommit.operations.resolve.application import (
     ResolveReceipt,
     ResolveRequest,
 )
-from memcommit.resolve_rules import RESOLVE_RULESET_VERSION
+from memcommit.operations.resolve.rules import RESOLVE_RULESET_VERSION
 from memcommit.store import MemoryStore, context_record_digest
 
 
