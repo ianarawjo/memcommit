@@ -35,18 +35,18 @@ from memcommit.operations.merge.application import (
     MergeResult,
     run_merge,
 )
-from memcommit.merge_planning import (
+from memcommit.operations.merge.planning import (
     PlannedContextMerge,
     materialize_context_merge,
     plan_context_merge,
     resolution_map,
 )
-from memcommit.merge_tree import (
+from memcommit.operations.merge.tree import (
     align_context_names,
     fresh_target_contexts,
     project_context_for_tree_merge,
 )
-from memcommit.merge_tree_persistence import MergeTreeWrite, commit_merge_tree
+from memcommit.operations.merge.tree_persistence import MergeTreeWrite, commit_merge_tree
 from memcommit.memory_lineage import (
     MemoryLineageEdge,
     checkpoint_memory_lineage_edges,
