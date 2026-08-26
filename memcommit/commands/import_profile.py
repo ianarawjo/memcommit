@@ -17,7 +17,7 @@ from memcommit.context_targeting.presets import (
 )
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError, import_baseline_profile
-from memcommit.resource_import import (
+from memcommit.operations.resource_import.model import (
     import_context_from_profile,
     import_memory_from_profile,
     import_profile_from_profile,

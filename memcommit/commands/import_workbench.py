@@ -36,7 +36,7 @@ from memcommit.profile_config import (
     validate_profile_name,
 )
 from memcommit.profiles import ProfileError
-from memcommit.resource_import import (
+from memcommit.operations.resource_import.model import (
     ContextImportPlan,
     MemoryImportPlan,
     plan_context_import,
