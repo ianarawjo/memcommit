@@ -21,7 +21,7 @@ import sys
 import time
 import uuid
 
-from memcommit.comparison import ComparisonAnalysis, ComparisonInput
+from memcommit.operations.compare.ledger.model import ComparisonAnalysis, ComparisonInput
 from memcommit.config import Config
 from memcommit.eval.compare_latency_ab import (
     BASELINE,

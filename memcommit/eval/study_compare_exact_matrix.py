@@ -26,14 +26,14 @@ from memcommit.commands.readable_context_catalog import (
     ReadableContextCatalog,
     freeze_profile_readable_context_catalog,
 )
-from memcommit.comparison import (
+from memcommit.operations.compare.ledger.model import (
     COMPARISON_RULESET_VERSION,
     SUPPORTED_COMPARISON_RULESET_VERSIONS,
     ComparisonAnalysis,
     ComparisonInput,
 )
-from memcommit.comparison_evidence import ComparisonEvidenceError
-from memcommit.comparison_provider import (
+from memcommit.operations.compare.ledger.evidence import ComparisonEvidenceError
+from memcommit.operations.compare.ledger.provider import (
     COMPARISON_PROVIDER_CONTRACT_VERSION,
     SUPPORTED_COMPARISON_PROVIDER_CONTRACT_VERSIONS,
     analyze_comparison,

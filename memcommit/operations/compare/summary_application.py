@@ -10,8 +10,8 @@ from memcommit.authority.access import (
     resolve_context_access,
     revalidate_granted_context_binding,
 )
-from memcommit.comparison import ComparisonInput
-from memcommit.comparison_store import ConcurrentComparisonUpdateError
+from memcommit.operations.compare.ledger.model import ComparisonInput
+from memcommit.operations.compare.ledger.store import ConcurrentComparisonUpdateError
 from memcommit.operations.compare.summary import ComparisonSummary
 from memcommit.operations.compare.summary_provider import (
     ComparisonSummaryProvider,

@@ -18,7 +18,7 @@ from collections import Counter, defaultdict
 from dataclasses import dataclass, replace
 from typing import Iterable, Literal
 
-from memcommit.comparison import (
+from memcommit.operations.compare.ledger.model import (
     COMPARISON_DESCENDANT_SCHEMA_VERSION,
     COMPARISON_RULESET_VERSION,
     ComparisonAnalysis,

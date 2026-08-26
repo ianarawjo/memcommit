@@ -6,7 +6,7 @@ import json
 import re
 from typing import Protocol
 
-from memcommit.comparison import ComparisonInput
+from memcommit.operations.compare.ledger.model import ComparisonInput
 from memcommit.operations.compare.summary import (
     ComparisonSummary,
     ComparisonSummaryError,

@@ -15,22 +15,22 @@ from memcommit.authority.access import (
     revalidate_granted_context_binding,
     resolve_context_access,
 )
-from memcommit.comparison import (
+from memcommit.operations.compare.ledger.model import (
     COMPARISON_RULESET_VERSION,
     ComparisonAnalysis,
     ComparisonInput,
 )
-from memcommit.comparison_execution import (
+from memcommit.operations.compare.ledger.execution import (
     connect_comparison_provider,
     ensure_comparison_analysis,
     install_prepared_comparison_analysis,
 )
-from memcommit.comparison_provider import analyze_comparison
-from memcommit.comparison_store import load_comparison_analysis
+from memcommit.operations.compare.ledger.provider import analyze_comparison
+from memcommit.operations.compare.ledger.store import load_comparison_analysis
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.context_naming import validate_portable_context_name
 from memcommit.context_targeting.loading import load_context_scope
-from memcommit.granted_comparison_store import (
+from memcommit.operations.compare.ledger.granted_store import (
     granted_artifact_contexts,
     load_granted_comparison_artifact,
     recursive_comparison_projection,

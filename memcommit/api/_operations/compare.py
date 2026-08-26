@@ -23,24 +23,24 @@ from memcommit.api.errors import (
     CompareStorageError,
 )
 from memcommit.authority.access import resolve_context_access
-from memcommit.comparison import ComparisonError, comparison_canonical_digest
-from memcommit.comparison_execution import (
+from memcommit.operations.compare.ledger.model import ComparisonError, comparison_canonical_digest
+from memcommit.operations.compare.ledger.execution import (
     ComparisonExecutionResult,
     connect_comparison_provider,
     ensure_comparison_analysis,
     load_comparison_context,
 )
-from memcommit.comparison_provider import ComparisonProviderError, analyze_comparison
-from memcommit.comparison_session_application import (
+from memcommit.operations.compare.ledger.provider import ComparisonProviderError, analyze_comparison
+from memcommit.operations.compare.ledger.session_application import (
     ComparisonSessionConflictError,
     ComparisonSessionInputError,
     ComparisonSessionUnavailableError,
     open_comparison_session,
     prepare_comparison_refresh,
 )
-from memcommit.comparison_store import ConcurrentComparisonUpdateError
+from memcommit.operations.compare.ledger.store import ConcurrentComparisonUpdateError
 from memcommit.context_locator import resolve_context_locator
-from memcommit.granted_comparison_store import load_granted_comparison_artifact
+from memcommit.operations.compare.ledger.granted_store import load_granted_comparison_artifact
 from memcommit.profiles import ProfileError, authority_grant_snapshot_lock
 from memcommit.study_prewarm.compare import (
     EquivalentComparePrewarmMatch,

@@ -8,10 +8,10 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.comparison import (
+from memcommit.operations.compare.ledger.model import (
     ComparisonAnalysis,
 )
-from memcommit.comparison_provider import (
+from memcommit.operations.compare.ledger.provider import (
     ComparisonProviderError,
 )
 from memcommit.context import Context
@@ -48,7 +48,7 @@ from memcommit.derived_policy import (
     authorize_combination,
     authorize_derived_transfer,
 )
-from memcommit.granted_comparison_store import (
+from memcommit.operations.compare.ledger.granted_store import (
     granted_artifact_contexts,
     load_granted_comparison_artifact,
     recursive_comparison_projection,

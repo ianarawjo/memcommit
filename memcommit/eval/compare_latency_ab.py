@@ -27,7 +27,7 @@ import time
 from typing import Protocol
 import uuid
 
-from memcommit.comparison import (
+from memcommit.operations.compare.ledger.model import (
     ComparisonAnalysis,
     ComparisonInput,
     ComparisonIssue,
@@ -36,7 +36,7 @@ from memcommit.comparison import (
     ComparisonRelation,
     ComparisonReports,
 )
-from memcommit.comparison_provider import (
+from memcommit.operations.compare.ledger.provider import (
     COMPARISON_PAYLOAD_MARKER,
     analyze_comparison,
 )

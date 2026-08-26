@@ -4,15 +4,19 @@ from __future__ import annotations
 
 import argparse
 import ast
+import io
 import json
 from pathlib import Path
 import re
+import subprocess
+import tarfile
 
 
 REPOSITORY = Path(__file__).resolve().parents[1]
 PACKAGE = REPOSITORY / "memcommit"
 OUTPUT_JSON = REPOSITORY / "docs" / "root-module-relocation-plan.json"
 OUTPUT_MARKDOWN = REPOSITORY / "docs" / "root-module-relocation-plan.md"
+BASELINE_COMMIT = "885e62c0"
 
 
 ROOT_BOUNDARIES = {
@@ -27,14 +31,14 @@ ROOT_BOUNDARIES = {
 
 
 OPERATION_TARGETS = {
-    "comparison": "memcommit.operations.compare.model",
-    "comparison_evidence": "memcommit.operations.compare.evidence",
-    "comparison_execution": "memcommit.operations.compare.execution",
-    "comparison_present": "memcommit.operations.compare.present",
-    "comparison_provider": "memcommit.operations.compare.provider",
-    "comparison_session_application": "memcommit.operations.compare.session_application",
-    "comparison_store": "memcommit.operations.compare.store",
-    "comparison_summary_present": "memcommit.operations.compare.summary_present",
+    "comparison": "memcommit.operations.compare.ledger.model",
+    "comparison_evidence": "memcommit.operations.compare.ledger.evidence",
+    "comparison_execution": "memcommit.operations.compare.ledger.execution",
+    "comparison_present": "memcommit.interfaces.cli.comparison",
+    "comparison_provider": "memcommit.operations.compare.ledger.provider",
+    "comparison_session_application": "memcommit.operations.compare.ledger.session_application",
+    "comparison_store": "memcommit.operations.compare.ledger.store",
+    "comparison_summary_present": "memcommit.interfaces.cli.comparison_summary",
     "conformance": "memcommit.operations.conformance.model",
     "conformance_runtime": "memcommit.operations.conformance.runtime",
     "dedun_scope": "memcommit.operations.dedun.scope",
@@ -52,7 +56,7 @@ OPERATION_TARGETS = {
     "find_turn_dialogue": "memcommit.operations.search.turn_dialogue",
     "forget_provider": "memcommit.operations.forget.provider",
     "forget_review": "memcommit.operations.forget.review",
-    "granted_comparison_store": "memcommit.operations.compare.granted_store",
+    "granted_comparison_store": "memcommit.operations.compare.ledger.granted_store",
     "granted_source_update_application": "memcommit.operations.update.granted_source_application",
     "granted_update_application": "memcommit.operations.update.granted_application",
     "ground": "memcommit.operations.ground.model",
@@ -205,14 +209,36 @@ def _is_compatibility(source: str) -> bool:
     )
 
 
-def _inbound_importers(module: str) -> int:
+def _baseline_sources() -> dict[str, str]:
+    archive = subprocess.run(
+        ["git", "archive", BASELINE_COMMIT, "memcommit"],
+        cwd=REPOSITORY,
+        check=True,
+        capture_output=True,
+    ).stdout
+    sources = {}
+    with tarfile.open(fileobj=io.BytesIO(archive)) as stream:
+        for member in stream.getmembers():
+            if not member.isfile() or not member.name.endswith(".py"):
+                continue
+            extracted = stream.extractfile(member)
+            assert extracted is not None
+            sources[member.name] = extracted.read().decode("utf-8")
+    return sources
+
+
+def _inbound_importers(
+    module: str,
+    *,
+    source_path: str,
+    sources: dict[str, str],
+) -> int:
     needle = module + "."
     direct = module
     count = 0
-    for path in PACKAGE.rglob("*.py"):
-        if path == PACKAGE / (module.removeprefix("memcommit.") + ".py"):
+    for path, source in sources.items():
+        if path == source_path:
             continue
-        source = path.read_text(encoding="utf-8")
         if direct in source or needle in source:
             count += 1
     return count
@@ -221,17 +247,18 @@ def _inbound_importers(module: str) -> int:
 def build_plan() -> dict[str, object]:
     entries = []
     unclassified = []
-    root_paths = sorted(PACKAGE.glob("*.py"))
-    for path in root_paths:
+    sources = _baseline_sources()
+    root_paths = sorted(
+        path
+        for path in sources
+        if path.startswith("memcommit/") and path.count("/") == 1
+    )
+    for relative_path in root_paths:
+        path = Path(relative_path)
         stem = path.stem
-        source = path.read_text(encoding="utf-8")
+        source = sources[relative_path]
         module = f"memcommit.{stem}" if stem != "__init__" else "memcommit"
-        if _is_compatibility(source):
-            role = "compatibility-facade"
-            target = _compatibility_target(source)
-            action = "retain"
-            reason = "preserve an established import path"
-        elif stem in OPERATION_TARGETS:
+        if stem in OPERATION_TARGETS:
             role = "operation-implementation"
             target = OPERATION_TARGETS[stem]
             action = "relocate"
@@ -246,15 +273,24 @@ def build_plan() -> dict[str, object]:
             target = module
             action = "retain"
             reason = ROOT_BOUNDARIES[stem]
+        elif _is_compatibility(source):
+            role = "compatibility-facade"
+            target = _compatibility_target(source)
+            action = "retain"
+            reason = "preserve an established import path"
         else:
             unclassified.append(path.name)
             continue
         entries.append(
             {
-                "path": path.relative_to(REPOSITORY).as_posix(),
+                "path": relative_path,
                 "module": module,
                 "lines": len(source.splitlines()),
-                "inbound_package_importers": _inbound_importers(module),
+                "inbound_package_importers": _inbound_importers(
+                    module,
+                    source_path=relative_path,
+                    sources=sources,
+                ),
                 "role": role,
                 "action": action,
                 "canonical_target": target,
@@ -287,7 +323,7 @@ def build_plan() -> dict[str, object]:
             "Freeze the path-only classification used to make the flat "
             "memcommit package navigable without deciding operation behavior."
         ),
-        "baseline_commit": "885e62c0",
+        "baseline_commit": BASELINE_COMMIT,
         "root_module_count": len(entries),
         "summary": summary,
         "modules": entries,

@@ -4835,7 +4835,7 @@ class MemoryStore:
         meld_records = self._read_meld_records_for_rename()
         post_meld_records: dict[str, dict[str, object]] = {}
         meld_session_count = 0
-        from memcommit.comparison import comparison_canonical_digest
+        from memcommit.operations.compare.ledger.model import comparison_canonical_digest
         from memcommit.meld import MeldError, MeldSession
 
         def rewrite_meld_binding(binding: object) -> bool:
@@ -6694,7 +6694,7 @@ class MemoryStore:
             canonical_context_uid = str(uuid.UUID(context_uid))
         except (AttributeError, TypeError, ValueError):
             canonical_context_uid = None
-        from memcommit.comparison_store import (
+        from memcommit.operations.compare.ledger.store import (
             comparison_paths_for_context,
             delete_comparison_paths,
         )

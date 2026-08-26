@@ -15,10 +15,10 @@ from pathlib import Path
 import sys
 from typing import Sequence
 
-from memcommit.comparison_execution import load_comparison_context
+from memcommit.operations.compare.ledger.execution import load_comparison_context
 from memcommit.authority.access import resolve_context_access
-from memcommit.comparison_store import load_comparison_analysis
-from memcommit.granted_comparison_store import load_granted_comparison_artifact
+from memcommit.operations.compare.ledger.store import load_comparison_analysis
+from memcommit.operations.compare.ledger.granted_store import load_granted_comparison_artifact
 from memcommit.profile_config import load_profile_registry, profile_store_dir, study_run_identity
 from memcommit.store import MemoryStore
 from memcommit.study_prewarm.compare import build_compare_prewarm_artifact

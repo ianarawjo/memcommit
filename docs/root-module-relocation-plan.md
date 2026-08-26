@@ -16,7 +16,7 @@ were directly under memcommit at baseline commit 885e62c0.
 
 | Current module | Role | Action | Canonical target | Importers |
 | --- | --- | --- | --- | ---: |
-| memcommit | root-boundary | retain | memcommit | 871 |
+| memcommit | root-boundary | retain | memcommit | 870 |
 | memcommit._architecture_catalog | shared-concept-implementation | relocate | memcommit.architecture.catalog | 0 |
 | memcommit.add_application | compatibility-facade | retain | memcommit.operations.add.application | 0 |
 | memcommit.add_runtime | compatibility-facade | retain | memcommit.operations.add.runtime | 0 |
@@ -48,16 +48,16 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.clipboard | shared-concept-implementation | relocate | memcommit.infrastructure.clipboard | 11 |
 | memcommit.command_attempts | shared-concept-implementation | relocate | memcommit.infrastructure.command_ledger.attempts | 16 |
 | memcommit.command_history | shared-concept-implementation | relocate | memcommit.retained_history.command_history | 11 |
-| memcommit.comparison | operation-implementation | relocate | memcommit.operations.compare.model | 33 |
-| memcommit.comparison_evidence | operation-implementation | relocate | memcommit.operations.compare.evidence | 5 |
-| memcommit.comparison_execution | operation-implementation | relocate | memcommit.operations.compare.execution | 9 |
-| memcommit.comparison_present | operation-implementation | relocate | memcommit.operations.compare.present | 5 |
-| memcommit.comparison_provider | operation-implementation | relocate | memcommit.operations.compare.provider | 11 |
-| memcommit.comparison_session_application | operation-implementation | relocate | memcommit.operations.compare.session_application | 2 |
-| memcommit.comparison_store | operation-implementation | relocate | memcommit.operations.compare.store | 10 |
+| memcommit.comparison | operation-implementation | relocate | memcommit.operations.compare.ledger.model | 33 |
+| memcommit.comparison_evidence | operation-implementation | relocate | memcommit.operations.compare.ledger.evidence | 5 |
+| memcommit.comparison_execution | operation-implementation | relocate | memcommit.operations.compare.ledger.execution | 9 |
+| memcommit.comparison_present | operation-implementation | relocate | memcommit.interfaces.cli.comparison | 5 |
+| memcommit.comparison_provider | operation-implementation | relocate | memcommit.operations.compare.ledger.provider | 11 |
+| memcommit.comparison_session_application | operation-implementation | relocate | memcommit.operations.compare.ledger.session_application | 2 |
+| memcommit.comparison_store | operation-implementation | relocate | memcommit.operations.compare.ledger.store | 10 |
 | memcommit.comparison_summary | compatibility-facade | retain | memcommit.operations.compare.summary | 1 |
 | memcommit.comparison_summary_application | compatibility-facade | retain | memcommit.operations.compare.summary_application | 0 |
-| memcommit.comparison_summary_present | operation-implementation | relocate | memcommit.operations.compare.summary_present | 1 |
+| memcommit.comparison_summary_present | operation-implementation | relocate | memcommit.interfaces.cli.comparison_summary | 1 |
 | memcommit.comparison_summary_provider | compatibility-facade | retain | memcommit.operations.compare.summary_provider | 0 |
 | memcommit.comparison_summary_rules | compatibility-facade | retain | memcommit.operations.compare.summary_rules | 0 |
 | memcommit.config | shared-concept-implementation | relocate | memcommit.infrastructure.config | 24 |
@@ -129,7 +129,7 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.forget_runtime | compatibility-facade | retain | memcommit.operations.forget.runtime | 0 |
 | memcommit.goal_focus | shared-concept-implementation | relocate | memcommit.semantic.goal_focus | 18 |
 | memcommit.goal_focus_runtime | shared-concept-implementation | relocate | memcommit.semantic.goal_focus_runtime | 11 |
-| memcommit.granted_comparison_store | operation-implementation | relocate | memcommit.operations.compare.granted_store | 8 |
+| memcommit.granted_comparison_store | operation-implementation | relocate | memcommit.operations.compare.ledger.granted_store | 8 |
 | memcommit.granted_provenance | shared-concept-implementation | relocate | memcommit.retained_history.granted_provenance | 2 |
 | memcommit.granted_query_application | compatibility-facade | retain | memcommit.operations.query.granted_application | 0 |
 | memcommit.granted_query_runtime | compatibility-facade | retain | memcommit.operations.query.granted_runtime | 0 |

@@ -9,9 +9,9 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 import uuid
 
-from memcommit.comparison_execution import load_comparison_context
+from memcommit.operations.compare.ledger.execution import load_comparison_context
 from memcommit.authority.access import GrantedReadStore, resolve_context_access
-from memcommit.comparison import (
+from memcommit.operations.compare.ledger.model import (
     COMPARISON_RULESET_VERSION,
     ComparisonAnalysis,
     ComparisonInput,
@@ -21,7 +21,7 @@ from memcommit.comparison import (
     ComparisonReports,
     comparison_canonical_digest,
 )
-from memcommit.comparison_provider import COMPARISON_PROVIDER_CONTRACT_VERSION
+from memcommit.operations.compare.ledger.provider import COMPARISON_PROVIDER_CONTRACT_VERSION
 from memcommit.config import Config
 from memcommit.infrastructure.providers.policy import (
     resolve_operation_provider_policy,

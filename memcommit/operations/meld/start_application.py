@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal, Protocol
 
-from memcommit.comparison import ComparisonAnalysis
+from memcommit.operations.compare.ledger.model import ComparisonAnalysis
 from memcommit.meld import (
     INLINE_MELD_CONTEXT_NAME,
     MELD_INLINE_MEMORY_SCHEMA_VERSION,

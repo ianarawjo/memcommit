@@ -6,7 +6,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.comparison import (
+from memcommit.operations.compare.ledger.model import (
     ComparisonAnalysis,
     ComparisonError,
     ComparisonInput,
@@ -16,17 +16,17 @@ from memcommit.operations.compare.summary import (
     ComparisonSummaryError,
 )
 from memcommit.operations.compare.summary_application import run_comparison_summary
-from memcommit.comparison_summary_present import render_comparison_summary
+from memcommit.interfaces.cli.comparison_summary import render_comparison_summary
 from memcommit.operations.compare.summary_provider import COMPARISON_SUMMARY_OPERATION
-from memcommit.comparison_present import (
+from memcommit.interfaces.cli.comparison import (
     render_comparison,
     render_comparison_receipt,
 )
-from memcommit.comparison_provider import (
+from memcommit.operations.compare.ledger.provider import (
     ComparisonProviderError,
     analyze_comparison,
 )
-from memcommit.comparison_store import (
+from memcommit.operations.compare.ledger.store import (
     ConcurrentComparisonUpdateError,
 )
 from memcommit.commands.comparison_execution import (

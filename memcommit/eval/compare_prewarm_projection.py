@@ -27,11 +27,11 @@ from typing import Protocol
 import uuid
 
 import memcommit.store as store_module
-from memcommit.comparison_execution import ensure_comparison_analysis
+from memcommit.operations.compare.ledger.execution import ensure_comparison_analysis
 from memcommit.authority.access import ContextAccess
-from memcommit.comparison import ComparisonAnalysis, ComparisonInput
-from memcommit.comparison_provider import analyze_comparison
-from memcommit.comparison_store import save_comparison_analysis
+from memcommit.operations.compare.ledger.model import ComparisonAnalysis, ComparisonInput
+from memcommit.operations.compare.ledger.provider import analyze_comparison
+from memcommit.operations.compare.ledger.store import save_comparison_analysis
 from memcommit.config import Config
 from memcommit.context import Context, Memory
 from memcommit.eval.compare_latency_ab import build_task2_comparison_input

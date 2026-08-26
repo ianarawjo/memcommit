@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.comparison_execution import (
+from memcommit.operations.compare.ledger.execution import (
     COMPARISON_AGGREGATE_TIMEOUT_SECONDS,
     ComparisonExecutionResult,
     connect_comparison_provider,

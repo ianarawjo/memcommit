@@ -18,7 +18,7 @@ from memcommit.authority.access import (
     freeze_granted_context_binding,
     resolve_context_access,
 )
-from memcommit.comparison import COMPARISON_RULESET_VERSION, ComparisonInput
+from memcommit.operations.compare.ledger.model import COMPARISON_RULESET_VERSION, ComparisonInput
 from memcommit.config import Config
 from memcommit.infrastructure.providers.policy import (
     resolve_operation_provider_policy,
@@ -40,7 +40,7 @@ from memcommit.meld import (
     directional_comparison_basis_assessment,
 )
 from memcommit.meld_provider import MELD_DIRECTIONAL_PROVIDER_CONTRACT_VERSION
-from memcommit.granted_comparison_store import recursive_comparison_projection
+from memcommit.operations.compare.ledger.granted_store import recursive_comparison_projection
 from memcommit.profile_config import (
     ProfileEntry,
     ProfileRegistry,

@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.comparison import ComparisonFrame, ComparisonInput
+from memcommit.operations.compare.ledger.model import ComparisonFrame, ComparisonInput
 from memcommit.operations.compare.summary_rules import (
     COMPARISON_SUMMARY_RULESET_VERSION,
 )

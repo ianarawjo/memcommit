@@ -21,18 +21,18 @@ import time
 from typing import Protocol
 import uuid
 
-from memcommit.comparison_execution import (
+from memcommit.operations.compare.ledger.execution import (
     ComparisonExecutionResult,
     ensure_comparison_analysis,
     load_comparison_context,
 )
 from memcommit.authority.access import ContextAccess, resolve_context_access
-from memcommit.comparison import ComparisonAnalysis, ComparisonInput
-from memcommit.comparison_provider import analyze_comparison
-from memcommit.comparison_store import load_comparison_analysis
+from memcommit.operations.compare.ledger.model import ComparisonAnalysis, ComparisonInput
+from memcommit.operations.compare.ledger.provider import analyze_comparison
+from memcommit.operations.compare.ledger.store import load_comparison_analysis
 from memcommit.config import Config
 from memcommit.context import Context
-from memcommit.granted_comparison_store import load_granted_comparison_artifact
+from memcommit.operations.compare.ledger.granted_store import load_granted_comparison_artifact
 from memcommit.infrastructure.providers.policy import (
     resolve_codex_evaluation_policy,
 )

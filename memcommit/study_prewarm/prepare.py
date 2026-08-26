@@ -8,12 +8,12 @@ from pathlib import Path
 import re
 
 from memcommit.authority.access import resolve_context_access
-from memcommit.comparison import (
+from memcommit.operations.compare.ledger.model import (
     COMPARISON_RULESET_VERSION,
     SUPPORTED_COMPARISON_RULESET_VERSIONS,
     ComparisonAnalysis,
 )
-from memcommit.comparison_provider import (
+from memcommit.operations.compare.ledger.provider import (
     COMPARISON_PROVIDER_CONTRACT_VERSION,
     SUPPORTED_COMPARISON_PROVIDER_CONTRACT_VERSIONS,
 )
