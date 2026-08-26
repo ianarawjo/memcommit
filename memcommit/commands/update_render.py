@@ -11,7 +11,7 @@ from memcommit.application.review_policy import (
     ownership_aware_application_review,
 )
 from memcommit.interfaces.tui.workbenches.impact import ImpactController
-from memcommit.memory_diff import update_operation_change
+from memcommit.reviewing.memory_diff import update_operation_change
 from memcommit.commands.resolution_workbench_shell import (
     ResolutionGlobalStrategy,
     render_resolution_workbench_snapshot,

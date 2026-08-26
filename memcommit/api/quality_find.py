@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from memcommit.reviewing.direct_item_duplicates import ExactDuplicateGroup
-from memcommit.quality_finding_handoff import QualityFindingHandoff
+from memcommit.reviewing.quality.handoff import QualityFindingHandoff
 
 
 @dataclass(frozen=True)

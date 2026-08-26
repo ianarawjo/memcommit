@@ -16,12 +16,12 @@ from memcommit.interfaces.tui.workbenches.findings import (
     quality_finding_compact_fragments,
     quality_find_report_header_text,
 )
-from memcommit.quality_audit import (
+from memcommit.reviewing.quality.audit import (
     QualityAuditSession,
     quality_audit_resolution_view,
 )
-from memcommit.quality_find_report import quality_find_category_label
-from memcommit.quality_find_workbench import (
+from memcommit.reviewing.quality.report import quality_find_category_label
+from memcommit.reviewing.quality.workbench import (
     QualityFindSourceFrame,
     QualityFindWorkbenchSession,
     quality_find_report_view,

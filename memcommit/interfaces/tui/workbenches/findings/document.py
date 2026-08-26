@@ -14,7 +14,7 @@ from memcommit.interfaces.tui.viewers.semantic import (
     SemanticViewerDocument,
     SemanticViewerSection,
 )
-from memcommit.quality_find_report import (
+from memcommit.reviewing.quality.report import (
     QualityFindReportView,
     QualityFindingReportItem,
     quality_find_category_label,

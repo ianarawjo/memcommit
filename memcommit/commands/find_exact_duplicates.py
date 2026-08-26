@@ -29,7 +29,7 @@ from memcommit.interfaces.console.identity import collision_safe_uid_prefixes
 from memcommit.interfaces.console.text import display_escape_text
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
-from memcommit.read_report import ReadReportTarget
+from memcommit.reviewing.read_report import ReadReportTarget
 from memcommit.store import MemoryStore
 
 

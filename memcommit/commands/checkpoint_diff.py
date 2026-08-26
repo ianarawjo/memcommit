@@ -15,7 +15,7 @@ from memcommit.interfaces.console.text import (
     display_escape_text,
 )
 from memcommit.interfaces.tui.core.theme import semantic_action_style
-from memcommit.memory_diff import MemoryChange, memory_diff_lines
+from memcommit.reviewing.memory_diff import MemoryChange, memory_diff_lines
 
 
 @dataclass(frozen=True)

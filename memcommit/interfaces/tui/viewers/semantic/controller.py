@@ -6,7 +6,7 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 
 from memcommit.interfaces.tui.viewers.semantic.model import SemanticViewerDocument
-from memcommit.session_workbench_navigation import (
+from memcommit.reviewing.session_navigation import (
     SessionWorkbenchNavigation,
     WorkbenchSection,
 )

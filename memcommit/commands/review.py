@@ -46,15 +46,15 @@ from memcommit.commands.review_sessions import (
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )
-from memcommit.findings import FindingsError
+from memcommit.reviewing.quality.findings import FindingsError
 from memcommit.query_provider import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )
-from memcommit.quality_audit import (
+from memcommit.reviewing.quality.audit import (
     QualityAuditError,
 )
-from memcommit.quality_audit_store import QualityAuditStore
+from memcommit.reviewing.quality.audit_store import QualityAuditStore
 from memcommit.operations.review.model import (
     ReviewError,
     atomize_review_matches_analysis,

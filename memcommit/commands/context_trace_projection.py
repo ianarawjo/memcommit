@@ -21,7 +21,7 @@ from memcommit.interfaces.tui.components.plain_text_clipboard import (
 )
 from memcommit.interfaces.tui.core.theme import semantic_action_style
 from memcommit.interfaces.tui.viewers.read_only import run_read_only_viewer
-from memcommit.memory_diff import MemoryChange, memory_diff_lines
+from memcommit.reviewing.memory_diff import MemoryChange, memory_diff_lines
 
 
 _CONTEXT_TRACE_VIEWER_MIN_HEIGHT = 10

@@ -29,7 +29,7 @@ from memcommit.context_targeting.presets import (
     ContextScopePreset,
     resolve_scope_preset,
 )
-from memcommit.findings import DuplicateFinding, DuplicateReport, FindingsError
+from memcommit.reviewing.quality.findings import DuplicateFinding, DuplicateReport, FindingsError
 from memcommit.query_provider import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
@@ -51,13 +51,13 @@ from memcommit.operations.dedun.scope import (
     freeze_recursive_dedun_scope,
     prepare_recursive_dedun_scope,
 )
-from memcommit.quality_finding_handoff import (
+from memcommit.reviewing.quality.handoff import (
     QualityFindingSource,
 )
 from memcommit.semantic.redundancy_evidence import (
     redundancy_evidence_json,
 )
-from memcommit.redundancy_scope import (
+from memcommit.reviewing.quality.redundancy_scope import (
     RedundancyScopeAnalysis,
     analyze_independent_redundancy_scope,
     freeze_redundancy_scope,

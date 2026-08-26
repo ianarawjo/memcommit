@@ -16,7 +16,7 @@ from memcommit.operations.atomize.domain import (
     AtomizeAnalysisSession,
     AtomizeQualityIssue,
 )
-from memcommit.result_workbench import (
+from memcommit.reviewing.result_workbench import (
     ResultCase,
     ResultCaseDetail,
     ResultDetailBlock,

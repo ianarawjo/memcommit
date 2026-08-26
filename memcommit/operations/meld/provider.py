@@ -22,7 +22,7 @@ from memcommit.operations.meld.model import (
     MeldSession,
     directional_comparison_basis_assessment,
 )
-from memcommit.result_workbench import (
+from memcommit.reviewing.result_workbench import (
     RESULT_REPORT_SECTION_SOFT_MAX_WORDS,
     RESULT_REPORT_SECTION_TARGET_MIN_WORDS,
 )

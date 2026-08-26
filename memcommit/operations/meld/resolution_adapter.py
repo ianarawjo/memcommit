@@ -22,7 +22,7 @@ from memcommit.resolution_workbench import (
     ResolutionResult,
     ResolutionWorkbenchView,
 )
-from memcommit.result_workbench import ResultRef
+from memcommit.reviewing.result_workbench import ResultRef
 
 
 def _route(session: MeldSession) -> str:

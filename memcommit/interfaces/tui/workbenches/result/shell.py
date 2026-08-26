@@ -21,7 +21,7 @@ from memcommit.interfaces.tui.viewers.semantic.detail import (
 from memcommit.interfaces.tui.viewers.semantic import (
     semantic_viewer_block_fragments,
 )
-from memcommit.result_workbench import (
+from memcommit.reviewing.result_workbench import (
     ResultCase,
     ResultCaseDetail,
     ResultSection,

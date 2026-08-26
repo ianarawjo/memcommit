@@ -52,8 +52,8 @@ from memcommit.query_provider import (
     connect_codex_chatgpt_provider,
 )
 from memcommit.store import MemoryStore
-from memcommit.read_report import ReadReportError, ReadReportTarget
-from memcommit.read_report_recents import (
+from memcommit.reviewing.read_report import ReadReportError, ReadReportTarget
+from memcommit.reviewing.read_report_recents import (
     read_report_recents,
     revalidate_read_report_recent,
 )

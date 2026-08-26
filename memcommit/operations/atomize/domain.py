@@ -22,7 +22,7 @@ from memcommit.context_targeting.memory_focus import (
     MemoryFocusError,
     resolve_memory_focus,
 )
-from memcommit.result_workbench import (
+from memcommit.reviewing.result_workbench import (
     RESULT_REPORT_SECTION_SOFT_MAX_WORDS,
     RESULT_REPORT_SECTION_TARGET_MIN_WORDS,
 )

@@ -58,7 +58,7 @@ from memcommit.interfaces.tui.workbenches.context_summary.model import (
     ContextSummaryWorkbenchReceipt,
     ContextSummaryWorkbenchView,
 )
-from memcommit.session_workbench_navigation import SessionWorkbenchNavigation
+from memcommit.reviewing.session_navigation import SessionWorkbenchNavigation
 
 
 def run_context_summary_workbench(

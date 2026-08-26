@@ -17,7 +17,7 @@ from memcommit.interfaces.tui.components.operation_launcher import (
     OperationLauncherSpec,
     run_operation_launcher,
 )
-from memcommit.read_report import (
+from memcommit.reviewing.read_report import (
     ReadReportError,
     ReadReportOperation,
     ReadReportRecent,

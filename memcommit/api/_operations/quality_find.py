@@ -22,20 +22,20 @@ from memcommit.authority.access import GrantedReadStore, resolve_context_access
 from memcommit.context_locator import resolve_context_locator
 from memcommit.derived_policy import authorize_combination
 from memcommit.reviewing.direct_item_duplicates import find_exact_duplicate_groups
-from memcommit.findings import ConflictReport, FindingsError
+from memcommit.reviewing.quality.findings import ConflictReport, FindingsError
 from memcommit.profile_config import (
     ProfileConfigError,
     load_profile_registry,
     profile_store_dir,
 )
 from memcommit.profiles import ProfileError
-from memcommit.quality_find_workbench import (
+from memcommit.reviewing.quality.workbench import (
     QualityFindKind,
     QualityFindSourceFrame,
     create_quality_find_workbench,
 )
-from memcommit.quality_finding_handoff import quality_finding_handoffs
-from memcommit.redundancy_scope import (
+from memcommit.reviewing.quality.handoff import quality_finding_handoffs
+from memcommit.reviewing.quality.redundancy_scope import (
     analyze_independent_redundancy_scope,
     freeze_redundancy_scope,
 )

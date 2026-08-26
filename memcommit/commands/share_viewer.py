@@ -48,7 +48,7 @@ from memcommit.interfaces.tui.components.focus import (
     SurfaceMoveResult,
     bind_surface_navigation,
 )
-from memcommit.session_workbench_navigation import SessionWorkbenchNavigation
+from memcommit.reviewing.session_navigation import SessionWorkbenchNavigation
 from memcommit.operations.share.model import SharePreview
 
 

@@ -12,7 +12,7 @@ from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from typing import Literal
 
-from memcommit.findings import _surface_key
+from memcommit.reviewing.quality.findings import _surface_key
 from memcommit.provider_types import SemanticProvider
 
 

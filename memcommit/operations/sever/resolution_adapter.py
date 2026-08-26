@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections import Counter
 
-from memcommit.memory_diff import MemoryChange
+from memcommit.reviewing.memory_diff import MemoryChange
 from memcommit.resolution_workbench import (
     ResolutionDetailBlock,
     ResolutionContextLocation,
@@ -18,7 +18,7 @@ from memcommit.resolution_workbench import (
     ResolutionResult,
     ResolutionWorkbenchView,
 )
-from memcommit.result_workbench import ResultRef
+from memcommit.reviewing.result_workbench import ResultRef
 from memcommit.operations.sever.model import SeverSession, sever_record_digest
 
 

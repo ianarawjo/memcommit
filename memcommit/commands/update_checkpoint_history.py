@@ -21,7 +21,7 @@ from memcommit.interfaces.console.text import (
     display_escape_text,
 )
 from memcommit.interfaces.tui.core.theme import semantic_action_style
-from memcommit.memory_diff import memory_diff_lines, update_operation_change
+from memcommit.reviewing.memory_diff import memory_diff_lines, update_operation_change
 from memcommit.operations.update.model import UpdateSession
 
 

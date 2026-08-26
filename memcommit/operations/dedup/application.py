@@ -11,7 +11,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Protocol
 
 from memcommit.reviewing.direct_item_duplicates import ExactDuplicateGroup
-from memcommit.quality_finding_handoff import (
+from memcommit.reviewing.quality.handoff import (
     QualityFindingHandoff,
     QualityFindingSource,
 )
