@@ -211,21 +211,22 @@ classification, and stale generated output.
   is now consumed evidence rather than a reusable V7 test. Profile-wide
   pipeline selection remains preferred over case routing. These steps do not
   change production mutation boundaries.
-  The same note now records the frozen 37-case base and 75-case composite
+  The same note records the frozen 37-case base and 75-case composite
   operation-gate pilots, short/long Task 1--3 slices, the 200-case intermediate
   ceiling, and the staged path to all 1,309 study Memories. It also records the
-  locked Task 2 150-versus-150 relation-discovery ladder, full Sol/Qwen
+  now-retired Task 2 150-versus-150 relation-discovery ladder, full Sol/Qwen
   one-shot failures, structure-only decomposition, oracle-band diagnostic, and
   why the reviewed relation groups are not a 22,500-pair answer key.
 - [`task2-classification-diagnostic-design-rationale.md`](task2-classification-diagnostic-design-rationale.md)
-  defines the oracle-group evidence axes, deterministic five-band projection,
-  exact group-ID coverage, retained timings, and the boundary that those axes
-  do not yet have independently reviewed Gold.
+  preserves the retired oracle-group evidence axes, deterministic five-band
+  projection, exact group-ID coverage, retained timings, and the boundary that
+  those axes did not have independently reviewed Gold.
 - [`task2-portable-semantic-harness-design-rationale.md`](task2-portable-semantic-harness-design-rationale.md)
-  defines the 26/50/100/138 Task 2 scale ladder, reviewed hypergroup versus
-  atomic-pair boundary, source-anchored V3 and candidate-verifier V4 contracts,
-  Sol/Qwen/Luna comparison gates, timing and interruption limits, and the
-  revision-locked failure-steering loop toward the full 150-versus-150 target.
+  preserves the retired 26/50/100/138 Task 2 scale ladder, reviewed hypergroup
+  versus atomic-pair boundary, source-anchored V3 and candidate-verifier V4
+  contracts, Sol/Qwen/Luna comparison gates, timing and interruption limits,
+  and the revision-locked failure-steering loop toward the full 150-versus-150
+  target.
 - [`semantic-duplicate-eval-design-rationale.md`](semantic-duplicate-eval-design-rationale.md)
   defines the host-first exact/surface split, strict four-way semantic stage,
   observed Qwen/Luna/Sol calibration timing, and the independent duplicate

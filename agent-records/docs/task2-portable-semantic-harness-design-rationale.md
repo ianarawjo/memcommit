@@ -22,7 +22,7 @@ Sol is a reference provider, not Gold. Agreement with Sol and agreement with
 reviewed Gold are reported separately, including cases where both models make
 the same wrong decision.
 
-## Current support boundary (2026-08-26)
+## Retired support boundary (2026-08-26)
 
 The V5--V8 judge-replay branch completed its consumed-calibration role but did
 not pass the promotion boundary described below. Its live runners, CLI run and
@@ -31,13 +31,17 @@ pytest contracts are therefore retired. Normal product behavior never depended
 on that branch, and keeping it executable would preserve a large unsupported
 research surface without a planned rerun.
 
-The immutable V5--V8 ledger JSON and the historical measurements in this note
-remain as research evidence. Task 2 discovery, classification, retrieval, and
-candidate-only evaluation remain supported and are intentional non-goals of
-this retirement. The enclosing `mem eval semantic` route also remains; only
-the reviewed judge-replay leaf was removed. Git history remains the source for
-reconstructing its exact executable implementation if that experiment is ever
-reopened.
+The remaining V1--V5 discovery, classification, retrieval, and candidate-only
+calibration routes were retired on the same date after this recorded experiment
+had reached its conclusion and no production command depended on them. Their
+frozen lock manifests, run/parity/status CLI surfaces, and focused pytest
+contracts are no longer maintained. The enclosing `mem eval semantic` route
+remains for unrelated campaigns; the ordinary Task 2 Study fixtures and
+production Compare relation grouping also remain.
+
+Immutable ledger JSON and the historical measurements in this note remain as
+research evidence. Git history is the source for reconstructing the exact
+executable calibration implementation if the experiment is ever reopened.
 
 ## Reviewed Gold and its boundary
 

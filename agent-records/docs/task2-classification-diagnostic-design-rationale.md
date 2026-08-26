@@ -1,5 +1,11 @@
 # Task 2 oracle-group classification diagnostic
 
+> **Retired 2026-08-26.** This document records a completed calibration
+> diagnostic. Its live runner, CLI surface, frozen runtime lock, and focused
+> tests were removed after the Task 2 calibration program reached its recorded
+> conclusion without a planned rerun or production dependency. Historical
+> ledgers and Git history remain authoritative for the experiment.
+
 Task 2 relation discovery combines two different questions: whether a provider
 recovers the same 138 reviewed groups from 150 versus 150 Memories, and whether
 it assigns the same semantic relationship after a group has been found. A
