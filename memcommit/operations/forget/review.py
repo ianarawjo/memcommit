@@ -7,7 +7,7 @@ from dataclasses import dataclass, replace
 from typing import Literal
 
 from memcommit.context import Context, Memory
-from memcommit.selective_curation import CurationAnalysis, CurationDecision, CurationItem
+from memcommit.semantic.selective_curation import CurationAnalysis, CurationDecision, CurationItem
 from memcommit.semantic.changes import EditChange, ProposedChange, RemoveChange
 
 

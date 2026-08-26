@@ -34,7 +34,7 @@ from memcommit.provider_types import (
     ProviderIdentity,
 )
 from memcommit.query_provider import CodexChatGPTProvider
-from memcommit.selective_curation import (
+from memcommit.semantic.selective_curation import (
     CriterionFrame,
     CurationAnalysis,
     CurationBatch,

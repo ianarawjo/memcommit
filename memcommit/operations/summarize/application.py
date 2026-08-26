@@ -12,7 +12,7 @@ from memcommit.operations.summarize.model import (
     SummaryFrame,
     summarize_frame,
 )
-from memcommit.understanding import UnderstandingSummary
+from memcommit.semantic.understanding import UnderstandingSummary
 
 
 @dataclass(frozen=True)

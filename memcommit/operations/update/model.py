@@ -14,7 +14,7 @@ from memcommit.context_targeting.memory_focus import (
     MemoryFocusError,
     resolve_memory_focus,
 )
-from memcommit.goal_focus import FrozenGoalFocus, GoalFocusError
+from memcommit.semantic.goal_focus import FrozenGoalFocus, GoalFocusError
 from memcommit.profile_config import ProfileConfigError, canonical_grant_permissions
 from memcommit.semantic_execution import (
     BudgetLimits,
@@ -26,7 +26,7 @@ from memcommit.semantic_execution import (
     json_budget,
     plan_semantic_execution,
 )
-from memcommit.semantic_disclosure import (
+from memcommit.semantic.disclosure import (
     SemanticDisclosureError,
     require_semantic_disclosure_authority,
 )

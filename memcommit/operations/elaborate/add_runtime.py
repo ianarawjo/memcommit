@@ -15,8 +15,8 @@ from memcommit.operations.elaborate.application import (
     ElaborateRequest,
     ElaborateResult,
 )
-from memcommit.goal_focus import FrozenGoalFocus
-from memcommit.goal_focus_runtime import revalidate_goal_focus
+from memcommit.semantic.goal_focus import FrozenGoalFocus
+from memcommit.semantic.goal_focus_runtime import revalidate_goal_focus
 from memcommit.operations.elaborate.runtime import (
     ElaborateProviderFactory,
     execute_elaborate,

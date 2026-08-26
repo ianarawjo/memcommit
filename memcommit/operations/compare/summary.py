@@ -14,7 +14,7 @@ from memcommit.operations.compare.ledger.model import ComparisonFrame, Compariso
 from memcommit.operations.compare.summary_rules import (
     COMPARISON_SUMMARY_RULESET_VERSION,
 )
-from memcommit.understanding import UnderstandingSummary
+from memcommit.semantic.understanding import UnderstandingSummary
 
 
 class ComparisonSummaryError(ValueError):

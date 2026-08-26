@@ -7,7 +7,7 @@ from typing import Protocol
 
 from memcommit.context import Memory
 from memcommit.operations.ground.model import validate_ground_goal
-from memcommit.goal_focus import FrozenGoalFocus
+from memcommit.semantic.goal_focus import FrozenGoalFocus
 from memcommit.operations.ground.workspace_model import (
     GroundWorkspace,
     GroundWorkspaceError,

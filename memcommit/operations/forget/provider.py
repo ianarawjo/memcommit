@@ -11,7 +11,7 @@ import json
 import re
 
 from memcommit.context import Context, Memory
-from memcommit.selective_curation import (
+from memcommit.semantic.selective_curation import (
     CriterionFrame,
     CurationAnalysis,
     CurationBatch,

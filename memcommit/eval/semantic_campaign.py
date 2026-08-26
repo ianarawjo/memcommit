@@ -15,7 +15,7 @@ import tempfile
 import time
 import uuid
 
-from memcommit.ambiguity_pipeline import (
+from memcommit.semantic.classification.ambiguity import (
     AMBIGUITY_PIPELINE_V1,
     AMBIGUITY_PIPELINE_V2,
     AMBIGUITY_PIPELINE_V3,
@@ -31,7 +31,7 @@ from memcommit.ambiguity_pipeline import (
     classify_ambiguity_case_v5,
     classify_ambiguity_case_v6,
 )
-from memcommit.duplicate_pipeline import (
+from memcommit.semantic.classification.duplicates import (
     DUPLICATE_PIPELINE_V1,
     DuplicatePipelineError,
     classify_duplicate_case,

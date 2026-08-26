@@ -20,7 +20,7 @@ from memcommit.operations.distill.config import (
     DEFAULT_DISTILL_SEMANTIC_CONFIG,
     DistillSemanticConfig,
 )
-from memcommit.goal_focus import FrozenGoalFocus, inline_goal_focus
+from memcommit.semantic.goal_focus import FrozenGoalFocus, inline_goal_focus
 from memcommit.operations.summarize.application import (
     FrozenSummarySource,
     SummarizeRequest,

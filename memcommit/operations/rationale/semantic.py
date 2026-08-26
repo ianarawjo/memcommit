@@ -26,7 +26,7 @@ from memcommit.semantic_execution import (
     json_budget,
     plan_semantic_execution,
 )
-from memcommit.semantic_prompt_policy import resolve_semantic_prompt_policy
+from memcommit.semantic.prompt_policy import resolve_semantic_prompt_policy
 
 
 RATIONALE_PROVENANCE_OPERATION = "rationale provenance"

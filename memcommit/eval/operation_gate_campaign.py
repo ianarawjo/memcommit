@@ -29,7 +29,7 @@ from memcommit.eval.semantic_campaign import (
     _timestamp,
     _utc_now,
 )
-from memcommit.operation_gate_pipeline import (
+from memcommit.semantic.classification.gates import (
     OPERATION_GATE_PIPELINE_V1,
     OperationGateError,
     classify_operation_gate,

@@ -31,7 +31,7 @@ from memcommit.interfaces.tui.workbenches.resolution import (
     ResolutionWorkbenchSpec,
     run_resolution_workbench,
 )
-from memcommit.semantic_redundancy_evidence import (
+from memcommit.semantic.redundancy_evidence import (
     redundancy_evidence_json,
 )
 

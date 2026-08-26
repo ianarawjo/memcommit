@@ -26,7 +26,7 @@ from memcommit.derived_policy import (
     authorize_derived_transfer,
 )
 from memcommit.query_provider import QueryProviderError, QueryProviderTimeoutError
-from memcommit.semantic_disclosure import (
+from memcommit.semantic.disclosure import (
     SemanticDisclosureError,
     require_semantic_disclosure_authority,
 )

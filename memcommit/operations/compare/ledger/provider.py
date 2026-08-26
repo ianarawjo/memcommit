@@ -35,7 +35,7 @@ from memcommit.semantic_execution import (
     json_budget,
     plan_semantic_execution,
 )
-from memcommit.understanding import understanding_text_schema
+from memcommit.semantic.understanding import understanding_text_schema
 
 
 COMPARISON_PAYLOAD_MARKER = "COMPARISON PAYLOAD:\n"

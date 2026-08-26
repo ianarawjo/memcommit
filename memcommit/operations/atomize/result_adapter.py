@@ -25,7 +25,7 @@ from memcommit.result_workbench import (
     ResultSection,
     ResultWorkbenchView,
 )
-from memcommit.understanding import UnderstandingSummary
+from memcommit.semantic.understanding import UnderstandingSummary
 
 
 _LEGACY_UNDERSTOOD = (
