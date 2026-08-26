@@ -17,3 +17,11 @@ __pycache__/
 # Local artifact-tool scratch space and inspection sidecars are regenerated.
 .codex-work/
 *.inspect.ndjson
+
+# Local command/PDF study rendering is reproducible scratch. Authored study
+# evidence belongs under docs/ or outputs/; the temporary canvases and helper
+# experiments in these locations are not part of the repository contract.
+/output/
+/tmp/pdfs/build_*.py
+/tmp/pdfs/*preflight.pdf
+/tmp/pdfs/rendered/
