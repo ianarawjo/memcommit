@@ -27,7 +27,7 @@ from memcommit.history import HistoryError
 from memcommit.history_search import HistorySearchError
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
-from memcommit.search import FindError
+from memcommit.operations.search.model import FindError
 
 
 def _current_name(runtime: ClientRuntime) -> str | None:

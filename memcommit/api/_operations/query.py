@@ -27,7 +27,7 @@ from memcommit.context_locator import resolve_context_locator
 from memcommit.context_targeting.readable_catalog import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.find_answer_dialogue import FindAnswerCorpusTooLarge
+from memcommit.operations.search.answer_dialogue import FindAnswerCorpusTooLarge
 from memcommit.operations.query.granted_application import (
     GrantedQueryRequest,
     GrantedQueryTarget,
@@ -49,7 +49,7 @@ from memcommit.profile_config import (
 )
 from memcommit.profiles import ProfileError
 from memcommit.query_provider import QueryProviderError
-from memcommit.search import FindError
+from memcommit.operations.search.model import FindError
 
 
 StageObserver = Callable[[str], None]

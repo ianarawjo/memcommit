@@ -57,13 +57,13 @@ from memcommit.interfaces.console.text import (
 )
 from memcommit.commands.search_result_present import group_search_items
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
-from memcommit.find_answer_dialogue import (
+from memcommit.operations.search.answer_dialogue import (
     FindAnswerCorpusTooLarge,
     FindAnswerProvider,
     FindOutsideStatus,
     synthesize_find_answer,
 )
-from memcommit.find_answer_references import (
+from memcommit.operations.search.answer_references import (
     render_find_answer_references,
 )
 from memcommit.operations.search.application import (
@@ -72,14 +72,14 @@ from memcommit.operations.search.application import (
     FindSearchStage,
 )
 from memcommit.operations.search.runtime import execute_find_search
-from memcommit.find_scope_evidence import (
+from memcommit.operations.search.scope_evidence import (
     collect_outside_context_evidence,
     compact_artifact_references,
     context_remainder_evidence,
     frame_context_uids,
     visible_result_evidence,
 )
-from memcommit.find_turn_dialogue import (
+from memcommit.operations.search.turn_dialogue import (
     FindTurnAction,
     FindTurnAnswer,
     FindTurnAsk,
@@ -90,7 +90,7 @@ from memcommit.infrastructure.providers.find_query import (
     connect_find_provider as connect_codex_chatgpt_provider,
 )
 from memcommit.query_provider import QueryProviderError
-from memcommit.search import (
+from memcommit.operations.search.model import (
     FindError,
     SearchArtifact,
     SearchCandidate,

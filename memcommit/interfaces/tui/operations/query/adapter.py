@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.find_answer_references import (
+from memcommit.operations.search.answer_references import (
     FindAnswerReferenceDocument,
     render_numbered_find_answer_reference,
 )

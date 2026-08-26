@@ -5,8 +5,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal, Protocol
 
-from memcommit.find_answer_references import FindAnswerReferenceDocument
-from memcommit.find_scope_evidence import (
+from memcommit.operations.search.answer_references import FindAnswerReferenceDocument
+from memcommit.operations.search.scope_evidence import (
     compact_artifact_references,
     compact_reference_content,
     visible_result_evidence,
@@ -16,7 +16,7 @@ from memcommit.ordinary_query_answer import (
     complete_ordinary_query_answer,
     prepare_ordinary_query_answer,
 )
-from memcommit.search import SearchCandidate
+from memcommit.operations.search.model import SearchCandidate
 
 
 OrdinaryQueryStage = Literal[

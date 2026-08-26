@@ -50,7 +50,7 @@ from memcommit.context_targeting.presets import (
     resolve_scope_preset,
 )
 from memcommit.derived_policy import authorize_combination
-from memcommit.find_answer_dialogue import FindAnswerCorpusTooLarge
+from memcommit.operations.search.answer_dialogue import FindAnswerCorpusTooLarge
 from memcommit.ordinary_query_answer import OrdinaryQueryCorpusTooLarge
 from memcommit.profile_config import ProfileConfigError, load_profile_registry
 from memcommit.profiles import ProfileError
@@ -64,7 +64,7 @@ from memcommit.operations.query.granted_source import (
     load_authority_query_catalog,
 )
 from memcommit.store import MemoryStore
-from memcommit.search import FindError
+from memcommit.operations.search.model import FindError
 
 
 def _query_ordinary_context(

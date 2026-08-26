@@ -27,7 +27,7 @@ from memcommit.query_provider import (
     QueryProviderError,
     _build_query_prompt,
 )
-from memcommit.search import (
+from memcommit.operations.search.model import (
     FindError,
     SearchCandidate,
     SearchMatch,

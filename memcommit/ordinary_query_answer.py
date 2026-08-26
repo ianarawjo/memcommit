@@ -8,7 +8,7 @@ import unicodedata
 from dataclasses import dataclass
 from typing import Literal, Protocol, Sequence, cast
 
-from memcommit.find_answer_references import (
+from memcommit.operations.search.answer_references import (
     FIND_ANSWER_SENTENCE_LIMIT,
     FindAnswerEvidence,
     FindAnswerReferenceDocument,

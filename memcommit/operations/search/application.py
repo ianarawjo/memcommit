@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from typing import Literal, Protocol
 
 from memcommit.context import Memory, MemoryRef, QueryContextRef
-from memcommit.search import (
+from memcommit.operations.search.model import (
     FindError,
     SearchArtifact,
     SearchCandidate,

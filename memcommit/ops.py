@@ -40,7 +40,7 @@ if TYPE_CHECKING:
         FindingsProvider,
     )
     from memcommit.operations.exact_dedup.application import ExactDuplicateReport
-    from memcommit.search import PromptProvider, SearchMatch
+    from memcommit.operations.search.model import PromptProvider, SearchMatch
     from memcommit.semantic.llm import LLMClient
     from memcommit.semantic.changes import ProposedChange
     from memcommit.operations.translate.runtime import (
@@ -1113,7 +1113,7 @@ def find(
     ``additional_roots`` lets a store-aware caller freeze lexical namespace
     descendants without teaching this in-memory operation about persistence.
     """
-    from memcommit.search import (
+    from memcommit.operations.search.model import (
         FindError,
         collect_candidates_from_roots,
         rank_candidates,
