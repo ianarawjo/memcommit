@@ -137,8 +137,8 @@ def test_pre_relocation_grounding_request_global_loads_through_alias() -> None:
 def test_migrated_grounding_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "memcommit/api/_operations/atomize_grounding.py",
-        "memcommit/commands/atomize.py",
-        "memcommit/commands/atomize_grounding.py",
+        "memcommit/commands/atomize/command.py",
+        "memcommit/commands/atomize/grounding.py",
         "memcommit/operations/atomize/grounding_runtime.py",
     )
 

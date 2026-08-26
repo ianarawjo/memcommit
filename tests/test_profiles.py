@@ -21,7 +21,7 @@ import memcommit.ops as ops
 import memcommit.profiles as profiles_module
 import memcommit.study_prewarm.prepare as prewarm_prepare_module
 from memcommit.cli import app
-from memcommit.commands.switch import _granted_picker_state, _granted_picker_views
+from memcommit.commands.switch.command import _granted_picker_state, _granted_picker_views
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.eval.study_bundle import build_all_study_bundles
 from memcommit.infrastructure.providers.policy import (
@@ -286,11 +286,11 @@ def test_bare_profile_uses_interactive_picker_result(
         return STUDY_BASELINE_PROFILE_NAME
 
     monkeypatch.setattr(
-        "memcommit.commands.profile._interactive_terminal",
+        "memcommit.commands.profile.command._interactive_terminal",
         lambda: True,
     )
     monkeypatch.setattr(
-        "memcommit.commands.profile.choose_profile",
+        "memcommit.commands.profile.command.choose_profile",
         select,
     )
 
@@ -314,11 +314,11 @@ def test_bare_profile_cancel_preserves_active_profile(
     monkeypatch.setenv("HOME", str(tmp_path))
     _prepare_authoring(isolated_store)
     monkeypatch.setattr(
-        "memcommit.commands.profile._interactive_terminal",
+        "memcommit.commands.profile.command._interactive_terminal",
         lambda: True,
     )
     monkeypatch.setattr(
-        "memcommit.commands.profile.choose_profile",
+        "memcommit.commands.profile.command.choose_profile",
         lambda entries, *, current, registry_generation, apply_removal: None,
     )
 
@@ -338,11 +338,11 @@ def test_bare_profile_revalidates_picker_result_before_selection(
     monkeypatch.setenv("HOME", str(tmp_path))
     _prepare_authoring(isolated_store)
     monkeypatch.setattr(
-        "memcommit.commands.profile._interactive_terminal",
+        "memcommit.commands.profile.command._interactive_terminal",
         lambda: True,
     )
     monkeypatch.setattr(
-        "memcommit.commands.profile.choose_profile",
+        "memcommit.commands.profile.command.choose_profile",
         lambda entries, *, current, registry_generation, apply_removal: "missing",
     )
 
@@ -366,7 +366,7 @@ def test_explicit_profile_use_does_not_open_picker(
         raise AssertionError("explicit profile use must not open the picker")
 
     monkeypatch.setattr(
-        "memcommit.commands.profile.choose_profile",
+        "memcommit.commands.profile.command.choose_profile",
         unexpected_picker,
     )
 
@@ -1546,7 +1546,7 @@ def test_init_study_without_name_uses_the_tty_edited_default(
     defaults: list[str] = []
 
     monkeypatch.setattr(
-        "memcommit.commands.init_study._is_interactive_terminal",
+        "memcommit.commands.init_study.command._is_interactive_terminal",
         lambda: True,
     )
 
@@ -1555,7 +1555,7 @@ def test_init_study_without_name_uses_the_tty_edited_default(
         return "edited-study-name"
 
     monkeypatch.setattr(
-        "memcommit.commands.init_study.choose_study_profile_name",
+        "memcommit.commands.init_study.command.choose_study_profile_name",
         choose,
     )
 
@@ -1680,11 +1680,11 @@ def test_initialized_study_picker_shows_participant_and_authority_profiles(
         return "pilot-picker"
 
     monkeypatch.setattr(
-        "memcommit.commands.profile._interactive_terminal",
+        "memcommit.commands.profile.command._interactive_terminal",
         lambda: True,
     )
     monkeypatch.setattr(
-        "memcommit.commands.profile.choose_profile",
+        "memcommit.commands.profile.command.choose_profile",
         select,
     )
 

@@ -11,18 +11,18 @@ import pytest
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-from memcommit.commands.command_wait import (
+from memcommit.commands.shared.command_wait import (
     CommandWaitContextBrowser,
     CommandWaitView,
     _freeze_default_context_browser,
     run_command_wait,
 )
-from memcommit.commands.context_picker import ContextMemoryRow
+from memcommit.commands.shared.context_picker import ContextMemoryRow
 from memcommit.context_targeting.catalog import (
     GrantedContextNavigation,
     grant_navigation_annotation,
 )
-from memcommit.commands.help_inventory import CommandEntry
+from memcommit.commands.help_inventory.command import CommandEntry
 from memcommit.profile_config import ProfileEntry
 from memcommit.store import MemoryStore
 from memcommit.source_projection.model import (
@@ -88,23 +88,23 @@ def test_default_context_browser_includes_opaque_grant_routes(monkeypatch):
             raise AssertionError(f"unexpected Context load: {name}")
 
     monkeypatch.setattr(
-        "memcommit.commands.command_wait.MemoryStore",
+        "memcommit.commands.shared.command_wait.MemoryStore",
         lambda **_kwargs: FakeStore(),
     )
     monkeypatch.setattr(
-        "memcommit.commands.command_wait.resolve_context_access",
+        "memcommit.commands.shared.command_wait.resolve_context_access",
         lambda *_args, **_kwargs: object(),
     )
     monkeypatch.setattr(
-        "memcommit.commands.command_wait.freeze_profile_readable_context_catalog",
+        "memcommit.commands.shared.command_wait.freeze_profile_readable_context_catalog",
         lambda *_args, **_kwargs: FakeCatalog(),
     )
     monkeypatch.setattr(
-        "memcommit.commands.command_wait.context_access_display_facts",
+        "memcommit.commands.shared.command_wait.context_access_display_facts",
         lambda _access: SourceDisplayFacts(access=SourceAccess.READ_GRANT),
     )
     monkeypatch.setattr(
-        "memcommit.commands.command_wait.freeze_granted_context_navigation",
+        "memcommit.commands.shared.command_wait.freeze_granted_context_navigation",
         lambda _store: GrantedContextNavigation(
             names=("public/readable", "public/query"),
             annotations={
@@ -316,11 +316,11 @@ def test_initial_analysis_uses_inline_progress_without_freezing_help(monkeypatch
             events.append(("CLOSE",))
 
     monkeypatch.setattr(
-        "memcommit.commands.command_wait.CommandProgress",
+        "memcommit.commands.shared.command_wait.CommandProgress",
         InlineProgress,
     )
     monkeypatch.setattr(
-        "memcommit.commands.command_wait.current_help_entries",
+        "memcommit.commands.shared.command_wait.current_help_entries",
         lambda: pytest.fail("initial analysis must not freeze full-screen Help"),
     )
 
@@ -370,7 +370,7 @@ def test_destination_keys_repeat_back_to_their_immediate_origin(monkeypatch):
         return None
 
     monkeypatch.setattr(
-        "memcommit.commands.command_wait.record_study_action",
+        "memcommit.commands.shared.command_wait.record_study_action",
         observe,
     )
 
@@ -547,7 +547,7 @@ def test_context_memory_browsing_never_switches_current(monkeypatch):
         raise AssertionError("The read-only Context browser attempted a switch.")
 
     monkeypatch.setattr(
-        "memcommit.commands.command_wait.record_study_action",
+        "memcommit.commands.shared.command_wait.record_study_action",
         observe,
     )
     monkeypatch.setattr(MemoryStore, "set_current", reject_switch)
@@ -603,7 +603,7 @@ def test_input_and_report_shortcuts_are_bound_only_when_views_exist(monkeypatch)
         return None
 
     monkeypatch.setattr(
-        "memcommit.commands.command_wait.record_study_action",
+        "memcommit.commands.shared.command_wait.record_study_action",
         observe,
     )
 

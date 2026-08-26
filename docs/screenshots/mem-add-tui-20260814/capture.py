@@ -55,7 +55,7 @@ def _configure_isolated_store(store_root: Path) -> None:
 
     # The capture exercises the real local Context catalog. It deliberately
     # excludes the host's registered Profiles and Grants from this fixture.
-    import memcommit.commands.add as add_command
+    import memcommit.commands.add.command as add_command
 
     add_command.freeze_granted_context_navigation = lambda _store: SimpleNamespace(
         names=(),

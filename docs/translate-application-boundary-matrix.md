@@ -15,7 +15,7 @@ classification is `CLOSED`.
 | Request validation, targeting, reuse/refresh, provider timing | `memcommit.operations.translate.application` | Operation-owned |
 | Catalog seed, curated edit/verify/reset, import/export policy | `memcommit.operations.translate.catalog_application` and `application` | Operation-owned |
 | In-place/save-as checkpoints and final CAS | `memcommit.operations.translate.materialization` | Operation-owned |
-| ANSI rendering and CLI syntax | `memcommit.commands.translate` | Correct adapter concern only where presentation-specific |
+| ANSI rendering and CLI syntax | `memcommit.commands.translate.command` | Correct adapter concern only where presentation-specific |
 
 ## Preserved invariants
 

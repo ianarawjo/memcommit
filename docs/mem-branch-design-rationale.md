@@ -61,7 +61,7 @@ application layer validates that the published Source-to-target mapping and
 selected current root exactly match its plan; it does not duplicate Store
 transaction mechanics.
 
-`memcommit.commands.branch` is consequently only the Typer and optional TUI
+`memcommit.commands.branch.command` is consequently only the Typer and optional TUI
 adapter: it resolves flags and relative Source syntax against the command-start
 current Context, obtains an interactive selection when needed, invokes the
 operation, and renders the receipt. `mem checkout -b` continues to call that

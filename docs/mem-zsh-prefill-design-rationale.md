@@ -66,7 +66,7 @@ evaluation.
 
 The line-oriented command adapter is owned by
 `memcommit.interfaces.cli.shell_init`. The legacy
-`memcommit.commands.shell_init` path remains an import-only alias to the same
+`memcommit.commands.shell_init.command` path remains an import-only alias to the same
 module, command callback, and renderer objects. This ownership relocation does
 not change the generated zsh bytes, CLI registration, output streams, error
 text, or exit status.

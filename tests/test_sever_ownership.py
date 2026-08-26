@@ -191,13 +191,13 @@ def test_pre_relocation_sever_session_global_loads_through_alias() -> None:
 
 def test_production_sever_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "memcommit/commands/impact.py",
-        "memcommit/commands/impact_catalog.py",
-        "memcommit/commands/impact_sessions.py",
-        "memcommit/commands/review.py",
-        "memcommit/commands/review_sessions.py",
-        "memcommit/commands/sever.py",
-        "memcommit/commands/sever_sessions.py",
+        "memcommit/commands/impact/command.py",
+        "memcommit/commands/impact/catalog.py",
+        "memcommit/commands/impact/sessions.py",
+        "memcommit/commands/review/command.py",
+        "memcommit/commands/review/sessions.py",
+        "memcommit/commands/sever/command.py",
+        "memcommit/commands/sever/sessions.py",
         "memcommit/operations/sever/application.py",
         "memcommit/operations/sever/provider.py",
         "memcommit/operations/sever/resolution_adapter.py",

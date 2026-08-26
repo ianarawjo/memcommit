@@ -291,11 +291,11 @@ def test_cli_json_handoff_round_trips_into_plain_resolve(
     _store, context = _stored_context()
     provider = FindingResolveProvider()
     monkeypatch.setattr(
-        "memcommit.commands.find_conflicts.connect_codex_chatgpt_provider",
+        "memcommit.commands.find_conflicts.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     monkeypatch.setattr(
-        "memcommit.commands.resolve.connect_semantic_provider",
+        "memcommit.commands.resolve.command.connect_semantic_provider",
         lambda: provider,
     )
 

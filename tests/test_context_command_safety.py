@@ -8,7 +8,7 @@ from typer.testing import CliRunner
 import memcommit.ops as ops
 import memcommit.store as store_module
 from memcommit.cli import app
-from memcommit.commands.branch_dialog import BranchCreationReceipt
+from memcommit.commands.branch.dialog import BranchCreationReceipt
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.store import MemoryStore
 
@@ -43,7 +43,7 @@ def test_delete_approval_does_not_delete_recreated_name(
         return True
 
     monkeypatch.setattr(
-        "memcommit.commands.delete.typer.confirm",
+        "memcommit.commands.delete.command.typer.confirm",
         replace_during_approval,
     )
 
@@ -221,7 +221,7 @@ def test_bare_branch_preserves_a_switch_made_while_the_picker_is_open(
         return BranchCreationReceipt("source", "feature")
 
     monkeypatch.setattr(
-        "memcommit.commands.branch.choose_branch_creation",
+        "memcommit.commands.branch.command.choose_branch_creation",
         switch_then_choose,
     )
 
@@ -247,7 +247,7 @@ def test_bare_init_preserves_a_switch_made_while_the_editor_is_open(
         return "new-context"
 
     monkeypatch.setattr(
-        "memcommit.commands.init.choose_context_name",
+        "memcommit.commands.init.command.choose_context_name",
         switch_then_choose,
     )
 
@@ -276,7 +276,7 @@ def test_bare_branch_does_not_overwrite_a_target_created_during_setup(
         return BranchCreationReceipt("source", "feature")
 
     monkeypatch.setattr(
-        "memcommit.commands.branch.choose_branch_creation",
+        "memcommit.commands.branch.command.choose_branch_creation",
         create_target_then_choose,
     )
 

@@ -232,8 +232,8 @@ def _pause(label: str) -> None:
 def _run_child(kind: str) -> None:
     import click
 
-    import memcommit.commands.conflict_resolve_handoff as handoff_command
-    import memcommit.commands.find_conflicts as find_command
+    import memcommit.commands.find_conflicts.resolve_handoff as handoff_command
+    import memcommit.commands.find_conflicts.command as find_command
     import memcommit.ops as ops
     from memcommit.cli import app
 

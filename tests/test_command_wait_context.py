@@ -1,6 +1,6 @@
 """Click-context compatibility for the shared command wait inventory."""
 
-from memcommit.commands.help_inventory import CommandEntry
+from memcommit.commands.help_inventory.command import CommandEntry
 from memcommit.interfaces.tui.components import session_help
 
 

@@ -57,7 +57,7 @@ def _prepare_compare_store(root: Path):
 
 
 def _run_ground_child(_store_root: Path) -> None:
-    from memcommit.commands.ground_shell import run_ground_shell
+    from memcommit.commands.ground.shell import run_ground_shell
 
     print("$ mem ground", flush=True)
     print(
@@ -81,7 +81,7 @@ def _run_ground_child(_store_root: Path) -> None:
 
 
 def _run_compare_child(store_root: Path) -> None:
-    from memcommit.commands.compare_setup import choose_compare_setup
+    from memcommit.commands.compare.setup import choose_compare_setup
 
     store = _prepare_compare_store(store_root)
     before = {

@@ -118,7 +118,7 @@ def test_pre_relocation_translate_globals_load_through_aliases() -> None:
 
 def test_production_translate_consumers_use_operation_owners() -> None:
     relative_paths = (
-        "memcommit/commands/translate.py",
+        "memcommit/commands/translate/command.py",
         "memcommit/eval/study_bundle.py",
         "memcommit/operations/query/granted_source.py",
         "memcommit/operations/translate/view.py",
@@ -181,7 +181,7 @@ def test_translate_owners_keep_the_existing_dependency_direction() -> None:
 
 
 def test_translate_command_is_only_an_io_and_presentation_adapter() -> None:
-    path = REPOSITORY_ROOT / "memcommit/commands/translate.py"
+    path = REPOSITORY_ROOT / "memcommit/commands/translate/command.py"
     source = path.read_text(encoding="utf-8")
     tree = ast.parse(source, filename=str(path))
     imports = {

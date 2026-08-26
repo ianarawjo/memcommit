@@ -264,7 +264,7 @@ operation. The lower `ContextTreeState` boundary is preferred when selection
 must remain inside an existing full-screen application; launching nested Typer
 commands is not an integration mechanism.
 
-`commands/context_picker.py` is now a behavior-free compatibility export.
+`commands/shared/context_picker.py` is now a behavior-free compatibility export.
 Production callers import the neutral picker directly, so Ground and other
 operations no longer depend on the Switch command layer merely to render the
 same frozen names.

@@ -13,17 +13,17 @@ from typer.testing import CliRunner
 import memcommit.ops as ops
 import memcommit.store as store_module
 from memcommit.cli import app
-from memcommit.commands.find_materialization import (
+from memcommit.commands.find.materialization import (
     FindMaterializationError,
     materialize_find_results,
 )
-from memcommit.commands.find_search_workbench import (
+from memcommit.commands.find.search_workbench import (
     FindSearchRequest,
     FindSearchResponse,
     FindSearchResult,
 )
 from memcommit.commands.granted_context import resolve_context_access
-from memcommit.commands.readable_context_catalog import (
+from memcommit.commands.shared.readable_context_catalog import (
     freeze_readable_context_catalog,
 )
 from memcommit.context import Memory, MemoryRef

@@ -41,7 +41,7 @@ def test_ops_chunk_is_a_thin_operation_compatibility_adapter() -> None:
 
 
 def test_chunk_command_uses_only_operation_owned_chunk_behavior() -> None:
-    path = REPOSITORY_ROOT / "memcommit/commands/chunk.py"
+    path = REPOSITORY_ROOT / "memcommit/commands/chunk/command.py"
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
     imports = {
         node.module

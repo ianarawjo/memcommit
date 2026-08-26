@@ -6,7 +6,7 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.commands.fit as fit_command
+import memcommit.commands.fit.command as fit_command
 import memcommit.ops as ops
 from memcommit.cli import app
 from memcommit.operations.fit.ground_report import (

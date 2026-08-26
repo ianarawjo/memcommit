@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-from memcommit.commands.checkpoint_diff import (
+from memcommit.commands.shared.checkpoint_diff import (
     checkpoint_diff_detail_renderer,
     checkpoint_restore_detail_renderer,
 )
-from memcommit.commands.history_picker import HistoryDetailView
-from memcommit.commands.history_present import checkpoint_picker_entries
+from memcommit.commands.shared.history_picker import HistoryDetailView
+from memcommit.commands.shared.history_present import checkpoint_picker_entries
 
 
 def _snapshot(content: str | None) -> dict:

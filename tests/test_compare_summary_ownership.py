@@ -115,7 +115,7 @@ def test_pre_relocation_summary_global_loads_through_alias() -> None:
 
 def test_production_summary_consumers_use_operation_owner() -> None:
     relative_paths = (
-        "memcommit/commands/compare.py",
+        "memcommit/commands/compare/command.py",
         "memcommit/operations/compare/summary.py",
         "memcommit/operations/compare/summary_provider.py",
         "memcommit/operations/compare/summary_application.py",

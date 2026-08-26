@@ -103,8 +103,8 @@ def test_production_exact_dedup_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "memcommit/api/_operations/exact_dedup.py",
         "memcommit/api/_operations/exact_duplicates.py",
-        "memcommit/commands/dedup.py",
-        "memcommit/commands/find_exact_duplicates.py",
+        "memcommit/commands/dedup/command.py",
+        "memcommit/commands/find_exact_duplicates/command.py",
         "memcommit/ops.py",
     )
 

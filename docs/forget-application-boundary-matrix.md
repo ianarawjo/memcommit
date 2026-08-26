@@ -12,7 +12,7 @@ existing command routes now enter the same application owners.
 
 Forget already shared a strict whole-frame selective-curation decoder with
 Sever, and its immutable review model was independent of the terminal. The
-complete operation nevertheless existed only in `commands/forget.py`: that
+complete operation nevertheless existed only in `commands/forget/command.py`: that
 module selected the provider, initiated semantic analysis, interpreted review
 actions, calculated mutation permissions, edited the Source, and created the
 checkpoint. A non-terminal caller therefore had to invoke command behavior or

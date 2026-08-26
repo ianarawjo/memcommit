@@ -23,7 +23,7 @@ from memcommit.operations.atomize.runtime import (
     capture_atomize_session_snapshot,
 )
 from memcommit.atomize_workflow import open_or_create_atomize_workbench
-from memcommit.commands.atomize import cmd as atomize_command
+from memcommit.commands.atomize.command import cmd as atomize_command
 from memcommit.context import AutoCheckpoint, Memory
 from memcommit.provenance import build_trace
 from memcommit.store import MemoryStore
@@ -150,7 +150,7 @@ def _open_all_atomic_session(store: MemoryStore):
 @pytest.fixture(autouse=True)
 def _normal_form_provider(monkeypatch):
     monkeypatch.setattr(
-        "memcommit.commands.atomize.connect_codex_chatgpt_provider",
+        "memcommit.commands.atomize.command.connect_codex_chatgpt_provider",
         _AllAtomicProvider,
     )
 

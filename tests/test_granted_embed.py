@@ -348,7 +348,7 @@ def test_recursive_find_and_search_open_attached_read_projection(
 
     provider = Provider()
     monkeypatch.setattr(
-        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        "memcommit.commands.find.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     semantic_direct = runner.invoke(

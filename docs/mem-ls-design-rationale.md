@@ -574,7 +574,7 @@ The implementation is covered by tests for:
 
 Implementation:
 
-- [`memcommit/commands/list_memories.py`](../memcommit/commands/list_memories.py)
+- [`memcommit/commands/list_memories/command.py`](../memcommit/commands/list_memories/command.py)
 - [`memcommit/infrastructure/clipboard.py`](../memcommit/infrastructure/clipboard.py)
 - [`memcommit/store.py`](../memcommit/store.py)
 - [`tests/test_commands.py`](../tests/test_commands.py)

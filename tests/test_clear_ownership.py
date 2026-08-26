@@ -32,7 +32,7 @@ def test_clear_request_and_result_are_terminal_independent() -> None:
 
 
 def test_clear_command_delegates_behavior_to_operation_runtime() -> None:
-    path = REPOSITORY_ROOT / "memcommit/commands/clear.py"
+    path = REPOSITORY_ROOT / "memcommit/commands/clear/command.py"
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
     imports = {
         node.module

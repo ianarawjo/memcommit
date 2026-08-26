@@ -11,7 +11,7 @@ from typer.testing import CliRunner
 
 from memcommit.cli import app
 from memcommit.command_history import CommandContextChange, ContextCommandUnit
-from memcommit.commands.restoration_present import (
+from memcommit.commands.shared.restoration_present import (
     _render_impact,
     _restored_command,
 )

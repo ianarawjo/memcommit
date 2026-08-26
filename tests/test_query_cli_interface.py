@@ -152,7 +152,7 @@ def test_granted_query_plain_renderer_keeps_catalog_opaque(capsys):
 
 
 def test_query_command_uses_cli_and_terminal_interfaces_without_local_presenters():
-    path = PACKAGE / "commands" / "query.py"
+    path = PACKAGE / "commands" / "query" / "command.py"
     source = path.read_text(encoding="utf-8")
     tree = ast.parse(source)
     local_functions = {

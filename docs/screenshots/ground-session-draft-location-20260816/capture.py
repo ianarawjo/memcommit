@@ -57,7 +57,7 @@ def _isolate_store(root: Path) -> None:
 def _run_child() -> None:
     from typer.testing import CliRunner
 
-    import memcommit.commands.ground as ground_command
+    import memcommit.commands.ground.command as ground_command
     import memcommit.ops as ops
     from memcommit.cli import app
     from memcommit.ground_dialogue import GroundDialogueProposal

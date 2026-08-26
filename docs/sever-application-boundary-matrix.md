@@ -14,7 +14,7 @@ presented as a stable Python API.
 
 ## Motivation
 
-Before this extraction, `memcommit.commands.sever` was the only complete
+Before this extraction, `memcommit.commands.sever.command` was the only complete
 execution junction. Domain records, provider decoding, session persistence,
 and review projection already had separate modules, but the command still
 resolved authority, froze frames, consulted the Study cache, constructed the
@@ -112,7 +112,7 @@ whole-frame curation, authority, session CAS, Apply compensation, terminal
 behavior, and the recorded TUI evidence are unchanged. No screenshot refresh
 is required because no visible or interactive state changed.
 
-`memcommit.commands.sever` retains thin `_start` and `_apply` compatibility
+`memcommit.commands.sever.command` retains thin `_start` and `_apply` compatibility
 facades because existing internal tests historically called the analysis-only
 and materialization-only paths. The executable command no longer calls the
 session Store's `load` or `save`, calculates record digests, selects a candidate,

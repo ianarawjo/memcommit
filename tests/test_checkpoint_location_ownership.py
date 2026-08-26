@@ -9,7 +9,7 @@ from pathlib import Path
 
 import pytest
 
-import memcommit.commands.history_location_picker as legacy_location
+import memcommit.commands.shared.history_location_picker as legacy_location
 from memcommit.interfaces.tui.components import checkpoint_location
 
 
@@ -17,12 +17,12 @@ from memcommit.interfaces.tui.components import checkpoint_location
     "first, second",
     (
         (
-            "memcommit.commands.history_location_picker",
+            "memcommit.commands.shared.history_location_picker",
             "memcommit.interfaces.tui.components.checkpoint_location",
         ),
         (
             "memcommit.interfaces.tui.components.checkpoint_location",
-            "memcommit.commands.history_location_picker",
+            "memcommit.commands.shared.history_location_picker",
         ),
     ),
 )
@@ -55,6 +55,7 @@ def test_legacy_facade_contains_no_implementation_definitions():
         Path(__file__).resolve().parents[1]
         / "memcommit"
         / "commands"
+        / "shared"
         / "history_location_picker.py"
     )
     tree = ast.parse(facade_path.read_text(encoding="utf-8"))

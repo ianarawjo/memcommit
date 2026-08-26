@@ -45,7 +45,7 @@ def _prepare_store(root: Path):
 
 
 def _run_child(store_root: Path, *, cancel: bool) -> None:
-    import memcommit.commands.compare_setup as compare_setup
+    import memcommit.commands.compare.setup as compare_setup
 
     store, contexts, reference_focus = _prepare_store(store_root)
     before = {

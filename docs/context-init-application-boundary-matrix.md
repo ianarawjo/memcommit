@@ -8,7 +8,7 @@ transaction: one require-new Context or one missing-parent batch is created,
 checkpointed, and selected under a current-Context compare-and-swap. The
 problem was ownership rather than missing safety. CLI arguments, optional TUI
 name input, creation planning, checkpoint policy, Store execution, and console
-rendering all lived in `commands/init.py`.
+rendering all lived in `commands/init/command.py`.
 
 This extraction moves the use case behind one typed application request and
 result while preserving that Store transaction. Its implementation is now
@@ -53,7 +53,7 @@ typed data; it is not yet a stable public Python API.
 
 | Concern | Owner after extraction | Contract |
 | --- | --- | --- |
-| CLI argument parsing and cancellation text | `commands/init.py` | No request is executed after TUI cancellation. |
+| CLI argument parsing and cancellation text | `commands/init/command.py` | No request is executed after TUI cancellation. |
 | Suggested exact-name editing | `interfaces/tui/operations/context_init` over the shared Context name editor | Returns a request only; creates, loads, switches, and persists nothing. |
 | Successful human-readable output | `interfaces/cli/context_init.py` | Preserves the established single and `--parents` receipts. |
 | Parent-prefix expansion | `operations/context_init/application.py` | Ordered lexical prefixes end at the requested leaf. No embedded-Context relation is created. |

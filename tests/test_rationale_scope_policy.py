@@ -7,7 +7,7 @@ import uuid
 from typer.testing import CliRunner
 
 from memcommit.cli import app
-from memcommit.commands.switch import _local_picker_annotations
+from memcommit.commands.switch.command import _local_picker_annotations
 from memcommit.context import Memory
 from memcommit.profile_config import ProfileEntry, ProfileRegistry
 from memcommit.store import MemoryStore

@@ -13,9 +13,9 @@ from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 from memcommit.cli import app
-from memcommit.commands.share_flow import choose_share_endpoint
-from memcommit.commands.share_viewer import ShareViewerReceipt
-from memcommit.commands.share_viewer import (
+from memcommit.commands.share.flow import choose_share_endpoint
+from memcommit.commands.share.viewer import ShareViewerReceipt
+from memcommit.commands.share.viewer import (
     run_share_unavailable_viewer,
     run_share_viewer,
     share_context_text,
@@ -216,8 +216,8 @@ def test_bare_share_opens_tty_flow_and_sends_selected_context(
         tmp_path,
         monkeypatch,
     )
-    share_command = importlib.import_module("memcommit.commands.share")
-    share_viewer = importlib.import_module("memcommit.commands.share_viewer")
+    share_command = importlib.import_module("memcommit.commands.share.command")
+    share_viewer = importlib.import_module("memcommit.commands.share.viewer")
     seen = {}
 
     monkeypatch.setattr(share_command, "_interactive_terminal", lambda: True)
@@ -281,9 +281,9 @@ def test_viewer_endpoint_browse_refreezes_and_applies_the_updated_command(
         encoding="utf-8",
     )
 
-    share_command = importlib.import_module("memcommit.commands.share")
-    share_flow = importlib.import_module("memcommit.commands.share_flow")
-    share_viewer = importlib.import_module("memcommit.commands.share_viewer")
+    share_command = importlib.import_module("memcommit.commands.share.command")
+    share_flow = importlib.import_module("memcommit.commands.share.flow")
+    share_viewer = importlib.import_module("memcommit.commands.share.viewer")
     original_preview = prepare_share(source.name, "government/healthcare-agent")
     seen = []
 
@@ -331,8 +331,8 @@ def test_complete_share_operands_bypass_tty_viewer(
         tmp_path,
         monkeypatch,
     )
-    share_command = importlib.import_module("memcommit.commands.share")
-    share_viewer = importlib.import_module("memcommit.commands.share_viewer")
+    share_command = importlib.import_module("memcommit.commands.share.command")
+    share_viewer = importlib.import_module("memcommit.commands.share.viewer")
     monkeypatch.setattr(share_command, "_interactive_terminal", lambda: True)
     monkeypatch.setattr(
         share_viewer,
@@ -958,8 +958,8 @@ def test_incomplete_recursive_cli_keeps_range_through_tty_review(
         monkeypatch,
     )
     _add_share_subtree(sender_store, source)
-    share_command = importlib.import_module("memcommit.commands.share")
-    share_viewer = importlib.import_module("memcommit.commands.share_viewer")
+    share_command = importlib.import_module("memcommit.commands.share.command")
+    share_viewer = importlib.import_module("memcommit.commands.share.viewer")
     seen = {}
     monkeypatch.setattr(share_command, "_interactive_terminal", lambda: True)
 

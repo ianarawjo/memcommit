@@ -133,7 +133,7 @@ def test_pre_relocation_copy_request_global_loads_through_legacy_alias() -> None
 
 
 def test_branch_remains_a_separate_context_creation_operation() -> None:
-    path = REPOSITORY_ROOT / "memcommit/commands/branch.py"
+    path = REPOSITORY_ROOT / "memcommit/commands/branch/command.py"
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
     imports = {
         node.module

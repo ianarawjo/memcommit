@@ -6,7 +6,7 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.commands.compare as compare_command
+import memcommit.commands.compare.command as compare_command
 import memcommit.ops as ops
 from memcommit.cli import app
 from memcommit.context import Memory
@@ -21,7 +21,7 @@ from memcommit.profile_config import (
 )
 from memcommit.profiles import authority_grant_snapshot_lock, create_authority_grant
 from memcommit.store import MemoryStore
-from memcommit.commands.compare_targeting import (
+from memcommit.commands.compare.targeting import (
     CompareTargetingError,
     resolve_compare_cli_targets,
 )

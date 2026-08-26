@@ -7,7 +7,7 @@ import json
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.commands.fit as fit_command
+import memcommit.commands.fit.command as fit_command
 from memcommit.cli import app
 from memcommit.operations.fit.judgment import (
     FIT_JUDGMENT_PAYLOAD_MARKER,

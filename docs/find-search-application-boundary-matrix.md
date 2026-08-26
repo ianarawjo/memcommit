@@ -38,7 +38,7 @@ agent/MCP memcommit_search ------/          |
 ```
 
 The application module imports no command, Typer, prompt-toolkit, clipboard,
-or materialization code. `memcommit.commands.find_search_workbench` retains
+or materialization code. `memcommit.commands.find.search_workbench` retains
 compatibility imports for callers that historically obtained the request and
 response types from that module, but it no longer owns them. New internal code
 imports the application owner directly.

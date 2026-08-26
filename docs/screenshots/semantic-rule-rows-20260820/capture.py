@@ -140,7 +140,7 @@ def _child(operation: str, root: Path) -> None:
     from memcommit.store import context_record_digest
 
     store, source, target = _prepare(root, operation)
-    import memcommit.commands.impact_process_local as impact_command
+    import memcommit.commands.impact.process_local as impact_command
 
     impact_command.connect_semantic_provider = (
         _DistillProvider if operation == "distill" else _ElaborateProvider

@@ -6,7 +6,7 @@ Last verified: 2026-08-15.
 
 The original `QueryContextRef` route kept concealed Query Source records outside
 the ordinary Context namespace, but its complete execution lived in
-`commands/query.py`: provider construction, Source opening, inference,
+`commands/query/command.py`: provider construction, Source opening, inference,
 progress, error rendering, and stdout were one command-owned function. That
 made the CLI the only callable entry point and obscured the critical privacy
 order that provider authentication must finish before concealed content is

@@ -7,7 +7,7 @@ EXIT
 OUTPUT
 ╭───────────────────── Traceback (most recent call last) ──────────────────────╮
 │ /Users/KimMunyeong/.codex/audit-snapshots/memcommit-six-world-v2-20260825-co │
-│ de/memcommit/commands/update.py:1101 in cmd                                  │
+│ de/memcommit/commands/update/command.py:1101 in cmd                                  │
 │                                                                              │
 │   1098 │   │   if session.goal_focus is not None:                            │
 │   1099 │   │   │   revalidate_goal_focus(store, session.goal_focus)          │
@@ -1359,7 +1359,7 @@ OUTPUT
 │ ╰──────────────────────────────────────────────────────────────────────────╯ │
 │                                                                              │
 │ /Users/KimMunyeong/.codex/audit-snapshots/memcommit-six-world-v2-20260825-co │
-│ de/memcommit/commands/update.py:1104 in <lambda>                             │
+│ de/memcommit/commands/update/command.py:1104 in <lambda>                             │
 │                                                                              │
 │   1101 │   │   application = run_application_flow(                           │
 │   1102 │   │   │   session,                                                  │

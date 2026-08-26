@@ -76,7 +76,7 @@ useful recognition or review decision.
 
 Frozen Profile/Store orientation discovery is owned beside that component in
 `memcommit.interfaces.tui.components.operation_launcher.location`. The former
-`memcommit.commands.operation_launcher_location` path is a module-identity
+`memcommit.commands.shared.operation_launcher_location` path is a module-identity
 compatibility alias, including for callers that patch its Store or profile
 globals. This is an ownership-only relocation: Profile-before-Store row order,
 frozen-root matching, registry-unavailable handling, and read-only behavior are

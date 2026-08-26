@@ -10,10 +10,10 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
-import memcommit.commands.distill as distill_command
+import memcommit.commands.distill.command as distill_command
 import memcommit.operations.distill.application as distill_application
 from memcommit.cli import app
-from memcommit.commands.help_inventory import COMMAND_FORMS
+from memcommit.commands.help_inventory.command import COMMAND_FORMS
 from memcommit.context import Context, Memory
 from memcommit.distill import (
     DISTILL_OPERATION,

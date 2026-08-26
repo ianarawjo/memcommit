@@ -11,7 +11,7 @@ from types import SimpleNamespace
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.commands.profile as profile_command
+import memcommit.commands.profile.command as profile_command
 import memcommit.ops as ops
 from memcommit.cli import app
 from memcommit.context import AutoCheckpoint, Context

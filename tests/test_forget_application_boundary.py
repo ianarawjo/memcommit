@@ -31,7 +31,7 @@ from memcommit.operations.forget.runtime import (
 from memcommit.forget_resolution_adapter import (
     ForgetResolutionWorkbenchAdapter as LegacyForgetResolutionWorkbenchAdapter,
 )
-from memcommit.commands.forget_setup_workbench import (
+from memcommit.commands.forget.setup_workbench import (
     ForgetSetupReceipt as LegacyForgetSetupReceipt,
 )
 from memcommit.interfaces.tui.operations.forget.resolution import (

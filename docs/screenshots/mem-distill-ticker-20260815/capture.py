@@ -202,7 +202,7 @@ def _write_evidence(result, receipt, *, unchanged: bool) -> None:
 
 
 def _run_child(store_root: Path) -> None:
-    from memcommit.commands.distill import render_distill
+    from memcommit.commands.distill.command import render_distill
     from memcommit.distill_application import DistillApplyRequest, DistillRequest
     from memcommit.distill_runtime import execute_distill, execute_distill_apply
     from memcommit.query_provider import CodexChatGPTProvider

@@ -117,7 +117,7 @@ def test_pre_relocation_add_request_global_loads_through_alias() -> None:
 def test_production_add_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "memcommit/api/_operations/add.py",
-        "memcommit/commands/add.py",
+        "memcommit/commands/add/command.py",
         "memcommit/interfaces/cli/add.py",
         "memcommit/interfaces/tui/operations/add/screen.py",
         "memcommit/operations/add/runtime.py",

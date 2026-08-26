@@ -8,7 +8,7 @@ from typer.testing import CliRunner
 
 import memcommit.config as config_module
 import memcommit.ops as ops
-from memcommit.commands import meld as meld_command
+from memcommit.commands.meld import command as meld_command
 from memcommit.cli import app
 from memcommit.comparison import ComparisonInput
 from memcommit.comparison_provider import (

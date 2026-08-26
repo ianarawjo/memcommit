@@ -35,7 +35,7 @@ and operation-specific permission checks while keeping `pwd` deterministic.
 - `operations/pwd/runtime.py` adapts one explicit `MemoryStore` without
   creating the Store or loading Context contents.
 - `interfaces/cli/pwd.py` renders the typed result as one line.
-- `commands/pwd.py` is the Typer error/exit-code and composition boundary.
+- `commands/pwd/command.py` is the Typer error/exit-code and composition boundary.
 
 The former top-level application and runtime paths remain true module aliases,
 not copied re-export namespaces. This keeps existing imports, object identity,

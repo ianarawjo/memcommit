@@ -8,8 +8,8 @@ from prompt_toolkit.output import DummyOutput
 import pytest
 from typer.main import get_command
 
-import memcommit.commands.update_setup as update_setup_command
-import memcommit.commands.update as update_command
+import memcommit.commands.update.setup as update_setup_command
+import memcommit.commands.update.command as update_command
 import memcommit.ops as ops
 from memcommit.cli import app
 from memcommit.interfaces.tui.components.endpoint_setup import EndpointSetupMemory

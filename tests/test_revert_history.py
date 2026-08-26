@@ -8,7 +8,7 @@ from typer.testing import CliRunner
 
 import memcommit.ops as ops
 from memcommit.cli import app
-from memcommit.commands.history_picker import HistorySelectionReceipt
+from memcommit.commands.shared.history_picker import HistorySelectionReceipt
 from memcommit.context import AutoCheckpoint, Memory
 from memcommit.store import MemoryStore
 
@@ -53,12 +53,12 @@ def test_bare_revert_uses_picker_and_exact_returned_uid(
     store = MemoryStore()
     init_uid = store.list_checkpoints("notes")[-1]["uid"]
     monkeypatch.setattr(
-        "memcommit.commands.revert._interactive_terminal",
+        "memcommit.commands.revert.command._interactive_terminal",
         lambda: True,
     )
 
     monkeypatch.setattr(
-        "memcommit.commands.diff_browser.choose_history_location",
+        "memcommit.commands.shared.diff_browser.choose_history_location",
         lambda *args, **kwargs: (_ for _ in ()).throw(
             AssertionError("bare Revert must not open the Profile Context tree")
         ),
@@ -74,7 +74,7 @@ def test_bare_revert_uses_picker_and_exact_returned_uid(
         )
 
     monkeypatch.setattr(
-        "memcommit.commands.diff_browser.choose_history",
+        "memcommit.commands.shared.diff_browser.choose_history",
         choose,
     )
 
@@ -92,7 +92,7 @@ def test_bare_revert_opens_the_current_context_history_directly(
     invoke("init", "notes")
     invoke("add", "remove me")
     monkeypatch.setattr(
-        "memcommit.commands.revert._interactive_terminal",
+        "memcommit.commands.revert.command._interactive_terminal",
         lambda: True,
     )
     observed = {}
@@ -102,7 +102,7 @@ def test_bare_revert_opens_the_current_context_history_directly(
         return None
 
     monkeypatch.setattr(
-        "memcommit.commands.revert.browse_checkpoint_locations",
+        "memcommit.commands.revert.command.browse_checkpoint_locations",
         browse,
     )
 
@@ -130,11 +130,11 @@ def test_bare_revert_keeps_an_empty_current_context_as_its_scope(
     store.set_current("task-1/participant")
 
     monkeypatch.setattr(
-        "memcommit.commands.revert._interactive_terminal",
+        "memcommit.commands.revert.command._interactive_terminal",
         lambda: True,
     )
     monkeypatch.setattr(
-        "memcommit.commands.diff_browser.choose_history_location",
+        "memcommit.commands.shared.diff_browser.choose_history_location",
         lambda *args, **kwargs: (_ for _ in ()).throw(
             AssertionError("an empty current Context must not broaden Revert")
         ),
@@ -146,7 +146,7 @@ def test_bare_revert_keeps_an_empty_current_context_as_its_scope(
         return None
 
     monkeypatch.setattr(
-        "memcommit.commands.diff_browser.choose_history",
+        "memcommit.commands.shared.diff_browser.choose_history",
         choose,
     )
 
@@ -169,11 +169,11 @@ def test_revert_tui_keep_choice_preserves_newer_checkpoint_files(
     target_uid = before[-1]["uid"]
 
     monkeypatch.setattr(
-        "memcommit.commands.revert._interactive_terminal",
+        "memcommit.commands.revert.command._interactive_terminal",
         lambda: True,
     )
     monkeypatch.setattr(
-        "memcommit.commands.diff_browser.choose_history",
+        "memcommit.commands.shared.diff_browser.choose_history",
         lambda *args, **kwargs: HistorySelectionReceipt(
             context_name="notes",
             checkpoint_uid=target_uid,
@@ -315,11 +315,11 @@ def test_natural_language_revert_searches_then_requires_picker_enter(
     init_uid = store.list_checkpoints("notes")[-1]["uid"]
     provider = EarliestCheckpointProvider()
     monkeypatch.setattr(
-        "memcommit.commands.revert._interactive_terminal",
+        "memcommit.commands.revert.command._interactive_terminal",
         lambda: True,
     )
     monkeypatch.setattr(
-        "memcommit.commands.revert.connect_codex_chatgpt_provider",
+        "memcommit.commands.revert.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -332,7 +332,7 @@ def test_natural_language_revert_searches_then_requires_picker_enter(
         )
 
     monkeypatch.setattr(
-        "memcommit.commands.revert.choose_history",
+        "memcommit.commands.revert.command.choose_history",
         choose,
     )
 
@@ -351,13 +351,13 @@ def test_explicit_uid_bypasses_provider_and_picker(
     store = MemoryStore()
     uid = store.list_checkpoints("notes")[0]["uid"]
     monkeypatch.setattr(
-        "memcommit.commands.revert.connect_codex_chatgpt_provider",
+        "memcommit.commands.revert.command.connect_codex_chatgpt_provider",
         lambda: (_ for _ in ()).throw(
             AssertionError("exact UID must not connect a provider")
         ),
     )
     monkeypatch.setattr(
-        "memcommit.commands.revert.choose_history",
+        "memcommit.commands.revert.command.choose_history",
         lambda *args, **kwargs: (_ for _ in ()).throw(
             AssertionError("exact UID must not open a picker")
         ),
@@ -396,7 +396,7 @@ def test_missing_hex_uid_never_falls_back_to_semantic_search(
 ):
     invoke("init", "notes")
     monkeypatch.setattr(
-        "memcommit.commands.revert.connect_codex_chatgpt_provider",
+        "memcommit.commands.revert.command.connect_codex_chatgpt_provider",
         lambda: (_ for _ in ()).throw(
             AssertionError("UID typo must not become a semantic query")
         ),
@@ -416,7 +416,7 @@ def test_natural_language_revert_outside_tty_does_not_call_provider_or_write(
     invoke("add", "keep current")
     before = MemoryStore().load_current().to_dict()
     monkeypatch.setattr(
-        "memcommit.commands.revert.connect_codex_chatgpt_provider",
+        "memcommit.commands.revert.command.connect_codex_chatgpt_provider",
         lambda: (_ for _ in ()).throw(
             AssertionError("non-TTY selection must stay read-only")
         ),
@@ -438,7 +438,7 @@ def test_picker_frame_change_aborts_before_revert(
     store = MemoryStore()
     init_uid = store.list_checkpoints("notes")[-1]["uid"]
     monkeypatch.setattr(
-        "memcommit.commands.revert._interactive_terminal",
+        "memcommit.commands.revert.command._interactive_terminal",
         lambda: True,
     )
 
@@ -452,7 +452,7 @@ def test_picker_frame_change_aborts_before_revert(
         )
 
     monkeypatch.setattr(
-        "memcommit.commands.diff_browser.choose_history",
+        "memcommit.commands.shared.diff_browser.choose_history",
         choose,
     )
 
@@ -473,15 +473,15 @@ def test_semantic_revert_race_at_locked_apply_preserves_concurrent_state(
     init_uid = store.list_checkpoints("notes")[-1]["uid"]
     provider = EarliestCheckpointProvider()
     monkeypatch.setattr(
-        "memcommit.commands.revert._interactive_terminal",
+        "memcommit.commands.revert.command._interactive_terminal",
         lambda: True,
     )
     monkeypatch.setattr(
-        "memcommit.commands.revert.connect_codex_chatgpt_provider",
+        "memcommit.commands.revert.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     monkeypatch.setattr(
-        "memcommit.commands.revert.choose_history",
+        "memcommit.commands.revert.command.choose_history",
         lambda entries, **kwargs: HistorySelectionReceipt(
             context_name="notes",
             checkpoint_uid=init_uid,
@@ -538,11 +538,11 @@ def test_cancelled_picker_does_not_resolve_memory_ref_targets(
 
     monkeypatch.setattr(MemoryStore, "_load_direct_memory", forbidden)
     monkeypatch.setattr(
-        "memcommit.commands.revert._interactive_terminal",
+        "memcommit.commands.revert.command._interactive_terminal",
         lambda: True,
     )
     monkeypatch.setattr(
-        "memcommit.commands.diff_browser.choose_history",
+        "memcommit.commands.shared.diff_browser.choose_history",
         lambda *args, **kwargs: None,
     )
 

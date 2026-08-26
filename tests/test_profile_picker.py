@@ -7,8 +7,8 @@ import threading
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-import memcommit.commands.profile_picker as profile_picker_module
-from memcommit.commands.profile_picker import (
+import memcommit.commands.profile.picker as profile_picker_module
+from memcommit.commands.profile.picker import (
     ProfilePickerAction,
     ProfilePickerEntry,
     ProfilePickerRefresh,

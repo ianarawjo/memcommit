@@ -7,7 +7,7 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
 from memcommit.cli import app
-from memcommit.commands.review_report import (
+from memcommit.commands.review.report import (
     render_review_report_snapshot,
     run_review_report_shell,
 )

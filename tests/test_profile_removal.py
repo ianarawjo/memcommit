@@ -10,9 +10,9 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
-import memcommit.commands.profile as profile_command
+import memcommit.commands.profile.command as profile_command
 from memcommit.cli import app
-from memcommit.commands.profile_picker import ProfilePickerAction
+from memcommit.commands.profile.picker import ProfilePickerAction
 from memcommit.context import Memory
 from memcommit.profile_config import (
     PROFILE_REGISTRY_SCHEMA_VERSION,
@@ -372,10 +372,10 @@ def test_interactive_removal_reloads_and_stays_in_profile_selector(
         return None
 
     monkeypatch.setattr(
-        "memcommit.commands.profile._interactive_terminal",
+        "memcommit.commands.profile.command._interactive_terminal",
         lambda: True,
     )
-    monkeypatch.setattr("memcommit.commands.profile.choose_profile", select)
+    monkeypatch.setattr("memcommit.commands.profile.command.choose_profile", select)
 
     result = runner.invoke(app, ["profile"])
 

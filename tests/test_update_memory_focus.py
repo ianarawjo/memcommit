@@ -8,7 +8,7 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
-import memcommit.commands.update as update_command
+import memcommit.commands.update.command as update_command
 from memcommit.cli import app
 from memcommit.store import MemoryStore
 from memcommit.update import UpdateError, UpdateSession, plan_update, session_matches

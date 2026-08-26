@@ -7,9 +7,9 @@ import json
 from typer.testing import CliRunner
 
 from memcommit.cli import app
-from memcommit.commands import trace as trace_command
-from memcommit.commands import trace_projection
-from memcommit.commands.trace_projection import (
+from memcommit.commands.trace import command as trace_command
+from memcommit.commands.trace import projection as trace_projection
+from memcommit.commands.trace.projection import (
     format_compact_trace_report,
     trace_document_fragments,
 )

@@ -12,18 +12,18 @@ from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
-import memcommit.commands.audit as audit_command
+import memcommit.commands.audit.command as audit_command
 from memcommit.cli import app
-from memcommit.commands.audit import (
+from memcommit.commands.audit.command import (
     _run_quality_audit_checks,
     run_quality_audit_review,
 )
-from memcommit.commands.audit_sessions import audit_session_entries
-from memcommit.commands.quality_find_workbench import (
+from memcommit.commands.audit.sessions import audit_session_entries
+from memcommit.commands.shared.quality_find_workbench import (
     QualityFindSetupReceipt,
     choose_quality_find_setup,
 )
-from memcommit.commands.review_sessions import review_session_entries
+from memcommit.commands.review.sessions import review_session_entries
 from memcommit.findings import (
     AmbiguityFinding,
     AmbiguityReport,
@@ -762,7 +762,7 @@ def test_audit_command_runs_all_three_and_saves_before_snapshot(
     store.set_current(ctx.name)
     EmptyAuditProvider.calls = []
     monkeypatch.setattr(
-        "memcommit.commands.audit.connect_codex_chatgpt_provider",
+        "memcommit.commands.audit.command.connect_codex_chatgpt_provider",
         EmptyAuditProvider,
     )
 
@@ -793,17 +793,17 @@ def test_flagless_audit_uses_current_context_and_prints_saved_session_receipt(
     store.set_current(ctx.name)
     EmptyAuditProvider.calls = []
     monkeypatch.setattr(
-        "memcommit.commands.audit.connect_codex_chatgpt_provider",
+        "memcommit.commands.audit.command.connect_codex_chatgpt_provider",
         EmptyAuditProvider,
     )
     monkeypatch.setattr(
-        "memcommit.commands.audit.choose_audit_setup",
+        "memcommit.commands.audit.command.choose_audit_setup",
         lambda *_args, **_kwargs: pytest.fail(
             "flagless Audit must not open Source setup"
         ),
     )
     monkeypatch.setattr(
-        "memcommit.commands.audit.run_quality_audit_review",
+        "memcommit.commands.audit.command.run_quality_audit_review",
         lambda *_args, **_kwargs: pytest.fail(
             "Audit execution must not open Review automatically"
         ),

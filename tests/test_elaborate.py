@@ -12,7 +12,7 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
-import memcommit.commands.elaborate as elaborate_command
+import memcommit.commands.elaborate.command as elaborate_command
 import memcommit.operations.elaborate.application as elaborate_application
 import memcommit.ops as ops
 from memcommit.cli import app

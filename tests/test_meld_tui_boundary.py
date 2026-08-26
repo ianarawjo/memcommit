@@ -5,10 +5,10 @@ from __future__ import annotations
 import ast
 from pathlib import Path
 
-import memcommit.commands.meld as meld_command
-import memcommit.commands.meld_shell as legacy_shell
-import memcommit.commands.compare as compare_command
-import memcommit.commands.resolution_workbench_shell as legacy_resolution_shell
+import memcommit.commands.meld.command as meld_command
+import memcommit.commands.meld.shell as legacy_shell
+import memcommit.commands.compare.command as compare_command
+import memcommit.commands.shared.resolution_workbench_shell as legacy_resolution_shell
 from memcommit.comparison_present import render_comparison
 import memcommit.interfaces.tui.operations.meld.screen as meld_screen
 import memcommit.interfaces.tui.workbenches.resolution.session_shell as resolution_shell
@@ -41,7 +41,7 @@ def test_meld_uses_the_interface_neutral_compare_presenter() -> None:
         if isinstance(node, ast.ImportFrom)
     }
     assert "memcommit.interfaces.presentation.comparison" in imported_modules
-    assert "memcommit.commands.compare" not in imported_modules
+    assert "memcommit.commands.compare.command" not in imported_modules
 
 
 def test_meld_screen_has_one_live_workbench_host() -> None:

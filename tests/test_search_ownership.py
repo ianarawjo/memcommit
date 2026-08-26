@@ -141,9 +141,9 @@ def test_pre_relocation_search_globals_load_through_aliases() -> None:
 def test_production_search_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "memcommit/api/_operations/search.py",
-        "memcommit/commands/find.py",
-        "memcommit/commands/find_materialization.py",
-        "memcommit/commands/find_search_workbench.py",
+        "memcommit/commands/find/command.py",
+        "memcommit/commands/find/materialization.py",
+        "memcommit/commands/find/search_workbench.py",
         "memcommit/operations/search/runtime.py",
         "memcommit/operations/search/materialization_application.py",
         "memcommit/operations/search/materialization_runtime.py",

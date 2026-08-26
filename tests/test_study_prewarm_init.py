@@ -13,10 +13,10 @@ import memcommit.study_prewarm.atomize as atomize_prewarm_module
 import memcommit.study_prewarm.prepare as prewarm_prepare_module
 from memcommit.cli import app
 from memcommit.atomize import create_atomize_analysis, impact_atomize
-from memcommit.commands.comparison_execution import load_comparison_context
-from memcommit.commands.comparison_execution import ensure_comparison_analysis
-from memcommit.commands.atomize_sessions import atomize_session_entries
-from memcommit.commands.compare_sessions import comparison_session_entries
+from memcommit.commands.compare.execution import load_comparison_context
+from memcommit.commands.compare.execution import ensure_comparison_analysis
+from memcommit.commands.atomize.sessions import atomize_session_entries
+from memcommit.commands.compare.sessions import comparison_session_entries
 from memcommit.atomize_workflow import open_or_create_atomize_workbench
 from memcommit.authority.access import resolve_context_access
 from memcommit.comparison import (

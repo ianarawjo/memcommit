@@ -370,7 +370,7 @@ def test_cli_grounding_dialogue_resumes_then_applies_once_with_provenance(
     ctx, student, staff, analysis = _saved_analysis(store)
     provider = TwoTurnGroundingProvider()
     monkeypatch.setattr(
-        "memcommit.commands.atomize.connect_codex_chatgpt_provider",
+        "memcommit.commands.atomize.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     context_before = store._context_file(ctx.name).read_bytes()
@@ -592,7 +592,7 @@ def test_grounding_carries_selected_reading_and_free_text_into_provider(
     store.save_atomize_workbench(workbench)
     provider = TwoTurnGroundingProvider()
     monkeypatch.setattr(
-        "memcommit.commands.atomize.connect_codex_chatgpt_provider",
+        "memcommit.commands.atomize.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -700,7 +700,7 @@ def test_cli_keep_review_only_creates_no_checkpoint(
     ctx, _student, _staff, _analysis = _saved_analysis(store)
     provider = TwoTurnGroundingProvider()
     monkeypatch.setattr(
-        "memcommit.commands.atomize.connect_codex_chatgpt_provider",
+        "memcommit.commands.atomize.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     checkpoint_count = len(store.list_checkpoints(ctx.name))
@@ -739,7 +739,7 @@ def test_cli_keep_review_only_creates_no_checkpoint(
 
     next_provider = TwoTurnGroundingProvider()
     monkeypatch.setattr(
-        "memcommit.commands.atomize.connect_codex_chatgpt_provider",
+        "memcommit.commands.atomize.command.connect_codex_chatgpt_provider",
         lambda: next_provider,
     )
     reopened = runner.invoke(
@@ -778,7 +778,7 @@ def test_open_grounding_explicitly_blocks_ordinary_atomize_save_modes(
     ctx, _student, _staff, _analysis = _saved_analysis(store)
     provider = TwoTurnGroundingProvider()
     monkeypatch.setattr(
-        "memcommit.commands.atomize.connect_codex_chatgpt_provider",
+        "memcommit.commands.atomize.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     opened = runner.invoke(
@@ -813,7 +813,7 @@ def test_accept_retry_recovers_checkpoint_after_receipt_save_failure(
     ctx, _student, _staff, _analysis = _saved_analysis(store)
     provider = TwoTurnGroundingProvider()
     monkeypatch.setattr(
-        "memcommit.commands.atomize.connect_codex_chatgpt_provider",
+        "memcommit.commands.atomize.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     assert runner.invoke(
@@ -911,7 +911,7 @@ def test_accept_retry_recovers_when_terminal_archive_precedes_latest_receipt(
     ctx, _student, _staff, _analysis = _saved_analysis(store)
     provider = TwoTurnGroundingProvider()
     monkeypatch.setattr(
-        "memcommit.commands.atomize.connect_codex_chatgpt_provider",
+        "memcommit.commands.atomize.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     assert runner.invoke(
@@ -1057,7 +1057,7 @@ def test_mixed_edit_add_save_failure_leaves_no_partial_context_or_checkpoint(
             )
 
     monkeypatch.setattr(
-        "memcommit.commands.atomize.connect_codex_chatgpt_provider",
+        "memcommit.commands.atomize.command.connect_codex_chatgpt_provider",
         ReadyEditAddProvider,
     )
     opened = runner.invoke(
@@ -1109,7 +1109,7 @@ def test_cli_reply_fails_closed_when_context_changed(
     ctx, student, _staff, _analysis = _saved_analysis(store)
     provider = TwoTurnGroundingProvider()
     monkeypatch.setattr(
-        "memcommit.commands.atomize.connect_codex_chatgpt_provider",
+        "memcommit.commands.atomize.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     opened = runner.invoke(
@@ -1172,7 +1172,7 @@ def test_provider_result_is_discarded_when_workbench_changes_during_call(
             return raw
 
     monkeypatch.setattr(
-        "memcommit.commands.atomize.connect_codex_chatgpt_provider",
+        "memcommit.commands.atomize.command.connect_codex_chatgpt_provider",
         ConcurrentWorkbenchProvider,
     )
 
@@ -1203,7 +1203,7 @@ def test_cli_bare_resume_fails_closed_when_grounding_binding_is_stale(
     ctx, student, _staff, analysis = _saved_analysis(store)
     provider = TwoTurnGroundingProvider()
     monkeypatch.setattr(
-        "memcommit.commands.atomize.connect_codex_chatgpt_provider",
+        "memcommit.commands.atomize.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     opened = runner.invoke(
@@ -1283,7 +1283,7 @@ def test_cli_grounding_stales_on_direct_memory_ref_order_change(
 
     provider = TwoTurnGroundingProvider()
     monkeypatch.setattr(
-        "memcommit.commands.atomize.connect_codex_chatgpt_provider",
+        "memcommit.commands.atomize.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     opened = runner.invoke(
@@ -1411,7 +1411,7 @@ def test_grounding_add_preserves_embedded_context_slot_and_position(
 
     provider = ReadyAddProvider()
     monkeypatch.setattr(
-        "memcommit.commands.atomize.connect_codex_chatgpt_provider",
+        "memcommit.commands.atomize.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 

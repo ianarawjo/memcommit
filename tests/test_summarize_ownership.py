@@ -136,7 +136,7 @@ def test_pre_relocation_summarize_globals_load_through_aliases() -> None:
 def test_production_summarize_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "memcommit/bootstrap.py",
-        "memcommit/commands/summarize.py",
+        "memcommit/commands/summarize/command.py",
         "memcommit/operations/distill/application.py",
         "memcommit/operations/distill/runtime.py",
         "memcommit/eval/study_summarize_exact_matrix.py",

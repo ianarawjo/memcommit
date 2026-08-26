@@ -50,7 +50,7 @@ def _run_long_child() -> None:
     import typer
 
     import memcommit.ops as ops
-    from memcommit.commands.merge import cmd as merge_command
+    from memcommit.commands.merge.command import cmd as merge_command
     from memcommit.context import Memory
     from memcommit.store import MemoryStore
 
@@ -107,7 +107,7 @@ def _run_zero_delta_child() -> None:
     import typer
 
     import memcommit.ops as ops
-    from memcommit.commands.merge import cmd as merge_command
+    from memcommit.commands.merge.command import cmd as merge_command
     from memcommit.context import Memory
     from memcommit.store import MemoryStore
 

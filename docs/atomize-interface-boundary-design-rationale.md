@@ -4,7 +4,7 @@
 
 Atomize's analysis and Apply semantics already had typed application/runtime
 entry points, but the saved-session terminal screen still lived in
-`memcommit.commands.atomize_workbench_shell`. The command module also assembled
+`memcommit.commands.atomize.workbench_shell`. The command module also assembled
 the workbench destination editor and rendered Apply receipts. This made the CLI
 the practical owner of a TUI that should be reusable by any terminal adapter,
 and an interface module could not import the screen without depending outward

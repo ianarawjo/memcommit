@@ -87,3 +87,34 @@ seven real implementation boundaries.
 The follow-up therefore introduces no new behavioral failure. It changes the
 physical navigation surface and the implementation of compatibility lookup,
 not the retained 13 functional or interaction-contract problems.
+
+## Command package layout follow-up
+
+On 2026-08-26 the 153 non-package modules under `memcommit.commands` were
+organized into one uniform package per Python command entry plus one explicit
+shared command-support package.
+
+- The exhaustive run with the same 14 baseline nodes deselected reached the
+  end in 401.12 seconds: 6033 passed, 11 path-sensitive tests failed, 1 skipped,
+  and 14 deselected. The failures read removed flat files or patched helper
+  attributes through the new thin package boundary.
+- After those tests were pointed at the implementation-owning `command.py` or
+  relocated support module, the exact 11 failing nodes passed. No production
+  command behavior changed. A final exhaustive rerun after making every entry
+  package surface lazy completed with 6044 passed, 1 skipped, and the same 14
+  baseline nodes deselected in 400.77 seconds.
+- The ownership and package-layout slice completed with 536 passed and 1
+  skipped. All 89 former flat support imports resolve to the canonical
+  relocated module object in fresh legacy-first and canonical-first
+  interpreters.
+- The 12 non-blocking baseline nodes retain the same comparison: the generated
+  callable-catalog node passes and the other 11 fail. The two known Meld TUI
+  non-completions remain outside this path-only pass.
+- The generated callable catalog records 11170 callables across 1010 modules
+  and 66 operations. The module-count increase is the explicit 65-package
+  boundary (`64` command entries plus `shared`), not new operation behavior.
+
+This follow-up therefore adds no behavioral failure. `commands/__init__.py` is
+now the only Python file at the command root; every entry starts at a stable
+package, and adding support to a formerly single-file command no longer changes
+its physical navigation grammar.

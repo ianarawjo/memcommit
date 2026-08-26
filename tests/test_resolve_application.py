@@ -11,7 +11,7 @@ from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
-import memcommit.commands.resolve as resolve_command
+import memcommit.commands.resolve.command as resolve_command
 from memcommit.cli import app
 from memcommit.api import (
     MemCommitClient,

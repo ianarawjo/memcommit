@@ -1,4 +1,4 @@
-"""Resolve removed flat root modules to their canonical owners lazily."""
+"""Resolve removed flat modules to their canonical owners lazily."""
 
 from __future__ import annotations
 
@@ -13,11 +13,19 @@ from typing import Any
 from memcommit.compatibility._legacy_alias_map import (
     LEGACY_SUBMODULE_ALIASES as _GENERATED_LEGACY_SUBMODULE_ALIASES,
 )
-
-
-LEGACY_SUBMODULE_ALIASES = MappingProxyType(
-    _GENERATED_LEGACY_SUBMODULE_ALIASES
+from memcommit.compatibility._legacy_command_alias_map import (
+    LEGACY_COMMAND_SUBMODULE_ALIASES as _GENERATED_LEGACY_COMMAND_SUBMODULE_ALIASES,
 )
+
+
+LEGACY_SUBMODULE_ALIASES = MappingProxyType(_GENERATED_LEGACY_SUBMODULE_ALIASES)
+LEGACY_COMMAND_SUBMODULE_ALIASES = MappingProxyType(
+    _GENERATED_LEGACY_COMMAND_SUBMODULE_ALIASES
+)
+_ALL_LEGACY_SUBMODULE_ALIASES = {
+    **LEGACY_SUBMODULE_ALIASES,
+    **LEGACY_COMMAND_SUBMODULE_ALIASES,
+}
 
 
 _FINDER_MARKER = "memcommit-legacy-submodule-aliases-v1"
@@ -56,7 +64,7 @@ class _LegacySubmoduleLoader(importlib.abc.Loader):
 
 
 class _LegacySubmoduleFinder(importlib.abc.MetaPathFinder):
-    """Recognize only the frozen historical root-submodule catalog."""
+    """Recognize only the frozen historical submodule catalogs."""
 
     marker = _FINDER_MARKER
 
@@ -66,7 +74,7 @@ class _LegacySubmoduleFinder(importlib.abc.MetaPathFinder):
         path: object = None,
         target: ModuleType | None = None,
     ) -> importlib.machinery.ModuleSpec | None:
-        canonical_name = LEGACY_SUBMODULE_ALIASES.get(fullname)
+        canonical_name = _ALL_LEGACY_SUBMODULE_ALIASES.get(fullname)
         if canonical_name is None:
             return None
         loader = _LegacySubmoduleLoader(fullname, canonical_name)
@@ -77,8 +85,7 @@ def install_legacy_submodule_aliases() -> None:
     """Install the one process-local compatibility finder idempotently."""
 
     if any(
-        getattr(finder, "marker", None) == _FINDER_MARKER
-        for finder in sys.meta_path
+        getattr(finder, "marker", None) == _FINDER_MARKER for finder in sys.meta_path
     ):
         return
     # The catalog is exact, so checking it before PathFinder avoids creating
@@ -87,4 +94,8 @@ def install_legacy_submodule_aliases() -> None:
     sys.meta_path.insert(0, _LegacySubmoduleFinder())
 
 
-__all__ = ["LEGACY_SUBMODULE_ALIASES", "install_legacy_submodule_aliases"]
+__all__ = [
+    "LEGACY_COMMAND_SUBMODULE_ALIASES",
+    "LEGACY_SUBMODULE_ALIASES",
+    "install_legacy_submodule_aliases",
+]

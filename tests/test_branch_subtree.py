@@ -7,7 +7,7 @@ from typer.testing import CliRunner
 import memcommit.ops as ops
 import memcommit.store as store_module
 from memcommit.cli import app
-from memcommit.commands.branch_dialog import BranchCreationReceipt
+from memcommit.commands.branch.dialog import BranchCreationReceipt
 from memcommit.context import AutoCheckpoint, Context, Memory, MemoryRef
 from memcommit.provenance import build_trace
 from memcommit.store import MemoryStore
@@ -264,7 +264,7 @@ def test_interactive_receipt_can_request_the_subtree(isolated_store, monkeypatch
     store = MemoryStore()
     _source_hierarchy(store)
     monkeypatch.setattr(
-        "memcommit.commands.branch.choose_branch_creation",
+        "memcommit.commands.branch.command.choose_branch_creation",
         lambda *args, **kwargs: BranchCreationReceipt(
             source_name="source",
             target_name="experiment",

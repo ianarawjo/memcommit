@@ -6,7 +6,7 @@ from pathlib import Path
 
 from typer.testing import CliRunner
 
-from memcommit.commands.semantic_eval import eval_app
+from memcommit.commands.semantic_eval.command import eval_app
 
 
 def _write(directory: Path, name: str, value: dict[str, object]) -> None:

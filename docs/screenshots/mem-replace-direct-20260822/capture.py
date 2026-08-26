@@ -94,7 +94,7 @@ def _run_child(kind: str) -> None:
     import click
     import typer
 
-    import memcommit.commands.replace as replace_command
+    import memcommit.commands.replace.command as replace_command
     from memcommit.context import Context
     from memcommit.replace_runtime import execute_replace_plan, plan_replace_with_store
     from memcommit.store import MemoryStore

@@ -5,7 +5,7 @@ Last verified: 2026-08-20.
 ## Problem
 
 Query execution had moved below the terminal boundary, but its 1,200-line
-workbench still lived in `memcommit.commands.query_workbench`. That module mixed
+workbench still lived in `memcommit.commands.query.workbench`. That module mixed
 process-local values, typed answer projection, and prompt-toolkit mechanics, and
 it depended on several operation-neutral helpers through command-owned paths.
 The result was callable without the CLI, but its ownership still implied that
@@ -23,7 +23,7 @@ memcommit/interfaces/tui/operations/query/
 ```
 
 The command imports this package directly. The former
-`memcommit.commands.query_workbench` path contains only object-identical
+`memcommit.commands.query.workbench` path contains only object-identical
 compatibility exports.
 
 The screen also uses interface-owned background-turn, horizontal-choice,

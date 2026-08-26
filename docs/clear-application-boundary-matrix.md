@@ -12,7 +12,7 @@ syntax compatibility only.
 | Request and durable/no-change result | `memcommit.operations.clear.application` | Terminal-independent typed contract |
 | Context resolution and authority | `memcommit.operations.clear.runtime` | One captured current name and exact `ContextAccess` |
 | Recursive catalog freeze and atomic save | `memcommit.operations.clear.runtime` | Complete local subtree or no publication |
-| Error and receipt rendering | `memcommit.commands.clear` | Typer-only adapter |
+| Error and receipt rendering | `memcommit.commands.clear.command` | Typer-only adapter |
 
 ## Invariants
 

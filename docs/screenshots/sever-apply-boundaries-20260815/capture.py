@@ -149,9 +149,9 @@ def _child_apply(store_root: Path) -> None:
     import click
     import typer
 
-    import memcommit.commands.command_wait as command_wait
-    import memcommit.commands.session_help as session_help
-    import memcommit.commands.sever as sever_command
+    import memcommit.commands.shared.command_wait as command_wait
+    import memcommit.commands.shared.session_help as session_help
+    import memcommit.commands.sever.command as sever_command
     from memcommit.store import MemoryStore
 
     store = MemoryStore(root=store_root)
@@ -194,7 +194,7 @@ def _child_apply(store_root: Path) -> None:
 
 
 def _child_verify(store_root: Path) -> None:
-    from memcommit.commands.sever import render_sever
+    from memcommit.commands.sever.command import render_sever
     from memcommit.sever_store import SeverSessionStore
     from memcommit.store import MemoryStore
 
@@ -210,7 +210,7 @@ def _child_verify(store_root: Path) -> None:
 
 
 def _child_restore(store_root: Path, direction: str) -> None:
-    from memcommit.commands.restoration_present import render_command_restore_receipt
+    from memcommit.commands.shared.restoration_present import render_command_restore_receipt
     from memcommit.store import MemoryStore
 
     store = MemoryStore(root=store_root, create=False)
@@ -271,7 +271,7 @@ def _child_compensation(store_root: Path) -> None:
 
 
 def _child_recovery(store_root: Path) -> None:
-    from memcommit.commands.sever import render_sever
+    from memcommit.commands.sever.command import render_sever
     from memcommit.sever_application import (
         SeverApplyRequest,
         SeverPersistedApplyRequest,

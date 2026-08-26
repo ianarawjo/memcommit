@@ -128,7 +128,7 @@ than `SAVE LOCATION`. The Resolution adapter supplies `SAVE LOCATION`; Init
 supplies `NEW CONTEXT NAME`; Branch supplies the same new-Context label; each remains free
 to provide `NOT CREATED`, `CURRENT TARGET`, or another operation-owned state.
 
-The current `commands/save_location_control.py` remains a thin compatibility
+The current `commands/shared/save_location_control.py` remains a thin compatibility
 facade for existing callers. It supplies Save Location defaults but owns no
 interaction mechanics. Init imports the generic Context-name composition;
 Branch configures the common endpoint shell used by Atomize. Neither names its

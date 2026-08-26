@@ -8,8 +8,8 @@ from prompt_toolkit.data_structures import Size
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-from memcommit.commands.background_turn import BackgroundExecutorTurn
-from memcommit.commands.find_search_workbench import (
+from memcommit.commands.shared.background_turn import BackgroundExecutorTurn
+from memcommit.commands.find.search_workbench import (
     FindSearchRequest,
     FindSearchResponse,
     FindSearchResult,

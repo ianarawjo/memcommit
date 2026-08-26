@@ -140,7 +140,7 @@ def test_pre_relocation_literal_find_globals_load_through_aliases() -> None:
 def test_production_literal_find_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "memcommit/api/_operations/find.py",
-        "memcommit/commands/literal_find.py",
+        "memcommit/commands/literal_find/command.py",
         "memcommit/interfaces/literal_find.py",
         "memcommit/interfaces/cli/find.py",
         "memcommit/interfaces/tui/operations/find/compact.py",

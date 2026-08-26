@@ -83,9 +83,9 @@ def _initialize_store(store_root: Path):
 
 
 def _patch_meld_command(store, provider_factory) -> None:
-    import memcommit.commands.command_wait as command_wait
-    import memcommit.commands.meld as meld_command
-    import memcommit.commands.session_help as session_help
+    import memcommit.commands.shared.command_wait as command_wait
+    import memcommit.commands.meld.command as meld_command
+    import memcommit.commands.shared.session_help as session_help
     import memcommit.interfaces.tui.components.session_help as tui_session_help
 
     meld_command.MemoryStore = lambda *args, **kwargs: store
@@ -99,7 +99,7 @@ def _run_meld_cli(store, args: list[str]) -> None:
     import click
     import typer
 
-    import memcommit.commands.meld as meld_command
+    import memcommit.commands.meld.command as meld_command
 
     app = typer.Typer()
 
@@ -160,7 +160,7 @@ def _run_setup_apply_child(store_root: Path) -> None:
 
 
 def _run_prepare_exact_child(store_root: Path) -> None:
-    from memcommit.commands.meld import render_meld_session
+    from memcommit.commands.meld.command import render_meld_session
     from memcommit.meld_runtime import execute_meld_start, prepare_meld_start
     from memcommit.meld_start_application import MeldStartRequest
 
@@ -228,7 +228,7 @@ def _run_exact_accept_child(store_root: Path, *, repeated: bool) -> None:
 
 
 def _run_restore_child(store_root: Path, direction: str) -> None:
-    from memcommit.commands.restoration_present import render_command_restore_receipt
+    from memcommit.commands.shared.restoration_present import render_command_restore_receipt
     from memcommit.store import MemoryStore
 
     store = MemoryStore(root=store_root, create=False)

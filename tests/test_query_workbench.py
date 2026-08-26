@@ -9,7 +9,7 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 import typer
 
-import memcommit.commands.query as query_command
+import memcommit.commands.query.command as query_command
 from memcommit.find_answer_references import (
     FindAnswerEvidence,
     FindAnswerSentence,

@@ -4,8 +4,8 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 import pytest
 
-import memcommit.commands.meld as meld_command
-import memcommit.commands.meld_setup as meld_setup_command
+import memcommit.commands.meld.command as meld_command
+import memcommit.commands.meld.setup as meld_setup_command
 import memcommit.ops as ops
 from memcommit.interfaces.tui.components.endpoint_setup import EndpointSetupMemory
 from memcommit.interfaces.tui.operations.meld import (

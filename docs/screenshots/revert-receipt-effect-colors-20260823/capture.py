@@ -112,7 +112,7 @@ def _print_state(store_dir: Path, *, label: str) -> None:
 
 def _run_revert(store_dir: Path, target_uid: str) -> None:
     _configure_store(store_dir)
-    from memcommit.commands.revert import cmd
+    from memcommit.commands.revert.command import cmd
 
     print("LIVE COLOR PTY", *reversed(os.get_terminal_size()))
     print(f"COMMAND · mem revert {target_uid[:8]} --context {CONTEXT}")

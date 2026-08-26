@@ -209,7 +209,7 @@ def test_pre_relocation_meld_subapplication_globals_load_through_aliases(
 def test_production_meld_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "memcommit/api/_operations/meld.py",
-        "memcommit/commands/meld.py",
+        "memcommit/commands/meld/command.py",
         "memcommit/operations/meld/restart_application.py",
         "memcommit/operations/meld/resolution_application.py",
         "memcommit/operations/meld/runtime.py",

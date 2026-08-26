@@ -87,7 +87,7 @@ def _environment() -> dict[str, str]:
 
 
 def _child() -> None:
-    import memcommit.commands.fit as fit_command
+    import memcommit.commands.fit.command as fit_command
 
     copied: list[str] = []
     fit_command.connect_semantic_provider = _DelayedMayProvider

@@ -6,7 +6,7 @@ from typer.main import get_command
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
-import memcommit.commands.query as query_command
+import memcommit.commands.query.command as query_command
 from memcommit.cli import app
 from memcommit.context_targeting.presets import (
     ContextScopePreset,

@@ -3,11 +3,11 @@
 from __future__ import annotations
 
 import pytest
-from memcommit.commands.compare import (
+from memcommit.commands.compare.command import (
     CompareCommandError,
     _resolve_endpoint_syntax,
 )
-from memcommit.commands.context_operand import choose_context_operand
+from memcommit.commands.shared.context_operand import choose_context_operand
 from memcommit.context_targeting.operands import choose_endpoint_operand
 from memcommit.context_targeting.model import ExistingContextOperand, InlineTextOperand
 from memcommit.context_targeting.operands import classify_context_or_inline_text_operand

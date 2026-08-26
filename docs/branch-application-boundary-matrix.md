@@ -9,7 +9,7 @@ still permits that transition.
 
 | Current route | Application entry | Runtime/materialization | Presentation |
 | --- | --- | --- | --- |
-| `mem branch NAME` | `BranchRequest` → `run_branch` | `BranchStorePort` / `execute_branch` | `memcommit.commands.branch` |
+| `mem branch NAME` | `BranchRequest` → `run_branch` | `BranchStorePort` / `execute_branch` | `memcommit.commands.branch.command` |
 | Interactive `mem branch` setup | Same request after frozen Source/name selection | Same runtime | Branch setup TUI then CLI receipt |
 | `mem checkout -b NAME` | Delegates to `commands.branch.cmd` | Same runtime | Checkout-compatible CLI syntax |
 | Direct/recursive Source range | `include_descendants` in the typed request | One exact or subtree transaction | Shared range controls |

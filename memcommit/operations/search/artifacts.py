@@ -9,8 +9,8 @@ from __future__ import annotations
 import json
 from collections.abc import Sequence
 
-from memcommit.commands.compare_sessions import iter_saved_comparisons
-from memcommit.commands.meld_sessions import list_meld_session_catalog
+from memcommit.commands.compare.sessions import iter_saved_comparisons
+from memcommit.commands.meld.sessions import list_meld_session_catalog
 from memcommit.context import Context
 from memcommit.operations.rationale.cache import list_rationale_inferences
 from memcommit.operations.search.model import SearchArtifact

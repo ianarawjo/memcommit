@@ -39,7 +39,7 @@ def _verify_pty() -> None:
 
 
 def _run_child() -> None:
-    from memcommit.commands.find_search_workbench import run_find_search_workbench
+    from memcommit.commands.find.search_workbench import run_find_search_workbench
     from memcommit.find_application import FindSearchResponse, FindSearchResult
 
     _verify_pty()

@@ -9,7 +9,7 @@ from pathlib import Path
 
 import pytest
 
-import memcommit.commands.sever as sever_command
+import memcommit.commands.sever.command as sever_command
 import memcommit.ops as ops
 from memcommit.operations.sever.model import (
     SeverApplication,

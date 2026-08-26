@@ -8,7 +8,7 @@ import pytest
 import typer
 from typer.testing import CliRunner
 
-import memcommit.commands.semantic_eval as command
+import memcommit.commands.semantic_eval.command as command
 from memcommit.provider_types import ProviderIdentity
 from memcommit.query_provider import QueryProviderError
 

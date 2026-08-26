@@ -9,7 +9,7 @@ from typer.testing import CliRunner
 
 import memcommit.ops as ops
 from memcommit.cli import app
-from memcommit.commands.find import (
+from memcommit.commands.find.command import (
     FIND_OUTSIDE_CANCELLATION,
     FIND_OUTSIDE_CONFIRMATION,
     _apply_show_result,
@@ -22,13 +22,13 @@ from memcommit.commands.find import (
     _supplement_namespace_branch_coverage,
 )
 from memcommit.authority.access import resolve_context_access
-from memcommit.commands.readable_context_catalog import (
+from memcommit.commands.shared.readable_context_catalog import (
     freeze_readable_context_catalog,
 )
-from memcommit.commands.find_chat_shell import (
+from memcommit.commands.find.chat_shell import (
     FindChatMessage,
 )
-from memcommit.commands.find_search_workbench import (
+from memcommit.commands.find.search_workbench import (
     FindSearchRequest,
     FindSearchResponse,
 )
@@ -213,7 +213,7 @@ def test_interactive_find_searches_multiple_exact_targets_in_one_provider_turn(
     catalog = freeze_readable_context_catalog(store, access)
     provider = KeywordProvider()
     monkeypatch.setattr(
-        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        "memcommit.commands.find.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     request = FindSearchRequest(
@@ -256,7 +256,7 @@ def test_explicit_find_repeats_context_for_the_same_multi_root_request(
         return FindSearchResponse(request=request, mode="CURRENT", results=())
 
     monkeypatch.setattr(
-        "memcommit.commands.find._run_find_search_request",
+        "memcommit.commands.find.command._run_find_search_request",
         run_request,
     )
     result = runner.invoke(
@@ -301,11 +301,11 @@ def test_search_all_and_short_alias_freeze_every_readable_context(
         return FindSearchResponse(request=request, mode="CURRENT", results=())
 
     monkeypatch.setattr(
-        "memcommit.commands.find._run_find_search_request",
+        "memcommit.commands.find.command._run_find_search_request",
         run_request,
     )
     monkeypatch.setattr(
-        "memcommit.commands.find.authorize_combination",
+        "memcommit.commands.find.command.authorize_combination",
         lambda accesses: authorized.append(
             tuple(access.display_name for access in accesses)
         ),
@@ -344,7 +344,7 @@ def test_search_all_rejects_explicit_context(isolated_store, monkeypatch):
     store.save(context)
     store.set_current(context.name)
     monkeypatch.setattr(
-        "memcommit.commands.find._run_find_search_request",
+        "memcommit.commands.find.command._run_find_search_request",
         lambda *_args, **_kwargs: (_ for _ in ()).throw(
             AssertionError("invalid Search scope must not execute")
         ),
@@ -390,7 +390,7 @@ def test_find_cli_multi_roots_keep_descendants_and_embeds_independent(
     def exposed_memories(*scope_args: str) -> set[str]:
         provider = KeywordProvider()
         monkeypatch.setattr(
-            "memcommit.commands.find.connect_codex_chatgpt_provider",
+            "memcommit.commands.find.command.connect_codex_chatgpt_provider",
             lambda: provider,
         )
         result = runner.invoke(
@@ -855,7 +855,7 @@ def test_find_cli_recurses_renders_local_content_and_does_not_checkpoint(
     checkpoints_before = store.list_checkpoints("facilities-reference")
     provider = KeywordProvider()
     monkeypatch.setattr(
-        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        "memcommit.commands.find.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -897,7 +897,7 @@ def test_find_cli_recursive_searches_materialized_namespace_descendants(
     store.set_current(root.name)
     provider = KeywordProvider()
     monkeypatch.setattr(
-        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        "memcommit.commands.find.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -946,7 +946,7 @@ def test_find_cli_labels_related_fallback_when_primary_matches_are_empty(
             )
 
     monkeypatch.setattr(
-        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        "memcommit.commands.find.command.connect_codex_chatgpt_provider",
         lambda: RelatedProvider(),
     )
 
@@ -999,15 +999,15 @@ def test_find_cli_tty_prints_static_results_without_opening_chat(
     store.set_current(ctx.name)
     provider = KeywordProvider()
     monkeypatch.setattr(
-        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        "memcommit.commands.find.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     monkeypatch.setattr(
-        "memcommit.commands.find._interactive_terminal",
+        "memcommit.commands.find.command._interactive_terminal",
         lambda: True,
     )
     monkeypatch.setattr(
-        "memcommit.commands.find.run_find_chat_session",
+        "memcommit.commands.find.command.run_find_chat_session",
         lambda *args, **kwargs: (_ for _ in ()).throw(
             AssertionError("ordinary Find must not open the chat shell")
         ),
@@ -1032,11 +1032,11 @@ def test_find_without_query_opens_blank_interactive_search_in_a_tty(
     store.set_current(ctx.name)
     opened = []
     monkeypatch.setattr(
-        "memcommit.commands.find._interactive_terminal",
+        "memcommit.commands.find.command._interactive_terminal",
         lambda: True,
     )
     monkeypatch.setattr(
-        "memcommit.commands.find._open_find_search_workbench",
+        "memcommit.commands.find.command._open_find_search_workbench",
         lambda store, access, **options: opened.append(
             (store.store_dir, access.display_name, options)
         ),
@@ -1118,16 +1118,16 @@ def test_find_cli_tty_static_results_include_namespace_descendants(
     store.save(child)
     store.set_current(root.name)
     monkeypatch.setattr(
-        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        "memcommit.commands.find.command.connect_codex_chatgpt_provider",
         lambda: KeywordProvider(),
     )
     monkeypatch.setattr(
-        "memcommit.commands.find._interactive_terminal",
+        "memcommit.commands.find.command._interactive_terminal",
         lambda: True,
     )
 
     monkeypatch.setattr(
-        "memcommit.commands.find.run_find_chat_session",
+        "memcommit.commands.find.command.run_find_chat_session",
         lambda *args, **kwargs: (_ for _ in ()).throw(
             AssertionError("ordinary Find must not open the chat shell")
         ),
@@ -1201,7 +1201,7 @@ def test_zero_result_follow_up_refines_and_replaces_search_results(
 
     provider = RefineProvider()
     monkeypatch.setattr(
-        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        "memcommit.commands.find.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -1260,7 +1260,7 @@ def test_refine_can_replace_zero_results_with_a_labeled_related_fallback(
             )
 
     monkeypatch.setattr(
-        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        "memcommit.commands.find.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
 
@@ -1309,7 +1309,7 @@ def test_show_result_proposal_runs_exact_read_only_cli_and_preserves_results(
         ctx.name,
     )
     monkeypatch.setattr(
-        "memcommit.commands.find._run_read_only_find_command",
+        "memcommit.commands.find.command._run_read_only_find_command",
         lambda argv: subprocess.CompletedProcess(
             args=argv,
             returncode=0,
@@ -1393,7 +1393,7 @@ def test_general_parking_question_gets_a_grounded_answer_without_a_command(
 
     provider = AnswerProvider()
     monkeypatch.setattr(
-        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        "memcommit.commands.find.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -1401,7 +1401,7 @@ def test_general_parking_question_gets_a_grounded_answer_without_a_command(
         raise AssertionError("An ANSWER turn must not execute a command.")
 
     monkeypatch.setattr(
-        "memcommit.commands.find._run_read_only_find_command",
+        "memcommit.commands.find.command._run_read_only_find_command",
         refuse_command,
     )
 
@@ -1493,7 +1493,7 @@ def test_explicit_other_context_answer_collects_and_references_outside_memory(
 
     provider = AnswerProvider()
     monkeypatch.setattr(
-        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        "memcommit.commands.find.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -1560,11 +1560,11 @@ def test_provider_cannot_expand_to_other_contexts_without_user_request(
 
     provider = OverbroadProvider()
     monkeypatch.setattr(
-        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        "memcommit.commands.find.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     monkeypatch.setattr(
-        "memcommit.commands.find.collect_outside_context_evidence",
+        "memcommit.commands.find.command.collect_outside_context_evidence",
         lambda *_args, **_kwargs: pytest.fail("outside Contexts must not be collected"),
     )
 
@@ -1614,7 +1614,7 @@ def test_show_result_failure_does_not_claim_success(monkeypatch):
         "show it",
     )
     monkeypatch.setattr(
-        "memcommit.commands.find._run_read_only_find_command",
+        "memcommit.commands.find.command._run_read_only_find_command",
         lambda _argv: subprocess.CompletedProcess(
             args=[],
             returncode=1,
@@ -1663,7 +1663,7 @@ def test_find_cli_groups_contexts_and_aligns_multiline_content(
             )
 
     monkeypatch.setattr(
-        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        "memcommit.commands.find.command.connect_codex_chatgpt_provider",
         lambda: InterleavedProvider(),
     )
 
@@ -1700,7 +1700,7 @@ def test_find_cli_groups_memory_ref_and_renders_target_inline(
     store.save(parent)
     store.set_current(parent.name)
     monkeypatch.setattr(
-        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        "memcommit.commands.find.command.connect_codex_chatgpt_provider",
         lambda: KeywordProvider(),
     )
 
@@ -1726,7 +1726,7 @@ def test_find_cli_explicit_context_does_not_switch_current(
     store.save(active)
     store.set_current("active")
     monkeypatch.setattr(
-        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        "memcommit.commands.find.command.connect_codex_chatgpt_provider",
         lambda: KeywordProvider(),
     )
 
@@ -1758,7 +1758,7 @@ def test_find_cli_query_ref_hit_prints_hint_without_hidden_content(
     store.save(parent)
     store.set_current("facilities-reference")
     monkeypatch.setattr(
-        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        "memcommit.commands.find.command.connect_codex_chatgpt_provider",
         lambda: KeywordProvider(),
     )
 
@@ -1797,7 +1797,7 @@ def test_query_ref_hint_shell_quotes_untrusted_names(
     )
     store.set_current(parent.name)
     monkeypatch.setattr(
-        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        "memcommit.commands.find.command.connect_codex_chatgpt_provider",
         lambda: KeywordProvider(),
     )
 
@@ -1813,7 +1813,7 @@ def test_find_cli_errors_for_missing_context_without_current_or_bad_limit(
     monkeypatch,
 ):
     monkeypatch.setattr(
-        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        "memcommit.commands.find.command.connect_codex_chatgpt_provider",
         lambda: pytest.fail("provider should not be called"),
     )
 

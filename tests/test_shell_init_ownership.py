@@ -11,7 +11,7 @@ import pytest
 
 
 REPOSITORY_ROOT = Path(__file__).parents[1]
-LEGACY_MODULE = "memcommit.commands.shell_init"
+LEGACY_MODULE = "memcommit.commands.shell_init.command"
 OWNER_MODULE = "memcommit.interfaces.cli.shell_init"
 
 
@@ -49,7 +49,13 @@ assert sys.modules[{OWNER_MODULE!r}] is canonical
 
 
 def test_legacy_shell_init_facade_defines_no_behavior() -> None:
-    path = REPOSITORY_ROOT / "memcommit" / "commands" / "shell_init.py"
+    path = (
+        REPOSITORY_ROOT
+        / "memcommit"
+        / "commands"
+        / "shell_init"
+        / "command.py"
+    )
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
 
     assert not any(

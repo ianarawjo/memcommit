@@ -80,9 +80,9 @@ def _initialize_store(store_root: Path):
 
 
 def _patch_update_command(store, provider_factory) -> None:
-    import memcommit.commands.command_wait as command_wait
-    import memcommit.commands.session_help as session_help
-    import memcommit.commands.update as update_command
+    import memcommit.commands.shared.command_wait as command_wait
+    import memcommit.commands.shared.session_help as session_help
+    import memcommit.commands.update.command as update_command
     import memcommit.interfaces.tui.components.session_help as tui_session_help
 
     update_command.MemoryStore = lambda *args, **kwargs: store

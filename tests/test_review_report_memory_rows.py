@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from memcommit.commands.review_report import render_review_report_snapshot
+from memcommit.commands.review.report import render_review_report_snapshot
 from memcommit.resolution_workbench import (
     ResolutionDetailBlock,
     ResolutionItem,

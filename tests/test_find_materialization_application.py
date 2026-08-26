@@ -10,15 +10,15 @@ import uuid
 import pytest
 
 import memcommit.ops as ops
-import memcommit.commands.find as find_command
+import memcommit.commands.find.command as find_command
 import memcommit.operations.search.materialization_application as materialization_application
 import memcommit.operations.search.materialization_runtime as materialization_runtime
 import memcommit.store as store_module
 from memcommit.authority.access import resolve_context_access
-from memcommit.commands.readable_context_catalog import (
+from memcommit.commands.shared.readable_context_catalog import (
     freeze_readable_context_catalog,
 )
-from memcommit.commands.find_search_workbench import FindSearchWorkbenchResult
+from memcommit.commands.find.search_workbench import FindSearchWorkbenchResult
 from memcommit.context import Memory, MemoryRef
 from memcommit.operations.search.application import (
     FindSearchRequest,

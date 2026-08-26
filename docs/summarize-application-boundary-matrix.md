@@ -94,7 +94,7 @@ Python production caller
        -> run_summarize
 
 mem summarize argv
-  -> memcommit.commands.summarize.cmd
+  -> memcommit.commands.summarize.command.cmd
   -> resolve semantic scope and presentation mode
   -> AUTO becomes immediate plain execution; --tui alone opts into setup
   -> bootstrap builds ConsoleRunner(application callable, plain presenter,

@@ -207,7 +207,7 @@ component without inheriting Embed semantics.
 
 The component projects only the target's frozen direct-item sequence. It does
 not import a command adapter or gain storage, authority, or apply behavior.
-The former `memcommit.commands.direct_item_placement` implementation is now a
+The former `memcommit.commands.shared.direct_item_placement` implementation is now a
 module-identity compatibility alias to this owner. The relocation deliberately
 retains the old import path while removing the second implementation and its
 independent globals. Older command screens may still have separate review

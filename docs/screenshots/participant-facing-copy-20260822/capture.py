@@ -68,7 +68,7 @@ def _run_query_child() -> None:
 
 
 def _run_search_child() -> None:
-    from memcommit.commands.find_search_workbench import run_find_search_workbench
+    from memcommit.commands.find.search_workbench import run_find_search_workbench
     from memcommit.find_application import FindSearchResponse, FindSearchResult
 
     _verify_pty()

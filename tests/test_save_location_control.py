@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from memcommit.commands.save_location_control import (
+from memcommit.commands.shared.save_location_control import (
     SaveLocationEditorState,
     SaveLocationView,
     save_location_card_lines,

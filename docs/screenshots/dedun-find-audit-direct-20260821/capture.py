@@ -253,7 +253,7 @@ def _show_verification(context_name: str, provider: _Provider, label: str) -> No
 
 
 def _run_dedun_child(*, no_change: bool) -> None:
-    import memcommit.commands.find_duplicates as find_command
+    import memcommit.commands.find_duplicates.command as find_command
     from memcommit.store import MemoryStore
 
     context_name = "quality/no-change" if no_change else "quality/direct-dedun"
@@ -288,7 +288,7 @@ def _run_dedun_child(*, no_change: bool) -> None:
 
 
 def _run_find_child() -> None:
-    import memcommit.commands.find_duplicates as find_command
+    import memcommit.commands.find_duplicates.command as find_command
 
     context_name = "quality/direct-find"
     with tempfile.TemporaryDirectory(prefix="direct-find-capture-") as directory:
@@ -317,7 +317,7 @@ def _run_find_exact_child() -> None:
 
 
 def _run_audit_child() -> None:
-    import memcommit.commands.audit as audit_command
+    import memcommit.commands.audit.command as audit_command
     from memcommit.quality_audit_store import QualityAuditStore
     from memcommit.store import MemoryStore
 

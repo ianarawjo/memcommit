@@ -123,7 +123,7 @@ def _run_query_child(*, fail: bool = False) -> None:
 
 
 def _run_find_child() -> None:
-    from memcommit.commands.find_search_workbench import (
+    from memcommit.commands.find.search_workbench import (
         FindSearchResponse,
         FindSearchResult,
         run_find_search_workbench,

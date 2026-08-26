@@ -6,7 +6,7 @@ from typer.testing import CliRunner
 
 import memcommit.ops as ops
 from memcommit.cli import app
-from memcommit.commands.find import (
+from memcommit.commands.find.command import (
     _collect_find_frame_candidates,
     _load_find_frame_roots,
 )
@@ -96,7 +96,7 @@ def test_query_single_argument_answers_from_ordinary_search_artifact(
     _saved_meld_trace(store)
     provider = _QueryAnswerProvider()
     monkeypatch.setattr(
-        "memcommit.commands.query.connect_codex_chatgpt_provider",
+        "memcommit.commands.query.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 

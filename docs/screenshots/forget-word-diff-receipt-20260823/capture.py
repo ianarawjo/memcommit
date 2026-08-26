@@ -108,7 +108,7 @@ def _run_forget_cli(store, provider: _ForgetProvider) -> None:
     import click
     import typer
 
-    import memcommit.commands.forget as forget_command
+    import memcommit.commands.forget.command as forget_command
 
     forget_command.MemoryStore = lambda *args, **kwargs: store
     forget_command.connect_codex_chatgpt_provider = lambda: provider

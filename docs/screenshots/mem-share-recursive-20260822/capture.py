@@ -134,7 +134,7 @@ def _received_names(receiver_store) -> tuple[str, ...]:
 def _run_child(home: Path, kind: str) -> None:
     import typer
 
-    from memcommit.commands.share import cmd
+    from memcommit.commands.share.command import cmd
     from memcommit.context import Context
     from memcommit.profile_config import (
         ProfileRegistry,

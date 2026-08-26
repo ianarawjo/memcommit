@@ -97,7 +97,7 @@ def _prepare_merge_store(store_dir: Path) -> None:
 
 def _run_revert(store_dir: Path) -> None:
     _configure_store(store_dir)
-    from memcommit.commands.revert import cmd
+    from memcommit.commands.revert.command import cmd
 
     print("PTY", os.get_terminal_size().columns, os.get_terminal_size().lines)
     cmd()
@@ -105,7 +105,7 @@ def _run_revert(store_dir: Path) -> None:
 
 def _run_merge(store_dir: Path) -> None:
     _configure_store(store_dir)
-    from memcommit.commands.merge import cmd
+    from memcommit.commands.merge.command import cmd
 
     print("PTY", os.get_terminal_size().columns, os.get_terminal_size().lines)
     cmd()

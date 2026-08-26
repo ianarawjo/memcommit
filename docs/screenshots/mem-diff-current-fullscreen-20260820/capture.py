@@ -164,7 +164,7 @@ def _store_digest(store_dir: Path) -> str:
 
 def _run_diff(store_dir: Path, context_name: str | None) -> None:
     _configure_store(store_dir)
-    from memcommit.commands.diff import cmd
+    from memcommit.commands.diff.command import cmd
     from memcommit.store import MemoryStore
 
     store = MemoryStore(create=False)
@@ -184,7 +184,7 @@ def _run_diff(store_dir: Path, context_name: str | None) -> None:
 
 
 def _run_large_diff() -> None:
-    from memcommit.commands.update_checkpoint_history import (
+    from memcommit.commands.update.checkpoint_history import (
         choose_update_checkpoint_at_location,
     )
 

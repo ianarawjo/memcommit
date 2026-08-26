@@ -117,7 +117,7 @@ def test_pre_relocation_show_globals_load_through_aliases() -> None:
 def test_production_show_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "memcommit/api/_operations/show.py",
-        "memcommit/commands/show.py",
+        "memcommit/commands/show/command.py",
         "memcommit/interfaces/cli/show.py",
         "memcommit/operations/show/runtime.py",
     )

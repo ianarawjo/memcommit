@@ -8,7 +8,7 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.commands.compare as compare_command
+import memcommit.commands.compare.command as compare_command
 import memcommit.ops as ops
 from memcommit.cli import app
 from memcommit.comparison import ComparisonInput

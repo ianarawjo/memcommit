@@ -107,7 +107,7 @@ def _evidence():
 def _run_child() -> None:
     import json
 
-    from memcommit.commands.ordinary_query_provider_policy import (
+    from memcommit.commands.query.provider_policy import (
         ORDINARY_QUERY_MODEL,
         ORDINARY_QUERY_REASONING_EFFORT,
     )

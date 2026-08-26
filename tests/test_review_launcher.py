@@ -7,8 +7,8 @@ from types import SimpleNamespace
 
 from typer.testing import CliRunner
 
-import memcommit.commands.review as review_command
-import memcommit.commands.review_sessions as review_sessions
+import memcommit.commands.review.command as review_command
+import memcommit.commands.review.sessions as review_sessions
 import memcommit.ops as ops
 from memcommit.cli import app
 from memcommit.interfaces.tui.components.operation_launcher.session import (
@@ -240,8 +240,8 @@ def test_applied_sever_selection_still_opens_read_only_review(
     isolated_store,
     monkeypatch,
 ):
-    import memcommit.commands.sever as sever_command
-    import memcommit.commands.sever_sessions as sever_sessions
+    import memcommit.commands.sever.command as sever_command
+    import memcommit.commands.sever.sessions as sever_sessions
     import memcommit.review_report_adapters as adapters
 
     session_uid = str(uuid.uuid4())
@@ -300,8 +300,8 @@ def test_applied_meld_selection_still_opens_read_only_review(
     isolated_store,
     monkeypatch,
 ):
-    import memcommit.commands.meld as meld_command
-    import memcommit.commands.meld_sessions as meld_sessions
+    import memcommit.commands.meld.command as meld_command
+    import memcommit.commands.meld.sessions as meld_sessions
     import memcommit.review_report_adapters as adapters
 
     session_uid = str(uuid.uuid4())

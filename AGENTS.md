@@ -328,7 +328,7 @@ conversation.
 
 - Before adding operation-specific TUI state, rendering, focus traversal,
   scrolling, pointer, or key-navigation code, check the shared components in
-  `memcommit.commands.tui_primitives`, `memcommit.selection`, Context/Memory
+  `memcommit.commands.shared.tui_primitives`, `memcommit.selection`, Context/Memory
   pickers, and the common session workbench shells. Reuse or extend the narrowest
   applicable shared component instead of cloning its behavior into one command.
 - Keep semantic meaning and validation in the calling command, but keep common
@@ -358,7 +358,7 @@ conversation.
   selection color, focused border/color, escaping, and cursor-versus-selection
   meaning must not be redrawn by an operation.
 - For an exact writable one-line name, reuse `ExactNameInputControl` from
-  `memcommit.commands.tui_primitives`; add `ExactNameFieldControl` only when the
+  `memcommit.commands.shared.tui_primitives`; add `ExactNameFieldControl` only when the
   field owns its own focused box. Context placement additionally composes
   `ContextParentLocatorControl` from `memcommit.context_targeting.tui`; do not
   make a Save Location, Meld, Sever, Study, or other operation-named editor own

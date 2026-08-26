@@ -163,7 +163,7 @@ def _gate() -> None:
 
 
 def _run_general_child() -> None:
-    import memcommit.commands.fit as fit_command
+    import memcommit.commands.fit.command as fit_command
 
     _Provider.calls = 0
     fit_command.connect_semantic_provider = lambda: _Provider(delay=0.8)
@@ -192,7 +192,7 @@ def _run_general_child() -> None:
 
 
 def _run_general_no_child() -> None:
-    import memcommit.commands.fit as fit_command
+    import memcommit.commands.fit.command as fit_command
 
     _Provider.calls = 0
     fit_command.connect_semantic_provider = lambda: _Provider(verdict="NO")
@@ -249,7 +249,7 @@ def _prepare_overlap_store(root: Path):
 
 
 def _run_overlap_child(store_root: Path) -> None:
-    import memcommit.commands.fit as fit_command
+    import memcommit.commands.fit.command as fit_command
     from memcommit.fit_store import FitStore
     from memcommit.store import context_record_digest
 
@@ -280,7 +280,7 @@ def _run_overlap_child(store_root: Path) -> None:
 
 
 def _run_three_operands_child(store_root: Path) -> None:
-    import memcommit.commands.fit as fit_command
+    import memcommit.commands.fit.command as fit_command
     import memcommit.ops as ops
     from memcommit.fit_store import FitStore
     from memcommit.store import MemoryStore

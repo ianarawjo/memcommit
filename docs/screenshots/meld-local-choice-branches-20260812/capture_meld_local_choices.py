@@ -113,7 +113,7 @@ def _child(store_root: Path, mode: str) -> None:
         print("PROVIDER CALLS · 0")
         return
 
-    from memcommit.commands.meld import _run_interactive
+    from memcommit.commands.meld.command import _run_interactive
 
     def provider_factory():
         raise RuntimeError("A local Meld choice must not connect a provider.")

@@ -9,14 +9,14 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
-import memcommit.commands.find as find_command
-import memcommit.commands.query as query_command
-import memcommit.commands.rationale as rationale_command
+import memcommit.commands.find.command as find_command
+import memcommit.commands.query.command as query_command
+import memcommit.commands.rationale.command as rationale_command
 from memcommit.api import MemCommitClient, ShowContextResult
 from memcommit.cli import app
 from memcommit.authority.access import resolve_context_access
-from memcommit.commands.memory_picker import MemoryReportTargetSelection
-from memcommit.commands.readable_context_catalog import (
+from memcommit.commands.shared.memory_picker import MemoryReportTargetSelection
+from memcommit.commands.shared.readable_context_catalog import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.context import Memory
@@ -290,7 +290,7 @@ def test_summarize_preserves_granted_read_projection_and_binding_freshness(
             )
 
     monkeypatch.setattr(
-        "memcommit.commands.summarize.connect_codex_chatgpt_provider",
+        "memcommit.commands.summarize.command.connect_codex_chatgpt_provider",
         Provider,
     )
 
@@ -330,7 +330,7 @@ def test_summarize_preserves_granted_read_projection_and_binding_freshness(
             return response
 
     monkeypatch.setattr(
-        "memcommit.commands.summarize.connect_codex_chatgpt_provider",
+        "memcommit.commands.summarize.command.connect_codex_chatgpt_provider",
         RevisionChangingProvider,
     )
 

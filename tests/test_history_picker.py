@@ -9,8 +9,8 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from prompt_toolkit.utils import get_cwidth
 
-import memcommit.commands.history_picker as history_picker
-from memcommit.commands.history_picker import (
+import memcommit.commands.shared.history_picker as history_picker
+from memcommit.commands.shared.history_picker import (
     HISTORY_BACK,
     REVERT_COMMAND_FORM,
     HistoryDetailView,
@@ -586,11 +586,11 @@ def test_untrusted_fields_are_display_escaped_in_detail():
 
 def test_picker_requires_tty_when_requested(monkeypatch):
     monkeypatch.setattr(
-        "memcommit.commands.history_picker.sys.stdin",
+        "memcommit.commands.shared.history_picker.sys.stdin",
         io.StringIO(),
     )
     monkeypatch.setattr(
-        "memcommit.commands.history_picker.sys.stdout",
+        "memcommit.commands.shared.history_picker.sys.stdout",
         io.StringIO(),
     )
 

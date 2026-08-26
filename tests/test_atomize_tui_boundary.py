@@ -41,8 +41,8 @@ def test_atomize_tui_boundary_does_not_import_command_modules() -> None:
 
 
 def test_atomize_legacy_shell_paths_are_identity_preserving_facades() -> None:
-    from memcommit.commands import atomize_render as legacy_cli
-    from memcommit.commands import atomize_workbench_shell as legacy_atomize
+    from memcommit.commands.atomize import render as legacy_cli
+    from memcommit.commands.atomize import workbench_shell as legacy_atomize
     from memcommit.interfaces.cli import atomize as atomize_cli
     from memcommit.interfaces.tui.operations.atomize import screen as atomize_screen
 
@@ -59,12 +59,12 @@ def test_atomize_legacy_shell_paths_are_identity_preserving_facades() -> None:
 
 def test_atomize_command_delegates_terminal_presentation_to_interfaces() -> None:
     source = (
-        REPOSITORY / "memcommit/commands/atomize.py"
+        REPOSITORY / "memcommit/commands/atomize/command.py"
     ).read_text(encoding="utf-8")
 
     assert "memcommit.interfaces.tui.operations.atomize.adapter" in source
     assert "memcommit.interfaces.cli.atomize" in source
-    assert "memcommit.commands.atomize_workbench_shell" not in source
+    assert "memcommit.commands.atomize.workbench_shell" not in source
     assert "prompt_toolkit" not in source
 
 

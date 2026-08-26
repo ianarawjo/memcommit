@@ -12,8 +12,8 @@ from typer.testing import CliRunner
 
 import memcommit.clipboard as clipboard
 import memcommit.ops as ops
-import memcommit.commands.meld as meld_command
-import memcommit.commands.meld_setup as meld_setup_command
+import memcommit.commands.meld.command as meld_command
+import memcommit.commands.meld.setup as meld_setup_command
 from memcommit.cli import app
 from memcommit.comparison_provider import COMPARISON_PAYLOAD_MARKER
 from memcommit.comparison_store import comparison_analysis_path
@@ -22,13 +22,13 @@ from memcommit.authority.access import (
     resolve_context_access,
     revalidate_granted_context_binding,
 )
-from memcommit.commands.compare_sessions import comparison_session_entries
-from memcommit.commands.compare_setup import choose_compare_setup
-from memcommit.commands.endpoint_setup_flows import (
+from memcommit.commands.compare.sessions import comparison_session_entries
+from memcommit.commands.compare.setup import choose_compare_setup
+from memcommit.commands.shared.endpoint_setup_flows import (
     _readable_endpoint_catalog,
     choose_update_setup,
 )
-from memcommit.commands.meld_setup import MeldSetupReceipt
+from memcommit.commands.meld.setup import MeldSetupReceipt
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.context_targeting.readable_catalog import ReadableContextCatalog
 from memcommit.derived_policy import analysis_retention, authorize_analysis_save
@@ -153,8 +153,7 @@ class _GrantedSubtreeDirectionalMeldProvider:
                         "relation_key": "coverage",
                         "left_memory_ids": [incoming["memory_id"]],
                         "right_memory_ids": [
-                            memory["memory_id"]
-                            for memory in baseline_by_owner.values()
+                            memory["memory_id"] for memory in baseline_by_owner.values()
                         ],
                         "kind": "CONFLICT",
                         "status": "RESOLVED",
@@ -307,7 +306,11 @@ def test_directional_meld_updates_granted_baseline_authority_context(
         app,
         ["meld", incoming.name, "--into", "campus-wiki/services"],
     )
-    assert started.exit_code == 0, (started.output, started.stderr, repr(started.exception))
+    assert started.exit_code == 0, (
+        started.output,
+        started.stderr,
+        repr(started.exception),
+    )
     authority_target = authority.load_direct("campus-wiki/services")
     session = active.load_meld_session(authority_target.uid)
     assert session is not None
@@ -327,7 +330,7 @@ def test_directional_meld_updates_granted_baseline_authority_context(
     assert accepted.exit_code == 0, accepted.output
     assert [
         memory.content
-            for memory in authority.load_direct("campus-wiki/services").iter_items()
+        for memory in authority.load_direct("campus-wiki/services").iter_items()
     ][0] == "Verified update: the public service desk moved east."
     # The attachment remains participant-owned authorization metadata; Meld
     # must not materialize an authority baseline copy into it.
@@ -473,7 +476,11 @@ def test_directional_meld_reads_granted_incoming_into_local_baseline(
         app,
         ["meld", "campus-wiki/services", "--into", baseline.name],
     )
-    assert started.exit_code == 0, (started.output, started.stderr, repr(started.exception))
+    assert started.exit_code == 0, (
+        started.output,
+        started.stderr,
+        repr(started.exception),
+    )
     session = active.load_meld_session(baseline.uid)
     assert session is not None
     assert session.granted_incoming is not None
@@ -490,9 +497,9 @@ def test_directional_meld_reads_granted_incoming_into_local_baseline(
         ],
     )
     assert accepted.exit_code == 0, accepted.output
-    assert [memory.content for memory in active.load_direct(baseline.name).iter_items()] == [
-        "The service desk is open on weekdays."
-    ]
+    assert [
+        memory.content for memory in active.load_direct(baseline.name).iter_items()
+    ] == ["The service desk is open on weekdays."]
 
 
 def test_directional_meld_combines_granted_contexts_in_one_authority_profile(
@@ -539,9 +546,9 @@ def test_directional_meld_combines_granted_contexts_in_one_authority_profile(
         ],
     )
     assert accepted.exit_code == 0, accepted.output + accepted.stderr
-    assert [item.content for item in authority.load_direct(baseline.name).iter_items()] == [
-        "The service desk is open on weekdays."
-    ]
+    assert [
+        item.content for item in authority.load_direct(baseline.name).iter_items()
+    ] == ["The service desk is open on weekdays."]
 
 
 def test_directional_meld_revoked_target_fails_closed_before_baseline_acceptance(
@@ -623,9 +630,12 @@ def test_directional_meld_rejects_ungranted_baseline_edit(
     )
     assert started.exit_code == 1
     assert "does not authorize UPDATE" in started.stderr
-    assert active.load_meld_session(
-        target_access.store.load_direct(target_access.context_name).uid
-    ) is None
+    assert (
+        active.load_meld_session(
+            target_access.store.load_direct(target_access.context_name).uid
+        )
+        is None
+    )
 
 
 def test_directional_meld_rolls_back_granted_baseline_when_receipt_save_fails(
@@ -687,7 +697,7 @@ def test_local_namespace_root_reads_granted_and_owned_descendants_together(
     active.set_current("task-root")
     provider = _GrantedFindProvider()
     monkeypatch.setattr(
-        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        "memcommit.commands.find.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -738,16 +748,12 @@ def test_recursive_summarize_uses_one_local_and_granted_public_namespace(
 
     class Provider:
         def complete(self, prompt, *, operation, output_schema=None):
-            payload = json.loads(
-                prompt.split("SUMMARIZE CONTEXT PAYLOAD:\n", 1)[1]
-            )
+            payload = json.loads(prompt.split("SUMMARIZE CONTEXT PAYLOAD:\n", 1)[1])
             payloads.append(payload)
             return json.dumps(
                 {
                     "text": "The readable namespace combines local and granted notes.",
-                    "source_ids": [
-                        item["source_id"] for item in payload["memories"]
-                    ],
+                    "source_ids": [item["source_id"] for item in payload["memories"]],
                 }
             )
 
@@ -803,9 +809,7 @@ def test_rationale_local_root_does_not_analyze_granted_neighbor_subtree(
         public_name="task-root/campus-wiki",
     )
     active.set_current("task-root")
-    target = next(
-        item for item in attachment.iter_items() if isinstance(item, Memory)
-    )
+    target = next(item for item in attachment.iter_items() if isinstance(item, Memory))
     result = runner.invoke(
         app,
         ["rationale", target.uid[:8], "--context", "task-root"],
@@ -846,9 +850,7 @@ def test_rationale_mixed_subtree_needs_no_combination_permission_for_provenance(
         public_name="task-root/campus-wiki",
     )
     active.set_current("task-root")
-    target = next(
-        item for item in attachment.iter_items() if isinstance(item, Memory)
-    )
+    target = next(item for item in attachment.iter_items() if isinstance(item, Memory))
     result = runner.invoke(
         app,
         ["rationale", target.uid[:8], "--context", "task-root"],
@@ -879,7 +881,7 @@ def test_find_and_quality_finders_read_granted_current_projection(
     active.set_current_virtual_context_if(source.name, "campus-wiki")
     provider = _GrantedFindProvider()
     monkeypatch.setattr(
-        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        "memcommit.commands.find.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     for module in (
@@ -888,7 +890,7 @@ def test_find_and_quality_finders_read_granted_current_projection(
         "find_conflicts",
     ):
         monkeypatch.setattr(
-            f"memcommit.commands.{module}.connect_codex_chatgpt_provider",
+            f"memcommit.commands.{module}.command.connect_codex_chatgpt_provider",
             lambda: provider,
         )
 
@@ -920,7 +922,7 @@ def test_recursive_dedun_rejects_granted_boundaries_before_provider(
     )
     active.set_current("task-root")
     monkeypatch.setattr(
-        "memcommit.commands.find_duplicates.connect_codex_chatgpt_provider",
+        "memcommit.commands.find_duplicates.command.connect_codex_chatgpt_provider",
         lambda: (_ for _ in ()).throw(
             AssertionError("authority rejection must precede provider connection")
         ),
@@ -1041,9 +1043,9 @@ def test_granted_chunk_without_selector_applies_one_context_batch(
     after = authority.load_direct(wiki.name)
     assert first.uid not in after.memories
     assert second.uid not in after.memories
-    assert [
-        item.content for item in after.iter_items() if isinstance(item, Memory)
-    ][-4:] == [
+    assert [item.content for item in after.iter_items() if isinstance(item, Memory)][
+        -4:
+    ] == [
         "First sentence.",
         "Second sentence.",
         "Third sentence.",
@@ -1063,13 +1065,9 @@ def test_granted_forget_rejects_delete_when_only_update_is_granted(
         parent_permissions=("READ", "UPDATE"),
     )
     active.set_current_virtual_context_if(source.name, "campus-wiki")
-    original = next(
-        item
-        for item in wiki.iter_items()
-        if isinstance(item, Memory)
-    )
+    original = next(item for item in wiki.iter_items() if isinstance(item, Memory))
     monkeypatch.setattr(
-        "memcommit.commands.forget.connect_codex_chatgpt_provider",
+        "memcommit.commands.forget.command.connect_codex_chatgpt_provider",
         lambda: object(),
     )
 
@@ -1087,7 +1085,7 @@ def test_granted_forget_rejects_delete_when_only_update_is_granted(
         return changes
 
     monkeypatch.setattr(
-        "memcommit.commands.forget._run_interactive_forget",
+        "memcommit.commands.forget.command._run_interactive_forget",
         approve_remove,
     )
 
@@ -1330,7 +1328,7 @@ def test_compare_reads_recursive_grant_excludes_query_override_and_saves_nothing
             )
 
     monkeypatch.setattr(
-        "memcommit.commands.compare.connect_codex_chatgpt_provider",
+        "memcommit.commands.compare.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
     switched = runner.invoke(app, ["switch", wiki.name])
@@ -1417,13 +1415,9 @@ def _source_grant_addition_plan(prompt: str) -> str:
             "edits": [],
             "additions": [
                 {
-                    "target_context_id": payload["target"]["contexts"][0][
-                        "context_id"
-                    ],
+                    "target_context_id": payload["target"]["contexts"][0]["context_id"],
                     "new_content": "Advisor-derived campus note.",
-                    "source_ids": [
-                        payload["source"]["memories"][0]["source_id"]
-                    ],
+                    "source_ids": [payload["source"]["memories"][0]["source_id"]],
                     "reason": "The granted source supports this addition.",
                 }
             ],
@@ -1455,11 +1449,11 @@ def test_granted_source_impact_and_update_apply_to_local_target(
             return _source_grant_addition_plan(prompt)
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
     monkeypatch.setattr(
-        "memcommit.commands.update.connect_codex_chatgpt_provider",
+        "memcommit.commands.update.command.connect_codex_chatgpt_provider",
         lambda: pytest.fail("matching impact plan must be reused"),
     )
 
@@ -1487,8 +1481,7 @@ def test_granted_source_impact_and_update_apply_to_local_target(
     assert "REVOKED" not in diff.stderr
     assert calls == 1
     assert any(
-        isinstance(item, Memory)
-        and item.content == "Advisor-derived campus note."
+        isinstance(item, Memory) and item.content == "Advisor-derived campus note."
         for item in active.load_direct(local_target.name).iter_items()
     )
     assert authority.load_direct(wiki.name).to_dict() == wiki.to_dict()
@@ -1561,7 +1554,7 @@ def test_derived_transfer_permissions_fail_before_provider_or_write(
     local_target = ops.init("participant-proposal")
     active.save(local_target)
     monkeypatch.setattr(
-        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: pytest.fail("provider must not run without derivation consent"),
     )
 
@@ -1659,7 +1652,7 @@ def test_symmetric_meld_requires_durable_grant_basis_before_provider(
     active.set_current(source.name)
     result_name = "participant/unsavable-meld"
     monkeypatch.setattr(
-        "memcommit.commands.meld.connect_codex_chatgpt_provider",
+        "memcommit.commands.meld.command.connect_codex_chatgpt_provider",
         lambda: pytest.fail("provider must not run without analysis retention"),
     )
 
@@ -1728,7 +1721,7 @@ def test_granted_compare_is_retained_and_seeds_local_symmetric_meld(
             )
 
     monkeypatch.setattr(
-        "memcommit.commands.compare.connect_codex_chatgpt_provider",
+        "memcommit.commands.compare.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
     compared = runner.invoke(
@@ -1751,7 +1744,7 @@ def test_granted_compare_is_retained_and_seeds_local_symmetric_meld(
     # Compare command or a hidden current-Context switch.
     granted_comparison_analysis_path(active, source.uid, wiki.uid).unlink()
     monkeypatch.setattr(
-        "memcommit.commands.meld.connect_codex_chatgpt_provider",
+        "memcommit.commands.meld.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
 
@@ -1849,11 +1842,11 @@ def test_update_between_distinct_grants_writes_only_accepting_target(
             return _source_grant_addition_plan(prompt)
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
     monkeypatch.setattr(
-        "memcommit.commands.update.connect_codex_chatgpt_provider",
+        "memcommit.commands.update.command.connect_codex_chatgpt_provider",
         lambda: pytest.fail("Update must reuse the exact impact plan"),
     )
 
@@ -1869,8 +1862,7 @@ def test_update_between_distinct_grants_writes_only_accepting_target(
     assert impact.exit_code == 0, impact.output + impact.stderr
     assert update.exit_code == 0, update.output + update.stderr
     assert any(
-        isinstance(item, Memory)
-        and item.content == "Advisor-derived campus note."
+        isinstance(item, Memory) and item.content == "Advisor-derived campus note."
         for item in target_store.load_direct(advisor.name).iter_items()
     )
     assert source_authority.load_direct(wiki.name).to_dict() == source_before
@@ -1881,8 +1873,8 @@ def test_granted_impact_projects_only_readable_target_scope(
     tmp_path,
     monkeypatch,
 ):
-    active_store, authority_store, _source, wiki, parent_grant = (
-        _setup_granted_target(isolated_store, tmp_path, monkeypatch)
+    active_store, authority_store, _source, wiki, parent_grant = _setup_granted_target(
+        isolated_store, tmp_path, monkeypatch
     )
     prompts: list[str] = []
 
@@ -1892,7 +1884,7 @@ def test_granted_impact_projects_only_readable_target_scope(
             return _empty_plan()
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
 
@@ -1949,7 +1941,7 @@ def test_granted_impact_revocation_during_provider_turn_discards_preview(
             return _empty_plan()
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
 
@@ -1977,7 +1969,7 @@ def test_granted_impact_query_only_target_fails_before_provider(
         raise AssertionError("provider must not connect")
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
         connect,
     )
 
@@ -2072,11 +2064,11 @@ def test_granted_impact_then_update_changes_only_run_authority(
             return _edit_and_add_plan(prompt)
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
     monkeypatch.setattr(
-        "memcommit.commands.update.connect_codex_chatgpt_provider",
+        "memcommit.commands.update.command.connect_codex_chatgpt_provider",
         lambda: pytest.fail("the matching impact plan must be reused"),
     )
 
@@ -2101,13 +2093,13 @@ def test_granted_impact_then_update_changes_only_run_authority(
     assert "This Update receipt was already applied." in repeated.output
     assert provider_calls == 1
     assert active_store.load_direct(source.name).to_dict() == source_before
-    assert authority_store.load_direct(
-        "campus-wiki/construction-details"
-    ).to_dict() == details_before
+    assert (
+        authority_store.load_direct("campus-wiki/construction-details").to_dict()
+        == details_before
+    )
     authority_root = authority_store.load_direct(wiki.name)
     assert any(
-        getattr(item, "content", "")
-        == "The public service desk is in the east lobby."
+        getattr(item, "content", "") == "The public service desk is in the east lobby."
         for item in authority_root.iter_items()
     )
     authority_services = authority_store.load_direct("campus-wiki/services")
@@ -2139,8 +2131,7 @@ def test_granted_target_empty_update_records_only_an_idempotent_receipt(
         for name in (wiki.name, "campus-wiki/services")
     }
     checkpoints_before = {
-        name: tuple(authority_store.list_checkpoints(name))
-        for name in authority_before
+        name: tuple(authority_store.list_checkpoints(name)) for name in authority_before
     }
     provider_calls = 0
 
@@ -2151,11 +2142,11 @@ def test_granted_target_empty_update_records_only_an_idempotent_receipt(
             return _empty_plan()
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
     monkeypatch.setattr(
-        "memcommit.commands.update.connect_codex_chatgpt_provider",
+        "memcommit.commands.update.command.connect_codex_chatgpt_provider",
         lambda: pytest.fail("the matching empty impact plan must be reused"),
     )
 
@@ -2204,17 +2195,23 @@ def test_granted_diff_revalidates_authority_and_keeps_public_names(
             return _edit_and_add_plan(prompt)
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
-    assert runner.invoke(
-        app,
-        ["impact", "--from", source.name, "--to", wiki.name],
-    ).exit_code == 0
-    assert runner.invoke(
-        app,
-        ["update", "--from", source.name, "--to", wiki.name],
-    ).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            ["impact", "--from", source.name, "--to", wiki.name],
+        ).exit_code
+        == 0
+    )
+    assert (
+        runner.invoke(
+            app,
+            ["update", "--from", source.name, "--to", wiki.name],
+        ).exit_code
+        == 0
+    )
 
     result = runner.invoke(app, ["diff", "--stat"])
 
@@ -2242,17 +2239,23 @@ def test_granted_diff_remains_inspectable_after_revocation(
             return _edit_and_add_plan(prompt)
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
-    assert runner.invoke(
-        app,
-        ["impact", "--from", source.name, "--to", wiki.name],
-    ).exit_code == 0
-    assert runner.invoke(
-        app,
-        ["update", "--from", source.name, "--to", wiki.name],
-    ).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            ["impact", "--from", source.name, "--to", wiki.name],
+        ).exit_code
+        == 0
+    )
+    assert (
+        runner.invoke(
+            app,
+            ["update", "--from", source.name, "--to", wiki.name],
+        ).exit_code
+        == 0
+    )
     delete_authority_grant(grant.uid)
 
     result = runner.invoke(app, ["diff", "--stat"])
@@ -2280,17 +2283,23 @@ def test_granted_diff_marks_authority_drift_stale_but_keeps_receipts(
             return _edit_and_add_plan(prompt)
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
-    assert runner.invoke(
-        app,
-        ["impact", "--from", source.name, "--to", wiki.name],
-    ).exit_code == 0
-    assert runner.invoke(
-        app,
-        ["update", "--from", source.name, "--to", wiki.name],
-    ).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            ["impact", "--from", source.name, "--to", wiki.name],
+        ).exit_code
+        == 0
+    )
+    assert (
+        runner.invoke(
+            app,
+            ["update", "--from", source.name, "--to", wiki.name],
+        ).exit_code
+        == 0
+    )
     changed = authority.load_direct(wiki.name)
     ops.add(changed, "A later authority correction.")
     authority.save(changed)
@@ -2320,17 +2329,23 @@ def test_revoked_granted_update_cannot_be_undone_by_participant(
             return _edit_and_add_plan(prompt)
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
-    assert runner.invoke(
-        app,
-        ["impact", "--from", source.name, "--to", wiki.name],
-    ).exit_code == 0
-    assert runner.invoke(
-        app,
-        ["update", "--from", source.name, "--to", wiki.name],
-    ).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            ["impact", "--from", source.name, "--to", wiki.name],
+        ).exit_code
+        == 0
+    )
+    assert (
+        runner.invoke(
+            app,
+            ["update", "--from", source.name, "--to", wiki.name],
+        ).exit_code
+        == 0
+    )
     authority_after = {
         name: authority.load_direct(name).to_dict()
         for name in (wiki.name, "campus-wiki/services")
@@ -2342,8 +2357,7 @@ def test_revoked_granted_update_cannot_be_undone_by_participant(
     assert result.exit_code == 1
     assert "Undo error" in result.stderr
     assert {
-        name: authority.load_direct(name).to_dict()
-        for name in authority_after
+        name: authority.load_direct(name).to_dict() for name in authority_after
     } == authority_after
 
 
@@ -2363,17 +2377,23 @@ def test_granted_undo_does_not_substitute_newer_authority_command(
             return _edit_and_add_plan(prompt)
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
-    assert runner.invoke(
-        app,
-        ["impact", "--from", source.name, "--to", wiki.name],
-    ).exit_code == 0
-    assert runner.invoke(
-        app,
-        ["update", "--from", source.name, "--to", wiki.name],
-    ).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            ["impact", "--from", source.name, "--to", wiki.name],
+        ).exit_code
+        == 0
+    )
+    assert (
+        runner.invoke(
+            app,
+            ["update", "--from", source.name, "--to", wiki.name],
+        ).exit_code
+        == 0
+    )
     later = authority.load_direct(wiki.name)
     ops.add(later, "A later independent authority command.")
     authority.save(
@@ -2411,17 +2431,23 @@ def test_granted_update_undo_and_redo_restore_exact_authority_unit(
             return _edit_and_add_plan(prompt)
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
-    assert runner.invoke(
-        app,
-        ["impact", "--from", source.name, "--to", wiki.name],
-    ).exit_code == 0
-    assert runner.invoke(
-        app,
-        ["update", "--from", source.name, "--to", wiki.name],
-    ).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            ["impact", "--from", source.name, "--to", wiki.name],
+        ).exit_code
+        == 0
+    )
+    assert (
+        runner.invoke(
+            app,
+            ["update", "--from", source.name, "--to", wiki.name],
+        ).exit_code
+        == 0
+    )
     root_after = authority.load_direct(wiki.name).to_dict()
     services_after = authority.load_direct("campus-wiki/services").to_dict()
 
@@ -2433,10 +2459,7 @@ def test_granted_update_undo_and_redo_restore_exact_authority_unit(
         in undone.stdout
     )
     assert authority.load_direct(wiki.name).to_dict() == root_before
-    assert (
-        authority.load_direct("campus-wiki/services").to_dict()
-        == services_before
-    )
+    assert authority.load_direct("campus-wiki/services").to_dict() == services_before
     undone_session = active.load_staged_update()
     assert undone_session.status == "undone"
     assert undone_session.application is not None
@@ -2449,10 +2472,7 @@ def test_granted_update_undo_and_redo_restore_exact_authority_unit(
         in redone.stdout
     )
     assert authority.load_direct(wiki.name).to_dict() == root_after
-    assert (
-        authority.load_direct("campus-wiki/services").to_dict()
-        == services_after
-    )
+    assert authority.load_direct("campus-wiki/services").to_dict() == services_after
     redone_session = active.load_staged_update()
     assert redone_session.status == "applied"
     assert redone_session.application == undone_session.application
@@ -2485,13 +2505,16 @@ def test_granted_update_checks_create_permission_before_first_write(
             return _edit_and_add_plan(prompt)
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
-    assert runner.invoke(
-        app,
-        ["impact", "--from", source.name, "--to", wiki.name],
-    ).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            ["impact", "--from", source.name, "--to", wiki.name],
+        ).exit_code
+        == 0
+    )
 
     update = runner.invoke(
         app,
@@ -2501,8 +2524,7 @@ def test_granted_update_checks_create_permission_before_first_write(
     assert update.exit_code == 1
     assert "does not contain every permission" in update.stderr
     assert {
-        name: authority_store.load_direct(name).to_dict()
-        for name in authority_before
+        name: authority_store.load_direct(name).to_dict() for name in authority_before
     } == authority_before
     assert authority_store.list_checkpoints(wiki.name) == []
     assert authority_store.list_checkpoints("campus-wiki/services") == []
@@ -2533,7 +2555,7 @@ def test_granted_update_requires_explicit_delete_for_removal(
             return _removal_plan(prompt)
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
     impact = runner.invoke(
@@ -2574,13 +2596,16 @@ def test_granted_update_rejects_fixed_study_baseline_authority(
             return _edit_and_add_plan(prompt)
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
-    assert runner.invoke(
-        app,
-        ["impact", "--from", source.name, "--to", wiki.name],
-    ).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            ["impact", "--from", source.name, "--to", wiki.name],
+        ).exit_code
+        == 0
+    )
 
     update = runner.invoke(
         app,
@@ -2610,13 +2635,16 @@ def test_granted_multi_owner_write_failure_rolls_back_authority(
             return _edit_and_add_plan(prompt)
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
-    assert runner.invoke(
-        app,
-        ["impact", "--from", source.name, "--to", wiki.name],
-    ).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            ["impact", "--from", source.name, "--to", wiki.name],
+        ).exit_code
+        == 0
+    )
     authority_before = {
         name: authority_store.load_direct(name).to_dict()
         for name in (wiki.name, "campus-wiki/services")
@@ -2642,8 +2670,7 @@ def test_granted_multi_owner_write_failure_rolls_back_authority(
     assert update.exit_code == 1
     assert "simulated granted second-owner failure" in update.stderr
     assert {
-        name: authority_store.load_direct(name).to_dict()
-        for name in authority_before
+        name: authority_store.load_direct(name).to_dict() for name in authority_before
     } == authority_before
     assert authority_store.list_checkpoints(wiki.name) == []
     assert authority_store.list_checkpoints("campus-wiki/services") == []

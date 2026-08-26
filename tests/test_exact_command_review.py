@@ -1,6 +1,6 @@
 """Cross-interface identity checks for exact-command review values."""
 
-from memcommit.commands.exact_command_review import (
+from memcommit.commands.shared.exact_command_review import (
     ExactCommandReview as LegacyCommandReview,
 )
 from memcommit.exact_command_review import ExactCommandReview

@@ -9,17 +9,17 @@ from typer.testing import CliRunner
 
 import memcommit.ops as ops
 from memcommit.cli import app
-from memcommit.commands import impact as impact_command
-from memcommit.commands import review as review_command
-from memcommit.commands.compare import display_escape_text as compare_escape
-from memcommit.commands.context_picker import (
+from memcommit.commands.impact import command as impact_command
+from memcommit.commands.review import command as review_command
+from memcommit.commands.compare.command import display_escape_text as compare_escape
+from memcommit.commands.shared.context_picker import (
     _build_context_tree,
     _context_ancestors,
     _render_context_options,
     _visible_context_rows,
     choose_context,
 )
-from memcommit.commands.profile_picker import (
+from memcommit.commands.profile.picker import (
     ProfilePickerEntry,
     _render_profile_options,
     choose_profile,
@@ -74,7 +74,7 @@ def test_read_and_analysis_commands_share_relative_context_operand_boundary(
     current_reads = _count_current_reads(monkeypatch)
 
     monkeypatch.setattr(
-        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        "memcommit.commands.find.command.connect_codex_chatgpt_provider",
         lambda: object(),
     )
     monkeypatch.setattr(
@@ -83,21 +83,21 @@ def test_read_and_analysis_commands_share_relative_context_operand_boundary(
     )
 
     monkeypatch.setattr(
-        "memcommit.commands.find_ambiguities.ops.find_ambiguities",
+        "memcommit.commands.find_ambiguities.command.ops.find_ambiguities",
         lambda context, *_args, **_kwargs: AmbiguityReport(
             memory_count=len(context.memories),
             findings=(),
         ),
     )
     monkeypatch.setattr(
-        "memcommit.commands.find_duplicates.ops.find_redundancies",
+        "memcommit.commands.find_duplicates.command.ops.find_redundancies",
         lambda context, *_args, **_kwargs: DuplicateReport(
             memory_count=len(context.memories),
             findings=(),
         ),
     )
     monkeypatch.setattr(
-        "memcommit.commands.find_conflicts.ops.find_conflicts",
+        "memcommit.commands.find_conflicts.command.ops.find_conflicts",
         lambda context, *_args, **_kwargs: ConflictReport(
             memory_count=len(context.memories),
             pair_count=0,
@@ -147,7 +147,7 @@ def test_query_resolves_only_ordinary_parent_context_operand(
             return "Grounded answer."
 
     monkeypatch.setattr(
-        "memcommit.commands.query.connect_query_provider",
+        "memcommit.commands.query.command.connect_query_provider",
         lambda _provider: Provider(),
     )
 

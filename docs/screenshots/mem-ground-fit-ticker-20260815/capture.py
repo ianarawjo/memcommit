@@ -298,7 +298,7 @@ def _write_evidence(*, ledger, reports, final_session, stale_checks) -> None:
 
 
 def _run_child(store_root: Path) -> None:
-    from memcommit.commands.ground_named_shell import (
+    from memcommit.commands.ground.named_shell import (
         render_named_ground_memories_pane,
     )
     from memcommit.fit_store import FitStore

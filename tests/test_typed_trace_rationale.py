@@ -121,11 +121,11 @@ def test_reference_rationale_explains_relation_then_target_provenance(
     assert invoke("embed", memory.uid, "--from", "source").exit_code == 0
     reference = _reference(store, "parent")
     monkeypatch.setattr(
-        "memcommit.commands.rationale.connect_semantic_provider",
+        "memcommit.commands.rationale.command.connect_semantic_provider",
         lambda: object(),
     )
     monkeypatch.setattr(
-        "memcommit.commands.rationale.synthesize_rationale_provenance",
+        "memcommit.commands.rationale.command.synthesize_rationale_provenance",
         lambda *args, **kwargs: RationaleNarrativeProjection(
             status=RationaleNarrativeStatus.AVAILABLE,
             text="The target was added directly as retained source evidence.",
@@ -164,7 +164,7 @@ def test_snapshot_reference_rationale_never_opens_live_target_provenance(
         raise AssertionError("snapshot rationale connected a provider")
 
     monkeypatch.setattr(
-        "memcommit.commands.rationale.connect_semantic_provider",
+        "memcommit.commands.rationale.command.connect_semantic_provider",
         forbidden,
     )
     assert invoke("edit", f"source:{memory.uid}", "later source value").exit_code == 0

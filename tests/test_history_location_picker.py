@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-import memcommit.commands.history_location_picker as location_picker
+import memcommit.commands.shared.history_location_picker as location_picker
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-from memcommit.commands.context_picker import ContextSubtreeSelection
+from memcommit.commands.shared.context_picker import ContextSubtreeSelection
 from memcommit.context_targeting.tui.picker import ContextMemoryRow
 
 

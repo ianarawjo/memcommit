@@ -14,16 +14,16 @@ from typer.core import TyperGroup
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-LEGACY_MODULE = "memcommit.commands.command_group"
+LEGACY_MODULE = "memcommit.commands.shared.command_group"
 OWNER_MODULE = "memcommit.interfaces.cli.command_group"
 CANONICAL_CONSUMERS = (
-    "write_protection.py",
-    "config.py",
-    "profile_group.py",
-    "dev.py",
-    "profile.py",
-    "root_group.py",
-    "semantic_eval.py",
+    "write_protection/command.py",
+    "config/command.py",
+    "profile/group.py",
+    "dev/command.py",
+    "profile/command.py",
+    "shared/root_group.py",
+    "semantic_eval/command.py",
 )
 
 
@@ -70,7 +70,9 @@ def test_command_group_class_and_alias_map_keep_one_identity() -> None:
     assert legacy is canonical
     assert legacy.CanonicalCommandGroup is canonical.CanonicalCommandGroup
     assert issubclass(canonical.CanonicalCommandGroup, TyperGroup)
-    assert legacy.EXPLICIT_COMMAND_NAME_ALIASES is canonical.EXPLICIT_COMMAND_NAME_ALIASES
+    assert (
+        legacy.EXPLICIT_COMMAND_NAME_ALIASES is canonical.EXPLICIT_COMMAND_NAME_ALIASES
+    )
 
 
 def test_legacy_monkeypatch_changes_canonical_routing_globals(monkeypatch) -> None:
@@ -106,7 +108,7 @@ def test_command_group_error_contract_keeps_exit_and_suggestion_order() -> None:
 
 
 def test_legacy_command_group_facade_defines_no_behavior() -> None:
-    path = REPOSITORY_ROOT / "memcommit" / "commands" / "command_group.py"
+    path = REPOSITORY_ROOT / "memcommit" / "commands" / "shared" / "command_group.py"
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
 
     assert not any(
@@ -142,4 +144,4 @@ def test_clean_command_groups_import_the_interface_owner() -> None:
             "from memcommit.interfaces.cli.command_group import "
             "CanonicalCommandGroup" in source
         )
-        assert "from memcommit.commands.command_group import" not in source
+        assert "from memcommit.commands.shared.command_group import" not in source

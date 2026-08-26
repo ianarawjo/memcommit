@@ -136,9 +136,9 @@ def _initialize_store(store_root: Path):
 
 
 def _patch_meld_command(store, provider_factory) -> None:
-    import memcommit.commands.command_wait as command_wait
-    import memcommit.commands.meld as meld_command
-    import memcommit.commands.session_help as session_help
+    import memcommit.commands.shared.command_wait as command_wait
+    import memcommit.commands.meld.command as meld_command
+    import memcommit.commands.shared.session_help as session_help
     import memcommit.interfaces.tui.components.session_help as tui_session_help
 
     meld_command.MemoryStore = lambda *args, **kwargs: store
@@ -152,7 +152,7 @@ def _run_meld_cli(store, args: list[str]) -> None:
     import click
     import typer
 
-    import memcommit.commands.meld as meld_command
+    import memcommit.commands.meld.command as meld_command
 
     app = typer.Typer()
 
@@ -205,7 +205,7 @@ def _run_tty_start_child(store_root: Path) -> None:
 
 
 def _run_prepare_exact_child(store_root: Path) -> None:
-    from memcommit.commands.meld import render_meld_session
+    from memcommit.commands.meld.command import render_meld_session
     from memcommit.meld import INLINE_MELD_CONTEXT_NAME
     from memcommit.meld_runtime import execute_meld_start, prepare_meld_start
     from memcommit.meld_start_application import MeldStartRequest

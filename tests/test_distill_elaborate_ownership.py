@@ -128,9 +128,9 @@ def test_production_consumers_use_operation_owners() -> None:
     relative_paths = (
         "memcommit/api/_operations/distill.py",
         "memcommit/api/_operations/elaborate.py",
-        "memcommit/commands/distill.py",
-        "memcommit/commands/elaborate.py",
-        "memcommit/commands/impact_process_local.py",
+        "memcommit/commands/distill/command.py",
+        "memcommit/commands/elaborate/command.py",
+        "memcommit/commands/impact/process_local.py",
         "memcommit/operations/ground/distill.py",
         "memcommit/operations/ground/elaborate.py",
         "memcommit/interfaces/cli/distill.py",

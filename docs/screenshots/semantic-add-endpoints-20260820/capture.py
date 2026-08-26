@@ -149,13 +149,13 @@ def _child(kind: str, root: Path) -> None:
     operation, route = kind.split("-", 1)
     store, source, target = _prepare(root, operation)
     if operation == "distill":
-        import memcommit.commands.distill as add_command
-        import memcommit.commands.impact_process_local as impact_command
+        import memcommit.commands.distill.command as add_command
+        import memcommit.commands.impact.process_local as impact_command
 
         provider = _DistillProvider
     else:
-        import memcommit.commands.elaborate as add_command
-        import memcommit.commands.impact_process_local as impact_command
+        import memcommit.commands.elaborate.command as add_command
+        import memcommit.commands.impact.process_local as impact_command
 
         provider = _ElaborateProvider
     add_command.connect_semantic_provider = provider

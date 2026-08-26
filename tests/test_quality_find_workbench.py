@@ -9,7 +9,7 @@ from typer.testing import CliRunner
 
 import memcommit.ops as ops
 from memcommit.cli import app
-from memcommit.commands.quality_find_workbench import (
+from memcommit.commands.shared.quality_find_workbench import (
     QualityFindSetupReceipt,
     choose_quality_find_setup,
     run_interactive_quality_find,
@@ -131,7 +131,7 @@ def test_interactive_orchestration_does_not_analyze_a_cancelled_setup(
     analyzed: list[str] = []
 
     monkeypatch.setattr(
-        "memcommit.commands.quality_find_workbench.choose_quality_find_setup",
+        "memcommit.commands.shared.quality_find_workbench.choose_quality_find_setup",
         lambda *_args, **_kwargs: None,
     )
 
@@ -161,7 +161,7 @@ def test_interactive_orchestration_builds_one_cross_context_analysis_frame(
     observed: list[QualityFindSourceFrame] = []
 
     monkeypatch.setattr(
-        "memcommit.commands.quality_find_workbench.choose_quality_find_setup",
+        "memcommit.commands.shared.quality_find_workbench.choose_quality_find_setup",
         lambda *_args, **_kwargs: QualityFindSetupReceipt(
             target_names=(root.name,),
             context_names=(root.name, child.name),
@@ -170,7 +170,7 @@ def test_interactive_orchestration_builds_one_cross_context_analysis_frame(
         ),
     )
     monkeypatch.setattr(
-        "memcommit.commands.quality_find_workbench."
+        "memcommit.commands.shared.quality_find_workbench."
         "run_quality_find_resolution_workbench",
         lambda *_args, **_kwargs: None,
     )
@@ -225,25 +225,25 @@ def test_interactive_orchestration_replays_recent_target_without_saved_session(
     )
     observed: list[QualityFindSourceFrame] = []
     monkeypatch.setattr(
-        "memcommit.commands.quality_find_workbench.read_report_recents",
+        "memcommit.commands.shared.quality_find_workbench.read_report_recents",
         lambda *_args, **_kwargs: (recent,),
     )
     monkeypatch.setattr(
-        "memcommit.commands.quality_find_workbench.choose_read_report_recent",
+        "memcommit.commands.shared.quality_find_workbench.choose_read_report_recent",
         lambda *_args, **_kwargs: target,
     )
     monkeypatch.setattr(
-        "memcommit.commands.quality_find_workbench.revalidate_read_report_recent",
+        "memcommit.commands.shared.quality_find_workbench.revalidate_read_report_recent",
         lambda *_args, **_kwargs: target,
     )
     monkeypatch.setattr(
-        "memcommit.commands.quality_find_workbench.choose_quality_find_setup",
+        "memcommit.commands.shared.quality_find_workbench.choose_quality_find_setup",
         lambda *_args, **_kwargs: (_ for _ in ()).throw(
             AssertionError("a recent target must bypass fresh setup")
         ),
     )
     monkeypatch.setattr(
-        "memcommit.commands.quality_find_workbench."
+        "memcommit.commands.shared.quality_find_workbench."
         "run_quality_find_resolution_workbench",
         lambda *_args, **_kwargs: None,
     )
@@ -290,19 +290,19 @@ def test_profile_recent_reexpands_the_current_frozen_readable_catalog(
     )
     observed: list[QualityFindSourceFrame] = []
     monkeypatch.setattr(
-        "memcommit.commands.quality_find_workbench.read_report_recents",
+        "memcommit.commands.shared.quality_find_workbench.read_report_recents",
         lambda *_args, **_kwargs: (recent,),
     )
     monkeypatch.setattr(
-        "memcommit.commands.quality_find_workbench.choose_read_report_recent",
+        "memcommit.commands.shared.quality_find_workbench.choose_read_report_recent",
         lambda *_args, **_kwargs: target,
     )
     monkeypatch.setattr(
-        "memcommit.commands.quality_find_workbench.revalidate_read_report_recent",
+        "memcommit.commands.shared.quality_find_workbench.revalidate_read_report_recent",
         lambda *_args, **_kwargs: target,
     )
     monkeypatch.setattr(
-        "memcommit.commands.quality_find_workbench."
+        "memcommit.commands.shared.quality_find_workbench."
         "run_quality_find_resolution_workbench",
         lambda *_args, **_kwargs: None,
     )
@@ -688,7 +688,7 @@ def test_explicit_select_commands_route_to_the_shared_quality_workbench(
     store.create_context(ctx)
     store.set_current(ctx.name)
     observed: list[tuple[str | None, str, str | None, bool]] = []
-    module_path = f"memcommit.commands.{module_name}"
+    module_path = f"memcommit.commands.{module_name}.command"
 
     monkeypatch.setattr(
         f"{module_path}.interactive_quality_find_available",
@@ -725,10 +725,9 @@ def test_find_redundancies_has_no_initial_selector_route(
     store.set_current(ctx.name)
     observed: list[str] = []
     monkeypatch.setattr(
-        "memcommit.commands.find_duplicates.ops.find_redundancies",
+        "memcommit.commands.find_duplicates.command.ops.find_redundancies",
         lambda source, *_args, **_kwargs: (
-            observed.append(source.name)
-            or DuplicateReport(memory_count=2, findings=())
+            observed.append(source.name) or DuplicateReport(memory_count=2, findings=())
         ),
     )
 
@@ -751,7 +750,7 @@ def test_repeated_dedun_bypasses_report_recents_and_target_setup(
     store.create_context(ctx)
     store.set_current(ctx.name)
     monkeypatch.setattr(
-        "memcommit.commands.find_duplicates.ops.find_redundancies",
+        "memcommit.commands.find_duplicates.command.ops.find_redundancies",
         lambda *_args, **_kwargs: DuplicateReport(memory_count=2, findings=()),
     )
 

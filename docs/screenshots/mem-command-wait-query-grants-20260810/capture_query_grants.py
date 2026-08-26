@@ -18,12 +18,12 @@ if str(REPOSITORY_ROOT) not in sys.path:
 
 
 def _child() -> None:
-    from memcommit.commands.command_wait import (
+    from memcommit.commands.shared.command_wait import (
         CommandWaitContextBrowser,
         build_report_loading_view,
         run_command_wait,
     )
-    from memcommit.commands.context_picker import ContextMemoryRow
+    from memcommit.commands.shared.context_picker import ContextMemoryRow
     from memcommit.context_targeting.catalog import grant_navigation_annotation
     from memcommit.source_projection.model import SourceDisplayFacts, SourceState
     from memcommit.source_projection.presentation import combine_source_display_tokens

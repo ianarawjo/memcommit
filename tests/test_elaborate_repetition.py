@@ -8,7 +8,7 @@ import json
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.commands.elaborate as elaborate_command
+import memcommit.commands.elaborate.command as elaborate_command
 import memcommit.ops as ops
 from memcommit.cli import app
 from memcommit.elaborate import (

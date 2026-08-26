@@ -42,7 +42,7 @@ def test_retired_implementation_status_phrases_do_not_return() -> None:
 
 def test_real_creation_and_permission_boundaries_remain_explicit() -> None:
     ground_source = (
-        PACKAGE_ROOT / "commands" / "ground_shell.py"
+        PACKAGE_ROOT / "commands" / "ground" / "shell.py"
     ).read_text(encoding="utf-8")
     source_projection = (
         PACKAGE_ROOT / "source_projection" / "presentation.py"

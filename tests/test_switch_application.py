@@ -224,7 +224,7 @@ def test_switch_application_and_runtime_do_not_import_terminal_adapters() -> Non
 
 
 def test_context_picker_compatibility_module_is_behavior_free() -> None:
-    path = ROOT / "memcommit" / "commands" / "context_picker.py"
+    path = ROOT / "memcommit" / "commands" / "shared" / "context_picker.py"
     tree = ast.parse(path.read_text())
     assert not any(
         isinstance(node, (ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef))
@@ -234,7 +234,8 @@ def test_context_picker_compatibility_module_is_behavior_free() -> None:
         source
         for source in (ROOT / "memcommit").rglob("*.py")
         if source != path
-        and "memcommit.commands.context_picker" in source.read_text()
+        and source.name != "_legacy_command_alias_map.py"
+        and "memcommit.commands.shared.context_picker" in source.read_text()
     ]
     assert production_importers == []
 
@@ -245,8 +246,7 @@ def test_switch_tui_operation_does_not_import_command_adapters() -> None:
         source
         for source in operation.rglob("*.py")
         if any(
-            module == "memcommit.commands"
-            or module.startswith("memcommit.commands.")
+            module == "memcommit.commands" or module.startswith("memcommit.commands.")
             for module in _imports(source)
         )
     ]

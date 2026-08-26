@@ -11,7 +11,7 @@ from typer.testing import CliRunner
 
 import memcommit.ops as ops
 from memcommit.cli import app
-from memcommit.commands import add as add_command
+from memcommit.commands.add import command as add_command
 from memcommit.context import AutoCheckpoint, Memory
 from memcommit.findings import AmbiguityFinding, AmbiguityReport
 from memcommit.provenance import build_trace

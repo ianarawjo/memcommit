@@ -63,13 +63,13 @@ from memcommit.commands import (
     write_protection,
 )
 from memcommit.interfaces.cli import embed, memory_transfer, reference, shell_init
-from memcommit.commands.clear import cmd as clear_cmd
-from memcommit.commands.config import app as config_app
-from memcommit.commands.dev import app as dev_app
-from memcommit.commands.semantic_eval import eval_app
-from memcommit.commands.profile import app as profile_app
-from memcommit.commands.provider import app as provider_app
-from memcommit.commands.root_group import MemCommandGroup
+from memcommit.commands.clear.command import cmd as clear_cmd
+from memcommit.commands.config.command import app as config_app
+from memcommit.commands.dev.command import app as dev_app
+from memcommit.commands.semantic_eval.command import eval_app
+from memcommit.commands.profile.command import app as profile_app
+from memcommit.commands.provider.command import app as provider_app
+from memcommit.commands.shared.root_group import MemCommandGroup
 from memcommit.help_catalog import operation_summary
 
 _HELP_CONTEXT_SETTINGS = {

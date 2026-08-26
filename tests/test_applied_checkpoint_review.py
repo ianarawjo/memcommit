@@ -14,7 +14,7 @@ from memcommit.applied_checkpoint_review import (
 )
 from memcommit.context import AutoCheckpoint
 from memcommit.cli import app
-from memcommit.commands.review_report import run_review_report_shell
+from memcommit.commands.review.report import run_review_report_shell
 from memcommit.interfaces.console.theme import (
     SemanticColorRole,
     semantic_color_rgb,
@@ -193,7 +193,7 @@ def test_dedun_review_combines_survivor_identity_and_content_without_keep_row(
         return ResolutionWorkbenchAction(kind="CLOSE")
 
     monkeypatch.setattr(
-        "memcommit.commands.review_report.run_resolution_workbench_shell",
+        "memcommit.commands.review.report.run_resolution_workbench_shell",
         run_shell,
     )
     run_review_report_shell(

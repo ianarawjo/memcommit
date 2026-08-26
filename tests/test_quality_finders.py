@@ -685,7 +685,7 @@ def test_cli_redundancy_report_groups_members_once_without_left_right_labels(
         }
 
     monkeypatch.setattr(
-        "memcommit.commands.find_duplicates.connect_codex_chatgpt_provider",
+        "memcommit.commands.find_duplicates.command.connect_codex_chatgpt_provider",
         lambda: PayloadProvider(respond),
     )
 
@@ -704,16 +704,22 @@ def test_cli_redundancy_report_groups_members_once_without_left_right_labels(
     assert "LATER" not in plain
     assert "LEFT" not in plain
     assert "RIGHT" not in plain
-    assert click.style(
-        "SURVIVOR",
-        fg=semantic_color_rgb(SemanticColorRole.ADD),
-        bold=True,
-    ) in result.output
-    assert click.style(
-        "ABSORB",
-        fg=semantic_color_rgb(SemanticColorRole.REMOVE),
-        bold=True,
-    ) in result.output
+    assert (
+        click.style(
+            "SURVIVOR",
+            fg=semantic_color_rgb(SemanticColorRole.ADD),
+            bold=True,
+        )
+        in result.output
+    )
+    assert (
+        click.style(
+            "ABSORB",
+            fg=semantic_color_rgb(SemanticColorRole.REMOVE),
+            bold=True,
+        )
+        in result.output
+    )
 
 
 def test_cli_ambiguity_and_conflict_reports_use_truthful_compact_units(
@@ -778,11 +784,11 @@ def test_cli_ambiguity_and_conflict_reports_use_truthful_compact_units(
 
     provider = PayloadProvider(respond)
     monkeypatch.setattr(
-        "memcommit.commands.find_ambiguities.connect_codex_chatgpt_provider",
+        "memcommit.commands.find_ambiguities.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     monkeypatch.setattr(
-        "memcommit.commands.find_conflicts.connect_codex_chatgpt_provider",
+        "memcommit.commands.find_conflicts.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -841,22 +847,26 @@ def test_cli_exact_duplicate_report_keeps_each_disposition_row_self_contained(
     assert "SHARED CONTENT" not in plain
     assert "CLEANUP MAP" not in plain
     assert plain.count(survivor.content) == 2
-    assert (
-        f"SURVIVOR  [memory {prefixes[survivor.uid]}]  {survivor.content}" in plain
-    )
+    assert f"SURVIVOR  [memory {prefixes[survivor.uid]}]  {survivor.content}" in plain
     assert f"ABSORB    [memory {prefixes[absorbed.uid]}]  {absorbed.content}" in plain
     assert "FIRST" not in plain
     assert "LATER" not in plain
-    assert click.style(
-        "SURVIVOR",
-        fg=semantic_color_rgb(SemanticColorRole.ADD),
-        bold=True,
-    ) in result.output
-    assert click.style(
-        "ABSORB",
-        fg=semantic_color_rgb(SemanticColorRole.REMOVE),
-        bold=True,
-    ) in result.output
+    assert (
+        click.style(
+            "SURVIVOR",
+            fg=semantic_color_rgb(SemanticColorRole.ADD),
+            bold=True,
+        )
+        in result.output
+    )
+    assert (
+        click.style(
+            "ABSORB",
+            fg=semantic_color_rgb(SemanticColorRole.REMOVE),
+            bold=True,
+        )
+        in result.output
+    )
 
 
 def test_cli_find_duplicates_recursive_keeps_groups_under_context_headings(
@@ -909,7 +919,7 @@ def test_cli_finders_are_read_only_and_each_use_one_provider_call(
         "find_conflicts",
     ]:
         monkeypatch.setattr(
-            f"memcommit.commands.{module_name}.connect_codex_chatgpt_provider",
+            f"memcommit.commands.{module_name}.command.connect_codex_chatgpt_provider",
             lambda: provider,
         )
 
@@ -990,12 +1000,12 @@ def test_quality_finder_all_aliases_freeze_one_profile_wide_source(
     provider = PayloadProvider(respond)
     for module_name in ("find_ambiguities", "find_conflicts"):
         monkeypatch.setattr(
-            f"memcommit.commands.{module_name}.connect_codex_chatgpt_provider",
+            f"memcommit.commands.{module_name}.command.connect_codex_chatgpt_provider",
             lambda: provider,
         )
     authorized = []
     monkeypatch.setattr(
-        "memcommit.commands.quality_find_workbench.authorize_combination",
+        "memcommit.commands.shared.quality_find_workbench.authorize_combination",
         lambda accesses: authorized.append(
             tuple(access.display_name for access in accesses)
         ),
@@ -1056,11 +1066,11 @@ def test_quality_finder_all_authority_failure_precedes_provider_connection(
     store.save(context)
     store.set_current(context.name)
     monkeypatch.setattr(
-        "memcommit.commands.quality_find_workbench.authorize_combination",
+        "memcommit.commands.shared.quality_find_workbench.authorize_combination",
         lambda _accesses: (_ for _ in ()).throw(ProfileError("combine denied")),
     )
     monkeypatch.setattr(
-        "memcommit.commands.find_ambiguities.connect_codex_chatgpt_provider",
+        "memcommit.commands.find_ambiguities.command.connect_codex_chatgpt_provider",
         ForbiddenProvider(),
     )
 
@@ -1094,15 +1104,15 @@ def test_cli_positional_context_does_not_switch_current(
     store.save(target)
     store.set_current(active.name)
     monkeypatch.setattr(
-        "memcommit.commands.find_duplicates.connect_codex_chatgpt_provider",
+        "memcommit.commands.find_duplicates.command.connect_codex_chatgpt_provider",
         lambda: PayloadProvider(lambda _operation, _payload: {"findings": []}),
     )
     monkeypatch.setattr(
-        "memcommit.commands.find_ambiguities.connect_codex_chatgpt_provider",
+        "memcommit.commands.find_ambiguities.command.connect_codex_chatgpt_provider",
         lambda: PayloadProvider(lambda _operation, _payload: {"findings": []}),
     )
     monkeypatch.setattr(
-        "memcommit.commands.find_conflicts.connect_codex_chatgpt_provider",
+        "memcommit.commands.find_conflicts.command.connect_codex_chatgpt_provider",
         lambda: PayloadProvider(lambda _operation, _payload: {"findings": []}),
     )
 
@@ -1116,10 +1126,7 @@ def test_cli_positional_context_does_not_switch_current(
         assert "Dedun 'target': absorbed 1 redundant direct item(s)" in result.output
         assert "1 DUP / EXACT link" in result.output
     elif command_name == "find-redundancies":
-        assert (
-            "Find Redundancies · target · 2 direct memories checked"
-            in result.output
-        )
+        assert "Find Redundancies · target · 2 direct memories checked" in result.output
         assert "1 group · 1 proposed absorption" in result.output
         assert "redundancy finding" not in result.output
         assert "DUN GROUP  1/1 · 2 Memories · DUP / EXACT" in result.output
@@ -1191,7 +1198,7 @@ def test_cli_direct_scope_does_not_open_memory_ref_or_embedded_context_files(
         "find_conflicts",
     ]:
         monkeypatch.setattr(
-            f"memcommit.commands.{module_name}.connect_codex_chatgpt_provider",
+            f"memcommit.commands.{module_name}.command.connect_codex_chatgpt_provider",
             lambda: provider,
         )
 
@@ -1248,7 +1255,7 @@ def test_cli_dedun_immediately_applies_eligible_groups_and_prints_review_receipt
 
     provider = PayloadProvider(respond)
     monkeypatch.setattr(
-        "memcommit.commands.find_duplicates.connect_codex_chatgpt_provider",
+        "memcommit.commands.find_duplicates.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -1306,7 +1313,7 @@ def test_cli_dedun_unions_semantic_memory_and_exact_embed_groups_atomically(
         }
 
     monkeypatch.setattr(
-        "memcommit.commands.find_duplicates.connect_codex_chatgpt_provider",
+        "memcommit.commands.find_duplicates.command.connect_codex_chatgpt_provider",
         lambda: PayloadProvider(respond),
     )
 

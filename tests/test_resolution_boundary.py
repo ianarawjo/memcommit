@@ -83,7 +83,7 @@ def test_meld_resolution_application_does_not_import_runtime_or_interfaces():
 
 
 def test_meld_interfaces_enter_the_operation_owned_resolution_boundary():
-    command_imports = _imports(PACKAGE / "commands" / "meld.py")
+    command_imports = _imports(PACKAGE / "commands" / "meld" / "command.py")
     public_imports = _imports(PACKAGE / "api" / "_operations" / "meld.py")
     agent_imports = _imports(PACKAGE / "interfaces" / "agent" / "meld.py")
 

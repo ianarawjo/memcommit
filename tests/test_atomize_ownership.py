@@ -131,7 +131,7 @@ def test_primary_atomize_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "memcommit/api/atomize.py",
         "memcommit/api/_operations/atomize.py",
-        "memcommit/commands/atomize.py",
+        "memcommit/commands/atomize/command.py",
         "memcommit/operations/atomize/runtime.py",
     )
 

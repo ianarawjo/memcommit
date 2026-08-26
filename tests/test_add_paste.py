@@ -7,8 +7,9 @@ from typer.testing import CliRunner
 
 from memcommit import ops
 from memcommit.cli import app
-from memcommit.commands import add, paste_input
-from memcommit.commands.paste_input import PasteCancelled, capture_paste
+from memcommit.commands.add import command as add
+from memcommit.commands.shared import paste_input
+from memcommit.commands.shared.paste_input import PasteCancelled, capture_paste
 from memcommit.context import Memory
 from memcommit.store import MemoryStore
 

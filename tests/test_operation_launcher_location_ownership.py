@@ -14,7 +14,7 @@ from memcommit.profile_config import ProfileConfigError
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-LEGACY_MODULE = "memcommit.commands.operation_launcher_location"
+LEGACY_MODULE = "memcommit.commands.shared.operation_launcher_location"
 CANONICAL_MODULE = (
     "memcommit.interfaces.tui.components.operation_launcher.location"
 )
@@ -52,7 +52,7 @@ assert sys.modules[{CANONICAL_MODULE!r}] is canonical
 
 
 def test_launcher_location_legacy_facade_defines_no_behavior() -> None:
-    source_path = REPOSITORY_ROOT / "memcommit/commands/operation_launcher_location.py"
+    source_path = REPOSITORY_ROOT / "memcommit/commands/shared/operation_launcher_location.py"
     tree = ast.parse(source_path.read_text(encoding="utf-8"))
 
     definitions = [

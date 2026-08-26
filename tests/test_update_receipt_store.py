@@ -9,8 +9,8 @@ from typer.testing import CliRunner
 
 import memcommit.ops as ops
 from memcommit.cli import app
-from memcommit.commands.impact_catalog import impact_session_entries
-from memcommit.commands.review_sessions import review_session_entries
+from memcommit.commands.impact.catalog import impact_session_entries
+from memcommit.commands.review.sessions import review_session_entries
 from memcommit.store import MemoryStore
 from memcommit.update import plan_update
 from memcommit.update_receipt_store import UpdateReceiptStore

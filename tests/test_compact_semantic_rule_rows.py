@@ -3,11 +3,11 @@ from __future__ import annotations
 import json
 
 import memcommit.ops as ops
-from memcommit.commands.impact_process_local import (
+from memcommit.commands.impact.process_local import (
     distill_impact_presentation,
     elaborate_impact_presentation,
 )
-from memcommit.commands.impact_sessions import render_impact_session_snapshot
+from memcommit.commands.impact.sessions import render_impact_session_snapshot
 from memcommit.distill import DISTILL_OPERATION, DISTILL_PAYLOAD_MARKER
 from memcommit.operations.distill.application import DistillRequest
 from memcommit.operations.distill.runtime import execute_distill

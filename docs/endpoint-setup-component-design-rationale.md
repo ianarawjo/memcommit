@@ -78,7 +78,7 @@ plans enter their deterministic Resolution workbench instead.
 
 The Profile-readable Context catalog is operation-neutral targeting logic, so
 its implementation lives in `context_targeting/readable_catalog.py`.
-`commands/readable_context_catalog.py` remains a compatibility import for
+`commands/shared/readable_context_catalog.py` remains a compatibility import for
 unmigrated command adapters, while new internal code imports the owning module
 directly.
 

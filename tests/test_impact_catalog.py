@@ -6,7 +6,7 @@ from types import SimpleNamespace
 
 import pytest
 
-import memcommit.commands.impact_catalog as impact_catalog
+import memcommit.commands.impact.catalog as impact_catalog
 from memcommit.interfaces.tui.components.operation_launcher.session import (
     SessionOpenReceipt,
     SessionPickerEntry,

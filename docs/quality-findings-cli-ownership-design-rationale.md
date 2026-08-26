@@ -7,7 +7,7 @@ renderer contains no command dispatch or operation policy.
 
 The implementation now lives unchanged in
 `memcommit.interfaces.cli.quality_findings`. Production command adapters import
-that owner directly. `memcommit.commands.findings_render` remains a module alias,
+that owner directly. `memcommit.commands.shared.findings_render` remains a module alias,
 not a copied re-export namespace, so either import order produces the same module
 object and legacy-path monkeypatches still affect the implementation globals.
 

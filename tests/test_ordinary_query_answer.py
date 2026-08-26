@@ -12,7 +12,7 @@ from memcommit.operations.query.ordinary_application import (
     OrdinaryQueryRequest,
 )
 from memcommit.operations.query.ordinary_runtime import execute_ordinary_query
-from memcommit.commands.readable_context_catalog import (
+from memcommit.commands.shared.readable_context_catalog import (
     freeze_readable_context_catalog,
 )
 from memcommit.find_answer_references import FindAnswerEvidence

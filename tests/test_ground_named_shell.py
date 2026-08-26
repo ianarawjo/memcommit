@@ -10,9 +10,9 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from prompt_toolkit.utils import get_cwidth
 
-import memcommit.commands.ground_named_shell as ground_named_shell_module
-from memcommit.commands.exact_command_review import ExactCommandReview
-from memcommit.commands.ground_named_shell import (
+import memcommit.commands.ground.named_shell as ground_named_shell_module
+from memcommit.commands.shared.exact_command_review import ExactCommandReview
+from memcommit.commands.ground.named_shell import (
     GroundCommandProposal,
     _line,
     render_named_ground_cases_pane,

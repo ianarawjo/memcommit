@@ -11,9 +11,9 @@ than inferred from the setup path.
 ## Reproduction frame
 
 - Working directory: `/Users/KimMunyeong/Github/memcommit`
-- Command adapter: `memcommit.commands.meld.cmd`, registered as `mem meld` in
+- Command adapter: `memcommit.commands.meld.command.cmd`, registered as `mem meld` in
   the capture's minimal Typer command group
-- Setup adapter: `memcommit.commands.meld_setup.choose_meld_setup`
+- Setup adapter: `memcommit.commands.meld.setup.choose_meld_setup`
 - Runtime/application boundary: `prepare_meld_start`, `execute_meld_start`,
   and the command-owned persisted `--accept` route; the harness never writes a
   Context directly after fixture creation

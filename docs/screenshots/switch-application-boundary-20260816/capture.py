@@ -116,7 +116,7 @@ def _switch_child(*, apply_selection: bool) -> None:
 
 def _ground_child() -> None:
     _app, store = _setup_store()
-    from memcommit.commands.ground_shell import (
+    from memcommit.commands.ground.shell import (
         GroundShellContextSuggestion,
         run_ground_shell,
     )

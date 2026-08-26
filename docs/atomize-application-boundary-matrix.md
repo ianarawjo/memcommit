@@ -236,7 +236,7 @@ Suggested ownership:
 - `memcommit.operations.atomize.analysis_runtime`: saved-pair and
   hidden-prewarm lookup, lazy provider analysis, freshness recheck, and pair
   publication/restoration.
-- `memcommit.commands.atomize`: CLI/TUI composition, progress and receipts,
+- `memcommit.commands.atomize.command`: CLI/TUI composition, progress and receipts,
   mapping final workbench actions to the typed in-place or Save As use case;
   the command retains presentation policy but not either materialization
   lifecycle.

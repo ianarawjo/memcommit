@@ -9,7 +9,7 @@ import pytest
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-LEGACY_MODULE = "memcommit.commands.exact_name_dialog"
+LEGACY_MODULE = "memcommit.commands.shared.exact_name_dialog"
 CANONICAL_MODULE = "memcommit.interfaces.tui.components.exact_name_dialog"
 
 
@@ -45,7 +45,7 @@ assert sys.modules[{CANONICAL_MODULE!r}] is canonical
 
 
 def test_legacy_exact_name_dialog_defines_no_behavior() -> None:
-    source_path = REPOSITORY_ROOT / "memcommit/commands/exact_name_dialog.py"
+    source_path = REPOSITORY_ROOT / "memcommit/commands/shared/exact_name_dialog.py"
     tree = ast.parse(source_path.read_text(encoding="utf-8"))
 
     definitions = [

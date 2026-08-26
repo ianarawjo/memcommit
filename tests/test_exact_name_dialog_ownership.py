@@ -12,7 +12,7 @@ import pytest
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-LEGACY_MODULE = "memcommit.commands.exact_name_dialog"
+LEGACY_MODULE = "memcommit.commands.shared.exact_name_dialog"
 CANONICAL_MODULE = "memcommit.interfaces.tui.components.exact_name_dialog"
 LEGACY_SOURCE_SHA256 = "b3875ebf6bdc72cf5f6b9070cb853eb51ce080fc1b5f068af167747d42bf10e1"
 
@@ -50,7 +50,7 @@ assert sys.modules[{CANONICAL_MODULE!r}] is canonical
 
 
 def test_legacy_exact_name_dialog_is_an_import_only_module_alias() -> None:
-    source_path = REPOSITORY_ROOT / "memcommit/commands/exact_name_dialog.py"
+    source_path = REPOSITORY_ROOT / "memcommit/commands/shared/exact_name_dialog.py"
     tree = ast.parse(source_path.read_text(encoding="utf-8"), filename=str(source_path))
 
     assert not any(
@@ -111,7 +111,7 @@ def test_canonical_source_matches_pre_move_source_after_import_normalization() -
 
 
 def test_import_workbench_uses_the_interface_owned_dialog() -> None:
-    source_path = REPOSITORY_ROOT / "memcommit/commands/import_workbench.py"
+    source_path = REPOSITORY_ROOT / "memcommit/commands/import_profile/workbench.py"
     tree = ast.parse(source_path.read_text(encoding="utf-8"), filename=str(source_path))
 
     imports = [

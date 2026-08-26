@@ -43,7 +43,7 @@ def _configure_store(root: Path) -> None:
 
 def _child(store_root: Path) -> None:
     import memcommit.ops as ops
-    import memcommit.commands.update as update_command
+    import memcommit.commands.update.command as update_command
     from memcommit.cli import app
     from memcommit.store import MemoryStore
 

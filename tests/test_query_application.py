@@ -321,7 +321,7 @@ def test_ordinary_query_application_and_runtime_have_no_interface_dependency():
 
 def test_production_adapters_import_ordinary_query_from_new_owner():
     root = Path(__file__).parents[1]
-    command = (root / "memcommit/commands/query.py").read_text()
+    command = (root / "memcommit/commands/query/command.py").read_text()
     workbench_model = (
         root / "memcommit/interfaces/tui/operations/query/model.py"
     ).read_text()

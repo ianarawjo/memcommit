@@ -14,11 +14,11 @@ from prompt_toolkit.output import DummyOutput
 from typer.main import get_command
 from typer.testing import CliRunner
 
-import memcommit.commands.help_inventory as help_inventory
+import memcommit.commands.help_inventory.command as help_inventory
 import memcommit.ops as ops
 from memcommit.cli import app
-from memcommit.commands.branch_dialog import BranchCreationReceipt
-from memcommit.commands.help_inventory import CommandEntry, run_help_selector
+from memcommit.commands.branch.dialog import BranchCreationReceipt
+from memcommit.commands.help_inventory.command import CommandEntry, run_help_selector
 from memcommit.store import MemoryStore
 
 runner = CliRunner(mix_stderr=False)
@@ -1198,7 +1198,7 @@ class TestInit:
             observed["view"] = view
             return view.value
 
-        monkeypatch.setattr("memcommit.commands.init.choose_context_name", choose)
+        monkeypatch.setattr("memcommit.commands.init.command.choose_context_name", choose)
 
         result = invoke("init")
 
@@ -1215,7 +1215,7 @@ class TestInit:
     ):
         invoke("init", "main")
         monkeypatch.setattr(
-            "memcommit.commands.init.choose_context_name",
+            "memcommit.commands.init.command.choose_context_name",
             lambda view: None,
         )
 
@@ -1232,7 +1232,7 @@ class TestInit:
         monkeypatch,
     ):
         monkeypatch.setattr(
-            "memcommit.commands.init.choose_context_name",
+            "memcommit.commands.init.command.choose_context_name",
             lambda view: "project/work",
         )
 
@@ -1949,7 +1949,7 @@ class TestBranch:
         invoke("init", "current")
         invoke("add", "current-only")
         monkeypatch.setattr(
-            "memcommit.commands.branch.choose_branch_creation",
+            "memcommit.commands.branch.command.choose_branch_creation",
             lambda *args, **kwargs: BranchCreationReceipt(
                 source_name="source",
                 target_name="experiment",
@@ -1972,7 +1972,7 @@ class TestBranch:
     ):
         invoke("init", "main")
         monkeypatch.setattr(
-            "memcommit.commands.branch.choose_branch_creation",
+            "memcommit.commands.branch.command.choose_branch_creation",
             lambda *args, **kwargs: None,
         )
 
@@ -1991,7 +1991,7 @@ class TestBranch:
         store = MemoryStore()
         store.create_context(ops.init("source"))
         monkeypatch.setattr(
-            "memcommit.commands.branch.choose_branch_creation",
+            "memcommit.commands.branch.command.choose_branch_creation",
             lambda *args, **kwargs: BranchCreationReceipt(
                 source_name="source",
                 target_name="feature",
@@ -2015,7 +2015,7 @@ class TestBranch:
         empty_uid = MemoryStore().load_direct("empty").uid
         invoke("switch", "source")
         monkeypatch.setattr(
-            "memcommit.commands.branch.choose_branch_creation",
+            "memcommit.commands.branch.command.choose_branch_creation",
             lambda *args, **kwargs: BranchCreationReceipt(
                 source_name="source",
                 target_name="empty",
@@ -2881,7 +2881,7 @@ class TestCheckout:
     ):
         invoke("init", "main")
         monkeypatch.setattr(
-            "memcommit.commands.branch.choose_branch_creation",
+            "memcommit.commands.branch.command.choose_branch_creation",
             lambda *args, **kwargs: BranchCreationReceipt(
                 source_name="main",
                 target_name="feature",

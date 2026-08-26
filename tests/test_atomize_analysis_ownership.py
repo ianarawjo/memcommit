@@ -140,8 +140,8 @@ def test_migrated_atomize_analysis_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "memcommit/operations/atomize/workflow.py",
         "memcommit/api/_operations/atomize.py",
-        "memcommit/commands/atomize.py",
-        "memcommit/commands/impact.py",
+        "memcommit/commands/atomize/command.py",
+        "memcommit/commands/impact/command.py",
         "memcommit/operations/atomize/analysis_runtime.py",
     )
 

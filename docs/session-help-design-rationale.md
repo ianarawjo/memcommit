@@ -10,7 +10,7 @@ behavior. Adding a Query-only binding would have repeated the same nested
 Application lifecycle in every later session.
 
 Session Help is therefore one operation-neutral handoff implemented by
-`memcommit.commands.session_help`. It is adopted by Query, Find search and
+`memcommit.commands.shared.session_help`. It is adopted by Query, Find search and
 chat, Compare, Result, the shared Resolution workbench, and both blank and
 named Ground shells. Resolution covers Meld, Sever, Update, Atomize, Forget,
 Impact, and adaptive Review without operation-specific bindings. The common

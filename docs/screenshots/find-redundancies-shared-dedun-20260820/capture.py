@@ -106,7 +106,7 @@ def _verification(label: str, provider: _Provider) -> str:
 def _run_child(command: str) -> None:
     import click
 
-    import memcommit.commands.find_duplicates as find_command
+    import memcommit.commands.find_duplicates.command as find_command
     from memcommit.cli import app
 
     with tempfile.TemporaryDirectory(prefix="find-redundancies-capture-") as directory:

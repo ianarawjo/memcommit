@@ -57,7 +57,7 @@ def test_meld_execution_modules_have_no_terminal_or_command_dependencies(module)
 
 
 def test_meld_command_contains_no_target_or_session_publication_primitive():
-    command_path = PACKAGE_ROOT / "commands" / "meld.py"
+    command_path = PACKAGE_ROOT / "commands" / "meld" / "command.py"
     source = command_path.read_text(encoding="utf-8")
 
     assert all(
@@ -73,7 +73,7 @@ def test_meld_command_contains_no_target_or_session_publication_primitive():
 
 
 def test_meld_command_contains_no_initial_cache_or_provisional_session_logic():
-    command_path = PACKAGE_ROOT / "commands" / "meld.py"
+    command_path = PACKAGE_ROOT / "commands" / "meld" / "command.py"
     source = command_path.read_text(encoding="utf-8")
 
     assert all(
@@ -91,7 +91,7 @@ def test_meld_command_contains_no_initial_cache_or_provisional_session_logic():
 
 
 def test_meld_command_calls_the_operation_owned_apply_service_directly():
-    command_path = PACKAGE_ROOT / "commands" / "meld.py"
+    command_path = PACKAGE_ROOT / "commands" / "meld" / "command.py"
     source = command_path.read_text(encoding="utf-8")
 
     assert "execute_meld_apply(" in source

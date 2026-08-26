@@ -9,8 +9,8 @@ from prompt_toolkit.output import DummyOutput
 import pytest
 
 import memcommit.ops as ops
-from memcommit.commands.meld import start_reviewed_symmetric_meld
-from memcommit.commands.meld_target_picker import (
+from memcommit.commands.meld.command import start_reviewed_symmetric_meld
+from memcommit.commands.meld.target_picker import (
     choose_meld_target,
     eligible_meld_targets,
 )

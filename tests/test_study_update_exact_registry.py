@@ -8,7 +8,7 @@ from typer.testing import CliRunner
 
 import memcommit.config as config_module
 import memcommit.ops as ops
-from memcommit.commands import update as update_command
+from memcommit.commands.update import command as update_command
 from memcommit.cli import app
 from memcommit.config import Config
 from memcommit.context import Context, Memory
@@ -174,7 +174,7 @@ def test_exact_update_impact_materializes_hidden_receipt_without_provider(
     )
     assert store.load_impact_plan() is None
     monkeypatch.setattr(
-        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: (_ for _ in ()).throw(
             AssertionError("hidden exact Update receipt opened a provider")
         ),

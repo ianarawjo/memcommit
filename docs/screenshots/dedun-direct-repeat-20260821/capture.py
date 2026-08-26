@@ -79,7 +79,7 @@ def _initialize() -> None:
 def _run_child() -> None:
     import click
 
-    import memcommit.commands.find_duplicates as find_command
+    import memcommit.commands.find_duplicates.command as find_command
     from memcommit.cli import app
     from memcommit.findings import DuplicateFinding, DuplicateReport
     from memcommit.read_report_recents import read_report_recents

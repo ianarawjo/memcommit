@@ -36,7 +36,7 @@ def test_context_catalog_entry_keeps_grant_metadata_typed() -> None:
 
 
 def test_contexts_command_imports_the_operation_runtime() -> None:
-    path = REPOSITORY_ROOT / "memcommit/commands/contexts.py"
+    path = REPOSITORY_ROOT / "memcommit/commands/contexts/command.py"
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
     imports = {
         node.module

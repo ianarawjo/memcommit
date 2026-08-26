@@ -65,7 +65,7 @@ Find, ordinary Query, the common endpoint setup used by
 Compare/Update/Meld/Atomize, and Sever import these controls directly. The full
 picker, receipts, Memory preview rendering, clipboard projection, and terminal
 orchestration now live in `context_targeting/tui/picker.py`.
-`commands/context_picker.py` keeps its established public and test-facing names
+`commands/shared/context_picker.py` keeps its established public and test-facing names
 as behavior-free compatibility imports only; production callers import the
 neutral owner directly. Its operation-neutral preview controller is also
 composed into the common endpoint setup and Sever setup trees: it owns lazy

@@ -323,7 +323,7 @@ def test_query_authenticates_before_reading_source(isolated_store, monkeypatch):
         raise AssertionError("source was opened before authentication")
 
     monkeypatch.setattr(
-        "memcommit.commands.query.connect_query_provider",
+        "memcommit.commands.query.command.connect_query_provider",
         unavailable,
     )
     monkeypatch.setattr(MemoryStore, "load_query_source", track_open)
@@ -353,7 +353,7 @@ def test_query_returns_provider_answer_without_checkpointing(
             return "They may enter only after 18:00."
 
     monkeypatch.setattr(
-        "memcommit.commands.query.connect_query_provider",
+        "memcommit.commands.query.command.connect_query_provider",
         lambda provider: FakeProvider(),
     )
 
@@ -407,7 +407,7 @@ def test_query_selects_a_complete_concealed_language_variant(
             return "확인했습니다."
 
     monkeypatch.setattr(
-        "memcommit.commands.query.connect_query_provider",
+        "memcommit.commands.query.command.connect_query_provider",
         lambda provider: FakeProvider(),
     )
 
@@ -457,7 +457,7 @@ def test_query_missing_language_error_does_not_disclose_entry_key(
             pytest.fail("provider must not receive a partially translated source")
 
     monkeypatch.setattr(
-        "memcommit.commands.query.connect_query_provider",
+        "memcommit.commands.query.command.connect_query_provider",
         lambda provider: FakeProvider(),
     )
 
@@ -483,7 +483,7 @@ def test_query_rejects_an_ordinary_context_item(isolated_store, monkeypatch):
     store.set_current("parent")
 
     monkeypatch.setattr(
-        "memcommit.commands.query.connect_query_provider",
+        "memcommit.commands.query.command.connect_query_provider",
         lambda provider: pytest.fail("provider should not be connected"),
     )
 

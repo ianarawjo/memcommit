@@ -70,10 +70,10 @@ separate Branch operation.
 
 | Concern | Owner after extraction | Contract |
 | --- | --- | --- |
-| Typer grammar, cancellation, and error presentation | `commands/switch.py` | Captures current once, routes an optional TUI selection, invokes the typed use case, and renders the result. |
+| Typer grammar, cancellation, and error presentation | `commands/switch/command.py` | Captures current once, routes an optional TUI selection, invokes the typed use case, and renders the result. |
 | Interactive Switch shape | `interfaces/tui/operations/switch` | Converts one frozen picker result into `SwitchContextRequest`; it performs no load, authorization, or write. |
 | Shared Context tree, direct-item preview, focus, and clipboard | `context_targeting/tui/picker.py` | Returns a Context name or read-only targeting value; it owns no operational role or Store continuation. |
-| Legacy picker imports | `commands/context_picker.py` | Behavior-free compatibility exports only; production callers use the neutral owner directly. |
+| Legacy picker imports | `commands/shared/context_picker.py` | Behavior-free compatibility exports only; production callers use the neutral owner directly. |
 | Global versus explicit-relative name semantics | `operations/switch/application.py` | Bare names remain canonical global names. Only `.`, `..`, `./...`, and `../...` resolve against the command-start current snapshot. |
 | Previous/next navigation meaning | `current_context_navigation.py` + `operations/switch/application.py` | Uses bounded actual pointer-transition history, never lexical catalog adjacency; direct selection clears forward history. |
 | Exact lexical-parent requirement | `operations/switch/application.py` through `SwitchContextPort.local_context_exists` | A missing lexical parent is never inferred from an Embed edge. |

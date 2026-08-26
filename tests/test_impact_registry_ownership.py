@@ -13,7 +13,7 @@ import pytest
 
 ROOT = Path(__file__).parents[1]
 PACKAGE = ROOT / "memcommit"
-LEGACY_MODULE = "memcommit.commands.impact_registry"
+LEGACY_MODULE = "memcommit.commands.impact.registry"
 OWNER_MODULE = "memcommit.interfaces.cli.impact_registry"
 
 
@@ -100,7 +100,7 @@ def test_route_order_lifecycle_and_help_are_unchanged() -> None:
 
 
 def test_legacy_facade_contains_no_implementation() -> None:
-    path = PACKAGE / "commands" / "impact_registry.py"
+    path = PACKAGE / "commands" / "impact" / "registry.py"
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
 
     assert not any(
@@ -122,7 +122,11 @@ def test_legacy_facade_contains_no_implementation() -> None:
 
 
 def test_impact_command_imports_the_interface_owner() -> None:
-    source = (PACKAGE / "commands" / "impact.py").read_text(encoding="utf-8")
+    source = (PACKAGE / "commands" / "impact" / "command.py").read_text(
+        encoding="utf-8"
+    )
 
-    assert "from memcommit.interfaces.cli.impact_registry import IMPACT_ROUTES" in source
-    assert "from memcommit.commands.impact_registry import IMPACT_ROUTES" not in source
+    assert (
+        "from memcommit.interfaces.cli.impact_registry import IMPACT_ROUTES" in source
+    )
+    assert "from memcommit.commands.impact.registry import IMPACT_ROUTES" not in source

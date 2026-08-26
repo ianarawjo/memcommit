@@ -12,7 +12,7 @@ import pytest
 
 ROOT = Path(__file__).parents[1]
 PACKAGE = ROOT / "memcommit"
-LEGACY_MODULE = "memcommit.commands.findings_render"
+LEGACY_MODULE = "memcommit.commands.shared.findings_render"
 OWNER_MODULE = "memcommit.interfaces.cli.quality_findings"
 
 
@@ -32,7 +32,7 @@ def test_legacy_and_owner_imports_share_module_identity(first: str, second: str)
 
 
 def test_legacy_facade_contains_no_implementation() -> None:
-    path = PACKAGE / "commands" / "findings_render.py"
+    path = PACKAGE / "commands" / "shared" / "findings_render.py"
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
 
     assert not any(
@@ -43,11 +43,11 @@ def test_legacy_facade_contains_no_implementation() -> None:
 
 def test_quality_finding_commands_import_the_interface_owner() -> None:
     for filename in (
-        "find_ambiguities.py",
-        "find_conflicts.py",
-        "find_duplicates.py",
-        "find_exact_duplicates.py",
+        "find_ambiguities/command.py",
+        "find_conflicts/command.py",
+        "find_duplicates/command.py",
+        "find_exact_duplicates/command.py",
     ):
         source = (PACKAGE / "commands" / filename).read_text(encoding="utf-8")
         assert "from memcommit.interfaces.cli.quality_findings import (" in source
-        assert "from memcommit.commands.findings_render import (" not in source
+        assert "from memcommit.commands.shared.findings_render import (" not in source

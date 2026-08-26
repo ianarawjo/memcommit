@@ -5,7 +5,7 @@ Last reviewed: 2026-08-22.
 ## Decision
 
 Non-interactive selector parsing and terminal rendering live in
-`memcommit.interfaces.cli.query`. `memcommit.commands.query` remains the Typer
+`memcommit.interfaces.cli.query`. `memcommit.commands.query.command` remains the Typer
 composition root: it interprets options, freezes storage/authority inputs,
 chooses ordinary, granted, or legacy-reference execution, wires concrete
 providers, and maps failures to exit codes.

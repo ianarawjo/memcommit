@@ -218,7 +218,7 @@ def test_query_reference_modules_have_no_interface_or_concrete_provider_dependen
 
 def test_query_command_uses_reference_application_without_legacy_executor():
     command = (
-        Path(__file__).parents[1] / "memcommit/commands/query.py"
+        Path(__file__).parents[1] / "memcommit/commands/query/command.py"
     ).read_text(encoding="utf-8")
 
     assert "from memcommit.operations.query.reference_application import" in command

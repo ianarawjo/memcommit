@@ -237,7 +237,7 @@ def _capture_combined_help(home: Path) -> None:
     from typer.main import get_command
 
     from memcommit.cli import app
-    from memcommit.commands.help_inventory import (
+    from memcommit.commands.help_inventory.command import (
         _ordered_help_entries,
         command_entries,
     )

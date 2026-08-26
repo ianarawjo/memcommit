@@ -175,7 +175,7 @@ def _session(*, empty: bool):
 
 
 def _run_child(kind: str, store_root: Path) -> None:
-    from memcommit.commands.audit import run_quality_audit_review
+    from memcommit.commands.audit.command import run_quality_audit_review
     from memcommit.quality_audit import quality_audit_record_digest
     from memcommit.store import MemoryStore
 

@@ -11,7 +11,7 @@ Context content or changing the current pointer.
 | --- | --- | --- |
 | Row and catalog result types | `memcommit.operations.contexts.application` | Terminal-free immutable values |
 | Store/Profile snapshot and Grant projection | `memcommit.operations.contexts.runtime` | Read-only local-plus-Grant catalog |
-| ANSI styling and text output | `memcommit.commands.contexts` | Typer presentation only |
+| ANSI styling and text output | `memcommit.commands.contexts.command` | Typer presentation only |
 
 ## Invariants
 

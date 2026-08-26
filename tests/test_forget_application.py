@@ -10,7 +10,7 @@ from typer.testing import CliRunner
 
 import memcommit.ops as ops
 from memcommit.cli import app
-from memcommit.commands import forget as forget_command
+from memcommit.commands.forget import command as forget_command
 from memcommit.context import AutoCheckpoint
 from memcommit.interfaces.cli import forget as forget_cli
 from memcommit.interfaces.console.theme import (

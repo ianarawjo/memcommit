@@ -133,8 +133,8 @@ def test_production_forget_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "memcommit/api/forget.py",
         "memcommit/api/_operations/forget.py",
-        "memcommit/commands/forget.py",
-        "memcommit/commands/impact_process_local.py",
+        "memcommit/commands/forget/command.py",
+        "memcommit/commands/impact/process_local.py",
         "memcommit/interfaces/tui/operations/forget/workbench.py",
         "memcommit/operations/forget/runtime.py",
     )

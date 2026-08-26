@@ -3,17 +3,17 @@
 import pytest
 
 import memcommit.ops as ops
-from memcommit.commands.find_materialization import (
+from memcommit.commands.find.materialization import (
     FindMaterializationError,
     materialize_find_results,
 )
-from memcommit.commands.find_search_workbench import (
+from memcommit.commands.find.search_workbench import (
     FindSearchRequest,
     FindSearchResponse,
     FindSearchResult,
 )
 from memcommit.authority.access import resolve_context_access
-from memcommit.commands.readable_context_catalog import (
+from memcommit.commands.shared.readable_context_catalog import (
     freeze_readable_context_catalog,
 )
 from memcommit.context import Memory, MemoryRef

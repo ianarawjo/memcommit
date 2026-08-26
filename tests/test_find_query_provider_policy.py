@@ -27,7 +27,9 @@ def test_query_route_pins_codex_but_preserves_non_codex_authority(
     routed = object()
     calls: list[str] = []
 
-    monkeypatch.setattr(policy, "_connect_pinned_codex_provider", lambda *_a, **_k: pinned)
+    monkeypatch.setattr(
+        policy, "_connect_pinned_codex_provider", lambda *_a, **_k: pinned
+    )
     monkeypatch.setattr(
         policy,
         "_connect_configured_query_provider",
@@ -81,12 +83,12 @@ def test_query_accepts_one_frozen_public_configuration(monkeypatch):
 
 def test_find_and_query_commands_import_the_shared_policy_owner():
     commands = Path(__file__).parents[1] / "memcommit" / "commands"
-    find_source = (commands / "find.py").read_text(encoding="utf-8")
-    query_source = (commands / "query.py").read_text(encoding="utf-8")
+    find_source = (commands / "find" / "command.py").read_text(encoding="utf-8")
+    query_source = (commands / "query" / "command.py").read_text(encoding="utf-8")
 
     owner = "from memcommit.infrastructure.providers.find_query import ("
     assert owner in find_source
     assert owner in query_source
-    assert "memcommit.commands.find_query_provider_policy" not in find_source
-    assert "memcommit.commands.find_query_provider_policy" not in query_source
-    assert "memcommit.commands.ordinary_query_provider_policy" not in query_source
+    assert "memcommit.commands.find.provider_policy" not in find_source
+    assert "memcommit.commands.find.provider_policy" not in query_source
+    assert "memcommit.commands.query.provider_policy" not in query_source

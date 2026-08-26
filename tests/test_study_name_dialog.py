@@ -8,7 +8,7 @@ import uuid
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-from memcommit.commands.study_name_dialog import choose_study_profile_name
+from memcommit.commands.init_study.name_dialog import choose_study_profile_name
 from memcommit.profiles import generate_study_profile_name
 
 

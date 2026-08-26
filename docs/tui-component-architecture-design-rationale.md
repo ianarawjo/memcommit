@@ -11,7 +11,7 @@ Last reviewed: 2026-08-16.
 ## Motivating problem
 
 The repository already shared substantial terminal behavior, but its lowest
-visual contracts were owned by `memcommit.commands.tui_primitives` and adjacent
+visual contracts were owned by `memcommit.commands.shared.tui_primitives` and adjacent
 command modules. Selection, Context targeting, result workbenches, and other
 surfaces therefore imported `commands` even when they did not depend on a
 command. Adding another operation screen would either deepen that reverse
