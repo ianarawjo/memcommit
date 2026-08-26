@@ -16,7 +16,7 @@ from memcommit.api.errors import (
     SemanticStorageError,
 )
 from memcommit.api.semantic import DistillProposal
-from memcommit.distill import DistillError
+from memcommit.operations.distill.model import DistillError
 from memcommit.ground_distill import execute_ground_distill, freeze_ground_distill
 from memcommit.query_provider import QueryProviderError
 

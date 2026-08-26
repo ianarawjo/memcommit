@@ -26,7 +26,7 @@ from memcommit.context_targeting.presets import (
     resolve_context_traversal,
     resolve_scope_preset,
 )
-from memcommit.distill import DistillError
+from memcommit.operations.distill.model import DistillError
 from memcommit.operations.distill.application import DistillRequest, DistillResult
 from memcommit.operations.distill.runtime import execute_distill, prepare_distill_add
 from memcommit.elaborate import ElaborateError, ElaborateMode

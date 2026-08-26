@@ -9,8 +9,8 @@ import json
 from typing import Iterator, Literal, Protocol
 
 from memcommit.context import Context, Memory
-from memcommit.distill import DistillError, DistillProvider
-from memcommit.distill import ensure_distill_goal_fit_allows_add
+from memcommit.operations.distill.model import DistillError, DistillProvider
+from memcommit.operations.distill.model import ensure_distill_goal_fit_allows_add
 from memcommit.operations.distill.application import (
     DistillRequest,
     DistillResult,

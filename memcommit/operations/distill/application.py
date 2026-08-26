@@ -6,7 +6,7 @@ from contextlib import AbstractContextManager
 from dataclasses import dataclass, field
 from typing import Literal, Protocol
 
-from memcommit.distill import (
+from memcommit.operations.distill.model import (
     DistillAnalysis,
     DistillError,
     DistillProvider,
@@ -16,7 +16,7 @@ from memcommit.distill import (
     validate_distill_input,
     validate_distill_provider_plan,
 )
-from memcommit.distill_config import (
+from memcommit.operations.distill.config import (
     DEFAULT_DISTILL_SEMANTIC_CONFIG,
     DistillSemanticConfig,
 )

@@ -10,7 +10,7 @@ import uuid
 
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.context_naming import validate_portable_context_name
-from memcommit.distill import (
+from memcommit.operations.distill.model import (
     DistillAnalysis,
     DistillError,
     DistillProvider,
@@ -25,7 +25,7 @@ from memcommit.operations.distill.application import (
     apply_distill,
     run_distill,
 )
-from memcommit.distill_config import (
+from memcommit.operations.distill.config import (
     DEFAULT_DISTILL_SEMANTIC_CONFIG,
     DistillSemanticConfig,
 )
