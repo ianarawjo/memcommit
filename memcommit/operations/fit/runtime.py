@@ -70,14 +70,14 @@ from memcommit.operations.fit.judgment import (
     execute_fit_judgments,
     prepare_fit_judgments,
 )
-from memcommit.ground import (
+from memcommit.operations.ground.model import (
     GROUND_PROPOSITION_SCHEMA_VERSION,
     GroundItem,
     GroundSession,
     is_bound_ground_schema,
 )
-from memcommit.ground_workspace_fit import execute_ground_workspace_fit
-from memcommit.ground_workspace_runtime import (
+from memcommit.operations.ground.workspace_fit import execute_ground_workspace_fit
+from memcommit.operations.ground.workspace_runtime import (
     ground_workspace_exists,
     load_ground_workspace,
 )

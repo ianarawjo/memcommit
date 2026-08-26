@@ -17,7 +17,7 @@ from memcommit.api.errors import (
 )
 from memcommit.api.semantic import ElaborateProposal
 from memcommit.operations.elaborate.model import ElaborateError
-from memcommit.ground_elaborate import (
+from memcommit.operations.ground.elaborate import (
     execute_ground_elaborate,
     freeze_ground_elaborate,
 )

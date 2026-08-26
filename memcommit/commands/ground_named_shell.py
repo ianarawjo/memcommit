@@ -72,7 +72,7 @@ from memcommit.interfaces.tui.core.text_layout import (
     elide_terminal_text,
     single_line_terminal_text,
 )
-from memcommit.ground import (
+from memcommit.operations.ground.model import (
     GROUND_PROPOSITION_SCHEMA_VERSION,
     GroundItem,
     GroundSession,
@@ -82,7 +82,7 @@ from memcommit.operations.fit.ground_report import FitJudgment, FitReport
 from memcommit.operations.fit.store import GroundFitReceipt
 from memcommit.interfaces.fit import fit_fraction, fit_mark
 from memcommit.operations.fit.application import FitResult
-from memcommit.ground_turn_dialogue import (
+from memcommit.operations.ground.turn_dialogue import (
     GroundTurnDraft,
     GroundTurnDraftBatch,
 )

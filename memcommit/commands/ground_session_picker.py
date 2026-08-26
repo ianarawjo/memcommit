@@ -16,7 +16,7 @@ from memcommit.interfaces.tui.components.operation_launcher.session import (
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )
-from memcommit.ground import GroundSession, validate_ground_contract_name
+from memcommit.operations.ground.model import GroundSession, validate_ground_contract_name
 from memcommit.store import (
     MemoryStore,
     ground_session_record_digest,

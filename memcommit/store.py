@@ -187,7 +187,7 @@ def context_record_digest(value: Context | dict[str, object]) -> str:
 
 def ground_session_record_digest(value: object) -> str:
     """Hash one complete validated Ground record canonically."""
-    from memcommit.ground import GroundSession
+    from memcommit.operations.ground.model import GroundSession
 
     record = (
         value.to_dict()
@@ -1542,7 +1542,7 @@ class MemoryStore:
         contract_name: str,
     ) -> Iterator[None]:
         """Serialize cooperative saves of one portable named Ground."""
-        from memcommit.ground import validate_ground_contract_name
+        from memcommit.operations.ground.model import validate_ground_contract_name
 
         canonical = validate_ground_contract_name(contract_name)
         if self.ground_sessions_dir.is_symlink():
@@ -2297,7 +2297,7 @@ class MemoryStore:
 
     def _ground_session_path(self, contract_name: str) -> Path:
         """Resolve one portable contract ID without creating active state."""
-        from memcommit.ground import validate_ground_contract_name
+        from memcommit.operations.ground.model import validate_ground_contract_name
 
         canonical = validate_ground_contract_name(contract_name)
         if self.ground_sessions_dir.is_symlink():
@@ -2308,7 +2308,7 @@ class MemoryStore:
 
     def load_ground_session(self, contract_name: str):
         """Return one named grounding session, or None when it does not exist."""
-        from memcommit.ground import GroundError, GroundSession
+        from memcommit.operations.ground.model import GroundError, GroundSession
 
         path = self._ground_session_path(contract_name)
         if not path.exists():
@@ -2354,7 +2354,7 @@ class MemoryStore:
         additionally lock and verify every bound Context frame before taking
         the Ground lock; ordinary setup saves keep that stricter check off.
         """
-        from memcommit.ground import GroundError, GroundSession
+        from memcommit.operations.ground.model import GroundError, GroundSession
 
         if not isinstance(session, GroundSession):
             raise TypeError("Expected a GroundSession.")
@@ -2463,7 +2463,7 @@ class MemoryStore:
 
     def _verify_ground_frames_locked(self, session) -> None:
         """Require every bound frame to match while its Context lock is held."""
-        from memcommit.ground import context_frame_digest
+        from memcommit.operations.ground.model import context_frame_digest
 
         for frame in session.frames:
             try:
@@ -4479,7 +4479,7 @@ class MemoryStore:
         self,
         contract_names: Iterable[str],
     ) -> dict[str, dict[str, object]]:
-        from memcommit.ground import GroundError, GroundSession
+        from memcommit.operations.ground.model import GroundError, GroundSession
 
         records: dict[str, dict[str, object]] = {}
         for contract_name in contract_names:
@@ -4767,7 +4767,7 @@ class MemoryStore:
         ground_records = self._read_ground_records_for_rename(ground_contract_names)
         post_ground_records: dict[str, dict[str, object]] = {}
         ground_frame_count = 0
-        from memcommit.ground import GroundError, GroundSession
+        from memcommit.operations.ground.model import GroundError, GroundSession
 
         for filename, record in ground_records.items():
             post = copy.deepcopy(record)

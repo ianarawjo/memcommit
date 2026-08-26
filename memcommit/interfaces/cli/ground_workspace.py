@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
-from memcommit.ground_workspace import GroundWorkspace
+from memcommit.operations.ground.workspace_model import GroundWorkspace
 from memcommit.interfaces.console.text import safe_terminal_text
 
 

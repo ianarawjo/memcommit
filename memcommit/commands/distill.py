@@ -40,7 +40,7 @@ from memcommit.operations.distill.runtime import (
     execute_distill_apply,
     prepare_distill_add,
 )
-from memcommit.ground_distill import (
+from memcommit.operations.ground.distill import (
     FrozenGroundDistill,
     FrozenGroundWorkspaceDistill,
     GroundDistillResult,

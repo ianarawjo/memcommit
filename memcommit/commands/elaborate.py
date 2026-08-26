@@ -20,7 +20,7 @@ from memcommit.operations.elaborate.add_runtime import (
     freeze_elaborate_context_source,
     prepare_elaborate_add,
 )
-from memcommit.ground_elaborate import (
+from memcommit.operations.ground.elaborate import (
     FrozenGroundElaborate,
     GroundElaborateResult,
     apply_ground_elaborate_result,

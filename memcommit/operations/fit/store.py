@@ -10,13 +10,13 @@ from pathlib import Path
 import uuid
 
 from memcommit.operations.fit.ground_report import FitError, FitReport
-from memcommit.ground import GroundSession, context_frame_digest
-from memcommit.ground_workspace import GroundWorkspace
-from memcommit.ground_workspace_fit import (
+from memcommit.operations.ground.model import GroundSession, context_frame_digest
+from memcommit.operations.ground.workspace_model import GroundWorkspace
+from memcommit.operations.ground.workspace_fit import (
     load_ground_workspace_fit_contexts,
     workspace_fit_report_is_current,
 )
-from memcommit.ground_workspace_runtime import (
+from memcommit.operations.ground.workspace_runtime import (
     ground_workspace_exists,
     load_ground_workspace,
 )

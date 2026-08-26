@@ -15,7 +15,7 @@ import json
 from typing import Literal, Protocol
 
 from memcommit.context import Context, Memory
-from memcommit.ground import (
+from memcommit.operations.ground.model import (
     GROUND_PROPOSITION_SCHEMA_VERSION,
     GroundSession,
     context_frame_digest,

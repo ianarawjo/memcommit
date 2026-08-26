@@ -6,13 +6,13 @@ from dataclasses import dataclass
 from datetime import datetime
 
 from memcommit.context import Memory
-from memcommit.ground_workspace import GroundWorkspace
-from memcommit.ground_workspace_draft import (
+from memcommit.operations.ground.workspace_model import GroundWorkspace
+from memcommit.operations.ground.workspace_draft import (
     GroundWorkspaceDraft,
     ground_workspace_draft_digest,
 )
-from memcommit.ground_workspace_draft_store import GroundWorkspaceDraftStore
-from memcommit.ground_workspace_runtime import (
+from memcommit.operations.ground.workspace_draft_store import GroundWorkspaceDraftStore
+from memcommit.operations.ground.workspace_runtime import (
     ground_workspace_exists,
     list_ground_workspace_names,
     load_ground_workspace,

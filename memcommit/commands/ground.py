@@ -49,7 +49,7 @@ from memcommit.interfaces.tui.operations.ground_workspace import (
     run_ground_workspace_tui,
 )
 from memcommit.context import Context, Memory
-from memcommit.ground import (
+from memcommit.operations.ground.model import (
     GROUND_PROPOSITION_SCHEMA_VERSION,
     GROUND_TEXT_LIMIT,
     GroundError,
@@ -77,39 +77,39 @@ from memcommit.ground import (
     validate_ground_contract_name,
     validate_ground_goal,
 )
-from memcommit.ground_dialogue import (
+from memcommit.operations.ground.dialogue import (
     GROUND_DIALOGUE_NAME_LIMIT,
     GROUND_DIALOGUE_USER_TEXT_LIMIT,
     GroundDialogueError,
     GroundDialogueProposal,
     interpret_ground_dialogue,
 )
-from memcommit.ground_context_catalog import (
+from memcommit.operations.ground.context_catalog import (
     discover_ground_context_locators,
     select_ground_context_locators,
 )
-from memcommit.ground_workspace import (
+from memcommit.operations.ground.workspace_model import (
     GroundWorkspaceError,
     ground_workspace_context_names,
 )
-from memcommit.ground_workspace_draft import (
+from memcommit.operations.ground.workspace_draft import (
     GroundWorkspaceDraft,
     GroundWorkspaceDraftError,
     GroundWorkspaceMemoryDraft,
     GroundWorkspaceRuleDraft,
     ground_workspace_draft_digest,
 )
-from memcommit.ground_workspace_draft_store import GroundWorkspaceDraftStore
-from memcommit.ground_workspace_application import (
+from memcommit.operations.ground.workspace_draft_store import GroundWorkspaceDraftStore
+from memcommit.operations.ground.workspace_application import (
     AddGroundWorkspaceMemoryRequest,
     CreateGroundWorkspaceRequest,
     ReplaceGroundWorkspaceMemoryRequest,
 )
-from memcommit.ground_workspace_history import (
+from memcommit.operations.ground.workspace_history import (
     GroundWorkspaceHistoryError,
     undo_ground_workspace_command,
 )
-from memcommit.ground_workspace_runtime import (
+from memcommit.operations.ground.workspace_runtime import (
     execute_ground_workspace_creation,
     execute_ground_workspace_memory_add,
     execute_ground_workspace_memory_replace,
@@ -121,7 +121,7 @@ from memcommit.goal_focus_runtime import (
     freeze_goal_focus_operand,
     revalidate_goal_focus,
 )
-from memcommit.ground_turn_dialogue import (
+from memcommit.operations.ground.turn_dialogue import (
     GroundBlockedTarget,
     GroundTurnAction,
     GroundTurnDraft,

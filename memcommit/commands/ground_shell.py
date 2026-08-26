@@ -88,7 +88,7 @@ from memcommit.interfaces.tui.components.table import (
     clamp_table_position,
     render_tui_table,
 )
-from memcommit.ground import (
+from memcommit.operations.ground.model import (
     GroundError,
     validate_ground_contract_name,
     validate_ground_goal,
