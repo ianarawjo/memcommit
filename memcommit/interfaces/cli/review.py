@@ -8,7 +8,7 @@ from memcommit.interfaces.tui.workbenches.review import (
     ATOMIZE_RESPONSE_LABEL,
     RESPONSE_LABEL,
 )
-from memcommit.review import ReviewItem, ReviewSession
+from memcommit.operations.review.model import ReviewItem, ReviewSession
 
 
 def visible_ordinal_index(selector: str, item_count: int) -> int | None:

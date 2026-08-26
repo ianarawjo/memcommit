@@ -55,7 +55,7 @@ from memcommit.quality_audit import (
     QualityAuditError,
 )
 from memcommit.quality_audit_store import QualityAuditStore
-from memcommit.review import (
+from memcommit.operations.review.model import (
     ReviewError,
     atomize_review_matches_analysis,
     create_ambiguity_review,

@@ -33,7 +33,7 @@ from memcommit.operations.resolve.application import (
     ResolveRequest,
     ResolveSourcePrecondition,
 )
-from memcommit.review import REVIEW_RESPONSE_CHAR_LIMIT
+from memcommit.operations.review.model import REVIEW_RESPONSE_CHAR_LIMIT
 
 
 QUALITY_FINDING_HANDOFF_CONTRACT_VERSION = "quality-finding-handoff-v1"

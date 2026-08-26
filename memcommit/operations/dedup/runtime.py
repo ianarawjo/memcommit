@@ -26,7 +26,7 @@ from memcommit.operations.dedup.application import (
 from memcommit.operations.dedup.planning import freeze_dedup_plan
 from memcommit.reviewing.direct_item_duplicates import find_exact_duplicate_groups
 from memcommit.profile_config import ProfileRegistry
-from memcommit.review import direct_context_digest
+from memcommit.operations.review.model import direct_context_digest
 from memcommit.store import MemoryStore, context_record_digest
 
 @dataclass

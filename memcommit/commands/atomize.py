@@ -85,7 +85,7 @@ from memcommit.context_targeting.model import (
 from memcommit.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
 )
-from memcommit.review import (
+from memcommit.operations.review.model import (
     atomize_review_declared_frames,
     atomize_review_matches_analysis,
     review_response_digest,

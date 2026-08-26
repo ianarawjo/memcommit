@@ -98,7 +98,7 @@ from memcommit.profiles import (
     ProfileError,
     authority_grant_snapshot_lock,
 )
-from memcommit.review import (
+from memcommit.operations.review.model import (
     ReviewError,
     atomize_review_declared_frames,
     atomize_review_matches_analysis,

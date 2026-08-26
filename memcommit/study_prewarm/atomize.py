@@ -31,7 +31,7 @@ from memcommit.profiles import (
     _STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT,
     _STUDY_PRACTICE_DESCRIPTION_TASK_UID,
 )
-from memcommit.review import direct_context_digest
+from memcommit.operations.review.model import direct_context_digest
 from memcommit.semantic_prompt_policy import (
     GENERAL_PROMPT_POLICY_ID,
     STUDY_PROMPT_POLICY_ID,

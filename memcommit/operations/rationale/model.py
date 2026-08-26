@@ -23,7 +23,7 @@ from memcommit.operations.rationale.cache import (
     rationale_inference_input_digest,
     save_rationale_inference,
 )
-from memcommit.review import (
+from memcommit.operations.review.model import (
     atomize_review_matches_analysis,
     review_matches_context,
 )

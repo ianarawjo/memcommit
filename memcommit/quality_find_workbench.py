@@ -40,7 +40,7 @@ from memcommit.resolution_workbench import (
     ResolutionWorkbenchView,
     resolution_overview_text,
 )
-from memcommit.review import REVIEW_RESPONSE_CHAR_LIMIT, direct_context_digest
+from memcommit.operations.review.model import REVIEW_RESPONSE_CHAR_LIMIT, direct_context_digest
 
 
 QualityFindKind = Literal["duplicates", "ambiguities", "conflicts"]

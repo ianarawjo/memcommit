@@ -32,7 +32,7 @@ from memcommit.operations.dedup.planning import freeze_dedup_plan
 from memcommit.findings import DuplicateFinding, DuplicateReport, find_redundancies
 from memcommit.quality_find_workbench import create_quality_find_workbench
 from memcommit.quality_finding_handoff import quality_finding_handoffs
-from memcommit.review import direct_context_digest
+from memcommit.operations.review.model import direct_context_digest
 from memcommit.store import context_record_digest
 
 
