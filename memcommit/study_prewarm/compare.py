@@ -22,7 +22,7 @@ from memcommit.operations.compare.ledger.model import (
     comparison_canonical_digest,
 )
 from memcommit.operations.compare.ledger.provider import COMPARISON_PROVIDER_CONTRACT_VERSION
-from memcommit.config import Config
+from memcommit.infrastructure.config import Config
 from memcommit.infrastructure.providers.policy import (
     resolve_operation_provider_policy,
 )

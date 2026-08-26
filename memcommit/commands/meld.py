@@ -92,7 +92,7 @@ from memcommit.interfaces.tui.components.operation_launcher.session import (
     SessionPickerEntry,
     choose_session,
 )
-from memcommit.query_provider import (
+from memcommit.infrastructure.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )

@@ -35,7 +35,7 @@ from memcommit.operations.fit.judgment import (
     judge_fit_questions,
 )
 from memcommit.operations.fit.coherence import FitCoherenceReport
-from memcommit.provider_types import CompletionRun, ProviderIdentity
+from memcommit.infrastructure.providers.types import CompletionRun, ProviderIdentity
 
 
 FIT_LEGACY_SCHEMA_VERSION = 1

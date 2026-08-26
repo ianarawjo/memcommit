@@ -23,7 +23,7 @@ from memcommit.eval.task2_discovery import (
     Task2GoldRelation,
     build_task2_discovery_input,
 )
-from memcommit.provider_types import (
+from memcommit.infrastructure.providers.types import (
     CompletionRun,
     ProviderIdentity,
     SemanticProvider,

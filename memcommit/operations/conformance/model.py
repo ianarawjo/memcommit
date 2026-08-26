@@ -9,7 +9,7 @@ from typing import Literal, Protocol
 import unicodedata
 import uuid
 
-from memcommit.provider_types import CompletionRun, ProviderIdentity
+from memcommit.infrastructure.providers.types import CompletionRun, ProviderIdentity
 from memcommit.semantic_execution import (
     BudgetLimits,
     ExecutionMode,

@@ -28,12 +28,12 @@ from typing import Protocol
 
 from memcommit.context import Context, Memory
 from memcommit.eval.semantic_campaign import _atomic_write_json
-from memcommit.provider_types import (
+from memcommit.infrastructure.providers.types import (
     CODEX_REASONING_EFFORTS,
     CompletionRun,
     ProviderIdentity,
 )
-from memcommit.query_provider import CodexChatGPTProvider
+from memcommit.infrastructure.providers.subscription import CodexChatGPTProvider
 from memcommit.semantic.selective_curation import (
     CriterionFrame,
     CurationAnalysis,

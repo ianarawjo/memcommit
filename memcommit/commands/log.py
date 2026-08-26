@@ -4,7 +4,7 @@ from typing import Annotated, Any, Optional
 
 import typer
 
-from memcommit.command_attempts import (
+from memcommit.infrastructure.command_ledger.attempts import (
     CommandAttempt,
     CommandAttemptError,
     CommandAttemptLedger,
@@ -45,7 +45,7 @@ from memcommit.operations.log.search import (
     HistorySearchResult,
     search_history,
 )
-from memcommit.query_provider import (
+from memcommit.infrastructure.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )
@@ -54,7 +54,7 @@ from memcommit.profile_config import ProfileConfigError
 from memcommit.profile_config import load_profile_registry
 from memcommit.profiles import ProfileError
 from memcommit.store import MemoryStore
-from memcommit.study_action_log import (
+from memcommit.infrastructure.command_ledger.study_actions import (
     StudyActionError,
     StudyActionEvent,
     StudyActionLedger,

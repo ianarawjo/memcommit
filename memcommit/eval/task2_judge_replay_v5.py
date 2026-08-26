@@ -43,7 +43,7 @@ from memcommit.eval.task2_retrieval_v4 import (
     Task2RetrievalV4Error,
     compare_task2_retrieval_v4_records,
 )
-from memcommit.provider_types import CompletionRun, ProviderIdentity, SemanticProvider
+from memcommit.infrastructure.providers.types import CompletionRun, ProviderIdentity, SemanticProvider
 
 
 TASK2_JUDGE_REPLAY_V5_KIND = "memcommit.semantic-eval.task2-judge-replay-v5"

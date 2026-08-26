@@ -7,7 +7,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.command_attempts import current_command_attempt_uid
+from memcommit.infrastructure.command_ledger.attempts import current_command_attempt_uid
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )
@@ -29,7 +29,7 @@ from memcommit.profiles import (
     init_study_profile,
 )
 from memcommit.study_scenarios import COFFEE_V1_SCENARIO_ID
-from memcommit.study_action_log import (
+from memcommit.infrastructure.command_ledger.study_actions import (
     StudyActionError,
     record_study_action,
     record_study_action_for_profile,

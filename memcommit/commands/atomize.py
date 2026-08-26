@@ -92,7 +92,7 @@ from memcommit.operations.review.model import (
 )
 from memcommit.store import MemoryStore
 from memcommit.study_prewarm.atomize import is_installed_atomize_prewarm
-from memcommit.query_provider import (
+from memcommit.infrastructure.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )

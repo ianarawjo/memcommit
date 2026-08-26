@@ -3,7 +3,7 @@ from typing import Annotated, Optional
 import typer
 
 import memcommit.ops as ops
-from memcommit.command_attempts import annotate_command_outcome
+from memcommit.infrastructure.command_ledger.attempts import annotate_command_outcome
 from memcommit.authority.access import (
     authorized_context_mutation,
     grant_checkpoint_args,

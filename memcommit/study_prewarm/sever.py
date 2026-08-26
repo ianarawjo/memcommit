@@ -9,7 +9,7 @@ from pathlib import Path
 import uuid
 
 from memcommit.authority.access import ContextAccess, resolve_context_access
-from memcommit.config import Config
+from memcommit.infrastructure.config import Config
 from memcommit.infrastructure.providers.policy import (
     resolve_operation_provider_policy,
 )

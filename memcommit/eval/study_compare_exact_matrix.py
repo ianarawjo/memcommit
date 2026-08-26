@@ -38,7 +38,7 @@ from memcommit.operations.compare.ledger.provider import (
     SUPPORTED_COMPARISON_PROVIDER_CONTRACT_VERSIONS,
     analyze_comparison,
 )
-from memcommit.config import Config
+from memcommit.infrastructure.config import Config
 from memcommit.eval.study_compare_graph_prewarm import (
     GraphPair,
     GraphView,
@@ -55,11 +55,11 @@ from memcommit.profile_config import (
     profile_store_dir,
     study_run_identity,
 )
-from memcommit.provider_types import (
+from memcommit.infrastructure.providers.types import (
     CODEX_CHATGPT_PROVIDER,
     CODEX_REASONING_EFFORTS,
 )
-from memcommit.query_provider import CodexChatGPTProvider
+from memcommit.infrastructure.providers.subscription import CodexChatGPTProvider
 from memcommit.store import MemoryStore
 from memcommit.study_prewarm.compare import (
     _exact_input_matches,

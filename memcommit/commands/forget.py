@@ -3,7 +3,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.command_attempts import annotate_command_outcome
+from memcommit.infrastructure.command_ledger.attempts import annotate_command_outcome
 from memcommit.commands.command_wait import run_command_wait
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.authority.access import (
@@ -39,8 +39,8 @@ from memcommit.interfaces.tui.operations.forget import (
 )
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
-from memcommit.provider_types import SemanticProvider
-from memcommit.query_provider import QueryProviderError
+from memcommit.infrastructure.providers.types import SemanticProvider
+from memcommit.infrastructure.providers.subscription import QueryProviderError
 from memcommit.semantic.changes import ProposedChange
 from memcommit.store import MemoryStore
 

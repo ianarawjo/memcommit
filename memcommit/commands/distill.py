@@ -11,7 +11,7 @@ from memcommit.authority.access import (
     resolve_context_access,
 )
 from memcommit.bootstrap import build_distill_console_runner
-from memcommit.clipboard import write_system_clipboard
+from memcommit.infrastructure.clipboard import write_system_clipboard
 from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.readable_context_catalog import (
@@ -63,7 +63,7 @@ from memcommit.interfaces.console.text import display_escape_text
 from memcommit.interfaces.tui.operations.distill import DistillTuiSetup
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
-from memcommit.query_provider import QueryProviderError, connect_semantic_provider
+from memcommit.infrastructure.providers.subscription import QueryProviderError, connect_semantic_provider
 from memcommit.operations.add.semantic_runtime import resolve_semantic_add_endpoints
 from memcommit.store import MemoryStore
 from memcommit.operations.summarize.model import SummaryFrame

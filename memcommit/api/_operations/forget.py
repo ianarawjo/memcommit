@@ -35,7 +35,7 @@ from memcommit.operations.forget.review import ForgetReviewError
 from memcommit.operations.forget.runtime import MemoryStoreForgetSourcePort
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
-from memcommit.query_provider import QueryProviderError
+from memcommit.infrastructure.providers.subscription import QueryProviderError
 from memcommit.store import ConcurrentContextUpdateError
 
 

@@ -16,7 +16,7 @@ from memcommit.api.semantic import FitJudgmentResult, FitPropositionInput
 from memcommit.operations.fit.judgment import FitJudgmentError, FitProposition
 from memcommit.operations.fit.application import FitPropositionsRequest
 from memcommit.operations.fit.runtime import run_proposition_fit
-from memcommit.query_provider import QueryProviderError
+from memcommit.infrastructure.providers.subscription import QueryProviderError
 
 
 def _fit_inputs(

@@ -8,7 +8,7 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.authority.access import resolve_context_access
-from memcommit.command_attempts import annotate_memory_report_attempt
+from memcommit.infrastructure.command_ledger.attempts import annotate_memory_report_attempt
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.memory_history import (
     build_memory_history,

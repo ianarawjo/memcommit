@@ -32,7 +32,7 @@ import uuid
 
 import memcommit.eval.task2_judge_replay_v5 as judge_v5
 from memcommit.eval.semantic_campaign import _atomic_write_json
-from memcommit.provider_types import CompletionRun, ProviderIdentity, SemanticProvider
+from memcommit.infrastructure.providers.types import CompletionRun, ProviderIdentity, SemanticProvider
 
 
 TASK2_JUDGE_REPLAY_V7_KIND = "memcommit.semantic-eval.task2-judge-replay-v7"

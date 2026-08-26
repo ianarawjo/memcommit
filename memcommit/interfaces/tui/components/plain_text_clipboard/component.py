@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 
-from memcommit.clipboard import ClipboardError, write_system_clipboard
+from memcommit.infrastructure.clipboard import ClipboardError, write_system_clipboard
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )

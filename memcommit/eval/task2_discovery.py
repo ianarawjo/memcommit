@@ -20,7 +20,7 @@ import uuid
 
 from memcommit.eval.semantic_campaign import _atomic_write_json
 from memcommit.eval.study_fixtures import FixtureMemory, default_fixture_root, load_study_fixture
-from memcommit.provider_types import CompletionRun, ProviderIdentity, SemanticProvider
+from memcommit.infrastructure.providers.types import CompletionRun, ProviderIdentity, SemanticProvider
 
 
 TASK2_DISCOVERY_KIND = "memcommit.semantic-eval.task2-discovery"

@@ -16,7 +16,7 @@ from memcommit.operations.conformance.runtime import (
 from memcommit.interfaces.console.text import display_escape_text, safe_terminal_text
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
-from memcommit.query_provider import QueryProviderError, connect_semantic_provider
+from memcommit.infrastructure.providers.subscription import QueryProviderError, connect_semantic_provider
 from memcommit.store import MemoryStore
 
 

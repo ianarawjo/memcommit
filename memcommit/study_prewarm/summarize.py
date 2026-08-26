@@ -8,7 +8,7 @@ accepted: direct and recursive requests have distinct exact keys.
 
 from __future__ import annotations
 
-from memcommit.config import Config
+from memcommit.infrastructure.config import Config
 from memcommit.infrastructure.providers.policy import (
     resolve_operation_provider_policy,
 )

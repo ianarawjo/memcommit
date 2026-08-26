@@ -23,7 +23,7 @@ from memcommit.authority.access import resolve_context_access
 from memcommit.context_targeting.readable_catalog import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.config import Config
+from memcommit.infrastructure.config import Config
 from memcommit.infrastructure.providers.policy import (
     resolve_codex_evaluation_policy,
 )
@@ -32,11 +32,11 @@ from memcommit.profile_config import (
     profile_store_dir,
     study_run_identity,
 )
-from memcommit.provider_types import (
+from memcommit.infrastructure.providers.types import (
     CODEX_CHATGPT_PROVIDER,
     CODEX_REASONING_EFFORTS,
 )
-from memcommit.query_provider import CodexChatGPTProvider
+from memcommit.infrastructure.providers.subscription import CodexChatGPTProvider
 from memcommit.store import MemoryStore
 from memcommit.study_prewarm.registry import (
     load_artifact,

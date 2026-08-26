@@ -48,7 +48,7 @@ from memcommit.eval.task2_discovery import (
     Task2GoldRelation,
     build_task2_discovery_input,
 )
-from memcommit.provider_types import CompletionRun, ProviderIdentity, SemanticProvider
+from memcommit.infrastructure.providers.types import CompletionRun, ProviderIdentity, SemanticProvider
 
 
 TASK2_RETRIEVAL_V3_KIND = "memcommit.semantic-eval.task2-retrieval-v3"

@@ -89,7 +89,7 @@ from memcommit.context_targeting.presets import (
     resolve_scope_preset,
 )
 from memcommit.authority.derived_policy import authorize_derived_transfer
-from memcommit.query_provider import (
+from memcommit.infrastructure.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.clipboard import write_system_clipboard
+from memcommit.infrastructure.clipboard import write_system_clipboard
 from memcommit.commands.command_progress import CommandProgress
 from memcommit.interfaces.cli.resolve import render_resolve_receipt
 from memcommit.interfaces.tui.operations.resolve import run_resolve_tui
@@ -10,7 +10,7 @@ from memcommit.reviewing.quality.handoff import (
     QualityFindingHandoff,
     conflict_handoff_to_resolve_request,
 )
-from memcommit.query_provider import connect_semantic_provider
+from memcommit.infrastructure.providers.subscription import connect_semantic_provider
 from memcommit.operations.resolve.application import apply_resolve, run_resolve
 from memcommit.operations.resolve.runtime import MemoryStoreResolvePort
 from memcommit.operations.resolve.semantic import ProviderResolveSemanticPort

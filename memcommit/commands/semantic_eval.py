@@ -17,7 +17,7 @@ from memcommit.interfaces.cli.command_group import CanonicalCommandGroup
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )
-from memcommit.config import Config
+from memcommit.infrastructure.config import Config
 from memcommit.infrastructure.providers.policy import (
     ProviderPolicyOverride,
     resolve_operation_provider_policy,
@@ -87,7 +87,7 @@ from memcommit.eval.task2_judge_replay_v8 import (
     run_task2_judge_replay_v8_campaign,
     validate_task2_judge_replay_v8_record,
 )
-from memcommit.provider_types import (
+from memcommit.infrastructure.providers.types import (
     CODEX_CHATGPT_PROVIDER,
     CODEX_LUNA_LOW_PRESET,
     CODEX_LUNA_MODEL,
@@ -99,8 +99,8 @@ from memcommit.provider_types import (
     ProviderIdentity,
     SemanticProvider,
 )
-from memcommit.query_provider import CodexChatGPTProvider, QueryProviderError
-from memcommit.semantic_provider import OllamaProvider, OpenRouterProvider
+from memcommit.infrastructure.providers.subscription import CodexChatGPTProvider, QueryProviderError
+from memcommit.infrastructure.providers.semantic import OllamaProvider, OpenRouterProvider
 
 
 DEFAULT_SEMANTIC_EVAL_LEDGER = Path.home() / ".mem" / "eval" / "semantic"

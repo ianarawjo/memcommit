@@ -17,7 +17,7 @@ from memcommit.operations.compare.ledger.provider import (
     COMPARISON_PROVIDER_CONTRACT_VERSION,
     SUPPORTED_COMPARISON_PROVIDER_CONTRACT_VERSIONS,
 )
-from memcommit.config import Config
+from memcommit.infrastructure.config import Config
 from memcommit.context_targeting.readable_catalog import (
     freeze_profile_readable_context_catalog,
 )
@@ -36,7 +36,7 @@ from memcommit.profile_config import (
     profile_control_dir,
     study_run_identity,
 )
-from memcommit.provider_types import (
+from memcommit.infrastructure.providers.types import (
     CODEX_CHATGPT_PROVIDER,
     CODEX_REASONING_EFFORTS,
 )

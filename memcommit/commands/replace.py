@@ -6,7 +6,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.command_attempts import annotate_command_outcome
+from memcommit.infrastructure.command_ledger.attempts import annotate_command_outcome
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.context_targeting.presets import (
     ContextScopePreset,

@@ -21,8 +21,8 @@ from typing import Callable, Mapping, Sequence
 from memcommit.context import Context, Memory
 from memcommit.eval.semantic_campaign import _atomic_write_json
 from memcommit.eval.study_fixtures import load_study_fixture
-from memcommit.provider_types import ProviderIdentity, SemanticProvider
-from memcommit.query_provider import (
+from memcommit.infrastructure.providers.types import ProviderIdentity, SemanticProvider
+from memcommit.infrastructure.providers.subscription import (
     CodexChatGPTProvider,
     QueryProviderError,
     _build_query_prompt,

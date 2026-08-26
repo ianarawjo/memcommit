@@ -41,7 +41,7 @@ from memcommit.eval.task2_discovery import (
     Task2GoldRelation,
     build_task2_discovery_input,
 )
-from memcommit.provider_types import CompletionRun, ProviderIdentity, SemanticProvider
+from memcommit.infrastructure.providers.types import CompletionRun, ProviderIdentity, SemanticProvider
 
 
 TASK2_CANDIDATE_ABLATION_V5_KIND = (

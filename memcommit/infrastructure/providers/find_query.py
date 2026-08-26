@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from dataclasses import replace
 
-from memcommit.config import Config
-from memcommit.provider_types import CODEX_CHATGPT_PROVIDER, SemanticProvider
+from memcommit.infrastructure.config import Config
+from memcommit.infrastructure.providers.types import CODEX_CHATGPT_PROVIDER, SemanticProvider
 from memcommit.infrastructure.providers.policy import (
     FIND_PROVIDER_POLICY,
     HELP_PROVIDER_POLICY,
@@ -14,11 +14,11 @@ from memcommit.infrastructure.providers.policy import (
     ProviderPolicyOverride,
     resolve_operation_provider_policy,
 )
-from memcommit.query_provider import (
+from memcommit.infrastructure.providers.subscription import (
     CodexChatGPTProvider,
     connect_query_provider as _connect_configured_query_provider,
 )
-from memcommit.study_action_log import (
+from memcommit.infrastructure.command_ledger.study_actions import (
     record_provider_connection_finished,
     record_provider_connection_started,
 )

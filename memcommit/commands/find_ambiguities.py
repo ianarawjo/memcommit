@@ -35,7 +35,7 @@ from memcommit.interfaces.console.theme import (
     semantic_color_rgb,
 )
 from memcommit.reviewing.quality.findings import FindingsError
-from memcommit.query_provider import (
+from memcommit.infrastructure.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )

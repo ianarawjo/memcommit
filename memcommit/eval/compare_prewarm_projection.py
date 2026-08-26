@@ -32,16 +32,16 @@ from memcommit.authority.access import ContextAccess
 from memcommit.operations.compare.ledger.model import ComparisonAnalysis, ComparisonInput
 from memcommit.operations.compare.ledger.provider import analyze_comparison
 from memcommit.operations.compare.ledger.store import save_comparison_analysis
-from memcommit.config import Config
+from memcommit.infrastructure.config import Config
 from memcommit.context import Context, Memory
 from memcommit.eval.compare_latency_ab import build_task2_comparison_input
-from memcommit.provider_types import (
+from memcommit.infrastructure.providers.types import (
     CODEX_CHATGPT_PROVIDER,
     CODEX_REASONING_EFFORTS,
     CompletionRun,
     ProviderIdentity,
 )
-from memcommit.query_provider import CodexChatGPTProvider
+from memcommit.infrastructure.providers.subscription import CodexChatGPTProvider
 from memcommit.store import MemoryStore
 
 

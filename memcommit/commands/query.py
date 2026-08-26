@@ -54,7 +54,7 @@ from memcommit.operations.search.answer_dialogue import FindAnswerCorpusTooLarge
 from memcommit.operations.query.answer import OrdinaryQueryCorpusTooLarge
 from memcommit.profile_config import ProfileConfigError, load_profile_registry
 from memcommit.profiles import ProfileError
-from memcommit.query_provider import QueryProviderError
+from memcommit.infrastructure.providers.subscription import QueryProviderError
 from memcommit.operations.query.ordinary_application import OrdinaryQueryRequest
 from memcommit.operations.query.ordinary_runtime import execute_ordinary_query
 from memcommit.operations.query.reference_application import QueryReferenceRequest

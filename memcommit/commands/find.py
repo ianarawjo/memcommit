@@ -89,7 +89,7 @@ from memcommit.operations.search.turn_dialogue import (
 from memcommit.infrastructure.providers.find_query import (
     connect_find_provider as connect_codex_chatgpt_provider,
 )
-from memcommit.query_provider import QueryProviderError
+from memcommit.infrastructure.providers.subscription import QueryProviderError
 from memcommit.operations.search.model import (
     FindError,
     SearchArtifact,

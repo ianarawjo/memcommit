@@ -47,7 +47,7 @@ from memcommit.interfaces.console.text import (
     display_escape_text,
 )
 from memcommit.reviewing.quality.findings import FindingsError
-from memcommit.query_provider import (
+from memcommit.infrastructure.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )

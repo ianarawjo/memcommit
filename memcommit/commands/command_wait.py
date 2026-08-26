@@ -84,7 +84,7 @@ from memcommit.source_projection.presentation import (
     combine_source_display_tokens,
 )
 from memcommit.store import MemoryStore
-from memcommit.study_action_log import record_study_action
+from memcommit.infrastructure.command_ledger.study_actions import record_study_action
 
 
 T = TypeVar("T")

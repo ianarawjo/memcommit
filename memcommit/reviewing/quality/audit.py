@@ -32,7 +32,7 @@ from memcommit.reviewing.quality.findings import (
     find_conflicts,
     find_redundancies,
 )
-from memcommit.provider_types import CompletionRun, ProviderIdentity
+from memcommit.infrastructure.providers.types import CompletionRun, ProviderIdentity
 from memcommit.reviewing.quality.report import (
     quality_find_category_label,
     quality_find_report_summary_text,

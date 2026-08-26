@@ -12,7 +12,7 @@ from dataclasses import dataclass, field
 from typing import Callable, Literal, Protocol, TypeAlias, cast
 
 from memcommit.commands.find_chat_shell import FindChatState
-from memcommit.query_provider import QueryProviderError
+from memcommit.infrastructure.providers.subscription import QueryProviderError
 
 
 FIND_TURN_USER_TEXT_LIMIT = 20_000

@@ -9,7 +9,7 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.authority.access import resolve_context_access
-from memcommit.command_attempts import annotate_memory_report_attempt
+from memcommit.infrastructure.command_ledger.attempts import annotate_memory_report_attempt
 from memcommit.commands.command_progress import progressing_provider_factory
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.memory_picker import (
@@ -80,7 +80,7 @@ from memcommit.operations.rationale.scope import (
 )
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
-from memcommit.query_provider import QueryProviderError, connect_semantic_provider
+from memcommit.infrastructure.providers.subscription import QueryProviderError, connect_semantic_provider
 from memcommit.store import MemoryStore
 
 

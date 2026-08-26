@@ -7,7 +7,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.command_attempts import annotate_command_outcome
+from memcommit.infrastructure.command_ledger.attempts import annotate_command_outcome
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )

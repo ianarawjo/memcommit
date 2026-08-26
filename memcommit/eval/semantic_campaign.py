@@ -36,8 +36,8 @@ from memcommit.semantic.classification.duplicates import (
     DuplicatePipelineError,
     classify_duplicate_case,
 )
-from memcommit.provider_types import CompletionRun, ProviderIdentity, SemanticProvider
-from memcommit.query_provider import QueryProviderError
+from memcommit.infrastructure.providers.types import CompletionRun, ProviderIdentity, SemanticProvider
+from memcommit.infrastructure.providers.subscription import QueryProviderError
 
 
 DEFAULT_AMBIGUITY_FIXTURE = Path(__file__).parent / "fixtures" / "ambiguity.json"

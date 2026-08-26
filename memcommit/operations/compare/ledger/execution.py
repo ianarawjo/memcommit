@@ -43,7 +43,7 @@ from memcommit.profiles import ProfileError, authority_grant_snapshot_lock
 from memcommit.infrastructure.providers.policy import (
     COMPARE_LEDGER_PROVIDER_POLICY,
 )
-from memcommit.query_provider import CodexChatGPTProvider
+from memcommit.infrastructure.providers.subscription import CodexChatGPTProvider
 from memcommit.store import MemoryStore
 
 if TYPE_CHECKING:

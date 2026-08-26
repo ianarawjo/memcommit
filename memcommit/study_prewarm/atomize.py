@@ -14,7 +14,7 @@ from memcommit.operations.atomize.domain import (
     AtomizeAnalysisSession,
     atomize_analysis_matches_context,
 )
-from memcommit.config import Config
+from memcommit.infrastructure.config import Config
 from memcommit.infrastructure.providers.policy import (
     resolve_operation_provider_policy,
 )

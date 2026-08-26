@@ -7,7 +7,7 @@ import json
 from dataclasses import dataclass
 from typing import Literal, Mapping, Protocol
 
-from memcommit.provider_types import (
+from memcommit.infrastructure.providers.types import (
     CODEX_CHATGPT_PROVIDER,
     CODEX_REASONING_EFFORTS,
     SEMANTIC_PROVIDER_IDS,

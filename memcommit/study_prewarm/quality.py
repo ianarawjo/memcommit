@@ -10,7 +10,7 @@ from __future__ import annotations
 from enum import Enum
 from typing import TypeVar
 
-from memcommit.provider_types import (
+from memcommit.infrastructure.providers.types import (
     CODEX_CHATGPT_PROVIDER,
     CODEX_REASONING_EFFORTS,
 )

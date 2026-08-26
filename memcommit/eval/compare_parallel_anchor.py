@@ -27,7 +27,7 @@ from typing import Protocol
 import uuid
 
 from memcommit.operations.compare.ledger.model import ComparisonAnalysis, ComparisonInput
-from memcommit.config import Config
+from memcommit.infrastructure.config import Config
 from memcommit.eval.compare_latency_ab import (
     DEFAULT_TIMEOUT_SECONDS,
     CompareLatencyABError,
@@ -46,13 +46,13 @@ from memcommit.eval.compare_minimal_io import (
     minimal_content_payload,
     parse_minimal_analysis,
 )
-from memcommit.provider_types import (
+from memcommit.infrastructure.providers.types import (
     CODEX_CHATGPT_PROVIDER,
     CODEX_REASONING_EFFORTS,
     CompletionRun,
     ProviderIdentity,
 )
-from memcommit.query_provider import CodexChatGPTProvider
+from memcommit.infrastructure.providers.subscription import CodexChatGPTProvider
 
 
 PARALLEL_ANCHOR = "PARALLEL_FULL_CONTEXT_ANCHOR_OWNERSHIP"

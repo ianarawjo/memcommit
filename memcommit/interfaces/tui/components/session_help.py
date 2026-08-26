@@ -23,7 +23,7 @@ from memcommit.interfaces.tui.operations.help.inventory import (
 from memcommit.interfaces.tui.core.keybindings import (
     bind_case_insensitive_key,
 )
-from memcommit.study_action_log import record_study_action
+from memcommit.infrastructure.command_ledger.study_actions import record_study_action
 
 
 HelpActionObserver = Callable[[str, str | None], None]

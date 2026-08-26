@@ -66,7 +66,7 @@ from memcommit.operations.help.lookup_application import (
 )
 from memcommit.infrastructure.providers.find_query import connect_help_provider
 from memcommit.profile_config import ProfileConfigError
-from memcommit.query_provider import QueryProviderError
+from memcommit.infrastructure.providers.subscription import QueryProviderError
 from memcommit.interfaces.tui.operations.help.localization import (
     HELP_LANGUAGES,
     HelpLanguage,
@@ -82,7 +82,7 @@ from memcommit.interfaces.tui.operations.help.study_copy_guard import (
     authored_study_help_fields,
     find_study_help_copy_match,
 )
-from memcommit.study_action_log import (
+from memcommit.infrastructure.command_ledger.study_actions import (
     record_study_help_lookup_completed,
     record_study_help_lookup_submitted,
 )

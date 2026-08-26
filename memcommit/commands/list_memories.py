@@ -5,7 +5,7 @@ from typing import Annotated, Literal, Optional
 import typer
 from prompt_toolkit.utils import get_cwidth
 
-from memcommit.clipboard import (
+from memcommit.infrastructure.clipboard import (
     ClipboardError,
     ClipboardPayload,
     copy_payload,

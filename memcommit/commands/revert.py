@@ -37,7 +37,7 @@ from memcommit.retained_history.checkpoint_catalog import (
 from memcommit.context import Memory
 from memcommit.retained_history.reconstruction import HistoryError, build_history
 from memcommit.operations.log.search import HistorySearchError, search_history
-from memcommit.query_provider import (
+from memcommit.infrastructure.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )

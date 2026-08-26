@@ -117,7 +117,7 @@ from memcommit.responses.resolution import (
     response_draft_from_item,
     response_target_from_item,
 )
-from memcommit.study_action_log import record_study_action
+from memcommit.infrastructure.command_ledger.study_actions import record_study_action
 from memcommit.responses.state import ResponseFrameState
 from memcommit.responses.tui import response_frame_fragments
 from memcommit.selection.model import SelectionOption

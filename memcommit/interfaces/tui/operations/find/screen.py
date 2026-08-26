@@ -15,7 +15,7 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 from prompt_toolkit.widgets import TextArea
 
-from memcommit.clipboard import ClipboardError
+from memcommit.infrastructure.clipboard import ClipboardError
 from memcommit.context_targeting.tui.compact_scope import (
     CompactReadableScopeControl,
 )

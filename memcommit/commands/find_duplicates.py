@@ -30,7 +30,7 @@ from memcommit.context_targeting.presets import (
     resolve_scope_preset,
 )
 from memcommit.reviewing.quality.findings import DuplicateFinding, DuplicateReport, FindingsError
-from memcommit.query_provider import (
+from memcommit.infrastructure.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )

@@ -13,7 +13,7 @@ from memcommit.authority.access import (
     freeze_granted_context_binding,
     resolve_context_access,
 )
-from memcommit.config import Config
+from memcommit.infrastructure.config import Config
 from memcommit.infrastructure.providers.policy import (
     resolve_operation_provider_policy,
 )

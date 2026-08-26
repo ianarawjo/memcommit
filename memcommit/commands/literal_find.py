@@ -10,7 +10,7 @@ from memcommit.authority.access import (
     context_access_display_facts,
     resolve_context_access,
 )
-from memcommit.clipboard import ClipboardError, write_system_clipboard
+from memcommit.infrastructure.clipboard import ClipboardError, write_system_clipboard
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.readable_context_catalog import (
     freeze_profile_readable_context_catalog,

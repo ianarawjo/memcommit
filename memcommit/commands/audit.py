@@ -70,7 +70,7 @@ from memcommit.reviewing.quality.workbench import (
     QualityFindWorkbenchSession,
     quality_find_report_view,
 )
-from memcommit.query_provider import (
+from memcommit.infrastructure.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )

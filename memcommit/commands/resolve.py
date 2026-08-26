@@ -6,7 +6,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.clipboard import write_system_clipboard
+from memcommit.infrastructure.clipboard import write_system_clipboard
 from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.operations.fit.judgment import FitJudgmentError
@@ -24,7 +24,7 @@ from memcommit.interfaces.console.text import display_escape_text
 from memcommit.interfaces.tui.operations.resolve import run_resolve_tui
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
-from memcommit.query_provider import QueryProviderError, connect_semantic_provider
+from memcommit.infrastructure.providers.subscription import QueryProviderError, connect_semantic_provider
 from memcommit.operations.resolve.application import (
     ResolveError,
     ResolveRequest,

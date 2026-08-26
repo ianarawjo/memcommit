@@ -8,8 +8,8 @@ from typing import Annotated, Iterator, Optional
 import typer
 
 from memcommit.bootstrap import build_summarize_console_runner
-from memcommit.clipboard import ClipboardError, write_system_clipboard
-from memcommit.command_attempts import annotate_read_report_attempt
+from memcommit.infrastructure.clipboard import ClipboardError, write_system_clipboard
+from memcommit.infrastructure.command_ledger.attempts import annotate_read_report_attempt
 from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.interfaces.tui.components.operation_launcher.location import (
@@ -47,7 +47,7 @@ from memcommit.interfaces.tui.operations.summarize import (
 )
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
-from memcommit.query_provider import (
+from memcommit.infrastructure.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )

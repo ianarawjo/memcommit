@@ -40,17 +40,17 @@ from memcommit.operations.compare.ledger.provider import (
     COMPARISON_PAYLOAD_MARKER,
     analyze_comparison,
 )
-from memcommit.config import Config
+from memcommit.infrastructure.config import Config
 from memcommit.context import Context, Memory
 from memcommit.eval.semantic_campaign import _atomic_write_json
 from memcommit.eval.study_fixtures import load_study_fixture
-from memcommit.provider_types import (
+from memcommit.infrastructure.providers.types import (
     CODEX_CHATGPT_PROVIDER,
     CODEX_REASONING_EFFORTS,
     CompletionRun,
     ProviderIdentity,
 )
-from memcommit.query_provider import CodexChatGPTProvider
+from memcommit.infrastructure.providers.subscription import CodexChatGPTProvider
 
 
 COMPARE_LATENCY_AB_KIND = "memcommit.semantic-eval.compare-latency-ab-v1"

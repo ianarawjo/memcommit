@@ -16,7 +16,7 @@ import unicodedata
 
 from memcommit.context import Context, Memory
 from memcommit.retained_history.provenance import MemoryState, TraceEvent, TraceReport
-from memcommit.query_provider import QueryProviderError
+from memcommit.infrastructure.providers.subscription import QueryProviderError
 from memcommit.operations.rationale.cache import (
     CachedRationaleInference,
     load_rationale_inference,

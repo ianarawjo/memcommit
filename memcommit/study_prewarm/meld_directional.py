@@ -19,7 +19,7 @@ from memcommit.authority.access import (
     resolve_context_access,
 )
 from memcommit.operations.compare.ledger.model import COMPARISON_RULESET_VERSION, ComparisonInput
-from memcommit.config import Config
+from memcommit.infrastructure.config import Config
 from memcommit.infrastructure.providers.policy import (
     resolve_operation_provider_policy,
 )
