@@ -93,7 +93,7 @@ def test_pre_relocation_review_report_globals_load_through_alias() -> None:
 
 def test_production_review_report_consumers_use_the_shared_owner() -> None:
     relative_paths = (
-        "memcommit/applied_checkpoint_review.py",
+        "memcommit/retained_history/applied_review.py",
         "memcommit/commands/review_report.py",
         "memcommit/operations/review/report_adapters.py",
     )

@@ -165,7 +165,7 @@ def test_deterministic_resolution_adapters_keep_one_application_owner(
 
 
 def test_read_report_identity_and_launcher_keep_runtime_and_ui_ownership_separate():
-    identity_imports = _imports(PACKAGE / "read_report.py")
+    identity_imports = _imports(PACKAGE / "reviewing" / "read_report.py")
     launcher_imports = _imports(
         PACKAGE
         / "interfaces"
@@ -182,5 +182,5 @@ def test_read_report_identity_and_launcher_keep_runtime_and_ui_ownership_separat
         or module.startswith("prompt_toolkit.")
         for module in identity_imports
     )
-    assert "memcommit.read_report" in launcher_imports
+    assert "memcommit.reviewing.read_report" in launcher_imports
     assert not any(module.startswith("memcommit.commands") for module in launcher_imports)
