@@ -11,7 +11,7 @@ from memcommit.context_targeting.model import ContextScope
 from memcommit.context_targeting.readable_catalog import ReadableContextCatalog
 from memcommit.context_targeting.resolution import expand_lexical_context_names
 from memcommit.derived_policy import authorize_combination
-from memcommit.direct_item_duplicates import ExactDuplicateGroup
+from memcommit.reviewing.direct_item_duplicates import ExactDuplicateGroup
 from memcommit.findings import DuplicateReport, FindingsProvider
 from memcommit.profile_config import ProfileRegistry
 from memcommit.quality_find_workbench import (

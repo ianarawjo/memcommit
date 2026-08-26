@@ -8,9 +8,9 @@ were directly under memcommit at baseline commit 885e62c0.
 | Role | Modules |
 | --- | ---: |
 | compatibility-facade | 103 |
-| operation-implementation | 75 |
+| operation-implementation | 74 |
 | root-boundary | 7 |
-| shared-concept-implementation | 64 |
+| shared-concept-implementation | 65 |
 
 ## Modules
 
@@ -85,7 +85,7 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.delete_application | compatibility-facade | retain | memcommit.operations.delete | 0 |
 | memcommit.delete_runtime | compatibility-facade | retain | memcommit.operations.delete | 0 |
 | memcommit.derived_policy | shared-concept-implementation | relocate | memcommit.authority.derived_policy | 26 |
-| memcommit.direct_item_duplicates | operation-implementation | relocate | memcommit.operations.dedup.direct_items | 8 |
+| memcommit.direct_item_duplicates | shared-concept-implementation | relocate | memcommit.reviewing.direct_item_duplicates | 8 |
 | memcommit.distill | operation-implementation | relocate | memcommit.operations.distill.model | 8 |
 | memcommit.distill_application | compatibility-facade | retain | memcommit.operations.distill.application | 0 |
 | memcommit.distill_config | operation-implementation | relocate | memcommit.operations.distill.config | 3 |

@@ -28,7 +28,7 @@ from memcommit.operations.dedup.application import (
     dedup_projection_record,
     project_dedup,
 )
-from memcommit.dedup_planning import freeze_dedup_plan
+from memcommit.operations.dedup.planning import freeze_dedup_plan
 from memcommit.findings import DuplicateFinding, DuplicateReport, find_redundancies
 from memcommit.quality_find_workbench import create_quality_find_workbench
 from memcommit.quality_finding_handoff import quality_finding_handoffs

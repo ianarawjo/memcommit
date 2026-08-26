@@ -762,14 +762,14 @@
     },
     {
       "action": "relocate",
-      "canonical_target": "memcommit.operations.dedup.direct_items",
-      "canonical_target_path": "memcommit/operations/dedup/direct_items.py",
+      "canonical_target": "memcommit.reviewing.direct_item_duplicates",
+      "canonical_target_path": "memcommit/reviewing/direct_item_duplicates.py",
       "inbound_package_importers": 8,
       "lines": 189,
       "module": "memcommit.direct_item_duplicates",
       "path": "memcommit/direct_item_duplicates.py",
-      "reason": "implementation is named for and consumed by one operation family",
-      "role": "operation-implementation"
+      "reason": "implementation belongs to a reusable named concept",
+      "role": "shared-concept-implementation"
     },
     {
       "action": "relocate",
@@ -2746,8 +2746,8 @@
   "schema_version": 1,
   "summary": {
     "compatibility-facade": 103,
-    "operation-implementation": 75,
+    "operation-implementation": 74,
     "root-boundary": 7,
-    "shared-concept-implementation": 64
+    "shared-concept-implementation": 65
   }
 }

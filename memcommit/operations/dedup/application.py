@@ -10,7 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Protocol
 
-from memcommit.direct_item_duplicates import ExactDuplicateGroup
+from memcommit.reviewing.direct_item_duplicates import ExactDuplicateGroup
 from memcommit.quality_finding_handoff import (
     QualityFindingHandoff,
     QualityFindingSource,

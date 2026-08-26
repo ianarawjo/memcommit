@@ -15,7 +15,7 @@ from memcommit.context import AutoCheckpoint, Context, Memory, MemoryRef
 from memcommit.context_targeting.model import ContextScope
 from memcommit.context_targeting.readable_catalog import ReadableContextCatalog
 from memcommit.context_targeting.resolution import expand_lexical_context_names
-from memcommit.direct_item_duplicates import (
+from memcommit.reviewing.direct_item_duplicates import (
     ExactDuplicateGroup,
     ExactDuplicateKind,
     find_exact_duplicate_groups,

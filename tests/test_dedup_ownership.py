@@ -150,9 +150,9 @@ def test_exact_dedup_and_dedun_scope_remain_separate_owners() -> None:
     exact = (
         REPOSITORY_ROOT / "memcommit/operations/exact_dedup/application.py"
     ).read_text(encoding="utf-8")
-    dedun_scope = (REPOSITORY_ROOT / "memcommit/dedun_scope.py").read_text(
-        encoding="utf-8"
-    )
+    dedun_scope = (
+        REPOSITORY_ROOT / "memcommit/operations/dedun/scope.py"
+    ).read_text(encoding="utf-8")
 
     assert "memcommit.dedun_scope" not in application + runtime
     assert "memcommit.operations.dedup" not in exact

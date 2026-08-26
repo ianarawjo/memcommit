@@ -16,7 +16,7 @@ from importlib import resources
 from typing import Callable, Literal, Protocol
 
 from memcommit.context import Context, Memory
-from memcommit.direct_item_duplicates import (
+from memcommit.reviewing.direct_item_duplicates import (
     ExactDuplicateGroup,
     find_exact_duplicate_groups,
 )
