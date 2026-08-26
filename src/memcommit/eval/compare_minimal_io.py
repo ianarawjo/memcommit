@@ -520,7 +520,12 @@ def run_minimal_io_compare(
 
 def _default_output_path() -> Path:
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    return Path("outputs") / "compare-latency-ab" / f"{stamp}-minimal-io.json"
+    return (
+        Path("agent-records")
+        / "outputs"
+        / "compare-latency-ab"
+        / f"{stamp}-minimal-io.json"
+    )
 
 
 def _parser() -> argparse.ArgumentParser:

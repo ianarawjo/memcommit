@@ -713,8 +713,9 @@ def main(argv: Sequence[str] | None = None) -> int:
             reasoning=reasoning,
             tasks=TASKS,
         )
-        root = args.output_root or Path("outputs/study-compare-exact-matrix") / (
-            f"{registry.active.name}-{model}-{reasoning}"
+        root = args.output_root or (
+            Path("agent-records/outputs/study-compare-exact-matrix")
+            / f"{registry.active.name}-{model}-{reasoning}"
         )
         summary = run_exact_matrix(
             store=store,

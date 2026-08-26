@@ -34,13 +34,13 @@ def test_evidence_and_classification_cover_the_same_help_operations() -> None:
 
 def test_reviewed_compatibility_evidence_cannot_drift() -> None:
     classifications = {
-        "show": ("CLOSED", ("agent-records/show-application-boundary-matrix.md",), "done")
+        "show": ("CLOSED", ("agent-records/docs/show-application-boundary-matrix.md",), "done")
     }
 
     with pytest.raises(EvidenceError, match="evidence differs"):
         combine_records(
             classifications,
-            {"show": ("agent-records/show-application-design-rationale.md",)},
+            {"show": ("agent-records/docs/show-application-design-rationale.md",)},
         )
 
 
@@ -53,8 +53,8 @@ def test_governed_markdown_rejects_a_missing_local_link(tmp_path: Path) -> None:
 
 
 def test_unregistered_final_boundary_matrix_is_rejected(tmp_path: Path) -> None:
-    agent_records = tmp_path / "agent-records"
-    agent_records.mkdir()
+    agent_records = tmp_path / "agent-records" / "docs"
+    agent_records.mkdir(parents=True)
     (agent_records / "status-application-boundary-matrix.md").write_text(
         "# Status boundary\n",
         encoding="utf-8",

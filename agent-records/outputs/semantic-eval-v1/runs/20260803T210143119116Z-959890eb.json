@@ -1,0 +1,260 @@
+{
+  "attempts": [
+    {
+      "actual": {
+        "label": "YES"
+      },
+      "case_id": "conflict-short-yes",
+      "completion_seconds": 1.0770812081173062,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "label": "YES"
+      },
+      "failure_category": null,
+      "length_tier": "SHORT",
+      "operation": "conflict",
+      "ordinal": 1,
+      "prompt_digest": "08b98e7b45d0a6bbea7e0dbedfe404ae06aa9804c8f0579f9f3bd978ad5f9bfe",
+      "provider_run": {
+        "completion_tokens": 25,
+        "operation": "conflict semantic gate",
+        "prompt_tokens": 628,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"scope_relation\": \"SAME\",\n  \"claim_relation\": \"INCOMPATIBLE\"\n}",
+      "repetition": 1,
+      "response_bytes": 66,
+      "response_digest": "47e120de4cd384e5931eaf4cb35ec32a91d65565a19386bd2e484a8cca40b1b9",
+      "schema_digest": "7633a65254de2318e31ee8eac6b6606e4de69f611e495407680818c6c117ffc4",
+      "stage": "SEMANTIC_GATE",
+      "stage_runs": [],
+      "status": "PASS",
+      "task": 2
+    },
+    {
+      "actual": {
+        "label": "MAY"
+      },
+      "case_id": "conflict-short-may",
+      "completion_seconds": 1.0803253748454154,
+      "diagnostic": null,
+      "error_type": null,
+      "expected": {
+        "label": "MAY"
+      },
+      "failure_category": null,
+      "length_tier": "SHORT",
+      "operation": "conflict",
+      "ordinal": 2,
+      "prompt_digest": "a9c15272e6d28c08e4d64ab469c87305700a5cc1e65965d6e4616b78837f4ae1",
+      "provider_run": {
+        "completion_tokens": 27,
+        "operation": "conflict semantic gate",
+        "prompt_tokens": 627,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"scope_relation\": \"UNRESOLVED\",\n  \"claim_relation\": \"COMPATIBLE\"\n}",
+      "repetition": 1,
+      "response_bytes": 70,
+      "response_digest": "386ac430893ffafebb6c652270a287da00b8e8e4506f1d92dc9e05d31f5a60ff",
+      "schema_digest": "7633a65254de2318e31ee8eac6b6606e4de69f611e495407680818c6c117ffc4",
+      "stage": "SEMANTIC_GATE",
+      "stage_runs": [],
+      "status": "PASS",
+      "task": 1
+    },
+    {
+      "actual": {
+        "label": "YES"
+      },
+      "case_id": "conflict-short-no",
+      "completion_seconds": 1.070210374891758,
+      "diagnostic": "The label must exactly match the reviewed gate contract.",
+      "error_type": null,
+      "expected": {
+        "label": "NO"
+      },
+      "failure_category": "LABEL_MISMATCH",
+      "length_tier": "SHORT",
+      "operation": "conflict",
+      "ordinal": 3,
+      "prompt_digest": "95ae07e61a5afdd59d04d3ab4f72742dd8b80aedc4194488650b868907e9c7d9",
+      "provider_run": {
+        "completion_tokens": 25,
+        "operation": "conflict semantic gate",
+        "prompt_tokens": 628,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"scope_relation\": \"SAME\",\n  \"claim_relation\": \"INCOMPATIBLE\"\n}",
+      "repetition": 1,
+      "response_bytes": 66,
+      "response_digest": "47e120de4cd384e5931eaf4cb35ec32a91d65565a19386bd2e484a8cca40b1b9",
+      "schema_digest": "7633a65254de2318e31ee8eac6b6606e4de69f611e495407680818c6c117ffc4",
+      "stage": "SEMANTIC_GATE",
+      "stage_runs": [],
+      "status": "FAIL",
+      "task": 1
+    }
+  ],
+  "completed_at": "2026-08-03T21:01:46.350379Z",
+  "corpus": {
+    "calibration_mode": "LEAVE_ONE_OUT",
+    "case_limit": 200,
+    "fixture": "operation_gates.json",
+    "fixture_case_count": 36,
+    "fixture_digest": "df3da28dae49c28e57621193b9cbc2a61f9c74d348f66bccc8bc008231c2dc6e",
+    "independent_holdout": false,
+    "operation": "operation-gates",
+    "role": "CALIBRATION",
+    "ruleset_version": "operation-gates-v2-pilot",
+    "schema_version": 1,
+    "selected_case_ids": [
+      "conflict-short-yes",
+      "conflict-short-may",
+      "conflict-short-no"
+    ],
+    "selected_length_tiers": [
+      "SHORT"
+    ],
+    "selected_operations": [
+      "conflict"
+    ],
+    "selected_tasks": [
+      1,
+      2,
+      3
+    ]
+  },
+  "kind": "memcommit.semantic-eval.run",
+  "ledger_path": "agent-records/outputs/semantic-eval-v1/runs/20260803T210143119116Z-959890eb.json",
+  "pipeline": {
+    "gate": "exact operation label with leave-one-out calibration",
+    "id": "operation-gate-v1",
+    "stages": [
+      "SEMANTIC_GATE"
+    ],
+    "version": 1
+  },
+  "provider": {
+    "effective_thinking": false,
+    "endpoint": "http://127.0.0.1:11434",
+    "model": "qwen3.6:35b-a3b",
+    "model_digest": "07d35212591fc27746f0a317c975a6d68754fb38e9053d82e25f06057af28522",
+    "provider": "ollama",
+    "reasoning_effort": null,
+    "runtime": "ollama/0.30.10"
+  },
+  "run_id": "20260803T210143119116Z-959890eb",
+  "schema_version": 1,
+  "settings": {
+    "provider": {
+      "context_tokens": 65536,
+      "max_output_tokens": 16384,
+      "timeout_seconds": 600.0
+    },
+    "runs_per_case": 1,
+    "temperature": 0,
+    "ttft": "NOT_AVAILABLE_NONSTREAMING"
+  },
+  "started_at": "2026-08-03T21:01:43.119116Z",
+  "status": "COMPLETED",
+  "summary": {
+    "attempts": {
+      "exact_matches": 2,
+      "structurally_valid": 3,
+      "total": 3
+    },
+    "campaign_passed": false,
+    "case_results": [
+      {
+        "case_id": "conflict-short-yes",
+        "exact_matches": 1,
+        "majority_count": 1,
+        "required_count": 1,
+        "status": "PASS"
+      },
+      {
+        "case_id": "conflict-short-may",
+        "exact_matches": 1,
+        "majority_count": 1,
+        "required_count": 1,
+        "status": "PASS"
+      },
+      {
+        "case_id": "conflict-short-no",
+        "exact_matches": 0,
+        "majority_count": 1,
+        "required_count": 1,
+        "status": "FAIL"
+      }
+    ],
+    "cases": {
+      "failed": 1,
+      "passed": 2,
+      "total": 3
+    },
+    "completion_seconds": {
+      "max": 1.0803253748454154,
+      "mean": 1.0758723192848265,
+      "median": 1.0770812081173062,
+      "p95": 1.0803253748454154
+    },
+    "distributions": {
+      "by_length_tier": {
+        "SHORT": {
+          "passed": 2,
+          "total": 3
+        }
+      },
+      "by_operation": {
+        "conflict": {
+          "passed": 2,
+          "total": 3
+        }
+      },
+      "by_task": {
+        "task-1": {
+          "passed": 1,
+          "total": 2
+        },
+        "task-2": {
+          "passed": 1,
+          "total": 1
+        }
+      },
+      "expected_label": {
+        "MAY": 1,
+        "NO": 1,
+        "YES": 1
+      }
+    },
+    "failures": {
+      "LABEL_MISMATCH": 1
+    },
+    "operation_completion_seconds": {
+      "conflict": {
+        "max": 1.0803253748454154,
+        "mean": 1.0758723192848265,
+        "median": 1.0770812081173062,
+        "p95": 1.0803253748454154
+      }
+    },
+    "stage_completion_seconds": {
+      "SEMANTIC_GATE": {
+        "max": 1.0803253748454154,
+        "mean": 1.0758723192848265,
+        "median": 1.0770812081173062,
+        "p95": 1.0803253748454154
+      }
+    }
+  },
+  "timing": {
+    "campaign_seconds": 3.23119999980554,
+    "provider_connection_seconds": 0.019116749987006187,
+    "total_seconds": 3.250316749792546
+  }
+}

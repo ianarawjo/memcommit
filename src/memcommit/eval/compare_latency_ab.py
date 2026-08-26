@@ -1205,7 +1205,12 @@ def write_benchmark_ledger(path: Path, record: Mapping[str, object]) -> None:
 
 def _default_output_path() -> Path:
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    return Path("outputs") / "compare-latency-ab" / f"{stamp}.json"
+    return (
+        Path("agent-records")
+        / "outputs"
+        / "compare-latency-ab"
+        / f"{stamp}.json"
+    )
 
 
 def _summary(record: Mapping[str, object], path: Path) -> dict[str, object]:

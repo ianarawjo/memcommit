@@ -399,7 +399,12 @@ class _PurposeEntry:
 def default_fixture_root() -> Path:
     """Return the repository's language-partitioned fixture directory."""
 
-    return Path(__file__).resolve().parents[3] / "agent-records" / "fixtures"
+    return (
+        Path(__file__).resolve().parents[3]
+        / "agent-records"
+        / "docs"
+        / "fixtures"
+    )
 
 
 def load_study_fixture(

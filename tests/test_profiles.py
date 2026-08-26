@@ -48,6 +48,7 @@ from memcommit.profiles import (
     ProfileError,
     STUDY_BASELINE_PROFILE_NAME,
     create_authority_grant,
+    default_study_bundle_root,
     resolve_granted_context_view,
     study_profile_groups,
 )
@@ -58,6 +59,14 @@ from memcommit.study_action_log import StudyActionLedger
 
 
 runner = CliRunner(mix_stderr=False)
+
+
+def test_default_study_bundle_root_uses_agent_output_tree() -> None:
+    repository = Path(__file__).resolve().parents[1]
+    expected = repository / "agent-records" / "outputs" / "study-fixtures"
+
+    assert default_study_bundle_root() == expected
+    assert expected.is_dir()
 
 
 def test_legacy_session_log_permission_normalizes_to_one_shot_query():

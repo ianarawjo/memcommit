@@ -49,7 +49,7 @@ KIND = "COMPARE_PREWARM_PROJECTION_AUDIT"
 SCHEMA_VERSION = 1
 BASELINE_CONDITION = "BASELINE_EXHAUSTIVE"
 DEFAULT_BASELINE_LEDGER = Path(
-    "outputs/compare-latency-ab/"
+    "agent-records/outputs/compare-latency-ab/"
     "20260810-gpt-5.6-sol-medium-a-then-b.json"
 )
 DELETION_POLICY = "KEEP_ODD_ONE_BASED_REFERENCE_POSITIONS"
@@ -712,7 +712,9 @@ def write_ledger(path: Path, record: Mapping[str, object]) -> None:
 
 def _default_output_path() -> Path:
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    return Path("outputs/compare-latency-ab") / f"{stamp}-medium-prewarm-projection.json"
+    return Path("agent-records/outputs/compare-latency-ab") / (
+        f"{stamp}-medium-prewarm-projection.json"
+    )
 
 
 def _summary(record: Mapping[str, object], output: Path) -> dict[str, object]:

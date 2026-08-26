@@ -171,7 +171,12 @@ def test_every_task1_update_memory_names_its_target_and_action(
     modify: str,
     add: str,
 ) -> None:
-    fixture_root = Path(__file__).resolve().parents[1] / "agent-records" / "fixtures"
+    fixture_root = (
+        Path(__file__).resolve().parents[1]
+        / "agent-records"
+        / "docs"
+        / "fixtures"
+    )
     dataset = load_study_fixture_corpus(
         language=language,
         root=fixture_root,

@@ -1,0 +1,404 @@
+{
+  "schema_version": 1,
+  "world": "task-3",
+  "phase": "core",
+  "issues": [
+    {
+      "id": "T3V2-CONTEXTS-OVERLOAD",
+      "title": "Profile-wide Context discovery has no task-root narrowing",
+      "classification": "usability / information overload",
+      "severity": "P2 / medium",
+      "regression": "confirmed open from T3-CONTEXTS-OVERLOAD",
+      "expected": "A person working on task-3 can narrow discovery to its local and granted hierarchy while retaining current, ownership, Grant, and capability annotations.",
+      "actual": "Each of five `contexts` attempts printed the identical 113-line, 7,624-byte Profile catalog. The first task-3 row begins only after 61 unrelated rows; the useful task-3 SHARE, QUERY, and READ/EXPORT Grant rows are at the end.",
+      "workaround": "Scan once for the `task-3` prefix, then carry exact canonical names into later commands.",
+      "evidence_sequences": [
+        1,
+        22,
+        43,
+        64,
+        85
+      ],
+      "reproduction": "Yes — 5/5 interleaved attempts emitted the same whole-Profile catalog.",
+      "evidence": [
+        {
+          "sequence": 1,
+          "attempt": 1,
+          "operation": "contexts",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/001-contexts-a1.txt"
+        },
+        {
+          "sequence": 22,
+          "attempt": 2,
+          "operation": "contexts",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/022-contexts-a2.txt"
+        },
+        {
+          "sequence": 43,
+          "attempt": 3,
+          "operation": "contexts",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/043-contexts-a3.txt"
+        },
+        {
+          "sequence": 64,
+          "attempt": 4,
+          "operation": "contexts",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/064-contexts-a4.txt"
+        },
+        {
+          "sequence": 85,
+          "attempt": 5,
+          "operation": "contexts",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/085-contexts-a5.txt"
+        }
+      ]
+    },
+    {
+      "id": "T3V2-RECURSIVE-READ-OVERLOAD",
+      "title": "Recursive List and Show expand the full embedded personal tree without a compact mode",
+      "classification": "usability / information overload",
+      "severity": "P2 / medium",
+      "regression": "newly isolated evidence",
+      "expected": "Recursive inspection gives a compact hierarchy and counts first, with a bounded way to drill into effective items when an embedded tree contains hundreds of Memories.",
+      "actual": "`list task-3/local --recursive` emitted 904 lines / 68,257 bytes. `show task-3/local --recursive` reported 48 Contexts and 406 Memories, then emitted 752 lines / 62,365 bytes. The complete embedded personal history buried the few locally staged candidates and generated chunk UIDs.",
+      "workaround": "Use `--direct`, inspect one exact child at a time, and carry UIDs from narrow receipts. There is no compact recursive summary switch in these attempts.",
+      "evidence_sequences": [
+        44,
+        45
+      ],
+      "reproduction": "Yes across two sibling operations: one recursive List and one recursive Show of the same accumulated root.",
+      "evidence": [
+        {
+          "sequence": 44,
+          "attempt": 3,
+          "operation": "list",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/044-list-a3.txt"
+        },
+        {
+          "sequence": 45,
+          "attempt": 3,
+          "operation": "show",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/045-show-a3.txt"
+        }
+      ]
+    },
+    {
+      "id": "T3V2-SEARCH-DISPOSITION-GAP",
+      "title": "Semantic relevance does not produce a safe disclosure disposition",
+      "classification": "semantic safety / review friction",
+      "severity": "P2 / medium-high",
+      "regression": "confirmed open from T3-SEARCH-CURATION",
+      "expected": "A privacy-sensitive candidate workflow keeps relevance, currency, third-party status, necessity, and approval visibly separate and makes multi-root coverage explicit.",
+      "actual": "The broad personal search ranked a younger brother's transport preference beside medication and accessibility candidates. A two-root top-5 search returned only privacy policy Memories without saying the personal root contributed zero results. The final safety-worded search found no exact results, broadened the query, and returned stale medication evidence and unapproved drafts; it did clearly label them RELATED and warned that they may not satisfy the original query.",
+      "workaround": "Search candidate and policy roots independently, reconcile exact Memories against currency/privacy/approval rules, and never treat ranking or RELATED fallback as an include decision.",
+      "evidence_sequences": [
+        26,
+        47,
+        89
+      ],
+      "reproduction": "Yes across three materially different semantic searches: broad personal, multi-root, and late safety-worded fallback.",
+      "evidence": [
+        {
+          "sequence": 26,
+          "attempt": 2,
+          "operation": "search",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/026-search-a2.txt"
+        },
+        {
+          "sequence": 47,
+          "attempt": 3,
+          "operation": "search",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/047-search-a3.txt"
+        },
+        {
+          "sequence": 89,
+          "attempt": 5,
+          "operation": "search",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/089-search-a5.txt"
+        }
+      ]
+    },
+    {
+      "id": "T3V2-SUMMARY-CURATION",
+      "title": "Narrative summary blends facts with different disclosure dispositions",
+      "classification": "semantic safety / privacy review",
+      "severity": "P2 / medium-high",
+      "regression": "confirmed open from T3-SUMMARY-CURATION",
+      "expected": "A summary used during disclosure review keeps candidate personal facts, third-party facts, uncertainty, and approval state separately inspectable.",
+      "actual": "The 2024/03 summary placed a historical medication instruction, clinic-standing/back discomfort, and the younger brother's advance-notice transport preference in one fluent paragraph. It noted medication currency uncertainty but did not mark the brother detail as a separately excluded third-party fact or emit include/exclude/verify dispositions.",
+      "workaround": "Use summaries only for orientation, then return to exact Memories, quality findings, and explicit user review before materializing any outbound packet.",
+      "evidence_sequences": [
+        28
+      ],
+      "reproduction": "One current-campaign privacy-sensitive month summary, consistent with the prior campaign's same behavior.",
+      "evidence": [
+        {
+          "sequence": 28,
+          "attempt": 2,
+          "operation": "summarize",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/028-summarize-a2.txt"
+        }
+      ]
+    },
+    {
+      "id": "T3V2-CHUNK-SAFETY-FRAME",
+      "title": "Clause Chunk splits a not-approved safety frame into independently retrievable facts",
+      "classification": "functional / semantic safety",
+      "severity": "P1 / high",
+      "regression": "confirmed open from T3-CHUNK-SEMANTICS",
+      "expected": "Chunking a disclosure draft preserves the relationship between its status, candidate fact, verification conditions, and approval boundary, or refuses a strategy that would detach them.",
+      "actual": "One `DRAFT ONLY` medication candidate became three ordinary Memories: `DRAFT ONLY:`, `medication timing is a candidate;`, and a separate verification clause. Find Ambiguities then flagged the two substantive fragments as underspecified. The local review Context can now retrieve the medication claim without its not-approved marker.",
+      "workaround": "Do not clause-chunk safety-gated disclosures. Keep status, fact, currency conditions, and approval in one Memory or use a typed compound structure.",
+      "evidence_sequences": [
+        36,
+        40,
+        44
+      ],
+      "reproduction": "One isolated destructive split, independently verified by Find Ambiguities and recursive List; no second unsafe split was performed.",
+      "evidence": [
+        {
+          "sequence": 36,
+          "attempt": 2,
+          "operation": "chunk",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/036-chunk-a2.txt"
+        },
+        {
+          "sequence": 40,
+          "attempt": 2,
+          "operation": "find-ambiguities",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/040-find-ambiguities-a2.txt"
+        },
+        {
+          "sequence": 44,
+          "attempt": 3,
+          "operation": "list",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/044-list-a3.txt"
+        }
+      ]
+    },
+    {
+      "id": "T3V2-CHUNK-UID-OMISSION",
+      "title": "Successful multi-Chunk receipt omits created Memory UIDs",
+      "classification": "functional / output reuse",
+      "severity": "P2 / medium",
+      "regression": "confirmed open from T3-CHUNK-TRACEABILITY",
+      "expected": "A successful split prints every created UID so Show, Edit, Move, Reference, quality checks, and audit records can consume the result directly.",
+      "actual": "The receipt previewed three fragments and ended with `Done — 3 memories added`, but printed no created UID. Recursive List was needed to discover 26a4a267, eebb79a4, and d0f1069a.",
+      "workaround": "Run List on the exact owner and manually match generated text to the new UIDs.",
+      "evidence_sequences": [
+        36,
+        44
+      ],
+      "reproduction": "One actual three-chunk mutation plus a later owner List that was required to recover all created UIDs.",
+      "evidence": [
+        {
+          "sequence": 36,
+          "attempt": 2,
+          "operation": "chunk",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/036-chunk-a2.txt"
+        },
+        {
+          "sequence": 44,
+          "attempt": 3,
+          "operation": "list",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/044-list-a3.txt"
+        }
+      ]
+    },
+    {
+      "id": "T3V2-COMPARE-SAME-CONTEXT-MEMORIES",
+      "title": "Two documented direct-Memory endpoints cannot be compared when they share an owner Context",
+      "classification": "functional / operand contract",
+      "severity": "P2 / medium",
+      "regression": "new finding",
+      "expected": "The documented auto-typed Memory endpoint form compares two distinct Memories and uses their neighbors only as non-actionable context, including when both direct Memories share an owner.",
+      "actual": "Two distinct qualified Memory endpoints, 18d58666 and e6023aed in 2024/03, were both recognized but the command failed before analysis with `Compare requires two distinct Contexts.` No state changed.",
+      "workaround": "Compare the whole owner Context to another Context, or copy one Memory into a separate local scratch Context before comparison; neither is equivalent to the requested evidence-level comparison.",
+      "evidence_sequences": [
+        58
+      ],
+      "reproduction": "One exact same-owner/two-Memory attempt; deterministic application validation rejected it before provider work.",
+      "evidence": [
+        {
+          "sequence": 58,
+          "attempt": 3,
+          "operation": "compare",
+          "exit": 1,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/058-compare-a3.txt"
+        }
+      ]
+    },
+    {
+      "id": "T3V2-RECURSIVE-QUALITY-OVERLOAD",
+      "title": "Recursive quality reports enumerate every empty child and semantic redundancy remains slow",
+      "classification": "usability / latency and report density",
+      "severity": "P2 / medium",
+      "regression": "confirmed open but materially faster than T3-RECURSIVE-OVERLOAD",
+      "expected": "Recursive quality checks foreground findings and summarize empty child frames, with drill-down evidence and bounded progress for semantic work.",
+      "actual": "Recursive exact duplicate analysis printed 11 empty Context sections for zero groups. Recursive redundancy analysis checked 81 Memories in 11 frames, took 44.31 seconds, found zero groups, and printed all 11 empty sections. This is improved from the prior campaign's 176-second 46-Context example but remains expensive and noisy.",
+      "workaround": "Use a broad literal/semantic retrieval pass to identify a likely child, then run quality analysis on that exact child; use JSON evidence only where a finding is expected.",
+      "evidence_sequences": [
+        59,
+        81
+      ],
+      "reproduction": "Yes across recursive exact-duplicate and semantic-redundancy sibling operations on the guardrail tree.",
+      "evidence": [
+        {
+          "sequence": 59,
+          "attempt": 3,
+          "operation": "find-duplicates",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/059-find-duplicates-a3.txt"
+        },
+        {
+          "sequence": 81,
+          "attempt": 4,
+          "operation": "find-redundancies",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/081-find-redundancies-a4.txt"
+        }
+      ]
+    },
+    {
+      "id": "T3V2-GRANT-EMBED-SEMANTIC-DEAD-END",
+      "title": "A readable granted Embed blocks recursive semantic work through its local owner",
+      "classification": "workflow composition / authorization usability",
+      "severity": "P2 / medium-high",
+      "regression": "new finding; failure is correctly fail-closed",
+      "expected": "After a readable public Context is intentionally embedded, recursive semantic operations either skip the Embed with a visible reason, expose independent Embed traversal, or accept the same granted Source through an explicit authority-bearing peer selection.",
+      "actual": "Embedding the READ+EMBED+DERIVE public guidance succeeded. A recursive Compare then explicitly selected that same public guidance as its peer, yet failed because the local reference frame encountered the granted Embed through its local owner. Final recursive Summarize of `task-3/local` failed for the same reason. Both failures occurred before provider connection/publication and clearly explained the authority boundary.",
+      "workaround": "Use direct local scope, summarize/compare individual local children, and select the granted Source separately. Once embedded, there is no observed recursive-local scope that includes lexical descendants while excluding only granted Embeds for these commands.",
+      "evidence_sequences": [
+        74,
+        79,
+        91
+      ],
+      "reproduction": "Yes across two semantic consumers after one successful granted Embed: recursive Compare and recursive Summarize both failed closed.",
+      "evidence": [
+        {
+          "sequence": 74,
+          "attempt": 4,
+          "operation": "embed",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/074-embed-a4.txt"
+        },
+        {
+          "sequence": 79,
+          "attempt": 4,
+          "operation": "compare",
+          "exit": 1,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/079-compare-a4.txt"
+        },
+        {
+          "sequence": 91,
+          "attempt": 5,
+          "operation": "summarize",
+          "exit": 1,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/091-summarize-a5.txt"
+        }
+      ]
+    },
+    {
+      "id": "T3V2-FIT-OPAQUE",
+      "title": "Positive Fit receipts expose no support, exclusions, or next action",
+      "classification": "usability / decision explainability",
+      "severity": "P2 / medium-high",
+      "regression": "confirmed open from T3-FIT-OPAQUE",
+      "expected": "A positive Fit result identifies the propositions/evidence that jointly fit, what was excluded or uncertain, and why the result is not approval for external disclosure.",
+      "actual": "All four successful Context/Memory/granted-source attempts printed only `FIT · YES` and target labels. They exposed no receipt UID, source-linked rationale, mismatches, uncertainty, excluded items, or next review action. The empty direct-root attempt failed clearly and safely.",
+      "workaround": "Use Compare, Query References, exact Show, and ambiguity/conflict analysis to reconstruct evidence. Treat Fit YES only as joint consistency, never disclosure approval.",
+      "evidence_sequences": [
+        42,
+        63,
+        84,
+        105
+      ],
+      "reproduction": "Yes — 4/4 successful Fit attempts across Context, direct-Memory, and granted-Source methods returned only YES plus targets.",
+      "evidence": [
+        {
+          "sequence": 42,
+          "attempt": 2,
+          "operation": "fit",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/042-fit-a2.txt"
+        },
+        {
+          "sequence": 63,
+          "attempt": 3,
+          "operation": "fit",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/063-fit-a3.txt"
+        },
+        {
+          "sequence": 84,
+          "attempt": 4,
+          "operation": "fit",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/084-fit-a4.txt"
+        },
+        {
+          "sequence": 105,
+          "attempt": 5,
+          "operation": "fit",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/105-fit-a5.txt"
+        }
+      ]
+    },
+    {
+      "id": "T3V2-JSON-ZERO-SILENCE",
+      "title": "Structured evidence modes emit an empty stream for a successful zero-finding result",
+      "classification": "machine-consumption / observability",
+      "severity": "P3 / low-medium",
+      "regression": "new finding",
+      "expected": "A machine-readable zero-finding result emits a stable empty-result record or summary so callers can distinguish successful zero from accidentally lost output without relying only on process status.",
+      "actual": "`find-conflicts --handoff-json` twice and `find-redundancies --evidence-json` once exited 0 with zero stdout and stderr when no findings existed. The same redundancy mode emitted canonical JSON when one finding existed, confirming the silent stream is the zero-result representation.",
+      "workaround": "Capture the exit code and run the human-readable form when an explicit zero receipt is required.",
+      "evidence_sequences": [
+        62,
+        102,
+        104
+      ],
+      "reproduction": "Yes — three zero-finding structured attempts across two operations emitted nothing; a nonzero redundancy attempt emitted canonical JSON.",
+      "evidence": [
+        {
+          "sequence": 62,
+          "attempt": 3,
+          "operation": "find-conflicts",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/062-find-conflicts-a3.txt"
+        },
+        {
+          "sequence": 102,
+          "attempt": 5,
+          "operation": "find-redundancies",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/102-find-redundancies-a5.txt"
+        },
+        {
+          "sequence": 104,
+          "attempt": 5,
+          "operation": "find-conflicts",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/104-find-conflicts-a5.txt"
+        }
+      ]
+    }
+  ]
+}

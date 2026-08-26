@@ -1,0 +1,1191 @@
+{
+  "schema_version": 1,
+  "world": "task-3",
+  "phase": "core+transform+admin",
+  "issues": [
+    {
+      "id": "T3V2-CONTEXTS-OVERLOAD",
+      "title": "Profile-wide Context discovery has no task-root narrowing",
+      "classification": "usability / information overload",
+      "severity": "P2 / medium",
+      "regression": "confirmed open from T3-CONTEXTS-OVERLOAD",
+      "expected": "A person working on task-3 can narrow discovery to its local and granted hierarchy while retaining current, ownership, Grant, and capability annotations.",
+      "actual": "Each of five `contexts` attempts printed the identical 113-line, 7,624-byte Profile catalog. The first task-3 row begins only after 61 unrelated rows; the useful task-3 SHARE, QUERY, and READ/EXPORT Grant rows are at the end.",
+      "workaround": "Scan once for the `task-3` prefix, then carry exact canonical names into later commands.",
+      "evidence_sequences": [
+        1,
+        22,
+        43,
+        64,
+        85
+      ],
+      "reproduction": "Yes — 5/5 interleaved attempts emitted the same whole-Profile catalog.",
+      "evidence": [
+        {
+          "sequence": 1,
+          "attempt": 1,
+          "operation": "contexts",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/001-contexts-a1.txt"
+        },
+        {
+          "sequence": 22,
+          "attempt": 2,
+          "operation": "contexts",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/022-contexts-a2.txt"
+        },
+        {
+          "sequence": 43,
+          "attempt": 3,
+          "operation": "contexts",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/043-contexts-a3.txt"
+        },
+        {
+          "sequence": 64,
+          "attempt": 4,
+          "operation": "contexts",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/064-contexts-a4.txt"
+        },
+        {
+          "sequence": 85,
+          "attempt": 5,
+          "operation": "contexts",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/085-contexts-a5.txt"
+        }
+      ]
+    },
+    {
+      "id": "T3V2-RECURSIVE-READ-OVERLOAD",
+      "title": "Recursive List and Show expand the full embedded personal tree without a compact mode",
+      "classification": "usability / information overload",
+      "severity": "P2 / medium",
+      "regression": "newly isolated evidence",
+      "expected": "Recursive inspection gives a compact hierarchy and counts first, with a bounded way to drill into effective items when an embedded tree contains hundreds of Memories.",
+      "actual": "`list task-3/local --recursive` emitted 904 lines / 68,257 bytes. `show task-3/local --recursive` reported 48 Contexts and 406 Memories, then emitted 752 lines / 62,365 bytes. The complete embedded personal history buried the few locally staged candidates and generated chunk UIDs.",
+      "workaround": "Use `--direct`, inspect one exact child at a time, and carry UIDs from narrow receipts. There is no compact recursive summary switch in these attempts.",
+      "evidence_sequences": [
+        44,
+        45
+      ],
+      "reproduction": "Yes across two sibling operations: one recursive List and one recursive Show of the same accumulated root.",
+      "evidence": [
+        {
+          "sequence": 44,
+          "attempt": 3,
+          "operation": "list",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/044-list-a3.txt"
+        },
+        {
+          "sequence": 45,
+          "attempt": 3,
+          "operation": "show",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/045-show-a3.txt"
+        }
+      ]
+    },
+    {
+      "id": "T3V2-SEARCH-DISPOSITION-GAP",
+      "title": "Semantic relevance does not produce a safe disclosure disposition",
+      "classification": "semantic safety / review friction",
+      "severity": "P2 / medium-high",
+      "regression": "confirmed open from T3-SEARCH-CURATION",
+      "expected": "A privacy-sensitive candidate workflow keeps relevance, currency, third-party status, necessity, and approval visibly separate and makes multi-root coverage explicit.",
+      "actual": "The broad personal search ranked a younger brother's transport preference beside medication and accessibility candidates. A two-root top-5 search returned only privacy policy Memories without saying the personal root contributed zero results. The final safety-worded search found no exact results, broadened the query, and returned stale medication evidence and unapproved drafts; it did clearly label them RELATED and warned that they may not satisfy the original query.",
+      "workaround": "Search candidate and policy roots independently, reconcile exact Memories against currency/privacy/approval rules, and never treat ranking or RELATED fallback as an include decision.",
+      "evidence_sequences": [
+        26,
+        47,
+        89
+      ],
+      "reproduction": "Yes across three materially different semantic searches: broad personal, multi-root, and late safety-worded fallback.",
+      "evidence": [
+        {
+          "sequence": 26,
+          "attempt": 2,
+          "operation": "search",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/026-search-a2.txt"
+        },
+        {
+          "sequence": 47,
+          "attempt": 3,
+          "operation": "search",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/047-search-a3.txt"
+        },
+        {
+          "sequence": 89,
+          "attempt": 5,
+          "operation": "search",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/089-search-a5.txt"
+        }
+      ]
+    },
+    {
+      "id": "T3V2-SUMMARY-CURATION",
+      "title": "Narrative summary blends facts with different disclosure dispositions",
+      "classification": "semantic safety / privacy review",
+      "severity": "P2 / medium-high",
+      "regression": "confirmed open from T3-SUMMARY-CURATION",
+      "expected": "A summary used during disclosure review keeps candidate personal facts, third-party facts, uncertainty, and approval state separately inspectable.",
+      "actual": "The 2024/03 summary placed a historical medication instruction, clinic-standing/back discomfort, and the younger brother's advance-notice transport preference in one fluent paragraph. It noted medication currency uncertainty but did not mark the brother detail as a separately excluded third-party fact or emit include/exclude/verify dispositions.",
+      "workaround": "Use summaries only for orientation, then return to exact Memories, quality findings, and explicit user review before materializing any outbound packet.",
+      "evidence_sequences": [
+        28
+      ],
+      "reproduction": "One current-campaign privacy-sensitive month summary, consistent with the prior campaign's same behavior.",
+      "evidence": [
+        {
+          "sequence": 28,
+          "attempt": 2,
+          "operation": "summarize",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/028-summarize-a2.txt"
+        }
+      ]
+    },
+    {
+      "id": "T3V2-CHUNK-SAFETY-FRAME",
+      "title": "Clause Chunk splits a not-approved safety frame into independently retrievable facts",
+      "classification": "functional / semantic safety",
+      "severity": "P1 / high",
+      "regression": "confirmed open from T3-CHUNK-SEMANTICS",
+      "expected": "Chunking a disclosure draft preserves the relationship between its status, candidate fact, verification conditions, and approval boundary, or refuses a strategy that would detach them.",
+      "actual": "One `DRAFT ONLY` medication candidate became three ordinary Memories: `DRAFT ONLY:`, `medication timing is a candidate;`, and a separate verification clause. Find Ambiguities then flagged the two substantive fragments as underspecified. The local review Context can now retrieve the medication claim without its not-approved marker.",
+      "workaround": "Do not clause-chunk safety-gated disclosures. Keep status, fact, currency conditions, and approval in one Memory or use a typed compound structure.",
+      "evidence_sequences": [
+        36,
+        40,
+        44
+      ],
+      "reproduction": "One isolated destructive split, independently verified by Find Ambiguities and recursive List; no second unsafe split was performed.",
+      "evidence": [
+        {
+          "sequence": 36,
+          "attempt": 2,
+          "operation": "chunk",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/036-chunk-a2.txt"
+        },
+        {
+          "sequence": 40,
+          "attempt": 2,
+          "operation": "find-ambiguities",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/040-find-ambiguities-a2.txt"
+        },
+        {
+          "sequence": 44,
+          "attempt": 3,
+          "operation": "list",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/044-list-a3.txt"
+        }
+      ]
+    },
+    {
+      "id": "T3V2-CHUNK-UID-OMISSION",
+      "title": "Successful multi-Chunk receipt omits created Memory UIDs",
+      "classification": "functional / output reuse",
+      "severity": "P2 / medium",
+      "regression": "confirmed open from T3-CHUNK-TRACEABILITY",
+      "expected": "A successful split prints every created UID so Show, Edit, Move, Reference, quality checks, and audit records can consume the result directly.",
+      "actual": "The receipt previewed three fragments and ended with `Done — 3 memories added`, but printed no created UID. Recursive List was needed to discover 26a4a267, eebb79a4, and d0f1069a.",
+      "workaround": "Run List on the exact owner and manually match generated text to the new UIDs.",
+      "evidence_sequences": [
+        36,
+        44
+      ],
+      "reproduction": "One actual three-chunk mutation plus a later owner List that was required to recover all created UIDs.",
+      "evidence": [
+        {
+          "sequence": 36,
+          "attempt": 2,
+          "operation": "chunk",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/036-chunk-a2.txt"
+        },
+        {
+          "sequence": 44,
+          "attempt": 3,
+          "operation": "list",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/044-list-a3.txt"
+        }
+      ]
+    },
+    {
+      "id": "T3V2-COMPARE-SAME-CONTEXT-MEMORIES",
+      "title": "Two documented direct-Memory endpoints cannot be compared when they share an owner Context",
+      "classification": "functional / operand contract",
+      "severity": "P2 / medium",
+      "regression": "new finding",
+      "expected": "The documented auto-typed Memory endpoint form compares two distinct Memories and uses their neighbors only as non-actionable context, including when both direct Memories share an owner.",
+      "actual": "Two distinct qualified Memory endpoints, 18d58666 and e6023aed in 2024/03, were both recognized but the command failed before analysis with `Compare requires two distinct Contexts.` No state changed.",
+      "workaround": "Compare the whole owner Context to another Context, or copy one Memory into a separate local scratch Context before comparison; neither is equivalent to the requested evidence-level comparison.",
+      "evidence_sequences": [
+        58
+      ],
+      "reproduction": "One exact same-owner/two-Memory attempt; deterministic application validation rejected it before provider work.",
+      "evidence": [
+        {
+          "sequence": 58,
+          "attempt": 3,
+          "operation": "compare",
+          "exit": 1,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/058-compare-a3.txt"
+        }
+      ]
+    },
+    {
+      "id": "T3V2-RECURSIVE-QUALITY-OVERLOAD",
+      "title": "Recursive quality reports enumerate every empty child and semantic redundancy remains slow",
+      "classification": "usability / latency and report density",
+      "severity": "P2 / medium",
+      "regression": "confirmed open but materially faster than T3-RECURSIVE-OVERLOAD",
+      "expected": "Recursive quality checks foreground findings and summarize empty child frames, with drill-down evidence and bounded progress for semantic work.",
+      "actual": "Recursive exact duplicate analysis printed 11 empty Context sections for zero groups. Recursive redundancy analysis checked 81 Memories in 11 frames, took 44.31 seconds, found zero groups, and printed all 11 empty sections. This is improved from the prior campaign's 176-second 46-Context example but remains expensive and noisy.",
+      "workaround": "Use a broad literal/semantic retrieval pass to identify a likely child, then run quality analysis on that exact child; use JSON evidence only where a finding is expected.",
+      "evidence_sequences": [
+        59,
+        81
+      ],
+      "reproduction": "Yes across recursive exact-duplicate and semantic-redundancy sibling operations on the guardrail tree.",
+      "evidence": [
+        {
+          "sequence": 59,
+          "attempt": 3,
+          "operation": "find-duplicates",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/059-find-duplicates-a3.txt"
+        },
+        {
+          "sequence": 81,
+          "attempt": 4,
+          "operation": "find-redundancies",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/081-find-redundancies-a4.txt"
+        }
+      ]
+    },
+    {
+      "id": "T3V2-GRANT-EMBED-SEMANTIC-DEAD-END",
+      "title": "A readable granted Embed blocks recursive semantic work through its local owner",
+      "classification": "workflow composition / authorization usability",
+      "severity": "P2 / medium-high",
+      "regression": "new finding; failure is correctly fail-closed",
+      "expected": "After a readable public Context is intentionally embedded, recursive semantic operations either skip the Embed with a visible reason, expose independent Embed traversal, or accept the same granted Source through an explicit authority-bearing peer selection.",
+      "actual": "Embedding the READ+EMBED+DERIVE public guidance succeeded. A recursive Compare then explicitly selected that same public guidance as its peer, yet failed because the local reference frame encountered the granted Embed through its local owner. Final recursive Summarize of `task-3/local` failed for the same reason. Both failures occurred before provider connection/publication and clearly explained the authority boundary. Transform Update reproduced the same fail-closed blockage twice even with explicit direct Source/Target routes: the local Target's granted Embed prevented semantic work through its local owner.",
+      "workaround": "Use direct local scope, summarize/compare individual local children, and select the granted Source separately. Once embedded, there is no observed recursive-local scope that includes lexical descendants while excluding only granted Embeds for these commands.",
+      "evidence_sequences": [
+        74,
+        79,
+        91
+      ],
+      "reproduction": "Yes across two semantic consumers after one successful granted Embed: recursive Compare and recursive Summarize both failed closed.",
+      "evidence": [
+        {
+          "sequence": 74,
+          "attempt": 4,
+          "operation": "embed",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/074-embed-a4.txt"
+        },
+        {
+          "sequence": 79,
+          "attempt": 4,
+          "operation": "compare",
+          "exit": 1,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/079-compare-a4.txt"
+        },
+        {
+          "sequence": 91,
+          "attempt": 5,
+          "operation": "summarize",
+          "exit": 1,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/091-summarize-a5.txt"
+        }
+      ],
+      "additional_transform_evidence": [
+        {
+          "phase": "transform",
+          "sequence": 24,
+          "attempt": 1,
+          "operation": "update",
+          "exit": 1,
+          "raw_output": "worlds/task-3/raw/transform/024-update-a1.txt"
+        },
+        {
+          "phase": "transform",
+          "sequence": 96,
+          "attempt": 4,
+          "operation": "update",
+          "exit": 1,
+          "raw_output": "worlds/task-3/raw/transform/096-update-a4.txt"
+        }
+      ]
+    },
+    {
+      "id": "T3V2-FIT-OPAQUE",
+      "title": "Positive Fit receipts expose no support, exclusions, or next action",
+      "classification": "usability / decision explainability",
+      "severity": "P2 / medium-high",
+      "regression": "confirmed open from T3-FIT-OPAQUE",
+      "expected": "A positive Fit result identifies the propositions/evidence that jointly fit, what was excluded or uncertain, and why the result is not approval for external disclosure.",
+      "actual": "All four successful Context/Memory/granted-source attempts printed only `FIT · YES` and target labels. They exposed no receipt UID, source-linked rationale, mismatches, uncertainty, excluded items, or next review action. The empty direct-root attempt failed clearly and safely.",
+      "workaround": "Use Compare, Query References, exact Show, and ambiguity/conflict analysis to reconstruct evidence. Treat Fit YES only as joint consistency, never disclosure approval.",
+      "evidence_sequences": [
+        42,
+        63,
+        84,
+        105
+      ],
+      "reproduction": "Yes — 4/4 successful Fit attempts across Context, direct-Memory, and granted-Source methods returned only YES plus targets.",
+      "evidence": [
+        {
+          "sequence": 42,
+          "attempt": 2,
+          "operation": "fit",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/042-fit-a2.txt"
+        },
+        {
+          "sequence": 63,
+          "attempt": 3,
+          "operation": "fit",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/063-fit-a3.txt"
+        },
+        {
+          "sequence": 84,
+          "attempt": 4,
+          "operation": "fit",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/084-fit-a4.txt"
+        },
+        {
+          "sequence": 105,
+          "attempt": 5,
+          "operation": "fit",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/105-fit-a5.txt"
+        }
+      ]
+    },
+    {
+      "id": "T3V2-JSON-ZERO-SILENCE",
+      "title": "Structured evidence modes emit an empty stream for a successful zero-finding result",
+      "classification": "machine-consumption / observability",
+      "severity": "P3 / low-medium",
+      "regression": "new finding",
+      "expected": "A machine-readable zero-finding result emits a stable empty-result record or summary so callers can distinguish successful zero from accidentally lost output without relying only on process status.",
+      "actual": "`find-conflicts --handoff-json` twice and `find-redundancies --evidence-json` once exited 0 with zero stdout and stderr when no findings existed. The same redundancy mode emitted canonical JSON when one finding existed, confirming the silent stream is the zero-result representation.",
+      "workaround": "Capture the exit code and run the human-readable form when an explicit zero receipt is required.",
+      "evidence_sequences": [
+        62,
+        102,
+        104
+      ],
+      "reproduction": "Yes — three zero-finding structured attempts across two operations emitted nothing; a nonzero redundancy attempt emitted canonical JSON.",
+      "evidence": [
+        {
+          "sequence": 62,
+          "attempt": 3,
+          "operation": "find-conflicts",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/062-find-conflicts-a3.txt"
+        },
+        {
+          "sequence": 102,
+          "attempt": 5,
+          "operation": "find-redundancies",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/102-find-redundancies-a5.txt"
+        },
+        {
+          "sequence": 104,
+          "attempt": 5,
+          "operation": "find-conflicts",
+          "exit": 0,
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/core/104-find-conflicts-a5.txt"
+        }
+      ]
+    },
+    {
+      "id": "T3V2-ELABORATE-UNVERIFIED-ORDINARY-MEMORY",
+      "title": "Elaborate persists invented healthcare examples as ordinary factual-looking Memories",
+      "classification": "semantic safety / unsupported generation",
+      "severity": "P1 / high",
+      "regression": "confirmed open from the prior task-3 Elaborate hallucination finding",
+      "expected": "Generated Cases remain visibly hypothetical and unverified in their durable content, especially when the Source supplies no recipient, clinician, prescription, vendor, or employee facts.",
+      "actual": "A one-Rule healthcare run invented Dr. Chen, a confirmed current prescription-adjustment purpose, and current medication name/dosage, then added the sentence as an ordinary Memory. A minimization run similarly added concrete benefits-vendor and employee incident stories. `VERIFICATION · UNVERIFIED` appeared only in the transient receipt; the first stored Memory did not label itself as a suggested example.",
+      "workaround": "Checkpoint the Target first, inspect the full Elaborate receipt immediately, and undo/revert every output whose stored text is not self-labelled hypothetical and source-grounded.",
+      "reproduction": "Yes — 2/5 materially different Elaborate attempts persisted invented concrete scenarios; strict round 4 improved this by including `Suggested Example Memory` in the content.",
+      "evidence": [
+        {
+          "phase": "transform",
+          "sequence": 9,
+          "attempt": 1,
+          "operation": "elaborate",
+          "exit": 0,
+          "raw_output": "worlds/task-3/raw/transform/009-elaborate-a1.txt"
+        },
+        {
+          "phase": "transform",
+          "sequence": 33,
+          "attempt": 2,
+          "operation": "elaborate",
+          "exit": 0,
+          "raw_output": "worlds/task-3/raw/transform/033-elaborate-a2.txt"
+        },
+        {
+          "phase": "transform",
+          "sequence": 81,
+          "attempt": 4,
+          "operation": "elaborate",
+          "exit": 0,
+          "raw_output": "worlds/task-3/raw/transform/081-elaborate-a4.txt"
+        }
+      ],
+      "evidence_sequences": [
+        9,
+        33,
+        81
+      ]
+    },
+    {
+      "id": "T3V2-FORGET-SAFETY-GATE-LOSS",
+      "title": "Forget removes or weakens the exact safety boundary it was told to preserve",
+      "classification": "semantic safety / destructive curation",
+      "severity": "P1 / high",
+      "regression": "newly isolated transform evidence",
+      "expected": "Whole-frame curation preserves explicit uncertainty and human decision gates while dropping only items that actually imply approval, unsupported currentness, or forbidden third-party disclosure.",
+      "actual": "Round 1 deleted a Memory that explicitly said the candidate was `not yet approved` under an instruction to remove only items implying approval. Round 3 deleted both an uncertainty-preserving medication rule and a draft accommodation candidate that required verification. Round 5 rewrote the exact recipient/purpose/item/channel/retention checklist into the vague phrase `decision before any transfer` despite an explicit preserve-the-human-decision-gate instruction.",
+      "workaround": "Always checkpoint before Forget, inspect the complete DIFF rather than trusting the instruction echo, and revert if a negative gate, uncertainty statement, or enumerated approval field is removed or generalized.",
+      "reproduction": "Yes — harmful disposition drift appeared in 3/5 different curation frames and was recovered by same-round Revert.",
+      "evidence": [
+        {
+          "phase": "transform",
+          "sequence": 13,
+          "attempt": 1,
+          "operation": "forget",
+          "exit": 0,
+          "raw_output": "worlds/task-3/raw/transform/013-forget-a1.txt"
+        },
+        {
+          "phase": "transform",
+          "sequence": 61,
+          "attempt": 3,
+          "operation": "forget",
+          "exit": 0,
+          "raw_output": "worlds/task-3/raw/transform/061-forget-a3.txt"
+        },
+        {
+          "phase": "transform",
+          "sequence": 109,
+          "attempt": 5,
+          "operation": "forget",
+          "exit": 0,
+          "raw_output": "worlds/task-3/raw/transform/109-forget-a5.txt"
+        }
+      ],
+      "evidence_sequences": [
+        13,
+        61,
+        109
+      ]
+    },
+    {
+      "id": "T3V2-UPDATE-AUTO-APPLY-OPAQUE",
+      "title": "Update applies semantic edits before showing the changed text",
+      "classification": "semantic mutation / review safety",
+      "severity": "P1 / high",
+      "regression": "confirmed open from the prior task-3 Update stale-stage/review finding",
+      "expected": "A high-stakes semantic Update presents the exact ADD/EDIT/REMOVE proposal for review before materialization, or at minimum prints every changed Memory in its Apply receipt.",
+      "actual": "Three Update attempts immediately printed `UPDATE APPLIED` and changed the local audit scratch with no `--accept` step. Receipts showed only aggregate counts. The final run edited five Memories, including appending possible recipient retention/internal-forwarding behavior to a minimization record, but none of the five before/after texts appeared in the receipt.",
+      "workaround": "Checkpoint the Target, run Update only in disposable local scratch, open `mem review update --session RECEIPT` immediately, and undo if any exact edit was not already approved.",
+      "reproduction": "Yes — 3 successful local Update routes auto-applied; two other attempts failed closed on an embedded Grant before mutation.",
+      "evidence": [
+        {
+          "phase": "transform",
+          "sequence": 48,
+          "attempt": 2,
+          "operation": "update",
+          "exit": 0,
+          "raw_output": "worlds/task-3/raw/transform/048-update-a2.txt"
+        },
+        {
+          "phase": "transform",
+          "sequence": 72,
+          "attempt": 3,
+          "operation": "update",
+          "exit": 0,
+          "raw_output": "worlds/task-3/raw/transform/072-update-a3.txt"
+        },
+        {
+          "phase": "transform",
+          "sequence": 120,
+          "attempt": 5,
+          "operation": "update",
+          "exit": 0,
+          "raw_output": "worlds/task-3/raw/transform/120-update-a5.txt"
+        }
+      ],
+      "evidence_sequences": [
+        48,
+        72,
+        120
+      ]
+    },
+    {
+      "id": "T3V2-SEVER-OPAQUE-READY",
+      "title": "Sever declares personal-Memory curation ready without showing kept, transformed, or dropped items",
+      "classification": "privacy review / output opacity",
+      "severity": "P1 / high",
+      "regression": "confirmed open from the prior task-3 Sever presentation finding",
+      "expected": "Before a fresh Result can be accepted, the line-oriented receipt exposes the exact selected/excluded/transformed Memories and their reasons, with every unresolved healthcare meaning decision required.",
+      "actual": "Four personal-history Sever runs returned `SEVER READY`, `JUDGMENTS · REQUIRED 0`, and `READY TO CREATE` with only Source/Result/session identifiers. No kept, dropped, transformed, third-party, stale, or unapproved items were visible in the receipt, so readiness could not be checked from the command that produced it.",
+      "workaround": "Do not accept from the READY receipt. Open the exact saved session through Impact/Review, inspect every disposition, and require explicit human approval of the final item list.",
+      "reproduction": "Yes — 4 successful Sever variants had the same opaque READY receipt; the fifth failed provider-result validation and changed nothing.",
+      "evidence": [
+        {
+          "phase": "transform",
+          "sequence": 21,
+          "attempt": 1,
+          "operation": "sever",
+          "exit": 0,
+          "raw_output": "worlds/task-3/raw/transform/021-sever-a1.txt"
+        },
+        {
+          "phase": "transform",
+          "sequence": 69,
+          "attempt": 3,
+          "operation": "sever",
+          "exit": 0,
+          "raw_output": "worlds/task-3/raw/transform/069-sever-a3.txt"
+        },
+        {
+          "phase": "transform",
+          "sequence": 93,
+          "attempt": 4,
+          "operation": "sever",
+          "exit": 0,
+          "raw_output": "worlds/task-3/raw/transform/093-sever-a4.txt"
+        },
+        {
+          "phase": "transform",
+          "sequence": 117,
+          "attempt": 5,
+          "operation": "sever",
+          "exit": 0,
+          "raw_output": "worlds/task-3/raw/transform/117-sever-a5.txt"
+        }
+      ],
+      "evidence_sequences": [
+        21,
+        69,
+        93,
+        117
+      ]
+    },
+    {
+      "id": "T3V2-MELD-EAGER-EMPTY-RESULT",
+      "title": "Meld creates an empty Result Context while semantic choices still need input",
+      "classification": "workflow state / premature materialization",
+      "severity": "P2 / medium",
+      "regression": "newly isolated state-continuity evidence",
+      "expected": "A fresh symmetric Result remains a plan until required/optional meaning review is complete, or the receipt clearly identifies any intentionally materialized placeholder and its cleanup route.",
+      "actual": "Rounds 1 and 5 returned `MELD NEEDS INPUT` with optional judgments and no `--accept`, but each invocation created a durable empty local Result Context. Source remained unchanged, yet the Result creation survived restoration of the separately checkpointed scratch Target.",
+      "workaround": "Use directional Meld when possible; otherwise treat the fresh Result name as reserved scratch and remove the empty placeholder only through a separately authorized cleanup after the review is abandoned.",
+      "reproduction": "Yes — both symmetric fresh-Result NEEDS INPUT attempts created zero-item Contexts; directional attempts did not.",
+      "evidence": [
+        {
+          "phase": "transform",
+          "sequence": 16,
+          "attempt": 1,
+          "operation": "meld",
+          "exit": 0,
+          "raw_output": "worlds/task-3/raw/transform/016-meld-a1.txt"
+        },
+        {
+          "phase": "transform",
+          "sequence": 112,
+          "attempt": 5,
+          "operation": "meld",
+          "exit": 0,
+          "raw_output": "worlds/task-3/raw/transform/112-meld-a5.txt"
+        }
+      ],
+      "evidence_sequences": [
+        16,
+        112
+      ]
+    },
+    {
+      "id": "T3V2-GRANTED-TRANSFORM-ROUTE-INCONSISTENCY",
+      "title": "Granted Context works in Audit, Meld, and Merge but is reported absent by Atomize and Impact Atomize",
+      "classification": "authorization routing / operation consistency",
+      "severity": "P2 / medium-high",
+      "regression": "new transform route evidence",
+      "expected": "Every readable/DERIVE-authorized operation resolves the same public Context through the grant-aware catalog, or fails with the exact missing capability rather than claiming the Context is not local/not found.",
+      "actual": "Atomize said the public guidance `does not exist locally`, and Impact Atomize said it was `not found`. In the same cumulative lane, Audit analyzed all 25 granted Memories, directional Meld accepted the public Source, and structural Merge copied all 25 into checkpointed local scratch. Distill separately gave a clear not-authorized boundary.",
+      "workaround": "Use the operations that explicitly resolve readable Grants, or copy/merge only when inward EXPORT authority and local recovery are appropriate; do not interpret `not found` as evidence that the Grant disappeared.",
+      "reproduction": "Yes across two failing Atomize adapters and three successful peer adapters over the identical public name.",
+      "evidence": [
+        {
+          "phase": "transform",
+          "sequence": 73,
+          "attempt": 4,
+          "operation": "atomize",
+          "exit": 1,
+          "raw_output": "worlds/task-3/raw/transform/073-atomize-a4.txt"
+        },
+        {
+          "phase": "transform",
+          "sequence": 74,
+          "attempt": 4,
+          "operation": "audit",
+          "exit": 0,
+          "raw_output": "worlds/task-3/raw/transform/074-audit-a4.txt"
+        },
+        {
+          "phase": "transform",
+          "sequence": 80,
+          "attempt": 4,
+          "operation": "distill",
+          "exit": 1,
+          "raw_output": "worlds/task-3/raw/transform/080-distill-a4.txt"
+        },
+        {
+          "phase": "transform",
+          "sequence": 87,
+          "attempt": 4,
+          "operation": "impact",
+          "exit": 1,
+          "raw_output": "worlds/task-3/raw/transform/087-impact-a4.txt"
+        },
+        {
+          "phase": "transform",
+          "sequence": 88,
+          "attempt": 4,
+          "operation": "meld",
+          "exit": 0,
+          "raw_output": "worlds/task-3/raw/transform/088-meld-a4.txt"
+        },
+        {
+          "phase": "transform",
+          "sequence": 89,
+          "attempt": 4,
+          "operation": "merge",
+          "exit": 0,
+          "raw_output": "worlds/task-3/raw/transform/089-merge-a4.txt"
+        }
+      ],
+      "evidence_sequences": [
+        73,
+        74,
+        80,
+        87,
+        88,
+        89
+      ]
+    },
+    {
+      "id": "T3V2-RESOLVE-OPAQUE-NOCHANGE",
+      "title": "Resolve reports FIT YES / NO CHANGE without evidence or candidate disposition",
+      "classification": "usability / semantic explainability",
+      "severity": "P2 / medium",
+      "regression": "confirmed open from the prior task-3 Resolve opacity finding",
+      "expected": "A no-change Resolve receipt explains what was examined, why no repair is needed, and how the stated guidance and Fit check support that result.",
+      "actual": "All five varied Resolve invocations returned only the Context name and `FIT · YES · NO CHANGE`. No selected Memory, assessed issue, evidence, guidance effect, or reusable session was shown, including focused and allow-delete routes.",
+      "workaround": "Treat NO CHANGE as an opaque model outcome, inspect the Source and saved quality findings separately, and do not interpret FIT YES as healthcare approval.",
+      "reproduction": "Yes — 5/5 interleaved Resolve routes produced the same evidence-free shape.",
+      "evidence": [
+        {
+          "phase": "transform",
+          "sequence": 10,
+          "attempt": 1,
+          "operation": "resolve",
+          "exit": 0,
+          "raw_output": "worlds/task-3/raw/transform/010-resolve-a1.txt"
+        },
+        {
+          "phase": "transform",
+          "sequence": 34,
+          "attempt": 2,
+          "operation": "resolve",
+          "exit": 0,
+          "raw_output": "worlds/task-3/raw/transform/034-resolve-a2.txt"
+        },
+        {
+          "phase": "transform",
+          "sequence": 58,
+          "attempt": 3,
+          "operation": "resolve",
+          "exit": 0,
+          "raw_output": "worlds/task-3/raw/transform/058-resolve-a3.txt"
+        },
+        {
+          "phase": "transform",
+          "sequence": 82,
+          "attempt": 4,
+          "operation": "resolve",
+          "exit": 0,
+          "raw_output": "worlds/task-3/raw/transform/082-resolve-a4.txt"
+        },
+        {
+          "phase": "transform",
+          "sequence": 106,
+          "attempt": 5,
+          "operation": "resolve",
+          "exit": 0,
+          "raw_output": "worlds/task-3/raw/transform/106-resolve-a5.txt"
+        }
+      ],
+      "evidence_sequences": [
+        10,
+        34,
+        58,
+        82,
+        106
+      ]
+    },
+    {
+      "id": "T3V2-ATOMIZE-PROVIDER-TIMEOUT",
+      "title": "One whole-Context Atomize provider call exceeded the isolated 360-second audit bound",
+      "classification": "infrastructure / provider latency",
+      "severity": "P2 / medium campaign impact; not classified as a product semantic defect",
+      "regression": "one current-campaign infrastructure failure",
+      "expected": "The bounded provider call finishes or fails with a native timeout before the audit's six-minute outer isolation limit, publishing no partial result.",
+      "actual": "The first whole-Context Atomize call emitted no application output and was terminated by the world-local audit harness after 360 seconds. The task-3 tree digest was unchanged. Four later focused/smaller Atomize attempts returned in 7–9 seconds or failed immediately at a route boundary.",
+      "workaround": "Use a focused Memory/Context frame, retain the outer timeout, and retry only in a new counted campaign rather than silently duplicating this invocation.",
+      "reproduction": "1/5 Atomize attempts; isolated as provider/infrastructure because later Atomize calls completed normally.",
+      "evidence": [
+        {
+          "phase": "transform",
+          "sequence": 1,
+          "attempt": 1,
+          "operation": "atomize",
+          "exit": 124,
+          "raw_output": "worlds/task-3/raw/transform/001-atomize-a1.txt"
+        }
+      ],
+      "evidence_sequences": [
+        1
+      ]
+    },
+    {
+      "id": "T3V2-TRANSFORM-HARNESS-ARTIFACT-ROUTING",
+      "title": "Audit harness failed to reuse saved artifact UIDs and used unsupported replay modifiers",
+      "classification": "audit infrastructure / methodology limitation",
+      "severity": "P2 / coverage limitation; not a product defect",
+      "regression": "current harness defect discovered from raw evidence",
+      "expected": "The audit extracts `SESSION [uid]` from snapshot receipts, binds round-local dynamic selectors eagerly, and uses only supported replay syntax so Review/Impact evidence exercises real saved artifacts.",
+      "actual": "The harness initially recognized only `mem review audit --session uid`, not Audit snapshot's `SESSION [uid]`, so Review attempts 1, 2, 4, and 5 passed `deadbeef`. Review 3 used an unsupported Context-only saved-Audit route. Impact 5 requested the current round's Meld artifact before Meld 5 existed. All five Dedun attempts also combined hidden `--plain` replay state with exact discovery and were rejected. Late-bound source selectors caused Rationale/Trace/Translate and Update 3 to use the final round's approval Source; ledger routes are corrected to the actual argv rather than the intended Sources.",
+      "workaround": "The harness source now recognizes bracketed Audit sessions. For a new campaign, bind every lambda default eagerly, use prior-round artifacts when Impact precedes creation, omit hidden `--plain` from exact Dedun discovery, and validate generated argv before the first counted call.",
+      "reproduction": "Deterministic from the recorded argv/raw output; no extra mem calls were made because the 120-command contract forbids replacement attempts.",
+      "evidence": [
+        {
+          "phase": "transform",
+          "sequence": 12,
+          "attempt": 1,
+          "operation": "dedun",
+          "exit": 1,
+          "raw_output": "worlds/task-3/raw/transform/012-dedun-a1.txt"
+        },
+        {
+          "phase": "transform",
+          "sequence": 20,
+          "attempt": 1,
+          "operation": "review",
+          "exit": 1,
+          "raw_output": "worlds/task-3/raw/transform/020-review-a1.txt"
+        },
+        {
+          "phase": "transform",
+          "sequence": 44,
+          "attempt": 2,
+          "operation": "review",
+          "exit": 1,
+          "raw_output": "worlds/task-3/raw/transform/044-review-a2.txt"
+        },
+        {
+          "phase": "transform",
+          "sequence": 68,
+          "attempt": 3,
+          "operation": "review",
+          "exit": 1,
+          "raw_output": "worlds/task-3/raw/transform/068-review-a3.txt"
+        },
+        {
+          "phase": "transform",
+          "sequence": 92,
+          "attempt": 4,
+          "operation": "review",
+          "exit": 1,
+          "raw_output": "worlds/task-3/raw/transform/092-review-a4.txt"
+        },
+        {
+          "phase": "transform",
+          "sequence": 108,
+          "attempt": 5,
+          "operation": "dedun",
+          "exit": 1,
+          "raw_output": "worlds/task-3/raw/transform/108-dedun-a5.txt"
+        },
+        {
+          "phase": "transform",
+          "sequence": 111,
+          "attempt": 5,
+          "operation": "impact",
+          "exit": 1,
+          "raw_output": "worlds/task-3/raw/transform/111-impact-a5.txt"
+        },
+        {
+          "phase": "transform",
+          "sequence": 116,
+          "attempt": 5,
+          "operation": "review",
+          "exit": 1,
+          "raw_output": "worlds/task-3/raw/transform/116-review-a5.txt"
+        }
+      ],
+      "evidence_sequences": [
+        12,
+        20,
+        44,
+        68,
+        92,
+        108,
+        111,
+        116
+      ]
+    },
+    {
+      "id": "T3V2-SEVER-PROVIDER-CONTRACT-FAILURE",
+      "title": "One Sever result failed complete-output validation",
+      "classification": "provider output / infrastructure failure",
+      "severity": "P2 / medium campaign impact; fail-closed",
+      "regression": "one current-campaign provider contract failure",
+      "expected": "Sever returns exactly one validated disposition per Source Memory with an application summary citing only Criteria related to a change.",
+      "actual": "Round 2 failed with `The application summary cites Criteria unrelated to a change.` No Source or Result Context was changed. Four other Sever variants produced saved READY sessions.",
+      "workaround": "Keep the failure fail-closed, retain the exact Source/Criteria frame, and retry only as a separately counted operation while checking the full session contract.",
+      "reproduction": "1/5 Sever attempts; validation correctly prevented publication.",
+      "evidence": [
+        {
+          "phase": "transform",
+          "sequence": 45,
+          "attempt": 2,
+          "operation": "sever",
+          "exit": 1,
+          "raw_output": "worlds/task-3/raw/transform/045-sever-a2.txt"
+        }
+      ],
+      "evidence_sequences": [
+        45
+      ]
+    },
+    {
+      "id": "T3V2-RENAME-BRANCH-STACK-OWNER-MISMATCH",
+      "title": "Renaming a Branch target invalidates its retained creation membership",
+      "classification": "functional / safety recovery / global command-stack corruption",
+      "severity": "P1 / high",
+      "regression": "independently corroborates the cross-world Rename/Branch stack defect",
+      "expected": "Renaming a Context created by Branch preserves a reconstructible producer unit under the new canonical name, so later Undo/Redo can verify and restore it.",
+      "actual": "Rename M1 changed `.../b1` to `.../renamed-1`, but its Branch receipt retained target membership `.../b1`. The read-only stack builder then failed with `Branch checkpoint owner is outside its creation membership` after Branch M2. Counted inverse Rename M2 restored `.../b1`; the exact 11-member B2 unit then rebuilt and Undo2/Redo2 both succeeded.",
+      "workaround": "Do not Rename a Branch/checkout-created Context while its creation checkpoint is retained. If no descendant has copied the invalid history, restore the exact original target name before using the global stack.",
+      "evidence_sequences": [
+        6,
+        38,
+        39,
+        40
+      ],
+      "reproduction": "One successful Branch-target Rename, one deterministic host stack failure, then one exact inverse-name recovery followed by successful Undo/Redo.",
+      "evidence": [
+        {
+          "phase": "admin",
+          "sequence": 6,
+          "operation": "rename",
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/006-rename-m1.txt"
+        },
+        {
+          "phase": "admin",
+          "after_sequence": 37,
+          "host_read": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/admin-host-reads.json",
+          "label": "round2 pre-recovery stack reconstruction"
+        },
+        {
+          "phase": "admin",
+          "sequence": 38,
+          "operation": "rename",
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/038-rename-m2.txt"
+        },
+        {
+          "phase": "admin",
+          "sequence": 39,
+          "operation": "undo",
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/039-undo-m2.txt"
+        },
+        {
+          "phase": "admin",
+          "sequence": 40,
+          "operation": "redo",
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/040-redo-m2.txt"
+        }
+      ]
+    },
+    {
+      "id": "T3V2-BRANCH-INHERITS-CREATION-RECEIPT",
+      "title": "Branch-of-Branch copies historical creation receipts as invalid target history",
+      "classification": "functional / safety recovery / inherited command-history corruption",
+      "severity": "P1 / high",
+      "regression": "newly isolated from a clean-source negative control",
+      "expected": "Branching a live prior Branch target either omits creation-only checkpoints from the copied history or treats them as lineage, leaving the new producer unit and the Profile-global Undo/Redo stack reconstructible.",
+      "actual": "The clean `guardrails` Source had zero Branch checkpoints. B1 had one valid creation receipt. Branch M3 copied that receipt into B3, where its owner is outside the recorded B1 target membership; Checkout M3 then copied both B1 and B3 receipts into co3. Exact current creation receipts remained identifiable, but every later global stack build and six counted Undo/Redo controls failed closed.",
+      "workaround": "Use a checkpoint-history-clean ordinary Source for Branch/checkout -b. Once a target has inherited multiple creation-only receipts, there is no non-destructive global Undo workaround; retain the malformed audit state as negative evidence.",
+      "evidence_sequences": [
+        43,
+        44,
+        46,
+        47,
+        64,
+        79,
+        83,
+        85,
+        86
+      ],
+      "reproduction": "B1 → B3 → co3 created three invalid owner/creation-membership pairs; 6/6 later counted Undo/Redo calls failed with the same builder error.",
+      "evidence": [
+        {
+          "phase": "admin",
+          "sequence": 43,
+          "operation": "branch",
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/043-branch-m3.txt"
+        },
+        {
+          "phase": "admin",
+          "sequence": 44,
+          "operation": "checkout",
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/044-checkout-m3.txt"
+        },
+        {
+          "phase": "admin",
+          "sequence": 46,
+          "operation": "undo",
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/046-undo-m3.txt"
+        },
+        {
+          "phase": "admin",
+          "sequence": 47,
+          "operation": "redo",
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/047-redo-m3.txt"
+        },
+        {
+          "phase": "admin",
+          "sequence": 64,
+          "operation": "redo",
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/064-redo-m4.txt"
+        },
+        {
+          "phase": "admin",
+          "sequence": 83,
+          "operation": "undo",
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/083-undo-m4.txt"
+        },
+        {
+          "phase": "admin",
+          "sequence": 85,
+          "operation": "undo",
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/085-undo-m5.txt"
+        },
+        {
+          "phase": "admin",
+          "sequence": 86,
+          "operation": "redo",
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/086-redo-m5.txt"
+        },
+        {
+          "phase": "admin",
+          "host_read": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/admin-host-reads.json",
+          "kind": "command_stack_reconstruction_failure_with_receipt_evidence"
+        }
+      ]
+    },
+    {
+      "id": "T3V2-ADMIN-HARNESS-INTERRUPTED-CALL",
+      "title": "Checkout M5 output was lost when the parent harness received SIGINT",
+      "classification": "audit harness / operator interruption (not product behavior)",
+      "severity": "P3 / low",
+      "regression": "audit-only event",
+      "expected": "Capture the missing-target Checkout M5 exit and output once.",
+      "actual": "The pinned sequence-89 subprocess had started when SIGINT interrupted the parent communicate() call. It is retained once as exit 130 with unavailable output; exact sequence-88-post/current host digests prove it published no durable change.",
+      "workaround": "Do not replay. Preserve exit 130 plus the exact pre/post host digest bridge.",
+      "evidence_sequences": [
+        89
+      ],
+      "reproduction": "One campaign-only operator interruption; no product conclusion drawn.",
+      "evidence": [
+        {
+          "phase": "admin",
+          "sequence": 89,
+          "operation": "checkout",
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/089-checkout-m5.txt"
+        },
+        {
+          "phase": "admin",
+          "after_sequence": 89,
+          "host_read": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/admin-host-reads.json",
+          "kind": "interrupted_counted_call_recovery"
+        }
+      ]
+    },
+    {
+      "id": "T3V2-INIT-STUDY-UUID-CREATES-ACTIVE-PROFILE",
+      "title": "UUID-shaped Study name was a valid high-cost input, not a safe negative control",
+      "classification": "audit input assumption / high-cost identity escape",
+      "severity": "P1 / high",
+      "regression": "new audit protocol failure; current Profile grammar permits this name",
+      "expected": "Per the ADMIN protocol, init-study M5 rejects the chosen name before creating or activating any Profile, leaving success count zero and identity pinned.",
+      "actual": "The UUID-shaped string satisfies the frozen portable Profile-name grammar. Sequence 95 exited 0, created a full managed Study Profile/Store, and selected it. The mandatory host read caught the new UID/root. The new Profile/Store were retained unchanged as evidence; only registry active_uid was atomically restored before seq96.",
+      "workaround": "For zero-success audit trials use a syntactically invalid slash name, reserved name, missing baseline, invalid worker count, or an actual TUI cancel. Do not assume a UUID-shaped Study/Profile name is invalid.",
+      "evidence_sequences": [
+        95
+      ],
+      "reproduction": "One exact non-TTY init-study call; success and identity escape were host-verified.",
+      "evidence": [
+        {
+          "phase": "admin",
+          "sequence": 95,
+          "operation": "init-study",
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/095-init_study-m5.txt"
+        },
+        {
+          "phase": "admin",
+          "recovery": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/recovery/admin-seq095-init-study/evidence.json"
+        }
+      ]
+    },
+    {
+      "id": "T3V2-ADMIN-IMPORT-PREEXISTING-IDENTITY",
+      "title": "Context Import M1/M2 used identities already present in the combined Study Store",
+      "classification": "audit input assumption / pre-existing identity collision",
+      "severity": "P3 / low",
+      "regression": "audit-only source-selection limitation",
+      "expected": "Exercise successful direct and recursive by-value Context import into scratch.",
+      "actual": "Both imports safely failed because the task-1 Context UIDs already existed under their task-1 canonical names in the active combined Study Store. Memory Import M3 still exercised a successful exact by-value route.",
+      "workaround": "Choose a source Profile/Context identity not already present in the active Store.",
+      "evidence_sequences": [
+        13,
+        29,
+        52
+      ],
+      "reproduction": "Two deterministic Context identity collisions and one successful Memory import.",
+      "evidence": [
+        {
+          "phase": "admin",
+          "sequence": 13,
+          "operation": "import",
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/013-import-m1.txt"
+        },
+        {
+          "phase": "admin",
+          "sequence": 29,
+          "operation": "import",
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/029-import-m2.txt"
+        },
+        {
+          "phase": "admin",
+          "sequence": 52,
+          "operation": "import",
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/052-import-m3.txt"
+        }
+      ]
+    },
+    {
+      "id": "T3V2-ADMIN-RECOVERY-ROUTE-DEVIATION",
+      "title": "Stack recovery required counted ADMIN route substitutions",
+      "classification": "audit recovery / protocol route deviation",
+      "severity": "P2 / medium",
+      "regression": "campaign adaptation after a P1 recoverability defect",
+      "expected": "Execute the prescribed Rename and Lock targets while preserving five attempts per operation.",
+      "actual": "Rename M2 became the counted inverse-name recovery. Later successful Rename trials used Init-created scratch Contexts rather than Branch/Checkout targets, and Lock M4 protected the scratch subtree so the protected Undo boundary remained exercised without creating another Rename owner mismatch. Actual argv/routes are in the ledger.",
+      "workaround": "Treat these methods as recovery-adapted evidence, not exact replicas of the original rows.",
+      "evidence_sequences": [
+        38,
+        63,
+        81,
+        82,
+        84,
+        104
+      ],
+      "reproduction": "One bounded same-phase recovery path; no supplemental mem calls or replay.",
+      "evidence": [
+        {
+          "phase": "admin",
+          "sequence": 38,
+          "operation": "rename",
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/038-rename-m2.txt"
+        },
+        {
+          "phase": "admin",
+          "sequence": 63,
+          "operation": "rename",
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/063-rename-m3.txt"
+        },
+        {
+          "phase": "admin",
+          "sequence": 81,
+          "operation": "lock",
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/081-lock-m4.txt"
+        },
+        {
+          "phase": "admin",
+          "sequence": 82,
+          "operation": "rename",
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/082-rename-m4.txt"
+        },
+        {
+          "phase": "admin",
+          "sequence": 84,
+          "operation": "unlock",
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/084-unlock-m4.txt"
+        },
+        {
+          "phase": "admin",
+          "sequence": 104,
+          "operation": "rename",
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/104-rename-m5.txt"
+        }
+      ]
+    },
+    {
+      "id": "T3V2-ADMIN-INIT-PARENT-ASSUMPTION",
+      "title": "Init M5 assumed a missing lexical parent must fail without --parents",
+      "classification": "audit input assumption / documented exact-leaf behavior",
+      "severity": "P3 / low",
+      "regression": "audit-only expectation mismatch",
+      "expected": "The ADMIN row expected a missing-parent validation failure.",
+      "actual": "Init created only the exact requested nested Context and did not create a parent Context. This matches detailed Init Help: default creates the exact name; --parents additionally creates missing parent Contexts.",
+      "workaround": "Use a UID-shaped name or an existing-name collision for a deterministic safe failure.",
+      "evidence_sequences": [
+        94
+      ],
+      "reproduction": "One exact nested Init without --parents, exit 0.",
+      "evidence": [
+        {
+          "phase": "admin",
+          "sequence": 94,
+          "operation": "init",
+          "raw_output": "agent-records/outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/094-init-m5.txt"
+        }
+      ]
+    }
+  ]
+}

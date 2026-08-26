@@ -37,6 +37,7 @@ runner = CliRunner()
 GROUNDING_SCREEN_CAPTURE_DIR = (
     Path(__file__).resolve().parents[1]
     / "agent-records"
+    / "docs"
     / "examples"
     / "mem-atomize-grounding-screens"
 )

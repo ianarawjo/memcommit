@@ -688,7 +688,12 @@ def _operation_classifications(
 ) -> dict[str, str]:
     """Load the reviewed conclusion separately from mechanically observed shape."""
 
-    path = repository / "agent-records" / "operation-route-classification.json"
+    path = (
+        repository
+        / "agent-records"
+        / "docs"
+        / "operation-route-classification.json"
+    )
     document = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(document, dict) or document.get("schema_version") != 1:
         raise ValueError(f"{path}: expected classification schema version 1")
@@ -727,7 +732,9 @@ def _operation_classifications(
                     raise ValueError(f"{path}: {state}/{name} requires a reason")
                 for evidence_path in evidence:
                     candidate = repository / evidence_path
-                    if not evidence_path.startswith("agent-records/") or not candidate.is_file():
+                    if not evidence_path.startswith(
+                        "agent-records/docs/"
+                    ) or not candidate.is_file():
                         raise ValueError(
                             f"{path}: {state}/{name} evidence does not exist: "
                             f"{evidence_path}"
@@ -759,7 +766,11 @@ def _operation_routes(
     entries = _cli_entries(repository, modules)
     module_names = {module.name for module in modules}
     client_methods = _client_methods(repository)
-    matrix_files = tuple(sorted((repository / "agent-records").glob("*boundary-matrix.md")))
+    matrix_files = tuple(
+        sorted(
+            (repository / "agent-records" / "docs").glob("*boundary-matrix.md")
+        )
+    )
     result: list[OperationRouteRecord] = []
     for operation in operations:
         tokens = _operation_tokens(operation)
@@ -893,7 +904,7 @@ def render_operation_markdown(snapshot: CatalogSnapshot) -> str:
         "This file is generated from source. `Observed shape` reports only which",
         "layers and evidence files are statically present; it is not a safety or",
         "architectural-closure conclusion. `Curated state` comes from the reviewed",
-        "`agent-records/operation-route-classification.json`; `UNREVIEWED` is not a",
+        "`agent-records/docs/operation-route-classification.json`; `UNREVIEWED` is not a",
         "`LEGACY` conclusion.",
         "",
         "| Operation | CLI entry | Application/runtime | TUI | Public Python | Agent | Boundary matrix | Observed shape | Curated state |",

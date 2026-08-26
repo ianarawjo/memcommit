@@ -32,7 +32,10 @@ def test_every_authored_rule_and_exact_case_enters_the_production_prompt() -> No
 def test_focused_matrix_names_every_authored_rule_and_case() -> None:
     authored = resolve_ruleset()
     matrix = (
-        Path(__file__).parents[1] / "agent-records" / "resolve-application-boundary-matrix.md"
+        Path(__file__).parents[1]
+        / "agent-records"
+        / "docs"
+        / "resolve-application-boundary-matrix.md"
     ).read_text(encoding="utf-8")
 
     for rule in authored["rules"]:

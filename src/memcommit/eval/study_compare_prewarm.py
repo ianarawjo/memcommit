@@ -297,7 +297,7 @@ def write_receipt(path: Path, receipt: Mapping[str, object]) -> None:
 
 def _default_output_path() -> Path:
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    return Path("outputs/compare-prewarm") / f"{stamp}-task2-full-medium.json"
+    return Path("agent-records/outputs/compare-prewarm") / f"{stamp}-task2-full-medium.json"
 
 
 def _parser() -> argparse.ArgumentParser:

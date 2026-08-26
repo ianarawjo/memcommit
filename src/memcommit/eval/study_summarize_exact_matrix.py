@@ -523,8 +523,9 @@ def main(argv: Sequence[str] | None = None) -> int:
             context_names=tuple(catalog.list_context_names()),
             current_context_name=current,
         )
-        root = args.output_root or Path("outputs/study-summarize-exact-matrix") / (
-            f"{registry.active.name}-{model}-{reasoning}"
+        root = args.output_root or (
+            Path("agent-records/outputs/study-summarize-exact-matrix")
+            / f"{registry.active.name}-{model}-{reasoning}"
         )
         summary = run_exact_matrix(
             store=store,

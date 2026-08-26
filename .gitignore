@@ -19,8 +19,8 @@ __pycache__/
 *.inspect.ndjson
 
 # Local command/PDF study rendering is reproducible scratch. Authored study
-# evidence belongs under agent-records/ or outputs/; the temporary canvases and helper
-# experiments in these locations are not part of the repository contract.
+# evidence belongs under agent-records/docs/ or agent-records/outputs/; the
+# temporary canvases and helper experiments below are not repository contracts.
 /output/
 /tmp/pdfs/build_*.py
 /tmp/pdfs/*preflight.pdf

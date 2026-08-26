@@ -2,10 +2,10 @@
 
 The selected Study baseline publishes one content-addressed, immutable bundle.
 Participant runs pin that bundle with a small local reference instead of
-copying every artifact.  It is not searched under ``outputs/`` and it is never
-an operation allowlist.  Each enabled entry names one exact artifact whose
-digest is checked before an operation-owned installer may inspect its semantic
-payload.
+copying every artifact.  It is not searched under
+``agent-records/outputs/`` and it is never an operation allowlist.  Each
+enabled entry names one exact artifact whose digest is checked before an
+operation-owned installer may inspect its semantic payload.
 """
 
 from __future__ import annotations

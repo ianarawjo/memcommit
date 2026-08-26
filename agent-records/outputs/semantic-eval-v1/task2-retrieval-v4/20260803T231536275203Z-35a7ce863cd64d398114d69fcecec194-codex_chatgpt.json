@@ -1,0 +1,6583 @@
+{
+  "batch_size": 15,
+  "calibration_boundary": {
+    "independent_holdout": false,
+    "input_membership": "GOLD_SELECTED_PREFIX_OF_COMPLETE_REVIEWED_GROUPS_CONSUMED_CALIBRATION",
+    "provider_call_branching_after_input_build_uses_reviewed_relations": false,
+    "reviewed_relations_contribute_to_alias_and_order_salt": true,
+    "reviewed_relations_reused_for_scoring_after_all_provider_calls": true,
+    "reviewed_relations_used_to_build_frozen_input": true
+  },
+  "calls": [
+    {
+      "call_index": 1,
+      "contract_valid": true,
+      "dependency_input_mode": "FULL_OPPOSITE_SIDE",
+      "dependency_valid": true,
+      "direction": "LEFT_TO_RIGHT",
+      "direction_batch_index": 1,
+      "elapsed_seconds": 15.593871041201055,
+      "error_type": null,
+      "failure_category": null,
+      "local_id_mapping_digest": "5a6c3a8a0424c1a3d08a86e5b1fbed0d0bfb2867b966bc1f5d86445656607c18",
+      "prompt_digest": "9a909a3a908fa4ffdf3e41329be7c1a029d74f198fa0cf516ec2225d2dced528",
+      "prompt_preparation_seconds": 2.7957838028669357e-05,
+      "provider_completion_seconds": 15.593722042161971,
+      "provider_run": {
+        "completion_tokens": null,
+        "identity": {
+          "endpoint": null,
+          "model": "gpt-5.6-luna",
+          "model_digest": null,
+          "provider": "codex_chatgpt",
+          "reasoning_effort": "low",
+          "runtime": "codex-cli"
+        },
+        "operation": "task2 v4 candidate group co-membership left_to_right",
+        "prompt_tokens": null,
+        "upstream_model": "gpt-5.6-luna",
+        "upstream_provider": "openai-codex"
+      },
+      "raw_response": "{\"selections\":[{\"source_id\":\"s01\",\"target_ids\":[\"t011\",\"t005\",\"t016\"]},{\"source_id\":\"s02\",\"target_ids\":[\"t007\",\"t002\",\"t027\"]},{\"source_id\":\"s03\",\"target_ids\":[\"t014\",\"t002\",\"t010\"]},{\"source_id\":\"s04\",\"target_ids\":[\"t019\",\"t016\",\"t026\"]},{\"source_id\":\"s05\",\"target_ids\":[\"t018\",\"t001\",\"t016\"]},{\"source_id\":\"s06\",\"target_ids\":[\"t003\",\"t010\",\"t013\"]},{\"source_id\":\"s07\",\"target_ids\":[\"t022\",\"t009\",\"t027\"]},{\"source_id\":\"s08\",\"target_ids\":[\"t025\",\"t024\",\"t005\"]},{\"source_id\":\"s09\",\"target_ids\":[\"t027\",\"t002\",\"t023\"]},{\"source_id\":\"s10\",\"target_ids\":[\"t017\",\"t020\",\"t026\"]},{\"source_id\":\"s11\",\"target_ids\":[\"t015\",\"t013\",\"t006\"]},{\"source_id\":\"s12\",\"target_ids\":[\"t010\",\"t002\",\"t014\"]},{\"source_id\":\"s13\",\"target_ids\":[\"t024\",\"t025\",\"t013\"]},{\"source_id\":\"s14\",\"target_ids\":[\"t004\",\"t008\",\"t011\"]},{\"source_id\":\"s15\",\"target_ids\":[\"t019\",\"t016\",\"t026\"]}]}",
+      "response_contract_valid": true,
+      "response_digest": "dabffbc4a37daa1c47db85132082192d234b41c6e7af0725eeacd02025c2a3f9",
+      "response_validation_seconds": 0.0001210412010550499,
+      "schema_digest": "1d2f49012ca878b0e5af709bcd26ec9f7f1d928d4ffb927d038f45b0cb4c7d0b",
+      "selections": [
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-019",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-R-019",
+            "T2-R-020",
+            "T2-R-005"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-083",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-R-018",
+            "T2-R-083",
+            "T2-R-017"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-011",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-R-011",
+            "T2-R-083",
+            "T2-R-015"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-085",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-R-009",
+            "T2-R-005",
+            "T2-R-010"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-004",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-R-004",
+            "T2-R-024",
+            "T2-R-005"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-023",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-R-023",
+            "T2-R-015",
+            "T2-R-007"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-003",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-R-003",
+            "T2-R-026",
+            "T2-R-017"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-013",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-R-013",
+            "T2-R-008",
+            "T2-R-020"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-017",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-R-017",
+            "T2-R-083",
+            "T2-R-001"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-025",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-R-025",
+            "T2-R-002",
+            "T2-R-010"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-022",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-R-022",
+            "T2-R-007",
+            "T2-R-014"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-015",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-R-015",
+            "T2-R-083",
+            "T2-R-011"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-008",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-R-008",
+            "T2-R-013",
+            "T2-R-007"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-006",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-R-006",
+            "T2-R-021",
+            "T2-R-019"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-009",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-R-009",
+            "T2-R-005",
+            "T2-R-010"
+          ]
+        }
+      ],
+      "source_fixture_ids": [
+        "T2-L-019",
+        "T2-L-083",
+        "T2-L-011",
+        "T2-L-085",
+        "T2-L-004",
+        "T2-L-023",
+        "T2-L-003",
+        "T2-L-013",
+        "T2-L-017",
+        "T2-L-025",
+        "T2-L-022",
+        "T2-L-015",
+        "T2-L-008",
+        "T2-L-006",
+        "T2-L-009"
+      ],
+      "source_start": 0,
+      "source_stop": 15,
+      "stage": "CANDIDATE",
+      "validation_error": null,
+      "visible_target_count": 27
+    },
+    {
+      "call_index": 2,
+      "contract_valid": true,
+      "dependency_input_mode": "STAGE_A_PROVIDER_CANDIDATES",
+      "dependency_valid": true,
+      "direction": "LEFT_TO_RIGHT",
+      "direction_batch_index": 1,
+      "elapsed_seconds": 15.571220583748072,
+      "error_type": null,
+      "failure_category": null,
+      "local_id_mapping_digest": "a885d0d87e0508af4f0e14d6def2b8d6ba2dbab61b3ed7df223bb9998a169705",
+      "prompt_digest": "7caaf5d2463418dfd6b13c53c4f8cdd08bb8ec4565f6444d4a85265922b76b79",
+      "prompt_preparation_seconds": 6.145797669887543e-05,
+      "provider_completion_seconds": 15.57106220908463,
+      "provider_run": {
+        "completion_tokens": null,
+        "identity": {
+          "endpoint": null,
+          "model": "gpt-5.6-luna",
+          "model_digest": null,
+          "provider": "codex_chatgpt",
+          "reasoning_effort": "low",
+          "runtime": "codex-cli"
+        },
+        "operation": "task2 v4 verifier group co-membership left_to_right",
+        "prompt_tokens": null,
+        "upstream_model": "gpt-5.6-luna",
+        "upstream_provider": "openai-codex"
+      },
+      "raw_response": "{\"selections\":[{\"source_id\":\"s01\",\"target_ids\":[]},{\"source_id\":\"s02\",\"target_ids\":[]},{\"source_id\":\"s03\",\"target_ids\":[\"t014\"]},{\"source_id\":\"s04\",\"target_ids\":[]},{\"source_id\":\"s05\",\"target_ids\":[\"t018\",\"t001\"]},{\"source_id\":\"s06\",\"target_ids\":[\"t003\"]},{\"source_id\":\"s07\",\"target_ids\":[\"t022\"]},{\"source_id\":\"s08\",\"target_ids\":[\"t024\"]},{\"source_id\":\"s09\",\"target_ids\":[\"t027\",\"t023\"]},{\"source_id\":\"s10\",\"target_ids\":[]},{\"source_id\":\"s11\",\"target_ids\":[\"t015\"]},{\"source_id\":\"s12\",\"target_ids\":[\"t010\"]},{\"source_id\":\"s13\",\"target_ids\":[\"t024\"]},{\"source_id\":\"s14\",\"target_ids\":[\"t004\"]},{\"source_id\":\"s15\",\"target_ids\":[]}] }",
+      "response_contract_valid": true,
+      "response_digest": "8d75e4cba6b57f04066e452e12512cbf5408b1bccaa561234ec706df97e13e5b",
+      "response_validation_seconds": 9.691668674349785e-05,
+      "schema_digest": "70035a9838f960f4057bd9c0649ffe8f058fcd501629c24df4b4bf34b27ca981",
+      "selections": [
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-019",
+          "stage": "VERIFIER",
+          "target_fixture_ids": []
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-083",
+          "stage": "VERIFIER",
+          "target_fixture_ids": []
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-011",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-R-011"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-085",
+          "stage": "VERIFIER",
+          "target_fixture_ids": []
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-004",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-R-004",
+            "T2-R-024"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-023",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-R-023"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-003",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-R-003"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-013",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-R-008"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-017",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-R-017",
+            "T2-R-001"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-025",
+          "stage": "VERIFIER",
+          "target_fixture_ids": []
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-022",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-R-022"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-015",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-R-015"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-008",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-R-008"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-006",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-R-006"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-009",
+          "stage": "VERIFIER",
+          "target_fixture_ids": []
+        }
+      ],
+      "source_fixture_ids": [
+        "T2-L-019",
+        "T2-L-083",
+        "T2-L-011",
+        "T2-L-085",
+        "T2-L-004",
+        "T2-L-023",
+        "T2-L-003",
+        "T2-L-013",
+        "T2-L-017",
+        "T2-L-025",
+        "T2-L-022",
+        "T2-L-015",
+        "T2-L-008",
+        "T2-L-006",
+        "T2-L-009"
+      ],
+      "source_start": 0,
+      "source_stop": 15,
+      "stage": "VERIFIER",
+      "validation_error": null,
+      "visible_target_count": 25
+    },
+    {
+      "call_index": 3,
+      "contract_valid": true,
+      "dependency_input_mode": "FULL_OPPOSITE_SIDE",
+      "dependency_valid": true,
+      "direction": "LEFT_TO_RIGHT",
+      "direction_batch_index": 2,
+      "elapsed_seconds": 12.661796374246478,
+      "error_type": null,
+      "failure_category": null,
+      "local_id_mapping_digest": "855a1253b92cf36061f1337b30a249bb75f2cf29d5c9d27064b97302eac8c93b",
+      "prompt_digest": "ecaacfab2704e0a3152a5d7851779f6c361d33f80f6fd8c196efdc64d4165970",
+      "prompt_preparation_seconds": 4.033278673887253e-05,
+      "provider_completion_seconds": 12.661496582906693,
+      "provider_run": {
+        "completion_tokens": null,
+        "identity": {
+          "endpoint": null,
+          "model": "gpt-5.6-luna",
+          "model_digest": null,
+          "provider": "codex_chatgpt",
+          "reasoning_effort": "low",
+          "runtime": "codex-cli"
+        },
+        "operation": "task2 v4 candidate group co-membership left_to_right",
+        "prompt_tokens": null,
+        "upstream_model": "gpt-5.6-luna",
+        "upstream_provider": "openai-codex"
+      },
+      "raw_response": "{\"selections\":[{\"source_id\":\"s01\",\"target_ids\":[\"t005\",\"t016\",\"t004\"]},{\"source_id\":\"s02\",\"target_ids\":[\"t006\",\"t011\",\"t019\"]},{\"source_id\":\"s03\",\"target_ids\":[\"t023\",\"t020\",\"t027\"]},{\"source_id\":\"s04\",\"target_ids\":[\"t007\",\"t002\",\"t027\"]},{\"source_id\":\"s05\",\"target_ids\":[\"t001\",\"t018\",\"t016\"]},{\"source_id\":\"s06\",\"target_ids\":[\"t020\",\"t017\",\"t019\"]},{\"source_id\":\"s07\",\"target_ids\":[\"t007\",\"t002\",\"t023\"]},{\"source_id\":\"s08\",\"target_ids\":[\"t012\",\"t013\",\"t024\"]},{\"source_id\":\"s09\",\"target_ids\":[\"t009\",\"t022\",\"t027\"]},{\"source_id\":\"s10\",\"target_ids\":[\"t008\",\"t004\",\"t005\"]},{\"source_id\":\"s11\",\"target_ids\":[\"t021\",\"t018\",\"t003\"]},{\"source_id\":\"s12\",\"target_ids\":[\"t026\",\"t019\",\"t016\"]},{\"source_id\":\"s13\",\"target_ids\":[\"t013\",\"t020\",\"t011\"]},{\"source_id\":\"s14\",\"target_ids\":[\"t016\",\"t005\",\"t026\"]}]}",
+      "response_contract_valid": true,
+      "response_digest": "bc4e695d9fcd909303e3e65ecb01a1d8c80fc4bff08904df98bc4308ab165f01",
+      "response_validation_seconds": 0.0002594585530459881,
+      "schema_digest": "d0e0065f7790263d1c5c8a3f8f5449689841e1ce24f08565e712973fa3d749ac",
+      "selections": [
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-020",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-R-020",
+            "T2-R-005",
+            "T2-R-006"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-014",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-R-014",
+            "T2-R-019",
+            "T2-R-009"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-001",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-R-001",
+            "T2-R-002",
+            "T2-R-017"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-084",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-R-018",
+            "T2-R-083",
+            "T2-R-017"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-024",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-R-024",
+            "T2-R-004",
+            "T2-R-005"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-002",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-R-002",
+            "T2-R-025",
+            "T2-R-009"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-018",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-R-018",
+            "T2-R-083",
+            "T2-R-001"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-016",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-R-016",
+            "T2-R-007",
+            "T2-R-008"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-026",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-R-026",
+            "T2-R-003",
+            "T2-R-017"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-021",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-R-021",
+            "T2-R-006",
+            "T2-R-020"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-012",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-R-012",
+            "T2-R-004",
+            "T2-R-023"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-010",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-R-010",
+            "T2-R-009",
+            "T2-R-005"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-007",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-R-007",
+            "T2-R-002",
+            "T2-R-019"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-005",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-R-005",
+            "T2-R-020",
+            "T2-R-010"
+          ]
+        }
+      ],
+      "source_fixture_ids": [
+        "T2-L-020",
+        "T2-L-014",
+        "T2-L-001",
+        "T2-L-084",
+        "T2-L-024",
+        "T2-L-002",
+        "T2-L-018",
+        "T2-L-016",
+        "T2-L-026",
+        "T2-L-021",
+        "T2-L-012",
+        "T2-L-010",
+        "T2-L-007",
+        "T2-L-005"
+      ],
+      "source_start": 15,
+      "source_stop": 29,
+      "stage": "CANDIDATE",
+      "validation_error": null,
+      "visible_target_count": 27
+    },
+    {
+      "call_index": 4,
+      "contract_valid": true,
+      "dependency_input_mode": "STAGE_A_PROVIDER_CANDIDATES",
+      "dependency_valid": true,
+      "direction": "LEFT_TO_RIGHT",
+      "direction_batch_index": 2,
+      "elapsed_seconds": 14.214565542526543,
+      "error_type": null,
+      "failure_category": null,
+      "local_id_mapping_digest": "f8ac945830c1202d4329f63993645ea3c6ab6a844a21b9dca3d44bac90c3ff52",
+      "prompt_digest": "f054ce71404ddbead19e9edaaf643cd2db954f3b5f07168795ddd2522ccd5800",
+      "prompt_preparation_seconds": 9.470898658037186e-05,
+      "provider_completion_seconds": 14.214261458721012,
+      "provider_run": {
+        "completion_tokens": null,
+        "identity": {
+          "endpoint": null,
+          "model": "gpt-5.6-luna",
+          "model_digest": null,
+          "provider": "codex_chatgpt",
+          "reasoning_effort": "low",
+          "runtime": "codex-cli"
+        },
+        "operation": "task2 v4 verifier group co-membership left_to_right",
+        "prompt_tokens": null,
+        "upstream_model": "gpt-5.6-luna",
+        "upstream_provider": "openai-codex"
+      },
+      "raw_response": "{\"selections\":[{\"source_id\":\"s01\",\"target_ids\":[\"t005\"]},{\"source_id\":\"s02\",\"target_ids\":[]},{\"source_id\":\"s03\",\"target_ids\":[\"t023\"]},{\"source_id\":\"s04\",\"target_ids\":[]},{\"source_id\":\"s05\",\"target_ids\":[\"t001\"]},{\"source_id\":\"s06\",\"target_ids\":[\"t020\",\"t017\"]},{\"source_id\":\"s07\",\"target_ids\":[]},{\"source_id\":\"s08\",\"target_ids\":[\"t012\"]},{\"source_id\":\"s09\",\"target_ids\":[]},{\"source_id\":\"s10\",\"target_ids\":[\"t008\"]},{\"source_id\":\"s11\",\"target_ids\":[\"t021\"]},{\"source_id\":\"s12\",\"target_ids\":[\"t026\"]},{\"source_id\":\"s13\",\"target_ids\":[\"t013\"]},{\"source_id\":\"s14\",\"target_ids\":[\"t016\"]}]}",
+      "response_contract_valid": true,
+      "response_digest": "cb9d6f35da334030b8db3dd74e3183b23ff3f3fb4267f313badeca0eff1fe244",
+      "response_validation_seconds": 0.0002093748189508915,
+      "schema_digest": "0d3c8319fbda9150f3d7d556122c954b60e2c9d34cc64101cc51fba09c7df2ff",
+      "selections": [
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-020",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-R-020"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-014",
+          "stage": "VERIFIER",
+          "target_fixture_ids": []
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-001",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-R-001"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-084",
+          "stage": "VERIFIER",
+          "target_fixture_ids": []
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-024",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-R-024"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-002",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-R-002",
+            "T2-R-025"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-018",
+          "stage": "VERIFIER",
+          "target_fixture_ids": []
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-016",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-R-016"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-026",
+          "stage": "VERIFIER",
+          "target_fixture_ids": []
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-021",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-R-021"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-012",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-R-012"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-010",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-R-010"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-007",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-R-007"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-005",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-R-005"
+          ]
+        }
+      ],
+      "source_fixture_ids": [
+        "T2-L-020",
+        "T2-L-014",
+        "T2-L-001",
+        "T2-L-084",
+        "T2-L-024",
+        "T2-L-002",
+        "T2-L-018",
+        "T2-L-016",
+        "T2-L-026",
+        "T2-L-021",
+        "T2-L-012",
+        "T2-L-010",
+        "T2-L-007",
+        "T2-L-005"
+      ],
+      "source_start": 15,
+      "source_stop": 29,
+      "stage": "VERIFIER",
+      "validation_error": null,
+      "visible_target_count": 23
+    },
+    {
+      "call_index": 5,
+      "contract_valid": true,
+      "dependency_input_mode": "FULL_OPPOSITE_SIDE",
+      "dependency_valid": true,
+      "direction": "RIGHT_TO_LEFT",
+      "direction_batch_index": 1,
+      "elapsed_seconds": 17.215439333114773,
+      "error_type": null,
+      "failure_category": null,
+      "local_id_mapping_digest": "f93e16d2856e478c58a15b34886ec19520453c435853b382e571db2a68abf2f3",
+      "prompt_digest": "2870f11816adcd3b33c547e7f8a680e91999681021cc6d13eeef30767c6ebc43",
+      "prompt_preparation_seconds": 8.754199370741844e-05,
+      "provider_completion_seconds": 17.215112541336566,
+      "provider_run": {
+        "completion_tokens": null,
+        "identity": {
+          "endpoint": null,
+          "model": "gpt-5.6-luna",
+          "model_digest": null,
+          "provider": "codex_chatgpt",
+          "reasoning_effort": "low",
+          "runtime": "codex-cli"
+        },
+        "operation": "task2 v4 candidate group co-membership right_to_left",
+        "prompt_tokens": null,
+        "upstream_model": "gpt-5.6-luna",
+        "upstream_provider": "openai-codex"
+      },
+      "raw_response": "{\"selections\":[{\"source_id\":\"s01\",\"target_ids\":[\"t020\",\"t005\",\"t029\"]},{\"source_id\":\"s02\",\"target_ids\":[\"t009\",\"t021\",\"t018\"]},{\"source_id\":\"s03\",\"target_ids\":[\"t006\",\"t012\",\"t028\"]},{\"source_id\":\"s04\",\"target_ids\":[\"t014\",\"t025\",\"t010\"]},{\"source_id\":\"s05\",\"target_ids\":[\"t016\",\"t029\",\"t027\"]},{\"source_id\":\"s06\",\"target_ids\":[\"t017\",\"t028\",\"t021\"]},{\"source_id\":\"s07\",\"target_ids\":[\"t002\",\"t019\",\"t022\"]},{\"source_id\":\"s08\",\"target_ids\":[\"t025\",\"t014\",\"t010\"]},{\"source_id\":\"s09\",\"target_ids\":[\"t024\",\"t007\",\"t009\"]},{\"source_id\":\"s10\",\"target_ids\":[\"t012\",\"t006\",\"t028\"]},{\"source_id\":\"s11\",\"target_ids\":[\"t003\",\"t001\",\"t017\"]},{\"source_id\":\"s12\",\"target_ids\":[\"t023\",\"t029\",\"t015\"]},{\"source_id\":\"s13\",\"target_ids\":[\"t028\",\"t021\",\"t015\"]},{\"source_id\":\"s14\",\"target_ids\":[\"t003\",\"t012\",\"t021\"]},{\"source_id\":\"s15\",\"target_ids\":[\"t011\",\"t008\",\"t013\"]}]}",
+      "response_contract_valid": true,
+      "response_digest": "62ca091a88f1f9fbee83095670efb6047e858d2b7bfc748c23e626f9cb0094b6",
+      "response_validation_seconds": 0.00023924978449940681,
+      "schema_digest": "f737831056f53a8d6ff24ae7bcaaaf0059ab80ecfb85745595c3e4ead5f6485b",
+      "selections": [
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-024",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-L-024",
+            "T2-L-004",
+            "T2-L-005"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-083",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-L-017",
+            "T2-L-002",
+            "T2-L-001"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-023",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-L-023",
+            "T2-L-015",
+            "T2-L-007"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-006",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-L-006",
+            "T2-L-021",
+            "T2-L-025"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-020",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-L-020",
+            "T2-L-005",
+            "T2-L-010"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-014",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-L-014",
+            "T2-L-007",
+            "T2-L-002"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-018",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-L-083",
+            "T2-L-084",
+            "T2-L-018"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-021",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-L-021",
+            "T2-L-006",
+            "T2-L-025"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-026",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-L-026",
+            "T2-L-003",
+            "T2-L-017"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-015",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-L-015",
+            "T2-L-023",
+            "T2-L-007"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-019",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-L-011",
+            "T2-L-019",
+            "T2-L-014"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-016",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-L-016",
+            "T2-L-005",
+            "T2-L-009"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-007",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-L-007",
+            "T2-L-002",
+            "T2-L-009"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-011",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-L-011",
+            "T2-L-015",
+            "T2-L-002"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-022",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-L-022",
+            "T2-L-013",
+            "T2-L-008"
+          ]
+        }
+      ],
+      "source_fixture_ids": [
+        "T2-R-024",
+        "T2-R-083",
+        "T2-R-023",
+        "T2-R-006",
+        "T2-R-020",
+        "T2-R-014",
+        "T2-R-018",
+        "T2-R-021",
+        "T2-R-026",
+        "T2-R-015",
+        "T2-R-019",
+        "T2-R-016",
+        "T2-R-007",
+        "T2-R-011",
+        "T2-R-022"
+      ],
+      "source_start": 0,
+      "source_stop": 15,
+      "stage": "CANDIDATE",
+      "validation_error": null,
+      "visible_target_count": 29
+    },
+    {
+      "call_index": 6,
+      "contract_valid": true,
+      "dependency_input_mode": "STAGE_A_PROVIDER_CANDIDATES",
+      "dependency_valid": true,
+      "direction": "RIGHT_TO_LEFT",
+      "direction_batch_index": 1,
+      "elapsed_seconds": 19.440909249708056,
+      "error_type": null,
+      "failure_category": null,
+      "local_id_mapping_digest": "fb5c41543ebe9563ae470c1820a4e6d339505d8e46102238fd42d4c34d7f5076",
+      "prompt_digest": "c97f5018fb249bec5e40854c26a364a0df1a9b08929cbd24f43a24c11b3817f2",
+      "prompt_preparation_seconds": 9.88328829407692e-05,
+      "provider_completion_seconds": 19.44066279195249,
+      "provider_run": {
+        "completion_tokens": null,
+        "identity": {
+          "endpoint": null,
+          "model": "gpt-5.6-luna",
+          "model_digest": null,
+          "provider": "codex_chatgpt",
+          "reasoning_effort": "low",
+          "runtime": "codex-cli"
+        },
+        "operation": "task2 v4 verifier group co-membership right_to_left",
+        "prompt_tokens": null,
+        "upstream_model": "gpt-5.6-luna",
+        "upstream_provider": "openai-codex"
+      },
+      "raw_response": "{\"selections\":[{\"source_id\":\"s01\",\"target_ids\":[\"t020\"]},{\"source_id\":\"s02\",\"target_ids\":[\"t009\",\"t021\",\"t018\"]},{\"source_id\":\"s03\",\"target_ids\":[\"t006\"]},{\"source_id\":\"s04\",\"target_ids\":[\"t014\"]},{\"source_id\":\"s05\",\"target_ids\":[\"t016\"]},{\"source_id\":\"s06\",\"target_ids\":[]},{\"source_id\":\"s07\",\"target_ids\":[]},{\"source_id\":\"s08\",\"target_ids\":[\"t025\"]},{\"source_id\":\"s09\",\"target_ids\":[]},{\"source_id\":\"s10\",\"target_ids\":[\"t012\"]},{\"source_id\":\"s11\",\"target_ids\":[\"t003\"]},{\"source_id\":\"s12\",\"target_ids\":[\"t023\"]},{\"source_id\":\"s13\",\"target_ids\":[\"t028\"]},{\"source_id\":\"s14\",\"target_ids\":[\"t003\"]},{\"source_id\":\"s15\",\"target_ids\":[\"t011\"]}]}",
+      "response_contract_valid": true,
+      "response_digest": "478be34efdee22c395e24ddb406f297e34bf25e8b535d85b9a93376942eab62a",
+      "response_validation_seconds": 0.00014762487262487411,
+      "schema_digest": "04bb9a09317c6dfee98052d0bbccd7a7b0c345a6fefd75c1d9879bee67dd3162",
+      "selections": [
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-024",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-L-024"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-083",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-L-017",
+            "T2-L-002",
+            "T2-L-001"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-023",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-L-023"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-006",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-L-006"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-020",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-L-020"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-014",
+          "stage": "VERIFIER",
+          "target_fixture_ids": []
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-018",
+          "stage": "VERIFIER",
+          "target_fixture_ids": []
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-021",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-L-021"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-026",
+          "stage": "VERIFIER",
+          "target_fixture_ids": []
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-015",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-L-015"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-019",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-L-011"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-016",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-L-016"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-007",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-L-007"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-011",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-L-011"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-022",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-L-022"
+          ]
+        }
+      ],
+      "source_fixture_ids": [
+        "T2-R-024",
+        "T2-R-083",
+        "T2-R-023",
+        "T2-R-006",
+        "T2-R-020",
+        "T2-R-014",
+        "T2-R-018",
+        "T2-R-021",
+        "T2-R-026",
+        "T2-R-015",
+        "T2-R-019",
+        "T2-R-016",
+        "T2-R-007",
+        "T2-R-011",
+        "T2-R-022"
+      ],
+      "source_start": 0,
+      "source_stop": 15,
+      "stage": "VERIFIER",
+      "validation_error": null,
+      "visible_target_count": 27
+    },
+    {
+      "call_index": 7,
+      "contract_valid": true,
+      "dependency_input_mode": "FULL_OPPOSITE_SIDE",
+      "dependency_valid": true,
+      "direction": "RIGHT_TO_LEFT",
+      "direction_batch_index": 2,
+      "elapsed_seconds": 13.934096248820424,
+      "error_type": null,
+      "failure_category": null,
+      "local_id_mapping_digest": "afecd9e937dae239c33a9353ef0a068bca0bd9ebe1fef1ad8c974b5763a41b7a",
+      "prompt_digest": "ff7c68a83f056fc0381866e9f39cfae5a8cc3ee4b27b53658e894a824c062d70",
+      "prompt_preparation_seconds": 7.287506014108658e-05,
+      "provider_completion_seconds": 13.933783791027963,
+      "provider_run": {
+        "completion_tokens": null,
+        "identity": {
+          "endpoint": null,
+          "model": "gpt-5.6-luna",
+          "model_digest": null,
+          "provider": "codex_chatgpt",
+          "reasoning_effort": "low",
+          "runtime": "codex-cli"
+        },
+        "operation": "task2 v4 candidate group co-membership right_to_left",
+        "prompt_tokens": null,
+        "upstream_model": "gpt-5.6-luna",
+        "upstream_provider": "openai-codex"
+      },
+      "raw_response": "{\"selections\":[{\"source_id\":\"s01\",\"target_ids\":[\"t029\",\"t027\",\"t015\"]},{\"source_id\":\"s02\",\"target_ids\":[\"t021\",\"t010\",\"t018\"]},{\"source_id\":\"s03\",\"target_ids\":[\"t005\",\"t026\",\"t020\"]},{\"source_id\":\"s04\",\"target_ids\":[\"t015\",\"t004\",\"t027\"]},{\"source_id\":\"s05\",\"target_ids\":[\"t021\",\"t010\",\"t018\"]},{\"source_id\":\"s06\",\"target_ids\":[\"t026\",\"t005\",\"t020\"]},{\"source_id\":\"s07\",\"target_ids\":[\"t007\",\"t024\",\"t009\"]},{\"source_id\":\"s08\",\"target_ids\":[\"t018\",\"t009\",\"t022\"]},{\"source_id\":\"s09\",\"target_ids\":[\"t013\",\"t008\",\"t006\"]},{\"source_id\":\"s10\",\"target_ids\":[\"t008\",\"t018\",\"t021\"]},{\"source_id\":\"s11\",\"target_ids\":[\"t027\",\"t015\",\"t004\"]},{\"source_id\":\"s12\",\"target_ids\":[\"t009\",\"t018\",\"t021\"]}]}",
+      "response_contract_valid": true,
+      "response_digest": "7a978b28506fe9469eb3e2a2519bada4e114f04f381c244d39f9f476e63330bb",
+      "response_validation_seconds": 0.00023958273231983185,
+      "schema_digest": "ce1e716a9663fae453abf75f63cc50a480abf0f53cb61109d9bdfb664abb5818",
+      "selections": [
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-005",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-L-005",
+            "T2-L-010",
+            "T2-L-009"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-025",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-L-002",
+            "T2-L-025",
+            "T2-L-001"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-004",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-L-004",
+            "T2-L-012",
+            "T2-L-024"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-009",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-L-009",
+            "T2-L-085",
+            "T2-L-010"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-002",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-L-002",
+            "T2-L-025",
+            "T2-L-001"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-012",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-L-012",
+            "T2-L-004",
+            "T2-L-024"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-003",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-L-003",
+            "T2-L-026",
+            "T2-L-017"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-001",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-L-001",
+            "T2-L-017",
+            "T2-L-018"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-008",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-L-008",
+            "T2-L-013",
+            "T2-L-023"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-013",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-L-013",
+            "T2-L-001",
+            "T2-L-002"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-010",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-L-010",
+            "T2-L-009",
+            "T2-L-085"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-017",
+          "stage": "CANDIDATE",
+          "target_fixture_ids": [
+            "T2-L-017",
+            "T2-L-001",
+            "T2-L-002"
+          ]
+        }
+      ],
+      "source_fixture_ids": [
+        "T2-R-005",
+        "T2-R-025",
+        "T2-R-004",
+        "T2-R-009",
+        "T2-R-002",
+        "T2-R-012",
+        "T2-R-003",
+        "T2-R-001",
+        "T2-R-008",
+        "T2-R-013",
+        "T2-R-010",
+        "T2-R-017"
+      ],
+      "source_start": 15,
+      "source_stop": 27,
+      "stage": "CANDIDATE",
+      "validation_error": null,
+      "visible_target_count": 29
+    },
+    {
+      "call_index": 8,
+      "contract_valid": true,
+      "dependency_input_mode": "STAGE_A_PROVIDER_CANDIDATES",
+      "dependency_valid": true,
+      "direction": "RIGHT_TO_LEFT",
+      "direction_batch_index": 2,
+      "elapsed_seconds": 12.582973916549236,
+      "error_type": null,
+      "failure_category": null,
+      "local_id_mapping_digest": "2e495b358d41658f8ec402ed5544939e7e7576d12288a31382573f547f1519db",
+      "prompt_digest": "8f0484ea39125a73a337a7bd34b28b7a219b487a1967dc34dbe3da3c35a7ae2c",
+      "prompt_preparation_seconds": 8.324999362230301e-05,
+      "provider_completion_seconds": 12.582679791841656,
+      "provider_run": {
+        "completion_tokens": null,
+        "identity": {
+          "endpoint": null,
+          "model": "gpt-5.6-luna",
+          "model_digest": null,
+          "provider": "codex_chatgpt",
+          "reasoning_effort": "low",
+          "runtime": "codex-cli"
+        },
+        "operation": "task2 v4 verifier group co-membership right_to_left",
+        "prompt_tokens": null,
+        "upstream_model": "gpt-5.6-luna",
+        "upstream_provider": "openai-codex"
+      },
+      "raw_response": "{\"selections\":[{\"source_id\":\"s01\",\"target_ids\":[\"t029\"]},{\"source_id\":\"s02\",\"target_ids\":[\"t021\"]},{\"source_id\":\"s03\",\"target_ids\":[\"t005\"]},{\"source_id\":\"s04\",\"target_ids\":[]},{\"source_id\":\"s05\",\"target_ids\":[\"t021\"]},{\"source_id\":\"s06\",\"target_ids\":[\"t026\"]},{\"source_id\":\"s07\",\"target_ids\":[\"t007\"]},{\"source_id\":\"s08\",\"target_ids\":[\"t018\"]},{\"source_id\":\"s09\",\"target_ids\":[\"t013\"]},{\"source_id\":\"s10\",\"target_ids\":[]},{\"source_id\":\"s11\",\"target_ids\":[\"t027\"]},{\"source_id\":\"s12\",\"target_ids\":[\"t009\"]}]}",
+      "response_contract_valid": true,
+      "response_digest": "80a3e5f8e33896d390f5632239a6a12d1caaa596a371778ab7bef842da6d0f2b",
+      "response_validation_seconds": 0.00021087471395730972,
+      "schema_digest": "95901cb3fcf02271b01e38d857f549dfb7c2578c84dee52564a6d7d0c363ec15",
+      "selections": [
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-005",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-L-005"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-025",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-L-002"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-004",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-L-004"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-009",
+          "stage": "VERIFIER",
+          "target_fixture_ids": []
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-002",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-L-002"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-012",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-L-012"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-003",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-L-003"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-001",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-L-001"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-008",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-L-008"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-013",
+          "stage": "VERIFIER",
+          "target_fixture_ids": []
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-010",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-L-010"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-017",
+          "stage": "VERIFIER",
+          "target_fixture_ids": [
+            "T2-L-017"
+          ]
+        }
+      ],
+      "source_fixture_ids": [
+        "T2-R-005",
+        "T2-R-025",
+        "T2-R-004",
+        "T2-R-009",
+        "T2-R-002",
+        "T2-R-012",
+        "T2-R-003",
+        "T2-R-001",
+        "T2-R-008",
+        "T2-R-013",
+        "T2-R-010",
+        "T2-R-017"
+      ],
+      "source_start": 15,
+      "source_stop": 27,
+      "stage": "VERIFIER",
+      "validation_error": null,
+      "visible_target_count": 17
+    }
+  ],
+  "candidate_count": 3,
+  "candidate_selections": [
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-019",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-R-019",
+        "T2-R-020",
+        "T2-R-005"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-083",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-R-018",
+        "T2-R-083",
+        "T2-R-017"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-011",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-R-011",
+        "T2-R-083",
+        "T2-R-015"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-085",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-R-009",
+        "T2-R-005",
+        "T2-R-010"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-004",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-R-004",
+        "T2-R-024",
+        "T2-R-005"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-023",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-R-023",
+        "T2-R-015",
+        "T2-R-007"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-003",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-R-003",
+        "T2-R-026",
+        "T2-R-017"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-013",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-R-013",
+        "T2-R-008",
+        "T2-R-020"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-017",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-R-017",
+        "T2-R-083",
+        "T2-R-001"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-025",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-R-025",
+        "T2-R-002",
+        "T2-R-010"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-022",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-R-022",
+        "T2-R-007",
+        "T2-R-014"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-015",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-R-015",
+        "T2-R-083",
+        "T2-R-011"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-008",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-R-008",
+        "T2-R-013",
+        "T2-R-007"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-006",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-R-006",
+        "T2-R-021",
+        "T2-R-019"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-009",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-R-009",
+        "T2-R-005",
+        "T2-R-010"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-020",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-R-020",
+        "T2-R-005",
+        "T2-R-006"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-014",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-R-014",
+        "T2-R-019",
+        "T2-R-009"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-001",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-R-001",
+        "T2-R-002",
+        "T2-R-017"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-084",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-R-018",
+        "T2-R-083",
+        "T2-R-017"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-024",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-R-024",
+        "T2-R-004",
+        "T2-R-005"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-002",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-R-002",
+        "T2-R-025",
+        "T2-R-009"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-018",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-R-018",
+        "T2-R-083",
+        "T2-R-001"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-016",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-R-016",
+        "T2-R-007",
+        "T2-R-008"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-026",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-R-026",
+        "T2-R-003",
+        "T2-R-017"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-021",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-R-021",
+        "T2-R-006",
+        "T2-R-020"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-012",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-R-012",
+        "T2-R-004",
+        "T2-R-023"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-010",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-R-010",
+        "T2-R-009",
+        "T2-R-005"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-007",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-R-007",
+        "T2-R-002",
+        "T2-R-019"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-005",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-R-005",
+        "T2-R-020",
+        "T2-R-010"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-024",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-L-024",
+        "T2-L-004",
+        "T2-L-005"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-083",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-L-017",
+        "T2-L-002",
+        "T2-L-001"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-023",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-L-023",
+        "T2-L-015",
+        "T2-L-007"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-006",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-L-006",
+        "T2-L-021",
+        "T2-L-025"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-020",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-L-020",
+        "T2-L-005",
+        "T2-L-010"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-014",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-L-014",
+        "T2-L-007",
+        "T2-L-002"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-018",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-L-083",
+        "T2-L-084",
+        "T2-L-018"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-021",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-L-021",
+        "T2-L-006",
+        "T2-L-025"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-026",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-L-026",
+        "T2-L-003",
+        "T2-L-017"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-015",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-L-015",
+        "T2-L-023",
+        "T2-L-007"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-019",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-L-011",
+        "T2-L-019",
+        "T2-L-014"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-016",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-L-016",
+        "T2-L-005",
+        "T2-L-009"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-007",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-L-007",
+        "T2-L-002",
+        "T2-L-009"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-011",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-L-011",
+        "T2-L-015",
+        "T2-L-002"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-022",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-L-022",
+        "T2-L-013",
+        "T2-L-008"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-005",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-L-005",
+        "T2-L-010",
+        "T2-L-009"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-025",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-L-002",
+        "T2-L-025",
+        "T2-L-001"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-004",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-L-004",
+        "T2-L-012",
+        "T2-L-024"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-009",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-L-009",
+        "T2-L-085",
+        "T2-L-010"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-002",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-L-002",
+        "T2-L-025",
+        "T2-L-001"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-012",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-L-012",
+        "T2-L-004",
+        "T2-L-024"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-003",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-L-003",
+        "T2-L-026",
+        "T2-L-017"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-001",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-L-001",
+        "T2-L-017",
+        "T2-L-018"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-008",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-L-008",
+        "T2-L-013",
+        "T2-L-023"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-013",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-L-013",
+        "T2-L-001",
+        "T2-L-002"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-010",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-L-010",
+        "T2-L-009",
+        "T2-L-085"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-017",
+      "stage": "CANDIDATE",
+      "target_fixture_ids": [
+        "T2-L-017",
+        "T2-L-001",
+        "T2-L-002"
+      ]
+    }
+  ],
+  "contract_valid": true,
+  "corpus": {
+    "digest": "0ef2c5a8dea6627999133ad283e3b1989da479f6b612b0a70d2f396b3bd0dde4",
+    "full_group_count": 138,
+    "full_left_count": 150,
+    "full_right_count": 150,
+    "input_digest": "fe47cda93b786f16207a85ea8678eb8dabb9716fde9e60f89cb284392f11e91c",
+    "language": "en",
+    "provider_visible_ids": "CALL_LOCAL_ONLY",
+    "selected_group_count": 26,
+    "selected_left_count": 29,
+    "selected_right_count": 27,
+    "selection": "FIRST_REVIEWED_GROUPS_CALIBRATION",
+    "source_alias_mapping_digest": "10fd2a7dad53c0ae0b16e8b995e2bf297c33cd5afdb501c26a7ecae0f1af0b64"
+  },
+  "durability": {
+    "interruption_boundary": "NO_LEDGER_BEFORE_FINAL_ATOMIC_WRITE; COMPLETED_IN_MEMORY_CALLS_MAY_BE_LOST_ON_PROCESS_INTERRUPTION",
+    "mode": "FINAL_ONLY"
+  },
+  "effective_thinking": null,
+  "expected_groups": [
+    {
+      "left_fixture_ids": [
+        "T2-L-001"
+      ],
+      "right_fixture_ids": [
+        "T2-R-001"
+      ]
+    },
+    {
+      "left_fixture_ids": [
+        "T2-L-002"
+      ],
+      "right_fixture_ids": [
+        "T2-R-002"
+      ]
+    },
+    {
+      "left_fixture_ids": [
+        "T2-L-003"
+      ],
+      "right_fixture_ids": [
+        "T2-R-003"
+      ]
+    },
+    {
+      "left_fixture_ids": [
+        "T2-L-004"
+      ],
+      "right_fixture_ids": [
+        "T2-R-004"
+      ]
+    },
+    {
+      "left_fixture_ids": [
+        "T2-L-005"
+      ],
+      "right_fixture_ids": [
+        "T2-R-005"
+      ]
+    },
+    {
+      "left_fixture_ids": [
+        "T2-L-006"
+      ],
+      "right_fixture_ids": [
+        "T2-R-006"
+      ]
+    },
+    {
+      "left_fixture_ids": [
+        "T2-L-007"
+      ],
+      "right_fixture_ids": [
+        "T2-R-007"
+      ]
+    },
+    {
+      "left_fixture_ids": [
+        "T2-L-008"
+      ],
+      "right_fixture_ids": [
+        "T2-R-008"
+      ]
+    },
+    {
+      "left_fixture_ids": [
+        "T2-L-009",
+        "T2-L-085"
+      ],
+      "right_fixture_ids": [
+        "T2-R-009"
+      ]
+    },
+    {
+      "left_fixture_ids": [
+        "T2-L-010"
+      ],
+      "right_fixture_ids": [
+        "T2-R-010"
+      ]
+    },
+    {
+      "left_fixture_ids": [
+        "T2-L-011"
+      ],
+      "right_fixture_ids": [
+        "T2-R-011"
+      ]
+    },
+    {
+      "left_fixture_ids": [
+        "T2-L-012"
+      ],
+      "right_fixture_ids": [
+        "T2-R-012"
+      ]
+    },
+    {
+      "left_fixture_ids": [
+        "T2-L-013"
+      ],
+      "right_fixture_ids": [
+        "T2-R-013"
+      ]
+    },
+    {
+      "left_fixture_ids": [
+        "T2-L-014"
+      ],
+      "right_fixture_ids": [
+        "T2-R-014"
+      ]
+    },
+    {
+      "left_fixture_ids": [
+        "T2-L-015"
+      ],
+      "right_fixture_ids": [
+        "T2-R-015"
+      ]
+    },
+    {
+      "left_fixture_ids": [
+        "T2-L-016"
+      ],
+      "right_fixture_ids": [
+        "T2-R-016"
+      ]
+    },
+    {
+      "left_fixture_ids": [
+        "T2-L-017"
+      ],
+      "right_fixture_ids": [
+        "T2-R-017"
+      ]
+    },
+    {
+      "left_fixture_ids": [
+        "T2-L-018",
+        "T2-L-083",
+        "T2-L-084"
+      ],
+      "right_fixture_ids": [
+        "T2-R-018",
+        "T2-R-083"
+      ]
+    },
+    {
+      "left_fixture_ids": [
+        "T2-L-019"
+      ],
+      "right_fixture_ids": [
+        "T2-R-019"
+      ]
+    },
+    {
+      "left_fixture_ids": [
+        "T2-L-020"
+      ],
+      "right_fixture_ids": [
+        "T2-R-020"
+      ]
+    },
+    {
+      "left_fixture_ids": [
+        "T2-L-021"
+      ],
+      "right_fixture_ids": [
+        "T2-R-021"
+      ]
+    },
+    {
+      "left_fixture_ids": [
+        "T2-L-022"
+      ],
+      "right_fixture_ids": [
+        "T2-R-022"
+      ]
+    },
+    {
+      "left_fixture_ids": [
+        "T2-L-023"
+      ],
+      "right_fixture_ids": [
+        "T2-R-023"
+      ]
+    },
+    {
+      "left_fixture_ids": [
+        "T2-L-024"
+      ],
+      "right_fixture_ids": [
+        "T2-R-024"
+      ]
+    },
+    {
+      "left_fixture_ids": [
+        "T2-L-025"
+      ],
+      "right_fixture_ids": [
+        "T2-R-025"
+      ]
+    },
+    {
+      "left_fixture_ids": [
+        "T2-L-026"
+      ],
+      "right_fixture_ids": [
+        "T2-R-026"
+      ]
+    }
+  ],
+  "expected_provider_call_count": 8,
+  "final_selections": [
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-019",
+      "stage": "VERIFIER",
+      "target_fixture_ids": []
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-083",
+      "stage": "VERIFIER",
+      "target_fixture_ids": []
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-011",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-R-011"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-085",
+      "stage": "VERIFIER",
+      "target_fixture_ids": []
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-004",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-R-004",
+        "T2-R-024"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-023",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-R-023"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-003",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-R-003"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-013",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-R-008"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-017",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-R-017",
+        "T2-R-001"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-025",
+      "stage": "VERIFIER",
+      "target_fixture_ids": []
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-022",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-R-022"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-015",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-R-015"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-008",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-R-008"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-006",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-R-006"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-009",
+      "stage": "VERIFIER",
+      "target_fixture_ids": []
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-020",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-R-020"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-014",
+      "stage": "VERIFIER",
+      "target_fixture_ids": []
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-001",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-R-001"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-084",
+      "stage": "VERIFIER",
+      "target_fixture_ids": []
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-024",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-R-024"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-002",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-R-002",
+        "T2-R-025"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-018",
+      "stage": "VERIFIER",
+      "target_fixture_ids": []
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-016",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-R-016"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-026",
+      "stage": "VERIFIER",
+      "target_fixture_ids": []
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-021",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-R-021"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-012",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-R-012"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-010",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-R-010"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-007",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-R-007"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-005",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-R-005"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-024",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-L-024"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-083",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-L-017",
+        "T2-L-002",
+        "T2-L-001"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-023",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-L-023"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-006",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-L-006"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-020",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-L-020"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-014",
+      "stage": "VERIFIER",
+      "target_fixture_ids": []
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-018",
+      "stage": "VERIFIER",
+      "target_fixture_ids": []
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-021",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-L-021"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-026",
+      "stage": "VERIFIER",
+      "target_fixture_ids": []
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-015",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-L-015"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-019",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-L-011"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-016",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-L-016"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-007",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-L-007"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-011",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-L-011"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-022",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-L-022"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-005",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-L-005"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-025",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-L-002"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-004",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-L-004"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-009",
+      "stage": "VERIFIER",
+      "target_fixture_ids": []
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-002",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-L-002"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-012",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-L-012"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-003",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-L-003"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-001",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-L-001"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-008",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-L-008"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-013",
+      "stage": "VERIFIER",
+      "target_fixture_ids": []
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-010",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-L-010"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-017",
+      "stage": "VERIFIER",
+      "target_fixture_ids": [
+        "T2-L-017"
+      ]
+    }
+  ],
+  "grouping_selection": "NONE_BOTH_FIXED_DIAGNOSTICS_RETAINED_BEFORE_REVIEWED_SCORING",
+  "groupings": {
+    "reciprocal": [
+      {
+        "left_fixture_ids": [],
+        "right_fixture_ids": [
+          "T2-R-009"
+        ]
+      },
+      {
+        "left_fixture_ids": [],
+        "right_fixture_ids": [
+          "T2-R-013"
+        ]
+      },
+      {
+        "left_fixture_ids": [],
+        "right_fixture_ids": [
+          "T2-R-014"
+        ]
+      },
+      {
+        "left_fixture_ids": [],
+        "right_fixture_ids": [
+          "T2-R-018"
+        ]
+      },
+      {
+        "left_fixture_ids": [],
+        "right_fixture_ids": [
+          "T2-R-019"
+        ]
+      },
+      {
+        "left_fixture_ids": [],
+        "right_fixture_ids": [
+          "T2-R-026"
+        ]
+      },
+      {
+        "left_fixture_ids": [],
+        "right_fixture_ids": [
+          "T2-R-083"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-001"
+        ],
+        "right_fixture_ids": [
+          "T2-R-001"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-002"
+        ],
+        "right_fixture_ids": [
+          "T2-R-002",
+          "T2-R-025"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-003"
+        ],
+        "right_fixture_ids": [
+          "T2-R-003"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-004"
+        ],
+        "right_fixture_ids": [
+          "T2-R-004"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-005"
+        ],
+        "right_fixture_ids": [
+          "T2-R-005"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-006"
+        ],
+        "right_fixture_ids": [
+          "T2-R-006"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-007"
+        ],
+        "right_fixture_ids": [
+          "T2-R-007"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-008"
+        ],
+        "right_fixture_ids": [
+          "T2-R-008"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-009"
+        ],
+        "right_fixture_ids": []
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-010"
+        ],
+        "right_fixture_ids": [
+          "T2-R-010"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-011"
+        ],
+        "right_fixture_ids": [
+          "T2-R-011"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-012"
+        ],
+        "right_fixture_ids": [
+          "T2-R-012"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-013"
+        ],
+        "right_fixture_ids": []
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-014"
+        ],
+        "right_fixture_ids": []
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-015"
+        ],
+        "right_fixture_ids": [
+          "T2-R-015"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-016"
+        ],
+        "right_fixture_ids": [
+          "T2-R-016"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-017"
+        ],
+        "right_fixture_ids": [
+          "T2-R-017"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-018"
+        ],
+        "right_fixture_ids": []
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-019"
+        ],
+        "right_fixture_ids": []
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-020"
+        ],
+        "right_fixture_ids": [
+          "T2-R-020"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-021"
+        ],
+        "right_fixture_ids": [
+          "T2-R-021"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-022"
+        ],
+        "right_fixture_ids": [
+          "T2-R-022"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-023"
+        ],
+        "right_fixture_ids": [
+          "T2-R-023"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-024"
+        ],
+        "right_fixture_ids": [
+          "T2-R-024"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-025"
+        ],
+        "right_fixture_ids": []
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-026"
+        ],
+        "right_fixture_ids": []
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-083"
+        ],
+        "right_fixture_ids": []
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-084"
+        ],
+        "right_fixture_ids": []
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-085"
+        ],
+        "right_fixture_ids": []
+      }
+    ],
+    "union": [
+      {
+        "left_fixture_ids": [],
+        "right_fixture_ids": [
+          "T2-R-009"
+        ]
+      },
+      {
+        "left_fixture_ids": [],
+        "right_fixture_ids": [
+          "T2-R-013"
+        ]
+      },
+      {
+        "left_fixture_ids": [],
+        "right_fixture_ids": [
+          "T2-R-014"
+        ]
+      },
+      {
+        "left_fixture_ids": [],
+        "right_fixture_ids": [
+          "T2-R-018"
+        ]
+      },
+      {
+        "left_fixture_ids": [],
+        "right_fixture_ids": [
+          "T2-R-026"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-001",
+          "T2-L-002",
+          "T2-L-017"
+        ],
+        "right_fixture_ids": [
+          "T2-R-001",
+          "T2-R-002",
+          "T2-R-017",
+          "T2-R-025",
+          "T2-R-083"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-003"
+        ],
+        "right_fixture_ids": [
+          "T2-R-003"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-004",
+          "T2-L-024"
+        ],
+        "right_fixture_ids": [
+          "T2-R-004",
+          "T2-R-024"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-005"
+        ],
+        "right_fixture_ids": [
+          "T2-R-005"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-006"
+        ],
+        "right_fixture_ids": [
+          "T2-R-006"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-007"
+        ],
+        "right_fixture_ids": [
+          "T2-R-007"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-008",
+          "T2-L-013"
+        ],
+        "right_fixture_ids": [
+          "T2-R-008"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-009"
+        ],
+        "right_fixture_ids": []
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-010"
+        ],
+        "right_fixture_ids": [
+          "T2-R-010"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-011"
+        ],
+        "right_fixture_ids": [
+          "T2-R-011",
+          "T2-R-019"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-012"
+        ],
+        "right_fixture_ids": [
+          "T2-R-012"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-014"
+        ],
+        "right_fixture_ids": []
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-015"
+        ],
+        "right_fixture_ids": [
+          "T2-R-015"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-016"
+        ],
+        "right_fixture_ids": [
+          "T2-R-016"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-018"
+        ],
+        "right_fixture_ids": []
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-019"
+        ],
+        "right_fixture_ids": []
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-020"
+        ],
+        "right_fixture_ids": [
+          "T2-R-020"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-021"
+        ],
+        "right_fixture_ids": [
+          "T2-R-021"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-022"
+        ],
+        "right_fixture_ids": [
+          "T2-R-022"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-023"
+        ],
+        "right_fixture_ids": [
+          "T2-R-023"
+        ]
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-025"
+        ],
+        "right_fixture_ids": []
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-026"
+        ],
+        "right_fixture_ids": []
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-083"
+        ],
+        "right_fixture_ids": []
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-084"
+        ],
+        "right_fixture_ids": []
+      },
+      {
+        "left_fixture_ids": [
+          "T2-L-085"
+        ],
+        "right_fixture_ids": []
+      }
+    ]
+  },
+  "kind": "memcommit.semantic-eval.task2-retrieval-v4",
+  "ledger_path": "agent-records/outputs/semantic-eval-v1/task2-retrieval-v4/20260803T231536275203Z-35a7ce863cd64d398114d69fcecec194-codex_chatgpt.json",
+  "lock": {
+    "consumed_during_optimization": true,
+    "corpus_digest": "0ef2c5a8dea6627999133ad283e3b1989da479f6b612b0a70d2f396b3bd0dde4",
+    "corpus_locked": true,
+    "frozen_at": "2026-08-03T21:51:13Z",
+    "full_group_count": 138,
+    "full_left_count": 150,
+    "full_right_count": 150,
+    "independent_holdout": false,
+    "path": "/Users/KimMunyeong/Github/memcommit/memcommit/eval/fixtures/task2_discovery.lock.json",
+    "rung_locked": true,
+    "selected_rung": {
+      "alias_mapping_digest": "10fd2a7dad53c0ae0b16e8b995e2bf297c33cd5afdb501c26a7ecae0f1af0b64",
+      "band_distribution": [
+        [
+          "Compatible Complement",
+          1
+        ],
+        [
+          "Conflict",
+          3
+        ],
+        [
+          "Context-Dependent Variant",
+          4
+        ],
+        [
+          "Near Duplicate",
+          10
+        ],
+        [
+          "Same-Principle Variant",
+          8
+        ]
+      ],
+      "gold_relations_digest": "2386dac34a0d1ce191ee83ee1fb2ebdb4a7920da30232ade310c25c2ee012222",
+      "group_count": 26,
+      "input_digest": "fe47cda93b786f16207a85ea8678eb8dabb9716fde9e60f89cb284392f11e91c",
+      "selected_left_count": 29,
+      "selected_right_count": 27
+    },
+    "sidecar_digest": "491be50592ca295e988f38d05936324d7105976499c852d3b561882bc135c0b1",
+    "sidecar_fixture": "task-2-pair-relations-en.tsv"
+  },
+  "pipeline": "task2-candidate-then-verify-v4",
+  "provider": {
+    "endpoint": null,
+    "model": "gpt-5.6-luna",
+    "model_digest": null,
+    "provider": "codex_chatgpt",
+    "reasoning_effort": "low",
+    "runtime": "codex-cli"
+  },
+  "provider_call_count": 8,
+  "provider_run": {
+    "completion_tokens": null,
+    "identity": {
+      "endpoint": null,
+      "model": "gpt-5.6-luna",
+      "model_digest": null,
+      "provider": "codex_chatgpt",
+      "reasoning_effort": "low",
+      "runtime": "codex-cli"
+    },
+    "operation": "task2 v4 verifier group co-membership right_to_left",
+    "prompt_tokens": null,
+    "upstream_model": "gpt-5.6-luna",
+    "upstream_provider": "openai-codex"
+  },
+  "run_id": "20260803T231536275203Z-35a7ce863cd64d398114d69fcecec194",
+  "schema_version": 1,
+  "score": {
+    "candidate_retrieval": {
+      "candidate_count": 3,
+      "expected": 64,
+      "macro_source_recall_at_3": 0.9821428571428571,
+      "metric": "REVIEWED_GROUP_CO_MEMBERSHIP_CANDIDATE_RECALL_AT_3",
+      "recall_at_3": 0.953125,
+      "recalled": 61,
+      "source_total": 56,
+      "sources": [
+        {
+          "candidate_fixture_ids": [
+            "T2-R-001",
+            "T2-R-002",
+            "T2-R-017"
+          ],
+          "direction": "LEFT_TO_RIGHT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-R-001"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-L-001"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-R-002",
+            "T2-R-009",
+            "T2-R-025"
+          ],
+          "direction": "LEFT_TO_RIGHT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-R-002"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-L-002"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-R-003",
+            "T2-R-017",
+            "T2-R-026"
+          ],
+          "direction": "LEFT_TO_RIGHT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-R-003"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-L-003"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-R-004",
+            "T2-R-005",
+            "T2-R-024"
+          ],
+          "direction": "LEFT_TO_RIGHT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-R-004"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-L-004"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-R-005",
+            "T2-R-010",
+            "T2-R-020"
+          ],
+          "direction": "LEFT_TO_RIGHT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-R-005"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-L-005"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-R-006",
+            "T2-R-019",
+            "T2-R-021"
+          ],
+          "direction": "LEFT_TO_RIGHT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-R-006"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-L-006"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-R-002",
+            "T2-R-007",
+            "T2-R-019"
+          ],
+          "direction": "LEFT_TO_RIGHT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-R-007"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-L-007"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-R-007",
+            "T2-R-008",
+            "T2-R-013"
+          ],
+          "direction": "LEFT_TO_RIGHT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-R-008"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-L-008"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-R-005",
+            "T2-R-009",
+            "T2-R-010"
+          ],
+          "direction": "LEFT_TO_RIGHT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-R-009"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-L-009"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-R-005",
+            "T2-R-009",
+            "T2-R-010"
+          ],
+          "direction": "LEFT_TO_RIGHT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-R-010"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-L-010"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-R-011",
+            "T2-R-015",
+            "T2-R-083"
+          ],
+          "direction": "LEFT_TO_RIGHT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-R-011"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-L-011"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-R-004",
+            "T2-R-012",
+            "T2-R-023"
+          ],
+          "direction": "LEFT_TO_RIGHT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-R-012"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-L-012"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-R-008",
+            "T2-R-013",
+            "T2-R-020"
+          ],
+          "direction": "LEFT_TO_RIGHT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-R-013"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-L-013"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-R-009",
+            "T2-R-014",
+            "T2-R-019"
+          ],
+          "direction": "LEFT_TO_RIGHT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-R-014"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-L-014"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-R-011",
+            "T2-R-015",
+            "T2-R-083"
+          ],
+          "direction": "LEFT_TO_RIGHT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-R-015"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-L-015"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-R-007",
+            "T2-R-008",
+            "T2-R-016"
+          ],
+          "direction": "LEFT_TO_RIGHT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-R-016"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-L-016"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-R-001",
+            "T2-R-017",
+            "T2-R-083"
+          ],
+          "direction": "LEFT_TO_RIGHT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-R-017"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-L-017"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-R-001",
+            "T2-R-018",
+            "T2-R-083"
+          ],
+          "direction": "LEFT_TO_RIGHT",
+          "expected": 2,
+          "expected_group_co_members": [
+            "T2-R-018",
+            "T2-R-083"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 2,
+          "source_fixture_id": "T2-L-018"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-R-005",
+            "T2-R-019",
+            "T2-R-020"
+          ],
+          "direction": "LEFT_TO_RIGHT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-R-019"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-L-019"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-R-005",
+            "T2-R-006",
+            "T2-R-020"
+          ],
+          "direction": "LEFT_TO_RIGHT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-R-020"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-L-020"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-R-006",
+            "T2-R-020",
+            "T2-R-021"
+          ],
+          "direction": "LEFT_TO_RIGHT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-R-021"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-L-021"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-R-007",
+            "T2-R-014",
+            "T2-R-022"
+          ],
+          "direction": "LEFT_TO_RIGHT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-R-022"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-L-022"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-R-007",
+            "T2-R-015",
+            "T2-R-023"
+          ],
+          "direction": "LEFT_TO_RIGHT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-R-023"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-L-023"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-R-004",
+            "T2-R-005",
+            "T2-R-024"
+          ],
+          "direction": "LEFT_TO_RIGHT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-R-024"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-L-024"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-R-002",
+            "T2-R-010",
+            "T2-R-025"
+          ],
+          "direction": "LEFT_TO_RIGHT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-R-025"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-L-025"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-R-003",
+            "T2-R-017",
+            "T2-R-026"
+          ],
+          "direction": "LEFT_TO_RIGHT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-R-026"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-L-026"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-R-017",
+            "T2-R-018",
+            "T2-R-083"
+          ],
+          "direction": "LEFT_TO_RIGHT",
+          "expected": 2,
+          "expected_group_co_members": [
+            "T2-R-018",
+            "T2-R-083"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 2,
+          "source_fixture_id": "T2-L-083"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-R-017",
+            "T2-R-018",
+            "T2-R-083"
+          ],
+          "direction": "LEFT_TO_RIGHT",
+          "expected": 2,
+          "expected_group_co_members": [
+            "T2-R-018",
+            "T2-R-083"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 2,
+          "source_fixture_id": "T2-L-084"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-R-005",
+            "T2-R-009",
+            "T2-R-010"
+          ],
+          "direction": "LEFT_TO_RIGHT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-R-009"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-L-085"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-L-001",
+            "T2-L-017",
+            "T2-L-018"
+          ],
+          "direction": "RIGHT_TO_LEFT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-L-001"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-R-001"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-L-001",
+            "T2-L-002",
+            "T2-L-025"
+          ],
+          "direction": "RIGHT_TO_LEFT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-L-002"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-R-002"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-L-003",
+            "T2-L-017",
+            "T2-L-026"
+          ],
+          "direction": "RIGHT_TO_LEFT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-L-003"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-R-003"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-L-004",
+            "T2-L-012",
+            "T2-L-024"
+          ],
+          "direction": "RIGHT_TO_LEFT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-L-004"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-R-004"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-L-005",
+            "T2-L-009",
+            "T2-L-010"
+          ],
+          "direction": "RIGHT_TO_LEFT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-L-005"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-R-005"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-L-006",
+            "T2-L-021",
+            "T2-L-025"
+          ],
+          "direction": "RIGHT_TO_LEFT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-L-006"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-R-006"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-L-002",
+            "T2-L-007",
+            "T2-L-009"
+          ],
+          "direction": "RIGHT_TO_LEFT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-L-007"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-R-007"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-L-008",
+            "T2-L-013",
+            "T2-L-023"
+          ],
+          "direction": "RIGHT_TO_LEFT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-L-008"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-R-008"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-L-009",
+            "T2-L-010",
+            "T2-L-085"
+          ],
+          "direction": "RIGHT_TO_LEFT",
+          "expected": 2,
+          "expected_group_co_members": [
+            "T2-L-009",
+            "T2-L-085"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 2,
+          "source_fixture_id": "T2-R-009"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-L-009",
+            "T2-L-010",
+            "T2-L-085"
+          ],
+          "direction": "RIGHT_TO_LEFT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-L-010"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-R-010"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-L-002",
+            "T2-L-011",
+            "T2-L-015"
+          ],
+          "direction": "RIGHT_TO_LEFT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-L-011"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-R-011"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-L-004",
+            "T2-L-012",
+            "T2-L-024"
+          ],
+          "direction": "RIGHT_TO_LEFT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-L-012"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-R-012"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-L-001",
+            "T2-L-002",
+            "T2-L-013"
+          ],
+          "direction": "RIGHT_TO_LEFT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-L-013"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-R-013"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-L-002",
+            "T2-L-007",
+            "T2-L-014"
+          ],
+          "direction": "RIGHT_TO_LEFT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-L-014"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-R-014"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-L-007",
+            "T2-L-015",
+            "T2-L-023"
+          ],
+          "direction": "RIGHT_TO_LEFT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-L-015"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-R-015"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-L-005",
+            "T2-L-009",
+            "T2-L-016"
+          ],
+          "direction": "RIGHT_TO_LEFT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-L-016"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-R-016"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-L-001",
+            "T2-L-002",
+            "T2-L-017"
+          ],
+          "direction": "RIGHT_TO_LEFT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-L-017"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-R-017"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-L-018",
+            "T2-L-083",
+            "T2-L-084"
+          ],
+          "direction": "RIGHT_TO_LEFT",
+          "expected": 3,
+          "expected_group_co_members": [
+            "T2-L-018",
+            "T2-L-083",
+            "T2-L-084"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 3,
+          "source_fixture_id": "T2-R-018"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-L-011",
+            "T2-L-014",
+            "T2-L-019"
+          ],
+          "direction": "RIGHT_TO_LEFT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-L-019"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-R-019"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-L-005",
+            "T2-L-010",
+            "T2-L-020"
+          ],
+          "direction": "RIGHT_TO_LEFT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-L-020"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-R-020"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-L-006",
+            "T2-L-021",
+            "T2-L-025"
+          ],
+          "direction": "RIGHT_TO_LEFT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-L-021"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-R-021"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-L-008",
+            "T2-L-013",
+            "T2-L-022"
+          ],
+          "direction": "RIGHT_TO_LEFT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-L-022"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-R-022"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-L-007",
+            "T2-L-015",
+            "T2-L-023"
+          ],
+          "direction": "RIGHT_TO_LEFT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-L-023"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-R-023"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-L-004",
+            "T2-L-005",
+            "T2-L-024"
+          ],
+          "direction": "RIGHT_TO_LEFT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-L-024"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-R-024"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-L-001",
+            "T2-L-002",
+            "T2-L-025"
+          ],
+          "direction": "RIGHT_TO_LEFT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-L-025"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-R-025"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-L-003",
+            "T2-L-017",
+            "T2-L-026"
+          ],
+          "direction": "RIGHT_TO_LEFT",
+          "expected": 1,
+          "expected_group_co_members": [
+            "T2-L-026"
+          ],
+          "recall_at_3": 1.0,
+          "recalled": 1,
+          "source_fixture_id": "T2-R-026"
+        },
+        {
+          "candidate_fixture_ids": [
+            "T2-L-001",
+            "T2-L-002",
+            "T2-L-017"
+          ],
+          "direction": "RIGHT_TO_LEFT",
+          "expected": 3,
+          "expected_group_co_members": [
+            "T2-L-018",
+            "T2-L-083",
+            "T2-L-084"
+          ],
+          "recall_at_3": 0.0,
+          "recalled": 0,
+          "source_fixture_id": "T2-R-083"
+        }
+      ]
+    },
+    "final_group_co_membership": {
+      "all_reviewed_groups": {
+        "left": {
+          "exact": 16,
+          "exact_accuracy": 0.5517241379310345,
+          "macro_jaccard": 0.603448275862069,
+          "members": [
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-001"
+              ],
+              "fixture_id": "T2-L-001",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-001"
+              ]
+            },
+            {
+              "exact": false,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-002"
+              ],
+              "fixture_id": "T2-L-002",
+              "jaccard": 0.5,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-002",
+                "T2-R-025"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-003"
+              ],
+              "fixture_id": "T2-L-003",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-003"
+              ]
+            },
+            {
+              "exact": false,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-004"
+              ],
+              "fixture_id": "T2-L-004",
+              "jaccard": 0.5,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-004",
+                "T2-R-024"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-005"
+              ],
+              "fixture_id": "T2-L-005",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-005"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-006"
+              ],
+              "fixture_id": "T2-L-006",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-006"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-007"
+              ],
+              "fixture_id": "T2-L-007",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-007"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-008"
+              ],
+              "fixture_id": "T2-L-008",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-008"
+              ]
+            },
+            {
+              "exact": false,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-009"
+              ],
+              "fixture_id": "T2-L-009",
+              "jaccard": 0.0,
+              "predicted_counterpart_fixture_ids": []
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-010"
+              ],
+              "fixture_id": "T2-L-010",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-010"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-011"
+              ],
+              "fixture_id": "T2-L-011",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-011"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-012"
+              ],
+              "fixture_id": "T2-L-012",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-012"
+              ]
+            },
+            {
+              "exact": false,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-013"
+              ],
+              "fixture_id": "T2-L-013",
+              "jaccard": 0.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-008"
+              ]
+            },
+            {
+              "exact": false,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-014"
+              ],
+              "fixture_id": "T2-L-014",
+              "jaccard": 0.0,
+              "predicted_counterpart_fixture_ids": []
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-015"
+              ],
+              "fixture_id": "T2-L-015",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-015"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-016"
+              ],
+              "fixture_id": "T2-L-016",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-016"
+              ]
+            },
+            {
+              "exact": false,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-017"
+              ],
+              "fixture_id": "T2-L-017",
+              "jaccard": 0.5,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-001",
+                "T2-R-017"
+              ]
+            },
+            {
+              "exact": false,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-018",
+                "T2-R-083"
+              ],
+              "fixture_id": "T2-L-018",
+              "jaccard": 0.0,
+              "predicted_counterpart_fixture_ids": []
+            },
+            {
+              "exact": false,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-019"
+              ],
+              "fixture_id": "T2-L-019",
+              "jaccard": 0.0,
+              "predicted_counterpart_fixture_ids": []
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-020"
+              ],
+              "fixture_id": "T2-L-020",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-020"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-021"
+              ],
+              "fixture_id": "T2-L-021",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-021"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-022"
+              ],
+              "fixture_id": "T2-L-022",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-022"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-023"
+              ],
+              "fixture_id": "T2-L-023",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-023"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-024"
+              ],
+              "fixture_id": "T2-L-024",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-024"
+              ]
+            },
+            {
+              "exact": false,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-025"
+              ],
+              "fixture_id": "T2-L-025",
+              "jaccard": 0.0,
+              "predicted_counterpart_fixture_ids": []
+            },
+            {
+              "exact": false,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-026"
+              ],
+              "fixture_id": "T2-L-026",
+              "jaccard": 0.0,
+              "predicted_counterpart_fixture_ids": []
+            },
+            {
+              "exact": false,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-018",
+                "T2-R-083"
+              ],
+              "fixture_id": "T2-L-083",
+              "jaccard": 0.0,
+              "predicted_counterpart_fixture_ids": []
+            },
+            {
+              "exact": false,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-018",
+                "T2-R-083"
+              ],
+              "fixture_id": "T2-L-084",
+              "jaccard": 0.0,
+              "predicted_counterpart_fixture_ids": []
+            },
+            {
+              "exact": false,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-009"
+              ],
+              "fixture_id": "T2-L-085",
+              "jaccard": 0.0,
+              "predicted_counterpart_fixture_ids": []
+            }
+          ],
+          "total": 29
+        },
+        "overall": {
+          "exact": 35,
+          "exact_accuracy": 0.625,
+          "macro_jaccard": 0.6517857142857143,
+          "total": 56
+        },
+        "right": {
+          "exact": 19,
+          "exact_accuracy": 0.7037037037037037,
+          "macro_jaccard": 0.7037037037037037,
+          "members": [
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-001"
+              ],
+              "fixture_id": "T2-R-001",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-001"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-002"
+              ],
+              "fixture_id": "T2-R-002",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-002"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-003"
+              ],
+              "fixture_id": "T2-R-003",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-003"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-004"
+              ],
+              "fixture_id": "T2-R-004",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-004"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-005"
+              ],
+              "fixture_id": "T2-R-005",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-005"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-006"
+              ],
+              "fixture_id": "T2-R-006",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-006"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-007"
+              ],
+              "fixture_id": "T2-R-007",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-007"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-008"
+              ],
+              "fixture_id": "T2-R-008",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-008"
+              ]
+            },
+            {
+              "exact": false,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-009",
+                "T2-L-085"
+              ],
+              "fixture_id": "T2-R-009",
+              "jaccard": 0.0,
+              "predicted_counterpart_fixture_ids": []
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-010"
+              ],
+              "fixture_id": "T2-R-010",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-010"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-011"
+              ],
+              "fixture_id": "T2-R-011",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-011"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-012"
+              ],
+              "fixture_id": "T2-R-012",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-012"
+              ]
+            },
+            {
+              "exact": false,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-013"
+              ],
+              "fixture_id": "T2-R-013",
+              "jaccard": 0.0,
+              "predicted_counterpart_fixture_ids": []
+            },
+            {
+              "exact": false,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-014"
+              ],
+              "fixture_id": "T2-R-014",
+              "jaccard": 0.0,
+              "predicted_counterpart_fixture_ids": []
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-015"
+              ],
+              "fixture_id": "T2-R-015",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-015"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-016"
+              ],
+              "fixture_id": "T2-R-016",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-016"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-017"
+              ],
+              "fixture_id": "T2-R-017",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-017"
+              ]
+            },
+            {
+              "exact": false,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-018",
+                "T2-L-083",
+                "T2-L-084"
+              ],
+              "fixture_id": "T2-R-018",
+              "jaccard": 0.0,
+              "predicted_counterpart_fixture_ids": []
+            },
+            {
+              "exact": false,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-019"
+              ],
+              "fixture_id": "T2-R-019",
+              "jaccard": 0.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-011"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-020"
+              ],
+              "fixture_id": "T2-R-020",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-020"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-021"
+              ],
+              "fixture_id": "T2-R-021",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-021"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-022"
+              ],
+              "fixture_id": "T2-R-022",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-022"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-023"
+              ],
+              "fixture_id": "T2-R-023",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-023"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-024"
+              ],
+              "fixture_id": "T2-R-024",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-024"
+              ]
+            },
+            {
+              "exact": false,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-025"
+              ],
+              "fixture_id": "T2-R-025",
+              "jaccard": 0.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-002"
+              ]
+            },
+            {
+              "exact": false,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-026"
+              ],
+              "fixture_id": "T2-R-026",
+              "jaccard": 0.0,
+              "predicted_counterpart_fixture_ids": []
+            },
+            {
+              "exact": false,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-018",
+                "T2-L-083",
+                "T2-L-084"
+              ],
+              "fixture_id": "T2-R-083",
+              "jaccard": 0.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-001",
+                "T2-L-002",
+                "T2-L-017"
+              ]
+            }
+          ],
+          "total": 27
+        }
+      },
+      "interpretation": "REVIEWED_GROUP_CO_MEMBERSHIP_NOT_INDEPENDENT_CARTESIAN_LABELS",
+      "metric": "REVIEWED_HYPERGROUP_CO_MEMBERSHIP",
+      "reviewed_one_to_one_subset": {
+        "left": {
+          "exact": 16,
+          "exact_accuracy": 0.6666666666666666,
+          "macro_jaccard": 0.7291666666666666,
+          "members": [
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-001"
+              ],
+              "fixture_id": "T2-L-001",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-001"
+              ]
+            },
+            {
+              "exact": false,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-002"
+              ],
+              "fixture_id": "T2-L-002",
+              "jaccard": 0.5,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-002",
+                "T2-R-025"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-003"
+              ],
+              "fixture_id": "T2-L-003",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-003"
+              ]
+            },
+            {
+              "exact": false,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-004"
+              ],
+              "fixture_id": "T2-L-004",
+              "jaccard": 0.5,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-004",
+                "T2-R-024"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-005"
+              ],
+              "fixture_id": "T2-L-005",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-005"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-006"
+              ],
+              "fixture_id": "T2-L-006",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-006"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-007"
+              ],
+              "fixture_id": "T2-L-007",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-007"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-008"
+              ],
+              "fixture_id": "T2-L-008",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-008"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-010"
+              ],
+              "fixture_id": "T2-L-010",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-010"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-011"
+              ],
+              "fixture_id": "T2-L-011",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-011"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-012"
+              ],
+              "fixture_id": "T2-L-012",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-012"
+              ]
+            },
+            {
+              "exact": false,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-013"
+              ],
+              "fixture_id": "T2-L-013",
+              "jaccard": 0.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-008"
+              ]
+            },
+            {
+              "exact": false,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-014"
+              ],
+              "fixture_id": "T2-L-014",
+              "jaccard": 0.0,
+              "predicted_counterpart_fixture_ids": []
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-015"
+              ],
+              "fixture_id": "T2-L-015",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-015"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-016"
+              ],
+              "fixture_id": "T2-L-016",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-016"
+              ]
+            },
+            {
+              "exact": false,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-017"
+              ],
+              "fixture_id": "T2-L-017",
+              "jaccard": 0.5,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-001",
+                "T2-R-017"
+              ]
+            },
+            {
+              "exact": false,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-019"
+              ],
+              "fixture_id": "T2-L-019",
+              "jaccard": 0.0,
+              "predicted_counterpart_fixture_ids": []
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-020"
+              ],
+              "fixture_id": "T2-L-020",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-020"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-021"
+              ],
+              "fixture_id": "T2-L-021",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-021"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-022"
+              ],
+              "fixture_id": "T2-L-022",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-022"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-023"
+              ],
+              "fixture_id": "T2-L-023",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-023"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-024"
+              ],
+              "fixture_id": "T2-L-024",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-R-024"
+              ]
+            },
+            {
+              "exact": false,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-025"
+              ],
+              "fixture_id": "T2-L-025",
+              "jaccard": 0.0,
+              "predicted_counterpart_fixture_ids": []
+            },
+            {
+              "exact": false,
+              "expected_counterpart_fixture_ids": [
+                "T2-R-026"
+              ],
+              "fixture_id": "T2-L-026",
+              "jaccard": 0.0,
+              "predicted_counterpart_fixture_ids": []
+            }
+          ],
+          "total": 24
+        },
+        "overall": {
+          "exact": 35,
+          "exact_accuracy": 0.7291666666666666,
+          "macro_jaccard": 0.7604166666666666,
+          "total": 48
+        },
+        "right": {
+          "exact": 19,
+          "exact_accuracy": 0.7916666666666666,
+          "macro_jaccard": 0.7916666666666666,
+          "members": [
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-001"
+              ],
+              "fixture_id": "T2-R-001",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-001"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-002"
+              ],
+              "fixture_id": "T2-R-002",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-002"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-003"
+              ],
+              "fixture_id": "T2-R-003",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-003"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-004"
+              ],
+              "fixture_id": "T2-R-004",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-004"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-005"
+              ],
+              "fixture_id": "T2-R-005",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-005"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-006"
+              ],
+              "fixture_id": "T2-R-006",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-006"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-007"
+              ],
+              "fixture_id": "T2-R-007",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-007"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-008"
+              ],
+              "fixture_id": "T2-R-008",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-008"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-010"
+              ],
+              "fixture_id": "T2-R-010",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-010"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-011"
+              ],
+              "fixture_id": "T2-R-011",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-011"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-012"
+              ],
+              "fixture_id": "T2-R-012",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-012"
+              ]
+            },
+            {
+              "exact": false,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-013"
+              ],
+              "fixture_id": "T2-R-013",
+              "jaccard": 0.0,
+              "predicted_counterpart_fixture_ids": []
+            },
+            {
+              "exact": false,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-014"
+              ],
+              "fixture_id": "T2-R-014",
+              "jaccard": 0.0,
+              "predicted_counterpart_fixture_ids": []
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-015"
+              ],
+              "fixture_id": "T2-R-015",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-015"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-016"
+              ],
+              "fixture_id": "T2-R-016",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-016"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-017"
+              ],
+              "fixture_id": "T2-R-017",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-017"
+              ]
+            },
+            {
+              "exact": false,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-019"
+              ],
+              "fixture_id": "T2-R-019",
+              "jaccard": 0.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-011"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-020"
+              ],
+              "fixture_id": "T2-R-020",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-020"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-021"
+              ],
+              "fixture_id": "T2-R-021",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-021"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-022"
+              ],
+              "fixture_id": "T2-R-022",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-022"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-023"
+              ],
+              "fixture_id": "T2-R-023",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-023"
+              ]
+            },
+            {
+              "exact": true,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-024"
+              ],
+              "fixture_id": "T2-R-024",
+              "jaccard": 1.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-024"
+              ]
+            },
+            {
+              "exact": false,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-025"
+              ],
+              "fixture_id": "T2-R-025",
+              "jaccard": 0.0,
+              "predicted_counterpart_fixture_ids": [
+                "T2-L-002"
+              ]
+            },
+            {
+              "exact": false,
+              "expected_counterpart_fixture_ids": [
+                "T2-L-026"
+              ],
+              "fixture_id": "T2-R-026",
+              "jaccard": 0.0,
+              "predicted_counterpart_fixture_ids": []
+            }
+          ],
+          "total": 24
+        }
+      }
+    },
+    "grouping_diagnostics": {
+      "reciprocal": {
+        "derivation": "BIPARTITE_COMPONENTS_OF_BIDIRECTIONALLY_VERIFIED_EDGES",
+        "score": {
+          "component_member_counterpart_sets": {
+            "left": {
+              "exact": 18,
+              "exact_accuracy": 0.6206896551724138,
+              "macro_jaccard": 0.6379310344827587,
+              "members": [
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-001"
+                  ],
+                  "fixture_id": "T2-L-001",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-001"
+                  ]
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-002"
+                  ],
+                  "fixture_id": "T2-L-002",
+                  "jaccard": 0.5,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-002",
+                    "T2-R-025"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-003"
+                  ],
+                  "fixture_id": "T2-L-003",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-003"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-004"
+                  ],
+                  "fixture_id": "T2-L-004",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-004"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-005"
+                  ],
+                  "fixture_id": "T2-L-005",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-005"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-006"
+                  ],
+                  "fixture_id": "T2-L-006",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-006"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-007"
+                  ],
+                  "fixture_id": "T2-L-007",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-007"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-008"
+                  ],
+                  "fixture_id": "T2-L-008",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-008"
+                  ]
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-009"
+                  ],
+                  "fixture_id": "T2-L-009",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": []
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-010"
+                  ],
+                  "fixture_id": "T2-L-010",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-010"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-011"
+                  ],
+                  "fixture_id": "T2-L-011",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-011"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-012"
+                  ],
+                  "fixture_id": "T2-L-012",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-012"
+                  ]
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-013"
+                  ],
+                  "fixture_id": "T2-L-013",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": []
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-014"
+                  ],
+                  "fixture_id": "T2-L-014",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": []
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-015"
+                  ],
+                  "fixture_id": "T2-L-015",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-015"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-016"
+                  ],
+                  "fixture_id": "T2-L-016",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-016"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-017"
+                  ],
+                  "fixture_id": "T2-L-017",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-017"
+                  ]
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-018",
+                    "T2-R-083"
+                  ],
+                  "fixture_id": "T2-L-018",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": []
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-019"
+                  ],
+                  "fixture_id": "T2-L-019",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": []
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-020"
+                  ],
+                  "fixture_id": "T2-L-020",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-020"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-021"
+                  ],
+                  "fixture_id": "T2-L-021",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-021"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-022"
+                  ],
+                  "fixture_id": "T2-L-022",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-022"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-023"
+                  ],
+                  "fixture_id": "T2-L-023",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-023"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-024"
+                  ],
+                  "fixture_id": "T2-L-024",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-024"
+                  ]
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-025"
+                  ],
+                  "fixture_id": "T2-L-025",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": []
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-026"
+                  ],
+                  "fixture_id": "T2-L-026",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": []
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-018",
+                    "T2-R-083"
+                  ],
+                  "fixture_id": "T2-L-083",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": []
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-018",
+                    "T2-R-083"
+                  ],
+                  "fixture_id": "T2-L-084",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": []
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-009"
+                  ],
+                  "fixture_id": "T2-L-085",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": []
+                }
+              ],
+              "total": 29
+            },
+            "overall": {
+              "exact": 37,
+              "exact_accuracy": 0.6607142857142857,
+              "macro_jaccard": 0.6696428571428571,
+              "total": 56
+            },
+            "right": {
+              "exact": 19,
+              "exact_accuracy": 0.7037037037037037,
+              "macro_jaccard": 0.7037037037037037,
+              "members": [
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-001"
+                  ],
+                  "fixture_id": "T2-R-001",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-001"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-002"
+                  ],
+                  "fixture_id": "T2-R-002",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-002"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-003"
+                  ],
+                  "fixture_id": "T2-R-003",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-003"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-004"
+                  ],
+                  "fixture_id": "T2-R-004",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-004"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-005"
+                  ],
+                  "fixture_id": "T2-R-005",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-005"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-006"
+                  ],
+                  "fixture_id": "T2-R-006",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-006"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-007"
+                  ],
+                  "fixture_id": "T2-R-007",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-007"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-008"
+                  ],
+                  "fixture_id": "T2-R-008",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-008"
+                  ]
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-009",
+                    "T2-L-085"
+                  ],
+                  "fixture_id": "T2-R-009",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": []
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-010"
+                  ],
+                  "fixture_id": "T2-R-010",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-010"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-011"
+                  ],
+                  "fixture_id": "T2-R-011",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-011"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-012"
+                  ],
+                  "fixture_id": "T2-R-012",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-012"
+                  ]
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-013"
+                  ],
+                  "fixture_id": "T2-R-013",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": []
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-014"
+                  ],
+                  "fixture_id": "T2-R-014",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": []
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-015"
+                  ],
+                  "fixture_id": "T2-R-015",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-015"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-016"
+                  ],
+                  "fixture_id": "T2-R-016",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-016"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-017"
+                  ],
+                  "fixture_id": "T2-R-017",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-017"
+                  ]
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-018",
+                    "T2-L-083",
+                    "T2-L-084"
+                  ],
+                  "fixture_id": "T2-R-018",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": []
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-019"
+                  ],
+                  "fixture_id": "T2-R-019",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": []
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-020"
+                  ],
+                  "fixture_id": "T2-R-020",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-020"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-021"
+                  ],
+                  "fixture_id": "T2-R-021",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-021"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-022"
+                  ],
+                  "fixture_id": "T2-R-022",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-022"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-023"
+                  ],
+                  "fixture_id": "T2-R-023",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-023"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-024"
+                  ],
+                  "fixture_id": "T2-R-024",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-024"
+                  ]
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-025"
+                  ],
+                  "fixture_id": "T2-R-025",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-002"
+                  ]
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-026"
+                  ],
+                  "fixture_id": "T2-R-026",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": []
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-018",
+                    "T2-L-083",
+                    "T2-L-084"
+                  ],
+                  "fixture_id": "T2-R-083",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": []
+                }
+              ],
+              "total": 27
+            }
+          },
+          "exact_complete_grouping": false,
+          "exact_group_f1": 0.5806451612903226,
+          "exact_group_precision": 0.5,
+          "exact_group_recall": 0.6923076923076923,
+          "exact_groups": 18,
+          "expected_groups": 26,
+          "multi_member_exact_groups": 0,
+          "multi_member_expected_groups": 2,
+          "multi_member_group_recall": 0.0,
+          "predicted_components": 36
+        }
+      },
+      "union": {
+        "derivation": "BIPARTITE_COMPONENTS_OF_EITHER_VERIFIED_DIRECTION",
+        "score": {
+          "component_member_counterpart_sets": {
+            "left": {
+              "exact": 13,
+              "exact_accuracy": 0.4482758620689655,
+              "macro_jaccard": 0.5206896551724138,
+              "members": [
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-001"
+                  ],
+                  "fixture_id": "T2-L-001",
+                  "jaccard": 0.2,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-001",
+                    "T2-R-002",
+                    "T2-R-017",
+                    "T2-R-025",
+                    "T2-R-083"
+                  ]
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-002"
+                  ],
+                  "fixture_id": "T2-L-002",
+                  "jaccard": 0.2,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-001",
+                    "T2-R-002",
+                    "T2-R-017",
+                    "T2-R-025",
+                    "T2-R-083"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-003"
+                  ],
+                  "fixture_id": "T2-L-003",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-003"
+                  ]
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-004"
+                  ],
+                  "fixture_id": "T2-L-004",
+                  "jaccard": 0.5,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-004",
+                    "T2-R-024"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-005"
+                  ],
+                  "fixture_id": "T2-L-005",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-005"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-006"
+                  ],
+                  "fixture_id": "T2-L-006",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-006"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-007"
+                  ],
+                  "fixture_id": "T2-L-007",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-007"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-008"
+                  ],
+                  "fixture_id": "T2-L-008",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-008"
+                  ]
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-009"
+                  ],
+                  "fixture_id": "T2-L-009",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": []
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-010"
+                  ],
+                  "fixture_id": "T2-L-010",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-010"
+                  ]
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-011"
+                  ],
+                  "fixture_id": "T2-L-011",
+                  "jaccard": 0.5,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-011",
+                    "T2-R-019"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-012"
+                  ],
+                  "fixture_id": "T2-L-012",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-012"
+                  ]
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-013"
+                  ],
+                  "fixture_id": "T2-L-013",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-008"
+                  ]
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-014"
+                  ],
+                  "fixture_id": "T2-L-014",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": []
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-015"
+                  ],
+                  "fixture_id": "T2-L-015",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-015"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-016"
+                  ],
+                  "fixture_id": "T2-L-016",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-016"
+                  ]
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-017"
+                  ],
+                  "fixture_id": "T2-L-017",
+                  "jaccard": 0.2,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-001",
+                    "T2-R-002",
+                    "T2-R-017",
+                    "T2-R-025",
+                    "T2-R-083"
+                  ]
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-018",
+                    "T2-R-083"
+                  ],
+                  "fixture_id": "T2-L-018",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": []
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-019"
+                  ],
+                  "fixture_id": "T2-L-019",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": []
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-020"
+                  ],
+                  "fixture_id": "T2-L-020",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-020"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-021"
+                  ],
+                  "fixture_id": "T2-L-021",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-021"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-022"
+                  ],
+                  "fixture_id": "T2-L-022",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-022"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-023"
+                  ],
+                  "fixture_id": "T2-L-023",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-023"
+                  ]
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-024"
+                  ],
+                  "fixture_id": "T2-L-024",
+                  "jaccard": 0.5,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-R-004",
+                    "T2-R-024"
+                  ]
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-025"
+                  ],
+                  "fixture_id": "T2-L-025",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": []
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-026"
+                  ],
+                  "fixture_id": "T2-L-026",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": []
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-018",
+                    "T2-R-083"
+                  ],
+                  "fixture_id": "T2-L-083",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": []
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-018",
+                    "T2-R-083"
+                  ],
+                  "fixture_id": "T2-L-084",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": []
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-R-009"
+                  ],
+                  "fixture_id": "T2-L-085",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": []
+                }
+              ],
+              "total": 29
+            },
+            "overall": {
+              "exact": 26,
+              "exact_accuracy": 0.4642857142857143,
+              "macro_jaccard": 0.5464285714285715,
+              "total": 56
+            },
+            "right": {
+              "exact": 13,
+              "exact_accuracy": 0.48148148148148145,
+              "macro_jaccard": 0.5740740740740741,
+              "members": [
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-001"
+                  ],
+                  "fixture_id": "T2-R-001",
+                  "jaccard": 0.3333333333333333,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-001",
+                    "T2-L-002",
+                    "T2-L-017"
+                  ]
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-002"
+                  ],
+                  "fixture_id": "T2-R-002",
+                  "jaccard": 0.3333333333333333,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-001",
+                    "T2-L-002",
+                    "T2-L-017"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-003"
+                  ],
+                  "fixture_id": "T2-R-003",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-003"
+                  ]
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-004"
+                  ],
+                  "fixture_id": "T2-R-004",
+                  "jaccard": 0.5,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-004",
+                    "T2-L-024"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-005"
+                  ],
+                  "fixture_id": "T2-R-005",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-005"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-006"
+                  ],
+                  "fixture_id": "T2-R-006",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-006"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-007"
+                  ],
+                  "fixture_id": "T2-R-007",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-007"
+                  ]
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-008"
+                  ],
+                  "fixture_id": "T2-R-008",
+                  "jaccard": 0.5,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-008",
+                    "T2-L-013"
+                  ]
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-009",
+                    "T2-L-085"
+                  ],
+                  "fixture_id": "T2-R-009",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": []
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-010"
+                  ],
+                  "fixture_id": "T2-R-010",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-010"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-011"
+                  ],
+                  "fixture_id": "T2-R-011",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-011"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-012"
+                  ],
+                  "fixture_id": "T2-R-012",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-012"
+                  ]
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-013"
+                  ],
+                  "fixture_id": "T2-R-013",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": []
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-014"
+                  ],
+                  "fixture_id": "T2-R-014",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": []
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-015"
+                  ],
+                  "fixture_id": "T2-R-015",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-015"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-016"
+                  ],
+                  "fixture_id": "T2-R-016",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-016"
+                  ]
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-017"
+                  ],
+                  "fixture_id": "T2-R-017",
+                  "jaccard": 0.3333333333333333,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-001",
+                    "T2-L-002",
+                    "T2-L-017"
+                  ]
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-018",
+                    "T2-L-083",
+                    "T2-L-084"
+                  ],
+                  "fixture_id": "T2-R-018",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": []
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-019"
+                  ],
+                  "fixture_id": "T2-R-019",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-011"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-020"
+                  ],
+                  "fixture_id": "T2-R-020",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-020"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-021"
+                  ],
+                  "fixture_id": "T2-R-021",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-021"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-022"
+                  ],
+                  "fixture_id": "T2-R-022",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-022"
+                  ]
+                },
+                {
+                  "exact": true,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-023"
+                  ],
+                  "fixture_id": "T2-R-023",
+                  "jaccard": 1.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-023"
+                  ]
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-024"
+                  ],
+                  "fixture_id": "T2-R-024",
+                  "jaccard": 0.5,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-004",
+                    "T2-L-024"
+                  ]
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-025"
+                  ],
+                  "fixture_id": "T2-R-025",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-001",
+                    "T2-L-002",
+                    "T2-L-017"
+                  ]
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-026"
+                  ],
+                  "fixture_id": "T2-R-026",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": []
+                },
+                {
+                  "exact": false,
+                  "expected_counterpart_fixture_ids": [
+                    "T2-L-018",
+                    "T2-L-083",
+                    "T2-L-084"
+                  ],
+                  "fixture_id": "T2-R-083",
+                  "jaccard": 0.0,
+                  "predicted_counterpart_fixture_ids": [
+                    "T2-L-001",
+                    "T2-L-002",
+                    "T2-L-017"
+                  ]
+                }
+              ],
+              "total": 27
+            }
+          },
+          "exact_complete_grouping": false,
+          "exact_group_f1": 0.42857142857142855,
+          "exact_group_precision": 0.4,
+          "exact_group_recall": 0.46153846153846156,
+          "exact_groups": 12,
+          "expected_groups": 26,
+          "multi_member_exact_groups": 0,
+          "multi_member_expected_groups": 2,
+          "multi_member_group_recall": 0.0,
+          "predicted_components": 30
+        }
+      }
+    },
+    "grouping_selection": "NONE_BOTH_FIXED_DIAGNOSTICS_RETAINED_BEFORE_REVIEWED_SCORING"
+  },
+  "started_at": "2026-08-03T23:15:36.275203Z",
+  "status": "VALID",
+  "timing": {
+    "campaign_seconds": 121.23025658307597,
+    "candidate_stage_call_seconds": 59.40520299738273,
+    "corpus_preparation_seconds": 0.01101191621273756,
+    "pipeline_seconds": 121.21805599983782,
+    "provider_connection_seconds": 0.05109012499451637,
+    "total_seconds": 121.28134670807049,
+    "verifier_stage_call_seconds": 61.80966929253191
+  },
+  "validation_error": null
+}

@@ -1,0 +1,3820 @@
+{
+  "batch_size": 15,
+  "calibration_boundary": {
+    "independent_holdout": false,
+    "input_membership": "GOLD_SELECTED_PREFIX_OF_COMPLETE_REVIEWED_GROUPS_CONSUMED_CALIBRATION",
+    "provider_call_branching_after_input_build_uses_reviewed_relations": false,
+    "reviewed_relations_contribute_to_alias_and_order_salt": true,
+    "reviewed_relations_reused_for_scoring_after_all_provider_calls": true,
+    "reviewed_relations_used_to_build_frozen_input": true
+  },
+  "calls": [
+    {
+      "call_index": 1,
+      "candidate_count": 5,
+      "condition_id": "TOP_5",
+      "contract_valid": true,
+      "direction": "LEFT_TO_RIGHT",
+      "direction_batch_index": 1,
+      "elapsed_seconds": 15.774835207965225,
+      "error_type": null,
+      "failure_category": null,
+      "local_id_mapping_digest": "5a6c3a8a0424c1a3d08a86e5b1fbed0d0bfb2867b966bc1f5d86445656607c18",
+      "local_source_mapping": [
+        [
+          "s01",
+          "T2-L-019"
+        ],
+        [
+          "s02",
+          "T2-L-083"
+        ],
+        [
+          "s03",
+          "T2-L-011"
+        ],
+        [
+          "s04",
+          "T2-L-085"
+        ],
+        [
+          "s05",
+          "T2-L-004"
+        ],
+        [
+          "s06",
+          "T2-L-023"
+        ],
+        [
+          "s07",
+          "T2-L-003"
+        ],
+        [
+          "s08",
+          "T2-L-013"
+        ],
+        [
+          "s09",
+          "T2-L-017"
+        ],
+        [
+          "s10",
+          "T2-L-025"
+        ],
+        [
+          "s11",
+          "T2-L-022"
+        ],
+        [
+          "s12",
+          "T2-L-015"
+        ],
+        [
+          "s13",
+          "T2-L-008"
+        ],
+        [
+          "s14",
+          "T2-L-006"
+        ],
+        [
+          "s15",
+          "T2-L-009"
+        ]
+      ],
+      "local_target_mapping": [
+        [
+          "t001",
+          "T2-R-024"
+        ],
+        [
+          "t002",
+          "T2-R-083"
+        ],
+        [
+          "t003",
+          "T2-R-023"
+        ],
+        [
+          "t004",
+          "T2-R-006"
+        ],
+        [
+          "t005",
+          "T2-R-020"
+        ],
+        [
+          "t006",
+          "T2-R-014"
+        ],
+        [
+          "t007",
+          "T2-R-018"
+        ],
+        [
+          "t008",
+          "T2-R-021"
+        ],
+        [
+          "t009",
+          "T2-R-026"
+        ],
+        [
+          "t010",
+          "T2-R-015"
+        ],
+        [
+          "t011",
+          "T2-R-019"
+        ],
+        [
+          "t012",
+          "T2-R-016"
+        ],
+        [
+          "t013",
+          "T2-R-007"
+        ],
+        [
+          "t014",
+          "T2-R-011"
+        ],
+        [
+          "t015",
+          "T2-R-022"
+        ],
+        [
+          "t016",
+          "T2-R-005"
+        ],
+        [
+          "t017",
+          "T2-R-025"
+        ],
+        [
+          "t018",
+          "T2-R-004"
+        ],
+        [
+          "t019",
+          "T2-R-009"
+        ],
+        [
+          "t020",
+          "T2-R-002"
+        ],
+        [
+          "t021",
+          "T2-R-012"
+        ],
+        [
+          "t022",
+          "T2-R-003"
+        ],
+        [
+          "t023",
+          "T2-R-001"
+        ],
+        [
+          "t024",
+          "T2-R-008"
+        ],
+        [
+          "t025",
+          "T2-R-013"
+        ],
+        [
+          "t026",
+          "T2-R-010"
+        ],
+        [
+          "t027",
+          "T2-R-017"
+        ]
+      ],
+      "prompt_digest": "2f01b6f7226309b552938851b3bc77a6e58257c26be670bd3e5c378c922b14d7",
+      "prompt_preparation_seconds": 3.954209387302399e-05,
+      "provider_completion_seconds": 15.774582624901086,
+      "provider_run": {
+        "completion_tokens": 1019,
+        "identity": {
+          "endpoint": "http://127.0.0.1:11434",
+          "model": "qwen3.6:35b-a3b",
+          "model_digest": "07d35212591fc27746f0a317c975a6d68754fb38e9053d82e25f06057af28522",
+          "provider": "ollama",
+          "reasoning_effort": null,
+          "runtime": "ollama/0.30.10"
+        },
+        "operation": "task2 v5 candidate top-5 left_to_right",
+        "prompt_tokens": 1782,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"selections\": [\n    {\n      \"source_id\": \"s01\",\n      \"target_ids\": [\n        \"t005\",\n        \"t011\",\n        \"t002\",\n        \"t007\",\n        \"t023\"\n      ]\n    },\n    {\n      \"source_id\": \"s02\",\n      \"target_ids\": [\n        \"t007\",\n        \"t002\",\n        \"t014\",\n        \"t010\",\n        \"t027\"\n      ]\n    },\n    {\n      \"source_id\": \"s03\",\n      \"target_ids\": [\n        \"t014\",\n        \"t002\",\n        \"t013\",\n        \"t006\",\n        \"t027\"\n      ]\n    },\n    {\n      \"source_id\": \"s04\",\n      \"target_ids\": [\n        \"t016\",\n        \"t018\",\n        \"t019\",\n        \"t026\",\n        \"t021\"\n      ]\n    },\n    {\n      \"source_id\": \"s05\",\n      \"target_ids\": [\n        \"t018\",\n        \"t016\",\n        \"t021\",\n        \"t026\",\n        \"t013\"\n      ]\n    },\n    {\n      \"source_id\": \"s06\",\n      \"target_ids\": [\n        \"t003\",\n        \"t024\",\n        \"t015\",\n        \"t017\",\n        \"t020\"\n      ]\n    },\n    {\n      \"source_id\": \"s07\",\n      \"target_ids\": [\n        \"t009\",\n        \"t022\",\n        \"t025\",\n        \"t019\",\n        \"t023\"\n      ]\n    },\n    {\n      \"source_id\": \"s08\",\n      \"target_ids\": [\n        \"t025\",\n        \"t024\",\n        \"t015\",\n        \"t017\",\n        \"t020\"\n      ]\n    },\n    {\n      \"source_id\": \"s09\",\n      \"target_ids\": [\n        \"t027\",\n        \"t002\",\n        \"t023\",\n        \"t010\",\n        \"t006\"\n      ]\n    },\n    {\n      \"source_id\": \"s10\",\n      \"target_ids\": [\n        \"t017\",\n        \"t020\",\n        \"t015\",\n        \"t024\",\n        \"t025\"\n      ]\n    },\n    {\n      \"source_id\": \"s11\",\n      \"target_ids\": [\n        \"t015\",\n        \"t017\",\n        \"t020\",\n        \"t024\",\n        \"t025\"\n      ]\n    },\n    {\n      \"source_id\": \"s12\",\n      \"target_ids\": [\n        \"t010\",\n        \"t006\",\n        \"t013\",\n        \"t014\",\n        \"t002\"\n      ]\n    },\n    {\n      \"source_id\": \"s13\",\n      \"target_ids\": [\n        \"t024\",\n        \"t015\",\n        \"t017\",\n        \"t020\",\n        \"t025\"\n      ]\n    },\n    {\n      \"source_id\": \"s14\",\n      \"target_ids\": [\n        \"t004\",\n        \"t008\",\n        \"t002\",\n        \"t013\",\n        \"t016\"\n      ]\n    },\n    {\n      \"source_id\": \"s15\",\n      \"target_ids\": [\n        \"t019\",\n        \"t016\",\n        \"t026\",\n        \"t021\",\n        \"t018\"\n      ]\n    }\n  ]\n}",
+      "response_digest": "aad498a3a1322f2deb39922da54abcbbb807932b060f0de1a5e7a7e54ee16de6",
+      "response_validation_seconds": 0.00021304097026586533,
+      "schema_digest": "0f61ca2101efa740715c653cf72a0b4ed0fafbe971e5a7a8872877b1e2699e47",
+      "selections": [
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-019",
+          "target_fixture_ids": [
+            "T2-R-020",
+            "T2-R-019",
+            "T2-R-083",
+            "T2-R-018",
+            "T2-R-001"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-083",
+          "target_fixture_ids": [
+            "T2-R-018",
+            "T2-R-083",
+            "T2-R-011",
+            "T2-R-015",
+            "T2-R-017"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-011",
+          "target_fixture_ids": [
+            "T2-R-011",
+            "T2-R-083",
+            "T2-R-007",
+            "T2-R-014",
+            "T2-R-017"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-085",
+          "target_fixture_ids": [
+            "T2-R-005",
+            "T2-R-004",
+            "T2-R-009",
+            "T2-R-010",
+            "T2-R-012"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-004",
+          "target_fixture_ids": [
+            "T2-R-004",
+            "T2-R-005",
+            "T2-R-012",
+            "T2-R-010",
+            "T2-R-007"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-023",
+          "target_fixture_ids": [
+            "T2-R-023",
+            "T2-R-008",
+            "T2-R-022",
+            "T2-R-025",
+            "T2-R-002"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-003",
+          "target_fixture_ids": [
+            "T2-R-026",
+            "T2-R-003",
+            "T2-R-013",
+            "T2-R-009",
+            "T2-R-001"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-013",
+          "target_fixture_ids": [
+            "T2-R-013",
+            "T2-R-008",
+            "T2-R-022",
+            "T2-R-025",
+            "T2-R-002"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-017",
+          "target_fixture_ids": [
+            "T2-R-017",
+            "T2-R-083",
+            "T2-R-001",
+            "T2-R-015",
+            "T2-R-014"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-025",
+          "target_fixture_ids": [
+            "T2-R-025",
+            "T2-R-002",
+            "T2-R-022",
+            "T2-R-008",
+            "T2-R-013"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-022",
+          "target_fixture_ids": [
+            "T2-R-022",
+            "T2-R-025",
+            "T2-R-002",
+            "T2-R-008",
+            "T2-R-013"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-015",
+          "target_fixture_ids": [
+            "T2-R-015",
+            "T2-R-014",
+            "T2-R-007",
+            "T2-R-011",
+            "T2-R-083"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-008",
+          "target_fixture_ids": [
+            "T2-R-008",
+            "T2-R-022",
+            "T2-R-025",
+            "T2-R-002",
+            "T2-R-013"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-006",
+          "target_fixture_ids": [
+            "T2-R-006",
+            "T2-R-021",
+            "T2-R-083",
+            "T2-R-007",
+            "T2-R-005"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-009",
+          "target_fixture_ids": [
+            "T2-R-009",
+            "T2-R-005",
+            "T2-R-010",
+            "T2-R-012",
+            "T2-R-004"
+          ]
+        }
+      ],
+      "source_fixture_ids": [
+        "T2-L-019",
+        "T2-L-083",
+        "T2-L-011",
+        "T2-L-085",
+        "T2-L-004",
+        "T2-L-023",
+        "T2-L-003",
+        "T2-L-013",
+        "T2-L-017",
+        "T2-L-025",
+        "T2-L-022",
+        "T2-L-015",
+        "T2-L-008",
+        "T2-L-006",
+        "T2-L-009"
+      ],
+      "source_start": 0,
+      "source_stop": 15,
+      "validation_error": null,
+      "visible_target_count": 27
+    },
+    {
+      "call_index": 2,
+      "candidate_count": 5,
+      "condition_id": "TOP_5",
+      "contract_valid": true,
+      "direction": "LEFT_TO_RIGHT",
+      "direction_batch_index": 2,
+      "elapsed_seconds": 14.911905500106514,
+      "error_type": null,
+      "failure_category": null,
+      "local_id_mapping_digest": "855a1253b92cf36061f1337b30a249bb75f2cf29d5c9d27064b97302eac8c93b",
+      "local_source_mapping": [
+        [
+          "s01",
+          "T2-L-020"
+        ],
+        [
+          "s02",
+          "T2-L-014"
+        ],
+        [
+          "s03",
+          "T2-L-001"
+        ],
+        [
+          "s04",
+          "T2-L-084"
+        ],
+        [
+          "s05",
+          "T2-L-024"
+        ],
+        [
+          "s06",
+          "T2-L-002"
+        ],
+        [
+          "s07",
+          "T2-L-018"
+        ],
+        [
+          "s08",
+          "T2-L-016"
+        ],
+        [
+          "s09",
+          "T2-L-026"
+        ],
+        [
+          "s10",
+          "T2-L-021"
+        ],
+        [
+          "s11",
+          "T2-L-012"
+        ],
+        [
+          "s12",
+          "T2-L-010"
+        ],
+        [
+          "s13",
+          "T2-L-007"
+        ],
+        [
+          "s14",
+          "T2-L-005"
+        ]
+      ],
+      "local_target_mapping": [
+        [
+          "t001",
+          "T2-R-024"
+        ],
+        [
+          "t002",
+          "T2-R-083"
+        ],
+        [
+          "t003",
+          "T2-R-023"
+        ],
+        [
+          "t004",
+          "T2-R-006"
+        ],
+        [
+          "t005",
+          "T2-R-020"
+        ],
+        [
+          "t006",
+          "T2-R-014"
+        ],
+        [
+          "t007",
+          "T2-R-018"
+        ],
+        [
+          "t008",
+          "T2-R-021"
+        ],
+        [
+          "t009",
+          "T2-R-026"
+        ],
+        [
+          "t010",
+          "T2-R-015"
+        ],
+        [
+          "t011",
+          "T2-R-019"
+        ],
+        [
+          "t012",
+          "T2-R-016"
+        ],
+        [
+          "t013",
+          "T2-R-007"
+        ],
+        [
+          "t014",
+          "T2-R-011"
+        ],
+        [
+          "t015",
+          "T2-R-022"
+        ],
+        [
+          "t016",
+          "T2-R-005"
+        ],
+        [
+          "t017",
+          "T2-R-025"
+        ],
+        [
+          "t018",
+          "T2-R-004"
+        ],
+        [
+          "t019",
+          "T2-R-009"
+        ],
+        [
+          "t020",
+          "T2-R-002"
+        ],
+        [
+          "t021",
+          "T2-R-012"
+        ],
+        [
+          "t022",
+          "T2-R-003"
+        ],
+        [
+          "t023",
+          "T2-R-001"
+        ],
+        [
+          "t024",
+          "T2-R-008"
+        ],
+        [
+          "t025",
+          "T2-R-013"
+        ],
+        [
+          "t026",
+          "T2-R-010"
+        ],
+        [
+          "t027",
+          "T2-R-017"
+        ]
+      ],
+      "prompt_digest": "d3ec65dc4415f32520e1529923ea574d6dc47ce735ef34a2046494dc024baa8b",
+      "prompt_preparation_seconds": 0.00015262514352798462,
+      "provider_completion_seconds": 14.911629375070333,
+      "provider_run": {
+        "completion_tokens": 952,
+        "identity": {
+          "endpoint": "http://127.0.0.1:11434",
+          "model": "qwen3.6:35b-a3b",
+          "model_digest": "07d35212591fc27746f0a317c975a6d68754fb38e9053d82e25f06057af28522",
+          "provider": "ollama",
+          "reasoning_effort": null,
+          "runtime": "ollama/0.30.10"
+        },
+        "operation": "task2 v5 candidate top-5 left_to_right",
+        "prompt_tokens": 1763,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"selections\": [\n    {\n      \"source_id\": \"s01\",\n      \"target_ids\": [\n        \"t005\",\n        \"t018\",\n        \"t016\",\n        \"t023\",\n        \"t002\"\n      ]\n    },\n    {\n      \"source_id\": \"s02\",\n      \"target_ids\": [\n        \"t006\",\n        \"t015\",\n        \"t012\",\n        \"t013\",\n        \"t019\"\n      ]\n    },\n    {\n      \"source_id\": \"s03\",\n      \"target_ids\": [\n        \"t023\",\n        \"t017\",\n        \"t020\",\n        \"t002\",\n        \"t027\"\n      ]\n    },\n    {\n      \"source_id\": \"s04\",\n      \"target_ids\": [\n        \"t007\",\n        \"t010\",\n        \"t014\",\n        \"t002\",\n        \"t027\"\n      ]\n    },\n    {\n      \"source_id\": \"s05\",\n      \"target_ids\": [\n        \"t001\",\n        \"t018\",\n        \"t016\",\n        \"t005\",\n        \"t023\"\n      ]\n    },\n    {\n      \"source_id\": \"s06\",\n      \"target_ids\": [\n        \"t017\",\n        \"t020\",\n        \"t019\",\n        \"t013\",\n        \"t002\"\n      ]\n    },\n    {\n      \"source_id\": \"s07\",\n      \"target_ids\": [\n        \"t007\",\n        \"t010\",\n        \"t014\",\n        \"t002\",\n        \"t023\"\n      ]\n    },\n    {\n      \"source_id\": \"s08\",\n      \"target_ids\": [\n        \"t012\",\n        \"t015\",\n        \"t019\",\n        \"t024\",\n        \"t025\"\n      ]\n    },\n    {\n      \"source_id\": \"s09\",\n      \"target_ids\": [\n        \"t009\",\n        \"t022\",\n        \"t025\",\n        \"t017\",\n        \"t020\"\n      ]\n    },\n    {\n      \"source_id\": \"s10\",\n      \"target_ids\": [\n        \"t008\",\n        \"t004\",\n        \"t011\",\n        \"t015\",\n        \"t024\"\n      ]\n    },\n    {\n      \"source_id\": \"s11\",\n      \"target_ids\": [\n        \"t021\",\n        \"t019\",\n        \"t016\",\n        \"t018\",\n        \"t027\"\n      ]\n    },\n    {\n      \"source_id\": \"s12\",\n      \"target_ids\": [\n        \"t026\",\n        \"t019\",\n        \"t016\",\n        \"t018\",\n        \"t027\"\n      ]\n    },\n    {\n      \"source_id\": \"s13\",\n      \"target_ids\": [\n        \"t013\",\n        \"t019\",\n        \"t016\",\n        \"t018\",\n        \"t027\"\n      ]\n    },\n    {\n      \"source_id\": \"s14\",\n      \"target_ids\": [\n        \"t016\",\n        \"t018\",\n        \"t005\",\n        \"t001\",\n        \"t023\"\n      ]\n    }\n  ]\n}",
+      "response_digest": "3917f98b71673e5bcebd00cdb529f7e50b6c6d2f85f3791e041cb48b22e409d9",
+      "response_validation_seconds": 0.00012349989265203476,
+      "schema_digest": "8bdb9b55bd48b89f6fadadcb24ecad819e4f9caaf5459bd2c8d2049e5d8d9fd3",
+      "selections": [
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-020",
+          "target_fixture_ids": [
+            "T2-R-020",
+            "T2-R-004",
+            "T2-R-005",
+            "T2-R-001",
+            "T2-R-083"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-014",
+          "target_fixture_ids": [
+            "T2-R-014",
+            "T2-R-022",
+            "T2-R-016",
+            "T2-R-007",
+            "T2-R-009"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-001",
+          "target_fixture_ids": [
+            "T2-R-001",
+            "T2-R-025",
+            "T2-R-002",
+            "T2-R-083",
+            "T2-R-017"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-084",
+          "target_fixture_ids": [
+            "T2-R-018",
+            "T2-R-015",
+            "T2-R-011",
+            "T2-R-083",
+            "T2-R-017"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-024",
+          "target_fixture_ids": [
+            "T2-R-024",
+            "T2-R-004",
+            "T2-R-005",
+            "T2-R-020",
+            "T2-R-001"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-002",
+          "target_fixture_ids": [
+            "T2-R-025",
+            "T2-R-002",
+            "T2-R-009",
+            "T2-R-007",
+            "T2-R-083"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-018",
+          "target_fixture_ids": [
+            "T2-R-018",
+            "T2-R-015",
+            "T2-R-011",
+            "T2-R-083",
+            "T2-R-001"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-016",
+          "target_fixture_ids": [
+            "T2-R-016",
+            "T2-R-022",
+            "T2-R-009",
+            "T2-R-008",
+            "T2-R-013"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-026",
+          "target_fixture_ids": [
+            "T2-R-026",
+            "T2-R-003",
+            "T2-R-013",
+            "T2-R-025",
+            "T2-R-002"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-021",
+          "target_fixture_ids": [
+            "T2-R-021",
+            "T2-R-006",
+            "T2-R-019",
+            "T2-R-022",
+            "T2-R-008"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-012",
+          "target_fixture_ids": [
+            "T2-R-012",
+            "T2-R-009",
+            "T2-R-005",
+            "T2-R-004",
+            "T2-R-017"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-010",
+          "target_fixture_ids": [
+            "T2-R-010",
+            "T2-R-009",
+            "T2-R-005",
+            "T2-R-004",
+            "T2-R-017"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-007",
+          "target_fixture_ids": [
+            "T2-R-007",
+            "T2-R-009",
+            "T2-R-005",
+            "T2-R-004",
+            "T2-R-017"
+          ]
+        },
+        {
+          "direction": "LEFT_TO_RIGHT",
+          "source_fixture_id": "T2-L-005",
+          "target_fixture_ids": [
+            "T2-R-005",
+            "T2-R-004",
+            "T2-R-020",
+            "T2-R-024",
+            "T2-R-001"
+          ]
+        }
+      ],
+      "source_fixture_ids": [
+        "T2-L-020",
+        "T2-L-014",
+        "T2-L-001",
+        "T2-L-084",
+        "T2-L-024",
+        "T2-L-002",
+        "T2-L-018",
+        "T2-L-016",
+        "T2-L-026",
+        "T2-L-021",
+        "T2-L-012",
+        "T2-L-010",
+        "T2-L-007",
+        "T2-L-005"
+      ],
+      "source_start": 15,
+      "source_stop": 29,
+      "validation_error": null,
+      "visible_target_count": 27
+    },
+    {
+      "call_index": 3,
+      "candidate_count": 5,
+      "condition_id": "TOP_5",
+      "contract_valid": true,
+      "direction": "RIGHT_TO_LEFT",
+      "direction_batch_index": 1,
+      "elapsed_seconds": 15.881357082631439,
+      "error_type": null,
+      "failure_category": null,
+      "local_id_mapping_digest": "f93e16d2856e478c58a15b34886ec19520453c435853b382e571db2a68abf2f3",
+      "local_source_mapping": [
+        [
+          "s01",
+          "T2-R-024"
+        ],
+        [
+          "s02",
+          "T2-R-083"
+        ],
+        [
+          "s03",
+          "T2-R-023"
+        ],
+        [
+          "s04",
+          "T2-R-006"
+        ],
+        [
+          "s05",
+          "T2-R-020"
+        ],
+        [
+          "s06",
+          "T2-R-014"
+        ],
+        [
+          "s07",
+          "T2-R-018"
+        ],
+        [
+          "s08",
+          "T2-R-021"
+        ],
+        [
+          "s09",
+          "T2-R-026"
+        ],
+        [
+          "s10",
+          "T2-R-015"
+        ],
+        [
+          "s11",
+          "T2-R-019"
+        ],
+        [
+          "s12",
+          "T2-R-016"
+        ],
+        [
+          "s13",
+          "T2-R-007"
+        ],
+        [
+          "s14",
+          "T2-R-011"
+        ],
+        [
+          "s15",
+          "T2-R-022"
+        ]
+      ],
+      "local_target_mapping": [
+        [
+          "t001",
+          "T2-L-019"
+        ],
+        [
+          "t002",
+          "T2-L-083"
+        ],
+        [
+          "t003",
+          "T2-L-011"
+        ],
+        [
+          "t004",
+          "T2-L-085"
+        ],
+        [
+          "t005",
+          "T2-L-004"
+        ],
+        [
+          "t006",
+          "T2-L-023"
+        ],
+        [
+          "t007",
+          "T2-L-003"
+        ],
+        [
+          "t008",
+          "T2-L-013"
+        ],
+        [
+          "t009",
+          "T2-L-017"
+        ],
+        [
+          "t010",
+          "T2-L-025"
+        ],
+        [
+          "t011",
+          "T2-L-022"
+        ],
+        [
+          "t012",
+          "T2-L-015"
+        ],
+        [
+          "t013",
+          "T2-L-008"
+        ],
+        [
+          "t014",
+          "T2-L-006"
+        ],
+        [
+          "t015",
+          "T2-L-009"
+        ],
+        [
+          "t016",
+          "T2-L-020"
+        ],
+        [
+          "t017",
+          "T2-L-014"
+        ],
+        [
+          "t018",
+          "T2-L-001"
+        ],
+        [
+          "t019",
+          "T2-L-084"
+        ],
+        [
+          "t020",
+          "T2-L-024"
+        ],
+        [
+          "t021",
+          "T2-L-002"
+        ],
+        [
+          "t022",
+          "T2-L-018"
+        ],
+        [
+          "t023",
+          "T2-L-016"
+        ],
+        [
+          "t024",
+          "T2-L-026"
+        ],
+        [
+          "t025",
+          "T2-L-021"
+        ],
+        [
+          "t026",
+          "T2-L-012"
+        ],
+        [
+          "t027",
+          "T2-L-010"
+        ],
+        [
+          "t028",
+          "T2-L-007"
+        ],
+        [
+          "t029",
+          "T2-L-005"
+        ]
+      ],
+      "prompt_digest": "8d95c8ab395733ed2f89e36cf0fc84fe5ab843fad4221e8631f073f30112392e",
+      "prompt_preparation_seconds": 0.00010962504893541336,
+      "provider_completion_seconds": 15.881114916410297,
+      "provider_run": {
+        "completion_tokens": 1019,
+        "identity": {
+          "endpoint": "http://127.0.0.1:11434",
+          "model": "qwen3.6:35b-a3b",
+          "model_digest": "07d35212591fc27746f0a317c975a6d68754fb38e9053d82e25f06057af28522",
+          "provider": "ollama",
+          "reasoning_effort": null,
+          "runtime": "ollama/0.30.10"
+        },
+        "operation": "task2 v5 candidate top-5 right_to_left",
+        "prompt_tokens": 1859,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"selections\": [\n    {\n      \"source_id\": \"s01\",\n      \"target_ids\": [\n        \"t005\",\n        \"t020\",\n        \"t004\",\n        \"t029\",\n        \"t026\"\n      ]\n    },\n    {\n      \"source_id\": \"s02\",\n      \"target_ids\": [\n        \"t002\",\n        \"t019\",\n        \"t022\",\n        \"t009\",\n        \"t018\"\n      ]\n    },\n    {\n      \"source_id\": \"s03\",\n      \"target_ids\": [\n        \"t006\",\n        \"t013\",\n        \"t028\",\n        \"t004\",\n        \"t015\"\n      ]\n    },\n    {\n      \"source_id\": \"s04\",\n      \"target_ids\": [\n        \"t014\",\n        \"t025\",\n        \"t027\",\n        \"t010\",\n        \"t029\"\n      ]\n    },\n    {\n      \"source_id\": \"s05\",\n      \"target_ids\": [\n        \"t001\",\n        \"t016\",\n        \"t029\",\n        \"t020\",\n        \"t004\"\n      ]\n    },\n    {\n      \"source_id\": \"s06\",\n      \"target_ids\": [\n        \"t017\",\n        \"t023\",\n        \"t012\",\n        \"t011\",\n        \"t028\"\n      ]\n    },\n    {\n      \"source_id\": \"s07\",\n      \"target_ids\": [\n        \"t002\",\n        \"t019\",\n        \"t022\",\n        \"t009\",\n        \"t018\"\n      ]\n    },\n    {\n      \"source_id\": \"s08\",\n      \"target_ids\": [\n        \"t025\",\n        \"t014\",\n        \"t027\",\n        \"t010\",\n        \"t029\"\n      ]\n    },\n    {\n      \"source_id\": \"s09\",\n      \"target_ids\": [\n        \"t007\",\n        \"t024\",\n        \"t008\",\n        \"t010\",\n        \"t026\"\n      ]\n    },\n    {\n      \"source_id\": \"s10\",\n      \"target_ids\": [\n        \"t012\",\n        \"t019\",\n        \"t002\",\n        \"t022\",\n        \"t009\"\n      ]\n    },\n    {\n      \"source_id\": \"s11\",\n      \"target_ids\": [\n        \"t013\",\n        \"t028\",\n        \"t023\",\n        \"t015\",\n        \"t004\"\n      ]\n    },\n    {\n      \"source_id\": \"s12\",\n      \"target_ids\": [\n        \"t023\",\n        \"t027\",\n        \"t029\",\n        \"t004\",\n        \"t015\"\n      ]\n    },\n    {\n      \"source_id\": \"s13\",\n      \"target_ids\": [\n        \"t028\",\n        \"t021\",\n        \"t018\",\n        \"t010\",\n        \"t004\"\n      ]\n    },\n    {\n      \"source_id\": \"s14\",\n      \"target_ids\": [\n        \"t003\",\n        \"t021\",\n        \"t018\",\n        \"t009\",\n        \"t015\"\n      ]\n    },\n    {\n      \"source_id\": \"s15\",\n      \"target_ids\": [\n        \"t011\",\n        \"t008\",\n        \"t023\",\n        \"t013\",\n        \"t029\"\n      ]\n    }\n  ]\n}",
+      "response_digest": "4abf876b42656cd2564a7994d22e1bda8106a00bfb9099935667453656a93aee",
+      "response_validation_seconds": 0.00013254117220640182,
+      "schema_digest": "7b33499bb82fc754943c65dc1c9ba0d91219383ea8114012b1921097d5a4cc8a",
+      "selections": [
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-024",
+          "target_fixture_ids": [
+            "T2-L-004",
+            "T2-L-024",
+            "T2-L-085",
+            "T2-L-005",
+            "T2-L-012"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-083",
+          "target_fixture_ids": [
+            "T2-L-083",
+            "T2-L-084",
+            "T2-L-018",
+            "T2-L-017",
+            "T2-L-001"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-023",
+          "target_fixture_ids": [
+            "T2-L-023",
+            "T2-L-008",
+            "T2-L-007",
+            "T2-L-085",
+            "T2-L-009"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-006",
+          "target_fixture_ids": [
+            "T2-L-006",
+            "T2-L-021",
+            "T2-L-010",
+            "T2-L-025",
+            "T2-L-005"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-020",
+          "target_fixture_ids": [
+            "T2-L-019",
+            "T2-L-020",
+            "T2-L-005",
+            "T2-L-024",
+            "T2-L-085"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-014",
+          "target_fixture_ids": [
+            "T2-L-014",
+            "T2-L-016",
+            "T2-L-015",
+            "T2-L-022",
+            "T2-L-007"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-018",
+          "target_fixture_ids": [
+            "T2-L-083",
+            "T2-L-084",
+            "T2-L-018",
+            "T2-L-017",
+            "T2-L-001"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-021",
+          "target_fixture_ids": [
+            "T2-L-021",
+            "T2-L-006",
+            "T2-L-010",
+            "T2-L-025",
+            "T2-L-005"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-026",
+          "target_fixture_ids": [
+            "T2-L-003",
+            "T2-L-026",
+            "T2-L-013",
+            "T2-L-025",
+            "T2-L-012"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-015",
+          "target_fixture_ids": [
+            "T2-L-015",
+            "T2-L-084",
+            "T2-L-083",
+            "T2-L-018",
+            "T2-L-017"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-019",
+          "target_fixture_ids": [
+            "T2-L-008",
+            "T2-L-007",
+            "T2-L-016",
+            "T2-L-009",
+            "T2-L-085"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-016",
+          "target_fixture_ids": [
+            "T2-L-016",
+            "T2-L-010",
+            "T2-L-005",
+            "T2-L-085",
+            "T2-L-009"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-007",
+          "target_fixture_ids": [
+            "T2-L-007",
+            "T2-L-002",
+            "T2-L-001",
+            "T2-L-025",
+            "T2-L-085"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-011",
+          "target_fixture_ids": [
+            "T2-L-011",
+            "T2-L-002",
+            "T2-L-001",
+            "T2-L-017",
+            "T2-L-009"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-022",
+          "target_fixture_ids": [
+            "T2-L-022",
+            "T2-L-013",
+            "T2-L-016",
+            "T2-L-008",
+            "T2-L-005"
+          ]
+        }
+      ],
+      "source_fixture_ids": [
+        "T2-R-024",
+        "T2-R-083",
+        "T2-R-023",
+        "T2-R-006",
+        "T2-R-020",
+        "T2-R-014",
+        "T2-R-018",
+        "T2-R-021",
+        "T2-R-026",
+        "T2-R-015",
+        "T2-R-019",
+        "T2-R-016",
+        "T2-R-007",
+        "T2-R-011",
+        "T2-R-022"
+      ],
+      "source_start": 0,
+      "source_stop": 15,
+      "validation_error": null,
+      "visible_target_count": 29
+    },
+    {
+      "call_index": 4,
+      "candidate_count": 5,
+      "condition_id": "TOP_5",
+      "contract_valid": true,
+      "direction": "RIGHT_TO_LEFT",
+      "direction_batch_index": 2,
+      "elapsed_seconds": 12.866873749997467,
+      "error_type": null,
+      "failure_category": null,
+      "local_id_mapping_digest": "afecd9e937dae239c33a9353ef0a068bca0bd9ebe1fef1ad8c974b5763a41b7a",
+      "local_source_mapping": [
+        [
+          "s01",
+          "T2-R-005"
+        ],
+        [
+          "s02",
+          "T2-R-025"
+        ],
+        [
+          "s03",
+          "T2-R-004"
+        ],
+        [
+          "s04",
+          "T2-R-009"
+        ],
+        [
+          "s05",
+          "T2-R-002"
+        ],
+        [
+          "s06",
+          "T2-R-012"
+        ],
+        [
+          "s07",
+          "T2-R-003"
+        ],
+        [
+          "s08",
+          "T2-R-001"
+        ],
+        [
+          "s09",
+          "T2-R-008"
+        ],
+        [
+          "s10",
+          "T2-R-013"
+        ],
+        [
+          "s11",
+          "T2-R-010"
+        ],
+        [
+          "s12",
+          "T2-R-017"
+        ]
+      ],
+      "local_target_mapping": [
+        [
+          "t001",
+          "T2-L-019"
+        ],
+        [
+          "t002",
+          "T2-L-083"
+        ],
+        [
+          "t003",
+          "T2-L-011"
+        ],
+        [
+          "t004",
+          "T2-L-085"
+        ],
+        [
+          "t005",
+          "T2-L-004"
+        ],
+        [
+          "t006",
+          "T2-L-023"
+        ],
+        [
+          "t007",
+          "T2-L-003"
+        ],
+        [
+          "t008",
+          "T2-L-013"
+        ],
+        [
+          "t009",
+          "T2-L-017"
+        ],
+        [
+          "t010",
+          "T2-L-025"
+        ],
+        [
+          "t011",
+          "T2-L-022"
+        ],
+        [
+          "t012",
+          "T2-L-015"
+        ],
+        [
+          "t013",
+          "T2-L-008"
+        ],
+        [
+          "t014",
+          "T2-L-006"
+        ],
+        [
+          "t015",
+          "T2-L-009"
+        ],
+        [
+          "t016",
+          "T2-L-020"
+        ],
+        [
+          "t017",
+          "T2-L-014"
+        ],
+        [
+          "t018",
+          "T2-L-001"
+        ],
+        [
+          "t019",
+          "T2-L-084"
+        ],
+        [
+          "t020",
+          "T2-L-024"
+        ],
+        [
+          "t021",
+          "T2-L-002"
+        ],
+        [
+          "t022",
+          "T2-L-018"
+        ],
+        [
+          "t023",
+          "T2-L-016"
+        ],
+        [
+          "t024",
+          "T2-L-026"
+        ],
+        [
+          "t025",
+          "T2-L-021"
+        ],
+        [
+          "t026",
+          "T2-L-012"
+        ],
+        [
+          "t027",
+          "T2-L-010"
+        ],
+        [
+          "t028",
+          "T2-L-007"
+        ],
+        [
+          "t029",
+          "T2-L-005"
+        ]
+      ],
+      "prompt_digest": "1a37f4ae0f837259032ec1f66a334169de9153d0540a2e44e81a0a2ab0819a07",
+      "prompt_preparation_seconds": 0.0001082499511539936,
+      "provider_completion_seconds": 12.866691500414163,
+      "provider_run": {
+        "completion_tokens": 818,
+        "identity": {
+          "endpoint": "http://127.0.0.1:11434",
+          "model": "qwen3.6:35b-a3b",
+          "model_digest": "07d35212591fc27746f0a317c975a6d68754fb38e9053d82e25f06057af28522",
+          "provider": "ollama",
+          "reasoning_effort": null,
+          "runtime": "ollama/0.30.10"
+        },
+        "operation": "task2 v5 candidate top-5 right_to_left",
+        "prompt_tokens": 1760,
+        "upstream_model": "qwen3.6:35b-a3b",
+        "upstream_provider": "ollama"
+      },
+      "raw_response": "{\n  \"selections\": [\n    {\n      \"source_id\": \"s01\",\n      \"target_ids\": [\n        \"t004\",\n        \"t015\",\n        \"t026\",\n        \"t029\",\n        \"t005\"\n      ]\n    },\n    {\n      \"source_id\": \"s02\",\n      \"target_ids\": [\n        \"t010\",\n        \"t021\",\n        \"t002\",\n        \"t019\",\n        \"t022\"\n      ]\n    },\n    {\n      \"source_id\": \"s03\",\n      \"target_ids\": [\n        \"t005\",\n        \"t020\",\n        \"t026\",\n        \"t029\",\n        \"t016\"\n      ]\n    },\n    {\n      \"source_id\": \"s04\",\n      \"target_ids\": [\n        \"t015\",\n        \"t028\",\n        \"t004\",\n        \"t021\",\n        \"t017\"\n      ]\n    },\n    {\n      \"source_id\": \"s05\",\n      \"target_ids\": [\n        \"t021\",\n        \"t010\",\n        \"t002\",\n        \"t019\",\n        \"t022\"\n      ]\n    },\n    {\n      \"source_id\": \"s06\",\n      \"target_ids\": [\n        \"t026\",\n        \"t029\",\n        \"t005\",\n        \"t020\",\n        \"t016\"\n      ]\n    },\n    {\n      \"source_id\": \"s07\",\n      \"target_ids\": [\n        \"t007\",\n        \"t024\",\n        \"t008\",\n        \"t011\",\n        \"t012\"\n      ]\n    },\n    {\n      \"source_id\": \"s08\",\n      \"target_ids\": [\n        \"t018\",\n        \"t002\",\n        \"t019\",\n        \"t022\",\n        \"t009\"\n      ]\n    },\n    {\n      \"source_id\": \"s09\",\n      \"target_ids\": [\n        \"t013\",\n        \"t008\",\n        \"t023\",\n        \"t011\",\n        \"t028\"\n      ]\n    },\n    {\n      \"source_id\": \"s10\",\n      \"target_ids\": [\n        \"t008\",\n        \"t013\",\n        \"t023\",\n        \"t011\",\n        \"t028\"\n      ]\n    },\n    {\n      \"source_id\": \"s11\",\n      \"target_ids\": [\n        \"t027\",\n        \"t015\",\n        \"t004\",\n        \"t029\",\n        \"t026\"\n      ]\n    },\n    {\n      \"source_id\": \"s12\",\n      \"target_ids\": [\n        \"t009\",\n        \"t028\",\n        \"t017\",\n        \"t002\",\n        \"t019\"\n      ]\n    }\n  ]\n}",
+      "response_digest": "344709ed9303f72fbd0e355bc9362def0629bb9e7f849dc89567f39aa708cbe4",
+      "response_validation_seconds": 7.399963214993477e-05,
+      "schema_digest": "de497af3f41fee5a4a385f8ce1da09f7ea0920d748e37f5a92ba823b1447c01e",
+      "selections": [
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-005",
+          "target_fixture_ids": [
+            "T2-L-085",
+            "T2-L-009",
+            "T2-L-012",
+            "T2-L-005",
+            "T2-L-004"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-025",
+          "target_fixture_ids": [
+            "T2-L-025",
+            "T2-L-002",
+            "T2-L-083",
+            "T2-L-084",
+            "T2-L-018"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-004",
+          "target_fixture_ids": [
+            "T2-L-004",
+            "T2-L-024",
+            "T2-L-012",
+            "T2-L-005",
+            "T2-L-020"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-009",
+          "target_fixture_ids": [
+            "T2-L-009",
+            "T2-L-007",
+            "T2-L-085",
+            "T2-L-002",
+            "T2-L-014"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-002",
+          "target_fixture_ids": [
+            "T2-L-002",
+            "T2-L-025",
+            "T2-L-083",
+            "T2-L-084",
+            "T2-L-018"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-012",
+          "target_fixture_ids": [
+            "T2-L-012",
+            "T2-L-005",
+            "T2-L-004",
+            "T2-L-024",
+            "T2-L-020"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-003",
+          "target_fixture_ids": [
+            "T2-L-003",
+            "T2-L-026",
+            "T2-L-013",
+            "T2-L-022",
+            "T2-L-015"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-001",
+          "target_fixture_ids": [
+            "T2-L-001",
+            "T2-L-083",
+            "T2-L-084",
+            "T2-L-018",
+            "T2-L-017"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-008",
+          "target_fixture_ids": [
+            "T2-L-008",
+            "T2-L-013",
+            "T2-L-016",
+            "T2-L-022",
+            "T2-L-007"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-013",
+          "target_fixture_ids": [
+            "T2-L-013",
+            "T2-L-008",
+            "T2-L-016",
+            "T2-L-022",
+            "T2-L-007"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-010",
+          "target_fixture_ids": [
+            "T2-L-010",
+            "T2-L-009",
+            "T2-L-085",
+            "T2-L-005",
+            "T2-L-012"
+          ]
+        },
+        {
+          "direction": "RIGHT_TO_LEFT",
+          "source_fixture_id": "T2-R-017",
+          "target_fixture_ids": [
+            "T2-L-017",
+            "T2-L-007",
+            "T2-L-014",
+            "T2-L-083",
+            "T2-L-084"
+          ]
+        }
+      ],
+      "source_fixture_ids": [
+        "T2-R-005",
+        "T2-R-025",
+        "T2-R-004",
+        "T2-R-009",
+        "T2-R-002",
+        "T2-R-012",
+        "T2-R-003",
+        "T2-R-001",
+        "T2-R-008",
+        "T2-R-013",
+        "T2-R-010",
+        "T2-R-017"
+      ],
+      "source_start": 15,
+      "source_stop": 27,
+      "validation_error": null,
+      "visible_target_count": 29
+    }
+  ],
+  "condition": {
+    "allowed_candidate_counts": [
+      4,
+      5
+    ],
+    "candidate_count": 5,
+    "gate_policy": "MEASUREMENT_ONLY_NO_PROMPT_GATE_TEXT",
+    "id": "TOP_5",
+    "only_prompt_variable": "CANDIDATE_COUNT_K",
+    "prompt_template_version": 1
+  },
+  "contract_valid": true,
+  "corpus": {
+    "digest": "0ef2c5a8dea6627999133ad283e3b1989da479f6b612b0a70d2f396b3bd0dde4",
+    "full_group_count": 138,
+    "full_left_count": 150,
+    "full_right_count": 150,
+    "input_digest": "fe47cda93b786f16207a85ea8678eb8dabb9716fde9e60f89cb284392f11e91c",
+    "language": "en",
+    "provider_visible_ids": "CALL_LOCAL_ONLY",
+    "selected_group_count": 26,
+    "selected_left_count": 29,
+    "selected_right_count": 27,
+    "selection": "FIRST_REVIEWED_GROUPS_CALIBRATION",
+    "source_alias_mapping_digest": "10fd2a7dad53c0ae0b16e8b995e2bf297c33cd5afdb501c26a7ecae0f1af0b64"
+  },
+  "durability": {
+    "interruption_boundary": "NO_LEDGER_BEFORE_FINAL_ATOMIC_WRITE;COMPLETED_IN_MEMORY_CALLS_MAY_BE_LOST_ON_PROCESS_INTERRUPTION",
+    "mode": "FINAL_ONLY"
+  },
+  "effective_thinking": false,
+  "expected_provider_call_count": 4,
+  "kind": "memcommit.semantic-eval.task2-candidate-ablation-v5",
+  "ledger_path": "agent-records/outputs/semantic-eval-v1/task2-candidate-ablation-v5/20260803T233124896067Z-e12c96f04e9f468290dd759fdbc3746f-top_5-ollama.json",
+  "lock": {
+    "consumed_during_optimization": true,
+    "corpus_digest": "0ef2c5a8dea6627999133ad283e3b1989da479f6b612b0a70d2f396b3bd0dde4",
+    "corpus_locked": true,
+    "frozen_at": "2026-08-03T21:51:13Z",
+    "full_group_count": 138,
+    "full_left_count": 150,
+    "full_right_count": 150,
+    "independent_holdout": false,
+    "path": "/Users/KimMunyeong/Github/memcommit/memcommit/eval/fixtures/task2_discovery.lock.json",
+    "rung_locked": true,
+    "selected_rung": {
+      "alias_mapping_digest": "10fd2a7dad53c0ae0b16e8b995e2bf297c33cd5afdb501c26a7ecae0f1af0b64",
+      "band_distribution": [
+        [
+          "Compatible Complement",
+          1
+        ],
+        [
+          "Conflict",
+          3
+        ],
+        [
+          "Context-Dependent Variant",
+          4
+        ],
+        [
+          "Near Duplicate",
+          10
+        ],
+        [
+          "Same-Principle Variant",
+          8
+        ]
+      ],
+      "gold_relations_digest": "2386dac34a0d1ce191ee83ee1fb2ebdb4a7920da30232ade310c25c2ee012222",
+      "group_count": 26,
+      "input_digest": "fe47cda93b786f16207a85ea8678eb8dabb9716fde9e60f89cb284392f11e91c",
+      "selected_left_count": 29,
+      "selected_right_count": 27
+    },
+    "sidecar_digest": "491be50592ca295e988f38d05936324d7105976499c852d3b561882bc135c0b1",
+    "sidecar_fixture": "task-2-pair-relations-en.tsv"
+  },
+  "pipeline": "task2-candidate-only-top-k-ablation-v5",
+  "provider": {
+    "endpoint": "http://127.0.0.1:11434",
+    "model": "qwen3.6:35b-a3b",
+    "model_digest": "07d35212591fc27746f0a317c975a6d68754fb38e9053d82e25f06057af28522",
+    "provider": "ollama",
+    "reasoning_effort": null,
+    "runtime": "ollama/0.30.10"
+  },
+  "provider_call_count": 4,
+  "provider_run": {
+    "completion_tokens": 818,
+    "identity": {
+      "endpoint": "http://127.0.0.1:11434",
+      "model": "qwen3.6:35b-a3b",
+      "model_digest": "07d35212591fc27746f0a317c975a6d68754fb38e9053d82e25f06057af28522",
+      "provider": "ollama",
+      "reasoning_effort": null,
+      "runtime": "ollama/0.30.10"
+    },
+    "operation": "task2 v5 candidate top-5 right_to_left",
+    "prompt_tokens": 1760,
+    "upstream_model": "qwen3.6:35b-a3b",
+    "upstream_provider": "ollama"
+  },
+  "run_id": "20260803T233124896067Z-e12c96f04e9f468290dd759fdbc3746f",
+  "schema_version": 1,
+  "score": {
+    "call_diagnostics": [
+      {
+        "call_index": 1,
+        "contract_valid": true,
+        "direction": "LEFT_TO_RIGHT",
+        "direction_batch_index": 1,
+        "expected_directed_edges": 16,
+        "failure_category": null,
+        "macro_source_recall_at_k": 1.0,
+        "micro_recall_at_k": 1.0,
+        "multi_member_groups": {
+          "expected": 4,
+          "recall_at_k": 1.0,
+          "recovered": 4
+        },
+        "one_to_one": {
+          "expected": 12,
+          "recall_at_k": 1.0,
+          "recovered": 12
+        },
+        "recovered_directed_edges": 16,
+        "source_hit_distribution": {
+          "complete": 15,
+          "partial": 0,
+          "zero_hit": 0
+        },
+        "source_start": 0,
+        "source_stop": 15,
+        "source_total": 15
+      },
+      {
+        "call_index": 2,
+        "contract_valid": true,
+        "direction": "LEFT_TO_RIGHT",
+        "direction_batch_index": 2,
+        "expected_directed_edges": 16,
+        "failure_category": null,
+        "macro_source_recall_at_k": 1.0,
+        "micro_recall_at_k": 1.0,
+        "multi_member_groups": {
+          "expected": 4,
+          "recall_at_k": 1.0,
+          "recovered": 4
+        },
+        "one_to_one": {
+          "expected": 12,
+          "recall_at_k": 1.0,
+          "recovered": 12
+        },
+        "recovered_directed_edges": 16,
+        "source_hit_distribution": {
+          "complete": 14,
+          "partial": 0,
+          "zero_hit": 0
+        },
+        "source_start": 15,
+        "source_stop": 29,
+        "source_total": 14
+      },
+      {
+        "call_index": 3,
+        "contract_valid": true,
+        "direction": "RIGHT_TO_LEFT",
+        "direction_batch_index": 1,
+        "expected_directed_edges": 19,
+        "failure_category": null,
+        "macro_source_recall_at_k": 0.9333333333333333,
+        "micro_recall_at_k": 0.9473684210526315,
+        "multi_member_groups": {
+          "expected": 6,
+          "recall_at_k": 1.0,
+          "recovered": 6
+        },
+        "one_to_one": {
+          "expected": 13,
+          "recall_at_k": 0.9230769230769231,
+          "recovered": 12
+        },
+        "recovered_directed_edges": 18,
+        "source_hit_distribution": {
+          "complete": 14,
+          "partial": 0,
+          "zero_hit": 1
+        },
+        "source_start": 0,
+        "source_stop": 15,
+        "source_total": 15
+      },
+      {
+        "call_index": 4,
+        "contract_valid": true,
+        "direction": "RIGHT_TO_LEFT",
+        "direction_batch_index": 2,
+        "expected_directed_edges": 13,
+        "failure_category": null,
+        "macro_source_recall_at_k": 1.0,
+        "micro_recall_at_k": 1.0,
+        "multi_member_groups": {
+          "expected": 2,
+          "recall_at_k": 1.0,
+          "recovered": 2
+        },
+        "one_to_one": {
+          "expected": 11,
+          "recall_at_k": 1.0,
+          "recovered": 11
+        },
+        "recovered_directed_edges": 13,
+        "source_hit_distribution": {
+          "complete": 12,
+          "partial": 0,
+          "zero_hit": 0
+        },
+        "source_start": 15,
+        "source_stop": 27,
+        "source_total": 12
+      }
+    ],
+    "candidate_count": 5,
+    "condition_id": "TOP_5",
+    "directions": {
+      "LEFT_TO_RIGHT": {
+        "expected_directed_edges": 32,
+        "macro_source_recall_at_k": 1.0,
+        "micro_recall_at_k": 1.0,
+        "multi_member_groups": {
+          "expected": 8,
+          "recall_at_k": 1.0,
+          "recovered": 8
+        },
+        "one_to_one": {
+          "expected": 24,
+          "recall_at_k": 1.0,
+          "recovered": 24
+        },
+        "recovered_directed_edges": 32,
+        "source_hit_distribution": {
+          "complete": 29,
+          "partial": 0,
+          "zero_hit": 0
+        },
+        "source_total": 29,
+        "sources": [
+          {
+            "candidate_fixture_ids": [
+              "T2-R-001",
+              "T2-R-002",
+              "T2-R-017",
+              "T2-R-025",
+              "T2-R-083"
+            ],
+            "direction": "LEFT_TO_RIGHT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-R-001"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-R-001"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-001",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-L-001"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-R-002",
+              "T2-R-007",
+              "T2-R-009",
+              "T2-R-025",
+              "T2-R-083"
+            ],
+            "direction": "LEFT_TO_RIGHT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-R-002"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-R-002"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-002",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-L-002"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-R-001",
+              "T2-R-003",
+              "T2-R-009",
+              "T2-R-013",
+              "T2-R-026"
+            ],
+            "direction": "LEFT_TO_RIGHT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-R-003"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-R-003"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-003",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-L-003"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-R-004",
+              "T2-R-005",
+              "T2-R-007",
+              "T2-R-010",
+              "T2-R-012"
+            ],
+            "direction": "LEFT_TO_RIGHT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-R-004"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-R-004"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-004",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-L-004"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-R-001",
+              "T2-R-004",
+              "T2-R-005",
+              "T2-R-020",
+              "T2-R-024"
+            ],
+            "direction": "LEFT_TO_RIGHT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-R-005"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-R-005"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-005",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-L-005"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-R-005",
+              "T2-R-006",
+              "T2-R-007",
+              "T2-R-021",
+              "T2-R-083"
+            ],
+            "direction": "LEFT_TO_RIGHT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-R-006"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-R-006"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-006",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-L-006"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-R-004",
+              "T2-R-005",
+              "T2-R-007",
+              "T2-R-009",
+              "T2-R-017"
+            ],
+            "direction": "LEFT_TO_RIGHT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-R-007"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-R-007"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-007",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-L-007"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-R-002",
+              "T2-R-008",
+              "T2-R-013",
+              "T2-R-022",
+              "T2-R-025"
+            ],
+            "direction": "LEFT_TO_RIGHT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-R-008"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-R-008"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-008",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-L-008"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-R-004",
+              "T2-R-005",
+              "T2-R-009",
+              "T2-R-010",
+              "T2-R-012"
+            ],
+            "direction": "LEFT_TO_RIGHT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-R-009"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-R-009"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-009",
+            "reviewed_partition": "MULTI_MEMBER_GROUP",
+            "source_fixture_id": "T2-L-009"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-R-004",
+              "T2-R-005",
+              "T2-R-009",
+              "T2-R-010",
+              "T2-R-017"
+            ],
+            "direction": "LEFT_TO_RIGHT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-R-010"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-R-010"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-010",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-L-010"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-R-007",
+              "T2-R-011",
+              "T2-R-014",
+              "T2-R-017",
+              "T2-R-083"
+            ],
+            "direction": "LEFT_TO_RIGHT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-R-011"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-R-011"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-011",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-L-011"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-R-004",
+              "T2-R-005",
+              "T2-R-009",
+              "T2-R-012",
+              "T2-R-017"
+            ],
+            "direction": "LEFT_TO_RIGHT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-R-012"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-R-012"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-012",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-L-012"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-R-002",
+              "T2-R-008",
+              "T2-R-013",
+              "T2-R-022",
+              "T2-R-025"
+            ],
+            "direction": "LEFT_TO_RIGHT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-R-013"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-R-013"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-013",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-L-013"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-R-007",
+              "T2-R-009",
+              "T2-R-014",
+              "T2-R-016",
+              "T2-R-022"
+            ],
+            "direction": "LEFT_TO_RIGHT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-R-014"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-R-014"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-014",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-L-014"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-R-007",
+              "T2-R-011",
+              "T2-R-014",
+              "T2-R-015",
+              "T2-R-083"
+            ],
+            "direction": "LEFT_TO_RIGHT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-R-015"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-R-015"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-015",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-L-015"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-R-008",
+              "T2-R-009",
+              "T2-R-013",
+              "T2-R-016",
+              "T2-R-022"
+            ],
+            "direction": "LEFT_TO_RIGHT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-R-016"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-R-016"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-016",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-L-016"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-R-001",
+              "T2-R-014",
+              "T2-R-015",
+              "T2-R-017",
+              "T2-R-083"
+            ],
+            "direction": "LEFT_TO_RIGHT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-R-017"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-R-017"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-017",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-L-017"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-R-001",
+              "T2-R-011",
+              "T2-R-015",
+              "T2-R-018",
+              "T2-R-083"
+            ],
+            "direction": "LEFT_TO_RIGHT",
+            "expected_count": 2,
+            "expected_group_co_members": [
+              "T2-R-018",
+              "T2-R-083"
+            ],
+            "hit_count": 2,
+            "hit_fixture_ids": [
+              "T2-R-018",
+              "T2-R-083"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-018",
+            "reviewed_partition": "MULTI_MEMBER_GROUP",
+            "source_fixture_id": "T2-L-018"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-R-001",
+              "T2-R-018",
+              "T2-R-019",
+              "T2-R-020",
+              "T2-R-083"
+            ],
+            "direction": "LEFT_TO_RIGHT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-R-019"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-R-019"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-019",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-L-019"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-R-001",
+              "T2-R-004",
+              "T2-R-005",
+              "T2-R-020",
+              "T2-R-083"
+            ],
+            "direction": "LEFT_TO_RIGHT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-R-020"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-R-020"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-020",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-L-020"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-R-006",
+              "T2-R-008",
+              "T2-R-019",
+              "T2-R-021",
+              "T2-R-022"
+            ],
+            "direction": "LEFT_TO_RIGHT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-R-021"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-R-021"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-021",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-L-021"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-R-002",
+              "T2-R-008",
+              "T2-R-013",
+              "T2-R-022",
+              "T2-R-025"
+            ],
+            "direction": "LEFT_TO_RIGHT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-R-022"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-R-022"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-022",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-L-022"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-R-002",
+              "T2-R-008",
+              "T2-R-022",
+              "T2-R-023",
+              "T2-R-025"
+            ],
+            "direction": "LEFT_TO_RIGHT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-R-023"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-R-023"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-023",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-L-023"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-R-001",
+              "T2-R-004",
+              "T2-R-005",
+              "T2-R-020",
+              "T2-R-024"
+            ],
+            "direction": "LEFT_TO_RIGHT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-R-024"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-R-024"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-024",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-L-024"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-R-002",
+              "T2-R-008",
+              "T2-R-013",
+              "T2-R-022",
+              "T2-R-025"
+            ],
+            "direction": "LEFT_TO_RIGHT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-R-025"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-R-025"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-025",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-L-025"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-R-002",
+              "T2-R-003",
+              "T2-R-013",
+              "T2-R-025",
+              "T2-R-026"
+            ],
+            "direction": "LEFT_TO_RIGHT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-R-026"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-R-026"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-026",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-L-026"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-R-011",
+              "T2-R-015",
+              "T2-R-017",
+              "T2-R-018",
+              "T2-R-083"
+            ],
+            "direction": "LEFT_TO_RIGHT",
+            "expected_count": 2,
+            "expected_group_co_members": [
+              "T2-R-018",
+              "T2-R-083"
+            ],
+            "hit_count": 2,
+            "hit_fixture_ids": [
+              "T2-R-018",
+              "T2-R-083"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-018",
+            "reviewed_partition": "MULTI_MEMBER_GROUP",
+            "source_fixture_id": "T2-L-083"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-R-011",
+              "T2-R-015",
+              "T2-R-017",
+              "T2-R-018",
+              "T2-R-083"
+            ],
+            "direction": "LEFT_TO_RIGHT",
+            "expected_count": 2,
+            "expected_group_co_members": [
+              "T2-R-018",
+              "T2-R-083"
+            ],
+            "hit_count": 2,
+            "hit_fixture_ids": [
+              "T2-R-018",
+              "T2-R-083"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-018",
+            "reviewed_partition": "MULTI_MEMBER_GROUP",
+            "source_fixture_id": "T2-L-084"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-R-004",
+              "T2-R-005",
+              "T2-R-009",
+              "T2-R-010",
+              "T2-R-012"
+            ],
+            "direction": "LEFT_TO_RIGHT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-R-009"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-R-009"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-009",
+            "reviewed_partition": "MULTI_MEMBER_GROUP",
+            "source_fixture_id": "T2-L-085"
+          }
+        ]
+      },
+      "RIGHT_TO_LEFT": {
+        "expected_directed_edges": 32,
+        "macro_source_recall_at_k": 0.9629629629629629,
+        "micro_recall_at_k": 0.96875,
+        "multi_member_groups": {
+          "expected": 8,
+          "recall_at_k": 1.0,
+          "recovered": 8
+        },
+        "one_to_one": {
+          "expected": 24,
+          "recall_at_k": 0.9583333333333334,
+          "recovered": 23
+        },
+        "recovered_directed_edges": 31,
+        "source_hit_distribution": {
+          "complete": 26,
+          "partial": 0,
+          "zero_hit": 1
+        },
+        "source_total": 27,
+        "sources": [
+          {
+            "candidate_fixture_ids": [
+              "T2-L-001",
+              "T2-L-017",
+              "T2-L-018",
+              "T2-L-083",
+              "T2-L-084"
+            ],
+            "direction": "RIGHT_TO_LEFT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-L-001"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-L-001"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-001",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-R-001"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-L-002",
+              "T2-L-018",
+              "T2-L-025",
+              "T2-L-083",
+              "T2-L-084"
+            ],
+            "direction": "RIGHT_TO_LEFT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-L-002"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-L-002"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-002",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-R-002"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-L-003",
+              "T2-L-013",
+              "T2-L-015",
+              "T2-L-022",
+              "T2-L-026"
+            ],
+            "direction": "RIGHT_TO_LEFT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-L-003"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-L-003"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-003",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-R-003"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-L-004",
+              "T2-L-005",
+              "T2-L-012",
+              "T2-L-020",
+              "T2-L-024"
+            ],
+            "direction": "RIGHT_TO_LEFT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-L-004"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-L-004"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-004",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-R-004"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-L-004",
+              "T2-L-005",
+              "T2-L-009",
+              "T2-L-012",
+              "T2-L-085"
+            ],
+            "direction": "RIGHT_TO_LEFT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-L-005"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-L-005"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-005",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-R-005"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-L-005",
+              "T2-L-006",
+              "T2-L-010",
+              "T2-L-021",
+              "T2-L-025"
+            ],
+            "direction": "RIGHT_TO_LEFT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-L-006"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-L-006"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-006",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-R-006"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-L-001",
+              "T2-L-002",
+              "T2-L-007",
+              "T2-L-025",
+              "T2-L-085"
+            ],
+            "direction": "RIGHT_TO_LEFT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-L-007"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-L-007"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-007",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-R-007"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-L-007",
+              "T2-L-008",
+              "T2-L-013",
+              "T2-L-016",
+              "T2-L-022"
+            ],
+            "direction": "RIGHT_TO_LEFT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-L-008"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-L-008"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-008",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-R-008"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-L-002",
+              "T2-L-007",
+              "T2-L-009",
+              "T2-L-014",
+              "T2-L-085"
+            ],
+            "direction": "RIGHT_TO_LEFT",
+            "expected_count": 2,
+            "expected_group_co_members": [
+              "T2-L-009",
+              "T2-L-085"
+            ],
+            "hit_count": 2,
+            "hit_fixture_ids": [
+              "T2-L-009",
+              "T2-L-085"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-009",
+            "reviewed_partition": "MULTI_MEMBER_GROUP",
+            "source_fixture_id": "T2-R-009"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-L-005",
+              "T2-L-009",
+              "T2-L-010",
+              "T2-L-012",
+              "T2-L-085"
+            ],
+            "direction": "RIGHT_TO_LEFT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-L-010"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-L-010"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-010",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-R-010"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-L-001",
+              "T2-L-002",
+              "T2-L-009",
+              "T2-L-011",
+              "T2-L-017"
+            ],
+            "direction": "RIGHT_TO_LEFT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-L-011"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-L-011"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-011",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-R-011"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-L-004",
+              "T2-L-005",
+              "T2-L-012",
+              "T2-L-020",
+              "T2-L-024"
+            ],
+            "direction": "RIGHT_TO_LEFT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-L-012"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-L-012"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-012",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-R-012"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-L-007",
+              "T2-L-008",
+              "T2-L-013",
+              "T2-L-016",
+              "T2-L-022"
+            ],
+            "direction": "RIGHT_TO_LEFT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-L-013"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-L-013"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-013",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-R-013"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-L-007",
+              "T2-L-014",
+              "T2-L-015",
+              "T2-L-016",
+              "T2-L-022"
+            ],
+            "direction": "RIGHT_TO_LEFT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-L-014"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-L-014"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-014",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-R-014"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-L-015",
+              "T2-L-017",
+              "T2-L-018",
+              "T2-L-083",
+              "T2-L-084"
+            ],
+            "direction": "RIGHT_TO_LEFT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-L-015"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-L-015"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-015",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-R-015"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-L-005",
+              "T2-L-009",
+              "T2-L-010",
+              "T2-L-016",
+              "T2-L-085"
+            ],
+            "direction": "RIGHT_TO_LEFT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-L-016"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-L-016"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-016",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-R-016"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-L-007",
+              "T2-L-014",
+              "T2-L-017",
+              "T2-L-083",
+              "T2-L-084"
+            ],
+            "direction": "RIGHT_TO_LEFT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-L-017"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-L-017"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-017",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-R-017"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-L-001",
+              "T2-L-017",
+              "T2-L-018",
+              "T2-L-083",
+              "T2-L-084"
+            ],
+            "direction": "RIGHT_TO_LEFT",
+            "expected_count": 3,
+            "expected_group_co_members": [
+              "T2-L-018",
+              "T2-L-083",
+              "T2-L-084"
+            ],
+            "hit_count": 3,
+            "hit_fixture_ids": [
+              "T2-L-018",
+              "T2-L-083",
+              "T2-L-084"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-018",
+            "reviewed_partition": "MULTI_MEMBER_GROUP",
+            "source_fixture_id": "T2-R-018"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-L-007",
+              "T2-L-008",
+              "T2-L-009",
+              "T2-L-016",
+              "T2-L-085"
+            ],
+            "direction": "RIGHT_TO_LEFT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-L-019"
+            ],
+            "hit_count": 0,
+            "hit_fixture_ids": [],
+            "hit_status": "ZERO_HIT",
+            "recall_at_k": 0.0,
+            "reviewed_group_id": "T2-019",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-R-019"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-L-005",
+              "T2-L-019",
+              "T2-L-020",
+              "T2-L-024",
+              "T2-L-085"
+            ],
+            "direction": "RIGHT_TO_LEFT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-L-020"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-L-020"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-020",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-R-020"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-L-005",
+              "T2-L-006",
+              "T2-L-010",
+              "T2-L-021",
+              "T2-L-025"
+            ],
+            "direction": "RIGHT_TO_LEFT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-L-021"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-L-021"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-021",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-R-021"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-L-005",
+              "T2-L-008",
+              "T2-L-013",
+              "T2-L-016",
+              "T2-L-022"
+            ],
+            "direction": "RIGHT_TO_LEFT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-L-022"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-L-022"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-022",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-R-022"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-L-007",
+              "T2-L-008",
+              "T2-L-009",
+              "T2-L-023",
+              "T2-L-085"
+            ],
+            "direction": "RIGHT_TO_LEFT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-L-023"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-L-023"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-023",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-R-023"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-L-004",
+              "T2-L-005",
+              "T2-L-012",
+              "T2-L-024",
+              "T2-L-085"
+            ],
+            "direction": "RIGHT_TO_LEFT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-L-024"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-L-024"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-024",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-R-024"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-L-002",
+              "T2-L-018",
+              "T2-L-025",
+              "T2-L-083",
+              "T2-L-084"
+            ],
+            "direction": "RIGHT_TO_LEFT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-L-025"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-L-025"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-025",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-R-025"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-L-003",
+              "T2-L-012",
+              "T2-L-013",
+              "T2-L-025",
+              "T2-L-026"
+            ],
+            "direction": "RIGHT_TO_LEFT",
+            "expected_count": 1,
+            "expected_group_co_members": [
+              "T2-L-026"
+            ],
+            "hit_count": 1,
+            "hit_fixture_ids": [
+              "T2-L-026"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-026",
+            "reviewed_partition": "ONE_TO_ONE",
+            "source_fixture_id": "T2-R-026"
+          },
+          {
+            "candidate_fixture_ids": [
+              "T2-L-001",
+              "T2-L-017",
+              "T2-L-018",
+              "T2-L-083",
+              "T2-L-084"
+            ],
+            "direction": "RIGHT_TO_LEFT",
+            "expected_count": 3,
+            "expected_group_co_members": [
+              "T2-L-018",
+              "T2-L-083",
+              "T2-L-084"
+            ],
+            "hit_count": 3,
+            "hit_fixture_ids": [
+              "T2-L-018",
+              "T2-L-083",
+              "T2-L-084"
+            ],
+            "hit_status": "COMPLETE",
+            "recall_at_k": 1.0,
+            "reviewed_group_id": "T2-018",
+            "reviewed_partition": "MULTI_MEMBER_GROUP",
+            "source_fixture_id": "T2-R-083"
+          }
+        ]
+      }
+    },
+    "exact_group_recoverability": {
+      "expected": 26,
+      "mechanical_definition": "EVERY_GOLD_CARTESIAN_CO_MEMBER_EDGE_RETRIEVED_IN_BOTH_DIRECTIONS;EXTRA_CANDIDATES_IGNORED",
+      "missed_group_ids": [
+        "T2-019"
+      ],
+      "multi_member": {
+        "expected": 2,
+        "recall_at_k": 1.0,
+        "recoverable": 2
+      },
+      "recall_at_k": 0.9615384615384616,
+      "recoverable": 25,
+      "recoverable_group_ids": [
+        "T2-001",
+        "T2-002",
+        "T2-003",
+        "T2-004",
+        "T2-005",
+        "T2-006",
+        "T2-007",
+        "T2-008",
+        "T2-009",
+        "T2-010",
+        "T2-011",
+        "T2-012",
+        "T2-013",
+        "T2-014",
+        "T2-015",
+        "T2-016",
+        "T2-017",
+        "T2-018",
+        "T2-020",
+        "T2-021",
+        "T2-022",
+        "T2-023",
+        "T2-024",
+        "T2-025",
+        "T2-026"
+      ]
+    },
+    "interpretation": "CONSUMED_CALIBRATION_GROUP_CO_MEMBERSHIP_NOT_INDEPENDENT_PAIR_LABELS",
+    "metric": "REVIEWED_GROUP_CO_MEMBERSHIP_CANDIDATE_RECALL_AT_K",
+    "overall": {
+      "expected_directed_edges": 64,
+      "macro_source_recall_at_k": 0.9821428571428571,
+      "micro_recall_at_k": 0.984375,
+      "multi_member_groups": {
+        "expected": 16,
+        "recall_at_k": 1.0,
+        "recovered": 16
+      },
+      "one_to_one": {
+        "expected": 48,
+        "recall_at_k": 0.9791666666666666,
+        "recovered": 47
+      },
+      "recovered_directed_edges": 63,
+      "source_hit_distribution": {
+        "complete": 55,
+        "partial": 0,
+        "zero_hit": 1
+      },
+      "source_total": 56
+    },
+    "unique_undirected_gold_edge_recoverability": {
+      "expected": 32,
+      "mechanical_definition": "GOLD_CARTESIAN_EDGE_PRESENT_IN_AT_LEAST_ONE_RETRIEVAL_DIRECTION",
+      "recall_at_k": 1.0,
+      "recovered": 32
+    }
+  },
+  "selections": [
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-019",
+      "target_fixture_ids": [
+        "T2-R-020",
+        "T2-R-019",
+        "T2-R-083",
+        "T2-R-018",
+        "T2-R-001"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-083",
+      "target_fixture_ids": [
+        "T2-R-018",
+        "T2-R-083",
+        "T2-R-011",
+        "T2-R-015",
+        "T2-R-017"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-011",
+      "target_fixture_ids": [
+        "T2-R-011",
+        "T2-R-083",
+        "T2-R-007",
+        "T2-R-014",
+        "T2-R-017"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-085",
+      "target_fixture_ids": [
+        "T2-R-005",
+        "T2-R-004",
+        "T2-R-009",
+        "T2-R-010",
+        "T2-R-012"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-004",
+      "target_fixture_ids": [
+        "T2-R-004",
+        "T2-R-005",
+        "T2-R-012",
+        "T2-R-010",
+        "T2-R-007"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-023",
+      "target_fixture_ids": [
+        "T2-R-023",
+        "T2-R-008",
+        "T2-R-022",
+        "T2-R-025",
+        "T2-R-002"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-003",
+      "target_fixture_ids": [
+        "T2-R-026",
+        "T2-R-003",
+        "T2-R-013",
+        "T2-R-009",
+        "T2-R-001"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-013",
+      "target_fixture_ids": [
+        "T2-R-013",
+        "T2-R-008",
+        "T2-R-022",
+        "T2-R-025",
+        "T2-R-002"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-017",
+      "target_fixture_ids": [
+        "T2-R-017",
+        "T2-R-083",
+        "T2-R-001",
+        "T2-R-015",
+        "T2-R-014"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-025",
+      "target_fixture_ids": [
+        "T2-R-025",
+        "T2-R-002",
+        "T2-R-022",
+        "T2-R-008",
+        "T2-R-013"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-022",
+      "target_fixture_ids": [
+        "T2-R-022",
+        "T2-R-025",
+        "T2-R-002",
+        "T2-R-008",
+        "T2-R-013"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-015",
+      "target_fixture_ids": [
+        "T2-R-015",
+        "T2-R-014",
+        "T2-R-007",
+        "T2-R-011",
+        "T2-R-083"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-008",
+      "target_fixture_ids": [
+        "T2-R-008",
+        "T2-R-022",
+        "T2-R-025",
+        "T2-R-002",
+        "T2-R-013"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-006",
+      "target_fixture_ids": [
+        "T2-R-006",
+        "T2-R-021",
+        "T2-R-083",
+        "T2-R-007",
+        "T2-R-005"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-009",
+      "target_fixture_ids": [
+        "T2-R-009",
+        "T2-R-005",
+        "T2-R-010",
+        "T2-R-012",
+        "T2-R-004"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-020",
+      "target_fixture_ids": [
+        "T2-R-020",
+        "T2-R-004",
+        "T2-R-005",
+        "T2-R-001",
+        "T2-R-083"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-014",
+      "target_fixture_ids": [
+        "T2-R-014",
+        "T2-R-022",
+        "T2-R-016",
+        "T2-R-007",
+        "T2-R-009"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-001",
+      "target_fixture_ids": [
+        "T2-R-001",
+        "T2-R-025",
+        "T2-R-002",
+        "T2-R-083",
+        "T2-R-017"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-084",
+      "target_fixture_ids": [
+        "T2-R-018",
+        "T2-R-015",
+        "T2-R-011",
+        "T2-R-083",
+        "T2-R-017"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-024",
+      "target_fixture_ids": [
+        "T2-R-024",
+        "T2-R-004",
+        "T2-R-005",
+        "T2-R-020",
+        "T2-R-001"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-002",
+      "target_fixture_ids": [
+        "T2-R-025",
+        "T2-R-002",
+        "T2-R-009",
+        "T2-R-007",
+        "T2-R-083"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-018",
+      "target_fixture_ids": [
+        "T2-R-018",
+        "T2-R-015",
+        "T2-R-011",
+        "T2-R-083",
+        "T2-R-001"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-016",
+      "target_fixture_ids": [
+        "T2-R-016",
+        "T2-R-022",
+        "T2-R-009",
+        "T2-R-008",
+        "T2-R-013"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-026",
+      "target_fixture_ids": [
+        "T2-R-026",
+        "T2-R-003",
+        "T2-R-013",
+        "T2-R-025",
+        "T2-R-002"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-021",
+      "target_fixture_ids": [
+        "T2-R-021",
+        "T2-R-006",
+        "T2-R-019",
+        "T2-R-022",
+        "T2-R-008"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-012",
+      "target_fixture_ids": [
+        "T2-R-012",
+        "T2-R-009",
+        "T2-R-005",
+        "T2-R-004",
+        "T2-R-017"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-010",
+      "target_fixture_ids": [
+        "T2-R-010",
+        "T2-R-009",
+        "T2-R-005",
+        "T2-R-004",
+        "T2-R-017"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-007",
+      "target_fixture_ids": [
+        "T2-R-007",
+        "T2-R-009",
+        "T2-R-005",
+        "T2-R-004",
+        "T2-R-017"
+      ]
+    },
+    {
+      "direction": "LEFT_TO_RIGHT",
+      "source_fixture_id": "T2-L-005",
+      "target_fixture_ids": [
+        "T2-R-005",
+        "T2-R-004",
+        "T2-R-020",
+        "T2-R-024",
+        "T2-R-001"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-024",
+      "target_fixture_ids": [
+        "T2-L-004",
+        "T2-L-024",
+        "T2-L-085",
+        "T2-L-005",
+        "T2-L-012"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-083",
+      "target_fixture_ids": [
+        "T2-L-083",
+        "T2-L-084",
+        "T2-L-018",
+        "T2-L-017",
+        "T2-L-001"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-023",
+      "target_fixture_ids": [
+        "T2-L-023",
+        "T2-L-008",
+        "T2-L-007",
+        "T2-L-085",
+        "T2-L-009"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-006",
+      "target_fixture_ids": [
+        "T2-L-006",
+        "T2-L-021",
+        "T2-L-010",
+        "T2-L-025",
+        "T2-L-005"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-020",
+      "target_fixture_ids": [
+        "T2-L-019",
+        "T2-L-020",
+        "T2-L-005",
+        "T2-L-024",
+        "T2-L-085"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-014",
+      "target_fixture_ids": [
+        "T2-L-014",
+        "T2-L-016",
+        "T2-L-015",
+        "T2-L-022",
+        "T2-L-007"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-018",
+      "target_fixture_ids": [
+        "T2-L-083",
+        "T2-L-084",
+        "T2-L-018",
+        "T2-L-017",
+        "T2-L-001"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-021",
+      "target_fixture_ids": [
+        "T2-L-021",
+        "T2-L-006",
+        "T2-L-010",
+        "T2-L-025",
+        "T2-L-005"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-026",
+      "target_fixture_ids": [
+        "T2-L-003",
+        "T2-L-026",
+        "T2-L-013",
+        "T2-L-025",
+        "T2-L-012"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-015",
+      "target_fixture_ids": [
+        "T2-L-015",
+        "T2-L-084",
+        "T2-L-083",
+        "T2-L-018",
+        "T2-L-017"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-019",
+      "target_fixture_ids": [
+        "T2-L-008",
+        "T2-L-007",
+        "T2-L-016",
+        "T2-L-009",
+        "T2-L-085"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-016",
+      "target_fixture_ids": [
+        "T2-L-016",
+        "T2-L-010",
+        "T2-L-005",
+        "T2-L-085",
+        "T2-L-009"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-007",
+      "target_fixture_ids": [
+        "T2-L-007",
+        "T2-L-002",
+        "T2-L-001",
+        "T2-L-025",
+        "T2-L-085"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-011",
+      "target_fixture_ids": [
+        "T2-L-011",
+        "T2-L-002",
+        "T2-L-001",
+        "T2-L-017",
+        "T2-L-009"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-022",
+      "target_fixture_ids": [
+        "T2-L-022",
+        "T2-L-013",
+        "T2-L-016",
+        "T2-L-008",
+        "T2-L-005"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-005",
+      "target_fixture_ids": [
+        "T2-L-085",
+        "T2-L-009",
+        "T2-L-012",
+        "T2-L-005",
+        "T2-L-004"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-025",
+      "target_fixture_ids": [
+        "T2-L-025",
+        "T2-L-002",
+        "T2-L-083",
+        "T2-L-084",
+        "T2-L-018"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-004",
+      "target_fixture_ids": [
+        "T2-L-004",
+        "T2-L-024",
+        "T2-L-012",
+        "T2-L-005",
+        "T2-L-020"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-009",
+      "target_fixture_ids": [
+        "T2-L-009",
+        "T2-L-007",
+        "T2-L-085",
+        "T2-L-002",
+        "T2-L-014"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-002",
+      "target_fixture_ids": [
+        "T2-L-002",
+        "T2-L-025",
+        "T2-L-083",
+        "T2-L-084",
+        "T2-L-018"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-012",
+      "target_fixture_ids": [
+        "T2-L-012",
+        "T2-L-005",
+        "T2-L-004",
+        "T2-L-024",
+        "T2-L-020"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-003",
+      "target_fixture_ids": [
+        "T2-L-003",
+        "T2-L-026",
+        "T2-L-013",
+        "T2-L-022",
+        "T2-L-015"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-001",
+      "target_fixture_ids": [
+        "T2-L-001",
+        "T2-L-083",
+        "T2-L-084",
+        "T2-L-018",
+        "T2-L-017"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-008",
+      "target_fixture_ids": [
+        "T2-L-008",
+        "T2-L-013",
+        "T2-L-016",
+        "T2-L-022",
+        "T2-L-007"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-013",
+      "target_fixture_ids": [
+        "T2-L-013",
+        "T2-L-008",
+        "T2-L-016",
+        "T2-L-022",
+        "T2-L-007"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-010",
+      "target_fixture_ids": [
+        "T2-L-010",
+        "T2-L-009",
+        "T2-L-085",
+        "T2-L-005",
+        "T2-L-012"
+      ]
+    },
+    {
+      "direction": "RIGHT_TO_LEFT",
+      "source_fixture_id": "T2-R-017",
+      "target_fixture_ids": [
+        "T2-L-017",
+        "T2-L-007",
+        "T2-L-014",
+        "T2-L-083",
+        "T2-L-084"
+      ]
+    }
+  ],
+  "started_at": "2026-08-03T23:31:24.896067Z",
+  "status": "VALID",
+  "timing": {
+    "campaign_seconds": 59.44377754209563,
+    "corpus_preparation_seconds": 0.006733416114002466,
+    "pipeline_seconds": 59.43626537499949,
+    "provider_call_seconds": 59.434971540700644,
+    "provider_connection_seconds": 0.018769667018204927,
+    "total_seconds": 59.462547209113836
+  },
+  "validation_error": null
+}

@@ -285,7 +285,12 @@ class ShareEndpoint:
 def default_study_bundle_root() -> Path:
     """Return the editable-checkout fixture location when it is available."""
 
-    return Path(__file__).resolve().parents[1] / "outputs" / "study-fixtures"
+    return (
+        Path(__file__).resolve().parents[4]
+        / "agent-records"
+        / "outputs"
+        / "study-fixtures"
+    )
 
 
 _STUDY_TASKS = (1, 2, 3)

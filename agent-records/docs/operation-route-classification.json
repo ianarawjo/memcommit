@@ -1,0 +1,392 @@
+{
+  "schema_version": 1,
+  "definitions": {
+    "CLOSED": "Every currently implemented route in the stated operation scope enters one reviewed terminal-independent application boundary; missing future adapters do not make a current route mixed.",
+    "MIXED": "A reviewed application boundary exists, but at least one current route, lifecycle phase, or conflicting evidence still leaves ownership outside that boundary.",
+    "LEGACY": "Review proved that the command or presentation layer remains the effective owner of application policy.",
+    "N/A": "Review and tests proved that the application-boundary question does not apply to this operation.",
+    "UNREVIEWED": "No route-closure conclusion has been made; this is not evidence that the operation is legacy."
+  },
+  "classifications": {
+    "CLOSED": {
+      "add": {
+        "evidence": [
+          "agent-records/docs/add-callable-boundary-matrix.md"
+        ],
+        "reason": "The typed batch, authority, mutation, CLI, TUI, public, and agent routes are verified against one application/runtime boundary."
+      },
+      "atomize": {
+        "evidence": [
+          "agent-records/docs/atomize-application-boundary-matrix.md",
+          "agent-records/docs/context-locator-design-rationale.md",
+          "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
+          "agent-records/docs/study-semantic-prompt-policy-design-rationale.md",
+          "agent-records/docs/terminal-semantic-session-rotation-design-rationale.md"
+        ],
+        "reason": "Analysis, saved review, reanalysis, both Apply directions, recovery, and public projection are verified as one structural lifecycle."
+      },
+      "compare": {
+        "evidence": [
+          "agent-records/docs/compare-application-boundary-matrix.md",
+          "agent-records/docs/compare-summary-design-rationale.md",
+          "agent-records/docs/compare-session-lifecycle-design-rationale.md",
+          "agent-records/docs/context-locator-design-rationale.md",
+          "agent-records/docs/init-study-prewarm-regeneration-design-rationale.md",
+          "agent-records/docs/mem-compare-design-rationale.md",
+          "agent-records/docs/session-endpoint-setup-design-rationale.md",
+          "agent-records/docs/study-semantic-prompt-policy-design-rationale.md"
+        ],
+        "reason": "The default CLI enters one transient source-revalidated summary application, while CLI, TUI, Python, agent, and MCP deep routes retain the targetless exhaustive Run, exact Open, and version-bound Refresh lifecycle with no Context Apply."
+      },
+      "copy": {
+        "evidence": [
+          "agent-records/docs/copy-callable-boundary-matrix.md",
+          "agent-records/docs/granted-derived-ownership-design-rationale.md",
+          "agent-records/docs/memory-transfer-design-rationale.md"
+        ],
+        "reason": "CLI, Embed-shaped multi-Memory TUI, Python, agent, and MCP routes share one provider-free ordered direct-Memory plan, including explicit export-and-retain Grant bindings, local-only Target placement, mandatory fresh output UIDs, atomic checkpoint, and Undo/Redo boundary."
+      },
+      "distill": {
+        "evidence": [
+          "agent-records/docs/distill-elaborate-generative-reduction-design-rationale.md",
+          "agent-records/docs/distill-elaborate-application-boundary-matrix.md",
+          "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
+          "agent-records/docs/goal-focus-operand-design-rationale.md",
+          "agent-records/docs/study-semantic-prompt-policy-design-rationale.md"
+        ],
+        "reason": "CLI, TUI, public, agent, MCP, Ground, provider, and prepared-result routes share the reviewed Distill application contract."
+      },
+      "elaborate": {
+        "evidence": [
+          "agent-records/docs/distill-elaborate-generative-reduction-design-rationale.md",
+          "agent-records/docs/distill-elaborate-application-boundary-matrix.md",
+          "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
+          "agent-records/docs/fit-general-judgment-design-rationale.md",
+          "agent-records/docs/goal-focus-operand-design-rationale.md",
+          "agent-records/docs/mem-elaborate-design-rationale.md",
+          "agent-records/docs/study-semantic-prompt-policy-design-rationale.md"
+        ],
+        "reason": "CLI, TUI, public, agent, MCP, Ground, provider, and prepared-result routes share the reviewed Elaborate application contract, including the best-effort default, explicit strict gate, and quality-bound receipt projection."
+      },
+      "embed": {
+        "evidence": [
+          "agent-records/docs/embed-application-boundary-matrix.md",
+          "agent-records/docs/granted-context-embed-design-rationale.md",
+          "agent-records/docs/granted-derived-ownership-design-rationale.md",
+          "agent-records/docs/mem-embed-placement-design-rationale.md",
+          "agent-records/docs/memory-reference-embed-semantics-design-rationale.md"
+        ],
+        "reason": "Context and Memory live-link CLI/TUI, Python, agent, and MCP routes share typed placement, local or READ+EMBED Grant Source freeze, content-free live authority bindings, CAS Apply, and checkpoint contracts through one terminal-independent operation boundary."
+      },
+      "find": {
+        "evidence": [
+          "agent-records/docs/find-application-boundary-matrix.md",
+          "agent-records/docs/find-search-compact-scope-design-rationale.md",
+          "agent-records/docs/search-find-replace-design-rationale.md"
+        ],
+        "reason": "CLI, TUI, Python, agent, and MCP routes share one provider-free readable-source freeze and complete literal or explicit-regex span result with no cache, session, or effect."
+      },
+      "fit": {
+        "evidence": [
+          "agent-records/docs/fit-application-boundary-matrix.md",
+          "agent-records/docs/context-name-portability-design-rationale.md"
+        ],
+        "reason": "General and Ground Fit routes share typed application/runtime execution and one terminal-independent compact receipt projection; standalone Fit has no TUI route."
+      },
+      "forget": {
+        "evidence": [
+          "agent-records/docs/context-locator-design-rationale.md",
+          "agent-records/docs/forget-application-boundary-matrix.md",
+          "agent-records/docs/forget-public-python-api-design-rationale.md",
+          "agent-records/docs/forget-agent-adapter-design-rationale.md",
+          "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md"
+        ],
+        "reason": "CLI, TUI, Python, agent, and MCP routes share one complete-frame process-local Analyze, Select, Revise, authority/CAS Apply, and exact in-process replay lifecycle."
+      },
+      "help": {
+        "evidence": [
+          "agent-records/docs/help-application-boundary-matrix.md",
+          "agent-records/docs/help-application-design-rationale.md",
+          "agent-records/docs/mem-help-design-rationale.md"
+        ],
+        "reason": "Bare CLI, Python, agent, and MCP discovery remain Store-free and provider-free over the canonical catalog; the positional CLI request route freezes the same complete catalog in a terminal-independent application, uses one bounded provider turn only to select exact IDs, and renders canonical Help rows without execution or partial publication."
+      },
+      "init": {
+        "evidence": [
+          "agent-records/docs/context-init-application-boundary-matrix.md",
+          "agent-records/docs/context-name-portability-design-rationale.md"
+        ],
+        "reason": "Ordinary Context initialization has one typed terminal-free transaction and independent exact-name CLI/TUI presenters; Study initialization remains a separate operation."
+      },
+      "merge": {
+        "evidence": [
+          "agent-records/docs/merge-application-boundary-matrix.md",
+          "agent-records/docs/context-locator-design-rationale.md",
+          "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md"
+        ],
+        "reason": "Direct and recursive Merge planning, review, application, and presentation use the same frozen typed plan and runtime."
+      },
+      "move": {
+        "evidence": [
+          "agent-records/docs/granted-derived-ownership-design-rationale.md",
+          "agent-records/docs/move-callable-boundary-matrix.md",
+          "agent-records/docs/memory-transfer-design-rationale.md"
+        ],
+        "reason": "CLI, Embed-shaped multi-Memory TUI, Python, agent, and MCP routes share one provider-free local ownership-transfer plan, complete inbound-link freeze, default atomic live-Embed retargeting with explicit Break, and one-unit Undo/Redo boundary; explicit granted Sources fail with the Copy-then-local-Move boundary."
+      },
+      "meld": {
+        "evidence": [
+          "agent-records/docs/meld-application-boundary-matrix.md",
+          "agent-records/docs/meld-session-lifecycle-design-rationale.md",
+          "agent-records/docs/context-or-inline-memory-operand-design-rationale.md",
+          "agent-records/docs/interactive-semantic-command-boundary-design-rationale.md",
+          "agent-records/docs/init-study-prewarm-regeneration-design-rationale.md",
+          "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
+          "agent-records/docs/session-endpoint-setup-design-rationale.md",
+          "agent-records/docs/terminal-semantic-session-rotation-design-rationale.md"
+        ],
+        "reason": "CLI, TUI, Python, and agent routes share typed Start, Restart, saved-turn, cache/provider, CAS, and Apply lifecycles with exact/equivalent/projected reuse and one reviewed-session version contract."
+      },
+      "pwd": {
+        "evidence": [
+          "agent-records/docs/mem-pwd-design-rationale.md"
+        ],
+        "reason": "The only current route is a typed terminal-independent current-Context read with a one-line CLI presenter."
+      },
+      "query": {
+        "evidence": [
+          "agent-records/docs/federated-query-design-rationale.md",
+          "agent-records/docs/query-callable-boundary-matrix.md",
+          "agent-records/docs/query-answer-application-boundary-matrix.md",
+          "agent-records/docs/query-reference-application-boundary-matrix.md",
+          "agent-records/docs/query-case-derived-answer-design-rationale.md",
+          "agent-records/docs/study-semantic-prompt-policy-design-rationale.md"
+        ],
+        "reason": "Ordinary, granted, and query-only families plus CLI, TUI, public, and agent projections have a verified operation package."
+      },
+      "reference": {
+        "evidence": [
+          "agent-records/docs/granted-derived-ownership-design-rationale.md",
+          "agent-records/docs/memory-reference-embed-semantics-design-rationale.md",
+          "agent-records/docs/reference-callable-boundary-matrix.md"
+        ],
+        "reason": "CLI, TUI, Python, agent, and MCP routes share one provider-free frozen local or explicit export-and-retain Grant Memory Source, local Target snapshot, content-digest revalidation, atomic checkpoint, and immutable stored-value contract."
+      },
+      "replace": {
+        "evidence": [
+          "agent-records/docs/replace-callable-boundary-matrix.md",
+          "agent-records/docs/search-find-replace-design-rationale.md"
+        ],
+        "reason": "CLI, TUI, Python, agent, and MCP routes share one complete local-scope frozen plan, exact-digest review, atomic multi-Context Apply, and operation-unit Undo/Redo boundary without provider or cache use."
+      },
+      "resolve": {
+        "evidence": [
+          "agent-records/docs/resolve-application-boundary-matrix.md",
+          "agent-records/docs/resolve-fit-repair-design-rationale.md",
+          "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
+          "agent-records/docs/resolution-lifecycle-design-rationale.md",
+          "agent-records/docs/study-semantic-prompt-policy-design-rationale.md"
+        ],
+        "reason": "Direct-Memory Fit repair exposes CLI, TUI, public, agent, and MCP projections over one typed analysis, exact replay, authority, and checkpointed Apply boundary."
+      },
+      "dedun": {
+        "evidence": [
+          "agent-records/docs/context-locator-design-rationale.md",
+          "agent-records/docs/dedun-callable-boundary-matrix.md",
+          "agent-records/docs/dedun-design-rationale.md",
+          "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
+          "agent-records/docs/memory-quality-finders-design-rationale.md",
+          "agent-records/docs/quality-finding-handoff-design-rationale.md",
+          "agent-records/docs/resolution-lifecycle-design-rationale.md"
+        ],
+        "reason": "Dedun reuses the closed exact-plus-semantic analysis, keeps every recursive Context as an independent direct frame, prepares all deterministic earliest-UID survivors before publication, and applies a local lexical subtree as one reference-safe rollback-safe Undoable command unit; direct Grant and exact replay routes retain their existing boundary."
+      },
+      "dedup": {
+        "evidence": [
+          "agent-records/docs/dedup-callable-boundary-matrix.md",
+          "agent-records/docs/dedup-design-rationale.md"
+        ],
+        "reason": "The CLI and public Python routes enter one provider-free role-aware exact application boundary for direct or local lexical reach, retain first-in-Context occurrence UIDs without cross-Context or cross-role grouping, and publish recursive changes atomically as one Undoable command unit."
+      },
+      "delete": {
+        "evidence": [
+          "agent-records/docs/delete-callable-boundary-matrix.md",
+          "agent-records/docs/unified-delete-selector-design-rationale.md"
+        ],
+        "reason": "CLI and TUI aliases, public Python, agent, and MCP routes share one terminal-independent Delete package; checkpointed direct-item removal remains Undoable, while exact-plan Context deletion is separately approved, permanent, lifecycle-recorded, and explicitly non-Undoable."
+      },
+      "find-duplicates": {
+        "evidence": [
+          "agent-records/docs/context-locator-design-rationale.md",
+          "agent-records/docs/find-duplicates-callable-boundary-matrix.md",
+          "agent-records/docs/dedup-design-rationale.md",
+          "agent-records/docs/study-semantic-prompt-policy-design-rationale.md"
+        ],
+        "reason": "The CLI and public Python routes share one provider-free role-aware exact-group analysis for direct or readable lexical reach, preserve each Context as an independent Memory, Embed, and Reference frame, and publish a complete typed read-only report without mutation or checkpoint creation."
+      },
+      "find-redundancies": {
+        "evidence": [
+          "agent-records/docs/context-locator-design-rationale.md",
+          "agent-records/docs/find-redundancies-callable-boundary-matrix.md",
+          "agent-records/docs/memory-quality-finders-design-rationale.md",
+          "agent-records/docs/quality-finding-handoff-design-rationale.md",
+          "agent-records/docs/read-report-lifecycle-design-rationale.md",
+          "agent-records/docs/study-semantic-prompt-policy-design-rationale.md"
+        ],
+        "reason": "CLI, public Python, agent, and MCP routes share one frozen DUN analysis for an exact root or readable lexical subtree: recursive Contexts remain independent direct semantic frames, same-role exact items remain typed, all frames validate before publication, and only the separate Dedun adapter enters the survivor and Apply boundary."
+      },
+      "sever": {
+        "evidence": [
+          "agent-records/docs/sever-application-boundary-matrix.md",
+          "agent-records/docs/application-flow-design-rationale.md",
+          "agent-records/docs/context-locator-design-rationale.md",
+          "agent-records/docs/context-name-portability-design-rationale.md",
+          "agent-records/docs/interactive-semantic-command-boundary-design-rationale.md",
+          "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
+          "agent-records/docs/mem-sever-design-rationale.md",
+          "agent-records/docs/ownership-aware-application-review-design-rationale.md",
+          "agent-records/docs/semantic-resolution-workbench-design-rationale.md",
+          "agent-records/docs/session-endpoint-setup-design-rationale.md",
+          "agent-records/docs/study-semantic-prewarm-registry-design-rationale.md",
+          "agent-records/docs/terminal-ui-integration-design-rationale.md"
+        ],
+        "reason": "Analysis, cache reuse, saved-session review, save-location revision, and both self-save and other-save Apply execute through typed application/runtime boundaries."
+      },
+      "show": {
+        "evidence": [
+          "agent-records/docs/show-application-boundary-matrix.md",
+          "agent-records/docs/show-application-design-rationale.md"
+        ],
+        "reason": "CLI direct/recursive scope, Python, agent, MCP, and Find follow-up routes share one live typed inspection application boundary with one-snapshot targeting, readable-catalog traversal, READ-Grant projection, and structural query-only concealment."
+      },
+      "status": {
+        "evidence": [
+          "agent-records/docs/status-application-boundary-matrix.md",
+          "agent-records/docs/mem-status-short-design-rationale.md"
+        ],
+        "reason": "Detailed, compact, recursive, lineage, local, and granted CLI routes share one typed read-only inventory, bounded preview, relationship, and recent-checkpoint application/runtime boundary."
+      },
+      "summarize": {
+        "evidence": [
+          "agent-records/docs/summarize-application-boundary-matrix.md",
+          "agent-records/docs/read-report-lifecycle-design-rationale.md"
+        ],
+        "reason": "Direct and recursive reads share one terminal-independent application result with independent plain and TUI presenters."
+      },
+      "switch": {
+        "evidence": [
+          "agent-records/docs/switch-application-boundary-matrix.md",
+          "agent-records/docs/context-listing-design-rationale.md",
+          "agent-records/docs/mem-switch-picker-design-rationale.md",
+          "agent-records/docs/mem-switch-navigation-history-design-rationale.md"
+        ],
+        "reason": "Explicit CLI, interactive picker, checkout-compatible selection, and bounded previous/next traversal share one typed global/relative/history target, READ authorization, target validation, and current-pointer/history CAS boundary."
+      },
+      "branch": {
+        "evidence": [
+          "agent-records/docs/branch-application-boundary-matrix.md",
+          "agent-records/docs/history-uid-presentation-design-rationale.md",
+          "agent-records/docs/mem-branch-design-rationale.md"
+        ],
+        "reason": "Explicit CLI, interactive setup, checkout -b compatibility, exact and recursive planning, require-new publication, current-pointer transition, and command-unit recovery share one typed Branch application/runtime boundary."
+      },
+      "chunk": {
+        "evidence": [
+          "agent-records/docs/chunk-application-boundary-matrix.md",
+          "agent-records/docs/mem-chunk-design-rationale.md"
+        ],
+        "reason": "The CLI and historical Python compatibility routes share one operation-owned mechanical split domain, direct-Memory plan, and authorized checkpointed publication boundary."
+      },
+      "clear": {
+        "evidence": [
+          "agent-records/docs/clear-application-boundary-matrix.md",
+          "agent-records/docs/mem-clear-design-rationale.md"
+        ],
+        "reason": "Exact and recursive CLI routes share one typed request/result and operation runtime for target resolution, Grant boundaries, complete subtree freezing, checkpointing, and atomic publication."
+      },
+      "contexts": {
+        "evidence": [
+          "agent-records/docs/contexts-application-boundary-matrix.md",
+          "agent-records/docs/context-listing-design-rationale.md"
+        ],
+        "reason": "The only current route freezes one read-only local-plus-Grant hierarchy into a terminal-independent typed catalog before CLI presentation."
+      },
+      "redo": {
+        "evidence": [
+          "agent-records/docs/semantic-apply-undo-design-rationale.md",
+          "agent-records/docs/undo-redo-application-boundary-matrix.md"
+        ],
+        "reason": "The CLI enters one fixed Redo adapter over the shared fail-closed granted-versus-local restoration selector and preserves one durable redo operation identity."
+      },
+      "undo": {
+        "evidence": [
+          "agent-records/docs/semantic-apply-undo-design-rationale.md",
+          "agent-records/docs/undo-redo-application-boundary-matrix.md"
+        ],
+        "reason": "The CLI enters one fixed Undo adapter over the shared fail-closed granted-versus-local restoration selector and preserves one durable undo operation identity."
+      },
+      "translate": {
+        "evidence": [
+          "agent-records/docs/mem-translate-design-rationale.md",
+          "agent-records/docs/translate-application-boundary-matrix.md"
+        ],
+        "reason": "CLI and historical in-memory routes share typed targeting, saved-view reuse and refresh, curation, strict import/export, provider orchestration, sidecar CAS, and both checkpointed materialization boundaries under the Translate operation package."
+      }
+    },
+    "MIXED": {
+      "search": {
+        "evidence": [
+          "agent-records/docs/find-search-application-boundary-matrix.md",
+          "agent-records/docs/find-search-compact-scope-design-rationale.md",
+          "agent-records/docs/search-find-replace-design-rationale.md"
+        ],
+        "reason": "Search and materialization are verified, but the current Search dialogue route remains outside the reviewed application boundary."
+      },
+      "update": {
+        "evidence": [
+          "agent-records/docs/context-locator-design-rationale.md",
+          "agent-records/docs/update-application-boundary-matrix.md",
+          "agent-records/docs/update-terminal-session-rotation-design-rationale.md",
+          "agent-records/docs/context-or-inline-memory-operand-design-rationale.md",
+          "agent-records/docs/init-study-prewarm-regeneration-design-rationale.md",
+          "agent-records/docs/interactive-semantic-command-boundary-design-rationale.md",
+          "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
+          "agent-records/docs/goal-focus-operand-design-rationale.md",
+          "agent-records/docs/session-endpoint-setup-design-rationale.md"
+        ],
+        "reason": "Apply policy and recovery are verified, but the remaining Update routes have not been traced into one complete reviewed application boundary."
+      }
+    },
+    "LEGACY": {},
+    "N/A": {},
+    "UNREVIEWED": [
+      "audit",
+      "check-conformance",
+      "checkout",
+      "checkpoint",
+      "config",
+      "diff",
+      "edit",
+      "eval",
+      "find-ambiguities",
+      "find-conflicts",
+      "ground",
+      "impact",
+      "import",
+      "init-study",
+      "list",
+      "lock",
+      "log",
+      "profile",
+      "provider",
+      "rationale",
+      "rename",
+      "revert",
+      "review",
+      "share",
+      "shell-init",
+      "trace",
+      "unlock"
+    ]
+  }
+}

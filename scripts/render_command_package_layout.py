@@ -12,8 +12,12 @@ import sys
 
 REPOSITORY = Path(__file__).resolve().parents[1]
 COMMANDS = REPOSITORY / "src" / "memcommit" / "commands"
-OUTPUT_JSON = REPOSITORY / "agent-records" / "command-package-layout-plan.json"
-OUTPUT_MARKDOWN = REPOSITORY / "agent-records" / "command-package-layout-plan.md"
+OUTPUT_JSON = (
+    REPOSITORY / "agent-records" / "docs" / "command-package-layout-plan.json"
+)
+OUTPUT_MARKDOWN = (
+    REPOSITORY / "agent-records" / "docs" / "command-package-layout-plan.md"
+)
 LEGACY_ALIAS_MODULE = (
     REPOSITORY / "src" / "memcommit" / "compatibility" / "_legacy_command_alias_map.py"
 )

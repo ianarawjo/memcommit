@@ -1057,7 +1057,10 @@ def _build_study_bundle_contents(
         )
     package.mkdir(parents=True, exist_ok=True)
     root = fixture_root or (
-        Path(__file__).resolve().parents[3] / "agent-records" / "fixtures"
+        Path(__file__).resolve().parents[3]
+        / "agent-records"
+        / "docs"
+        / "fixtures"
     )
     profile_records: list[dict[str, object]] = []
     manifest: list[BundleManifestEntry] = []

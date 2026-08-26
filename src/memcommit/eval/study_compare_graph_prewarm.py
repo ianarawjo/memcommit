@@ -988,7 +988,8 @@ def run_graph_prewarm(
 def _default_output_root(profile_name: str, model: str, reasoning: str) -> Path:
     safe_model = model.replace("/", "-")
     return (
-        Path("outputs")
+        Path("agent-records")
+        / "outputs"
         / "study-compare-graph-prewarm"
         / profile_name
         / (

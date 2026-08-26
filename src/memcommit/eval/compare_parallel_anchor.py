@@ -661,7 +661,7 @@ def run_parallel_anchor_compare(
 
 def _default_output_path() -> Path:
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    return Path("outputs") / "compare-latency-ab" / (
+    return Path("agent-records") / "outputs" / "compare-latency-ab" / (
         f"{stamp}-parallel-anchor.json"
     )
 

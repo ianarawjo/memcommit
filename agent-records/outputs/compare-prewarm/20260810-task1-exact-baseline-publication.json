@@ -1,0 +1,14 @@
+{
+  "analysis_uid": "74bf4d5f-6e42-4b49-a3a0-66ee389eb1f8",
+  "baseline_profile_name": "study-baseline",
+  "entry_key": "761e8566aa4ac33b38626907d1d6d93e1764b1307057ce298666a291f931bcf8",
+  "kind": "STUDY_COMPARE_PREWARM_PUBLICATION_RECEIPT",
+  "operation": "COMPARE",
+  "provider_calls_during_publication": 0,
+  "schema_version": 1,
+  "semantic_content_in_receipt": false,
+  "source_artifact": "agent-records/outputs/study-compare-graph-prewarm/study-20260810T180141Z-641b669e/gpt-5.6-sol-medium-compact-v1-graph-v2/task-1/pairs/f406beeb20ce83a4a524a781b288b523c82f69c9cf483e167cf43b8bbb3a9248.json",
+  "source_provider_calls": 2,
+  "source_provider_seconds": 414.0063945840084,
+  "task": "task-1"
+}
