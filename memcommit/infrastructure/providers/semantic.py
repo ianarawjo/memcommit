@@ -38,7 +38,7 @@ from memcommit.infrastructure.providers.policy import (
 )
 
 if TYPE_CHECKING:
-    from memcommit.profile_config import ProfileRegistry
+    from memcommit.operations.profile.config import ProfileRegistry
 
 
 OLLAMA_DEFAULT_BASE_URL = "http://127.0.0.1:11434"

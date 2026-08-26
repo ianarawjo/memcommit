@@ -25,7 +25,7 @@ from memcommit.resolution import (
 )
 
 if TYPE_CHECKING:
-    from memcommit.update import GrantedUpdateTarget
+    from memcommit.operations.update.model import GrantedUpdateTarget
 
 
 RESOLVE_CONTRACT_VERSION = "resolve-exact-rules-v3"

@@ -26,7 +26,7 @@ from memcommit.resolution import (
 )
 
 if TYPE_CHECKING:
-    from memcommit.update import GrantedUpdateTarget
+    from memcommit.operations.update.model import GrantedUpdateTarget
 
 
 DEDUP_CONTRACT_VERSION = "dedun-v3"

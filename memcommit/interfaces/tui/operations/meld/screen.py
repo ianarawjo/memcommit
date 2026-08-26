@@ -139,11 +139,11 @@ def run_meld_shell(
         ResolutionGlobalStrategy,
         run_resolution_workbench_shell,
     )
-    from memcommit.meld_resolution_adapter import (
+    from memcommit.operations.meld.resolution_adapter import (
         MeldResolutionWorkbenchAdapter,
     )
     from memcommit.interfaces.tui.workbenches.impact import ImpactController
-    from memcommit.review_report_adapters import meld_review_report
+    from memcommit.operations.review.report_adapters import meld_review_report
 
     snapshot_hint = (
         "Run the same 'mem meld' command outside a TTY to render its saved snapshot."

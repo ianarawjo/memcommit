@@ -148,7 +148,7 @@ def dev_fake(
     Example:
         mem dev fake test-user "a software engineer who likes hiking and coffee"
     """
-    from memcommit.config import Config
+    from memcommit.infrastructure.config import Config
     from memcommit.semantic.llm import LLMClient, LLMError
     from memcommit.store import MemoryStore
     import memcommit.ops as ops

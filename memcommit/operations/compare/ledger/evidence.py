@@ -166,7 +166,7 @@ class ProjectedComparisonMemory(Memory):
 def _context_source_form(context: Context) -> ComparisonSourceForm:
     # Import lazily so the core Context model remains independent from the
     # immutable Context snapshot package.
-    from memcommit.context_snapshot import ContextSnapshotRef
+    from memcommit.retained_history.context_snapshot import ContextSnapshotRef
 
     if isinstance(context, ContextSnapshotRef):
         return "CONTEXT_REFERENCE"
@@ -181,7 +181,7 @@ def _root_source_form(context: Context) -> ComparisonSourceForm:
 
 
 def _context_owner(context: Context) -> tuple[str, str]:
-    from memcommit.context_snapshot import ContextSnapshotRef
+    from memcommit.retained_history.context_snapshot import ContextSnapshotRef
 
     if isinstance(context, ContextSnapshotRef):
         return context.target_context_uid, context.target_context_name

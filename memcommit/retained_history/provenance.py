@@ -889,7 +889,7 @@ def _owner_aware_meld_change_evidence(
     ):
         return {}, "has a mismatched owner-aware meld checkpoint"
     try:
-        from memcommit.meld import (
+        from memcommit.operations.meld.model import (
             MeldChangeSet,
             MeldFrame,
             meld_canonical_digest,
@@ -1232,7 +1232,7 @@ def _meld_change_evidence(
     }:
         return {}, "has an unsupported meld record"
     try:
-        from memcommit.meld import MeldChangeSet, meld_canonical_digest
+        from memcommit.operations.meld.model import MeldChangeSet, meld_canonical_digest
 
         change_set = MeldChangeSet.from_dict(record["change_set"])
     except (KeyError, TypeError, ValueError):

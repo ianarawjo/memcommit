@@ -47,7 +47,7 @@ from memcommit.infrastructure.providers.subscription import CodexChatGPTProvider
 from memcommit.store import MemoryStore
 
 if TYPE_CHECKING:
-    from memcommit.profile_config import ProfileRegistry
+    from memcommit.operations.profile.config import ProfileRegistry
 
 
 COMPARISON_AGGREGATE_TIMEOUT_SECONDS = int(

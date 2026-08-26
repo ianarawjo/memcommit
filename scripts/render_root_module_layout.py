@@ -372,6 +372,55 @@ def render_markdown(plan: dict[str, object]) -> str:
     return "\n".join(lines)
 
 
+def verify_current_layout() -> None:
+    relocated = OPERATION_TARGETS | CONCEPT_TARGETS
+    failures = []
+    for stem, target in sorted(relocated.items()):
+        root_path = PACKAGE / f"{stem}.py"
+        target_path = REPOSITORY / _module_target_path(target)
+        if not target_path.is_file():
+            failures.append(f"missing canonical target: {target_path}")
+            continue
+        if not root_path.is_file():
+            failures.append(f"missing compatibility path: {root_path}")
+            continue
+        facade = root_path.read_text(encoding="utf-8")
+        if target not in facade or "sys.modules[__name__]" not in facade:
+            failures.append(f"root path is not an identity alias: {root_path}")
+
+    legacy_stems = set(relocated)
+    for path in PACKAGE.rglob("*.py"):
+        if path.parent == PACKAGE:
+            continue
+        tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+        for node in ast.walk(tree):
+            modules = []
+            if isinstance(node, ast.ImportFrom) and node.module:
+                modules.append(node.module)
+            elif isinstance(node, ast.Import):
+                modules.extend(alias.name for alias in node.names)
+            for module in modules:
+                parts = module.split(".")
+                if len(parts) > 1 and parts[0] == "memcommit":
+                    if parts[1] in legacy_stems:
+                        failures.append(
+                            f"internal legacy import: {path}:{node.lineno}:{module}"
+                        )
+
+    root_modules = sorted(PACKAGE.glob("*.py"))
+    if len(root_modules) != 249:
+        failures.append(
+            f"expected 249 compatibility/root modules, found {len(root_modules)}"
+        )
+    if failures:
+        raise SystemExit("\n".join(failures))
+    print(
+        "root module layout is canonical: "
+        f"{len(relocated)} relocated implementations, "
+        f"{len(ROOT_BOUNDARIES)} retained root boundaries"
+    )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--check", action="store_true")
@@ -386,6 +435,7 @@ def main() -> int:
             raise SystemExit("root module relocation JSON is stale")
         if OUTPUT_MARKDOWN.read_text(encoding="utf-8") != rendered_markdown:
             raise SystemExit("root module relocation Markdown is stale")
+        verify_current_layout()
         print("root module relocation plan is current")
         return 0
     OUTPUT_JSON.write_text(rendered_json, encoding="utf-8")

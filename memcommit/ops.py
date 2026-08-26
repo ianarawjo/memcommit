@@ -33,7 +33,7 @@ if TYPE_CHECKING:
         AtomizeImpactReport,
         AtomizeProvider,
     )
-    from memcommit.findings import (
+    from memcommit.reviewing.quality.findings import (
         AmbiguityReport,
         ConflictReport,
         DuplicateReport,
@@ -265,7 +265,7 @@ def reference_context(
     and self-reference checks without importing Store or CLI concerns.
     """
 
-    from memcommit.context_snapshot import ContextSnapshotRef
+    from memcommit.retained_history.context_snapshot import ContextSnapshotRef
 
     if not isinstance(snapshot, ContextSnapshotRef):
         raise TypeError("Context Reference requires a ContextSnapshotRef.")
@@ -467,7 +467,7 @@ def _copy_context_for_branch(
         uid=str(uuid.uuid4()),
         name=validate_portable_context_name(new_name),
     )
-    from memcommit.context_snapshot import ContextSnapshotRef
+    from memcommit.retained_history.context_snapshot import ContextSnapshotRef
 
     uid_map = _branch_memory_uid_map(
         ctx,
@@ -586,7 +586,7 @@ def branch_subtree(
         )
         for source in sources
     }
-    from memcommit.context_snapshot import ContextSnapshotRef
+    from memcommit.retained_history.context_snapshot import ContextSnapshotRef
 
     # Populate every target Memory first so an internal live reference can
     # bind to the independently owned target occurrence regardless of Context
@@ -949,7 +949,7 @@ def find_redundancies(
     context_name_by_uid: "Mapping[str, str] | None" = None,
 ) -> "DuplicateReport":
     """Find exact DUP and semantic-DUN evidence without mutating *ctx*."""
-    from memcommit.findings import find_redundancies as _find_redundancies
+    from memcommit.reviewing.quality.findings import find_redundancies as _find_redundancies
 
     return _find_redundancies(
         ctx,
@@ -974,7 +974,7 @@ def find_ambiguities(
     context_name_by_uid: "Mapping[str, str] | None" = None,
 ) -> "AmbiguityReport":
     """Find ambiguous direct Memories without mutating *ctx*."""
-    from memcommit.findings import find_ambiguities as _find_ambiguities
+    from memcommit.reviewing.quality.findings import find_ambiguities as _find_ambiguities
 
     return _find_ambiguities(
         ctx,
@@ -990,7 +990,7 @@ def find_conflicts(
     context_name_by_uid: "Mapping[str, str] | None" = None,
 ) -> "ConflictReport":
     """Find conflicting direct-Memory pairs without mutating *ctx*."""
-    from memcommit.findings import find_conflicts as _find_conflicts
+    from memcommit.reviewing.quality.findings import find_conflicts as _find_conflicts
 
     return _find_conflicts(
         ctx,

@@ -2079,7 +2079,7 @@ def _payload(
     # The aggregate call names the complete pair space instead of asking the
     # model to silently choose likely pairs. The provider-capacity preflight
     # below remains the only aggregate size boundary.
-    from memcommit.findings import (
+    from memcommit.reviewing.quality.findings import (
         _load_calibration_cases,
     )
     pairs: list[dict[str, str]] = []

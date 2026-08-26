@@ -214,8 +214,8 @@ def _run_update_report(
     session_uid: str | None,
     snapshot: bool,
 ) -> None:
-    from memcommit.review_report_adapters import update_review_report
-    from memcommit.update_receipt_store import UpdateReceiptStore
+    from memcommit.operations.review.report_adapters import update_review_report
+    from memcommit.operations.update.receipt_store import UpdateReceiptStore
 
     current = store.load_staged_update() or store.load_impact_plan()
     retained = UpdateReceiptStore(store).list()
@@ -289,7 +289,7 @@ def _run_compare_report(
         load_saved_comparison,
         revalidate_saved_comparison,
     )
-    from memcommit.review_report_adapters import compare_review_report
+    from memcommit.operations.review.report_adapters import compare_review_report
 
     selected = _select_report_session(
         comparison_session_entries(store),
@@ -314,7 +314,7 @@ def _run_meld_report(
         list_meld_session_catalog,
         reload_selected_meld_session,
     )
-    from memcommit.review_report_adapters import meld_review_report
+    from memcommit.operations.review.report_adapters import meld_review_report
 
     catalog = list_meld_session_catalog(store)
     by_key = {entry.session_uid: entry for entry in catalog}
@@ -359,7 +359,7 @@ def _run_sever_report(
         list_sever_session_catalog,
         reload_selected_sever_session,
     )
-    from memcommit.review_report_adapters import sever_review_report
+    from memcommit.operations.review.report_adapters import sever_review_report
     from memcommit.operations.sever.session_store import SeverSessionStore
 
     sessions = SeverSessionStore(store)
@@ -494,7 +494,7 @@ def _run_atomize_workbench(
                 "An applied Atomize analysis is read-only; its saved findings "
                 "and responses cannot be changed."
             )
-        from memcommit.review_report_adapters import atomize_review_report
+        from memcommit.operations.review.report_adapters import atomize_review_report
 
         _show_operation_review(
             atomize_review_report(analysis, workbench),
@@ -528,7 +528,7 @@ def _run_atomize_workbench(
         workbench.response_for(matches[0].uid).text = response or ""
         store.save_atomize_workbench(workbench)
         from memcommit.commands.review_report import render_review_report_snapshot
-        from memcommit.review_report_adapters import atomize_review_report
+        from memcommit.operations.review.report_adapters import atomize_review_report
 
         typer.echo(
             render_review_report_snapshot(
@@ -538,7 +538,7 @@ def _run_atomize_workbench(
         return
     if snapshot or not sys.stdin.isatty() or not sys.stdout.isatty():
         from memcommit.commands.review_report import render_review_report_snapshot
-        from memcommit.review_report_adapters import atomize_review_report
+        from memcommit.operations.review.report_adapters import atomize_review_report
 
         typer.echo(
             render_review_report_snapshot(
@@ -547,8 +547,8 @@ def _run_atomize_workbench(
         )
         return
     from memcommit.commands.review_report import run_review_report_shell
-    from memcommit.resolution_workbench import ResolutionNavigation
-    from memcommit.review_report_adapters import atomize_review_report
+    from memcommit.resolution.workbench import ResolutionNavigation
+    from memcommit.operations.review.report_adapters import atomize_review_report
 
     navigation = ResolutionNavigation(selected_item_uid=workbench.cursor_uid)
 

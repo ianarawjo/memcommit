@@ -286,7 +286,7 @@ def _saved_update_impact(
     session_uid: str | None,
 ) -> None:
     from memcommit.commands.impact_sessions import update_impact_presentation
-    from memcommit.update_receipt_store import UpdateReceiptStore
+    from memcommit.operations.update.receipt_store import UpdateReceiptStore
 
     current = store.load_staged_update() or store.load_impact_plan()
     receipts = UpdateReceiptStore(store)

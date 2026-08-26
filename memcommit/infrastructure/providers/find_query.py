@@ -27,7 +27,7 @@ from memcommit.infrastructure.command_ledger.study_actions import (
 def _connect_active_operation(operation: str) -> SemanticProvider:
     # semantic_provider imports this package's policy module while it starts;
     # defer the reverse dependency so either public module can load first.
-    from memcommit.semantic_provider import connect_operation_provider
+    from memcommit.infrastructure.providers.semantic import connect_operation_provider
 
     provider, _policy = connect_operation_provider(operation)
     return provider

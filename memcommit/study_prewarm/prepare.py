@@ -243,7 +243,7 @@ def inspect_study_prewarm_compatibility(
 
 
 def _current_update_schema_version() -> int:
-    from memcommit.update import UPDATE_SCHEMA_VERSION
+    from memcommit.operations.update.model import UPDATE_SCHEMA_VERSION
 
     return UPDATE_SCHEMA_VERSION
 

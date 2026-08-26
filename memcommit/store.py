@@ -487,7 +487,7 @@ def _rewrite_context_pointers(
                 collisions.add(target_name)
             selector_names[target_name] = "context_ref"
         elif kind == "context_snapshot_ref":
-            from memcommit.context_snapshot import ContextSnapshotRef
+            from memcommit.retained_history.context_snapshot import ContextSnapshotRef
 
             snapshot = ContextSnapshotRef.from_dict(item)
             target_name = snapshot.target_context_name
@@ -634,7 +634,7 @@ def _rewrite_branched_context_pointers(
             # external to the local subtree UID remapping.
             ordinary_names.add(name)
         elif kind == "context_snapshot_ref":
-            from memcommit.context_snapshot import ContextSnapshotRef
+            from memcommit.retained_history.context_snapshot import ContextSnapshotRef
 
             snapshot = ContextSnapshotRef.from_dict(item)
             ordinary_names.add(snapshot.target_context_name)
@@ -1707,7 +1707,7 @@ class MemoryStore:
     @staticmethod
     def _load_update_session(path: Path):
         """Load and validate one cached semantic update session."""
-        from memcommit.update import UpdateSession
+        from memcommit.operations.update.model import UpdateSession
 
         if not path.exists():
             return None
@@ -1726,7 +1726,7 @@ class MemoryStore:
     @staticmethod
     def _save_update_session(path: Path, session) -> None:
         """Atomically persist one validated semantic update session."""
-        from memcommit.update import UpdateSession
+        from memcommit.operations.update.model import UpdateSession
 
         if not isinstance(session, UpdateSession):
             raise TypeError("Expected an UpdateSession.")
@@ -1769,7 +1769,7 @@ class MemoryStore:
                     raise ConcurrentContextUpdateError(
                         "The active update record changed before it could be saved."
                     )
-            from memcommit.update_receipt_store import UpdateReceiptStore
+            from memcommit.operations.update.receipt_store import UpdateReceiptStore
 
             receipts = UpdateReceiptStore(self)
             if current is not None and current.status in {"applied", "undone"}:
@@ -1783,7 +1783,7 @@ class MemoryStore:
 
     def _save_active_terminal_update(self, session, *, receipts=None) -> None:
         """Publish the active terminal session and immutable receipt as a pair."""
-        from memcommit.update_receipt_store import UpdateReceiptStore
+        from memcommit.operations.update.receipt_store import UpdateReceiptStore
 
         receipts = receipts or UpdateReceiptStore(self)
         previous = self._load_update_session(self.staged_update_file)
@@ -1823,7 +1823,7 @@ class MemoryStore:
         with remote publication; this prototype provides exception atomicity,
         not crash atomicity, across several Context files.
         """
-        from memcommit.update import (
+        from memcommit.operations.update.model import (
             UpdateApplicationReceipt,
             UpdateCheckpointReceipt,
             UpdateError,
@@ -1836,8 +1836,8 @@ class MemoryStore:
         )
         from memcommit.operations.update.application import prepare_update_application
         from memcommit.context_targeting.loading import load_context_scope
-        from memcommit.goal_focus import GoalFocusError
-        from memcommit.goal_focus_runtime import revalidate_goal_focus
+        from memcommit.semantic.goal_focus import GoalFocusError
+        from memcommit.semantic.goal_focus_runtime import revalidate_goal_focus
 
         if not isinstance(session, UpdateSession) or session.status != "staged":
             raise ValueError("Expected one staged UpdateSession.")
@@ -2084,7 +2084,7 @@ class MemoryStore:
     @staticmethod
     def _load_review_session(path: Path):
         """Load and strictly validate the active semantic review."""
-        from memcommit.review import ReviewError, ReviewSession
+        from memcommit.operations.review.model import ReviewError, ReviewSession
 
         if not path.exists():
             return None
@@ -2126,7 +2126,7 @@ class MemoryStore:
     def load_review_session_source(self, session_uid: str) -> Context:
         """Load the immutable direct-Context frame bound to one Review UID."""
 
-        from memcommit.review import direct_context_digest
+        from memcommit.operations.review.model import direct_context_digest
 
         session = self.load_review_session_by_uid(session_uid)
         path = self._review_session_source_path(session_uid)
@@ -2157,7 +2157,7 @@ class MemoryStore:
     def _retain_review_session_source(self, session) -> bool:
         """Persist the initial source frame once when it is still available."""
 
-        from memcommit.review import direct_context_digest
+        from memcommit.operations.review.model import direct_context_digest
 
         path = self._review_session_source_path(session.uid)
         if path.exists() or path.is_symlink():
@@ -2231,7 +2231,7 @@ class MemoryStore:
     @_profile_write_guarded
     def save_review_session(self, session) -> None:
         """Atomically save one validated semantic review session."""
-        from memcommit.review import ReviewError, ReviewSession
+        from memcommit.operations.review.model import ReviewError, ReviewSession
 
         if not isinstance(session, ReviewSession):
             raise TypeError("Expected a ReviewSession.")
@@ -2503,8 +2503,8 @@ class MemoryStore:
 
     def load_meld_choice_branches(self, session):
         """Restore sparse local choices for the exact current assessment."""
-        from memcommit.meld import MeldSession
-        from memcommit.meld_choice_branches import (
+        from memcommit.operations.meld.model import MeldSession
+        from memcommit.operations.meld.choice_branches import (
             MeldChoiceBranchError,
             MeldChoiceBranchSet,
         )
@@ -2540,8 +2540,8 @@ class MemoryStore:
 
     def save_meld_choice_branches(self, session, branches) -> None:
         """Persist only staged choices; no provider outcome is written here."""
-        from memcommit.meld import MeldSession, meld_canonical_digest
-        from memcommit.meld_choice_branches import (
+        from memcommit.operations.meld.model import MeldSession, meld_canonical_digest
+        from memcommit.operations.meld.choice_branches import (
             MeldChoiceBranchError,
             MeldChoiceBranchSet,
         )
@@ -2598,7 +2598,7 @@ class MemoryStore:
 
     def load_meld_resolution_branch(self, key: str):
         """Return one exact validated follow-up branch, if it is saved."""
-        from memcommit.meld_resolution_cache import (
+        from memcommit.operations.meld.resolution_cache import (
             MeldResolutionBranch,
             MeldResolutionCacheError,
         )
@@ -2629,7 +2629,7 @@ class MemoryStore:
 
     def save_meld_resolution_branch(self, branch) -> None:
         """Publish one immutable exact branch without replacing a peer result."""
-        from memcommit.meld_resolution_cache import (
+        from memcommit.operations.meld.resolution_cache import (
             MeldResolutionBranch,
             MeldResolutionCacheError,
         )
@@ -2735,7 +2735,7 @@ class MemoryStore:
     ):
         """Load one immutable displaced terminal Meld session."""
 
-        from memcommit.meld import MeldError, MeldSession
+        from memcommit.operations.meld.model import MeldError, MeldSession
 
         path = self._meld_session_history_path(target_context_uid, session_uid)
         if not path.exists():
@@ -2792,7 +2792,7 @@ class MemoryStore:
 
     def load_meld_session(self, target_context_uid: str):
         """Return the saved meld for one target Context, if present."""
-        from memcommit.meld import MeldError, MeldSession
+        from memcommit.operations.meld.model import MeldError, MeldSession
 
         path = self._meld_session_path(target_context_uid)
         if not path.exists():
@@ -2825,7 +2825,7 @@ class MemoryStore:
         expected_session_digest: str | None = None,
     ) -> None:
         """Persist one meld session with target-scoped optimistic concurrency."""
-        from memcommit.meld import (
+        from memcommit.operations.meld.model import (
             MeldError,
             MeldSession,
             meld_canonical_digest,
@@ -2896,7 +2896,7 @@ class MemoryStore:
         locks, and the exact new Context is rolled back before either lock is
         released if the session cannot be written.
         """
-        from memcommit.meld import MeldError, MeldSession
+        from memcommit.operations.meld.model import MeldError, MeldSession
 
         if not isinstance(session, MeldSession):
             raise TypeError("Expected a MeldSession.")
@@ -4570,7 +4570,7 @@ class MemoryStore:
     def _read_meld_records_for_rename(self) -> dict[str, dict[str, object]]:
         """Load every target-keyed Meld artifact into rename freshness."""
 
-        from memcommit.meld import MeldError, MeldSession
+        from memcommit.operations.meld.model import MeldError, MeldSession
 
         root = self.meld_sessions_dir
         if not root.exists():
@@ -4836,7 +4836,7 @@ class MemoryStore:
         post_meld_records: dict[str, dict[str, object]] = {}
         meld_session_count = 0
         from memcommit.operations.compare.ledger.model import comparison_canonical_digest
-        from memcommit.meld import MeldError, MeldSession
+        from memcommit.operations.meld.model import MeldError, MeldSession
 
         def rewrite_meld_binding(binding: object) -> bool:
             if not isinstance(binding, dict):
@@ -6702,7 +6702,7 @@ class MemoryStore:
             delete_translation_view_paths,
             translation_view_paths_for_context,
         )
-        from memcommit.rationale_cache import (
+        from memcommit.operations.rationale.cache import (
             delete_rationale_inference_paths,
             rationale_inference_paths_for_context,
         )
@@ -7534,7 +7534,7 @@ class MemoryStore:
         atomicity for multi-Context Update commands; as elsewhere in this
         prototype, a machine crash can still interrupt several file replaces.
         """
-        from memcommit.command_history import (
+        from memcommit.retained_history.command_history import (
             CommandHistoryError,
             CommandRestoreResult,
             build_command_stacks,
@@ -7771,7 +7771,7 @@ class MemoryStore:
         changed since the original command.
         """
 
-        from memcommit.command_history import (
+        from memcommit.retained_history.command_history import (
             CommandHistoryError,
             CommandRestoreResult,
             branch_tree_receipt,
@@ -8185,7 +8185,7 @@ class MemoryStore:
         place. Every member receives the same restoration receipt, so neither
         a partial tree nor an incomplete redo can enter the global stack.
         """
-        from memcommit.command_history import (
+        from memcommit.retained_history.command_history import (
             CommandRestoreResult,
             command_restore_metadata,
         )
@@ -8598,7 +8598,7 @@ class MemoryStore:
 
         from memcommit.operations.atomize.domain import AtomizeAnalysisSession
         from memcommit.operations.atomize.workbench import atomize_workbench_record_digest
-        from memcommit.command_history import (
+        from memcommit.retained_history.command_history import (
             CommandRestoreResult,
             command_restore_metadata,
         )
@@ -9041,7 +9041,7 @@ class MemoryStore:
         restore the same identity and history, including every restoration
         receipt, without copying Memory text into lifecycle metadata.
         """
-        from memcommit.command_history import (
+        from memcommit.retained_history.command_history import (
             CommandRestoreResult,
             command_restore_metadata,
         )
@@ -9398,7 +9398,7 @@ class MemoryStore:
                     raise ConcurrentContextUpdateError(
                         "The active Update receipt changed during restoration."
                     )
-                from memcommit.update import UpdateSession
+                from memcommit.operations.update.model import UpdateSession
 
                 self._save_update_session(path, UpdateSession.from_dict(value))
             return
@@ -9505,7 +9505,7 @@ class MemoryStore:
             or session.target.context_name != target_name
         ):
             raise ValueError("Meld session does not match the restored command.")
-        from memcommit.meld import (
+        from memcommit.operations.meld.model import (
             MELD_OWNER_AWARE_SCHEMA_VERSION,
             MeldCheckpointReceipt,
         )
@@ -9656,7 +9656,7 @@ class MemoryStore:
         direction: str,
     ) -> tuple[Path, dict[str, object], dict[str, object]] | None:
         """Prepare the active local Update receipt coupled to its checkpoints."""
-        from memcommit.update import operation_digest
+        from memcommit.operations.update.model import operation_digest
 
         session = self.load_staged_update()
         if session is None:
@@ -9729,7 +9729,7 @@ class MemoryStore:
         Undo/Redo cannot split the recovery unit later.
         """
 
-        from memcommit.checkpoint_catalog import (
+        from memcommit.retained_history.checkpoint_catalog import (
             CheckpointUnitRevertMember,
             CheckpointUnitRevertResult,
             ResolvedCheckpointUnit,

@@ -422,7 +422,7 @@ def _run_workbench(
         run_resolution_workbench_shell,
     )
     from memcommit.interfaces.tui.workbenches.impact import ImpactController
-    from memcommit.review_report_adapters import sever_review_report
+    from memcommit.operations.review.report_adapters import sever_review_report
 
     snapshot = execute_sever_session_open(session.uid, store=store)
     if snapshot.session != session:

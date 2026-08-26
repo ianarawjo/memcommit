@@ -389,7 +389,7 @@ def connect_semantic_provider():
     # Import lazily because the configured provider module reuses this file's
     # hardened Codex adapter. Selection is frozen when the command calls this
     # factory; callers never re-read config during one provider turn.
-    from memcommit.semantic_provider import connect_semantic_provider as connect
+    from memcommit.infrastructure.providers.semantic import connect_semantic_provider as connect
 
     return connect()
 
@@ -412,10 +412,10 @@ def connect_query_provider(provider: str) -> QueryProvider:
     # A persisted query route remains authoritative and is never replaced by
     # active-Profile semantic selection. Additional allowlisted adapters still
     # perform their own authentication/service probe before source load.
-    from memcommit.provider_types import OLLAMA_PROVIDER, OPENROUTER_PROVIDER
+    from memcommit.infrastructure.providers.types import OLLAMA_PROVIDER, OPENROUTER_PROVIDER
 
     if provider in {OLLAMA_PROVIDER, OPENROUTER_PROVIDER}:
-        from memcommit.semantic_provider import connect_provider
+        from memcommit.infrastructure.providers.semantic import connect_provider
 
         return connect_provider(provider)  # type: ignore[return-value]
     raise QueryProviderError(f"Unsupported query provider '{provider}'.")

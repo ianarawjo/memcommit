@@ -517,7 +517,7 @@ except CompareContextError:
 else:
     raise AssertionError('missing Compare analysis unexpectedly opened')
 assert 'memcommit.api._operations.compare' in sys.modules
-assert 'memcommit.comparison_execution' in sys.modules
+assert 'memcommit.operations.compare.ledger.execution' in sys.modules
 assert 'memcommit.api._operations.add' not in sys.modules
 assert 'memcommit.operations.add.application' not in sys.modules
 assert 'memcommit.operations.add.runtime' not in sys.modules

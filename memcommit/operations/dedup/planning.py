@@ -18,7 +18,7 @@ from memcommit.context import Memory
 from memcommit.reviewing.direct_item_duplicates import ExactDuplicateGroup
 
 if TYPE_CHECKING:
-    from memcommit.update import GrantedUpdateTarget
+    from memcommit.operations.update.model import GrantedUpdateTarget
 
 
 def _component_uid(
