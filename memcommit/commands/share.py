@@ -13,7 +13,7 @@ from memcommit.interfaces.console.text import (
 )
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
-from memcommit.share import (
+from memcommit.operations.share.model import (
     ShareError,
     deliver_context,
     deliver_prepared_share,

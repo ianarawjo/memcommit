@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Callable, Sequence
 
 from memcommit.context_targeting.tui.picker import choose_context
-from memcommit.share import (
+from memcommit.operations.share.model import (
     ShareError,
     SharePreview,
     list_share_endpoints,
