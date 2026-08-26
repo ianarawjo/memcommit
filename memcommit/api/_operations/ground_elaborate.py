@@ -16,7 +16,7 @@ from memcommit.api.errors import (
     SemanticStorageError,
 )
 from memcommit.api.semantic import ElaborateProposal
-from memcommit.elaborate import ElaborateError
+from memcommit.operations.elaborate.model import ElaborateError
 from memcommit.ground_elaborate import (
     execute_ground_elaborate,
     freeze_ground_elaborate,

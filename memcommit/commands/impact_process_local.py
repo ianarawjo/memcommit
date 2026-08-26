@@ -29,7 +29,7 @@ from memcommit.context_targeting.presets import (
 from memcommit.operations.distill.model import DistillError
 from memcommit.operations.distill.application import DistillRequest, DistillResult
 from memcommit.operations.distill.runtime import execute_distill, prepare_distill_add
-from memcommit.elaborate import ElaborateError, ElaborateMode
+from memcommit.operations.elaborate.model import ElaborateError, ElaborateMode
 from memcommit.operations.elaborate.add_runtime import (
     freeze_elaborate_context_source,
     prepare_elaborate_add,

@@ -7,7 +7,7 @@ import hashlib
 import json
 from typing import Literal, Protocol
 
-from memcommit.elaborate import (
+from memcommit.operations.elaborate.model import (
     ElaborateError,
     ElaborateProvider,
     ElaborateTargetContext,
@@ -15,7 +15,7 @@ from memcommit.elaborate import (
 )
 from memcommit.operations.elaborate.application import ElaborateRequest, ElaborateResult
 from memcommit.operations.elaborate.runtime import execute_elaborate
-from memcommit.elaborate_target_context import (
+from memcommit.operations.elaborate.target_context import (
     FrozenElaborateTargetContext,
     GRANTED_ELABORATE_ADD_PERMISSIONS,
     authorized_frozen_elaborate_target,

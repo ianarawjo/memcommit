@@ -13,7 +13,7 @@ from memcommit.api.errors import (
     SemanticProviderFailure,
 )
 from memcommit.api.semantic import ElaborateProposal
-from memcommit.elaborate import ElaborateError
+from memcommit.operations.elaborate.model import ElaborateError
 from memcommit.operations.elaborate.application import ElaborateRequest
 from memcommit.operations.elaborate.runtime import execute_elaborate
 from memcommit.query_provider import QueryProviderError

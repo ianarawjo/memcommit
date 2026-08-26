@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from typing import Literal
 
 from memcommit.context import Memory
-from memcommit.elaborate import (
+from memcommit.operations.elaborate.model import (
     ElaborateError,
     ElaborateMode,
     ElaborateQualityPolicy,
@@ -21,7 +21,7 @@ from memcommit.operations.elaborate.runtime import (
     ElaborateProviderFactory,
     execute_elaborate,
 )
-from memcommit.elaborate_target_context import (
+from memcommit.operations.elaborate.target_context import (
     FrozenElaborateTargetContext,
     GRANTED_ELABORATE_ADD_PERMISSIONS,
     GRANTED_ELABORATE_AMBIENT_PERMISSIONS,

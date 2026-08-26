@@ -5,14 +5,14 @@ from __future__ import annotations
 from contextlib import contextmanager
 from typing import Iterator, Protocol
 
-from memcommit.elaborate import ElaborateProvider, ElaborateTargetContext
+from memcommit.operations.elaborate.model import ElaborateProvider, ElaborateTargetContext
 from memcommit.operations.elaborate.application import (
     ElaboratePreparedLookup,
     ElaborateRequest,
     ElaborateResult,
     run_elaborate,
 )
-from memcommit.elaborate_config import (
+from memcommit.operations.elaborate.config import (
     DEFAULT_ELABORATE_SEMANTIC_CONFIG,
     ElaborateSemanticConfig,
 )

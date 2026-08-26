@@ -6,7 +6,7 @@ from contextlib import AbstractContextManager
 from dataclasses import dataclass
 from typing import Literal, Protocol
 
-from memcommit.elaborate import (
+from memcommit.operations.elaborate.model import (
     ElaborateAnalysis,
     ElaborateError,
     ElaborateProvider,
@@ -18,7 +18,7 @@ from memcommit.elaborate import (
     validate_elaborate_analysis,
     validate_elaborate_provider_plan,
 )
-from memcommit.elaborate_config import (
+from memcommit.operations.elaborate.config import (
     DEFAULT_ELABORATE_SEMANTIC_CONFIG,
     ElaborateSemanticConfig,
 )
