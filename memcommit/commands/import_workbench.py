@@ -23,7 +23,7 @@ from memcommit.interfaces.tui.components.exact_name_dialog import choose_exact_n
 from memcommit.interfaces.tui.components.flat_selection_dialog import choose_flat_option
 from memcommit.commands.tui_primitives import ExactNameFieldView
 from memcommit.context import Memory, MemoryRef
-from memcommit.context_naming import validate_portable_context_name
+from memcommit.context_targeting.naming import validate_portable_context_name
 from memcommit.context_targeting.tui.name_editor import (
     ContextNameView,
     choose_context_name,

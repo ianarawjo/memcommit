@@ -26,7 +26,7 @@ from collections.abc import Mapping, Sequence
 from typing import TYPE_CHECKING, Callable
 
 from memcommit.context import Context, Information, Memory, MemoryRef, QueryContextRef
-from memcommit.context_naming import validate_portable_context_name
+from memcommit.context_targeting.naming import validate_portable_context_name
 
 if TYPE_CHECKING:
     from memcommit.operations.atomize.domain import (

@@ -8,7 +8,7 @@ from typing import AbstractSet
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.context_naming import validate_portable_context_name
+from memcommit.context_targeting.naming import validate_portable_context_name
 from memcommit.context_targeting.tui.picker import ContextMemoryRow
 from memcommit.application.interactive_command_review import sever_start_command_review
 from memcommit.interfaces.tui.components.endpoint_setup import (

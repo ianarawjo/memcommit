@@ -17,7 +17,7 @@ from memcommit.interfaces.console.text import safe_terminal_text
 from memcommit.interfaces.console.theme import SemanticColorRole
 from memcommit.reviewing.report import ReviewReportController, ReviewTextFragment
 from memcommit.store import MemoryStore
-from memcommit.uid_locator import resolve_exact_or_unique_uid
+from memcommit.context_targeting.uid_locator import resolve_exact_or_unique_uid
 
 
 CHECKPOINT_REVIEW_OPERATIONS = frozenset(

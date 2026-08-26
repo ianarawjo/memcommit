@@ -93,7 +93,7 @@ from memcommit.operations.ground.model import (
     validate_ground_contract_name,
     validate_ground_goal,
 )
-from memcommit.context_naming import validate_portable_context_name
+from memcommit.context_targeting.naming import validate_portable_context_name
 
 
 INITIAL_QUESTION = (

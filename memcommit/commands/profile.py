@@ -31,7 +31,7 @@ from memcommit.context_targeting.presets import (
     ContextScopePreset,
     resolve_scope_preset,
 )
-from memcommit.context_naming import is_portable_context_name
+from memcommit.context_targeting.naming import is_portable_context_name
 from memcommit.profile_config import (
     AuthorityGrant,
     ProfileConfigError,

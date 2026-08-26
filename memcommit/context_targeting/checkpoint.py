@@ -9,10 +9,10 @@ from memcommit.context_locator import (
     resolve_context_locator,
     suggest_context_locators,
 )
-from memcommit.name_suggestions import did_you_mean_suffix
+from memcommit.context_targeting.name_suggestions import did_you_mean_suffix
 from memcommit.context_targeting.memory_focus import is_memory_uid_selector
 from memcommit.context_targeting.model import CheckpointTarget, ContextTarget
-from memcommit.uid_locator import resolve_exact_or_unique_uid
+from memcommit.context_targeting.uid_locator import resolve_exact_or_unique_uid
 
 
 class LocalCheckpointCatalog(Protocol):

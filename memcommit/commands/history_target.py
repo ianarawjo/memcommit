@@ -11,7 +11,7 @@ from memcommit.context_locator import (
 from memcommit.context_targeting.memory_focus import is_memory_uid_selector
 from memcommit.context_targeting.model import ContextTarget, DirectMemoryTarget
 from memcommit.context_targeting.resolution import parse_direct_memory_locator
-from memcommit.name_suggestions import did_you_mean_suffix
+from memcommit.context_targeting.name_suggestions import did_you_mean_suffix
 
 
 HistoryReportTarget = ContextTarget | DirectMemoryTarget

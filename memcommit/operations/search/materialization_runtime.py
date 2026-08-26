@@ -13,7 +13,7 @@ from memcommit.authority.access import (
     authorized_context_operation,
 )
 from memcommit.context import AutoCheckpoint, Context, Memory
-from memcommit.context_naming import validate_portable_context_name
+from memcommit.context_targeting.naming import validate_portable_context_name
 from memcommit.derived_policy import (
     authorize_analysis_save,
     authorize_combination,

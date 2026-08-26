@@ -62,7 +62,7 @@ from memcommit.operations.review.model import (
     review_matches_context,
 )
 from memcommit.store import MemoryStore
-from memcommit.uid_locator import UidLocatorError, resolve_exact_or_unique_uid
+from memcommit.context_targeting.uid_locator import UidLocatorError, resolve_exact_or_unique_uid
 
 
 def _interactive_terminal() -> bool:

@@ -24,7 +24,7 @@ from memcommit.commands.ground_session_picker import (
 )
 from memcommit.context import Context
 from memcommit.store import MemoryStore
-from memcommit.uid_locator import (
+from memcommit.context_targeting.uid_locator import (
     UidLocatorUnavailableError,
     resolve_exact_or_unique_uid,
 )

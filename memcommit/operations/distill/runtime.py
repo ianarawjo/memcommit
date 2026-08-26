@@ -9,7 +9,7 @@ from typing import Iterator, Protocol
 import uuid
 
 from memcommit.context import AutoCheckpoint, Context, Memory
-from memcommit.context_naming import validate_portable_context_name
+from memcommit.context_targeting.naming import validate_portable_context_name
 from memcommit.operations.distill.model import (
     DistillAnalysis,
     DistillError,

@@ -105,7 +105,7 @@ from memcommit.operations.review.model import (
     review_response_digest,
 )
 from memcommit.store import MemoryStore
-from memcommit.uid_locator import UidLocatorError, resolve_exact_or_unique_uid
+from memcommit.context_targeting.uid_locator import UidLocatorError, resolve_exact_or_unique_uid
 from memcommit.study_prewarm.registry import StudyPrewarmRegistryError
 from memcommit.operations.update.model import UpdateError, plan_update, session_matches
 from memcommit.operations.update.endpoints import (

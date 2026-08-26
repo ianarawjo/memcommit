@@ -28,7 +28,7 @@ from memcommit.context_targeting.checkpoint import (
     resolve_local_context_checkpoint_target,
 )
 from memcommit.context_targeting.model import CheckpointTarget
-from memcommit.uid_locator import resolve_exact_or_unique_uid
+from memcommit.context_targeting.uid_locator import resolve_exact_or_unique_uid
 from memcommit.operations.update.model import (
     AddOperation,
     EditOperation,

@@ -9,7 +9,7 @@ from memcommit.context_locator import (
     is_relative_context_locator,
     resolve_context_locator,
 )
-from memcommit.current_context_navigation import ContextNavigationDirection
+from memcommit.context_targeting.navigation import ContextNavigationDirection
 
 
 class SwitchContextError(RuntimeError):

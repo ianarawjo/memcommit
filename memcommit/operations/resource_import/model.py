@@ -29,7 +29,7 @@ from memcommit.profiles import (
     inspect_store,
 )
 from memcommit.store import MemoryStore
-from memcommit.context_naming import validate_portable_context_name
+from memcommit.context_targeting.naming import validate_portable_context_name
 
 
 @dataclass(frozen=True)

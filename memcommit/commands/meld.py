@@ -100,7 +100,7 @@ from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import (
     ProfileError,
 )
-from memcommit.context_naming import validate_portable_context_name
+from memcommit.context_targeting.naming import validate_portable_context_name
 from memcommit.resolution_workbench import ResolutionNavigation
 from memcommit.store import (
     ConcurrentContextUpdateError,

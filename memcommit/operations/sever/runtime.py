@@ -17,7 +17,7 @@ from memcommit.authority.access import (
 )
 from memcommit.command_attempts import annotate_sever_attempt
 from memcommit.context import AutoCheckpoint, Context, Memory, MemoryRef, QueryContextRef
-from memcommit.context_naming import validate_portable_context_name
+from memcommit.context_targeting.naming import validate_portable_context_name
 from memcommit.context_targeting.model import ContextScope
 from memcommit.context_targeting.resolution import expand_lexical_context_names
 from memcommit.derived_policy import (
