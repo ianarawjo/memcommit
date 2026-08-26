@@ -31,7 +31,7 @@ from memcommit.operations.forget.application import (
     run_forget_revision,
     run_forget_selection,
 )
-from memcommit.forget_review import ForgetReviewError
+from memcommit.operations.forget.review import ForgetReviewError
 from memcommit.operations.forget.runtime import MemoryStoreForgetSourcePort
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError

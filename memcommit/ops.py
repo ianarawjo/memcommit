@@ -773,7 +773,7 @@ def merge(source: Context, target: Context) -> list[Information]:
 def analyze_forget(ctx: Context, query: str, llm: object):
     """Analyze Forget through the operation-owned provider module."""
 
-    from memcommit.forget_provider import analyze_forget as _analyze_forget
+    from memcommit.operations.forget.provider import analyze_forget as _analyze_forget
 
     return _analyze_forget(ctx, query, llm)
 
@@ -785,7 +785,7 @@ def forget(
 ) -> tuple[list[ProposedChange], list[dict[str, object]]]:
     """Return Forget proposals without mutating the Source Context."""
 
-    from memcommit.forget_provider import forget as _forget
+    from memcommit.operations.forget.provider import forget as _forget
 
     return _forget(ctx, query, llm)
 
@@ -798,7 +798,7 @@ def revise_forget(
 ) -> tuple[list[ProposedChange], list[dict[str, object]]]:
     """Revise Forget proposals through the operation-owned provider module."""
 
-    from memcommit.forget_provider import revise_forget as _revise_forget
+    from memcommit.operations.forget.provider import revise_forget as _revise_forget
 
     return _revise_forget(feedback, llm, history, ctx)
 

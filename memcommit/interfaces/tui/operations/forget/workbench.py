@@ -10,7 +10,7 @@ from memcommit.operations.forget.application import (
     ForgetSessionSnapshot,
     run_forget_selection,
 )
-from memcommit.forget_review import ForgetSelection
+from memcommit.operations.forget.review import ForgetSelection
 from memcommit.interfaces.tui.workbenches.impact import ImpactController
 from memcommit.interfaces.tui.operations.forget.resolution import (
     ForgetResolutionWorkbenchAdapter,
