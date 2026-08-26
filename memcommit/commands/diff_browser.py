@@ -33,11 +33,11 @@ from memcommit.commands.update_checkpoint_history import (
     choose_update_checkpoint_subtree,
 )
 from memcommit.context_locator import resolve_context_locator
-from memcommit.checkpoint_catalog import (
+from memcommit.retained_history.checkpoint_catalog import (
     ResolvedCheckpointUnit,
     freeze_checkpoint_catalog,
 )
-from memcommit.history_display import (
+from memcommit.retained_history.display import (
     HistoryDisplayRow,
     checkpoint_command_identity,
     checkpoint_inherited_from,

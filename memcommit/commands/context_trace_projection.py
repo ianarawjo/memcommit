@@ -10,7 +10,7 @@ from memcommit.commands.trace_projection import (
     DEFAULT_TRACE_OPERATION_LIMIT,
     MAX_TRACE_OPERATION_LIMIT,
 )
-from memcommit.context_history import (
+from memcommit.retained_history.context_history import (
     ContextTraceChange,
     ContextTraceEvent,
     ContextTraceReport,

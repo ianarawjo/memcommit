@@ -19,7 +19,7 @@ from memcommit.context_targeting.readable_catalog import (
 )
 from memcommit.context_targeting.resolution import parse_direct_memory_locator
 from memcommit.profile_config import ProfileRegistry
-from memcommit.provenance import collect_trace_candidates
+from memcommit.retained_history.provenance import collect_trace_candidates
 from memcommit.operations.reference.provenance import collect_reference_candidates
 from memcommit.store import MemoryStore
 

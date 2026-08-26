@@ -10,7 +10,7 @@ from __future__ import annotations
 from dataclasses import replace
 from datetime import datetime
 
-from memcommit.applied_checkpoint_review import (
+from memcommit.retained_history.applied_review import (
     CHECKPOINT_REVIEW_OPERATIONS,
     list_applied_checkpoint_reviews,
 )

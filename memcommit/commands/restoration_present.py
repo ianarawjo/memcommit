@@ -9,7 +9,7 @@ from typing import Any
 
 import typer
 
-from memcommit.command_history import CommandRestoreResult, ContextCommandUnit
+from memcommit.retained_history.command_history import CommandRestoreResult, ContextCommandUnit
 from memcommit.interfaces.console.identity import collision_safe_uid_prefixes
 from memcommit.interfaces.console.text import (
     display_escape_text,

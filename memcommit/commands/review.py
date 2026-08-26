@@ -18,7 +18,7 @@ from memcommit.operations.atomize.workbench import (
     create_atomize_workbench,
     project_atomize_workbench_findings,
 )
-from memcommit.applied_checkpoint_review import (
+from memcommit.retained_history.applied_review import (
     CHECKPOINT_REVIEW_OPERATIONS,
     applied_checkpoint_review_controller,
     list_applied_checkpoint_reviews,

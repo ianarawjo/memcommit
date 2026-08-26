@@ -47,7 +47,7 @@ from memcommit.operations.merge.tree import (
     project_context_for_tree_merge,
 )
 from memcommit.operations.merge.tree_persistence import MergeTreeWrite, commit_merge_tree
-from memcommit.memory_lineage import (
+from memcommit.retained_history.memory_lineage import (
     MemoryLineageEdge,
     checkpoint_memory_lineage_edges,
     memory_content_sha256,

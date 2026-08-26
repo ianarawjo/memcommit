@@ -33,13 +33,13 @@ from memcommit.interfaces.console.theme import (
     semantic_action_role,
     semantic_color_rgb,
 )
-from memcommit.history_display import (
+from memcommit.retained_history.display import (
     HistoryDisplayRow,
     HistoryRowSegment,
     history_display_row_segments,
     project_history_display_rows,
 )
-from memcommit.history import HistoryError, build_history
+from memcommit.retained_history.reconstruction import HistoryError, build_history
 from memcommit.operations.log.search import (
     HistorySearchError,
     HistorySearchResult,
@@ -49,7 +49,7 @@ from memcommit.query_provider import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )
-from memcommit.provenance import ProvenanceError
+from memcommit.retained_history.provenance import ProvenanceError
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profile_config import load_profile_registry
 from memcommit.profiles import ProfileError

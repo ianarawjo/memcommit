@@ -6,7 +6,7 @@ from dataclasses import dataclass
 
 import memcommit.ops as ops
 from memcommit.context import Memory
-from memcommit.memory_lineage import memory_content_sha256
+from memcommit.retained_history.memory_lineage import memory_content_sha256
 from memcommit.operations.branch.application import (
     BranchError,
     BranchPlan,

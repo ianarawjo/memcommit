@@ -9,7 +9,7 @@ from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 from prompt_toolkit.formatted_text.base import StyleAndTextTuples
 
-from memcommit.history_display import (
+from memcommit.retained_history.display import (
     HistoryDisplayBadge,
     HistoryDisplayRow,
     HistoryRowSegment,
@@ -28,7 +28,7 @@ from memcommit.interfaces.tui.core.theme import (
     semantic_action_style,
 )
 from memcommit.interfaces.tui.viewers.read_only import run_read_only_viewer
-from memcommit.provenance import (
+from memcommit.retained_history.provenance import (
     MemoryState,
     TraceContextTransition,
     TraceEvent,

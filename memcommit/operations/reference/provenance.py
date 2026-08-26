@@ -12,7 +12,7 @@ from dataclasses import dataclass
 from typing import Literal
 
 from memcommit.context import Context, GrantedMemorySource, MemoryRef
-from memcommit.provenance import ProvenanceError, TraceReport, build_trace
+from memcommit.retained_history.provenance import ProvenanceError, TraceReport, build_trace
 from memcommit.store import MemoryStore
 
 

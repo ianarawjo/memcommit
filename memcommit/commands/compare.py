@@ -67,7 +67,7 @@ from memcommit.query_provider import (
     connect_codex_chatgpt_provider,
 )
 from memcommit.profile_config import ProfileConfigError
-from memcommit.provenance import ProvenanceError
+from memcommit.retained_history.provenance import ProvenanceError
 from memcommit.profiles import ProfileError, authority_grant_snapshot_lock
 from memcommit.operations.rationale.model import RationaleError, build_rationale
 from memcommit.operations.rationale.semantic import synthesize_rationale_provenance

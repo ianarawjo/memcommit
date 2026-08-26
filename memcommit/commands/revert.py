@@ -28,14 +28,14 @@ from memcommit.commands.restoration_present import (
     render_checkpoint_unit_revert_receipt,
     render_revert_receipt,
 )
-from memcommit.checkpoint_catalog import (
+from memcommit.retained_history.checkpoint_catalog import (
     CheckpointCatalogError,
     CheckpointNotFoundError,
     ResolvedCheckpointUnit,
     freeze_checkpoint_catalog,
 )
 from memcommit.context import Memory
-from memcommit.history import HistoryError, build_history
+from memcommit.retained_history.reconstruction import HistoryError, build_history
 from memcommit.operations.log.search import HistorySearchError, search_history
 from memcommit.query_provider import (
     QueryProviderError,

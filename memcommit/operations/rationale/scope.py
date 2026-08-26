@@ -15,7 +15,7 @@ from memcommit.context_targeting.readable_catalog import (
 )
 from memcommit.context import Context, Memory
 from memcommit.derived_policy import authorize_combination
-from memcommit.provenance import (
+from memcommit.retained_history.provenance import (
     MemoryState,
     TraceCandidate,
     TraceReport,

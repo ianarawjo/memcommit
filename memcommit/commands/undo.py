@@ -5,7 +5,7 @@ from typing import Annotated
 
 import typer
 
-from memcommit.command_history import CommandHistoryError
+from memcommit.retained_history.command_history import CommandHistoryError
 from memcommit.commands.restoration_present import (
     render_command_restore_receipt,
 )

@@ -7,7 +7,7 @@ import json
 import unicodedata
 from typing import Literal, Protocol, Sequence
 
-from memcommit.history import (
+from memcommit.retained_history.reconstruction import (
     HistoryCheckpoint,
     HistoryState,
     HistoryTimeline,

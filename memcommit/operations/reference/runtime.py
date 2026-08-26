@@ -14,7 +14,7 @@ from memcommit.authority.access import (
     resolve_context_access,
 )
 from memcommit.context import AutoCheckpoint, Context, Memory, MemoryRef
-from memcommit.context_snapshot import (
+from memcommit.retained_history.context_snapshot import (
     CONTEXT_SNAPSHOT_SCHEMA_VERSION,
     ContextSnapshotRef,
     context_snapshot_digest,

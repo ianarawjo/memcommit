@@ -10,7 +10,7 @@ import json
 from typing import get_args
 import unicodedata
 
-from memcommit.provenance import EventKind
+from memcommit.retained_history.provenance import EventKind
 
 
 RATIONALE_RULESET_VERSION = "rationale-natural-provenance-v5"

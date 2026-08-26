@@ -15,7 +15,7 @@ from typing import Callable, Protocol
 import unicodedata
 
 from memcommit.context import Context, Memory
-from memcommit.provenance import MemoryState, TraceEvent, TraceReport
+from memcommit.retained_history.provenance import MemoryState, TraceEvent, TraceReport
 from memcommit.query_provider import QueryProviderError
 from memcommit.operations.rationale.cache import (
     CachedRationaleInference,

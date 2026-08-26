@@ -7,7 +7,7 @@ import json
 from typing import Callable, Protocol
 import unicodedata
 
-from memcommit.provenance import MemoryState, TraceEvent, TraceReport
+from memcommit.retained_history.provenance import MemoryState, TraceEvent, TraceReport
 from memcommit.operations.rationale.rules import (
     DEFAULT_RATIONALE_PROVENANCE_LIMIT,
     RATIONALE_RULESET_VERSION,

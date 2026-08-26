@@ -18,7 +18,7 @@ from memcommit.context import (
     MemoryRef,
     QueryContextRef,
 )
-from memcommit.context_snapshot import ContextSnapshotRef
+from memcommit.retained_history.context_snapshot import ContextSnapshotRef
 from memcommit.context_targeting.presets import (
     ContextScopePreset,
     resolve_scope_preset,
