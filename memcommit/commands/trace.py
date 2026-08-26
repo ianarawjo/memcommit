@@ -58,7 +58,7 @@ from memcommit.provenance import (
     TraceReport,
     collect_trace_candidates,
 )
-from memcommit.reference_provenance import (
+from memcommit.operations.reference.provenance import (
     MemoryReferenceTraceReport,
     build_reference_trace,
 )

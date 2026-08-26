@@ -48,7 +48,7 @@ from memcommit.context_targeting.report_items import (
     resolve_readable_memory_target,
 )
 from memcommit.provenance import ProvenanceError
-from memcommit.reference_provenance import (
+from memcommit.operations.reference.provenance import (
     MemoryReferenceTraceReport,
     build_reference_trace,
 )
