@@ -10,6 +10,7 @@ import pytest
 import memcommit.ops as ops
 from memcommit.authority.access import granted_context_link, resolve_context_access
 from memcommit.context import Context, QueryContextRef
+from memcommit.conformance import CONTEXT_CONFORMANCE_OPERATION
 from memcommit.elaborate import ELABORATE_PAYLOAD_MARKER, ElaborateError
 from memcommit.operations.elaborate.add_runtime import (
     apply_prepared_elaborate_add,
@@ -30,6 +31,7 @@ from memcommit.ground_workspace_runtime import (
 )
 from memcommit.interfaces.cli.elaborate import elaborate_result_text
 from memcommit.interfaces.tui.operations.elaborate import project_elaborate_result
+from memcommit.fit_judgment import FIT_JUDGMENT_OPERATION
 from memcommit.profile_config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
@@ -48,6 +50,7 @@ from tests.elaborate_validation_support import (
 class TargetAwareProvider:
     def __init__(self):
         self.payloads: list[dict[str, object]] = []
+        self.prompts: list[str] = []
 
     def complete(self, prompt, *, operation, output_schema=None):
         validation = passing_elaborate_validation_response(prompt, operation)
@@ -55,6 +58,7 @@ class TargetAwareProvider:
             return validation
         payload = json.loads(prompt.split(ELABORATE_PAYLOAD_MARKER, 1)[1])
         self.payloads.append(payload)
+        self.prompts.append(prompt)
         target = payload.get("target_context")
         refs = []
         if isinstance(target, dict):
@@ -198,6 +202,8 @@ def test_target_ambient_follows_local_embeds_deduplicates_cycles_and_keeps_query
     assert "t2 · QUERY ONLY · private/preferences · NAME ONLY" in plain
     assert "TARGET USED · t1, t3" in plain
     assert "TARGET AMBIENT · ambient/target · 3 ITEMS" in rendered
+    assert "ordered existing prefix" in provider.prompts[0]
+    assert "do not restart at seeds" in provider.prompts[0]
 
     receipt = apply_prepared_elaborate_add(prepared, store=store)
     assert receipt.count == 1
@@ -205,12 +211,183 @@ def test_target_ambient_follows_local_embeds_deduplicates_cycles_and_keeps_query
     assert context_record_digest(store.load_direct(source.name)) == source_digest
     checkpoint = store.list_checkpoints(target.name)[0]
     elaborate_receipt = checkpoint["args"]["elaborate"]
-    assert elaborate_receipt["version"] == 4
+    assert elaborate_receipt["version"] == 5
     assert elaborate_receipt["quality_policy"] == "BEST_EFFORT"
     assert elaborate_receipt["case_validation"] == "NOT_RUN"
     assert elaborate_receipt["target_ambient"]["name"] == target.name
     assert elaborate_receipt["proposals"][0]["target_context_refs"] == ["t1", "t3"]
     assert elaborate_receipt["proposals"][0]["validation"] is None
+
+
+def test_target_ambient_restatement_is_rejected_before_validation(
+    isolated_store,
+) -> None:
+    store = MemoryStore()
+    source = _context(store, "ambient/repeat-source", "Act only after confirmation.")
+    repeated = (
+        "A person confirms option B, and the system acts on option B only after "
+        "that confirmation."
+    )
+    target = _context(store, "ambient/repeat-target", repeated)
+    frozen_source = freeze_elaborate_context_source(
+        store,
+        context_name=source.name,
+        role="rules",
+        number=1,
+    )
+    provider = TargetAwareProvider()
+
+    with pytest.raises(
+        ElaborateError,
+        match=r"repeat existing Target Memories \(Case 1: t1\)",
+    ):
+        prepare_elaborate_add(
+            store=store,
+            request=frozen_source.request,
+            target_name=target.name,
+            source=frozen_source,
+            provider_factory=lambda: provider,
+        )
+
+    assert len(provider.payloads) == 1
+    assert len(tuple(store.load_direct(target.name).iter_items())) == 1
+
+
+def test_sequence_rules_continue_after_the_ordered_target_prefix(
+    isolated_store,
+) -> None:
+    class FibonacciProvider:
+        def complete(self, prompt, *, operation, output_schema=None):
+            passing = passing_elaborate_validation_response(prompt, operation)
+            if operation == FIT_JUDGMENT_OPERATION:
+                assert passing is not None
+                return passing
+            if operation == CONTEXT_CONFORMANCE_OPERATION:
+                payload = json.loads(
+                    prompt.split("CONFORMANCE CONTEXT PAYLOAD:\n", 1)[1]
+                )
+                memory_ids = [
+                    item["memory_id"]
+                    for item in payload["target_context"]["memories"]
+                ]
+                assert memory_ids == [
+                    *(f"t{index}" for index in range(1, 11)),
+                    "c1",
+                    "c2",
+                    "c3",
+                ]
+                return json.dumps(
+                    {
+                        "judgments": [
+                            {
+                                "rule_id": payload["rules"][0]["rule_id"],
+                                "status": "CONFORMS",
+                                "evidence_memory_ids": ["t1", "t2"],
+                                "nonconforming_cases": [],
+                                "reason": "The ordered prefix contains both seeds.",
+                            },
+                            {
+                                "rule_id": payload["rules"][1]["rule_id"],
+                                "status": "CONFORMS",
+                                "evidence_memory_ids": memory_ids,
+                                "nonconforming_cases": [],
+                                "reason": "The complete ordered collection follows recurrence.",
+                            },
+                            {
+                                "rule_id": payload["rules"][2]["rule_id"],
+                                "status": "CONFORMS",
+                                "evidence_memory_ids": memory_ids,
+                                "nonconforming_cases": [],
+                                "reason": "Every member uses the required integer form.",
+                            },
+                        ],
+                        "outside_memory_ids": [],
+                    }
+                )
+            payload = json.loads(prompt.split(ELABORATE_PAYLOAD_MARKER, 1)[1])
+            target_ids = [
+                item["target_id"]
+                for item in payload["target_context"]["items"]
+                if item["kind"] == "MEMORY"
+            ]
+            return json.dumps(
+                {
+                    "overview": "The sequence continues after the frozen prefix.",
+                    "cases": [
+                        {
+                            "proposition": value,
+                            "expected": value,
+                            "rationale": "This is the next unseen sequence member.",
+                            "case_role": "FIT",
+                            "rule_checks": [
+                                {
+                                    "source_rule_index": index,
+                                    "evidence": "Its ordered position contributes to this Rule.",
+                                }
+                                for index in range(1, 4)
+                            ],
+                            "target_context_refs": target_ids,
+                        }
+                        for value in ("55", "89", "144")
+                    ],
+                }
+            )
+
+    store = MemoryStore()
+    source = _context(
+        store,
+        "sequence/rules",
+        "The family begins with the ordered seed values 0, 1.",
+        "After the seeds, each value is the sum of the preceding two values.",
+        "Each proposition is one unsigned base-10 integer.",
+    )
+    target = _context(
+        store,
+        "sequence/values",
+        "0",
+        "1",
+        "1",
+        "2",
+        "3",
+        "5",
+        "8",
+        "13",
+        "21",
+        "34",
+    )
+    frozen_source = freeze_elaborate_context_source(
+        store,
+        context_name=source.name,
+        role="rules",
+        number=3,
+        strict=True,
+    )
+
+    prepared = prepare_elaborate_add(
+        store=store,
+        request=frozen_source.request,
+        target_name=target.name,
+        source=frozen_source,
+        provider_factory=FibonacciProvider,
+    )
+    receipt = apply_prepared_elaborate_add(prepared, store=store)
+
+    assert [case.proposition for case in prepared.result.analysis.cases] == [
+        "55",
+        "89",
+        "144",
+    ]
+    assert receipt.count == 3
+    strict_record = store.list_checkpoints(target.name)[0]["args"]["elaborate"]
+    assert strict_record["quality_policy"] == "STRICT"
+    assert strict_record["case_validation"] == (
+        "ORDERED_COLLECTION_SOURCE_RULE_CONFORMANCE_AND_SOURCE_FIT"
+    )
+    assert [item.content for item in store.load_direct(target.name).iter_items()][-3:] == [
+        "55",
+        "89",
+        "144",
+    ]
 
 
 def test_same_context_source_wins_and_is_not_resent_as_target_ambient(

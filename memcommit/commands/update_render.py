@@ -41,16 +41,12 @@ def _view(
     heading = (
         "Applied update"
         if applied
-        else "Undone update"
-        if undone
-        else ("Staged update" if staged else "Impact")
+        else "Undone update" if undone else ("Staged update" if staged else "Impact")
     )
     status = (
         "APPLIED"
         if applied
-        else "UNDONE"
-        if undone
-        else ("STAGED" if staged else "IMPACT")
+        else "UNDONE" if undone else ("STAGED" if staged else "IMPACT")
     )
     return replace(
         UpdateResolutionWorkbenchAdapter(session).view(),
@@ -117,9 +113,11 @@ def review_update_application(
                 + (
                     "EXACT PREWARM"
                     if analysis_origin == "EXACT_PREWARM"
-                    else "PROJECTED PREWARM"
-                    if analysis_origin == "PROJECTED_PREWARM"
-                    else "EQUIVALENT SCOPE PREWARM"
+                    else (
+                        "PROJECTED PREWARM"
+                        if analysis_origin == "PROJECTED_PREWARM"
+                        else "EQUIVALENT SCOPE PREWARM"
+                    )
                 )
                 + " · PROVIDER NOT CALLED"
                 if analysis_origin is not None
@@ -172,6 +170,7 @@ def review_update_application(
                     target_descendants=current.target_include_descendants,
                     source_memory_uid=current.source_memory_uid,
                     target_memory_uid=current.target_memory_uid,
+                    inline_source_content=current.inline_source_content,
                     comment=action.comment,
                     expected_session=update_session_record_digest(current),
                 )
@@ -224,6 +223,13 @@ def render_update_receipt(session: UpdateSession) -> str:
     ]
     if not session.operations:
         lines.insert(1, "OUTCOME · NO CHANGE · no Context checkpoint")
+    if session.goal_focus is not None:
+        lines.append(
+            "GOAL FOCUS · "
+            f"{session.goal_focus.kind} · {session.goal_focus.label} · "
+            f"{len(session.goal_focus.items)} ITEM"
+            f"{'S' if len(session.goal_focus.items) != 1 else ''}"
+        )
     if checkpoints:
         lines.append(
             "CHECKPOINTS · "
@@ -264,6 +270,14 @@ def render_plan(
         " · TARGET "
         f"{'INCLUDE DESCENDANTS' if session.target_include_descendants else 'SELECTED GRAPH ONLY'}"
     )
+    if session.goal_focus is not None:
+        typer.echo(
+            "GOAL FOCUS · "
+            f"{session.goal_focus.kind} · {session.goal_focus.label} · "
+            f"{len(session.goal_focus.items)} ITEM"
+            f"{'S' if len(session.goal_focus.items) != 1 else ''} · "
+            "RELEVANCE ONLY"
+        )
     if session.granted_target is not None:
         required = required_grant_permissions(session.operations)
         granted = set(session.granted_target.permissions)

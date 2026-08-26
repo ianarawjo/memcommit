@@ -99,9 +99,9 @@ application merely to offer optional follow-up dialogue.
 
 The grouped stdout can be redirected or copied by the shell. It is a
 presentation format, not a durable or supported structured selection for
-another memcommit operation. Temporal Find retains its separate history picker
-when an interactive terminal is available; removing the current-state chat
-surface does not change that historical selection contract.
+another memcommit operation. Search remains current-only for every query;
+retained-history lookup is an explicit `mem log QUERY` operation with its own
+history presentation.
 
 The CLI groups results by their primary owning Context instead of repeating
 the Context name on every item. Context groups appear in the order of their
@@ -408,10 +408,8 @@ The ranking path keeps each provider payload within the shared
 When the frozen ordinary corpus exceeds that boundary, Find preserves Context
 groups where they fit, ranks every batch, and globally reranks the validated
 shortlist. One oversized candidate and an oversized final shortlist still fail
-without truncation. Small corpora retain one provider call. Temporal Find
-remains one-shot until independently planned subject/anchor relations have an
-explicit reconciliation contract. Follow-up synthesis uses the same shared
-capacity. If explicitly requested other-Context evidence causes that ceiling
+without truncation. Small corpora retain one provider call. Follow-up synthesis
+uses the same shared capacity. If explicitly requested other-Context evidence causes that ceiling
 to be exceeded, Find retries with the frozen visible and same-frame evidence
 and reports the wider check as unavailable instead of sampling an arbitrary
 subset. If the same-frame payload alone exceeds the ceiling, the turn currently

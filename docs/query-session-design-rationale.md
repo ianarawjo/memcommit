@@ -1,6 +1,6 @@
 # Query one-shot retention rationale
 
-Last verified: 2026-08-22.
+Last verified: 2026-08-24.
 
 ## Decision
 
@@ -16,8 +16,12 @@ Transcripts, or To Do frame.
 
 This makes the interactive surface match the direct CLI contract: each Enter
 freezes one Source selection and one question, performs one provider turn,
-shows one answer, and retains no memcommit-owned history after the process
-closes.
+shows one answer, and retains no Query-owned transcript after the process
+closes. Every Profile separately retains the complete CLI command in its
+command-attempt ledger, so a question supplied directly as argv is present
+there. Current `init-study` Participants duplicate that command in the detailed
+Study action timeline. Answers, References, provider responses, and questions
+entered later in the TUI remain outside those command records.
 
 ## Compatibility boundary
 
@@ -56,10 +60,12 @@ That complexity did not support an Apply or resumable-review boundary. Unlike
 Compare, Meld, Update, or Sever, Query has no reviewed proposal whose later
 materialization depends on retaining the operation artifact.
 
-A one-shot answer is also the clearer privacy contract. `QUERY` authorizes the
+A one-shot answer is also the clearer Query privacy contract. `QUERY` authorizes the
 current provider-mediated disclosure; it no longer implicitly starts a new
 task-owned retention lifecycle. Users who intentionally need a copy still
 control stdout redirection or the explicit plain-text clipboard action.
+Command-attempt telemetry is a separate execution-audit boundary, not a Query
+session or replay authority.
 
 ## Alternatives considered
 

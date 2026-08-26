@@ -37,6 +37,7 @@ no terminal screenshot refresh.
 | Unanswered required item or pending response | No automatic Accept | None until the item is resolved or the response is incorporated | Not applicable |
 | Closed or cancelled authority decision | Session remains staged | No Target owner changes | Reopen the staged session through Update |
 | Stale Source, Target, Grant, or session revision | Fail before publication | No partial success receipt | Re-run or reopen against current state |
+| Optional Goal focus | Context/Memory/text frame guides relevance but supplies no `source_id` and authorizes no fact | Exact focus receipt is retained in the session and owner checkpoints | Durable Goal pre-image is locked and revalidated before Apply |
 
 The zero-operation row is deliberately different from Merge. Merge can record
 a command-level no-op checkpoint as an explicit graph reconciliation effect.
@@ -47,9 +48,10 @@ checkpoint solely to make operations look alike.
 
 ## Integrity and failure boundaries
 
-- Update freezes Source and Target identity, scope, Memory digests, operations,
-  and session revision before Apply. The stored session uses compare-and-swap
-  when it is revised or marked applied.
+- Update freezes Source and Target identity, scope, Memory digests, optional
+  typed Goal focus, operations, and session revision before Apply. The stored
+  session uses compare-and-swap when it is revised or marked applied. Goal is
+  a relevance/output criterion, never Source evidence.
 - Local and granted application revalidate the frozen inputs and relevant Grant
   before the first Target write.
 - Every owner is preflighted before mutation. If an ordinary write raises, the
@@ -60,11 +62,22 @@ checkpoint solely to make operations look alike.
 - Repeating the exact already-applied Update is idempotent: it reports that the
   plan was already applied, does not call the provider again, and does not add
   checkpoints or rewrite the session.
+- A distinct invocation after an applied Update starts a new work unit without
+  `--replace-stage`. The prior terminal receipt is migrated to immutable
+  UID-addressed storage before the new staged record is published, and record
+  compare-and-swap prevents concurrent work from being overwritten. A provider
+  or validation failure before publication leaves the prior active receipt in
+  place.
 - Multi-Context exception atomicity is verified. Crash atomicity is not: the
   current prototype has no durable transaction journal spanning several
   Context files. Final approval would not repair that storage limitation, so it
   remains an explicit infrastructure follow-up rather than a decision-policy
   condition.
+
+The Goal operand and its cross-operation role are defined in
+[`goal-focus-operand-design-rationale.md`](goal-focus-operand-design-rationale.md).
+This narrow focus binding does not implement the separately documented
+multi-turn Update issue-resolution Ground.
 
 ## Task 1 replay evidence
 

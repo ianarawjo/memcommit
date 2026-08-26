@@ -9,7 +9,7 @@ associated tests together whenever hands-on testing changes the workflow.
 | User-facing term | Technical contract | Command | Status |
 |---|---|---|---|
 | **Atomic meld** *(informal shorthand)* | An issue-scoped directional meld embedded in atomize grounding | `mem atomize --evaluate ISSUE` | Implemented |
-| **Inline-Memory meld** | One exact process-local Memory melded into an authoritative local baseline Context | `mem meld --memory TEXT`; an unambiguously non-Context one-operand sentence is shorthand | Implemented |
+| **Inline-Memory meld** | One exact process-local Memory melded into an authoritative local baseline Context | `mem meld --memory TEXT`; `--from SENTENCE --to BASELINE` and an unambiguously non-Context one-operand sentence are shorthands | Implemented |
 | **Directional Context meld** | A read-only incoming Context melded into an authoritative baseline Context | `mem meld INCOMING BASELINE`; omit `BASELINE` to use the current Context | Implemented |
 | **Symmetric Context meld** | Two equal-authority Contexts combined into an explicit Result Context | `mem meld PEER_A PEER_B RESULT_C`; `--to RESULT_C` is an alias | Implemented |
 
@@ -82,6 +82,8 @@ Or name the local BASELINE explicitly:
 
 ```bash
 mem meld --memory 'all greetings need "."' --into policies/greetings
+mem meld --memory 'all greetings need "."' --to policies/greetings
+mem meld --from 'all greetings need "."' --to policies/greetings
 ```
 
 When the sole positional operand cannot be a portable Context locator, Meld
@@ -254,7 +256,15 @@ This is convenience grammar for the same directional operation, not another
 Meld mode. The example is normalized to the portable route
 `mem meld task2/advisor2 task2/advisor1`; saved-session identity,
 follow-up guidance, and application receipts use that canonical spelling.
-`--from` cannot be combined with `--into` or positional Contexts.
+The same role-explicit form can name the baseline without first switching:
+
+```bash
+mem meld --from ../advisor2 --to task2/advisor1
+```
+
+Here `--to` is directional because fewer than two positional peers are
+present. `--from` still cannot be combined with `--into` or positional
+Contexts.
 
 `mem meld INCOMING --into BASELINE` remains an explicit alias. Likewise,
 `mem meld --into BASELINE` uses the current Context as INCOMING for
@@ -359,23 +369,33 @@ applies accepted changes to that owner rather than flattening them into the
 root. Memory references remain unsupported. Query-only routes are never
 dereferenced or treated as ordinary Meld evidence or target owners.
 
-### Why `--into` and `--to` remain distinct
+### How operand shape distinguishes `--into` and `--to`
 
 `--into` communicates authority and mutation: incoming evidence is considered
 against an existing baseline, and explicit acceptance may create that
-baseline's next state. It is intentionally not an alias for `--to`.
+baseline's next state. It is the unambiguous and canonical directional
+spelling.
 
-`--to` names the third frame of the symmetric shape:
+`--to` follows the visible operand shape. With fewer than two positional
+sources it names the directional baseline:
+
+```text
+mem meld --from INCOMING --to BASELINE
+mem meld --memory TEXT --to BASELINE
+```
+
+With two positional peers it names the third frame of the symmetric shape:
 
 ```text
 mem meld LEFT_PEER RIGHT_PEER --to RESULT_CONTEXT
 ```
 
-That form names a distinct result for a symmetric meld and does not make
-either peer authoritative. Reusing `--to` for directional mutation now would
-make those two contracts indistinguishable. The equivalent positional form is
+That form names a distinct result and does not make either peer authoritative.
+The equivalent positional form is
 `mem meld LEFT_PEER RIGHT_PEER RESULT_CONTEXT`; there is no hidden current
-Result.
+Result. Saved directional commands normalize to `--into` so the durable
+receipt states the authority relationship without relying on remembered
+input shape.
 
 ## Symmetric Context meld: combine two equal-authority Contexts
 

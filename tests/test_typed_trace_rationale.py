@@ -195,4 +195,7 @@ def test_duplicate_bare_report_uid_lists_every_typed_owner(isolated_store):
     assert result.exit_code == 1
     assert f"first:{shared_uid} (MEMORY)" in result.output
     assert f"second:{shared_uid} (MEMORY)" in result.output
-    assert "Use one qualified CONTEXT:UID locator" in result.output
+    assert (
+        "To select one, rerun with its CONTEXT:UID value shown above."
+        in result.output
+    )

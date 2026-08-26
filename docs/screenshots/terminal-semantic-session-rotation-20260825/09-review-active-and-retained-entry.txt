@@ -1,0 +1,52 @@
+ MEM REVIEW · SAVED SESSIONS · RECENT FIRST · ALL                                                                                                                                   
+ PROFILE · (unregistered)                                                                                                                                                           
+ STORE   · /var/folders/gb/k74fw7ks06x4c041g8gqgj600000gq/T/mem-session-rotation-uvfmj3bt/review-store                                                                              
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+› 2026-08-25 13:28Z  AMBIGUITIES · capture/review-policy  [0/1 ANSWERED           ]  1 review item                                                                                 ^
+  2026-08-25 13:28Z  AMBIGUITIES · capture/review-policy  [1/1 ANSWERED · RETAINED]  1 review item                                                                                  
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                   v
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+AMBIGUITIES REVIEW                                                                                                                                                                 ^
+State: 0/1 ANSWERED                                                                                                                                                                 
+Context: capture/review-policy                                                                                                                                                      
+Review session: f75a8d01-f90a-45d6-95c4-da316dd8114c                                                                                                                                
+                                                                                                                                                                                    
+Enter resumes this active ReviewSession.                                                                                                                                            
+Review does not apply Memory changes or create a checkpoint.                                                                                                                        
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                   v
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ ↑/↓ move  PgUp/PgDn detail  Enter view  S sort  G group  / filter  Esc/q cancel  ·  1/2

@@ -19,10 +19,10 @@ from memcommit.distill_goal_fit import (
 )
 from memcommit.elaborate import ELABORATE_OPERATION, ELABORATE_PAYLOAD_MARKER
 from memcommit.store import MemoryStore, context_record_digest
+from tests.distill_goal_fit_support import passing_distill_goal_fit_response
 from tests.elaborate_validation_support import (
     passing_elaborate_validation_response,
 )
-from tests.distill_goal_fit_support import passing_distill_goal_fit_response
 
 
 runner = CliRunner()
@@ -312,6 +312,112 @@ def test_elaborate_context_role_is_explicit_and_not_name_based(
     assert "MODE · GOAL_TO_RULES · VERIFICATION · UNVERIFIED" in result.output
     assert "Confirm the selected ticker before acting." in (
         memory.content for memory in store.load_direct("ordinary-output").memories.values()
+    )
+
+
+def test_elaborate_combines_rule_source_with_context_goal_focus(
+    isolated_store,
+    monkeypatch,
+) -> None:
+    store = MemoryStore()
+    source = _create(
+        store,
+        "coffee-advice",
+        "Manage the cafe's social feed consistently.",
+        "Maintain good supplier and customer relationships.",
+        "Manage staff well.",
+    )
+    _create(
+        store,
+        "coffee-advice/goal",
+        "Give practical advice to a friend who owns a cafe.",
+    )
+    _ElaborateProvider.calls = []
+    monkeypatch.setattr(
+        elaborate_command,
+        "connect_semantic_provider",
+        _ElaborateProvider,
+    )
+
+    result = runner.invoke(
+        app,
+        [
+            "elaborate",
+            "--from",
+            source.name,
+            "--to",
+            source.name,
+            "--goal",
+            "coffee-advice/goal",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    payload = _ElaborateProvider.calls[0]
+    assert payload["mode"] == "RULES_TO_CASES"
+    assert payload["goal_focus"]["kind"] == "CONTEXT"
+    assert payload["goal_focus"]["items"][0]["content"] == (
+        "Give practical advice to a friend who owns a cafe."
+    )
+    checkpoint = store.list_checkpoints(source.name)[0]
+    assert checkpoint["args"]["elaborate"]["goal_focus"]["kind"] == "CONTEXT"
+
+
+@pytest.mark.parametrize(
+    ("goal_kind", "expected_kind"),
+    (("context", "CONTEXT"), ("memory", "MEMORY"), ("inline", "INLINE")),
+)
+def test_distill_goal_accepts_context_memory_or_inline_operand(
+    isolated_store,
+    monkeypatch,
+    goal_kind,
+    expected_kind,
+) -> None:
+    store = MemoryStore()
+    source = _create(
+        store,
+        "goal-operands/source",
+        "Apple Inc. is listed under AAPL.",
+        "Microsoft Corporation is listed under MSFT.",
+    )
+    target = _create(store, "goal-operands/target", "Existing target content.")
+    goal_context = _create(
+        store,
+        "goal-operands/focus",
+        "Focus on identifiers useful to a cafe inventory manager.",
+    )
+    goal_memory = next(iter(goal_context.memories.values()))
+    goal_operand = {
+        "context": goal_context.name,
+        "memory": f"{goal_context.name}:{goal_memory.uid[:8]}",
+        "inline": "Focus on identifiers useful to a cafe inventory manager.",
+    }[goal_kind]
+    _DistillProvider.calls = []
+    monkeypatch.setattr(
+        distill_command,
+        "connect_semantic_provider",
+        _DistillProvider,
+    )
+
+    result = runner.invoke(
+        app,
+        [
+            "distill",
+            "--from",
+            source.name,
+            "--to",
+            target.name,
+            "--goal",
+            goal_operand,
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    checkpoint = store.list_checkpoints(target.name)[0]
+    focus = checkpoint["args"]["distill"]["goal_focus"]
+    assert focus["kind"] == expected_kind
+    assert focus["items"][0]["content"] == (
+        "Focus on identifiers useful to a cafe inventory manager."
     )
 
 

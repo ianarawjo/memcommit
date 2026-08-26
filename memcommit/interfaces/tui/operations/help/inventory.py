@@ -526,9 +526,9 @@ COMMAND_FORMS = {
     ),
     "contexts": ("mem contexts (list local Contexts and granted views)",),
     "delete": (
-        "mem delete [item] (delete a Context or current direct item)",
+        "mem delete [target1] [target2] (delete mixed Contexts or direct items in order)",
         "mem delete (select a Context or direct item interactively)",
-        "mem delete [item] --context [context] (explicit direct-item scope)",
+        "mem delete [item1] [item2] --context [context] (scope every item to one owner)",
     ),
     "diff": (
         "mem diff (select a Context, then inspect its checkpoints)",
@@ -542,16 +542,20 @@ COMMAND_FORMS = {
         "mem distill --to [target] (distill current into an existing target)",
         "mem distill --from [source] (distill a source into current)",
         "mem distill --from [source] --to [target] (explicit existing endpoints)",
-        'mem distill --from [source] --goal "[goal]" (guide Rule relevance)',
+        "mem distill --from [source] --goal [context|memory|text] "
+        "(guide Rule relevance without adding evidence)",
         "mem distill --from [source] -r (include descendants and embeds)",
         "mem distill --ground [name] "
         "(inspect read-only Rules from its exact Goal and working-candidate frame)",
+        "mem distill --ground [name] --adopt "
+        "(atomically add the complete proposal to the physical /rules lane)",
     ),
     "elaborate": (
         "mem elaborate (elaborate current direct Memories as Rules and add Cases to current)",
         "mem elaborate --from [source] --to [target] (explicit existing endpoints)",
         "mem elaborate --from [source] --as goal (treat its one direct Memory as a Goal)",
-        'mem elaborate --goal "[goal]" (add candidate Rules to current)',
+        "mem elaborate --goal [context|memory|text] "
+        "(use it as Goal Source and add candidate Rules to current)",
         'mem elaborate --rule "[rule]" --to [target] (add concrete Cases)',
         'mem elaborate --rule "[rule1]" --rule "[rule2]" '
         "(add concrete Cases across explicit Rules to current)",
@@ -559,6 +563,10 @@ COMMAND_FORMS = {
         "(use the exact Ground Goal through the same application)",
         "mem elaborate --ground [name] --from-rules "
         "(use the exact active Ground Rules through the same application)",
+        "mem elaborate --ground [name] --from-goal --adopt "
+        "(atomically add the complete proposal to physical /rules)",
+        "mem elaborate --ground [name] --from-rules --adopt "
+        "(atomically add the complete proposal to physical /examples)",
     ),
     "edit": (
         'mem edit [UID_or_CONTEXT:UID] "[new_content]" (replace one direct Memory)',
@@ -605,7 +613,6 @@ COMMAND_FORMS = {
         "mem search (interactive semantic search, checked COPY/REFERENCE, and Save Location)",
         'mem search "[query]" (semantic search in the direct current Context)',
         'mem search -r "[query]" (namespace descendants and embedded Contexts)',
-        'mem search "[temporal_query]" (retained history when the query explicitly asks about time)',
         'mem search --context [context] "[query]" (direct explicit Context root)',
         'mem search --context [context1] --context [context2] --descendants "[query]" (multiple roots with lexical descendants)',
         'mem search --context-only --follow-embeds "[query]" (exact lexical roots while following embedded Contexts)',
@@ -697,10 +704,11 @@ COMMAND_FORMS = {
         "mem init [context] --parents (ensure its lexical hierarchy and switch)",
     ),
     "init-study": (
-        "mem init-study (edit or generate a Study Profile name)",
-        "mem init-study [profile_name] (use an explicit Study Profile name)",
-        "mem init-study --from-profile [baseline_profile] (generated run name)",
-        "mem init-study [profile_name] --from-profile [baseline_profile] (explicit baseline)",
+        "mem init-study (initialize coffee-v1 with an edited or generated Profile name)",
+        "mem init-study [profile_name] (initialize coffee-v1 with an explicit Profile name)",
+        "mem init-study --scenario legacy-v1 (reproduce the preserved debugging fixture)",
+        "mem init-study [profile_name] --scenario legacy-v1 (name a legacy debugging run)",
+        "mem init-study --from-profile [baseline_profile] (copy an explicit legacy baseline)",
     ),
     "list": (
         "mem list (list the current Context)",
@@ -738,6 +746,7 @@ COMMAND_FORMS = {
         "mem meld --sessions (enter the interactive Meld session launcher)",
         "mem meld --memory [exact_text] (one process-local incoming Memory into current local Baseline)",
         "mem meld --memory [exact_text] --into [baseline_context] (one process-local incoming Memory into an explicit local Baseline)",
+        "mem meld --memory [exact_text] --to [baseline_context] (shared directional Target spelling)",
         "mem meld [non_context_sentence] (unambiguous inline-Memory shorthand into current local Baseline)",
         "mem meld [incoming_context] (directional into current Baseline)",
         "mem meld [incoming_context] [baseline_context] (directional)",
@@ -752,6 +761,7 @@ COMMAND_FORMS = {
         "mem meld [incoming_context] --left-descendants --into [baseline_context] --right-descendants (directional selected subtrees with owner-aware baseline writes)",
         "mem meld --into [baseline_context] (current Context is incoming)",
         "mem meld --from [incoming_context] (current Context is baseline)",
+        "mem meld --from [incoming_context_or_sentence] --to [baseline_context] (fully named directional route)",
     ),
     "merge": (
         "mem merge (choose a readable Source, CREATE-authorized Target, and reach in a TTY)",
@@ -801,7 +811,7 @@ COMMAND_FORMS = {
         "mem profile grant delete [grant] (revoke a view)",
     ),
     "provider": (
-        "mem provider (edit the active ordinary Profile in a TTY; show the route overview otherwise)",
+        "mem provider (print the active Profile route overview without editing)",
         "mem provider status (inspect the selection without connecting)",
         "mem provider use codex_chatgpt (select managed Codex defaults)",
         "mem provider use ollama --model [model] (select a local model)",
@@ -953,7 +963,12 @@ COMMAND_FORMS = {
         "mem update (choose Source and Target for a new Update)",
         "mem update --sessions (enter the interactive Update session launcher)",
         "mem update [source_context] [target_context] (explicit direction)",
+        "mem update [source_context] (current Context is target)",
+        "mem update [non_context_sentence] --to [target_context] (one process-local Source Memory)",
+        "mem update --memory [exact_text] --to [target_context] (force one process-local Source Memory)",
         "mem update --from [source_context] --to [target_context] (compatibility aliases)",
+        "mem update --from [source] --to [target] --goal [context|memory|text] "
+        "(bind a non-evidence relevance focus through planning and Apply)",
         "mem update -r --from [source_context] --to [target_context] (both subtrees)",
         "mem update -r --from [source_context] --to [target_context] --target-root-only (Source subtree, target root)",
         "mem update --from [source_context] --source-descendants --to [target_context] --target-descendants (include both readable subtrees)",

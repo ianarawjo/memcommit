@@ -146,17 +146,20 @@ def run_review_resolution_shell(
     ctx: Context,
     *,
     save: Callable[[ReviewSession], None],
+    read_only: bool = False,
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
 ) -> ReviewSession:
-    """Edit a ReviewSession through the service-wide response surface."""
+    """Open a ReviewSession through the service-wide response surface."""
 
     navigation = ResolutionNavigation(selected_item_uid=session.cursor_uid)
     workbench_navigation = SessionWorkbenchNavigation()
 
     def load_draft(item_uid: str) -> tuple[str | None, str]:
-        response = session.response_for(item_uid)
+        response = session.responses.get(item_uid)
+        if response is None:
+            return None, ""
         return response.selected_choice_uid, response.text
 
     def validate_response(text: str) -> None:
@@ -193,13 +196,15 @@ def run_review_resolution_shell(
         terminal_label="Review",
         snapshot_hint="Use 'mem review --snapshot' to inspect the saved session.",
         draft_loader=load_draft,
-        draft_saver=save_draft,
+        draft_saver=None if read_only else save_draft,
         response_validator=validate_response,
-        save_draft_on_close=True,
-        toggle_sort=toggle_sort,
+        save_draft_on_close=not read_only,
+        toggle_sort=None if read_only else toggle_sort,
         split_viewer_items=True,
+        read_only=read_only,
     )
-    if navigation.selected_item_uid is not None:
+    if not read_only and navigation.selected_item_uid is not None:
         session.cursor_uid = navigation.selected_item_uid
-    save(session)
+    if not read_only:
+        save(session)
     return session

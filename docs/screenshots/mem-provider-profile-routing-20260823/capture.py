@@ -1,4 +1,4 @@
-"""Capture editable general and locked Study Provider routes in real PTYs."""
+"""Capture read-only Provider entry and explicit route actions in real PTYs."""
 
 from __future__ import annotations
 
@@ -176,37 +176,41 @@ def _snapshot(recorder, stem: str) -> None:
 def _capture_general(home: Path) -> None:
     child, recorder = _spawn_mem(home, "provider")
     try:
-        child.expect("MEM PROVIDER · PROFILE-AWARE ROUTING")
-        _BASE._settle(child)
-        _snapshot(recorder, "01-general-entry")
-
-        child.send("\x1b[B")
-        _BASE._settle(child)
-        _snapshot(recorder, "02-general-ollama-selected")
-
-        child.send("\rqwen3.6:35b-a3b")
-        _BASE._settle(child)
-        _snapshot(recorder, "03-general-model-entered")
-
-        child.send("\r\r")
-        _BASE._settle(child)
-        _snapshot(recorder, "04-general-exact-command-review")
-
-        child.send("\r")
-        child.expect("Profile provider route: authoring · default")
-        child.expect("Verify with 'mem provider probe'.")
+        child.expect("PROFILE PROVIDER ROUTES")
+        child.expect("mode: general · editable")
+        child.expect("contact_status: not_contacted")
         child.expect(pexpect.EOF)
-        _snapshot(recorder, "05-general-apply-receipt")
+        _snapshot(recorder, "01-general-read-only-overview")
     finally:
         if child.isalive():
             child.close(force=True)
 
-    child, recorder = _spawn_mem(home, "provider", "status")
+    child, recorder = _spawn_mem(
+        home,
+        "provider",
+        "use",
+        "ollama",
+        "--model",
+        "qwen3.6:35b-a3b",
+        "--thinking",
+        "auto",
+    )
     try:
-        child.expect("provider: ollama")
-        child.expect("model: qwen3.6:35b-a3b")
+        child.expect("Profile provider route: authoring · default")
+        child.expect("Verify with 'mem provider probe'.")
         child.expect(pexpect.EOF)
-        _snapshot(recorder, "06-general-read-only-status")
+        _snapshot(recorder, "02-general-explicit-use-receipt")
+    finally:
+        if child.isalive():
+            child.close(force=True)
+
+    child, recorder = _spawn_mem(home, "provider")
+    try:
+        child.expect("PROFILE PROVIDER ROUTES")
+        child.expect("ollama · model qwen3.6:35b-a3b")
+        child.expect("source: profile_default")
+        child.expect(pexpect.EOF)
+        _snapshot(recorder, "03-general-updated-overview")
     finally:
         if child.isalive():
             child.close(force=True)
@@ -215,11 +219,13 @@ def _capture_general(home: Path) -> None:
 def _capture_study(home: Path) -> None:
     child, recorder = _spawn_mem(home, "provider")
     try:
-        child.expect("PROFILE · provider-study · STUDY · LOCKED")
-        _BASE._settle(child)
-        _snapshot(recorder, "07-study-locked-entry")
-        child.send("q")
+        child.expect("PROFILE PROVIDER ROUTES")
+        child.expect("profile: provider-study")
+        child.expect("mode: study · locked")
+        child.expect("study_config: study-provider-config-v1")
+        child.expect("configure: unavailable in a Study Profile")
         child.expect(pexpect.EOF)
+        _snapshot(recorder, "04-study-read-only-overview")
     finally:
         if child.isalive():
             child.close(force=True)
@@ -235,7 +241,7 @@ def _capture_study(home: Path) -> None:
     try:
         child.expect("Provider configuration is fixed for this Study Profile")
         child.expect(pexpect.EOF)
-        _snapshot(recorder, "08-study-edit-rejected")
+        _snapshot(recorder, "05-study-edit-rejected")
     finally:
         if child.isalive():
             child.close(force=True)
@@ -246,7 +252,7 @@ def _capture_study(home: Path) -> None:
         child.expect("provider: codex_chatgpt")
         child.expect("PROFILE ROUTE SIDECARS · 0")
         child.expect(pexpect.EOF)
-        _snapshot(recorder, "09-study-read-only-verification")
+        _snapshot(recorder, "06-study-read-only-verification")
     finally:
         if child.isalive():
             child.close(force=True)
@@ -270,32 +276,50 @@ def main() -> None:
         _capture_general(general_home)
         _capture_study(study_home)
 
-    captures = sorted(OUT.glob("*.typescript"))
+    stems = (
+        "01-general-read-only-overview",
+        "02-general-explicit-use-receipt",
+        "03-general-updated-overview",
+        "04-study-read-only-overview",
+        "05-study-edit-rejected",
+        "06-study-read-only-verification",
+    )
+    captures = tuple(OUT / f"{stem}.typescript" for stem in stems)
     raw = "".join(path.read_text(encoding="utf-8") for path in captures)
-    assert captures and all(
+    assert all(
         "PTY 180 52" in path.read_text(encoding="utf-8") for path in captures
     )
-    assert "38;5" in raw or "38;2" in raw
-    assert "48;5" in raw or "48;2" in raw
+    assert "\x1b[31m" in raw or "\x1b[38;" in raw
     assert "doesn't support cursor position requests" not in raw
 
-    entry = (OUT / "01-general-entry.txt").read_text(encoding="utf-8")
-    assert "GENERAL · EDITABLE · NOT CONTACTED" in entry
-    selected = (OUT / "02-general-ollama-selected.txt").read_text(encoding="utf-8")
-    assert "✓ OLLAMA" in selected
-    model = (OUT / "03-general-model-entered.txt").read_text(encoding="utf-8")
-    assert "qwen3.6:35b-a3b" in model
-    review = (OUT / "04-general-exact-command-review.txt").read_text(encoding="utf-8")
-    assert "mem provider use ollama --model qwen3.6:35b-a3b --thinking auto" in review
-    receipt = (OUT / "05-general-apply-receipt.txt").read_text(encoding="utf-8")
+    for stem in ("01-general-read-only-overview", "03-general-updated-overview"):
+        bare = (OUT / f"{stem}.typescript").read_text(encoding="utf-8")
+        assert "\x1b[?1049h" not in bare
+        assert "PRESS ENTER" not in bare
+    study_bare = (OUT / "04-study-read-only-overview.typescript").read_text(
+        encoding="utf-8"
+    )
+    assert "\x1b[?1049h" not in study_bare
+    assert "PRESS ENTER" not in study_bare
+    assert "probe pinned default" not in study_bare.lower()
+
+    initial = (OUT / "01-general-read-only-overview.txt").read_text(
+        encoding="utf-8"
+    )
+    assert "GENERAL · EDITABLE" in initial.upper()
+    receipt = (OUT / "02-general-explicit-use-receipt.txt").read_text(
+        encoding="utf-8"
+    )
     assert "Profile provider route: authoring · default" in receipt
-    status = (OUT / "06-general-read-only-status.txt").read_text(encoding="utf-8")
-    assert "route_source: profile_default" in status
-    locked = (OUT / "07-study-locked-entry.txt").read_text(encoding="utf-8")
-    assert "STUDY · LOCKED" in locked
-    rejected = (OUT / "08-study-edit-rejected.txt").read_text(encoding="utf-8")
+    updated = (OUT / "03-general-updated-overview.txt").read_text(encoding="utf-8")
+    assert "source: profile_default" in updated
+    locked = (OUT / "04-study-read-only-overview.txt").read_text(encoding="utf-8")
+    assert "mode: study · locked" in locked
+    rejected = (OUT / "05-study-edit-rejected.txt").read_text(encoding="utf-8")
     assert "fixed for this Study Profile" in rejected
-    verified = (OUT / "09-study-read-only-verification.txt").read_text(encoding="utf-8")
+    verified = (OUT / "06-study-read-only-verification.txt").read_text(
+        encoding="utf-8"
+    )
     assert "PROFILE ROUTE SIDECARS · 0" in verified
 
 

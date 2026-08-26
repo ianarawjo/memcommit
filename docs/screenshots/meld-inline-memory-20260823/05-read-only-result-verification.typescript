@@ -9,5 +9,5 @@ DURABLE VERIFICATION · INLINE-MEMORY MELD
   CONTEXT NAMES · capture/greeting-policy
   INLINE MEMORY CONTEXT EXISTS · False
   TARGET MEMORIES · 1
-    1. [9b22f580] 'all greetings need "."; keep "" and ! literal. '
+    1. [6d13192d] 'all greetings need "."; keep "" and ! literal. '
   RETAINED INLINE CONTENT · 'all greetings need "."; keep "" and ! literal. '

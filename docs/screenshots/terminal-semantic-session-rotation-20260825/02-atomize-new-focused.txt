@@ -1,0 +1,52 @@
+ MEM ATOMIZE · SESSIONS · RECENT FIRST · ALL                                                                                                                                        
+ PROFILE · (unregistered)                                                                                                                                                           
+ STORE   · /var/folders/gb/k74fw7ks06x4c041g8gqgj600000gq/T/mem-session-rotation-uvfmj3bt/atomize-store                                                                             
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+› + Add new Atomize session                                                                                                                                                        ^
+› 2026-08-25 13:28Z  capture/atomize-policy  [CURRENT]  capture/atomize-policy → capture/atomize-policy · 1 → 1 Memories · 2 issues                                                 
+  2026-08-25 13:28Z  capture/atomize-policy  [APPLIED]  capture/atomize-policy → capture/atomize-policy · 1 → 1 Memories · 2 issues                                                 
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                   v
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ Add new Atomize session                                                                                                                                                           ^
+ Leave saved-session browsing and enter operation-specific setup.                                                                                                                   
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                   v
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ ↑/↓ move  PgUp/PgDn detail  Enter open  S sort  G group  / filter  N Add new Atomize session  Esc/q cancel  ·  1/3

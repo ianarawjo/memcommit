@@ -18,17 +18,18 @@ from memcommit.interfaces.agent import (
 )
 from memcommit.interfaces.mcp import McpRegistryProjection
 from memcommit.store import MemoryStore
+from tests.distill_goal_fit_support import passing_distill_goal_fit_response
 from tests.elaborate_validation_support import (
     passing_elaborate_validation_response,
 )
-from tests.distill_goal_fit_support import passing_distill_goal_fit_response
 
 
 class AgentSemanticProvider:
     def complete(self, prompt, *, operation, output_schema=None):
+        validation = passing_elaborate_validation_response(prompt, operation)
+        if validation is not None:
+            return validation
         validation = passing_distill_goal_fit_response(prompt, operation)
-        if validation is None:
-            validation = passing_elaborate_validation_response(prompt, operation)
         if validation is not None:
             return validation
         if operation == "fit_propositions":
@@ -183,6 +184,7 @@ def test_semantic_agent_elaborate_accepts_an_exact_number(isolated_store):
             "number": 5,
         },
     )
+
     assert result["ok"] is True
     assert len(result["result"]["rules"]) == 5
     schema = next(

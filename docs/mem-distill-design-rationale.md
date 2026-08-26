@@ -15,24 +15,31 @@ hidden-prewarm artifact and a durable review session are not implemented.
 
 ## Meaning and direction
 
-Distill is the evidence-bound upward operation:
+Distill is the evidence-bound upward operation. `Rule` remains the durable
+output lane, but semantically each returned Rule is a parent proposition
+relative to the exact child propositions it cites:
 
 ```text
-Case or Example propositions in a Context --Distill--> reusable Rules
-                                     Goal? --focuses relevance only--^
+child propositions in a Context --Distill--> reusable parent Rules
+                              Goal? --selects output contract--^
 ```
 
-The optional Goal cannot support a Rule. Every proposed Rule must cite at
-least one Source Memory, and an empty Source fails before provider connection
-even when a Goal exists. Top-down proposal generation is owned by Elaborate:
-a Goal may suggest Rules, and Rules may suggest Case propositions, but those
-outputs remain explicitly unverified.
+The optional Goal cannot support a Rule. It selects the intended use,
+abstraction hierarchy, quantity, exclusions, and modality of the
+evidence-supported parent set. Every proposed Rule must still cite at least one
+Source Memory, and an empty Source fails before provider connection even when a
+Goal exists. Top-down Example generation remains owned by Elaborate: a Goal may
+suggest Rules, and Rules may suggest Case propositions, but those outputs
+remain explicitly unverified.
 
 When a Goal is present, Distill runs one second, whole-result Goal Fit audit
-after the evidence-bound Rule set has been decoded. The audit asks only whether
-every proposed Rule is materially relevant to and compatible with the Goal.
-It does not turn Goal text into evidence, require the Goal wording to reappear
-as a Rule, or invent a missing Rule. The result is `FIT`, `NOT_FIT`, or
+after the evidence-bound Rule set has been decoded. When no Goal is supplied,
+Distill is intentionally a one-provider-turn operation: there is no independent
+relevance question to audit, so constructing an empty second judgment would add
+latency without adding evidence or safety. The audit asks only whether every
+proposed Rule is materially relevant to and compatible with the Goal. It does
+not turn Goal text into evidence, require the Goal wording to reappear as a
+Rule, or invent a missing Rule. The result is `FIT`, `NOT_FIT`, or
 `UNDETERMINED`; `NOT_FIT` blocks every Add path, while `UNDETERMINED` remains a
 recorded non-blocking judgment. This asymmetry preserves Goal-as-focus meaning
 while preventing a known incompatible proposal from being published.
@@ -80,6 +87,31 @@ record. Its decoder requires every proposed Rule exactly once and in order;
 `NOT_FIT` and `UNDETERMINED` must identify the material Rule UIDs. An empty
 supported Rule set is deterministically `FIT` because a relevance focus cannot
 itself authorize a Rule and there is no proposal to contradict it.
+
+Provider contract version 9 changes only the prompt-level reduction method and
+prepared-result identity, not the JSON schema or evidence boundary. The
+provider now reads the complete Source before deciding applicability and may
+derive parents over a supported subset, an ordered collection, independent
+sibling criteria, or diagnostic indicators. When the Source is itself a
+coherent normative Rule set, a final whole-set audit may additionally return
+one governing Goal-like parent while retaining independently useful lower
+Rules. A parent must state an objective, constraint, classification, or
+judgment; a bare topic label remains invalid. No operation code recognizes
+Fibonacci, cleanliness, languages, or any other evaluation domain.
+
+Provider contract version 10 keeps the same JSON schema and evidence boundary
+but promotes the optional natural-language Goal from a relevance phrase to an
+output-selection contract. The provider applies one ordered procedure: read the
+whole Source, enumerate supported semantic and form candidates, interpret the
+Goal's intended use/hierarchy/count/exclusions/modality, reconcile a minimal
+nonredundant Rule topology, and finally account for every Source Memory. A
+surface-form audit remains mandatory internally so the no-Goal café,
+lost-property, and Cloze families remain reconstructable, but a semantic Goal
+may exclude dates, viewpoint, or platform metadata from the returned Rule set.
+No host code parses Goal vocabulary, computes a target compression ratio, or
+contains evaluation-family branches. A Goal also remains non-evidence: it may
+select supported operational criteria but cannot turn neutral observations
+into duties or authorize a fabricated concrete Task.
 
 Distill is `WHOLE_FRAME_ONLY`. Relations among any Source propositions can
 change the complete Rule set, so an oversized frame is rejected instead of
@@ -179,8 +211,9 @@ clipboard contract. Its Context surface also composes the common lazy
 direct-item preview: `m` shows or hides items only for the focused Context and
 `M` does so for every Context in the frozen readable catalog. Preview rows are
 read-only viewport stops, never a narrower Distill selection, and opening them
-does not call the provider. The optional Goal is currently supplied by CLI
-input; a dedicated TUI Goal editor is a named remaining boundary.
+does not call the provider. The optional Goal is supplied by the shared Goal
+operand as an existing direct-Memory Context, one direct Memory, or
+process-local text; a dedicated TUI Goal editor is a named remaining boundary.
 
 Ground composition uses the same workbench in caller-frozen mode. It shows the
 single bound candidate Context and exact reach for traceability, but removes
@@ -207,14 +240,18 @@ checked before inference and again before the proposal is returned. Neither
 the Ground nor any bound Context is changed.
 
 Ground Distill intentionally rejects Context/range/Goal overrides and
-`--save-as`/`--apply`. Promotion into Ground Rules is a separate reviewed
-Ground action; a read-only semantic proposal is not acceptance.
+`--save-as`/`--apply`. It remains read-only by default. For a physical Ground,
+the explicit `--adopt` form revalidates the exact reviewed Ground revision and
+`/rules` pre-image, then adds the complete proposal as one Ground-local command
+unit. Legacy JSON Grounds cannot use this adoption path; a semantic proposal
+without `--adopt` is not acceptance.
 
 ## Apply, provenance, and authority
 
 Standalone publication consumes the exact prepared proposal and appends every
 Rule to the existing Target as one Undo unit. Its checkpoint records Source and
-Target names, Source scope/digest, Goal digest, provider contract, Rule
+Target names, Source scope/digest, the complete typed Goal focus receipt,
+provider contract, Rule
 evidence, outside evidence, analysis digest, and exact result Memory UIDs. A
 distinct Source remains unchanged. When Source equals Target, only the new
 Rules change it. The compatibility require-new Apply retains its earlier
@@ -243,3 +280,6 @@ prompt that an agent or pipeline cannot answer.
 - no granted-frame derivation;
 - no TUI Goal editor; and
 - no agent/MCP mutation tool.
+
+The shared operand and physical-Ground adoption invariants are recorded in
+[`goal-focus-operand-design-rationale.md`](goal-focus-operand-design-rationale.md).

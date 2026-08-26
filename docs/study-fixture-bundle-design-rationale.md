@@ -2,6 +2,10 @@
 
 ## Decision
 
+This note describes the preserved `legacy-v1` regression fixture. The default
+`mem init-study` route now uses the separate built-in `coffee-v1` scenario;
+see `docs/init-study-scenario-versioning-design-rationale.md`.
+
 Each user-study task is built as a task store plus a separate task-specific
 authority store. English is canonical `Memory.content`; reviewed Korean source
 text is installed as a `ko` same-UID translation catalog. All source data,
@@ -43,7 +47,8 @@ have already been transferred to fixture sources or are intentionally being
 discarded. This preserves an editable rehearsal layer without allowing stale
 generated data to silently erase human corrections.
 
-`mem init-study [NAME]` never rereads these generated packages. It snapshots
+`mem init-study [NAME] --scenario legacy-v1` never rereads these generated
+packages. It snapshots
 the current registered baseline into two run-private Profiles: `NAME` owns the
 three participant Task branches, while `NAME-granted-memory` owns all three
 authority branches. The command rematerializes the reviewed manifest grant

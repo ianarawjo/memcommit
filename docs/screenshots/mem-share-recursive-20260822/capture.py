@@ -136,6 +136,11 @@ def _run_child(home: Path, kind: str) -> None:
 
     from memcommit.commands.share import cmd
     from memcommit.context import Context
+    from memcommit.profile_config import (
+        ProfileRegistry,
+        load_profile_registry,
+        profile_registry_file,
+    )
     from memcommit.share import ShareError, deliver_prepared_share, prepare_share
 
     sender_store, receiver_store, root = _prepare_topology(home)
@@ -143,6 +148,33 @@ def _run_child(home: Path, kind: str) -> None:
     print(f"$ mem share {root.name} -r", flush=True)
     print(f"CAPTURE PTY · {columns}x{rows}", flush=True)
     print("PROFILE · share-sender · CURRENT · practice", flush=True)
+
+    if kind == "unavailable":
+        registry = load_profile_registry()
+        profile_registry_file().write_text(
+            json.dumps(
+                ProfileRegistry(
+                    generation=registry.generation + 1,
+                    active_uid=registry.active_uid,
+                    profiles=registry.profiles,
+                    grants=(),
+                    removed_profile_uids=registry.removed_profile_uids,
+                ).to_dict()
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        cmd(
+            source=root.name,
+            recipient="",
+            direct=False,
+            recursive=True,
+        )
+        print("UNAVAILABLE VERIFICATION", flush=True)
+        print(f"  RECEIVED CONTEXTS · {len(_received_names(receiver_store))}")
+        print(f"  SOURCE CONTEXTS · {len(sender_store.list_context_names())}")
+        print(f"  CURRENT · {sender_store.current_context_name()}", flush=True)
+        return
 
     if kind in {"send", "cancel"}:
         cmd(
@@ -249,23 +281,37 @@ def _capture_send(home: Path) -> None:
         _BASE._settle(child)
         _snapshot(recorder, "03-descendant-context-focused")
 
-        child.send("\t\x1b[B")
+        child.send("\t")
         _BASE._settle(child)
-        _snapshot(recorder, "04-descendant-memory-focused")
+        _snapshot(recorder, "04-endpoint-focused")
+
+        child.send("\r")
+        child.expect("Select a Share endpoint")
+        _BASE._settle(child)
+        _snapshot(recorder, "05-endpoint-browse")
+
+        child.send("\x1b[B\r")
+        child.expect("MEM SHARE")
+        _BASE._settle(child)
+        _snapshot(recorder, "06-endpoint-updated")
+
+        child.send("\x1b[B\x1b[B")
+        _BASE._settle(child)
+        _snapshot(recorder, "07-descendant-memory-focused")
 
         child.send("\t")
         _BASE._settle(child)
-        _snapshot(recorder, "05-send-bundle-approval")
+        _snapshot(recorder, "08-exact-apply")
 
         child.send("\r")
         child.expect("CAPTURE GATE")
         _BASE._settle(child)
-        _snapshot(recorder, "06-success-receipt")
+        _snapshot(recorder, "09-success-receipt")
 
         child.send("v\r")
         child.expect("READ-ONLY RECEIVER VERIFICATION")
         child.expect(pexpect.EOF)
-        _snapshot(recorder, "07-read-only-receiver-verification")
+        _snapshot(recorder, "10-read-only-receiver-verification")
     finally:
         if child.isalive():
             child.close(force=True)
@@ -281,7 +327,7 @@ def _capture_cancel(home: Path) -> None:
         child.send("\x1b")
         child.expect("CANCEL VERIFICATION")
         child.expect(pexpect.EOF)
-        _snapshot(recorder, "08-cancelled-bundle-verification")
+        _snapshot(recorder, "11-cancelled-bundle-verification")
     finally:
         if child.isalive():
             child.close(force=True)
@@ -293,7 +339,22 @@ def _capture_stale(home: Path) -> None:
         child.expect("STALE BUNDLE REJECTED")
         child.expect("FAIL-CLOSED VERIFICATION")
         child.expect(pexpect.EOF)
-        _snapshot(recorder, "09-stale-membership-failure")
+        _snapshot(recorder, "12-stale-membership-failure")
+    finally:
+        if child.isalive():
+            child.close(force=True)
+
+
+def _capture_unavailable(home: Path) -> None:
+    child, recorder = _spawn("unavailable", home)
+    try:
+        child.expect("MEM SHARE")
+        _BASE._settle(child)
+        _snapshot(recorder, "13-unavailable-entry")
+        child.send("\x1b")
+        child.expect("UNAVAILABLE VERIFICATION")
+        child.expect(pexpect.EOF)
+        _snapshot(recorder, "14-unavailable-close-verification")
     finally:
         if child.isalive():
             child.close(force=True)
@@ -301,13 +362,17 @@ def _capture_stale(home: Path) -> None:
 
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
+    for path in OUT.iterdir():
+        if path.suffix in {".png", ".txt", ".typescript"}:
+            path.unlink()
     with tempfile.TemporaryDirectory(prefix="mem-share-recursive-") as directory:
         root = Path(directory)
         _capture_send(root / "send")
         _capture_cancel(root / "cancel")
         _capture_stale(root / "stale")
+        _capture_unavailable(root / "unavailable")
     streams = tuple(path.read_bytes() for path in OUT.glob("*.typescript"))
-    if len(streams) != 9:
+    if len(streams) != 14:
         raise RuntimeError("Recursive Share capture set is incomplete.")
     if not any(b"\x1b[" in stream and b"38;" in stream for stream in streams):
         raise RuntimeError("Capture did not retain the expected ANSI colors.")

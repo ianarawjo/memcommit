@@ -1,4 +1,5 @@
 """Human-readable action and impact receipts for Undo and Revert."""
+
 from __future__ import annotations
 
 import click
@@ -47,9 +48,7 @@ def test_undo_reports_update_action_context_and_edited_memory(isolated_store):
         AutoCheckpoint(
             command="update",
             args={"source_context_name": "test/update/from"},
-            description=(
-                "Applied semantic update 12345678 from test/update/from."
-            ),
+            description=("Applied semantic update 12345678 from test/update/from."),
         ),
     )
 
@@ -83,8 +82,7 @@ def test_legacy_checkpoint_without_recorded_preimage_uses_prior_state(
         ),
     )
     checkpoint_dir = (
-        isolated_store / "contexts" / "test" / "update" / "to"
-        / "checkpoints"
+        isolated_store / "contexts" / "test" / "update" / "to" / "checkpoints"
     )
     update_path = max(
         checkpoint_dir.glob("*.json"),
@@ -101,9 +99,7 @@ def test_legacy_checkpoint_without_recorded_preimage_uses_prior_state(
         "Undid command: mem update --from test/update/from --to test/update/to"
         in result.output
     )
-    assert store.load_current().memories[memory_uid].content == (
-        "It is raining now"
-    )
+    assert store.load_current().memories[memory_uid].content == ("It is raining now")
     assert "Affected Memories: 1 · ~ 1 edited" in result.output
     assert memory_uid[:8] not in result.output
 
@@ -313,15 +309,21 @@ def test_undo_and_redo_color_success_and_memory_effect_separately(
     undone = runner.invoke(app, ["undo"], color=True)
 
     assert undone.exit_code == 0, undone.output
-    assert click.style(
-        "Undid command: ",
-        fg=semantic_color_rgb(SemanticColorRole.UNDO),
-        bold=True,
-    ) in undone.output
-    assert click.style(
-        "+ 1 added",
-        fg=semantic_color_rgb(SemanticColorRole.ADD),
-    ) in undone.output
+    assert (
+        click.style(
+            "Undid command: ",
+            fg=semantic_color_rgb(SemanticColorRole.UNDO),
+            bold=True,
+        )
+        in undone.output
+    )
+    assert (
+        click.style(
+            "+ 1 added",
+            fg=semantic_color_rgb(SemanticColorRole.ADD),
+        )
+        in undone.output
+    )
     assert f"mem remove {full_memory_uid[:8]} --context notes" in click.unstyle(
         undone.output
     )
@@ -330,15 +332,21 @@ def test_undo_and_redo_color_success_and_memory_effect_separately(
     redone = runner.invoke(app, ["redo"], color=True)
 
     assert redone.exit_code == 0, redone.output
-    assert click.style(
-        "Redid command: ",
-        fg=semantic_color_rgb(SemanticColorRole.REDO),
-        bold=True,
-    ) in redone.output
-    assert click.style(
-        "- 1 removed",
-        fg=semantic_color_rgb(SemanticColorRole.REMOVE),
-    ) in redone.output
+    assert (
+        click.style(
+            "Redid command: ",
+            fg=semantic_color_rgb(SemanticColorRole.REDO),
+            bold=True,
+        )
+        in redone.output
+    )
+    assert (
+        click.style(
+            "- 1 removed",
+            fg=semantic_color_rgb(SemanticColorRole.REMOVE),
+        )
+        in redone.output
+    )
 
     assert runner.invoke(app, ["undo"]).exit_code == 0
     store = MemoryStore()
@@ -357,10 +365,13 @@ def test_undo_and_redo_color_success_and_memory_effect_separately(
     edit_undone = runner.invoke(app, ["undo"], color=True)
 
     assert edit_undone.exit_code == 0, edit_undone.output
-    assert click.style(
-        "~ 1 edited",
-        fg=semantic_color_rgb(SemanticColorRole.EDIT),
-    ) in edit_undone.output
+    assert (
+        click.style(
+            "~ 1 edited",
+            fg=semantic_color_rgb(SemanticColorRole.EDIT),
+        )
+        in edit_undone.output
+    )
 
 
 def test_undo_expands_a_colliding_direct_memory_prefix(isolated_store):
@@ -446,8 +457,7 @@ def test_memory_ref_impact_shows_pointer_but_not_target_content(
 
     assert result.exit_code == 0
     assert (
-        f"Undid command: mem reference {stored_source_uid} "
-        "--from source --into notes"
+        f"Undid command: mem reference {stored_source_uid} --from source --into notes"
     ) in result.output
     assert "Affected Memories: 0 · Other: 1 Memory ref removed" in result.output
     assert "SECRET TARGET" not in result.output
@@ -507,9 +517,7 @@ def _command_unit(
             {
                 "context": "work/notes",
                 "method": "sentences",
-                "splits": [
-                    {"uid": "memory-uid", "chunk_uids": ["a", "b"]}
-                ],
+                "splits": [{"uid": "memory-uid", "chunk_uids": ["a", "b"]}],
             },
             "mem chunk --method sentences --context work/notes",
         ),
@@ -521,9 +529,7 @@ def _command_unit(
                 "break_on": ",;",
                 "min_chars": 40,
                 "max_chars": 120,
-                "splits": [
-                    {"uid": "memory-uid", "chunk_uids": ["a", "b"]}
-                ],
+                "splits": [{"uid": "memory-uid", "chunk_uids": ["a", "b"]}],
             },
             (
                 "mem chunk --method clauses --break-on ',;' --min-chars 40 "
@@ -632,9 +638,7 @@ def test_undo_reconstructs_meld_sever_and_translate_commands():
         },
     )
 
-    assert _restored_command(meld) == (
-        "mem meld new/facts --into work/notes --accept"
-    )
+    assert _restored_command(meld) == ("mem meld new/facts --into work/notes --accept")
     assert _restored_command(sever) == (
         "mem sever source/all rules/private result/kept --source-descendants "
         "--criteria-root-only --accept"
@@ -659,9 +663,7 @@ def test_undo_uses_public_grant_operand_instead_of_authority_owner():
         context_name="authority/private-notes",
     )
 
-    assert _restored_command(unit) == (
-        "mem remove memory-uid --context shared/notes"
-    )
+    assert _restored_command(unit) == ("mem remove memory-uid --context shared/notes")
 
 
 def test_undo_keeps_full_uid_when_legacy_scope_cannot_be_reconstructed():
@@ -669,6 +671,4 @@ def test_undo_keeps_full_uid_when_legacy_scope_cannot_be_reconstructed():
 
     unit = _command_unit("remove", {"uid": full_uid})
 
-    assert _restored_command(unit) == (
-        f"mem remove {full_uid} --context work/notes"
-    )
+    assert _restored_command(unit) == (f"mem remove {full_uid} --context work/notes")

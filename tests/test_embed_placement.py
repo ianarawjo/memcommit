@@ -526,26 +526,27 @@ def test_embed_setup_stages_the_gap_between_two_memories(isolated_store) -> None
         "--before",
         second.uid,
     )
-    assert embed_exact_command_review(
-        receipt.child_name,
-        receipt.into_name,
-        DirectItemGap(
-            position=receipt.placement.position,
-            previous_uid=receipt.placement.previous_uid,
-            next_uid=receipt.placement.next_uid,
-        ),
-        item_count=receipt.item_count,
-        placement_selector=second.uid[:7],
-    ).argv[-1] == second.uid[:7]
+    assert (
+        embed_exact_command_review(
+            receipt.child_name,
+            receipt.into_name,
+            DirectItemGap(
+                position=receipt.placement.position,
+                previous_uid=receipt.placement.previous_uid,
+                next_uid=receipt.placement.next_uid,
+            ),
+            item_count=receipt.item_count,
+            placement_selector=second.uid[:7],
+        ).argv[-1]
+        == second.uid[:7]
+    )
 
 
 def test_embed_proposed_command_updates_the_visible_gap_before_freeze(
     isolated_store,
 ) -> None:
     store, child, parent, first, second = _ordered_store()
-    arguments = (
-        f"{child.name} --into {parent.name} --before {second.uid[:7]}"
-    )
+    arguments = f"{child.name} --into {parent.name} --before {second.uid[:7]}"
     with create_pipe_input() as pipe_input:
         # Reach the always-editable command, replace it, and approve once. Each
         # complete valid buffer change already synchronized the checked gap.
@@ -737,5 +738,8 @@ def test_flagless_embed_rejects_target_order_drift_after_review(
     result = runner.invoke(app, ["embed"])
 
     assert result.exit_code == 1
-    assert "direct-item order changed after the insertion gap was reviewed" in result.stderr
+    assert (
+        "direct-item order changed after the insertion gap was reviewed"
+        in result.stderr
+    )
     assert child.uid not in store.load_direct(parent.name).ordered_uids()

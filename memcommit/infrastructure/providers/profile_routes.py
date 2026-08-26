@@ -14,6 +14,7 @@ from typing import Iterator, Mapping
 from memcommit.config import Config
 from memcommit.infrastructure.providers.policy import (
     ConfiguredProviderRoute,
+    PROFILE_PROVIDER_OPERATION_NAMES,
     ProviderPolicyConfig,
     ProviderPolicyError,
     ProviderRoute,
@@ -39,6 +40,25 @@ class ProfileProviderRoutesError(RuntimeError):
     """A Profile provider route or Study policy pin is unsafe to use."""
 
 
+def _profile_provider_operation(
+    value: object,
+    *,
+    allow_default: bool = False,
+) -> str:
+    """Return one exact operation key understood by Profile policy routing."""
+
+    allowed = PROFILE_PROVIDER_OPERATION_NAMES | (
+        {"semantic_default"} if allow_default else set()
+    )
+    if not isinstance(value, str) or value not in allowed:
+        raise ProfileProviderRoutesError(
+            "Profile provider operation must be one exact supported name: "
+            + ", ".join(sorted(allowed))
+            + "."
+        )
+    return value
+
+
 @dataclass(frozen=True)
 class GeneralProfileRoutes:
     """Editable route combinations owned by one ordinary Profile."""
@@ -46,6 +66,10 @@ class GeneralProfileRoutes:
     profile_uid: str
     default: ProviderRoute | None = None
     operations: Mapping[str, ProviderRoute] = field(default_factory=dict)
+
+    def __post_init__(self) -> None:
+        for operation in self.operations:
+            _profile_provider_operation(operation)
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -207,11 +231,8 @@ def load_profile_routes(profile: ProfileEntry) -> GeneralProfileRoutes:
         raise ProfileProviderRoutesError("Profile provider operation routes are invalid.")
     operations: dict[str, ProviderRoute] = {}
     for operation, raw_route in raw_operations.items():
-        if not isinstance(operation, str) or not operation.strip():
-            raise ProfileProviderRoutesError(
-                "Profile provider operation name is invalid."
-            )
-        operations[operation] = _route_from_dict(raw_route)
+        canonical_operation = _profile_provider_operation(operation)
+        operations[canonical_operation] = _route_from_dict(raw_route)
     return GeneralProfileRoutes(
         profile_uid=profile.uid,
         default=default,
@@ -266,6 +287,7 @@ def resolve_active_provider_policy(
     machine_config: Config | None = None,
     registry: ProfileRegistry | None = None,
 ) -> tuple[ResolvedProviderPolicy, ActiveProviderScope]:
+    operation = _profile_provider_operation(operation, allow_default=True)
     scope = load_active_provider_scope(
         machine_config=machine_config,
         registry=registry,
@@ -337,6 +359,8 @@ def set_active_profile_route(
     registry: ProfileRegistry | None = None,
 ) -> tuple[ProfileEntry, GeneralProfileRoutes]:
     route = validate_provider_route(route)
+    if operation is not None:
+        operation = _profile_provider_operation(operation)
     frozen_registry = registry or load_profile_registry()
     profile = frozen_registry.active
     if study_run_identity(profile) is not None:
@@ -344,8 +368,6 @@ def set_active_profile_route(
             "Provider configuration is fixed for this Study Profile. Switch "
             "to an ordinary Profile to edit provider routes."
         )
-    if operation is not None and not operation.strip():
-        raise ProfileProviderRoutesError("Provider operation must be non-empty.")
     with _routes_lock(profile):
         current = load_profile_routes(profile)
         operations = dict(current.operations)
@@ -368,8 +390,8 @@ def reset_active_profile_route(
     *,
     registry: ProfileRegistry | None = None,
 ) -> tuple[ProfileEntry, GeneralProfileRoutes]:
-    if operation is not None and not operation.strip():
-        raise ProfileProviderRoutesError("Provider operation must be non-empty.")
+    if operation is not None:
+        operation = _profile_provider_operation(operation)
     frozen_registry = registry or load_profile_registry()
     profile = frozen_registry.active
     if study_run_identity(profile) is not None:

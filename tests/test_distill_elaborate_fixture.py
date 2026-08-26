@@ -162,7 +162,7 @@ def test_distill_cloze_fixture_requires_shared_language_tone_and_notation_rules(
     assert [rule.content for rule in analysis.rules] == expected_rules
     assert all(len(rule.support_memory_uids) == 3 for rule in analysis.rules)
     prompt = ReviewedSurfaceDistillProvider.prompt
-    assert "surface-form audit is mandatory" in prompt
+    assert "surface-form audit is mandatory as analysis" in prompt
     assert "language and language-mixing pattern" in prompt
     assert "register, tone, formality" in prompt
     assert "section labels and their order" in prompt
@@ -214,6 +214,9 @@ def test_distill_cafe_fixture_recovers_behavior_and_generative_form_rules() -> N
     assert all(len(rule.support_memory_uids) == 3 for rule in analysis.rules)
     assert "presentation or narrative form" in ReviewedDistillProvider.prompt
     assert "topic label or a broad summary" in ReviewedDistillProvider.prompt
+    assert "parent-child relationships" in ReviewedDistillProvider.prompt
+    assert "multiple supported subfamilies" in ReviewedDistillProvider.prompt
+    assert "final whole-set parent audit" in ReviewedDistillProvider.prompt
 
 
 def test_elaborate_cafe_fixture_requires_every_rule_in_every_example() -> None:
@@ -270,6 +273,11 @@ def test_elaborate_cafe_fixture_requires_every_rule_in_every_example() -> None:
         for case in result.analysis.cases
     )
     assert "complete input Rule set together" in ReviewedElaborateProvider.prompt
+    assert "one coherent child collection" in ReviewedElaborateProvider.prompt
+    assert "conjunctive record schema from sibling parents" in (
+        ReviewedElaborateProvider.prompt
+    )
+    assert "`NOT APPLICABLE:`" in ReviewedElaborateProvider.prompt
     assert "stored proposition must still show the Rule-compliant handling" in (
         ReviewedElaborateProvider.prompt
     )

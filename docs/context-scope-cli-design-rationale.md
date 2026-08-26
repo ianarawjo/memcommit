@@ -84,6 +84,12 @@ local names with effectively READ-granted public names and retains the exact
 Grant binding for every selected granted name. Direct must open only the
 selected Context record.
 
+For read operations, following embeds also resolves top-level READ Grant rows
+that static inspection already displays on the exact local attachment Context.
+This is a process-local source projection, not lexical expansion: the Grant's
+canonical public name keeps its own hierarchy, `--exclude-embeds` excludes its
+content, and an attached QUERY-only route never enters the ordinary frame.
+
 | Command family | `-d` mapping | `-r` mapping | More precise controls |
 | --- | --- | --- | --- |
 | `list` / `ls` | selected Context | existing recursive listing | `-R` remains a compatibility alias |

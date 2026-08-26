@@ -70,6 +70,14 @@ def test_client_projects_import_maturity_and_exact_limitation_detail(tmp_path):
     assert "arbitrary documents or Skills" in detail.body
 
 
+def test_client_projects_provider_as_partial(tmp_path):
+    client = MemCommitClient(root=tmp_path / "missing-store")
+
+    operation = client.describe_operation("provider")
+
+    assert operation.maturity == "PARTIAL"
+
+
 def test_client_projects_query_only_access_as_typed_detail(tmp_path):
     client = MemCommitClient(root=tmp_path / "missing-store")
 

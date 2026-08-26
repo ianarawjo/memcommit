@@ -26,6 +26,15 @@ An ordinary Profile may own:
 - one complete default route; and
 - zero or more complete operation routes keyed by semantic operation name.
 
+Operation keys are an exact, closed policy namespace: `search`, `query`,
+`help`, `forget`, `compare_contexts`, `meld_contexts`, and `compare_summary`.
+They are the operations that can request active-Profile policy, not every
+public CLI command and not the freer labels passed to `provider.complete()`
+for telemetry. Unknown, differently cased, or whitespace-padded keys are
+rejected both before a write and while loading an existing route document.
+The inherited default is selected by omitting `--operation`; the internal
+`semantic_default` identifier is not an authorable operation key.
+
 A route is the provider ID, model, Codex reasoning effort when applicable, and
 timeout. An operation route replaces the Profile default as one combination;
 unset operations use the default. This avoids half-inherited identities such
@@ -56,22 +65,49 @@ version from code and verifies the digest before provider contact.
 
 The first version, `study-provider-config-v1`, contains this complete matrix:
 
-| Route | Provider | Model | Reasoning | Timeout |
-| --- | --- | --- | --- | ---: |
-| default | `codex_chatgpt` | `gpt-5.6-sol` | `none` | 600 s |
-| `search` | `codex_chatgpt` | `gpt-5.6-terra` | `low` | 600 s |
-| `query` | `codex_chatgpt` | `gpt-5.6-sol` | `none` | 600 s |
-| `help` | `codex_chatgpt` | `gpt-5.6-sol` | `none` | 600 s |
-| `forget` | `codex_chatgpt` | `gpt-5.6-sol` | `none` | 600 s |
-| `compare_contexts` | `codex_chatgpt` | `gpt-5.6-sol` | `none` | 900 s |
-| `meld_contexts` | `codex_chatgpt` | `gpt-5.6-sol` | `none` | 900 s |
+| Route | Provider | Model | Reasoning | Tier | Timeout |
+| --- | --- | --- | --- | --- | ---: |
+| default | `codex_chatgpt` | `gpt-5.6-sol` | `none` | standard | 600 s |
+| `search` | `codex_chatgpt` | `gpt-5.6-terra` | `low` | standard | 600 s |
+| `query` | `codex_chatgpt` | `gpt-5.6-sol` | `none` | standard | 600 s |
+| `help` | `codex_chatgpt` | `gpt-5.6-sol` | `none` | standard | 600 s |
+| `forget` | `codex_chatgpt` | `gpt-5.6-sol` | `none` | standard | 600 s |
+| `compare_contexts` | `codex_chatgpt` | `gpt-5.6-sol` | `none` | standard | 900 s |
+| `meld_contexts` | `codex_chatgpt` | `gpt-5.6-sol` | `none` | standard | 900 s |
 
-Future Study changes add a new retained version rather than mutate this
+`study-provider-config-v2-fast` retains the same provider, model, reasoning,
+and timeout matrix but adds the Study-wide Codex service tier `fast`. The
+Codex adapter still ignores user configuration and therefore passes both
+`service_tier="fast"` and `features.fast_mode=true` explicitly for each
+ephemeral Study request. General Profiles do not inherit this condition and
+the user's global Codex configuration is not changed. The tier participates
+in both the Study configuration digest and each resolved route digest; the
+provider runtime identity records `codex-cli/fast` so retained semantic
+artifacts do not present Fast and Standard executions as the same runtime.
+
+During the pre-study pilot, the visible current Study pairs were explicitly
+repinned from either the legacy unpinned condition or exact v1 digest to v2 in
+one registry generation. The migration requires a complete participant and
+granted-memory pair with one accepted source condition before publishing any
+change. Removed Profile tombstones retain their historical provenance. This
+one-time pilot exception is not an ordinary Study edit path: Study provider
+configuration remains locked after the migration.
+
+Future Study changes add a new retained version rather than mutate an existing
 matrix. Existing Study Profiles therefore continue to name their original
 configuration. A Study Profile created before provider pinning, an unknown
 version, or a digest mismatch fails closed before semantic execution; silently
 substituting the newest condition would make the run look reproducible when it
 is not. Recreating the run through `mem init-study` is the explicit migration.
+
+Provider identity is independent from provider-input composition. Both Study
+roles also select the versioned `study-rules-only-v1` semantic prompt
+projection, which omits developer-authored demonstrations while retaining the
+operation's normative rules, user evidence, schema, and validation. Its scope,
+cache migration, and retained user Example boundary are recorded in
+[`study-semantic-prompt-policy-design-rationale.md`](study-semantic-prompt-policy-design-rationale.md).
+Changing that projection does not imply that `reasoning=none` disables the
+model's ordinary inference, and it does not change the pinned provider route.
 
 ## Runtime and CLI contract
 
@@ -81,41 +117,41 @@ the shared completion factory all use this boundary. Explicit evaluation
 arguments and authorized query-only source routes remain separate: they must
 not rewrite Profile configuration or be silently rerouted by it.
 
-Entering bare `mem provider` does not itself contact a provider. Outside a TTY
-it is a provider-free inspection of the active Profile, retaining the stable
-line-oriented overview for piping, scripting, and captured status. In a TTY,
-an ordinary Profile instead opens an editable Profile-aware screen. It is
-labelled `general · editable` and shows its effective default plus only the
-operation routes the person configured. A Study Profile is labelled
-`study · locked` and shows the pinned version, digest, and complete Study
-matrix. Its TTY screen exposes only read-only inspection and an explicit Probe
-action. The output intentionally contains no `rule` or “fixed by operation”
-explanation; editability and ownership are first-class fields.
+Bare `mem provider` is the same provider-free, line-oriented inspection in a
+TTY and outside one. It prints the active Profile's effective routes and exits;
+it never enters an alternate-screen editor, waits for Enter, stages a route, or
+contacts a provider. A general Profile is labelled `general · editable` and
+shows its effective default plus only the operation routes the person
+configured. A Study Profile is labelled `study · locked` and shows the pinned
+version, digest, and complete Study matrix. The output intentionally contains
+no `rule` or “fixed by operation” explanation; editability and ownership are
+first-class fields.
 
-The general TTY composes the shared flat selection state, focused frames,
-surface focus controller, and exact-command review. Provider, model, Codex
-reasoning, and an optional operation key remain process-local while editing.
-The To Do frame renders the exact `mem provider use ...` or
-`mem provider reset ...` command and its effects; Enter returns that typed
-selection to the command adapter, which re-enters the existing `use` or
-`reset` boundary and revalidates the active Profile before writing. Editing
-does not contact a provider. `P` exits to the existing explicit Probe route,
-and Escape publishes no configuration change.
+Configuration and provider contact require explicit intent through
+`mem provider use ...`, `mem provider reset ...`, or `mem provider probe ...`.
+Keeping the bare command observational avoids surprising input focus when a
+person selects Provider only to inspect the current route. Provider-specific
+transport controls and budget flags remain on those explicit commands instead
+of turning overview into an editor.
 
-Provider-specific transport state that is not directly edited remains
-explicit in the reviewed command. Ollama retains its current thinking mode and
-OpenRouter retains its current zero-data-retention choice, so entering the TTY
-does not silently reset either machine-local value. Context-window and output
-budgets remain available through the explicit CLI flags rather than expanding
-the initial screen into a generic key/value editor.
+The canonical Help catalog marks Provider `PARTIAL`. The CLI controls remain
+available for development, recovery, and explicit route administration, but
+Provider is not presented as a finished everyday workflow and has no dedicated
+configuration TUI. This maturity label is product-surface guidance, not a
+duplicate operation-route judgment; the operation evidence ledger remains the
+sole authority for its reviewed route state.
 
-The ordered [180×52 Provider interaction evidence](screenshots/mem-provider-profile-routing-20260823/README.md)
-records general entry, provider and model selection, exact review, Apply,
-provider-free status verification, Study lock presentation, rejected Study
-mutation, and the zero-sidecar no-partial-write check.
+The ordered [180×52 Provider command evidence](screenshots/mem-provider-profile-routing-20260823/README.md)
+records provider-free general and Study overviews, explicit general route
+configuration, rejected Study mutation, and the zero-sidecar no-partial-write
+check. The raw captures also assert that bare Provider never enters an
+alternate screen or renders an Enter prompt.
 
 `mem provider use PROVIDER` edits the active general Profile default.
-`--operation OPERATION` edits one operation combination. `mem provider reset`
+`--operation OPERATION` edits one exact allowlisted operation combination.
+This closes misspelled or inert configuration before any sidecar write while
+leaving evaluation-only and completion-label operation strings outside the
+Profile route namespace. `mem provider reset`
 removes the Profile default and returns it to the legacy machine fallback;
 with `--operation`, it removes just that operation route. Both commands reject
 a Study Profile. `status` resolves one route without contact, and `probe`
@@ -157,3 +193,6 @@ registry transaction boundary.
 
 This layer does not choose execution strategy, prompt size, schema, retry, or
 batching. Those remain operation contracts under `memcommit.semantic_execution`.
+Adding a new independently configurable semantic route therefore also requires
+registering its exact policy key; merely adding a CLI command or a new
+completion label must not widen Profile configuration.

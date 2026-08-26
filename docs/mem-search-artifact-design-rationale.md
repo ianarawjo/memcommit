@@ -65,6 +65,12 @@ Contexts before ranking; query-only Views remain a separate typed Source mode.
   include saved overview, issues, reviewed comments, target identity, and
   application receipt because those are the operation artifact the user saw or
   approved.
+- Saved Meld artifacts are validated only after their target Context UID is in
+  the command-frozen local artifact frame. An invalid session owned by an
+  unrelated Context is not evidence for the request and must not become a
+  global precondition for ordinary Find or Query. The Meld session launcher
+  still validates its complete catalog because that catalog is its explicit
+  requested scope.
 - Search may reuse a validated legacy cache record for compatibility. Current
   `mem rationale` never creates or refreshes one.
 
@@ -88,6 +94,7 @@ The initial operation-session adapters cover durable Compare, Meld, query
 transcripts, checkpoint-derived trace events, and rationale caches. Other
 workbenches can join the same `SearchArtifact` boundary later, but each needs a
 purpose-built safe projection; serializing arbitrary session JSON is not an
-accepted fallback. Temporal Find retains its existing specialized history
-pipeline rather than mixing current artifact ranking into temporal relation
-calculation.
+accepted fallback. Search always ranks the frozen current readable frame,
+including its safe artifacts. Natural-language retained-history planning stays
+behind the explicit `mem log QUERY` operation and never mixes checkpoint
+evidence into Search based on query wording.

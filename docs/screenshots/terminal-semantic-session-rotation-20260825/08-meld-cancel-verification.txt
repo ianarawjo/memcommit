@@ -1,0 +1,9 @@
+New Meld cancelled; no session was created.                                                                                                                                         
+                                                                                                                                                                                    
+MELD NEW FLOW · CANCELLED                                                                                                                                                           
+  RETAINED TERMINAL UID · 974a5e43-da28-47b1-9155-5ff57cd3e5c3                                                                                                                      
+  ACTIVE NEW UID · 6935876e-2515-4716-94db-bcc5680d694f                                                                                                                             
+  DISTINCT UIDS · True                                                                                                                                                              
+  TERMINAL HISTORY COUNT · 1                                                                                                                                                        
+  PROVIDER CALLS · 0                                                                                                                                                                
+  STORE UNCHANGED BY CANCELLED NEW FLOW · True

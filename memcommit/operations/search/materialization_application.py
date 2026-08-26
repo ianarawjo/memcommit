@@ -29,11 +29,6 @@ class FindMaterializationRequest:
             raise FindMaterializationError(
                 "Find materialization requires one typed search response."
             )
-        if self.response.mode != "CURRENT":
-            raise FindMaterializationError(
-                "History results are evidence views and cannot be saved as a new "
-                "Context."
-            )
         if self.mode not in {"COPY", "REFERENCE"}:
             raise FindMaterializationError("Choose COPY or REFERENCE.")
         if (

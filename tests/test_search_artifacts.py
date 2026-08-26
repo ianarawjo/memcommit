@@ -164,3 +164,35 @@ def test_find_frame_includes_retained_meld_and_rationale_artifacts(
 
     assert {"meld_session", "rationale"} <= kinds
     assert "query_session" not in kinds
+
+
+def test_unrelated_invalid_meld_session_does_not_block_search_artifacts(
+    isolated_store,
+):
+    store = MemoryStore()
+    selected = ops.init("selected")
+    ops.add(selected, "Current selected evidence")
+    unrelated = ops.init("unrelated")
+    for context in (selected, unrelated):
+        store.save(context)
+    store._meld_session_path(unrelated.uid).parent.mkdir(parents=True, exist_ok=True)
+    store._meld_session_path(unrelated.uid).write_text("{", encoding="utf-8")
+
+    roots = _load_find_frame_roots(
+        store,
+        store.load(selected.name),
+        recursive=True,
+        resolve_embeds=True,
+    )
+    candidates = _collect_find_frame_candidates(
+        store,
+        roots,
+        recursive=True,
+        include_artifacts=True,
+    )
+
+    assert any(
+        candidate.context_name == selected.name
+        and candidate.item.content == "Current selected evidence"
+        for candidate in candidates
+    )

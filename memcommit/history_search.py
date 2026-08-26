@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import json
-import re
 import unicodedata
 from typing import Literal, Protocol, Sequence
 
@@ -61,29 +60,6 @@ _RELATIONS = frozenset(
         "IMMEDIATELY_AFTER",
     }
 )
-_TEMPORAL_PATTERNS = (
-    re.compile(
-        r"\b(before|after|during|while|when|latest|earliest|previous|"
-        r"last\s+(?:updated|changed|saved|known|version|checkpoint)|"
-        r"first\s+(?:saved\s+)?(?:version|checkpoint)|"
-        r"histor(?:y|ical)|checkpoint|version|as\s+of|at\s+the\s+time|"
-        r"used\s+to|until|since)\b",
-        re.IGNORECASE,
-    ),
-    re.compile(
-        r"(직전|직후|이전|이후|당시|시점|"
-        r"버전|체크포인트|"
-        r"과거|히스토리|마지막|최초|그때|"
-        r"있(?:었)?을\s*때|없(?:었)?을\s*때|"
-        r"하기\s*전|한\s*뒤|변동\s*이후|변경\s*이후)"
-    ),
-    # These short suffixes also occur inside ordinary words such as "안전에"
-    # and "안전의". A non-Hangul boundary keeps those current-state queries
-    # from silently enumerating and transmitting retained history.
-    re.compile(r"(?<![가-힣])(?:전에|후에|전의|후의|동안)(?![가-힣])"),
-)
-
-
 class HistorySearchError(RuntimeError):
     """Safe failure at the semantic history-search boundary."""
 
@@ -197,13 +173,6 @@ class _Qualified:
     # Keeping these positions prevents a long-lived Memory version from being
     # rendered at a later, non-qualifying checkpoint.
     positions: tuple[int, ...]
-
-
-def is_temporal_query(query: str) -> bool:
-    """Conservatively detect explicit time/history language in English or Korean."""
-    if not isinstance(query, str) or not query.strip():
-        return False
-    return any(pattern.search(query) is not None for pattern in _TEMPORAL_PATTERNS)
 
 
 def _as_timelines(

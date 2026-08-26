@@ -6,13 +6,6 @@ from dataclasses import dataclass
 from typing import Literal, Protocol
 
 from memcommit.context import Memory, MemoryRef, QueryContextRef
-from memcommit.history import HistoryTimeline
-from memcommit.history_search import (
-    HistorySearchResult,
-    history_result_recovery_label,
-    is_temporal_query,
-    search_history,
-)
 from memcommit.search import (
     FindError,
     SearchArtifact,
@@ -22,15 +15,12 @@ from memcommit.search import (
 )
 
 
-FindSearchMode = Literal["CURRENT", "HISTORY"]
+FindSearchMode = Literal["CURRENT"]
 FindSearchResultKind = Literal[
     "memory",
     "ref",
     "query",
     "artifact",
-    "memory_version",
-    "memory_transition",
-    "checkpoint",
 ]
 FindSearchRelevance = Literal["primary", "related"]
 FindSearchStage = Literal[
@@ -81,7 +71,6 @@ class FindSearchResult:
     source_context_uid: str | None = None
     source_memory_uid: str | None = None
     current_match: SearchMatch | None = None
-    history_result: HistorySearchResult | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.context_name, str) or not self.context_name.strip():
@@ -91,9 +80,6 @@ class FindSearchResult:
             "ref",
             "query",
             "artifact",
-            "memory_version",
-            "memory_transition",
-            "checkpoint",
         }:
             raise ValueError("Search returned an unsupported result kind.")
         if not isinstance(self.uid, str) or not self.uid.strip():
@@ -111,10 +97,6 @@ class FindSearchResult:
             isinstance(value, str) and value.strip() for value in source_values
         ):
             raise ValueError("Search result Save As identity must be complete or absent.")
-        if self.current_match is not None and self.history_result is not None:
-            raise ValueError(
-                "A Search result cannot contain current and history evidence."
-            )
 
 
 @dataclass(frozen=True)
@@ -129,7 +111,7 @@ class FindSearchResponse:
     def __post_init__(self) -> None:
         if not isinstance(self.request, FindSearchRequest):
             raise ValueError("Search responses require the frozen request.")
-        if self.mode not in {"CURRENT", "HISTORY"}:
+        if self.mode != "CURRENT":
             raise ValueError("Search returned an invalid search mode.")
         if not isinstance(self.results, tuple) or any(
             not isinstance(result, FindSearchResult) for result in self.results
@@ -153,22 +135,11 @@ class FrozenFindCurrentSource:
     coverage_root_name: str | None = None
 
 
-@dataclass(frozen=True)
-class FrozenFindHistorySource:
-    """One authorized local history frame."""
-
-    timelines: tuple[HistoryTimeline, ...]
-
-
 class FindSearchSourcePort(Protocol):
     """Freeze readable evidence before semantic provider construction."""
 
     def freeze_current(self, request: FindSearchRequest) -> FrozenFindCurrentSource:
         """Return current-state candidates after readable-scope validation."""
-
-    def freeze_history(self, request: FindSearchRequest) -> FrozenFindHistorySource:
-        """Return local timelines after rejecting concealed grant history."""
-
 
 class FindSearchProvider(Protocol):
     def complete(
@@ -324,22 +295,6 @@ def _current_result(match: SearchMatch) -> FindSearchResult:
     )
 
 
-def _history_result(result: HistorySearchResult) -> FindSearchResult:
-    timestamp = (
-        result.timestamp[:16].replace("T", " ") if result.timestamp else "current"
-    )
-    return FindSearchResult(
-        context_name=result.context_name,
-        kind=result.kind,
-        uid=result.checkpoint_uid or result.candidate_id,
-        content=(
-            f"{timestamp} · {result.description} · "
-            f"{history_result_recovery_label(result)}"
-        ),
-        history_result=result,
-    )
-
-
 def run_find_search(
     request: FindSearchRequest,
     *,
@@ -348,29 +303,6 @@ def run_find_search(
     observer: FindSearchObserver | None = None,
 ) -> FindSearchResponse:
     """Execute one read-only Search request without CLI or TUI dependencies."""
-
-    if is_temporal_query(request.query):
-        history_source = source_port.freeze_history(request)
-        _observe(observer, "INPUTS_FROZEN")
-        _observe(observer, "CONNECTING_PROVIDER")
-        provider = provider_factory()
-        _observe(observer, "SEARCHING")
-        results = search_history(
-            history_source.timelines,
-            request.query,
-            provider,
-            result_kinds=(
-                "memory_version",
-                "memory_transition",
-                "checkpoint",
-            ),
-            limit=request.limit,
-        )
-        return FindSearchResponse(
-            request=request,
-            mode="HISTORY",
-            results=tuple(_history_result(result) for result in results),
-        )
 
     current_source = source_port.freeze_current(request)
     _observe(observer, "INPUTS_FROZEN")
@@ -414,7 +346,6 @@ __all__ = [
     "FindSearchSourcePort",
     "FindSearchStage",
     "FrozenFindCurrentSource",
-    "FrozenFindHistorySource",
     "related_query_for_matches",
     "run_find_search",
     "supplement_namespace_branch_coverage",

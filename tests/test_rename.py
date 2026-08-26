@@ -16,6 +16,7 @@ from typer.testing import CliRunner
 
 import memcommit.ops as ops
 import memcommit.store as store_module
+from memcommit.command_history import build_command_stacks
 from memcommit.cli import app
 from memcommit.context import (
     AutoCheckpoint,
@@ -340,7 +341,7 @@ def test_renamed_checkpoint_pointers_restore_against_the_new_locator(
 
     observer.remove(source.uid)
     observer.remove(memory_ref.uid)
-    store.save(
+    removed_checkpoint = store.save(
         observer,
         AutoCheckpoint(
             command="remove",
@@ -348,6 +349,7 @@ def test_renamed_checkpoint_pointers_restore_against_the_new_locator(
             description="Removed pointers",
         ),
     )
+    assert removed_checkpoint is not None
 
     store.rename_contexts(store.plan_context_rename("old", "new"))
 
@@ -366,6 +368,18 @@ def test_renamed_checkpoint_pointers_restore_against_the_new_locator(
     assert migrated_checkpoint["args"]["historical_note"] == (
         "the old locator was old"
     )
+    migrated_remove = next(
+        checkpoint
+        for checkpoint in store.list_checkpoints("observer")
+        if checkpoint["uid"] == removed_checkpoint.uid
+    )
+    assert migrated_remove["command_before"]["memories"][source.uid]["name"] == (
+        "new"
+    )
+    assert migrated_remove["command_before"]["memories"][memory_ref.uid][
+        "target_context"
+    ] == {"uid": source.uid, "name": "new"}
+    assert build_command_stacks(store).undo[-1].command == "remove"
 
     store.revert("observer", pointer_checkpoint.uid, keep_history=True)
     restored = store.load("observer")
@@ -376,6 +390,87 @@ def test_renamed_checkpoint_pointers_restore_against_the_new_locator(
     assert isinstance(restored_memory_ref, MemoryRef)
     assert restored_memory_ref.target is not None
     assert restored_memory_ref.target.content == "version one"
+
+
+def test_undo_and_redo_survive_renamed_checkpoint_preimages(isolated_store):
+    store = MemoryStore()
+    source = _save_context(store, "old", "version one")
+    source_memory = next(iter(source.iter_items()))
+    observer = ops.init("observer")
+    observer.add(source)
+    memory_ref = ops.embed_memory(source_memory, source, observer)
+    pointer_checkpoint = store.save(
+        observer,
+        AutoCheckpoint(
+            command="reference",
+            args={},
+            description="Saved pointers",
+        ),
+    )
+    assert pointer_checkpoint is not None
+    observer.remove(source.uid)
+    observer.remove(memory_ref.uid)
+    store.save(
+        observer,
+        AutoCheckpoint(
+            command="remove",
+            args={},
+            description="Removed pointers",
+        ),
+    )
+
+    store.rename_contexts(store.plan_context_rename("old", "new"))
+
+    undone = store.restore_recent_context_command("undo")
+    assert undone.unit.command == "remove"
+    restored = store.load("observer")
+    assert restored.memories[source.uid].name == "new"
+    assert restored.memories[memory_ref.uid].target_context_name == "new"
+
+    redone = store.restore_recent_context_command("redo")
+    assert redone.unit.uid == undone.unit.uid
+    assert not store.load_direct("observer").memories
+
+
+def test_undo_and_redo_survive_rename_inside_revert_log_snapshot(isolated_store):
+    store = MemoryStore()
+    source = _save_context(store, "old", "version one")
+    source_memory = next(iter(source.iter_items()))
+    observer = ops.init("observer")
+    observer.add(source)
+    memory_ref = ops.embed_memory(source_memory, source, observer)
+    pointer_checkpoint = store.save(
+        observer,
+        AutoCheckpoint(
+            command="reference",
+            args={},
+            description="Saved pointers",
+        ),
+    )
+    assert pointer_checkpoint is not None
+    observer.remove(source.uid)
+    observer.remove(memory_ref.uid)
+    store.save(
+        observer,
+        AutoCheckpoint(
+            command="remove",
+            args={},
+            description="Removed pointers",
+        ),
+    )
+    store.revert("observer", pointer_checkpoint.uid, keep_history=False)
+
+    store.rename_contexts(store.plan_context_rename("old", "new"))
+
+    assert build_command_stacks(store).undo[-1].command == "revert"
+    undone = store.restore_recent_context_command("undo")
+    assert undone.unit.command == "revert"
+    assert not store.load_direct("observer").memories
+
+    store.restore_recent_context_command("redo")
+    restored = store.load("observer")
+    assert restored.memories[source.uid].name == "new"
+    assert restored.memories[memory_ref.uid].target_context_name == "new"
 
 
 def test_reviewed_plan_is_rejected_if_context_graph_changes(isolated_store):

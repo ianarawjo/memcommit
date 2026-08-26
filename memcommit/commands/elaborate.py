@@ -12,6 +12,7 @@ from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.elaborate import ElaborateError, ElaborateMode
 from memcommit.operations.elaborate.application import ElaborateRequest, ElaborateResult
+from memcommit.goal_focus_runtime import freeze_goal_focus_operand
 from memcommit.operations.elaborate.add_runtime import (
     FrozenElaborateSource,
     PreparedElaborateAdd,
@@ -21,6 +22,8 @@ from memcommit.operations.elaborate.add_runtime import (
 )
 from memcommit.ground_elaborate import (
     FrozenGroundElaborate,
+    GroundElaborateResult,
+    apply_ground_elaborate_result,
     execute_ground_elaborate,
     freeze_ground_elaborate,
 )
@@ -48,7 +51,10 @@ def cmd(
         typer.Option(
             "--goal",
             "-g",
-            help="Goal to elaborate into suggested, unverified Rules",
+            help=(
+                "Goal focus as a Context, CONTEXT:UID/UID Memory, or inline "
+                "text; alone it is also the Goal Source for Rule generation"
+            ),
         ),
     ] = None,
     rule: Annotated[
@@ -97,8 +103,8 @@ def cmd(
         typer.Option(
             "--strict",
             help=(
-                "Reject generated Cases unless independent Conformance and Fit "
-                "checks both pass"
+                "Require generated Cases to pass independent Source Rule "
+                "Conformance and Fit before Add"
             ),
         ),
     ] = False,
@@ -109,6 +115,16 @@ def cmd(
             help="Use one exact saved Ground revision instead of inline input",
         ),
     ] = None,
+    adopt: Annotated[
+        bool,
+        typer.Option(
+            "--adopt",
+            help=(
+                "Explicitly add the complete physical-Ground proposal to its "
+                "/rules or /examples lane"
+            ),
+        ),
+    ] = False,
     from_goal: Annotated[
         bool,
         typer.Option(
@@ -143,7 +159,13 @@ def cmd(
         # command into an interactive preview workflow.
         if mode is ConsoleMode.AUTO:
             mode = ConsoleMode.PLAIN
+        if adopt and tui:
+            raise ElaborateError(
+                "--adopt cannot use the read-only TUI; the explicit "
+                "line-oriented command is the adoption boundary."
+            )
         frozen_ground: FrozenGroundElaborate | None = None
+        ground_result: GroundElaborateResult | None = None
         ground_store: MemoryStore | None = None
         prepared: PreparedElaborateAdd | None = None
         ordinary_store: MemoryStore | None = None
@@ -172,24 +194,52 @@ def cmd(
             )
             request = frozen_ground.request
         else:
+            if adopt:
+                raise ElaborateError("--adopt requires --ground.")
             if from_goal or from_rules:
                 raise ElaborateError("--from-goal/--from-rules require --ground.")
             ordinary_store = MemoryStore(create=False)
             snapshot = ContextOperandSnapshot.capture(ordinary_store)
-            inline = goal is not None or bool(rule)
-            if inline:
-                if source_name is not None:
-                    raise ElaborateError(
-                        "Inline --goal/--rule input cannot be combined with --from."
-                    )
+            goal_focus = (
+                freeze_goal_focus_operand(
+                    ordinary_store,
+                    goal,
+                    current_name=snapshot.current_name,
+                )
+                if goal is not None
+                else None
+            )
+            inline_rules = bool(rule)
+            if source_name is not None and inline_rules:
+                raise ElaborateError(
+                    "Inline --rule input cannot be combined with --from."
+                )
+            context_source = source_name is not None or (
+                not inline_rules and goal_focus is None
+            )
+            if not context_source:
                 if as_role != "rules":
                     raise ElaborateError("--as applies only to a Context Source.")
-                request = ElaborateRequest(
-                    goal=goal,
-                    rules=tuple(rule or ()),
-                    number=number,
-                    strict=strict,
-                )
+                if inline_rules:
+                    request = ElaborateRequest(
+                        rules=tuple(rule or ()),
+                        goal_focus=goal_focus,
+                        number=number,
+                        strict=strict,
+                    )
+                else:
+                    assert goal_focus is not None
+                    if len(goal_focus.items) != 1:
+                        raise ElaborateError(
+                            "Standalone --goal requires one Goal item; use --from "
+                            "with --as goal for an exact one-Memory Goal Source."
+                        )
+                    request = ElaborateRequest(
+                        goal=goal_focus.text,
+                        goal_focus=goal_focus,
+                        number=number,
+                        strict=strict,
+                    )
                 ordinary_target = resolve_semantic_add_target(
                     target_locator=target_name,
                     current=snapshot.current_name,
@@ -208,23 +258,25 @@ def cmd(
                     role=as_role,
                     number=number,
                     strict=strict,
+                    goal_focus=goal_focus,
                 )
                 request = ordinary_source.request
                 ordinary_target = endpoints.target_name
 
         def execute(value: ElaborateRequest) -> ElaborateResult:
-            nonlocal prepared
+            nonlocal prepared, ground_result
             with CommandProgress(
                 "ELABORATE",
                 "generating review proposals",
                 total=1,
             ) as progress:
                 if frozen_ground is not None and ground_store is not None:
-                    result = execute_ground_elaborate(
+                    ground_result = execute_ground_elaborate(
                         frozen_ground,
                         store=ground_store,
                         provider_factory=connect_semantic_provider,
-                    ).elaborate
+                    )
+                    result = ground_result.elaborate
                 else:
                     assert ordinary_store is not None
                     assert ordinary_target is not None
@@ -255,8 +307,24 @@ def cmd(
         else:
             result = runner.run(request, mode=mode)
         if frozen_ground is not None:
-            # Ground remains an exact read-only proposal adapter until its
-            # workspace source locks can participate in the same atomic Add.
+            if adopt:
+                if ground_result is None or ground_store is None:
+                    raise ElaborateError("Elaborate produced no Ground proposal.")
+                receipt = apply_ground_elaborate_result(
+                    ground_result,
+                    store=ground_store,
+                )
+                typer.secho(
+                    f"ELABORATE ADOPTED · {display_escape_text(receipt.workspace_name)}"
+                    f"/{receipt.lane}",
+                    fg=typer.colors.GREEN,
+                    bold=True,
+                )
+                typer.echo(
+                    f"EFFECTS · ADD {len(receipt.memory_uids)} MEMORIES · "
+                    f"GROUND REVISION {receipt.revision}"
+                )
+                typer.echo(f"UNDO · mem ground {receipt.workspace_name} --undo")
             return
         if result is None or prepared is None or ordinary_store is None:
             raise ElaborateError("Elaborate produced no addable proposal.")
@@ -269,11 +337,8 @@ def cmd(
         source_label = receipt.source_name or "INLINE"
         typer.echo(
             f"MODE · {prepared.result.analysis.mode.value} · "
-            "VERIFICATION · UNVERIFIED"
-        )
-        typer.echo(
-            "QUALITY · "
-            + prepared.result.analysis.quality_policy.value.replace("_", " ")
+            "VERIFICATION · UNVERIFIED · "
+            f"QUALITY · {prepared.result.analysis.quality_policy.value}"
         )
         typer.echo(
             f"SOURCE · {display_escape_text(source_label)} · "

@@ -36,6 +36,7 @@ from memcommit.operations.elaborate.add_runtime import (
 )
 from memcommit.operations.elaborate.application import ElaborateRequest, ElaborateResult
 from memcommit.operations.fit.judgment import FitJudgmentError
+from memcommit.goal_focus_runtime import freeze_goal_focus_operand
 from memcommit.operations.forget.application import (
     ForgetAnalysisRequest,
     ForgetAnalysisResult,
@@ -424,6 +425,15 @@ def distill_cmd(
             )
         if save_as is not None:
             store.assert_context_creatable(save_as)
+        goal_focus = (
+            freeze_goal_focus_operand(
+                store,
+                goal,
+                current_name=snapshot.current_name,
+            )
+            if goal is not None
+            else None
+        )
         with CommandProgress(
             "IMPACT · DISTILL",
             "preparing source",
@@ -433,7 +443,7 @@ def distill_cmd(
                 result = execute_distill(
                     DistillRequest(
                         context_locator=context_name,
-                        goal=goal,
+                        goal_focus=goal_focus,
                         include_descendants=traversal.include_descendants,
                         follow_embeds=traversal.follow_embeds,
                     ),
@@ -455,7 +465,7 @@ def distill_cmd(
                 prepared = prepare_distill_add(
                     DistillRequest(
                         context_locator=endpoints.source_name,
-                        goal=goal,
+                        goal_focus=goal_focus,
                         include_descendants=traversal.include_descendants,
                         follow_embeds=traversal.follow_embeds,
                     ),
@@ -687,10 +697,7 @@ def elaborate_cmd(
         bool,
         typer.Option(
             "--strict",
-            help=(
-                "Reject generated Cases unless independent Conformance and Fit "
-                "checks both pass"
-            ),
+            help="Preview the independent Conformance/Fit-gated Case result",
         ),
     ] = False,
 ) -> None:
@@ -699,21 +706,47 @@ def elaborate_cmd(
     try:
         store = MemoryStore(create=False)
         snapshot = ContextOperandSnapshot.capture(store)
-        inline = goal is not None or bool(rule)
+        goal_focus = (
+            freeze_goal_focus_operand(
+                store,
+                goal,
+                current_name=snapshot.current_name,
+            )
+            if goal is not None
+            else None
+        )
+        inline_rules = bool(rule)
         frozen_source = None
-        if inline:
-            if source_name is not None:
-                raise ElaborateError(
-                    "Inline --goal/--rule input cannot be combined with --from."
-                )
+        if source_name is not None and inline_rules:
+            raise ElaborateError(
+                "Inline --rule input cannot be combined with --from."
+            )
+        context_source = source_name is not None or (
+            not inline_rules and goal_focus is None
+        )
+        if not context_source:
             if as_role != "rules":
                 raise ElaborateError("--as applies only to a Context Source.")
-            request = ElaborateRequest(
-                goal=goal,
-                rules=tuple(rule or ()),
-                number=number,
-                strict=strict,
-            )
+            if inline_rules:
+                request = ElaborateRequest(
+                    rules=tuple(rule or ()),
+                    goal_focus=goal_focus,
+                    number=number,
+                    strict=strict,
+                )
+            else:
+                assert goal_focus is not None
+                if len(goal_focus.items) != 1:
+                    raise ElaborateError(
+                        "Standalone --goal requires one Goal item; use --from "
+                        "with --as goal for an exact one-Memory Goal Source."
+                    )
+                request = ElaborateRequest(
+                    goal=goal_focus.text,
+                    goal_focus=goal_focus,
+                    number=number,
+                    strict=strict,
+                )
             resolved_source = None
             resolved_target = resolve_semantic_add_target(
                 target_locator=target_name,
@@ -733,6 +766,7 @@ def elaborate_cmd(
                 role=as_role,
                 number=number,
                 strict=strict,
+                goal_focus=goal_focus,
             )
             request = frozen_source.request
             resolved_source = endpoints.source_name

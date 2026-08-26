@@ -175,7 +175,7 @@ table as the authored cross-operation rule:
 | `compare` | Open new A/B endpoint setup | auto-typed `PEER` uses current as Reference; auto-typed `REFERENCE PEER` is fully explicit; each endpoint accepts Context, UUID-shaped Memory, or `CONTEXT:MEMORY` | explicitly Context-typed `--from REFERENCE`, `--to PEER`; `--reference-memory`/`--compared-memory` retain short-prefix focus; `--sessions` opens saved analyses |
 | `branch` | Open compact Source/new-target setup | `RESULT_NAME` creates from current | `--from SOURCE` chooses one existing local Source; Result remains a new identifier |
 | `merge` | Open Source/Target setup | `SOURCE [TARGET]`; omitted Target is current | `--from SOURCE`; `--to TARGET` and `--into TARGET` are equivalent |
-| `update` | Open new Source/Target setup | `SOURCE TARGET` only | `--from SOURCE`, `--to TARGET`; one omitted option endpoint uses current; `--sessions` opens saved work |
+| `update` | Open new Source/Target setup | `SOURCE [TARGET]`; omitted Target is current. An unambiguously non-Context Source is one process-local Memory | `--from SOURCE`, `--to TARGET`; `--memory TEXT` forces inline Source content; one omitted endpoint uses current; `--sessions` opens saved work |
 | `impact update` | Inspect saved Update Impact | `SOURCE TARGET` starts a new preview | same `--from`/`--to` endpoint aliases |
 | root `impact` | Error without a named route or endpoint | none, because the first token is a subcommand | retained `--from`/`--to` directional alias |
 | `forget`, `impact forget` | Context defaults to current; instruction is still required outside the setup TTY | the position is reserved for `INSTRUCTION` | `--context CONTEXT` |
@@ -183,6 +183,14 @@ table as the authored cross-operation rule:
 | `sever` | Open Source/Criteria/Result setup | `SOURCE CRITERIA [RESULT]`; omitted Result self-saves | `--source`/`--from`, `--criteria`/`--against`, `--save-as`/`--to` |
 | `embed`, `reference` | Open Source/Target setup | `ITEM`; omitted Target is current | A Context Source may use `--from SOURCE`; `--into`/`--to` select Target. With an explicit Memory ITEM, `--from` retains its owner-Context qualifier meaning |
 | `impact meld`, `impact sever` | Inspect saved operation work | none | `--session UID` only |
+
+Update and Meld are deliberate mixed Context-or-inline Source boundaries. They
+first preserve any existing Context, relative locator, or portable-looking
+missing name as a Context operand; only a value that cannot be a portable
+Context name becomes inline Memory content. This fail-closed order prevents a
+misspelled Context name from silently becoming provider evidence. The exact
+shared contract and operation-specific limits are recorded in
+[`context-or-inline-memory-operand-design-rationale.md`](context-or-inline-memory-operand-design-rationale.md).
 
 For the ordinary unary families, supplying both the positional Context and
 `--context` is a usage error rather than a precedence rule. Resolve is the

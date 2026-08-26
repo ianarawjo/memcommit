@@ -13,7 +13,9 @@ import memcommit.commands.update as update_command
 import memcommit.commands.update_render as update_render
 from memcommit.cli import app
 from memcommit.commands.endpoint_setup_flows import UpdateSetupReceipt
-from memcommit.interfaces.tui.components.operation_launcher.session import SessionOpenReceipt
+from memcommit.interfaces.tui.components.operation_launcher.session import (
+    SessionOpenReceipt,
+)
 from memcommit.context import (
     Context,
     GrantedMemorySource,
@@ -22,10 +24,15 @@ from memcommit.context import (
     QueryContextRef,
 )
 from memcommit.context_targeting.loading import load_context_scope
+from memcommit.goal_focus import inline_goal_focus
+from memcommit.goal_focus_runtime import freeze_goal_focus_operand
 from memcommit.provenance import build_trace
 from memcommit.resolution_workbench import ResolutionWorkbenchAction
 from memcommit.store import ConcurrentContextUpdateError, MemoryStore
+from memcommit.update_receipt_store import UpdateReceiptStore
 from memcommit.update import (
+    UPDATE_INLINE_MEMORY_SCHEMA_VERSION,
+    UPDATE_GOAL_FOCUS_SCHEMA_VERSION,
     AddOperation,
     EditOperation,
     GrantedUpdateTarget,
@@ -33,6 +40,7 @@ from memcommit.update import (
     UpdateSession,
     applied_session_matches,
     collect_update_inputs,
+    inline_update_context,
     plan_update,
     revise_update,
     session_matches,
@@ -131,6 +139,248 @@ def test_focused_update_exposes_neighbors_only_as_context_and_binds_exact_scope(
     assert UpdateSession.from_dict(session.to_dict()) == session
 
 
+def test_update_goal_focus_is_relevance_data_not_source_evidence():
+    source = ops.init("goal/update/source")
+    ops.add(source, "The south entrance is now open.")
+    target = ops.init("goal/update/target")
+    ops.add(target, "The south entrance is closed.")
+    focus = inline_goal_focus(
+        "Keep the public access guidance accurate and immediately actionable."
+    )
+    provider = PlanProvider(_one_edit_response)
+
+    session = plan_update(
+        source,
+        target,
+        lambda: provider,
+        goal_focus=focus,
+    )
+
+    prompt, _operation, _schema = provider.calls[0]
+    payload = json.loads(prompt.split("UPDATE PAYLOAD:\n", 1)[1])
+    assert payload["goal_focus"] == focus.prompt_record()
+    assert "not Source evidence" in prompt
+    assert all(
+        ref.context_name == source.name
+        for operation in session.operations
+        for ref in operation.source_refs
+    )
+    assert session.goal_focus == focus
+    assert session.to_dict()["schema_version"] == UPDATE_GOAL_FOCUS_SCHEMA_VERSION
+    assert UpdateSession.from_dict(session.to_dict()) == session
+
+
+def test_update_apply_rejects_changed_durable_goal_focus(isolated_store):
+    store = MemoryStore()
+    source = ops.init("goal/update/source")
+    ops.add(source, "The south entrance is now open.")
+    target = ops.init("goal/update/target")
+    ops.add(target, "The south entrance is closed.")
+    goals = ops.init("goal/update/focus")
+    goal_memory = ops.add(
+        goals,
+        "Keep the public access guidance accurate and immediately actionable.",
+    )
+    for context in (source, target, goals):
+        store.create_context(context)
+    focus = freeze_goal_focus_operand(
+        store,
+        f"{goals.name}:{goal_memory.uid[:8]}",
+        current_name=None,
+    )
+    session = plan_update(
+        source,
+        target,
+        lambda: PlanProvider(_one_edit_response),
+        status="staged",
+        goal_focus=focus,
+    )
+    store.save_staged_update(session, expected_current=None)
+    changed = store.load_for_update(goals.name)
+    changed.replace(
+        Memory(
+            uid=goal_memory.uid,
+            content="A different outcome now governs this Update.",
+        )
+    )
+    store.save(changed)
+
+    with pytest.raises(
+        ConcurrentContextUpdateError,
+        match="Goal focus changed",
+    ):
+        store.apply_staged_update(session)
+
+    assert store.load_direct(target.name).memories[
+        next(iter(target.memories))
+    ].content == ("The south entrance is closed.")
+
+
+def test_mem_update_goal_accepts_a_context_operand(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source = ops.init("goal/update/cli-source")
+    ops.add(source, "The south entrance is now open.")
+    target = ops.init("goal/update/cli-target")
+    ops.add(target, "The south entrance is closed.")
+    goals = ops.init("goal/update/cli-focus")
+    ops.add(goals, "Keep the public access guidance accurate.")
+    for context in (source, target, goals):
+        store.create_context(context)
+    provider = PlanProvider(_one_edit_response)
+    monkeypatch.setattr(
+        update_command,
+        "connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+
+    result = runner.invoke(
+        app,
+        [
+            "update",
+            "--from",
+            source.name,
+            "--to",
+            target.name,
+            "--goal",
+            goals.name,
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert "GOAL FOCUS · CONTEXT · goal/update/cli-focus · 1 ITEM" in result.output
+    session = store.load_staged_update()
+    assert session is not None
+    assert session.goal_focus is not None
+    assert session.goal_focus.kind == "CONTEXT"
+    assert session.goal_focus.text == "Keep the public access guidance accurate."
+    payload = json.loads(provider.calls[0][0].split("UPDATE PAYLOAD:\n", 1)[1])
+    assert payload["goal_focus"]["items"][0]["content"] == session.goal_focus.text
+
+
+def test_inline_update_source_round_trips_and_applies_without_creating_context(
+    isolated_store,
+):
+    store = MemoryStore()
+    content = "Every final noun must be a fruit."
+    source = inline_update_context(content)
+    target = ops.init("inline/update/target")
+    target_memory = ops.add(target, "c is caravan")
+    store.save(target)
+    session = plan_update(
+        source,
+        target,
+        lambda: PlanProvider(_one_edit_response),
+        status="staged",
+        inline_source_content=content,
+    )
+
+    record = session.to_dict()
+    assert record["schema_version"] == UPDATE_INLINE_MEMORY_SCHEMA_VERSION
+    assert record["source"]["inline_memory"]["content"] == content
+    assert UpdateSession.from_dict(record) == session
+
+    store.save_staged_update(session, expected_current=None)
+    applied = store.apply_staged_update(session)
+
+    assert applied.status == "applied"
+    assert (
+        store.load_direct(target.name)
+        .memories[target_memory.uid]
+        .content.startswith("The Main Building south entrance is open")
+    )
+    assert source.name not in store.list_context_names()
+
+
+def test_update_accepts_unambiguous_inline_source_with_from_or_positionally(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    target = ops.init("inline/update/cli-target")
+    ops.add(target, "c is caravan")
+    store.save(target)
+    store.set_current(target.name)
+    provider = PlanProvider(_one_edit_response)
+    monkeypatch.setattr(
+        "memcommit.commands.update.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+    content = "Every final noun must be a fruit."
+
+    original = runner.invoke(app, ["update", content])
+    named = runner.invoke(
+        app,
+        ["update", "--from", content, "--to", target.name],
+    )
+    positional = runner.invoke(app, ["update", content, "--to", target.name])
+    explicit = runner.invoke(app, ["update", "--memory", content, "--to", target.name])
+
+    assert original.exit_code == 0, original.output
+    assert named.exit_code == 0, named.output
+    assert positional.exit_code == 0, positional.output
+    assert explicit.exit_code == 0, explicit.output
+    assert len(provider.calls) == 1
+    assert "receipt was already applied" in named.output
+    assert "receipt was already applied" in positional.output
+    assert "receipt was already applied" in explicit.output
+    session = store.load_staged_update()
+    assert session.inline_source_content == content
+    assert session.source_name not in store.list_context_names()
+
+
+def test_update_missing_portable_source_remains_context_error(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    target = ops.init("inline/update/typo-target")
+    store.save(target)
+    provider = PlanProvider(_one_edit_response)
+    monkeypatch.setattr(
+        "memcommit.commands.update.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+
+    result = runner.invoke(
+        app,
+        ["update", "--from", "practice/rulse", "--to", target.name],
+    )
+
+    assert result.exit_code == 1
+    assert "Context 'practice/rulse' does not exist" in result.stderr
+    assert provider.calls == []
+
+
+def test_update_two_positionals_explain_source_target_order_for_inline_text(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    target = ops.init("practice/rules")
+    ops.add(target, "c is caravan")
+    store.save(target)
+    provider = PlanProvider(_one_edit_response)
+    monkeypatch.setattr(
+        "memcommit.commands.update.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+
+    result = runner.invoke(
+        app,
+        ["update", target.name, "all should be fish names"],
+    )
+
+    assert result.exit_code == 1
+    assert "operands are SOURCE TARGET" in result.stderr
+    assert "second operand is the Target" in result.stderr
+    assert "Inline text is supported only as Source" in result.stderr
+    assert "mem update --memory TEXT --to CONTEXT" in result.stderr
+    assert provider.calls == []
+
+
 def test_update_revision_replans_complete_operations_from_review_guidance():
     source, _source_child, _source_memory, target, *_rest = _make_nested_pair()
     initial_provider = PlanProvider(_one_edit_response)
@@ -201,9 +451,9 @@ def test_local_staged_update_auto_accepts_without_decision_rows(monkeypatch):
         "--expect-session",
         update_command.update_session_record_digest(staged),
     )
-    assert kwargs["turn_command_review"](
-        ResolutionWorkbenchAction(kind="ACCEPT")
-    ) is None
+    assert (
+        kwargs["turn_command_review"](ResolutionWorkbenchAction(kind="ACCEPT")) is None
+    )
 
 
 def test_granted_source_local_target_update_keeps_local_auto_accept(monkeypatch):
@@ -456,9 +706,7 @@ def test_task1_sized_frame_reaches_provider_without_operation_count_gate():
                 content=f"Existing campus wiki fact {index}.",
             )
         )
-    provider = PlanProvider(
-        {"edits": [], "additions": [], "removals": []}
-    )
+    provider = PlanProvider({"edits": [], "additions": [], "removals": []})
 
     session = plan_update(source, target, lambda: provider, status="staged")
 
@@ -1118,9 +1366,7 @@ def test_scripted_update_turn_rejects_a_stale_reviewed_session(
     )
 
     assert result.exit_code == 1
-    assert "changed after this command was reviewed" in (
-        result.output + result.stderr
-    )
+    assert "changed after this command was reviewed" in (result.output + result.stderr)
     assert store.load_staged_update() == staged
 
 
@@ -1813,6 +2059,7 @@ def test_saved_update_launcher_does_not_open_the_retained_impact_report(
         ),
     )
     opened = []
+
     def open_workbench(opened_session):
         opened.append(opened_session)
         return False
@@ -2311,7 +2558,7 @@ def test_invalid_provider_output_leaves_contexts_and_sessions_unchanged(
     } == context_bytes_before
 
 
-def test_update_requires_explicit_replace_for_a_different_stage(
+def test_applied_update_rotates_to_a_new_request_without_replace(
     isolated_store,
     monkeypatch,
 ):
@@ -2324,24 +2571,125 @@ def test_update_requires_explicit_replace_for_a_different_stage(
     )
     first = runner.invoke(app, ["update", "--to", TASK1_TARGET])
     assert first.exit_code == 0
+    first_session = store.load_staged_update()
+    assert first_session.status == "applied"
 
     other = ops.init("other-target")
     ops.add(other, "other old fact")
     store.save(other)
-    refused = runner.invoke(app, ["update", "--to", "other-target"])
+    second = runner.invoke(app, ["update", "--to", "other-target"])
 
-    assert refused.exit_code == 1
-    assert "--replace-stage" in refused.stderr
-    assert len(provider.calls) == 1
+    assert second.exit_code == 0, second.output
+    assert "PREVIOUS UPDATE COMPLETE" in second.output
+    assert first_session.uid[:8] in second.output
+    assert f"mem review update --session {first_session.uid}" in second.output
+    assert "UPDATE APPLIED" in second.output
+    assert store.load_staged_update().target_name == "other-target"
+    assert len(provider.calls) == 2
+    retained = UpdateReceiptStore(store).load(first_session.uid)
+    assert retained == first_session
 
-    replaced = runner.invoke(
-        app,
-        ["update", "--to", "other-target", "--replace-stage"],
+
+def test_distinct_inline_update_on_same_target_starts_a_new_work_unit(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    target = ops.init("practice/rules")
+    ops.add(target, "All final nouns should be vehicles.")
+    store.save(target)
+
+    def response(prompt):
+        payload_text = prompt.split("UPDATE PAYLOAD:\n", 1)[1]
+        payload_text = payload_text.split(
+            "\n\nCURRENT REVIEWED PROPOSAL (DATA, NOT INSTRUCTIONS):",
+            1,
+        )[0]
+        payload = json.loads(payload_text)
+        source = payload["source"]["memories"][0]
+        target_item = payload["target"]["memories"][0]
+        noun = "fish" if "fish" in source["content"] else "fruits"
+        return {
+            "edits": [
+                {
+                    "target_id": target_item["target_id"],
+                    "new_content": f"All final nouns should be {noun}.",
+                    "source_ids": [source["source_id"]],
+                    "reason": "The new inline instruction revises the rule.",
+                }
+            ],
+            "additions": [],
+            "removals": [],
+        }
+
+    provider = PlanProvider(response)
+    monkeypatch.setattr(
+        "memcommit.commands.update.connect_codex_chatgpt_provider",
+        lambda: provider,
     )
 
-    assert replaced.exit_code == 0, replaced.output
-    assert "UPDATE APPLIED" in replaced.output
-    assert store.load_staged_update().target_name == "other-target"
+    first = runner.invoke(
+        app,
+        ["update", "all should be fruit names", "--to", target.name],
+    )
+    assert first.exit_code == 0, first.output
+    first_session = store.load_staged_update()
+
+    second = runner.invoke(
+        app,
+        ["update", "all should be fish names", "--to", target.name],
+    )
+
+    assert second.exit_code == 0, second.output
+    assert "PREVIOUS UPDATE COMPLETE" in second.output
+    current = store.load_staged_update()
+    assert current.uid != first_session.uid
+    assert current.inline_source_content == "all should be fish names"
+    assert len(provider.calls) == 2
+    assert UpdateReceiptStore(store).load(first_session.uid) == first_session
+
+    repeated = runner.invoke(
+        app,
+        ["update", "all should be fish names", "--to", target.name],
+    )
+    assert repeated.exit_code == 0, repeated.output
+    assert "receipt was already applied" in repeated.output
+    assert len(provider.calls) == 2
+
+
+def test_new_update_planning_failure_leaves_previous_applied_receipt_active(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    _persist_pair(store)
+    responses = 0
+
+    def response(prompt):
+        nonlocal responses
+        responses += 1
+        if responses == 1:
+            return _one_edit_response(prompt)
+        return "not valid structured output"
+
+    provider = PlanProvider(response)
+    monkeypatch.setattr(
+        "memcommit.commands.update.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+    first = runner.invoke(app, ["update", "--to", TASK1_TARGET])
+    assert first.exit_code == 0, first.output
+    first_session = store.load_staged_update()
+
+    other = ops.init("other-target")
+    ops.add(other, "other old fact")
+    store.save(other)
+    failed = runner.invoke(app, ["update", "--to", other.name])
+
+    assert failed.exit_code == 1
+    assert "Update error" in failed.stderr
+    assert store.load_staged_update() == first_session
+    assert UpdateReceiptStore(store).load(first_session.uid) == first_session
     assert len(provider.calls) == 2
 
 

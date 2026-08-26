@@ -15,6 +15,8 @@ from memcommit.operations.elaborate.application import (
     ElaborateRequest,
     ElaborateResult,
 )
+from memcommit.goal_focus import FrozenGoalFocus
+from memcommit.goal_focus_runtime import revalidate_goal_focus
 from memcommit.operations.elaborate.runtime import (
     ElaborateProviderFactory,
     execute_elaborate,
@@ -67,6 +69,7 @@ def freeze_elaborate_context_source(
     role: ElaborateContextRole,
     number: int | None = None,
     strict: bool = False,
+    goal_focus: FrozenGoalFocus | None = None,
 ) -> FrozenElaborateSource:
     """Interpret ordinary direct Memories by invocation role, never by name."""
 
@@ -87,6 +90,7 @@ def freeze_elaborate_context_source(
             )
         request = ElaborateRequest(
             goal=memories[0].content,
+            goal_focus=goal_focus,
             number=number,
             strict=strict,
         )
@@ -97,6 +101,7 @@ def freeze_elaborate_context_source(
             )
         request = ElaborateRequest(
             rules=tuple(item.content for item in memories),
+            goal_focus=goal_focus,
             number=number,
             strict=strict,
         )
@@ -138,6 +143,8 @@ def prepare_elaborate_add(
 
     if source is not None and source.request != request:
         raise ElaborateError("Elaborate Source does not match its request.")
+    if request.goal_focus is not None:
+        revalidate_goal_focus(store, request.goal_focus)
     target = freeze_semantic_add_target(store, target_name)
     excluded_root_memory_uids = (
         source.memory_uids
@@ -166,6 +173,8 @@ def prepare_elaborate_add(
                 target_context.semantic if target_context.semantic.items else None
             ),
         )
+        if request.goal_focus is not None:
+            revalidate_goal_focus(store, request.goal_focus)
         if source is not None:
             _revalidate_source(store, source)
     return PreparedElaborateAdd(
@@ -196,6 +205,18 @@ def apply_prepared_elaborate_add(
         ()
         if source is None
         else ((source.context_name, source.context_uid, source.context_digest),)
+    )
+    goal_focus = analysis.goal_focus
+    goal_bindings = (
+        ()
+        if goal_focus is None or goal_focus.kind == "INLINE"
+        else (
+            (
+                goal_focus.context_name,
+                goal_focus.context_uid,
+                goal_focus.context_digest,
+            ),
+        )
     )
     proposal_records = (
         [
@@ -242,7 +263,7 @@ def apply_prepared_elaborate_add(
         for item in prepared.target_context.local_contexts
     )
     all_source_bindings = tuple(
-        dict.fromkeys((*source_bindings, *ambient_bindings))
+        dict.fromkeys((*source_bindings, *goal_bindings, *ambient_bindings))
     )
     with authorized_frozen_elaborate_target(
         store,
@@ -258,7 +279,7 @@ def apply_prepared_elaborate_add(
             contents=contents,
             source_bindings=all_source_bindings,
             operation_args={
-                "version": 4,
+                "version": 5,
                 "analysis_uid": analysis.uid,
                 "analysis_digest": analysis.digest,
                 "mode": analysis.mode.value,
@@ -267,7 +288,7 @@ def apply_prepared_elaborate_add(
                 "quality_policy": analysis.quality_policy.value,
                 "case_validation": (
                     (
-                        "INDEPENDENT_SOURCE_RULE_CONFORMANCE_AND_SOURCE_FIT"
+                        "ORDERED_COLLECTION_SOURCE_RULE_CONFORMANCE_AND_SOURCE_FIT"
                         if analysis.quality_policy is ElaborateQualityPolicy.STRICT
                         else "NOT_RUN"
                     )
@@ -277,6 +298,11 @@ def apply_prepared_elaborate_add(
                 "origin": prepared.result.origin,
                 "overview": analysis.overview,
                 "inputs": list(analysis.inputs),
+                "goal_focus": (
+                    None
+                    if analysis.goal_focus is None
+                    else analysis.goal_focus.receipt_record()
+                ),
                 "target_ambient": analysis.target_context.prompt_record()
                 if analysis.target_context is not None
                 else None,

@@ -1,0 +1,21 @@
+PTY 180 52                                                                                                                                                                          
+PROFILE PROVIDER ROUTES                                                                                                                                                             
+profile: provider-study                                                                                                                                                             
+mode: study · locked                                                                                                                                                                
+contact_status: not_contacted                                                                                                                                                       
+policy_version: semantic-provider-policy-v2                                                                                                                                         
+study_config: study-provider-config-v1                                                                                                                                              
+study_config_digest: 9faa8cea3634d393e3b2f724077b1db14f8628ee7243de2ab75c93d22c816702                                                                                               
+                                                                                                                                                                                    
+default:                                                                                                                                                                            
+  codex_chatgpt · model gpt-5.6-sol · reasoning none · timeout 600s                                                                                                                 
+operation_routes:                                                                                                                                                                   
+  search            codex_chatgpt · model gpt-5.6-terra · reasoning low · timeout 600s                                                                                              
+  query             codex_chatgpt · model gpt-5.6-sol · reasoning none · timeout 600s                                                                                               
+  help              codex_chatgpt · model gpt-5.6-sol · reasoning none · timeout 600s                                                                                               
+  forget            codex_chatgpt · model gpt-5.6-sol · reasoning none · timeout 600s                                                                                               
+  compare_contexts  codex_chatgpt · model gpt-5.6-sol · reasoning none · timeout 900s                                                                                               
+  meld_contexts     codex_chatgpt · model gpt-5.6-sol · reasoning none · timeout 900s                                                                                               
+                                                                                                                                                                                    
+configure: unavailable in a Study Profile                                                                                                                                           
+verify: mem provider probe [--operation OPERATION]

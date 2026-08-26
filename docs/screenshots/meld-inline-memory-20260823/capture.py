@@ -7,6 +7,7 @@ import io
 import json
 import os
 from pathlib import Path
+import re
 import shlex
 import sys
 import tempfile
@@ -192,13 +193,14 @@ def _run_tty_start_child(store_root: Path) -> None:
     store, _baseline = _initialize_store(store_root)
     provider = _SlowInlineProvider()
     _patch_meld_command(store, lambda: provider)
-    print(f"$ {shlex.join(['mem', 'meld', CONTENT])}", flush=True)
+    command = ["--from", CONTENT, "--to", BASELINE_NAME]
+    print(f"$ {shlex.join(['mem', 'meld', *command])}", flush=True)
     print(
         f"PTY {os.get_terminal_size().columns} {os.get_terminal_size().lines}",
         flush=True,
     )
     print(f"CURRENT BASELINE / TARGET · {BASELINE_NAME}", flush=True)
-    _run_meld_cli(store, [CONTENT])
+    _run_meld_cli(store, command)
     _verification(store, provider_calls=provider.calls)
 
 
@@ -224,7 +226,10 @@ def _run_prepare_exact_child(store_root: Path) -> None:
         provider_factory=lambda: provider,
         prepared=prepared,
     )
-    print(f"$ {shlex.join(['mem', 'meld', '--memory', CONTENT])} · reviewed")
+    print(
+        f"$ {shlex.join(['mem', 'meld', '--from', CONTENT, '--to', BASELINE_NAME])}"
+        " · reviewed"
+    )
     print(f"PTY {os.get_terminal_size().columns} {os.get_terminal_size().lines}")
     print(render_meld_session(started.session))
     print("\nEXACT APPLY GATE")
@@ -299,7 +304,11 @@ def _run_unresolved_review_child(store_root: Path) -> None:
     )
     store.save_meld_session(session, expected_session_digest=None)
     before = store._context_file(BASELINE_NAME).read_bytes()
-    print("$ mem meld --memory … · unresolved inline-Memory review", flush=True)
+    print(
+        "$ mem meld --from '…' --to capture/greeting-policy · "
+        "unresolved inline-Memory review",
+        flush=True,
+    )
     print(
         f"PTY {os.get_terminal_size().columns} {os.get_terminal_size().lines}",
         flush=True,
@@ -432,6 +441,9 @@ def main() -> None:
         )
         _capture_unresolved_review(root / "review-store")
 
+    for path in (*OUT.glob("*.txt"), *OUT.glob("*.typescript")):
+        payload = re.sub(br"\r+\n", b"\n", path.read_bytes())
+        path.write_bytes(re.sub(rb"[ \t]+(?=\n|$)", b"", payload))
     captures = tuple(sorted(OUT.glob("[0-9][0-9]-*.typescript")))
     if not captures or any(
         "PTY 180 52" not in path.read_text(encoding="utf-8") for path in captures

@@ -113,6 +113,7 @@ def meld_endpoint_setup_spec(
                 height=height,
                 allow_new=True,
                 new_label="CREATE NEW RESULT CONTEXT",
+                existing_label="EMPTY · EXISTING",
                 prefer_new=True,
                 new_name_validator=new_name_validator,
             ),

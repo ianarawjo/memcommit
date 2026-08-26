@@ -894,9 +894,64 @@ def test_atomize_launcher_passes_exact_setup_memory_to_command(
             "context_name": "focused/source",
             "output_name": "focused/output",
             "show_all": False,
+            "refresh": True,
             "memory_selector": "memory-uid",
         }
     ]
+
+
+def test_atomize_refresh_retains_terminal_uid_and_exact_retry_is_provider_free(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    ctx, _memory = _init_context(store)
+    provider = AggregateProvider()
+    _patch_provider(monkeypatch, provider)
+
+    opened = runner.invoke(
+        app,
+        ["atomize", "--context", ctx.name, "--output", ctx.name],
+    )
+    assert opened.exit_code == 0, opened.output
+    first = store.load_atomize_analysis(ctx.uid)
+    assert first is not None
+    applied = runner.invoke(app, ["atomize", "--context", ctx.name, "--save"])
+    assert applied.exit_code == 0, applied.output
+
+    repeated = runner.invoke(
+        app,
+        ["atomize", "--context", ctx.name, "--output", ctx.name],
+    )
+    assert repeated.exit_code == 0, repeated.output
+    assert store.load_atomize_analysis(ctx.uid).uid == first.uid
+    assert len(provider.payloads) == 1
+
+    refreshed = runner.invoke(
+        app,
+        [
+            "atomize",
+            "--context",
+            ctx.name,
+            "--output",
+            ctx.name,
+            "--refresh",
+        ],
+    )
+    assert refreshed.exit_code == 0, refreshed.output
+    second = store.load_atomize_analysis(ctx.uid)
+    assert second is not None and second.uid != first.uid
+    assert len(provider.payloads) == 2
+    retained = store.load_atomize_session_history(ctx.uid, first.uid)
+    assert retained[0].uid == first.uid
+    assert retained[1] is not None and retained[1].application is not None
+
+    historical = runner.invoke(
+        app,
+        ["impact", "atomize", "--session", first.uid],
+    )
+    assert historical.exit_code == 0, historical.output
+    assert first.uid[:8] in historical.output
 
 
 def test_atomize_sessions_empty_and_forged_receipts_fail_closed(
@@ -1107,6 +1162,7 @@ def test_refresh_rolls_back_analysis_if_workbench_save_fails(
     assert restored is not None and restored.uid == first.analysis.uid
     assert store._atomize_analysis_path(ctx.uid).read_bytes() == original_analysis
     assert store._atomize_workbench_path(ctx.uid).read_bytes() == original_workbench
+    assert store.list_atomize_session_history() == ()
 
 
 def test_refresh_is_explicit_and_stale_analysis_fails_closed(

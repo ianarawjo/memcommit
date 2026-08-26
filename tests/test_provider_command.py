@@ -1,4 +1,4 @@
-"""Provider CLI exposes editable general routes and locked Study routes."""
+"""Provider CLI exposes read-only overviews and explicit route actions."""
 
 from __future__ import annotations
 
@@ -182,6 +182,29 @@ def test_use_can_configure_and_reset_one_operation_route():
     assert _route_payloads()[0]["operations"] == {}
 
 
+@pytest.mark.parametrize("operation", ["memory", " search ", "SEARCH"])
+def test_provider_commands_reject_unknown_or_nonexact_operation_names(operation):
+    results = (
+        runner.invoke(
+            app,
+            [
+                "provider",
+                "use",
+                "codex_chatgpt",
+                "--operation",
+                operation,
+            ],
+        ),
+        runner.invoke(app, ["provider", "status", "--operation", operation]),
+        runner.invoke(app, ["provider", "probe", "--operation", operation]),
+        runner.invoke(app, ["provider", "reset", "--operation", operation]),
+    )
+
+    assert all(result.exit_code == 1 for result in results)
+    assert all("one exact supported name" in result.stderr for result in results)
+    assert _route_payloads() == []
+
+
 def test_switching_provider_requires_a_fresh_model():
     result = runner.invoke(app, ["provider", "use", "openrouter"])
 
@@ -228,6 +251,7 @@ def test_study_overview_is_locked_and_ignores_machine_default():
     assert "profile: pilot-001" in result.output
     assert "mode: study · locked" in result.output
     assert f"study_config: {STUDY_PROVIDER_POLICY_VERSION}" in result.output
+    assert "reasoning none · tier fast · timeout 600s" in result.output
     assert "search            codex_chatgpt · model gpt-5.6-terra" in result.output
     assert "query             codex_chatgpt · model gpt-5.6-sol" in result.output
     assert "rule:" not in result.output

@@ -73,6 +73,13 @@ revision counts, raw emits provider-free direct-item unified diffs, and verbose
 retains full direct-item UIDs. With no Context or checkpoint target these flags
 continue to describe the active Update record for compatibility.
 
+These are selected-transition item counts, not history-command counts. For
+example, `1 edited` on an Update checkpoint says that one stable Memory UID
+changed between that checkpoint and its predecessor. It does not say that the
+Context has only one retained revision, nor does it absorb an earlier creation
+baseline or Distill transition into the selected Update. Those earlier
+checkpoints remain independently selectable.
+
 A bare Diff operand is completed by the shared typed Context/checkpoint
 targeting layer. Relative forms remain Context-only. A bare eight-or-more
 character UUID-shaped value is checked against the frozen ordinary-local

@@ -63,10 +63,10 @@ globals resolve to the canonical modules, while importing
 
 This package is intentionally separate from provider-free Literal Find under
 `memcommit.operations.find`. The relocation changes no readable authority,
-provider disclosure, ranking, temporal/current result, selection,
-materialization, checkpoint, rollback, or public projection behavior. Later
-changes to Search mode routing must remain in the same canonical analysis
-owner rather than becoming compatibility-facade behavior.
+provider disclosure, ranking, current-only result, selection, materialization,
+checkpoint, rollback, or public projection behavior. The current-only Search
+work and its removal of implicit temporal routing remain in the same canonical
+analysis owner rather than becoming compatibility-facade behavior.
 
 ## Boundary matrix
 
@@ -145,11 +145,15 @@ reaches this same application path.
 
 `tests/test_find_application.py` proves:
 
-- terminal-independent CURRENT and HISTORY execution;
+- terminal-independent current-readable execution, including queries that
+  contain time-oriented words;
 - authority/source freezing before provider construction;
-- current-versus-history source separation;
+- Search never enumerates retained history or changes mode from query wording;
+- `docs/screenshots/search-current-only-temporal-20260823/` records the
+  corresponding 180×52 color-TTY entry, query, running, current-result,
+  checked-result, and read-only-close states;
 - direct query-view name disclosure without hidden source loading;
-- provider-free failure for granted temporal history;
+- granted current content follows the same current-only query contract;
 - no stdout or stderr from the Store runtime; and
 - no command, Typer, or prompt-toolkit imports in the application module.
 

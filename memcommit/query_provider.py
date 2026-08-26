@@ -145,6 +145,7 @@ class CodexChatGPTProvider:
     timeout: float = 120
     model: str | None = None
     reasoning_effort: str | None = None
+    service_tier: str | None = None
     identity: ProviderIdentity = field(init=False)
     last_run: CompletionRun | None = field(default=None, init=False)
     _runner: Callable[..., subprocess.CompletedProcess[str]] = field(
@@ -165,10 +166,14 @@ class CodexChatGPTProvider:
                 "Unsupported Codex reasoning effort. Choose from: "
                 + ", ".join(CODEX_REASONING_EFFORTS)
             )
+        if self.service_tier not in {None, "fast"}:
+            raise QueryProviderError(
+                "Unsupported Codex service tier. Choose 'fast' or leave it unset."
+            )
         self.identity = ProviderIdentity(
             provider=CODEX_CHATGPT_PROVIDER,
             model=self.model or "current-recommended",
-            runtime="codex-cli",
+            runtime=("codex-cli/fast" if self.service_tier == "fast" else "codex-cli"),
             reasoning_effort=self.reasoning_effort,
         )
 
@@ -182,6 +187,7 @@ class CodexChatGPTProvider:
         timeout: float = 120,
         model: str | None = None,
         reasoning_effort: str | None = None,
+        service_tier: str | None = None,
     ) -> CodexChatGPTProvider:
         """
         Verify that Codex will use a stored ChatGPT login, never an API key.
@@ -247,6 +253,7 @@ class CodexChatGPTProvider:
             timeout=timeout,
             model=model,
             reasoning_effort=reasoning_effort,
+            service_tier=service_tier,
             _runner=process_runner,
         )
 
@@ -286,6 +293,18 @@ class CodexChatGPTProvider:
                         [
                             "--config",
                             f'model_reasoning_effort="{self.reasoning_effort}"',
+                        ]
+                    )
+                if self.service_tier == "fast":
+                    # User config is deliberately ignored for isolation, so
+                    # the Study condition must enable both documented Codex
+                    # Fast-mode settings on every ephemeral invocation.
+                    args.extend(
+                        [
+                            "--config",
+                            'service_tier="fast"',
+                            "--config",
+                            "features.fast_mode=true",
                         ]
                     )
                 if output_schema is not None:

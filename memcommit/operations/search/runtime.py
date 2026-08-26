@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from collections.abc import Sequence
 from typing import Protocol
 
 from memcommit.context import Context
@@ -17,10 +16,8 @@ from memcommit.operations.search.application import (
     FindSearchResponse,
     FindSearchSourcePort,
     FrozenFindCurrentSource,
-    FrozenFindHistorySource,
     run_find_search,
 )
-from memcommit.history import build_history
 from memcommit.store import MemoryStore
 
 
@@ -45,37 +42,8 @@ class FindReadableCatalog(Protocol):
     def access_for(self, name: str) -> FindReadableAccess: ...
 
 
-def _history_context_names(
-    catalog: FindReadableCatalog,
-    roots: Sequence[Context],
-    *,
-    follow_embeds: bool,
-) -> tuple[str, ...]:
-    """Freeze history owners without opening refs or query-only sources."""
-
-    names: list[str] = []
-    visited: set[str] = set()
-
-    def visit(context: Context) -> None:
-        if context.uid in visited:
-            return
-        visited.add(context.uid)
-        names.append(context.name)
-        if not follow_embeds:
-            return
-        for item in context.iter_items():
-            if isinstance(item, Context) and catalog.context_exists(item.name):
-                # History is built from direct durable records. The resolved
-                # graph supplies reach only; refs and query routes remain closed.
-                visit(catalog.load_direct(item.name))
-
-    for root in roots:
-        visit(root)
-    return tuple(names)
-
-
 class MemoryStoreFindSearchSourcePort(FindSearchSourcePort):
-    """Freeze current or historical evidence from one readable catalog."""
+    """Freeze current readable evidence from one catalog."""
 
     def __init__(self, store: MemoryStore, catalog: FindReadableCatalog):
         self._store = store
@@ -119,23 +87,6 @@ class MemoryStoreFindSearchSourcePort(FindSearchSourcePort):
             candidates=candidates,
             coverage_root_name=coverage_root_name,
         )
-
-    def freeze_history(self, request: FindSearchRequest) -> FrozenFindHistorySource:
-        roots = self._roots(request)
-        names = _history_context_names(
-            self._catalog,
-            roots,
-            follow_embeds=request.follow_embeds,
-        )
-        if any(self._catalog.access_for(name).is_granted for name in names):
-            raise RuntimeError(
-                "Temporal Search is unavailable for a granted READ view because "
-                "the grant does not expose authority checkpoint history."
-            )
-        return FrozenFindHistorySource(
-            timelines=tuple(build_history(self._store, name) for name in names)
-        )
-
 
 def execute_find_search(
     request: FindSearchRequest,

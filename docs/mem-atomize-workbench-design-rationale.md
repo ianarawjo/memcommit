@@ -191,18 +191,20 @@ The persisted workbench is bound to:
 - selected choices and verbatim reviewer responses; and
 - enough provenance to identify which analysis was eventually applied.
 
-The current schema stores one latest immutable analysis and one mutable
-workbench per Context UID:
+The current schema stores one mutable latest analysis/workbench pair per
+Context UID, plus immutable displaced pairs by analysis UID:
 
 ```text
 ~/.mem/atomize-analyses/<context-uid>.json
 ~/.mem/atomize-workbenches/<context-uid>.json
+~/.mem/atomize-session-history/<context-uid>/<analysis-uid>.json
 ```
 
 Their exact analysis UID, Context digest, issue projection digest, choice
 identities, cursor, sort mode, layout, and responses are validated on load.
 A refreshed analysis replaces the latest-analysis slot and creates a fresh
-workbench. A revision archive is deliberately deferred.
+workbench only after retaining the displaced pair. The active workbench may
+continue to change, while a retained history pair is immutable and read-only.
 
 The initial analysis is one aggregate provider completion. The same response
 contains the atomize classification and proposed children for every direct

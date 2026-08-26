@@ -11,10 +11,10 @@ three distinct projections:
 | versioned Memory state | one directly owned Memory's content at a reconstructable state | only through an active checkpoint containing that occurrence |
 | Memory transition | an add, edit, removal, or restoration edge between reconstructable Context states | no; it is an event boundary |
 
-This model is shared by temporal `mem find`, static `mem log`, semantic
+This model is shared by the semantic and static `mem log` routes, semantic
 checkpoint selection for `mem revert`, and the state comparison used by
-`mem undo`. Sharing the model prevents each command from inventing a different
-meaning for “before,” “after,” “latest,” or “the previous state.”
+`mem undo`. Sharing the model prevents each history operation from inventing
+a different meaning for “before,” “after,” “latest,” or “the previous state.”
 
 Log and Trace additionally share `memcommit.temporal_history` for direct-Memory
 delta extraction. The common layer compares adjacent direct frames by UID and
@@ -24,18 +24,13 @@ reconstructable provenance may connect distinct UIDs as `SPLIT`, `ABSORB`, or
 translation lineage. Log may display those enriched edges, while Trace follows
 them from one selected Memory and filters out unrelated changes.
 
-Ordinary `mem find` remains a search over the current Context graph. It must
-not silently enumerate or transmit history for every query. The history path
-is activated only when the query contains a supported temporal or
-version-oriented marker. The bounded English detector recognizes
-before/after/during/while/when, latest/earliest/previous, supported “last …”
-and “first …” forms, history/historical, checkpoint/version, as-of/at-the-time,
-used-to, until, and since language. The Korean detector recognizes
-`직전`, `직후`, `이전`, `이후`, `전에`, `후에`, `전의`, `후의`, `동안`,
-`당시`, `시점`, `버전`, `체크포인트`, `과거`, `히스토리`, `마지막`,
-`최초`, `그때`, supported 있을/없을-때 forms, `하기 전`, `한 뒤`,
-`변동 이후`, and `변경 이후`. Marker recognition selects the history
-pipeline; it does not by itself decide the query's semantic answer.
+`mem search` always searches the frozen current readable Memory graph. Query
+words such as `before`, `after`, `during`, `when`, `latest`, `동안`, or `이후`
+remain ordinary semantic content; they never switch the command to checkpoint
+history or expand the disclosed evidence. Natural-language History Search is
+entered explicitly through `mem log QUERY`. This operation boundary keeps a
+sentence about current content from silently enumerating retained checkpoints
+and makes the source of a historical answer visible in the command itself.
 
 ## Reconstructable history
 
@@ -140,13 +135,12 @@ their evidence are therefore part of the interaction contract.
 
 ## Command contracts
 
-### `mem find`
+### `mem search`
 
 ```text
-mem find
-mem find "parking information"
-mem find "things changed after the shuttle notice changed"
-mem find "셔틀 공지가 있을 때 마지막으로 업데이트된 메모리"
+mem search
+mem search "parking information"
+mem search "notices that apply during construction"
 ```
 
 A query-less invocation in a TTY opens the process-local Find search
@@ -156,18 +150,17 @@ namespace descendants and follow explicit embeds. It sends nothing to a
 provider until a nonblank query is submitted. Outside a TTY, a query remains
 required so scripts never wait for an interactive selector.
 
-A non-temporal query keeps the existing current-state Find behavior and
-privacy boundary. A temporal query may return versioned direct Memory states
-or direct Memory transitions as well as checkpoints when the wording asks for
-one. Both one-shot paths default to the selected Context only; `-r/--recursive`
-adds every materialized ordinary namespace descendant and reachable explicit
-embed. History results must identify their Context, checkpoint or transition
-boundary, relation to the anchor, and whether they are restorable.
+Every query keeps the current-state Search privacy boundary. Search defaults
+to the selected Context only; `-r/--recursive` adds every materialized ordinary
+namespace descendant and reachable explicit embed. Time-oriented wording can
+match a current Memory that contains that wording, but it cannot return a
+version, transition, or checkpoint.
 
-In a TTY, temporal results are inspectable with the shared history
-presentation. Enter inspects a selected result; it never changes the Context.
-Outside a TTY, results are printed as ordinary read-only output suitable for
-inspection, not as a persisted selection receipt.
+`docs/screenshots/search-current-only-temporal-20260823/` records the complete
+interactive boundary at `180 × 52`: entry, time-oriented query text, ordinary
+Search execution, a current Memory result, staged checking, and read-only close
+verification. The color PTY stream confirms that removing implicit History
+routing did not introduce a parallel or visually hidden Search mode.
 
 ### `mem log`
 
@@ -390,6 +383,24 @@ is reconstructed from the preceding effective state, including the implicit
 target state of a retained Revert receipt. The post-image remains the ordinary
 checkpoint snapshot. Neither image resolves MemoryRefs, embedded Contexts, or
 query-only sources.
+
+`snapshot` and `command_before` are the shared future-restorable Context-frame
+roles of one persisted checkpoint record. Revert `log_snapshot` values recurse
+through the same complete record shape. Identity-preserving graph operations
+must traverse those roles through `memcommit.checkpoint_frames` rather than
+keeping operation-local field inventories. This boundary matters even though
+Revert and command Undo/Redo retain distinct history policies: a renamed
+post-image can make Revert succeed while an unmigrated pre-image makes the
+global command chain fail closed.
+
+Legacy records already split by that historical Rename defect are repaired
+only through `scripts/repair_rename_checkpoint_history.py`. Its default is a
+read-only plan. Apply requires the exact reviewed plan digest, matching Rename
+evidence and live UID ownership over the same frozen Context/checkpoint graph,
+rewrites no prose or Context content, and
+verifies complete Undo/Redo stack reconstruction before releasing its locks.
+The reader does not silently normalize or ignore a mismatch because doing so
+would weaken exact pre-image and CAS evidence for unrelated corruption.
 
 Every successful Undo or Redo writes an automatic checkpoint in each affected
 Context. Those checkpoints share a restoration receipt UID, direction, source

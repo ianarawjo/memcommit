@@ -50,7 +50,7 @@ its interactive command-wait projection:
 - Meld initial analysis uses the transient line. Later issue or whole-set turns,
   including Review handoffs that re-enter the same Meld controller, retain the
   previous reviewed report in the interactive wait.
-- Find, temporal Find, Compare, Compare rationale, the three quality finders,
+- Search, Compare, Compare rationale, the three quality finders,
   and ambiguity Review creation; initial Compare analysis uses the transient
   line in a TTY.
 - Query routing/answering, Translate, Summarize, Rationale, semantic Log and

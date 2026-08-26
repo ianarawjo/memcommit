@@ -1,0 +1,52 @@
+ MEM ATOMIZE · SESSIONS · RECENT FIRST · ALL                                                                                                                                        
+ PROFILE · (unregistered)                                                                                                                                                           
+ STORE   · /var/folders/gb/k74fw7ks06x4c041g8gqgj600000gq/T/mem-session-rotation-uvfmj3bt/atomize-store                                                                             
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  + Add new Atomize session                                                                                                                                                        ^
+› 2026-08-25 13:28Z  capture/atomize-policy  [CURRENT]  capture/atomize-policy → capture/atomize-policy · 1 → 1 Memories · 2 issues                                                 
+  2026-08-25 13:28Z  capture/atomize-policy  [APPLIED]  capture/atomize-policy → capture/atomize-policy · 1 → 1 Memories · 2 issues                                                 
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                   v
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ Kind         atomize                                                                                                                                                              ^
+ Key          db7e7221-a54b-4c5e-aa34-812161f8b53a                                                                                                                                  
+ Title        capture/atomize-policy                                                                                                                                                
+ Status       CURRENT                                                                                                                                                               
+ Context      capture/atomize-policy                                                                                                                                                
+ Modified     2026-08-25 13:28Z                                                                                                                                                     
+ Summary      capture/atomize-policy → capture/atomize-policy · 1 → 1 Memories · 2 issues                                                                                           
+ Detail       Analysis db7e7221-a54b-4c5e-aa34-812161f8b53a                                                                                                                         
+              Source Context capture/atomize-policy [c3dc8b2e-d352-48f4-987a-7dc2181ac71f]                                                                                          
+              Planned Output capture/atomize-policy · IN PLACE                                                                                                                      
+              Opening this analysis checks that it is still current. The shown command is a reference route; the picker does not run it.                                            
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                   v
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ ↑/↓ move  PgUp/PgDn detail  Enter open  S sort  G group  / filter  N Add new Atomize session  Esc/q cancel  ·  2/3

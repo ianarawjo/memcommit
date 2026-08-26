@@ -211,7 +211,10 @@ def test_tui_adapter_returns_request_without_selecting_state() -> None:
 
 def test_switch_application_and_runtime_do_not_import_terminal_adapters() -> None:
     forbidden = ("typer", "prompt_toolkit", "memcommit.commands")
-    for relative in ("memcommit/switch_application.py", "memcommit/switch_runtime.py"):
+    for relative in (
+        "memcommit/operations/switch/application.py",
+        "memcommit/operations/switch/runtime.py",
+    ):
         imports = _imports(ROOT / relative)
         assert not any(
             module == prefix or module.startswith(prefix + ".")

@@ -111,8 +111,10 @@ tries the complete ordinary-local direct-Memory owner catalog. A unique match
 becomes an exact owner/UID coordinate, no match returns to the operation's
 established missing-Context or literal behavior, and multiple matches fail with
 every canonical `CONTEXT:UID` candidate. Grant-aware adapters preserve an exact
-authorized public Context before this local fallback; bare short prefixes never
-enumerate Grant contents. Compare, Resolve, Lock and Unlock, Embed, Reference,
+authorized public Context before this local fallback. Mutating and semantic
+source adapters never enumerate Grant contents from a bare short prefix.
+Read-only Show, Trace, and Rationale are the deliberate exception described
+below. Compare, Resolve, Lock and Unlock, Embed, Reference,
 Fit, Conformance, Atomize, Impact Atomize, Chunk, Translate, and Show consume
 this common classification and fallback rather than setting their own minimum
 prefix length.
@@ -129,10 +131,13 @@ This reuse has three deliberate semantic domains:
   Context/Memory shape classification.
 
 Show applies the same short-prefix precedence to its broader direct-item
-catalog. Because it may select MemoryRefs, embedded Context rows, and query
-rows in addition to ordinary Memories, that final lookup remains
-operation-owned. It still requires one unique owner and never prefers the
-current Context.
+catalog. It first resolves current ordinary Memories across the frozen
+Profile-readable local and READ-granted catalog so a UID printed by
+Find/List/Search can be used directly. If no current readable Memory matches,
+it falls back to the ordinary-local direct-item catalog, where it may select
+MemoryRefs, embedded Context rows, and query rows. That final lookup remains
+operation-owned. Both stages require one unique public owner and never prefer
+the current Context.
 
 A bare Memory-shaped operand may enumerate only strict ordinary-local direct
 records and must have one unique owner. A qualified owner may instead be
@@ -141,6 +146,16 @@ does not enumerate Grants, follow Embed edges, open MemoryRefs or query-only
 content, or confer mutation authority. This split prevents a convenient
 positional grammar from silently broadening the operation's readable or
 writable namespace.
+
+Read-only Show, Trace, and Rationale additionally compose a Profile-readable
+report resolver before that local fallback. It enumerates only current direct
+ordinary Memories under effective READ access, keeps the exact `ContextAccess`
+for the winning public name, and reports local/Grant collisions as explicit
+`CONTEXT:UID` ambiguity. It never opens QUERY-only content or owner history.
+Trace and Rationale consult retained local Memories and MemoryRefs only when no
+current readable Memory matches. This asymmetry is intentional: result UIDs
+round-trip through reports without granting bare-UID mutation or hidden-history
+authority.
 
 Every tree that exposes the shared preview controller also uses one shared
 visibility hint. Lowercase `m` toggles direct-item rows only for the Context at
@@ -158,12 +173,20 @@ become synthetic Contexts, and Grant attachments never become hierarchy edges.
 `expand_lexical_context_names` preserves the caller's frozen catalog order and
 deduplicates overlapping roots. Loaders retain their authority-bearing store
 and deduplicate loaded Context identities before adding the same graph twice.
+An exact local Context may nevertheless display top-level READ grants attached
+to it as process-local source rows. When an operation follows embeds, the
+readable catalog resolves those already-visible rows through their exact Grant
+bindings. This does not add the granted names to the local lexical subtree,
+does not make attachment metadata a namespace parent, and never opens a
+QUERY-only source.
 
 Lexical descendant reach, target cardinality, and embedded graph traversal
 remain separate. The
 merged loader follows its store's normal `load` behavior for compatibility.
 Search exposes `follow_embeds` independently and cannot admit query-only
-content through the ordinary Context store protocol.
+content through the ordinary Context store protocol. Excluding embeds also
+keeps an attached READ projection out of the executable content frame, even
+though static authority presentation may still disclose that the route exists.
 
 Common controls own mechanics only. Operations still decide selectable names,
 role availability, initial scope, validation, provider disclosure, receipts,

@@ -818,6 +818,53 @@ def test_delete_preserves_review_bound_to_another_context(isolated_store):
     assert restored.uid == review.uid
 
 
+def test_delete_removes_uid_retained_atomize_and_review_evidence(isolated_store):
+    from memcommit.atomize import AtomizeImpactReport, create_atomize_analysis
+    from memcommit.atomize_workbench import create_atomize_workbench
+    from memcommit.findings import AmbiguityReport
+    from memcommit.review import create_ambiguity_review
+
+    store = MemoryStore()
+    deleted = ops.init("history/deleted")
+    retained = ops.init("history/retained")
+    store.save(deleted)
+    store.save(retained)
+
+    analysis = create_atomize_analysis(
+        deleted,
+        AtomizeImpactReport(
+            context_uid=deleted.uid,
+            context_name=deleted.name,
+            memory_count=0,
+            projected_memory_count=0,
+            items=(),
+        ),
+    )
+    workbench = create_atomize_workbench(analysis)
+    store.archive_atomize_session(analysis, workbench)
+
+    deleted_review = create_ambiguity_review(
+        deleted,
+        AmbiguityReport(memory_count=0, findings=()),
+    )
+    retained_review = create_ambiguity_review(
+        retained,
+        AmbiguityReport(memory_count=0, findings=()),
+    )
+    store.save_review_session(deleted_review)
+    store.save_review_session(retained_review)
+    assert store.load_review_session_history(deleted_review.uid) is not None
+    assert store._review_session_source_path(deleted_review.uid).is_file()
+
+    store.delete(deleted.name)
+
+    assert not (store.atomize_session_history_dir / deleted.uid).exists()
+    assert not store._review_session_history_path(deleted_review.uid).exists()
+    assert not store._review_session_source_path(deleted_review.uid).exists()
+    assert store.load_review_session().uid == retained_review.uid
+    assert store._review_session_source_path(retained_review.uid).is_file()
+
+
 def test_delete_preflights_invalid_exact_atomize_artifact(
     isolated_store,
 ):

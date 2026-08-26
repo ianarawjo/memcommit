@@ -359,6 +359,7 @@ def test_recursive_copy_freezes_visible_tree_and_paste_replays_it(
         "\n"
         "  VIA EMBED · child/\n"
         "    Nested fact.\n"
+        "\n"
         "  Parent fact.\n"
     )
     MemoryStore().delete("parent")
@@ -392,6 +393,7 @@ def test_copy_freezes_a_typed_namespace_child_for_later_paste(
         "  1 subcontext\n"
         "\n"
         "  DESCENDANT · parent/child/\n"
+        "\n"
         "  Parent fact.\n"
     )
     record = json.loads(

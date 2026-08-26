@@ -1,36 +1,36 @@
-$ mem meld --memory 'all greetings need "."; keep "" and ! literal. ' · reviewed                                                                                                    
-PTY 180 52                                                                                                                                                                          
-MEM MELD · DIRECTIONAL                                                                                                                                                              
-INCOMING INLINE MEMORY → BASELINE / TARGET capture/greeting-policy                                                                                                                  
-SCOPE · A SELECTED GRAPH ONLY · B SELECTED GRAPH ONLY                                                                                                                               
-State: READY_TO_APPLY · Round: 1                                                                                                                                                    
-                                                                                                                                                                                    
-WHAT MEM UNDERSTOOD                                                                                                                                                                 
-The inline greeting rule is a new distinction and the existing baseline Memory remains unchanged.                                                                                   
-                                                                                                                                                                                    
-RELATIONS · 1  ISSUES · 0  RESULTS · 1                                                                                                                                              
-                                                                                                                                                                                    
-ACCOUNTING                                                                                                                                                                          
-  Source coverage: 2/2                                                                                                                                                              
-  Relation coverage: 1/1                                                                                                                                                            
-  Final Memories: 1 · PRESERVE 0 · COALESCE 0 · SYNTHESIZE 1 · USER_ADD 0                                                                                                           
-  Open issues: REQUIRED 0 · HELPFUL 0                                                                                                                                               
-  Cross-relation results: 0                                                                                                                                                         
-  ✓ R1. CONFLICT · The inline rule replaces the prior policy.                                                                                                                       
-                                                                                                                                                                                    
-ISSUES                                                                                                                                                                              
-  (none)                                                                                                                                                                            
-                                                                                                                                                                                    
-PROPOSED BASELINE CHANGES                                                                                                                                                           
-  ~  1. [EDIT · SYNTHESIZE] all greetings need "."; keep "" and ! literal.                                                                                                          
-       WHY · Preserves the exact new greeting distinction.                                                                                                                          
-                                                                                                                                                                                    
-Apply exactly this proposal: mem meld --memory 'all greetings need "."; keep "" and ! literal. ' --into capture/greeting-policy --accept                                            
-                                                                                                                                                                                    
-EXACT APPLY GATE                                                                                                                                                                    
-  COMMAND · mem meld --memory 'all greetings need "."; keep "" and ! literal. ' --into capture/greeting-policy --accept                                                             
-  SESSION STATE · READY_TO_APPLY                                                                                                                                                    
-  SESSION SCHEMA · 9                                                                                                                                                                
-  PROVIDER CALLS · 1                                                                                                                                                                
-  TARGET CHECKPOINTS · 0                                                                                                                                                            
+$ mem meld --from 'all greetings need "."; keep "" and ! literal. ' --to capture/greeting-policy · reviewed
+PTY 180 52
+MEM MELD · DIRECTIONAL
+INCOMING INLINE MEMORY → BASELINE / TARGET capture/greeting-policy
+SCOPE · A SELECTED GRAPH ONLY · B SELECTED GRAPH ONLY
+State: READY_TO_APPLY · Round: 1
+
+WHAT MEM UNDERSTOOD
+The inline greeting rule is a new distinction and the existing baseline Memory remains unchanged.
+
+RELATIONS · 1  ISSUES · 0  RESULTS · 1
+
+ACCOUNTING
+  Source coverage: 2/2
+  Relation coverage: 1/1
+  Final Memories: 1 · PRESERVE 0 · COALESCE 0 · SYNTHESIZE 1 · USER_ADD 0
+  Open issues: REQUIRED 0 · HELPFUL 0
+  Cross-relation results: 0
+  ✓ R1. CONFLICT · The inline rule replaces the prior policy.
+
+ISSUES
+  (none)
+
+PROPOSED BASELINE CHANGES
+  ~  1. [EDIT · SYNTHESIZE] all greetings need "."; keep "" and ! literal.
+       WHY · Preserves the exact new greeting distinction.
+
+Apply exactly this proposal: mem meld --memory 'all greetings need "."; keep "" and ! literal. ' --into capture/greeting-policy --accept
+
+EXACT APPLY GATE
+  COMMAND · mem meld --memory 'all greetings need "."; keep "" and ! literal. ' --into capture/greeting-policy --accept
+  SESSION STATE · READY_TO_APPLY
+  SESSION SCHEMA · 9
+  PROVIDER CALLS · 1
+  TARGET CHECKPOINTS · 0
   INLINE MEMORY CONTEXT EXISTS · False

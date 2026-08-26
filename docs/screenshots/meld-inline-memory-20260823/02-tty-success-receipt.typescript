@@ -1,12 +1,12 @@
-$ mem meld 'all greetings need "."; keep "" and ! literal. '
+$ mem meld --from 'all greetings need "."; keep "" and ! literal. ' --to capture/greeting-policy
 PTY 180 52
 CURRENT BASELINE / TARGET · capture/greeting-policy
 MEM MELD · 1/2 · CONNECTING PROVIDER . · 0sMEM MELD · 2/2 · ANALYZING MELD TURN . · 0sMEM MELD · 2/2 · ANALYZING MELD TURN .. · 0sMEM MELD · 2/2 · ANALYZING MELD TURN … · 0s MEM MELD · 2/2 · ANALYZING MELD TURN . · 1sMEM MELD · 2/2 · ANALYZING MELD TURN .. · 1sMEM MELD · 2/2 · ANALYZING MELD TURN … · 1s                                            MELD APPLIED · DIRECTIONAL · capture/greeting-policy
 EFFECTS · ADD 0 · EDIT 1
 RESULT MEMORIES · 1
-RECEIPT · f72c7c46-e9b2-4b9e-a3a3-04bf37c3c217
-CHECKPOINT · e0321a85-9563-40c1-93c7-0e5386d280a3
-REVIEW · mem review meld --session f72c7c46-e9b2-4b9e-a3a3-04bf37c3c217
+RECEIPT · a33aa821-d7e7-4e42-96c5-0f45c522f2c2
+CHECKPOINT · ec1e18c9-a5c6-4460-a3af-a91635b7264a
+REVIEW · mem review meld --session a33aa821-d7e7-4e42-96c5-0f45c522f2c2
 RECOVERY · mem undo
 
 DURABLE VERIFICATION · INLINE-MEMORY MELD
@@ -17,5 +17,5 @@ DURABLE VERIFICATION · INLINE-MEMORY MELD
   CONTEXT NAMES · capture/greeting-policy
   INLINE MEMORY CONTEXT EXISTS · False
   TARGET MEMORIES · 1
-    1. [ec87bc09] 'all greetings need "."; keep "" and ! literal. '
+    1. [8ecade2b] 'all greetings need "."; keep "" and ! literal. '
   RETAINED INLINE CONTENT · 'all greetings need "."; keep "" and ! literal. '

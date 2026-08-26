@@ -1,0 +1,52 @@
+ MELD SESSIONS · RECENTLY MODIFIED · RECENT FIRST · ALL                                                                                                                             
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+› + Add new Meld session                                                                                                                                                           ^
+› 2026-08-25 13:28Z  capture/meld-incoming → capture/meld-baseline  [PENDING_ANALYSIS]  Directional · INCOMING → BASELINE / TARGET · 0 turns                                        
+  2026-08-25 13:28Z  capture/meld-incoming → capture/meld-baseline  [KEPT_REVIEW_ONLY]  Directional · INCOMING → BASELINE / TARGET · 1 turn                                         
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                   v
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ Add new Meld session                                                                                                                                                              ^
+ Leave saved-session browsing and enter operation-specific setup.                                                                                                                   
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                   v
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ ↑/↓ move  PgUp/PgDn detail  Enter open  S sort  G group  / filter  N Add new Meld session  Esc/q cancel  ·  1/3

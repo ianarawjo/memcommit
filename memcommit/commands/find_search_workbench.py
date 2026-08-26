@@ -817,8 +817,7 @@ def run_find_search_workbench(
                     save_location_edit["programmatic"] = False
             result_count = len(response.results)
             result_label = "RESULT" if result_count == 1 else "RESULTS"
-            mode_prefix = "HISTORY · " if response.mode == "HISTORY" else ""
-            status["value"] = f"{mode_prefix}{result_count} {result_label}"
+            status["value"] = f"{result_count} {result_label}"
 
         def fail(error: Exception) -> None:
             detail = " ".join(safe_terminal_text(str(error)).split())
@@ -944,9 +943,6 @@ def run_find_search_workbench(
         selected_indices = tuple(int(uid) for uid in result_selection.selected_uids)
         if not selected_indices:
             status["value"] = "CHECK AT LEAST ONE RESULT"
-            return "HANDLED"
-        if response.mode != "CURRENT":
-            status["value"] = "HISTORY RESULTS CANNOT BE SAVED AS A CONTEXT"
             return "HANDLED"
         selected_results = tuple(response.results[index] for index in selected_indices)
         unsupported = next(

@@ -41,8 +41,11 @@ from memcommit.context_history import (
 from memcommit.context_rationale import synthesize_context_rationale
 from memcommit.context_targeting.model import ContextTarget
 from memcommit.context_targeting.report_items import (
+    ReadableMemoryTargetNotFoundError,
+    freeze_memory_report_readable_catalog,
     parse_memory_report_locator,
     resolve_local_memory_report_target,
+    resolve_readable_memory_target,
 )
 from memcommit.provenance import ProvenanceError
 from memcommit.reference_provenance import (
@@ -123,6 +126,13 @@ def render_rationale(
     else:
         typer.secho("\nPROVENANCE", bold=True)
         typer.echo("  " + safe_terminal_text(projection.text))
+    if any(
+        event.kind == "HISTORY_GAP" or event.evidence == "UNRECORDED"
+        for event in report.trace.events
+    ):
+        typer.secho("\nATTENTION", bold=True)
+        for warning in report.trace.warnings:
+            typer.echo(f"  {display_escape_text(warning)}")
 
 
 def render_reference_rationale(
@@ -468,33 +478,42 @@ def cmd(
                     selector = item_selector
         else:
             try:
+                readable_catalog = freeze_memory_report_readable_catalog(
+                    store,
+                    current=context_snapshot.current_name,
+                )
+                readable_target = (
+                    resolve_readable_memory_target(
+                        readable_catalog,
+                        item_selector,
+                    )
+                    if readable_catalog is not None
+                    else None
+                )
+            except ReadableMemoryTargetNotFoundError:
+                readable_target = None
+            if readable_target is not None:
+                if readable_target.access.is_granted:
+                    context_name = readable_target.context_name
+                    selector = readable_target.uid
+                    include_descendants = False
+                else:
+                    resolved_target = resolve_local_memory_report_target(
+                        store,
+                        readable_target.uid,
+                        current=context_snapshot.current_name,
+                        context_locator=readable_target.context_name,
+                    )
+            else:
+                # Current readable Memories are the round-trip namespace for
+                # Find/List/Search. Retained local history and MemoryRefs remain
+                # addressable when no current row matches that UID.
                 resolved_target = resolve_local_memory_report_target(
                     store,
                     item_selector,
                     current=context_snapshot.current_name,
                     context_locator=None,
                 )
-            except ValueError as error:
-                # Bare UID lookup intentionally does not enumerate Grant
-                # content. Preserve the established current-granted route when
-                # the current public Context itself supplies the explicit scope.
-                # A real local ambiguity must still require CONTEXT:UID; being
-                # attached to a Grant must never turn it into a guessed target.
-                if "No reportable" not in str(error):
-                    raise
-                current_name = context_snapshot.current_name
-                if current_name is None:
-                    raise
-                current_access = resolve_context_access(
-                    store,
-                    current_name,
-                    current_name=current_name,
-                    required_permission="READ",
-                )
-                if not current_access.is_granted:
-                    raise
-                context_name = current_access.display_name
-                selector = item_selector
 
         if resolved_target is not None:
             context_name = resolved_target.context_name

@@ -154,6 +154,14 @@ source의 권위와 범위, 변경 가능한 target의 소유권, provenance,
 승인 경계를 규정한다. 제안된 각각의 edit, addition, 또는 removal은
 구체적인 아티팩트에 연결된 candidate Case로 볼 수 있다.
 
+현재 구현은 이 큰 계약의 좁은 부분으로, `--goal`에 공통
+Context/Memory/text Goal focus를 받을 수 있다. 이 frame은 provider의
+relevance 및 output-selection 기준이고 session과 Apply freshness에
+결합되지만 `source_id` 근거가 아니며 named Ground 전체와의 자동
+동기화도 아니다. 이 경계는
+[`goal-focus-operand-design-rationale.md`](goal-focus-operand-design-rationale.md)에
+기록한다.
+
 Task 1에서 B는 읽고 수정할 수 있는 ordinary `campus-wiki`다. 표준
 이름은 [`task-1-naming-contract.md`](task-1-naming-contract.md)를 따른다.
 공사 상세는 그 안의 query-only `construction-details` 포인터로 분리된다.

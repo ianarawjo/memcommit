@@ -30,6 +30,10 @@ from memcommit.interfaces.tui.components.frame import (
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )
+from memcommit.exact_command_review import ExactCommandReview
+from memcommit.interfaces.tui.components.exact_command_review import (
+    format_exact_command,
+)
 from memcommit.interfaces.tui.viewers.semantic import (
     SemanticViewerBlock,
     SemanticViewerController,
@@ -48,12 +52,12 @@ from memcommit.session_workbench_navigation import SessionWorkbenchNavigation
 from memcommit.share import SharePreview
 
 
-ShareViewerAction = Literal["send", "close"]
+ShareViewerAction = Literal["send", "browse_endpoint", "close"]
 
 
 @dataclass(frozen=True)
 class ShareViewerReceipt:
-    """The only two outcomes of the process-local Share viewer."""
+    """One explicit outcome of the process-local Share viewer."""
 
     action: ShareViewerAction
 
@@ -67,7 +71,7 @@ def _memory_count_text(count: int) -> str:
 
 
 def share_context_text(preview: SharePreview) -> str:
-    """Render the selected Context and destination without workflow jargon."""
+    """Render the selected Source Context scope without its separate endpoint."""
 
     if preview.include_descendants:
         members = tuple(
@@ -82,7 +86,6 @@ def share_context_text(preview: SharePreview) -> str:
                 + f" · {len(preview.contexts)} CONTEXTS"
                 + f" · {len(preview.memories)} MEMORIES",
                 *members,
-                "TO · " + display_escape_text(preview.endpoint),
             )
         )
     return "\n".join(
@@ -90,8 +93,46 @@ def share_context_text(preview: SharePreview) -> str:
             "CONTEXT TO SEND",
             display_escape_text(preview.source_context),
             f"MEMORIES · {len(preview.memories)}",
-            "",
-            "TO · " + display_escape_text(preview.endpoint),
+        )
+    )
+
+
+def share_memories_text(preview: SharePreview) -> str:
+    """Render every disclosed Memory with its durable Source identity."""
+
+    rows = (
+        (context.source_context, memory)
+        for context in preview.contexts
+        for memory in context.memories
+    )
+    return "\n".join(
+        memory.uid
+        + " · "
+        + (
+            display_escape_text(context_name) + " · "
+            if preview.include_descendants
+            else ""
+        )
+        + _compact_memory(memory.content)
+        for context_name, memory in rows
+    )
+
+
+def share_exact_command_text(preview: SharePreview) -> str:
+    """Render the explicit direct/recursive command represented by a preview."""
+
+    range_flag = "--recursive" if preview.include_descendants else "--direct"
+    return format_exact_command(
+        ExactCommandReview(
+            argv=(
+                "mem",
+                "share",
+                preview.source_context,
+                range_flag,
+                "--to",
+                preview.endpoint,
+            ),
+            effects=("Send only the frozen Share unit shown above.",),
         )
     )
 
@@ -114,7 +155,7 @@ def run_share_viewer(
     nav = navigation or SessionWorkbenchNavigation(pane="viewer")
     viewer_controller = SemanticViewerController(nav)
     bindings = KeyBindings()
-    if nav.pane not in {"viewer", "items", "todo"}:
+    if nav.pane not in {"viewer", "responses", "items", "todo"}:
         nav.focus("viewer")
     nav.move_row(len(preview.memories), 0)
 
@@ -172,21 +213,6 @@ def run_share_viewer(
             )
             for index, context in enumerate(preview.contexts, start=1)
         )
-    context_sections.append(
-        SemanticViewerSection(
-            uid="SHARE:DESTINATION",
-            kind="DESTINATION",
-            block=SemanticViewerBlock(
-                (
-                    (
-                        "class:section",
-                        "TO · " + display_escape_text(preview.endpoint),
-                    ),
-                ),
-                focus_indices=(0,),
-            ),
-        ),
-    )
     context_document = SemanticViewerDocument(tuple(context_sections))
 
     def render_context():
@@ -217,7 +243,7 @@ def run_share_viewer(
                     [
                         (
                             "class:memory-object",
-                            f"{marker} M{index + 1} · {owner}"
+                            f"{marker} {memory.uid} · {owner}"
                             f"{_compact_memory(memory.content)}",
                         )
                     ],
@@ -228,17 +254,25 @@ def run_share_viewer(
                 fragments.append(("", "\n"))
         return FormattedText(fragments)
 
-    def render_send():
+    def render_endpoint():
         return semantic_viewer_block_fragments(
             [
                 (
                     "class:section",
-                    (
-                        "SEND CONTEXT BUNDLE · Enter"
-                        if preview.include_descendants
-                        else "SEND CONTEXT · Enter"
-                    ),
+                    display_escape_text(preview.endpoint) + " · [ BROWSE ] · Enter",
                 )
+            ],
+            active=nav.pane == "responses",
+        )
+
+    def render_apply():
+        return semantic_viewer_block_fragments(
+            [
+                (
+                    "class:report-neutral",
+                    share_exact_command_text(preview) + "\n",
+                ),
+                ("class:section", "[ PRESS ENTER TO APPLY ]"),
             ],
             active=nav.pane == "todo",
         )
@@ -264,14 +298,19 @@ def run_share_viewer(
         wrap_lines=True,
         right_margins=[ScrollbarMargin(display_arrows=True)],
     )
+    endpoint_window = Window(
+        FormattedTextControl(render_endpoint, focusable=True, show_cursor=False),
+        height=Dimension.exact(1),
+        dont_extend_height=True,
+    )
     memories_window = Window(
         FormattedTextControl(render_memories, focusable=True, show_cursor=False),
         wrap_lines=True,
         right_margins=[ScrollbarMargin(display_arrows=True)],
     )
-    send_window = Window(
-        FormattedTextControl(render_send, focusable=True, show_cursor=False),
-        height=Dimension.exact(1),
+    apply_window = Window(
+        FormattedTextControl(render_apply, focusable=True, show_cursor=False),
+        height=Dimension.exact(2),
         dont_extend_height=True,
     )
 
@@ -298,6 +337,10 @@ def run_share_viewer(
     def boundary(_event, _delta: int) -> SurfaceMoveResult:
         return "BOUNDARY"
 
+    def browse_endpoint(event) -> SurfaceActionResult:
+        event.app.exit(result=ShareViewerReceipt(action="browse_endpoint"))
+        return "HANDLED"
+
     def send(event) -> SurfaceActionResult:
         event.app.exit(result=ShareViewerReceipt(action="send"))
         return "HANDLED"
@@ -317,6 +360,14 @@ def run_share_viewer(
                 on_vertical_enter=enter_viewer,
             ),
             FocusSurface(
+                "share-endpoint",
+                endpoint_window,
+                move_vertical=boundary,
+                activate=browse_endpoint,
+                back=close,
+                on_focus=lambda: nav.focus("responses"),
+            ),
+            FocusSurface(
                 "share-memories",
                 memories_window,
                 move_vertical=move_memories,
@@ -325,8 +376,8 @@ def run_share_viewer(
                 on_vertical_enter=enter_memories,
             ),
             FocusSurface(
-                "share-action",
-                send_window,
+                "share-apply",
+                apply_window,
                 move_vertical=boundary,
                 activate=send,
                 back=close,
@@ -337,18 +388,23 @@ def run_share_viewer(
     bind_surface_navigation(bindings, surface_controller, back=True)
     context_frame = Frame(
         context_window,
-        title="CONTEXTS" if preview.include_descendants else "CONTEXT",
+        title=("FROM · CONTEXTS" if preview.include_descendants else "FROM · CONTEXT"),
         height=Dimension(min=7, preferred=8, max=10),
+    )
+    endpoint_frame = Frame(
+        endpoint_window,
+        title="TO · SHARE ENDPOINT",
+        height=Dimension.exact(3),
     )
     memories_frame = Frame(
         memories_window,
         title="MEMORIES",
         height=Dimension(min=5, preferred=12, weight=1),
     )
-    send_frame = Frame(
-        send_window,
-        title="ACTION",
-        height=Dimension.exact(3),
+    apply_frame = Frame(
+        apply_window,
+        title="APPLY",
+        height=Dimension.exact(4),
     )
     footer = Window(
         FormattedTextControl(
@@ -356,13 +412,17 @@ def run_share_viewer(
                 " FOCUS "
                 + {
                     "viewer": (
-                        "CONTEXTS" if preview.include_descendants else "CONTEXT"
+                        "FROM · CONTEXTS"
+                        if preview.include_descendants
+                        else "FROM · CONTEXT"
                     ),
+                    "responses": "TO · SHARE ENDPOINT",
                     "items": "MEMORIES",
-                    "todo": "ACTION",
+                    "todo": "APPLY",
                 }[nav.pane]
                 + " · Tab/Shift-Tab move · "
-                "↑↓ inspect · Enter sends in ACTION · Esc/Backspace/Q close"
+                "↑↓ inspect · Enter browses TO or applies exact command · "
+                "Esc/Backspace/Q close"
             )
         ),
         height=Dimension.exact(1),
@@ -374,15 +434,17 @@ def run_share_viewer(
                 [
                     header,
                     context_frame,
+                    endpoint_frame,
                     memories_frame,
-                    send_frame,
+                    apply_frame,
                     footer,
                 ]
             ),
             focused_element={
                 "viewer": context_window,
+                "responses": endpoint_window,
                 "items": memories_window,
-                "todo": send_window,
+                "todo": apply_window,
             }[nav.pane],
         ),
         key_bindings=bindings,
@@ -394,8 +456,9 @@ def run_share_viewer(
     )
     for pane, frame in (
         ("viewer", context_frame),
+        ("responses", endpoint_frame),
         ("items", memories_frame),
-        ("todo", send_frame),
+        ("todo", apply_frame),
     ):
         bind_focused_frame_style(
             frame,
@@ -441,6 +504,18 @@ def run_share_unavailable_viewer(
         ),
         wrap_lines=True,
     )
+    endpoint_window = Window(
+        FormattedTextControl(
+            lambda: semantic_viewer_block_fragments(
+                [("class:section", "NO SELECTED SHARE ENDPOINT")],
+                active=nav.pane == "responses",
+            ),
+            focusable=True,
+            show_cursor=False,
+        ),
+        height=Dimension.exact(1),
+        dont_extend_height=True,
+    )
     memories_window = Window(
         FormattedTextControl(
             lambda: [("", "(none)")],
@@ -448,10 +523,10 @@ def run_share_unavailable_viewer(
             show_cursor=False,
         )
     )
-    action_window = Window(
+    apply_window = Window(
         FormattedTextControl(
             lambda: semantic_viewer_block_fragments(
-                [("class:section", "SEND UNAVAILABLE")],
+                [("class:section", "[ APPLY UNAVAILABLE ]")],
                 active=nav.pane == "todo",
             ),
             focusable=True,
@@ -478,6 +553,13 @@ def run_share_unavailable_viewer(
                 on_focus=lambda: nav.focus("viewer"),
             ),
             FocusSurface(
+                "share-unavailable-endpoint",
+                endpoint_window,
+                move_vertical=boundary,
+                back=close,
+                on_focus=lambda: nav.focus("responses"),
+            ),
+            FocusSurface(
                 "share-unavailable-memories",
                 memories_window,
                 move_vertical=boundary,
@@ -485,8 +567,8 @@ def run_share_unavailable_viewer(
                 on_focus=lambda: nav.focus("items"),
             ),
             FocusSurface(
-                "share-unavailable-action",
-                action_window,
+                "share-unavailable-apply",
+                apply_window,
                 move_vertical=boundary,
                 back=close,
                 on_focus=lambda: nav.focus("todo"),
@@ -495,13 +577,21 @@ def run_share_unavailable_viewer(
     )
     bind_surface_navigation(bindings, surface_controller, back=True)
     frames = (
-        ("viewer", Frame(context_window, title="CONTEXT")),
+        ("viewer", Frame(context_window, title="FROM · CONTEXT")),
+        (
+            "responses",
+            Frame(
+                endpoint_window,
+                title="TO · SHARE ENDPOINT",
+                height=Dimension.exact(3),
+            ),
+        ),
         ("items", Frame(memories_window, title="MEMORIES")),
         (
             "todo",
             Frame(
-                action_window,
-                title="ACTION",
+                apply_window,
+                title="APPLY",
                 height=Dimension.exact(3),
             ),
         ),
@@ -511,9 +601,10 @@ def run_share_unavailable_viewer(
             lambda: (
                 " FOCUS "
                 + {
-                    "viewer": "CONTEXT",
+                    "viewer": "FROM · CONTEXT",
+                    "responses": "TO · SHARE ENDPOINT",
                     "items": "MEMORIES",
-                    "todo": "ACTION",
+                    "todo": "APPLY",
                 }[nav.pane]
                 + " · Tab/Shift-Tab move · Esc/Backspace/Q close"
             )

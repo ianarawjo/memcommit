@@ -321,15 +321,22 @@ def test_unary_context_position_and_option_cannot_compete(
     assert "both positionally and with --context" in result.stderr
 
 
-@pytest.mark.parametrize("command", (("update",), ("impact", "update")))
-def test_directional_positionals_require_the_complete_pair(
+def test_impact_update_positionals_require_the_complete_pair(
     isolated_store,
-    command,
 ):
-    result = runner.invoke(app, [*command, "source-only"])
+    result = runner.invoke(app, ["impact", "update", "source-only"])
 
     assert result.exit_code == 2
     assert "exactly SOURCE TARGET" in result.stderr
+
+
+def test_update_single_positional_is_the_source_with_current_target(
+    isolated_store,
+):
+    result = runner.invoke(app, ["update", "source-only"])
+
+    assert result.exit_code == 1
+    assert "No current target Context" in result.stderr
 
 
 @pytest.mark.parametrize("command", (("update",), ("impact", "update")))

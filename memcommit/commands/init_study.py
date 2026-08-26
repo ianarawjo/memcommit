@@ -25,8 +25,10 @@ from memcommit.profiles import (
     ProfileError,
     STUDY_BASELINE_PROFILE_NAME,
     generate_study_profile_name,
+    init_coffee_study_profile,
     init_study_profile,
 )
+from memcommit.study_scenarios import COFFEE_V1_SCENARIO_ID
 from memcommit.study_action_log import (
     StudyActionError,
     record_study_action,
@@ -70,13 +72,28 @@ def cmd(
             )
         ),
     ] = None,
+    scenario: Annotated[
+        Optional[str],
+        typer.Option(
+            "--scenario",
+            show_default=False,
+            help=(
+                "Versioned Study scenario: coffee-v1 (default) or legacy-v1 "
+                "for the preserved debugging fixture"
+            ),
+        ),
+    ] = None,
     baseline_profile: Annotated[
-        str,
+        Optional[str],
         typer.Option(
             "--from-profile",
-            help=("Editable Study baseline whose Task/grant topology will be copied"),
+            show_default=False,
+            help=(
+                "Editable legacy Study baseline to copy; supplying this option "
+                "without --scenario implies legacy-v1"
+            ),
         ),
-    ] = STUDY_BASELINE_PROFILE_NAME,
+    ] = None,
     prewarm_workers: Annotated[
         int,
         typer.Option(
@@ -99,24 +116,38 @@ def cmd(
         ),
     ] = "xhigh",
 ) -> None:
-    """Clone one live Study baseline and restore its real grants."""
+    """Initialize the Coffee Study, or explicitly reproduce the legacy fixture."""
 
     try:
+        resolved_scenario = scenario or (
+            "legacy-v1" if baseline_profile is not None else COFFEE_V1_SCENARIO_ID
+        )
+        if resolved_scenario not in {COFFEE_V1_SCENARIO_ID, "legacy-v1"}:
+            raise ProfileError("Study scenario must be 'coffee-v1' or 'legacy-v1'.")
+        if resolved_scenario == COFFEE_V1_SCENARIO_ID and baseline_profile is not None:
+            raise ProfileError("--from-profile can be used only with legacy-v1.")
         previous_profile = load_profile_registry().active
         if name is None and _is_interactive_terminal():
             name = choose_study_profile_name(generate_study_profile_name())
             if name is None:
                 typer.echo("Cancelled — no Study Profile was created.")
                 return
-        result = init_study_profile(
-            baseline_profile,
-            name=name,
-            provider_policy_version=STUDY_PROVIDER_POLICY_VERSION,
-            provider_policy_digest=STUDY_PROVIDER_POLICY_DIGEST,
-            prewarm_workers=prewarm_workers,
-            prewarm_reasoning=prewarm_reasoning,
-            prewarm_progress=_show_prewarm_progress,
-        )
+        if resolved_scenario == COFFEE_V1_SCENARIO_ID:
+            result = init_coffee_study_profile(
+                name=name,
+                provider_policy_version=STUDY_PROVIDER_POLICY_VERSION,
+                provider_policy_digest=STUDY_PROVIDER_POLICY_DIGEST,
+            )
+        else:
+            result = init_study_profile(
+                baseline_profile or STUDY_BASELINE_PROFILE_NAME,
+                name=name,
+                provider_policy_version=STUDY_PROVIDER_POLICY_VERSION,
+                provider_policy_digest=STUDY_PROVIDER_POLICY_DIGEST,
+                prewarm_workers=prewarm_workers,
+                prewarm_reasoning=prewarm_reasoning,
+                prewarm_progress=_show_prewarm_progress,
+            )
     except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
         typer.secho(
             f"Error: {display_escape_text(str(error))}",
@@ -178,7 +209,11 @@ def cmd(
         f"Initialized Study run '{display_escape_text(result.profile.name)}'.",
         fg=typer.colors.GREEN,
     )
-    typer.echo("Baseline Profile: " + display_escape_text(result.baseline_profile_name))
+    typer.echo("Scenario: " + display_escape_text(result.scenario_id))
+    if result.scenario_id == "legacy-v1":
+        typer.echo(
+            "Baseline Profile: " + display_escape_text(result.baseline_profile_name)
+        )
     typer.echo("Participant Profile: " + display_escape_text(result.profile.name))
     typer.echo(
         "Granted-memory Profile: " + display_escape_text(result.authority_profile.name)
@@ -219,9 +254,16 @@ def cmd(
         # Setup diagnostics must not prime participants with operation names or
         # reveal which measured task has a prepared semantic path.
         typer.echo("Shared Study prewarm bundle attached.")
-    typer.echo(
-        "Operational history starts empty; declared caches remain hidden until "
-        "the first matching operation. Checkpoints, sessions, ad-hoc caches, "
-        "locks, and run logs were not imported."
-    )
+    if result.scenario_id == COFFEE_V1_SCENARIO_ID:
+        typer.echo(
+            "Operational history starts empty; no shared semantic prewarm was "
+            "attached. Checkpoints, sessions, ad-hoc caches, locks, and run logs "
+            "were not imported."
+        )
+    else:
+        typer.echo(
+            "Operational history starts empty; declared caches remain hidden until "
+            "the first matching operation. Checkpoints, sessions, ad-hoc caches, "
+            "locks, and run logs were not imported."
+        )
     typer.echo("Active Profile: " + display_escape_text(result.active_profile_name))

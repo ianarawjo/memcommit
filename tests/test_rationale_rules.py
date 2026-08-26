@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from dataclasses import replace
 import json
 
 import pytest
@@ -9,6 +10,7 @@ from typer.testing import CliRunner
 
 from memcommit.cli import app
 from memcommit.context import Memory
+from memcommit import ops
 from memcommit.provenance import (
     MemoryState,
     TraceCommandContext,
@@ -29,10 +31,21 @@ from memcommit.rationale_semantic import (
     rationale_provenance_payload,
     synthesize_rationale_provenance,
 )
+from memcommit.semantic_prompt_policy import GENERAL_SEMANTIC_PROMPT_POLICY
 from memcommit.store import MemoryStore
 
 
 runner = CliRunner()
+
+
+@pytest.fixture(autouse=True)
+def _freeze_general_prompt_policy(monkeypatch):
+    """Keep ruleset unit tests independent of the developer's active Profile."""
+
+    monkeypatch.setattr(
+        "memcommit.rationale_semantic.resolve_semantic_prompt_policy",
+        lambda: GENERAL_SEMANTIC_PROMPT_POLICY,
+    )
 
 
 def _state(raw: dict[str, object]) -> MemoryState:
@@ -398,12 +411,13 @@ def test_over_limit_draft_gets_one_complete_trace_length_repair():
 
 def test_length_repair_runs_at_most_once():
     case = _case("direct-add-remove-undo")
-    overflow = next(
+    first = next(
         item["provenance"]
         for item in case["known_wrong"]
         if "R15_LENGTH_HEADROOM_AND_REPAIR" in item["violates"]
     )
-    provider = _SequenceProvider(overflow, overflow)
+    second = first
+    provider = _SequenceProvider(first, second)
 
     with pytest.raises(RationaleSynthesisError, match="after one whole-Trace"):
         synthesize_rationale_provenance(
@@ -415,10 +429,7 @@ def test_length_repair_runs_at_most_once():
 
 
 def test_non_length_validation_failure_does_not_retry():
-    provider = _SequenceProvider(
-        "CREATED via chunk → REMOVED via undo",
-        "This response must not be requested.",
-    )
+    provider = _SequenceProvider("null", "This response must not be requested.")
 
     with pytest.raises(RationaleSynthesisError, match="non-narrative"):
         synthesize_rationale_provenance(
@@ -442,6 +453,111 @@ def test_hidden_history_returns_without_connecting_a_provider():
     assert projection.text == ""
 
 
+def test_unrecorded_gap_returns_empty_without_connecting_a_provider():
+    state = MemoryState(uid="selected-memory", content="Current only.", position=0)
+    trace = TraceReport(
+        context_uid="context",
+        context_name="unrecorded",
+        selected_uid=state.uid,
+        component_uids=(state.uid,),
+        originals=(),
+        current=(state,),
+        events=(
+            TraceEvent(
+                kind="HISTORY_GAP",
+                evidence="UNRECORDED",
+                timestamp=None,
+                checkpoint_uid=None,
+                command="current",
+                description="Current state has no retained checkpoint.",
+                after=(state,),
+            ),
+        ),
+        analyses=(),
+        warnings=("The current Context has no retained checkpoint.",),
+    )
+
+    projection = synthesize_rationale_provenance(
+        trace,
+        provider_factory=lambda: pytest.fail("a history gap connected a provider"),
+    )
+
+    assert projection.status.value == "EMPTY"
+    assert projection.text == ""
+    assert projection.length == 0
+
+
+def test_mixed_gap_sends_only_the_latest_retained_boundary():
+    retained = _case_trace(_case("direct-add-remove-undo"))
+    retained_selected = next(
+        state for state in retained.current if state.uid == retained.selected_uid
+    )
+    unrecorded_selected = MemoryState(
+        uid=retained_selected.uid,
+        content="UNRECORDED LIVE TEXT",
+        position=retained_selected.position,
+    )
+    warning = "The current Context contains an unrecorded edit."
+    gap = TraceEvent(
+        kind="HISTORY_GAP",
+        evidence="UNRECORDED",
+        timestamp=None,
+        checkpoint_uid=None,
+        command="current",
+        description="Current state differs from retained history.",
+        before=(retained_selected,),
+        after=(unrecorded_selected,),
+    )
+    trace = replace(
+        retained,
+        current=(unrecorded_selected,),
+        events=(*retained.events, gap),
+        warnings=(*retained.warnings, warning),
+    )
+    expected = "The retained operations explain only the earlier wording."
+    provider = _CapturingProvider(expected)
+
+    projection = synthesize_rationale_provenance(
+        trace,
+        provider_factory=lambda: provider,
+    )
+
+    assert projection.text == expected
+    payload = json.loads(provider.prompts[0].split("RATIONALE PAYLOAD:\n", 1)[1])
+    request = payload["request"]
+    assert request["history_boundary"] == "UNRECORDED_CURRENT_OMITTED"
+    assert request["warnings"][-1] == warning
+    assert all(event["kind"] != "HISTORY_GAP" for event in request["events"])
+    assert request["selected_content"] == retained_selected.content
+    assert request["current"][0]["content"] == retained_selected.content
+    assert "UNRECORDED LIVE TEXT" not in provider.prompts[0]
+
+
+def test_cli_gap_receipt_and_json_are_provider_free(isolated_store, monkeypatch):
+    store = MemoryStore()
+    context = ops.init("unrecorded")
+    memory = ops.add(context, "Only the current file retains this.")
+    store.save(context)
+    store.set_current(context.name)
+    monkeypatch.setattr(
+        "memcommit.commands.rationale.connect_semantic_provider",
+        lambda: pytest.fail("CLI gap receipt connected a provider"),
+    )
+    selector = f"{context.name}:{memory.uid}"
+
+    receipt = runner.invoke(app, ["rationale", selector])
+    machine = runner.invoke(app, ["rationale", selector, "--json"])
+
+    assert receipt.exit_code == 0, receipt.output
+    assert "PROVENANCE — no retained history" in receipt.output
+    assert "ATTENTION" in receipt.output
+    assert "no retained checkpoint" in receipt.output
+    assert machine.exit_code == 0, machine.output
+    payload = json.loads(machine.output)
+    assert payload["provenance_projection"]["status"] == "EMPTY"
+    assert payload["provenance_projection"]["text"] == ""
+
+
 @pytest.mark.parametrize(
     ("provenance", "limit", "unit", "message"),
     [
@@ -457,6 +573,10 @@ def test_hidden_history_returns_without_connecting_a_provider():
             RationaleLimitUnit.WORDS,
             "exceeded",
         ),
+        ("/", 40, RationaleLimitUnit.WORDS, "non-narrative"),
+        ("null", 40, RationaleLimitUnit.WORDS, "non-narrative"),
+        (":null", 40, RationaleLimitUnit.WORDS, "non-narrative"),
+        ("undefined", 40, RationaleLimitUnit.WORDS, "non-narrative"),
     ],
 )
 def test_provider_output_must_be_complete_narrative_within_the_exact_bound(

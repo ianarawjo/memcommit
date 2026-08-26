@@ -23,6 +23,7 @@ from functools import wraps
 from pathlib import Path
 from typing import Any, Callable, Iterable, Iterator, Literal, Optional
 
+from memcommit.checkpoint_frames import map_restorable_checkpoint_frames
 from memcommit.context import AutoCheckpoint, Checkpoint, Context, Memory, MemoryRef
 from memcommit.context_naming import (
     RESERVED_CONTEXT_SEGMENTS,
@@ -110,12 +111,16 @@ QUERY_SOURCES_DIR = _ActiveStorePath("query-sources")
 IMPACT_PLAN_FILE = _ActiveStorePath("impact-plan.json")
 STAGED_UPDATE_FILE = _ActiveStorePath("staged-update.json")
 REVIEW_SESSION_FILE = _ActiveStorePath("review-session.json")
+REVIEW_SESSION_HISTORY_DIR = _ActiveStorePath("review-session-history")
+REVIEW_SESSION_SOURCES_DIR = _ActiveStorePath("review-session-sources")
 ATOMIZE_ANALYSES_DIR = _ActiveStorePath("atomize-analyses")
 ATOMIZE_WORKBENCHES_DIR = _ActiveStorePath("atomize-workbenches")
+ATOMIZE_SESSION_HISTORY_DIR = _ActiveStorePath("atomize-session-history")
 ATOMIZE_GROUNDING_SESSIONS_DIR = _ActiveStorePath("atomize-groundings")
 ATOMIZE_GROUNDING_HISTORY_DIR = _ActiveStorePath("atomize-grounding-history")
 GROUND_SESSIONS_DIR = _ActiveStorePath("ground-sessions")
 MELD_SESSIONS_DIR = _ActiveStorePath("meld-sessions")
+MELD_SESSION_HISTORY_DIR = _ActiveStorePath("meld-session-history")
 _NO_UPDATE_SESSION_EXPECTATION = object()
 _NO_CURRENT_CONTEXT_EXPECTATION = object()
 
@@ -553,57 +558,25 @@ def _rewrite_checkpoint_record(
     *,
     moved_names_by_uid: dict[str, tuple[str, str]],
 ) -> tuple[dict[str, object], int, tuple[str, ...]]:
-    """Migrate future-restorable typed pointers, including nested log frames."""
-    rewritten = copy.deepcopy(value)
+    """Migrate typed pointers in every future-restorable checkpoint frame."""
     changed = 0
     collisions: set[str] = set()
 
-    snapshot = rewritten.get("snapshot")
-    if isinstance(snapshot, dict):
-        next_snapshot, count, found = _rewrite_context_pointers(
-            snapshot,
+    def rewrite_frame(frame: dict[str, object]) -> dict[str, object]:
+        nonlocal changed
+        next_frame, count, found = _rewrite_context_pointers(
+            frame,
             moved_names_by_uid=moved_names_by_uid,
             # Existing checkpoint owner labels remain historical evidence.
             # Revert already retargets the restored owner to the live Context.
             rewrite_owner_name=False,
             require_current_pointer_names=False,
         )
-        rewritten["snapshot"] = next_snapshot
         changed += count
         collisions.update(found)
+        return next_frame
 
-    restored_snapshot = rewritten.get("restored_snapshot")
-    if isinstance(restored_snapshot, dict):
-        next_restored_snapshot, count, found = _rewrite_context_pointers(
-            restored_snapshot,
-            moved_names_by_uid=moved_names_by_uid,
-            # A projected Revert post-image is live-restorable state even
-            # though the selected inherited snapshot remains Source evidence.
-            rewrite_owner_name=False,
-            require_current_pointer_names=False,
-        )
-        rewritten["restored_snapshot"] = next_restored_snapshot
-        changed += count
-        collisions.update(found)
-
-    args = rewritten.get("args")
-    if isinstance(args, dict) and "log_snapshot" in args:
-        log_snapshot = args["log_snapshot"]
-        if not isinstance(log_snapshot, list):
-            raise ValueError("Checkpoint log_snapshot must be a list.")
-        next_entries: list[object] = []
-        for entry in log_snapshot:
-            if not isinstance(entry, dict):
-                raise ValueError("Checkpoint log_snapshot entry must be an object.")
-            next_entry, count, found = _rewrite_checkpoint_record(
-                entry,
-                moved_names_by_uid=moved_names_by_uid,
-            )
-            next_entries.append(next_entry)
-            changed += count
-            collisions.update(found)
-        args["log_snapshot"] = next_entries
-
+    rewritten = map_restorable_checkpoint_frames(value, rewrite_frame)
     return rewritten, changed, tuple(sorted(collisions))
 
 
@@ -740,32 +713,13 @@ def _rewrite_branched_checkpoint_record(
     targets_by_source_uid: dict[str, tuple[str, str]],
 ) -> dict[str, object]:
     """Retarget every future-restorable Context frame in a copied history."""
-    rewritten = copy.deepcopy(value)
-    for field in ("snapshot", "command_before", "restored_snapshot"):
-        frame = rewritten.get(field)
-        if isinstance(frame, dict):
-            rewritten[field] = _rewrite_branched_context_pointers(
-                frame,
-                targets_by_source_uid=targets_by_source_uid,
-            )
-
-    args = rewritten.get("args")
-    if isinstance(args, dict) and "log_snapshot" in args:
-        log_snapshot = args["log_snapshot"]
-        if not isinstance(log_snapshot, list):
-            raise ValueError("Checkpoint log_snapshot must be a list.")
-        next_entries: list[dict[str, object]] = []
-        for entry in log_snapshot:
-            if not isinstance(entry, dict):
-                raise ValueError("Checkpoint log_snapshot entry must be an object.")
-            next_entries.append(
-                _rewrite_branched_checkpoint_record(
-                    entry,
-                    targets_by_source_uid=targets_by_source_uid,
-                )
-            )
-        args["log_snapshot"] = next_entries
-    return rewritten
+    return map_restorable_checkpoint_frames(
+        value,
+        lambda frame: _rewrite_branched_context_pointers(
+            frame,
+            targets_by_source_uid=targets_by_source_uid,
+        ),
+    )
 
 
 def _validate_context_header(data: object, expected_name: str) -> dict:
@@ -1028,9 +982,7 @@ class MemoryStore:
         # Explicit roots are already selected by the caller and must not touch
         # HOME Profile state. Profile-backed stores resolve exactly once here
         # so a later process-global Profile switch cannot retarget this object.
-        self._store_dir = (
-            Path(root).absolute() if root is not None else Path(STORE_DIR)
-        )
+        self._store_dir = Path(root).absolute() if root is not None else Path(STORE_DIR)
         # Store-root authority and Grant-resolution authority are independent.
         # In particular, a public explicit-root client may inspect a persisted
         # pointer but must not inherit the host process's active Profile Grants.
@@ -1070,6 +1022,14 @@ class MemoryStore:
         return self.store_dir / "review-session.json"
 
     @property
+    def review_session_history_dir(self) -> Path:
+        return self.store_dir / "review-session-history"
+
+    @property
+    def review_session_sources_dir(self) -> Path:
+        return self.store_dir / "review-session-sources"
+
+    @property
     def command_context_archives_dir(self) -> Path:
         """Private retained histories for undo of Context-creation commands."""
         return self.store_dir / "command-context-archives"
@@ -1081,6 +1041,10 @@ class MemoryStore:
     @property
     def atomize_workbenches_dir(self) -> Path:
         return self.store_dir / "atomize-workbenches"
+
+    @property
+    def atomize_session_history_dir(self) -> Path:
+        return self.store_dir / "atomize-session-history"
 
     @property
     def atomize_grounding_sessions_dir(self) -> Path:
@@ -1097,6 +1061,10 @@ class MemoryStore:
     @property
     def meld_sessions_dir(self) -> Path:
         return self.store_dir / "meld-sessions"
+
+    @property
+    def meld_session_history_dir(self) -> Path:
+        return self.store_dir / "meld-session-history"
 
     @property
     def meld_resolution_branches_dir(self) -> Path:
@@ -1862,28 +1830,26 @@ class MemoryStore:
             UpdateSession,
             applied_session_matches,
             collect_update_inputs,
+            inline_update_session_source,
             operation_digest,
             session_matches,
         )
         from memcommit.operations.update.application import prepare_update_application
         from memcommit.context_targeting.loading import load_context_scope
+        from memcommit.goal_focus import GoalFocusError
+        from memcommit.goal_focus_runtime import revalidate_goal_focus
 
         if not isinstance(session, UpdateSession) or session.status != "staged":
             raise ValueError("Expected one staged UpdateSession.")
 
-        lock_names = {
-            context.name
-            for context in (
-                *session.source_contexts,
-                *session.target_contexts,
+        inline_source = inline_update_session_source(session)
+        lock_names = {context.name for context in session.target_contexts}
+        lock_names.add(session.target_name)
+        if inline_source is None:
+            lock_names.update(
+                context.name for context in session.source_contexts
             )
-        }
-        lock_names.update(
-            {
-                session.source_name,
-                session.target_name,
-            }
-        )
+            lock_names.add(session.source_name)
         # A source MemoryRef is readable evidence owned outside the embedded
         # source graph. Lock every cited owner too so its supporting text
         # cannot change between freshness validation and the final receipt.
@@ -1891,7 +1857,12 @@ class MemoryStore:
             source.context_name
             for operation in session.operations
             for source in operation.source_refs
+            if inline_source is None
+            or source.context_name != inline_source.name
         )
+        if session.goal_focus is not None and session.goal_focus.kind != "INLINE":
+            assert session.goal_focus.context_name is not None
+            lock_names.add(session.goal_focus.context_name)
 
         with self._update_session_write_lock():
             current = self._load_update_session(self.staged_update_file)
@@ -1901,7 +1872,18 @@ class MemoryStore:
                 )
 
             with self._context_write_locks(lock_names):
-                source = load_context_scope(
+                if session.goal_focus is not None:
+                    # Goal is a frozen relevance criterion, not Update Source
+                    # evidence. It still participates in the Apply freshness
+                    # boundary so a changed Goal cannot authorize a plan that
+                    # was reviewed against an older outcome.
+                    try:
+                        revalidate_goal_focus(self, session.goal_focus)
+                    except GoalFocusError as error:
+                        raise ConcurrentContextUpdateError(
+                            "The Update Goal focus changed before application."
+                        ) from error
+                source = inline_source or load_context_scope(
                     self,
                     session.source_name,
                     include_descendants=session.source_include_descendants,
@@ -1973,6 +1955,11 @@ class MemoryStore:
                                     "source_context_name": session.source_name,
                                     "target_context_uid": session.target_uid,
                                     "target_context_name": session.target_name,
+                                    "goal_focus": (
+                                        None
+                                        if session.goal_focus is None
+                                        else session.goal_focus.receipt_record()
+                                    ),
                                     "owner_context_uid": (owner.owner_context_uid),
                                     "operation_memory_uids": [
                                         operation.memory_uid
@@ -2008,7 +1995,7 @@ class MemoryStore:
                             )
                         )
 
-                    source_after = load_context_scope(
+                    source_after = inline_source or load_context_scope(
                         self,
                         session.source_name,
                         include_descendants=session.source_include_descendants,
@@ -2120,6 +2107,127 @@ class MemoryStore:
         """Return the active semantic review, or None when none exists."""
         return self._load_review_session(self.review_session_file)
 
+    def _review_session_history_path(self, session_uid: str) -> Path:
+        try:
+            canonical = str(uuid.UUID(session_uid))
+        except (AttributeError, TypeError, ValueError) as error:
+            raise ValueError("Invalid semantic review session uid.") from error
+        if canonical != session_uid:
+            raise ValueError("Invalid semantic review session uid.")
+        return self.review_session_history_dir / f"{canonical}.json"
+
+    def _review_session_source_path(self, session_uid: str) -> Path:
+        # Source snapshots share the same UID grammar as terminal histories,
+        # but are written when the review is first saved so later Context
+        # changes cannot rewrite the evidence it actually displayed.
+        canonical = self._review_session_history_path(session_uid).stem
+        return self.review_session_sources_dir / f"{canonical}.json"
+
+    def load_review_session_source(self, session_uid: str) -> Context:
+        """Load the immutable direct-Context frame bound to one Review UID."""
+
+        from memcommit.review import direct_context_digest
+
+        session = self.load_review_session_by_uid(session_uid)
+        path = self._review_session_source_path(session_uid)
+        if not path.exists():
+            raise FileNotFoundError(
+                f"Review source snapshot '{session_uid}' is unavailable."
+            )
+        if not path.is_file() or path.is_symlink():
+            raise ValueError("Semantic review source storage is invalid.")
+        try:
+            with open(path, encoding="utf-8") as handle:
+                context = Context.from_dict(
+                    json.load(
+                        handle,
+                        object_pairs_hook=_reject_duplicate_json_keys,
+                    )
+                )
+        except (json.JSONDecodeError, KeyError, TypeError, ValueError) as error:
+            raise ValueError("Semantic review source storage is invalid.") from error
+        if (
+            context.uid != session.context_uid
+            or context.name != session.context_name
+            or direct_context_digest(context) != session.context_digest
+        ):
+            raise ValueError("Semantic review source snapshot is invalid.")
+        return context
+
+    def _retain_review_session_source(self, session) -> bool:
+        """Persist the initial source frame once when it is still available."""
+
+        from memcommit.review import direct_context_digest
+
+        path = self._review_session_source_path(session.uid)
+        if path.exists() or path.is_symlink():
+            if not path.is_file() or path.is_symlink():
+                raise ValueError("Semantic review source storage is invalid.")
+            return False
+        try:
+            context = self.load_direct(session.context_name)
+        except FileNotFoundError:
+            return False
+        if (
+            context.uid != session.context_uid
+            or direct_context_digest(context) != session.context_digest
+        ):
+            # A legacy session may first be saved again only after its Source
+            # has changed. Do not fabricate an historical frame from new data.
+            return False
+        if self.review_session_sources_dir.exists() and (
+            not self.review_session_sources_dir.is_dir()
+            or self.review_session_sources_dir.is_symlink()
+        ):
+            raise ValueError("Semantic review source storage is invalid.")
+        self.review_session_sources_dir.mkdir(parents=True, exist_ok=True)
+        _write_json_atomic(path, context.to_dict())
+        return True
+
+    def load_review_session_history(self, session_uid: str):
+        """Load one immutable displaced terminal ReviewSession by exact UID."""
+
+        path = self._review_session_history_path(session_uid)
+        session = self._load_review_session(path)
+        if session is None:
+            raise FileNotFoundError(
+                f"Review session '{session_uid}' is unavailable."
+            )
+        if session.uid != session_uid or not session.terminal:
+            raise ValueError("Semantic review history is invalid.")
+        return session
+
+    def list_review_sessions(self) -> tuple:
+        """Return the active ReviewSession plus immutable terminal history."""
+
+        active = self.load_review_session()
+        sessions = [] if active is None else [active]
+        if not self.review_session_history_dir.exists():
+            return tuple(sessions)
+        if (
+            not self.review_session_history_dir.is_dir()
+            or self.review_session_history_dir.is_symlink()
+        ):
+            raise ValueError("Semantic review history is invalid.")
+        active_uid = active.uid if active is not None else None
+        for path in sorted(self.review_session_history_dir.glob("*.json")):
+            if path.is_symlink() or not path.is_file():
+                raise ValueError("Semantic review history is invalid.")
+            if path != self._review_session_history_path(path.stem):
+                raise ValueError("Semantic review history is invalid.")
+            session = self.load_review_session_history(path.stem)
+            if session.uid != active_uid:
+                sessions.append(session)
+        return tuple(sessions)
+
+    def load_review_session_by_uid(self, session_uid: str):
+        """Resolve one exact active or retained ReviewSession identity."""
+
+        active = self.load_review_session()
+        if active is not None and active.uid == session_uid:
+            return active
+        return self.load_review_session_history(session_uid)
+
     @_profile_write_guarded
     def save_review_session(self, session) -> None:
         """Atomically save one validated semantic review session."""
@@ -2139,7 +2247,51 @@ class MemoryStore:
             ReviewSession.from_dict(data)
         except (ReviewError, TypeError) as error:
             raise ValueError("Semantic review session is invalid.") from error
-        _write_json_atomic(self.review_session_file, data)
+        current = None
+        if self.review_session_file.exists():
+            try:
+                current = self._load_review_session(self.review_session_file)
+            except ValueError:
+                # --new/--replace-review is also the documented recovery path
+                # for a malformed legacy singleton. There is no trustworthy
+                # terminal evidence to archive in that case.
+                current = None
+        if (
+            current is not None
+            and current.uid != session.uid
+            and current.terminal
+        ):
+            history_path = self._review_session_history_path(current.uid)
+            if self.review_session_history_dir.exists() and (
+                not self.review_session_history_dir.is_dir()
+                or self.review_session_history_dir.is_symlink()
+            ):
+                raise ValueError("Semantic review history is invalid.")
+            self.review_session_history_dir.mkdir(parents=True, exist_ok=True)
+            archived = current.to_dict()
+            if history_path.exists() or history_path.is_symlink():
+                retained = self._load_review_session(history_path)
+                if retained is None or retained.to_dict() != archived:
+                    raise ValueError("Semantic review history is immutable.")
+            else:
+                _write_json_atomic(history_path, archived)
+        source_created = self._retain_review_session_source(session)
+        try:
+            _write_json_atomic(self.review_session_file, data)
+        except Exception:
+            if source_created:
+                source_path = self._review_session_source_path(session.uid)
+                if source_path.exists() and not source_path.is_symlink():
+                    source_path.unlink()
+            raise
+        if (
+            current is not None
+            and current.uid != session.uid
+            and not current.terminal
+        ):
+            displaced_source = self._review_session_source_path(current.uid)
+            if displaced_source.exists() and not displaced_source.is_symlink():
+                displaced_source.unlink()
 
     # --- Common-grounding sessions ---
 
@@ -2399,9 +2551,9 @@ class MemoryStore:
         if not isinstance(branches, MeldChoiceBranchSet):
             raise TypeError("Expected a MeldChoiceBranchSet.")
         try:
-            restored = MeldChoiceBranchSet.from_dict(
-                branches.to_dict()
-            ).validated_for(session)
+            restored = MeldChoiceBranchSet.from_dict(branches.to_dict()).validated_for(
+                session
+            )
         except MeldChoiceBranchError as error:
             raise ValueError("Meld choice branches are invalid.") from error
         path = self._meld_choice_branches_path(session.uid)
@@ -2524,6 +2676,120 @@ class MemoryStore:
             raise ValueError("Meld session storage is invalid.")
         return self.meld_sessions_dir / f"{canonical}.json"
 
+    def _meld_session_history_path(
+        self,
+        target_context_uid: str,
+        session_uid: str,
+    ) -> Path:
+        try:
+            canonical_target = str(uuid.UUID(target_context_uid))
+            canonical_session = str(uuid.UUID(session_uid))
+        except (AttributeError, TypeError, ValueError) as error:
+            raise ValueError("Invalid Meld session history identity.") from error
+        if (
+            canonical_target != target_context_uid
+            or canonical_session != session_uid
+        ):
+            raise ValueError("Invalid Meld session history identity.")
+        return (
+            self.meld_session_history_dir
+            / canonical_target
+            / f"{canonical_session}.json"
+        )
+
+    def _archive_meld_session_locked(self, session) -> None:
+        """Retain terminal Meld evidence before replacing the latest slot."""
+
+        path = self._meld_session_history_path(
+            session.target.context_uid,
+            session.uid,
+        )
+        if self.meld_session_history_dir.exists() and (
+            not self.meld_session_history_dir.is_dir()
+            or self.meld_session_history_dir.is_symlink()
+        ):
+            raise ValueError("Meld session history is invalid.")
+        if path.parent.exists() and (
+            not path.parent.is_dir() or path.parent.is_symlink()
+        ):
+            raise ValueError("Meld session history is invalid.")
+        path.parent.mkdir(parents=True, exist_ok=True)
+        data = session.to_dict()
+        if path.exists() or path.is_symlink():
+            if not path.is_file() or path.is_symlink():
+                raise ValueError("Meld session history is invalid.")
+            with open(path, encoding="utf-8") as handle:
+                retained = json.load(
+                    handle,
+                    object_pairs_hook=_reject_duplicate_json_keys,
+                )
+            if retained != data:
+                raise ValueError("Meld session history is immutable.")
+            return
+        _write_json_atomic(path, data)
+
+    def load_meld_session_history(
+        self,
+        target_context_uid: str,
+        session_uid: str,
+    ):
+        """Load one immutable displaced terminal Meld session."""
+
+        from memcommit.meld import MeldError, MeldSession
+
+        path = self._meld_session_history_path(target_context_uid, session_uid)
+        if not path.exists():
+            raise FileNotFoundError(f"Meld session '{session_uid}' is unavailable.")
+        if not path.is_file() or path.is_symlink():
+            raise ValueError("Meld session history is invalid.")
+        try:
+            with open(path, encoding="utf-8") as handle:
+                value = json.load(
+                    handle,
+                    object_pairs_hook=_reject_duplicate_json_keys,
+                )
+            session = MeldSession.from_dict(value)
+        except (json.JSONDecodeError, MeldError, ValueError) as error:
+            raise ValueError("Meld session history is invalid.") from error
+        if (
+            session.uid != session_uid
+            or session.target.context_uid != target_context_uid
+            or session.state not in {"APPLIED", "KEPT_REVIEW_ONLY"}
+        ):
+            raise ValueError("Meld session history identity is invalid.")
+        return session
+
+    def list_meld_session_history(self) -> tuple:
+        """Return terminal Meld histories with their exact record paths."""
+
+        root = self.meld_session_history_dir
+        if not root.exists():
+            return ()
+        if not root.is_dir() or root.is_symlink():
+            raise ValueError("Meld session history is invalid.")
+        records = []
+        for target_dir in sorted(root.iterdir(), key=lambda item: item.name):
+            if not target_dir.is_dir() or target_dir.is_symlink():
+                raise ValueError("Meld session history is invalid.")
+            for path in sorted(target_dir.glob("*.json")):
+                if path.is_symlink() or not path.is_file():
+                    raise ValueError("Meld session history is invalid.")
+                if path != self._meld_session_history_path(
+                    target_dir.name,
+                    path.stem,
+                ):
+                    raise ValueError("Meld session history is invalid.")
+                records.append(
+                    (
+                        self.load_meld_session_history(
+                            target_dir.name,
+                            path.stem,
+                        ),
+                        path,
+                    )
+                )
+        return tuple(records)
+
     def load_meld_session(self, target_context_uid: str):
         """Return the saved meld for one target Context, if present."""
         from memcommit.meld import MeldError, MeldSession
@@ -2604,6 +2870,13 @@ class MemoryStore:
                         raise ConcurrentContextUpdateError(
                             "The meld session changed before it could be saved."
                         )
+                    current_session = MeldSession.from_dict(current)
+                    if (
+                        current_session.uid != restored.uid
+                        and current_session.state
+                        in {"APPLIED", "KEPT_REVIEW_ONLY"}
+                    ):
+                        self._archive_meld_session_locked(current_session)
                 elif expected_session_digest is not None:
                     raise ConcurrentContextUpdateError(
                         "The meld session no longer exists."
@@ -2822,6 +3095,18 @@ class MemoryStore:
 
         if not isinstance(analysis, AtomizeAnalysisSession):
             raise TypeError("Expected an AtomizeAnalysisSession.")
+        active_analysis = self.load_atomize_analysis(analysis.context_uid)
+        if active_analysis is None or active_analysis.uid != analysis.uid:
+            try:
+                _archived_analysis, workbench, _path = (
+                    self.load_atomize_session_history(
+                        analysis.context_uid,
+                        analysis.uid,
+                    )
+                )
+            except FileNotFoundError:
+                return None
+            return workbench
         path = self._atomize_workbench_path(analysis.context_uid)
         if not path.exists():
             return None
@@ -2911,6 +3196,220 @@ class MemoryStore:
                 if not path.is_file() or path.is_symlink():
                     raise ValueError("Atomize workbench storage is invalid.")
                 path.unlink()
+
+    def _atomize_session_history_path(
+        self,
+        context_uid: str,
+        analysis_uid: str,
+    ) -> Path:
+        try:
+            canonical_context = str(uuid.UUID(context_uid))
+            canonical_analysis = str(uuid.UUID(analysis_uid))
+        except (AttributeError, TypeError, ValueError) as error:
+            raise ValueError("Invalid Atomize session history identity.") from error
+        if canonical_context != context_uid or canonical_analysis != analysis_uid:
+            raise ValueError("Invalid Atomize session history identity.")
+        return (
+            self.atomize_session_history_dir
+            / canonical_context
+            / f"{canonical_analysis}.json"
+        )
+
+    @_profile_write_guarded
+    def archive_atomize_session(self, analysis, workbench) -> bool:
+        """Retain one displaced analysis/workbench pair under its analysis UID."""
+
+        from memcommit.operations.atomize.domain import (
+            AtomizeAnalysisSession,
+            AtomizeImpactError,
+        )
+        from memcommit.operations.atomize.workbench import (
+            AtomizeWorkbenchError,
+            AtomizeWorkbenchSession,
+            atomize_workbench_issue_projection,
+        )
+
+        if not isinstance(analysis, AtomizeAnalysisSession):
+            raise TypeError("Expected an AtomizeAnalysisSession.")
+        if workbench is not None and not isinstance(
+            workbench,
+            AtomizeWorkbenchSession,
+        ):
+            raise TypeError("Expected an AtomizeWorkbenchSession.")
+        analysis_data = analysis.to_dict()
+        try:
+            AtomizeAnalysisSession.from_dict(analysis_data)
+            if workbench is not None:
+                restored_workbench = AtomizeWorkbenchSession.from_dict(
+                    workbench.to_dict(),
+                    issues=atomize_workbench_issue_projection(analysis),
+                )
+                if not restored_workbench.matches_analysis(
+                    analysis_uid=analysis.uid,
+                    context_uid=analysis.context_uid,
+                    context_name=analysis.context_name,
+                    context_digest=analysis.context_digest,
+                    issues=atomize_workbench_issue_projection(analysis),
+                ):
+                    raise ValueError(
+                        "Atomize workbench does not match its retained analysis."
+                    )
+        except (AtomizeImpactError, AtomizeWorkbenchError) as error:
+            raise ValueError("Atomize session history is invalid.") from error
+        path = self._atomize_session_history_path(
+            analysis.context_uid,
+            analysis.uid,
+        )
+        if self.atomize_session_history_dir.exists() and (
+            not self.atomize_session_history_dir.is_dir()
+            or self.atomize_session_history_dir.is_symlink()
+        ):
+            raise ValueError("Atomize session history is invalid.")
+        if path.parent.exists() and (
+            not path.parent.is_dir() or path.parent.is_symlink()
+        ):
+            raise ValueError("Atomize session history is invalid.")
+        path.parent.mkdir(parents=True, exist_ok=True)
+        data = {
+            "schema_version": 1,
+            "analysis": analysis_data,
+            "workbench": workbench.to_dict() if workbench is not None else None,
+        }
+        if path.exists() or path.is_symlink():
+            if not path.is_file() or path.is_symlink():
+                raise ValueError("Atomize session history is invalid.")
+            with open(path, encoding="utf-8") as handle:
+                retained = json.load(
+                    handle,
+                    object_pairs_hook=_reject_duplicate_json_keys,
+                )
+            if retained != data:
+                raise ValueError("Atomize session history is immutable.")
+            return False
+        _write_json_atomic(path, data)
+        return True
+
+    @_profile_write_guarded
+    def delete_atomize_session_history(
+        self,
+        context_uid: str,
+        analysis_uid: str,
+    ) -> None:
+        """Remove an archive created by a failed latest-pair publication."""
+
+        path = self._atomize_session_history_path(context_uid, analysis_uid)
+        if not path.exists():
+            return
+        if not path.is_file() or path.is_symlink():
+            raise ValueError("Atomize session history is invalid.")
+        path.unlink()
+        try:
+            path.parent.rmdir()
+        except OSError:
+            pass
+        try:
+            self.atomize_session_history_dir.rmdir()
+        except OSError:
+            pass
+
+    def load_atomize_session_history(
+        self,
+        context_uid: str,
+        analysis_uid: str,
+    ):
+        """Load one immutable displaced Atomize pair and its exact path."""
+
+        from memcommit.operations.atomize.domain import (
+            AtomizeAnalysisSession,
+            AtomizeImpactError,
+        )
+        from memcommit.operations.atomize.workbench import (
+            AtomizeWorkbenchError,
+            AtomizeWorkbenchSession,
+            atomize_workbench_issue_projection,
+        )
+
+        path = self._atomize_session_history_path(context_uid, analysis_uid)
+        if not path.exists():
+            raise FileNotFoundError(
+                f"Atomize analysis '{analysis_uid}' is unavailable."
+            )
+        if not path.is_file() or path.is_symlink():
+            raise ValueError("Atomize session history is invalid.")
+        try:
+            with open(path, encoding="utf-8") as handle:
+                data = json.load(
+                    handle,
+                    object_pairs_hook=_reject_duplicate_json_keys,
+                )
+            if not isinstance(data, dict) or set(data) != {
+                "schema_version",
+                "analysis",
+                "workbench",
+            }:
+                raise ValueError("Atomize session history is invalid.")
+            if data["schema_version"] != 1:
+                raise ValueError("Atomize session history is invalid.")
+            analysis = AtomizeAnalysisSession.from_dict(data["analysis"])
+            if (
+                analysis.context_uid != context_uid
+                or analysis.uid != analysis_uid
+            ):
+                raise ValueError("Atomize session history identity is invalid.")
+            workbench_data = data["workbench"]
+            workbench = (
+                None
+                if workbench_data is None
+                else AtomizeWorkbenchSession.from_dict(
+                    workbench_data,
+                    issues=atomize_workbench_issue_projection(analysis),
+                )
+            )
+            if workbench is not None and not workbench.matches_analysis(
+                analysis_uid=analysis.uid,
+                context_uid=analysis.context_uid,
+                context_name=analysis.context_name,
+                context_digest=analysis.context_digest,
+                issues=atomize_workbench_issue_projection(analysis),
+            ):
+                raise ValueError("Atomize session history identity is invalid.")
+            return analysis, workbench, path
+        except (
+            json.JSONDecodeError,
+            AtomizeImpactError,
+            AtomizeWorkbenchError,
+            TypeError,
+            ValueError,
+        ) as error:
+            raise ValueError("Atomize session history is invalid.") from error
+
+    def list_atomize_session_history(self) -> tuple:
+        """Return every immutable displaced Atomize pair."""
+
+        root = self.atomize_session_history_dir
+        if not root.exists():
+            return ()
+        if not root.is_dir() or root.is_symlink():
+            raise ValueError("Atomize session history is invalid.")
+        records = []
+        for context_dir in sorted(root.iterdir(), key=lambda item: item.name):
+            if not context_dir.is_dir() or context_dir.is_symlink():
+                raise ValueError("Atomize session history is invalid.")
+            for path in sorted(context_dir.glob("*.json")):
+                if path.is_symlink() or not path.is_file():
+                    raise ValueError("Atomize session history is invalid.")
+                if path != self._atomize_session_history_path(
+                    context_dir.name,
+                    path.stem,
+                ):
+                    raise ValueError("Atomize session history is invalid.")
+                records.append(
+                    self.load_atomize_session_history(
+                        context_dir.name,
+                        path.stem,
+                    )
+                )
+        return tuple(records)
 
     # --- Conversational atomize grounding sessions ---
 
@@ -5169,7 +5668,6 @@ class MemoryStore:
                         frozen.append(current)
                     yield tuple(frozen)
 
-
     def create_context_with_sources(
         self,
         ctx: Context,
@@ -6247,8 +6745,18 @@ class MemoryStore:
             if canonical_context_uid == context_uid
             else None
         )
+        atomize_session_history_dir = (
+            self.atomize_session_history_dir / context_uid
+            if canonical_context_uid == context_uid
+            else None
+        )
         meld_path = (
             self._meld_session_path(context_uid)
+            if canonical_context_uid == context_uid
+            else None
+        )
+        meld_session_history_dir = (
+            self.meld_session_history_dir / context_uid
             if canonical_context_uid == context_uid
             else None
         )
@@ -6274,10 +6782,36 @@ class MemoryStore:
         ):
             raise ValueError("Atomize grounding history is invalid.")
         review_session = self.load_review_session()
+        retained_reviews = self.list_review_sessions()
         delete_review_session = (
             review_session is not None
             and review_session.context_uid == context_uid
             and review_session.context_name == name
+        )
+        review_history_paths = tuple(
+            self._review_session_history_path(session.uid)
+            for session in retained_reviews
+            if session.uid != getattr(review_session, "uid", None)
+            and session.context_uid == context_uid
+            and session.context_name == name
+        )
+        review_source_paths = tuple(
+            self._review_session_source_path(session.uid)
+            for session in retained_reviews
+            if session.context_uid == context_uid and session.context_name == name
+        )
+        if atomize_session_history_dir is not None and (
+            atomize_session_history_dir.exists()
+            or atomize_session_history_dir.is_symlink()
+        ):
+            # Strict loading rejects malformed entries before the primary
+            # Context deletion can commit.
+            self.list_atomize_session_history()
+        meld_history_paths = tuple(
+            path
+            for session, path in self.list_meld_session_history()
+            if any(frame.context_uid == context_uid for frame in session.frames)
+            or session.target.context_uid == context_uid
         )
         ctx_dir = self._context_dir(name)
         context_file = self._context_file(name)
@@ -6426,11 +6960,51 @@ class MemoryStore:
                     pass
 
             attempt_cleanup("Atomize grounding history", remove_grounding_history)
+        if (
+            atomize_session_history_dir is not None
+            and atomize_session_history_dir.exists()
+        ):
+            def remove_atomize_session_history() -> None:
+                shutil.rmtree(atomize_session_history_dir)
+                _fsync_directory(atomize_session_history_dir.parent)
+                try:
+                    self.atomize_session_history_dir.rmdir()
+                except OSError:
+                    pass
+
+            attempt_cleanup("Atomize session history", remove_atomize_session_history)
+        for retained_meld_path in meld_history_paths:
+            attempt_cleanup("Meld session history", retained_meld_path.unlink)
+        if (
+            meld_session_history_dir is not None
+            and meld_session_history_dir.exists()
+        ):
+            def remove_empty_meld_history_directory() -> None:
+                try:
+                    meld_session_history_dir.rmdir()
+                except OSError:
+                    return
+                _fsync_directory(meld_session_history_dir.parent)
+                try:
+                    self.meld_session_history_dir.rmdir()
+                except OSError:
+                    pass
+
+            attempt_cleanup(
+                "Meld session history directory",
+                remove_empty_meld_history_directory,
+            )
         if delete_review_session and self.review_session_file.exists():
             # Review answers may contain user-supplied local context. Once
             # their exact Context is deleted, retaining that global artifact
             # would be both misleading state and an avoidable privacy leak.
             attempt_cleanup("review session", self.review_session_file.unlink)
+        for retained_review_path in review_history_paths:
+            if retained_review_path.exists():
+                attempt_cleanup("review session history", retained_review_path.unlink)
+        for review_source_path in review_source_paths:
+            if review_source_path.exists():
+                attempt_cleanup("review source snapshot", review_source_path.unlink)
 
         def clear_current_pointer() -> None:
             with self._state_write_lock():
@@ -6857,9 +7431,7 @@ class MemoryStore:
             terminal_digest = manifest.get("terminal_workbench_digest")
             if source_workbench is None:
                 if reviewing_digest is not None or terminal_digest is not None:
-                    raise ValueError(
-                        "Command Context archive manifest is invalid."
-                    )
+                    raise ValueError("Command Context archive manifest is invalid.")
             elif (
                 not isinstance(source_workbench, dict)
                 or not isinstance(reviewing_digest, str)
@@ -7219,23 +7791,15 @@ class MemoryStore:
                 "Branch lifecycle restoration requires one complete creation unit."
             )
         try:
-            receipts = tuple(
-                branch_tree_receipt(args) for args in unit.checkpoint_args
-            )
+            receipts = tuple(branch_tree_receipt(args) for args in unit.checkpoint_args)
         except CommandHistoryError as error:
             raise ValueError(str(error)) from error
         receipt = receipts[0]
         if (
             any(candidate != receipt for candidate in receipts[1:])
             or unit.uid != f"branch:{receipt.operation_uid}"
-            or {
-                (change.context_uid, change.context_name)
-                for change in unit.changes
-            }
-            != {
-                (item.target_uid, item.target_name)
-                for item in receipt.contexts
-            }
+            or {(change.context_uid, change.context_name) for change in unit.changes}
+            != {(item.target_uid, item.target_name) for item in receipt.contexts}
         ):
             raise ValueError("Branch lifecycle receipts are inconsistent.")
 
@@ -7283,11 +7847,9 @@ class MemoryStore:
                                 "no longer exists."
                             ) from error
                         assert change.after is not None
-                        if (
-                            current.uid != change.context_uid
-                            or context_record_digest(current)
-                            != context_record_digest(change.after)
-                        ):
+                        if current.uid != change.context_uid or context_record_digest(
+                            current
+                        ) != context_record_digest(change.after):
                             raise ConcurrentContextUpdateError(
                                 f"Affected Context '{change.context_name}' changed "
                                 "after the Branch selected for undo."
@@ -7329,13 +7891,10 @@ class MemoryStore:
                                     command="undo",
                                     args={"command_restore": restore_metadata},
                                     description=(
-                                        "Undo command 'mem branch' "
-                                        f"[{receipt_uid[:8]}]"
+                                        f"Undo command 'mem branch' [{receipt_uid[:8]}]"
                                     ),
                                 ),
-                                expected_context_digest=context_record_digest(
-                                    current
-                                ),
+                                expected_context_digest=context_record_digest(current),
                             )
                             if checkpoint is None:
                                 raise RuntimeError(
@@ -7347,9 +7906,7 @@ class MemoryStore:
                             archive.mkdir(mode=0o700)
                             created_archives.append(archive)
                             context_file = self._context_file(change.context_name)
-                            checkpoints_dir = self._checkpoints_dir(
-                                change.context_name
-                            )
+                            checkpoints_dir = self._checkpoints_dir(change.context_name)
                             archived_context = archive / "context.json"
                             archived_checkpoints = archive / "checkpoints"
                             move_record_and_history(
@@ -7394,12 +7951,8 @@ class MemoryStore:
                                 with self._state_write_lock():
                                     self._write_state(undo_original_state)
                             except Exception as candidate:
-                                undo_rollback_error = (
-                                    undo_rollback_error or candidate
-                                )
-                        moved_names = {
-                            change.context_name for change, *_rest in moved
-                        }
+                                undo_rollback_error = undo_rollback_error or candidate
+                        moved_names = {change.context_name for change, *_rest in moved}
                         for (
                             change,
                             archive,
@@ -7427,14 +7980,9 @@ class MemoryStore:
                                     manifest.unlink()
                                 archive.rmdir()
                             except Exception as candidate:
-                                undo_rollback_error = (
-                                    undo_rollback_error or candidate
-                                )
+                                undo_rollback_error = undo_rollback_error or candidate
                         for archive_path in reversed(created_archives):
-                            if (
-                                not archive_path.exists()
-                                or archive_path.is_symlink()
-                            ):
+                            if not archive_path.exists() or archive_path.is_symlink():
                                 continue
                             try:
                                 archive_path.rmdir()
@@ -7451,9 +7999,7 @@ class MemoryStore:
                                     checkpoint.uid,
                                 )
                             except Exception as candidate:
-                                undo_rollback_error = (
-                                    undo_rollback_error or candidate
-                                )
+                                undo_rollback_error = undo_rollback_error or candidate
                         try:
                             root.rmdir()
                         except OSError:
@@ -7476,9 +8022,7 @@ class MemoryStore:
                                 "exists."
                             )
                         archive_path, archive_manifest, archived_record, _entries = (
-                            self._load_command_context_archive(
-                                change.checkpoint_uid
-                            )
+                            self._load_command_context_archive(change.checkpoint_uid)
                         )
                         assert change.after is not None
                         if (
@@ -7500,24 +8044,18 @@ class MemoryStore:
                         )
 
                     activated: list[tuple[Any, Path, Path, Path]] = []
-                    redone: list[
-                        tuple[Any, Path, Path, Path, Checkpoint]
-                    ] = []
+                    redone: list[tuple[Any, Path, Path, Path, Checkpoint]] = []
                     redo_original_state: dict[str, object] | None = None
                     state_changed = False
                     try:
                         for change in unit.changes:
-                            archive, _manifest, context = archived[
-                                change.context_name
-                            ]
+                            archive, _manifest, context = archived[change.context_name]
                             self._context_dir(change.context_name).mkdir(
                                 parents=True,
                                 exist_ok=True,
                             )
                             context_file = self._context_file(change.context_name)
-                            checkpoints_dir = self._checkpoints_dir(
-                                change.context_name
-                            )
+                            checkpoints_dir = self._checkpoints_dir(change.context_name)
                             archived_context = archive / "context.json"
                             archived_checkpoints = archive / "checkpoints"
                             move_record_and_history(
@@ -7540,13 +8078,10 @@ class MemoryStore:
                                     command="redo",
                                     args={"command_restore": restore_metadata},
                                     description=(
-                                        "Redo command 'mem branch' "
-                                        f"[{receipt_uid[:8]}]"
+                                        f"Redo command 'mem branch' [{receipt_uid[:8]}]"
                                     ),
                                 ),
-                                expected_context_digest=context_record_digest(
-                                    context
-                                ),
+                                expected_context_digest=context_record_digest(context),
                             )
                             if checkpoint is None:
                                 raise RuntimeError(
@@ -7579,9 +8114,7 @@ class MemoryStore:
                                 with self._state_write_lock():
                                     self._write_state(redo_original_state)
                             except Exception as candidate:
-                                redo_rollback_error = (
-                                    redo_rollback_error or candidate
-                                )
+                                redo_rollback_error = redo_rollback_error or candidate
                         redone_names = {
                             change.context_name for change, *_rest in redone
                         }
@@ -7604,9 +8137,7 @@ class MemoryStore:
                                     archived_checkpoints,
                                 )
                             except Exception as candidate:
-                                redo_rollback_error = (
-                                    redo_rollback_error or candidate
-                                )
+                                redo_rollback_error = redo_rollback_error or candidate
                         for (
                             change,
                             _archive,
@@ -7623,9 +8154,7 @@ class MemoryStore:
                                     archived_checkpoints,
                                 )
                             except Exception as candidate:
-                                redo_rollback_error = (
-                                    redo_rollback_error or candidate
-                                )
+                                redo_rollback_error = redo_rollback_error or candidate
                         if redo_rollback_error is not None:
                             raise RuntimeError(
                                 "Branch Redo failed and its Context tree could "
@@ -7699,11 +8228,9 @@ class MemoryStore:
                                 "no longer exists."
                             ) from error
                         assert change.after is not None
-                        if (
-                            current.uid != change.context_uid
-                            or context_record_digest(current)
-                            != context_record_digest(change.after)
-                        ):
+                        if current.uid != change.context_uid or context_record_digest(
+                            current
+                        ) != context_record_digest(change.after):
                             raise ConcurrentContextUpdateError(
                                 f"Affected Context '{change.context_name}' changed "
                                 "after the Merge selected for undo."
@@ -7735,8 +8262,7 @@ class MemoryStore:
                                     command="undo",
                                     args={"command_restore": restore_metadata},
                                     description=(
-                                        "Undo command 'mem merge' "
-                                        f"[{receipt_uid[:8]}]"
+                                        f"Undo command 'mem merge' [{receipt_uid[:8]}]"
                                     ),
                                 ),
                                 expected_context_digest=expected_digest,
@@ -7756,8 +8282,7 @@ class MemoryStore:
                                     command="undo",
                                     args={"command_restore": restore_metadata},
                                     description=(
-                                        "Undo command 'mem merge' "
-                                        f"[{receipt_uid[:8]}]"
+                                        f"Undo command 'mem merge' [{receipt_uid[:8]}]"
                                     ),
                                 ),
                                 expected_context_digest=context_record_digest(current),
@@ -7783,9 +8308,7 @@ class MemoryStore:
                                 )
                             archive.mkdir(mode=0o700)
                             context_file = self._context_file(change.context_name)
-                            checkpoints_dir = self._checkpoints_dir(
-                                change.context_name
-                            )
+                            checkpoints_dir = self._checkpoints_dir(change.context_name)
                             archived_context = archive / "context.json"
                             archived_checkpoints = archive / "checkpoints"
                             context_file.rename(archived_context)
@@ -7811,12 +8334,13 @@ class MemoryStore:
                             )
                     except Exception:
                         rollback_error: Exception | None = None
-                        moved_names = {
-                            change.context_name for change, *_rest in moved
-                        }
-                        for change, archive, archived_context, archived_checkpoints in reversed(
-                            moved
-                        ):
+                        moved_names = {change.context_name for change, *_rest in moved}
+                        for (
+                            change,
+                            archive,
+                            archived_context,
+                            archived_checkpoints,
+                        ) in reversed(moved):
                             try:
                                 archived_checkpoints.rename(
                                     self._checkpoints_dir(change.context_name)
@@ -7880,11 +8404,9 @@ class MemoryStore:
                                 f"Affected Context '{change.context_name}' "
                                 "no longer exists."
                             ) from error
-                        if (
-                            current.uid != change.context_uid
-                            or context_record_digest(current)
-                            != context_record_digest(change.before)
-                        ):
+                        if current.uid != change.context_uid or context_record_digest(
+                            current
+                        ) != context_record_digest(change.before):
                             raise ConcurrentContextUpdateError(
                                 f"Affected Context '{change.context_name}' changed "
                                 "after the Merge selected for redo."
@@ -7939,8 +8461,7 @@ class MemoryStore:
                                     command="redo",
                                     args={"command_restore": restore_metadata},
                                     description=(
-                                        "Redo command 'mem merge' "
-                                        f"[{receipt_uid[:8]}]"
+                                        f"Redo command 'mem merge' [{receipt_uid[:8]}]"
                                     ),
                                 ),
                                 expected_context_digest=expected_digest,
@@ -7953,18 +8474,14 @@ class MemoryStore:
                             updated_written.append((change.context_name, checkpoint))
 
                         for change in created_changes:
-                            archive, _manifest, archived = archives[
-                                change.context_name
-                            ]
+                            archive, _manifest, archived = archives[change.context_name]
                             self._assert_context_storage_available(change.context_name)
                             self._context_dir(change.context_name).mkdir(
                                 parents=True,
                                 exist_ok=True,
                             )
                             context_file = self._context_file(change.context_name)
-                            checkpoints_dir = self._checkpoints_dir(
-                                change.context_name
-                            )
+                            checkpoints_dir = self._checkpoints_dir(change.context_name)
                             archived_context = archive / "context.json"
                             archived_checkpoints = archive / "checkpoints"
                             archived_context.rename(context_file)
@@ -7983,8 +8500,7 @@ class MemoryStore:
                                     command="redo",
                                     args={"command_restore": restore_metadata},
                                     description=(
-                                        "Redo command 'mem merge' "
-                                        f"[{receipt_uid[:8]}]"
+                                        f"Redo command 'mem merge' [{receipt_uid[:8]}]"
                                     ),
                                 ),
                                 expected_context_digest=context_record_digest(archived),
@@ -8005,12 +8521,14 @@ class MemoryStore:
                             )
                     except Exception:
                         rollback_error: Exception | None = None
-                        moved_names = {
-                            change.context_name for change, *_rest in moved
-                        }
-                        for change, archive, archived_context, archived_checkpoints, checkpoint in reversed(
-                            moved
-                        ):
+                        moved_names = {change.context_name for change, *_rest in moved}
+                        for (
+                            change,
+                            archive,
+                            archived_context,
+                            archived_checkpoints,
+                            checkpoint,
+                        ) in reversed(moved):
                             try:
                                 self._remove_checkpoint_uid_locked(
                                     change.context_name,
@@ -8024,9 +8542,12 @@ class MemoryStore:
                                 )
                             except Exception as candidate:
                                 rollback_error = rollback_error or candidate
-                        for change, archive, archived_context, archived_checkpoints in reversed(
-                            activated
-                        ):
+                        for (
+                            change,
+                            archive,
+                            archived_context,
+                            archived_checkpoints,
+                        ) in reversed(activated):
                             if change.context_name in moved_names:
                                 continue
                             try:
@@ -8089,8 +8610,7 @@ class MemoryStore:
             or unit.changes[0].after is None
         ):
             raise ValueError(
-                "Only an exact Atomize Save As creation can use lifecycle "
-                "restoration."
+                "Only an exact Atomize Save As creation can use lifecycle restoration."
             )
         change = unit.changes[0]
         receipt_uid = str(uuid.uuid4())
@@ -8165,13 +8685,12 @@ class MemoryStore:
                     entries = self.list_checkpoints(change.context_name)
                     args, save_as = load_creation_receipt(entries)
                     source_record = save_as.get("source_context")
-                    if (
-                        not isinstance(source_record, dict)
-                        or set(source_record) != {"uid", "name", "digest"}
-                    ):
-                        raise ValueError(
-                            "Atomize Save As Source receipt is invalid."
-                        )
+                    if not isinstance(source_record, dict) or set(source_record) != {
+                        "uid",
+                        "name",
+                        "digest",
+                    }:
+                        raise ValueError("Atomize Save As Source receipt is invalid.")
                     source_uid = source_record.get("uid")
                     source_name = source_record.get("name")
                     analysis_uid = save_as.get("source_analysis_uid")
@@ -8185,18 +8704,14 @@ class MemoryStore:
                             and not isinstance(current_before, str)
                         )
                     ):
-                        raise ValueError(
-                            "Atomize Save As Source receipt is invalid."
-                        )
+                        raise ValueError("Atomize Save As Source receipt is invalid.")
                     with ExitStack() as session_locks:
                         for context_uid in sorted({source_uid, change.context_uid}):
                             session_locks.enter_context(
                                 self._atomize_session_write_lock(context_uid)
                             )
                         source_analysis = self.load_atomize_analysis(source_uid)
-                        output_analysis = self.load_atomize_analysis(
-                            change.context_uid
-                        )
+                        output_analysis = self.load_atomize_analysis(change.context_uid)
                         if (
                             source_analysis is None
                             or output_analysis is None
@@ -8226,8 +8741,7 @@ class MemoryStore:
                                 or set(source_workbench_record)
                                 != {"uid", "output_context_name", "record_digest"}
                                 or terminal is None
-                                or terminal.uid
-                                != source_workbench_record.get("uid")
+                                or terminal.uid != source_workbench_record.get("uid")
                             ):
                                 raise ValueError(
                                     "Atomize Source workbench receipt is invalid."
@@ -8238,9 +8752,7 @@ class MemoryStore:
                                 output_context_name=change.context_name,
                                 checkpoint_uid=change.checkpoint_uid,
                                 restore_output_context_name=(
-                                    source_workbench_record.get(
-                                        "output_context_name"
-                                    )
+                                    source_workbench_record.get("output_context_name")
                                 ),
                             )
                             reviewing_digest = atomize_workbench_record_digest(
@@ -8259,8 +8771,7 @@ class MemoryStore:
                                 command="undo",
                                 args={"command_restore": restore_metadata},
                                 description=(
-                                    "Undo command 'mem atomize' "
-                                    f"[{receipt_uid[:8]}]"
+                                    f"Undo command 'mem atomize' [{receipt_uid[:8]}]"
                                 ),
                             ),
                             expected_context_digest=context_record_digest(current),
@@ -8285,9 +8796,7 @@ class MemoryStore:
                         archive.mkdir(mode=0o700)
                         context_file = self._context_file(change.context_name)
                         checkpoints_dir = self._checkpoints_dir(change.context_name)
-                        analysis_path = self._atomize_analysis_path(
-                            change.context_uid
-                        )
+                        analysis_path = self._atomize_analysis_path(change.context_uid)
                         archived_context = archive / "context.json"
                         archived_checkpoints = archive / "checkpoints"
                         archived_analysis = archive / "atomize-analysis.json"
@@ -8360,8 +8869,7 @@ class MemoryStore:
                 else:
                     if self.context_exists(change.context_name):
                         raise ConcurrentContextUpdateError(
-                            f"Affected Context '{change.context_name}' already "
-                            "exists."
+                            f"Affected Context '{change.context_name}' already exists."
                         )
                     archive, manifest, archived_context, entries = (
                         self._load_command_context_archive(change.checkpoint_uid)
@@ -8404,11 +8912,9 @@ class MemoryStore:
                                     "The Source Atomize workbench changed before Redo."
                                 )
                         else:
-                            if (
-                                reviewing is None
-                                or atomize_workbench_record_digest(reviewing)
-                                != manifest.get("reviewing_workbench_digest")
-                            ):
+                            if reviewing is None or atomize_workbench_record_digest(
+                                reviewing
+                            ) != manifest.get("reviewing_workbench_digest"):
                                 raise ConcurrentContextUpdateError(
                                     "The Source Atomize workbench changed before Redo."
                                 )
@@ -8430,9 +8936,7 @@ class MemoryStore:
                             archived_analysis.is_symlink()
                             or not archived_analysis.is_file()
                         ):
-                            raise ValueError(
-                                "Archived Atomize analysis is invalid."
-                            )
+                            raise ValueError("Archived Atomize analysis is invalid.")
                         with open(archived_analysis, encoding="utf-8") as file:
                             output_analysis = AtomizeAnalysisSession.from_dict(
                                 json.load(
@@ -8453,9 +8957,7 @@ class MemoryStore:
                         context_dir.mkdir(parents=True, exist_ok=True)
                         context_file = self._context_file(change.context_name)
                         checkpoints_dir = self._checkpoints_dir(change.context_name)
-                        analysis_path = self._atomize_analysis_path(
-                            change.context_uid
-                        )
+                        analysis_path = self._atomize_analysis_path(change.context_uid)
                         archived_context_file = archive / "context.json"
                         archived_checkpoints = archive / "checkpoints"
                         moved = False
@@ -8635,7 +9137,7 @@ class MemoryStore:
                             command="undo",
                             args={"command_restore": restore_metadata},
                             description=(
-                                "Undo command 'mem sever' " f"[{receipt_uid[:8]}]"
+                                f"Undo command 'mem sever' [{receipt_uid[:8]}]"
                             ),
                         ),
                         expected_context_digest=context_record_digest(current),
@@ -8758,7 +9260,7 @@ class MemoryStore:
                                 command="redo",
                                 args={"command_restore": restore_metadata},
                                 description=(
-                                    "Redo command 'mem sever' " f"[{receipt_uid[:8]}]"
+                                    f"Redo command 'mem sever' [{receipt_uid[:8]}]"
                                 ),
                             ),
                             expected_context_digest=context_record_digest(
@@ -8850,7 +9352,9 @@ class MemoryStore:
 
         sessions = SeverSessionStore(self)
         session = sessions.load(session_uid)
-        result_uids = tuple(source.uid for _candidate, source, _content in session.results())
+        result_uids = tuple(
+            source.uid for _candidate, source, _content in session.results()
+        )
         application = SeverApplication(
             output_context_uid=change.context_uid,
             checkpoint_uid=change.checkpoint_uid,

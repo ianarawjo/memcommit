@@ -58,14 +58,22 @@ of the requested pair and could not truthfully support `WHAT MEM UNDERSTOOD`.
 
 Every declared named Context pair must instead have its own artifact produced
 by the ordinary Compare provider contract. The currently frozen Study graph
-contains 718 such opposite-side pairs: 56 in Task 1, 289 in Task 2, and 373 in
-Task 3. The 2026-08-13 preparation executed that entire matrix with 16
+historically contained 718 such opposite-side pairs: 56 in Task 1, 289 in Task
+2, and 373 in Task 3. The 2026-08-13 preparation executed that entire matrix with 16
 concurrent ordinary Compare calls: 5 rows reused an existing exact artifact,
 713 were newly generated, 718 validated, and 0 failed. The prior sixth exact
 artifact is the reverse-direction Task 1 parent request and remains a separate
 valid row outside this manifest. An exact artifact may be re-rooted only when
 the complete ordered provider-visible evidence is byte-identical. A missing
 exact pair runs the ordinary live Compare path.
+
+The v4 regeneration boundary rebinds those coordinates to the current ordinary
+Compare input contract. Seven Task 1 coordinates that include
+`task-1/participant` now fail ordinary Compare's duplicate-evidence check before
+provider connection, so they are retained only as disabled declaration anchors.
+The executable current matrix contains 711 rows: 49 in Task 1, 289 in Task 2,
+and 373 in Task 3. See
+[`init-study-prewarm-regeneration-design-rationale.md`](init-study-prewarm-regeneration-design-rationale.md).
 
 After the Summarize matrix was added, the resulting shared bundle has 921 total
 entries: 719 Compare, 198 Summarize, and one each for Atomize, Sever, and

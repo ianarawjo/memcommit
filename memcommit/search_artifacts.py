@@ -148,7 +148,13 @@ def _meld_artifacts(
 ) -> list[SearchArtifactRecord]:
     by_uid = {context.uid: context for context in contexts}
     records: list[SearchArtifactRecord] = []
-    for entry in list_meld_session_catalog(store):
+    # Meld records are target-scoped.  Do not validate or open sessions owned
+    # by Contexts outside this frozen artifact frame: they are neither evidence
+    # for this request nor a precondition for searching these Contexts.
+    for entry in list_meld_session_catalog(
+        store,
+        target_context_uids=by_uid,
+    ):
         context = by_uid.get(entry.key)
         if context is None:
             continue

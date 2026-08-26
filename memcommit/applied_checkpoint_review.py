@@ -160,24 +160,17 @@ def _distill_lines(payload: dict[str, object]) -> list[str]:
 
 
 def _elaborate_lines(payload: dict[str, object]) -> list[str]:
+    case_validation = payload.get("case_validation")
+    quality_policy = payload.get("quality_policy")
+    if quality_policy is None:
+        quality_policy = "STRICT" if case_validation else "LEGACY"
     lines = [
         f"MODE · {_line(payload.get('mode', '(unknown)'))}",
         f"TARGET · {_line(payload.get('target_context') or '(unknown)')}",
         f"VERIFICATION · {_line(payload.get('verification', 'UNVERIFIED'))}",
-        "QUALITY · "
-        + _line(
-            payload.get("quality_policy")
-            or (
-                "STRICT"
-                if payload.get("case_validation")
-                == "INDEPENDENT_SOURCE_RULE_CONFORMANCE_AND_SOURCE_FIT"
-                else "BEST_EFFORT"
-            )
-        ),
+        f"QUALITY · {_line(quality_policy)}",
+        f"CASE VALIDATION · {_line(case_validation or '(legacy)')}",
     ]
-    case_validation = payload.get("case_validation")
-    if case_validation is not None:
-        lines.append(f"CASE VALIDATION · {_line(case_validation)}")
     overview = payload.get("overview")
     if overview:
         lines.extend(("", "PROPOSAL OVERVIEW", _line(overview)))

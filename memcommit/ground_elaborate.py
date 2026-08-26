@@ -17,21 +17,32 @@ from memcommit.operations.elaborate.application import ElaborateRequest, Elabora
 from memcommit.operations.elaborate.runtime import execute_elaborate
 from memcommit.elaborate_target_context import (
     FrozenElaborateTargetContext,
+    GRANTED_ELABORATE_ADD_PERMISSIONS,
     authorized_frozen_elaborate_target,
     freeze_elaborate_target_context,
 )
 from memcommit.ground import GroundSession, is_bound_ground_schema
 from memcommit.ground_workspace import GroundWorkspace
 from memcommit.ground_workspace_runtime import (
+    execute_ground_workspace_memories_adoption,
     ground_workspace_exists,
     load_ground_workspace,
+)
+from memcommit.ground_workspace_application import (
+    AdoptGroundWorkspaceMemoriesRequest,
+    AdoptGroundWorkspaceMemoriesResult,
 )
 from memcommit.ground_workspace_projection import (
     GroundWorkspaceProjectionError,
     project_ordinary_memories,
 )
+from memcommit.goal_focus_runtime import freeze_goal_focus_context
 from memcommit.semantic_add_runtime import freeze_semantic_add_target
-from memcommit.store import MemoryStore, ground_session_record_digest
+from memcommit.store import (
+    MemoryStore,
+    context_record_digest,
+    ground_session_record_digest,
+)
 
 
 GroundElaborateDirection = Literal["GOAL_TO_RULES", "RULES_TO_CASES"]
@@ -53,6 +64,8 @@ class FrozenGroundElaborate:
     direction: GroundElaborateDirection
     request: ElaborateRequest
     target_context: FrozenElaborateTargetContext | ElaborateTargetContext | None = None
+    root_digest: str | None = None
+    source_bindings: tuple[tuple[str, str, str], ...] = ()
 
 
 @dataclass(frozen=True)
@@ -145,6 +158,28 @@ def freeze_ground_elaborate(
             store,
             target=freeze_semantic_add_target(store, target_lane.name),
         )
+        source_lane = (
+            workspace.goals if direction == "GOAL_TO_RULES" else workspace.rules
+        )
+        source_bindings = [
+            (
+                source_lane.name,
+                source_lane.uid,
+                context_record_digest(source_lane),
+            ),
+            *(
+                (item.context_name, item.context_uid, item.context_digest)
+                for item in target_context.local_contexts
+            ),
+        ]
+        if request.goal_focus is not None:
+            focus = request.goal_focus
+            assert focus.context_name is not None
+            assert focus.context_uid is not None
+            assert focus.context_digest is not None
+            source_bindings.append(
+                (focus.context_name, focus.context_uid, focus.context_digest)
+            )
         return FrozenGroundElaborate(
             ground_name=workspace.name,
             ground_uid=workspace.uid,
@@ -153,6 +188,8 @@ def freeze_ground_elaborate(
             direction=direction,
             request=request,
             target_context=target_context,
+            root_digest=context_record_digest(workspace.root),
+            source_bindings=tuple(dict.fromkeys(source_bindings)),
         )
 
     session = store.load_ground_session(ground_name)
@@ -182,20 +219,35 @@ def _request_from_ground_workspace(
     number: int | None = None,
     strict: bool = False,
 ) -> tuple[ElaborateRequest, str]:
+    try:
+        goal_memories = project_ordinary_memories(
+            workspace.goals,
+            operation="Ground workspace Elaborate",
+        )
+    except GroundWorkspaceProjectionError as error:
+        raise ElaborateError(str(error)) from error
+    if len(goal_memories) > 1:
+        raise ElaborateError(
+            "Ground workspace Elaborate requires zero or one Goal Memory."
+        )
+    goal_focus = (
+        freeze_goal_focus_context(
+            workspace.goals,
+            kind="GROUND",
+            require_single=True,
+        )
+        if goal_memories
+        else None
+    )
     if direction == "GOAL_TO_RULES":
-        try:
-            memories = project_ordinary_memories(
-                workspace.goals,
-                operation="Ground workspace Elaborate",
-            )
-        except GroundWorkspaceProjectionError as error:
-            raise ElaborateError(str(error)) from error
-        if len(memories) != 1:
+        if goal_focus is None:
             raise ElaborateError(
                 "Ground workspace Elaborate requires exactly one Goal Memory."
             )
+        memories = goal_memories
         request = ElaborateRequest(
-            goal=memories[0].content,
+            goal=goal_focus.text,
+            goal_focus=goal_focus,
             number=number,
             strict=strict,
         )
@@ -213,6 +265,7 @@ def _request_from_ground_workspace(
             )
         request = ElaborateRequest(
             rules=tuple(item.content for item in memories),
+            goal_focus=goal_focus,
             number=number,
             strict=strict,
         )
@@ -223,6 +276,9 @@ def _request_from_ground_workspace(
             {
                 "workspace_uid": workspace.uid,
                 "direction": direction,
+                "goal_focus": (
+                    None if goal_focus is None else goal_focus.receipt_record()
+                ),
                 "memories": [
                     {"uid": item.uid, "content": item.content}
                     for item in memories
@@ -328,10 +384,70 @@ def execute_ground_elaborate(
     return GroundElaborateResult(frozen=frozen, elaborate=result)
 
 
+def apply_ground_elaborate_result(
+    result: GroundElaborateResult,
+    *,
+    store: MemoryStore,
+) -> AdoptGroundWorkspaceMemoriesResult:
+    """Explicitly adopt one unchanged physical-Ground Elaborate proposal."""
+
+    if not isinstance(result, GroundElaborateResult):
+        raise TypeError("Ground Elaborate adoption requires a result.")
+    frozen = result.frozen
+    target_context = frozen.target_context
+    if not isinstance(target_context, FrozenElaborateTargetContext):
+        raise ElaborateError(
+            "Elaborate adoption requires a physical Ground workspace result."
+        )
+    current = freeze_ground_elaborate(
+        store,
+        ground_name=frozen.ground_name,
+        direction=frozen.direction,
+        number=frozen.request.number,
+        strict=frozen.request.strict,
+    )
+    if current != frozen:
+        raise ElaborateError(
+            "The Ground workspace changed after the Elaborate proposal was reviewed."
+        )
+    analysis = result.elaborate.analysis
+    contents = (
+        tuple(item.content for item in analysis.rules)
+        if frozen.direction == "GOAL_TO_RULES"
+        else tuple(item.proposition for item in analysis.cases)
+    )
+    lane: Literal["rules", "examples"] = (
+        "rules" if frozen.direction == "GOAL_TO_RULES" else "examples"
+    )
+    assert frozen.root_digest is not None
+    with authorized_frozen_elaborate_target(
+        store,
+        target_context,
+        revalidate_after=False,
+        required_granted_permissions=GRANTED_ELABORATE_ADD_PERMISSIONS,
+    ):
+        return execute_ground_workspace_memories_adoption(
+            AdoptGroundWorkspaceMemoriesRequest(
+                workspace_name=frozen.ground_name,
+                lane=lane,
+                contents=contents,
+                expected_workspace_uid=frozen.ground_uid,
+                expected_revision=frozen.ground_revision,
+                expected_root_digest=frozen.root_digest,
+                expected_lane_digest=target_context.target.context_digest,
+                source_operation="elaborate",
+                analysis_digest=analysis.digest,
+                source_bindings=frozen.source_bindings,
+            ),
+            store=store,
+        )
+
+
 __all__ = [
     "FrozenGroundElaborate",
     "GroundElaborateDirection",
     "GroundElaborateResult",
+    "apply_ground_elaborate_result",
     "execute_ground_elaborate",
     "freeze_ground_elaborate",
 ]

@@ -1,0 +1,52 @@
+ MELD SESSIONS · RECENTLY MODIFIED · RECENT FIRST · ALL                                                                                                                             
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  + Add new Meld session                                                                                                                                                           ^
+› 2026-08-25 13:28Z  capture/meld-incoming → capture/meld-baseline  [PENDING_ANALYSIS]  Directional · INCOMING → BASELINE / TARGET · 0 turns                                        
+  2026-08-25 13:28Z  capture/meld-incoming → capture/meld-baseline  [KEPT_REVIEW_ONLY]  Directional · INCOMING → BASELINE / TARGET · 1 turn                                         
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                   v
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ Kind         meld                                                                                                                                                                 ^
+ Key          83614aa6-b44a-439b-94a7-57d0fa27301c                                                                                                                                  
+ Title        capture/meld-incoming → capture/meld-baseline                                                                                                                         
+ Status       PENDING_ANALYSIS                                                                                                                                                      
+ Context      capture/meld-baseline                                                                                                                                                 
+ Modified     2026-08-25 13:28Z                                                                                                                                                     
+ Summary      Directional · INCOMING → BASELINE / TARGET · 0 turns                                                                                                                  
+ Detail       Modified 2026-08-25T13:28:46+00:00 from file metadata.                                                                                                                
+              Session 6935876e-2515-4716-94db-bcc5680d694f                                                                                                                          
+              Target capture/meld-baseline [83614aa6]                                                                                                                               
+              Mode DIRECTIONAL                                                                                                                                                      
+              State PENDING_ANALYSIS                                                                                                                                                
+              Record ACTIVE                                                                                                                                                         
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                   v
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ ↑/↓ move  PgUp/PgDn detail  Enter open  S sort  G group  / filter  N Add new Meld session  Esc/q cancel  ·  2/3

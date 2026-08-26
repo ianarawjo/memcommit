@@ -17,6 +17,8 @@ from memcommit.ground_workspace import (
 )
 from memcommit.ground_workspace_application import (
     AddGroundWorkspaceMemoryRequest,
+    AdoptGroundWorkspaceMemoriesRequest,
+    AdoptGroundWorkspaceMemoriesResult,
     CreateGroundWorkspaceRequest,
     CreateGroundWorkspaceResult,
     GroundWorkspaceCreationPort,
@@ -25,10 +27,12 @@ from memcommit.ground_workspace_application import (
     RemoveGroundWorkspaceMemoryRequest,
     ReplaceGroundWorkspaceMemoryRequest,
     add_ground_workspace_memory,
+    adopt_ground_workspace_memories,
     create_ground_workspace,
     remove_ground_workspace_memory,
     replace_ground_workspace_memory,
 )
+from memcommit.goal_focus import FrozenGoalFocus
 from memcommit.store import MemoryStore, context_record_digest, validate_context_name
 
 
@@ -38,7 +42,12 @@ class MemoryStoreGroundWorkspaceCreationPort(GroundWorkspaceCreationPort):
     def __init__(self, store: MemoryStore):
         self._store = store
 
-    def create(self, workspace: GroundWorkspace) -> GroundWorkspace:
+    def create(
+        self,
+        workspace: GroundWorkspace,
+        *,
+        goal_focus: FrozenGoalFocus | None = None,
+    ) -> GroundWorkspace:
         for context in workspace.all_contexts:
             validate_portable_context_name(context.name)
         context_membership = [
@@ -62,6 +71,9 @@ class MemoryStoreGroundWorkspaceCreationPort(GroundWorkspaceCreationPort):
                             ),
                         },
                         "command_contexts": context_membership,
+                        "goal_focus": (
+                            None if goal_focus is None else goal_focus.receipt_record()
+                        ),
                     },
                     description=(
                         f"Initialized Ground workspace '{workspace.name}'"
@@ -102,6 +114,7 @@ class MemoryStoreGroundWorkspaceEditingPort(GroundWorkspaceEditingPort):
         lane: GroundWorkspaceLane,
         memory_uid: str,
         action: str,
+        goal_focus: FrozenGoalFocus | None = None,
     ) -> tuple[GroundWorkspace, str]:
         if action not in {"add-memory", "replace-memory", "remove-memory"}:
             raise GroundWorkspaceError("Ground workspace edit action is invalid.")
@@ -122,6 +135,9 @@ class MemoryStoreGroundWorkspaceEditingPort(GroundWorkspaceEditingPort):
             "lane": lane,
             "memory_uid": memory_uid,
             "revision": workspace.manifest.revision,
+            "goal_focus": (
+                None if goal_focus is None else goal_focus.receipt_record()
+            ),
         }
         entries = []
         for context in changed:
@@ -159,6 +175,84 @@ class MemoryStoreGroundWorkspaceEditingPort(GroundWorkspaceEditingPort):
         ):
             raise GroundWorkspaceError(
                 "Ground workspace edit receipt does not match the committed state."
+            )
+        return committed, command_uid
+
+    def commit_adoption(
+        self,
+        workspace: GroundWorkspace,
+        *,
+        request: AdoptGroundWorkspaceMemoriesRequest,
+        memory_uids: tuple[str, ...],
+    ) -> tuple[GroundWorkspace, str]:
+        """Publish a complete semantic proposal as one undoable Ground unit."""
+
+        lane_context = workspace.lane(request.lane)
+        changed = (workspace.root, lane_context)
+        command_uid = str(uuid.uuid4())
+        membership = [
+            {"uid": context.uid, "name": context.name}
+            for context in changed
+        ]
+        ground_command = {
+            "version": 1,
+            "kind": "edit",
+            "workspace_uid": workspace.uid,
+            "workspace_name": workspace.name,
+            "command_uid": command_uid,
+            "action": f"adopt-{request.source_operation}",
+            "lane": request.lane,
+            "memory_uids": list(memory_uids),
+            "revision": workspace.manifest.revision,
+            "semantic_result": {
+                "operation": request.source_operation,
+                "analysis_digest": request.analysis_digest,
+            },
+        }
+        entries = []
+        for context in changed:
+            expected_digest = getattr(context, "_store_digest", None)
+            if not isinstance(expected_digest, str):
+                raise GroundWorkspaceError(
+                    "Ground semantic adoption is missing its Context CAS base."
+                )
+            entries.append(
+                (
+                    context,
+                    AutoCheckpoint(
+                        command="ground",
+                        args={
+                            "ground_workspace_command": ground_command,
+                            "command_contexts": membership,
+                        },
+                        description=(
+                            f"Adopted {len(memory_uids)} {request.source_operation.title()} "
+                            f"proposal Memories in Ground lane '{lane_context.name}'."
+                        ),
+                    ),
+                    expected_digest,
+                )
+            )
+        changed_names = {context.name for context in changed}
+        source_bindings = tuple(
+            binding
+            for binding in request.source_bindings
+            if binding[0] not in changed_names
+        )
+        self._store.save_context_command_batch(
+            entries,
+            source_bindings=source_bindings,
+        )
+        committed = load_ground_workspace(self._store, workspace.name)
+        if (
+            committed.manifest.revision != workspace.manifest.revision
+            or context_record_digest(committed.root)
+            != context_record_digest(workspace.root)
+            or context_record_digest(committed.lane(request.lane))
+            != context_record_digest(lane_context)
+        ):
+            raise GroundWorkspaceError(
+                "Ground semantic adoption receipt does not match the committed state."
             )
         return committed, command_uid
 
@@ -283,10 +377,24 @@ def execute_ground_workspace_memory_remove(
     )
 
 
+def execute_ground_workspace_memories_adoption(
+    request: AdoptGroundWorkspaceMemoriesRequest,
+    *,
+    store: MemoryStore,
+) -> AdoptGroundWorkspaceMemoriesResult:
+    """Execute one atomic, provenance-bearing semantic Ground adoption."""
+
+    return adopt_ground_workspace_memories(
+        request,
+        port=MemoryStoreGroundWorkspaceEditingPort(store),
+    )
+
+
 __all__ = [
     "MemoryStoreGroundWorkspaceCreationPort",
     "MemoryStoreGroundWorkspaceEditingPort",
     "execute_ground_workspace_creation",
+    "execute_ground_workspace_memories_adoption",
     "execute_ground_workspace_memory_add",
     "execute_ground_workspace_memory_remove",
     "execute_ground_workspace_memory_replace",

@@ -130,11 +130,10 @@ def test_run_find_materialization_preserves_exact_prepare_publish_contract():
     assert result.item_uids == ("memory-result",)
 
 
-def test_materialization_request_rejects_history_nonmemory_and_duplicate_source():
+def test_materialization_request_rejects_nonmemory_and_duplicate_source():
     source = ops.init("source")
     memory = ops.add(source, "Source Memory")
     current = _response(source, memory)
-    history = FindSearchResponse(current.request, "HISTORY", ())
     artifact = FindSearchResponse(
         current.request,
         "CURRENT",
@@ -153,8 +152,6 @@ def test_materialization_request_rejects_history_nonmemory_and_duplicate_source(
         (current.results[0], current.results[0]),
     )
 
-    with pytest.raises(FindMaterializationError, match="History results"):
-        FindMaterializationRequest(history, (0,), "COPY", "result")
     with pytest.raises(FindMaterializationError, match="artifact results"):
         FindMaterializationRequest(artifact, (0,), "COPY", "result")
     with pytest.raises(FindMaterializationError, match="more than once"):

@@ -1,0 +1,11 @@
+New Atomize cancelled; no analysis was opened.                                                                                                                                      
+                                                                                                                                                                                    
+ATOMIZE NEW FLOW · CANCELLED                                                                                                                                                        
+  RETAINED TERMINAL UID · aa95e018-33c5-4881-8302-06d7a1f40ff9                                                                                                                      
+  ACTIVE REFRESH UID · db7e7221-a54b-4c5e-aa34-812161f8b53a                                                                                                                         
+  DISTINCT UIDS · True                                                                                                                                                              
+  TERMINAL HISTORY COUNT · 1                                                                                                                                                        
+  ACTIVE ANALYSIS STILL PRESENT · True                                                                                                                                              
+  PROVIDER CALLS DURING PREPARATION · 2                                                                                                                                             
+  PROVIDER CALLS DURING LAUNCHER · 0                                                                                                                                                
+  STORE UNCHANGED BY CANCELLED NEW FLOW · True

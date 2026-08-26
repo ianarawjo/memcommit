@@ -38,7 +38,6 @@ from memcommit.semantic_execution import (
 from memcommit.semantic_prompt_policy import resolve_semantic_prompt_policy
 from memcommit.operations.fit.judgment import (
     FIT_JUDGMENT_MAX_ITEMS,
-    FIT_JUDGMENT_MAX_QUESTIONS,
     FIT_JUDGMENT_TEXT_LIMIT,
     FitJudgmentError,
     FitProposition,
@@ -46,10 +45,11 @@ from memcommit.operations.fit.judgment import (
     execute_fit_judgments,
     prepare_fit_judgments,
 )
+from memcommit.goal_focus import FrozenGoalFocus
 
 
 ELABORATE_OPERATION = "elaborate"
-ELABORATE_PROVIDER_CONTRACT_VERSION = 11
+ELABORATE_PROVIDER_CONTRACT_VERSION = 14
 ELABORATE_PAYLOAD_MARKER = "ELABORATE PAYLOAD:\n"
 
 
@@ -59,7 +59,7 @@ class ElaborateMode(str, Enum):
 
 
 class ElaborateQualityPolicy(str, Enum):
-    """How far generated Cases are independently quality-gated."""
+    """Whether generated Cases are suggestions or independently gated."""
 
     BEST_EFFORT = "BEST_EFFORT"
     STRICT = "STRICT"
@@ -266,7 +266,7 @@ class ElaboratedRuleCheck:
 
 @dataclass(frozen=True)
 class ElaboratedCaseValidation:
-    """Independent Rule-conformance and Source-Fit evidence for one Case."""
+    """Collection Rule-conformance and Source-Fit retained on one Case."""
 
     source_fit: str
     source_fit_reason: str
@@ -282,7 +282,8 @@ class ElaboratedCaseValidation:
             )
         if self.rule_conformance != "CONFORMS":
             raise ElaborateError(
-                "An accepted Elaborate Case must conform to every Source Rule."
+                "An accepted Elaborate Case collection must conform to every "
+                "Source Rule."
             )
         indexes = self.conforming_source_rule_indexes
         if (
@@ -345,6 +346,7 @@ class ElaborateAnalysis:
     overview: str
     rules: tuple[ElaboratedRule, ...] = ()
     cases: tuple[ElaboratedCase, ...] = ()
+    goal_focus: FrozenGoalFocus | None = None
     target_context: ElaborateTargetContext | None = None
     number: int | None = None
     quality_policy: ElaborateQualityPolicy = ElaborateQualityPolicy.BEST_EFFORT
@@ -360,6 +362,11 @@ class ElaborateAnalysis:
             raise ElaborateError("Elaborate analysis input is invalid.")
         if not isinstance(self.overview, str) or not self.overview.strip():
             raise ElaborateError("Elaborate overview must be nonempty text.")
+        if self.goal_focus is not None and not isinstance(
+            self.goal_focus,
+            FrozenGoalFocus,
+        ):
+            raise ElaborateError("Elaborate Goal focus must be a typed frame.")
         if self.mode is ElaborateMode.GOAL_TO_RULES:
             if self.cases:
                 raise ElaborateError("Goal elaboration returned an invalid proposal set.")
@@ -394,12 +401,13 @@ class ElaborateAnalysis:
                 "in input order."
             )
         if not isinstance(self.quality_policy, ElaborateQualityPolicy):
-            raise ElaborateError("Elaborate analysis quality policy is invalid.")
-        if (
-            self.mode is ElaborateMode.GOAL_TO_RULES
-            and self.quality_policy is ElaborateQualityPolicy.STRICT
+            raise ElaborateError("Elaborate quality policy is invalid.")
+        if self.mode is ElaborateMode.GOAL_TO_RULES and (
+            self.quality_policy is ElaborateQualityPolicy.STRICT
         ):
-            raise ElaborateError("Strict Elaborate applies only to Rules-to-Cases.")
+            raise ElaborateError(
+                "Strict Elaborate applies only when generating Cases from Rules."
+            )
         if self.quality_policy is ElaborateQualityPolicy.STRICT:
             if any(
                 item.validation is None
@@ -408,15 +416,14 @@ class ElaborateAnalysis:
                 for item in self.cases
             ):
                 raise ElaborateError(
-                    "Every strict Elaborate Case must independently conform to every "
-                    "Source Rule and Fit the complete Source frame."
+                    "Every strict Elaborate Case must belong to a collection that "
+                    "conforms to every Source Rule and Fits the complete Source frame."
                 )
         elif any(item.validation is not None for item in self.cases):
-            # Validation evidence changes the meaning of the result. Keeping it
-            # exclusive to STRICT prevents a receipt from implying a gate that
-            # the request did not ask to run.
+            # Validation is not an incidental annotation: retaining it would
+            # falsely imply that the best-effort route paid the strict gate.
             raise ElaborateError(
-                "Best-effort Elaborate Cases must not carry strict validation evidence."
+                "Best-effort Elaborate Cases cannot retain strict validation."
             )
         if self.provider_contract_version != ELABORATE_PROVIDER_CONTRACT_VERSION:
             raise ElaborateError("Unsupported Elaborate provider contract version.")
@@ -500,6 +507,9 @@ class ElaborateAnalysis:
                 if self.target_context is None
                 else self.target_context.prompt_record()
             ),
+            "goal_focus": (
+                None if self.goal_focus is None else self.goal_focus.receipt_record()
+            ),
             "number": self.number,
             "quality_policy": self.quality_policy.value,
             "semantic_config": {
@@ -579,11 +589,7 @@ def validate_elaborate_analysis(
             _text(
                 case.proposition,
                 "Case proposition",
-                limit=(
-                    _case_validation_text_limit(config)
-                    if analysis.quality_policy is ElaborateQualityPolicy.STRICT
-                    else config.text_limit
-                ),
+                limit=_case_validation_text_limit(config),
             )
             _text(
                 case.expected,
@@ -643,8 +649,8 @@ def _schema(
     input_count: int,
     target_context: ElaborateTargetContext | None,
     number: int,
+    strict: bool,
     config: ElaborateSemanticConfig,
-    strict: bool = False,
 ) -> dict[str, object]:
     text = {"type": "string", "minLength": 1, "maxLength": config.text_limit}
     rationale = {
@@ -765,6 +771,7 @@ def validate_elaborate_provider_plan(
     *,
     mode: ElaborateMode,
     inputs: tuple[str, ...],
+    goal_focus: FrozenGoalFocus | None = None,
     target_context: ElaborateTargetContext | None = None,
     number: int | None = None,
     strict: bool = False,
@@ -776,17 +783,25 @@ def validate_elaborate_provider_plan(
         raise ElaborateError("Elaborate provider planning requires normalized input.")
     if not isinstance(config, ElaborateSemanticConfig):
         raise TypeError("Elaborate requires an ElaborateSemanticConfig.")
-    if type(strict) is not bool:
-        raise ElaborateError("Elaborate strict must be a boolean.")
-    if strict and mode is ElaborateMode.GOAL_TO_RULES:
-        raise ElaborateError("Strict Elaborate applies only to Rules-to-Cases.")
     number = normalize_elaborate_number(mode=mode, number=number, config=config)
+    if type(strict) is not bool:
+        raise ElaborateError("Elaborate strict mode must be boolean.")
+    if strict and mode is not ElaborateMode.RULES_TO_CASES:
+        raise ElaborateError(
+            "Strict Elaborate applies only when generating Cases from Rules."
+        )
     if strict and mode is ElaborateMode.RULES_TO_CASES:
-        validation_items = number * (len(inputs) + 1)
+        target_memories = tuple(
+            item
+            for item in (() if target_context is None else target_context.items)
+            if item.kind == "MEMORY"
+        )
+        target_memory_count = len(target_memories)
+        validation_subjects = number + target_memory_count
+        validation_items = len(inputs) + validation_subjects
         if (
             len(inputs) > CONFORMANCE_MAX_RULES
-            or number > CONFORMANCE_MAX_SUBJECTS
-            or number > FIT_JUDGMENT_MAX_QUESTIONS
+            or validation_subjects > CONFORMANCE_MAX_SUBJECTS
             or validation_items > FIT_JUDGMENT_MAX_ITEMS
         ):
             raise ElaborateError(
@@ -799,8 +814,18 @@ def validate_elaborate_provider_plan(
                 "An Elaborate Source Rule exceeds the shared Conformance/Fit "
                 f"{validation_text_limit}-character limit."
             )
+        if any(
+            item.content is None or len(item.content) > validation_text_limit
+            for item in target_memories
+        ):
+            raise ElaborateError(
+                "An Elaborate Target Memory exceeds the shared Conformance/Fit "
+                f"{validation_text_limit}-character limit."
+            )
     payload: dict[str, object] = {"mode": mode.value, "inputs": list(inputs)}
     payload["number"] = number
+    if goal_focus is not None:
+        payload["goal_focus"] = goal_focus.prompt_record()
     if target_context is not None:
         payload["target_context"] = target_context.prompt_record()
     schema = _schema(
@@ -808,8 +833,8 @@ def validate_elaborate_provider_plan(
         input_count=len(inputs),
         target_context=target_context,
         number=number,
-        config=config,
         strict=strict,
+        config=config,
     )
     expected = number
     prompt_policy = resolve_semantic_prompt_policy()
@@ -825,7 +850,7 @@ def validate_elaborate_provider_plan(
         elaborate_execution_policy(mode=mode, config=config),
         json_budget(
             plan_payload,
-            item_count=len(inputs),
+            item_count=len(inputs) + (0 if goal_focus is None else len(goal_focus.items)),
             output_schema=schema,
             expected_output_items=expected,
         ),
@@ -860,14 +885,77 @@ def _decode_target_context_refs(
     return tuple(value)
 
 
+def _referenced_target_memories(
+    target_context: ElaborateTargetContext | None,
+    cases: tuple[ElaboratedCase, ...],
+) -> tuple[ElaborateTargetContextItem, ...]:
+    """Keep only ambient Memories the generated collection says it used."""
+
+    if target_context is None:
+        return ()
+    referenced = {
+        alias
+        for case in cases
+        for alias in case.target_context_refs
+    }
+    return tuple(
+        item
+        for item in target_context.items
+        if item.kind == "MEMORY" and item.alias in referenced
+    )
+
+
+def _content_key(value: str) -> str:
+    """Compare semantic-add content without insignificant spacing or case."""
+
+    return " ".join(value.split()).casefold()
+
+
+def _reject_target_restatements(
+    *,
+    target_context: ElaborateTargetContext | None,
+    proposals: tuple[ElaboratedRule | ElaboratedCase, ...],
+) -> None:
+    """Fail before publication when a proposal merely repeats its Target."""
+
+    if target_context is None:
+        return
+    target_alias_by_content = {
+        _content_key(item.content): item.alias
+        for item in target_context.items
+        if item.kind == "MEMORY" and item.content is not None
+    }
+    restatements: list[str] = []
+    label = (
+        "Rule"
+        if proposals and isinstance(proposals[0], ElaboratedRule)
+        else "Case"
+    )
+    for index, proposal in enumerate(proposals, 1):
+        content = (
+            proposal.content
+            if isinstance(proposal, ElaboratedRule)
+            else proposal.proposition
+        )
+        alias = target_alias_by_content.get(_content_key(content))
+        if alias is not None:
+            restatements.append(f"{label} {index}: {alias}")
+    if restatements:
+        raise ElaborateError(
+            "Elaborate rejected proposals that repeat existing Target Memories "
+            "(" + "; ".join(restatements) + ")."
+        )
+
+
 def _validate_elaborated_cases(
     *,
     analysis_uid: str,
     inputs: tuple[str, ...],
     cases: tuple[ElaboratedCase, ...],
     provider: ElaborateProvider,
+    target_context: ElaborateTargetContext | None,
 ) -> tuple[ElaboratedCaseValidation, ...]:
-    """Fail closed unless every generated Case conforms and Fits its Source."""
+    """Fail closed unless the generated collection conforms and Fits its Source."""
 
     namespace = uuid.UUID(analysis_uid)
     rules = tuple(
@@ -882,7 +970,28 @@ def _validate_elaborated_cases(
     rule_index_by_uid = {
         rule.uid: index for index, rule in enumerate(rules, 1)
     }
-    subjects = tuple(
+    target_memories = _referenced_target_memories(target_context, cases)
+    target_subjects = tuple(
+        ConformanceSubject(
+            # Target adapters may retain a stable non-UUID provider identity.
+            # Conformance owns UUID subjects, so bind that identity and exact
+            # content into this analysis namespace instead of weakening either
+            # public contract.
+            uid=str(
+                uuid.uuid5(
+                    namespace,
+                    f"target-memory:{item.alias}:{item.memory_uid}:{item.content}",
+                )
+            ),
+            alias=item.alias,
+            content=item.content,
+            role="TARGET_CONTEXT",
+            linked_rule_uids=rule_uids,
+        )
+        for item in target_memories
+        if item.memory_uid is not None and item.content is not None
+    )
+    case_subjects = tuple(
         ConformanceSubject(
             uid=case.uid,
             alias=f"c{index}",
@@ -892,9 +1001,10 @@ def _validate_elaborated_cases(
         )
         for index, case in enumerate(cases, 1)
     )
+    subjects = (*target_subjects, *case_subjects)
     try:
         conformance = check_context_conformance(
-            source_label="ELABORATE GENERATED CASES",
+            source_label="ELABORATE TARGET PREFIX AND GENERATED CASES",
             rules_label="ELABORATE SOURCE RULES",
             rules=rules,
             subjects=subjects,
@@ -906,6 +1016,27 @@ def _validate_elaborated_cases(
             "Source Rule frame."
         ) from error
 
+    rule_judgment_by_uid = {
+        judgment.rule_uid: judgment
+        for judgment in conformance.context_judgments
+    }
+    rule_failures = tuple(
+        f"Rule {index}: "
+        + (
+            "MISSING"
+            if rule_judgment_by_uid.get(rule.uid) is None
+            else rule_judgment_by_uid[rule.uid].status
+        )
+        for index, rule in enumerate(rules, 1)
+        if rule_judgment_by_uid.get(rule.uid) is None
+        or rule_judgment_by_uid[rule.uid].status != "CONFORMS"
+    )
+    if rule_failures:
+        raise ElaborateError(
+            "Elaborate rejected a generated Case collection that did not conform "
+            "to every Source Rule (" + "; ".join(rule_failures) + ")."
+        )
+
     conformance_by_uid = {
         judgment.subject_uid: judgment
         for judgment in conformance.context_example_judgments
@@ -913,22 +1044,29 @@ def _validate_elaborated_cases(
     conformance_failures: list[str] = []
     for index, case in enumerate(cases, 1):
         judgment = conformance_by_uid.get(case.uid)
-        if (
-            judgment is None
-            or judgment.status != "CONFORMS"
-            or judgment.rule_uids != rule_uids
-        ):
+        if judgment is None or judgment.status != "CONFORMS":
             status = "MISSING" if judgment is None else judgment.status
             conformance_failures.append(f"Case {index}: {status}")
     if conformance_failures:
         raise ElaborateError(
-            "Elaborate rejected generated Cases that did not conform to every "
-            "Source Rule (" + "; ".join(conformance_failures) + ")."
+            "Elaborate rejected generated Cases that did not conform within the "
+            "complete Source Rule collection ("
+            + "; ".join(conformance_failures)
+            + ")."
         )
 
-    questions = tuple(
+    questions = (
         FitQuestion(
-            question_id=f"c{case_index}",
+            question_id="case-set",
+            background=tuple(
+                FitProposition(
+                    alias=item.alias,
+                    content=item.content,
+                    role="MEMORY",
+                )
+                for item in target_memories
+                if item.content is not None
+            ),
             propositions=(
                 *(
                     FitProposition(
@@ -938,14 +1076,16 @@ def _validate_elaborated_cases(
                     )
                     for rule_index, content in enumerate(inputs, 1)
                 ),
-                FitProposition(
-                    alias=f"c{case_index}",
-                    content=case.proposition,
-                    role="EXAMPLE",
+                *(
+                    FitProposition(
+                        alias=f"c{case_index}",
+                        content=case.proposition,
+                        role="EXAMPLE",
+                    )
+                    for case_index, case in enumerate(cases, 1)
                 ),
             ),
-        )
-        for case_index, case in enumerate(cases, 1)
+        ),
     )
     try:
         prepared_fit = prepare_fit_judgments(questions)
@@ -959,18 +1099,11 @@ def _validate_elaborated_cases(
             "Source frame."
         ) from error
 
-    fit_by_question = {
-        assessment.question_id: assessment for assessment in fit.assessments
-    }
-    fit_failures = tuple(
-        f"Case {index}: {fit_by_question[f'c{index}'].verdict}"
-        for index in range(1, len(cases) + 1)
-        if fit_by_question[f"c{index}"].verdict != "YES"
-    )
-    if fit_failures:
+    fit_assessment = fit.assessments[0]
+    if fit_assessment.verdict != "YES":
         raise ElaborateError(
-            "Elaborate rejected generated Cases that did not Fit the complete "
-            "Source frame (" + "; ".join(fit_failures) + ")."
+            "Elaborate rejected the generated Case collection because it did not "
+            f"Fit the complete Source frame ({fit_assessment.verdict})."
         )
 
     conforming_indexes = tuple(
@@ -979,7 +1112,7 @@ def _validate_elaborated_cases(
     return tuple(
         ElaboratedCaseValidation(
             source_fit="YES",
-            source_fit_reason=fit_by_question[f"c{index}"].reason,
+            source_fit_reason=fit_assessment.reason,
             rule_conformance="CONFORMS",
             conforming_source_rule_indexes=conforming_indexes,
         )
@@ -991,6 +1124,7 @@ def analyze_elaborate(
     *,
     goal: str | None,
     rules: tuple[str, ...],
+    goal_focus: FrozenGoalFocus | None = None,
     provider: ElaborateProvider,
     target_context: ElaborateTargetContext | None = None,
     number: int | None = None,
@@ -1004,17 +1138,21 @@ def analyze_elaborate(
         rules=rules,
         config=config,
     )
-    if type(strict) is not bool:
-        raise ElaborateError("Elaborate strict must be a boolean.")
-    if strict and mode is ElaborateMode.GOAL_TO_RULES:
-        raise ElaborateError("Strict Elaborate applies only to Rules-to-Cases.")
     number = normalize_elaborate_number(mode=mode, number=number, config=config)
+    if type(strict) is not bool:
+        raise ElaborateError("Elaborate strict mode must be boolean.")
+    if strict and mode is not ElaborateMode.RULES_TO_CASES:
+        raise ElaborateError(
+            "Strict Elaborate applies only when generating Cases from Rules."
+        )
     if target_context is not None and not isinstance(
         target_context, ElaborateTargetContext
     ):
         raise TypeError("Elaborate Target Context must be typed.")
     payload: dict[str, object] = {"mode": mode.value, "inputs": list(inputs)}
     payload["number"] = number
+    if goal_focus is not None:
+        payload["goal_focus"] = goal_focus.prompt_record()
     if target_context is not None:
         payload["target_context"] = target_context.prompt_record()
     schema = _schema(
@@ -1022,16 +1160,17 @@ def analyze_elaborate(
         input_count=len(inputs),
         target_context=target_context,
         number=number,
-        config=config,
         strict=strict,
+        config=config,
     )
     validate_elaborate_provider_plan(
         mode=mode,
         inputs=inputs,
+        goal_focus=goal_focus,
         target_context=target_context,
         number=number,
-        config=config,
         strict=strict,
+        config=config,
     )
     if mode is ElaborateMode.GOAL_TO_RULES:
         quantity = f"exactly {number}"
@@ -1050,21 +1189,48 @@ def analyze_elaborate(
         quantity = f"exactly {number}"
         instruction = (
             f"Propose {quantity} "
-            "self-contained positive Example Memories. Repeated Case propositions "
+            "self-contained positive child propositions as Example Memories. A "
+            "positive child means that the proposition is a valid operationalization, "
+            "instance, boundary member, or diagnostic example of its applicable "
+            "parent Rules; its subject matter may describe an undesirable or negative "
+            "state when that state positively instantiates a diagnostic Rule. Repeated Case propositions "
             "are valid when repetition is required or useful under the complete Rule "
             "set; do not invent artificial distinctions solely to make proposition "
-            "content unique. Every Case must "
-            "instantiate and comply with the complete input Rule set together; do "
-            "not assign different Cases to different Rules. Preserve fixed roles, "
+            "content unique. Read the complete input Rule set together as one parent "
+            "frame and generate one coherent child "
+            "collection that covers the complete parent frame. Do not require every "
+            "individual child to instantiate every Rule when the parents define "
+            "alternative conditions, disjoint subfamilies, different child roles, or "
+            "collection-level relationships. Each child must comply with every Rule "
+            "applicable to that member, must violate none, and must be governed by at "
+            "least one Rule; collectively the children must give every input Rule an "
+            "applicable conforming member or relationship. Preserve fixed roles, "
             "relationships, event order, decision boundaries, and presentation form "
             "required by the Rules; when variation is useful, vary only legitimate "
             "instance slots. "
+            "Before drafting, distinguish a conjunctive record schema from sibling "
+            "parents. When the Rules jointly define one record's required form, "
+            "roles, sequence, and outcome, as in the quoted cafe and Cloze families, "
+            "each child must instantiate that complete conjunctive schema. When the "
+            "Rules instead state independently meaningful components, criteria, "
+            "alternative branches, or diagnostic indicators, prefer focused children "
+            "under the applicable parent or parents and distribute complete coverage "
+            "across the sibling collection. Do not make every child mention unrelated "
+            "independent parents merely to simulate complete coverage. "
+            "A Rule may govern an ordered collection or family rather than every "
+            "member in isolation, as with seeds, position, ordering, or recurrence. "
+            "In that situation, make the complete ordered proposal collection obey "
+            "every Rule while each Case obeys every Rule applicable to that member. "
             "The proposition itself must contain the complete compliant scenario "
             "and outcome that would be stored as the Example Memory.\n\n"
             "For every Case, provide rule_checks for every source Rule exactly once "
-            "and in input order. Each check must cite observable evidence in that "
-            "Case proposition; do not claim coverage that the proposition does not "
-            "show. FIT, BOUNDARY, and CONTRAST describe different useful kinds of "
+            "and in input order so the complete parent frame is visibly read. Begin "
+            "each evidence string with `APPLIES:`, `NOT APPLICABLE:`, or `COLLECTION:`. "
+            "APPLIES must cite observable evidence in that Case proposition. NOT "
+            "APPLICABLE must explain the condition or subfamily mismatch without "
+            "calling it a violation. COLLECTION must identify the Case's observable "
+            "position or contribution to a sibling relationship. Do not claim coverage the complete "
+            "collection does not show. FIT, BOUNDARY, and CONTRAST describe different useful kinds of "
             "compliant examples. A CONTRAST may expose a tempting alternative, but "
             "the stored proposition must still show the Rule-compliant handling, not "
             "a Rule violation. An underspecified Rule is not a reason to return an "
@@ -1082,11 +1248,30 @@ def analyze_elaborate(
             "QUERY_ONLY_CONTEXT item contributes its public name only; never infer "
             "or claim hidden content. Target items are context, not source Goal or "
             "Rule evidence: current inputs remain authoritative, and every Case "
-            "must still check every current Rule. Do not copy a Target item merely "
-            "to restate it. For each proposal return target_context_refs containing "
+            "must still check every current Rule. Treat the listed Target MEMORY "
+            "items as an ordered existing prefix when a current Rule describes a "
+            "sequence, recurrence, position, or other collection-level relationship. "
+            "Generate the next unseen members after the final applicable Target item; "
+            "do not restart at seeds or copy an existing Target Memory. In that "
+            "ordered-prefix case, cite every Target item materially needed to establish "
+            "the proposed suffix's origin, position, and lineage under the complete "
+            "Rule set, not only the final arithmetic or lexical operands. For each "
+            "proposal return target_context_refs containing "
             "exactly the target_id values materially used; return an empty list "
             "when none was used. If Target context conflicts with a current input, "
             "follow the current input and do not cite the conflicting Target item."
+        )
+    goal_focus_instruction = ""
+    if goal_focus is not None:
+        goal_focus_instruction = (
+            "\n\nThe payload includes GOAL_FOCUS. Use its complete ordered item frame "
+            "to select the intended use, relevance, exclusions, abstraction level, "
+            "and useful variation of the proposal set. Goal-focus items are not "
+            "Source evidence and cannot authorize a Rule, Case fact, or durable "
+            "decision. Every proposal must still be supported or governed by the "
+            "operation's actual Goal or Rule Source. Account for the complete Goal "
+            "focus when writing the overview, and do not collapse several Goal items "
+            "into one fabricated proposition."
         )
     prompt_policy = resolve_semantic_prompt_policy()
     reference_instruction = (
@@ -1116,6 +1301,7 @@ def analyze_elaborate(
         "or outside knowledge.\n\n"
         + reference_instruction
         + target_instruction
+        + goal_focus_instruction
         + ELABORATE_PAYLOAD_MARKER
         + json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
     )
@@ -1173,6 +1359,10 @@ def analyze_elaborate(
                     target_context_refs=target_refs,
                 )
             )
+        _reject_target_restatements(
+            target_context=target_context,
+            proposals=tuple(proposed_rules),
+        )
     else:
         values = decoded["cases"]
         if (
@@ -1200,9 +1390,7 @@ def analyze_elaborate(
             proposition = _text(
                 value["proposition"],
                 "Case proposition",
-                limit=(
-                    _case_validation_text_limit(config) if strict else config.text_limit
-                ),
+                limit=_case_validation_text_limit(config),
             )
             expected_value = _text(
                 value["expected"],
@@ -1284,12 +1472,17 @@ def analyze_elaborate(
                     target_context_refs=target_refs,
                 )
             )
+        _reject_target_restatements(
+            target_context=target_context,
+            proposals=tuple(proposed_cases),
+        )
         if strict:
             validations = _validate_elaborated_cases(
                 analysis_uid=analysis_uid,
                 inputs=inputs,
                 cases=tuple(proposed_cases),
                 provider=provider,
+                target_context=target_context,
             )
             proposed_cases = [
                 replace(case, validation=validation)
@@ -1306,6 +1499,7 @@ def analyze_elaborate(
         overview=_text(decoded["overview"], "overview", limit=config.overview_limit),
         rules=tuple(proposed_rules),
         cases=tuple(proposed_cases),
+        goal_focus=goal_focus,
         target_context=target_context,
         number=number,
         quality_policy=(
@@ -1325,8 +1519,8 @@ __all__ = [
     "ElaborateAnalysis",
     "ElaborateError",
     "ElaborateMode",
-    "ElaborateQualityPolicy",
     "ElaborateProvider",
+    "ElaborateQualityPolicy",
     "ElaboratedCase",
     "ElaboratedCaseValidation",
     "ElaboratedRuleCheck",

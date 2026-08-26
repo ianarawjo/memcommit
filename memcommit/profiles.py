@@ -152,6 +152,7 @@ class StudyInitializationResult:
     authority_inspection: StoreInspection
     baseline_profile_name: str
     active_profile_name: str
+    scenario_id: str = "legacy-v1"
     declared_compare_prewarms: int = 0
     installed_compare_prewarms: int = 0
     skipped_compare_prewarms: int = 0
@@ -174,6 +175,15 @@ class StudyInitializationResult:
     installed_meld_resolution_prewarms: int = 0
     skipped_meld_resolution_prewarms: int = 0
     installed_meld_resolution_branches: int = 0
+
+
+@dataclass(frozen=True)
+class StudyProviderPolicyMigrationResult:
+    """One atomic pilot migration of visible current Study pairs."""
+
+    generation: int
+    migrated_study_count: int
+    migrated_profile_count: int
 
 
 @dataclass(frozen=True)
@@ -1319,6 +1329,105 @@ def use_profile(name: str) -> tuple[ProfileRegistry, StoreInspection, bool]:
         )
         _write_registry(updated)
         return updated, inspection, True
+
+
+def migrate_visible_study_provider_policy(
+    *,
+    target_version: str,
+    target_digest: str,
+    accepted_sources: frozenset[tuple[str | None, str | None]],
+) -> StudyProviderPolicyMigrationResult:
+    """Atomically repin every visible current Study pair during the pilot.
+
+    Removed Profile tombstones retain their historical provenance. Every
+    visible participant/authority pair must be complete and must share one
+    explicitly accepted source condition before any registry replacement.
+    """
+
+    if not target_version or len(target_version) > 128:
+        raise ProfileError("Study provider policy version is invalid.")
+    if (
+        not isinstance(target_digest, str)
+        or len(target_digest) != 64
+        or any(character not in "0123456789abcdef" for character in target_digest)
+    ):
+        raise ProfileError("Study provider policy digest is invalid.")
+    if not accepted_sources:
+        raise ProfileError("Study provider migration has no accepted source.")
+
+    target = (target_version, target_digest)
+    with _registry_lock():
+        registry = load_profile_registry()
+        removed = frozenset(registry.removed_profile_uids)
+        groups: dict[str, list[tuple[ProfileEntry, StudyRunIdentity]]] = {}
+        for profile in registry.profiles:
+            if profile.uid in removed:
+                continue
+            identity = study_run_identity(profile)
+            if identity is None:
+                continue
+            groups.setdefault(identity.uid, []).append((profile, identity))
+
+        migrated_uids: set[str] = set()
+        migrated_studies = 0
+        for study_uid, members in groups.items():
+            roles = {identity.role for _profile, identity in members}
+            conditions = {
+                (
+                    identity.provider_policy_version,
+                    identity.provider_policy_digest,
+                )
+                for _profile, identity in members
+            }
+            if len(members) != 2 or roles != {"PARTICIPANT", "GRANTED_MEMORY"}:
+                raise ProfileError(
+                    f"Visible Study {study_uid!r} does not contain one complete pair."
+                )
+            if len(conditions) != 1:
+                raise ProfileError(
+                    f"Visible Study {study_uid!r} has inconsistent provider policy."
+                )
+            current = next(iter(conditions))
+            if current == target:
+                continue
+            if current not in accepted_sources:
+                raise ProfileError(
+                    f"Visible Study {study_uid!r} has an unaccepted provider policy."
+                )
+            migrated_studies += 1
+            migrated_uids.update(profile.uid for profile, _identity in members)
+
+        if not migrated_uids:
+            return StudyProviderPolicyMigrationResult(
+                generation=registry.generation,
+                migrated_study_count=0,
+                migrated_profile_count=0,
+            )
+
+        profiles: list[ProfileEntry] = []
+        for profile in registry.profiles:
+            if profile.uid not in migrated_uids:
+                profiles.append(profile)
+                continue
+            assert profile.source is not None
+            source = dict(profile.source)
+            source["provider_policy_version"] = target_version
+            source["provider_policy_digest"] = target_digest
+            profiles.append(replace(profile, source=source))
+
+        updated = ProfileRegistry(
+            generation=max(1, registry.generation + 1),
+            active_uid=registry.active_uid,
+            profiles=tuple(profiles),
+            grants=registry.grants,
+            removed_profile_uids=registry.removed_profile_uids,
+        )
+        _write_registry(updated)
+        return StudyProviderPolicyMigrationResult(
+            generation=updated.generation,
+            migrated_study_count=migrated_studies,
+            migrated_profile_count=len(migrated_uids),
+        )
 
 
 def _write_empty_profile_store(destination: Path) -> StoreInspection:
@@ -4522,6 +4631,115 @@ def _snapshot_study_baseline(
     return packages
 
 
+def _coffee_study_packages(destination: Path) -> dict[int, _StudyTaskPackage]:
+    """Materialize fresh package sources for the built-in Coffee scenario.
+
+    These sources are transient inputs to the same two-Profile publication
+    boundary used by the legacy baseline.  Their Context names are already the
+    public runtime names, so composing them must not add a second ``task-N``
+    prefix.
+    """
+
+    from memcommit.study_scenarios.coffee_v1 import build_coffee_v1_scenario
+
+    scenario = build_coffee_v1_scenario()
+    packages: dict[int, _StudyTaskPackage] = {}
+    for task_spec in scenario.tasks:
+        task = task_spec.task
+        participant_name = f"coffee-v1-task-{task}-participant"
+        authority_name = f"coffee-v1-task-{task}-authority"
+        sources: list[_StudyProfileSource] = []
+        contexts_by_role: dict[str, dict[str, Context]] = {}
+        for role, name, contexts, catalogs, current in (
+            (
+                "TASK",
+                participant_name,
+                task_spec.participant_contexts,
+                task_spec.participant_catalogs,
+                task_spec.participant_current,
+            ),
+            (
+                "AUTHORITY",
+                authority_name,
+                task_spec.authority_contexts,
+                task_spec.authority_catalogs,
+                task_spec.authority_current,
+            ),
+        ):
+            store_root = destination / name
+            inspection = _write_mapped_study_store(
+                store_root,
+                contexts=contexts,
+                catalogs=catalogs,
+                current_context=current,
+            )
+            materialized, query_refs = _context_records(store_root)
+            if query_refs:
+                raise ProfileError(
+                    "Built-in Study scenarios cannot contain query pointers."
+                )
+            contexts_by_role[role] = materialized
+            sources.append(
+                _StudyProfileSource(
+                    task=task,
+                    name=name,
+                    role=role,
+                    store=store_root,
+                    entries=(),
+                    inspection=inspection,
+                )
+            )
+
+        templates: list[dict[str, object]] = []
+        for grant in task_spec.grants:
+            authority_context = contexts_by_role["AUTHORITY"][grant.authority_context]
+            attachment_context = contexts_by_role["TASK"][grant.attachment_context]
+            templates.append(
+                {
+                    "schema_version": 1,
+                    "key": grant.key,
+                    "grant_uid": _expected_study_grant_uid(task, grant.key),
+                    "authority_profile": authority_name,
+                    "grantee_profile": participant_name,
+                    "authority_context": {
+                        "uid": authority_context.uid,
+                        "name": authority_context.name,
+                    },
+                    "attachment": {
+                        "kind": "GRANTEE_CONTEXT",
+                        "context": {
+                            "uid": attachment_context.uid,
+                            "name": attachment_context.name,
+                        },
+                    },
+                    "public_name": grant.public_name,
+                    "permissions": list(grant.permissions),
+                    "recursive": grant.recursive,
+                    "excluded_contexts": [],
+                }
+            )
+        template_tuple = tuple(templates)
+        packages[task] = _StudyTaskPackage(
+            task=task,
+            schema_version=2,
+            manifest={
+                "canonical_language": "en",
+                # Legacy bundle Contexts are task-relative and need prefixing;
+                # this scenario declares the final public hierarchy directly.
+                "runtime_names_pre_namespaced": True,
+                "scenario_id": scenario.scenario_id,
+            },
+            manifest_digest=scenario.digest,
+            profiles=tuple(sources),
+            grant_templates=template_tuple,
+            query_view_count=_query_view_count_for_baseline(
+                contexts_by_role["AUTHORITY"],
+                template_tuple,
+            ),
+        )
+    return packages
+
+
 def _prefix_study_grant_template(
     raw: dict[str, object],
     *,
@@ -4620,6 +4838,7 @@ def _compose_study_run_pair(
 
     for task in _STUDY_TASKS:
         package = packages[task]
+        pre_namespaced = package.manifest.get("runtime_names_pre_namespaced") is True
         for authority in (False, True):
             role = "AUTHORITY" if authority else "TASK"
             source = next(item for item in package.profiles if item.role == role)
@@ -4629,7 +4848,8 @@ def _compose_study_run_pair(
             mapping = {
                 name: (
                     name
-                    if task == 1 and not authority and _is_study_practice_name(name)
+                    if pre_namespaced
+                    or (task == 1 and not authority and _is_study_practice_name(name))
                     else f"task-{task}/{name}"
                 )
                 for name in source_contexts
@@ -4643,6 +4863,13 @@ def _compose_study_run_pair(
                 participant_contexts.extend(remapped)
                 participant_catalogs.extend(catalogs)
 
+    first_package = packages[1]
+    first_pre_namespaced = (
+        first_package.manifest.get("runtime_names_pre_namespaced") is True
+    )
+    first_participant_source = next(
+        source for source in first_package.profiles if source.role == "TASK"
+    )
     participant_inspection = _write_mapped_study_store(
         participant_root,
         contexts=tuple(participant_contexts),
@@ -4650,7 +4877,11 @@ def _compose_study_run_pair(
         # Start at the Practice parent so the participant deliberately opens
         # its description before proceeding. Task-specific Contexts stay
         # intact for later explicit navigation.
-        current_context=_STUDY_PRACTICE_ROOT,
+        current_context=(
+            first_participant_source.inspection.current_context
+            if first_pre_namespaced
+            else _STUDY_PRACTICE_ROOT
+        ),
     )
     authority_source = next(
         source for source in packages[1].profiles if source.role == "AUTHORITY"
@@ -4659,7 +4890,11 @@ def _compose_study_run_pair(
         authority_root,
         contexts=tuple(authority_contexts),
         catalogs=tuple(authority_catalogs),
-        current_context=f"task-1/{authority_source.inspection.current_context}",
+        current_context=(
+            authority_source.inspection.current_context
+            if first_pre_namespaced
+            else f"task-1/{authority_source.inspection.current_context}"
+        ),
     )
 
     # _materialize_study_grants validates each original package independently.
@@ -4689,9 +4924,13 @@ def _compose_study_run_pair(
                     inspection=inspection,
                 )
             )
-        templates = tuple(
-            _prefix_study_grant_template(raw, task=task)
-            for raw in package.grant_templates
+        templates = (
+            tuple(copy.deepcopy(raw) for raw in package.grant_templates)
+            if package.manifest.get("runtime_names_pre_namespaced") is True
+            else tuple(
+                _prefix_study_grant_template(raw, task=task)
+                for raw in package.grant_templates
+            )
         )
         merged[task] = replace(
             package,
@@ -4741,6 +4980,8 @@ def _publish_study_run_pair(
     prewarm_workers: int,
     prewarm_reasoning: str,
     prewarm_progress: Callable[[str], None] | None,
+    scenario_id: str = "legacy-v1",
+    prepare_prewarms: bool = True,
 ) -> StudyInitializationResult:
     """Publish the run's two stores and grants as one registry transaction."""
 
@@ -4837,34 +5078,36 @@ def _publish_study_run_pair(
                 raise ProfileError("Managed profile destination is occupied.")
             os.replace(source, destination)
             published.append((destination, source))
-        # Cache compatibility is checked only after the complete staged grant
-        # topology can be resolved, but before the Profile registry advertises
-        # the new run. Provider or publication failure therefore rolls both
-        # run stores back without exposing a half-initialized participant.
-        from memcommit.study_prewarm.prepare import prepare_study_prewarms
-        from memcommit.store import MemoryStore
+        if prepare_prewarms:
+            # Cache compatibility is checked only after the complete staged
+            # grant topology can be resolved, but before the registry
+            # advertises the new run. The Coffee scenario deliberately skips
+            # this block because participant-authored inputs make an exact
+            # shared semantic artifact neither stable nor reusable.
+            from memcommit.study_prewarm.prepare import prepare_study_prewarms
+            from memcommit.store import MemoryStore
 
-        try:
-            prepare_study_prewarms(
-                baseline=baseline,
-                baseline_store_root=profile_store_dir(baseline),
-                participant_store=MemoryStore(
-                    root=profile_store_dir(participant),
-                    create=False,
-                ),
-                registry_snapshot=updated,
-                workers=prewarm_workers,
-                reasoning=prewarm_reasoning,
-                progress=prewarm_progress,
-            )
-            _attach_declared_study_prewarms(
-                profile_store_dir(baseline),
-                profile_store_dir(participant),
-            )
-        except Exception as error:
-            raise ProfileError(
-                f"Study semantic prewarm could not be prepared: {error}"
-            ) from error
+            try:
+                prepare_study_prewarms(
+                    baseline=baseline,
+                    baseline_store_root=profile_store_dir(baseline),
+                    participant_store=MemoryStore(
+                        root=profile_store_dir(participant),
+                        create=False,
+                    ),
+                    registry_snapshot=updated,
+                    workers=prewarm_workers,
+                    reasoning=prewarm_reasoning,
+                    progress=prewarm_progress,
+                )
+                _attach_declared_study_prewarms(
+                    profile_store_dir(baseline),
+                    profile_store_dir(participant),
+                )
+            except Exception as error:
+                raise ProfileError(
+                    f"Study semantic prewarm could not be prepared: {error}"
+                ) from error
         # The participant pins a digest-checked immutable bundle, but no
         # operation artifact or hidden receipt is installed during setup.
         # Operation-specific evidence and authority validation happen only
@@ -4900,6 +5143,7 @@ def _publish_study_run_pair(
             ),
             baseline_profile_name=baseline.name,
             active_profile_name=participant.name,
+            scenario_id=scenario_id,
         )
     except Exception:
         if not committed:
@@ -5000,6 +5244,7 @@ def init_study_profile(
                 prewarm_workers=prewarm_workers,
                 prewarm_reasoning=prewarm_reasoning,
                 prewarm_progress=prewarm_progress,
+                scenario_id="legacy-v1",
             )
         finally:
             if staging.exists() and not staging.is_symlink():
@@ -5027,6 +5272,80 @@ def init_study_profile(
         declared_directional_meld_prewarms=counts["MELD_DIRECTIONAL"],
         declared_meld_resolution_prewarms=counts["MELD_RESOLUTION"],
     )
+
+
+def init_coffee_study_profile(
+    *,
+    name: str | None = None,
+    provider_policy_version: str,
+    provider_policy_digest: str,
+) -> StudyInitializationResult:
+    """Create one isolated run from the built-in ``coffee-v1`` scenario."""
+
+    from memcommit.study_scenarios.coffee_v1 import (
+        COFFEE_V1_BASELINE_UID,
+        COFFEE_V1_DIGEST,
+        COFFEE_V1_SCENARIO_ID,
+    )
+
+    generated_uid = uuid.uuid4()
+    created = datetime.now(timezone.utc)
+    if name is None:
+        profile_name = generate_study_profile_name(
+            created=created,
+            generated_uid=generated_uid,
+        )
+    else:
+        try:
+            profile_name = validate_profile_name(name)
+        except (ProfileConfigError, ValueError) as error:
+            raise ProfileError("Study Profile name is invalid.") from error
+    if profile_name == AUTHORING_PROFILE_NAME:
+        raise ProfileError("The fixed authoring name cannot identify a Study Profile.")
+
+    with _registry_lock():
+        registry = load_profile_registry()
+        if any(
+            group.name.casefold() == profile_name.casefold()
+            for group in study_profile_groups(registry.profiles)
+        ):
+            raise ProfileError(
+                f"Profile name {profile_name!r} conflicts with an existing legacy "
+                "Study group."
+            )
+        staging = profile_stores_dir() / (
+            f".{profile_name}.coffee-v1-source-{uuid.uuid4().hex}"
+        )
+        staging.mkdir()
+        try:
+            packages = _coffee_study_packages(staging)
+            # The built-in scenario behaves as an immutable virtual baseline:
+            # its stable UID and content digest provide the same run provenance
+            # without publishing a mutable Profile that could drift.
+            baseline = ProfileEntry(
+                uid=COFFEE_V1_BASELINE_UID,
+                name=COFFEE_V1_SCENARIO_ID,
+                kind="MANAGED",
+            )
+            return _publish_study_run_pair(
+                registry,
+                baseline=baseline,
+                packages=packages,
+                study_name=profile_name,
+                study_uid=str(generated_uid),
+                created_at=created.isoformat(),
+                baseline_digest=COFFEE_V1_DIGEST,
+                provider_policy_version=provider_policy_version,
+                provider_policy_digest=provider_policy_digest,
+                prewarm_workers=1,
+                prewarm_reasoning="none",
+                prewarm_progress=None,
+                scenario_id=COFFEE_V1_SCENARIO_ID,
+                prepare_prewarms=False,
+            )
+        finally:
+            if staging.exists() and not staging.is_symlink():
+                shutil.rmtree(staging)
 
 
 def generate_study_profile_name(

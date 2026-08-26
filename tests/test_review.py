@@ -172,6 +172,33 @@ def test_common_review_escape_closes_from_the_root_and_saves() -> None:
     assert saved
 
 
+def test_common_review_retained_history_is_read_only_and_never_saved() -> None:
+    ctx, report, first, _third = _context_and_report()
+    session = create_ambiguity_review(ctx, report)
+    session.select_choice(0)
+    before = session.to_dict()
+    saved: list[dict[str, object]] = []
+
+    with create_pipe_input() as pipe_input:
+        # Open the answered item and traverse its response area before closing.
+        # A retained history view may inspect that evidence but cannot stage a
+        # replacement response or reclaim the active Review slot on close.
+        pipe_input.send_text("\t\x1b[B\r\t\x1b[B\rq")
+        returned = run_review_resolution_shell(
+            session,
+            ctx,
+            save=lambda value: saved.append(value.to_dict()),
+            read_only=True,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert returned is session
+    assert session.to_dict() == before
+    assert saved == []
+
+
 def test_review_restores_source_order_and_derives_reading_roles():
     ctx, report, first, third = _context_and_report()
 
@@ -360,12 +387,13 @@ def test_cli_creates_snapshot_resumes_without_provider_and_never_mutates(
         "memcommit.commands.review.connect_codex_chatgpt_provider",
         lambda: pytest.fail("replacement guard must run before provider"),
     )
-    refused = runner.invoke(
+    repeated = runner.invoke(
         app,
         ["review", "ambiguities", "--snapshot"],
     )
-    assert refused.exit_code == 1
-    assert "--replace-review" in refused.output
+    assert repeated.exit_code == 0, repeated.output
+    assert "same NFC mechanism" in repeated.output
+    assert len(provider.calls) == 1
     assert review_path.read_bytes() == review_before
 
     monkeypatch.setattr(
@@ -453,3 +481,76 @@ def test_explicit_replace_recovers_from_a_corrupt_saved_review(
     assert "no actionable ambiguity findings" in result.output
     assert len(provider.calls) == 1
     assert store.load_review_session() is not None
+
+
+def test_terminal_ambiguity_review_rotates_distinct_frame_and_retains_source(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    first_context = ops.init("review/lifecycle/first")
+    ops.add(first_context, "A complete first rule.")
+    second_context = ops.init("review/lifecycle/second")
+    ops.add(second_context, "A complete second rule.")
+    store.save(first_context)
+    store.save(second_context)
+    provider = PayloadProvider(lambda _payload: {"findings": []})
+    monkeypatch.setattr(
+        "memcommit.commands.review.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+
+    first_result = runner.invoke(
+        app,
+        ["review", "ambiguities", "--context", first_context.name, "--snapshot"],
+    )
+    assert first_result.exit_code == 0, first_result.output
+    first = store.load_review_session()
+    assert first is not None and first.terminal
+
+    second_result = runner.invoke(
+        app,
+        ["review", "ambiguities", "--context", second_context.name, "--snapshot"],
+    )
+    assert second_result.exit_code == 0, second_result.output
+    second = store.load_review_session()
+    assert second is not None and second.uid != first.uid
+    assert len(provider.calls) == 2
+    assert store.load_review_session_history(first.uid).uid == first.uid
+
+    exact_retry = runner.invoke(
+        app,
+        ["review", "ambiguities", "--context", second_context.name, "--snapshot"],
+    )
+    assert exact_retry.exit_code == 0, exact_retry.output
+    assert store.load_review_session().uid == second.uid
+    assert len(provider.calls) == 2
+
+    historical = runner.invoke(
+        app,
+        ["review", "ambiguities", "--session", first.uid, "--snapshot"],
+    )
+    assert historical.exit_code == 0, historical.output
+    assert "no actionable ambiguity findings" in historical.output
+    assert store.load_review_session().uid == second.uid
+
+    explicit_new = runner.invoke(
+        app,
+        [
+            "review",
+            "ambiguities",
+            "--context",
+            second_context.name,
+            "--new",
+            "--snapshot",
+        ],
+    )
+    assert explicit_new.exit_code == 0, explicit_new.output
+    third = store.load_review_session()
+    assert third is not None and third.uid != second.uid
+    assert len(provider.calls) == 3
+    assert {session.uid for session in store.list_review_sessions()} == {
+        first.uid,
+        second.uid,
+        third.uid,
+    }

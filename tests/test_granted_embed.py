@@ -194,6 +194,47 @@ def test_context_reference_keeps_revoked_granted_context_edge_opaque(
     assert tuple(retained_edge.iter_items()) == ()
 
 
+def test_recursive_list_and_show_open_attached_read_projection(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+) -> None:
+    store, _authority, workspace, _advisor, advice, _grant = _fixture(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+
+    direct_list = runner.invoke(app, ["list", "--direct", workspace.name])
+    recursive_list = runner.invoke(
+        app,
+        ["list", "--recursive", workspace.name],
+    )
+    recursive_show = runner.invoke(
+        app,
+        ["show", "--recursive", "--context", workspace.name],
+    )
+    mixed_copy = runner.invoke(
+        app,
+        ["list", "--recursive", "--copy", workspace.name],
+    )
+
+    assert direct_list.exit_code == 0, direct_list.output + direct_list.stderr
+    assert advice.content not in direct_list.output
+    assert recursive_list.exit_code == 0, recursive_list.output + recursive_list.stderr
+    assert advice.content in recursive_list.output
+    assert recursive_show.exit_code == 0, recursive_show.output + recursive_show.stderr
+    assert "Contexts 2" in recursive_show.output
+    assert "Context: advisor" in recursive_show.output
+    assert advice.content in recursive_show.output
+    assert "advisor/private" in recursive_show.output
+    assert "Concealed review note." not in recursive_list.output
+    assert "Concealed review note." not in recursive_show.output
+    assert mixed_copy.exit_code == 1
+    assert "mixed local and granted recursive list" in mixed_copy.stderr
+    assert _advisor.uid not in store.load_direct(workspace.name).memories
+
+
 def test_live_context_embed_does_not_cross_nested_read_only_override(
     isolated_store,
     tmp_path,
@@ -244,6 +285,112 @@ def test_live_context_embed_does_not_cross_nested_read_only_override(
     assert [
         item.content for item in resolved.iter_items() if isinstance(item, Memory)
     ] == [advice.content]
+
+
+def test_recursive_find_and_search_open_attached_read_projection(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+) -> None:
+    store, authority, workspace, _advisor, advice, grant = _fixture(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+    update_authority_grant(
+        grant.uid,
+        permissions=("READ", "EMBED", "DERIVE", "COMBINE"),
+    )
+    unrelated_workspace = ops.init("unrelated-workspace")
+    store.save(unrelated_workspace)
+    unrelated_advisor = ops.init("unrelated-advisor")
+    ops.add(unrelated_advisor, "Unrelated authority-only review secret.")
+    authority.save(unrelated_advisor)
+    create_authority_grant(
+        authority_name="advisor-authority",
+        grantee_name=AUTHORING_PROFILE_NAME,
+        resource_name=unrelated_advisor.name,
+        attachment_name=unrelated_workspace.name,
+        public_name=unrelated_advisor.name,
+        permissions=("READ", "EMBED", "DERIVE", "COMBINE"),
+        recursive=True,
+    )
+
+    literal_direct = runner.invoke(
+        app,
+        ["find", "evidence-backed", "--direct", "--context", workspace.name],
+    )
+    literal_recursive = runner.invoke(
+        app,
+        ["find", "evidence-backed", "--recursive", "--context", workspace.name],
+    )
+
+    class Provider:
+        def __init__(self) -> None:
+            self.payloads: list[dict[str, object]] = []
+
+        def complete(self, prompt, *, operation, output_schema=None):
+            assert operation == "search"
+            payload = json.loads(prompt.split("FIND PAYLOAD:\n", 1)[1])
+            self.payloads.append(payload)
+            matches = [
+                {"candidate_id": candidate["candidate_id"]}
+                for candidate in payload["candidates"]
+                if "evidence-backed" in candidate.get("content", "")
+            ]
+            return json.dumps(
+                {
+                    "matches": matches,
+                    "related_query": "",
+                    "related_matches": [],
+                }
+            )
+
+    provider = Provider()
+    monkeypatch.setattr(
+        "memcommit.commands.find.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+    semantic_direct = runner.invoke(
+        app,
+        [
+            "search",
+            "evidence-backed",
+            "--direct",
+            "--context",
+            workspace.name,
+        ],
+    )
+    semantic_recursive = runner.invoke(
+        app,
+        [
+            "search",
+            "evidence-backed",
+            "--recursive",
+            "--context",
+            workspace.name,
+        ],
+    )
+
+    assert literal_direct.exit_code == 0, literal_direct.output
+    assert "MATCHED 0" in literal_direct.output
+    assert literal_recursive.exit_code == 0, literal_recursive.output
+    assert advice.content in literal_recursive.output
+    assert semantic_direct.exit_code == 0, (
+        semantic_direct.output + semantic_direct.stderr
+    )
+    assert advice.content not in semantic_direct.output
+    assert semantic_recursive.exit_code == 0, (
+        semantic_recursive.output + semantic_recursive.stderr
+    )
+    assert advice.content in semantic_recursive.output
+    assert len(provider.payloads) == 2
+    direct_payload_text = json.dumps(provider.payloads[0])
+    payload_text = json.dumps(provider.payloads[1])
+    assert advice.content not in direct_payload_text
+    assert advice.content in payload_text
+    assert "Concealed review note." not in payload_text
+    assert "Unrelated authority-only review secret." not in payload_text
 
 
 def test_granted_embed_revocation_fails_recursive_load_but_keeps_pointer(

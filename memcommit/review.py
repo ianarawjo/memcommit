@@ -507,6 +507,18 @@ class ReviewSession:
     def answered_count(self) -> int:
         return sum(response.answered for response in self.responses.values())
 
+    @property
+    def terminal(self) -> bool:
+        """Return whether this review has no unanswered findings left.
+
+        Review is deliberately non-applying, so answering every item (or
+        receiving an empty finding set) is its only terminal boundary.  A
+        terminal record remains evidence; it must not keep owning the mutable
+        active-review slot when a distinct frame is requested later.
+        """
+
+        return self.answered_count == len(self.items)
+
 
 def _reading_labels(
     interpretation: ReviewInterpretation,

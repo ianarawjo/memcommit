@@ -1,0 +1,14 @@
+[38;2;139;213;255;1mTERMINAL SESSION ROTATION · VERIFICATION[0m
+PTY 180 52
+PROFILE · ISOLATED CAPTURE STORES
+
+[38;2;139;213;202;1mPASS[0m · ATOMIZE · retained terminal UID + active UID + cancelled New is non-mutating
+[38;2;139;213;202;1mPASS[0m · MELD · retained terminal UID + active UID + cancelled New is non-mutating
+[38;2;139;213;202;1mPASS[0m · REVIEW AMBIGUITIES · old UID reopens its one-Memory snapshot read-only
+
+EXACT RETRY · resumes the matching UID without a provider call
+DISTINCT TERMINAL FOLLOW-UP · rotates and retains the prior UID
+SAME-FRAME REANALYSIS · explicit --refresh / --restart / --new
+HISTORICAL REVIEW · immutable source snapshot, read-only by UID
+
+[38;2;166;218;149;1mVERIFICATION COMPLETE · 3/3 OPERATION ADAPTERS[0m

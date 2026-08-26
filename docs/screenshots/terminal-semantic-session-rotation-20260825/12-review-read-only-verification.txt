@@ -1,0 +1,12 @@
+Review saved: 1/1 items answered.                                                                                                                                                   
+No Memory changes applied. No checkpoint created.                                                                                                                                   
+                                                                                                                                                                                    
+RETAINED AMBIGUITY REVIEW · READ-ONLY VERIFICATION                                                                                                                                  
+  RETAINED UID · 4363c244-732e-47c3-9471-736f6abcb9a4                                                                                                                               
+  ACTIVE UID · f75a8d01-f90a-45d6-95c4-da316dd8114c                                                                                                                                 
+  DISTINCT UIDS · True                                                                                                                                                              
+  RETAINED ANSWERS · 1/1                                                                                                                                                            
+  RETAINED SOURCE MEMORIES · 1                                                                                                                                                      
+  ACTIVE SOURCE MEMORIES · 2                                                                                                                                                        
+  PROVIDER CALLS · 0                                                                                                                                                                
+  STORE UNCHANGED BY HISTORY VIEW · True

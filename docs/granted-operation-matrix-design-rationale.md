@@ -50,9 +50,9 @@ permission set while the registry lock remains held through the write.
 
 - A more-specific QUERY-only grant is never converted into READ evidence by a
   recursive parent operation.
-- Temporal Find, generic checkpoint browsing, log, and revert do not use a READ
-  grant because authority checkpoint history is a separate capability that the
-  grant schema does not expose.
+- Search uses only the current READ projection. Generic checkpoint browsing,
+  Log, and Revert do not use a READ grant because authority checkpoint history
+  is a separate capability that the grant schema does not expose.
 - Context lifecycle and pointer operations (`init`, `branch`, Context `delete`,
   Context `rename`, `embed`, and `reference`) do not treat an authority Context
   as participant-owned topology. A cross-Profile merge copies values rather

@@ -1,4 +1,5 @@
 """Provider selection and transport contracts independent of live services."""
+
 from __future__ import annotations
 
 import json
@@ -14,6 +15,7 @@ from memcommit.query_provider import QueryProviderError
 from memcommit.semantic_provider import (
     OllamaProvider,
     OpenRouterProvider,
+    connect_operation_provider,
     connect_provider,
 )
 
@@ -104,7 +106,10 @@ def test_ollama_completion_sends_schema_as_format_and_trusted_instruction():
     messages = request_payload["messages"]
     assert messages[-1] == {"role": "user", "content": "synthetic input"}
     assert "OUTPUT JSON SCHEMA" in messages[0]["content"]
-    assert json.dumps(schema, separators=(",", ":"), sort_keys=True) in messages[0]["content"]
+    assert (
+        json.dumps(schema, separators=(",", ":"), sort_keys=True)
+        in messages[0]["content"]
+    )
 
 
 def test_ollama_truncated_completion_fails_closed():
@@ -261,3 +266,22 @@ def test_connect_codex_provider_uses_the_reported_semantic_timeout(monkeypatch):
     connect_provider(CODEX_CHATGPT_PROVIDER, config=CodexConfig(), env={})
 
     assert captured["timeout"] == 321.0
+
+
+def test_study_connection_forwards_the_pinned_fast_tier(monkeypatch):
+    captured = {}
+
+    monkeypatch.setattr(
+        "memcommit.semantic_provider.CodexChatGPTProvider.connect",
+        lambda **kwargs: captured.update(kwargs) or object(),
+    )
+
+    _provider, policy = connect_operation_provider(
+        "query",
+        mode="STUDY_PARTICIPANT",
+        config=_FakeConfig(),
+        env={},
+    )
+
+    assert policy.service_tier == "fast"
+    assert captured["service_tier"] == "fast"

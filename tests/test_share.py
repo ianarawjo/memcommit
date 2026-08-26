@@ -13,11 +13,14 @@ from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 from memcommit.cli import app
+from memcommit.commands.share_flow import choose_share_endpoint
 from memcommit.commands.share_viewer import ShareViewerReceipt
 from memcommit.commands.share_viewer import (
     run_share_unavailable_viewer,
     run_share_viewer,
     share_context_text,
+    share_exact_command_text,
+    share_memories_text,
 )
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.session_workbench_navigation import SessionWorkbenchNavigation
@@ -219,7 +222,7 @@ def test_bare_share_opens_tty_flow_and_sends_selected_context(
 
     monkeypatch.setattr(share_command, "_interactive_terminal", lambda: True)
 
-    def send(preview):
+    def send(preview, **_kwargs):
         seen["preview"] = preview
         return ShareViewerReceipt(action="send")
 
@@ -232,6 +235,88 @@ def test_bare_share_opens_tty_flow_and_sends_selected_context(
     preview = seen["preview"]
     assert preview.source_context == source.name
     delivered = receiver_store.load_direct(preview.receiver_context)
+    assert [memory.content for memory in delivered.iter_items()] == [
+        "Use a text reminder.",
+        "Avoid appointments before 09:00.",
+    ]
+
+
+def test_viewer_endpoint_browse_refreezes_and_applies_the_updated_command(
+    tmp_path,
+    monkeypatch,
+):
+    _sender_store, receiver_store, source, receiver = _study_share_topology(
+        tmp_path,
+        monkeypatch,
+    )
+    endpoint = Context(
+        uid=str(uuid.uuid4()),
+        name="remote/research/archive-agent",
+    )
+    receiver_store.create_context(endpoint)
+    registry = load_profile_registry()
+    original = registry.grants[0]
+    alternate = AuthorityGrant(
+        uid=str(uuid.uuid4()),
+        revision=1,
+        authority_profile_uid=receiver.uid,
+        grantee_profile_uid=registry.active.uid,
+        attachment_context_uid=original.attachment_context_uid,
+        attachment_context_name=original.attachment_context_name,
+        resource_kind=GRANT_RESOURCE_CONTEXT_TREE,
+        resource_uid=endpoint.uid,
+        resource_name=endpoint.name,
+        public_name="research/archive-agent",
+        permissions=("SHARE",),
+        contexts=(GrantContextBinding(uid=endpoint.uid, name=endpoint.name),),
+    )
+    updated_registry = ProfileRegistry(
+        generation=registry.generation + 1,
+        active_uid=registry.active_uid,
+        profiles=registry.profiles,
+        grants=registry.grants + (alternate,),
+    )
+    profile_registry_file().write_text(
+        json.dumps(updated_registry.to_dict()) + "\n",
+        encoding="utf-8",
+    )
+
+    share_command = importlib.import_module("memcommit.commands.share")
+    share_flow = importlib.import_module("memcommit.commands.share_flow")
+    share_viewer = importlib.import_module("memcommit.commands.share_viewer")
+    original_preview = prepare_share(source.name, "government/healthcare-agent")
+    seen = []
+
+    monkeypatch.setattr(share_command, "_interactive_terminal", lambda: True)
+    monkeypatch.setattr(
+        share_flow,
+        "choose_share_preview",
+        lambda *_args, **_kwargs: original_preview,
+    )
+    monkeypatch.setattr(
+        share_flow,
+        "choose_share_endpoint",
+        lambda **_kwargs: "research/archive-agent",
+    )
+
+    def review(preview, **_kwargs):
+        seen.append(preview)
+        return ShareViewerReceipt(
+            action="browse_endpoint" if len(seen) == 1 else "send"
+        )
+
+    monkeypatch.setattr(share_viewer, "run_share_viewer", review)
+
+    result = runner.invoke(app, ["share", source.name])
+
+    assert result.exit_code == 0, result.stderr or result.output
+    assert [preview.endpoint for preview in seen] == [
+        "government/healthcare-agent",
+        "research/archive-agent",
+    ]
+    assert "To: research/archive-agent" in result.output
+    assert seen[0].consent_digest != seen[1].consent_digest
+    delivered = receiver_store.load_direct(seen[1].receiver_context)
     assert [memory.content for memory in delivered.iter_items()] == [
         "Use a text reminder.",
         "Avoid appointments before 09:00.",
@@ -302,7 +387,7 @@ def test_unavailable_share_surface_is_read_only_and_closable():
     assert receipt.action == "close"
 
 
-def test_share_viewer_presents_context_then_memories_and_only_send_action(
+def test_share_viewer_presents_from_to_memories_and_exact_apply(
     tmp_path,
     monkeypatch,
 ):
@@ -316,12 +401,21 @@ def test_share_viewer_presents_context_then_memories_and_only_send_action(
     assert "CONTEXT TO SEND" in context_text
     assert source.name in context_text
     assert "MEMORIES · 2" in context_text
-    assert "TO · government/healthcare-agent" in context_text
+    assert "government/healthcare-agent" not in context_text
     assert "CONSENT DIGEST" not in context_text
+    memory_text = share_memories_text(preview)
+    assert "M1" not in memory_text
+    for memory in preview.memories:
+        assert memory.uid in memory_text
+        assert memory.content in memory_text
+    assert share_exact_command_text(preview) == (
+        "mem share local/personal-memory/severed --direct "
+        "--to government/healthcare-agent"
+    )
 
     with create_pipe_input() as pipe_input:
-        # CONTEXT -> MEMORIES -> ACTION, then explicitly send.
-        pipe_input.send_text("\t\t\r")
+        # FROM -> TO -> MEMORIES -> APPLY, then explicitly apply.
+        pipe_input.send_text("\t\t\t\r")
         receipt = run_share_viewer(
             preview,
             app_input=pipe_input,
@@ -332,7 +426,56 @@ def test_share_viewer_presents_context_then_memories_and_only_send_action(
     assert receipt.action == "send"
 
 
-def test_share_context_moves_between_stable_semantic_sections(
+def test_share_endpoint_surface_enter_requests_browse_without_sending(
+    tmp_path,
+    monkeypatch,
+):
+    _sender_store, _receiver_store, source, _receiver = _study_share_topology(
+        tmp_path,
+        monkeypatch,
+    )
+    preview = prepare_share(source.name, "government/healthcare-agent")
+    navigation = SessionWorkbenchNavigation()
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\t\r")
+        receipt = run_share_viewer(
+            preview,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+            navigation=navigation,
+        )
+
+    assert receipt.action == "browse_endpoint"
+    assert navigation.pane == "responses"
+
+
+def test_explicit_endpoint_browse_opens_even_for_one_available_endpoint(
+    tmp_path,
+    monkeypatch,
+):
+    _study_share_topology(tmp_path, monkeypatch)
+    seen = {}
+
+    def choose(names, **kwargs):
+        seen["names"] = names
+        seen["current"] = kwargs["current"]
+        return names[0]
+
+    selected = choose_share_endpoint(
+        current="government/healthcare-agent",
+        chooser=choose,
+    )
+
+    assert selected == "government/healthcare-agent"
+    assert seen == {
+        "names": ("government/healthcare-agent",),
+        "current": "government/healthcare-agent",
+    }
+
+
+def test_share_source_boundary_moves_to_the_separate_endpoint_surface(
     tmp_path,
     monkeypatch,
 ):
@@ -354,7 +497,8 @@ def test_share_context_moves_between_stable_semantic_sections(
         )
 
     assert receipt.action == "close"
-    assert navigation.section_uid == "SHARE:DESTINATION"
+    assert navigation.section_uid == "SHARE:CONTEXT"
+    assert navigation.pane == "responses"
 
 
 def test_share_arrow_boundaries_cross_surfaces_and_tab_preserves_memory_cursor(
@@ -369,8 +513,8 @@ def test_share_arrow_boundaries_cross_surfaces_and_tab_preserves_memory_cursor(
     navigation = SessionWorkbenchNavigation()
 
     with create_pipe_input() as pipe_input:
-        # CONTEXT title -> destination -> MEMORIES first -> MEMORIES second.
-        # Tab enters ACTION and Shift-Tab must restore the second Memory.
+        # FROM -> TO -> MEMORIES first -> MEMORIES second.
+        # Tab enters APPLY and Shift-Tab must restore the second Memory.
         pipe_input.send_text("\x1b[B\x1b[B\x1b[B\t\x1b[Zq")
         receipt = run_share_viewer(
             preview,
@@ -381,12 +525,12 @@ def test_share_arrow_boundaries_cross_surfaces_and_tab_preserves_memory_cursor(
         )
 
     assert receipt.action == "close"
-    assert navigation.section_uid == "SHARE:DESTINATION"
+    assert navigation.section_uid == "SHARE:CONTEXT"
     assert navigation.pane == "items"
     assert navigation.row_index == 1
 
 
-def test_share_arrow_boundaries_reach_action_before_enter_sends(
+def test_share_arrow_boundaries_reach_apply_before_enter_sends(
     tmp_path,
     monkeypatch,
 ):
@@ -397,7 +541,7 @@ def test_share_arrow_boundaries_reach_action_before_enter_sends(
     preview = prepare_share(source.name, "government/healthcare-agent")
 
     with create_pipe_input() as pipe_input:
-        # Two Context stops, two Memory rows, then the ACTION Surface.
+        # FROM, TO, two Memory rows, then the APPLY Surface.
         pipe_input.send_text("\x1b[B\x1b[B\x1b[B\x1b[B\r")
         receipt = run_share_viewer(
             preview,
@@ -409,7 +553,7 @@ def test_share_arrow_boundaries_reach_action_before_enter_sends(
     assert receipt.action == "send"
 
 
-def test_share_enter_outside_action_does_not_send(
+def test_share_enter_outside_to_and_apply_does_not_send(
     tmp_path,
     monkeypatch,
 ):
@@ -420,7 +564,8 @@ def test_share_enter_outside_action_does_not_send(
     preview = prepare_share(source.name, "government/healthcare-agent")
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\r\t\rq")
+        # Enter is inert in FROM and MEMORIES. TO and APPLY own activation.
+        pipe_input.send_text("\r\t\t\rq")
         receipt = run_share_viewer(
             preview,
             app_input=pipe_input,
@@ -756,14 +901,18 @@ def test_recursive_share_viewer_names_every_context_in_the_consent_unit(
 
     lines = rendered.splitlines()
     assert lines[0].endswith("· 4 CONTEXTS · 4 MEMORIES")
-    assert len(lines) == len(preview.contexts) + 2
+    assert len(lines) == len(preview.contexts) + 1
     assert "" not in lines
     for index, context in enumerate(preview.contexts, start=1):
         assert lines[index].startswith(f"C{index} · {context.source_context} · ")
         assert lines[index].endswith((" Memory", " Memories"))
+    assert share_exact_command_text(preview) == (
+        "mem share local/personal-memory/severed --recursive "
+        "--to government/healthcare-agent"
+    )
 
 
-def test_recursive_share_compact_context_roster_scrolls_to_destination(
+def test_recursive_share_compact_context_roster_crosses_to_endpoint_surface(
     tmp_path,
     monkeypatch,
 ):
@@ -796,7 +945,8 @@ def test_recursive_share_compact_context_roster_scrolls_to_destination(
         )
 
     assert receipt.action == "close"
-    assert navigation.section_uid == "SHARE:DESTINATION"
+    assert navigation.section_uid == f"SHARE:CONTEXT:{len(preview.contexts)}"
+    assert navigation.pane == "responses"
 
 
 def test_incomplete_recursive_cli_keeps_range_through_tty_review(
@@ -813,7 +963,7 @@ def test_incomplete_recursive_cli_keeps_range_through_tty_review(
     seen = {}
     monkeypatch.setattr(share_command, "_interactive_terminal", lambda: True)
 
-    def close(preview):
+    def close(preview, **_kwargs):
         seen["preview"] = preview
         return ShareViewerReceipt(action="close")
 

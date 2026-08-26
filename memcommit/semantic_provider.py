@@ -565,6 +565,7 @@ def connect_operation_provider(
                 timeout=resolved.timeout_seconds,
                 model=resolved.model,
                 reasoning_effort=resolved.reasoning_effort,
+                service_tier=resolved.service_tier,
             )
         elif resolved.provider_id == OLLAMA_PROVIDER:
             if not resolved.model:
@@ -616,7 +617,7 @@ def _connect_provider(
     config: Config | None = None,
     env: dict[str, str] | None = None,
 ) -> SemanticProvider:
-    """Connect after the caller has opened the content-free audit phase."""
+    """Connect after the caller has opened the provider-audit phase."""
     settings = config or Config()
     environment = os.environ if env is None else env
     if provider_id == CODEX_CHATGPT_PROVIDER:

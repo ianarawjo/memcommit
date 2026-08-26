@@ -1,0 +1,9 @@
+$ mem update --from practice/rulse --to capture/fruit-rules
+PTY 180 52
+TTY FLAGS · stdin=True stdout=True
+Update error: Context 'practice/rulse' does not exist.
+TYPO-SAFE VERIFICATION
+  COMMAND EXIT · 1
+  PROVIDER CALLS · 0
+  TARGET BYTES UNCHANGED · True
+  STAGED UPDATE · None

@@ -103,7 +103,7 @@ def _strict_value(value: object) -> bool:
     if value is None:
         return False
     if type(value) is not bool:
-        raise AgentRequestError("strict must be a boolean.")
+        raise AgentRequestError("strict must be boolean.")
     return value
 
 
@@ -164,8 +164,8 @@ def _serialize(result: ElaborateProposal) -> JsonObject:
             for item in result.cases
         ],
         "origin": result.origin,
-        "quality_policy": result.quality_policy,
         "verification": result.verification,
+        "quality_policy": result.quality_policy,
         "target_context": (
             None
             if result.target_context_name is None
@@ -273,7 +273,7 @@ def elaborate_agent_tool_schema() -> JsonObject:
                         "type": "integer",
                         "minimum": 1,
                     },
-                    "strict": {"type": "boolean", "default": False},
+                    "strict": {"type": "boolean"},
                 },
             }
         )
@@ -291,7 +291,7 @@ def elaborate_agent_tool_schema() -> JsonObject:
                         "type": "integer",
                         "minimum": 1,
                     },
-                    "strict": {"type": "boolean", "default": False},
+                    "strict": {"type": "boolean"},
                 },
             }
         )
@@ -301,9 +301,9 @@ def elaborate_agent_tool_schema() -> JsonObject:
             "Propose unverified Rules from a Goal or Cases from Rules, using "
             "inline input or one exact Ground; omission of number requests exactly "
             "3 proposals, any supplied number must be a positive exact count with "
-            "no fixed maximum, and nothing is saved or accepted. Rules-to-Cases "
-            "is best-effort by default; strict=true adds independent Conformance "
-            "and Fit acceptance gates."
+            "no fixed maximum, strict defaults false and gates generated Cases "
+            "through independent Conformance/Fit when true, and nothing is saved "
+            "or accepted."
         ),
         "parameters": {"type": "object", "oneOf": branches},
     }

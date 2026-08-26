@@ -84,6 +84,13 @@ Creation:
 5. creates one initial checkpoint per Context; and
 6. does not read or change the process-global current Context.
 
+The initial Goal is not a scalar manifest field. `--goal` and `--set-goal`
+resolve the shared Goal operand as one existing Context Memory, one direct
+Memory, or process-local text, then materialize exactly one new ordinary
+Memory in `/goals`. The checkpoint retains the copied operand's exact
+provenance, while the stored Goal remains independent rather than becoming a
+live alias or synchronization link.
+
 Opening, previewing, or typing a name is not creation. Terminal creation must
 retain a separately approved exact action before invoking this application
 boundary. The creation unit is the workspace genesis and is not removable by
@@ -186,6 +193,13 @@ The selected boundaries are:
 - Fit, Distill, Elaborate, and other semantic operations freeze only the exact
   Memory and reference inputs they actually disclose or consume.
 
+Distill and Elaborate proposals do not mutate the workspace by default. Their
+explicit `--adopt` forms add the complete reviewed proposal to `/rules` or
+`/examples` all-or-none, advance the manifest once, retain the semantic
+analysis digest, and create one Ground-local command unit. Proposal generation
+continues to stale only on consumed input; adoption also freezes the
+whole-Ground revision and destination lane because it is the mutation boundary.
+
 Cache and receipt validity therefore follows operation-local input identity,
 not the mere existence of an unrelated workspace descendant or checkpoint.
 
@@ -203,6 +217,9 @@ Undo restores every Context touched by the selected Ground command as one
 command unit. It never restores an external source merely because a relation,
 reference, Embed, Grant, or branch points to that source. Drift after the
 selected command fails closed rather than overwriting a later external edit.
+
+The shared operand, projection, and adoption rationale is recorded in
+[`goal-focus-operand-design-rationale.md`](goal-focus-operand-design-rationale.md).
 
 ## Presentation and component ownership
 

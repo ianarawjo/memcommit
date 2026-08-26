@@ -1,0 +1,36 @@
+{
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple init",
+  "pty": {
+    "columns": 180,
+    "rows": 52,
+    "TERM": "xterm-256color",
+    "COLORTERM": "truecolor",
+    "NO_COLOR": "removed"
+  },
+  "profile": "sixworld-v2-template",
+  "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+  "entry_current_context": "recorded by ledger starting_state",
+  "steps": [
+    {
+      "step": 1,
+      "screenshot": "worlds/a-is-apple/screenshots/admin/092-init-5-01-entry.png",
+      "docs_copy": "docs/screenshots/six-world-audit-v2-20260825/a-is-apple-admin/092-init-5-01-entry.png",
+      "preceding_keys_or_text": "none",
+      "visible_state": "entry",
+      "durable_state_mutated_at_step": false
+    },
+    {
+      "step": 2,
+      "screenshot": "worlds/a-is-apple/screenshots/admin/092-init-5-02-cancel-or-failure-receipt.png",
+      "docs_copy": "docs/screenshots/six-world-audit-v2-20260825/a-is-apple-admin/092-init-5-02-cancel-or-failure-receipt.png",
+      "preceding_keys_or_text": "Enter/Escape then process exit",
+      "visible_state": "cancel-or-failure-receipt",
+      "durable_state_mutated_at_step": false
+    }
+  ],
+  "capture_finalization": {
+    "renderer": "actual color-preserving cumulative PTY byte-stream replay",
+    "visible_prefix_count": 3,
+    "limitation": "Keys were pre-buffered before the frozen launcher completed on some attempts. When only one visible prompt-toolkit flush survived, multiple ordered labels refer to that same actual visible frame; no synthetic state was invented."
+  }
+}

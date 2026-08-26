@@ -59,6 +59,13 @@ creation checkpoint after copying that inherited lineage, so Log shows the
 recoverable Branch command without reclassifying Source commands. `init` is a
 creation baseline, remains visible, and is not counted as a command.
 
+The count therefore has a deliberately narrower unit than the number of
+visible history rows: a newly created Context followed by one Distill shows
+both the `created` baseline and the Distill row, while its annotation says
+`1 direct command`. This is also independent from Diff's Memory-disposition
+summary for one selected checkpoint. A value such as `1 edited` in Diff counts
+items changed by that transition, not creation or semantic command rows.
+
 Descendant counts continue to mean commands directly owned by lexical child
 Contexts. Inherited commands are not added to either the current Context's
 direct count or an ancestor's descendant count. Grant attachment metadata is

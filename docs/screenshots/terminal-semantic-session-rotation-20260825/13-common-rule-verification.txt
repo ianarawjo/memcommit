@@ -1,0 +1,14 @@
+TERMINAL SESSION ROTATION · VERIFICATION                                                                                                                                            
+PTY 180 52                                                                                                                                                                          
+PROFILE · ISOLATED CAPTURE STORES                                                                                                                                                   
+                                                                                                                                                                                    
+PASS · ATOMIZE · retained terminal UID + active UID + cancelled New is non-mutating                                                                                                 
+PASS · MELD · retained terminal UID + active UID + cancelled New is non-mutating                                                                                                    
+PASS · REVIEW AMBIGUITIES · old UID reopens its one-Memory snapshot read-only                                                                                                       
+                                                                                                                                                                                    
+EXACT RETRY · resumes the matching UID without a provider call                                                                                                                      
+DISTINCT TERMINAL FOLLOW-UP · rotates and retains the prior UID                                                                                                                     
+SAME-FRAME REANALYSIS · explicit --refresh / --restart / --new                                                                                                                      
+HISTORICAL REVIEW · immutable source snapshot, read-only by UID                                                                                                                     
+                                                                                                                                                                                    
+VERIFICATION COMPLETE · 3/3 OPERATION ADAPTERS

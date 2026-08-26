@@ -89,18 +89,20 @@ through the same CLI boundary.
 
 The CLI positional operand now auto-types as an existing Context locator or a
 direct item. `mem show task-1` therefore opens Context `task-1` even when the
-current Context is `practice/greetings`; `mem show UID` finds one unique
-ordinary-local direct owner; and `mem show CONTEXT:UID` states the owner
-explicitly. For a bare UUID prefix shorter than the normal eight-character
-display token, Show first preserves an exact readable Context with that name.
-When no such Context exists, it searches the same complete ordinary-local
-direct-item catalog as longer UID prefixes, requires one unique owner, and
-never prefers a match merely because it is current. This keeps `mem show 08df`
-consistent with direct-Memory operations without making a valid short
-hexadecimal Context name unreachable. Non-UUID text preserves the established
-current direct-name route for embedded Context and query-view rows, then falls
-back to Context lookup. `--context` remains the explicit disambiguator and the
-qualified READ route. The CLI normalizes every form into the same `ShowRequest`;
+current Context is `practice/greetings`; `mem show UID` first finds one unique
+current ordinary Memory across local and effectively READ-granted public
+owners; and `mem show CONTEXT:UID` states the owner explicitly. This makes a
+UID printed by Profile-wide Find/List/Search a directly usable read-only
+operand. Local and granted candidates have equal standing: ambiguity lists
+their public `CONTEXT:UID` coordinates instead of preferring current. For a
+bare UUID prefix shorter than the normal eight-character display token, Show
+first preserves an exact readable Context with that name. When no such Context
+or current readable Memory exists, it searches the complete ordinary-local
+direct-item catalog, which retains MemoryRef, embedded-Context, and query-row
+selection without opening query-only content. Non-UUID text preserves the
+established current direct-name route for embedded Context and query-view rows,
+then falls back to Context lookup. `--context` remains the explicit
+disambiguator. The CLI normalizes every form into the same `ShowRequest`;
 the Python and agent contracts deliberately retain separate `selector` and
 `context_name` fields instead of exposing shell-oriented overloading.
 
@@ -130,8 +132,9 @@ distinguish a Memory from an opaque query view.
 - Show does not grant QUERY execution; the separate Query operation owns that
   provider and publication lifecycle.
 - Show does not search for a selector across recursive Contexts or add history
-  semantics. Bare UUID-shaped discovery finds an exact direct owner before the
-  Show request is constructed; it is not recursive scope traversal.
+  semantics. Bare UUID-shaped discovery scans frozen Profile-readable current
+  direct owners before the Show request is constructed; it does not follow
+  Embed edges, infer lexical reach, or enumerate QUERY-only sources.
 - Show does not cache live Context content; each call reads its authorized
   current Store snapshot.
 - The public and agent result can legitimately contain complete readable

@@ -1,53 +1,0 @@
-PTY 180 52
-[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m MEM PROVIDER · PROFILE-AWARE ROUTING[0m
-[0m PROFILE · provider-study · STUDY · LOCKED[0m
-[0m┌────────────────────────────────────────────────────────────────| STUDY PROVIDER ROUTES · LOCKED · NOT CONTACTED |────────────────────────────────────────────────────────────────[179C┐[0m
-[0m│[0;38;5;231mDEFAULT · codex_chatgpt · model gpt-5.6-sol · reasoning none · timeout 600s[0m                                                                                                       [179C│[0m
-[0m│[0;38;5;231mSOURCE · study_policy[0m                                                                                                                                                             [179C│[0m
-[0m│                                                                                                                                                                                  [179C│[0m
-[0m│[0;38;5;231mOPERATION ROUTES[0m                                                                                                                                                                  [179C│[0m
-[0m│[0;38;5;231msearch           · codex_chatgpt · model gpt-5.6-terra · reasoning low · timeout 600s[0m                                                                                             [179C│[0m
-[0m│[0;38;5;231mquery            · codex_chatgpt · model gpt-5.6-sol · reasoning none · timeout 600s[0m                                                                                              [179C│[0m
-[0m│[0;38;5;231mhelp             · codex_chatgpt · model gpt-5.6-sol · reasoning none · timeout 600s[0m                                                                                              [179C│[0m
-[0m│[0;38;5;231mforget           · codex_chatgpt · model gpt-5.6-sol · reasoning none · timeout 600s[0m                                                                                              [179C│[0m
-[0m│[0;38;5;231mcompare_contexts · codex_chatgpt · model gpt-5.6-sol · reasoning none · timeout 900s[0m                                                                                              [179C│[0m
-[0m│[0;38;5;231mmeld_contexts    · codex_chatgpt · model gpt-5.6-sol · reasoning none · timeout 900s[0m                                                                                              [179C│[0m
-[0m│                                                                                                                                                                                  [179C│[0m
-[0m│[0;38;5;231mPINNED STUDY POLICY[0m                                                                                                                                                               [179C│[0m
-[0m│[0;38;5;231mversion · study-provider-config-v1[0m                                                                                                                                                [179C│[0m
-[0m│[0;38;5;231mdigest  · 9faa8cea3634d393e3b2f724077b1db14f8628ee7243de2ab75c93d22c816702[0m                                                                                                        [179C│[0m
-[0m│                                                                                                                                                                                  [179C│[0m
-[0m│                                                                                                                                                                                  [179C│[0m
-[0m│                                                                                                                                                                                  [179C│[0m
-[0m│                                                                                                                                                                                  [179C│[0m
-[0m│                                                                                                                                                                                  [179C│[0m
-[0m│                                                                                                                                                                                  [179C│[0m
-[0m│                                                                                                                                                                                  [179C│[0m
-[0m│                                                                                                                                                                                  [179C│[0m
-[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
-[0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ TO DO · READ-ONLY VERIFICATION ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
-[0;38;5;117;1m┃[0;38;5;231mProvider routing is fixed for Study reproducibility.[0m                                                                                                                              [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;231mSwitch to an ordinary Profile to edit routes.[0m                                                                                                                                     [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m                                                                                                                                                                                  [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m[ PRESS ENTER TO PROBE THE PINNED DEFAULT ROUTE ][0m                                                                                                                                 [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m                                                                                                                                                                                  [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
-[0m Enter/P probe pinned default · Esc/Q close · use mem profile to switch[0m
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-[0m [21A[C[0m

@@ -643,8 +643,8 @@ class TestHelp:
             "mem translate (show/save a default-English view of the current Context)"
         )
         assert help_inventory.COMMAND_FORMS["init-study"][:2] == (
-            "mem init-study (edit or generate a Study Profile name)",
-            "mem init-study [profile_name] (use an explicit Study Profile name)",
+            "mem init-study (initialize coffee-v1 with an edited or generated Profile name)",
+            "mem init-study [profile_name] (initialize coffee-v1 with an explicit Profile name)",
         )
         assert help_inventory.COMMAND_FORMS["checkout"][0] == (
             "mem checkout (enter the Git-style interactive Context picker)"
@@ -786,11 +786,11 @@ class TestHelp:
             }
             assert f"mem {command_name}" in selectable
 
-    def test_search_history_form_uses_the_temporal_query_contract(self):
+    def test_search_forms_do_not_advertise_implicit_history_routing(self):
         forms = help_inventory.COMMAND_FORMS["search"]
 
         assert not any("--history" in form for form in forms)
-        assert any('mem search "[temporal_query]"' in form for form in forms)
+        assert not any("temporal_query" in form for form in forms)
 
     def test_search_forms_expose_independent_multi_root_scope_axes(self):
         forms = help_inventory.COMMAND_FORMS["search"]
@@ -1465,7 +1465,7 @@ class TestList:
             < parent_memory_index
         )
 
-    def test_recursive_list_separates_sibling_context_blocks_only(
+    def test_list_separates_context_blocks_from_direct_memories(
         self,
         isolated_store,
     ):
@@ -1494,19 +1494,30 @@ class TestList:
             for index, line in enumerate(recursive_lines)
             if line.startswith("  VIA EMBED · [context ") and line.endswith("] beta")
         )
+        parent_memory_index = next(
+            index
+            for index, line in enumerate(recursive_lines)
+            if "[memory " in line and line.endswith("] Parent memory.")
+        )
         assert recursive_lines[alpha_index - 1] == ""
         assert recursive_lines[alpha_index - 2] != ""
         assert recursive_lines[beta_index - 1] == ""
         assert recursive_lines[beta_index + 1] != ""
-        assert "" not in recursive_lines[beta_index + 1 :]
+        assert recursive_lines[parent_memory_index - 1] == ""
         direct_lines = direct.output.splitlines()
         direct_beta_index = next(
             index
             for index, line in enumerate(direct_lines)
             if line.startswith("  VIA EMBED · [context ") and line.endswith("] beta")
         )
+        direct_parent_memory_index = next(
+            index
+            for index, line in enumerate(direct_lines)
+            if "[memory " in line and line.endswith("] Parent memory.")
+        )
         assert direct_lines[direct_beta_index - 1].startswith("  VIA EMBED · [context ")
         assert direct_lines[direct_beta_index - 1].endswith("] alpha")
+        assert direct_lines[direct_parent_memory_index - 1] == ""
 
     def test_recursive_long_option_matches_short_option(self, isolated_store):
         invoke("init", "child")
@@ -1689,6 +1700,57 @@ class TestRemove:
         result = invoke("remove", "deadbeef")
         assert result.exit_code == 1
         assert "Error" in result.stderr
+
+    def test_bare_uid_resolves_a_unique_item_outside_the_current_context(
+        self,
+        isolated_store,
+    ):
+        invoke("init", "rules")
+        invoke("add", "remove this mistaken Rule")
+        store = MemoryStore()
+        uid = next(iter(store.load_current().memories))
+        invoke("init", "values")
+
+        removed = invoke("remove", uid[:8])
+
+        assert removed.exit_code == 0
+        assert "Removed" in removed.output
+        assert uid not in store.load_direct("rules").memories
+        assert store.current_context_name() == "values"
+
+    def test_ambiguous_cross_context_uid_requires_context_qualification(
+        self,
+        isolated_store,
+    ):
+        from memcommit.context import Memory as Mem
+
+        store = MemoryStore()
+        first = ops.init("first")
+        first.add(
+            Mem(uid="aaaa1111-1111-1111-1111-111111111111", content="first")
+        )
+        second = ops.init("second")
+        second.add(
+            Mem(uid="aaaa2222-2222-2222-2222-222222222222", content="second")
+        )
+        store.create_context(first)
+        store.create_context(second)
+        store.set_current("second")
+
+        ambiguous = invoke("remove", "aaaa")
+
+        assert ambiguous.exit_code == 1
+        assert "multiple local matches (2)" in ambiguous.stderr
+        assert "first:aaaa1111-1111-1111-1111-111111111111" in ambiguous.stderr
+        assert "second:aaaa2222-2222-2222-2222-222222222222" in ambiguous.stderr
+        assert len(store.load_direct("first").memories) == 1
+        assert len(store.load_direct("second").memories) == 1
+
+        removed = invoke("remove", "aaaa", "--context", "first")
+
+        assert removed.exit_code == 0
+        assert not store.load_direct("first").memories
+        assert len(store.load_direct("second").memories) == 1
 
     def test_fails_on_ambiguous_prefix(self, isolated_store):
         from memcommit.context import Memory as Mem

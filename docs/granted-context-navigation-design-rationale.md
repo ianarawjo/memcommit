@@ -81,9 +81,9 @@ READ does not expose authority checkpoint history. Current-state `mem find`
 and the semantic quality operations (`dedun`, `find-ambiguities`, and
 `find-conflicts`) use the same bounded READ projection as listing: recursive
 Find includes READ-visible namespace descendants, while a more-specific
-QUERY-only override never becomes candidate evidence. Temporal Find fails
-closed with an explicit history-boundary error instead of opening the
-authority store's checkpoints. Query routing recovers the owned attachment
+QUERY-only override never becomes candidate evidence. Time-oriented Search
+wording remains inside this current projection and never opens the authority
+store's checkpoints. Query routing recovers the owned attachment
 behind a current READ-granted view so a
 participant may enter an advisor and still invoke the separately authorized
 proposal-guidelines query route.

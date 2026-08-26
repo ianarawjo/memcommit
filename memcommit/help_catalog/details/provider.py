@@ -22,8 +22,8 @@ PROVIDER_DETAILS = (
             OperationComparisonOption(
                 label="OVERVIEW",
                 guidance=(
-                    "Use bare mem provider to edit an ordinary Profile in a TTY, "
-                    "inspect a locked Study Profile, or print stable non-TTY routes."
+                    "Use bare mem provider to print the active Profile routes without "
+                    "opening an editor or contacting a provider."
                 ),
             ),
             OperationComparisonOption(

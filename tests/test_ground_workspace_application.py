@@ -341,6 +341,63 @@ def test_cli_creates_and_reopens_the_physical_workspace_without_current_change(
     assert not (isolated_store / "ground-sessions").exists()
 
 
+def test_cli_ground_goal_materializes_context_or_memory_operand_into_goals_lane(
+    isolated_store,
+) -> None:
+    store = MemoryStore()
+    source = ops.init("goal-library/cafe")
+    source_goal = ops.add(
+        source,
+        "Help a friend's cafe improve through practical experiments.",
+    )
+    store.create_context(source)
+
+    created = runner.invoke(
+        app,
+        [
+            "ground",
+            "cafe-ground",
+            "--goal",
+            source.name,
+            "--snapshot",
+        ],
+    )
+
+    assert created.exit_code == 0, created.output
+    workspace = load_ground_workspace(store, "cafe-ground")
+    [stored_goal] = tuple(workspace.goals.iter_items())
+    assert stored_goal.content == source_goal.content
+    [checkpoint] = store.list_checkpoints("cafe-ground/goals")
+    assert checkpoint["args"]["goal_focus"]["kind"] == "CONTEXT"
+    assert checkpoint["args"]["goal_focus"]["items"][0]["memory_uid"] == (
+        source_goal.uid
+    )
+
+    replacement = ops.init("goal-library/revised")
+    replacement_goal = ops.add(
+        replacement,
+        "Keep every recommendation reversible and affordable.",
+    )
+    store.create_context(replacement)
+    revised = runner.invoke(
+        app,
+        [
+            "ground",
+            "cafe-ground",
+            "--set-goal",
+            f"{replacement.name}:{replacement_goal.uid[:8]}",
+        ],
+    )
+
+    assert revised.exit_code == 0, revised.output
+    [stored_goal] = tuple(load_ground_workspace(store, "cafe-ground").goals.iter_items())
+    assert stored_goal.content == replacement_goal.content
+    latest = store.list_checkpoints("cafe-ground/goals")[0]
+    assert latest["args"]["ground_workspace_command"]["goal_focus"]["kind"] == (
+        "MEMORY"
+    )
+
+
 def test_cli_namespaced_workspace_is_a_real_context_subtree(isolated_store):
     result = runner.invoke(
         app,

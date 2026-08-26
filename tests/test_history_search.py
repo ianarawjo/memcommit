@@ -8,7 +8,6 @@ from memcommit.context import AutoCheckpoint, Memory
 from memcommit.history import build_history
 from memcommit.history_search import (
     HistorySearchError,
-    is_temporal_query,
     search_history,
 )
 from memcommit import ops
@@ -359,30 +358,6 @@ def test_multiple_timelines_use_globally_unique_aliases_and_same_context_join(
 
     assert {result.context_name for result in results} == {"first", "second"}
     assert all("Lot B" in result.transition.after.content for result in results)
-
-
-@pytest.mark.parametrize(
-    "query, expected",
-    [
-        ("parking", False),
-        ("first aid station", False),
-        ("visitor last name", False),
-        ("안전에 관한 메모리", False),
-        ("안전의 중요성", False),
-        ("before parking changed", True),
-        ("changes during construction", True),
-        ("Memories updated after the shuttle was removed", True),
-        ("the last updated Memory", True),
-        ("공사 기간 동안 바뀐 메모리", True),
-        ("셔틀 공지가 바뀌기 전에 수정된 메모리", True),
-        ("셔틀 공지가 바뀐 후에 수정된 메모리", True),
-        ("셔틀 공지가 있을 때 주차 안내", True),
-        ("셔틀 공지가 있을 때 마지막으로 수정된 메모리", True),
-        ("셔틀 공지 변동 이후에 바뀐 것들", True),
-    ],
-)
-def test_is_temporal_query(query, expected):
-    assert is_temporal_query(query) is expected
 
 
 def test_provider_cannot_return_durable_or_wrong_kind_candidate(

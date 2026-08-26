@@ -56,8 +56,12 @@ can prompt a participant to consider actions beyond the most obvious match.
 Even a weak, unrelated, or nonsensical nonblank request receives the three
 closest catalog possibilities. Results carry no confidence, `WHY`, expanded
 overview, forms, or execution action. The focused lookup exits after the three
-rows; it does not open the full-screen browser, create a transcript, read a
-Store or Memory, or execute any candidate.
+rows; it does not open the full-screen browser, read a Store or Memory, or
+execute any candidate. Every Profile's command-attempt ledger retains the
+entered `mem help REQUEST` command. A current Study Participant additionally
+records the normalized request and exact three-operation ranking as typed
+events in its detailed Study action ledger; other Profiles retain no ranked
+Help result.
 
 Visible order is not randomized or counterbalanced. Semantic fitness and
 display position therefore coincide intentionally, even though the interface
@@ -95,6 +99,10 @@ validated `init-study` source provenance rather than mutable Profile names.
 Bare Help and focused Help outside an active Study Profile retain their normal
 behavior. The provenance check opens only the external Profile registry; it
 does not open a Store, Context, or Memory.
+
+Only the Participant role retains focused Help wording and results. The
+granted-memory role receives the same Study-copy guard but does not retain
+content-bearing Help actions.
 
 Bare `mem help` remains the complete deterministic inventory below, in both its
 plain and interactive forms. The semantic provider is connected only after a
@@ -460,9 +468,8 @@ UIDs, flags, and paths remain unquoted so their token boundaries stay visible.
 
 Every currently visible top-level command has an explicitly audited, bounded
 form list. This is necessary even for apparently simple callbacks: Click
-cannot reveal that a temporal `find` is selected from the wording of its query,
-that `profile NAME` is routed through a group alias, or that bare `lock` changes
-the current Context. A conservative registered-operand fallback remains for a
+cannot reveal that `profile NAME` is routed through a group alias or that bare
+`lock` changes the current Context. A conservative registered-operand fallback remains for a
 new command before its inventory is updated, but the test contract requires
 all shipped commands to replace that fallback with reviewed forms.
 
@@ -496,10 +503,11 @@ intentionally more explicit than the optional positional operand shown by
 generic parser usage, because the operation names select materially different
 artifacts and provider boundaries. A message-less `mem checkpoint` and the
 default-English `mem translate` route are likewise shown because both are
-callable behaviors, not syntax errors. `find` exposes its bare interactive
-search-and-scope route, describes the default descendant-and-embed frame, and
-describes retained-history selection as an explicitly temporal query instead
-of inventing a `--history` option that the parser does not implement. Resource
+callable behaviors, not syntax errors. `search` exposes its bare interactive
+search-and-scope route and describes the default descendant-and-embed frame.
+Its Forms deliberately advertise no implicit History route: time-oriented
+words remain current-content query text, while retained-history semantics are
+entered explicitly through `mem log QUERY`. Resource
 imports and write-protection
 groups enumerate their distinct public grammars rather than collapsing them
 into ambiguous positional placeholders.

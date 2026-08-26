@@ -41,6 +41,15 @@ The catalog observes these invariants:
 - namespace projection is process-local and never writes grant pointers into a
   Context record.
 
+The attachment still has one narrow read-time consequence. A local Context's
+static inspection presents its directly attached top-level READ grants as
+available Context source rows. A loader asked to follow embeds resolves those
+displayed rows through their frozen `ContextAccess` bindings, so a recursive
+read of that exact workspace does not show an empty shell while an exact read
+of the displayed granted name has content. The rows do not become lexical
+children, are absent when embed traversal is excluded, and QUERY-only grants
+remain opaque routes rather than ordinary content contributors.
+
 `mem ls`, current-state `mem find`, `mem rationale`, and the A/B source picker
 for new symmetric `mem meld` sessions consume this shared catalog. Recursive
 listing, search, Rationale target selection, and Meld source selection from `task-1`
@@ -50,8 +59,8 @@ stored by another Profile. Find also performs one bounded relevance check over
 omitted first-level branches when a small global limit would otherwise show
 material matches from only one sibling branch. `--direct` still excludes
 namespace descendants and does not turn a virtual query route into a direct
-item. Temporal Find retains its history-specific store boundary and does not
-traverse granted history. Rationale likewise uses only current Memories for a
+item. Search always uses this current-readable boundary and never interprets
+query wording as permission to traverse history. Rationale likewise uses only current Memories for a
 granted contributor; it never treats READ as permission to inspect that
 contributor's authority history.
 
@@ -85,7 +94,9 @@ boundary if a visible granted source is selected.
 A recursive list rooted locally can now contain both local and granted Memory
 content. The private structured clipboard does not yet have a multi-source,
 multi-grant freshness receipt, so `mem ls -R --copy` rejects such a mixed
-scope. A person can copy an exact granted Context using the existing
+scope whether the granted contributor entered through public lexical placement,
+a persisted Embed, or one displayed attached READ projection. A person can
+copy an exact granted Context using the existing
 grant-bound receipt. Implementing a composite receipt is intentionally left as
 a separate persistence change.
 

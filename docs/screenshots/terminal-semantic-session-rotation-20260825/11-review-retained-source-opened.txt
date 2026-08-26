@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Review ambiguities                                                                                                                                                              ^┃
+┃ CONTEXT LOCATIONS                                                                                                                                                                ┃
+┃   SOURCE · capture/review-policy                                                                                                                                                 ┃
+┃ OPEN                                                                                                                                                                             ┃
+┃                                                                                                                                                                                  ┃
+┃ OVERVIEW                                                                                                                                                                         ┃
+┃ Review source-linked findings and save responses without changing any Context or Memory.                                                                                         ┃
+┃                                                                                                                                                                                  ┃
+┃ ACTIONABLE FINDINGS · 1                                                                                                                                                          ┃
+┃ AMBIGUITY 1 · Use the same NFC for access.                                                                                                                                       ┃
+┃ [REQUIRED] The local antecedent permits two ordinary readings.                                                                                                                   ┃
+┃ QUESTION · Which local reading should guide later semantic work?                                                                                                                 ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› REPORT         Complete Review Ambiguities report                                                                                                                              ^│
+│  AMBIGUITY      Use the same NFC for access.                                                                                                                                     │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ READ ONLY ]  No action available · This saved session can only be inspected.                                                                                                    │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ READ ONLY · OPEN · ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter inspect  Esc/Backspace close H Help  y/Y copy  Q close

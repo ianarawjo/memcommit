@@ -501,6 +501,32 @@ def _profile_readable_display_uids(
     return _readable_catalog_display_uids(catalog)
 
 
+def _graph_contains_granted_context(
+    context: Context,
+    catalog: ReadableContextCatalog,
+) -> bool:
+    """Detect a granted contributor reached outside lexical expansion."""
+
+    seen: set[str] = set()
+
+    def visit(current: Context) -> bool:
+        if current.uid in seen:
+            return False
+        seen.add(current.uid)
+        for item in current.iter_items():
+            if not isinstance(item, Context):
+                continue
+            if catalog.context_exists(item.name) and catalog.access_for(
+                item.name
+            ).is_granted:
+                return True
+            if visit(item):
+                return True
+        return False
+
+    return visit(context)
+
+
 def _require_uid_prefixes(
     snapshot: dict[str, object],
     visible_uids: tuple[str, ...],
@@ -796,6 +822,10 @@ def _render_snapshot_items(
             style_relationships=style_relationships,
             uid_prefixes=uid_prefixes,
         )
+    if contexts and memories:
+        # Namespace/embedded Contexts and direct Memories are different
+        # semantic groups even though both belong to this displayed Context.
+        lines.append("")
     for item in memories:
         _render_snapshot_item(
             item,
@@ -1300,20 +1330,28 @@ def cmd(
         readable_uids = _profile_readable_display_uids(active_store, access)
         store = freeze_readable_context_catalog(active_store, access)
         context_names = tuple(store.list_context_names())
+        # Load resolves direct MemoryRefs even when presentation is collapsed;
+        # direct presentation must not open an attached READ source merely to
+        # display its authority metadata.
+        ctx = (
+            store.load(access.display_name)
+            if recursive
+            else store.load_without_attached_reads(access.display_name)
+        )
         if (
             copy_result
             and recursive
             and not access.is_granted
-            and store.granted_names_below(access.display_name)
+            and (
+                store.granted_names_below(access.display_name)
+                or _graph_contains_granted_context(ctx, store)
+            )
         ):
             raise RuntimeError(
                 "Copying a mixed local and granted recursive list is not yet "
                 "supported. Copy the granted Context explicitly so its exact "
                 "grant receipt can be retained."
             )
-        # Load resolves direct MemoryRefs even when presentation is collapsed;
-        # ``recursive`` below controls what the snapshot exposes.
-        ctx = store.load(access.display_name)
     except (
         FileNotFoundError,
         OSError,

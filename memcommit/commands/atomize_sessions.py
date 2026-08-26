@@ -58,11 +58,14 @@ def _artifact_timestamp(
 ) -> float:
     """Use the latest durable Atomize interaction, not discovery time."""
     timestamp = _created_timestamp(analysis.created_at)
-    paths = (
-        analysis_path,
-        store._atomize_workbench_path(analysis.context_uid),
-        store._atomize_grounding_session_path(analysis.context_uid),
-    )
+    paths = [analysis_path]
+    if analysis_path.parent == store.atomize_analyses_dir:
+        paths.extend(
+            (
+                store._atomize_workbench_path(analysis.context_uid),
+                store._atomize_grounding_session_path(analysis.context_uid),
+            )
+        )
     for path in paths:
         try:
             if path.is_file() and not path.is_symlink():
@@ -105,7 +108,7 @@ def _analysis_files(store: MemoryStore) -> tuple[tuple[str, Path], ...]:
 def iter_saved_atomize_analyses(
     store: MemoryStore,
 ) -> tuple[tuple[AtomizeAnalysisSession, Path], ...]:
-    """Strictly load every latest Context-scoped Atomize analysis."""
+    """Strictly load latest and UID-retained Atomize analyses."""
     records: list[tuple[AtomizeAnalysisSession, Path]] = []
     for context_uid, path in _analysis_files(store):
         analysis = store.load_atomize_analysis(context_uid)
@@ -114,6 +117,10 @@ def iter_saved_atomize_analyses(
             # not selectable; a later explicit UID lookup will also fail.
             continue
         records.append((analysis, path))
+    records.extend(
+        (analysis, path)
+        for analysis, _workbench, path in store.list_atomize_session_history()
+    )
     return tuple(records)
 
 
@@ -210,6 +217,16 @@ def revalidate_saved_atomize_analysis(
             "'mem impact atomize --refresh' for its source Context before "
             "reopening it."
         )
+    history_path = store._atomize_session_history_path(
+        analysis.context_uid,
+        analysis.uid,
+    )
+    if history_path.is_file() and not history_path.is_symlink():
+        workbench = store.load_atomize_workbench(analysis)
+        if workbench is not None and workbench.application is not None:
+            # Terminal history is a record of the reviewed frame, not a claim
+            # that today's Context still has the same name or contents.
+            return Context(uid=analysis.context_uid, name=analysis.context_name), True
     try:
         context = store.load_direct(analysis.context_name)
     except FileNotFoundError as error:

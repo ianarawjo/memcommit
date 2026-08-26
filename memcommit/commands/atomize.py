@@ -360,6 +360,16 @@ def cmd(
             help="Enter the interactive Atomize session launcher",
         ),
     ] = False,
+    refresh: Annotated[
+        bool,
+        typer.Option(
+            "--refresh",
+            help=(
+                "Start a new semantic analysis even when the same request "
+                "already has a saved or applied session"
+            ),
+        ),
+    ] = False,
     evaluate: Annotated[
         Optional[str],
         typer.Option(
@@ -520,10 +530,25 @@ def cmd(
         or grounding_action_count
         or comment is not None
         or revision is not None
+        or refresh
     ):
         typer.secho(
             "Atomize error: --sessions cannot be combined with a Context, "
             "mutation, or grounding action.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
+    if refresh and (
+        save
+        or save_as is not None
+        or grounding_action_count
+        or comment is not None
+        or revision is not None
+    ):
+        typer.secho(
+            "Atomize error: --refresh starts new analysis work and cannot be "
+            "combined with an apply or grounding action.",
             fg=typer.colors.RED,
             err=True,
         )
@@ -595,6 +620,9 @@ def cmd(
                     "context_name": setup.input_name,
                     "output_name": setup.output_name,
                     "show_all": show_all,
+                    # New means a new work unit even when setup selects the
+                    # same Context and scope as a terminal latest session.
+                    "refresh": True,
                 }
                 if setup.input_memory_uid is not None:
                     start_kwargs["memory_selector"] = setup.input_memory_uid
@@ -648,6 +676,11 @@ def cmd(
             and grounding is not None
             and grounding.state in {"AWAITING_REPLY", "READY_TO_APPLY"}
         ):
+            if refresh:
+                raise AtomizeGroundingApplicationError(
+                    "An atomize grounding dialogue is still open. Apply it or "
+                    "keep it as review-only before starting a refreshed analysis."
+                )
             if save or save_as is not None:
                 raise AtomizeGroundingApplicationError(
                     "An atomize grounding dialogue is still open. Reply to "
@@ -782,7 +815,7 @@ def cmd(
 
         applying = save or save_as is not None or auto_apply_exact_context
         if auto_apply_exact_context:
-            existing_applied = session is not None and (
+            existing_applied = not refresh and session is not None and (
                 atomize_analysis_was_applied(store, direct_ctx, session.uid)
                 or atomize_workbench_was_applied(store, session)
             )
@@ -799,7 +832,8 @@ def cmd(
                     opened = execute_atomize_analysis_open(
                         AtomizeAnalysisOpenRequest(
                             context=direct_ctx,
-                            allow_prepared=session is None,
+                            refresh=refresh,
+                            allow_prepared=session is None and not refresh,
                         ),
                         store=store,
                         provider_factory=provider_factory,
@@ -813,6 +847,7 @@ def cmd(
         if not applying:
             if (
                 memory_selector is None
+                and not refresh
                 and session is not None
                 and (
                     atomize_analysis_was_applied(store, direct_ctx, session.uid)
@@ -831,9 +866,10 @@ def cmd(
                 opened = execute_atomize_analysis_open(
                     AtomizeAnalysisOpenRequest(
                         context=direct_ctx,
+                        refresh=refresh,
                         output_context_name=output_name,
                         memory_selector=memory_selector,
-                        allow_prepared=session is None,
+                        allow_prepared=session is None and not refresh,
                     ),
                     store=store,
                     provider_factory=provider_factory,

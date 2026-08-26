@@ -28,7 +28,8 @@ ProviderPolicySource = Literal[
 ]
 
 POLICY_VERSION = "semantic-provider-policy-v2"
-STUDY_PROVIDER_POLICY_VERSION = "study-provider-config-v1"
+LEGACY_STUDY_PROVIDER_POLICY_VERSION = "study-provider-config-v1"
+STUDY_PROVIDER_POLICY_VERSION = "study-provider-config-v2-fast"
 
 
 class ProviderPolicyError(ValueError):
@@ -84,21 +85,27 @@ class StudyProviderConfig:
     version: str
     default: ProviderRoute
     operations: Mapping[str, ProviderRoute]
+    service_tier: str | None = None
 
     def route_for(self, operation: str) -> ProviderRoute:
         return self.operations.get(operation, self.default)
 
     @property
     def digest(self) -> str:
-        payload = json.dumps(
-            {
-                "version": self.version,
-                "default": self.default.to_dict(),
-                "operations": {
-                    operation: route.to_dict()
-                    for operation, route in sorted(self.operations.items())
-                },
+        payload_value: dict[str, object] = {
+            "version": self.version,
+            "default": self.default.to_dict(),
+            "operations": {
+                operation: route.to_dict()
+                for operation, route in sorted(self.operations.items())
             },
+        }
+        if self.service_tier is not None:
+            # Omit the absent field so the retained v1 digest remains exactly
+            # compatible with Study Profiles created before Fast mode.
+            payload_value["service_tier"] = self.service_tier
+        payload = json.dumps(
+            payload_value,
             ensure_ascii=False,
             separators=(",", ":"),
             sort_keys=True,
@@ -140,21 +147,25 @@ class ResolvedProviderPolicy:
     source: ProviderPolicySource
     version: str = POLICY_VERSION
     configuration_version: str | None = None
+    service_tier: str | None = None
 
     @property
     def digest(self) -> str:
+        payload_value: dict[str, object] = {
+            "version": self.version,
+            "configuration_version": self.configuration_version,
+            "operation": self.operation,
+            "mode": self.mode,
+            "provider": self.provider_id,
+            "model": self.model,
+            "reasoning": self.reasoning_effort,
+            "timeout_seconds": self.timeout_seconds,
+            "source": self.source,
+        }
+        if self.service_tier is not None:
+            payload_value["service_tier"] = self.service_tier
         payload = json.dumps(
-            {
-                "version": self.version,
-                "configuration_version": self.configuration_version,
-                "operation": self.operation,
-                "mode": self.mode,
-                "provider": self.provider_id,
-                "model": self.model,
-                "reasoning": self.reasoning_effort,
-                "timeout_seconds": self.timeout_seconds,
-                "source": self.source,
-            },
+            payload_value,
             ensure_ascii=False,
             separators=(",", ":"),
             sort_keys=True,
@@ -191,12 +202,24 @@ _STUDY_ROUTES = {
         timeout_seconds=900.0,
     ),
 }
+# Profile operation routes are user-authored control state, so their keys must
+# name a connector that can actually request an active-Profile policy.  Keep
+# this distinct from public CLI command names and provider.complete() labels:
+# neither is a routable policy namespace. Compare Summary uses the Study
+# default today but has its own active-Profile connector in ordinary Profiles.
+PROFILE_PROVIDER_OPERATION_NAMES = frozenset({*_STUDY_ROUTES, "compare_summary"})
 STUDY_PROVIDER_CONFIGS: Mapping[str, StudyProviderConfig] = {
+    LEGACY_STUDY_PROVIDER_POLICY_VERSION: StudyProviderConfig(
+        version=LEGACY_STUDY_PROVIDER_POLICY_VERSION,
+        default=_STUDY_DEFAULT_ROUTE,
+        operations=_STUDY_ROUTES,
+    ),
     STUDY_PROVIDER_POLICY_VERSION: StudyProviderConfig(
         version=STUDY_PROVIDER_POLICY_VERSION,
         default=_STUDY_DEFAULT_ROUTE,
         operations=_STUDY_ROUTES,
-    )
+        service_tier="fast",
+    ),
 }
 STUDY_PROVIDER_POLICY_DIGEST = STUDY_PROVIDER_CONFIGS[
     STUDY_PROVIDER_POLICY_VERSION
@@ -263,9 +286,7 @@ def operation_provider_policy(operation: str) -> OperationProviderPolicy:
 def _config_value(config: object, method: str, *args: object) -> object:
     reader = getattr(config, method, None)
     if not callable(reader):
-        raise ProviderPolicyError(
-            f"Semantic provider configuration lacks {method}()."
-        )
+        raise ProviderPolicyError(f"Semantic provider configuration lacks {method}().")
     return reader(*args)
 
 
@@ -282,9 +303,7 @@ def _global_route(config: ProviderPolicyConfig) -> ConfiguredProviderRoute:
             provider_id=provider,
             model=model if isinstance(model, str) else None,
             reasoning_effort=reasoning if isinstance(reasoning, str) else None,
-            timeout_seconds=float(
-                _config_value(config, "semantic_timeout_seconds")
-            ),
+            timeout_seconds=float(_config_value(config, "semantic_timeout_seconds")),
         ),
         source="GLOBAL_DEFAULT",
     )
@@ -364,11 +383,13 @@ def resolve_operation_provider_policy(
         )
 
     configuration_version: str | None = None
+    service_tier: str | None = None
     if mode == "STUDY_PARTICIPANT":
         study = study_provider_config(study_policy_version)
         route = study.route_for(operation)
         source: ProviderPolicySource = "STUDY_POLICY"
         configuration_version = study.version
+        service_tier = study.service_tier
     else:
         configured = _configured_route(operation, config)
         route = configured.route
@@ -411,6 +432,7 @@ def resolve_operation_provider_policy(
         timeout_seconds=route.timeout_seconds,
         source=source,
         configuration_version=configuration_version,
+        service_tier=service_tier,
     )
 
 
@@ -443,10 +465,12 @@ __all__ = [
     "FIND_PROVIDER_POLICY",
     "FORGET_PROVIDER_POLICY",
     "HELP_PROVIDER_POLICY",
+    "LEGACY_STUDY_PROVIDER_POLICY_VERSION",
     "MELD_PROVIDER_POLICY",
     "OPERATION_PROVIDER_POLICIES",
     "OperationProviderPolicy",
     "POLICY_VERSION",
+    "PROFILE_PROVIDER_OPERATION_NAMES",
     "ProviderPolicyConfig",
     "ProviderPolicyError",
     "ProviderPolicyMode",

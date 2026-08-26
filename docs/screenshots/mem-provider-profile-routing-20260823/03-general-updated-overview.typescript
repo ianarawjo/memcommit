@@ -1,0 +1,17 @@
+PTY 180 52
+PROFILE PROVIDER ROUTES
+profile: authoring
+mode: general · editable
+contact_status: not_contacted
+policy_version: semantic-provider-policy-v2
+
+default:
+  ollama · model qwen3.6:35b-a3b · timeout 600s
+  source: profile_default
+operation_routes:
+  none configured
+other_operations: use default
+
+configure: mem provider use PROVIDER [--operation OPERATION]
+reset: mem provider reset [--operation OPERATION]
+verify: mem provider probe [--operation OPERATION]

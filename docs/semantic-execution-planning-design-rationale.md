@@ -116,10 +116,11 @@ or single-related-query result contract.
 
 If one candidate cannot fit, or if the complete shortlist still cannot fit,
 Find fails without truncating stored content. Small corpora retain exactly one
-provider call. Temporal Find currently remains guarded one-shot because its
-provider returns a coupled subject/anchor/relation plan rather than ordinary
-ranked candidates; independently planned timeline shards cannot yet be merged
-without a temporal-plan agreement contract.
+provider call. Explicit natural-language History Search under `mem log QUERY`
+remains guarded one-shot because its provider returns a coupled
+subject/anchor/relation plan rather than ordinary ranked candidates;
+independently planned timeline shards cannot yet be merged without a
+temporal-plan agreement contract.
 
 ### Ordinary Query
 

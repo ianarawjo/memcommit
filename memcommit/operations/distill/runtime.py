@@ -29,6 +29,8 @@ from memcommit.distill_config import (
     DEFAULT_DISTILL_SEMANTIC_CONFIG,
     DistillSemanticConfig,
 )
+from memcommit.goal_focus import FrozenGoalFocus
+from memcommit.goal_focus_runtime import revalidate_goal_focus
 from memcommit.semantic_add_runtime import (
     FrozenSemanticAddTarget,
     SemanticAddReceipt,
@@ -133,6 +135,17 @@ class PreparedDistillAdd:
     source_port: LocalMemoryStoreDistillSourcePort
 
 
+def _goal_source_bindings(
+    focus: FrozenGoalFocus | None,
+) -> tuple[tuple[str, str, str], ...]:
+    if focus is None or focus.kind == "INLINE":
+        return ()
+    assert focus.context_name is not None
+    assert focus.context_uid is not None
+    assert focus.context_digest is not None
+    return ((focus.context_name, focus.context_uid, focus.context_digest),)
+
+
 def _goal_fit_record(analysis: DistillAnalysis) -> dict[str, object] | None:
     goal_fit = analysis.goal_fit
     if goal_fit is None:
@@ -167,6 +180,8 @@ def prepare_distill_add(
     def provider_session() -> Iterator[DistillProvider]:
         yield provider_factory()
 
+    if request.goal_focus is not None:
+        revalidate_goal_focus(store, request.goal_focus)
     result = run_distill(
         request,
         source_port=source_port,
@@ -174,6 +189,8 @@ def prepare_distill_add(
         config=config,
         prepared_lookup=prepared_lookup,
     )
+    if result.goal_focus is not None:
+        revalidate_goal_focus(store, result.goal_focus)
     return PreparedDistillAdd(
         result=result,
         target=target,
@@ -203,6 +220,7 @@ def apply_prepared_distill_add(
     source_bindings = prepared.source_port.source_bindings(
         prepared.result.frozen_source
     )
+    goal_source_bindings = _goal_source_bindings(prepared.result.goal_focus)
     result_records = [
         {
             "rule_uid": rule.uid,
@@ -224,7 +242,9 @@ def apply_prepared_distill_add(
         source_name=analysis.source.context_name,
         target=prepared.target,
         contents=tuple(rule.content for rule in analysis.rules),
-        source_bindings=source_bindings,
+        source_bindings=tuple(
+            dict.fromkeys((*source_bindings, *goal_source_bindings))
+        ),
         operation_args={
             "version": 3,
             "analysis_uid": analysis.uid,
@@ -247,6 +267,11 @@ def apply_prepared_distill_add(
             ),
             "goal": analysis.goal,
             "goal_digest": goal_digest,
+            "goal_focus": (
+                prepared.result.goal_focus.receipt_record()
+                if prepared.result.goal_focus is not None
+                else None
+            ),
             "goal_fit": _goal_fit_record(analysis),
             "rules": result_records,
             "outside_memory_uids": list(analysis.outside_memory_uids),
@@ -275,13 +300,18 @@ def execute_distill(
     def provider_session() -> Iterator[DistillProvider]:
         yield provider_factory()
 
-    return run_distill(
+    if request.goal_focus is not None:
+        revalidate_goal_focus(store, request.goal_focus)
+    result = run_distill(
         request,
         source_port=source_port,
         provider_session_factory=provider_session,
         config=config,
         prepared_lookup=prepared_lookup,
     )
+    if result.goal_focus is not None:
+        revalidate_goal_focus(store, result.goal_focus)
+    return result
 
 
 def _rule_result_uid(rule_uid: str, analysis_digest: str) -> str:
@@ -313,6 +343,8 @@ class MemoryStoreDistillOutputPort:
             raise DistillError(
                 "The Distill Source changed before Apply; no Result was created."
             )
+        if request.result.goal_focus is not None:
+            revalidate_goal_focus(self.store, request.result.goal_focus)
 
         # The first durable slice supports local Context frames only. Grant
         # output needs DERIVE/EXPORT plus retained-analysis authority and must
@@ -334,6 +366,8 @@ class MemoryStoreDistillOutputPort:
             local_bindings.append(
                 (name, context.uid, context_record_digest(context))
             )
+        local_bindings.extend(_goal_source_bindings(request.result.goal_focus))
+        local_bindings = list(dict.fromkeys(local_bindings))
 
         output = Context(uid=str(uuid.uuid4()), name=request.output_name)
         result_uids: list[str] = []
@@ -388,6 +422,11 @@ class MemoryStoreDistillOutputPort:
                         ),
                         "goal": analysis.goal,
                         "goal_digest": goal_digest,
+                        "goal_focus": (
+                            request.result.goal_focus.receipt_record()
+                            if request.result.goal_focus is not None
+                            else None
+                        ),
                         "goal_fit": _goal_fit_record(analysis),
                         "result_context": output.name,
                         "rules": result_records,

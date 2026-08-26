@@ -108,6 +108,23 @@ def _select_report_session(
     return selected
 
 
+def _load_saved_review_by_selector(
+    store: MemoryStore,
+    selector: str,
+):
+    """Resolve one active or terminal-history ReviewSession UID/prefix."""
+
+    try:
+        return resolve_exact_or_unique_uid(
+            store.list_review_sessions(),
+            selector,
+            uid=lambda session: session.uid,
+            label="Saved Review session",
+        )
+    except UidLocatorError as error:
+        raise ReviewError(str(error)) from error
+
+
 def _show_operation_review(controller, *, snapshot: bool) -> None:
     from memcommit.commands.review_report import (
         echo_review_report_snapshot,
@@ -625,8 +642,12 @@ def cmd(
     replace_review: Annotated[
         bool,
         typer.Option(
+            "--new",
             "--replace-review",
-            help="Replace an existing saved review when starting a new one",
+            help=(
+                "Start a new adapter review; --replace-review remains a "
+                "compatibility alias"
+            ),
         ),
     ] = False,
     respond_to: Annotated[
@@ -649,6 +670,7 @@ def cmd(
 ) -> None:
     """Inspect terminal evidence or saved reports without applying Memories."""
     store = MemoryStore()
+    retained_review_source = False
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
         canonical_context_name = (
@@ -757,13 +779,20 @@ def cmd(
         if normalized_kind == SAVED_REVIEW_KIND:
             if launcher_receipt is None:
                 raise ReviewError("Unsupported review adapter.")
-            session = store.load_review_session()
-            if session is None or session.uid != selected_session_uid:
-                raise ReviewError(
-                    "The selected saved review changed while the Review "
-                    "launcher was open. Reopen the launcher."
-                )
-            ctx = store.load_direct(session.context_name)
+            assert selected_session_uid is not None
+            session = _load_saved_review_by_selector(
+                store,
+                selected_session_uid,
+            )
+            active_review = store.load_review_session()
+            retained_review_source = (
+                active_review is None or active_review.uid != session.uid
+            )
+            ctx = (
+                store.load_review_session_source(session.uid)
+                if retained_review_source
+                else store.load_direct(session.context_name)
+            )
         elif normalized_kind is None:
             if session_uid is not None or receipt_uid is not None:
                 raise ReviewError(
@@ -803,37 +832,63 @@ def cmd(
                     "'forget', 'meld', 'resolve', 'sever', and 'update'."
                 )
             if session_uid is not None:
-                raise ReviewError(
-                    "Ambiguity Review is Context-bound; use --context instead of "
-                    "--session."
+                if replace_review:
+                    raise ReviewError("--new cannot be combined with --session.")
+                session = _load_saved_review_by_selector(store, session_uid)
+                if session.kind != "ambiguities":
+                    raise ReviewError(
+                        "The selected Review session is not an ambiguity review."
+                    )
+                active_review = store.load_review_session()
+                retained_review_source = (
+                    active_review is None or active_review.uid != session.uid
                 )
-            # Explicit replacement is also the recovery path for a malformed
-            # prior artifact, so do not require that artifact to parse first.
-            existing = None if replace_review else store.load_review_session()
-            if existing is not None and not replace_review:
-                raise ReviewError(
-                    "A saved review already exists. Resume it with "
-                    "'mem review', or explicitly replace it with "
-                    f"'mem review {normalized_kind} --replace-review'."
+                ctx = (
+                    store.load_review_session_source(session.uid)
+                    if retained_review_source
+                    else store.load_direct(session.context_name)
                 )
-            ctx = _load_direct_context(
-                store,
-                canonical_context_name,
-                current_name=context_snapshot.current_name,
-            )
-            with CommandProgress(
-                "REVIEW AMBIGUITIES",
-                "analyzing direct memories",
-                total=1,
-            ):
-                report = ops.find_ambiguities(
-                    ctx,
-                    connect_codex_chatgpt_provider,
+            else:
+                ctx = _load_direct_context(
+                    store,
+                    canonical_context_name,
+                    current_name=context_snapshot.current_name,
                 )
-            session = create_ambiguity_review(ctx, report)
-            # The semantic report is durable before terminal control begins.
-            # A PTY disconnect must not discard the expensive one-shot result.
-            store.save_review_session(session)
+                # --new is also the recovery path for malformed legacy state,
+                # so it deliberately avoids parsing the prior singleton.
+                existing = None if replace_review else store.load_review_session()
+                exact_resume = (
+                    existing is not None
+                    and existing.kind == "ambiguities"
+                    and review_matches_context(existing, ctx)
+                )
+                if exact_resume:
+                    session = existing
+                else:
+                    if (
+                        existing is not None
+                        and not existing.terminal
+                        and not replace_review
+                    ):
+                        raise ReviewError(
+                            "An unfinished saved review already exists. Resume it "
+                            "with 'mem review', or explicitly start new work with "
+                            f"'mem review {normalized_kind} --new'."
+                        )
+                    with CommandProgress(
+                        "REVIEW AMBIGUITIES",
+                        "analyzing direct memories",
+                        total=1,
+                    ):
+                        report = ops.find_ambiguities(
+                            ctx,
+                            connect_codex_chatgpt_provider,
+                        )
+                    session = create_ambiguity_review(ctx, report)
+                    # The semantic report and its source snapshot are durable
+                    # before terminal control begins. Saving a distinct review
+                    # archives terminal predecessor evidence by UID.
+                    store.save_review_session(session)
     except (
         FileNotFoundError,
         OSError,
@@ -864,7 +919,7 @@ def cmd(
             err=True,
         )
         raise typer.Exit(1)
-    matches_source = (
+    matches_source = retained_review_source or (
         atomize_review_matches_analysis(session, ctx, analysis)
         if session.kind == "atomize" and analysis is not None
         else (
@@ -891,6 +946,13 @@ def cmd(
     if (respond_to is None) != (response is None):
         typer.secho(
             "Review error: --respond-to and --response must be used together.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
+    if retained_review_source and respond_to is not None:
+        typer.secho(
+            "Review error: retained terminal Review history is read-only.",
             fg=typer.colors.RED,
             err=True,
         )
@@ -934,6 +996,7 @@ def cmd(
             session,
             ctx,
             save=store.save_review_session,
+            read_only=retained_review_source,
         )
     except ReviewCancelled:
         typer.echo("Review saved. No Memory changes applied.")

@@ -14,11 +14,9 @@ import memcommit.operations.search.application as find_application
 from memcommit.operations.search.application import (
     FindSearchRequest,
     FrozenFindCurrentSource,
-    FrozenFindHistorySource,
     run_find_search,
 )
 from memcommit.operations.search.runtime import execute_find_search
-from memcommit.history_search import HistorySearchResult
 from memcommit.search import SearchCandidate
 from memcommit.store import MemoryStore
 
@@ -31,11 +29,6 @@ class _CurrentSource:
     def freeze_current(self, request):
         self.calls.append(("CURRENT", request))
         return FrozenFindCurrentSource(self.candidates)
-
-    def freeze_history(self, request):
-        self.calls.append(("HISTORY", request))
-        raise AssertionError("A current query must not enumerate retained history.")
-
 
 class _SelectingProvider:
     def __init__(self):
@@ -115,47 +108,29 @@ def test_run_find_search_freezes_empty_current_frame_before_provider_factory():
     assert response.results == ()
 
 
-def test_run_find_search_uses_history_source_and_preserves_local_result(monkeypatch):
-    request = FindSearchRequest("the last updated Memory", ("notes",))
-    history_result = HistorySearchResult(
-        candidate_id="t000001",
-        kind="memory_transition",
-        context_uid="context-1",
-        context_name="notes",
-        checkpoint_uid="checkpoint-1",
-        timestamp="2026-08-14T12:00:00Z",
-        description="The note changed.",
-        selectable=False,
-    )
-    calls = []
-
-    class Source:
-        def freeze_current(self, _request):
-            raise AssertionError("A temporal query must not open current artifacts.")
-
-        def freeze_history(self, frozen_request):
-            calls.append(("freeze", frozen_request))
-            return FrozenFindHistorySource(())
-
-    provider = object()
-
-    def search(timelines, query, selected_provider, **kwargs):
-        calls.append(("search", timelines, query, selected_provider, kwargs))
-        return [history_result]
-
-    monkeypatch.setattr(find_application, "search_history", search)
+@pytest.mark.parametrize(
+    "query",
+    [
+        "changes during construction",
+        "the last updated Memory",
+        "공사 기간 동안 바뀐 메모리",
+    ],
+)
+def test_run_find_search_treats_time_language_as_current_content(query):
+    request = FindSearchRequest(query, ("notes",))
+    source = _CurrentSource((_candidate("Current construction notice."),))
+    provider = _SelectingProvider()
 
     response = run_find_search(
         request,
-        source_port=Source(),
+        source_port=source,
         provider_factory=lambda: provider,
     )
 
-    assert calls[0] == ("freeze", request)
-    assert calls[1][0:4] == ("search", (), request.query, provider)
-    assert response.mode == "HISTORY"
-    assert response.results[0].history_result is history_result
-    assert "The note changed." in response.results[0].content
+    assert source.calls == [("CURRENT", request)]
+    assert provider.calls == 1
+    assert response.mode == "CURRENT"
+    assert response.results[0].content == "Current construction notice."
 
 
 def test_execute_find_search_freezes_direct_scope_and_query_route(
@@ -225,12 +200,12 @@ def test_execute_find_search_freezes_direct_scope_and_query_route(
     assert captured.err == ""
 
 
-def test_execute_temporal_find_rejects_granted_history_before_provider(
+def test_execute_search_with_time_language_reads_granted_current_content(
     isolated_store,
 ):
     store = MemoryStore()
     granted = Context(uid="granted-uid", name="granted")
-    provider_calls = 0
+    granted.add(Memory(uid="granted-memory", content="Current granted notice."))
 
     class Access:
         is_granted = True
@@ -254,20 +229,17 @@ def test_execute_temporal_find_rejects_granted_history_before_provider(
         def access_for(self, _name):
             return Access()
 
-    def provider_factory():
-        nonlocal provider_calls
-        provider_calls += 1
-        return object()
+    provider = _SelectingProvider()
+    response = execute_find_search(
+        FindSearchRequest("changes during construction", ("granted",)),
+        store=store,
+        catalog=Catalog(),
+        provider_factory=lambda: provider,
+    )
 
-    with pytest.raises(RuntimeError, match="does not expose authority checkpoint"):
-        execute_find_search(
-            FindSearchRequest("the last updated Memory", ("granted",)),
-            store=store,
-            catalog=Catalog(),
-            provider_factory=provider_factory,
-        )
-
-    assert provider_calls == 0
+    assert provider.calls == 1
+    assert response.mode == "CURRENT"
+    assert response.results[0].content == "Current granted notice."
 
 
 def test_find_application_has_no_command_typer_or_tui_imports():

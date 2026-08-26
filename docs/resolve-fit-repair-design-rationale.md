@@ -95,6 +95,24 @@ interactive read-only Viewer for a non-applicable outcome. The explicit
 `--candidate ... --apply` form remains an exact replay path for an externally
 reviewed plan, such as one obtained from `mem impact resolve`.
 
+### Apply-first and recovery policy
+
+Ordinary Resolve is intentionally apply-first once its execution contract has
+produced exactly one grounded plan, the independent verifier has accepted it,
+the complete post-image reaches the requested Fit target, and authority,
+freshness, pre-image, and CAS checks still hold. The invocation is the request
+to execute that verified judgment; Resolve does not add a second pre-effect
+approval screen merely because the effect was selected semantically.
+
+The compensating boundary is one atomic `resolve` checkpoint. A successful
+receipt must expose the checkpoint-backed Review route and `mem undo`, while a
+failure before checkpoint publication must expose no partial Resolve effect.
+This recovery policy does not make unsupported or unresolved output
+actionable: `ASSUMED`, `NEEDS_INPUT`, `NEEDS_AUTHORITY`, non-target-reaching,
+multi-candidate, stale, and incompletely authorized outcomes remain
+non-applying. Irreversible effects outside the checkpointed MemoryStore are
+not part of this automatic execution contract.
+
 The agent adapter retains a grounded typed analysis process-locally so the next
 agent turn can Apply the exact plan it already showed without asking a
 nondeterministic provider to reproduce it. It consumes that cache entry after
@@ -374,25 +392,24 @@ grounding, Fit reason, and exact effects for `mem review resolve --receipt
 UID`. `--apply --candidate --expected-revision` remains a compatibility replay
 boundary, not the default lifecycle.
 
-## 2026-08-22 compact execution handoff
+## 2026-08-22 compact proposal projection
 
-A `PROPOSAL` no longer opens Resolve's former full Viewer, Responses, Items,
-and To Do workbench. That layout repeated a report after generation and made a
-single verified automatic plan look like an unresolved interpretation choice.
-Resolve now projects that plan into the same compact Enter-only execution
-surface used by Meld: the verified plan row is selected, and a separate Apply
-row is the only mutation action. Read-only terminal outcomes remain in the
-semantic Viewer.
+Resolve no longer uses its former full Viewer, Responses, Items, and To Do
+workbench for a `PROPOSAL`. That layout repeated a report after generation and
+made a single verified automatic plan look like an unresolved interpretation
+choice. A compact projection remains available to explicit hosts that inspect
+a process-local proposal, but the ordinary CLI execution route applies its
+unique verified plan directly under the apply-first policy above; it does not
+insert the compact projection as a second approval step. Read-only terminal
+outcomes remain in the semantic Viewer.
 
-Conflict Find hands the exact finding to this same Resolve route, so direct
-Resolve and conflict handoff cannot drift into different application UIs. The
-compact shell does not weaken the execution contract: the operation callback
-still receives the candidate UID from the frozen analysis and revalidates
-authority and revision before mutation. The removed second exact-command page
-was presentation duplication, not the source of those invariants. Supporting
-several Pareto-incomparable candidates would require an explicit typed design;
-the current route deliberately exposes exactly one independently verified
-candidate.
+Conflict Find hands the exact finding to the same ordinary Resolve execution
+route, so direct Resolve and conflict handoff cannot drift into different
+application semantics. Both routes still carry the frozen candidate UID and
+revalidate authority and revision before mutation. The removed second
+exact-command page was presentation duplication, not the source of those
+invariants. Supporting several Pareto-incomparable candidates would require an
+explicit typed design; such a result is not eligible for automatic Apply.
 
 Plain Resolve now reports observable outcomes instead of using `FIT REPAIR` as
 a status-independent report heading. Every route begins with `RESOLVE · NAME`.

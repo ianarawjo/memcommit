@@ -17,6 +17,7 @@ from memcommit.share import (
     ShareError,
     deliver_context,
     deliver_prepared_share,
+    prepare_share,
 )
 from memcommit.store import ConcurrentContextUpdateError
 
@@ -73,11 +74,15 @@ def cmd(
         elif _interactive_terminal():
             from memcommit.commands.share_flow import (
                 ShareFlowUnavailable,
+                choose_share_endpoint,
                 choose_share_preview,
             )
             from memcommit.commands.share_viewer import (
                 run_share_unavailable_viewer,
                 run_share_viewer,
+            )
+            from memcommit.session_workbench_navigation import (
+                SessionWorkbenchNavigation,
             )
 
             try:
@@ -95,12 +100,30 @@ def cmd(
                 annotate_command_outcome("CANCELLED")
                 typer.echo("Share closed; nothing was sent.")
                 return
-            receipt = run_share_viewer(preview)
-            if receipt.action == "close":
-                annotate_command_outcome("CANCELLED")
-                typer.echo("Share closed; nothing was sent.")
-                return
-            delivery = deliver_prepared_share(preview)
+            navigation = SessionWorkbenchNavigation()
+            while True:
+                receipt = run_share_viewer(preview, navigation=navigation)
+                if receipt.action == "close":
+                    annotate_command_outcome("CANCELLED")
+                    typer.echo("Share closed; nothing was sent.")
+                    return
+                if receipt.action == "browse_endpoint":
+                    selected_endpoint = choose_share_endpoint(
+                        current=preview.endpoint,
+                    )
+                    if selected_endpoint is None:
+                        continue
+                    # Endpoint identity participates in the consent digest and
+                    # receiver placement. Re-freeze the complete unit so the
+                    # updated exact command and later Apply mean the same thing.
+                    preview = prepare_share(
+                        preview.source_context,
+                        selected_endpoint,
+                        include_descendants=preview.include_descendants,
+                    )
+                    continue
+                delivery = deliver_prepared_share(preview)
+                break
         else:
             missing = []
             if source is None:

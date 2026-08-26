@@ -1,4 +1,5 @@
 """Action- and impact-oriented receipts for Context restoration commands."""
+
 from __future__ import annotations
 
 import shlex
@@ -103,11 +104,7 @@ def _snapshot_items(
     )
     raw_order = snapshot.get("order")
     order = (
-        [
-            uid
-            for uid in raw_order
-            if isinstance(uid, str) and uid in items
-        ]
+        [uid for uid in raw_order if isinstance(uid, str) and uid in items]
         if isinstance(raw_order, list)
         else list(items)
     )
@@ -128,9 +125,7 @@ def _changes(
         if uid not in after:
             changes.append(_ItemChange("removed", uid, before[uid], None))
         elif before[uid] != after[uid]:
-            changes.append(
-                _ItemChange("edited", uid, before[uid], after[uid])
-            )
+            changes.append(_ItemChange("edited", uid, before[uid], after[uid]))
     for uid in after_order:
         if uid not in before:
             changes.append(_ItemChange("added", uid, None, after[uid]))
@@ -155,7 +150,7 @@ def _quoted_content(value: object) -> str:
     escaped = _short(value, limit=_MAX_CONTENT_CODEPOINTS)
     # display_escape_text escapes original backslashes first. Escaping quotes
     # here keeps the enclosing quotation marks unambiguous as well.
-    return '"' + escaped.replace('"', r'\"') + '"'
+    return '"' + escaped.replace('"', r"\"") + '"'
 
 
 def _item_kind(item: Mapping[str, Any] | None) -> str:
@@ -440,15 +435,11 @@ def _sole_context(unit: ContextCommandUnit) -> str | None:
     return next(iter(names)) if len(names) == 1 else None
 
 
-def _operand_context(
-    args: Mapping[str, object], fallback: str | None
-) -> str | None:
+def _operand_context(args: Mapping[str, object], fallback: str | None) -> str | None:
     """Prefer the retained public Grant operand over its authority owner."""
 
     grant = args.get("authority_grant")
-    if isinstance(grant, Mapping) and isinstance(
-        grant.get("public_context"), str
-    ):
+    if isinstance(grant, Mapping) and isinstance(grant.get("public_context"), str):
         return grant["public_context"]
     return fallback
 
@@ -505,8 +496,7 @@ def _meld_command(args: Mapping[str, object]) -> str | None:
     source_names = [
         item.get("context_name")
         for item in sources
-        if isinstance(item, Mapping)
-        and isinstance(item.get("context_name"), str)
+        if isinstance(item, Mapping) and isinstance(item.get("context_name"), str)
     ]
     target_name = baseline.get("context_name")
     if not isinstance(target_name, str):
@@ -612,9 +602,7 @@ def _restored_command(unit: ContextCommandUnit) -> str:
     operand_context = _operand_context(args, context_name)
     if unit.command == "add":
         if isinstance(args.get("content"), str):
-            return _with_context(
-                "mem add <CONTENT>", operand_context
-            )
+            return _with_context("mem add <CONTENT>", operand_context)
         if isinstance(args.get("input"), str):
             return _with_context(
                 f"mem add --input {_command_arg(args['input'])}", operand_context
@@ -627,20 +615,15 @@ def _restored_command(unit: ContextCommandUnit) -> str:
                 f"mem edit --input {_command_arg(args['input'])}",
                 operand_context,
             )
-        if isinstance(args.get("uid"), str) and isinstance(
-            args.get("content"), str
-        ):
+        if isinstance(args.get("uid"), str) and isinstance(args.get("content"), str):
             selector = _compact_direct_item_selector(unit, args["uid"])
             return _with_context(
-                f"mem edit {_command_arg(selector)} "
-                "<CONTENT>",
+                f"mem edit {_command_arg(selector)} <CONTENT>",
                 operand_context,
             )
     if unit.command == "remove" and isinstance(args.get("uid"), str):
         selector = _compact_direct_item_selector(unit, args["uid"])
-        return _with_context(
-            f"mem remove {_command_arg(selector)}", operand_context
-        )
+        return _with_context(f"mem remove {_command_arg(selector)}", operand_context)
     if unit.command == "chunk" and isinstance(args.get("uid"), str):
         selector = _compact_direct_item_selector(unit, args["uid"])
         command = f"mem chunk {_command_arg(selector)}"
@@ -693,16 +676,17 @@ def _restored_command(unit: ContextCommandUnit) -> str:
             and isinstance(tree.get("root"), str)
         ):
             return f"mem dedun {_command_arg(tree['root'])} --recursive"
-    if unit.command == "embed" and isinstance(args.get("child"), str) and isinstance(
-        args.get("into"), str
+    if (
+        unit.command == "embed"
+        and isinstance(args.get("child"), str)
+        and isinstance(args.get("into"), str)
     ):
         return (
             f"mem embed {_command_arg(args['child'])} "
             f"--into {_command_arg(args['into'])}"
         )
     if unit.command == "reference" and all(
-        isinstance(args.get(key), str)
-        for key in ("memory_uid", "source", "into")
+        isinstance(args.get(key), str) for key in ("memory_uid", "source", "into")
     ):
         return (
             f"mem reference {_command_arg(args['memory_uid'])} "
@@ -750,16 +734,11 @@ def _restored_command(unit: ContextCommandUnit) -> str:
                 return f"mem atomize --save-as {_command_arg(context_name)}"
             return f"mem atomize --save --context {_command_arg(context_name)}"
     if unit.command == "atomize-grounding" and context_name is not None:
-        return (
-            "mem atomize --accept-grounding --context "
-            + _command_arg(context_name)
-        )
+        return "mem atomize --accept-grounding --context " + _command_arg(context_name)
     if unit.command == "dev query-source install" and all(
         isinstance(args.get(key), str) for key in ("name", "into")
     ):
-        command = (
-            f"mem dev query-source install {_command_arg(args['name'])} "
-        )
+        command = f"mem dev query-source install {_command_arg(args['name'])} "
         source_file = args.get("source_file")
         if isinstance(source_file, str):
             command += f"--from {_command_arg(source_file)} "
@@ -821,8 +800,7 @@ def _render_impact(
 def _render_action_detail(description: str | None) -> None:
     if isinstance(description, str) and description:
         typer.echo(
-            "Action detail: "
-            + _short(description, limit=_MAX_DESCRIPTION_CODEPOINTS)
+            "Action detail: " + _short(description, limit=_MAX_DESCRIPTION_CODEPOINTS)
         )
 
 
@@ -884,9 +862,7 @@ def render_command_restore_receipt(result: CommandRestoreResult) -> None:
     direction = result.direction
     past = "Undid" if direction == "undo" else "Redid"
     direction_role = (
-        SemanticColorRole.UNDO
-        if direction == "undo"
-        else SemanticColorRole.REDO
+        SemanticColorRole.UNDO if direction == "undo" else SemanticColorRole.REDO
     )
     fragments = [
         typer.style(

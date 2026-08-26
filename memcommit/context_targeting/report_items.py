@@ -10,9 +10,15 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal
 
-from memcommit.context import Context
+from memcommit.authority.access import ContextAccess, resolve_context_access
+from memcommit.context import Context, Memory
 from memcommit.context_locator import resolve_context_locator
+from memcommit.context_targeting.readable_catalog import (
+    ReadableContextCatalog,
+    freeze_profile_readable_context_catalog,
+)
 from memcommit.context_targeting.resolution import parse_direct_memory_locator
+from memcommit.profile_config import ProfileRegistry
 from memcommit.provenance import collect_trace_candidates
 from memcommit.reference_provenance import collect_reference_candidates
 from memcommit.store import MemoryStore
@@ -29,6 +35,23 @@ class ResolvedMemoryReportTarget:
     uid: str
     kind: MemoryReportTargetKind
     status: Literal["CURRENT", "HISTORICAL"]
+
+
+@dataclass(frozen=True)
+class ResolvedReadableMemoryTarget:
+    """One current ordinary Memory and its exact readable authority route."""
+
+    context_name: str
+    uid: str
+    access: ContextAccess
+
+
+class ReadableMemoryTargetNotFoundError(ValueError):
+    """No current ordinary Memory matched in the readable Profile catalog."""
+
+
+class ReadableMemoryTargetAmbiguityError(ValueError):
+    """Multiple current ordinary Memories matched in the readable catalog."""
 
 
 def parse_memory_report_locator(
@@ -126,9 +149,114 @@ def resolve_local_memory_report_target(
     return matches[0]
 
 
+def freeze_memory_report_readable_catalog(
+    store: MemoryStore,
+    *,
+    current: str | None,
+    registry: ProfileRegistry | None = None,
+) -> ReadableContextCatalog | None:
+    """Freeze the Profile-wide current-Memory namespace for a bare UID.
+
+    An explicit bare UID used by a read-only report is independent of the
+    current row, but the current row remains the authorization anchor needed
+    to freeze the Profile catalog.  A Profile with readable Grants necessarily
+    has a local attachment; when no current row exists, the first ordinary
+    local Context supplies that neutral anchor.  An entirely empty store has
+    no current Memories and therefore returns ``None`` for the caller's
+    retained-history fallback.
+    """
+
+    if current is not None:
+        selected_access = resolve_context_access(
+            store,
+            current,
+            current_name=current,
+            required_permission="READ",
+            registry=registry,
+        )
+    else:
+        local_names = tuple(sorted(store.list_context_names(), key=str.casefold))
+        if not local_names:
+            return None
+        selected_name = local_names[0]
+        selected_access = ContextAccess(
+            store=store,
+            context_name=selected_name,
+            display_name=selected_name,
+            attachment_name=None,
+            permission="READ",
+        )
+    return freeze_profile_readable_context_catalog(
+        store,
+        selected_access,
+        include_query_routes=False,
+        registry=registry,
+    )
+
+
+def resolve_readable_memory_target(
+    catalog: ReadableContextCatalog,
+    selector: str,
+) -> ResolvedReadableMemoryTarget:
+    """Resolve one current Memory across local and READ-granted public owners.
+
+    Only direct ordinary Memories enter this namespace.  Retained history,
+    Memory references, embedded traversal, and QUERY-only sources remain
+    operation-specific fallbacks or concealed routes.  Local and granted
+    candidates have equal standing, so a collision always requires the
+    displayed ``CONTEXT:UID`` coordinate instead of current-Context priority.
+    """
+
+    matches = tuple(
+        (public_name, memory, catalog.access_for(public_name))
+        for public_name in catalog.list_context_names()
+        for memory in catalog.load_direct(public_name).iter_items()
+        if isinstance(memory, Memory) and memory.uid.startswith(selector)
+    )
+    exact = tuple(match for match in matches if match[1].uid == selector)
+    if exact:
+        matches = exact
+    coordinates = {
+        (public_name, memory.uid): (public_name, memory, access)
+        for public_name, memory, access in matches
+    }
+    matches = tuple(coordinates.values())
+    if not matches:
+        raise ReadableMemoryTargetNotFoundError(
+            f"No current readable Memory with uid starting with {selector!r} "
+            "was found in this Profile."
+        )
+    if len(matches) != 1:
+        local_only = all(not access.is_granted for _name, _memory, access in matches)
+        choices = "; ".join(
+            f"{public_name}:{memory.uid} (MEMORY)"
+            for public_name, memory, _access in sorted(
+                matches,
+                key=lambda match: (match[0].casefold(), match[1].uid),
+            )
+        )
+        raise ReadableMemoryTargetAmbiguityError(
+            f"Report selector {selector!r} has multiple "
+            f"{'local' if local_only else 'current readable'} "
+            f"matches ({len(matches)}): {choices}. To select one, rerun with "
+            "its CONTEXT:UID value shown above."
+        )
+    public_name, memory, access = matches[0]
+    return ResolvedReadableMemoryTarget(
+        context_name=public_name,
+        uid=memory.uid,
+        access=access,
+    )
+
+
 __all__ = [
     "MemoryReportTargetKind",
+    "ReadableMemoryTargetAmbiguityError",
+    "ReadableMemoryTargetNotFoundError",
     "ResolvedMemoryReportTarget",
+    "ResolvedReadableMemoryTarget",
+    "freeze_memory_report_readable_catalog",
     "parse_memory_report_locator",
     "resolve_local_memory_report_target",
+    "resolve_readable_memory_target",
 ]

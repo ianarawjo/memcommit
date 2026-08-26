@@ -1,0 +1,54 @@
+$ mem atomize --sessions
+PTY 180 52
+[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m MEM ATOMIZE · SESSIONS · RECENT FIRST · ALL[0m
+[0m PROFILE · (unregistered)[0m
+[0m STORE   · /var/folders/gb/k74fw7ks06x4c041g8gqgj600000gq/T/mem-session-rotation-uvfmj3bt/atomize-store[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
+[0;1m  + Add new Atomize session[152C^[0m
+[0;1;7m› 2026-08-25 13:28Z  capture/atomize-policy  [CURRENT]  capture/atomize-policy → capture/atomize-policy · 1 → 1 Memories · 2 issues[48C[0;48;2;68;68;68m [0m
+[0m  2026-08-25 13:28Z  capture/atomize-policy  [APPLIED]  capture/atomize-policy → capture/atomize-policy · 1 → 1 Memories · 2 issues[48C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[0m                                                                                                                                                                                   [179C[0;1mv[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
+[0m Kind         atomize[158C[0;1m^[0m
+[0m Key          db7e7221-a54b-4c5e-aa34-812161f8b53a[129C[0;48;2;68;68;68m [0m
+[0m Title        capture/atomize-policy[143C[0;48;2;68;68;68m [0m
+[0m Status       CURRENT[158C[0;48;2;68;68;68m [0m
+[0m Context      capture/atomize-policy[143C[0;48;2;68;68;68m [0m
+[0m Modified     2026-08-25 13:28Z[148C[0;48;2;68;68;68m [0m
+[0m Summary      capture/atomize-policy → capture/atomize-policy · 1 → 1 Memories · 2 issues[90C[0;48;2;68;68;68m [0m
+[0m Detail       Analysis db7e7221-a54b-4c5e-aa34-812161f8b53a[120C[0;48;2;68;68;68m [0m
+[0m              Source Context capture/atomize-policy [c3dc8b2e-d352-48f4-987a-7dc2181ac71f][89C[0;48;2;68;68;68m [0m
+[0m              Planned Output capture/atomize-policy · IN PLACE[117C[0;48;2;68;68;68m [0m
+[0m              Opening this analysis checks that it is still current. The shown command is a reference route; the picker does not run it.[43C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[0m                                                                                                                                                                                   [179C[0;1mv[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
+[0m ↑/↓ move  PgUp/PgDn detail  Enter open  S sort  G group  / filter  N Add new Atomize session  Esc/q cancel  ·  2/3[115D[46A[0m

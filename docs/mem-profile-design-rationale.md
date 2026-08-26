@@ -113,8 +113,9 @@ same topology in the initialized Profile as in the baseline.
 
 ## Isolated two-Profile Study runs
 
-`mem init-study [NAME]` is the repeatable run-oriented entry point. It snapshots
-the currently registered `study-baseline` Profile, not the generated bundle,
+`mem init-study [NAME] --scenario legacy-v1` is the repeatable legacy
+run-oriented entry point. It snapshots the currently registered
+`study-baseline` Profile, not the generated bundle,
 and publishes two managed Profiles plus their grants in one registry generation:
 
 ```text
@@ -185,12 +186,16 @@ pilot-001  STUDY
 The group and roles come from stable Study UID/source-kind provenance, not from
 the current display names. A Profile rename therefore keeps the same Study
 label and role, while an explicit Study rename can change that shared label
-without changing either Profile name. These two current roles also opt into the content-free Study
-action ledger; the baseline, ordinary Profiles, and legacy six-Profile runs do
-not. Initialization selects the new participant Profile in the same atomic
-registry generation that publishes the complete pair and grants. Its detailed
-ledger is seeded explicitly because the `init-study` root attempt began in the
-previous Profile.
+without changing either Profile name. These two current roles also opt into the
+Study action ledger; only the Participant adds complete command text and
+focused Help wording/results, while the granted-memory role remains
+content-free within that detailed ledger. Every Profile's separate generic
+command-attempt ledger retains its complete command. The baseline, ordinary
+Profiles, and legacy six-Profile runs do not opt into detailed Study actions.
+Initialization selects the new participant Profile in the same
+atomic registry generation that publishes the complete pair and grants. Its
+detailed ledger is seeded explicitly because the `init-study` root attempt
+began in the previous Profile.
 
 ## Recoverable legacy Study archive
 

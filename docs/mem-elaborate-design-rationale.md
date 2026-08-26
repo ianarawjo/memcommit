@@ -19,14 +19,17 @@ number means exactly three proposals in both directions. `--n N` (also `-n`
 and `--number`) overrides that default with another exact count or the complete
 operation fails. Exact count applies to ordered, UID-backed proposal
 occurrences, not distinct content: repeated Rule content or Case propositions
-remain valid when repetition is intended or useful.
+remain valid within one proposal set when repetition is intended or useful.
+When an existing Target supplies ambient Memories, however, an output that
+only restates one of those Memories is rejected before validation or Add.
 
 ## Shared application contract
 
 `ElaborateRequest` accepts exactly one direction: one nonempty Goal or one or
 more distinct nonempty Rules, plus an optional override for the exact proposal
-number. The normalized request always carries an exact count, defaulting to
-three.
+number and a Rules-to-Cases-only strict flag. The normalized request always
+carries an exact count, defaulting to three, and one explicit quality policy.
+`BEST_EFFORT` is the default; `STRICT` is selected only by `--strict`.
 An explicit count may be any positive integer; three is a default, not a
 maximum. `ElaborateSemanticConfig` owns optional host-injected directional
 safety ceilings plus the text, rationale, overview, and response limits. Both
@@ -48,11 +51,10 @@ prepared-result check, and atomic publication count all share the exact request
 value. A count mismatch publishes nothing. General provider input and response
 envelope limits remain independent of this count contract, so a provider may
 still fail an exceptionally large exact request rather than silently reducing
-its count. With `--strict`, Rules-to-Cases also fails before provider
-construction when the complete Rule-by-Case Conformance/Fit validation frame
-exceeds the shared whole-frame item or text limits. The default best-effort
-path does not plan or run that frame; ordinary generation limits still apply
-in both modes.
+its count. Strict Rules-to-Cases also fails before provider construction when
+the complete Rule-by-Case Conformance/Fit validation frame exceeds the shared
+whole-frame item or text limits. Best-effort does not inherit limits belonging
+only to semantic calls it does not make.
 
 Proposal identity is not derived from normalized content. Every returned Rule
 or Case has a distinct proposal UID even when its content repeats, and
@@ -61,14 +63,18 @@ UID. Content equality therefore neither invalidates the analysis nor silently
 reduces the requested count. This matches the Store's identity model and keeps
 intentional repetition observable in Context order, receipts, Review, and
 Undo. Reusing one proposal UID remains invalid because that would collapse two
-ordered occurrences onto one identity.
+ordered occurrences onto one identity. This allowance applies among new
+occurrences in one request; it does not authorize re-adding content already
+present in the frozen Target ambient frame.
 
 Every Case is classified as `FIT`, `BOUNDARY`, or `CONTRAST` and carries one
-ordered `rule_checks` entry for every current input Rule. Every stored
-proposition must jointly comply with the complete Rule set; a contrast may
-appear in the rationale but is not stored as a violating Example. Structural
-domain validation and active-config validation are separate so an injected
-configuration is applied consistently to live and prepared output.
+ordered `rule_checks` entry for every current input Rule. An individually
+applicable Rule must hold for that Case. A family-level Rule such as a seed,
+ordering, position, or recurrence invariant instead governs the ordered
+collection, so it need not be restated by every member in isolation. A contrast
+may appear in the rationale but is not stored as a violating Example.
+Structural domain validation and active-config validation are separate so an
+injected configuration is applied consistently to live and prepared output.
 
 Every generative provider prompt quotes the complete café, lost-property, and Cloze
 Rule/Example reference pairs. Rules-to-Cases reads them in the generative
@@ -86,39 +92,87 @@ UID-backed rather than content-backed and explicitly admits repeated output
 content without weakening exact count or complete Rule coverage.
 
 Provider contract version 10 added mandatory post-generation validation for
-Rules-to-Cases. Version 11 makes generation-only `BEST_EFFORT` the default and
-puts that former acceptance sequence behind `--strict`. Quality policy is part
-of exact prepared identity, so output produced under one policy cannot be
-replayed as the other.
+Rules-to-Cases. Provider contract version 11 corrects its validation unit:
+every Source Rule must conform over the complete ordered collection, every new
+Case must conform under at least one applicable Rule without violating any
+Rule, and the complete Source/Target-prefix/generated-Case frame must receive
+general Fit `YES` before an analysis can be returned or published.
 
-### Independent Source validation
+Provider contract version 12 generalizes the generation prompt from
+"every Case shows every Rule" to parent/child applicability without changing
+the exact-count or validation schema. The provider must first distinguish a
+conjunctive record schema, whose Rules jointly constrain every child, from
+independent sibling criteria, conditional subfamilies, diagnostic indicators,
+and collection-level relationships, whose coverage may be distributed across
+children. Every `rule_checks` row is still present so the complete parent frame
+is read; its evidence now identifies `APPLIES`, `NOT APPLICABLE`, or
+`COLLECTION` meaning. For an ordered Target prefix, materially used references
+must establish origin, position, and lineage, not merely name the final two
+operands needed to compute the next member.
+
+Provider contract version 14 separates generation quality from optional
+acceptance gating. A best-effort analysis retains no strict validation object;
+a strict analysis must retain complete collection Conformance and Fit evidence.
+Prepared reuse, digests, public projections, agent projections, and Add receipts
+bind this policy so validation state cannot be replayed across modes.
+
+### Best-effort default and optional independent Source validation
 
 Generator-authored `rule_checks` remain useful evidence pointers, but they are
 not acceptance evidence because the same turn produced both the Case and its
-self-assessment. Strict Rules-to-Cases therefore composes two existing judgment
-contracts after generation. Context Conformance checks the complete generated
-Case set against every Source Rule and must classify every Case as `CONFORMS`
-under all Rules. General Fit then checks each Case together with the complete
-Source Rule frame and must return `YES`. `VIOLATES`, `NOT_APPLICABLE`,
-`INSUFFICIENT_EVIDENCE`, Fit `NO`, and Fit `MAY` all fail a strict operation
-before publication; the operation does not silently reduce the requested exact
-count or loop through hidden regeneration attempts. Best effort does not run
-either independent judgment and carries no validation object.
+self-assessment. Default Rules-to-Cases nevertheless stops after that one
+generation turn and publishes the structurally valid exact-count collection as
+`SUGGESTED`, `UNVERIFIED`, and `BEST_EFFORT`. It does not run Conformance or Fit
+and then hide or ignore their result. This keeps Elaborate a responsive proposal
+operation and leaves strict assessment to an explicit `--strict` request or the
+separate `mem check-conformance` operation.
+
+Strict Rules-to-Cases composes two existing judgment contracts after generation.
+Context Conformance checks every Source Rule over one ordered frame: materially
+referenced Target Memories first, then generated Cases. Every Rule-level
+judgment must be `CONFORMS`, and every generated Case must be a conforming
+governed member; different members may be governed by different applicable
+subsets. General Fit then checks the complete Rule and Case collection once,
+with referenced Target Memories as explicit background, and must return `YES`.
+`VIOLATES`, `PARTIALLY_CONFORMS`, `NOT_APPLICABLE`,
+`INSUFFICIENT_EVIDENCE`, Fit `NO`, and Fit `MAY` all fail strict publication;
+the operation does not silently reduce or regenerate the requested set.
 
 Fit remains compatibility rather than factual grounding. A concrete value
 that does not appear in Source is allowed when it is a legitimate Rule
 instantiation and creates no Source contradiction. The validation must not
 treat missing support as incompatibility, establish objective truth, or turn a
-synthetic Case into real-world evidence. For that reason accepted Cases remain
-`SUGGESTED` and `UNVERIFIED` even though their Source conformance and
-compatibility have been checked.
+synthetic Case into real-world evidence. Both policies therefore remain
+`SUGGESTED` and `UNVERIFIED`; strict means Source compatibility was checked,
+not that the generated Case became true or accepted evidence.
 
-Each semantic primitive keeps one complete frame: generation is
-`WHOLE_FRAME_ONLY`, Conformance judges all generated Cases and Source Rules in
-one turn, and Fit judges the exhaustive Case question set in one turn. No
-primitive batches or truncates the frame. The typed Case, digest, public and
-agent projections, plain detail, and Add checkpoint retain the accepted
-conformance and Source-Fit result.
+Each invoked semantic primitive keeps one complete frame: generation is always
+`WHOLE_FRAME_ONLY`; strict Conformance judges all referenced Target Memories,
+generated Cases, and Source Rules in one turn; strict Fit judges the same
+complete collection in one question. No primitive batches or truncates its
+frame. The typed Case, digest, public and agent projections, plain detail, and
+Add checkpoint retain either `BEST_EFFORT` plus `NOT_RUN`, or `STRICT` plus the
+accepted Conformance/Fit result.
+
+### Study failure reconstruction
+
+The policy change was motivated by three recorded Study attempts whose
+generation turn completed successfully but whose complete candidate collection
+was then discarded by the former mandatory Conformance gate: one 10-Case
+attempt in `study-20260825T110027Z-59cb6a29`, and 40-Case and 10-Case Fibonacci
+attempts in `study-20260824T170446Z-585b70f0`. Under the best-effort default,
+those same control paths stop after structural decoding and make all 60
+candidates eligible for atomic Add; `--strict` deliberately retains the former
+rejection behavior. Failed-attempt ledgers do not retain provider response
+bodies and no Add checkpoint exists, so exact historical candidate strings
+cannot be recovered or honestly regenerated after the fact.
+
+The complete ledger-derived reconstruction is recorded in
+`outputs/elaborate-best-effort-reconstruction-20260825/README.md`. Across the
+eight substantive Elaborate attempts in the two Studies, the recorded
+generation-boundary counterfactual skips 13 judgment turns and 222.847 seconds
+of observed post-generation elapsed time. These observations motivate the
+default but are not a provider-latency guarantee.
 
 ### Why the former 4/3 ceilings were removed
 
@@ -149,15 +203,16 @@ advanced when this invariant replaced the earlier zero-proposal behavior.
 An injectable exact prepared lookup may avoid provider construction only when
 the normalized direction, complete input tuple, exact-number request, quality
 policy, and Target ambient frame match. A strict Rules-to-Cases result must
-already contain its independent validation evidence; a best-effort result must
-not contain it. There is no persisted Elaborate cache artifact yet and no
-subset/projection reuse claim.
+contain validation evidence; a best-effort result must not claim it. There is
+no persisted Elaborate cache artifact yet and no subset/projection reuse claim.
 
 ## Standalone Add and endpoint contract
 
 Standalone Elaborate is a semantic Add. It generates a complete proposal set
 and appends every generated proposition to one existing ordinary Context in a
-single checkpoint; there is no `--apply` gate. The two endpoint options fill
+single checkpoint; there is no `--apply` gate. Best-effort is the default, while
+`--strict` adds the independent pre-publication gates for Rules-to-Cases. The
+two endpoint options fill
 from one Current snapshot:
 
 | Invocation | Source | Target |
@@ -171,12 +226,14 @@ With no inline input, directly owned ordinary Source Memories are interpreted
 as Rules by default and Elaborate generates Cases. `--as goal` instead requires
 exactly one direct Memory and generates Rules. This role belongs to the
 invocation, not to the Context name: `goals`, `rules`, and other naming
-conventions carry no hidden semantics. Inline `--goal` or repeatable `--rule`
-remains available and uses Current or `--to` as its existing Target.
-`--n`/`-n`/`--number` has the same exact meaning for inline input, Context input,
-and both Ground directions. `--strict` is likewise carried through Context,
-Impact, Ground, Python, and agent Rules-to-Cases routes; it is rejected for
-Goal-to-Rules.
+conventions carry no hidden semantics. `--goal` uses the shared Goal operand
+and may identify a direct-Memory Context, one direct Memory, or process-local
+text. When supplied alone, its exactly one item is also the Goal-to-Rules
+generative Source for compatibility. Beside `--rule` or a Context `--from`, it
+is auxiliary relevance focus and does not become Source evidence. Repeatable
+`--rule` remains available and uses Current or `--to` as its existing Target.
+`--n`/`-n`/`--number` has the same exact meaning for inline input, Context input, and
+both Ground directions.
 
 Source and Target may be the same Context. The command freezes their common
 pre-image before provider construction, so a provider turn cannot consume the
@@ -211,6 +268,15 @@ requires `EXPORT` because the derived result leaves the granted resource and
 `SAVE_ANALYSIS` because the durable receipt retains the reviewed analysis;
 both are checked before provider connection and again at publication.
 
+For ordered family Rules, ambient Memory order is semantic: referenced Target
+Memories form the existing prefix and generated Cases form its proposed suffix.
+The provider must continue after the final applicable Target item rather than
+restart at a seed. Independently of the provider's explanation, normalized
+case-insensitive content equality with any frozen Target Memory fails locally
+before optional validation or Add. This is a narrow no-restatement boundary, not
+general semantic deduplication; nonidentical overlap still belongs to explicit
+reconciliation operations.
+
 When Source and Target are the same Context, directly consumed Source Memory
 UIDs are excluded from the ambient frame. Source meaning therefore wins and
 the same string is not sent twice under two semantic roles; safe embedded and
@@ -222,7 +288,9 @@ aliases report exactly which ambient items the provider says it materially
 used, may be empty, and are locally restricted to the frozen Target aliases.
 They do not replace `rule_checks` and do not turn Target Memories into Rule
 evidence. The typed analysis, plain and TUI details, public proposal, agent
-projection, digest, and Add receipt retain this trace. Any root,
+projection, digest, and version-5 Add receipt retain this trace. The receipt
+also records `quality_policy` and `case_validation`, using `NOT_RUN` rather
+than fabricating validation evidence for best-effort Cases. Any root,
 embedded, referenced, or granted ambient pre-image drift rejects the proposal
 or Add without partially appending generated Memories.
 
@@ -276,19 +344,25 @@ the complete ambient frame remains in the typed result and full projections.
 ## Ground route
 
 Ground CLI accepts one exact saved Ground and either `--from-goal` or
-`--from-rules`, plus the same optional exact `--number`. It calls the same
-`run_elaborate` application function. The
-Ground adapter freezes and revalidates the exact Ground UID, revision, and
-record digest before and after the provider sequence. A physical Ground uses
+`--from-rules`, plus the same optional exact `--number` and Rules-to-Cases
+`--strict` policy. It calls the same
+`run_elaborate` application function. The Ground adapter freezes and
+revalidates the exact operation-consumed Goal or Rule frame before and after
+the provider sequence. A physical Ground uses
 `/rules` as Goal-to-Rules destination ambient context and `/examples` as
 Rules-to-Cases destination ambient context; other lanes are not included.
 The legacy record projects its active Rule or Case destination lane under the
 same typed ambient contract. Active Ground Rules are
 `PROPOSED` or `ACCEPTED` Rules; rejected/deferred material is not silently
-reused. Ground Elaborate remains proposal-only until its non-Context workspace
-records can participate in the same exact source-lock publication boundary.
+reused. Ground Elaborate remains proposal-only by default. For a physical
+Ground, explicit `--adopt` additionally requires the reviewed whole-Ground
+revision and destination pre-image, then appends the complete result to
+`/rules` or `/examples` as one revision and one Ground-local Undo unit. Legacy
+JSON Grounds remain proposal-only.
 
 No Elaborate route promotes or accepts a Ground Rule or Case automatically.
+The shared focus and adoption contract is documented in
+[`goal-focus-operand-design-rationale.md`](goal-focus-operand-design-rationale.md).
 
 ## Interfaces
 
@@ -302,10 +376,11 @@ forms and the same optional exact-count override, and return
 slice does not silently broaden those callable adapters into mutations.
 Agent contract version 3 added the name-only/content-safe Target ambient frame
 and per-proposal Target references; standalone public calls without a Target
-continue to return no ambient frame. Agent contract version 4 added accepted
-per-Case Source conformance and Fit evidence. Version 5 adds the optional
-boolean `strict` request field, explicit `quality_policy`, and nullable Case
-validation. Its JSON Schema still publishes no `maximum` for `number`.
+continue to return no ambient frame. Agent contract version 4 adds accepted
+per-Case Source conformance and Fit evidence. Agent contract version 5 adds the
+optional `strict` request, explicit `quality_policy`, and nullable Case
+validation for best-effort output. Its JSON Schema still publishes no
+`maximum` for `number`.
 
 Elaborate currently opens directly on its result Viewer rather than providing
 an input-composer TUI. That is intentional for this slice: CLI, Python, or
@@ -322,6 +397,6 @@ can remain a presentation adapter over the same request.
   exact count within one response envelope;
 - no promise that exact-count proposal content is unique; repetition is a
   valid, separately identified result; and
-- no claim that generated or stored Case propositions are evidence; and
-- no claim that best-effort Cases independently conform or Fit; use `--strict`
-  when that rejection boundary is required.
+- no claim that a best-effort Case conforms to every Source Rule unless a later
+  explicit check establishes it; and
+- no claim that generated or stored Case propositions are evidence.

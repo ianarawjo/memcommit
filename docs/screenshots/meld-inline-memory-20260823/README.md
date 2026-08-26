@@ -9,7 +9,7 @@ read-only reload.
 ## Reproduction frame
 
 - Working directory: `/Users/KimMunyeong/Github/memcommit`
-- Command: `mem meld 'all greetings need "."; keep "" and ! literal. '`
+- Command: `mem meld --from 'all greetings need "."; keep "" and ! literal. ' --to capture/greeting-policy`
 - Current Context and local BASELINE/Target: `capture/greeting-policy`
 - Initial Target Memory: `Keep the existing greeting policy.`
 - Provider: deterministic `InlineMemoryProvider`, delayed only for the wait capture
@@ -22,7 +22,7 @@ read-only reload.
 
 | Image | Preceding input | Visible state | Durable mutation |
 | --- | --- | --- | --- |
-| `01-inline-input-provider-pending` | launch the quoted one-operand sentence while `capture/greeting-policy` is current | exact punctuation-bearing argv, verified 180×52 PTY, current BASELINE/Target, and real Meld Provider wait | fixture Context only |
+| `01-inline-input-provider-pending` | launch the quoted `--from SENTENCE --to BASELINE` form | exact punctuation-bearing argv, verified 180×52 PTY, explicit BASELINE/Target, and real Meld Provider wait | fixture Context only |
 | `02-tty-success-receipt` | Provider completes with no unresolved semantic decision | local Undo-backed policy applies the reviewed edit; schema 9 is saved, one checkpoint exists, retained text includes `"."`, `""`, `!`, and trailing space, and `INLINE MEMORY CONTEXT EXISTS · False` | exact Target edit |
 | `03-exact-ready-review` | prepare the same input in a separate store without TTY auto-application | complete ready relation/proposal plus exact shell-safe `mem meld --memory ... --into ... --accept` gate; zero checkpoints and no temporary Context | saved review session only |
 | `04-exact-accept-receipt` | execute the displayed `--accept` command | Provider calls remain zero, session is `APPLIED`, one checkpoint exists, and the exact input is both Target content and retained source evidence | exact Target edit |

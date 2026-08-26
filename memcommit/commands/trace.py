@@ -47,8 +47,11 @@ from memcommit.granted_provenance import (
 from memcommit.context_history import ContextTraceReport, build_context_trace
 from memcommit.context_targeting.model import ContextTarget
 from memcommit.context_targeting.report_items import (
+    ReadableMemoryTargetNotFoundError,
+    freeze_memory_report_readable_catalog,
     parse_memory_report_locator,
     resolve_local_memory_report_target,
+    resolve_readable_memory_target,
 )
 from memcommit.provenance import (
     ProvenanceError,
@@ -457,14 +460,45 @@ def cmd(
                     context_locator=access.context_name,
                 )
         else:
-            # A bare explicit UID is already a stable type signal. Search every
-            # ordinary local owner once instead of silently preferring current.
-            resolved_target = resolve_local_memory_report_target(
+            # Read-only report UIDs round-trip from Profile-wide Find/List/Search
+            # results. Current local and READ-granted Memories therefore share
+            # one ambiguity-preserving catalog. Retained local history and
+            # Memory references remain a fallback only when no current row
+            # matches anywhere in that readable namespace.
+            readable_catalog = freeze_memory_report_readable_catalog(
                 store,
-                item_selector,
                 current=context_snapshot.current_name,
-                context_locator=None,
             )
+            try:
+                readable_target = (
+                    resolve_readable_memory_target(
+                        readable_catalog,
+                        item_selector,
+                    )
+                    if readable_catalog is not None
+                    else None
+                )
+            except ReadableMemoryTargetNotFoundError:
+                readable_target = None
+            if readable_target is not None:
+                if readable_target.access.is_granted:
+                    granted_access = readable_target.access
+                    resolved_target = None
+                    item_selector = readable_target.uid
+                else:
+                    resolved_target = resolve_local_memory_report_target(
+                        store,
+                        readable_target.uid,
+                        current=context_snapshot.current_name,
+                        context_locator=readable_target.context_name,
+                    )
+            else:
+                resolved_target = resolve_local_memory_report_target(
+                    store,
+                    item_selector,
+                    current=context_snapshot.current_name,
+                    context_locator=None,
+                )
 
         if granted_access is not None:
             report = build_granted_memory_trace(granted_access, item_selector)

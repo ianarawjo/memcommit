@@ -45,19 +45,36 @@ def _choose_endpoint(
     names: Sequence[str],
     *,
     chooser: ShareNameChooser,
+    current: str | None = None,
 ) -> str | None:
     if not names:
         raise ShareFlowUnavailable(
             "No SHARE endpoint is available to the active Profile."
         )
-    if len(names) == 1:
+    # Initial setup may safely accept the only endpoint, but an explicit
+    # in-view Browse request must still open the catalog it promised to show.
+    if len(names) == 1 and current is None:
         return names[0]
     return chooser(
         tuple(names),
-        current=None,
+        current=current,
         title="Select a Share endpoint",
         accept_label="use endpoint",
         local_annotations={name: "SHARE ENDPOINT" for name in names},
+    )
+
+
+def choose_share_endpoint(
+    *,
+    current: str | None = None,
+    chooser: ShareNameChooser = choose_context,
+) -> str | None:
+    """Browse the complete currently available SHARE endpoint catalog."""
+
+    return _choose_endpoint(
+        list_share_endpoints(),
+        chooser=chooser,
+        current=current,
     )
 
 
@@ -86,8 +103,7 @@ def choose_share_preview(
 
     selected_endpoint = recipient
     if not selected_endpoint:
-        selected_endpoint = _choose_endpoint(
-            list_share_endpoints(),
+        selected_endpoint = choose_share_endpoint(
             chooser=endpoint_chooser,
         )
         if selected_endpoint is None:

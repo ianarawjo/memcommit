@@ -32,9 +32,9 @@ class SemanticProvider:
         distill_validation = passing_distill_goal_fit_response(prompt, operation)
         if distill_validation is not None:
             return distill_validation
-        elaborate_validation = passing_elaborate_validation_response(prompt, operation)
-        if elaborate_validation is not None:
-            return elaborate_validation
+        validation = passing_elaborate_validation_response(prompt, operation)
+        if validation is not None:
+            return validation
         if operation == "fit_propositions":
             payload = json.loads(prompt.split(FIT_JUDGMENT_PAYLOAD_MARKER, 1)[1])
             question = payload["questions"][0]

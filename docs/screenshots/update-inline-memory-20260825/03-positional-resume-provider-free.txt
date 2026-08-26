@@ -1,0 +1,21 @@
+$ mem update 'want to make all the last word as fruits' --to capture/fruit-rules
+PTY 180 52
+TTY FLAGS · stdin=True stdout=True
+UPDATE APPLIED · INLINE UPDATE MEMORY → capture/fruit-rules
+EFFECTS · ADD 0 · EDIT 1 · REMOVE 0
+RECEIPT · 74e3587f-2c6e-49ed-bf08-461089ec0d64
+CHECKPOINTS · capture/fruit-rules [eeaeaf61-2ceb-4076-b1d0-22326975f8bc]
+REVIEW · mem review update --session 74e3587f-2c6e-49ed-bf08-461089ec0d64
+RECOVERY · mem undo
+This Update receipt was already applied.
+COMMAND EXIT · 0
+
+DURABLE VERIFICATION · INLINE-MEMORY UPDATE
+  SESSION STATE · applied
+  SESSION SCHEMA · 8
+  PROVIDER CALLS · 0
+  TARGET CHECKPOINTS · 1
+  CONTEXT NAMES · capture/fruit-rules
+  INLINE UPDATE CONTEXT EXISTS · False
+  TARGET MEMORY · 'Make every final word a fruit.'
+  RETAINED INLINE CONTENT · 'want to make all the last word as fruits'

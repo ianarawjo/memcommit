@@ -43,6 +43,20 @@ saved mutation(target, expected_version=version, ...)
 | Change destination | the typed snapshot's literal version | never | relocate the empty symmetric Result and session together |
 | Apply | literal current version, or the exact reviewed predecessor of an already-applied session | never | one operation checkpoint or verified recovery of that same receipt |
 
+Terminal completion releases the target's mutable work slot. `APPLIED` and
+`KEPT_REVIEW_ONLY` records remain immutable UID-addressed evidence. A plain,
+provably different Source request automatically enters the same typed Restart
+and CAS boundary; an exact terminal retry remains provider-free. `--restart`
+is still required to reanalyze an indistinguishable request or deliberately
+replace unfinished work. The Meld setup launcher's `New` action supplies that
+explicit signal when its selected target already has a saved session.
+
+Terminal predecessors are archived only when the replacement is ready to
+publish, under `meld-session-history/<target-uid>/<session-uid>.json`. Failed
+provider work leaves the predecessor active. Impact and Review resolve both
+the target-scoped latest slot and retained terminal UIDs; retained rows are
+view-only and cannot be resumed into Apply.
+
 The Apply retry exception is deliberately narrow. An applied Meld retains its
 complete typed application receipt. The application layer can clone that saved
 session, clear the exact receipt, and hash the reconstructed `READY_TO_APPLY`

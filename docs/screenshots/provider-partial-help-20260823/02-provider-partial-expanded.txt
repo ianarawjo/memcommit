@@ -1,0 +1,52 @@
+ mem help · command inventory                                                                                                                                                       
+┌────────────────────────────────────────────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────────────────────────────────────────────┐
+│  LANGUAGE · [ ✓ EN ]  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                                                                                                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+│ ▸ mem undo ─┬ Undo the most recent recorded command as one unit.                                                                                                                │^
+│             └ WHEN · Reversing the latest recorded mutation as one operation.                                                                                                   │ 
+│ ▸ mem redo ─┬ Redo the most recently undone recorded Context command.                                                                                                           │ 
+│             └ WHEN · Reapplying a command that was undone accidentally.                                                                                                         │ 
+│ ▸ mem revert ─┬ Restore the current or an explicit local Context to a selected checkpoint after reviewing that revision's complete result.                                      │ 
+│               └ WHEN · Restoring a Context to a deliberately saved recovery point.                                                                                              │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┌ PROFILES ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ NO LLM · Select and administer complete local Profile stores and their managed names.                                                                                           │ 
+│ ▸ mem profile ─┬ Create, select, and manage local MemoryStore Profiles. Profiles can be renamed or permanently removed, and Study headings can be renamed through the picker or │ 
+│                │ explicit profile subcommands.                                                                                                                                  │ 
+│                └ WHEN · Managing separate users, environments, or Memory stores.                                                                                                │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┌ SHARING & PROTECTION ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ NO LLM · Deliver owned Contexts and protect Memory, Context, or Profile writes.                                                                                                 │ 
+│ ▸ mem share ─┬ Send one exact Context or lexical Context subtree through a grant-backed receiver endpoint.                                                                      │ 
+│              └ WHEN · Delivering an owned Context to an authorized receiver.                                                                                                    │ 
+│ ▸ mem lock ─┬ Lock the current Context, an auto-typed Context or direct Memory target, a recursive Context set, or the explicit Profile.                                        │ 
+│             └ WHEN · Preventing accidental modification of stable material.                                                                                                     │ 
+│ ▸ mem unlock ─┬ Unlock the current Context, an auto-typed Context or direct Memory target, a recursive Context set, or the explicit Profile.                                    │ 
+│               └ WHEN · Reopening protected material for intentional revision.                                                                                                   │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┏ SYSTEM & STUDY TOOLS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+┃ Configure MemCommit and prepare or run study and evaluation utilities.                                                                                                          ┃ 
+┃ ▸ mem help ─┬ Enter the interactive command browser and open syntax help.                                                                                                       ┃ 
+┃             └ WHEN · Discovering available operations and their invocation forms.                                                                                               ┃ 
+┃ ▾ mem provider ──┬ Select and verify Codex, Ollama, or OpenRouter semantic execution.                                                                                           ┃ 
+┃     [PARTIAL]    └ WHEN · Choosing which backend semantic operations should use, or checking that it is ready before durable work.                                              ┃ 
+┃   FLOW      · Provider configuration <-> status or probe                                                                                                                        ┃ 
+┃   EXECUTION · DETERMINISTIC                                                                                                                                                     ┃ 
+┃   EFFECT    · May change provider configuration or make a probe request                                                                                                         ┃ 
+┃   PROVIDER ACTIONS                                                                                                                                                              ┃ 
+┃   Provider inspection, configuration, reset, and readiness checking are separate actions. None changes Context content.                                                         ┃ 
+┃   - OVERVIEW · Use bare mem provider to print the active Profile routes without opening an editor or contacting a provider.                                                     ┃ 
+┃   - STATUS · Show the selected provider and bounded settings without connecting or exposing credentials.                                                                        ┃ 
+┃   - USE · Store the provider and model selection for later commands.                                                                                                            ┃ 
+┃   - RESET · Remove one authored Profile route and resume its inherited default without contacting a provider.                                                                   ┃ 
+┃   - PROBE · Contact the selected provider with one synthetic strict-schema completion before durable work.                                                                      ┃ 
+┃   FORM 1 · mem provider (print the active Profile route overview without editing)                                                                                               ┃ 
+┃   FORM 2 · mem provider status (inspect the selection without connecting)                                                                                                       ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab next kind  H full help  Q/Esc close

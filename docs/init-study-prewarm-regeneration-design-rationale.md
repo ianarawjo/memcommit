@@ -2,6 +2,11 @@
 
 ## Motivation
 
+This regeneration path belongs to the preserved `legacy-v1` scenario. The
+default built-in `coffee-v1` scenario contains participant-authored semantic
+inputs and therefore skips compatibility checks and shared prewarm attachment;
+see `docs/init-study-scenario-versioning-design-rationale.md`.
+
 Study runs pin an immutable semantic-prewarm bundle. That isolation worked as
 intended, but setup previously checked only registry shape and artifact hashes.
 It could therefore attach readable artifacts that the current operation runtime

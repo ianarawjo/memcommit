@@ -26,6 +26,10 @@ from memcommit.context_targeting.memory_focus import (
     MemoryFocusError,
     resolve_memory_focus,
 )
+from memcommit.context_targeting.model import InlineTextOperand
+from memcommit.context_targeting.operands import (
+    classify_context_or_inline_text_operand,
+)
 from memcommit.context_locator import resolve_context_locator
 from memcommit.authority.access import (
     ContextAccess,
@@ -436,7 +440,9 @@ def render_meld_receipt(
         f"REVIEW · mem review meld --session {session.uid}",
     ]
     if recovered:
-        lines.append("RECOVERY STATUS · prior application recovered; no duplicate write")
+        lines.append(
+            "RECOVERY STATUS · prior application recovered; no duplicate write"
+        )
     elif session.granted_target is None:
         lines.append("RECOVERY · mem undo")
     else:
@@ -586,14 +592,14 @@ def _is_inline_memory_operand(
 ) -> bool:
     """Classify only unambiguously non-Context one-operand text as Memory."""
 
-    resolved = resolve_context_locator(value, current=current_name)
-    if store.context_exists(resolved):
-        return False
-    try:
-        validate_portable_context_name(value)
-    except ValueError:
-        return True
-    return False
+    return isinstance(
+        classify_context_or_inline_text_operand(
+            value,
+            current=current_name,
+            context_exists=store.context_exists,
+        ),
+        InlineTextOperand,
+    )
 
 
 def _load_meld_source(
@@ -637,6 +643,59 @@ def _load_local_meld_source(
         include_descendants=True,
     )
     return recursive_comparison_projection(context) if project else context
+
+
+def _meld_request_matches_saved_session(
+    session: MeldSession,
+    *,
+    requested_mode: str,
+    left_name: str,
+    right_name: str,
+    left_descendants: bool,
+    right_descendants: bool,
+    incoming_text: str | None,
+    incoming_memory: str | None,
+    baseline_memory: str | None,
+) -> bool:
+    """Compare one explicit start frame with the target's current work slot."""
+
+    if session.mode != requested_mode:
+        return False
+    saved_names = tuple(frame.context_name for frame in session.frames)
+    sources_match = (
+        saved_names == (left_name, right_name)
+        if requested_mode == "DIRECTIONAL"
+        else set(saved_names) == {left_name, right_name}
+    )
+    sources_match = sources_match and tuple(
+        bool(frame.include_descendants) for frame in session.frames
+    ) == (left_descendants, right_descendants)
+    sources_match = sources_match and (
+        (
+            session.schema_version == MELD_INLINE_MEMORY_SCHEMA_VERSION
+            and len(session.frames[0].memories) == 1
+            and session.frames[0].memories[0].content == incoming_text
+        )
+        if incoming_text is not None
+        else session.schema_version != MELD_INLINE_MEMORY_SCHEMA_VERSION
+    )
+    for selector, frame, label in (
+        (incoming_memory, session.frames[0], "INCOMING Memory"),
+        (baseline_memory, session.frames[1], "BASELINE Memory"),
+    ):
+        requested_uid = None
+        if selector is not None:
+            try:
+                focus = resolve_memory_focus(
+                    (*frame.memories, *frame.context_evidence),
+                    selector,
+                    label=label,
+                )
+            except MemoryFocusError as error:
+                raise MeldCommandError(str(error)) from error
+            requested_uid = focus.selected_uid
+        sources_match = sources_match and frame.selected_memory_uid == requested_uid
+    return sources_match
 
 
 def _bound_frame_digest(frame, context: Context) -> str:
@@ -1212,6 +1271,18 @@ def _resume_picked_meld(
 ) -> None:
     """Reload, rebind, and open one picker selection without creating state."""
     session = reload_selected_meld_session(store, entry)
+    if entry.archived:
+        if session.state == "APPLIED":
+            typer.echo(render_meld_receipt(session))
+        else:
+            typer.echo(f"MELD DEFERRED · {session.target.context_name}")
+            typer.echo(f"SESSION · {session.uid}")
+            typer.echo("SOURCE · UNCHANGED")
+        typer.secho(
+            "Opened retained terminal history; no live work was resumed.",
+            fg=typer.colors.CYAN,
+        )
+        return
     left_ctx, right_ctx, target = _load_bound_contexts(store, session)
     if (
         target.uid != session.target.context_uid
@@ -1305,13 +1376,27 @@ def _start_new_meld_from_setup(store: MemoryStore) -> None:
         return
     left = receipt.left_name
     right = receipt.right_name
+
+    def replaces_existing_target(target_name: str) -> bool:
+        try:
+            target = store.load_direct(target_name)
+        except FileNotFoundError:
+            return False
+        return store.load_meld_session(target.uid) is not None
+
     if receipt.mode == "directional":
+        restart_existing = replaces_existing_target(right)
         start_kwargs = {
             "left": left,
             "into": right,
             "left_descendants": receipt.left_descendants,
             "right_descendants": receipt.right_descendants,
         }
+        if restart_existing:
+            # Choosing New is the explicit replacement signal when setup
+            # resolves to a target that already owns even an indistinguishable
+            # saved request.
+            start_kwargs["restart"] = True
         if receipt.left_memory_uid is not None:
             start_kwargs["incoming_memory"] = receipt.left_memory_uid
         if receipt.right_memory_uid is not None:
@@ -1321,13 +1406,16 @@ def _start_new_meld_from_setup(store: MemoryStore) -> None:
 
     if receipt.target_name is None:
         raise MeldCommandError("Symmetric Meld setup omitted result C.")
-    cmd(
-        left=left,
-        right=right,
-        to=receipt.target_name,
-        left_descendants=receipt.left_descendants,
-        right_descendants=receipt.right_descendants,
-    )
+    start_kwargs = {
+        "left": left,
+        "right": right,
+        "to": receipt.target_name,
+        "left_descendants": receipt.left_descendants,
+        "right_descendants": receipt.right_descendants,
+    }
+    if replaces_existing_target(receipt.target_name):
+        start_kwargs["restart"] = True
+    cmd(**start_kwargs)
 
 
 def cmd(
@@ -1335,9 +1423,9 @@ def cmd(
         Optional[str],
         typer.Argument(
             help=(
-                "Directional INCOMING A, or symmetric PEER A when RESULT/--to "
-                "is supplied; an unambiguously non-Context sole sentence is "
-                "inline Memory content"
+                "Directional INCOMING A, or symmetric PEER A when a third "
+                "RESULT or two-source --to is supplied; an unambiguously "
+                "non-Context sole sentence is inline Memory content"
             )
         ),
     ] = None,
@@ -1345,17 +1433,15 @@ def cmd(
         Optional[str],
         typer.Argument(
             help=(
-                "Directional BASELINE B, or symmetric PEER B when RESULT/--to "
-                "is supplied"
+                "Directional BASELINE B, or symmetric PEER B when a third "
+                "RESULT or two-source --to is supplied"
             )
         ),
     ] = None,
     result: Annotated[
         Optional[str],
         typer.Argument(
-            help=(
-                "Symmetric RESULT C; equivalent to --to and created when absent"
-            )
+            help=("Symmetric RESULT C; equivalent to --to and created when absent")
         ),
     ] = None,
     into: Annotated[
@@ -1372,8 +1458,8 @@ def cmd(
         typer.Option(
             "--to",
             help=(
-                "Symmetric RESULT C alias for the third positional Context; "
-                "created when absent"
+                "Directional BASELINE when fewer than two positional sources "
+                "are supplied; otherwise symmetric RESULT C, created when absent"
             ),
         ),
     ] = None,
@@ -1382,8 +1468,8 @@ def cmd(
         typer.Option(
             "--from",
             help=(
-                "Directional INCOMING alias for 'mem meld INCOMING' when the "
-                "current Context supplies BASELINE"
+                "Directional INCOMING Context or unambiguous inline Memory; "
+                "--to may name BASELINE, otherwise current supplies it"
             ),
         ),
     ] = None,
@@ -1516,7 +1602,7 @@ def cmd(
             "--memory",
             help=(
                 "Use exact text as one process-local INCOMING Memory; the "
-                "current Context or --into supplies BASELINE"
+                "current Context, --into, or directional --to supplies BASELINE"
             ),
         ),
     ] = None,
@@ -1621,6 +1707,8 @@ def cmd(
             err=True,
         )
         raise typer.Exit(2)
+    to_is_symmetric = to is not None and left is not None and right is not None
+    directional_to = to if to is not None and not to_is_symmetric else None
     if from_ is not None and into is not None:
         typer.secho(
             "Meld error: --from and --into are alternative directional "
@@ -1637,7 +1725,15 @@ def cmd(
             err=True,
         )
         raise typer.Exit(2)
-    if (to is not None or result is not None) and (
+    if directional_to is not None and into is not None:
+        typer.secho(
+            "Meld error: directional BASELINE cannot be supplied with both "
+            "--into and --to.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
+    if (to_is_symmetric or result is not None) and (
         into is not None or from_ is not None
     ):
         typer.secho(
@@ -1657,7 +1753,14 @@ def cmd(
         raise typer.Exit(2)
     if memory is not None and any(
         value is not None
-        for value in (left, right, result, to, from_, incoming_memory)
+        for value in (
+            left,
+            right,
+            result,
+            (to if to_is_symmetric else None),
+            from_,
+            incoming_memory,
+        )
     ):
         typer.secho(
             "Meld error: --memory supplies INCOMING content and cannot be "
@@ -1712,7 +1815,10 @@ def cmd(
             return
         current_name = store.current_context_name()
         create_target = False
-        explicit_result = result if result is not None else to
+        explicit_result = (
+            result if result is not None else (to if to_is_symmetric else None)
+        )
+        directional_baseline = into if into is not None else directional_to
         incoming_text = memory
         if incoming_text is not None:
             requested_mode = "DIRECTIONAL"
@@ -1721,13 +1827,17 @@ def cmd(
                     "Inline --memory cannot be combined with INCOMING descendants."
                 )
             left_name = INLINE_MELD_CONTEXT_NAME
-            if into is not None:
-                right_name = resolve_context_locator(into, current=current_name)
+            if directional_baseline is not None:
+                right_name = resolve_context_locator(
+                    directional_baseline,
+                    current=current_name,
+                )
             else:
                 if not current_name:
                     raise MeldCommandError(
                         "Inline --memory uses the current Context as BASELINE, "
-                        "but no current Context is available. Supply --into BASELINE."
+                        "but no current Context is available. Supply --into or "
+                        "--to BASELINE."
                     )
                 right_name = current_name
             target_name = right_name
@@ -1735,26 +1845,47 @@ def cmd(
                 ["mem", "meld", "--memory", incoming_text, "--into", right_name]
             )
         elif from_ is not None:
-            if not current_name:
+            if directional_baseline is None and not current_name:
                 raise MeldCommandError(
                     "No current BASELINE Context. Switch to the intended "
-                    "baseline before using --from."
+                    "baseline before using --from, or supply --to BASELINE."
                 )
             requested_mode = "DIRECTIONAL"
             # Both roles are fixed from one current-name snapshot.  The
             # convenience spelling must resume the same target-scoped session
             # as the portable INCOMING --into BASELINE form.
-            left_name = resolve_context_locator(
+            parsed_from = classify_context_or_inline_text_operand(
                 from_,
                 current=current_name,
+                context_exists=store.context_exists,
             )
-            right_name = current_name
+            if isinstance(parsed_from, InlineTextOperand):
+                incoming_text = parsed_from.text
+                left_name = INLINE_MELD_CONTEXT_NAME
+            else:
+                left_name = resolve_context_locator(
+                    parsed_from.locator,
+                    current=current_name,
+                )
+            right_name = (
+                resolve_context_locator(
+                    directional_baseline,
+                    current=current_name,
+                )
+                if directional_baseline is not None
+                else current_name
+            )
+            assert right_name is not None
             target_name = right_name
-            start_command = shlex.join(["mem", "meld", left_name, right_name])
-        elif into is not None:
+            start_command = shlex.join(
+                ["mem", "meld", "--memory", incoming_text, "--into", right_name]
+                if incoming_text is not None
+                else ["mem", "meld", left_name, right_name]
+            )
+        elif directional_baseline is not None:
             if right is not None or result is not None:
                 raise MeldCommandError(
-                    "Directional --into accepts at most one positional INCOMING "
+                    "Directional --into/--to accepts at most one positional INCOMING "
                     "Context. Use 'mem meld INCOMING BASELINE' instead."
                 )
             requested_mode = "DIRECTIONAL"
@@ -1762,20 +1893,33 @@ def cmd(
                 if not current_name:
                     raise MeldCommandError(
                         "No current INCOMING Context. Supply one explicitly or "
-                        "switch to it before using --into."
+                        "switch to it before using --into/--to."
                     )
                 left_name = current_name
             else:
-                left_name = resolve_context_locator(
+                parsed_left = classify_context_or_inline_text_operand(
                     left,
                     current=current_name,
+                    context_exists=store.context_exists,
                 )
+                if isinstance(parsed_left, InlineTextOperand):
+                    incoming_text = parsed_left.text
+                    left_name = INLINE_MELD_CONTEXT_NAME
+                else:
+                    left_name = resolve_context_locator(
+                        parsed_left.locator,
+                        current=current_name,
+                    )
             right_name = resolve_context_locator(
-                into,
+                directional_baseline,
                 current=current_name,
             )
             target_name = right_name
-            start_command = shlex.join(["mem", "meld", left_name, right_name])
+            start_command = shlex.join(
+                ["mem", "meld", "--memory", incoming_text, "--into", right_name]
+                if incoming_text is not None
+                else ["mem", "meld", left_name, right_name]
+            )
         elif explicit_result is not None:
             if left is None or right is None:
                 raise MeldCommandError(
@@ -1968,6 +2112,27 @@ def cmd(
             authorize_combination((left_access, right_access))
             authorize_derived_transfer(left_access, target_access)
             authorize_derived_transfer(right_access, target_access)
+        request_matches_saved = (
+            session is not None
+            and _meld_request_matches_saved_session(
+                session,
+                requested_mode=requested_mode,
+                left_name=left_name,
+                right_name=right_name,
+                left_descendants=left_descendants,
+                right_descendants=right_descendants,
+                incoming_text=incoming_text,
+                incoming_memory=incoming_memory,
+                baseline_memory=baseline_memory,
+            )
+        )
+        auto_restart = bool(
+            session is not None
+            and session.state in {"APPLIED", "KEPT_REVIEW_ONLY"}
+            and not request_matches_saved
+            and action_count == 0
+            and expand is None
+        )
         if session is None:
             if any(
                 (
@@ -2053,9 +2218,11 @@ def cmd(
                 label = (
                     "EXACT PREWARM"
                     if directional_prewarm_origin == "EXACT_PREWARM"
-                    else "EQUIVALENT SCOPE PREWARM"
-                    if directional_prewarm_origin == "EQUIVALENT_SCOPE_PREWARM"
-                    else "PROJECTED PREWARM"
+                    else (
+                        "EQUIVALENT SCOPE PREWARM"
+                        if directional_prewarm_origin == "EQUIVALENT_SCOPE_PREWARM"
+                        else "PROJECTED PREWARM"
+                    )
                 )
                 phase = "INITIAL ANALYSIS" if len(session.turns) > 1 else "ANALYSIS"
                 typer.echo(f"{phase} · {label} · PROVIDER NOT CALLED")
@@ -2066,7 +2233,8 @@ def cmd(
             )
             return
 
-        if restart:
+        if restart or auto_restart:
+            prior_session_uid = session.uid
             prior_digest = meld_canonical_digest(session.to_dict())
             restart_request = MeldRestartRequest(
                 mode=requested_mode,
@@ -2131,6 +2299,10 @@ def cmd(
                 if session.state == "APPLIED"
                 else render_meld_incomplete_receipt(session)
             )
+            if auto_restart:
+                typer.echo(
+                    f"PRIOR SESSION · {prior_session_uid} · RETAINED TERMINAL HISTORY"
+                )
             return
 
         if session.mode != requested_mode:
@@ -2138,52 +2310,13 @@ def cmd(
                 "The target already has a saved meld with a different "
                 "authority mode. Use --restart to replace it."
             )
-        saved_names = tuple(frame.context_name for frame in session.frames)
-        sources_match = (
-            saved_names == (left_name, right_name)
-            if requested_mode == "DIRECTIONAL"
-            else set(saved_names) == {left_name, right_name}
-        )
-        sources_match = sources_match and tuple(
-            bool(frame.include_descendants) for frame in session.frames
-        ) == (left_descendants, right_descendants)
-        sources_match = sources_match and (
-            (
-                session.schema_version == MELD_INLINE_MEMORY_SCHEMA_VERSION
-                and len(session.frames[0].memories) == 1
-                and session.frames[0].memories[0].content == incoming_text
-            )
-            if incoming_text is not None
-            else session.schema_version != MELD_INLINE_MEMORY_SCHEMA_VERSION
-        )
-        for selector, frame, label in (
-            (incoming_memory, session.frames[0], "INCOMING Memory"),
-            (baseline_memory, session.frames[1], "BASELINE Memory"),
-        ):
-            requested_uid = None
-            if selector is not None:
-                try:
-                    focus = resolve_memory_focus(
-                        (*frame.memories, *frame.context_evidence),
-                        selector,
-                        label=label,
-                    )
-                except MemoryFocusError as error:
-                    raise MeldCommandError(str(error)) from error
-                requested_uid = focus.selected_uid
-            sources_match = sources_match and (
-                frame.selected_memory_uid == requested_uid
-            )
-        if not sources_match:
+        if not request_matches_saved:
             raise MeldCommandError(
                 "The target already has a meld from different sources. Use "
                 "--restart to replace it."
             )
         expected_session_digest = meld_canonical_digest(session.to_dict())
-        if (
-            expect_session is not None
-            and expect_session != expected_session_digest
-        ):
+        if expect_session is not None and expect_session != expected_session_digest:
             raise MeldCommandError(
                 "The saved Meld session changed after this command was reviewed. "
                 "Reopen it and rebuild the turn command."
@@ -2317,12 +2450,14 @@ def cmd(
         typer.echo(
             render_meld_receipt(session)
             if session.state == "APPLIED"
-            else render_meld_session(
-                session,
-                expanded_issue_uid=expanded_uid,
+            else (
+                render_meld_session(
+                    session,
+                    expanded_issue_uid=expanded_uid,
+                )
+                if expanded_uid is not None
+                else render_meld_incomplete_receipt(session)
             )
-            if expanded_uid is not None
-            else render_meld_incomplete_receipt(session)
         )
         if interactive_ran:
             typer.secho(

@@ -23,9 +23,22 @@ class ExistingContextOperand:
 
     def __post_init__(self) -> None:
         if not isinstance(self.locator, str) or not self.locator:
-            raise ValueError(
-                "An existing-Context operand requires a nonempty locator."
-            )
+            raise ValueError("An existing-Context operand requires a nonempty locator.")
+
+
+@dataclass(frozen=True, slots=True)
+class InlineTextOperand:
+    """One CLI operand that cannot be mistaken for a Context locator.
+
+    This value classifies syntax only.  The calling semantic operation still
+    owns whether the text is evidence, an instruction, or unsupported input.
+    """
+
+    text: str
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.text, str) or not self.text.strip():
+            raise ValueError("An inline-text operand requires nonblank text.")
 
 
 @dataclass(frozen=True, slots=True)

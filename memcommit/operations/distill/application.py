@@ -20,6 +20,7 @@ from memcommit.distill_config import (
     DEFAULT_DISTILL_SEMANTIC_CONFIG,
     DistillSemanticConfig,
 )
+from memcommit.goal_focus import FrozenGoalFocus, inline_goal_focus
 from memcommit.operations.summarize.application import (
     FrozenSummarySource,
     SummarizeRequest,
@@ -34,8 +35,20 @@ class DistillRequest:
 
     context_locator: str | None = None
     goal: str | None = None
+    goal_focus: FrozenGoalFocus | None = None
     include_descendants: bool = False
     follow_embeds: bool = False
+
+    def __post_init__(self) -> None:
+        if self.goal is not None and self.goal_focus is not None:
+            raise DistillError(
+                "Distill accepts either legacy Goal text or one frozen Goal operand, not both."
+            )
+        if self.goal_focus is not None and not isinstance(
+            self.goal_focus,
+            FrozenGoalFocus,
+        ):
+            raise DistillError("Distill Goal focus must be a typed frozen frame.")
 
 
 @dataclass(frozen=True)
@@ -44,6 +57,7 @@ class DistillResult:
 
     analysis: DistillAnalysis
     frozen_source: FrozenSummarySource = field(repr=False, compare=False)
+    goal_focus: FrozenGoalFocus | None = None
     origin: Literal["LIVE", "PREPARED_EXACT"] = "LIVE"
 
     def __post_init__(self) -> None:
@@ -114,7 +128,14 @@ def run_distill(
         or source.frame.follow_embeds != request.follow_embeds
     ):
         raise DistillError("The frozen Distill Source does not match its request.")
-    goal = validate_distill_input(source.frame, goal=request.goal, config=config)
+    goal_focus = request.goal_focus
+    if goal_focus is None and request.goal is not None:
+        goal_focus = inline_goal_focus(request.goal)
+    goal = validate_distill_input(
+        source.frame,
+        goal=goal_focus.text if goal_focus is not None else None,
+        config=config,
+    )
     analysis = (
         prepared_lookup(source.frame, goal, config)
         if prepared_lookup is not None
@@ -151,6 +172,7 @@ def run_distill(
     return DistillResult(
         analysis=analysis,
         frozen_source=source,
+        goal_focus=goal_focus,
         origin=origin,
     )
 

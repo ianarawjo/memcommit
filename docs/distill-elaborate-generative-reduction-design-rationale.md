@@ -57,13 +57,14 @@ Elaborate is whole-Rule-set generation:
 Rule Memories --Elaborate--> suggested Example Memories
 ```
 
-Every generated Case is a self-contained positive Example Memory that jointly
-instantiates every input Rule. Cases vary legitimate slots while preserving
-required roles, relations, order, boundaries, and form. `FIT`, `BOUNDARY`, and
-`CONTRAST` remain proposal roles, but all three propositions must comply with
-the complete Rule set. A CONTRAST may make a tempting alternative visible in
-its rationale or expected handling; the stored proposition itself is never the
-Rule violation.
+Every generated Case is a positive Example Memory. Individually applicable
+Rules constrain that member directly; family-level seeds, ordering, position,
+and recurrence instead constrain the ordered collection. Cases vary legitimate
+slots while preserving required roles, relations, order, boundaries, and form.
+`FIT`, `BOUNDARY`, and `CONTRAST` remain proposal roles, but the complete
+collection must comply with every Rule and no stored proposition may be a Rule
+violation. A CONTRAST may make a tempting alternative visible in its rationale
+or expected handling; the stored proposition itself is never the alternative.
 
 These operations are not mathematical inverses. A later Distill turn may split
 or combine equivalent invariants differently. The required property is
@@ -99,9 +100,10 @@ Elaborate uses the Rule sides as examples of independently reviewable,
 generative Rule form and the paired Examples as a demonstration of why those
 Rules are operational. The reference block is therefore present in every
 Distill and Elaborate generation call rather than existing only in tests.
-Elaborate's later Conformance and Fit turns instead receive only the exact
-current Source Rule and generated Case frames required by those shared
-judgment contracts.
+Strict Elaborate's later Conformance and Fit turns instead receive the exact
+current Source Rule frame, materially referenced Target Memories, and generated
+Cases required by those shared judgment contracts. Best-effort stops after the
+generation turn.
 
 Prompt reference and execution evidence remain distinct. The authored
 reference families have no current-run Memory aliases. Distill may populate
@@ -120,6 +122,11 @@ Elaborate Target is run-specific ambient context: it can teach the next Rule or
 Example the destination's already established terminology and form, but it is
 not another Goal or Rule and cannot satisfy a current `rule_checks` obligation.
 Every proposal separately reports the Target aliases it materially used.
+For an ordered family, those referenced Target Memories are the existing
+prefix and the proposed Cases are the suffix. Generation must continue after
+the final applicable member rather than replay seeds. Exact normalized content
+equality with any frozen Target Memory is rejected locally before validation or
+publication; this does not attempt general semantic deduplication.
 
 Only the exact Target graph is eligible. Profile-wide automatic injection was
 rejected because unrelated readable Contexts would change generation, consume
@@ -148,23 +155,36 @@ Every Case must provide exactly one nonempty evidence statement for every
 source Rule index, in input order. JSON Schema fixes the array length to the
 input count, and the local decoder independently rejects omissions,
 duplicates, reordering, and unavailable indexes. The evidence must identify
-observable content in the proposition according to the provider instruction.
+observable content in the proposition or that member's observable position and
+contribution within the ordered collection.
 
 Structural coverage alone is not acceptance evidence because the generator
-can make a mistaken semantic claim. Rules-to-Cases now follows generation with
-two independent judgment turns over complete frames. Context Conformance must
-classify every generated Case as conforming to every Source Rule; general Fit
-must return `YES` for each Case together with the complete Source frame. Any
-violation, non-applicability, insufficient evidence, Fit `NO`, or Fit `MAY`
-fails the operation before result publication. The operation preserves the
-requested exact count and does not silently drop or regenerate failed Cases.
+can make a mistaken semantic claim. Default Rules-to-Cases intentionally treats
+that output as best-effort: it stops after one complete generation turn,
+retains `rule_checks` as generator-authored rationale, and publishes the exact
+count as `SUGGESTED` and `UNVERIFIED`. It does not run a judgment that it then
+hides or ignores.
+
+Explicit strict Rules-to-Cases follows generation with two independent judgment
+turns over complete frames. Context Conformance must classify every Source Rule
+as `CONFORMS` over referenced Target Memories plus generated Cases, and every
+new Case must be a conforming governed member even when different Rule subsets
+apply to different positions. General Fit must return one `YES` for the complete
+Source/Target-prefix/generated-Case frame. Any partial conformance, violation,
+non-applicability, insufficient evidence, Fit `NO`, or Fit `MAY` fails strict
+publication. Neither policy silently drops or regenerates Cases.
 
 Neither judgment establishes truth or evidential support. A concrete value may
 be absent from Source and still pass when it legitimately instantiates the
 Rules and introduces no contradiction. Cases therefore remain `SUGGESTED` and
 `UNVERIFIED`. Provider contract version 10 prevents earlier generation-only
-analyses from replaying without accepted Conformance and Fit evidence. Agent
-contract version 4 exposes the same per-Case evidence.
+analyses from replaying without accepted Conformance and Fit evidence.
+Provider contract version 11 records the collection-level validation unit and
+Target-prefix continuation boundary. Version 12 teaches generation to
+distinguish conjunctive record schemas from sibling, conditional, diagnostic,
+and collection parents. Version 13 makes best-effort the explicit default and
+binds optional strict evidence to the analysis. Agent contract version 5
+exposes the quality policy and nullable per-Case evidence.
 
 ## Configured-provider observation
 
@@ -206,9 +226,10 @@ zero Target Memories with no checkpoint.
   reviewed Example families unreconstructable.
 - Requiring byte-identical Distill output was rejected because equivalent Rule
   decompositions can split or combine anchors without semantic loss.
-- Relying on generator-authored `rule_checks` as verification was rejected.
-  Elaborate instead composes the shared Conformance and general Fit contracts
-  after generation, while retaining `UNVERIFIED` for truth and evidence.
+- Treating generator-authored `rule_checks` as verification was rejected.
+  Best-effort retains them only as rationale; explicit strict mode composes the
+  shared Conformance and general Fit contracts after generation. Both policies
+  retain `UNVERIFIED` for truth and evidence.
 - Allowing reference Memories to appear as current evidence was rejected
   because a demonstration cannot establish a Rule about the selected Source.
 - Injecting all readable Profile Contexts into Elaborate was rejected; only the
@@ -219,8 +240,124 @@ zero Target Memories with no checkpoint.
   status remain unchanged.
 
 The three-family corpus is consumed calibration, not an independent holdout.
-A future campaign still needs independent domains before claiming broad
-generalization.
+`memcommit/eval/fixtures/distill_elaborate_holdout.json` therefore freezes four
+prompt-unseen families: mixed English/Korean subfamilies, ordered Fibonacci
+continuation, operational cleanliness hierarchy, and diagnostic cleanliness
+hierarchy. Production reference loading never reads that file, and regression
+tests assert that neither its case identifiers nor its authored parent texts or
+acceptance readings enter the quoted prompt. This supplies a repeatable
+generalization check; four families are still not evidence of broad domain
+coverage.
+
+## Parent/child prompt-generalization observation
+
+The motivating failures were semantic rather than missing domain branches in
+Python. Before the prompt change, mixed-subfamily Distill already recovered
+separate English and Korean Rules, and Fibonacci Distill recovered recurrence,
+but cleanliness Distill produced only lower formatting and item Rules. A
+Fibonacci continuation Elaborate over the existing prefix `0 ... 34` generated
+a proposal but failed collection validation with recurrence Rule 2 marked
+`INSUFFICIENT_EVIDENCE`. A combined cleanliness Rule frame also failed because
+a generated dish-mark diagnostic child correctly conformed to the diagnostic
+Rule while violating the independent normative clean-dish Rule.
+
+The revised prompt teaches relationships, not answers. Distill treats each Rule
+as a parent relative to cited children, audits supported subsets and ordered
+collections, and performs one final governing-parent audit for a coherent
+normative Source. Elaborate distinguishes conjunctive record schemas from
+sibling parents, keeps every parent visible in `rule_checks`, and requires an
+ordered prefix's references to establish the proposed suffix's lineage. No
+Fibonacci values or cleanliness fixture sentences appear in the production
+reference corpus.
+
+On 2026-08-24, the configured `codex_chatgpt` Study provider produced these
+prompt-unseen results through the real Impact application paths:
+
+- Fibonacci continuation changed from a failed 20.27-second run to a completed
+  29.12-second run proposing exactly `55, 89, 144, 233, 377` after `34`. The
+  final run used the clean ten-Memory `fibonacci/holdout-prefix`; a separately
+  modified interactive prefix was not treated as holdout evidence.
+- Mixed-subfamily Elaborate completed with three new English and three new
+  Korean children, without replaying its six-member Target prefix.
+- Operational cleanliness Distill retained the three criteria and added one
+  parent supported by all three; its final prompt produced three focused
+  sibling children rather than repeating every criterion inside every child.
+- Diagnostic cleanliness Distill joined dish residue and insect observation
+  under one inadequate-cleanliness parent, and Elaborate produced conforming
+  negative-state children for each condition.
+- Elaborating the newly distilled operational parent produced new focused
+  children for visible-residue removal, contamination prevention, and
+  pre-threshold waste removal. Their wording did not reproduce the original
+  children, preserving the intentional non-inverse boundary.
+
+The interactive inputs were retained under
+`practice/eval/{mixed,fibonacci,cleanliness}`. Cleanliness deliberately has
+separate `operational-rules`, `positive-examples`, `diagnostic-rules`, and
+`diagnostic-examples` Contexts in addition to the combined failure frame. These
+Context paths organize reproducible inputs; lexical Context ancestry is not a
+parent/child proposition edge.
+
+The combined normative-plus-diagnostic cleanliness frame remains a deliberate
+limitation. Prompt changes cannot make one dish-mark proposition both conform
+to "dishes must be mark-free" and serve as its counterexample. Supporting that
+single-frame graph requires a typed counterexample or diagnostic relation in
+the Conformance-under-Fit model. The current public projection also still says
+`ALL N RULES` because typed validation retains the complete Rule-index set even
+when the provider and Conformance judgment used applicable subsets. Both are
+structural follow-ups rather than reasons to hard-code the holdout domains.
+
+## Goal-selected reduction topology
+
+A later real-review evaluation exposed a tension in the version-9 instructions:
+the prompt called the Goal a relevance focus while also requiring every audited
+surface-form axis in the output and preferring that completeness over Rule-count
+minimization. Five full Korean café reviews therefore produced useful global and
+subset assessment parents, but also returned date, first-person, and platform
+metadata Rules under a semantic customer-experience Goal. The complete nine-Rule
+output was only 1.62:1 smaller by characters, although its single governing
+parent was 9.64:1 smaller.
+
+Version 10 resolves the instruction conflict with one domain-neutral ordered
+procedure. The natural-language Goal selects intended use, hierarchy, exact or
+maximum Rule quantities, exclusions, and modality after the provider has read
+the complete Source and enumerated supported candidates. Reconciliation removes
+subsumed paraphrases and retains a lower parent only when it changes generation,
+recognition, classification, or a decision boundary. Surface form remains part
+of analysis and remains output-relevant for no-Goal or reproduction Goals, while
+a semantic Goal may exclude it. Literal character ratio is deliberately only a
+reported metric: compactness is controlled through topology and nonredundancy so
+a numeric compression target cannot silently erase conditions or minority
+boundaries.
+
+The cumulative live campaign ran in a separate ordinary evaluation Profile so
+the retained Study Profile's pinned `reasoning=none` route remained unchanged.
+Every call used `codex_chatgpt`, `gpt-5.6-sol`, and `reasoning=xhigh`. The three
+prompt-visible calibration families returned the complete reviewed café,
+lost-property, and Cloze decompositions with 7, 6, and 4 Rules respectively.
+The four prompt-unseen families returned the required mixed-subfamily parents,
+Fibonacci recurrence and numeral form, operational-cleanliness hierarchy, and
+diagnostic-cleanliness hierarchy. The interactive coffee family returned one
+four-Source governing parent plus three subject-specific Rules without a
+sentence-form Rule.
+
+For the five full Korean reviews, the same Source produced different supported
+topologies solely through the natural-language Goal. A general semantic Goal
+returned five content criteria and no review-form Rules. A contract requesting
+one assessment parent plus at most three supporting criteria returned exactly
+four Rules and no unsupported duty. A reproduction Goal returned eleven content
+and form Rules, including bounded optional update and platform metadata. An
+operating-criteria Goal returned only food/drink, space, and staff criteria and
+did not invent installation or purchasing Tasks. The 839-character Source
+became 310 characters under the general five-Rule result (2.71:1) and 301
+characters under the four-Rule topology (2.79:1). These are whole-result
+measurements; selecting only one governing parent would report a larger ratio
+but would conceal the requested supporting topology.
+
+The cumulative Goal cases are frozen separately in
+`memcommit/eval/fixtures/distill_goal_holdout.json`. This fixture records the
+complete translated review Memories, their CC0 dataset provenance and sampling
+seed, the exact natural-language Goals, and semantic acceptance readings. It is
+not loaded by the production prompt.
 
 ## Lost-property procedural calibration
 

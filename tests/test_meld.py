@@ -62,6 +62,7 @@ from memcommit.commands.resolution_workbench_shell import (
     resolution_seeded_report_fragments,
 )
 from memcommit.meld import (
+    INLINE_MELD_CONTEXT_NAME,
     MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION,
     MELD_DIRECTIONAL_PRESERVATION_SCHEMA_VERSION,
     MELD_INLINE_MEMORY_SCHEMA_VERSION,
@@ -1147,6 +1148,153 @@ def test_inline_memory_meld_preserves_punctuation_without_creating_source_contex
     assert content in (meld_event.declared_frame or "")
 
 
+def test_inline_memory_accepts_shared_from_to_directional_spelling(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    baseline = ops.init("inline/meld/from-to-baseline")
+    ops.add(baseline, "c is caravan")
+    store.save(baseline)
+    provider = InlineMemoryProvider()
+    _patch_provider(monkeypatch, provider)
+    content = "Every final noun must be a fruit."
+
+    started = runner.invoke(
+        app,
+        ["meld", "--from", content, "--to", baseline.name],
+    )
+    resumed = runner.invoke(
+        app,
+        ["meld", "--memory", content, "--to", baseline.name],
+    )
+
+    assert started.exit_code == 0, started.output
+    assert resumed.exit_code == 0, resumed.output
+    assert len(provider.payloads) == 1
+    session = store.load_meld_session(baseline.uid)
+    assert session.schema_version == MELD_INLINE_MEMORY_SCHEMA_VERSION
+    assert session.frames[0].memories[0].content == content
+    assert not store.context_exists(INLINE_MELD_CONTEXT_NAME)
+
+
+def test_terminal_meld_rotates_for_distinct_inline_source_and_retains_uid(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    baseline = ops.init("inline/meld/lifecycle-baseline")
+    ops.add(baseline, "Keep the original rule.")
+    store.save(baseline)
+    provider = InlineMemoryProvider()
+    _patch_provider(monkeypatch, provider)
+    first_text = "Every final noun must be a fruit."
+    second_text = "Every final noun must be a fish."
+
+    started = runner.invoke(
+        app,
+        ["meld", "--memory", first_text, "--into", baseline.name],
+    )
+    assert started.exit_code == 0, started.output
+    first = store.load_meld_session(baseline.uid)
+    assert first is not None
+    accepted = runner.invoke(
+        app,
+        [
+            "meld",
+            "--memory",
+            first_text,
+            "--into",
+            baseline.name,
+            "--accept",
+        ],
+    )
+    assert accepted.exit_code == 0, accepted.output
+
+    repeated = runner.invoke(
+        app,
+        ["meld", "--memory", first_text, "--into", baseline.name],
+    )
+    assert repeated.exit_code == 0, repeated.output
+    assert store.load_meld_session(baseline.uid).uid == first.uid
+    assert len(provider.payloads) == 1
+
+    rotated = runner.invoke(
+        app,
+        ["meld", "--memory", second_text, "--into", baseline.name],
+    )
+    assert rotated.exit_code == 0, rotated.output
+    second = store.load_meld_session(baseline.uid)
+    assert second is not None and second.uid != first.uid
+    assert len(provider.payloads) == 2
+    assert "RETAINED TERMINAL HISTORY" in rotated.output
+    assert store.load_meld_session_history(baseline.uid, first.uid).uid == first.uid
+
+    historical = runner.invoke(
+        app,
+        ["review", "meld", "--session", first.uid, "--snapshot"],
+    )
+    assert historical.exit_code == 0, historical.output
+    assert first_text in historical.output
+    assert second_text not in historical.output
+
+    accepted_second = runner.invoke(
+        app,
+        [
+            "meld",
+            "--memory",
+            second_text,
+            "--into",
+            baseline.name,
+            "--accept",
+        ],
+    )
+    assert accepted_second.exit_code == 0, accepted_second.output
+    same_input_provider = ZeroChangeDirectionalProvider()
+    _patch_provider(monkeypatch, same_input_provider)
+    restarted = runner.invoke(
+        app,
+        [
+            "meld",
+            "--memory",
+            second_text,
+            "--into",
+            baseline.name,
+            "--restart",
+        ],
+    )
+    assert restarted.exit_code == 0, restarted.output
+    third = store.load_meld_session(baseline.uid)
+    assert third is not None and third.uid != second.uid
+    assert len(provider.payloads) == 2
+    assert len(same_input_provider.payloads) == 1
+    assert store.load_meld_session_history(baseline.uid, second.uid).uid == second.uid
+
+    store.delete(baseline.name)
+    assert not store._meld_session_path(baseline.uid).exists()
+    assert not (store.meld_session_history_dir / baseline.uid).exists()
+
+
+def test_meld_missing_portable_from_value_remains_context_error(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    baseline = ops.init("inline/meld/typo-baseline")
+    store.save(baseline)
+    provider = InlineMemoryProvider()
+    _patch_provider(monkeypatch, provider)
+
+    result = runner.invoke(
+        app,
+        ["meld", "--from", "practice/rulse", "--to", baseline.name],
+    )
+
+    assert result.exit_code == 1
+    assert "Context 'practice/rulse' does not exist" in result.output
+    assert provider.payloads == []
+
+
 def test_one_word_inline_memory_requires_explicit_memory_option(
     isolated_store,
     monkeypatch,
@@ -1263,9 +1411,9 @@ def test_focused_directional_meld_keeps_neighbors_context_only_and_edits_selecte
     assert payload["frames"][1]["context_evidence"][0]["content"] == (
         baseline_neighbor.content
     )
-    assert schema["properties"]["results"]["items"]["properties"][
-        "operation"
-    ]["enum"] == ["EDIT"]
+    assert schema["properties"]["results"]["items"]["properties"]["operation"][
+        "enum"
+    ] == ["EDIT"]
     assert "context_id" not in json.dumps(schema)
     assert assessment.proposals[0].memory_uid == baseline_focus.uid
     assert MeldSession.from_dict(session.to_dict()).to_dict() == session.to_dict()
@@ -1320,8 +1468,7 @@ def test_focused_directional_meld_keeps_focus_without_neighbor_evidence():
     assert session.frames[0].selected_memory_uid == incoming_memory.uid
     assert session.frames[1].selected_memory_uid == baseline_memory.uid
     assert all(
-        frame["memory_focus"] is True
-        and "context_evidence" not in frame
+        frame["memory_focus"] is True and "context_evidence" not in frame
         for frame in captured["payload"]["frames"]
     )
     assert captured["schema"]["properties"]["results"]["items"]["properties"][
@@ -1592,9 +1739,7 @@ def test_directional_compare_seed_output_cannot_restate_relation_drift():
                     output_schema=output_schema,
                 )
             )
-            value["paired_relations"] = [
-                {"summary": "A rewritten judgment."}
-            ]
+            value["paired_relations"] = [{"summary": "A rewritten judgment."}]
             return json.dumps(value)
 
     with pytest.raises(
@@ -1764,7 +1909,9 @@ def test_seeded_meld_report_uses_nested_cards_and_blue_selection_badges():
         comparison,
         reused=True,
         durable=True,
-    ).partition("\nThe complete source-linked relation ledger")[0]
+    ).partition(
+        "\nThe complete source-linked relation ledger"
+    )[0]
     conflict_section = next(
         index
         for index, (_offset, key) in enumerate(
@@ -1900,7 +2047,9 @@ def test_result_rows_share_tree_prefix_and_keep_apply_card_fully_anchored():
         comparison,
         reused=True,
         durable=True,
-    ).partition("\nThe complete source-linked relation ledger")[0]
+    ).partition(
+        "\nThe complete source-linked relation ledger"
+    )[0]
     sections = _seeded_report_sections(
         _seeded_report_lines(view, report, (), True, False)
     )
@@ -2024,9 +2173,7 @@ def test_v3_rejects_cross_relation_thematic_compression():
                     {
                         "relation_key": relation["relation_key"],
                         "left_memory_ids": (
-                            relation["memory_ids"]
-                            if relation["side"] == "LEFT"
-                            else []
+                            relation["memory_ids"] if relation["side"] == "LEFT" else []
                         ),
                         "right_memory_ids": (
                             relation["memory_ids"]
@@ -2165,7 +2312,9 @@ def test_context_meld_one_shot_reply_resume_and_provider_free_apply(
         comparison,
         reused=True,
         durable=True,
-    ).partition("\nThe complete source-linked relation ledger")[0]
+    ).partition(
+        "\nThe complete source-linked relation ledger"
+    )[0]
     ready_sections = _seeded_report_sections(
         _seeded_report_lines(ready_view, ready_report, (), True, False)
     )
@@ -2227,8 +2376,7 @@ def test_undo_and_redo_restore_meld_application_state_as_one_operation(
     _patch_provider(monkeypatch, provider)
 
     assert (
-        runner.invoke(app, ["meld", left.name, right.name, target.name]).exit_code
-        == 0
+        runner.invoke(app, ["meld", left.name, right.name, target.name]).exit_code == 0
     )
     grounded = runner.invoke(
         app,
@@ -2406,9 +2554,9 @@ def test_seeded_meld_schema_round_trips_and_rejects_tampering(
         MeldSession.from_dict(bad_digest)
 
     bad_import = json.loads(json.dumps(value))
-    bad_import["turns"][0]["assessment"]["relations"][0]["summary"] = (
-        "A forged imported relation."
-    )
+    bad_import["turns"][0]["assessment"]["relations"][0][
+        "summary"
+    ] = "A forged imported relation."
     with pytest.raises(MeldError, match="turn zero does not match"):
         MeldSession.from_dict(bad_import)
 
@@ -2625,7 +2773,8 @@ def test_directional_meld_applies_descendants_to_exact_owners_as_one_command(
         proposal.owner_context_name for proposal in session.current_assessment.proposals
     } == {baseline_access.name, baseline_hours.name}
     result_labels = {
-        result.label for result in MeldResolutionWorkbenchAdapter(session).view().results
+        result.label
+        for result in MeldResolutionWorkbenchAdapter(session).view().results
     }
     assert any(baseline_access.name in label for label in result_labels)
     assert any(baseline_hours.name in label for label in result_labels)
@@ -2646,7 +2795,8 @@ def test_directional_meld_applies_descendants_to_exact_owners_as_one_command(
     assert applied.exit_code == 0, applied.output
     assert tuple(store.load_direct(baseline.name).iter_items()) == ()
     assert [
-        memory.content for memory in store.load_direct(baseline_access.name).iter_items()
+        memory.content
+        for memory in store.load_direct(baseline_access.name).iter_items()
     ] == ["Only the vehicle entrance is closed."]
     assert [
         memory.content for memory in store.load_direct(baseline_hours.name).iter_items()
@@ -2897,12 +3047,14 @@ def test_meld_positional_grammar_and_explicit_alias_boundaries(
     assert "mem meld INCOMING BASELINE" in normalized_help
     assert "mem meld PEER_A PEER_B RESULT_C" in normalized_help
 
-    missing_peers = runner.invoke(
+    current_to_target = runner.invoke(
         app,
         ["meld", "--to", baseline.name],
     )
-    assert missing_peers.exit_code == 1
-    assert "requires PEER A and PEER B before RESULT C" in missing_peers.output
+    assert current_to_target.exit_code == 0, current_to_target.output
+    assert f"INCOMING {incoming.name} → BASELINE / TARGET {baseline.name}" in (
+        current_to_target.output
+    )
 
     too_many = runner.invoke(
         app,
@@ -3141,8 +3293,7 @@ def test_deferred_session_restart_creates_exact_ordered_compare_basis(
     provider = Task2Provider()
     _patch_provider(monkeypatch, provider)
     assert (
-        runner.invoke(app, ["meld", left.name, right.name, target.name]).exit_code
-        == 0
+        runner.invoke(app, ["meld", left.name, right.name, target.name]).exit_code == 0
     )
     assert (
         runner.invoke(
@@ -3186,8 +3337,7 @@ def test_symmetric_session_resumes_with_peer_arguments_reversed(
     provider = Task2Provider()
     _patch_provider(monkeypatch, provider)
     assert (
-        runner.invoke(app, ["meld", left.name, right.name, target.name]).exit_code
-        == 0
+        runner.invoke(app, ["meld", left.name, right.name, target.name]).exit_code == 0
     )
 
     resumed = runner.invoke(app, ["meld", right.name, left.name, target.name])
@@ -3206,8 +3356,7 @@ def test_revision_flags_require_a_semantic_comment_or_choice(
     provider = Task2Provider()
     _patch_provider(monkeypatch, provider)
     assert (
-        runner.invoke(app, ["meld", left.name, right.name, target.name]).exit_code
-        == 0
+        runner.invoke(app, ["meld", left.name, right.name, target.name]).exit_code == 0
     )
 
     result = runner.invoke(
@@ -3309,7 +3458,10 @@ def test_v3_preserve_all_materializes_provider_free_and_remains_non_applying(
     assert result.exit_code == 0, result.output
     assert len(provider.payloads) == 0
     assert "MELD READY · SYMMETRIC" in result.output
-    assert f"IMPACT · mem impact meld --session {store.load_meld_session(target.uid).uid}" in result.output
+    assert (
+        f"IMPACT · mem impact meld --session {store.load_meld_session(target.uid).uid}"
+        in result.output
+    )
     assert store._context_file(target.name).read_bytes() == before
 
 
@@ -3482,8 +3634,7 @@ def test_source_is_rechecked_under_lock_at_the_target_mutation_boundary(
     provider = Task2Provider()
     _patch_provider(monkeypatch, provider)
     assert (
-        runner.invoke(app, ["meld", left.name, right.name, target.name]).exit_code
-        == 0
+        runner.invoke(app, ["meld", left.name, right.name, target.name]).exit_code == 0
     )
     assert (
         runner.invoke(
@@ -3538,8 +3689,7 @@ def test_accept_recovers_checkpoint_after_receipt_save_failure(
     provider = Task2Provider()
     _patch_provider(monkeypatch, provider)
     assert (
-        runner.invoke(app, ["meld", left.name, right.name, target.name]).exit_code
-        == 0
+        runner.invoke(app, ["meld", left.name, right.name, target.name]).exit_code == 0
     )
     assert (
         runner.invoke(
@@ -3604,8 +3754,7 @@ def test_applied_accept_rejects_a_target_that_no_longer_matches_receipt(
     provider = Task2Provider()
     _patch_provider(monkeypatch, provider)
     assert (
-        runner.invoke(app, ["meld", left.name, right.name, target.name]).exit_code
-        == 0
+        runner.invoke(app, ["meld", left.name, right.name, target.name]).exit_code == 0
     )
     assert (
         runner.invoke(
@@ -3887,9 +4036,7 @@ def test_source_indexed_meld_assignments_reconstruct_complete_relations():
             payload = json.loads(prompt.split(MELD_PAYLOAD_MARKER, 1)[1])
             left_id = payload["frames"][0]["memories"][0]["memory_id"]
             right_id = payload["frames"][1]["memories"][0]["memory_id"]
-            assert output_schema["properties"]["source_assignments"][
-                "minItems"
-            ] == 2
+            assert output_schema["properties"]["source_assignments"]["minItems"] == 2
             return json.dumps(
                 {
                     "overview": "The two source policies are equivalent.",
@@ -4179,12 +4326,11 @@ def test_directional_v6_accepts_one_exact_preserve_add_per_incoming_memory():
     assessment = assess_meld_turn(session, ExactPreserves())
     session.record_assessment(session.current_turn.uid, assessment)
 
-    assert [proposal.content for proposal in session.current_assessment.proposals] == list(
-        contents
-    )
+    assert [
+        proposal.content for proposal in session.current_assessment.proposals
+    ] == list(contents)
     assert all(
-        proposal.disposition == "PRESERVE"
-        and len(proposal.source_members) == 1
+        proposal.disposition == "PRESERVE" and len(proposal.source_members) == 1
         for proposal in session.current_assessment.proposals
     )
 
@@ -4213,9 +4359,9 @@ def test_directional_validation_repairs_one_rejected_assessment_before_save(
                 assert "validation_error" in payload
                 assert "exact content" in payload["validation_error"]
                 repaired = payload["rejected_assessment"]
-                repaired["results"][0]["content"] = payload["frames"][0][
-                    "memories"
-                ][0]["content"]
+                repaired["results"][0]["content"] = payload["frames"][0]["memories"][0][
+                    "content"
+                ]
                 return json.dumps(repaired)
             incoming_id = payload["frames"][0]["memories"][0]["memory_id"]
             baseline_id = payload["frames"][1]["memories"][0]["memory_id"]
@@ -4410,9 +4556,9 @@ def test_followup_meld_turn_reuses_exact_saved_resolution_branch_without_provide
     )
 
     assert reused.current_assessment is not None
-    assert [
-        proposal.content for proposal in reused.current_assessment.proposals
-    ] == [proposal.content for proposal in first.current_assessment.proposals]
+    assert [proposal.content for proposal in reused.current_assessment.proposals] == [
+        proposal.content for proposal in first.current_assessment.proposals
+    ]
     assert reused.current_assessment.ready_to_apply
     assert reused.uid == pending.uid
     assert len(list(store.meld_resolution_branches_dir.glob("*.json"))) == 1
@@ -4457,9 +4603,7 @@ def test_meld_choice_branches_persist_only_the_selected_local_option(
         "Use this scope for the study condition.",
     )
     record = json.loads(
-        next(store.meld_choice_branches_dir.glob("*.json")).read_text(
-            encoding="utf-8"
-        )
+        next(store.meld_choice_branches_dir.glob("*.json")).read_text(encoding="utf-8")
     )
     assert set(record["branches"][0]) == {
         "issue_uid",
@@ -4720,9 +4864,9 @@ def test_declared_study_meld_branch_is_available_in_a_fresh_profile(
 
     assert restored.current_assessment is not None
     assert restored.current_assessment.ready_to_apply
-    assert [
-        proposal.content for proposal in restored.current_assessment.proposals
-    ] == [proposal.content for proposal in assessed.current_assessment.proposals]
+    assert [proposal.content for proposal in restored.current_assessment.proposals] == [
+        proposal.content for proposal in assessed.current_assessment.proposals
+    ]
     assert store.load_meld_resolution_branch(branch.key) is not None
 
 
@@ -5176,9 +5320,7 @@ def test_meld_compact_surface_arrow_and_apply_row_contract():
 
     with create_pipe_input() as pipe_input:
         option_count = len(session.current_assessment.issues[0].options)
-        pipe_input.send_text(
-            "\x1b[B\r" + "\x1b[B" * (option_count - 1) + "\r"
-        )
+        pipe_input.send_text("\x1b[B\r" + "\x1b[B" * (option_count - 1) + "\r")
         action = run_meld_shell(
             session,
             app_input=pipe_input,

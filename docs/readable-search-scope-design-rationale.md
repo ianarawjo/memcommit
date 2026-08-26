@@ -23,8 +23,9 @@ to change disclosure scope accidentally while refactoring another.
 The module accepts a narrow ordinary-Context store protocol implemented by
 `MemoryStore`, `GrantedReadStore`, and `ReadableContextCatalog`. It does not
 connect a provider, rank results, synthesize an answer, render operation UI, or
-decide authority. Find continues to own current-versus-history routing,
-related-result fallback, and multi-target behavior. Query continues to own
+decide authority. Search owns current-readable ranking, related-result fallback,
+and multi-target behavior; explicit `mem log QUERY` owns retained-history
+planning. Query continues to own
 grounded evidence selection and answer synthesis.
 
 The interactive Find caller supplies its frozen `ReadableContextCatalog` so

@@ -11,7 +11,6 @@ import typer
 from memcommit.commands.command_group import CanonicalCommandGroup
 from memcommit.commands.command_progress import CommandProgress
 from memcommit.config import Config
-from memcommit.interfaces.console.terminal import is_interactive_terminal
 from memcommit.infrastructure.providers.policy import (
     POLICY_VERSION,
     ProviderRoute,
@@ -24,12 +23,6 @@ from memcommit.infrastructure.providers.profile_routes import (
     reset_active_profile_route,
     resolve_active_provider_policy,
     set_active_profile_route,
-)
-from memcommit.interfaces.tui.operations.provider import (
-    ProviderRouteView,
-    ProviderTuiAction,
-    ProviderTuiSetup,
-    run_provider_tui,
 )
 from memcommit.profile_config import load_profile_registry
 from memcommit.provider_types import (
@@ -70,14 +63,22 @@ def _resolved_policy_summary(policy: ResolvedProviderPolicy) -> str:
     parts = [policy.provider_id, f"model {_model_label(policy.model)}"]
     if policy.provider_id == CODEX_CHATGPT_PROVIDER:
         parts.append(f"reasoning {policy.reasoning_effort or 'none'}")
+        if policy.service_tier is not None:
+            parts.append(f"tier {policy.service_tier}")
     parts.append(f"timeout {policy.timeout_seconds:g}s")
     return " · ".join(parts)
 
 
-def _route_summary(route: ProviderRoute) -> str:
+def _route_summary(
+    route: ProviderRoute,
+    *,
+    service_tier: str | None = None,
+) -> str:
     parts = [route.provider_id, f"model {_model_label(route.model)}"]
     if route.provider_id == CODEX_CHATGPT_PROVIDER:
         parts.append(f"reasoning {route.reasoning_effort or 'none'}")
+        if service_tier is not None:
+            parts.append(f"tier {service_tier}")
     parts.append(f"timeout {route.timeout_seconds:g}s")
     return " · ".join(parts)
 
@@ -100,11 +101,16 @@ def _render_provider_overview(config: Config) -> None:
     if scope.mode == "STUDY":
         study = study_provider_config(scope.study_policy_version)
         typer.echo("default:")
-        typer.echo(f"  {_route_summary(study.default)}")
+        typer.echo(
+            f"  {_route_summary(study.default, service_tier=study.service_tier)}"
+        )
         typer.echo("operation_routes:")
         width = max(len(operation) for operation in study.operations)
         for operation, route in study.operations.items():
-            typer.echo(f"  {operation:<{width}}  {_route_summary(route)}")
+            typer.echo(
+                f"  {operation:<{width}}  "
+                f"{_route_summary(route, service_tier=study.service_tier)}"
+            )
         typer.echo()
         typer.echo("configure: unavailable in a Study Profile")
         typer.echo("verify: mem provider probe [--operation OPERATION]")
@@ -141,108 +147,15 @@ def _report_provider_configuration_error(error: Exception) -> None:
     )
 
 
-def _provider_route_view(
-    route: ProviderRoute | ResolvedProviderPolicy,
-) -> ProviderRouteView:
-    return ProviderRouteView(
-        provider_id=route.provider_id,
-        model=route.model,
-        reasoning_effort=route.reasoning_effort,
-        timeout_seconds=route.timeout_seconds,
-    )
-
-
-def _provider_tui_setup(
-    config: Config,
-) -> ProviderTuiSetup:
-    """Freeze one Profile scope before the interactive screen opens."""
-
-    registry = load_profile_registry()
-    scope = load_active_provider_scope(machine_config=config, registry=registry)
-    thinking = config.semantic_thinking()
-    thinking_label = "auto" if thinking is None else ("on" if thinking else "off")
-    known_models = tuple(
-        (provider, config.model_for_provider(provider))
-        for provider in SEMANTIC_PROVIDER_IDS
-    )
-    if scope.mode == "STUDY":
-        study = study_provider_config(scope.study_policy_version)
-        return ProviderTuiSetup(
-            profile_name=scope.profile.name,
-            mode="STUDY",
-            default_route=_provider_route_view(study.default),
-            route_source="STUDY_POLICY",
-            operation_routes=tuple(
-                (operation, _provider_route_view(route))
-                for operation, route in study.operations.items()
-            ),
-            known_models=known_models,
-            ollama_thinking=thinking_label,
-            openrouter_zdr=config.openrouter_zdr(),
-            study_policy_version=scope.study_policy_version,
-            study_policy_digest=scope.study_policy_digest,
-        )
-
-    default, _ = resolve_active_provider_policy(
-        "semantic_default",
-        machine_config=config,
-        registry=registry,
-    )
-    assert scope.routes is not None
-    return ProviderTuiSetup(
-        profile_name=scope.profile.name,
-        mode="GENERAL",
-        default_route=_provider_route_view(default),
-        route_source=default.source,
-        operation_routes=tuple(
-            (operation, _provider_route_view(route))
-            for operation, route in sorted(scope.routes.operations.items())
-        ),
-        has_profile_default=scope.routes.default is not None,
-        known_models=known_models,
-        ollama_thinking=thinking_label,
-        openrouter_zdr=config.openrouter_zdr(),
-    )
-
-
-def _run_provider_tui_action(action: ProviderTuiAction) -> None:
-    """Re-enter the existing command boundary after exact TUI review."""
-
-    if action.kind == "USE":
-        assert action.draft is not None
-        draft = action.draft
-        use_provider(
-            draft.provider_id,
-            model=draft.model,
-            preset=None,
-            reasoning=draft.reasoning_effort,
-            operation=draft.operation,
-            timeout_seconds=None,
-            context_tokens=None,
-            max_output_tokens=None,
-            thinking=draft.ollama_thinking,
-            zdr=draft.openrouter_zdr,
-        )
-        return
-    if action.kind == "RESET":
-        reset_provider(action.operation)
-        return
-    provider_probe(action.operation)
-
-
 @app.callback(invoke_without_command=True)
 def provider_group(ctx: typer.Context) -> None:
-    """Edit routes in a TTY, or show the stable overview outside one."""
+    """Show active-Profile routes when no explicit action is selected."""
     if ctx.invoked_subcommand is not None:
         return
     try:
-        config = Config()
-        if not is_interactive_terminal():
-            _render_provider_overview(config)
-            return
-        action = run_provider_tui(_provider_tui_setup(config))
-        if action is not None:
-            _run_provider_tui_action(action)
+        # Bare Provider is deliberately observation-only in every terminal.
+        # Editing or contacting a provider requires an explicit subcommand.
+        _render_provider_overview(Config())
     except (RuntimeError, ValueError) as error:
         _report_provider_configuration_error(error)
         raise typer.Exit(1)
@@ -483,6 +396,7 @@ def provider_status(
         typer.echo(f"timeout_seconds: {resolved.timeout_seconds:g}")
         if resolved.provider_id == CODEX_CHATGPT_PROVIDER:
             typer.echo(f"reasoning: {resolved.reasoning_effort or 'none'}")
+            typer.echo(f"service_tier: {resolved.service_tier or 'standard'}")
         _render_transport_status(config, resolved.provider_id)
     except (RuntimeError, ValueError) as error:
         _report_provider_configuration_error(error)

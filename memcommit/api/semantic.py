@@ -121,8 +121,8 @@ class ElaborateProposal:
     rules: tuple[ElaborateRuleProposal, ...]
     cases: tuple[ElaborateCaseProposal, ...]
     origin: str
-    quality_policy: str = "BEST_EFFORT"
     verification: str = "UNVERIFIED"
+    quality_policy: str = "BEST_EFFORT"
     target_context_name: str | None = None
     target_context_items: tuple[ElaborateTargetContextItemProposal, ...] = ()
 

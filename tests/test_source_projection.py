@@ -98,6 +98,7 @@ def test_reach_labels_keep_context_identity_separate_from_embed_color():
         in styled_source_reach_label(SourceReach.VIA_EMBED)
     )
 
+
 def test_source_reference_row_folds_content_and_keeps_owner_alias_separate():
     row = SourceReferenceRow(
         number=1,

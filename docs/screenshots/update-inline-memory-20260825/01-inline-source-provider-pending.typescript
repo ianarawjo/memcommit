@@ -1,0 +1,5 @@
+$ mem update --from 'want to make all the last word as fruits' --to capture/fruit-rules
+PTY 180 52
+TTY FLAGS · stdin=True stdout=True
+CURRENT TARGET · capture/fruit-rules
+MEM UPDATE · 1/2 · CONNECTING PROVIDER . · 0sMEM UPDATE · 2/2 · PLANNING MEMORY CHANGES . · 0sMEM UPDATE · 2/2 · PLANNING MEMORY CHANGES .. · 0s

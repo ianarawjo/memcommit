@@ -61,7 +61,7 @@ non-goals of the ownership-only move.
 | --- | --- | --- |
 | Request | `LiteralFindRequest` | Nonempty pattern of at most 2,000 characters, at least one distinct public Context name, explicit lexical/embedded reach, case policy, and `LITERAL` or `REGEX` mode |
 | Readable namespace | CLI/public composition adapters | Existing relative locators resolve against one captured current Context; Profile TUI breadth freezes `ReadableContextCatalog`; QUERY-only routes never become ordinary sources |
-| Frozen source | `ReadableLiteralFindSourcePort` | Complete readable roots are loaded before matching; lexical descendants and embedded traversal remain independent; graph cycles are deduplicated by Context UID; each searchable Memory-shaped item receives one contiguous frozen-corpus position before matching |
+| Frozen source | `ReadableLiteralFindSourcePort` | Complete readable roots are loaded before matching; lexical descendants and embedded traversal remain independent; following embeds resolves an exact local Context's displayed attached READ rows through their frozen Grant bindings without opening QUERY-only content; graph cycles are deduplicated by Context UID; each searchable Memory-shaped item receives one contiguous frozen-corpus position before matching |
 | Match semantics | `run_literal_find` | Literal is default; regex is opt-in; zero-width regex is rejected; every non-overlapping span is retained with exact start/end/text |
 | MemoryRef | runtime source collector | The selected owner and referenced Source identity are both retained; unresolved or unreadable references are skipped rather than opened through concealed authority |
 | Result | `LiteralFindResult` | Complete scanned-item, matched-item, and occurrence counts accompany immutable per-item spans |
@@ -80,6 +80,10 @@ loader expansion.
   complete-coverage, and zero-width rejection semantics without Store or UI.
 - `tests/test_literal_find_runtime.py` checks readable roots, independent
   lexical/embedded reach, MemoryRef provenance, cycles, and unavailable refs.
+- `tests/test_granted_embed.py` checks that List, Show, Find, and semantic
+  Search agree on an attached READ projection, preserve direct-scope
+  exclusion, reject unsafe mixed recursive copy, and never disclose a nested
+  QUERY-only Memory.
 - `tests/test_literal_find_cli.py` checks actual Typer routes, repeated roots,
   descendants, literal defaults, regex rejection, non-TTY behavior, short
   inline TTY output, long-result compact-pager routing, bounded `--plain`

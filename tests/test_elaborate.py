@@ -39,6 +39,7 @@ from memcommit.ground import (
     propose_ground_rule,
 )
 from memcommit.ground_elaborate import (
+    apply_ground_elaborate_result,
     execute_ground_elaborate,
     freeze_ground_elaborate,
 )
@@ -49,6 +50,11 @@ from memcommit.ground_workspace_application import (
 from memcommit.ground_workspace_runtime import (
     execute_ground_workspace_creation,
     execute_ground_workspace_memory_add,
+    load_ground_workspace,
+)
+from memcommit.ground_workspace_history import (
+    build_ground_workspace_command_stack,
+    undo_ground_workspace_command,
 )
 from memcommit.interfaces.tui.operations.elaborate import (
     project_elaborate_clipboard,
@@ -687,13 +693,72 @@ def test_rules_elaborate_rejects_oversized_validation_frame_before_provider() ->
         execute_elaborate(
             ElaborateRequest(
                 rules=("Apply the complete Rule.",),
-                number=1_001,
+                number=2_001,
                 strict=True,
             ),
             provider_factory=provider_factory,
         )
 
     assert provider_constructions == 0
+
+
+def test_rules_elaborate_accepts_collection_level_rule_applicability() -> None:
+    class CollectionProvider(ExactNumberProvider):
+        def complete(self, prompt, *, operation, output_schema=None):
+            if operation == CONTEXT_CONFORMANCE_OPERATION:
+                payload = json.loads(
+                    prompt.split("CONFORMANCE CONTEXT PAYLOAD:\n", 1)[1]
+                )
+                memory_ids = [
+                    item["memory_id"]
+                    for item in payload["target_context"]["memories"]
+                ]
+                return json.dumps(
+                    {
+                        "judgments": [
+                            {
+                                "rule_id": payload["rules"][0]["rule_id"],
+                                "status": "CONFORMS",
+                                "evidence_memory_ids": memory_ids[:2],
+                                "nonconforming_cases": [],
+                                "reason": "The first two members satisfy the seed Rule.",
+                            },
+                            {
+                                "rule_id": payload["rules"][1]["rule_id"],
+                                "status": "CONFORMS",
+                                "evidence_memory_ids": memory_ids[2:],
+                                "nonconforming_cases": [],
+                                "reason": "The later members satisfy the recurrence Rule.",
+                            },
+                        ],
+                        "outside_memory_ids": [],
+                    }
+                )
+            return super().complete(
+                prompt,
+                operation=operation,
+                output_schema=output_schema,
+            )
+
+    provider = CollectionProvider()
+    result = execute_elaborate(
+        ElaborateRequest(
+            rules=(
+                "The family begins with two ordered seed members.",
+                "Every later member follows the family recurrence.",
+            ),
+            number=4,
+            strict=True,
+        ),
+        provider_factory=lambda: provider,
+    )
+
+    assert len(result.analysis.cases) == 4
+    assert all(case.validation is not None for case in result.analysis.cases)
+    assert result.analysis.quality_policy is ElaborateQualityPolicy.STRICT
+    assert "ordered collection or family" in provider.calls[0][2]
+    assert "applicable to that member" in provider.calls[0][2]
+    assert "`COLLECTION:`" in provider.calls[0][2]
 
 
 def test_elaborate_application_imports_no_terminal_or_command_adapter() -> None:
@@ -998,6 +1063,44 @@ def test_mem_elaborate_plain_uses_the_typed_application(
     assert len(store.load_direct(target.name).order) == 3
 
 
+def test_mem_elaborate_ground_adopt_is_an_explicit_physical_write(
+    isolated_store,
+    monkeypatch,
+) -> None:
+    store = MemoryStore()
+    execute_ground_workspace_creation(
+        CreateGroundWorkspaceRequest(
+            name="physical-elaborate",
+            goal="Confirm a chosen option before acting.",
+        ),
+        store=store,
+    )
+    monkeypatch.setattr(
+        elaborate_command,
+        "connect_semantic_provider",
+        ElaborateProvider,
+    )
+
+    result = runner.invoke(
+        app,
+        [
+            "elaborate",
+            "--ground",
+            "physical-elaborate",
+            "--from-goal",
+            "--adopt",
+            "--plain",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert "ELABORATE ADOPTED · physical-elaborate/rules" in result.output
+    assert "EFFECTS · ADD 3 MEMORIES" in result.output
+    assert len(
+        tuple(load_ground_workspace(store, "physical-elaborate").rules.iter_items())
+    ) == 3
+
+
 def test_physical_ground_goal_elaborate_freezes_only_the_goal_memory(
     isolated_store,
 ):
@@ -1032,10 +1135,83 @@ def test_physical_ground_goal_elaborate_freezes_only_the_goal_memory(
         provider_factory=lambda: provider,
     )
 
-    assert result.frozen.request == ElaborateRequest(
-        goal="Confirm a chosen option before acting."
-    )
+    assert result.frozen.request.goal == "Confirm a chosen option before acting."
+    assert result.frozen.request.goal_focus is not None
+    assert result.frozen.request.goal_focus.kind == "GROUND"
+    assert result.frozen.request.goal_focus.items[0].memory_uid is not None
     assert len(provider.calls) == 1
+
+
+def test_physical_ground_elaborate_adopts_rules_as_one_ground_command(
+    isolated_store,
+):
+    store = MemoryStore()
+    execute_ground_workspace_creation(
+        CreateGroundWorkspaceRequest(
+            name="physical-elaborate",
+            goal="Confirm a chosen option before acting.",
+        ),
+        store=store,
+    )
+    frozen = freeze_ground_elaborate(
+        store,
+        ground_name="physical-elaborate",
+        direction="GOAL_TO_RULES",
+    )
+    proposal = execute_ground_elaborate(
+        frozen,
+        store=store,
+        provider_factory=ElaborateProvider,
+    )
+
+    receipt = apply_ground_elaborate_result(proposal, store=store)
+
+    workspace = load_ground_workspace(store, "physical-elaborate")
+    assert receipt.revision == frozen.ground_revision + 1
+    assert len(tuple(workspace.rules.iter_items())) == 3
+    [unit] = build_ground_workspace_command_stack(
+        store,
+        "physical-elaborate",
+    ).undo
+    assert unit.action == "adopt-elaborate"
+    undo_ground_workspace_command(store, "physical-elaborate")
+    assert tuple(
+        load_ground_workspace(store, "physical-elaborate").rules.iter_items()
+    ) == ()
+
+
+def test_physical_ground_elaborate_adoption_rejects_changed_ground_revision(
+    isolated_store,
+):
+    store = MemoryStore()
+    execute_ground_workspace_creation(
+        CreateGroundWorkspaceRequest(
+            name="physical-elaborate",
+            goal="Confirm a chosen option before acting.",
+        ),
+        store=store,
+    )
+    frozen = freeze_ground_elaborate(
+        store,
+        ground_name="physical-elaborate",
+        direction="GOAL_TO_RULES",
+    )
+    proposal = execute_ground_elaborate(
+        frozen,
+        store=store,
+        provider_factory=ElaborateProvider,
+    )
+    execute_ground_workspace_memory_add(
+        AddGroundWorkspaceMemoryRequest(
+            workspace_name="physical-elaborate",
+            lane="examples",
+            content="An independently reviewed Example.",
+        ),
+        store=store,
+    )
+
+    with pytest.raises(ElaborateError, match="changed after the Elaborate"):
+        apply_ground_elaborate_result(proposal, store=store)
 
 
 def test_physical_ground_rules_elaborate_and_fail_on_consumed_rule_drift(

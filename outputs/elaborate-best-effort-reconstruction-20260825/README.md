@@ -64,8 +64,8 @@ The active Study's replayed suffix was:
 `w is window`.
 
 Under the new default, the content is unchanged for that recorded generation
-turn, but the receipt shape changes from version 3 with implicit mandatory
-validation to version 4 with `quality_policy: BEST_EFFORT`,
+turn, but the receipt shape changes from version 4 with implicit mandatory
+validation to version 5 with `quality_policy: BEST_EFFORT`,
 `case_validation: NOT_RUN`, and `validation: null` on every proposal. Running
 the command with `--strict` instead retains the former three-turn acceptance
 path and populated validation records.

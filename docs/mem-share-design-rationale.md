@@ -33,14 +33,16 @@ checkpoint. This deliberately decouples Share authorization from Sever or any
 other semantic transformation.
 
 The source picker shows Context names only; it does not expand every candidate's
-Memories. After selection, the viewer has three regions: direct Share keeps its
-`CONTEXT` projection, while recursive Share uses a compact `CONTEXTS` roster
-showing the root summary, every included canonical Context name and its
-direct-Memory count, and the endpoint; `MEMORIES` shows every disclosed direct
-Memory beside its owning Context; and `ACTION` contains the one `SEND CONTEXT`
-or `SEND CONTEXT BUNDLE` action. It has no provider turn, semantic options, or
-durable Share session. If no source or endpoint exists, the same surface opens
-read-only with `SEND UNAVAILABLE`.
+Memories. After selection, the viewer has four regions in disclosure order.
+Direct Share keeps its `FROM · CONTEXT` projection, while recursive Share uses a
+compact `FROM · CONTEXTS` roster showing the root summary, every included
+canonical Context name, and its direct-Memory count. `TO · SHARE ENDPOINT`
+shows the selected Grant-backed endpoint and exposes Browse. `MEMORIES` shows
+every disclosed direct Memory with its complete durable Memory UID and, for a
+bundle, its owning Context. `APPLY` shows the exact explicit `mem share` command
+plus `[ PRESS ENTER TO APPLY ]`. It has no provider turn, semantic options, or
+durable Share session. If no complete plan exists, the same four-surface shape
+opens read-only with unavailable endpoint and Apply projections.
 
 Each recursive Context consumes exactly one unboxed row:
 
@@ -50,7 +52,6 @@ C1 · practice              · 1 Memory
 C2 · practice/appointments · 1 Memory
 C3 · practice/empty-lane   · 0 Memories
 C4 · practice/medication   · 1 Memory
-TO · government/healthcare-agent
 ```
 
 The focused row alone receives the shared blue focus treatment. Full names and
@@ -61,15 +62,27 @@ rows per member and made even a four-Context bundle require scrolling. A
 collapsible tree was also rejected: it would save space by concealing exactly
 which members will be sent.
 
-These three regions declare the shared Surface topology
-`CONTEXT(S) → MEMORIES → ACTION`. Tab and Shift-Tab wrap without resetting the
-Viewer section or Memory cursor. Up and Down first move within the current
-region, then cross a real top or bottom boundary without wrapping; vertical
-entry selects the nearest Context section or Memory row. Enter has a Share
-effect only in `ACTION`. Escape and Backspace use the same read-only close path,
-while Q and Ctrl-C remain immediate close aliases. The unavailable projection
-uses the same topology but deliberately gives its `ACTION` Surface no activation
-capability, so no navigation or Enter sequence can manufacture a send action.
+The endpoint is not arbitrary writable text: Browse shows only the complete
+currently available `SHARE` endpoint catalog. Enter on `TO` leaves the frozen
+viewer for that picker. Cancelling returns to the same endpoint, while choosing
+another endpoint re-prepares the complete Source scope because endpoint Grant
+identity participates in the consent digest, Share UID, and receiver placement.
+The viewer then reopens with `TO` focused and both its visible endpoint and exact
+Apply command updated from the same fresh preview.
+
+These four regions declare the shared Surface topology
+`FROM → TO → MEMORIES → APPLY`. Tab and Shift-Tab wrap without resetting the
+Viewer section, selected endpoint, or Memory cursor. Up and Down first move
+within the current region, then cross a real top or bottom boundary without
+wrapping; vertical entry selects the nearest Source section or Memory row.
+Enter opens Browse in `TO`, applies only the displayed exact command in `APPLY`,
+and remains inert in `FROM` and `MEMORIES`. Direct previews spell `--direct`
+and recursive previews spell `--recursive`, even where the CLI would accept an
+omitted direct flag, so the reviewed disclosure range is explicit. Escape and
+Backspace use the same read-only close path, while Q and Ctrl-C remain immediate
+close aliases. The unavailable projection uses the same topology but gives its
+`TO` and `APPLY` Surfaces no activation capability, so no navigation or Enter
+sequence can manufacture a send action.
 
 The shared Surface controller owns only focus and key routing. Share continues
 to own Source and endpoint eligibility, the frozen preview, the exact send
@@ -84,8 +97,10 @@ and deterministic placement. Send revalidates the complete frozen projection
 under the registry, namespace-graph, and Context locks. A recursive Send holds
 an exclusive Source graph lock from final membership validation through
 receiver publication, so a new child cannot enter the bundle after review. Any
-Source, membership, range, or endpoint change requires reopening Share and
-reviewing a fresh snapshot.
+Source, membership, or range change requires reopening Share and reviewing a
+fresh snapshot. An endpoint change through the viewer's own Browse path also
+creates a fresh preview and requires reviewing its updated `TO` and `APPLY`
+surfaces before Apply.
 
 References and embedded Contexts are rejected because Share must send exactly
 the direct Memories shown in the viewer. They are not silently traversed or

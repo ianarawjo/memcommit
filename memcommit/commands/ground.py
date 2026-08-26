@@ -117,6 +117,10 @@ from memcommit.ground_workspace_runtime import (
     load_ground_workspace_navigation_contexts,
     load_ground_workspace,
 )
+from memcommit.goal_focus_runtime import (
+    freeze_goal_focus_operand,
+    revalidate_goal_focus,
+)
 from memcommit.ground_turn_dialogue import (
     GroundBlockedTarget,
     GroundTurnAction,
@@ -703,11 +707,39 @@ def _run_named_ground_workspace(
 ) -> None:
     """Create or open one Context-rooted workspace through the new boundary."""
 
-    creation_request = CreateGroundWorkspaceRequest(name=name, goal=goal or "")
-    # Creation is an authorized effect of this exact named command. Unlike
-    # blank discovery, it must establish missing Store infrastructure before
-    # taking the multi-Context command lock.
-    store = MemoryStore()
+    # Operand interpretation and durable-Goal validation are still read-only.
+    # An invalid inline Goal must not create Store infrastructure merely so it
+    # can be rejected by the 40-word Ground contract.
+    inspection_store = MemoryStore(create=False)
+    current_name = (
+        inspection_store.current_context_name()
+        if inspection_store.state_file.exists()
+        else None
+    )
+    goal_focus = (
+        freeze_goal_focus_operand(
+            inspection_store,
+            goal,
+            current_name=current_name,
+            require_single=True,
+        )
+        if goal is not None
+        else None
+    )
+    set_goal_focus = (
+        freeze_goal_focus_operand(
+            inspection_store,
+            set_goal,
+            current_name=current_name,
+            require_single=True,
+        )
+        if set_goal is not None
+        else None
+    )
+    creation_request = CreateGroundWorkspaceRequest(
+        name=name,
+        goal_focus=goal_focus,
+    )
     edit_values = (set_goal, add_rule, add_example, add_relation)
     edit_count = sum(value is not None for value in edit_values) + int(undo_local)
     if edit_count > 1:
@@ -715,6 +747,9 @@ def _run_named_ground_workspace(
             "Set Goal, add Rule, add Example, add relation, and Undo are "
             "separate Ground actions."
         )
+    # A valid named command now owns the creation effect and may establish
+    # missing Store infrastructure before taking the multi-Context lock.
+    store = MemoryStore()
     exists = ground_workspace_exists(store, name)
     if exists:
         if goal is not None:
@@ -738,6 +773,12 @@ def _run_named_ground_workspace(
                 "A legacy Ground session uses this name. Legacy Ground JSON "
                 "is not imported into a physical workspace."
             )
+        if goal_focus is not None:
+            # Resolution is not authority to copy stale Goal content. Freeze
+            # first for review/provenance, then revalidate immediately before
+            # the multi-Context Ground creation command crosses its write
+            # boundary.
+            revalidate_goal_focus(store, goal_focus)
         execute_ground_workspace_creation(
             creation_request,
             store=store,
@@ -759,6 +800,9 @@ def _run_named_ground_workspace(
             f"[{undone.source_unit.uid[:8]}] · revision {undone.revision}."
         )
     elif set_goal is not None:
+        assert set_goal_focus is not None
+        revalidate_goal_focus(store, set_goal_focus)
+        goal_content = set_goal_focus.text
         goals = tuple(
             item for item in workspace.goals.iter_items() if isinstance(item, Memory)
         )
@@ -772,8 +816,9 @@ def _run_named_ground_workspace(
                     workspace_name=name,
                     lane="goals",
                     memory_uid=goals[0].uid,
-                    content=set_goal,
+                    content=goal_content,
                     expected_revision=workspace.manifest.revision,
+                    goal_focus=set_goal_focus,
                 ),
                 store=store,
             )
@@ -782,8 +827,9 @@ def _run_named_ground_workspace(
                 AddGroundWorkspaceMemoryRequest(
                     workspace_name=name,
                     lane="goals",
-                    content=set_goal,
+                    content=goal_content,
                     expected_revision=workspace.manifest.revision,
+                    goal_focus=set_goal_focus,
                 ),
                 store=store,
             )
@@ -2613,13 +2659,22 @@ def cmd(
     ] = False,
     goal: Annotated[
         Optional[str],
-        typer.Option("--goal", help="Goal for a new named Ground"),
+        typer.Option(
+            "--goal",
+            help=(
+                "Initial Goal from a Context, CONTEXT:UID/UID Memory, or "
+                "inline text; materialized as one /goals Memory"
+            ),
+        ),
     ] = None,
     set_goal: Annotated[
         Optional[str],
         typer.Option(
             "--set-goal",
-            help="Add or replace the one Goal Memory in a physical Ground",
+            help=(
+                "Add or replace the one /goals Memory from a Context, "
+                "CONTEXT:UID/UID Memory, or inline text"
+            ),
         ),
     ] = None,
     add_rule: Annotated[

@@ -1,7 +1,7 @@
-                                                                                                                                                                                    
-INLINE-MEMORY REVIEW CLOSED                                                                                                                                                         
-  RETURNED ACTION · None                                                                                                                                                            
-  SESSION STATE · AWAITING_REPLY                                                                                                                                                    
-  TARGET BYTES UNCHANGED · True                                                                                                                                                     
-  INLINE MEMORY CONTEXT EXISTS · False                                                                                                                                              
+
+INLINE-MEMORY REVIEW CLOSED
+  RETURNED ACTION · None
+  SESSION STATE · AWAITING_REPLY
+  TARGET BYTES UNCHANGED · True
+  INLINE MEMORY CONTEXT EXISTS · False
   PROVIDER CALLS AFTER OPEN · 0

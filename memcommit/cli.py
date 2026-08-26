@@ -203,8 +203,10 @@ app.command(
     epilog=(
         "Positional forms: 'mem meld INCOMING' uses the current BASELINE; "
         "'mem meld INCOMING BASELINE' is directional; and "
-        "'mem meld PEER_A PEER_B RESULT_C' is symmetric. --into, --from, "
-        "and --to remain explicit aliases."
+        "'mem meld PEER_A PEER_B RESULT_C' is symmetric. With fewer than two "
+        "positional sources, --to names the directional BASELINE; after two "
+        "peers it names symmetric RESULT C. Quote multiword inline text so the "
+        "shell passes it as one operand."
     ),
 )(meld.cmd)
 app.command(
@@ -393,9 +395,11 @@ app.command(
     "update",
     help=operation_summary("update"),
     epilog=(
-        "Positional form: 'mem update SOURCE TARGET'. Zero operands opens "
-        "saved Update work; one-sided current-filled routes remain available "
-        "through --from or --to."
+        "Positional forms: 'mem update SOURCE' uses the current Target and "
+        "'mem update SOURCE TARGET' is fully explicit. An unambiguous sentence "
+        "may supply one process-local Source Memory; --memory forces text. Zero "
+        "operands opens setup, and --from/--to retain role-named routes. Quote "
+        "multiword inline text so the shell passes it as one operand."
     ),
 )(update.cmd)
 

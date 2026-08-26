@@ -9,6 +9,8 @@ from memcommit.commands.compare import (
 )
 from memcommit.commands.context_operand import choose_context_operand
 from memcommit.context_targeting.operands import choose_endpoint_operand
+from memcommit.context_targeting.model import ExistingContextOperand, InlineTextOperand
+from memcommit.context_targeting.operands import classify_context_or_inline_text_operand
 from memcommit.update_endpoints import choose_update_endpoint_operands
 
 
@@ -21,16 +23,22 @@ def test_unary_context_operand_defaults_to_current_and_rejects_duplicates():
 
 
 def test_directional_endpoint_options_never_use_silent_precedence():
-    assert choose_endpoint_operand(
-        "source",
-        role="Source",
-        options=(("--from", None),),
-    ) == "source"
-    assert choose_endpoint_operand(
-        None,
-        role="Target",
-        options=(("--into", None), ("--to", "target")),
-    ) == "target"
+    assert (
+        choose_endpoint_operand(
+            "source",
+            role="Source",
+            options=(("--from", None),),
+        )
+        == "source"
+    )
+    assert (
+        choose_endpoint_operand(
+            None,
+            role="Target",
+            options=(("--into", None), ("--to", "target")),
+        )
+        == "target"
+    )
     with pytest.raises(ValueError, match="both positionally and with --from"):
         choose_endpoint_operand(
             "source",
@@ -72,3 +80,53 @@ def test_update_positionals_require_a_complete_pair():
             source_option=None,
             target_option=None,
         )
+
+
+def test_update_opt_in_single_source_uses_named_or_current_target():
+    assert choose_update_endpoint_operands(
+        ["source"],
+        source_option=None,
+        target_option="target",
+        allow_single_source=True,
+    ) == ("source", "target")
+    assert choose_update_endpoint_operands(
+        ["source"],
+        source_option=None,
+        target_option=None,
+        allow_single_source=True,
+    ) == ("source", None)
+    with pytest.raises(ValueError, match="both positionally and with --from"):
+        choose_update_endpoint_operands(
+            ["source"],
+            source_option="other",
+            target_option=None,
+            allow_single_source=True,
+        )
+    with pytest.raises(ValueError, match="SOURCE, or SOURCE TARGET"):
+        choose_update_endpoint_operands(
+            ["want", "to", "make", "fruits"],
+            source_option=None,
+            target_option=None,
+            allow_single_source=True,
+        )
+
+
+def test_context_or_inline_text_classification_fails_safe_for_locator_typos():
+    existing = {"practice/rules", "legacy invalid name"}
+
+    def classify(value):
+        return classify_context_or_inline_text_operand(
+            value,
+            current="practice",
+            context_exists=existing.__contains__,
+        )
+
+    assert classify("practice/rules") == ExistingContextOperand("practice/rules")
+    assert classify("practice/rulse") == ExistingContextOperand("practice/rulse")
+    assert classify("../rulse") == ExistingContextOperand("../rulse")
+    assert classify("legacy invalid name") == ExistingContextOperand(
+        "legacy invalid name"
+    )
+    assert classify("make every final word a fruit") == InlineTextOperand(
+        "make every final word a fruit"
+    )

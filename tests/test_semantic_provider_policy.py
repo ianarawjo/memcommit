@@ -5,6 +5,7 @@ from __future__ import annotations
 import pytest
 
 from memcommit.infrastructure.providers.policy import (
+    LEGACY_STUDY_PROVIDER_POLICY_VERSION,
     POLICY_VERSION,
     STUDY_PROVIDER_POLICY_VERSION,
     ConfiguredProviderRoute,
@@ -12,6 +13,7 @@ from memcommit.infrastructure.providers.policy import (
     ProviderPolicyOverride,
     ProviderRoute,
     resolve_operation_provider_policy,
+    study_provider_config,
 )
 
 
@@ -66,6 +68,7 @@ def test_general_profile_inherits_machine_default_without_an_authored_pin():
     assert resolved.model == "global-model"
     assert resolved.reasoning_effort == "medium"
     assert resolved.timeout_seconds == 123.0
+    assert resolved.service_tier is None
     assert resolved.source == "GLOBAL_DEFAULT"
     assert resolved.version == POLICY_VERSION
 
@@ -114,8 +117,19 @@ def test_study_uses_versioned_routes_independent_of_general_configuration():
     assert search.timeout_seconds == 600.0
     assert search.source == "STUDY_POLICY"
     assert search.configuration_version == STUDY_PROVIDER_POLICY_VERSION
+    assert search.service_tier == "fast"
     assert ledger.model == "gpt-5.6-sol"
     assert ledger.timeout_seconds == 900.0
+
+
+def test_legacy_study_policy_retains_standard_tier_and_original_digest():
+    legacy = study_provider_config(LEGACY_STUDY_PROVIDER_POLICY_VERSION)
+
+    assert legacy.service_tier is None
+    assert (
+        legacy.digest
+        == "9faa8cea3634d393e3b2f724077b1db14f8628ee7243de2ab75c93d22c816702"
+    )
 
 
 def test_unknown_study_configuration_fails_closed():

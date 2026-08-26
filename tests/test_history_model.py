@@ -123,4 +123,3 @@ def test_build_history_never_resolves_refs_or_query_only_content(
     serialized = repr(timeline)
     assert "SECRET REF CONTENT" not in serialized
     assert "secret-source" not in serialized
-

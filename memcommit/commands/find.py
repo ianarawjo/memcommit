@@ -36,11 +36,6 @@ from memcommit.operations.search.materialization_runtime import (
     execute_find_materialization,
 )
 from memcommit.commands.command_progress import CommandProgress
-from memcommit.commands.history_picker import choose_history
-from memcommit.commands.history_present import (
-    history_result_recovery_label,
-    history_result_picker_entries,
-)
 from memcommit.commands.readable_context_catalog import (
     ReadableContextCatalog,
     freeze_readable_context_catalog,
@@ -93,12 +88,6 @@ from memcommit.find_turn_dialogue import (
 )
 from memcommit.infrastructure.providers.find_query import (
     connect_find_provider as connect_codex_chatgpt_provider,
-)
-from memcommit.history import HistoryError
-from memcommit.history_search import (
-    HistorySearchError,
-    HistorySearchResult,
-    is_temporal_query,
 )
 from memcommit.query_provider import QueryProviderError
 from memcommit.search import (
@@ -602,39 +591,6 @@ def _supplement_namespace_branch_coverage(
     return result[:limit]
 
 
-def _render_temporal_find(
-    root_name: str,
-    results: list[HistorySearchResult],
-) -> None:
-    if not results:
-        typer.secho(display_escape_text(root_name), bold=True)
-        typer.echo("  (no matching historical items)")
-        return
-    grouped: dict[tuple[str, str], list[HistorySearchResult]] = {}
-    for result in results:
-        grouped.setdefault(
-            (result.context_uid, result.context_name),
-            [],
-        ).append(result)
-    for group_index, ((_, context_name), matches) in enumerate(grouped.items()):
-        if group_index:
-            typer.echo()
-        typer.secho(display_escape_text(context_name), bold=True)
-        for result in matches:
-            timestamp = (
-                result.timestamp[:16].replace("T", " ")
-                if result.timestamp
-                else "current"
-            )
-            checkpoint = result.checkpoint_uid or result.candidate_id
-            typer.echo(
-                f"  [{result.kind:<17} {checkpoint[:8]}] "
-                f"{display_escape_text(timestamp)}  "
-                f"{display_escape_text(result.description)}  "
-                f"({display_escape_text(history_result_recovery_label(result))})"
-            )
-
-
 def _render_labeled_content(label: str, content: str) -> None:
     """Render the first content line beside its item and align continuations."""
     lines = safe_terminal_text(content).splitlines() or [""]
@@ -1048,30 +1004,9 @@ def _render_find_search_response(
         if all_readable_contexts
         else " + ".join(display_escape_text(name) for name in target_names)
     )
-    if response.mode == "HISTORY":
-        history_results = tuple(
-            result.history_result
-            for result in response.results
-            if result.history_result is not None
-        )
-        if len(history_results) == len(response.results):
-            if _interactive_terminal() and len(target_names) == 1 and history_results:
-                choose_history(
-                    history_result_picker_entries(history_results),
-                    context_name=target_names[0],
-                    mode="log",
-                )
-                return
-            _render_temporal_find(heading, list(history_results))
-            return
-
     if not response.results:
         typer.secho(heading, bold=True)
-        typer.echo(
-            "  (no matching historical items)"
-            if response.mode == "HISTORY"
-            else "  (no matching items)"
-        )
+        typer.echo("  (no matching items)")
         return
     if response.related_query:
         if len(target_names) == 1:
@@ -1377,8 +1312,6 @@ def cmd(
         except (
             FindMaterializationError,
             FindError,
-            HistoryError,
-            HistorySearchError,
             QueryProviderError,
             FileNotFoundError,
             OSError,
@@ -1400,7 +1333,6 @@ def cmd(
         follow_embeds=follow_embeds,
         limit=limit,
     )
-    temporal_query = is_temporal_query(query)
     try:
         if all_readable_catalog is not None or len(target_names) > 1:
             catalog = all_readable_catalog
@@ -1420,21 +1352,14 @@ def cmd(
                 include_query_routes=follow_embeds,
             )
             with CommandProgress(
-                "SEARCH HISTORY" if temporal_query else "SEARCH",
+                "SEARCH",
                 "connecting provider",
-                total=2 if temporal_query else 3,
+                total=3,
             ) as progress:
 
                 def observe(stage: FindSearchStage) -> None:
                     if stage == "SEARCHING":
-                        progress.update(
-                            (
-                                "searching history"
-                                if temporal_query
-                                else "ranking candidates"
-                            ),
-                            step=2,
-                        )
+                        progress.update("ranking candidates", step=2)
                     elif stage == "CHECKING_COVERAGE":
                         progress.update("checking namespace coverage", step=3)
 
@@ -1451,21 +1376,14 @@ def cmd(
         )
     except (
         FindError,
-        HistoryError,
-        HistorySearchError,
         QueryProviderError,
         FileNotFoundError,
         OSError,
         RuntimeError,
         ValueError,
     ) as error:
-        error_label = (
-            "Search history error"
-            if len(target_names) == 1 and temporal_query
-            else "Search error"
-        )
         typer.secho(
-            f"{error_label}: {display_escape_text(str(error))}",
+            f"Search error: {display_escape_text(str(error))}",
             fg=typer.colors.RED,
             err=True,
         )

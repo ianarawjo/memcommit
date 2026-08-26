@@ -483,17 +483,13 @@ def test_granted_read_shows_current_trace_route_but_never_opens_history(
 
     monkeypatch.setattr(MemoryStore, "list_checkpoints", forbidden_history)
 
-    rationale = runner.invoke(
-        app,
-        ["rationale", target.uid[:8], "--context", "campus-wiki"],
-    )
+    shown = runner.invoke(app, ["show", target.uid[:8]])
+    rationale = runner.invoke(app, ["rationale", target.uid[:8]])
     trace = runner.invoke(
         app,
         [
             "trace",
             target.uid[:8],
-            "--context",
-            "campus-wiki/public",
             "--plain",
         ],
     )
@@ -507,6 +503,8 @@ def test_granted_read_shows_current_trace_route_but_never_opens_history(
             "campus-wiki/public",
         ],
     )
+    assert shown.exit_code == 0, shown.output + shown.stderr
+    assert updated_content in shown.output
     assert rationale.exit_code == 0, rationale.output + rationale.stderr
     assert "PROVENANCE — hidden by Grant" in rationale.output
     assert "ACCESS ROUTE" in rationale.output
@@ -520,6 +518,36 @@ def test_granted_read_shows_current_trace_route_but_never_opens_history(
     assert updated_content in trace.output
     assert log_memory.exit_code == 1
     assert "READ does not expose authority checkpoint" in log_memory.stderr
+
+
+@pytest.mark.parametrize("operation", ("show", "trace", "rationale"))
+def test_bare_read_report_uid_rejects_local_and_granted_collision(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+    operation,
+):
+    authority_store, _editable, _campus_grant, _details_grant = _grant_fixture(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+    granted = next(
+        item
+        for item in authority_store.load_direct("campus-wiki/public").iter_items()
+        if isinstance(item, Memory)
+    )
+    store = MemoryStore()
+    local = store.load_direct("task-root")
+    local.add(Memory(uid=granted.uid, content="A distinct local occurrence."))
+    store.save(local)
+
+    result = runner.invoke(app, [operation, granted.uid])
+
+    assert result.exit_code == 1
+    assert "multiple current readable matches" in result.stderr
+    assert f"task-root:{granted.uid}" in result.stderr
+    assert f"campus-wiki/public:{granted.uid}" in result.stderr
 
 
 def test_read_view_does_not_open_nested_query_authority_record(

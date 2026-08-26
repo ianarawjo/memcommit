@@ -1,0 +1,8 @@
+Shared Context bundle.                                                                                                                                                              
+Share: 436c4592-3039-5729-b5f4-ab831664ddfe                                                                                                                                         
+To: research/archive-agent                                                                                                                                                          
+Contexts: 4                                                                                                                                                                         
+Memories: 3                                                                                                                                                                         
+Consent digest: 40612bba24db4009983323e7bf37d78c2907f02f60ef3490b654395f39947da3                                                                                                    
+Receiver: share-receiver:remote/research/archive-agent/received-shares/436c4592-3039-5729-b5f4-ab831664ddfe                                                                         
+CAPTURE GATE · PRESS V FOR READ-ONLY VERIFICATION

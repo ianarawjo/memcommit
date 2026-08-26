@@ -112,6 +112,7 @@ def _key_material(
     provider: str,
     model: str,
     reasoning: str | None,
+    update_schema_version: int = UPDATE_SCHEMA_VERSION,
 ) -> dict[str, object]:
     return {
         "operation": "UPDATE",
@@ -120,7 +121,7 @@ def _key_material(
         "model": model,
         "reasoning": reasoning,
         "provider_contract_version": UPDATE_PROVIDER_CONTRACT_VERSION,
-        "update_schema_version": UPDATE_SCHEMA_VERSION,
+        "update_schema_version": update_schema_version,
         "task_description": description,
         "source": {
             "uid": session.source_uid,
@@ -193,7 +194,12 @@ def _configured_semantic_identity() -> tuple[str, str | None, str | None]:
     return resolved.provider_id, resolved.model, resolved.reasoning_effort
 
 
-def _validate_artifact(value: dict[str, object], *, entry_key: str) -> tuple[UpdateSession, dict[str, str]]:
+def _validate_artifact(
+    value: dict[str, object],
+    *,
+    entry_key: str,
+    expected_update_schema_version: int = UPDATE_SCHEMA_VERSION,
+) -> tuple[UpdateSession, dict[str, str]]:
     if (
         value.get("kind") != UPDATE_ARTIFACT_KIND
         or value.get("schema_version") != UPDATE_ARTIFACT_SCHEMA_VERSION
@@ -201,7 +207,7 @@ def _validate_artifact(value: dict[str, object], *, entry_key: str) -> tuple[Upd
         or value.get("operation") != "UPDATE"
         or value.get("task") != TASK
         or value.get("provider_contract_version") != UPDATE_PROVIDER_CONTRACT_VERSION
-        or value.get("update_schema_version") != UPDATE_SCHEMA_VERSION
+        or value.get("update_schema_version") != expected_update_schema_version
     ):
         raise StudyPrewarmRegistryError("Declared Update prewarm is invalid.")
     description = value.get("task_description")
@@ -214,7 +220,9 @@ def _validate_artifact(value: dict[str, object], *, entry_key: str) -> tuple[Upd
     try:
         session = UpdateSession.from_dict(value.get("session"))
     except ValueError as error:
-        raise StudyPrewarmRegistryError("Declared Update session is invalid.") from error
+        raise StudyPrewarmRegistryError(
+            "Declared Update session is invalid."
+        ) from error
     if (
         session != _portable_session(session)
         or session.source_name != SOURCE_NAME
@@ -229,8 +237,10 @@ def _validate_artifact(value: dict[str, object], *, entry_key: str) -> tuple[Upd
     provider = value.get("provider")
     model = value.get("model")
     reasoning = value.get("reasoning")
-    if not isinstance(provider, str) or not isinstance(model, str) or (
-        reasoning is not None and not isinstance(reasoning, str)
+    if (
+        not isinstance(provider, str)
+        or not isinstance(model, str)
+        or (reasoning is not None and not isinstance(reasoning, str))
     ):
         raise StudyPrewarmRegistryError("Update provider identity is invalid.")
     expected = payload_digest(
@@ -240,11 +250,59 @@ def _validate_artifact(value: dict[str, object], *, entry_key: str) -> tuple[Upd
             provider=provider,
             model=model,
             reasoning=reasoning,
+            update_schema_version=expected_update_schema_version,
         )
     )
     if expected != entry_key:
         raise StudyPrewarmRegistryError("Update prewarm key is stale.")
     return session, description  # type: ignore[return-value]
+
+
+def upgrade_update_prewarm_artifact(
+    value: dict[str, object],
+    *,
+    entry_key: str,
+    previous_schema_version: int,
+) -> tuple[str, dict[str, object]]:
+    """Rebind one readable legacy plan to the current wrapper generation.
+
+    The provider-authored operations do not change during this migration.  A
+    full legacy validation is required first so a malformed artifact can never
+    be laundered into a current cache entry.
+    """
+
+    session, description = _validate_artifact(
+        value,
+        entry_key=entry_key,
+        expected_update_schema_version=previous_schema_version,
+    )
+    offline_seconds = value.get("offline_provider_seconds")
+    if (
+        not isinstance(offline_seconds, (int, float))
+        or isinstance(offline_seconds, bool)
+        or offline_seconds < 0
+    ):
+        raise StudyPrewarmRegistryError("Update provider evidence is invalid.")
+    provider = str(value["provider"])
+    model = str(value["model"])
+    reasoning = value.get("reasoning")
+    material = _key_material(
+        description=description,
+        session=session,
+        provider=provider,
+        model=model,
+        reasoning=reasoning if isinstance(reasoning, str) else None,
+    )
+    key = payload_digest(material)
+    return key, {
+        "kind": UPDATE_ARTIFACT_KIND,
+        "schema_version": UPDATE_ARTIFACT_SCHEMA_VERSION,
+        "key": key,
+        **material,
+        "offline_provider_seconds": float(offline_seconds),
+        "session_digest": payload_digest(session.to_dict()),
+        "session": session.to_dict(),
+    }
 
 
 def _installation_path(store: MemoryStore, session_uid: str) -> Path:
@@ -267,7 +325,9 @@ def _installation_evidence(
     }
 
 
-def _record_installation(store: MemoryStore, *, entry_key: str, session: UpdateSession) -> None:
+def _record_installation(
+    store: MemoryStore, *, entry_key: str, session: UpdateSession
+) -> None:
     path = _installation_path(store, session.uid)
     if path.parent.exists() and (not path.parent.is_dir() or path.parent.is_symlink()):
         raise StudyPrewarmRegistryError("Update prewarm receipt directory is unsafe.")
@@ -459,7 +519,11 @@ def _rebind_portable_session(
         for candidate in inputs.target_contexts
     }
     target_memories = {
-        (candidate.context_uid, candidate.context_name, candidate.memory_uid): candidate.content
+        (
+            candidate.context_uid,
+            candidate.context_name,
+            candidate.memory_uid,
+        ): candidate.content
         for candidate in inputs.target_memories
     }
     added_uids: set[tuple[str, str]] = set()
@@ -477,11 +541,17 @@ def _rebind_portable_session(
         ):
             raise StudyPrewarmRegistryError("Update operation provenance is stale.")
         if isinstance(operation, (EditOperation, RemoveOperation)):
-            if target_memories.get((*owner, operation.memory_uid)) != operation.old_content:
+            if (
+                target_memories.get((*owner, operation.memory_uid))
+                != operation.old_content
+            ):
                 raise StudyPrewarmRegistryError("Update target operation is stale.")
         elif isinstance(operation, AddOperation):
             identity = (operation.owner_context_uid, operation.memory_uid)
-            if identity in added_uids or (*owner, operation.memory_uid) in target_memories:
+            if (
+                identity in added_uids
+                or (*owner, operation.memory_uid) in target_memories
+            ):
                 raise StudyPrewarmRegistryError("Update addition identity is stale.")
             added_uids.add(identity)
     # Context fingerprints include run-local graph bindings. The exhaustive
@@ -636,7 +706,10 @@ def _project_update_session(
     )
     relation = (
         "EQUAL"
-        if source_relation == target_context_relation == target_memory_relation == "EQUAL"
+        if source_relation
+        == target_context_relation
+        == target_memory_relation
+        == "EQUAL"
         else "SUBSET"
     )
     projected = replace(
@@ -686,10 +759,7 @@ def find_installed_projectable_update_prewarm(
     registry = load_registry(store.store_dir)
     if registry is None:
         return None
-    if (
-        not source.name.startswith(TASK + "/")
-        or not target.name.startswith(TASK + "/")
-    ):
+    if not source.name.startswith(TASK + "/") or not target.name.startswith(TASK + "/"):
         return None
     profile_registry = registry_snapshot or load_profile_registry()
     requested_identity = _configured_semantic_identity()
@@ -743,16 +813,20 @@ def find_installed_projectable_update_prewarm(
             )
             exact_source = load_context_scope(
                 exact_source_store,
-                source_access.display_name
-                if source_access.is_granted
-                else source_access.context_name,
+                (
+                    source_access.display_name
+                    if source_access.is_granted
+                    else source_access.context_name
+                ),
                 include_descendants=True,
             )
             exact_target = load_context_scope(
                 exact_target_store,
-                target_access.display_name
-                if target_access.is_granted
-                else target_access.context_name,
+                (
+                    target_access.display_name
+                    if target_access.is_granted
+                    else target_access.context_name
+                ),
                 include_descendants=True,
             )
             canonical = _rebind_portable_session(
@@ -799,12 +873,10 @@ def find_installed_projectable_update_prewarm(
                 relation == "EQUAL"
                 and source.uid == canonical.source_uid
                 and source.name == canonical.source_name
-                and source_include_descendants
-                == canonical.source_include_descendants
+                and source_include_descendants == canonical.source_include_descendants
                 and target.uid == canonical.target_uid
                 and target.name == canonical.target_name
-                and target_include_descendants
-                == canonical.target_include_descendants
+                and target_include_descendants == canonical.target_include_descendants
             )
             if exact:
                 rebound = canonical
@@ -820,9 +892,11 @@ def find_installed_projectable_update_prewarm(
                     origin=(
                         "EXACT_PREWARM"
                         if exact
-                        else "EQUIVALENT_SCOPE_PREWARM"
-                        if relation == "EQUAL"
-                        else "PROJECTED_PREWARM"
+                        else (
+                            "EQUIVALENT_SCOPE_PREWARM"
+                            if relation == "EQUAL"
+                            else "PROJECTED_PREWARM"
+                        )
                     ),
                 ),
             )
@@ -878,9 +952,13 @@ def install_declared_update_prewarms(
         return UpdatePrewarmInstallResult(0, 0, 0, ())
     identity = study_run_identity(profile)
     if identity is None or identity.role != "PARTICIPANT":
-        raise StudyPrewarmRegistryError("Update prewarm requires a participant Study Profile.")
+        raise StudyPrewarmRegistryError(
+            "Update prewarm requires a participant Study Profile."
+        )
     if registry.baseline_profile_uid != identity.baseline_profile_uid:
-        raise StudyPrewarmRegistryError("Update prewarm belongs to a different baseline.")
+        raise StudyPrewarmRegistryError(
+            "Update prewarm belongs to a different baseline."
+        )
     requested_identity = _configured_semantic_identity()
     declared = skipped = 0
     installed = 0
@@ -904,35 +982,80 @@ def install_declared_update_prewarms(
         current_description = store.load_direct(description["name"])
         if (
             current_description.uid != description["context_uid"]
-            or context_record_digest(current_description) != description["context_digest"]
+            or context_record_digest(current_description)
+            != description["context_digest"]
         ):
-            raise StudyPrewarmRegistryError("Task 1 description changed after Update was prepared.")
+            raise StudyPrewarmRegistryError(
+                "Task 1 description changed after Update was prepared."
+            )
         source_access = resolve_context_access(
-            store, SOURCE_NAME, current_name=store.current_context_name(),
-            required_permission="READ", registry=registry_snapshot,
+            store,
+            SOURCE_NAME,
+            current_name=store.current_context_name(),
+            required_permission="READ",
+            registry=registry_snapshot,
         )
         target_access = resolve_context_access(
-            store, TARGET_NAME, current_name=store.current_context_name(),
-            required_permission="READ", registry=registry_snapshot,
+            store,
+            TARGET_NAME,
+            current_name=store.current_context_name(),
+            required_permission="READ",
+            registry=registry_snapshot,
         )
         authorize_derived_transfer(source_access, target_access)
-        source_store = GrantedReadStore(source_access, registry=registry_snapshot) if source_access.is_granted else store
-        target_store = GrantedReadStore(target_access, registry=registry_snapshot) if target_access.is_granted else store
-        source = load_context_scope(source_store, source_access.display_name if source_access.is_granted else source_access.context_name, include_descendants=True)
-        target = load_context_scope(target_store, target_access.display_name if target_access.is_granted else target_access.context_name, include_descendants=True)
+        source_store = (
+            GrantedReadStore(source_access, registry=registry_snapshot)
+            if source_access.is_granted
+            else store
+        )
+        target_store = (
+            GrantedReadStore(target_access, registry=registry_snapshot)
+            if target_access.is_granted
+            else store
+        )
+        source = load_context_scope(
+            source_store,
+            (
+                source_access.display_name
+                if source_access.is_granted
+                else source_access.context_name
+            ),
+            include_descendants=True,
+        )
+        target = load_context_scope(
+            target_store,
+            (
+                target_access.display_name
+                if target_access.is_granted
+                else target_access.context_name
+            ),
+            include_descendants=True,
+        )
         current = _rebind_portable_session(
             prepared,
             source=source,
             target=target,
-            granted_source=freeze_granted_context_binding(source_access) if source_access.is_granted else None,
-            granted_target=freeze_granted_context_binding(target_access) if target_access.is_granted else None,
+            granted_source=(
+                freeze_granted_context_binding(source_access)
+                if source_access.is_granted
+                else None
+            ),
+            granted_target=(
+                freeze_granted_context_binding(target_access)
+                if target_access.is_granted
+                else None
+            ),
         )
         if not session_matches(
-            current, source, target,
+            current,
+            source,
+            target,
             granted_source=current.granted_source,
             granted_target=current.granted_target,
         ):
-            raise StudyPrewarmRegistryError("Declared Update prewarm does not match current inputs.")
+            raise StudyPrewarmRegistryError(
+                "Declared Update prewarm does not match current inputs."
+            )
         if publish:
             record_declared_installation(
                 store,

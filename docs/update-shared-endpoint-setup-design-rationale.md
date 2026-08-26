@@ -86,7 +86,18 @@ aware proof that filters and revalidates every disposition, not a TUI change.
 Update session schema 6 remains the emitted form for unchanged whole-Context
 sessions. Schema 7 is emitted only when at least one focused UID exists, so old
 readers and existing Study receipts retain their prior representation while
-focused identity becomes durable.
+focused identity becomes durable. A CLI inline Source emits schema 8 with the
+exact process-local Memory and deterministic synthetic identity. It creates no
+stored Context; Apply reconstructs that Source and locks only durable target
+Contexts. The setup TUI remains Context-to-Context because introducing inline
+composition there would change its interaction and authority contract.
+
+The command accepts `SOURCE [TARGET]`, `--from SOURCE --to TARGET`, and
+`--memory TEXT --to TARGET`. An unambiguously non-Context Source becomes the
+same single inline Memory, while a portable-looking missing name continues to
+fail as a Context typo. The full classification and persistence rationale is
+recorded in
+[`context-or-inline-memory-operand-design-rationale.md`](context-or-inline-memory-operand-design-rationale.md).
 
 The selected setup design does not move or relax Update's provider decoder,
 complete-plan validation, final review, local/granted-target distinction,

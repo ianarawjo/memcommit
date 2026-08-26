@@ -1,4 +1,4 @@
-$ mem meld --memory 'all greetings need "."; keep "" and ! literal. ' · reviewed
+$ mem meld --from 'all greetings need "."; keep "" and ! literal. ' --to capture/greeting-policy · reviewed
 PTY 180 52
 MEM MELD · DIRECTIONAL
 INCOMING INLINE MEMORY → BASELINE / TARGET capture/greeting-policy
@@ -22,7 +22,7 @@ ISSUES
   (none)
 
 PROPOSED BASELINE CHANGES
-  ~  1. [EDIT · SYNTHESIZE] all greetings need "."; keep "" and ! literal. 
+  ~  1. [EDIT · SYNTHESIZE] all greetings need "."; keep "" and ! literal.
        WHY · Preserves the exact new greeting distinction.
 
 Apply exactly this proposal: mem meld --memory 'all greetings need "."; keep "" and ! literal. ' --into capture/greeting-policy --accept

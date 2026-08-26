@@ -316,15 +316,19 @@ def rationale_ruleset() -> dict[str, object]:
     return deepcopy(_loaded_ruleset())
 
 
-def rationale_ruleset_prompt_payload() -> dict[str, object]:
-    """Project all rules, exact outputs, and known-wrong cases into production."""
+def rationale_ruleset_prompt_payload(
+    *,
+    include_cases: bool = True,
+) -> dict[str, object]:
+    """Project rules and optionally authored cases into one provider turn."""
 
     data = rationale_ruleset()
     return {
         "ruleset_version": data["ruleset_version"],
         "rules": data["rules"],
-        # These are consumed calibration, not a held-out evaluation set.
-        "cases": data["cases"],
+        # These remain consumed calibration for ordinary Profiles. Study uses
+        # the same rules without replaying the examples on every invocation.
+        "cases": data["cases"] if include_cases else [],
     }
 
 

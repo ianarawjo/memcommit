@@ -22,6 +22,7 @@ from memcommit.elaborate_config import (
     DEFAULT_ELABORATE_SEMANTIC_CONFIG,
     ElaborateSemanticConfig,
 )
+from memcommit.goal_focus import FrozenGoalFocus
 
 
 @dataclass(frozen=True)
@@ -30,6 +31,7 @@ class ElaborateRequest:
 
     goal: str | None = None
     rules: tuple[str, ...] = ()
+    goal_focus: FrozenGoalFocus | None = None
     number: int | None = None
     strict: bool = False
 
@@ -46,14 +48,21 @@ class ElaborateRequest:
             raise ElaborateError("Elaborate accepts either one Goal or Rules, not both.")
         if self.goal is None and not self.rules:
             raise ElaborateError("Elaborate requires one Goal or at least one Rule.")
+        if self.goal_focus is not None and not isinstance(
+            self.goal_focus,
+            FrozenGoalFocus,
+        ):
+            raise ElaborateError("Elaborate Goal focus must be a typed frame.")
         if self.number is not None and (
             type(self.number) is not int or self.number <= 0
         ):
             raise ElaborateError("Elaborate number must be a positive integer.")
         if type(self.strict) is not bool:
-            raise ElaborateError("Elaborate strict must be a boolean.")
+            raise ElaborateError("Elaborate strict mode must be boolean.")
         if self.strict and self.goal is not None:
-            raise ElaborateError("Strict Elaborate applies only to Rules-to-Cases.")
+            raise ElaborateError(
+                "Strict Elaborate applies only when generating Cases from Rules."
+            )
 
 
 @dataclass(frozen=True)
@@ -105,6 +114,7 @@ def run_elaborate(
     normalized = ElaborateRequest(
         goal=inputs[0] if mode.value == "GOAL_TO_RULES" else None,
         rules=inputs if mode.value == "RULES_TO_CASES" else (),
+        goal_focus=request.goal_focus,
         number=number,
         strict=request.strict,
     )
@@ -119,6 +129,7 @@ def run_elaborate(
         validate_elaborate_provider_plan(
             mode=mode,
             inputs=inputs,
+            goal_focus=normalized.goal_focus,
             target_context=target_context,
             number=number,
             strict=normalized.strict,
@@ -128,6 +139,7 @@ def run_elaborate(
             analysis = analyze_elaborate(
                 goal=normalized.goal,
                 rules=normalized.rules,
+                goal_focus=normalized.goal_focus,
                 provider=provider,
                 target_context=target_context,
                 number=number,
@@ -137,6 +149,7 @@ def run_elaborate(
     elif (
         analysis.mode is not mode
         or analysis.inputs != inputs
+        or analysis.goal_focus != normalized.goal_focus
         or analysis.target_context != target_context
         or analysis.number != number
         or analysis.quality_policy

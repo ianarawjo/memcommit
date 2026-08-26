@@ -472,9 +472,12 @@ Contexts. Publication still requires a later `push` or PR.
 If the cached impact plan is stale because A or B changed, `update` plans again
 instead of promoting stale operations. Running `update` repeatedly with the
 same A and applied B is idempotent: it recognizes the result receipt and
-neither reconnects to the provider nor creates another checkpoint. A
-different, stale, or diverged active update record is preserved unless the
-participant explicitly supplies `--replace-stage`.
+neither reconnects to the provider nor creates another checkpoint. A distinct
+invocation after an applied receipt starts a new Update without
+`--replace-stage`; the prior terminal receipt is retained under its session UID
+and named before the new work proceeds. An unfinished staged receipt, and an
+undone receipt that still owns the Redo path, continue to require an explicit
+lifecycle choice rather than being replaced implicitly.
 
 An ordinary exception during a multi-owner write restores every owner already
 written and removes the checkpoints created by that attempt, leaving the

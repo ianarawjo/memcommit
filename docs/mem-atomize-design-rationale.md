@@ -81,12 +81,14 @@ results afterward. Sessions owned by other profiles are therefore absent from
 the list, search results, and reopen resolution rather than merely hidden by
 presentation.
 
-The selector uses the shared saved-work picker and shows one latest Atomize
-analysis per source Context. Recent-first sorting uses the latest durable
-analysis, workbench, or open-grounding file modification time; grouping is by
-the exact Context name because Atomize has no separate project metadata. Name
-sorting, Context grouping, filtering, cancellation, and `--all` presentation
-come from the common picker grammar.
+The selector uses the shared saved-work picker and shows the latest Atomize
+analysis plus displaced UID-retained revisions. Recent-first sorting uses the
+durable analysis or current subordinate-state modification time; grouping is
+by the exact Context name because Atomize has no separate project metadata.
+Name sorting, Context grouping, filtering, cancellation, and `--all`
+presentation come from the common picker grammar. The `New` row always carries
+the same fresh-work signal as `mem atomize --refresh`, so selecting the same
+Context and scope cannot fall back into an applied latest analysis.
 
 Selection freezes the analysis UID process-locally. Before rendering, Atomize
 loads that exact UID again, checks the persisted source Context identity and
@@ -99,18 +101,21 @@ screen is rendered. These checks occur after selection so deletion,
 replacement, or source mutation while the picker is open cannot fall through
 to the ordinary create-or-resume path.
 
-The analysis UID is frozen, while its workbench and grounding dialogue are
-mutable subordinate state. If another process records a valid turn while the
-picker is open, selection resumes that latest binding-valid subordinate state;
-the status or issue count shown in the frozen row may therefore be older than
-the reopened screen. Exact historical workbench revisions are not retained.
+The analysis UID is frozen, while the active workbench and grounding dialogue
+are mutable subordinate state. If another process records a valid turn while
+the picker is open, selection resumes that latest binding-valid subordinate
+state; the status or issue count shown in the frozen row may therefore be older
+than the reopened screen. When a new analysis UID replaces the active pair,
+the displaced analysis and its complete workbench are retained together as
+immutable history.
 
 The common picker currently requires an argv-shaped presentation field. The
 Atomize adapter displays the nearest ordinary public route,
 `mem atomize --context NAME`, but labels it as a route hint that the picker
 does not execute. The frozen analysis UID, not that hint, is authoritative for
-the current selection. A public UID-based reopen command and archived
-analysis revisions remain intentional non-goals of this slice.
+the current selection. `mem impact atomize --session UID` and the saved-session
+launchers resolve both current and retained analysis identities. Historical
+state is read-only; viewing it never makes it the active workbench.
 
 The selected Output is durable mutable workbench state rather than semantic
 analysis input. Workbench schema v2 records its exact Context name. Schema v1

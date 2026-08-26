@@ -56,7 +56,8 @@ The current implementation also supports:
 ```text
 mem review                 # resume global review, or atomize as fallback
 mem review --snapshot      # print one stable, non-interactive frame
-mem review ambiguities --replace-review  # explicitly discard and rescan
+mem review ambiguities --new             # explicitly rescan the same frame
+mem review ambiguities --replace-review  # compatibility alias / corrupt-state recovery
 mem review atomize --replace-review      # reset mutable workbench state
 mem review atomize --respond-to UID --response TEXT  # save without a TUI
 mem impact atomize --refresh             # explicit unframed reanalysis
@@ -333,12 +334,13 @@ adapter stores one global prototype session atomically in:
 ~/.mem/review-session.json
 ```
 
-The atomize workflow instead stores one latest analysis and workbench per
-Context UID:
+The atomize workflow stores one latest analysis/workbench pair per Context UID
+and retains displaced pairs by analysis UID:
 
 ```text
 ~/.mem/atomize-analyses/<context-uid>.json
 ~/.mem/atomize-workbenches/<context-uid>.json
+~/.mem/atomize-session-history/<context-uid>/<analysis-uid>.json
 ```
 
 Completed `mem audit` runs use a multi-session UID catalog rather than a
@@ -373,12 +375,16 @@ the Context identity, direct-Memory content, or canonical direct-Memory order
 makes the relevant session stale. The shell refuses to reinterpret an old
 answer against a new local frame.
 
-Starting another global ambiguity adapter never silently overwrites
-`review-session.json`; `--replace-review` is its explicit destructive
-boundary. `mem review atomize --replace-review` resets only the mutable
-workbench for the current saved analysis. It neither reruns the provider nor
-replaces the analysis. Reanalysis requires `mem impact atomize --refresh` or
-`--with-review`.
+An unfinished global ambiguity adapter resumes for the same frame and blocks a
+different frame until `--new` is supplied. Once every item is answered, or the
+finder returned no items, a distinct Context frame automatically becomes new
+work. The displaced terminal session and its original direct-Context snapshot
+remain UID-addressable, read-only evidence. An exact terminal retry still
+resumes provider-free; `--new` explicitly reruns the same frame, while
+`--replace-review` remains a compatibility alias and malformed-state recovery
+route. `mem review atomize --replace-review` continues to reset only the
+current Atomize workbench. Atomize reanalysis uses `mem atomize --refresh`,
+`mem impact atomize --refresh`, or `--with-review` as appropriate.
 
 Deleting a Context removes its analysis and workbench. It also deletes the
 global review when that artifact names the deleted Context, while preserving a
@@ -389,11 +395,12 @@ References, embedded Contexts, and query-only views remain outside the
 direct-Memory review boundary. Review never opens legacy `query-sources/` or
 authority Contexts reachable only through a `QUERY` grant.
 
-The global ambiguity adapter remains a one-session concurrency limitation.
-Atomize workbenches are isolated by Context UID but still have one latest slot
-per Context and no cross-process locking or revision archive. Concurrent
-writers to the same Context can still last-write mutable workbench state;
-locking and multi-revision storage are future work.
+The global ambiguity adapter retains one mutable active slot, plus immutable
+terminal history by UID. Atomize workbenches remain isolated by Context UID
+with one mutable latest slot, but displaced analysis/workbench pairs are also
+retained by analysis UID. Concurrent mutable Review writers still use the
+legacy last-write behavior; terminal rotation does not claim a new general
+cross-process response-edit CAS.
 
 ## Terminal and chat-controller boundary
 

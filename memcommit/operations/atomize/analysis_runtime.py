@@ -32,6 +32,31 @@ from memcommit.study_prewarm.atomize import find_declared_atomize_prewarm
 ATOMIZE_AGGREGATE_TIMEOUT_SECONDS = 300
 
 
+def _archive_displaced_atomize_pair(
+    store: MemoryStore,
+    *,
+    existing: AtomizeAnalysisSession | None,
+    workbench,
+    replacement_uid: str,
+) -> bool:
+    """Retain the prior UID only when a genuinely new analysis replaces it."""
+
+    if existing is None or existing.uid == replacement_uid:
+        return False
+    return store.archive_atomize_session(existing, workbench)
+
+
+def _remove_failed_atomize_archive(
+    store: MemoryStore,
+    *,
+    existing: AtomizeAnalysisSession | None,
+    created: bool,
+) -> None:
+    if existing is None or not created:
+        return
+    store.delete_atomize_session_history(existing.context_uid, existing.uid)
+
+
 def _connect_aggregate_atomize_provider(
     provider_factory: Callable[[], AtomizeProvider],
 ) -> AtomizeProvider:
@@ -102,12 +127,24 @@ def _install_prepared_atomize_analysis(
         output_context_name=output_context_name or context.name,
     )
     analysis_saved = False
+    history_created = False
     try:
+        history_created = _archive_displaced_atomize_pair(
+            store,
+            existing=existing,
+            workbench=previous_workbench,
+            replacement_uid=analysis.uid,
+        )
         store.save_atomize_analysis(analysis)
         analysis_saved = True
         store.save_atomize_workbench(workbench)
     except Exception:
         if not analysis_saved:
+            _remove_failed_atomize_archive(
+                store,
+                existing=existing,
+                created=history_created,
+            )
             raise
         try:
             if existing is None:
@@ -119,6 +156,11 @@ def _install_prepared_atomize_analysis(
                     store.delete_atomize_workbench(existing.context_uid)
                 else:
                     store.save_atomize_workbench(previous_workbench)
+            _remove_failed_atomize_archive(
+                store,
+                existing=existing,
+                created=history_created,
+            )
         except Exception as cleanup_error:
             raise RuntimeError(
                 "Prepared atomize installation failed and its previous derived "
@@ -170,23 +212,37 @@ class MemoryStoreAtomizeAnalysisOpenPort:
                     "The atomize workbench changed while reviewed "
                     "materialization was running; no proposal was saved."
                 )
-            self.store._save_atomize_analysis_locked(analysis)  # noqa: SLF001
+            history_created = _archive_displaced_atomize_pair(
+                self.store,
+                existing=expected.analysis,
+                workbench=expected.workbench,
+                replacement_uid=analysis.uid,
+            )
+            analysis_saved = False
             try:
+                self.store._save_atomize_analysis_locked(analysis)  # noqa: SLF001
+                analysis_saved = True
                 self.store._save_atomize_workbench_locked(workbench)  # noqa: SLF001
             except Exception:
-                self.store._save_atomize_analysis_locked(  # noqa: SLF001
-                    expected.analysis
+                if analysis_saved:
+                    self.store._save_atomize_analysis_locked(  # noqa: SLF001
+                        expected.analysis
+                    )
+                    if expected.workbench is None:
+                        path = self.store._atomize_workbench_path(  # noqa: SLF001
+                            expected.analysis.context_uid
+                        )
+                        if path.exists():
+                            path.unlink()
+                    else:
+                        self.store._save_atomize_workbench_locked(  # noqa: SLF001
+                            expected.workbench
+                        )
+                _remove_failed_atomize_archive(
+                    self.store,
+                    existing=expected.analysis,
+                    created=history_created,
                 )
-                if expected.workbench is None:
-                    path = self.store._atomize_workbench_path(  # noqa: SLF001
-                        expected.analysis.context_uid
-                    )
-                    if path.exists():
-                        path.unlink()
-                else:
-                    self.store._save_atomize_workbench_locked(  # noqa: SLF001
-                        expected.workbench
-                    )
                 raise
 
     def _prepared(
@@ -357,12 +413,24 @@ class MemoryStoreAtomizeAnalysisOpenPort:
             )
 
         analysis_saved = False
+        history_created = False
         try:
+            history_created = _archive_displaced_atomize_pair(
+                self.store,
+                existing=existing,
+                workbench=previous_workbench,
+                replacement_uid=analysis.uid,
+            )
             self.store.save_atomize_analysis(analysis)
             analysis_saved = True
             self.store.save_atomize_workbench(workbench)
         except Exception:
             if not analysis_saved:
+                _remove_failed_atomize_archive(
+                    self.store,
+                    existing=existing,
+                    created=history_created,
+                )
                 raise
             try:
                 if existing is None:
@@ -374,6 +442,11 @@ class MemoryStoreAtomizeAnalysisOpenPort:
                         self.store.delete_atomize_workbench(existing.context_uid)
                     else:
                         self.store.save_atomize_workbench(previous_workbench)
+                _remove_failed_atomize_archive(
+                    self.store,
+                    existing=existing,
+                    created=history_created,
+                )
             except Exception as cleanup_error:
                 raise RuntimeError(
                     "Atomize analysis failed and its previous derived state "

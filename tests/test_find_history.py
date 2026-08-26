@@ -1,8 +1,10 @@
-"""CLI routing for temporal ``mem search`` queries."""
+"""Regression coverage for current-only ``mem search`` routing."""
+
 from __future__ import annotations
 
 import json
 
+import pytest
 from typer.testing import CliRunner
 
 from memcommit.cli import app
@@ -12,6 +14,7 @@ from memcommit.authority.access import resolve_context_access
 from memcommit.commands.readable_context_catalog import (
     freeze_readable_context_catalog,
 )
+from memcommit.store import MemoryStore
 
 
 runner = CliRunner()
@@ -21,70 +24,77 @@ def invoke(*args: str):
     return runner.invoke(app, list(args))
 
 
-class LatestEditProvider:
+class CurrentNoticeProvider:
+    def __init__(self):
+        self.queries: list[str] = []
+        self.candidate_contents: list[list[str]] = []
+
     def complete(self, prompt, *, operation, output_schema=None):
-        payload = json.loads(
-            prompt.split("HISTORY SEARCH PAYLOAD:\n", 1)[1]
+        assert operation == "search"
+        assert output_schema is not None
+        payload = json.loads(prompt.split("FIND PAYLOAD:\n", 1)[1])
+        self.queries.append(payload["query"])
+        contents = [
+            candidate.get("content", "") for candidate in payload["candidates"]
+        ]
+        self.candidate_contents.append(contents)
+        matching = next(
+            candidate["candidate_id"]
+            for candidate in payload["candidates"]
+            if "Lot B" in candidate.get("content", "")
         )
-        assert operation == "history search"
-        assert set(payload["allowed_result_kinds"]) == {
-            "memory_version",
-            "memory_transition",
-            "checkpoint",
-        }
         return json.dumps(
             {
-                "understanding": "Find the latest edited Memory.",
-                "result_kind": "memory_transition",
-                "subject_mode": "ALL",
-                "subject_ids": [],
-                "event_kinds": ["EDITED"],
-                "anchor_kind": "NONE",
-                "anchor_ids": [],
-                "anchor_occurrence": "ANY",
-                "relation": "NONE",
-                "reduce": "LATEST",
+                "matches": [{"candidate_id": matching}],
+                "related_query": "",
+                "related_matches": [],
             }
         )
 
 
-def _history_fixture():
-    invoke("init", "transport")
-    invoke("add", "Parking is in Lot A.")
-    from memcommit.store import MemoryStore
-
+def _edited_fixture() -> None:
+    assert invoke("init", "transport").exit_code == 0
+    assert invoke("add", "Parking is in Lot A.").exit_code == 0
     store = MemoryStore()
     uid = next(iter(store.load_current().memories))
-    invoke("edit", uid[:8], "Parking is in Lot B.")
+    assert invoke("edit", uid[:8], "Parking is in Lot B.").exit_code == 0
 
 
-def test_temporal_find_prints_versioned_transition_outside_tty(
+@pytest.mark.parametrize(
+    "query",
+    [
+        "changes during construction",
+        "the last updated Memory",
+        "Memories updated after the shuttle was removed",
+        "공사 기간 동안 바뀐 메모리",
+    ],
+)
+def test_time_language_searches_only_current_memories(
     isolated_store,
     monkeypatch,
+    query,
 ):
-    _history_fixture()
+    _edited_fixture()
+    provider = CurrentNoticeProvider()
     monkeypatch.setattr(
         "memcommit.commands.find.connect_codex_chatgpt_provider",
-        lambda: LatestEditProvider(),
+        lambda: provider,
     )
 
-    result = invoke("search", "the last updated Memory")
+    result = invoke("search", query)
 
-    assert result.exit_code == 0
-    assert "transport" in result.output
-    assert "memory_transition" in result.output
+    assert result.exit_code == 0, result.output
     assert "Parking is in Lot B." in result.output
-    assert "event boundary" in result.output
-    assert "not a direct restore target" in result.output
+    assert "memory_transition" not in result.output
+    assert "event boundary" not in result.output
+    assert provider.queries == [query]
 
 
-def test_interactive_request_uses_the_same_temporal_history_contract(
+def test_application_request_with_time_language_has_current_mode(
     isolated_store,
     monkeypatch,
 ):
-    _history_fixture()
-    from memcommit.store import MemoryStore
-
+    _edited_fixture()
     store = MemoryStore()
     current = store.current_context_name()
     assert current == "transport"
@@ -95,9 +105,10 @@ def test_interactive_request_uses_the_same_temporal_history_contract(
         required_permission="READ",
     )
     catalog = freeze_readable_context_catalog(store, access)
+    provider = CurrentNoticeProvider()
     monkeypatch.setattr(
         "memcommit.commands.find.connect_codex_chatgpt_provider",
-        lambda: LatestEditProvider(),
+        lambda: provider,
     )
     request = FindSearchRequest(
         "the last updated Memory",
@@ -108,188 +119,7 @@ def test_interactive_request_uses_the_same_temporal_history_contract(
 
     response = _run_find_search_request(store, catalog, request)
 
-    assert response.mode == "HISTORY"
+    assert response.mode == "CURRENT"
     assert len(response.results) == 1
-    assert response.results[0].kind == "memory_transition"
-    assert "Parking is in Lot B." in response.results[0].content
-
-
-def test_temporal_find_uses_shared_read_only_picker_in_tty(
-    isolated_store,
-    monkeypatch,
-):
-    _history_fixture()
-    observed = {}
-    monkeypatch.setattr(
-        "memcommit.commands.find.connect_codex_chatgpt_provider",
-        lambda: LatestEditProvider(),
-    )
-    monkeypatch.setattr(
-        "memcommit.commands.find._interactive_terminal",
-        lambda: True,
-    )
-
-    def choose(entries, *, context_name, mode):
-        observed["entries"] = entries
-        observed["context_name"] = context_name
-        observed["mode"] = mode
-        return None
-
-    monkeypatch.setattr(
-        "memcommit.commands.find.choose_history",
-        choose,
-    )
-
-    result = invoke("search", "the latest changed Memory")
-
-    assert result.exit_code == 0
-    assert observed["context_name"] == "transport"
-    assert observed["mode"] == "log"
-    assert "Before: Parking is in Lot A." in observed["entries"][0].detail
-    assert "After: Parking is in Lot B." in observed["entries"][0].detail
-    assert "event boundary · not a direct restore target" in (
-        observed["entries"][0].detail
-    )
-
-
-def test_non_temporal_find_keeps_the_existing_current_state_path(
-    isolated_store,
-    monkeypatch,
-):
-    invoke("init", "notes")
-    observed = {}
-
-    provider = object()
-
-    def current_find(
-        query,
-        candidates,
-        selected_provider,
-        *,
-        limit,
-    ):
-        observed["query"] = query
-        observed["candidate_kinds"] = [candidate.kind for candidate in candidates]
-        observed["provider"] = selected_provider
-        observed["limit"] = limit
-        return []
-
-    monkeypatch.setattr("memcommit.find_application.rank_candidates", current_find)
-    monkeypatch.setattr(
-        "memcommit.commands.find.connect_codex_chatgpt_provider",
-        lambda: provider,
-    )
-    monkeypatch.setattr(
-        "memcommit.find_runtime.build_history",
-        lambda *args, **kwargs: (_ for _ in ()).throw(
-            AssertionError("ordinary find must not enumerate history")
-        ),
-    )
-
-    result = invoke("search", "parking information")
-
-    assert result.exit_code == 0
-    assert observed == {
-        "query": "parking information",
-        "candidate_kinds": ["artifact"],
-        "provider": provider,
-        "limit": 5,
-    }
-
-
-def test_temporal_find_also_descends_the_visible_embedded_context_graph(
-    isolated_store,
-    monkeypatch,
-):
-    invoke("init", "transport")
-    invoke("add", "Parking is in Lot A.")
-    from memcommit.store import MemoryStore
-
-    store = MemoryStore()
-    uid = next(iter(store.load_current().memories))
-    invoke("edit", uid[:8], "Parking is in Lot B.")
-    invoke("init", "wiki")
-    invoke("embed", "transport", "--into", "wiki")
-    invoke("switch", "wiki")
-    monkeypatch.setattr(
-        "memcommit.commands.find.connect_codex_chatgpt_provider",
-        lambda: LatestEditProvider(),
-    )
-
-    result = invoke("search", "the last updated Memory", "-r")
-
-    assert result.exit_code == 0
-    assert "transport" in result.output
-    assert "Parking is in Lot B." in result.output
-
-
-def test_temporal_find_searches_materialized_namespace_descendants_recursively(
-    isolated_store,
-    monkeypatch,
-):
-    invoke("init", "task-3")
-    invoke("init", "task-3/personal-memory")
-    invoke("add", "The clinic appointment is at 9 a.m.")
-    from memcommit.store import MemoryStore
-
-    store = MemoryStore()
-    uid = next(iter(store.load_current().memories))
-    invoke("edit", uid[:8], "The clinic appointment is at 10 a.m.")
-    invoke("switch", "task-3")
-    monkeypatch.setattr(
-        "memcommit.commands.find.connect_codex_chatgpt_provider",
-        lambda: LatestEditProvider(),
-    )
-
-    result = invoke("search", "the last updated Memory", "-r")
-
-    assert result.exit_code == 0, result.output
-    assert "task-3/personal-memory" in result.output
-    assert "The clinic appointment is at 10 a.m." in result.output
-
-    direct = invoke("search", "the last updated Memory")
-
-    assert direct.exit_code == 0, direct.output
-    assert "task-3/personal-memory" not in direct.output
-    assert "no matching historical items" in direct.output
-
-
-def test_temporal_find_does_not_resolve_memory_refs_or_query_sources(
-    isolated_store,
-    monkeypatch,
-):
-    invoke("init", "source")
-    invoke("add", "SECRET TARGET")
-    from memcommit.store import MemoryStore
-
-    store = MemoryStore()
-    source = store.load_current()
-    target_uid = next(iter(source.memories))
-    invoke("init", "search-root")
-    reference = invoke("reference", target_uid, "--from", "source")
-    assert reference.exit_code == 0
-
-    def forbidden(*args, **kwargs):
-        raise AssertionError("temporal find opened pointer content")
-
-    monkeypatch.setattr(MemoryStore, "_load_direct_memory", forbidden)
-    monkeypatch.setattr(MemoryStore, "load_query_source", forbidden)
-
-    class PrivacyProvider(LatestEditProvider):
-        def complete(self, prompt, *, operation, output_schema=None):
-            assert "SECRET TARGET" not in prompt
-            return super().complete(
-                prompt,
-                operation=operation,
-                output_schema=output_schema,
-            )
-
-    monkeypatch.setattr(
-        "memcommit.commands.find.connect_codex_chatgpt_provider",
-        lambda: PrivacyProvider(),
-    )
-
-    result = invoke("search", "the last updated Memory")
-
-    assert result.exit_code == 0
-    assert "SECRET TARGET" not in result.output
+    assert response.results[0].kind == "memory"
+    assert response.results[0].content == "Parking is in Lot B."

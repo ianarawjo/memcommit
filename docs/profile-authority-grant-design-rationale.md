@@ -106,7 +106,10 @@ campus authority may be appropriate for a different experiment, but this
 fixture's exact contents and permissions are part of Task 1's condition.
 `QUERY` on the editable wiki and narrower details view is explicit so both can
 answer one-shot questions without granting READ over the query-only override.
-Query transcript retention is not an experimental condition.
+Query transcript retention is not an experimental condition. Every Profile's
+command-attempt telemetry may retain a direct CLI command containing a
+question, but it does not retain the answer or create a reopenable Query
+transcript.
 
 Within `study-baseline`, the corresponding authority material remains under
 `granted-memory/task-N` as ordinary owned Contexts. `init-study` separates

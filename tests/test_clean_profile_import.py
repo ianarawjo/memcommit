@@ -83,7 +83,10 @@ def test_init_study_imports_an_isolated_pair_with_empty_history(
     )
     assert imported.exit_code == 0, imported.stderr or imported.output
 
-    result = runner.invoke(app, ["init-study", "clean-study"])
+    result = runner.invoke(
+        app,
+        ["init-study", "clean-study", "--scenario", "legacy-v1"],
+    )
 
     assert result.exit_code == 0, result.stderr or result.output
     registry = load_profile_registry()

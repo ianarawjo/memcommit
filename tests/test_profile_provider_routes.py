@@ -8,6 +8,7 @@ import uuid
 import pytest
 
 from memcommit.infrastructure.providers.policy import (
+    PROFILE_PROVIDER_OPERATION_NAMES,
     STUDY_PROVIDER_POLICY_DIGEST,
     STUDY_PROVIDER_POLICY_VERSION,
     ProviderRoute,
@@ -130,6 +131,95 @@ def test_ordinary_profile_falls_back_then_overrides_default_and_operation(
         registry=registry,
     )
     assert restored.source == "GLOBAL_DEFAULT"
+
+
+def test_profile_operation_routes_accept_only_exact_routable_names(
+    monkeypatch,
+    tmp_path,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    profile = _ordinary_profile()
+    registry = _registry(profile)
+    route = ProviderRoute("codex_chatgpt", None, "none", 45.0)
+
+    assert PROFILE_PROVIDER_OPERATION_NAMES == {
+        "compare_contexts",
+        "compare_summary",
+        "forget",
+        "help",
+        "meld_contexts",
+        "query",
+        "search",
+    }
+    for operation in sorted(PROFILE_PROVIDER_OPERATION_NAMES):
+        set_active_profile_route(route, operation=operation, registry=registry)
+
+    for invalid in ("", "memory", " search ", "SEARCH", "semantic_default"):
+        with pytest.raises(
+            ProfileProviderRoutesError,
+            match="one exact supported name",
+        ):
+            set_active_profile_route(route, operation=invalid, registry=registry)
+        with pytest.raises(
+            ProfileProviderRoutesError,
+            match="one exact supported name",
+        ):
+            reset_active_profile_route(invalid, registry=registry)
+
+
+def test_unknown_persisted_profile_operation_route_fails_closed(
+    monkeypatch,
+    tmp_path,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    profile = _ordinary_profile()
+    path = profile_provider_routes_file(profile)
+    path.parent.mkdir(parents=True)
+    path.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "profile_uid": profile.uid,
+                "default": None,
+                "operations": {
+                    "memory": ProviderRoute(
+                        "codex_chatgpt",
+                        None,
+                        "none",
+                        45.0,
+                    ).to_dict(),
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(
+        ProfileProviderRoutesError,
+        match="one exact supported name",
+    ):
+        load_active_provider_scope(
+            machine_config=MachineConfig(),  # type: ignore[arg-type]
+            registry=_registry(profile),
+        )
+
+
+def test_unknown_active_policy_operation_is_rejected_before_resolution(
+    monkeypatch,
+    tmp_path,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    profile = _ordinary_profile()
+
+    with pytest.raises(
+        ProfileProviderRoutesError,
+        match="one exact supported name",
+    ):
+        resolve_active_provider_policy(
+            "memory",
+            machine_config=MachineConfig(),  # type: ignore[arg-type]
+            registry=_registry(profile),
+        )
 
 
 def test_route_file_is_bound_to_the_profile_uid(monkeypatch, tmp_path):

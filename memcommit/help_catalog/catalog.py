@@ -152,11 +152,11 @@ _OPERATIONS = (
     ),
     _operation(
         "delete",
-        "Select a Context or direct item to delete, or name it by locator, name, or UID.",
-        "Context or direct item -> removed",
+        "Select Contexts or direct items to delete, or name them by locator, name, or UID.",
+        "Context/direct-item targets -> independently removed in argv order",
         ExecutionKind.DETERMINISTIC,
         "Destructive change after confirmation",
-        "One exact Context or direct item",
+        "One or more exact Contexts or direct items",
     ),
     _operation(
         "diff",
@@ -359,8 +359,8 @@ _OPERATIONS = (
     ),
     _operation(
         "init-study",
-        "Copy one Study baseline into an isolated participant/authority Profile pair.",
-        "Study baseline -> isolated Study Profiles",
+        "Initialize the Coffee Study by default, or explicitly reproduce the preserved legacy debugging fixture.",
+        "Versioned Study scenario -> isolated Study Profiles",
         ExecutionKind.DETERMINISTIC,
         "Creates isolated Profile stores and switches Profile",
     ),
@@ -442,6 +442,7 @@ _OPERATIONS = (
         "Provider configuration <-> status or probe",
         ExecutionKind.DETERMINISTIC,
         "May change provider configuration or make a probe request",
+        maturity="PARTIAL",
     ),
     _operation(
         "pwd",

@@ -71,11 +71,14 @@ def test_connect_requires_exact_chatgpt_status_and_sanitizes_environment():
     assert provider.env["CODEX_HOME"] == "/auth/home"
     assert provider.env["NO_COLOR"] == "1"
     assert provider.env["RUST_LOG"] == "error"
-    assert all(name not in provider.env for name in (
-        "OPENAI_API_KEY",
-        "CODEX_API_KEY",
-        "CODEX_ACCESS_TOKEN",
-    ))
+    assert all(
+        name not in provider.env
+        for name in (
+            "OPENAI_API_KEY",
+            "CODEX_API_KEY",
+            "CODEX_ACCESS_TOKEN",
+        )
+    )
     assert calls[1][0] == ["/working/codex", "login", "status"]
 
 
@@ -228,6 +231,40 @@ def test_complete_pins_explicit_codex_model_and_reasoning():
     assert provider.identity.reasoning_effort == "low"
     assert provider.last_run is not None
     assert provider.last_run.upstream_model == "gpt-5.6-luna"
+
+
+def test_complete_enables_fast_tier_explicitly_despite_ignored_user_config():
+    captured = {}
+
+    def runner(args, **kwargs):
+        captured["args"] = args
+        return _completed(args, stdout="READY")
+
+    provider = CodexChatGPTProvider(
+        binary=Path("/working/codex"),
+        env={},
+        model="gpt-5.6-sol",
+        reasoning_effort="none",
+        service_tier="fast",
+        _runner=runner,
+    )
+
+    assert provider.complete("prompt", operation="probe") == "READY"
+
+    args = captured["args"]
+    assert "--ignore-user-config" in args
+    assert 'service_tier="fast"' in args
+    assert "features.fast_mode=true" in args
+    assert provider.identity.runtime == "codex-cli/fast"
+
+
+def test_codex_provider_rejects_unknown_service_tier():
+    with pytest.raises(QueryProviderError, match="service tier"):
+        CodexChatGPTProvider(
+            binary=Path("/working/codex"),
+            env={},
+            service_tier="ultrafast",
+        )
 
 
 def test_complete_forwards_documented_none_reasoning_effort():

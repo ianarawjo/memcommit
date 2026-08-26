@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "corpus_role": "HOLDOUT",
+  "independent_holdout": true,
+  "prompt_reference": false,
+  "sources": [
+    {
+      "id": "coffee-freshness-rules",
+      "memories": [
+        "생두는 오래되지 않을수록 좋다.",
+        "그라인더는 오래 쓰지 않을수록 좋다.",
+        "그라인더에서 그라인딩한 커피는 최대한 빨리 쓰는 게 좋다.",
+        "같은 커피를 오래 놔뒀다가 쓰면 안 된다."
+      ]
+    },
+    {
+      "id": "korean-cafe-reviews",
+      "provenance": {
+        "dataset": "Yelp Coffee Reviews",
+        "dataset_url": "https://www.kaggle.com/datasets/sripaadsrinivasan/yelp-coffee-reviews",
+        "license": "CC0",
+        "selection_seed": 20260824,
+        "transformation": "Complete sampled review texts translated to Korean without summarization."
+      },
+      "memories": [
+        "2016년 2월 17일 차이라테를 마셨는데, 그 맛이 어릴 때 동네 편의점에서 사 먹던 시나몬 네코 웨이퍼를 정말 떠올리게 했다. 향신료 맛이 아주 강하고 맛있었다. 지금까지 마신 차이 중 최고는 아니지만, 분명 가장 매콤했다. TOMS에 커피숍이 있는 줄 누가 알았겠는가? Crystal M.이 TOMS에서 올린 모든 사진 보기.",
+        "2010년 8월 29일 내가 마셔 본 카푸치노와 라테는 아주 좋았고, 음료 거품 위의 그림도 멋졌다. 분위기는 친근하고 편안하면서도 업무 미팅에 아주 잘 어울렸다. 커피숍이라면 조금 한산할 것 같은 오전 10시에도 카페인을 마시며 온갖 업무 미팅을 하는 사람들로 가득했다. 무료 와이파이도 아주 잘 작동했다. 가끔 너무 오래 머물러서 이곳에 임대료를 내야 할 것 같은 기분이 든다.",
+        "2015년 9월 21일 샌드위치가 맛있다. 타코도 맛있다. 아침에 커피 한 잔을 급히 사야 할 때 이곳의 커피가 좋다. 음료와 간식의 선택지도 훌륭하다. 음악은 신나고 직원들은 친절하다. 이곳이 정말 좋다!",
+        "2016년 1월 4일 수정된 리뷰. 블랙 앤드 블루 커피의 본고장이다! 제대로 된 커피를 원한다면 이곳에 와야 한다. 나는 신나고 활기찬 분위기가 좋고, 커피에 까다로운 내 남자친구는 이곳의 푸어오버를 좋아한다. 커피 한 잔 한 잔에 정성을 들인다는 것이 분명하다. 유일한 단점은 와이파이가 없어서 이곳에서 일하기 어렵다는 것이다. 블랙 앤드 블루.",
+        "2016년 8월 4일 오늘 아침에 브렉퍼스트 타코를 주문했는데 정말 맛있었다! 바삭한 베이컨과 해시브라운, 달걀이 좋았다. 주문할 때마다 늘 갓 만들어 주는 것 같다. 정말 맛있고 직원들도 항상 친절하다. 이곳을 추천하고 싶다!"
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "id": "coffee-semantic-goal",
+      "source_id": "coffee-freshness-rules",
+      "goal": "커피 품질과 신선도를 유지하기 위한 시간 경과 및 사용 관리 원칙을 도출한다.",
+      "required_readings": [
+        "One governing time-management parent is supported by all four Source propositions.",
+        "Green-bean age, grinder use, and post-grinding delay remain separately recoverable.",
+        "A semantic operating-principles Goal does not return Korean sentence-form Rules."
+      ]
+    },
+    {
+      "id": "review-semantic-topology-goal",
+      "source_id": "korean-cafe-reviews",
+      "goal": "다섯 리뷰를 설명하는 평가 parent 하나와 서로 중복되지 않는 하위 평가 기준을 최대 세 개 도출한다. 리뷰 문체나 날짜 형식은 제외하고, 리뷰에서 직접 지지되지 않는 운영 의무는 만들지 않는다.",
+      "required_readings": [
+        "The output contains exactly one governing assessment and no more than three nonredundant supporting criteria.",
+        "Date, first-person voice, platform metadata, and other review-form parents are excluded.",
+        "Descriptive review evidence is not strengthened into unsupported operating duties."
+      ]
+    },
+    {
+      "id": "review-reproduction-goal",
+      "source_id": "korean-cafe-reviews",
+      "goal": "비슷한 카페 리뷰를 재생성할 수 있도록 리뷰의 내용 구성과 문체, 날짜, 플랫폼 형식에 관한 증거 기반 규칙을 도출한다.",
+      "required_readings": [
+        "Content organization and supported review-form parents are both returned.",
+        "Date form, tense, viewpoint, tone, optional update status, and optional platform metadata retain their observed boundaries.",
+        "A minority-only form is not promoted to a universal requirement."
+      ]
+    },
+    {
+      "id": "review-operational-criteria-goal",
+      "source_id": "korean-cafe-reviews",
+      "goal": "리뷰가 직접 지지하는 고객 경험 평가를 카페 운영 기준으로 표현한다. 구체적인 설치나 구매 같은 실행 Task는 만들지 않고, 음식·음료 품질, 공간 경험, 직원 응대 중 증거가 있는 기준만 도출한다.",
+      "required_readings": [
+        "Evidence-supported criteria cover food and drink quality, spatial experience, and staff interaction.",
+        "The output does not fabricate installation, purchasing, staffing, or other concrete Tasks.",
+        "Review-writing form is irrelevant to this operating-criteria Goal."
+      ]
+    }
+  ]
+}

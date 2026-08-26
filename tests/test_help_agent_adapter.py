@@ -134,6 +134,16 @@ def test_import_limitation_and_query_access_boundary_are_addressable(tmp_path):
     assert "QUERY without READ" in access["result"]["detail"]["body"]
 
 
+def test_provider_maturity_is_partial_in_agent_discovery(tmp_path):
+    adapter = HelpAgentAdapter(MemCommitClient(root=tmp_path / "missing-store"))
+
+    provider = adapter.invoke(
+        {"version": 1, "kind": "describe", "operation": "provider"}
+    )["result"]["operation"]
+
+    assert provider["maturity"] == "PARTIAL"
+
+
 def test_agent_can_list_compact_detail_ids_before_requesting_one(tmp_path):
     adapter = HelpAgentAdapter(MemCommitClient(root=tmp_path / "missing-store"))
 

@@ -87,7 +87,7 @@ _VISIBLE_ROWS = 12
 
 @runtime_checkable
 class HistoryPickerItem(Protocol):
-    """Minimal projection a checkpoint or temporal Find adapter must provide."""
+    """Minimal projection a checkpoint or semantic Log adapter must provide."""
 
     uid: str
     timestamp: str

@@ -21,8 +21,9 @@ def elaborate_result_lines(result: ElaborateResult) -> tuple[str, ...]:
     )
     lines = [
         f"ELABORATE · {direction}",
-        f"STATUS · REVIEW ONLY · SUGGESTED · UNVERIFIED · {result.origin.replace('_', ' ')}",
-        f"QUALITY · {analysis.quality_policy.value.replace('_', ' ')}",
+        "STATUS · REVIEW ONLY · SUGGESTED · UNVERIFIED · "
+        f"{analysis.quality_policy.value.replace('_', ' ')} · "
+        f"{result.origin.replace('_', ' ')}",
         "",
         "PROPOSAL OVERVIEW",
         safe_terminal_text(analysis.overview),

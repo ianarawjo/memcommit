@@ -36,11 +36,17 @@ LOG_DETAILS = (
             ),
             OperationComparisonOption(
                 label="PROFILE ATTEMPTS",
-                guidance="Inspect Profile-scoped mem command attempts.",
+                guidance=(
+                    "Inspect Profile-scoped attempts and their complete "
+                    "entered commands."
+                ),
             ),
             OperationComparisonOption(
                 label="STUDY ACTIONS",
-                guidance="Inspect content-free actions for the active Study Profile.",
+                guidance=(
+                    "Inspect detailed actions for the active Study Profile, "
+                    "including Participant command text."
+                ),
             ),
         ),
     ),

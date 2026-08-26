@@ -58,8 +58,23 @@ def update_start_command_review(
     target_descendants: bool = False,
     source_memory_uid: str | None = None,
     target_memory_uid: str | None = None,
+    inline_source_content: str | None = None,
 ) -> ExactCommandReview:
-    argv = ["mem", "update", "--from", source_name, "--to", target_name]
+    if inline_source_content is not None:
+        if source_descendants or source_memory_uid is not None:
+            raise ValueError(
+                "Inline Update input cannot use Source descendants or focus."
+            )
+        argv = [
+            "mem",
+            "update",
+            "--memory",
+            inline_source_content,
+            "--to",
+            target_name,
+        ]
+    else:
+        argv = ["mem", "update", "--from", source_name, "--to", target_name]
     if source_descendants:
         argv.append("--source-descendants")
     if target_descendants:
@@ -161,6 +176,7 @@ def update_turn_command_review(
     target_memory_uid: str | None,
     comment: str,
     expected_session: str,
+    inline_source_content: str | None = None,
 ) -> ExactCommandReview:
     start = update_start_command_review(
         source_name=source_name,
@@ -169,6 +185,7 @@ def update_turn_command_review(
         target_descendants=target_descendants,
         source_memory_uid=source_memory_uid,
         target_memory_uid=target_memory_uid,
+        inline_source_content=inline_source_content,
     )
     return ExactCommandReview(
         (*start.argv, "--comment", comment, "--expect-session", expected_session),

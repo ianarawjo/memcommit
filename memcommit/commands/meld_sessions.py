@@ -7,11 +7,11 @@ target-scoped record and compare its identity before entering the workbench.
 from __future__ import annotations
 
 import uuid
+from collections.abc import Collection
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
-import memcommit.store as store_module
 from memcommit.meld import MeldSession, meld_canonical_digest
 from memcommit.store import MemoryStore
 
@@ -25,6 +25,7 @@ class MeldSessionCatalogEntry:
     """One immutable picker projection and its revalidation evidence."""
 
     key: str
+    target_context_uid: str
     session_uid: str
     session_digest: str
     title: str
@@ -35,6 +36,7 @@ class MeldSessionCatalogEntry:
     modified_at: str
     detail: str
     reopen_argv: tuple[str, ...]
+    archived: bool
 
 
 def _canonical_storage_key(path: Path) -> str:
@@ -94,9 +96,19 @@ def _reopen_argv(session: MeldSession) -> tuple[str, ...]:
     )
 
 
-def _catalog_entry(path: Path, session: MeldSession) -> MeldSessionCatalogEntry:
-    storage_key = _canonical_storage_key(path)
-    if session.target.context_uid != storage_key:
+def _catalog_entry(
+    path: Path,
+    session: MeldSession,
+    *,
+    key: str,
+    archived: bool,
+) -> MeldSessionCatalogEntry:
+    if archived:
+        if key != session.uid or path.stem != session.uid:
+            raise MeldSessionCatalogError(
+                "Retained Meld session does not match its session storage key."
+            )
+    elif session.target.context_uid != key:
         raise MeldSessionCatalogError(
             "Saved Meld session does not match its target storage key."
         )
@@ -110,7 +122,8 @@ def _catalog_entry(path: Path, session: MeldSession) -> MeldSessionCatalogEntry:
     modified = datetime.fromtimestamp(stat.st_mtime, tz=timezone.utc)
     turn_count = len(session.turns)
     return MeldSessionCatalogEntry(
-        key=storage_key,
+        key=key,
+        target_context_uid=session.target.context_uid,
         session_uid=session.uid,
         session_digest=meld_canonical_digest(session.to_dict()),
         title=title,
@@ -131,17 +144,32 @@ def _catalog_entry(path: Path, session: MeldSession) -> MeldSessionCatalogEntry:
             f"Target {session.target.context_name} "
             f"[{session.target.context_uid[:8]}]\n"
             f"Mode {session.mode}\n"
-            f"State {session.state}"
+            f"State {session.state}\n"
+            f"Record {'RETAINED TERMINAL HISTORY' if archived else 'ACTIVE'}"
         ),
-        reopen_argv=_reopen_argv(session),
+        reopen_argv=(
+            ("mem", "impact", "meld", "--session", session.uid)
+            if archived
+            else _reopen_argv(session)
+        ),
+        archived=archived,
     )
 
 
 def list_meld_session_catalog(
     store: MemoryStore,
+    *,
+    target_context_uids: Collection[str] | None = None,
 ) -> tuple[MeldSessionCatalogEntry, ...]:
-    """Return validated saved Meld sessions in recent-file-modification order."""
-    directory = store_module.MELD_SESSIONS_DIR
+    """Return validated saved Meld sessions in recent-file-modification order.
+
+    A scoped artifact reader supplies the exact Context UIDs in its already
+    frozen search frame.  Filter by the target-scoped storage key before
+    opening session content so an unrelated legacy or damaged session cannot
+    make an otherwise independent Find or Query fail.  Session launchers omit
+    the filter and retain full-store validation.
+    """
+    directory = store.meld_sessions_dir
     if not directory.exists():
         return ()
     if directory.is_symlink() or not directory.is_dir():
@@ -161,6 +189,8 @@ def list_meld_session_catalog(
         if path.is_symlink() or not path.is_file():
             raise MeldSessionCatalogError("Meld session storage is invalid.")
         key = _canonical_storage_key(path)
+        if target_context_uids is not None and key not in target_context_uids:
+            continue
         try:
             session = store.load_meld_session(key)
         except (OSError, TypeError, ValueError) as error:
@@ -171,7 +201,32 @@ def list_meld_session_catalog(
             # A concurrent deletion is not a selection.  It will simply be
             # absent from this read-only snapshot.
             continue
-        result.append(_catalog_entry(path, session))
+        result.append(
+            _catalog_entry(
+                path,
+                session,
+                key=key,
+                archived=False,
+            )
+        )
+    try:
+        histories = store.list_meld_session_history()
+    except (OSError, TypeError, ValueError) as error:
+        raise MeldSessionCatalogError("Meld session history is invalid.") from error
+    for session, path in histories:
+        if (
+            target_context_uids is not None
+            and session.target.context_uid not in target_context_uids
+        ):
+            continue
+        result.append(
+            _catalog_entry(
+                path,
+                session,
+                key=session.uid,
+                archived=True,
+            )
+        )
     return tuple(
         sorted(
             result,
@@ -191,7 +246,14 @@ def reload_selected_meld_session(
 ) -> MeldSession:
     """Reload one picker selection and reject replacement under the same key."""
     try:
-        session = store.load_meld_session(entry.key)
+        session = (
+            store.load_meld_session_history(
+                entry.target_context_uid,
+                entry.session_uid,
+            )
+            if entry.archived
+            else store.load_meld_session(entry.target_context_uid)
+        )
     except (OSError, TypeError, ValueError) as error:
         raise MeldSessionCatalogError(
             "The selected Meld session is no longer valid. Reopen the list."

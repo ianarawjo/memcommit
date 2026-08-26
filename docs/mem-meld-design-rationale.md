@@ -530,13 +530,16 @@ The baseline may already contain Memories. Its exact bound snapshot is
 preserved unless an accepted proposal contains a material `EDIT` or `ADD`.
 The incoming Context is never mutated.
 
-`--from INCOMING` is only a viewpoint-sensitive convenience spelling when the
-current Context is the baseline. It resolves `INCOMING` against the one current
-Context snapshot captured at command start, then immediately uses the same
-ordered frame pair, target-bound storage key, and provider contract as
-`mem meld INCOMING BASELINE`. Durable guidance and receipts therefore
-remain location-independent. Combining `--from` with `--into` or positional
-Contexts is rejected instead of inventing a third authority contract.
+`--from INCOMING` is a directional Source spelling. Without a target it uses
+the current Context as baseline; with `--to BASELINE`, the visible one-Source
+shape makes `--to` the baseline. It resolves Context-shaped `INCOMING` against
+the one current Context snapshot captured at command start. An unambiguously
+non-Context value instead becomes one exact ephemeral incoming Memory. Both
+routes immediately use the same ordered frame pair, target-bound storage key,
+and provider contract as `mem meld INCOMING BASELINE`. Durable guidance and
+receipts therefore remain location-independent. Combining `--from` with
+`--into` or positional Contexts is rejected instead of inventing a third
+authority contract.
 
 This is a useful product boundary, but `Context` should not be the lowest-level
 semantic type in the implementation. The core should consume bound
@@ -596,12 +599,15 @@ derived `PEER A + PEER B → RESULT C` shape cannot hide the current Context as
 an input. One operand uses the current Context only as the omitted directional
 BASELINE.
 
-`--into BASELINE` remains an explicit directional alias because the existing
-Context is authoritative and is the only possible mutation target. `--to RESULT`
-remains an explicit symmetric alias because neither peer becomes
-authoritative or mutable. `--from INCOMING` reverses only which directional
-role is omitted at the CLI boundary. Saved commands normalize to positional
-`INCOMING BASELINE` or `PEER_A PEER_B --to RESULT` forms.
+`--into BASELINE` remains the unambiguous directional spelling because the
+existing Context is authoritative and is the only possible mutation target.
+`--to` is shape-sensitive: with fewer than two positional sources it names
+that directional baseline; with two positional peers it names the distinct
+symmetric Result because neither peer becomes authoritative or mutable.
+`--from INCOMING` supplies the directional Source and may therefore combine
+with directional `--to BASELINE`. Saved commands normalize directional work to
+the authority-explicit `--into BASELINE` form and symmetric work to
+`PEER_A PEER_B --to RESULT`.
 
 Context operands follow the shared existing-Context locator contract. Bare
 names are canonical global names. Only `.`, `..`, `./...`, and `../...` opt
@@ -1636,8 +1642,9 @@ analysis leaves the previous session intact.
 Directional acceptance applies only material `EDIT` and `ADD` operations to
 the baseline and creates one checkpoint. A ready zero-operation assessment
 also creates one checkpoint that records the resolved no-change decision.
-Neither case mutates the incoming Context. `--to` is deliberately symmetric
-and cannot alias the authority-bearing directional `--into`.
+Neither case mutates the incoming Context. A directional command accepted
+with shape-sensitive `--to` is normalized to the authority-bearing `--into`
+spelling in its reviewed command receipt.
 
 An eventual `mem ingest --paste` may orchestrate raw intake, atomization, and a
 directional meld. Import owns the run manifest and resumability; it must call

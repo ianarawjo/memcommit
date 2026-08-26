@@ -35,6 +35,7 @@ from memcommit.ground_workspace_projection import (
     project_ordinary_memories,
 )
 from memcommit.ground_workspace_runtime import load_ground_workspace
+from memcommit.goal_focus_runtime import freeze_goal_focus_context
 from memcommit.store import MemoryStore
 
 
@@ -76,6 +77,11 @@ def freeze_ground_workspace_fit(
         raise FitError("Physical Ground Fit Context scope is invalid.")
     if len(goals) != 1:
         raise FitError("Physical Ground Fit requires exactly one Goal Memory.")
+    goal_focus = freeze_goal_focus_context(
+        workspace.goals,
+        kind="GROUND",
+        require_single=True,
+    )
     if not rules:
         raise FitError("Physical Ground Fit requires at least one Rule Memory.")
     if not examples:
@@ -135,7 +141,7 @@ def freeze_ground_workspace_fit(
             uid=workspace.uid,
             alias="g1",
             layer="GOAL",
-            statement=goals[0].content,
+            statement=goal_focus.text,
             context_aliases=context_aliases,
         ),
         *(
@@ -160,7 +166,7 @@ def freeze_ground_workspace_fit(
         ),
     )
     coherence = FrozenGroundCoherence(
-        brief=goals[0].content,
+        brief=goal_focus.text,
         requirements=(),
         contexts=context_frames,
         subjects=subjects,

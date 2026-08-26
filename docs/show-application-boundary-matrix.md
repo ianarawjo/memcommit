@@ -28,8 +28,8 @@ lazy.
 This relocation changes physical ownership only. It does not alter readable
 authority, query-only concealment, Context or Memory targeting, traversal,
 projection, public results, or the no-provider and no-durable-effect boundary.
-Later readable direct-item resolution must remain part of the same canonical
-runtime rather than being split across the compatibility path.
+The in-progress readable direct-item resolution remains part of the same
+canonical runtime rather than being split across the compatibility path.
 
 | Route | Entry | Application path | Projection | Effect | Evidence |
 | --- | --- | --- | --- | --- | --- |
@@ -64,8 +64,11 @@ runtime rather than being split across the compatibility path.
    reached through both has one block, while an immutable Context Reference is
    traversed only within its retained package and never replaced by live state.
 6. Every READ-granted snapshot belongs to one authority-registry generation.
-   An explicit-root client never borrows global Profile grants.
-   Grant attachment metadata never becomes a recursive hierarchy edge.
+   An explicit-root client never borrows global Profile grants. Grant
+   attachment metadata never becomes a lexical hierarchy edge; when the exact
+   local Context displays an attached top-level READ row, recursive Embed reach
+   resolves that row through its exact Grant binding. QUERY-only rows remain
+   opaque.
 7. A query-view result has no content or concealed-source identity field and
    Show never opens query-source storage.
 8. A successful call performs no provider connection and publishes no Context,

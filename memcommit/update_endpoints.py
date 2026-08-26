@@ -1,4 +1,5 @@
 """Resolve the two ordinary-Context endpoints of a directional update."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -19,24 +20,34 @@ def choose_update_endpoint_operands(
     *,
     source_option: str | None,
     target_option: str | None,
+    allow_single_source: bool = False,
 ) -> tuple[str | None, str | None]:
     """Normalize the positional pair and legacy directional options.
 
-    One positional endpoint would leave its role ambiguous.  The established
-    one-sided current-filled forms therefore remain available only through
-    their role-named ``--from`` and ``--to`` options.
+    The legacy/default form requires a complete positional pair.  Commands
+    that opt into ``allow_single_source`` define one positional operand as the
+    Source and use ``--to`` or the command-start current Context as Target.
     """
     positional = tuple(operands or ())
-    if len(positional) not in {0, 2}:
+    allowed_lengths = {0, 1, 2} if allow_single_source else {0, 2}
+    if len(positional) not in allowed_lengths:
         raise ValueError(
-            "expected either no positional Contexts or exactly SOURCE TARGET."
+            (
+                "expected zero, SOURCE, or SOURCE TARGET operands."
+                if allow_single_source
+                else "expected either no positional Contexts or exactly SOURCE TARGET."
+            )
         )
-    if positional and (source_option is not None or target_option is not None):
-        raise ValueError(
-            "positional Contexts cannot be combined with --from or --to."
-        )
-    if positional:
+    if len(positional) == 2 and (
+        source_option is not None or target_option is not None
+    ):
+        raise ValueError("positional Contexts cannot be combined with --from or --to.")
+    if len(positional) == 2:
         return positional[0], positional[1]
+    if len(positional) == 1:
+        if source_option is not None:
+            raise ValueError("Source was supplied both positionally and with --from.")
+        return positional[0], target_option
     return source_option, target_option
 
 
@@ -48,15 +59,11 @@ def resolve_update_endpoints(
 ) -> UpdateEndpoints:
     """Resolve explicit or current-filled endpoints against one snapshot."""
     if source_locator is None and target_locator is None:
-        raise ValueError(
-            "At least one directional endpoint locator is required."
-        )
+        raise ValueError("At least one directional endpoint locator is required.")
 
     if source_locator is None:
         if not current:
-            raise ValueError(
-                "No current source Context. Supply '--from SOURCE'."
-            )
+            raise ValueError("No current source Context. Supply '--from SOURCE'.")
         source_name = current
     else:
         source_name = resolve_context_locator(
@@ -66,9 +73,7 @@ def resolve_update_endpoints(
 
     if target_locator is None:
         if not current:
-            raise ValueError(
-                "No current target Context. Supply '--to TARGET'."
-            )
+            raise ValueError("No current target Context. Supply '--to TARGET'.")
         target_name = current
     else:
         target_name = resolve_context_locator(

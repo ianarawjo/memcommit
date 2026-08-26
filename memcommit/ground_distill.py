@@ -10,6 +10,7 @@ from typing import Iterator, Literal, Protocol
 
 from memcommit.context import Context, Memory
 from memcommit.distill import DistillError, DistillProvider
+from memcommit.distill import ensure_distill_goal_fit_allows_add
 from memcommit.operations.distill.application import (
     DistillRequest,
     DistillResult,
@@ -24,14 +25,28 @@ from memcommit.ground import (
     is_bound_ground_schema,
 )
 from memcommit.ground_workspace_runtime import (
+    execute_ground_workspace_memories_adoption,
     ground_workspace_exists,
     load_ground_workspace,
+)
+from memcommit.ground_workspace_application import (
+    AdoptGroundWorkspaceMemoriesRequest,
+    AdoptGroundWorkspaceMemoriesResult,
 )
 from memcommit.ground_workspace_projection import (
     GroundWorkspaceProjectionError,
     project_ordinary_memories,
 )
-from memcommit.store import MemoryStore, ground_session_record_digest
+from memcommit.goal_focus_runtime import freeze_goal_focus_context
+from memcommit.semantic_add_runtime import (
+    FrozenSemanticAddTarget,
+    freeze_semantic_add_target,
+)
+from memcommit.store import (
+    MemoryStore,
+    context_record_digest,
+    ground_session_record_digest,
+)
 from memcommit.summarize import SummaryFrame, collect_summary_scope
 from memcommit.operations.summarize.application import (
     FrozenSummarySource,
@@ -68,6 +83,9 @@ class FrozenGroundWorkspaceDistill:
     ground_digest: str
     candidate_frame: SummaryFrame
     request: DistillRequest
+    root_digest: str
+    target: FrozenSemanticAddTarget
+    source_bindings: tuple[tuple[str, str, str], ...]
     source_kind: Literal["GROUND_WORKSPACE_INPUTS"] = "GROUND_WORKSPACE_INPUTS"
     example_frame: SummaryFrame | None = None
 
@@ -218,6 +236,15 @@ def _freeze_ground_workspace_distill(
         raise DistillError(
             "Ground workspace Distill requires zero or one Goal Memory."
         )
+    goal_focus = (
+        freeze_goal_focus_context(
+            workspace.goals,
+            kind="GROUND",
+            require_single=True,
+        )
+        if goals
+        else None
+    )
     contexts_prefix = workspace.contexts.name + "/"
     context_frame = (
         workspace.contexts,
@@ -278,6 +305,27 @@ def _freeze_ground_workspace_distill(
             sort_keys=True,
         ).encode("utf-8")
     ).hexdigest()
+    source_contexts = (workspace.examples, *context_frame)
+    source_bindings = tuple(
+        (context.name, context.uid, context_record_digest(context))
+        for context in source_contexts
+    )
+    if goal_focus is not None:
+        assert goal_focus.context_name is not None
+        assert goal_focus.context_uid is not None
+        assert goal_focus.context_digest is not None
+        source_bindings = tuple(
+            dict.fromkeys(
+                (
+                    *source_bindings,
+                    (
+                        goal_focus.context_name,
+                        goal_focus.context_uid,
+                        goal_focus.context_digest,
+                    ),
+                )
+            )
+        )
     return FrozenGroundWorkspaceDistill(
         ground_name=workspace.name,
         ground_uid=workspace.uid,
@@ -286,8 +334,11 @@ def _freeze_ground_workspace_distill(
         candidate_frame=frame,
         request=DistillRequest(
             context_locator=workspace.examples.name,
-            goal=goals[0].content if goals else None,
+            goal_focus=goal_focus,
         ),
+        root_digest=context_record_digest(workspace.root),
+        target=freeze_semantic_add_target(store, workspace.rules.name),
+        source_bindings=source_bindings,
         example_frame=frame,
     )
 
@@ -308,6 +359,8 @@ def _revalidate_ground(frozen: FrozenGroundDistill, store: MemoryStore) -> None:
 def _revalidate_ground_workspace(
     frozen: FrozenGroundWorkspaceDistill,
     store: MemoryStore,
+    *,
+    adoption: bool = False,
 ) -> None:
     current = _freeze_ground_workspace_distill(store, frozen.ground_name)
     if (
@@ -315,6 +368,15 @@ def _revalidate_ground_workspace(
         or current.ground_digest != frozen.ground_digest
         or current.request != frozen.request
         or current.candidate_frame != frozen.candidate_frame
+        or current.source_bindings != frozen.source_bindings
+        or (
+            adoption
+            and (
+                current.ground_revision != frozen.ground_revision
+                or current.root_digest != frozen.root_digest
+                or current.target != frozen.target
+            )
+        )
     ):
         raise DistillError(
             "The consumed Ground workspace Memories changed while Distill was running."
@@ -424,10 +486,48 @@ def execute_ground_distill(
     return GroundDistillResult(frozen=frozen, distill=result)
 
 
+def apply_ground_distill_result(
+    result: GroundDistillResult,
+    *,
+    store: MemoryStore,
+) -> AdoptGroundWorkspaceMemoriesResult:
+    """Explicitly adopt one unchanged physical-Ground Distill proposal."""
+
+    if not isinstance(result, GroundDistillResult) or not isinstance(
+        result.frozen,
+        FrozenGroundWorkspaceDistill,
+    ):
+        raise DistillError(
+            "Distill adoption requires a physical Ground workspace result."
+        )
+    frozen = result.frozen
+    _revalidate_ground_workspace(frozen, store, adoption=True)
+    ensure_distill_goal_fit_allows_add(result.distill.analysis)
+    contents = tuple(rule.content for rule in result.distill.analysis.rules)
+    if not contents:
+        raise DistillError("Distill produced no Rules to adopt into Ground.")
+    return execute_ground_workspace_memories_adoption(
+        AdoptGroundWorkspaceMemoriesRequest(
+            workspace_name=frozen.ground_name,
+            lane="rules",
+            contents=contents,
+            expected_workspace_uid=frozen.ground_uid,
+            expected_revision=frozen.ground_revision,
+            expected_root_digest=frozen.root_digest,
+            expected_lane_digest=frozen.target.context_digest,
+            source_operation="distill",
+            analysis_digest=result.distill.analysis.digest,
+            source_bindings=frozen.source_bindings,
+        ),
+        store=store,
+    )
+
+
 __all__ = [
     "FrozenGroundDistill",
     "FrozenGroundWorkspaceDistill",
     "GroundDistillResult",
     "execute_ground_distill",
+    "apply_ground_distill_result",
     "freeze_ground_distill",
 ]

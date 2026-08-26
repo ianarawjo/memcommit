@@ -31,10 +31,14 @@ mem rationale MEMORY
 
 Explicit Memory-targeted routes accept a current or retained historical direct
 Memory or MemoryRef UID, an unambiguous prefix, or a qualified `CONTEXT:UID`
-locator. A bare explicit UID is resolved across ordinary local direct and
-retained items; if more than one owner has that UID, the command lists typed
-qualified candidates instead of preferring the current Context. A qualified
-locator is exact and never broadens into descendants. `mem trace MEMORY` is the
+locator. A bare explicit UID first resolves current ordinary Memories across
+the frozen Profile-readable local and READ-granted namespace. This is the same
+UID namespace printed by Find/List/Search, so a granted result can be pasted
+directly into either report. Local and granted collisions list public
+`CONTEXT:UID` candidates instead of preferring the current Context. Only when
+no current readable Memory matches does the route consult ordinary-local
+retained items and MemoryRefs. A qualified locator is exact and never broadens
+into descendants. `mem trace MEMORY` is the
 public interactive route for `mem log --memory MEMORY` when the target is a
 direct local Memory; both use the same retained-history controller and compact
 projection rather than invoking another CLI command. Log always prints that
@@ -106,8 +110,9 @@ does not discard the already proven relationship, and a snapshot reference
 never connects a provider merely to reinterpret its retained copy. Neither
 route opens query-only content.
 
-An explicit Memory selector in a READ-granted Context may produce a different
-typed Trace: **CURRENT GRANTED VIEW**. It shows the currently readable Memory,
+An explicit qualified selector or a unique Profile-wide bare UID resolving to
+a READ-granted Context may produce a different typed Trace: **CURRENT GRANTED
+VIEW**. It shows the currently readable Memory,
 the public Context name, owner Profile, Grant UID and revision, grantee,
 resource, and effective permissions. Its history section is always
 `HISTORY HIDDEN`: construction must not call the authority Profile's checkpoint
@@ -344,6 +349,17 @@ current state itself. The UI shows it only under `CURRENT` and leaves
 that Memory was created; `mem rationale` therefore reports that no retained
 history is available and skips provider connection.
 
+That no-provider boundary is based on reportable retained events, not merely
+on a nonempty Trace event tuple. `HISTORY_GAP · UNRECORDED` remains visible in
+Trace as evidence of a boundary, but it is not a retained provenance event. A
+gap-only Rationale therefore returns an `EMPTY` projection with blank text and
+renders `PROVENANCE — no retained history` without constructing a provider. If
+recorded, reconstructed, or structurally inferred retained events precede a
+gap, only those retained events and their latest retained state enter the
+semantic turn. The live unrecorded state is omitted, while the Trace warning
+and an explicit unrecorded-boundary marker tell the provider and the human
+receipt not to infer the missing transition.
+
 The default human Rationale projection is deliberately smaller than its
 evidence model. It shows the selected **MEMORY** and one **PROVENANCE**
 paragraph. For the motivating `practice/source` trace, the expected receipt is:
@@ -370,13 +386,15 @@ chooses the measurement. Every first draft receives the generalized preferred
 target `max(1, floor(limit × 0.9))`: 40 aims for 36 words, 80 for 72, and 120
 for 108, while a complete result between that soft target and the hard bound
 remains valid. A structurally valid draft above the hard bound is not clipped
-or published. Rationale sends its measured length, rejected draft, and complete
-frozen Trace through one freshly preflighted compression turn using the same
-provider snapshot, ruleset, schema, and decoder. A second overflow fails closed;
-invalid JSON, non-narrative text, transport failure, and other errors do not
-trigger repair. JSON keeps the complete typed Trace and the final validated
-`provenance_projection`, including its ruleset version, hard bound, unit, and
-measured length.
+or published: Rationale sends its measured length, rejected draft, and the
+complete frozen Trace through one freshly preflighted compression turn.
+The repair uses the same provider snapshot, ruleset, schema, and decoder; a
+second overflow fails closed. Invalid JSON, non-narrative text, transport
+failure, and other errors do not trigger repair. Punctuation-only output and
+null sentinels such as `/`, `null`, `:null`, and `undefined` likewise cannot
+turn absent provenance into an apparently available receipt. JSON keeps the
+complete typed Trace and the final validated `provenance_projection`, including
+its ruleset version, hard bound, unit, and measured length.
 
 Within that bound, discriminating evidence has an explicit priority. The
 narrative first preserves short exact before-and-after excerpts, then the
@@ -460,7 +478,7 @@ existing 37- and 38-word exact cases remain valid under the 40-word hard bound;
 missing a soft target alone never spends a second provider turn.
 
 `tests/test_rationale_rules.py` proves that every authored item enters the
-production prompt, executes all eight available-history canonical cases
+general production prompt, executes all eight available-history canonical cases
 through the production payload/schema/decoder, carries Context and warnings,
 keeps all 15 long-history events provider-visible, and rejects raw event chains.
 It also proves generalized 90% target rounding, one 41-word-to-14-word

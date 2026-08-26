@@ -537,7 +537,8 @@ def test_long_and_annotated_command_labels_use_both_record_rows():
     selected = {
         entry.name: entry
         for entry in entries
-        if entry.name in {"delete", "check-conformance", "config", "ground", "import"}
+        if entry.name
+        in {"delete", "check-conformance", "config", "ground", "import", "provider"}
     }
     rendered = "".join(
         text
@@ -559,6 +560,7 @@ def test_long_and_annotated_command_labels_use_both_record_rows():
         "config": "(legacy)",
         "ground": "[PARTIAL]",
         "import": "[PARTIAL]",
+        "provider": "[PARTIAL]",
     }
     for first_row, second_row in expected_labels.items():
         command_index = next(
@@ -883,6 +885,7 @@ def test_final_help_categories_match_their_reviewed_runtime_boundaries():
     assert revert.summary.startswith("Restore the current or an explicit local Context")
     assert "Study headings can be renamed" in profile.summary
     assert "backend semantic operations should use" in provider.best_for
+    assert provider.maturity == "PARTIAL"
     assert "legacy low-level interface" in config.best_for
     assert "existing semantic evaluation campaigns" in eval_operation.summary
 
@@ -907,7 +910,7 @@ def test_final_help_categories_expose_exact_on_demand_details():
         "EXACT CHECKPOINT",
         "INTERACTIVE",
         "NATURAL-LANGUAGE",
-        "--KEEP",
+        "--DISCARD-NEWER",
     ]
     assert profile_management.title == "PROFILE MANAGEMENT"
     assert "remove, not delete" in profile_management.explanation
@@ -922,7 +925,7 @@ def test_final_help_categories_expose_exact_on_demand_details():
     assert provider_actions.title == "PROVIDER ACTIONS"
     provider_options = {option.label: option for option in provider_actions.options}
     assert "synthetic strict-schema" in provider_options["PROBE"].guidance
-    assert "ordinary Profile in a TTY" in provider_options["OVERVIEW"].guidance
+    assert "without opening an editor" in provider_options["OVERVIEW"].guidance
     assert "inherited" in provider_options["RESET"].guidance
     assert evaluation_scope.title == "EVALUATION SCOPE"
     assert "general evaluation interface remains future work" in (

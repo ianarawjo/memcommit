@@ -127,13 +127,31 @@ Context name is evidence of what was recorded then; `revert` already restores
 that content into the currently addressed live Context and replaces the
 snapshot owner UID/name at application time.
 
-Typed pointers inside a restorable checkpoint are different. Rename rewrites
-ordinary `context_ref` and `memory_ref.target_context` locator fields in every
-checkpoint snapshot, including snapshots recursively stored in
-`args.log_snapshot`. Otherwise reverting after a successful rename could
-resurrect an ordinary pointer to a locator that deliberately no longer exists.
-Free text and unrelated command arguments remain historical evidence and are
-not subject to search-and-replace.
+Typed pointers inside a restorable checkpoint are different. A complete
+checkpoint record has two future-restorable Context-frame roles: `snapshot` is
+the command post-image and optional `command_before` is its exact pre-image.
+Revert may recursively retain complete checkpoint records in
+`args.log_snapshot`. Rename rewrites ordinary `context_ref` and
+`memory_ref.target_context` locator fields in both frame roles at every nested
+level. Otherwise Revert can remain usable through the post-image while
+command-unit Undo/Redo becomes unreconstructable from a stale pre-image.
+
+`memcommit.checkpoint_frames.map_restorable_checkpoint_frames` owns that
+persistence traversal. Rename and subtree Branch supply different typed
+pointer transformations but must not maintain separate lists of checkpoint
+frame fields. Free text and unrelated command arguments remain historical
+evidence and are not subject to search-and-replace.
+
+An earlier Rename implementation predated `command_before` and migrated only
+`snapshot` plus nested log records. Already-written histories from that version
+require a bounded repair rather than a relaxed Undo comparison. The maintenance
+repair accepts one exact Context UID and old/new locator pair, requires a
+matching retained Rename receipt and the live UID at the exact new owner,
+produces a Context/checkpoint-graph-bound dry-run digest, and changes only matching
+typed locator fields across physical and nested records. Apply holds the
+command, graph, and affected Context locks, rolls exact checkpoint bytes back
+on failure, and must reconstruct the complete global Undo/Redo stacks before
+publishing success. It never changes a Context record or Memory content.
 
 ## Ground, translation, and unapplied Meld continuity
 
@@ -261,5 +279,8 @@ multi-user publication primitive.
   relationship between the old and new names.
 - There is no destination merge, case-only rename, dry-run export format,
   durable crash journal, or automatic repair command for an interrupted move.
+- The historical locator repair is an explicit maintenance script, not an
+  automatic startup migration. It repairs one reviewed UID/name mapping at a
+  time so a partial or ambiguous namespace history cannot be guessed.
 - Semantic analyses not covered by the Ground/translation continuity rules
   must be rerun or otherwise handled by their owning command.

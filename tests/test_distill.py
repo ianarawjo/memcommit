@@ -34,7 +34,11 @@ from memcommit.ground import (
     bind_ground_workbench,
     create_ground_session,
 )
-from memcommit.ground_distill import execute_ground_distill, freeze_ground_distill
+from memcommit.ground_distill import (
+    apply_ground_distill_result,
+    execute_ground_distill,
+    freeze_ground_distill,
+)
 from memcommit.ground_workspace_application import (
     AddGroundWorkspaceMemoryRequest,
     CreateGroundWorkspaceRequest,
@@ -42,6 +46,11 @@ from memcommit.ground_workspace_application import (
 from memcommit.ground_workspace_runtime import (
     execute_ground_workspace_creation,
     execute_ground_workspace_memory_add,
+    load_ground_workspace,
+)
+from memcommit.ground_workspace_history import (
+    build_ground_workspace_command_stack,
+    undo_ground_workspace_command,
 )
 from memcommit.store import MemoryStore
 from memcommit.summarize import collect_summary_frame
@@ -155,6 +164,32 @@ def test_distill_accepts_goal_and_context_evidence_as_one_rule_frame():
     }
 
 
+def test_distill_goal_is_a_prompt_level_output_contract_not_host_branching():
+    _context, frame = _frame()
+    provider = DistillProvider()
+
+    analyze_distill(
+        frame,
+        goal=(
+            "Return one descriptive parent and at most three supporting criteria; "
+            "exclude review formatting and do not invent operational duties."
+        ),
+        provider=provider,
+    )
+
+    prompt = provider.calls[0][0]
+    assert "output-selection contract over evidence-supported parents" in prompt
+    assert "Use one ordered reduction procedure for every domain" in prompt
+    assert "requested global-versus-supporting hierarchy" in prompt
+    assert "exact or maximum quantities" in prompt
+    assert "smallest nonredundant set" in prompt
+    assert "Do not optimize a literal character ratio" in prompt
+    assert "must not turn observations into duties" in prompt
+    assert "surface-form audit is mandatory as analysis" in prompt
+    assert "If a semantic Goal excludes form" in prompt
+    assert "do not depend on domain-specific branches" in prompt
+
+
 def test_distill_without_goal_skips_goal_fit_audit():
     _context, frame = _frame()
     provider = DistillProvider()
@@ -162,7 +197,11 @@ def test_distill_without_goal_skips_goal_fit_audit():
     analysis = analyze_distill(frame, goal=None, provider=provider)
 
     assert analysis.goal_fit is None
+    assert len(provider.calls) == 1
     assert provider.goal_fit_calls == []
+    assert "complete generative-family Rule set when there is no Goal" in (
+        provider.calls[0][0]
+    )
 
 
 def test_distill_goal_fit_rejects_incomplete_rule_coverage():
@@ -800,6 +839,29 @@ def test_mem_distill_ground_plain_uses_frozen_ground(monkeypatch, isolated_store
     assert "GOAL · RELEVANCE FOCUS ONLY" in result.output
 
 
+def test_mem_distill_ground_adopt_is_an_explicit_physical_write(
+    monkeypatch,
+    isolated_store,
+):
+    store = MemoryStore()
+    _physical_ground_with_distill_examples(store)
+    monkeypatch.setattr(
+        distill_command,
+        "connect_semantic_provider",
+        DistillProvider,
+    )
+
+    result = runner.invoke(
+        app,
+        ["distill", "--ground", "physical-distill", "--adopt", "--plain"],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert "DISTILL ADOPTED · physical-distill/rules" in result.output
+    assert "EFFECTS · ADD 1 RULES" in result.output
+    assert len(tuple(load_ground_workspace(store, "physical-distill").rules.iter_items())) == 1
+
+
 def _physical_ground_with_distill_examples(store: MemoryStore) -> None:
     execute_ground_workspace_creation(
         CreateGroundWorkspaceRequest(
@@ -837,13 +899,73 @@ def test_physical_ground_distill_consumes_goal_and_example_memories(
     )
 
     assert frozen.source_kind == "GROUND_WORKSPACE_INPUTS"
-    assert frozen.request.goal == "Learn how real US ticker symbols are assigned."
+    assert frozen.request.goal is None
+    assert frozen.request.goal_focus is not None
+    assert frozen.request.goal_focus.kind == "GROUND"
+    assert frozen.request.goal_focus.text == (
+        "Learn how real US ticker symbols are assigned."
+    )
     assert [source.content for source in frozen.candidate_frame.sources] == [
         "Apple Inc. is listed under AAPL.",
         "Microsoft Corporation is listed under MSFT.",
     ]
     assert result.distill.analysis.source == frozen.candidate_frame
     assert len(provider.calls) == 1
+
+
+def test_physical_ground_distill_adopts_complete_proposal_as_one_command(
+    isolated_store,
+):
+    store = MemoryStore()
+    _physical_ground_with_distill_examples(store)
+    frozen = freeze_ground_distill(store, ground_name="physical-distill")
+    proposal = execute_ground_distill(
+        frozen,
+        store=store,
+        provider_factory=DistillProvider,
+    )
+
+    receipt = apply_ground_distill_result(proposal, store=store)
+
+    workspace = load_ground_workspace(store, "physical-distill")
+    assert receipt.revision == frozen.ground_revision + 1
+    assert tuple(item.content for item in workspace.rules.iter_items()) == (
+        "When conversation is the purpose, prefer a quiet setting "
+        "and confirm the final choice with the user.",
+    )
+    unit = build_ground_workspace_command_stack(
+        store,
+        "physical-distill",
+    ).undo[-1]
+    assert unit.action == "adopt-distill"
+    undo_ground_workspace_command(store, "physical-distill")
+    assert tuple(
+        load_ground_workspace(store, "physical-distill").rules.iter_items()
+    ) == ()
+
+
+def test_physical_ground_distill_adoption_rejects_changed_target_lane(
+    isolated_store,
+):
+    store = MemoryStore()
+    _physical_ground_with_distill_examples(store)
+    frozen = freeze_ground_distill(store, ground_name="physical-distill")
+    proposal = execute_ground_distill(
+        frozen,
+        store=store,
+        provider_factory=DistillProvider,
+    )
+    execute_ground_workspace_memory_add(
+        AddGroundWorkspaceMemoryRequest(
+            workspace_name="physical-distill",
+            lane="rules",
+            content="A separately reviewed Rule.",
+        ),
+        store=store,
+    )
+
+    with pytest.raises(DistillError, match="consumed Ground workspace"):
+        apply_ground_distill_result(proposal, store=store)
 
 
 def test_physical_ground_distill_ignores_unconsumed_rule_revision_change(
@@ -999,6 +1121,8 @@ def test_mem_distill_save_as_without_apply_never_prompts_and_remains_read_only(
     assert result.exit_code == 0, result.output
     assert "[y/N]" not in result.output
     assert "READY TO CREATE" in result.output
+    assert len(provider.calls) == 1
+    assert provider.goal_fit_calls == []
     assert not store.context_exists("distill/preview-rules")
 
 
@@ -1008,8 +1132,11 @@ def test_mem_distill_help_inventory_exposes_goal_review_and_apply_forms():
         "mem distill --to [target] (distill current into an existing target)",
         "mem distill --from [source] (distill a source into current)",
         "mem distill --from [source] --to [target] (explicit existing endpoints)",
-        'mem distill --from [source] --goal "[goal]" (guide Rule relevance)',
+        "mem distill --from [source] --goal [context|memory|text] "
+        "(guide Rule relevance without adding evidence)",
         "mem distill --from [source] -r (include descendants and embeds)",
         "mem distill --ground [name] "
         "(inspect read-only Rules from its exact Goal and working-candidate frame)",
+        "mem distill --ground [name] --adopt "
+        "(atomically add the complete proposal to the physical /rules lane)",
     )

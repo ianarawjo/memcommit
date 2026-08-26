@@ -8,6 +8,7 @@ from typer.testing import CliRunner
 import memcommit.config as config_module
 import memcommit.ops as ops
 import memcommit.profiles as profiles_module
+import memcommit.semantic_prompt_policy as semantic_prompt_policy_module
 import memcommit.study_prewarm.atomize as atomize_prewarm_module
 import memcommit.study_prewarm.prepare as prewarm_prepare_module
 from memcommit.cli import app
@@ -130,6 +131,14 @@ def test_init_study_copies_and_rebinds_declared_compare_and_atomize(
     monkeypatch,
 ):
     monkeypatch.setenv("HOME", str(tmp_path))
+    # The shared test harness pins ordinary commands to virtual authoring.
+    # This regression explicitly exercises Study-only prompt-policy prewarms,
+    # so policy selection must observe the real run Profile created below.
+    monkeypatch.setattr(
+        semantic_prompt_policy_module,
+        "load_profile_registry",
+        load_profile_registry,
+    )
     monkeypatch.setattr(config_module, "CONFIG_FILE", tmp_path / "config.json")
     Config().update(
         {
@@ -148,7 +157,10 @@ def test_init_study_copies_and_rebinds_declared_compare_and_atomize(
         ["profile", "import-study", "--from", str(bundles)],
     )
     assert imported.exit_code == 0, imported.stderr or imported.output
-    seeded_run = runner.invoke(app, ["init-study", "seed-source"])
+    seeded_run = runner.invoke(
+        app,
+        ["init-study", "seed-source", "--scenario", "legacy-v1"],
+    )
     assert seeded_run.exit_code == 0, seeded_run.stderr or seeded_run.output
 
     first_registry = load_profile_registry()
@@ -258,7 +270,10 @@ def test_init_study_copies_and_rebinds_declared_compare_and_atomize(
         "prepare_study_prewarms",
         observed_prepare,
     )
-    initialized = runner.invoke(app, ["init-study", "seed-target"])
+    initialized = runner.invoke(
+        app,
+        ["init-study", "seed-target", "--scenario", "legacy-v1"],
+    )
 
     assert initialized.exit_code == 0, initialized.stderr or initialized.output
     assert len(preparation_calls) == 1

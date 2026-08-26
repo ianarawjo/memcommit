@@ -20,6 +20,12 @@ from memcommit.context_targeting.loading import (
     DirectItemNotFoundError,
     resolve_local_direct_item_locator,
 )
+from memcommit.context_targeting.report_items import (
+    ReadableMemoryTargetAmbiguityError,
+    ReadableMemoryTargetNotFoundError,
+    freeze_memory_report_readable_catalog,
+    resolve_readable_memory_target,
+)
 from memcommit.context_targeting.memory_focus import is_memory_uid_prefix
 from memcommit.context_targeting.model import (
     ContextScope,
@@ -235,6 +241,24 @@ class MemoryStoreShowPort:
                                 permissions=grant.permissions,
                             )
                         elif "QUERY" in grant.permissions:
+                            existing = context.memories.get(grant.uid)
+                            if existing is None:
+                                context.add(
+                                    QueryContextRef(
+                                        uid=grant.uid,
+                                        name=grant.public_name,
+                                        target_source_uid=grant.resource_uid,
+                                        provider="authority-grant",
+                                    )
+                                )
+                            elif not (
+                                isinstance(existing, QueryContextRef)
+                                and existing.name == grant.public_name
+                            ):
+                                raise ProfileError(
+                                    "A query-only grant identity collides with "
+                                    "an existing direct item."
+                                )
                             item_facts[grant.uid] = context_access_facts(
                                 granted=True,
                                 permission="QUERY",
@@ -287,9 +311,7 @@ class MemoryStoreShowPort:
                 self._store,
                 root_access,
                 registry=registry,
-                # Owned Context rows retain Show's established attached-Grant
-                # projection below. Avoid projecting QUERY rows twice.
-                include_query_routes=False,
+                include_query_routes=True,
             )
             if self._allow_grants
             else None
@@ -333,37 +355,52 @@ class MemoryStoreShowPort:
             public_name: str,
             *,
             access: ContextAccess,
-        ) -> tuple[Context, dict[str, SourceDisplayFacts], frozenset[str]]:
+        ) -> tuple[Context, dict[str, SourceDisplayFacts]]:
             context = (
                 catalog.load(public_name)
                 if catalog is not None
                 else self._store.load(public_name)
             )
             item_facts: dict[str, SourceDisplayFacts] = {}
-            projected_grant_context_uids: set[str] = set()
             if not access.is_granted and self._allow_grants and registry is not None:
                 grants = grants_for_attachment(
                     attachment_name=access.context_name,
                     registry=registry,
                 )
                 if grants:
-                    context = project_grants_into_context(context, grants)
                     for grant in top_level_grants(grants):
                         if "READ" in grant.permissions:
-                            projected_grant_context_uids.add(grant.resource_uid)
                             item_facts[grant.resource_uid] = context_access_facts(
                                 granted=True,
                                 permission="READ",
                                 permissions=grant.permissions,
                             )
                         elif "QUERY" in grant.permissions:
+                            existing = context.memories.get(grant.uid)
+                            if existing is None:
+                                context.add(
+                                    QueryContextRef(
+                                        uid=grant.uid,
+                                        name=grant.public_name,
+                                        target_source_uid=grant.resource_uid,
+                                        provider="authority-grant",
+                                    )
+                                )
+                            elif not (
+                                isinstance(existing, QueryContextRef)
+                                and existing.name == grant.public_name
+                            ):
+                                raise ProfileError(
+                                    "A query-only grant identity collides with "
+                                    "an existing direct item."
+                                )
                             item_facts[grant.uid] = context_access_facts(
                                 granted=True,
                                 permission="QUERY",
                                 permissions=grant.permissions,
                                 form=SourceForm.QUERY_VIEW,
                             )
-            return context, item_facts, frozenset(projected_grant_context_uids)
+            return context, item_facts
 
         def visit_snapshot(
             snapshot: ContextSnapshotRef,
@@ -427,7 +464,7 @@ class MemoryStoreShowPort:
             expected_uid: str | None = None,
         ) -> None:
             access = access_for(public_name)
-            context, item_facts, projected_grant_uids = load_public(
+            context, item_facts = load_public(
                 public_name,
                 access=access,
             )
@@ -451,11 +488,6 @@ class MemoryStoreShowPort:
                 return
             for item in context.iter_items():
                 if not isinstance(item, Context):
-                    continue
-                # An attached Grant is an authorization projection, not an
-                # Embed edge. Public lexical placement alone may bring the
-                # same readable name into scope independently.
-                if item.uid in projected_grant_uids:
                     continue
                 if isinstance(item, ContextSnapshotRef):
                     visit_snapshot(item, reach=SourceReach.VIA_EMBED)
@@ -591,6 +623,31 @@ def execute_show_cli_operand(
             raise ShowDirectItemScopeError(
                 "--recursive/-r cannot be combined with a direct-item selector."
             )
+        if allow_grants:
+            readable_catalog = freeze_memory_report_readable_catalog(
+                store,
+                current=current_context_name,
+                registry=registry,
+            )
+            if readable_catalog is not None:
+                try:
+                    readable_target = resolve_readable_memory_target(
+                        readable_catalog,
+                        selector,
+                    )
+                except ReadableMemoryTargetNotFoundError:
+                    pass
+                except ReadableMemoryTargetAmbiguityError as error:
+                    raise ShowInputError(
+                        f"Ambiguous selector {selector!r}: {error}"
+                    ) from error
+                else:
+                    return execute(
+                        ShowRequest(
+                            context_name=readable_target.context_name,
+                            selector=readable_target.uid,
+                        )
+                    )
         try:
             target = resolve_local_direct_item_locator(
                 store,

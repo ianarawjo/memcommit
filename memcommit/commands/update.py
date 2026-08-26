@@ -34,7 +34,17 @@ from memcommit.commands.update_render import (
     review_update_application,
 )
 from memcommit.context import Context
+from memcommit.context_locator import resolve_context_locator
 from memcommit.context_targeting.loading import load_context_scope
+from memcommit.context_targeting.model import InlineTextOperand
+from memcommit.context_targeting.operands import (
+    classify_context_or_inline_text_operand,
+)
+from memcommit.goal_focus import FrozenGoalFocus
+from memcommit.goal_focus_runtime import (
+    freeze_goal_focus_operand,
+    revalidate_goal_focus,
+)
 from memcommit.context_targeting.presets import (
     ContextScopePreset,
     legacy_root_only_option_alias,
@@ -60,6 +70,7 @@ from memcommit.update import (
     UpdateSession,
     applied_session_matches,
     collect_update_inputs,
+    inline_update_context,
     plan_update,
     revise_update,
     session_matches,
@@ -201,13 +212,17 @@ def _browse_saved_update(store: MemoryStore) -> None:
 
     # Re-enter execution directly. Only outstanding judgments are shown; the
     # retained report remains behind the explicit Impact command.
-    cmd(
-        source_name=current.source_name,
-        target_name=current.target_name,
-        replace_stage=False,
-        source_descendants=current.source_include_descendants,
-        target_descendants=current.target_include_descendants,
-    )
+    resume_kwargs = {
+        "target_name": current.target_name,
+        "replace_stage": False,
+        "source_descendants": current.source_include_descendants,
+        "target_descendants": current.target_include_descendants,
+    }
+    if current.inline_source_content is None:
+        resume_kwargs["source_name"] = current.source_name
+    else:
+        resume_kwargs["memory"] = current.inline_source_content
+    cmd(**resume_kwargs)
 
 
 def _resolve_update_access(
@@ -302,6 +317,8 @@ def _plan_update_with_wait(
     granted_target: GrantedUpdateTarget | None,
     source_memory_selector: str | None = None,
     target_memory_selector: str | None = None,
+    inline_source_content: str | None = None,
+    goal_focus: FrozenGoalFocus | None = None,
 ) -> UpdateSession:
     """Plan one complete Update while sharing the interactive command wait."""
 
@@ -322,6 +339,8 @@ def _plan_update_with_wait(
             granted_target=granted_target,
             source_memory_selector=source_memory_selector,
             target_memory_selector=target_memory_selector,
+            inline_source_content=inline_source_content,
+            goal_focus=goal_focus,
         )
 
     return run_command_wait(
@@ -400,15 +419,21 @@ def cmd(
     contexts: Annotated[
         list[str] | None,
         typer.Argument(
-            metavar="SOURCE TARGET",
-            help="Explicit Source and Target Contexts",
+            metavar="SOURCE [TARGET]",
+            help=(
+                "Source and optional Target Context; an unambiguous sentence "
+                "is one process-local Source Memory"
+            ),
         ),
     ] = None,
     source_name: Annotated[
         Optional[str],
         typer.Option(
             "--from",
-            help=("Source Context A; if --to is omitted, current supplies B"),
+            help=(
+                "Source Context A or unambiguous inline Memory; if --to is "
+                "omitted, current supplies B"
+            ),
         ),
     ] = None,
     target_name: Annotated[
@@ -416,6 +441,26 @@ def cmd(
         typer.Option(
             "--to",
             help=("Target Context B; if --from is omitted, current supplies A"),
+        ),
+    ] = None,
+    memory: Annotated[
+        Optional[str],
+        typer.Option(
+            "--memory",
+            help=(
+                "Use exact text as one process-local Source Memory; current or "
+                "--to supplies the Target"
+            ),
+        ),
+    ] = None,
+    goal: Annotated[
+        Optional[str],
+        typer.Option(
+            "--goal",
+            help=(
+                "Optional relevance focus as a Context, CONTEXT:UID/UID "
+                "Memory, or inline text; never treated as Update evidence"
+            ),
         ),
     ] = None,
     replace_stage: Annotated[
@@ -502,11 +547,13 @@ def cmd(
         ),
     ] = False,
 ) -> None:
+    positional_contexts = tuple(contexts or ())
     try:
         source_name, target_name = choose_update_endpoint_operands(
-            contexts,
+            positional_contexts,
             source_option=source_name,
             target_option=target_name,
+            allow_single_source=True,
         )
     except ValueError as error:
         typer.secho(
@@ -559,9 +606,19 @@ def cmd(
             err=True,
         )
         raise typer.Exit(2)
+    if memory is not None and source_name is not None:
+        typer.secho(
+            "Update error: --memory supplies Source content and cannot be "
+            "combined with positional Source or --from.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
     if sessions and (
         source_name is not None
         or target_name is not None
+        or memory is not None
+        or goal is not None
         or replace_stage
         or source_memory is not None
         or target_memory is not None
@@ -584,16 +641,17 @@ def cmd(
             typer.secho(f"Update error: {error}", fg=typer.colors.RED, err=True)
             raise typer.Exit(1)
         return
-    if source_name is None and target_name is None:
+    if source_name is None and target_name is None and memory is None:
         if (
             source_memory is not None
             or target_memory is not None
             or scope_flags_supplied
             or comment is not None
             or expect_session is not None
+            or goal is not None
         ):
             typer.secho(
-                "Update error: scope flags require --from or --to.",
+                "Update error: scope or Goal options require --from or --to.",
                 fg=typer.colors.RED,
                 err=True,
             )
@@ -614,6 +672,14 @@ def cmd(
             err=True,
         )
         raise typer.Exit(2)
+    if memory is not None and (source_memory is not None or source_descendants):
+        typer.secho(
+            "Update error: inline --memory cannot use Source Memory focus or "
+            "Source descendants.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
     if target_memory is not None and target_descendants:
         typer.secho(
             "Update error: --target-memory cannot be combined with "
@@ -628,35 +694,103 @@ def cmd(
         # Both locators must retain the meaning they had at command start,
         # even if another process switches the global current Context later.
         current_name = store.current_context_name()
-        endpoints = resolve_update_endpoints(
-            source_locator=source_name,
-            target_locator=target_name,
-            current=current_name,
+        requested_goal_focus = (
+            freeze_goal_focus_operand(
+                store,
+                goal,
+                current_name=current_name,
+            )
+            if goal is not None
+            else None
         )
-        source_access = _resolve_update_access(
-            store,
-            endpoints.source_name,
-            current_name=current_name,
-        )
+        if requested_goal_focus is not None:
+            revalidate_goal_focus(store, requested_goal_focus)
+        if target_name is not None:
+            parsed_target = classify_context_or_inline_text_operand(
+                target_name,
+                current=current_name,
+                context_exists=store.context_exists,
+            )
+            if isinstance(parsed_target, InlineTextOperand):
+                if len(positional_contexts) == 2:
+                    raise UpdateError(
+                        "Positional Update operands are SOURCE TARGET; the "
+                        "second operand is the Target. Inline text is supported "
+                        "only as Source. To update the first Context from text, "
+                        "use 'mem update --memory TEXT --to CONTEXT'."
+                    )
+                raise UpdateError(
+                    "The Update Target must be an existing Context; inline text "
+                    "is supported only as Source."
+                )
+            target_name = parsed_target.locator
+        inline_source_content = memory
+        if inline_source_content is None and source_name is not None:
+            parsed_source = classify_context_or_inline_text_operand(
+                source_name,
+                current=current_name,
+                context_exists=store.context_exists,
+            )
+            if isinstance(parsed_source, InlineTextOperand):
+                inline_source_content = parsed_source.text
+                source_name = None
+            else:
+                source_name = parsed_source.locator
+        source_access = None
+        if inline_source_content is not None:
+            if source_descendants or source_memory is not None:
+                raise UpdateError(
+                    "Inline Update input cannot use Source descendants or "
+                    "Source Memory focus."
+                )
+            if target_name is None:
+                if not current_name:
+                    raise UpdateError(
+                        "Inline Update input uses the current Context as Target, "
+                        "but no current Context is available. Supply --to TARGET."
+                    )
+                resolved_target_name = current_name
+            else:
+                resolved_target_name = resolve_context_locator(
+                    target_name,
+                    current=current_name,
+                )
+            source = inline_update_context(inline_source_content)
+        else:
+            endpoints = resolve_update_endpoints(
+                source_locator=source_name,
+                target_locator=target_name,
+                current=current_name,
+            )
+            source_access = _resolve_update_access(
+                store,
+                endpoints.source_name,
+                current_name=current_name,
+            )
+            resolved_target_name = endpoints.target_name
+            source_store = (
+                GrantedReadStore(source_access) if source_access.is_granted else store
+            )
+            source = load_context_scope(
+                source_store,
+                (
+                    source_access.display_name
+                    if source_access.is_granted
+                    else source_access.context_name
+                ),
+                include_descendants=source_descendants,
+            )
         target_access = _resolve_update_access(
             store,
-            endpoints.target_name,
+            resolved_target_name,
             current_name=current_name,
         )
-        source_store = (
-            GrantedReadStore(source_access) if source_access.is_granted else store
-        )
+        if inline_source_content is not None and target_access.is_granted:
+            raise UpdateError(
+                "Inline-Memory Update currently requires a local Target Context."
+            )
         target_store = (
             GrantedReadStore(target_access) if target_access.is_granted else store
-        )
-        source = load_context_scope(
-            source_store,
-            (
-                source_access.display_name
-                if source_access.is_granted
-                else source_access.context_name
-            ),
-            include_descendants=source_descendants,
         )
         target = load_context_scope(
             target_store,
@@ -669,7 +803,7 @@ def cmd(
         )
         granted_source = (
             freeze_granted_context_binding(source_access)
-            if source_access.is_granted
+            if source_access is not None and source_access.is_granted
             else None
         )
         granted_target = (
@@ -677,7 +811,8 @@ def cmd(
             if target_access.is_granted
             else None
         )
-        authorize_derived_transfer(source_access, target_access)
+        if source_access is not None:
+            authorize_derived_transfer(source_access, target_access)
         requested_inputs = collect_update_inputs(
             source,
             target,
@@ -701,12 +836,21 @@ def cmd(
         typer.secho(f"Update error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
 
+    goal_focus = (
+        requested_goal_focus
+        if goal is not None
+        else (
+            existing.goal_focus if existing is not None and not replace_stage else None
+        )
+    )
+    completed_previous: UpdateSession | None = None
     if existing is not None and existing.status == "applied":
         if (
             existing.source_include_descendants == source_descendants
             and existing.target_include_descendants == target_descendants
             and existing.source_memory_uid == requested_inputs.source_memory_uid
             and existing.target_memory_uid == requested_inputs.target_memory_uid
+            and existing.goal_focus == goal_focus
             and applied_session_matches(
                 existing,
                 source,
@@ -719,13 +863,18 @@ def cmd(
             typer.echo("This Update receipt was already applied.")
             return
         if not replace_stage:
-            typer.secho(
-                "Update error: an applied update or its local working copy "
-                "has diverged. Review it before using '--replace-stage'.",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
+            # A terminal receipt is evidence, not an unfinished work slot. Keep
+            # it addressable by UID while the distinct invocation starts fresh.
+            completed_previous = existing
+            if goal is None:
+                goal_focus = None
+
+    try:
+        if goal_focus is not None:
+            revalidate_goal_focus(store, goal_focus)
+    except (RuntimeError, ValueError) as error:
+        typer.secho(f"Update error: {error}", fg=typer.colors.RED, err=True)
+        raise typer.Exit(1)
 
     if existing is not None and existing.status == "undone" and not replace_stage:
         render_plan(existing, applied=False)
@@ -749,6 +898,7 @@ def cmd(
             and existing.target_include_descendants == target_descendants
             and existing.source_memory_uid == requested_inputs.source_memory_uid
             and existing.target_memory_uid == requested_inputs.target_memory_uid
+            and existing.goal_focus == goal_focus
             and session_matches(
                 existing,
                 source,
@@ -785,9 +935,13 @@ def cmd(
                 installed_update_prewarm_origin,
             )
 
-            update_analysis_origin = installed_update_prewarm_origin(
-                store,
-                session,
+            update_analysis_origin = (
+                None
+                if inline_source_content is not None
+                else installed_update_prewarm_origin(
+                    store,
+                    session,
+                )
             )
         if comment is not None:
             if session is None or session.status != "staged":
@@ -807,7 +961,9 @@ def cmd(
             )
             store.save_staged_update(revised, expected_current=session)
             render_plan(revised, staged=True)
-            typer.echo("Update revision saved; review it before applying the target changes.")
+            typer.echo(
+                "Update revision saved; review it before applying the target changes."
+            )
             return
         if session is None:
             if (
@@ -816,6 +972,7 @@ def cmd(
                 and cached.target_include_descendants == target_descendants
                 and cached.source_memory_uid == requested_inputs.source_memory_uid
                 and cached.target_memory_uid == requested_inputs.target_memory_uid
+                and cached.goal_focus == goal_focus
                 and session_matches(
                     cached,
                     source,
@@ -829,15 +986,21 @@ def cmd(
                     installed_update_prewarm_origin,
                 )
 
-                origin = installed_update_prewarm_origin(store, cached)
+                origin = (
+                    None
+                    if inline_source_content is not None
+                    else installed_update_prewarm_origin(store, cached)
+                )
                 if origin is not None:
                     update_analysis_origin = origin
                     label = (
                         "EXACT PREWARM"
                         if origin == "EXACT_PREWARM"
-                        else "PROJECTED PREWARM"
-                        if origin == "PROJECTED_PREWARM"
-                        else "EQUIVALENT SCOPE PREWARM"
+                        else (
+                            "PROJECTED PREWARM"
+                            if origin == "PROJECTED_PREWARM"
+                            else "EQUIVALENT SCOPE PREWARM"
+                        )
                     )
                     typer.echo(
                         f"{label} · UPDATE PLAN REUSED · provider was not called."
@@ -849,7 +1012,12 @@ def cmd(
 
                 update_prewarm_match = (
                     None
-                    if source_memory is not None or target_memory is not None
+                    if (
+                        inline_source_content is not None
+                        or goal_focus is not None
+                        or source_memory is not None
+                        or target_memory is not None
+                    )
                     else find_installed_projectable_update_prewarm(
                         store=store,
                         source=source,
@@ -866,10 +1034,11 @@ def cmd(
                     label = (
                         "EXACT PREWARM"
                         if update_prewarm_match.origin == "EXACT_PREWARM"
-                        else "EQUIVALENT SCOPE PREWARM"
-                        if update_prewarm_match.origin
-                        == "EQUIVALENT_SCOPE_PREWARM"
-                        else "PROJECTED PREWARM"
+                        else (
+                            "EQUIVALENT SCOPE PREWARM"
+                            if update_prewarm_match.origin == "EQUIVALENT_SCOPE_PREWARM"
+                            else "PROJECTED PREWARM"
+                        )
                     )
                     typer.echo(
                         f"{label} · UPDATE PLAN REUSED · provider was not called."
@@ -884,6 +1053,8 @@ def cmd(
                         granted_target=granted_target,
                         source_memory_selector=source_memory,
                         target_memory_selector=target_memory,
+                        inline_source_content=inline_source_content,
+                        goal_focus=goal_focus,
                     )
             # Bind the staged intent to the active record observed above.
             # This prevents two update processes from silently replacing one
@@ -892,6 +1063,15 @@ def cmd(
                 session,
                 expected_current=existing,
             )
+            if completed_previous is not None:
+                typer.echo(
+                    "PREVIOUS UPDATE COMPLETE · "
+                    f"{completed_previous.uid[:8]} · starting a new Update."
+                )
+                typer.echo(
+                    "REVIEW PREVIOUS · mem review update --session "
+                    f"{completed_previous.uid}"
+                )
             if update_prewarm_match is not None:
                 from memcommit.study_prewarm.update import (
                     record_equivalent_update_prewarm,
@@ -902,19 +1082,21 @@ def cmd(
                 recorder = (
                     record_exact_update_prewarm
                     if update_prewarm_match.origin == "EXACT_PREWARM"
-                    else record_equivalent_update_prewarm
-                    if update_prewarm_match.origin
-                    == "EQUIVALENT_SCOPE_PREWARM"
-                    else record_projected_update_prewarm
+                    else (
+                        record_equivalent_update_prewarm
+                        if update_prewarm_match.origin == "EQUIVALENT_SCOPE_PREWARM"
+                        else record_projected_update_prewarm
+                    )
                 )
                 recorder(
                     store,
                     entry_key=update_prewarm_match.entry_key,
                     session=session,
-                    prepared_source_name=(
-                        update_prewarm_match.prepared_source_name
-                    ),
+                    prepared_source_name=(update_prewarm_match.prepared_source_name),
                 )
+
+        if session.goal_focus is not None:
+            revalidate_goal_focus(store, session.goal_focus)
 
         application = run_application_flow(
             session,

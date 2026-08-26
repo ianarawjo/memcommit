@@ -2,8 +2,10 @@
 
 ## Decision
 
-`mem init-study` does not copy or validate every declared semantic artifact and
-does not write per-entry hidden receipts. It records one small reference to a
+`mem init-study` does not copy declared semantic artifacts into the participant
+and does not write per-entry hidden receipts. Before attaching a bundle it now
+validates every declared artifact and regenerates supported obsolete cache
+generations; it then records one small reference to the resulting
 content-addressed immutable Study bundle: its digest and baseline Profile UID.
 It creates no ordinary Atomize, Compare, Update, Meld, or Sever session.
 

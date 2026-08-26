@@ -19,7 +19,9 @@
         "evidence": [
           "docs/atomize-application-boundary-matrix.md",
           "docs/context-locator-design-rationale.md",
-          "docs/execution-receipt-review-lifecycle-design-rationale.md"
+          "docs/execution-receipt-review-lifecycle-design-rationale.md",
+          "docs/study-semantic-prompt-policy-design-rationale.md",
+          "docs/terminal-semantic-session-rotation-design-rationale.md"
         ],
         "reason": "Analysis, saved review, reanalysis, both Apply directions, recovery, and public projection are verified as one structural lifecycle."
       },
@@ -29,8 +31,10 @@
           "docs/compare-summary-design-rationale.md",
           "docs/compare-session-lifecycle-design-rationale.md",
           "docs/context-locator-design-rationale.md",
+          "docs/init-study-prewarm-regeneration-design-rationale.md",
           "docs/mem-compare-design-rationale.md",
-          "docs/session-endpoint-setup-design-rationale.md"
+          "docs/session-endpoint-setup-design-rationale.md",
+          "docs/study-semantic-prompt-policy-design-rationale.md"
         ],
         "reason": "The default CLI enters one transient source-revalidated summary application, while CLI, TUI, Python, agent, and MCP deep routes retain the targetless exhaustive Run, exact Open, and version-bound Refresh lifecycle with no Context Apply."
       },
@@ -46,7 +50,9 @@
         "evidence": [
           "docs/distill-elaborate-generative-reduction-design-rationale.md",
           "docs/distill-elaborate-application-boundary-matrix.md",
-          "docs/execution-receipt-review-lifecycle-design-rationale.md"
+          "docs/execution-receipt-review-lifecycle-design-rationale.md",
+          "docs/goal-focus-operand-design-rationale.md",
+          "docs/study-semantic-prompt-policy-design-rationale.md"
         ],
         "reason": "CLI, TUI, public, agent, MCP, Ground, provider, and prepared-result routes share the reviewed Distill application contract."
       },
@@ -54,10 +60,13 @@
         "evidence": [
           "docs/distill-elaborate-generative-reduction-design-rationale.md",
           "docs/distill-elaborate-application-boundary-matrix.md",
+          "docs/execution-receipt-review-lifecycle-design-rationale.md",
+          "docs/fit-general-judgment-design-rationale.md",
+          "docs/goal-focus-operand-design-rationale.md",
           "docs/mem-elaborate-design-rationale.md",
-          "docs/execution-receipt-review-lifecycle-design-rationale.md"
+          "docs/study-semantic-prompt-policy-design-rationale.md"
         ],
-        "reason": "CLI, TUI, public, agent, MCP, Ground, provider, and prepared-result routes share one explicit Elaborate quality policy: generation-only BEST_EFFORT by default and the former independent Conformance/Fit acceptance gates under strict mode."
+        "reason": "CLI, TUI, public, agent, MCP, Ground, provider, and prepared-result routes share the reviewed Elaborate application contract, including the best-effort default, explicit strict gate, and quality-bound receipt projection."
       },
       "embed": {
         "evidence": [
@@ -129,9 +138,12 @@
         "evidence": [
           "docs/meld-application-boundary-matrix.md",
           "docs/meld-session-lifecycle-design-rationale.md",
+          "docs/context-or-inline-memory-operand-design-rationale.md",
           "docs/interactive-semantic-command-boundary-design-rationale.md",
+          "docs/init-study-prewarm-regeneration-design-rationale.md",
           "docs/execution-receipt-review-lifecycle-design-rationale.md",
-          "docs/session-endpoint-setup-design-rationale.md"
+          "docs/session-endpoint-setup-design-rationale.md",
+          "docs/terminal-semantic-session-rotation-design-rationale.md"
         ],
         "reason": "CLI, TUI, Python, and agent routes share typed Start, Restart, saved-turn, cache/provider, CAS, and Apply lifecycles with exact/equivalent/projected reuse and one reviewed-session version contract."
       },
@@ -147,7 +159,8 @@
           "docs/query-callable-boundary-matrix.md",
           "docs/query-answer-application-boundary-matrix.md",
           "docs/query-reference-application-boundary-matrix.md",
-          "docs/query-case-derived-answer-design-rationale.md"
+          "docs/query-case-derived-answer-design-rationale.md",
+          "docs/study-semantic-prompt-policy-design-rationale.md"
         ],
         "reason": "Ordinary, granted, and query-only families plus CLI, TUI, public, and agent projections have a verified operation package."
       },
@@ -171,7 +184,8 @@
           "docs/resolve-application-boundary-matrix.md",
           "docs/resolve-fit-repair-design-rationale.md",
           "docs/execution-receipt-review-lifecycle-design-rationale.md",
-          "docs/resolution-lifecycle-design-rationale.md"
+          "docs/resolution-lifecycle-design-rationale.md",
+          "docs/study-semantic-prompt-policy-design-rationale.md"
         ],
         "reason": "Direct-Memory Fit repair exposes CLI, TUI, public, agent, and MCP projections over one typed analysis, exact replay, authority, and checkpointed Apply boundary."
       },
@@ -205,7 +219,8 @@
         "evidence": [
           "docs/context-locator-design-rationale.md",
           "docs/find-duplicates-callable-boundary-matrix.md",
-          "docs/dedup-design-rationale.md"
+          "docs/dedup-design-rationale.md",
+          "docs/study-semantic-prompt-policy-design-rationale.md"
         ],
         "reason": "The CLI and public Python routes share one provider-free role-aware exact-group analysis for direct or readable lexical reach, preserve each Context as an independent Memory, Embed, and Reference frame, and publish a complete typed read-only report without mutation or checkpoint creation."
       },
@@ -215,7 +230,8 @@
           "docs/find-redundancies-callable-boundary-matrix.md",
           "docs/memory-quality-finders-design-rationale.md",
           "docs/quality-finding-handoff-design-rationale.md",
-          "docs/read-report-lifecycle-design-rationale.md"
+          "docs/read-report-lifecycle-design-rationale.md",
+          "docs/study-semantic-prompt-policy-design-rationale.md"
         ],
         "reason": "CLI, public Python, agent, and MCP routes share one frozen DUN analysis for an exact root or readable lexical subtree: recursive Contexts remain independent direct semantic frames, same-role exact items remain typed, all frames validate before publication, and only the separate Dedun adapter enters the survivor and Apply boundary."
       },
@@ -330,8 +346,12 @@
         "evidence": [
           "docs/context-locator-design-rationale.md",
           "docs/update-application-boundary-matrix.md",
+          "docs/update-terminal-session-rotation-design-rationale.md",
+          "docs/context-or-inline-memory-operand-design-rationale.md",
+          "docs/init-study-prewarm-regeneration-design-rationale.md",
           "docs/interactive-semantic-command-boundary-design-rationale.md",
           "docs/execution-receipt-review-lifecycle-design-rationale.md",
+          "docs/goal-focus-operand-design-rationale.md",
           "docs/session-endpoint-setup-design-rationale.md"
         ],
         "reason": "Apply policy and recovery are verified, but the remaining Update routes have not been traced into one complete reviewed application boundary."

@@ -3,14 +3,17 @@
 from __future__ import annotations
 
 import copy
+from collections.abc import Sequence
 from dataclasses import dataclass
 
 from memcommit.authority.access import (
     ContextAccess,
     GrantedReadStore,
     resolve_context_access,
+    top_level_grants,
 )
 from memcommit.context import Context, QueryContextRef
+from memcommit.context_snapshot import ContextSnapshotRef
 from memcommit.context_targeting.catalog import (
     GrantedContextNavigation,
     freeze_granted_context_navigation,
@@ -18,6 +21,7 @@ from memcommit.context_targeting.catalog import (
 from memcommit.context_targeting.model import ContextScope
 from memcommit.context_targeting.resolution import expand_lexical_context_names
 from memcommit.profile_config import (
+    AuthorityGrant,
     ProfileRegistry,
     load_profile_registry,
     profile_store_dir,
@@ -73,6 +77,7 @@ class ReadableContextCatalog:
         self._include_query_routes = include_query_routes
         self._granted_stores: dict[str, GrantedReadStore] = {}
         self._bindings: dict[str, ReadableContextBinding] = {}
+        self._attached_read_names_by_parent: dict[str, tuple[str, ...]] = {}
         self._query_routes_by_parent: dict[str, tuple[QueryContextRef, ...]] = {}
 
         if root_access.is_granted:
@@ -98,9 +103,11 @@ class ReadableContextCatalog:
 
         registry = self._active_registry(registry)
         if registry is not None:
-            self._add_granted_bindings(registry)
+            valid_grants = tuple(self._valid_active_grants(registry))
+            self._add_granted_bindings(registry, valid_grants)
+            self._freeze_attached_read_names(valid_grants)
             if include_query_routes:
-                self._freeze_query_routes(registry)
+                self._freeze_query_routes(registry, valid_grants)
         self._names = tuple(sorted(self._bindings))
 
     def _active_registry(
@@ -128,9 +135,13 @@ class ReadableContextCatalog:
                 continue
             yield grant
 
-    def _add_granted_bindings(self, registry: ProfileRegistry) -> None:
+    def _add_granted_bindings(
+        self,
+        registry: ProfileRegistry,
+        grants: Sequence[AuthorityGrant],
+    ) -> None:
         candidate_names: set[str] = set()
-        for grant in self._valid_active_grants(registry):
+        for grant in grants:
             for binding in grant.contexts:
                 suffix = binding.name[len(grant.resource_name) :]
                 candidate_names.add(grant.public_name + suffix)
@@ -159,10 +170,53 @@ class ReadableContextCatalog:
                 access,
             )
 
-    def _freeze_query_routes(self, registry: ProfileRegistry) -> None:
+    def _freeze_attached_read_names(
+        self,
+        grants: Sequence[AuthorityGrant],
+    ) -> None:
+        """Freeze exact attachment projections without changing hierarchy.
+
+        A Grant attachment remains authorization metadata: it does not enter
+        ``list_context_names`` as a parent edge and lexical expansion continues
+        to use only canonical public names.  A selected local Context does,
+        however, display its top-level READ grants as directly available source
+        rows.  Following readable embeds must open those displayed rows through
+        their already-frozen bindings instead of leaving them as empty shells.
+        """
+
+        by_attachment: dict[str, list[AuthorityGrant]] = {}
+        for grant in grants:
+            by_attachment.setdefault(grant.attachment_context_name, []).append(grant)
+
+        frozen: dict[str, tuple[str, ...]] = {}
+        for attachment_name, attached in by_attachment.items():
+            names: list[str] = []
+            for grant in top_level_grants(tuple(attached)):
+                if "READ" not in grant.permissions:
+                    continue
+                binding = self._bindings.get(grant.public_name)
+                if binding is None or not binding.access.is_granted:
+                    continue
+                access = binding.access
+                if (
+                    access.attachment_name != attachment_name
+                    or access.view is None
+                    or access.view.grant.uid != grant.uid
+                ):
+                    continue
+                names.append(grant.public_name)
+            if names:
+                frozen[attachment_name] = tuple(sorted(set(names), key=str.casefold))
+        self._attached_read_names_by_parent = frozen
+
+    def _freeze_query_routes(
+        self,
+        registry: ProfileRegistry,
+        grants: Sequence[AuthorityGrant],
+    ) -> None:
         by_parent: dict[str, list[QueryContextRef]] = {}
         seen_names: set[str] = set()
-        for grant in self._valid_active_grants(registry):
+        for grant in grants:
             public_name = grant.public_name
             if public_name in seen_names:
                 continue
@@ -228,6 +282,11 @@ class ReadableContextCatalog:
             if self._bindings[name].access.is_granted
         )
 
+    def attached_read_names(self, parent_name: str) -> tuple[str, ...]:
+        """Return top-level READ projections attached to one exact local row."""
+
+        return self._attached_read_names_by_parent.get(parent_name, ())
+
     def _granted_store(self, access: ContextAccess) -> GrantedReadStore:
         assert access.is_granted
         key = access.view.grant.uid
@@ -261,6 +320,46 @@ class ReadableContextCatalog:
         visit(projected)
         return projected
 
+    def _project_local_attached_reads(
+        self,
+        context: Context,
+        *,
+        loading: frozenset[str],
+    ) -> Context:
+        """Resolve displayed READ projections as process-local source edges."""
+
+        projected = copy.deepcopy(context)
+
+        def visit(current: Context, ancestors: frozenset[str]) -> None:
+            binding = self._bindings.get(current.name)
+            if binding is not None and not binding.access.is_granted:
+                for public_name in self.attached_read_names(current.name):
+                    if public_name in ancestors:
+                        continue
+                    child = self.load(public_name, ancestors | {current.name})
+                    existing = current.memories.get(child.uid)
+                    if existing is None:
+                        current.add(child)
+                    elif not (
+                        isinstance(existing, Context)
+                        and existing.name == child.name
+                    ):
+                        raise ProfileError(
+                            "A granted view identity collides with an existing "
+                            "direct item."
+                        )
+            for item in tuple(current.iter_items()):
+                if isinstance(item, Context) and not isinstance(
+                    item,
+                    ContextSnapshotRef,
+                ):
+                    child_binding = self._bindings.get(item.name)
+                    if child_binding is not None and not child_binding.access.is_granted:
+                        visit(item, ancestors | {current.name})
+
+        visit(projected, loading)
+        return projected
+
     def load_direct(self, public_name: str) -> Context:
         binding = self._bindings.get(public_name)
         if binding is None:
@@ -281,16 +380,18 @@ class ReadableContextCatalog:
         access = binding.access
         if access.is_granted:
             return self._granted_store(access).load(public_name)
-        return self._project_local_query_routes(self._active_store.load(public_name))
+        return self._project_local_query_routes(
+            self._active_store.load(public_name)
+        )
 
     def load(self, public_name: str, _loading=frozenset()) -> Context:
-        binding = self._bindings.get(public_name)
-        if binding is None:
-            raise FileNotFoundError(f"Context '{public_name}' is outside the view.")
-        access = binding.access
-        if access.is_granted:
-            return self._granted_store(access).load(public_name)
-        return self._project_local_query_routes(self._active_store.load(public_name))
+        context = self.load_without_attached_reads(public_name)
+        if self.access_for(public_name).is_granted:
+            return context
+        return self._project_local_attached_reads(
+            context,
+            loading=_loading | {public_name},
+        )
 
 
 def freeze_readable_context_catalog(
@@ -313,6 +414,7 @@ def freeze_profile_readable_context_catalog(
     selected_access: ContextAccess,
     *,
     include_query_routes: bool = True,
+    registry: ProfileRegistry | None = None,
 ) -> ReadableContextCatalog:
     """Freeze all readable Profile names without losing granted orientation.
 
@@ -341,6 +443,7 @@ def freeze_profile_readable_context_catalog(
     catalog = ReadableContextCatalog(
         active_store,
         root_access,
+        registry=registry,
         include_query_routes=include_query_routes,
     )
     if not catalog.context_exists(selected_access.display_name):

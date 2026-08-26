@@ -26,6 +26,7 @@ from memcommit.context_targeting.tui.picker import (
     ContextMemoryRow,
     context_memory_rows,
 )
+from memcommit.goal_focus_runtime import freeze_goal_focus_operand
 from memcommit.context_naming import validate_portable_context_name
 from memcommit.distill import DistillError
 from memcommit.operations.distill.application import (
@@ -42,6 +43,8 @@ from memcommit.operations.distill.runtime import (
 from memcommit.ground_distill import (
     FrozenGroundDistill,
     FrozenGroundWorkspaceDistill,
+    GroundDistillResult,
+    apply_ground_distill_result,
     execute_ground_distill,
     freeze_ground_distill,
 )
@@ -115,7 +118,10 @@ def cmd(
         typer.Option(
             "--goal",
             "-g",
-            help="Optional Goal that focuses which supported Rules are relevant",
+            help=(
+                "Optional relevance focus as a Context, CONTEXT:UID/UID "
+                "Memory, or inline text; omit it to skip Goal Fit"
+            ),
         ),
     ] = None,
     ground: Annotated[
@@ -125,6 +131,16 @@ def cmd(
             help="Use the exact Goal and working-candidate frame of a bound Ground",
         ),
     ] = None,
+    adopt: Annotated[
+        bool,
+        typer.Option(
+            "--adopt",
+            help=(
+                "Explicitly add the complete physical-Ground proposal to its "
+                "/rules lane"
+            ),
+        ),
+    ] = False,
     direct: Annotated[
         bool,
         typer.Option(
@@ -187,6 +203,13 @@ def cmd(
         # Context Summary Viewer is an explicit --tui inspection surface.
         if mode is ConsoleMode.AUTO:
             mode = ConsoleMode.PLAIN
+        if adopt and tui:
+            raise DistillError(
+                "--adopt cannot use the read-only TUI; the explicit "
+                "line-oriented command is the adoption boundary."
+            )
+        if adopt and ground is None:
+            raise DistillError("--adopt requires --ground.")
         if ground is not None and (
             context_name is not None
             or source_name is not None
@@ -232,9 +255,18 @@ def cmd(
                 target_locator=target_name,
                 current=_snapshot.current_name,
             )
+            goal_focus = (
+                freeze_goal_focus_operand(
+                    store,
+                    goal,
+                    current_name=_snapshot.current_name,
+                )
+                if goal is not None
+                else None
+            )
             request = DistillRequest(
                 context_locator=endpoints.source_name,
-                goal=goal,
+                goal_focus=goal_focus,
                 include_descendants=traversal.include_descendants,
                 follow_embeds=traversal.follow_embeds,
             )
@@ -274,6 +306,7 @@ def cmd(
             if ground is not None
             else None
         )
+        ground_result: GroundDistillResult | None = None
         if save_as is not None:
             validate_portable_context_name(save_as)
             if store.context_exists(save_as):
@@ -282,6 +315,7 @@ def cmd(
                 )
 
         def execute(request: DistillRequest) -> DistillResult:
+            nonlocal ground_result
             active_store, _snapshot = command_resources()
             if frozen_ground is not None and request != frozen_ground.request:
                 # Ground supplies an exact frozen frame. A presentation adapter
@@ -298,19 +332,18 @@ def cmd(
                     progress.update("distilling Rules", step=2)
                     return connect_semantic_provider()
 
-                return (
-                    execute_distill(
+                if frozen_ground is None:
+                    return execute_distill(
                         request=request,
                         store=active_store,
                         provider_factory=connect_provider,
                     )
-                    if frozen_ground is None
-                    else execute_ground_distill(
-                        frozen_ground,
-                        store=active_store,
-                        provider_factory=connect_provider,
-                    ).distill
+                ground_result = execute_ground_distill(
+                    frozen_ground,
+                    store=active_store,
+                    provider_factory=connect_provider,
                 )
+                return ground_result.distill
 
         def prepare_tui(request: DistillRequest) -> DistillTuiSetup:
             active_store, active_snapshot = command_resources()
@@ -389,7 +422,15 @@ def cmd(
             if frozen_ground is not None
             else DistillRequest(
                 context_locator=context_name,
-                goal=goal,
+                goal_focus=(
+                    freeze_goal_focus_operand(
+                        store,
+                        goal,
+                        current_name=_snapshot.current_name,
+                    )
+                    if goal is not None
+                    else None
+                ),
                 include_descendants=traversal.include_descendants,
                 follow_embeds=traversal.follow_embeds,
             )
@@ -408,6 +449,23 @@ def cmd(
             return
         if automatic_result and not (save_as is not None and apply):
             render_distill_receipt(result)
+
+        if adopt:
+            if ground_result is None:
+                raise DistillError("Distill produced no Ground proposal.")
+            receipt = apply_ground_distill_result(ground_result, store=store)
+            typer.secho(
+                f"DISTILL ADOPTED · {display_escape_text(receipt.workspace_name)}"
+                f"/{receipt.lane}",
+                fg=typer.colors.GREEN,
+                bold=True,
+            )
+            typer.echo(
+                f"EFFECTS · ADD {len(receipt.memory_uids)} RULES · "
+                f"GROUND REVISION {receipt.revision}"
+            )
+            typer.echo(f"UNDO · mem ground {receipt.workspace_name} --undo")
+            return
 
         # Terminal interactivity must not broaden compatibility --save-as
         # into publication; only the explicit --apply operand crosses it.

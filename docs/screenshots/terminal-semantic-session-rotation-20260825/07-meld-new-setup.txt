@@ -1,0 +1,8 @@
+ NEW MELD · CHOOSE MODE AND ENDPOINTS                                                                                                                                               
+› MODE · [ ✓ SYMMETRIC · CREATE SEPARATE RESULT ]  [   DIRECTIONAL · UPDATE EXISTING ] · ←/→ TO SELECT                                                                              
+  FROM › capture/meld-baseline                   [ BROWSE ] CURRENT                           [   INCLUDE DESCENDANTS ]                                                             
+  WITH › capture/meld-incoming                   [ BROWSE ]                                   [   INCLUDE DESCENDANTS ]                                                             
+  TO   ›                                         ENTER NEW NAME                                                                                                                     
+ COMMAND · INVALID                                                                                                                                                                  
+ TO needs a Context name.                                                                                                                                                           
+ ←/→ mode · ↓ first endpoint row · Tab next control · Esc cancel
