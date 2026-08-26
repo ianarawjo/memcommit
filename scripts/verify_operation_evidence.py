@@ -18,10 +18,10 @@ from urllib.parse import unquote
 
 
 REPOSITORY = Path(__file__).resolve().parents[1]
-DOCS = REPOSITORY / "docs"
-REGISTRY = DOCS / "operation-route-classification.json"
-EVIDENCE_REGISTRY = DOCS / "operation-evidence-index.json"
-GENERATED_INDEX = DOCS / "generated" / "operation-evidence-index.md"
+AGENT_RECORDS = REPOSITORY / "agent-records"
+REGISTRY = AGENT_RECORDS / "operation-route-classification.json"
+EVIDENCE_REGISTRY = AGENT_RECORDS / "operation-evidence-index.json"
+GENERATED_INDEX = AGENT_RECORDS / "generated" / "operation-evidence-index.md"
 CURATED_STATES = ("CLOSED", "MIXED", "LEGACY", "N/A", "UNREVIEWED")
 _MARKDOWN_LINK = re.compile(r"!?\[[^\]]*\]\(([^)]+)\)")
 
@@ -51,7 +51,7 @@ def _help_operation_names(repository: Path) -> tuple[str, ...]:
 
 
 def load_registry(repository: Path = REPOSITORY) -> dict[str, object]:
-    path = repository / "docs" / "operation-route-classification.json"
+    path = repository / "agent-records" / "operation-route-classification.json"
     try:
         document = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as error:
@@ -120,7 +120,7 @@ def operation_records(
                 if (
                     pure_path.is_absolute()
                     or not pure_path.parts
-                    or pure_path.parts[0] != "docs"
+                    or pure_path.parts[0] != "agent-records"
                     or ".." in pure_path.parts
                 ):
                     raise EvidenceError(
@@ -148,7 +148,7 @@ def operation_records(
 def load_evidence_records(
     repository: Path = REPOSITORY,
 ) -> dict[str, tuple[str, ...]]:
-    path = repository / "docs" / "operation-evidence-index.json"
+    path = repository / "agent-records" / "operation-evidence-index.json"
     try:
         document = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as error:
@@ -156,7 +156,7 @@ def load_evidence_records(
     if not isinstance(document, dict) or document.get("schema_version") != 1:
         raise EvidenceError(f"{path}: expected evidence schema version 1")
     if document.get("classification_source") != (
-        "docs/operation-route-classification.json"
+        "agent-records/operation-route-classification.json"
     ):
         raise EvidenceError(f"{path}: unexpected classification source")
     operations = document.get("operations")
@@ -184,7 +184,7 @@ def load_evidence_records(
             if (
                 pure_path.is_absolute()
                 or not pure_path.parts
-                or pure_path.parts[0] != "docs"
+                or pure_path.parts[0] != "agent-records"
                 or ".." in pure_path.parts
             ):
                 raise EvidenceError(
@@ -239,7 +239,7 @@ def validate_boundary_matrix_registration(
     registered = _registered_evidence(records)
     matrix_paths = {
         path.relative_to(repository).as_posix()
-        for path in (repository / "docs").glob("*boundary-matrix.md")
+        for path in (repository / "agent-records").glob("*boundary-matrix.md")
         if path.name != "operation-consistency-matrix.md"
     }
     missing = sorted(matrix_paths - registered)
@@ -298,7 +298,7 @@ def validate_markdown_links(paths: set[Path], repository: Path = REPOSITORY) -> 
                     )
                     continue
                 if candidate == (
-                    repository / "docs" / "generated" / "operation-evidence-index.md"
+                    repository / "agent-records" / "generated" / "operation-evidence-index.md"
                 ):
                     # The write mode must be able to bootstrap this generated
                     # target. Check mode validates its presence and contents.
@@ -312,15 +312,15 @@ def validate_markdown_links(paths: set[Path], repository: Path = REPOSITORY) -> 
         raise EvidenceError("\n".join(failures))
 
 
-def validate_governing_docs(repository: Path = REPOSITORY) -> None:
+def validate_governing_agent_records(repository: Path = REPOSITORY) -> None:
     canonical = "operation-route-classification.json"
     evidence = "operation-evidence-index.json"
     generated = "generated/operation-evidence-index.md"
     for path in (
-        repository / "docs" / "README.md",
-        repository / "docs" / "operation-consistency-matrix.md",
-        repository / "docs" / "distribution-boundary-and-architecture-understanding-plan.md",
-        repository / "docs" / "callable-catalog-design-rationale.md",
+        repository / "agent-records" / "README.md",
+        repository / "agent-records" / "operation-consistency-matrix.md",
+        repository / "agent-records" / "distribution-boundary-and-architecture-understanding-plan.md",
+        repository / "agent-records" / "callable-catalog-design-rationale.md",
     ):
         text = path.read_text(encoding="utf-8")
         missing = [name for name in (canonical, evidence, generated) if name not in text]
@@ -336,8 +336,8 @@ def validate_governing_docs(repository: Path = REPOSITORY) -> None:
         re.IGNORECASE,
     )
     for path in (
-        repository / "docs" / "operation-consistency-matrix.md",
-        repository / "docs" / "distribution-boundary-and-architecture-understanding-plan.md",
+        repository / "agent-records" / "operation-consistency-matrix.md",
+        repository / "agent-records" / "distribution-boundary-and-architecture-understanding-plan.md",
     ):
         if match := stale_count.search(path.read_text(encoding="utf-8")):
             raise EvidenceError(
@@ -353,8 +353,8 @@ def render_index(
         "",
         "This file is generated by `scripts/verify_operation_evidence.py`.",
         "Do not edit it directly. Route state comes only from",
-        "`docs/operation-route-classification.json`; document membership comes",
-        "only from `docs/operation-evidence-index.json`.",
+        "`agent-records/operation-route-classification.json`; document membership comes",
+        "only from `agent-records/operation-evidence-index.json`.",
         "",
         "| Operation | Route state | Registered evidence | Reviewed conclusion |",
         "| --- | --- | --- | --- |",
@@ -362,7 +362,7 @@ def render_index(
     for operation in sorted(records):
         state, evidence, reason = records[operation]
         links = "<br>".join(
-            f"[`{PurePosixPath(path).name}`](../{PurePosixPath(path).relative_to('docs').as_posix()})"
+            f"[`{PurePosixPath(path).name}`](../{PurePosixPath(path).relative_to('agent-records').as_posix()})"
             for path in evidence
         ) or "—"
         safe_reason = reason.replace("|", "\\|") if reason else "—"
@@ -376,18 +376,18 @@ def verify(repository: Path = REPOSITORY) -> str:
     evidence_records = load_evidence_records(repository)
     records = combine_records(classifications, evidence_records)
     validate_boundary_matrix_registration(records, repository)
-    validate_governing_docs(repository)
+    validate_governing_agent_records(repository)
     evidence_paths = {
         repository / path
         for path in _registered_evidence(records)
         if path.endswith(".md")
     }
     governed_paths = {
-        repository / "docs" / "README.md",
-        repository / "docs" / "operation-consistency-matrix.md",
-        repository / "docs" / "distribution-boundary-and-architecture-understanding-plan.md",
-        repository / "docs" / "operation-evidence-ledger-design-rationale.md",
-        repository / "docs" / "callable-catalog-design-rationale.md",
+        repository / "agent-records" / "README.md",
+        repository / "agent-records" / "operation-consistency-matrix.md",
+        repository / "agent-records" / "distribution-boundary-and-architecture-understanding-plan.md",
+        repository / "agent-records" / "operation-evidence-ledger-design-rationale.md",
+        repository / "agent-records" / "callable-catalog-design-rationale.md",
     }
     validate_markdown_links(evidence_paths | governed_paths, repository)
     return render_index(records)

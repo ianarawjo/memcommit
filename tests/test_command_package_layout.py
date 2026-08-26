@@ -16,7 +16,7 @@ from memcommit.compatibility.legacy_submodules import (
 REPOSITORY = Path(__file__).resolve().parents[1]
 COMMANDS = REPOSITORY / "src" / "memcommit" / "commands"
 PLAN = json.loads(
-    (REPOSITORY / "docs" / "command-package-layout-plan.json").read_text(
+    (REPOSITORY / "agent-records" / "command-package-layout-plan.json").read_text(
         encoding="utf-8"
     )
 )

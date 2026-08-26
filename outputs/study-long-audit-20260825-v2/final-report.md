@@ -215,4 +215,4 @@ Profile/Store option and actor-bound saved-state locator remain desirable.
   `shared-concurrency/supplemental-report.json`, and
   `shared-concurrency/update-race-report.json`.
 - TUI index:
-  `docs/screenshots/six-world-audit-v2-20260825/a-is-apple-admin/README.md`.
+  `agent-records/screenshots/six-world-audit-v2-20260825/a-is-apple-admin/README.md`.

@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "classification_source": "agent-records/operation-route-classification.json",
+  "operations": {
+    "add": [
+      "agent-records/add-callable-boundary-matrix.md"
+    ],
+    "atomize": [
+      "agent-records/atomize-application-boundary-matrix.md",
+      "agent-records/execution-receipt-review-lifecycle-design-rationale.md"
+    ],
+    "audit": [],
+    "branch": [],
+    "check-conformance": [],
+    "checkout": [
+      "agent-records/switch-application-boundary-matrix.md"
+    ],
+    "checkpoint": [],
+    "chunk": [
+      "agent-records/mem-chunk-design-rationale.md"
+    ],
+    "clear": [],
+    "compare": [
+      "agent-records/compare-application-boundary-matrix.md",
+      "agent-records/compare-session-lifecycle-design-rationale.md"
+    ],
+    "config": [],
+    "contexts": [],
+    "dedup": [
+      "agent-records/dedup-callable-boundary-matrix.md",
+      "agent-records/dedup-design-rationale.md"
+    ],
+    "dedun": [
+      "agent-records/dedun-callable-boundary-matrix.md",
+      "agent-records/dedun-design-rationale.md",
+      "agent-records/execution-receipt-review-lifecycle-design-rationale.md",
+      "agent-records/resolution-lifecycle-design-rationale.md"
+    ],
+    "delete": [
+      "agent-records/unified-delete-selector-design-rationale.md"
+    ],
+    "diff": [
+      "agent-records/mem-history-search-design-rationale.md"
+    ],
+    "distill": [
+      "agent-records/distill-elaborate-application-boundary-matrix.md",
+      "agent-records/execution-receipt-review-lifecycle-design-rationale.md"
+    ],
+    "edit": [],
+    "elaborate": [
+      "agent-records/distill-elaborate-application-boundary-matrix.md",
+      "agent-records/execution-receipt-review-lifecycle-design-rationale.md"
+    ],
+    "embed": [
+      "agent-records/embed-application-boundary-matrix.md",
+      "agent-records/memory-reference-embed-semantics-design-rationale.md"
+    ],
+    "eval": [],
+    "find": [
+      "agent-records/find-application-boundary-matrix.md",
+      "agent-records/search-find-replace-design-rationale.md"
+    ],
+    "find-ambiguities": [
+      "agent-records/read-report-lifecycle-design-rationale.md"
+    ],
+    "find-conflicts": [
+      "agent-records/read-report-lifecycle-design-rationale.md"
+    ],
+    "fit": [
+      "agent-records/fit-application-boundary-matrix.md"
+    ],
+    "forget": [
+      "agent-records/forget-application-boundary-matrix.md",
+      "agent-records/forget-public-python-api-design-rationale.md",
+      "agent-records/forget-agent-adapter-design-rationale.md",
+      "agent-records/execution-receipt-review-lifecycle-design-rationale.md"
+    ],
+    "ground": [
+      "agent-records/ground-workspace-application-boundary-matrix.md",
+      "agent-records/ground-workspace-context-model-design-rationale.md"
+    ],
+    "help": [
+      "agent-records/help-application-boundary-matrix.md",
+      "agent-records/help-application-design-rationale.md",
+      "agent-records/mem-help-design-rationale.md"
+    ],
+    "impact": [],
+    "import": [],
+    "init": [
+      "agent-records/context-init-application-boundary-matrix.md"
+    ],
+    "init-study": [],
+    "list": [],
+    "lock": [],
+    "log": [
+      "agent-records/command-attempt-ledger-design-rationale.md"
+    ],
+    "meld": [
+      "agent-records/meld-application-boundary-matrix.md",
+      "agent-records/meld-session-lifecycle-design-rationale.md",
+      "agent-records/execution-receipt-review-lifecycle-design-rationale.md"
+    ],
+    "merge": [
+      "agent-records/merge-application-boundary-matrix.md",
+      "agent-records/execution-receipt-review-lifecycle-design-rationale.md"
+    ],
+    "profile": [
+      "agent-records/context-name-portability-design-rationale.md"
+    ],
+    "provider": [],
+    "pwd": [
+      "agent-records/mem-pwd-design-rationale.md"
+    ],
+    "query": [
+      "agent-records/query-callable-boundary-matrix.md",
+      "agent-records/query-answer-application-boundary-matrix.md",
+      "agent-records/query-reference-application-boundary-matrix.md"
+    ],
+    "rationale": [
+      "agent-records/read-report-lifecycle-design-rationale.md"
+    ],
+    "redo": [],
+    "reference": [
+      "agent-records/memory-reference-embed-semantics-design-rationale.md",
+      "agent-records/reference-callable-boundary-matrix.md"
+    ],
+    "rename": [],
+    "replace": [
+      "agent-records/replace-callable-boundary-matrix.md",
+      "agent-records/search-find-replace-design-rationale.md"
+    ],
+    "resolve": [
+      "agent-records/resolve-fit-repair-design-rationale.md",
+      "agent-records/execution-receipt-review-lifecycle-design-rationale.md",
+      "agent-records/resolution-lifecycle-design-rationale.md"
+    ],
+    "revert": [],
+    "review": [
+      "agent-records/execution-receipt-review-lifecycle-design-rationale.md"
+    ],
+    "search": [
+      "agent-records/find-search-application-boundary-matrix.md",
+      "agent-records/search-find-replace-design-rationale.md"
+    ],
+    "sever": [
+      "agent-records/sever-application-boundary-matrix.md",
+      "agent-records/execution-receipt-review-lifecycle-design-rationale.md"
+    ],
+    "share": [],
+    "shell-init": [],
+    "show": [
+      "agent-records/show-application-boundary-matrix.md",
+      "agent-records/show-application-design-rationale.md"
+    ],
+    "status": [
+      "agent-records/status-application-boundary-matrix.md",
+      "agent-records/mem-status-short-design-rationale.md"
+    ],
+    "summarize": [
+      "agent-records/summarize-application-boundary-matrix.md",
+      "agent-records/read-report-lifecycle-design-rationale.md"
+    ],
+    "switch": [
+      "agent-records/switch-application-boundary-matrix.md"
+    ],
+    "trace": [
+      "agent-records/read-report-lifecycle-design-rationale.md"
+    ],
+    "translate": [],
+    "undo": [],
+    "unlock": [],
+    "update": [
+      "agent-records/update-application-boundary-matrix.md",
+      "agent-records/execution-receipt-review-lifecycle-design-rationale.md"
+    ]
+  }
+}

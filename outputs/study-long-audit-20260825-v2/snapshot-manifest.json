@@ -18,7 +18,7 @@
       "outputs",
       "output",
       "tmp",
-      "docs/screenshots",
+      "agent-records/screenshots",
       "node_modules",
       "*.pyc"
     ]

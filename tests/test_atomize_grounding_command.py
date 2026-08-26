@@ -36,7 +36,7 @@ from memcommit.store import MemoryStore
 runner = CliRunner()
 GROUNDING_SCREEN_CAPTURE_DIR = (
     Path(__file__).resolve().parents[1]
-    / "docs"
+    / "agent-records"
     / "examples"
     / "mem-atomize-grounding-screens"
 )

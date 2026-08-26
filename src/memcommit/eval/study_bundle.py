@@ -1056,7 +1056,9 @@ def _build_study_bundle_contents(
             f"Study bundle staging directory {package} is not empty."
         )
     package.mkdir(parents=True, exist_ok=True)
-    root = fixture_root or (Path(__file__).resolve().parents[3] / "docs" / "fixtures")
+    root = fixture_root or (
+        Path(__file__).resolve().parents[3] / "agent-records" / "fixtures"
+    )
     profile_records: list[dict[str, object]] = []
     manifest: list[BundleManifestEntry] = []
     contexts_by_profile: dict[str, frozenset[str]] = {}

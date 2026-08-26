@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parent
 AUDIT = ROOT.parents[1]
 REPO = AUDIT.parents[1]
 LEDGER = ROOT / "phase-admin.json"
-DOCS = REPO / "docs/screenshots/six-world-audit-v2-20260825/a-is-apple-admin"
+AGENT_RECORDS = REPO / "agent-records/screenshots/six-world-audit-v2-20260825/a-is-apple-admin"
 
 
 def visible_text(data: bytes) -> str:
@@ -66,11 +66,11 @@ def main() -> None:
             # receipt.  The former all-black canvas represented absence, not a
             # terminal state, so do not publish it as a screenshot.
             blank = screenshots[-1]
-            blank_docs = DOCS / blank.name
+            blank_record = AGENT_RECORDS / blank.name
             if blank.exists():
                 blank.unlink()
-            if blank_docs.exists():
-                blank_docs.unlink()
+            if blank_record.exists():
+                blank_record.unlink()
             evidence["screenshots"] = evidence["screenshots"][:-1]
             log["steps"] = [step for step in log["steps"] if Path(step["screenshot"]).name != blank.name]
             log["no_post_exit_receipt"] = "Bare read-only Help closed on Q and emitted no terminal text."
@@ -84,10 +84,10 @@ def main() -> None:
             ),
         }
         log_path.write_text(json.dumps(log, ensure_ascii=False, indent=2) + "\n")
-        docs_log = DOCS / log_path.name
-        if docs_log.exists():
-            docs_log.unlink()
-        os.link(log_path, docs_log)
+        record_log = AGENT_RECORDS / log_path.name
+        if record_log.exists():
+            record_log.unlink()
+        os.link(log_path, record_log)
 
     # Repair the host byte-equality assertion across harness restarts from the
     # immutable counted raw outputs, excluding only the audit wrapper header.
@@ -214,9 +214,9 @@ def main() -> None:
     }
     LEDGER.write_text(json.dumps(ledger, ensure_ascii=False, indent=2) + "\n")
 
-    images = sorted(DOCS.glob("*.png"))
-    logs = sorted(DOCS.glob("*-interaction.json"))
-    readme = DOCS / "README.md"
+    images = sorted(AGENT_RECORDS.glob("*.png"))
+    logs = sorted(AGENT_RECORDS.glob("*-interaction.json"))
+    readme = AGENT_RECORDS / "README.md"
     readme.write_text(
         "# a-is-apple ADMIN interactive evidence\n\n"
         "Actual 180×52 xterm-256color PTY captures. Interaction logs record keys, visible state, "

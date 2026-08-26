@@ -1,0 +1,601 @@
+# Memory quality finders
+
+This note specifies the implemented command and data contract. For the
+reconstructed discussion that led to the labels, the rejected alternatives,
+the ambiguity `3 × 3` matrix, the relationship to the earlier `fit` idea, and
+the limits of the ordinary-reading judge, see
+[`memory-quality-judgment-theory-and-decision-history.md`](memory-quality-judgment-theory-and-decision-history.md).
+
+## Decision
+
+The quality-analysis surface consists of four explicit read-only finders and
+one applying complete-DUN operation:
+
+```text
+mem find-duplicates
+mem find-redundancies
+mem find-ambiguities
+mem find-conflicts
+mem dedun
+```
+
+`dedun` is a deliberate product term: `dup` denotes same-role exact direct-item
+duplicates, while `dun = dup + direct-Memory semantic dun`.
+`find-redundancies` owns the frozen
+read-only complete DUN analysis and never exposes an Apply action. Dedun
+deliberately reuses that same analysis and treats the invocation as immediate
+Apply intent, retaining the earliest existing UID in each eligible connected
+group. `find-duplicates` is a separate provider-free exact-DUP report. There is
+no separate singular operation: `find-redundancy` is an input alias for the
+canonical plural command. The existing
+`mem find <query>` is separate literal text lookup, not a quality or
+relationship judge.
+
+The implemented [`mem review ambiguities`](memory-review-shell-design-rationale.md)
+is a separate consumer of an ambiguity report. It persists selected readings
+and one freeform reviewer annotation, but it does not change the finder's
+read-only/mutation contract or apply those annotations to Memories.
+
+## Direct relation reports and explicit judgment workbench
+
+Flagless and explicit Context forms use the stable one-shot report contract:
+
+```text
+mem find-redundancies --context NAME
+mem find-redundancies --recursive NAME
+mem dedun --context NAME
+mem find-ambiguities --context NAME
+mem find-conflicts --context NAME
+mem find-ambiguities -a
+mem find-conflicts -a
+```
+
+In a TTY, invoking a read-only finder without flags immediately analyzes the
+command-start current Context, exactly like its non-TTY route.
+`find-duplicates` and `find-redundancies` are deliberately immediate relation
+reports: neither command exposes an initial selector or a process-local review
+workbench. The current Context is the implicit exact Source, and a positional
+Context or `--context` compatibility form supplies one other exact Source.
+This preserves the useful distinction between `dup` as a deterministic exact
+scan and `dun` as the complete exact-plus-semantic scan without inserting a
+second approval step before either read-only report.
+
+Both reports accept the common `-d/--direct` and `-r/--recursive` scope
+presets. Recursive Find Redundancies freezes the root's readable lexical
+subtree, then runs one complete direct-item DUN analysis per Context. It does
+not combine siblings into one provider frame, infer cross-Context DUN edges,
+or follow embedded Contexts. Every frame must validate before any report is
+published. This keeps each cleanup group owned by exactly one Context and lets
+the later applying operation define an auditable all-or-nothing boundary.
+
+Ambiguity and Conflict retain an explicit `--select` capability because their
+judgment review can span a deliberately composed readable frame. That screen
+contains three top-to-bottom controls:
+
+1. `TARGETS`, the common `PROFILE` plus readable Context namespace tree;
+2. `SCOPE`, with `SINGLE TARGET` versus `MULTIPLE TARGETS` and `THIS CONTEXT
+   ONLY` versus `INCLUDE DESCENDANTS`; and
+3. `TO DO`, the exact operation-labelled Run action for the visible checked
+   set.
+
+Setup starts in `MULTIPLE TARGETS` and `THIS CONTEXT ONLY`, with the current
+Context checked and marked for orientation. This keeps one-Context execution a
+fast path while making comparison breadth explicit. Moving the cursor does not
+change checked values. Enter or Space toggles one row; under descendant reach
+it checks or clears the row's complete lexical subtree. The common range state
+permits an empty multiple selection while editing, but `TO DO` rejects it
+rather than inventing a fallback. `PROFILE` expands only to the frozen readable
+catalog and never becomes a storage locator or persisted preference.
+
+`SINGLE` versus `MULTIPLE` controls selected-root cardinality independently
+from lexical reach. One selected root plus `INCLUDE DESCENDANTS` can therefore
+produce several effective Contexts. Execution freezes the exact visible
+checked set; it does not repeat a hidden descendant expansion that could
+re-include an independently unchecked row. Cancellation creates no provider
+connection, finding artifact, Context write, or checkpoint.
+
+The one-shot `-a/--all` form is the non-interactive spelling of the same
+`PROFILE · ALL READABLE CONTEXTS` target for Ambiguity and Conflict. It freezes
+the active Profile's concrete readable names at command start, analyzes the
+direct Memories from that exact set as one provenance-preserving frame, and
+never stores `PROFILE` as a Context locator. The flag is mutually exclusive
+with a positional or `--context` operand and with `--select`. Before provider
+construction, every READ-granted contributor must authorize the applicable
+`DERIVE` and cross-domain `COMBINE` use.
+The line-oriented report prints each finding Memory's frozen public Context
+name so a Profile-wide result never loses owner provenance. Within one result,
+each member is the single logical line `[uid-prefix] content`; `LEFT` and
+`RIGHT` are deliberately absent. A multi-Context report prepends
+`[CONTEXT name]` to that same line. This keeps the immediate CLI output at the
+smallest unambiguous form while retaining complete content.
+
+The finder kind is fixed by the command and therefore is not another setup
+choice. Embedded Context edges remain excluded: descendant reach follows the
+public lexical namespace only. The explicit `--context NAME` forms retain
+their original exact, direct, one-Context behavior.
+
+Dedun does not expose the multi-target selector. Its flagless and `-d` routes
+own one exact Context; `--context` selects another exact readable Context.
+`-r` freezes one local lexical subtree, analyzes every Context independently,
+prepares every deterministic earliest-UID survivor, and only then publishes
+all changed Contexts in one rollback-safe and Undoable command unit. It rejects
+granted roots or descendants because version 1 has no cross-Store transaction.
+Eligible EXACT, SURFACE_EQUIVALENT, and SEMANTIC_EQUIVALENT evidence is grouped;
+OVERLAP stays unchanged. If no eligible group exists, Dedun prints a no-change
+receipt and creates no checkpoint. Each changed Context has its own immutable
+checkpoint evidence for `mem review dedun --receipt UID`, while `mem undo`
+restores the complete recursive command unit.
+
+After Ambiguity or Conflict setup, every effective Context is loaded directly through the same
+frozen readable catalog. Its directly owned Memories are copied into one
+temporary aggregate analysis Context in visible Context order and direct
+Memory order. The finder makes one provider turn over that complete aggregate
+frame: Conflict can therefore report cross-Context relations, while Ambiguity
+interprets each Memory using the same combined local frame.
+The provider payload records the original public Context name beside every
+candidate, and the local workbench preserves that owner for each evidence
+source. The temporary aggregate is process-local, has a deterministic frame
+identity, and is never saved or exposed as a new Context.
+
+The validated report is projected into a compact read-only finding browser.
+Its one-line header preserves each operation's real judgment unit instead of
+adding a heterogeneous `N findings` total. Ambiguity reports flagged/direct
+Memories. Conflict reports both involved/direct Memories and flagged/checked
+pairs. Redundancy reports checked Memories, connected cleanup groups, and
+proposed absorptions because its whole-frame discovery does not enumerate a
+candidate-pair denominator. The owner is frozen as `[SOURCE <Context>]` for a
+single-Context frame. Every result is one source-linked logical line and may
+soft-wrap with the terminal width. References follow the repository's typed
+grammar: `[MEMORY <uid-prefix>]` under the header's single Source, or
+`[CONTEXT <name>] [MEMORY <uid-prefix>]` per member in a multi-Context frame.
+Prefixes expand against the exact members of a row when eight characters
+would collide, so the compact display never makes a pair look self-referential.
+The rejected `context@uid` spelling conflated two identities, had no shared
+escaping contract, and differed from Fit and Conformance evidence rows.
+
+Ambiguity keeps its exact Memory, reason, question, and all ordinary readings,
+but folds the readings into the `WHY` rationale instead of showing
+answer-looking labelled alternatives. A `SINGLE` interpretation is rendered
+as `UNDERSPECIFIED`, not exposed as a raw internal classifier. Conflict keeps
+both exact Memories, `WHY`, and the smallest follow-up question. `MAY` is
+rendered as `POSSIBLE CONFLICT`; `YES` is rendered as `CONFLICT`. The former
+`scope_dimensions` enum was removed from the current provider schema and
+public report because it was neither exhaustive nor reliably classifiable and
+did not control any behavior. Any meaningful subject, time, audience, or other
+distinction belongs in the natural-language reason and question. Redundancy
+keeps its exact relation and pair but omits `WHY`: the relation plus complete
+members is the compact read-only evidence needed for this list. There is no
+preview/detail split:
+`Up`/`Down` changes the focused line, while an Ambiguity `Enter` is inert
+because Find has no answer or inspection action. Escape or Backspace closes;
+navigation and closing cannot create response state.
+
+On an eligible single-Context Conflict, `Enter` may leave the browser for
+Resolve, and the complete-DUN report may leave for Dedun through the same
+visible Enter grammar. The former `R` and `D` handoff letters are inert. These
+transitions start a separate operation with its own request and authority
+boundary; they are not answers to Find and do not turn a finding into mutable
+review state. Conflict Resolve then uses the shared Meld-style compact
+execution form instead of restoring a large finder detail or Resolve report.
+Dedun independently revalidates its newly frozen exact frame and
+enters its deterministic Apply boundary. Sharing the analyzer does not share
+Apply authority. Durable multi-session retention is instead explicit through
+`mem audit`, which records all three reports, each finder ruleset, and
+provider/model provenance without silently changing a one-shot
+`find-* --context` invocation into a stored artifact. The older ambiguity
+Review singleton remains independently readable.
+
+The one-shot `find-redundancies` report projects the evidence forest as
+connected `DUN GROUP` blocks. Each Memory appears once per group in frozen
+direct order: `SURVIVOR` names the deterministic earliest-UID choice and every
+other member receives its own `ABSORB` row. This is the same cleanup grammar as
+the applied Dedun receipt and naturally extends from two members to any larger
+connected group. The group is explicitly `PROPOSED · NOT APPLIED` because Find
+remains read-only. Typed `EVIDENCE` rows retain every relation and reason.
+Pair-internal `LEFT`/`RIGHT` and order-only `FIRST`/`LATER` labels are not shown:
+the former repeat shared members in multi-edge groups, while the latter hide
+the cleanup disposition the report is meant to preview.
+
+The provider-free exact-Duplicate report uses the same disposition grammar but
+makes every member row self-contained. It prints one `SURVIVOR` row and any
+number of `ABSORB` rows, each with that member's UID and complete content. For a
+two-member exact group this is exactly two rows; it does not add a separate
+shared-content or cleanup-map row. Repeating byte-identical content is
+intentional here: the small repetition removes cross-row lookup and makes every
+kept or removed identity understandable on its own. The earlier generic
+`CONTENT` plus UID-only `FIRST` and `LATER` projection was not losing stored
+data, but made the relationship easy to miss. Compact UIDs are resolved against
+the complete group and expand past eight characters when needed, so two members
+never appear to have the same visible identity.
+
+In both reports only the disposition token is colored. `SURVIVOR` uses the
+shared ADD blue as the member retained in the proposed result, while `ABSORB`
+uses the shared REMOVE red as a member that would leave it. UIDs, Memory bodies,
+evidence, and `PROPOSED · NOT APPLIED` remain neutral, and ANSI-free output keeps
+the identical labels and ordering.
+
+Ambiguity and Conflict deliberately combine common Context targeting with one
+small finder-specific report adapter rather than inheriting the answerable
+Resolution Session grammar. Context targeting owns setup selection; the
+compact browser owns read-only complete-paragraph navigation. The receipt between
+them is the semantic boundary; the setup UI never calls a finder merely
+because a cursor moved or a Context was checked. The direct Duplicate and
+Redundancy reports skip setup but may use the same read-only report model after
+analysis. When more than one effective Context crosses authority domains,
+the operation applies the normal `DERIVE`/`COMBINE` Grant boundary before
+loading content or connecting the provider. Local Contexts need no additional
+Grant authority.
+
+## Durable three-finder Audit
+
+The three quality finders remain the unconditional Audit base. Audit schema
+version 3 may additionally retain one typed Context Conformance report when an
+explicit Rules Context is supplied with `--against`. Conformance is not a
+fourth quality finder: it has a Rule-versus-Target frame, its own exhaustive
+coverage contract, and no fabricated quality-review items. The standalone
+`mem check-conformance` adapter and Audit call the same core. Legacy schema
+versions 1 and 2 remain readable as exact snapshots. Version 2 Conflict
+records require their historical `scope_dimensions` field while decoding,
+then discard it and rewrite as version 3; no old classification is silently
+reinterpreted as a current result. See
+`agent-records/mem-check-conformance-design-rationale.md`.
+
+`mem audit` is the user-facing orchestration operation for running Duplicate,
+Ambiguity, and Conflict analysis together. It is not a fourth semantic finder
+and it does not merge the three judgments into one provider prompt. Its help
+text names all three finders explicitly.
+
+Audit defaults to the command-start current Context in every environment.
+`--context NAME` selects another exact Context, while explicit `--select`
+opens the common single-Context selector. All routes freeze the same
+direct-Memory frame, then run the existing finder contracts in
+the stable order Duplicate, Ambiguity, Conflict. Each finder retains its own
+operation name, schema, ruleset, provider call, report type, and cardinality.
+The first result is not passed to the second or third. A progress screen may
+show the three host-owned stages, but no partial combined report is published
+if any finder fails.
+
+Audit reports the stable Duplicate, Ambiguity, Conflict, and optional
+Conformance host stages through the shared transient one-line
+`CommandProgress` renderer. It does not allocate a full-screen progress box or
+publish partial report content. Persistence still occurs only after every
+typed check forms one valid snapshot.
+
+After all three checks validate, Audit creates one new UID-addressed artifact
+under the Profile's private Audit session directory. It never overwrites a
+latest-by-Context slot: repeated runs are separate evidence because a semantic
+provider can return different valid judgments for the same Source. The
+artifact freezes:
+
+- the canonical Context UID and name;
+- every direct Memory UID, content string, and order supplied to all checks;
+- the direct-frame digest;
+- all three typed reports, including zero-finding reports;
+- the ruleset and available provider/model provenance for each independent
+  finder run; and
+- the creation time and immutable Audit UID.
+
+The completed snapshot is saved before its compact receipt is printed. A
+disconnect therefore cannot discard the provider result. Audit schemas 1 and 2
+retain their response map for compatibility with already saved artifacts, but
+the current Review route never creates or edits it. A nonempty older response
+is displayed only as a historical note beside its exact immutable finding.
+
+Durable Audit requires retained-analysis authority before provider connection.
+An ordinary local Context satisfies that ownership boundary. A granted Source
+must authorize `DERIVE` and `SAVE_ANALYSIS`; READ alone remains sufficient only
+for the non-retained individual finder route.
+
+### Audit report composition
+
+The report deliberately has no overall quality score and no `PASS` result.
+Absence of findings is a model-assisted production result, not proof that the
+Source is clean. The complete Viewer uses one compact overview for identity,
+all check counts, Source scope, and the complete frozen direct-Memory snapshot;
+one section for each of Duplicate, Ambiguity, and Conflict; optional
+Conformance; one provenance section; and one final boundary. The overview
+keeps every Source body but avoids turning each Memory or serialized field into
+its own focus stop.
+
+The comprehensive Viewer preserves the stable group order Duplicate,
+Ambiguity, Conflict. A zero-finding check remains visible; every positive
+result uses the same one-line issue projection as its one-shot finder.
+Questions are retained as report evidence beside Ambiguity and Conflict
+reasons, but they are plain read-only prose rather than response controls.
+Labelled alternatives, redundancy reasons, and historical response notes are
+not part of the default review document because they either look selectable or
+repeat information already conveyed by the compact result. The immutable typed
+reports and legacy response map remain decodable; this is a presentation
+reduction, not a stored-data migration. No `REQUIRED` or `OPTIONAL` answer
+obligation is created.
+
+Saved Audits appear in the aggregate `mem review` launcher and reopen exactly
+through `mem review audit --session UID`. Review renders the saved audited
+Source snapshot and never reruns a finder. It does not fail merely because the
+live Context later changes or disappears: the reviewed object is the
+historical snapshot, not a claim about the current Context. Review and Audit
+never mutate a Context, Memory, or checkpoint.
+
+Ordinary `mem audit` does not open Review automatically. After saving, its
+compact receipt identifies the frozen Source and direct-Memory count, then
+shows the same truthful per-check summaries as the individual finders:
+Redundancy reports connected groups and proposed absorptions, Ambiguity reports
+flagged/direct Memories, and Conflict reports involved/direct Memories plus
+flagged/checked pairs. There is no aggregate total across those incompatible
+units. This exposes each result without automatically flooding the terminal
+with a potentially quadratic Conflict report. The category labels reuse the
+shared quality palette, while the counts, Source, and exact Review command
+remain neutral and retain identical ANSI-free text in a pipe or `NO_COLOR`
+environment.
+
+Each nonempty category also previews at most three findings in saved report
+order. A preview is one source-linked logical line containing the typed finding
+label and classification plus collision-safe Memory identities and bounded
+single-line Memory excerpts; it deliberately omits provider rationale and
+readings, which remain in the complete Review. When a category has more than
+three findings, one explicit `… N more` row accounts for the undisplayed
+remainder. The fixed per-category bound keeps a 22-Conflict Audit immediately
+diagnosable without turning the completion receipt back into the full report.
+
+`--snapshot` explicitly prints the full typed report, and
+`mem review audit --session UID` opens the same document as a read-only
+full-screen Viewer. The receipt therefore makes the completed result legible
+while execution, durable evidence, and later full inspection remain distinct.
+
+## Units of judgment
+
+The judgments and their public evidence deliberately have different arities:
+
+| Command | Discovery input and result unit | Primary labels |
+|---|---|---|
+| `find-duplicates` | one direct Context; same-role exact Memory, Embed, and Reference groups | emitted: provider-free typed `DUP / EXACT` groups |
+| `find-redundancies` / Dedun analysis | same-role exact direct items plus the whole selected direct-Memory semantic frame; positive semantic evidence links identify unordered Memory pairs | emitted: typed exact groups plus `EXACT`, `SURFACE_EQUIVALENT`, `SEMANTIC_EQUIVALENT`; rejection boundaries: cross-role pairs, `OVERLAP`, `UNKNOWN`, `DISTINCT` |
+| `find-ambiguities` | one Memory interpreted inside the complete selected frame | `SINGLE`, `DOMINANT`, `COMPETING` crossed with `NONE`, `HELPFUL`, `REQUIRED` |
+| `find-conflicts` | one unordered pair of Memories | `YES`, `MAY`, `NO` |
+
+Consequently, a selected frame with `n` direct Memories has `n` unary ambiguity
+targets and admits up to `n(n-1)/2` possible binary relations. That
+cardinality does not prescribe the execution strategy. `find-conflicts`
+currently names every unordered pair as an explicit target.
+The shared redundancy analysis instead discovers equivalence components from a
+whole-Context input and emits only a linear set of positive pair-shaped
+evidence links. It never materializes the candidate-pair space.
+
+`find-ambiguities` uses “ambiguity” as the public quality category while
+preserving two independent judgments. `interpretation` describes whether
+ordinary reading yields one reading, a dominant reading plus alternatives, or
+several competing readings. `clarification` describes whether more information
+is unnecessary, useful, or required for safe use. These axes must remain
+separate: a sentence can have one reading but still omit contact information
+required to carry out its instruction, and intentional wordplay can have
+competing readings without needing clarification.
+
+For conflict, `MAY` is a semantic result, not model confidence. It means that
+ordinary readings supported by the current Context include both a conflicting
+and a jointly explainable interpretation. A missing entrance, audience, time,
+or other distinction is a typical cause. The judge returns `YES` when all
+materially ordinary scope-aligned readings conflict, `NO` when all such
+readings are jointly explainable, and `MAY` only when both outcomes occur
+among those readings. The persisted result does not force this cause into a
+fixed semantic-coordinate taxonomy; the reason and question carry the exact
+distinction needed for that pair.
+
+Duplicate relations likewise preserve boundaries that a removal stage needs:
+
+- `EXACT` means the two stored content strings are identical.
+- `SURFACE_EQUIVALENT` means conservative comparison normalization yields the
+  same key without changing stored content.
+- `SEMANTIC_EQUIVALENT` means either Memory can replace the other without
+  information loss under the same scope.
+- `OVERLAP` means the pair shares a claim but at least one Memory contains
+  unique information.
+- `UNKNOWN` means missing scope prevents an equivalence decision.
+- `DISTINCT` means the Memories are not substitutable.
+
+`OVERLAP`, `UNKNOWN`, and `DISTINCT` are calibration and rejection boundaries,
+not positive Dedun evidence. In particular, related information and
+missing scope must not be presented under a command whose positive result says
+that a pair is duplicate.
+
+## Local interpretation boundary
+
+The quality frame contains only directly owned Memories from the exact frozen
+set of effective readable Contexts. The whole combined set forms the local
+interpretation frame for each judgment. This implements the project assumption
+that conflict and ambiguity are judged under ordinary reading of the knowledge
+the person explicitly placed in scope, rather than against every imaginable
+outside premise. Context membership remains evidence: it is transmitted as
+candidate ownership and retained in each result source rather than flattened
+away semantically.
+
+The implementation does not recursively traverse embedded Context edges,
+dereference `memory_ref` values, or open query-only sources. A reference is a
+view of a Memory owned elsewhere, not a second candidate. Lexical descendants
+are ordinary independently loaded Contexts and are included only when the
+visible range control selects them. Embedded traversal remains deferred until
+it has a canonical logical identity, cycle handling, owner-aware results, and
+an explicit disclosure policy.
+
+## One-shot Context execution
+
+When semantic targets exist, each finder makes exactly one semantic-provider
+call for the complete aggregate direct-Memory frame; an empty semantic
+candidate set returns locally without opening a provider session. The
+operations use different target contracts:
+
+- ambiguity sends every direct Memory once as a unary target;
+- conflict sends every direct Memory plus every canonical unordered pair as an
+  explicit target;
+- duplicate first builds deterministic `EXACT` and `SURFACE_EQUIVALENT`
+  components with hash keys, then sends one representative per component.
+  The model returns disjoint `SEMANTIC_EQUIVALENT` groups of representative
+  IDs. The local program converts each group into a canonical spanning tree of
+  pair evidence instead of its quadratic pair clique.
+
+Duplicate discovery has no `pairs` or `unresolved_pairs` payload. Its
+representative reduction removes only equivalence already established by
+local exact or conservative surface comparison; it is not a similarity
+heuristic. Version 1 otherwise performs no embedding prefilter, similarity
+cutoff, or multi-call batching.
+
+The fixture loader validates each calibration file against the operation's
+declared `ruleset_version`. Individual one-shot reports do not retain that
+metadata, while durable Audit records the declared version beside each typed
+report. The provider payload still sends the calibrated cases rather than a
+separate ruleset field, so an Audit version identifies the host judgment
+contract but is not by itself full prompt-byte provenance.
+
+This choice favors an inspectable research contract:
+
+- conflict includes every pair explicitly, including lexically dissimilar
+  statements;
+- duplicate supplies every mechanically distinct representative once without
+  repeating it in a quadratic pair table;
+- all judgments use the same complete selected Context frame;
+- one invocation cannot combine silently different provider calls or partial
+  prompt contexts;
+- duplicate discovery does not depend on an undocumented retrieval heuristic.
+
+All one-shot operations still have a finite input boundary. Quality finders use
+the shared 1,000,000-character effective provider capacity and have no separate
+Memory-pair count gate. Conflict still materializes every explicit pair and is
+therefore ultimately bounded by the encoded provider payload rather than an
+arbitrary fixed pair count. Duplicate remains linear: its keyed grouping,
+representative payload, and returned spanning evidence are linear in the
+number and total text of the supplied Memories.
+
+This removes quadratic duplicate request construction; it does not make one
+provider call suitable for one million Memories. A million Memory bodies
+cannot fit in the current one-shot context. True million-scale semantic
+discovery requires deterministic indexing plus a separately specified
+candidate-generation, sharding, or batching mode whose recall and coverage
+are visible. The current command never silently truncates or presents such a
+partial scan as complete.
+
+The semantic finders reuse the same temporary ChatGPT-authenticated Codex
+provider as the existing `find`, `impact`, and `update` operations. They do not
+introduce a second provider path or a per-finder model router. The isolated
+provider ignores local model configuration and uses Codex's current
+recommended model selection. This keeps the implementation consistent with the
+other prototype operations, but it also means the exact model is not yet
+recorded in a finding report. A reproducible evaluation harness must capture
+the resolved model before comparing results across provider revisions. The
+provider remains a research-prototype dependency expected to be replaced by an
+MCP or internal-network provider later.
+
+## Read-only result contract
+
+The semantic finder commands:
+
+- accept the current or one explicit Context directly; Ambiguity and Conflict
+  additionally accept all readable Contexts through `-a/--all` or a frozen
+  readable Context range through explicit `--select`, while Redundancy remains
+  one exact Context;
+- validate model-returned opaque IDs against locally generated candidate IDs;
+- return the affected UID or UID pair, its label, and a concise rationale;
+- include an ordinary reading or a smallest useful clarifying question where
+  the operation contract calls for it;
+- make no Context write and create no checkpoint;
+- fail closed on malformed, duplicated, or out-of-scope provider output.
+
+For ambiguity results, proposed readings, reasons, and questions are requested
+in English so the review surface has one comparison language while still
+showing the original Memory unchanged. The reason connects the two ambiguity
+axes to a concrete outcome: what cannot be determined for `REQUIRED`, what
+would become more precise for `HELPFUL`, or why resolution is operationally
+unnecessary for `NONE`. It may use multiple sentences when one uncertainty
+affects several decisions. These are explanations, not structured affected
+result IDs or verified counterfactual counts.
+
+The structured result contains findings only:
+
+- ambiguity omits `SINGLE/NONE`;
+- conflict omits `NO`;
+- semantic duplicate detection omits `OVERLAP`, `UNKNOWN`, and `DISTINCT`.
+
+Ambiguity and conflict instruct the provider over explicit target lists.
+Duplicate instructs it to inspect every supplied representative and discover
+positive equivalence groups. In all three cases, absence is a production
+result rather than proof that the model considered or discovered every
+positive. Golden and held-out evaluation must measure omissions. If findings
+are later persisted or passed to another operation, their envelope must also
+record the ruleset and resolved provider/model.
+
+Mechanical duplicate comparison is deterministic and remains independently
+checkable. It uses keyed components and emits only enough `EXACT` and
+`SURFACE_EQUIVALENT` links to connect each component. The semantic call
+receives the first representative of each component once. Returned semantic
+groups must be disjoint and use only those known IDs; the local program emits
+one representative-to-member link per remaining group member. Thus the public
+pair shape is evidence, not a pre-enumerated search target.
+
+## Relationship to atomize, dedup, dedun, and reconcile
+
+Atomization remains the preferred first refinement stage because a composite
+Memory can hide an internal duplicate or make two partly overlapping records
+look wholly equivalent. It is a prerequisite that improves the units supplied
+to the finders, not a fourth quality finder and not behavior silently performed
+by any `find-*` command. The finders can still inspect unatomized intake, but
+their labels apply to the stored Memory boundaries they receive.
+
+`dedup` removes same-role exact direct-item occurrences without a provider or
+review screen. Memory keys use byte-identical content; Embed and Reference keys
+retain their live binding or snapshot provenance. `dedun` includes that entire
+exact layer, then adds semantic equivalence only among directly owned Memories,
+turns the role-bounded groups into a stale-safe plan, checks inbound references,
+and creates one checkpoint on Apply. Cross-role equality never authorizes
+removal.
+`OVERLAP` and `UNKNOWN` remain negative golden boundaries and must never flow
+into removal.
+
+`find-ambiguities` and `find-conflicts` remain separately callable because one
+is unary and the other pairwise, and because their labels answer different
+questions. A later `reconcile` operation may consume both result sets,
+identify a shared missing distinction from their reasons and questions, and
+propose the smallest clarification or edit. Reconciliation is combined
+reasoning over findings; it
+does not replace their detection and does not silently apply a resolution.
+The shared review-shell design may later render both finding types, but visual
+reuse does not merge their semantic units.
+
+## Calibration fixtures and evaluation boundary
+
+The initial fixtures live at:
+
+```text
+memcommit/eval/fixtures/ambiguity.json
+memcommit/eval/fixtures/conflict.json
+memcommit/eval/fixtures/duplicates.json
+```
+
+The ambiguity fixture covers the complete `3 × 3` cross-product of
+interpretation and clarification labels. The conflict fixture holds the
+entrance contrast under one shared frame so that `YES`, `MAY`, and `NO` differ
+only in whether the second Memory identifies the main, unspecified, or
+separate staff entrance. The duplicate fixture provides one boundary case for
+each relation.
+
+These are initial, inspectable calibration cases and golden contract
+regressions. If their examples or rationales are included in the provider
+prompt, scores on the same cases do not measure generalization. Independent
+held-out cases, paraphrased variants, multilingual variants, adversarial scope
+changes, and repeated-run stability tests must be maintained separately before
+making accuracy claims. Ruleset changes should version the fixture contract
+rather than silently rewriting the meaning of an existing label.
+
+## Intentional limitations
+
+Version 1 does not:
+
+- prove that no duplicate, ambiguity, or conflict exists outside the selected
+  direct-Memory frame;
+- infer a globally correct interpretation from facts absent from that frame;
+- scale past the declared one-shot payload; conflict additionally retains its
+  explicit pair boundary;
+- turn duplicate evidence into mutation-ready survivor groups, resolve
+  conflicts, answer clarifying questions, or mutate Memories;
+- answer its own follow-up questions or interpret its possible readings as a
+  reviewer decision; the separate `mem review ambiguities` operation owns that
+  answerable workflow;
+- treat `MAY` or `UNKNOWN` as provider-confidence scores;
+- use calibration cases as evidence of held-out performance.

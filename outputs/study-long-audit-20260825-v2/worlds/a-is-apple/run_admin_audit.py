@@ -34,7 +34,7 @@ LEDGER = WORLD / "phase-admin.json"
 RAW = WORLD / "raw/admin"
 HOST = WORLD / "host_reads/admin"
 SHOT_WORLD = WORLD / "screenshots/admin"
-SHOT_DOCS = REPO / "docs/screenshots/six-world-audit-v2-20260825/a-is-apple-admin"
+SHOT_AGENT_RECORDS = REPO / "agent-records/screenshots/six-world-audit-v2-20260825/a-is-apple-admin"
 PROFILE_CONTROL = Path(
     "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/"
     "worlds/a-is-apple/profile-control"
@@ -305,16 +305,16 @@ def _tui_steps(kind: str, child, buf: BytesIO, sequence: int, operation: str, at
         number = len(shots) + 1
         name = f"{sequence:03d}-{operation}-{attempt}-{number:02d}-{label}.png"
         world_path = SHOT_WORLD / name
-        docs_path = SHOT_DOCS / name
+        record_path = SHOT_AGENT_RECORDS / name
         _render(data, world_path)
-        docs_path.parent.mkdir(parents=True, exist_ok=True)
-        if docs_path.exists():
-            docs_path.unlink()
-        os.link(world_path, docs_path)
+        record_path.parent.mkdir(parents=True, exist_ok=True)
+        if record_path.exists():
+            record_path.unlink()
+        os.link(world_path, record_path)
         shots.append(world_path)
         log.append({
             "step": number, "screenshot": str(world_path.relative_to(AUDIT)),
-            "docs_copy": str(docs_path.relative_to(REPO)), "preceding_keys_or_text": key,
+            "agent_record_copy": str(record_path.relative_to(REPO)), "preceding_keys_or_text": key,
             "visible_state": label, "durable_state_mutated_at_step": mutation,
         })
 
@@ -377,14 +377,14 @@ def _run_tui(spec: Spec, args: tuple[str, ...], sequence: int):
     receipt_label = "success-receipt" if child.exitstatus == 0 and spec.tui in {"branch", "switch-entry", "help-emit"} else "cancel-or-failure-receipt"
     receipt_name = f"{sequence:03d}-{spec.operation}-{spec.attempt}-{len(shots)+1:02d}-{receipt_label}.png"
     receipt_world = SHOT_WORLD / receipt_name
-    receipt_docs = SHOT_DOCS / receipt_name
+    receipt_record = SHOT_AGENT_RECORDS / receipt_name
     _render(data, receipt_world)
-    if receipt_docs.exists():
-        receipt_docs.unlink()
-    os.link(receipt_world, receipt_docs)
+    if receipt_record.exists():
+        receipt_record.unlink()
+    os.link(receipt_world, receipt_record)
     shots.append(receipt_world)
     log.append({"step": len(shots), "screenshot": str(receipt_world.relative_to(AUDIT)),
-                "docs_copy": str(receipt_docs.relative_to(REPO)), "preceding_keys_or_text": "Enter/Escape then process exit",
+                "agent_record_copy": str(receipt_record.relative_to(REPO)), "preceding_keys_or_text": "Enter/Escape then process exit",
                 "visible_state": receipt_label, "durable_state_mutated_at_step": spec.tui in {"branch", "switch-entry"} and child.exitstatus == 0})
     raw_path = SHOT_WORLD / f"{sequence:03d}-{spec.operation}-{spec.attempt}-pty.bin"
     raw_path.write_bytes(data)
@@ -475,7 +475,7 @@ def _new_ledger(initial: str) -> dict:
 
 def main() -> None:
     global RUN_ID
-    for directory in (RAW,HOST,SHOT_WORLD,SHOT_DOCS,EVAL_DIR): directory.mkdir(parents=True,exist_ok=True)
+    for directory in (RAW,HOST,SHOT_WORLD,SHOT_AGENT_RECORDS,EVAL_DIR): directory.mkdir(parents=True,exist_ok=True)
     ledger=_json(LEDGER) if LEDGER.exists() else _new_ledger(_target_digest())
     completed={r["sequence"] for p in ledger["operations"].values() for r in p["attempts"]}
     prior=sorted((r for p in ledger["operations"].values() for r in p["attempts"]),key=lambda r:r["sequence"])
@@ -581,8 +581,8 @@ def main() -> None:
                        "identity_host_reads":len(list(HOST.glob("post-identity-*.json"))),"final_current_context":_current(),
                        "wall_seconds":round(sum(r["cost"]["wall_seconds"] for r in records),3)}
     _write_json(LEDGER,ledger)
-    readme=SHOT_DOCS/"README.md"
-    image_lines="\n".join(f"- `{p.name}`" for p in sorted(SHOT_DOCS.glob("*.png")))
+    readme=SHOT_AGENT_RECORDS/"README.md"
+    image_lines="\n".join(f"- `{p.name}`" for p in sorted(SHOT_AGENT_RECORDS.glob("*.png")))
     readme.write_text("# a-is-apple ADMIN interactive evidence\n\nAll captures are actual 180×52 xterm-256color PTY states. See the per-attempt interaction JSON mirrors under the world output.\n\n"+image_lines+"\n")
 
 

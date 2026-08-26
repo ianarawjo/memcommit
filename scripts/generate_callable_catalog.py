@@ -36,7 +36,7 @@ def main() -> int:
     args = parser.parse_args()
 
     snapshot = build_catalog(REPOSITORY)
-    output_dir = REPOSITORY / "docs" / "generated"
+    output_dir = REPOSITORY / "agent-records" / "generated"
     stale: list[str] = []
     for name, renderer in OUTPUTS.items():
         path = output_dir / name

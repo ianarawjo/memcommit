@@ -19,6 +19,15 @@ used later to reconstruct design decisions and write study materials. Treat
 the rationale as part of the deliverable rather than leaving it only in the
 conversation.
 
+Agent-maintained records and human-facing documentation are separate
+provenance classes. Content under `agent-records/` is agent-authored or
+agent-organized unless the individual file explicitly records human review.
+Its presence in the repository does not by itself mean that a person wrote,
+approved, or endorsed it. Do not create or update `docs/` unless the user
+explicitly requests a human-facing document or approves an exact document for
+that role; preserving verbatim human source material inside an agent record is
+not such approval.
+
 - Every commit created by an agent must explain both **what changed** and
   **why**. Use the subject for a concise outcome and the commit body for the
   problem or context, intended behavior, and reason for the chosen approach.
@@ -27,10 +36,10 @@ conversation.
   or compatibility boundary, and intentional non-goal. Keep the account
   concise and factual; do not invent retrospective certainty.
 - For a material or non-obvious design decision, create or update a focused
-  note under `docs/`, normally named `*-design-rationale.md`. Preserve the
-  motivating scenario, command or data contract, invariants, alternatives
-  considered, and limitations that may matter to a later implementation or
-  research write-up.
+  note under `agent-records/`, normally named `*-design-rationale.md`.
+  Preserve the motivating scenario, command or data contract, invariants,
+  alternatives considered, and limitations that may matter to a later
+  implementation or research write-up.
 - Put short comments next to non-obvious invariants, concurrency decisions,
   privacy boundaries, workarounds, and deliberately asymmetric behavior in the
   code. Comments should explain **why the code must behave this way**, not
@@ -45,19 +54,19 @@ conversation.
 
 ## Operation evidence ledger
 
-- Treat `docs/operation-route-classification.json` as the sole authored source
-  of operation-level `CLOSED`, `MIXED`, `LEGACY`, `N/A`, and `UNREVIEWED`
-  route state. Do not copy those judgments or their aggregate counts into the
-  distribution plan, shared consistency matrix, README, or a second status
-  table.
+- Treat `agent-records/operation-route-classification.json` as the sole
+  authored source of operation-level `CLOSED`, `MIXED`, `LEGACY`, `N/A`, and
+  `UNREVIEWED` route state. Do not copy those judgments or their aggregate
+  counts into the distribution plan, shared consistency matrix, README, or a
+  second status table.
 - Register every operation-focused boundary matrix and route-relevant
   rationale under its canonical Help operation in
-  `docs/operation-evidence-index.json`. This document-membership index may
-  contain partial evidence while the operation remains `UNREVIEWED`. When a
-  reviewed state changes, keep the version-1 classification evidence field
+  `agent-records/operation-evidence-index.json`. This document-membership index
+  may contain partial evidence while the operation remains `UNREVIEWED`. When
+  a reviewed state changes, keep the version-1 classification evidence field
   identical to the evidence index until its callable-catalog compatibility
   schema is migrated.
-- Never edit `docs/generated/operation-evidence-index.md` directly. Run
+- Never edit `agent-records/generated/operation-evidence-index.md` directly. Run
   `python scripts/verify_operation_evidence.py` after changing either registry,
   then run `python scripts/verify_operation_evidence.py --check` before a
   commit. The check must remain part of CI.
@@ -68,14 +77,14 @@ conversation.
   evidence under every operation it covers.
 - Work and record each operation separately while its authority, cache,
   provider, receipt, review, Apply, and adapter boundaries are still being
-  established. Update `docs/operation-consistency-matrix.md` only for shared
-  contract evidence; its row state is not an operation route state.
+  established. Update `agent-records/operation-consistency-matrix.md` only for
+  shared contract evidence; its row state is not an operation route state.
 - Do not move the existing flat operation documents merely to normalize their
   layout. They may be consolidated into operation directories later, after
   document roles and boundaries stabilize, by atomically migrating registry
   paths and all links. Keep
-  `docs/operation-evidence-ledger-design-rationale.md` consistent with that
-  eventual migration.
+  `agent-records/operation-evidence-ledger-design-rationale.md` consistent with
+  that eventual migration.
 
 ## Existing Context locators
 
@@ -98,7 +107,7 @@ conversation.
   rollout: display and freeze the canonical target before approval so a raw
   relative locator cannot change meaning with global current state.
 - Keep the implementation and rollout list consistent with
-  `docs/context-locator-design-rationale.md`.
+  `agent-records/context-locator-design-rationale.md`.
 
 ## Grant-aware readable Contexts
 
@@ -199,7 +208,7 @@ conversation.
   `WHOLE_FRAME_ONLY`; the shared planner may fail them before provider
   connection but must not partition their Source or criterion frames.
 - Keep implementation status and limitations consistent with
-  `docs/semantic-execution-planning-design-rationale.md`.
+  `agent-records/semantic-execution-planning-design-rationale.md`.
 
 ## Selective curation batches
 
@@ -219,7 +228,7 @@ conversation.
   mutation checks; Sever must leave Source unchanged and create its reviewed
   require-new result under its derived-work permissions.
 - Keep the implementation and rollout limitations consistent with
-  `docs/selective-curation-design-rationale.md`.
+  `agent-records/selective-curation-design-rationale.md`.
 
 ## Terminal color semantics
 
@@ -235,11 +244,12 @@ conversation.
   safety boundary differs; do not substitute a final-state screenshot for the
   intervening process.
 - Store those snapshots as an ordered, numbered set under one focused
-  `docs/screenshots/...` directory. Keep a README or interaction log beside
-  them that maps every image to the exact command, PTY size, profile/current
-  Context, preceding keys or text, visible state, and whether that step mutated
-  durable state. A later behavior change must refresh the affected snapshots
-  and log entries so the recorded process continues to match the implementation.
+  `agent-records/screenshots/...` directory. Keep a README or interaction log
+  beside them that maps every image to the exact command, PTY size,
+  profile/current Context, preceding keys or text, visible state, and whether
+  that step mutated durable state. A later behavior change must refresh the
+  affected snapshots and log entries so the recorded process continues to
+  match the implementation.
 - Whenever a task creates or refreshes terminal captures, render the complete
   newly created or updated ordered image set directly in the current
   conversation before reporting completion. Use absolute local Markdown image
@@ -277,8 +287,8 @@ conversation.
   relevant, and the ordered keys or text sent between captures. For a failure,
   also record the precondition that triggered it and verify whether any partial
   state was published. Keep this interaction log beside the images under a
-  focused `docs/screenshots/...` directory when the captures are part of the
-  repository's debugging or study record.
+  focused `agent-records/screenshots/...` directory when the captures are part
+  of the repository's debugging or study record.
 - Prefer a real terminal screenshot. If GUI automation is unavailable, render
   the actual color-preserving PTY byte stream rather than substituting a
   synthetic fixture, and label the image with that provenance. Preserve the
@@ -315,7 +325,7 @@ conversation.
   must retain the same labels, ordering, symbols, and safety boundaries. Tests
   must cover both semantic role selection and ANSI-free text equivalence.
 - Keep the palette, adapters, tests, and
-  `docs/terminal-semantic-color-design-rationale.md` consistent whenever a
+  `agent-records/terminal-semantic-color-design-rationale.md` consistent whenever a
   semantic role or alias changes. Do not repurpose an established role merely
   to make an unrelated status visually distinct.
 - Preserve the Switch Context picker's narrow categorical contract: color only

@@ -99,7 +99,7 @@ Distill.
 1. Add one reviewed Ground action for replacing/reconciling a complete Rule set
    instead of retaining a composite-Rule workaround.
 2. Add the non-destructive Context-binding refresh described in
-   `docs/ground-ticker-iterative-flow-todo.md`.
+   `agent-records/ground-ticker-iterative-flow-todo.md`.
 3. Apply bound-Context freshness before provider construction consistently in
    Fit and Ground Elaborate.
 4. Strengthen Fit beyond schema/exhaustiveness so a judgment reason that

@@ -1,0 +1,1913 @@
+{
+  "evaluation": "incremental ticker Ground Fit",
+  "provider": {
+    "name": "codex_chatgpt",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "none"
+  },
+  "source_distill_evidence": "agent-records/screenshots/mem-distill-ticker-20260815/actual-run.json",
+  "ground": {
+    "name": "ticker-fit-incremental",
+    "schema_version": 3,
+    "final_revision": 27,
+    "final_digest": "be440e6abaf44fc9a4489307e486e48df47d717b5c5f40d36e627f1bfb0b40fc",
+    "rule_count": 5,
+    "example_count": 20
+  },
+  "incremental_revision_ledger": [
+    {
+      "action": "create-bound-upgrade-v3",
+      "revision": 0,
+      "digest": "2fc99de04cc64401ac61f5a90656d93c3da0235966e6f69b9ea222f10814440c"
+    },
+    {
+      "action": "add-rule-1",
+      "revision": 1,
+      "digest": "21ed51cd0938202748bb6405bdd0293c08d8db3d156be933a39838302c103c1c"
+    },
+    {
+      "action": "add-rule-2",
+      "revision": 2,
+      "digest": "779ef4450b21ba7a1137f084e466824f709ecc7116f64d3a35289bf39a24d363"
+    },
+    {
+      "action": "add-rule-3",
+      "revision": 3,
+      "digest": "f2b291a1a733f27acbc7d1838c951ba09615313337c4b404c8164e5a87239789"
+    },
+    {
+      "action": "add-rule-4",
+      "revision": 4,
+      "digest": "6a52ed770bb6fa6ea14196aec99a2c9b45d96fbc8512e872f791b079e0e58eed"
+    },
+    {
+      "action": "add-rule-5",
+      "revision": 5,
+      "digest": "83eab7d892f11ac177d1af375abfbc4f319ab861ccfece4da94d6815f2bfe2cb"
+    },
+    {
+      "action": "add-example-01",
+      "revision": 6,
+      "digest": "4a95847d9557f34b392441f06580da76e5351b34611437a6e20a32854f8061f4"
+    },
+    {
+      "action": "add-example-02",
+      "revision": 7,
+      "digest": "676631d52ce2da47b7cad933f3dd8f3a2886f1c6a90bee23444debc70609fe5b"
+    },
+    {
+      "action": "add-example-03",
+      "revision": 8,
+      "digest": "22875810c116b4c51986978ae1febcf626b91cce4a8487076338a129f06a49df"
+    },
+    {
+      "action": "add-example-04",
+      "revision": 9,
+      "digest": "88f8446b0e66467e2f7fbd9788a5b251337de1ee7195f1a9a73fff5bc95afde5"
+    },
+    {
+      "action": "add-example-05",
+      "revision": 10,
+      "digest": "c2fc5cd7b9d3d9199da2720d70ac8084a06b67fd386593035a902c94a646f70f"
+    },
+    {
+      "action": "add-example-06",
+      "revision": 11,
+      "digest": "762de93da03c0d85f13528709e16a926511d1d858b766ab2b1f0e94e8e290535"
+    },
+    {
+      "action": "add-example-07",
+      "revision": 12,
+      "digest": "da43f2dcc547ca51c61d4603302e499f1ab6c76f0f5f59d7a7517cbe56c490d2"
+    },
+    {
+      "action": "add-example-08",
+      "revision": 13,
+      "digest": "7162e7c8fac51c1704b2afb13a3dc83fc9286b1622fc56c7d2d5f075302bcc4c"
+    },
+    {
+      "action": "add-example-09",
+      "revision": 14,
+      "digest": "eccfcef33dfe4df5fd9f196b8339530a72b6f91325548d1208c7b35bff422e9b"
+    },
+    {
+      "action": "add-example-10",
+      "revision": 15,
+      "digest": "654043966568b749716615de776fd1c63c57aaab9742f62857f282d30a788b54"
+    },
+    {
+      "action": "add-example-11",
+      "revision": 16,
+      "digest": "a4de7c49bbc30d8807565699c768810ea18f90857af4f7d3d240f483971e7a38"
+    },
+    {
+      "action": "add-example-12",
+      "revision": 17,
+      "digest": "24b4fd181715c1c40acfbd1b53f9ff09021c34ad5884bca81ab693b455e737e8"
+    },
+    {
+      "action": "add-example-13",
+      "revision": 18,
+      "digest": "bd580c5268e16c21240613da1cc4ea7432647b93101d6744034657ca87265734"
+    },
+    {
+      "action": "add-example-14",
+      "revision": 19,
+      "digest": "b2dbf18f67a89613dea869ebcef8c3182d184d3aac86e70a715dde2c20fce1e0"
+    },
+    {
+      "action": "add-example-15",
+      "revision": 20,
+      "digest": "f6ff52f0a4713a57e1526b3874f594e5b65c73a93e22859b5630b9d7d2b5e249"
+    },
+    {
+      "action": "add-example-16",
+      "revision": 21,
+      "digest": "a43a210633389b05881c0a3d0ffaa917421a882667d3ce63018aff83e786baab"
+    },
+    {
+      "action": "add-example-17",
+      "revision": 22,
+      "digest": "ef5c63472f3dcfc013ff0d082df17c2d6f392f4a3bd83c753247215f8d543269"
+    },
+    {
+      "action": "add-example-18",
+      "revision": 23,
+      "digest": "a0587a61af67a81f8be1f9fbe698e0e43e5afb1ebcc5b4dd03429f4ef3e04686"
+    },
+    {
+      "action": "add-example-19",
+      "revision": 24,
+      "digest": "1d2342655ce83bbe0851533152e0336779ac0f8f38b2366abf2604228ca84fba"
+    },
+    {
+      "action": "refine-rule-2",
+      "revision": 25,
+      "digest": "58c6dc4c8a149812e9831911f97fd4446de5220dcbe9d0c58ed0e7dec2ec8386"
+    },
+    {
+      "action": "refine-rule-3",
+      "revision": 26,
+      "digest": "b25e1743b62f755c5a7ee304cf7d8623f972c5b0b11ee252aec74d8cd3b183cb"
+    },
+    {
+      "action": "add-example-20",
+      "revision": 27,
+      "digest": "be440e6abaf44fc9a4489307e486e48df47d717b5c5f40d36e627f1bfb0b40fc"
+    }
+  ],
+  "stale_checks": {
+    "first_receipt_stale_after_example_19": true,
+    "second_receipt_stale_after_rule_and_example_revisions": true,
+    "final_receipt_current": true
+  },
+  "fit_runs": [
+    {
+      "schema_version": 1,
+      "ruleset_version": "ground-fit-v1",
+      "uid": "2bbe7788-9dd1-4f34-903f-17eef099a3fa",
+      "ground_uid": "e54d11ba-9baa-4c46-beac-44d647ebc3d8",
+      "ground_name": "ticker-fit-incremental",
+      "ground_revision": 23,
+      "ground_digest": "a0587a61af67a81f8be1f9fbe698e0e43e5afb1ebcc5b4dd03429f4ef3e04686",
+      "rules": [
+        {
+          "uid": "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+          "alias": "r1",
+          "statement": "When generating a synthetic ticker, first remove a leading article such as ‘The,’ discard legal-form suffixes such as Inc., LLC, Ltd., PLC, Corp., or Corporation, and ignore connectors such as ‘&’ when selecting ticker characters; preserve meaningful numeric tokens."
+        },
+        {
+          "uid": "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+          "alias": "r2",
+          "statement": "When the normalized company name has two or more meaningful words, form the base ticker from the initial character of each meaningful word, using the numeric character for a number-bearing word; preserve a meaningful abbreviation such as ‘AI’ as a single ticker component."
+        },
+        {
+          "uid": "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+          "alias": "r3",
+          "statement": "When the normalized company name is a single word, derive a concise three-letter mnemonic from that word rather than applying the multiword-initial rule."
+        },
+        {
+          "uid": "d009a381-3b03-4c52-9260-ac4f8810776a",
+          "alias": "r4",
+          "statement": "When share-class details are present, keep the ordinary company base ticker and append a dot suffix: ‘.A’ or ‘.B’ for the corresponding class and ‘.P’ for Preferred."
+        },
+        {
+          "uid": "d2d75577-6d24-4577-b9b6-d613c4dcb210",
+          "alias": "r5",
+          "statement": "Treat every generated symbol under these rules as a synthetic mnemonic; do not represent it as an official, unique, or exchange-valid market ticker without separate verification."
+        }
+      ],
+      "examples": [
+        {
+          "uid": "186237fa-9cb2-452c-bc98-08cd8e71026d",
+          "alias": "e1",
+          "statement": "Applying the synthetic ticker Rules to \"North Star Energy Inc.\" produces \"NSE\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "cfc7925d-73b3-42bc-9aa1-fb47109dfcf6",
+          "alias": "e2",
+          "statement": "Applying the synthetic ticker Rules to \"Blue River Holdings LLC\" produces \"BRH\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "b98f1c1a-7c8d-4441-8d2c-4324a77d6274",
+          "alias": "e3",
+          "statement": "Applying the synthetic ticker Rules to \"Cedar Valley Technologies Corporation\" produces \"CVT\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "66d82d99-9df2-431f-98e8-016099cedc5e",
+          "alias": "e4",
+          "statement": "Applying the synthetic ticker Rules to \"Aurora Robotics Ltd.\" produces \"AR\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "975eaebf-8b24-4bfe-b8e6-ca78ed70295b",
+          "alias": "e5",
+          "statement": "Applying the synthetic ticker Rules to \"Harbor Point Foods PLC\" produces \"HPF\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "a167c6c0-0a6b-4ccd-8519-8730c931fda9",
+          "alias": "e6",
+          "statement": "Applying the synthetic ticker Rules to \"The Meridian Group Inc.\" produces \"MG\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "4af53d72-4159-4bd2-a05a-929d384358f5",
+          "alias": "e7",
+          "statement": "Applying the synthetic ticker Rules to \"Lumen Labs LLC\" produces \"LL\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "df1b265e-1aea-4bea-a9aa-769e99acba65",
+          "alias": "e8",
+          "statement": "Applying the synthetic ticker Rules to \"Quanta Systems & Services Inc.\" produces \"QSS\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "761f0594-0eb6-404c-a54a-488fea36073a",
+          "alias": "e9",
+          "statement": "Applying the synthetic ticker Rules to \"Atlas 7 Networks Corp.\" produces \"A7N\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "7dbc7263-fa93-47e0-a698-87ddacf22da8",
+          "alias": "e10",
+          "statement": "Applying the synthetic ticker Rules to \"3 Rivers Logistics LLC\" produces \"3RL\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "e684c62e-7510-4cb2-8529-f02777ffa3b4",
+          "alias": "e11",
+          "statement": "Applying the synthetic ticker Rules to \"Redwood Inc.\" produces \"RED\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "5e9dd871-9d7e-415c-860a-2ec627046a23",
+          "alias": "e12",
+          "statement": "Applying the synthetic ticker Rules to \"Meridian Corporation\" produces \"MER\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "7d72d4d5-431f-4b79-8c2f-e0de2884a51e",
+          "alias": "e13",
+          "statement": "Applying the synthetic ticker Rules to \"Solstice Ltd.\" produces \"SOL\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "5ced074a-0d15-483c-85d5-6de7b3394a1e",
+          "alias": "e14",
+          "statement": "Applying the synthetic ticker Rules to \"International Business Fabricators Inc.\" produces \"IBF\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "3df27cae-0b84-455d-beba-e43d2ff15062",
+          "alias": "e15",
+          "statement": "Applying the synthetic ticker Rules to \"North Star Energy Inc., Class B\" produces \"NSE.B\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "c0fa037b-cb8e-4f03-9d3c-ddf8ddc01024",
+          "alias": "e16",
+          "statement": "Applying the synthetic ticker Rules to \"North Star Energy Inc., Class A\" produces \"NSE.A\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "d573439b-7880-4bfd-acd2-7a9bfbc6b54d",
+          "alias": "e17",
+          "statement": "Applying the synthetic ticker Rules to \"Blue River Holdings LLC, Preferred\" produces \"BRH.P\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "cd859974-f557-4404-8a37-a2ae723d8af1",
+          "alias": "e18",
+          "statement": "Applying the synthetic ticker Rules to \"Acme & Sons Ltd.\" produces \"AS\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        }
+      ],
+      "judgments": [
+        {
+          "example_uid": "186237fa-9cb2-452c-bc98-08cd8e71026d",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "After removing “Inc.,” the meaningful words are North, Star, and Energy; their initials determine NSE.",
+          "observed": ""
+        },
+        {
+          "example_uid": "cfc7925d-73b3-42bc-9aa1-fb47109dfcf6",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "After removing “LLC,” the meaningful-word initials determine BRH.",
+          "observed": ""
+        },
+        {
+          "example_uid": "b98f1c1a-7c8d-4441-8d2c-4324a77d6274",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "After removing “Corporation,” the meaningful-word initials determine CVT.",
+          "observed": ""
+        },
+        {
+          "example_uid": "66d82d99-9df2-431f-98e8-016099cedc5e",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "After removing “Ltd.,” the meaningful-word initials determine AR.",
+          "observed": ""
+        },
+        {
+          "example_uid": "975eaebf-8b24-4bfe-b8e6-ca78ed70295b",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "After removing “PLC,” the meaningful-word initials determine HPF.",
+          "observed": ""
+        },
+        {
+          "example_uid": "a167c6c0-0a6b-4ccd-8519-8730c931fda9",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "Removing the leading article “The” and suffix “Inc.” leaves Meridian Group, which determines MG.",
+          "observed": ""
+        },
+        {
+          "example_uid": "4af53d72-4159-4bd2-a05a-929d384358f5",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "After removing “LLC,” the initials of Lumen and Labs determine LL.",
+          "observed": ""
+        },
+        {
+          "example_uid": "df1b265e-1aea-4bea-a9aa-769e99acba65",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "Removing “Inc.” and ignoring the connector “&” leaves Quanta, Systems, and Services, determining QSS.",
+          "observed": ""
+        },
+        {
+          "example_uid": "761f0594-0eb6-404c-a54a-488fea36073a",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "Removing “Corp.” and preserving the meaningful numeric token yields the components A, 7, and N, determining A7N.",
+          "observed": ""
+        },
+        {
+          "example_uid": "7dbc7263-fa93-47e0-a698-87ddacf22da8",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "Removing “LLC” and preserving the meaningful numeric token yields 3, R, and L, determining 3RL.",
+          "observed": ""
+        },
+        {
+          "example_uid": "e684c62e-7510-4cb2-8529-f02777ffa3b4",
+          "status": "UNDERDETERMINED",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "The Rules require a concise three-letter mnemonic for the single word Redwood but do not specify a conversion that uniquely determines RED.",
+          "observed": ""
+        },
+        {
+          "example_uid": "5e9dd871-9d7e-415c-860a-2ec627046a23",
+          "status": "UNDERDETERMINED",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "After removing “Corporation,” Meridian is a single word; the Rules do not uniquely determine the exact mnemonic MER.",
+          "observed": ""
+        },
+        {
+          "example_uid": "7d72d4d5-431f-4b79-8c2f-e0de2884a51e",
+          "status": "UNDERDETERMINED",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "After removing “Ltd.,” Solstice is a single word; the Rules do not uniquely determine the exact mnemonic SOL.",
+          "observed": ""
+        },
+        {
+          "example_uid": "5ced074a-0d15-483c-85d5-6de7b3394a1e",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "After removing “Inc.,” the initials of International, Business, and Fabricators determine IBF.",
+          "observed": ""
+        },
+        {
+          "example_uid": "3df27cae-0b84-455d-beba-e43d2ff15062",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "The base ticker NSE is determined from the company name, and Class B requires the suffix .B.",
+          "observed": ""
+        },
+        {
+          "example_uid": "c0fa037b-cb8e-4f03-9d3c-ddf8ddc01024",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "The base ticker NSE is determined from the company name, and Class A requires the suffix .A.",
+          "observed": ""
+        },
+        {
+          "example_uid": "d573439b-7880-4bfd-acd2-7a9bfbc6b54d",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "The base ticker BRH is determined from the company name, and Preferred requires the suffix .P.",
+          "observed": ""
+        },
+        {
+          "example_uid": "cd859974-f557-4404-8a37-a2ae723d8af1",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "Removing “Ltd.” and ignoring “&” leaves Acme and Sons, whose initials determine AS.",
+          "observed": ""
+        }
+      ],
+      "overview": "Multiword and share-class results are determined by the Rules. The exact three-letter mnemonics for single-word names are underdetermined because no deterministic mnemonic-conversion method is specified.",
+      "created_at": "2026-08-15T13:35:24.974658Z",
+      "provider_identity": {
+        "provider": "codex_chatgpt",
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "runtime": "codex-cli",
+        "endpoint": null,
+        "reasoning_effort": "none"
+      }
+    },
+    {
+      "schema_version": 1,
+      "ruleset_version": "ground-fit-v1",
+      "uid": "686638e8-c87a-47ad-838e-d35762133f2b",
+      "ground_uid": "e54d11ba-9baa-4c46-beac-44d647ebc3d8",
+      "ground_name": "ticker-fit-incremental",
+      "ground_revision": 24,
+      "ground_digest": "1d2342655ce83bbe0851533152e0336779ac0f8f38b2366abf2604228ca84fba",
+      "rules": [
+        {
+          "uid": "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+          "alias": "r1",
+          "statement": "When generating a synthetic ticker, first remove a leading article such as ‘The,’ discard legal-form suffixes such as Inc., LLC, Ltd., PLC, Corp., or Corporation, and ignore connectors such as ‘&’ when selecting ticker characters; preserve meaningful numeric tokens."
+        },
+        {
+          "uid": "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+          "alias": "r2",
+          "statement": "When the normalized company name has two or more meaningful words, form the base ticker from the initial character of each meaningful word, using the numeric character for a number-bearing word; preserve a meaningful abbreviation such as ‘AI’ as a single ticker component."
+        },
+        {
+          "uid": "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+          "alias": "r3",
+          "statement": "When the normalized company name is a single word, derive a concise three-letter mnemonic from that word rather than applying the multiword-initial rule."
+        },
+        {
+          "uid": "d009a381-3b03-4c52-9260-ac4f8810776a",
+          "alias": "r4",
+          "statement": "When share-class details are present, keep the ordinary company base ticker and append a dot suffix: ‘.A’ or ‘.B’ for the corresponding class and ‘.P’ for Preferred."
+        },
+        {
+          "uid": "d2d75577-6d24-4577-b9b6-d613c4dcb210",
+          "alias": "r5",
+          "statement": "Treat every generated symbol under these rules as a synthetic mnemonic; do not represent it as an official, unique, or exchange-valid market ticker without separate verification."
+        }
+      ],
+      "examples": [
+        {
+          "uid": "186237fa-9cb2-452c-bc98-08cd8e71026d",
+          "alias": "e1",
+          "statement": "Applying the synthetic ticker Rules to \"North Star Energy Inc.\" produces \"NSE\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "cfc7925d-73b3-42bc-9aa1-fb47109dfcf6",
+          "alias": "e2",
+          "statement": "Applying the synthetic ticker Rules to \"Blue River Holdings LLC\" produces \"BRH\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "b98f1c1a-7c8d-4441-8d2c-4324a77d6274",
+          "alias": "e3",
+          "statement": "Applying the synthetic ticker Rules to \"Cedar Valley Technologies Corporation\" produces \"CVT\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "66d82d99-9df2-431f-98e8-016099cedc5e",
+          "alias": "e4",
+          "statement": "Applying the synthetic ticker Rules to \"Aurora Robotics Ltd.\" produces \"AR\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "975eaebf-8b24-4bfe-b8e6-ca78ed70295b",
+          "alias": "e5",
+          "statement": "Applying the synthetic ticker Rules to \"Harbor Point Foods PLC\" produces \"HPF\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "a167c6c0-0a6b-4ccd-8519-8730c931fda9",
+          "alias": "e6",
+          "statement": "Applying the synthetic ticker Rules to \"The Meridian Group Inc.\" produces \"MG\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "4af53d72-4159-4bd2-a05a-929d384358f5",
+          "alias": "e7",
+          "statement": "Applying the synthetic ticker Rules to \"Lumen Labs LLC\" produces \"LL\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "df1b265e-1aea-4bea-a9aa-769e99acba65",
+          "alias": "e8",
+          "statement": "Applying the synthetic ticker Rules to \"Quanta Systems & Services Inc.\" produces \"QSS\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "761f0594-0eb6-404c-a54a-488fea36073a",
+          "alias": "e9",
+          "statement": "Applying the synthetic ticker Rules to \"Atlas 7 Networks Corp.\" produces \"A7N\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "7dbc7263-fa93-47e0-a698-87ddacf22da8",
+          "alias": "e10",
+          "statement": "Applying the synthetic ticker Rules to \"3 Rivers Logistics LLC\" produces \"3RL\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "e684c62e-7510-4cb2-8529-f02777ffa3b4",
+          "alias": "e11",
+          "statement": "Applying the synthetic ticker Rules to \"Redwood Inc.\" produces \"RED\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "5e9dd871-9d7e-415c-860a-2ec627046a23",
+          "alias": "e12",
+          "statement": "Applying the synthetic ticker Rules to \"Meridian Corporation\" produces \"MER\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "7d72d4d5-431f-4b79-8c2f-e0de2884a51e",
+          "alias": "e13",
+          "statement": "Applying the synthetic ticker Rules to \"Solstice Ltd.\" produces \"SOL\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "5ced074a-0d15-483c-85d5-6de7b3394a1e",
+          "alias": "e14",
+          "statement": "Applying the synthetic ticker Rules to \"International Business Fabricators Inc.\" produces \"IBF\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "3df27cae-0b84-455d-beba-e43d2ff15062",
+          "alias": "e15",
+          "statement": "Applying the synthetic ticker Rules to \"North Star Energy Inc., Class B\" produces \"NSE.B\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "c0fa037b-cb8e-4f03-9d3c-ddf8ddc01024",
+          "alias": "e16",
+          "statement": "Applying the synthetic ticker Rules to \"North Star Energy Inc., Class A\" produces \"NSE.A\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "d573439b-7880-4bfd-acd2-7a9bfbc6b54d",
+          "alias": "e17",
+          "statement": "Applying the synthetic ticker Rules to \"Blue River Holdings LLC, Preferred\" produces \"BRH.P\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "cd859974-f557-4404-8a37-a2ae723d8af1",
+          "alias": "e18",
+          "statement": "Applying the synthetic ticker Rules to \"Acme & Sons Ltd.\" produces \"AS\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "adbb0643-9bd1-4b10-a58c-567a872a5ac4",
+          "alias": "e19",
+          "statement": "Applying the synthetic ticker Rules to \"Axiom AI Technologies Inc.\" produces \"AAT\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        }
+      ],
+      "judgments": [
+        {
+          "example_uid": "186237fa-9cb2-452c-bc98-08cd8e71026d",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "After discarding “Inc.,” the meaningful words North, Star, and Energy yield the initials N, S, and E.",
+          "observed": ""
+        },
+        {
+          "example_uid": "cfc7925d-73b3-42bc-9aa1-fb47109dfcf6",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "After discarding “LLC,” Blue, River, and Holdings yield B, R, and H.",
+          "observed": ""
+        },
+        {
+          "example_uid": "b98f1c1a-7c8d-4441-8d2c-4324a77d6274",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "After discarding “Corporation,” Cedar, Valley, and Technologies yield C, V, and T.",
+          "observed": ""
+        },
+        {
+          "example_uid": "66d82d99-9df2-431f-98e8-016099cedc5e",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "After discarding “Ltd.,” Aurora and Robotics yield A and R.",
+          "observed": ""
+        },
+        {
+          "example_uid": "975eaebf-8b24-4bfe-b8e6-ca78ed70295b",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "After discarding “PLC,” Harbor, Point, and Foods yield H, P, and F.",
+          "observed": ""
+        },
+        {
+          "example_uid": "a167c6c0-0a6b-4ccd-8519-8730c931fda9",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "After removing the leading article “The” and discarding “Inc.,” Meridian and Group yield M and G.",
+          "observed": ""
+        },
+        {
+          "example_uid": "4af53d72-4159-4bd2-a05a-929d384358f5",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "After discarding “LLC,” Lumen and Labs yield L and L.",
+          "observed": ""
+        },
+        {
+          "example_uid": "df1b265e-1aea-4bea-a9aa-769e99acba65",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "After ignoring “&” and discarding “Inc.,” Quanta, Systems, and Services yield Q, S, and S.",
+          "observed": ""
+        },
+        {
+          "example_uid": "761f0594-0eb6-404c-a54a-488fea36073a",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "After discarding “Corp.,” Atlas, the meaningful numeric token 7, and Networks yield A, 7, and N.",
+          "observed": ""
+        },
+        {
+          "example_uid": "7dbc7263-fa93-47e0-a698-87ddacf22da8",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "After discarding “LLC,” the meaningful numeric token 3, Rivers, and Logistics yield 3, R, and L.",
+          "observed": ""
+        },
+        {
+          "example_uid": "e684c62e-7510-4cb2-8529-f02777ffa3b4",
+          "status": "UNDERDETERMINED",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "After discarding “Inc.,” Redwood is a single word, but the Rules do not specify which three letters its concise mnemonic must contain.",
+          "observed": ""
+        },
+        {
+          "example_uid": "5e9dd871-9d7e-415c-860a-2ec627046a23",
+          "status": "UNDERDETERMINED",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "After discarding “Corporation,” Meridian is a single word, but the Rules do not determine the exact three-letter mnemonic “MER.”",
+          "observed": ""
+        },
+        {
+          "example_uid": "7d72d4d5-431f-4b79-8c2f-e0de2884a51e",
+          "status": "UNDERDETERMINED",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "After discarding “Ltd.,” Solstice is a single word, but the Rules do not determine the exact three-letter mnemonic “SOL.”",
+          "observed": ""
+        },
+        {
+          "example_uid": "5ced074a-0d15-483c-85d5-6de7b3394a1e",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "After discarding “Inc.,” International, Business, and Fabricators yield I, B, and F.",
+          "observed": ""
+        },
+        {
+          "example_uid": "3df27cae-0b84-455d-beba-e43d2ff15062",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "North, Star, and Energy yield NSE, and the Class B detail requires the suffix “.B.”",
+          "observed": ""
+        },
+        {
+          "example_uid": "c0fa037b-cb8e-4f03-9d3c-ddf8ddc01024",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "North, Star, and Energy yield NSE, and the Class A detail requires the suffix “.A.”",
+          "observed": ""
+        },
+        {
+          "example_uid": "d573439b-7880-4bfd-acd2-7a9bfbc6b54d",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "Blue, River, and Holdings yield BRH, and the Preferred detail requires the suffix “.P.”",
+          "observed": ""
+        },
+        {
+          "example_uid": "cd859974-f557-4404-8a37-a2ae723d8af1",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "After ignoring “&” and discarding “Ltd.,” Acme and Sons yield A and S.",
+          "observed": ""
+        },
+        {
+          "example_uid": "adbb0643-9bd1-4b10-a58c-567a872a5ac4",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "After discarding “Inc.,” Axiom contributes A, the meaningful abbreviation AI is preserved as one component, and Technologies contributes T, producing AAT.",
+          "observed": ""
+        }
+      ],
+      "overview": "All multiword and share-class examples are determined by the Rules. The three single-word examples are underdetermined because the Rules require a concise three-letter mnemonic but do not specify the exact character-selection method.",
+      "created_at": "2026-08-15T13:35:58.207685Z",
+      "provider_identity": {
+        "provider": "codex_chatgpt",
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "runtime": "codex-cli",
+        "endpoint": null,
+        "reasoning_effort": "none"
+      }
+    },
+    {
+      "schema_version": 1,
+      "ruleset_version": "ground-fit-v1",
+      "uid": "9bccf2aa-2066-4b1c-9593-a7c99f47d761",
+      "ground_uid": "e54d11ba-9baa-4c46-beac-44d647ebc3d8",
+      "ground_name": "ticker-fit-incremental",
+      "ground_revision": 27,
+      "ground_digest": "be440e6abaf44fc9a4489307e486e48df47d717b5c5f40d36e627f1bfb0b40fc",
+      "rules": [
+        {
+          "uid": "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+          "alias": "r1",
+          "statement": "When generating a synthetic ticker, first remove a leading article such as ‘The,’ discard legal-form suffixes such as Inc., LLC, Ltd., PLC, Corp., or Corporation, and ignore connectors such as ‘&’ when selecting ticker characters; preserve meaningful numeric tokens."
+        },
+        {
+          "uid": "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+          "alias": "r2",
+          "statement": "When a normalized company name has two or more meaningful words, form the base ticker from exactly one leading alphanumeric character per meaningful word; a multi-letter abbreviation such as ‘AI’ contributes only its first character, while a number-bearing word preserves its leading numeric character."
+        },
+        {
+          "uid": "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+          "alias": "r3",
+          "statement": "When the normalized company name is a single word, form the base ticker from exactly its first three alphabetic characters in uppercase."
+        },
+        {
+          "uid": "d009a381-3b03-4c52-9260-ac4f8810776a",
+          "alias": "r4",
+          "statement": "When share-class details are present, keep the ordinary company base ticker and append a dot suffix: ‘.A’ or ‘.B’ for the corresponding class and ‘.P’ for Preferred."
+        },
+        {
+          "uid": "d2d75577-6d24-4577-b9b6-d613c4dcb210",
+          "alias": "r5",
+          "statement": "Treat every generated symbol under these rules as a synthetic mnemonic; do not represent it as an official, unique, or exchange-valid market ticker without separate verification."
+        }
+      ],
+      "examples": [
+        {
+          "uid": "186237fa-9cb2-452c-bc98-08cd8e71026d",
+          "alias": "e1",
+          "statement": "Applying the synthetic ticker Rules to \"North Star Energy Inc.\" produces \"NSE\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "cfc7925d-73b3-42bc-9aa1-fb47109dfcf6",
+          "alias": "e2",
+          "statement": "Applying the synthetic ticker Rules to \"Blue River Holdings LLC\" produces \"BRH\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "b98f1c1a-7c8d-4441-8d2c-4324a77d6274",
+          "alias": "e3",
+          "statement": "Applying the synthetic ticker Rules to \"Cedar Valley Technologies Corporation\" produces \"CVT\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "66d82d99-9df2-431f-98e8-016099cedc5e",
+          "alias": "e4",
+          "statement": "Applying the synthetic ticker Rules to \"Aurora Robotics Ltd.\" produces \"AR\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "975eaebf-8b24-4bfe-b8e6-ca78ed70295b",
+          "alias": "e5",
+          "statement": "Applying the synthetic ticker Rules to \"Harbor Point Foods PLC\" produces \"HPF\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "a167c6c0-0a6b-4ccd-8519-8730c931fda9",
+          "alias": "e6",
+          "statement": "Applying the synthetic ticker Rules to \"The Meridian Group Inc.\" produces \"MG\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "4af53d72-4159-4bd2-a05a-929d384358f5",
+          "alias": "e7",
+          "statement": "Applying the synthetic ticker Rules to \"Lumen Labs LLC\" produces \"LL\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "df1b265e-1aea-4bea-a9aa-769e99acba65",
+          "alias": "e8",
+          "statement": "Applying the synthetic ticker Rules to \"Quanta Systems & Services Inc.\" produces \"QSS\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "761f0594-0eb6-404c-a54a-488fea36073a",
+          "alias": "e9",
+          "statement": "Applying the synthetic ticker Rules to \"Atlas 7 Networks Corp.\" produces \"A7N\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "7dbc7263-fa93-47e0-a698-87ddacf22da8",
+          "alias": "e10",
+          "statement": "Applying the synthetic ticker Rules to \"3 Rivers Logistics LLC\" produces \"3RL\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "e684c62e-7510-4cb2-8529-f02777ffa3b4",
+          "alias": "e11",
+          "statement": "Applying the synthetic ticker Rules to \"Redwood Inc.\" produces \"RED\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "5e9dd871-9d7e-415c-860a-2ec627046a23",
+          "alias": "e12",
+          "statement": "Applying the synthetic ticker Rules to \"Meridian Corporation\" produces \"MER\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "7d72d4d5-431f-4b79-8c2f-e0de2884a51e",
+          "alias": "e13",
+          "statement": "Applying the synthetic ticker Rules to \"Solstice Ltd.\" produces \"SOL\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "5ced074a-0d15-483c-85d5-6de7b3394a1e",
+          "alias": "e14",
+          "statement": "Applying the synthetic ticker Rules to \"International Business Fabricators Inc.\" produces \"IBF\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "3df27cae-0b84-455d-beba-e43d2ff15062",
+          "alias": "e15",
+          "statement": "Applying the synthetic ticker Rules to \"North Star Energy Inc., Class B\" produces \"NSE.B\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "c0fa037b-cb8e-4f03-9d3c-ddf8ddc01024",
+          "alias": "e16",
+          "statement": "Applying the synthetic ticker Rules to \"North Star Energy Inc., Class A\" produces \"NSE.A\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "d573439b-7880-4bfd-acd2-7a9bfbc6b54d",
+          "alias": "e17",
+          "statement": "Applying the synthetic ticker Rules to \"Blue River Holdings LLC, Preferred\" produces \"BRH.P\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "cd859974-f557-4404-8a37-a2ae723d8af1",
+          "alias": "e18",
+          "statement": "Applying the synthetic ticker Rules to \"Acme & Sons Ltd.\" produces \"AS\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "adbb0643-9bd1-4b10-a58c-567a872a5ac4",
+          "alias": "e19",
+          "statement": "Applying the synthetic ticker Rules to \"Axiom AI Technologies Inc.\" produces \"AAT\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        },
+        {
+          "uid": "de9296fb-3c7c-4312-a83f-f5830ac5f380",
+          "alias": "e20",
+          "statement": "Applying the synthetic ticker Rules to \"The 5th Avenue Retail Group LLC\" produces \"5ARG\".",
+          "projection": "PROPOSITION",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "input_text": null,
+          "expected_output": null
+        }
+      ],
+      "judgments": [
+        {
+          "example_uid": "186237fa-9cb2-452c-bc98-08cd8e71026d",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "After removing Inc., the three meaningful words contribute N, S, and E.",
+          "observed": ""
+        },
+        {
+          "example_uid": "cfc7925d-73b3-42bc-9aa1-fb47109dfcf6",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "After removing LLC, Blue, River, and Holdings contribute B, R, and H.",
+          "observed": ""
+        },
+        {
+          "example_uid": "b98f1c1a-7c8d-4441-8d2c-4324a77d6274",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "After removing Corporation, the three meaningful words contribute C, V, and T.",
+          "observed": ""
+        },
+        {
+          "example_uid": "66d82d99-9df2-431f-98e8-016099cedc5e",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "After removing Ltd., Aurora and Robotics contribute A and R.",
+          "observed": ""
+        },
+        {
+          "example_uid": "975eaebf-8b24-4bfe-b8e6-ca78ed70295b",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "After removing PLC, Harbor, Point, and Foods contribute H, P, and F.",
+          "observed": ""
+        },
+        {
+          "example_uid": "a167c6c0-0a6b-4ccd-8519-8730c931fda9",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "Removing the leading article The and suffix Inc. leaves Meridian and Group, contributing M and G.",
+          "observed": ""
+        },
+        {
+          "example_uid": "4af53d72-4159-4bd2-a05a-929d384358f5",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "After removing LLC, Lumen and Labs contribute L and L.",
+          "observed": ""
+        },
+        {
+          "example_uid": "df1b265e-1aea-4bea-a9aa-769e99acba65",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "Removing Inc. and ignoring the connector & leaves Quanta, Systems, and Services, contributing Q, S, and S.",
+          "observed": ""
+        },
+        {
+          "example_uid": "761f0594-0eb6-404c-a54a-488fea36073a",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "After removing Corp., Atlas, 7, and Networks contribute A, 7, and N; the numeric token is preserved.",
+          "observed": ""
+        },
+        {
+          "example_uid": "7dbc7263-fa93-47e0-a698-87ddacf22da8",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "After removing LLC, 3, Rivers, and Logistics contribute 3, R, and L.",
+          "observed": ""
+        },
+        {
+          "example_uid": "e684c62e-7510-4cb2-8529-f02777ffa3b4",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "Removing Inc. leaves the single word Redwood, whose first three alphabetic characters are RED.",
+          "observed": ""
+        },
+        {
+          "example_uid": "5e9dd871-9d7e-415c-860a-2ec627046a23",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "Removing Corporation leaves the single word Meridian, whose first three alphabetic characters are MER.",
+          "observed": ""
+        },
+        {
+          "example_uid": "7d72d4d5-431f-4b79-8c2f-e0de2884a51e",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "Removing Ltd. leaves the single word Solstice, whose first three alphabetic characters are SOL.",
+          "observed": ""
+        },
+        {
+          "example_uid": "5ced074a-0d15-483c-85d5-6de7b3394a1e",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "After removing Inc., International, Business, and Fabricators contribute I, B, and F.",
+          "observed": ""
+        },
+        {
+          "example_uid": "3df27cae-0b84-455d-beba-e43d2ff15062",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "North Star Energy yields NSE, and Class B requires the .B suffix.",
+          "observed": ""
+        },
+        {
+          "example_uid": "c0fa037b-cb8e-4f03-9d3c-ddf8ddc01024",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "North Star Energy yields NSE, and Class A requires the .A suffix.",
+          "observed": ""
+        },
+        {
+          "example_uid": "d573439b-7880-4bfd-acd2-7a9bfbc6b54d",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "Blue River Holdings yields BRH, and Preferred requires the .P suffix.",
+          "observed": ""
+        },
+        {
+          "example_uid": "cd859974-f557-4404-8a37-a2ae723d8af1",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "Removing Ltd. and ignoring & leaves Acme and Sons, contributing A and S.",
+          "observed": ""
+        },
+        {
+          "example_uid": "adbb0643-9bd1-4b10-a58c-567a872a5ac4",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "After removing Inc., Axiom, AI, and Technologies each contribute one leading character, producing AAT.",
+          "observed": ""
+        },
+        {
+          "example_uid": "de9296fb-3c7c-4312-a83f-f5830ac5f380",
+          "status": "FIT",
+          "rule_uids": [
+            "b134ff68-e4bd-463d-b3f0-2e1fa07c9884",
+            "05df74f1-06d8-4923-85a9-2aa00e0ab773",
+            "798bad5b-0904-469b-9aa8-dd7a6c65f519",
+            "d009a381-3b03-4c52-9260-ac4f8810776a",
+            "d2d75577-6d24-4577-b9b6-d613c4dcb210"
+          ],
+          "reason": "Removing The and LLC leaves 5th, Avenue, Retail, and Group; their leading alphanumeric characters produce 5ARG.",
+          "observed": ""
+        }
+      ],
+      "overview": "All examples follow the stated normalization, base-ticker, and share-class rules and present the outputs as synthetic rather than verified official tickers.",
+      "created_at": "2026-08-15T13:36:15.539588Z",
+      "provider_identity": {
+        "provider": "codex_chatgpt",
+        "model": "gpt-5.6-sol",
+        "model_digest": null,
+        "runtime": "codex-cli",
+        "endpoint": null,
+        "reasoning_effort": "none"
+      }
+    }
+  ],
+  "temporary_store_removed": true
+}

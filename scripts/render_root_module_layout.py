@@ -14,8 +14,8 @@ import tarfile
 
 REPOSITORY = Path(__file__).resolve().parents[1]
 PACKAGE = REPOSITORY / "src" / "memcommit"
-OUTPUT_JSON = REPOSITORY / "docs" / "root-module-relocation-plan.json"
-OUTPUT_MARKDOWN = REPOSITORY / "docs" / "root-module-relocation-plan.md"
+OUTPUT_JSON = REPOSITORY / "agent-records" / "root-module-relocation-plan.json"
+OUTPUT_MARKDOWN = REPOSITORY / "agent-records" / "root-module-relocation-plan.md"
 LEGACY_ALIAS_MODULE = (
     REPOSITORY / "src" / "memcommit" / "compatibility" / "_legacy_alias_map.py"
 )

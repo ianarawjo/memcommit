@@ -14,7 +14,7 @@ from memcommit.help_catalog import OPERATION_HELP_BY_NAME
 
 
 REPOSITORY = Path(__file__).parents[1]
-GENERATED = REPOSITORY / "docs" / "generated"
+GENERATED = REPOSITORY / "agent-records" / "generated"
 
 
 def _snapshot():
