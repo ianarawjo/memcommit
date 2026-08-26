@@ -45,7 +45,7 @@ from memcommit.operations.dedup.application import (
     recommended_dedup_selections,
 )
 from memcommit.operations.dedup.runtime import MemoryStoreDedupPort
-from memcommit.dedun_scope import (
+from memcommit.operations.dedun.scope import (
     DedunScopeReceipt,
     apply_recursive_dedun_scope,
     freeze_recursive_dedun_scope,
