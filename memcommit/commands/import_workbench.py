@@ -28,14 +28,14 @@ from memcommit.context_targeting.tui.name_editor import (
     ContextNameView,
     choose_context_name,
 )
-from memcommit.profile_config import (
+from memcommit.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,
     load_profile_registry,
     profile_store_dir,
     validate_profile_name,
 )
-from memcommit.profiles import ProfileError
+from memcommit.operations.profile.model import ProfileError
 from memcommit.operations.resource_import.model import (
     ContextImportPlan,
     MemoryImportPlan,

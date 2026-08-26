@@ -39,7 +39,7 @@ from prompt_toolkit.input import Input
 from prompt_toolkit.key_binding.key_processor import KeyPress
 from prompt_toolkit.keys import Keys
 
-from memcommit.profile_config import (
+from memcommit.operations.profile.config import (
     ProfileConfigError,
     ProfileEntry,
     profile_store_dir,

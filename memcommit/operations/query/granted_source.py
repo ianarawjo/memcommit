@@ -14,8 +14,8 @@ from memcommit.flow_placeholder import (
     FlowPlaceholderError,
     render_flow_circular_placeholder,
 )
-from memcommit.profile_config import GrantContextBinding, load_profile_registry
-from memcommit.profiles import GrantedContextView
+from memcommit.operations.profile.config import GrantContextBinding, load_profile_registry
+from memcommit.operations.profile.model import GrantedContextView
 from memcommit.store import MemoryStore
 from memcommit.operations.translate.view import (
     TranslationCatalog,

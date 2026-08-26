@@ -14,14 +14,14 @@ from memcommit.context import (
     QueryContextRef,
 )
 from memcommit.context_locator import resolve_context_locator
-from memcommit.profile_config import (
+from memcommit.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,
     load_profile_registry,
     profile_store_dir,
     validate_profile_name,
 )
-from memcommit.profiles import (
+from memcommit.operations.profile.model import (
     ProfileError,
     StoreInspection,
     authority_grant_snapshot_lock,

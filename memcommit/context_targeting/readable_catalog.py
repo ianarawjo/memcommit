@@ -20,13 +20,13 @@ from memcommit.context_targeting.catalog import (
 )
 from memcommit.context_targeting.model import ContextScope
 from memcommit.context_targeting.resolution import expand_lexical_context_names
-from memcommit.profile_config import (
+from memcommit.operations.profile.config import (
     AuthorityGrant,
     ProfileRegistry,
     load_profile_registry,
     profile_store_dir,
 )
-from memcommit.profiles import ProfileError
+from memcommit.operations.profile.model import ProfileError
 from memcommit.source_projection.presentation import SourceDisplayValue
 from memcommit.store import MemoryStore
 

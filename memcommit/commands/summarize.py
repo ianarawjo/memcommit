@@ -45,8 +45,8 @@ from memcommit.interfaces.tui.operations.summarize import (
     SummarizeTuiSetup,
     project_summarize_clipboard,
 )
-from memcommit.profile_config import ProfileConfigError
-from memcommit.profiles import ProfileError
+from memcommit.operations.profile.config import ProfileConfigError
+from memcommit.operations.profile.model import ProfileError
 from memcommit.infrastructure.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,

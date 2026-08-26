@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from memcommit.api.query import QueryProviderConfig
-from memcommit.profile_config import ProfileEntry, ProfileRegistry
+from memcommit.operations.profile.config import ProfileEntry, ProfileRegistry
 from memcommit.store import MemoryStore
 
 

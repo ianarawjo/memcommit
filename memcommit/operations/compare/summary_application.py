@@ -19,7 +19,7 @@ from memcommit.operations.compare.summary_provider import (
 )
 from memcommit.context import Context
 from memcommit.authority.derived_policy import authorize_combination
-from memcommit.profiles import authority_grant_snapshot_lock
+from memcommit.operations.profile.model import authority_grant_snapshot_lock
 from memcommit.store import MemoryStore
 
 

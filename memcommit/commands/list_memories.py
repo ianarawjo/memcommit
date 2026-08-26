@@ -41,8 +41,8 @@ from memcommit.interfaces.console.identity import collision_safe_uid_prefixes
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )
-from memcommit.profile_config import AuthorityGrant, ProfileConfigError
-from memcommit.profiles import ProfileError
+from memcommit.operations.profile.config import AuthorityGrant, ProfileConfigError
+from memcommit.operations.profile.model import ProfileError
 from memcommit.store import MemoryStore
 from memcommit.operations.update.model import GrantedUpdateTarget
 from memcommit.authority.study_operation_policy import analysis_boundary_label

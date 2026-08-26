@@ -50,9 +50,9 @@ from memcommit.infrastructure.providers.subscription import (
     connect_codex_chatgpt_provider,
 )
 from memcommit.retained_history.provenance import ProvenanceError
-from memcommit.profile_config import ProfileConfigError
-from memcommit.profile_config import load_profile_registry
-from memcommit.profiles import ProfileError
+from memcommit.operations.profile.config import ProfileConfigError
+from memcommit.operations.profile.config import load_profile_registry
+from memcommit.operations.profile.model import ProfileError
 from memcommit.store import MemoryStore
 from memcommit.infrastructure.command_ledger.study_actions import (
     StudyActionError,

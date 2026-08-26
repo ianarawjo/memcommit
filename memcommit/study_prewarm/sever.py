@@ -20,7 +20,7 @@ from memcommit.authority.derived_policy import (
     authorize_combination,
     authorize_derived_transfer,
 )
-from memcommit.profile_config import ProfileEntry, ProfileRegistry, study_run_identity
+from memcommit.operations.profile.config import ProfileEntry, ProfileRegistry, study_run_identity
 from memcommit.operations.sever.model import (
     SEVER_SCHEMA_VERSION,
     SeverContextBinding,

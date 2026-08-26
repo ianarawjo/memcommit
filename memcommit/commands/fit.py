@@ -29,8 +29,8 @@ from memcommit.interfaces.cli.fit import (
 )
 from memcommit.interfaces.console.text import display_escape_text
 from memcommit.interfaces.fit import fit_result_text
-from memcommit.profile_config import ProfileConfigError
-from memcommit.profiles import ProfileError
+from memcommit.operations.profile.config import ProfileConfigError
+from memcommit.operations.profile.model import ProfileError
 from memcommit.infrastructure.providers.subscription import QueryProviderError, connect_semantic_provider
 from memcommit.store import MemoryStore
 

@@ -11,8 +11,8 @@ from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.context_locator import resolve_context_locator
 from memcommit.context_targeting.model import ContextScope
 from memcommit.context_targeting.resolution import expand_lexical_context_names
-from memcommit.profile_config import ProfileRegistry, profile_store_dir
-from memcommit.profiles import (
+from memcommit.operations.profile.config import ProfileRegistry, profile_store_dir
+from memcommit.operations.profile.model import (
     ShareEndpoint,
     authority_grant_snapshot_lock,
     resolve_share_endpoint,

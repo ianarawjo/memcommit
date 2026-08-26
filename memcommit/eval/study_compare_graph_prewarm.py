@@ -58,8 +58,8 @@ from memcommit.eval.compare_latency_ab import (
     _run_compact,
 )
 from memcommit.operations.compare.ledger.provider import analyze_comparison
-from memcommit.profile_config import load_profile_registry
-from memcommit.profiles import _study_practice_contexts
+from memcommit.operations.profile.config import load_profile_registry
+from memcommit.operations.profile.model import _study_practice_contexts
 from memcommit.infrastructure.providers.types import (
     CODEX_CHATGPT_PROVIDER,
     CODEX_REASONING_EFFORTS,

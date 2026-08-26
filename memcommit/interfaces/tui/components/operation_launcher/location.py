@@ -6,7 +6,7 @@ from pathlib import Path
 
 import memcommit.store as store_module
 from memcommit.interfaces.tui.components.operation_launcher import LauncherOrientation
-from memcommit.profile_config import (
+from memcommit.operations.profile.config import (
     ProfileConfigError,
     load_profile_registry,
     profile_store_dir,

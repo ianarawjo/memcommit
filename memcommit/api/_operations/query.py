@@ -42,12 +42,12 @@ from memcommit.operations.query.ordinary_runtime import execute_ordinary_query
 from memcommit.operations.query.reference_application import QueryReferenceRequest
 from memcommit.operations.query.reference_runtime import execute_query_reference
 from memcommit.operations.query.answer import OrdinaryQueryCorpusTooLarge
-from memcommit.profile_config import (
+from memcommit.operations.profile.config import (
     ProfileConfigError,
     load_profile_registry,
     profile_store_dir,
 )
-from memcommit.profiles import ProfileError
+from memcommit.operations.profile.model import ProfileError
 from memcommit.infrastructure.providers.subscription import QueryProviderError
 from memcommit.operations.search.model import FindError
 

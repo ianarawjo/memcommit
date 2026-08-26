@@ -25,12 +25,12 @@ from memcommit.api.errors import (
     AddStorageError,
 )
 from memcommit.context_locator import resolve_context_locator
-from memcommit.profile_config import (
+from memcommit.operations.profile.config import (
     ProfileConfigError,
     load_profile_registry,
     profile_store_dir,
 )
-from memcommit.profiles import ProfileError
+from memcommit.operations.profile.model import ProfileError
 from memcommit.store import ConcurrentContextUpdateError
 
 

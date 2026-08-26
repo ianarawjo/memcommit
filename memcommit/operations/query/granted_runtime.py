@@ -25,12 +25,12 @@ from memcommit.operations.query.granted_source import (
     load_authority_query_catalog,
     load_authority_query_source,
 )
-from memcommit.profile_config import (
+from memcommit.operations.profile.config import (
     AuthorityGrant,
     load_profile_registry,
     profile_store_dir,
 )
-from memcommit.profiles import (
+from memcommit.operations.profile.model import (
     authority_grant_snapshot_lock,
     resolve_granted_context_view,
 )

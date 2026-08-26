@@ -11,8 +11,8 @@ from memcommit.context_targeting.presets import (
     resolve_scope_preset,
 )
 from memcommit.interfaces.cli.status import render_status
-from memcommit.profile_config import ProfileConfigError
-from memcommit.profiles import ProfileError
+from memcommit.operations.profile.config import ProfileConfigError
+from memcommit.operations.profile.model import ProfileError
 from memcommit.operations.status.application import (
     NoCurrentStatusContextError,
     StatusError,

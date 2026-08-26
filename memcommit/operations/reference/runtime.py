@@ -42,8 +42,8 @@ from memcommit.operations.reference.application import (
     validate_context_reference_request,
     validate_reference_request,
 )
-from memcommit.profile_config import profile_store_dir
-from memcommit.profiles import authority_grant_snapshot_lock
+from memcommit.operations.profile.config import profile_store_dir
+from memcommit.operations.profile.model import authority_grant_snapshot_lock
 from memcommit.store import MemoryStore, context_record_digest
 
 

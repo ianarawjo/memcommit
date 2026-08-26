@@ -47,7 +47,7 @@ from memcommit.context_targeting.context_catalog import (
     ContextCatalogDiagnosticCode,
     ContextCatalogScan,
 )
-from memcommit.profile_config import resolve_active_store_dir
+from memcommit.operations.profile.config import resolve_active_store_dir
 from memcommit.authority.storage_permissions import (
     ensure_private_directory,
     open_private_exclusive,

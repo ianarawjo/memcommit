@@ -24,8 +24,8 @@ from memcommit.operations.embed.application import (
     MemoryEmbedRequest,
 )
 from memcommit.operations.embed.runtime import execute_embed, execute_memory_embed
-from memcommit.profile_config import ProfileConfigError
-from memcommit.profiles import ProfileError
+from memcommit.operations.profile.config import ProfileConfigError
+from memcommit.operations.profile.model import ProfileError
 from memcommit.store import ConcurrentContextUpdateError
 
 

@@ -20,7 +20,7 @@ from memcommit.reviewing.direct_item_duplicates import (
     ExactDuplicateKind,
     find_exact_duplicate_groups,
 )
-from memcommit.profile_config import ProfileRegistry
+from memcommit.operations.profile.config import ProfileRegistry
 from memcommit.store import MemoryStore, context_record_digest
 
 

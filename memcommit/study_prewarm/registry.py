@@ -20,7 +20,7 @@ import shutil
 from typing import Literal
 import uuid
 
-from memcommit.profile_config import profile_control_dir
+from memcommit.operations.profile.config import profile_control_dir
 
 
 REGISTRY_DIRECTORY_NAME = "study-semantic-prewarm"

@@ -54,8 +54,8 @@ from memcommit.interfaces.tui.workbenches.impact import ImpactController
 from memcommit.interfaces.console.text import display_escape_text
 from memcommit.interfaces.tui.operations.forget import choose_forget_setup
 from memcommit.reviewing.memory_diff import MemoryChange
-from memcommit.profile_config import ProfileConfigError
-from memcommit.profiles import ProfileError
+from memcommit.operations.profile.config import ProfileConfigError
+from memcommit.operations.profile.model import ProfileError
 from memcommit.reviewing.quality.handoff import (
     QualityFindingHandoffError,
     conflict_handoff_to_resolve_request,

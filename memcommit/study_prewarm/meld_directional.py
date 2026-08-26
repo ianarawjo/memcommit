@@ -41,7 +41,7 @@ from memcommit.operations.meld.model import (
 )
 from memcommit.operations.meld.provider import MELD_DIRECTIONAL_PROVIDER_CONTRACT_VERSION
 from memcommit.operations.compare.ledger.granted_store import recursive_comparison_projection
-from memcommit.profile_config import (
+from memcommit.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,
     load_profile_registry,

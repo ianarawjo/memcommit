@@ -15,7 +15,7 @@ from memcommit.context_targeting.memory_focus import (
     resolve_memory_focus,
 )
 from memcommit.semantic.goal_focus import FrozenGoalFocus, GoalFocusError
-from memcommit.profile_config import ProfileConfigError, canonical_grant_permissions
+from memcommit.operations.profile.config import ProfileConfigError, canonical_grant_permissions
 from memcommit.semantic_execution import (
     BudgetLimits,
     BudgetVector,

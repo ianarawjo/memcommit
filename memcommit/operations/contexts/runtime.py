@@ -12,7 +12,7 @@ from memcommit.operations.contexts.application import (
     ContextCatalogEntry,
     ContextsCatalog,
 )
-from memcommit.profile_config import load_profile_registry
+from memcommit.operations.profile.config import load_profile_registry
 from memcommit.store import MemoryStore
 
 

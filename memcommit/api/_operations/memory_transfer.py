@@ -33,8 +33,8 @@ from memcommit.operations.memory_transfer.application import (
     run_move,
 )
 from memcommit.operations.memory_transfer.runtime import MemoryStoreMemoryTransferPort
-from memcommit.profile_config import ProfileConfigError
-from memcommit.profiles import ProfileError
+from memcommit.operations.profile.config import ProfileConfigError
+from memcommit.operations.profile.model import ProfileError
 from memcommit.store import ConcurrentContextUpdateError
 from memcommit.authority.write_protection import WriteProtectionError
 

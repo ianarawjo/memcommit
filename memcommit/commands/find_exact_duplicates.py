@@ -27,8 +27,8 @@ from memcommit.operations.exact_dedup.application import (
 )
 from memcommit.interfaces.console.identity import collision_safe_uid_prefixes
 from memcommit.interfaces.console.text import display_escape_text
-from memcommit.profile_config import ProfileConfigError
-from memcommit.profiles import ProfileError
+from memcommit.operations.profile.config import ProfileConfigError
+from memcommit.operations.profile.model import ProfileError
 from memcommit.reviewing.read_report import ReadReportTarget
 from memcommit.store import MemoryStore
 

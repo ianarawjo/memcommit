@@ -16,12 +16,12 @@ from memcommit.infrastructure.providers.policy import (
     STUDY_PROVIDER_POLICY_VERSION,
 )
 from memcommit.commands.study_name_dialog import choose_study_profile_name
-from memcommit.profile_config import (
+from memcommit.operations.profile.config import (
     ProfileConfigError,
     load_profile_registry,
     study_run_identity,
 )
-from memcommit.profiles import (
+from memcommit.operations.profile.model import (
     ProfileError,
     STUDY_BASELINE_PROFILE_NAME,
     generate_study_profile_name,

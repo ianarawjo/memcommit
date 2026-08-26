@@ -15,8 +15,8 @@ from memcommit.retained_history.context_snapshot import ContextSnapshotRef
 from memcommit.context_targeting.model import ContextScope
 from memcommit.context_targeting.readable_catalog import ReadableContextCatalog
 from memcommit.context_targeting.resolution import expand_lexical_context_names
-from memcommit.profile_config import ProfileRegistry, profile_store_dir
-from memcommit.profiles import (
+from memcommit.operations.profile.config import ProfileRegistry, profile_store_dir
+from memcommit.operations.profile.model import (
     authority_grant_snapshot_lock,
     grants_for_attachment,
 )

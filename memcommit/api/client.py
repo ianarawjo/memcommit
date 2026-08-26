@@ -77,7 +77,7 @@ from memcommit.api.semantic import (
 )
 from memcommit.context import QueryContextRef
 from memcommit.reviewing.quality.handoff import QualityFindingHandoff
-from memcommit.profile_config import (
+from memcommit.operations.profile.config import (
     ProfileConfigError,
     ProfileEntry,
     ProfileRegistry,

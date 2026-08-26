@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from typing import Literal, Sequence
 
 from memcommit.help_catalog.model import OperationHelp
-from memcommit.profile_config import load_profile_registry, study_run_identity
+from memcommit.operations.profile.config import load_profile_registry, study_run_identity
 from memcommit.interfaces.tui.operations.help.localization import (
     HELP_LANGUAGES,
     HelpLanguage,

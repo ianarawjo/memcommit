@@ -6,7 +6,7 @@ from collections.abc import Iterable
 from typing import Literal
 
 from memcommit.authority.access import ContextAccess
-from memcommit.profiles import ProfileError
+from memcommit.operations.profile.model import ProfileError
 
 
 AnalysisRetention = Literal["GRANT_BOUND", "RETAINED"]

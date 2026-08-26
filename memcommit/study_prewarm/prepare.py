@@ -30,7 +30,7 @@ from memcommit.eval.study_compare_graph_prewarm import TaskGraphPlan
 from memcommit.infrastructure.providers.policy import (
     resolve_operation_provider_policy,
 )
-from memcommit.profile_config import (
+from memcommit.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,
     profile_control_dir,

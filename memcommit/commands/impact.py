@@ -93,8 +93,8 @@ from memcommit.infrastructure.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )
-from memcommit.profile_config import ProfileConfigError
-from memcommit.profiles import (
+from memcommit.operations.profile.config import ProfileConfigError
+from memcommit.operations.profile.model import (
     ProfileError,
     authority_grant_snapshot_lock,
 )

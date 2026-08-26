@@ -6,8 +6,8 @@ from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.interfaces.console.text import display_escape_text
 from memcommit.operations.clear.application import ClearRequest
 from memcommit.operations.clear.runtime import execute_clear
-from memcommit.profile_config import ProfileConfigError
-from memcommit.profiles import ProfileError
+from memcommit.operations.profile.config import ProfileConfigError
+from memcommit.operations.profile.model import ProfileError
 from memcommit.store import MemoryStore
 
 

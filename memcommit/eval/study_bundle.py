@@ -29,7 +29,7 @@ from memcommit.eval.study_fixtures import (
     load_study_fixture,
     pair_fixture_translations,
 )
-from memcommit.profile_config import GRANT_PERMISSIONS
+from memcommit.operations.profile.config import GRANT_PERMISSIONS
 from memcommit.store import MemoryStore
 from memcommit.operations.translate.view import (
     TRANSLATION_ORIGIN_IMPORTED,

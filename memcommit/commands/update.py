@@ -56,8 +56,8 @@ from memcommit.operations.update.granted_source_application import (
     apply_granted_source_staged_update,
 )
 from memcommit.operations.update.granted_application import apply_granted_staged_update
-from memcommit.profile_config import ProfileConfigError
-from memcommit.profiles import ProfileError
+from memcommit.operations.profile.config import ProfileConfigError
+from memcommit.operations.profile.model import ProfileError
 from memcommit.infrastructure.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,

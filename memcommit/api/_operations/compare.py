@@ -41,7 +41,7 @@ from memcommit.operations.compare.ledger.session_application import (
 from memcommit.operations.compare.ledger.store import ConcurrentComparisonUpdateError
 from memcommit.context_locator import resolve_context_locator
 from memcommit.operations.compare.ledger.granted_store import load_granted_comparison_artifact
-from memcommit.profiles import ProfileError, authority_grant_snapshot_lock
+from memcommit.operations.profile.model import ProfileError, authority_grant_snapshot_lock
 from memcommit.study_prewarm.compare import (
     EquivalentComparePrewarmMatch,
     find_declared_equivalent_compare_analysis,

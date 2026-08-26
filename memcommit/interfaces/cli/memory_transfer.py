@@ -27,8 +27,8 @@ from memcommit.operations.memory_transfer.runtime import MemoryStoreMemoryTransf
 from memcommit.interfaces.tui.operations.memory_transfer import (
     choose_memory_transfer_setup,
 )
-from memcommit.profile_config import ProfileConfigError
-from memcommit.profiles import ProfileError
+from memcommit.operations.profile.config import ProfileConfigError
+from memcommit.operations.profile.model import ProfileError
 from memcommit.store import ConcurrentContextUpdateError, MemoryStore
 from memcommit.authority.write_protection import WriteProtectionError
 

@@ -22,8 +22,8 @@ from memcommit.operations.find.literal_application import (
     LiteralFindRequest,
 )
 from memcommit.operations.find.literal_runtime import execute_literal_find
-from memcommit.profile_config import ProfileConfigError
-from memcommit.profiles import ProfileError
+from memcommit.operations.profile.config import ProfileConfigError
+from memcommit.operations.profile.model import ProfileError
 
 
 def _current_name(runtime: ClientRuntime) -> str | None:

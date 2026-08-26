@@ -6,8 +6,8 @@ from memcommit.interfaces.console.text import (
 from memcommit.interfaces.console.theme import SOURCE_CAPABILITY_RGB
 from memcommit.operations.contexts.application import ContextCatalogEntry
 from memcommit.operations.contexts.runtime import load_contexts_catalog
-from memcommit.profile_config import ProfileConfigError
-from memcommit.profiles import ProfileError
+from memcommit.operations.profile.config import ProfileConfigError
+from memcommit.operations.profile.model import ProfileError
 from memcommit.store import MemoryStore
 
 

@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal
 
-from memcommit.profile_config import (
+from memcommit.operations.profile.config import (
     ProfileRegistry,
     load_profile_registry,
     study_run_identity,

@@ -18,7 +18,7 @@ from memcommit.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
     parse_direct_memory_locator,
 )
-from memcommit.profile_config import ProfileRegistry
+from memcommit.operations.profile.config import ProfileRegistry
 from memcommit.store import MemoryStore
 
 

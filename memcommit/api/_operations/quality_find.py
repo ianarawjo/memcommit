@@ -23,12 +23,12 @@ from memcommit.context_locator import resolve_context_locator
 from memcommit.authority.derived_policy import authorize_combination
 from memcommit.reviewing.direct_item_duplicates import find_exact_duplicate_groups
 from memcommit.reviewing.quality.findings import ConflictReport, FindingsError
-from memcommit.profile_config import (
+from memcommit.operations.profile.config import (
     ProfileConfigError,
     load_profile_registry,
     profile_store_dir,
 )
-from memcommit.profiles import ProfileError
+from memcommit.operations.profile.model import ProfileError
 from memcommit.reviewing.quality.workbench import (
     QualityFindKind,
     QualityFindSourceFrame,

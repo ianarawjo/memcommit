@@ -32,12 +32,12 @@ from memcommit.operations.dedup.application import (
     prepare_dedup,
 )
 from memcommit.operations.dedup.runtime import MemoryStoreDedupPort
-from memcommit.profile_config import (
+from memcommit.operations.profile.config import (
     ProfileConfigError,
     load_profile_registry,
     profile_store_dir,
 )
-from memcommit.profiles import ProfileError
+from memcommit.operations.profile.model import ProfileError
 from memcommit.reviewing.quality.handoff import (
     QualityFindingHandoff,
     QualityFindingHandoffError,

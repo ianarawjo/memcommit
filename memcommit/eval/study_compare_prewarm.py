@@ -36,8 +36,8 @@ from memcommit.operations.compare.ledger.granted_store import load_granted_compa
 from memcommit.infrastructure.providers.policy import (
     resolve_codex_evaluation_policy,
 )
-from memcommit.profile_config import load_profile_registry
-from memcommit.profiles import authority_grant_snapshot_lock
+from memcommit.operations.profile.config import load_profile_registry
+from memcommit.operations.profile.model import authority_grant_snapshot_lock
 from memcommit.infrastructure.providers.types import (
     CODEX_CHATGPT_PROVIDER,
     CODEX_REASONING_EFFORTS,

@@ -13,7 +13,7 @@ from memcommit.context_targeting.catalog import (
     freeze_granted_context_navigation,
 )
 from memcommit.context_targeting.navigation import ContextNavigationDirection
-from memcommit.profiles import authority_grant_snapshot_lock
+from memcommit.operations.profile.model import authority_grant_snapshot_lock
 from memcommit.store import MemoryStore
 from memcommit.operations.switch.application import (
     SwitchContextError,

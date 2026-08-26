@@ -67,12 +67,12 @@ from memcommit.operations.meld.application import (
     MeldApplyResult,
     run_meld_apply,
 )
-from memcommit.profiles import (
+from memcommit.operations.profile.model import (
     ProfileError,
     authority_grant_snapshot_lock,
     resolve_granted_context_view,
 )
-from memcommit.profile_config import load_profile_registry
+from memcommit.operations.profile.config import load_profile_registry
 from memcommit.operations.meld.provider import meld_turn_request_digest
 from memcommit.operations.meld.resolution_cache import (
     MeldResolutionBranch,

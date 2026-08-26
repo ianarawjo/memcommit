@@ -19,7 +19,7 @@ from memcommit.context_targeting.readable_catalog import ReadableContextCatalog
 from memcommit.context import Context
 from memcommit.context_targeting.model import ContextScope
 from memcommit.context_targeting.resolution import expand_lexical_context_names
-from memcommit.profiles import authority_grant_snapshot_lock
+from memcommit.operations.profile.model import authority_grant_snapshot_lock
 from memcommit.store import MemoryStore
 from memcommit.operations.summarize.model import (
     SummarizeError,

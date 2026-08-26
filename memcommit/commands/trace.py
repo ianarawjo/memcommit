@@ -63,8 +63,8 @@ from memcommit.operations.reference.provenance import (
     build_reference_trace,
 )
 from memcommit.store import MemoryStore
-from memcommit.profile_config import ProfileConfigError
-from memcommit.profiles import ProfileError
+from memcommit.operations.profile.config import ProfileConfigError
+from memcommit.operations.profile.model import ProfileError
 
 
 def render_trace(

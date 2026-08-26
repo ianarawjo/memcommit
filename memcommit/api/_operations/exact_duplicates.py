@@ -19,8 +19,8 @@ from memcommit.api.errors import (
 from memcommit.authority.access import resolve_context_access
 from memcommit.context_locator import resolve_context_locator
 from memcommit.operations.exact_dedup.application import find_exact_duplicate_scope
-from memcommit.profile_config import ProfileConfigError
-from memcommit.profiles import ProfileError
+from memcommit.operations.profile.config import ProfileConfigError
+from memcommit.operations.profile.model import ProfileError
 
 
 def find_duplicates_exact(

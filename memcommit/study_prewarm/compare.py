@@ -33,7 +33,7 @@ from memcommit.authority.derived_policy import (
     authorize_analysis_save,
     authorize_combination,
 )
-from memcommit.profile_config import ProfileEntry, ProfileRegistry, study_run_identity
+from memcommit.operations.profile.config import ProfileEntry, ProfileRegistry, study_run_identity
 from memcommit.store import MemoryStore, _write_json_atomic, context_record_digest
 from memcommit.study_prewarm.installations import (
     INSTALLATIONS_DIRECTORY_NAME,

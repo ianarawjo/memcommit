@@ -17,7 +17,7 @@ from memcommit.authority.access import (
 )
 from memcommit.context import AutoCheckpoint, Context, Memory, MemoryRef
 from memcommit.context_locator import resolve_context_locator
-from memcommit.profile_config import ProfileRegistry
+from memcommit.operations.profile.config import ProfileRegistry
 from memcommit.operations.resolve.application import (
     RESOLVE_CONTRACT_VERSION,
     FrozenResolveFrame,

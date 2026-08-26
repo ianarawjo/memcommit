@@ -30,8 +30,8 @@ from memcommit.semantic.disclosure import (
     SemanticDisclosureError,
     require_semantic_disclosure_authority,
 )
-from memcommit.profile_config import ProfileRegistry
-from memcommit.profiles import ProfileError, authority_grant_snapshot_lock
+from memcommit.operations.profile.config import ProfileRegistry
+from memcommit.operations.profile.model import ProfileError, authority_grant_snapshot_lock
 from memcommit.operations.sever.model import (
     SeverApplication,
     SeverContextBinding,

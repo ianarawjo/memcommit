@@ -13,7 +13,7 @@ from memcommit.context_targeting.resolution import expand_lexical_context_names
 from memcommit.authority.derived_policy import authorize_combination
 from memcommit.reviewing.direct_item_duplicates import ExactDuplicateGroup
 from memcommit.reviewing.quality.findings import DuplicateReport, FindingsProvider
-from memcommit.profile_config import ProfileRegistry
+from memcommit.operations.profile.config import ProfileRegistry
 from memcommit.reviewing.quality.workbench import (
     QualityFindSourceFrame,
     create_quality_find_workbench,

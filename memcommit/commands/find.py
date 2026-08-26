@@ -107,8 +107,8 @@ from memcommit.source_projection.presentation import (
     source_object_label,
 )
 from memcommit.store import MemoryStore
-from memcommit.profile_config import ProfileConfigError
-from memcommit.profiles import ProfileError
+from memcommit.operations.profile.config import ProfileConfigError
+from memcommit.operations.profile.model import ProfileError
 
 
 FIND_OUTSIDE_CONFIRMATION = "confirm other contexts"

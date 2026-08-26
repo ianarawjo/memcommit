@@ -8,8 +8,8 @@ from memcommit.context_targeting.readable_catalog import (
     freeze_profile_readable_context_catalog,
     freeze_readable_context_catalog,
 )
-from memcommit.profile_config import load_profile_registry, profile_store_dir
-from memcommit.profiles import authority_grant_snapshot_lock
+from memcommit.operations.profile.config import load_profile_registry, profile_store_dir
+from memcommit.operations.profile.model import authority_grant_snapshot_lock
 from memcommit.store import MemoryStore
 
 

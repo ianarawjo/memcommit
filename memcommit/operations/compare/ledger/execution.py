@@ -39,7 +39,7 @@ from memcommit.operations.compare.ledger.granted_store import (
     load_granted_comparison_artifact,
     save_granted_comparison_artifact,
 )
-from memcommit.profiles import ProfileError, authority_grant_snapshot_lock
+from memcommit.operations.profile.model import ProfileError, authority_grant_snapshot_lock
 from memcommit.infrastructure.providers.policy import (
     COMPARE_LEDGER_PROVIDER_POLICY,
 )

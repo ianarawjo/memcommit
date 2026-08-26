@@ -26,7 +26,7 @@ from memcommit.interfaces.tui.operations.memory_transfer.model import (
 from memcommit.interfaces.tui.operations.memory_transfer.screen import (
     run_memory_transfer_tui,
 )
-from memcommit.profiles import ProfileError
+from memcommit.operations.profile.model import ProfileError
 from memcommit.source_projection.presentation import (
     SourceDisplayToken,
     SourceDisplayValue,

@@ -3,8 +3,8 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.context_targeting.tui.picker import choose_context, context_memory_rows
-from memcommit.profile_config import ProfileConfigError
-from memcommit.profiles import ProfileError
+from memcommit.operations.profile.config import ProfileConfigError
+from memcommit.operations.profile.model import ProfileError
 from memcommit.authority.access import (
     GrantedReadStore,
     resolve_context_access,

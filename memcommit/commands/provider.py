@@ -24,7 +24,7 @@ from memcommit.infrastructure.providers.profile_routes import (
     resolve_active_provider_policy,
     set_active_profile_route,
 )
-from memcommit.profile_config import load_profile_registry
+from memcommit.operations.profile.config import load_profile_registry
 from memcommit.infrastructure.providers.types import (
     CODEX_CHATGPT_PROVIDER,
     CODEX_LUNA_LOW_PRESET,

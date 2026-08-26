@@ -49,8 +49,8 @@ from memcommit.operations.conformance.model import ConformanceError, check_conte
 from memcommit.operations.conformance.runtime import freeze_context_conformance
 from memcommit.authority.derived_policy import authorize_analysis_save
 from memcommit.reviewing.quality.findings import FindingsError, FindingsProvider
-from memcommit.profile_config import ProfileConfigError
-from memcommit.profiles import ProfileError
+from memcommit.operations.profile.config import ProfileConfigError
+from memcommit.operations.profile.model import ProfileError
 from memcommit.reviewing.quality.audit import (
     QualityAuditError,
     QualityAuditKind,

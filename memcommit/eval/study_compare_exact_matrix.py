@@ -49,7 +49,7 @@ from memcommit.eval.study_compare_graph_prewarm import (
 from memcommit.infrastructure.providers.policy import (
     resolve_codex_evaluation_policy,
 )
-from memcommit.profile_config import (
+from memcommit.operations.profile.config import (
     ProfileRegistry,
     load_profile_registry,
     profile_store_dir,

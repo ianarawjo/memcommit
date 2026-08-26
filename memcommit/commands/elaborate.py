@@ -35,8 +35,8 @@ from memcommit.interfaces.console import (
     resolve_console_mode,
 )
 from memcommit.interfaces.console.text import display_escape_text
-from memcommit.profile_config import ProfileConfigError
-from memcommit.profiles import ProfileError
+from memcommit.operations.profile.config import ProfileConfigError
+from memcommit.operations.profile.model import ProfileError
 from memcommit.infrastructure.providers.subscription import QueryProviderError, connect_semantic_provider
 from memcommit.operations.add.semantic_runtime import (
     resolve_semantic_add_endpoints,

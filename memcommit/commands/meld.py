@@ -96,8 +96,8 @@ from memcommit.infrastructure.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )
-from memcommit.profile_config import ProfileConfigError
-from memcommit.profiles import (
+from memcommit.operations.profile.config import ProfileConfigError
+from memcommit.operations.profile.model import (
     ProfileError,
 )
 from memcommit.context_targeting.naming import validate_portable_context_name

@@ -37,8 +37,8 @@ from memcommit.context_targeting.resolution import (
     expand_lexical_context_names,
     parse_auto_typed_context_memory_operand,
 )
-from memcommit.profile_config import ProfileRegistry
-from memcommit.profiles import (
+from memcommit.operations.profile.config import ProfileRegistry
+from memcommit.operations.profile.model import (
     ProfileError,
     authority_grant_snapshot_lock,
     grants_for_attachment,

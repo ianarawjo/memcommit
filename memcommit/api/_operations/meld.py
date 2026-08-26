@@ -58,7 +58,7 @@ from memcommit.operations.meld.session_application import (
     require_meld_session_version,
 )
 from memcommit.operations.meld.start_application import MeldStartError, MeldStartRequest
-from memcommit.profiles import ProfileError
+from memcommit.operations.profile.model import ProfileError
 from memcommit.store import ConcurrentContextUpdateError
 
 

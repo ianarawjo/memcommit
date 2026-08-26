@@ -82,7 +82,7 @@ from memcommit.operations.ground.workspace_runtime import (
     load_ground_workspace,
 )
 from memcommit.operations.fit.store import FitStore
-from memcommit.profiles import authority_grant_snapshot_lock
+from memcommit.operations.profile.model import authority_grant_snapshot_lock
 from memcommit.store import (
     MemoryStore,
     context_record_digest,

@@ -18,7 +18,7 @@ from memcommit.operations.meld.resolution_cache import (
     configured_meld_cache_identity,
     meld_resolution_cache_key,
 )
-from memcommit.profile_config import (
+from memcommit.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,
     study_run_identity,

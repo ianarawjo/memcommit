@@ -78,8 +78,8 @@ from memcommit.operations.rationale.scope import (
     rationale_trace,
     resolve_rationale_target,
 )
-from memcommit.profile_config import ProfileConfigError
-from memcommit.profiles import ProfileError
+from memcommit.operations.profile.config import ProfileConfigError
+from memcommit.operations.profile.model import ProfileError
 from memcommit.infrastructure.providers.subscription import QueryProviderError, connect_semantic_provider
 from memcommit.store import MemoryStore
 
