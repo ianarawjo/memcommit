@@ -6,7 +6,7 @@ import shlex
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 
-from memcommit.exact_command_review import ExactCommandReview
+from memcommit.application.exact_command_review import ExactCommandReview
 from memcommit.interfaces.console.text import display_escape_text
 from memcommit.interfaces.tui.components.exact_command_review.rendering import (
     format_exact_command,

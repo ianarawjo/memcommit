@@ -18,7 +18,7 @@ from memcommit.interfaces.tui.operations.update.model import (
     UpdateEndpointSelection,
     UpdateTuiSetup,
 )
-from memcommit.interactive_command_review import update_start_command_review
+from memcommit.application.interactive_command_review import update_start_command_review
 
 
 def update_endpoint_setup_spec(setup: UpdateTuiSetup) -> EndpointSetupSpec:

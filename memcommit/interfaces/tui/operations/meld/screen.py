@@ -8,7 +8,7 @@ from typing import Callable
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.application_review_policy import (
+from memcommit.application.review_policy import (
     ownership_aware_application_review,
 )
 from memcommit.interfaces.console.terminal import (
@@ -26,7 +26,7 @@ from memcommit.operations.meld.model import (
     MeldSession,
     meld_canonical_digest,
 )
-from memcommit.interactive_command_review import meld_turn_command_review
+from memcommit.application.interactive_command_review import meld_turn_command_review
 from memcommit.resolution_workbench import ResolutionNavigation
 
 

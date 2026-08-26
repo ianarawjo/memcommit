@@ -7,7 +7,7 @@ from typing import Annotated, Literal, Optional
 
 import typer
 
-from memcommit.application_review_policy import (
+from memcommit.application.review_policy import (
     ownership_aware_application_review,
 )
 from memcommit.authority.access import (
@@ -52,7 +52,7 @@ from memcommit.operations.sever.model import (
     SeverSelection,
     SeverSession,
 )
-from memcommit.interactive_command_review import sever_turn_command_review
+from memcommit.application.interactive_command_review import sever_turn_command_review
 from memcommit.operations.sever.application import (
     SeverAnalysisProgress,
     SeverAnalysisRequest,

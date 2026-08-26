@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import shlex
 
-from memcommit.exact_command_review import ExactCommandReview
+from memcommit.application.exact_command_review import ExactCommandReview
 from memcommit.interfaces.console.text import display_escape_text
 
 

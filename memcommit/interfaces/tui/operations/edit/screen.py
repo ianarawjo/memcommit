@@ -24,7 +24,7 @@ from memcommit.operations.edit.application import (
     edit_target_selector,
     validate_edit_request,
 )
-from memcommit.exact_command_review import ExactCommandReview
+from memcommit.application.exact_command_review import ExactCommandReview
 from memcommit.interfaces.console.terminal import require_interactive_terminal
 from memcommit.interfaces.console.text import (
     display_escape_text,

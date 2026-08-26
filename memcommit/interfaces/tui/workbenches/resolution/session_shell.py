@@ -26,8 +26,8 @@ from prompt_toolkit.styles import merge_styles
 from prompt_toolkit.widgets import Frame
 from prompt_toolkit.utils import get_cwidth
 
-from memcommit.application_review_policy import DecisionFreeBehavior
-from memcommit.exact_command_review import ExactCommandReview
+from memcommit.application.review_policy import DecisionFreeBehavior
+from memcommit.application.exact_command_review import ExactCommandReview
 from memcommit.interfaces.tui.components.exact_command_review.rendering import (
     format_exact_command,
 )

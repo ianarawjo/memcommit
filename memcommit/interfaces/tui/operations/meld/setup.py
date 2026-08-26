@@ -20,7 +20,7 @@ from memcommit.interfaces.tui.operations.meld.model import (
     MeldEndpointSelection,
     MeldTuiSetup,
 )
-from memcommit.interactive_command_review import meld_start_command_review
+from memcommit.application.interactive_command_review import meld_start_command_review
 
 
 def meld_endpoint_setup_spec(

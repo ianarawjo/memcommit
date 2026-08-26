@@ -30,7 +30,7 @@ from memcommit.interfaces.tui.components.frame import (
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )
-from memcommit.exact_command_review import ExactCommandReview
+from memcommit.application.exact_command_review import ExactCommandReview
 from memcommit.interfaces.tui.components.exact_command_review import (
     format_exact_command,
 )

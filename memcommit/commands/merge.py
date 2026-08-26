@@ -4,7 +4,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.application_review_policy import (
+from memcommit.application.review_policy import (
     ownership_aware_application_review,
 )
 from memcommit.context_targeting.operands import choose_endpoint_operand

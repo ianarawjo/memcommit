@@ -10,7 +10,7 @@ from prompt_toolkit.output import Output
 
 from memcommit.context_naming import validate_portable_context_name
 from memcommit.context_targeting.tui.picker import ContextMemoryRow
-from memcommit.interactive_command_review import sever_start_command_review
+from memcommit.application.interactive_command_review import sever_start_command_review
 from memcommit.interfaces.tui.components.endpoint_setup import (
     EndpointSetupDraft,
     EndpointSetupMemory,

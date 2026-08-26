@@ -7,7 +7,7 @@ from dataclasses import replace
 
 import typer
 
-from memcommit.application_review_policy import (
+from memcommit.application.review_policy import (
     ownership_aware_application_review,
 )
 from memcommit.interfaces.tui.workbenches.impact import ImpactController
@@ -23,7 +23,7 @@ from memcommit.operations.update.model import (
     required_grant_permissions,
     update_session_record_digest,
 )
-from memcommit.interactive_command_review import update_turn_command_review
+from memcommit.application.interactive_command_review import update_turn_command_review
 from memcommit.operations.update.resolution_adapter import (
     UpdateResolutionWorkbenchAdapter,
 )

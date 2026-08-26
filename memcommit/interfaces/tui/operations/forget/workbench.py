@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.application_review_policy import (
+from memcommit.application.review_policy import (
     ownership_aware_application_review,
 )
 from memcommit.operations.forget.application import (

@@ -41,7 +41,7 @@ from memcommit.interfaces.console.text import (
     safe_terminal_text,
 )
 from memcommit.interfaces.console.terminal import require_interactive_terminal
-from memcommit.exact_command_review import ExactCommandReview
+from memcommit.application.exact_command_review import ExactCommandReview
 from memcommit.interfaces.tui.components.endpoint_setup.memory_focus import (
     EndpointMemoryFocusController,
     MemoryProjectionLoader,

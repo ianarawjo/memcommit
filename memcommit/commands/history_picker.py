@@ -35,7 +35,7 @@ from memcommit.commands.horizontal_choice import (
     HorizontalChoiceState,
     render_horizontal_choice,
 )
-from memcommit.exact_command_review import ExactCommandReview
+from memcommit.application.exact_command_review import ExactCommandReview
 from memcommit.interfaces.tui.components.exact_command_review import (
     EditableExactCommandControl,
     ExactCommandDraft,

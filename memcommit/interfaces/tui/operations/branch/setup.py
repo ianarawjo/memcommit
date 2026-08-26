@@ -7,7 +7,7 @@ from collections.abc import Callable, Mapping, Sequence
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.exact_command_review import ExactCommandReview
+from memcommit.application.exact_command_review import ExactCommandReview
 from memcommit.interfaces.tui.components.endpoint_setup import (
     EndpointSetupDraft,
     EndpointSetupMode,

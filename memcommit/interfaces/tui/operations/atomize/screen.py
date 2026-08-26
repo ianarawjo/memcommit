@@ -24,7 +24,7 @@ from memcommit.operations.atomize.workbench import (
 from memcommit.interfaces.tui.workbenches.review import (
     RESPONSE_LABEL,
 )
-from memcommit.application_review_policy import (
+from memcommit.application.review_policy import (
     ownership_aware_application_review,
 )
 from memcommit.interfaces.tui.workbenches.result import (
