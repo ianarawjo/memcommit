@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal, Protocol
 
-from memcommit.meld import MELD_OWNER_AWARE_SCHEMA_VERSION, MeldSession
+from memcommit.operations.meld.model import MELD_OWNER_AWARE_SCHEMA_VERSION, MeldSession
 
 
 MeldApplyRoute = Literal[

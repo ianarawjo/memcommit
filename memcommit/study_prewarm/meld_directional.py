@@ -31,7 +31,7 @@ from memcommit.derived_policy import (
     authorize_combination,
     authorize_derived_transfer,
 )
-from memcommit.meld import (
+from memcommit.operations.meld.model import (
     MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION,
     MeldError,
     MeldFrame,
@@ -39,7 +39,7 @@ from memcommit.meld import (
     MeldSession,
     directional_comparison_basis_assessment,
 )
-from memcommit.meld_provider import MELD_DIRECTIONAL_PROVIDER_CONTRACT_VERSION
+from memcommit.operations.meld.provider import MELD_DIRECTIONAL_PROVIDER_CONTRACT_VERSION
 from memcommit.operations.compare.ledger.granted_store import recursive_comparison_projection
 from memcommit.profile_config import (
     ProfileEntry,

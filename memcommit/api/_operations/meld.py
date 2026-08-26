@@ -24,13 +24,13 @@ from memcommit.api.meld import (
 )
 from memcommit.authority.access import resolve_context_access
 from memcommit.context_locator import resolve_context_locator
-from memcommit.meld import (
+from memcommit.operations.meld.model import (
     MELD_SCHEMA_VERSION,
     MeldError as CoreMeldError,
     meld_canonical_digest,
 )
 from memcommit.operations.meld.application import MeldApplyRequest
-from memcommit.meld_provider import MeldProviderError
+from memcommit.operations.meld.provider import MeldProviderError
 from memcommit.operations.meld.resolution_application import (
     MeldResolutionError,
     MeldResolutionTurnRequest,

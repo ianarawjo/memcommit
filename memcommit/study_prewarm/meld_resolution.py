@@ -6,13 +6,13 @@ from dataclasses import dataclass
 from typing import Iterable
 
 from memcommit.context import Context
-from memcommit.meld import MeldError, MeldSession
-from memcommit.meld_provider import (
+from memcommit.operations.meld.model import MeldError, MeldSession
+from memcommit.operations.meld.provider import (
     MELD_RESOLUTION_REQUEST_CONTRACT_VERSION,
     assess_meld_turn,
     meld_turn_request_digest,
 )
-from memcommit.meld_resolution_cache import (
+from memcommit.operations.meld.resolution_cache import (
     MeldResolutionBranch,
     MeldResolutionCacheError,
     configured_meld_cache_identity,

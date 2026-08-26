@@ -51,7 +51,7 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.comparison | operation-implementation | relocate | memcommit.operations.compare.ledger.model | 33 |
 | memcommit.comparison_evidence | operation-implementation | relocate | memcommit.operations.compare.ledger.evidence | 5 |
 | memcommit.comparison_execution | operation-implementation | relocate | memcommit.operations.compare.ledger.execution | 9 |
-| memcommit.comparison_present | operation-implementation | relocate | memcommit.interfaces.cli.comparison | 5 |
+| memcommit.comparison_present | operation-implementation | relocate | memcommit.interfaces.presentation.comparison | 5 |
 | memcommit.comparison_provider | operation-implementation | relocate | memcommit.operations.compare.ledger.provider | 11 |
 | memcommit.comparison_session_application | operation-implementation | relocate | memcommit.operations.compare.ledger.session_application | 2 |
 | memcommit.comparison_store | operation-implementation | relocate | memcommit.operations.compare.ledger.store | 10 |

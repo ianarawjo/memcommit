@@ -21,7 +21,7 @@ from memcommit.interfaces.tui.core.text_layout import (
     elide_terminal_text,
     single_line_terminal_text,
 )
-from memcommit.meld import (
+from memcommit.operations.meld.model import (
     MELD_INLINE_MEMORY_SCHEMA_VERSION,
     MeldSession,
     meld_canonical_digest,
@@ -179,7 +179,7 @@ def run_meld_shell(
         # that exact artifact instead of maintaining a second summary dialect.
         # Navigation hints are omitted because this target-bound Meld already
         # supplies the next interaction below the shared report.
-        from memcommit.interfaces.cli.comparison import render_comparison
+        from memcommit.interfaces.presentation.comparison import render_comparison
 
         compare_report = (
             render_comparison(

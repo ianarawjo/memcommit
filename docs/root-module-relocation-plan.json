@@ -388,8 +388,8 @@
     },
     {
       "action": "relocate",
-      "canonical_target": "memcommit.interfaces.cli.comparison",
-      "canonical_target_path": "memcommit/interfaces/cli/comparison.py",
+      "canonical_target": "memcommit.interfaces.presentation.comparison",
+      "canonical_target_path": "memcommit/interfaces/presentation/comparison.py",
       "inbound_package_importers": 5,
       "lines": 424,
       "module": "memcommit.comparison_present",

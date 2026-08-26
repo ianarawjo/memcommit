@@ -40,7 +40,7 @@ def test_meld_uses_the_interface_neutral_compare_presenter() -> None:
         for node in ast.walk(module)
         if isinstance(node, ast.ImportFrom)
     }
-    assert "memcommit.comparison_present" in imported_modules
+    assert "memcommit.interfaces.presentation.comparison" in imported_modules
     assert "memcommit.commands.compare" not in imported_modules
 
 

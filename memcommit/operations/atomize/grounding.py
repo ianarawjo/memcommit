@@ -20,7 +20,7 @@ from dataclasses import dataclass, replace
 from typing import Iterable, Literal
 
 from memcommit.context import Context
-from memcommit.meld import (
+from memcommit.operations.meld.model import (
     MeldError,
     MeldProposalOperation as AtomizeGroundingProposalOperation,
     MeldRevision as AtomizeGroundingRevision,

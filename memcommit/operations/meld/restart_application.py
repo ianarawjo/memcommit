@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from memcommit.operations.compare.ledger.model import ComparisonAnalysis
-from memcommit.meld import (
+from memcommit.operations.meld.model import (
     INLINE_MELD_CONTEXT_NAME,
     MELD_INLINE_MEMORY_SCHEMA_VERSION,
     MeldSession,

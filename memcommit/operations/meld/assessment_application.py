@@ -6,13 +6,13 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Literal, Protocol
 
-from memcommit.meld import (
+from memcommit.operations.meld.model import (
     MeldAssessment,
     MeldError,
     MeldRepairableAssessmentError,
     MeldSession,
 )
-from memcommit.meld_provider import assess_meld_turn, repair_meld_assessment
+from memcommit.operations.meld.provider import assess_meld_turn, repair_meld_assessment
 
 
 MeldAssessmentStage = Literal[

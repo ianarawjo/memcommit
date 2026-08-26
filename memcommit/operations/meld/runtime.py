@@ -42,7 +42,7 @@ from memcommit.derived_policy import (
     authorize_combination,
     authorize_derived_transfer,
 )
-from memcommit.meld import (
+from memcommit.operations.meld.model import (
     MELD_INLINE_MEMORY_SCHEMA_VERSION,
     MELD_OWNER_AWARE_SCHEMA_VERSION,
     MeldCheckpointReceipt,
@@ -73,8 +73,8 @@ from memcommit.profiles import (
     resolve_granted_context_view,
 )
 from memcommit.profile_config import load_profile_registry
-from memcommit.meld_provider import meld_turn_request_digest
-from memcommit.meld_resolution_cache import (
+from memcommit.operations.meld.provider import meld_turn_request_digest
+from memcommit.operations.meld.resolution_cache import (
     MeldResolutionBranch,
     configured_meld_cache_identity,
     meld_resolution_cache_key,

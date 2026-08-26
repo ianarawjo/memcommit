@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.meld import MeldError, MeldRevision
+from memcommit.operations.meld.model import MeldError, MeldRevision
 from memcommit.operations.meld.session_application import (
     MeldSessionSnapshot,
     MeldTurnRequest,

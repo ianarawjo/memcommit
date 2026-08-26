@@ -29,7 +29,7 @@ from memcommit.operations.atomize.grounding import (
     atomize_grounding_context_digest,
 )
 from memcommit.context import Context, Memory
-from memcommit.meld import MeldError, MeldRevision, meld_canonical_digest
+from memcommit.operations.meld.model import MeldError, MeldRevision, meld_canonical_digest
 
 
 AtomizeMeldFrameRole = Literal["INCOMING", "BASELINE"]

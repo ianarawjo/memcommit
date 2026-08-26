@@ -12,8 +12,8 @@ from memcommit.commands.resolution_workbench_shell import (
 )
 from memcommit.interfaces.tui.workbenches.impact import ImpactController
 from memcommit.memory_diff import update_operation_change
-from memcommit.meld import MeldSession
-from memcommit.meld_resolution_adapter import MeldResolutionWorkbenchAdapter
+from memcommit.operations.meld.model import MeldSession
+from memcommit.operations.meld.resolution_adapter import MeldResolutionWorkbenchAdapter
 from memcommit.resolution_workbench import ResolutionWorkbenchView
 from memcommit.operations.sever.model import SeverSession
 from memcommit.operations.sever.resolution_adapter import (
@@ -76,7 +76,7 @@ def update_impact_presentation(
 def _saved_compare_report(session: MeldSession) -> str:
     if session.mode != "SYMMETRIC" or session.comparison_seed is None:
         return ""
-    from memcommit.interfaces.cli.comparison import render_comparison
+    from memcommit.interfaces.presentation.comparison import render_comparison
 
     return (
         render_comparison(

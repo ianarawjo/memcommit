@@ -53,7 +53,7 @@ from memcommit.operations.compare.ledger.granted_store import (
     load_granted_comparison_artifact,
     recursive_comparison_projection,
 )
-from memcommit.meld import (
+from memcommit.operations.meld.model import (
     INLINE_MELD_CONTEXT_NAME,
     MELD_INLINE_MEMORY_SCHEMA_VERSION,
     MELD_OWNER_AWARE_SCHEMA_VERSION,
@@ -66,7 +66,7 @@ from memcommit.meld import (
     meld_accounting,
     meld_canonical_digest,
 )
-from memcommit.meld_provider import (
+from memcommit.operations.meld.provider import (
     MeldProviderError,
 )
 from memcommit.interfaces.console.text import (

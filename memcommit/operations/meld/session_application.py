@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Protocol
 
-from memcommit.meld import (
+from memcommit.operations.meld.model import (
     MeldError,
     MeldRevision,
     MeldSession,

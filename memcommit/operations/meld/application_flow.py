@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 
-from memcommit.meld import MeldSession
+from memcommit.operations.meld.model import MeldSession
 
 
 MeldApplicationReceipt = tuple[bool, str, int]

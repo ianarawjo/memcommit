@@ -18,7 +18,7 @@ from memcommit.operations.compare.summary import (
 from memcommit.operations.compare.summary_application import run_comparison_summary
 from memcommit.interfaces.cli.comparison_summary import render_comparison_summary
 from memcommit.operations.compare.summary_provider import COMPARISON_SUMMARY_OPERATION
-from memcommit.interfaces.cli.comparison import (
+from memcommit.interfaces.presentation.comparison import (
     render_comparison,
     render_comparison_receipt,
 )

@@ -34,7 +34,7 @@ OPERATION_TARGETS = {
     "comparison": "memcommit.operations.compare.ledger.model",
     "comparison_evidence": "memcommit.operations.compare.ledger.evidence",
     "comparison_execution": "memcommit.operations.compare.ledger.execution",
-    "comparison_present": "memcommit.interfaces.cli.comparison",
+    "comparison_present": "memcommit.interfaces.presentation.comparison",
     "comparison_provider": "memcommit.operations.compare.ledger.provider",
     "comparison_session_application": "memcommit.operations.compare.ledger.session_application",
     "comparison_store": "memcommit.operations.compare.ledger.store",
