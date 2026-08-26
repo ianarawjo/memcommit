@@ -1,0 +1,267 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source diff f056775b --context practice/description --raw
+
+EXIT
+0
+
+WALL_SECONDS
+1.269082
+
+STDOUT
+UNIT        CHECKPOINT · THIS CHECKPOINT VS PREVIOUS
+CHECKPOINT  f056775b-83c4-4e3d-b673-71a4011f2e14
+CONTEXT     practice/description
+ACTION      checkpoint
+DESCRIPTION v2 transform round 2 safety
+RESULT      13 DIRECT ITEMS
+SUMMARY     0 kept · 13 added · 0 edited · 28 removed
+
+diff --mem practice/description#c8ccbf37-b892-4435-a7b8-f101e261284a
+--- a/practice/description#c8ccbf37-b892-4435-a7b8-f101e261284a
++++ /dev/null
+@@ -1 +0,0 @@
+-When asked “How does this read?”, treat the request as a request for an opinion: do not immediately edit the draft, and first assess sentence order and paragraph division.
+\ No newline at end of file
+diff --mem practice/description#a9ebb067-71c8-4b0b-ba52-3c7078bf17f9
+--- a/practice/description#a9ebb067-71c8-4b0b-ba52-3c7078bf17f9
++++ /dev/null
+@@ -1 +0,0 @@
+-When later asked to polish, preserve the overall structure and citation-needed markers, changing only wording that causes a problem.
+\ No newline at end of file
+diff --mem practice/description#599ff378-ff7a-41cd-bd8a-7a7966ff9f81
+--- a/practice/description#599ff378-ff7a-41cd-bd8a-7a7966ff9f81
++++ /dev/null
+@@ -1 +0,0 @@
+-When asked to change one expression, leave almost everything else unchanged, including the user-selected technical or project-specific terminology; for the stated absorption-into-two-parts example, retain “distribute” rather than replacing it with “divide.”
+\ No newline at end of file
+diff --mem practice/description#98f1423d-aa53-4865-b40a-d0303e75b3e0
+--- a/practice/description#98f1423d-aa53-4865-b40a-d0303e75b3e0
++++ /dev/null
+@@ -1 +0,0 @@
+-When a passage must make four points, retain all four while removing overly redundant material and stating repeated content only once.
+\ No newline at end of file
+diff --mem practice/description#c93197aa-2e9f-4878-baa6-f4fd483335c7
+--- a/practice/description#c93197aa-2e9f-4878-baa6-f4fd483335c7
++++ /dev/null
+@@ -1 +0,0 @@
+-When a draft must meet a shorter fixed limit, target an approximately 20–30% reduction by cutting redundant or unnecessary material.
+\ No newline at end of file
+diff --mem practice/description#7e826188-00e8-41c3-89b4-c918072c3836
+--- a/practice/description#7e826188-00e8-41c3-89b4-c918072c3836
++++ /dev/null
+@@ -1 +0,0 @@
+-Do not shorten sentences so aggressively that a claim becomes more categorical; retain enough wording to preserve the claim’s original strength and conditions.
+\ No newline at end of file
+diff --mem practice/description#8a743d78-406a-4d43-98fd-20918d18c398
+--- a/practice/description#8a743d78-406a-4d43-98fd-20918d18c398
++++ /dev/null
+@@ -1 +0,0 @@
+-When a next idea is merely related and does not broaden the scope, do not use “More broadly”; use “In relation to this” or another accurate connector, and do not add a new claim solely to connect the paragraphs.
+\ No newline at end of file
+diff --mem practice/description#399e5239-acbb-484e-99ee-38c663966e14
+--- a/practice/description#399e5239-acbb-484e-99ee-38c663966e14
++++ /dev/null
+@@ -1 +0,0 @@
+-For any title about interaction with AI agent memory, preserve the intended terminology: use “interaction,” “management,” and “AI agent memory,” not “agent memory.”
+\ No newline at end of file
+diff --mem practice/description#6fb7dc3a-7e5b-408b-b49f-47812678508b
+--- a/practice/description#6fb7dc3a-7e5b-408b-b49f-47812678508b
++++ /dev/null
+@@ -1 +0,0 @@
+-By default, format a document title in sentence case rather than title case; an explicitly named style guide may override only this capitalization default, and “for” must always be retained whenever it is intended wording.
+\ No newline at end of file
+diff --mem practice/description#cbea7a4e-a233-4bad-8e5f-133f2f66db41
+--- a/practice/description#cbea7a4e-a233-4bad-8e5f-133f2f66db41
++++ /dev/null
+@@ -1 +0,0 @@
+-If work titles are inconsistently placed in quotation marks and italics, make them consistently italic throughout the document by default; an explicitly named style guide may override only this work-title formatting default.
+\ No newline at end of file
+diff --mem practice/description#fe282ebc-07f4-4f39-bfc1-90672fa3bf58
+--- a/practice/description#fe282ebc-07f4-4f39-bfc1-90672fa3bf58
++++ /dev/null
+@@ -1 +0,0 @@
+-When told that content looks wrong, consult the complete original paper, book, or guide to find accurate information before proposing a correction; do not rely only on an abstract or short snippet.
+\ No newline at end of file
+diff --mem practice/description#30b82df9-8300-4dfc-b573-0bc3a3bcdd08
+--- a/practice/description#30b82df9-8300-4dfc-b573-0bc3a3bcdd08
++++ /dev/null
+@@ -1 +0,0 @@
+-Before adding or reusing citations and references, verify from each complete source that it exists and supports the exact claim.
+\ No newline at end of file
+diff --mem practice/description#09f769b3-a7da-4d62-9ebc-09d765c1e872
+--- a/practice/description#09f769b3-a7da-4d62-9ebc-09d765c1e872
++++ /dev/null
+@@ -1 +0,0 @@
+-Do not invent quotations or evidence, and do not overstate an author’s contribution or a paper’s status.
+\ No newline at end of file
+diff --mem practice/description#5526b599-a63b-4b8a-8917-e9f6d1df7e90
+--- a/practice/description#5526b599-a63b-4b8a-8917-e9f6d1df7e90
++++ /dev/null
+@@ -1 +0,0 @@
+-If the user requested review only and citation verification finds a problem, report the problem first rather than silently rewriting the draft.
+\ No newline at end of file
+diff --mem practice/description#83848cf2-2c60-49e5-9fc3-ee7aac684e79
+--- a/practice/description#83848cf2-2c60-49e5-9fc3-ee7aac684e79
++++ /dev/null
+@@ -1 +0,0 @@
+-When asked to review a draft without revising it, identify and explain any problems, but do not change the draft.
+\ No newline at end of file
+diff --mem practice/description#b1767464-11e0-428f-abb8-46eff3e1a392
+--- a/practice/description#b1767464-11e0-428f-abb8-46eff3e1a392
++++ /dev/null
+@@ -1 +0,0 @@
+-Even when a review reveals an obvious wording error, report the error and a reason it is problematic; wait for a separate request before editing the wording.
+\ No newline at end of file
+diff --mem practice/description#635c8904-893c-46bc-a522-bc975a61ebfe
+--- a/practice/description#635c8904-893c-46bc-a522-bc975a61ebfe
++++ /dev/null
+@@ -1 +0,0 @@
+-When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.
+\ No newline at end of file
+diff --mem practice/description#1afd6a32-08e4-4be6-bc93-e78f4606e248
+--- a/practice/description#1afd6a32-08e4-4be6-bc93-e78f4606e248
++++ /dev/null
+@@ -1 +0,0 @@
+-If I later ask for polishing, preserve the overall strucutre and citation-needed markers, and change only wording that causes a problem.
+\ No newline at end of file
+diff --mem practice/description#e877b52a-d44f-456f-895d-1c9474dcd046
+--- a/practice/description#e877b52a-d44f-456f-895d-1c9474dcd046
++++ /dev/null
+@@ -1 +0,0 @@
+-When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um... for example, use distribute, not divide, when material is absorbed into two parts.
+\ No newline at end of file
+diff --mem practice/description#c4898408-a743-4ffb-92aa-60540af9ff3f
+--- a/practice/description#c4898408-a743-4ffb-92aa-60540af9ff3f
++++ /dev/null
+@@ -1 +0,0 @@
+-If a passage is supposed to make four points, keep all four while removing parts that are too redundent and stating repeated content only once.
+\ No newline at end of file
+diff --mem practice/description#b429bd6a-10c2-4e4f-bbec-68abeab39813
+--- a/practice/description#b429bd6a-10c2-4e4f-bbec-68abeab39813
++++ /dev/null
+@@ -1 +0,0 @@
+-When the draft has to fit a shorter fixed limit, aim to cut around 20–30% from redundant or unnecessary material.
+\ No newline at end of file
+diff --mem practice/description#02d6403b-4a8c-4b08-a2cc-c170d9b35f47
+--- a/practice/description#02d6403b-4a8c-4b08-a2cc-c170d9b35f47
++++ /dev/null
+@@ -1 +0,0 @@
+-But don't shorten sentences so aggressively that a claim sounds more categorical; keep enough wording to preserve its original strength and conditions.
+\ No newline at end of file
+diff --mem practice/description#7ea4e91b-74a2-4830-b5c9-5b96791b5835
+--- a/practice/description#7ea4e91b-74a2-4830-b5c9-5b96791b5835
++++ /dev/null
+@@ -1 +0,0 @@
+-If the next idea is merely related and does not broaden the scope, don't use More broadly; use In relation to this or another accurate connector without adding a new claim merely to make two paragraphs connect.
+\ No newline at end of file
+diff --mem practice/description#5b34f905-3f26-4221-8b72-6f7ad395bfa2
+--- a/practice/description#5b34f905-3f26-4221-8b72-6f7ad395bfa2
++++ /dev/null
+@@ -1 +0,0 @@
+-For any titlle about interaction with AI agent memory, keep the exact terminology and intended words: use interaction and management and AI agent memory rather than agent memory.
+\ No newline at end of file
+diff --mem practice/description#67192e6c-1f9d-4d97-b2cc-f9b8d1ea808a
+--- a/practice/description#67192e6c-1f9d-4d97-b2cc-f9b8d1ea808a
++++ /dev/null
+@@ -1 +0,0 @@
+-By default, format a document title in sentence case rather than title case. An explicitly named style guide may override only that capitalization default; always keep for whenever it is part of the intended wording.
+\ No newline at end of file
+diff --mem practice/description#288741d0-3d5f-43ee-a8c9-0e70ced4f4d7
+--- a/practice/description#288741d0-3d5f-43ee-a8c9-0e70ced4f4d7
++++ /dev/null
+@@ -1 +0,0 @@
+-If titles of works use quotation marks in some places and italics in others, make them consistently italic throughout the document by default; an explicitly named style guide may override only this work-title format.
+\ No newline at end of file
+diff --mem practice/description#07b7d0b0-00a7-469d-93b7-24947608fcdf
+--- a/practice/description#07b7d0b0-00a7-469d-93b7-24947608fcdf
++++ /dev/null
+@@ -1 +0,0 @@
+-When I say that content looks wrong, find accurate information before proposing a correction by reading the original paper, book, or guide, not only an abstract or a short snippet.
+\ No newline at end of file
+diff --mem practice/description#1c5c951d-e5aa-41c4-b6ec-c4e10c995974
+--- a/practice/description#1c5c951d-e5aa-41c4-b6ec-c4e10c995974
++++ /dev/null
+@@ -1 +0,0 @@
+-Before adding or reusing citations and refferences, verify that each source exists and supports the exact claim after reviewing the complete source. Don't invent quotations or evidence or overstate an author's contribution or a paper's status. If I asked only for review, report a verification problem first instead of silently rewriting the draft.
+\ No newline at end of file
+diff --mem practice/description#89ff1887-d807-5a04-94d7-424fff9a93b9
+--- /dev/null
++++ b/practice/description#89ff1887-d807-5a04-94d7-424fff9a93b9
+@@ -0,0 +1 @@
++memcommit is a research prototype that provides command-line and terminal user interfaces (CLI/TUI) for managing agent memory and supporting collaboration among people and agents. Through memcommit's operations and structural concepts—including Memories, Contexts, Profiles, Grants, and Sessions—you can manage agent memories as they are collected, organized, and propagated among people and agents. In this study, you will use memcommit in three different situations, each involving a different context, goal, and kind of memory.
+\ No newline at end of file
+diff --mem practice/description#cbd46e2b-722d-5fac-abb9-36abad820333
+--- /dev/null
++++ b/practice/description#cbd46e2b-722d-5fac-abb9-36abad820333
+@@ -0,0 +1 @@
++SITUATION · Before beginning the three study tasks, complete a short practice exercise to become familiar with how memcommit organizes and presents its commands. Each newline-separated editing note in `practice/source` is stored as its own Memory, preserving the boundaries between the original requests. Some notes still combine recurring constraints, rough wording, and typos.
+\ No newline at end of file
+diff --mem practice/description#1e046596-b6f1-5623-aebb-52c46b4a54be
+--- /dev/null
++++ b/practice/description#1e046596-b6f1-5623-aebb-52c46b4a54be
+@@ -0,0 +1 @@
++TASK · Divide their underlying constraints into appropriate atomic Memories without performing the requested edits, adding instructions, or changing the intended meaning, so that each constraint can be reviewed independently. Open `mem help`, inspect the available operations, find the operation designed for atomization, and use it to atomize the notes and save the result as `practice/source-atomized`.
+\ No newline at end of file
+diff --mem practice/description#bce98730-d7e9-440d-9400-630f523a496d
+--- /dev/null
++++ b/practice/description#bce98730-d7e9-440d-9400-630f523a496d
+@@ -0,0 +1 @@
++When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.
+\ No newline at end of file
+diff --mem practice/description#3fbf33de-2655-4f08-8148-4fe57e33a544
+--- /dev/null
++++ b/practice/description#3fbf33de-2655-4f08-8148-4fe57e33a544
+@@ -0,0 +1 @@
++{"content":"When I say that content looks wrong, find accurate information before proposing a correction by reading the original paper, book, or guide, not only an abstract or a short snippet.","content_sha256":"795b352f611ff2218d2c939ad0a7472d11010900eff92ef8f3d03d7255e1a2c6","target_context":{"name":"practice/source","uid":"7e48e68e-3c6f-541b-bfc1-e307abcc7a4f"},"target_memory_uid":"96300a95-2cb2-5644-bae6-f53d7b31a725","type":"memory_snapshot_ref","uid":"3fbf33de-2655-4f08-8148-4fe57e33a544"}
+\ No newline at end of file
+diff --mem practice/description#7e48e68e-3c6f-541b-bfc1-e307abcc7a4f
+--- /dev/null
++++ b/practice/description#7e48e68e-3c6f-541b-bfc1-e307abcc7a4f
+@@ -0,0 +1 @@
++{"name":"practice/source","type":"context_ref","uid":"7e48e68e-3c6f-541b-bfc1-e307abcc7a4f"}
+\ No newline at end of file
+diff --mem practice/description#d0f6e587-6c4f-4ae2-a377-b3a271840d9e
+--- /dev/null
++++ b/practice/description#d0f6e587-6c4f-4ae2-a377-b3a271840d9e
+@@ -0,0 +1 @@
++If I later ask for polishing, preserve the overall strucutre and citation-needed markers, and change only wording that causes a problem.
+\ No newline at end of file
+diff --mem practice/description#6bd4bd30-3bed-4858-b6c8-4e815922c5bf
+--- /dev/null
++++ b/practice/description#6bd4bd30-3bed-4858-b6c8-4e815922c5bf
+@@ -0,0 +1 @@
++If a passage is supposed to make four points, keep all four while removing parts that are too redundent and stating repeated content only once.
+\ No newline at end of file
+diff --mem practice/description#5e5f3d04-acff-4252-98fb-ecde5a8c761c
+--- /dev/null
++++ b/practice/description#5e5f3d04-acff-4252-98fb-ecde5a8c761c
+@@ -0,0 +1 @@
++DEFAULT CANDIDATE: use sentence case for document titles by default, subject only to an explicitly named style guide capitalization override; preserve the intended word for.
+\ No newline at end of file
+diff --mem practice/description#70720de6-5c38-4c93-a3ab-af0c71bd6470
+--- /dev/null
++++ b/practice/description#70720de6-5c38-4c93-a3ab-af0c71bd6470
+@@ -0,0 +1 @@
++Use consistent italics for work titles by default, subject only to an explicitly named style guide work-title-format override.
+\ No newline at end of file
+diff --mem practice/description#ee899250-8f40-4771-86c2-30deaffff4d6
+--- /dev/null
++++ b/practice/description#ee899250-8f40-4771-86c2-30deaffff4d6
+@@ -0,0 +1 @@
++{"content":"If the next idea is merely related and does not broaden the scope, don't use More broadly; use In relation to this or another accurate connector without adding a new claim merely to make two paragraphs connect.","content_sha256":"a42e4c115f46fe487863131816c163d66cf8586d523d962dc71d36f0fdd21845","target_context":{"name":"practice/source","uid":"7e48e68e-3c6f-541b-bfc1-e307abcc7a4f"},"target_memory_uid":"b976766e-d366-5065-929e-5f31e638fdbe","type":"memory_snapshot_ref","uid":"ee899250-8f40-4771-86c2-30deaffff4d6"}
+\ No newline at end of file
+diff --mem practice/description#824acb9d-695c-5d55-9997-64cc317a2203
+--- /dev/null
++++ b/practice/description#824acb9d-695c-5d55-9997-64cc317a2203
+@@ -0,0 +1 @@
++{"name":"practice","type":"context_ref","uid":"824acb9d-695c-5d55-9997-64cc317a2203"}
+\ No newline at end of file
+diff --mem practice/description#8517d6ae-7208-419d-83c5-8edcbc10634c
+--- /dev/null
++++ b/practice/description#8517d6ae-7208-419d-83c5-8edcbc10634c
+@@ -0,0 +1 @@
++AUDIT RESULT: mechanical sentence splitting detached an editing permission trigger, a protected-word object, and companion safeguards. Future atomize must keep every result independently reviewable with its complete trigger, exception, safeguard, and source provenance.
+\ No newline at end of file
+
+
+STDERR

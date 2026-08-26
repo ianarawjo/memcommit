@@ -1,0 +1,15 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple rationale practice:f1c940a1 --verbose
+
+EXIT
+0
+
+OUTPUT
+Rationale [f1c940a1-e572-4070-94a7-be4722fdbf2b] · practice
+Context UID: 824acb9d-695c-5d55-9997-64cc317a2203
+
+MEMORY
+  a is apple.
+
+PROVENANCE
+  In practice, “a is apple.” was added directly as a standalone Memory, cleared and restored twice, then cleared and restored again. Three NEW merges copied it unchanged into fresh practice/source occurrences while retaining it in practice, where it remains current.

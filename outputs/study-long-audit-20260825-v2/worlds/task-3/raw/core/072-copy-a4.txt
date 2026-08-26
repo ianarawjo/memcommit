@@ -1,0 +1,10 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 copy 18d58666 d7f215c6 --from task-3/local/personal-memory/2024/03 --into task-3/local
+
+STDOUT
+COPIED · 2 Memories → 'task-3/local' · NEW UIDs · after [72eb2325] at the end
+  'task-3/local/personal-memory/2024/03' [18d58666] → [6ea7bcc1]
+  'task-3/local/personal-memory/2024/03' [d7f215c6] → [692e0872]
+Checkpoint 'task-3/local' [4cabd238].
+
+STDERR

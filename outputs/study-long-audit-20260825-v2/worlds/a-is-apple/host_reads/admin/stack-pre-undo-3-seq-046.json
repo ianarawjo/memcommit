@@ -1,0 +1,28 @@
+{
+  "label": "pre-undo-3-seq-046",
+  "read_at": "2026-08-25T18:01:22.462971+00:00",
+  "undo_top": {
+    "uid": "branch:cb837c18-aad1-42d2-a724-6f080ffe38b6",
+    "command": "branch",
+    "members": [
+      {
+        "context_uid": "9e203b0c-359a-4226-bb94-3a52cd6317b4",
+        "context_name": "audit/a-is-apple/admin-v2-scratch/co3",
+        "checkpoint_uid": "receipt member; see target Context checkpoint"
+      }
+    ],
+    "receipt_checkpoint": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/a-is-apple/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd/contexts/audit/a-is-apple/admin-v2-scratch/co3/checkpoints/20260825T140121-Branched-'audit-a-is-app-c307cccc.json",
+    "source_root": "audit/a-is-apple/admin-v2-scratch/b3",
+    "target_root": "audit/a-is-apple/admin-v2-scratch/co3",
+    "include_descendants": false,
+    "current_before": "audit/a-is-apple/admin-v2-scratch/b3",
+    "receipt_checkpoint_uid": "c307cccc-d1bb-418f-b4e3-99780eb4eea9"
+  },
+  "redo_top": null,
+  "undo_depth": null,
+  "redo_depth": null,
+  "builder_error": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+  "fallback_semantics": "Exact newest branch receipt UID/member set only; no valid stack claimed.",
+  "staged_update_exists": false,
+  "staged_update_granted_target": null
+}

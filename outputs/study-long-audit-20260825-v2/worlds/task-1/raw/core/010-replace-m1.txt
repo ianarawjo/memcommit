@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 replace five-to-ten-minute '5–10-minute' --context task-1/campus-wiki/facility-updates
+
+EXIT
+1
+
+WALL_SECONDS
+1.283647
+
+STDOUT
+
+
+STDERR
+Replace error: Replace targets must be ordinary local Contexts in this Store.

@@ -1,0 +1,8 @@
+Profile: sixworld-v2-template
+Context lineage: task-2 > participant > admin-v2-scratch
+On context: task-2/participant/admin-v2-scratch
+
+Inventory · Checkpoints 1
+
+Recent changes · latest 1 of 1 checkpoints:
+  ef7e9d02  2026-08-25 14:02  init          Initialized context 'task-2/participant/admin-v2-scratch'

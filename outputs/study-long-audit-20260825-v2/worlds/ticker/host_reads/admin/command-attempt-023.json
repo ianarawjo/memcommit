@@ -1,0 +1,28 @@
+{
+  "sequence": 23,
+  "count_before": 267,
+  "count_after": 268,
+  "delta": 1,
+  "new_attempt_uids": [
+    "8e51a0d5-df7c-4926-9eac-4404b091c32a"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "8e51a0d5-df7c-4926-9eac-4404b091c32a",
+      "operation": "status",
+      "command": "mem status --branch",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:12:40.085304+00:00",
+      "completed_at": "2026-08-25T18:12:40.188503+00:00",
+      "elapsed_seconds": 0.10303129200474359,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

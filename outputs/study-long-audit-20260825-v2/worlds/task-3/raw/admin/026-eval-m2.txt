@@ -1,0 +1,34 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 eval semantic run ambiguity --provider codex_chatgpt --model gpt-5.6-sol --reasoning none --pipeline v2 --corpus calibration --runs 1 --case single-none-main-entrance-hours --ledger-dir /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-3/admin-eval-ledger
+
+STDIN
+<none>
+
+EXIT
+0
+
+WALL_SECONDS
+6.032196
+
+POST_CALL_IDENTITY_HOST_ASSERTION
+{"profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-3/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+STDOUT
+Connected: codex_chatgpt:gpt-5.6-sol · reasoning none · 0.025s
+[01/01] single-none-main-entrance-hours · run 1 · PASS · 4.749s
+Semantic eval · ambiguity · classification gate
+Provider: codex_chatgpt:gpt-5.6-sol · reasoning=none · runs=1 · cases=1/10
+Corpus: CALIBRATION · leave-one-out · not an independent holdout · digest 003654c092e0
+Pipeline: ambiguity-classify-v2 · schema v2
+Score: 1/1 cases passed
+Attempts: exact 1/1 · structurally valid 1/1
+Timing: connection 0.025s · completion mean/median/p95/max 4.749s/4.749s/4.749s/4.749s · campaign 4.751s · total 4.777s
+Label distribution:
+  interpretation   NONE  HELPFUL  REQUIRED
+  SINGLE            1        0         0
+  DOMINANT          0        0         0
+  COMPETING         0        0         0
+Ledger: /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-3/admin-eval-ledger/runs/20260825T175959817698Z-f8e5fd34.json
+
+
+STDERR

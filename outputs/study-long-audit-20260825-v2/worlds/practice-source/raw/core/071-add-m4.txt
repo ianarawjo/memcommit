@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source add 'CANDIDATE: use sentence case for document titles by default, subject only to an explicitly named style guide capitalization override; preserve the intended word for. Use consistent italics for work titles by default, subject only to an explicitly named style guide work-title-format override.' --context practice
+
+EXIT
+0
+
+WALL_SECONDS
+1.353485
+
+STDOUT
+Added [435deab1] CANDIDATE: use sentence case for document titles by default, subject only to an explicitly named style guide capitalization override; preserve the intended word for. Use consistent italics for work titles by default, subject only to an explicitly named style guide work-title-format override.
+
+
+STDERR

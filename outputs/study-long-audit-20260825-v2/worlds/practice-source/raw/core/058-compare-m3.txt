@@ -1,0 +1,17 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source compare practice/source practice/description
+
+EXIT
+0
+
+WALL_SECONDS
+6.738556
+
+STDOUT
+Compare · practice/source ↔ practice/description
+
+COMPARISON
+  The frames share the same editing and verification rules, including preserving four intended points and cutting roughly 20–30% only when a shorter fixed limit applies. The compared frame additionally specializes these rules as source material for a three-task memcommit practice exercise requiring atomic separation without performing edits or changing meaning.
+
+
+STDERR

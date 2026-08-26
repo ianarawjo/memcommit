@@ -1,0 +1,279 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple diff b369b639 --context practice/source --raw
+
+EXIT
+0
+
+OUTPUT
+UNIT        CHECKPOINT · THIS CHECKPOINT VS PREVIOUS
+CHECKPOINT  b369b639-9e65-466d-a7aa-0d19edaf033f
+CONTEXT     practice/source
+ACTION      checkpoint
+DESCRIPTION a-is-apple transform round 5 recovery before destructive scratch trials
+RESULT      19 DIRECT ITEMS
+SUMMARY     0 kept · 19 added · 0 edited · 25 removed
+
+diff --mem practice/source#b443aa3f-d84c-4370-a361-6ac6b2f6c023
+--- a/practice/source#b443aa3f-d84c-4370-a361-6ac6b2f6c023
++++ /dev/null
+@@ -1 +0,0 @@
+-Recover the preferred set as exactly: a maps to apple, b maps to banana, and c maps to cedar; do not introduce mappings for other letters.
+\ No newline at end of file
+diff --mem practice/source#fe3ff968-8b04-4306-8db0-48049cbe98e2
+--- a/practice/source#fe3ff968-8b04-4306-8db0-48049cbe98e2
++++ /dev/null
+@@ -1 +0,0 @@
+-Keep unresolved alternatives explicit during recovery instead of silently replacing the preferred mapping.
+\ No newline at end of file
+diff --mem practice/source#cd7dfe8a-36a0-4912-af58-ad0cbb56bf3c
+--- a/practice/source#cd7dfe8a-36a0-4912-af58-ad0cbb56bf3c
++++ /dev/null
+@@ -1 +0,0 @@
+-For each mapping discussed, label whether its provenance identifies it as preferred or leaves it as an unresolved alternative.
+\ No newline at end of file
+diff --mem practice/source#506ca83d-c293-455f-9747-09755d7759fd
+--- a/practice/source#506ca83d-c293-455f-9747-09755d7759fd
++++ /dev/null
+@@ -1 +0,0 @@
+-When a preferred mapping and an unresolved alternative concern the same source item, present both with their respective provenance and explain only the provenance difference that supports their different status.
+\ No newline at end of file
+diff --mem practice/source#22c1519f-4ce8-4bab-bb90-aa0b47d3b4bd
+--- a/practice/source#22c1519f-4ce8-4bab-bb90-aa0b47d3b4bd
++++ /dev/null
+@@ -1 +0,0 @@
+-Do not add mappings, resolve alternatives, or infer preference from the mapping values themselves; report preference only when the cited provenance supports it, and otherwise retain the alternative as unresolved.
+\ No newline at end of file
+diff --mem practice/source#136a560e-c1d1-4438-b66b-8e937c0af72a
+--- a/practice/source#136a560e-c1d1-4438-b66b-8e937c0af72a
++++ /dev/null
+@@ -1 +0,0 @@
+-a is apple.
+\ No newline at end of file
+diff --mem practice/source#b0e0be1c-05b7-469d-8a20-3fd59c426b6f
+--- a/practice/source#b0e0be1c-05b7-469d-8a20-3fd59c426b6f
++++ /dev/null
+@@ -1 +0,0 @@
+-a maps to apple;
+\ No newline at end of file
+diff --mem practice/source#715187fa-b897-4bf5-8af4-cf8fac6a5cd7
+--- a/practice/source#715187fa-b897-4bf5-8af4-cf8fac6a5cd7
++++ /dev/null
+@@ -1 +0,0 @@
+-this edited duplicate retains the original
+\ No newline at end of file
+diff --mem practice/source#363f2765-b064-44d7-b0d3-3a640eedf614
+--- a/practice/source#363f2765-b064-44d7-b0d3-3a640eedf614
++++ /dev/null
+@@ -1 +0,0 @@
+-assertion.
+\ No newline at end of file
+diff --mem practice/source#3d6c9417-7086-4043-9407-46f535230e6c
+--- a/practice/source#3d6c9417-7086-4043-9407-46f535230e6c
++++ /dev/null
+@@ -1 +0,0 @@
+-{"content":"a is apple.","content_sha256":"47398c1717bfd3f093b0ebc34169259e40f4838a252d8c001b0084e054d1f881","target_context":{"name":"practice","uid":"824acb9d-695c-5d55-9997-64cc317a2203"},"target_memory_uid":"f1c940a1-e572-4070-94a7-be4722fdbf2b","type":"memory_snapshot_ref","uid":"3d6c9417-7086-4043-9407-46f535230e6c"}
+\ No newline at end of file
+diff --mem practice/source#b6e1778f-482b-49b4-94fc-5055a94fb0ff
+--- a/practice/source#b6e1778f-482b-49b4-94fc-5055a94fb0ff
++++ /dev/null
+@@ -1 +0,0 @@
+-{"content":"b is banana.","content_sha256":"485ce501c9dc4e9e891198f6943dbd683142867b0806b66b147c8fed3d82c6ea","target_context":{"name":"practice/source","uid":"7e48e68e-3c6f-541b-bfc1-e307abcc7a4f"},"target_memory_uid":"4a8036d1-67a5-497a-b287-98d1302d4619","type":"memory_snapshot_ref","uid":"b6e1778f-482b-49b4-94fc-5055a94fb0ff"}
+\ No newline at end of file
+diff --mem practice/source#7e48e68e-3c6f-541b-bfc1-e307abcc7a4f
+--- a/practice/source#7e48e68e-3c6f-541b-bfc1-e307abcc7a4f
++++ /dev/null
+@@ -1 +0,0 @@
+-{"name":"practice/source","type":"context_ref","uid":"7e48e68e-3c6f-541b-bfc1-e307abcc7a4f"}
+\ No newline at end of file
+diff --mem practice/source#f173f17a-ea9f-4e77-b6ba-3ca6f2f580d5
+--- a/practice/source#f173f17a-ea9f-4e77-b6ba-3ca6f2f580d5
++++ /dev/null
+@@ -1 +0,0 @@
+-a maps to apple;
+\ No newline at end of file
+diff --mem practice/source#a7a92ce0-a77a-44af-aa76-e59073844723
+--- a/practice/source#a7a92ce0-a77a-44af-aa76-e59073844723
++++ /dev/null
+@@ -1 +0,0 @@
+-copied from the original direct Memory for
+\ No newline at end of file
+diff --mem practice/source#03d96470-90dd-4f16-8785-e3d018a92108
+--- a/practice/source#03d96470-90dd-4f16-8785-e3d018a92108
++++ /dev/null
+@@ -1 +0,0 @@
+-provenance.
+\ No newline at end of file
+diff --mem practice/source#94b522dc-e113-4dd0-b826-04ff3415040f
+--- a/practice/source#94b522dc-e113-4dd0-b826-04ff3415040f
++++ /dev/null
+@@ -1 +0,0 @@
+-{"content":"b is boat.","content_sha256":"cd96b211546ad1a7273e041b12cd3fa7fb4369a245673a965324741f0af9d3dd","target_context":{"name":"practice/source","uid":"7e48e68e-3c6f-541b-bfc1-e307abcc7a4f"},"target_memory_uid":"c1cf9a92-dbf1-41f4-a0e4-8e2a3e701b3f","type":"memory_snapshot_ref","uid":"94b522dc-e113-4dd0-b826-04ff3415040f"}
+\ No newline at end of file
+diff --mem practice/source#976fa18c-5ee6-4131-b9e4-f73b385edc10
+--- a/practice/source#976fa18c-5ee6-4131-b9e4-f73b385edc10
++++ /dev/null
+@@ -1 +0,0 @@
+-{"content":"a is apple.","content_sha256":"47398c1717bfd3f093b0ebc34169259e40f4838a252d8c001b0084e054d1f881","target_context":{"name":"practice/source","uid":"7e48e68e-3c6f-541b-bfc1-e307abcc7a4f"},"target_memory_uid":"dfc0640c-49d4-4ccf-8497-bf296599cb91","type":"memory_snapshot_ref","uid":"976fa18c-5ee6-4131-b9e4-f73b385edc10"}
+\ No newline at end of file
+diff --mem practice/source#d5d0a8b4-d425-5c9f-9325-56329df711ef
+--- a/practice/source#d5d0a8b4-d425-5c9f-9325-56329df711ef
++++ /dev/null
+@@ -1 +0,0 @@
+-{"name":"practice/description","type":"context_ref","uid":"d5d0a8b4-d425-5c9f-9325-56329df711ef"}
+\ No newline at end of file
+diff --mem practice/source#2d835771-5cff-4322-af17-c2f519f5ce8a
+--- a/practice/source#2d835771-5cff-4322-af17-c2f519f5ce8a
++++ /dev/null
+@@ -1 +0,0 @@
+-a maps to apricot;
+\ No newline at end of file
+diff --mem practice/source#29cbc308-eab9-42f0-a4e5-e0565ad9f7f4
+--- a/practice/source#29cbc308-eab9-42f0-a4e5-e0565ad9f7f4
++++ /dev/null
+@@ -1 +0,0 @@
+-this is a deliberate conflicting
+\ No newline at end of file
+diff --mem practice/source#869325c3-6d5c-4eaf-a5ef-266e22d0df54
+--- a/practice/source#869325c3-6d5c-4eaf-a5ef-266e22d0df54
++++ /dev/null
+@@ -1 +0,0 @@
+-alternative for recovery testing.
+\ No newline at end of file
+diff --mem practice/source#48ad6a39-c59a-4c73-82a8-3c3b3fc02839
+--- a/practice/source#48ad6a39-c59a-4c73-82a8-3c3b3fc02839
++++ /dev/null
+@@ -1 +0,0 @@
+-Preferred set: a is apple; b is banana; c is cedar; unresolved alternatives remain explicit.
+\ No newline at end of file
+diff --mem practice/source#6975906e-4968-4c91-8f43-2b68192851b7
+--- a/practice/source#6975906e-4968-4c91-8f43-2b68192851b7
++++ /dev/null
+@@ -1 +0,0 @@
+-Preferred set: a is apple; b is banana;
+\ No newline at end of file
+diff --mem practice/source#400678d1-5ee5-4d3e-bddb-16863ddc2c41
+--- a/practice/source#400678d1-5ee5-4d3e-bddb-16863ddc2c41
++++ /dev/null
+@@ -1 +0,0 @@
+-c is cedar;
+\ No newline at end of file
+diff --mem practice/source#c7d239df-7dbd-4f73-a6ee-f49ef9631049
+--- a/practice/source#c7d239df-7dbd-4f73-a6ee-f49ef9631049
++++ /dev/null
+@@ -1 +0,0 @@
+-unresolved alternatives remain explicit.
+\ No newline at end of file
+diff --mem practice/source#f3ef224d-ff16-5a7a-880a-18eee2fc55b5
+--- /dev/null
++++ b/practice/source#f3ef224d-ff16-5a7a-880a-18eee2fc55b5
+@@ -0,0 +1 @@
++When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.
+\ No newline at end of file
+diff --mem practice/source#e50c293a-2416-50c8-b35c-45b53ff58db5
+--- /dev/null
++++ b/practice/source#e50c293a-2416-50c8-b35c-45b53ff58db5
+@@ -0,0 +1 @@
++If I later ask for polishing, preserve the overall strucutre and citation-needed markers, and change only wording that causes a problem.
+\ No newline at end of file
+diff --mem practice/source#39b21971-6ad4-561f-830e-99377eeeab09
+--- /dev/null
++++ b/practice/source#39b21971-6ad4-561f-830e-99377eeeab09
+@@ -0,0 +1 @@
++When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um... for example, use distribute, not divide, when material is absorbed into two parts.
+\ No newline at end of file
+diff --mem practice/source#6fad23ab-406e-5298-98e5-0bf00b224b21
+--- /dev/null
++++ b/practice/source#6fad23ab-406e-5298-98e5-0bf00b224b21
+@@ -0,0 +1 @@
++If a passage is supposed to make four points, keep all four while removing parts that are too redundent and stating repeated content only once.
+\ No newline at end of file
+diff --mem practice/source#6cc4b8a3-eaff-5805-8d37-83dd4bf8872c
+--- /dev/null
++++ b/practice/source#6cc4b8a3-eaff-5805-8d37-83dd4bf8872c
+@@ -0,0 +1 @@
++When the draft has to fit a shorter fixed limit, aim to cut around 20–30% from redundant or unnecessary material.
+\ No newline at end of file
+diff --mem practice/source#7ebe67fb-e08d-50b1-8c3b-af25d70462eb
+--- /dev/null
++++ b/practice/source#7ebe67fb-e08d-50b1-8c3b-af25d70462eb
+@@ -0,0 +1 @@
++But don't shorten sentences so aggressively that a claim sounds more categorical; keep enough wording to preserve its original strength and conditions.
+\ No newline at end of file
+diff --mem practice/source#b976766e-d366-5065-929e-5f31e638fdbe
+--- /dev/null
++++ b/practice/source#b976766e-d366-5065-929e-5f31e638fdbe
+@@ -0,0 +1 @@
++If the next idea is merely related and does not broaden the scope, don't use More broadly; use In relation to this or another accurate connector without adding a new claim merely to make two paragraphs connect.
+\ No newline at end of file
+diff --mem practice/source#44de7eff-4117-549c-a78e-f2cd3ab50133
+--- /dev/null
++++ b/practice/source#44de7eff-4117-549c-a78e-f2cd3ab50133
+@@ -0,0 +1 @@
++For any titlle about interaction with AI agent memory, keep the exact terminology and intended words: use interaction and management and AI agent memory rather than agent memory.
+\ No newline at end of file
+diff --mem practice/source#1a9d3a74-12a1-50f1-96d0-bcaa09a65406
+--- /dev/null
++++ b/practice/source#1a9d3a74-12a1-50f1-96d0-bcaa09a65406
+@@ -0,0 +1 @@
++By default, format a document title in sentence case rather than title case. An explicitly named style guide may override only that capitalization default; always keep for whenever it is part of the intended wording.
+\ No newline at end of file
+diff --mem practice/source#94c3ce98-85f3-51e2-a351-8cb92ec040c3
+--- /dev/null
++++ b/practice/source#94c3ce98-85f3-51e2-a351-8cb92ec040c3
+@@ -0,0 +1 @@
++If titles of works use quotation marks in some places and italics in others, make them consistently italic throughout the document by default; an explicitly named style guide may override only this work-title format.
+\ No newline at end of file
+diff --mem practice/source#96300a95-2cb2-5644-bae6-f53d7b31a725
+--- /dev/null
++++ b/practice/source#96300a95-2cb2-5644-bae6-f53d7b31a725
+@@ -0,0 +1 @@
++When I say that content looks wrong, find accurate information before proposing a correction by reading the original paper, book, or guide, not only an abstract or a short snippet.
+\ No newline at end of file
+diff --mem practice/source#4fe217eb-2b65-5fb0-92ff-733ced1e9270
+--- /dev/null
++++ b/practice/source#4fe217eb-2b65-5fb0-92ff-733ced1e9270
+@@ -0,0 +1 @@
++Before adding or reusing citations and refferences, verify that each source exists and supports the exact claim after reviewing the complete source. Don't invent quotations or evidence or overstate an author's contribution or a paper's status. If I asked only for review, report a verification problem first instead of silently rewriting the draft.
+\ No newline at end of file
+diff --mem practice/source#4a8036d1-67a5-497a-b287-98d1302d4619
+--- /dev/null
++++ b/practice/source#4a8036d1-67a5-497a-b287-98d1302d4619
+@@ -0,0 +1 @@
++b is banana.
+\ No newline at end of file
+diff --mem practice/source#c1cf9a92-dbf1-41f4-a0e4-8e2a3e701b3f
+--- /dev/null
++++ b/practice/source#c1cf9a92-dbf1-41f4-a0e4-8e2a3e701b3f
+@@ -0,0 +1 @@
++b is blueberry.
+\ No newline at end of file
+diff --mem practice/source#be4139d0-97c4-4baa-a90f-b35120bcd188
+--- /dev/null
++++ b/practice/source#be4139d0-97c4-4baa-a90f-b35120bcd188
+@@ -0,0 +1 @@
++b is banana;
+\ No newline at end of file
+diff --mem practice/source#7ab9caeb-ce39-4b2b-bf3e-2ebe3665e5c7
+--- /dev/null
++++ b/practice/source#7ab9caeb-ce39-4b2b-bf3e-2ebe3665e5c7
+@@ -0,0 +1 @@
++this copied mapping is provisional while
+\ No newline at end of file
+diff --mem practice/source#1f9dc37a-578a-4502-ad6a-3e66d79d04f0
+--- /dev/null
++++ b/practice/source#1f9dc37a-578a-4502-ad6a-3e66d79d04f0
+@@ -0,0 +1 @@
++blueberry remains visible.
+\ No newline at end of file
+diff --mem practice/source#584c69df-42df-4a4a-8cf1-8c5ec4453d69
+--- /dev/null
++++ b/practice/source#584c69df-42df-4a4a-8cf1-8c5ec4453d69
+@@ -0,0 +1 @@
++b is blueberry.
+\ No newline at end of file
+diff --mem practice/source#3e9ffb8f-a60c-43ca-8018-12e09a8fe571
+--- /dev/null
++++ b/practice/source#3e9ffb8f-a60c-43ca-8018-12e09a8fe571
+@@ -0,0 +1 @@
++{"content":"Canonical set: a is apple; b is banana; c is cedar; unresolved alternatives remain explicit.","content_sha256":"297d35c874264eed8c7de27c4e95dc01caac0310ad5dcea59a61a8a09f8181e9","target_context":{"name":"practice","uid":"824acb9d-695c-5d55-9997-64cc317a2203"},"target_memory_uid":"b5180f53-fbee-483a-afd3-72a1433f34e9","type":"memory_snapshot_ref","uid":"3e9ffb8f-a60c-43ca-8018-12e09a8fe571"}
+\ No newline at end of file

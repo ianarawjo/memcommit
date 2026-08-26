@@ -1,0 +1,11 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple eval semantic check 20260825T180054387235Z-b3f50264 --ledger-dir /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/a-is-apple/admin-eval-ledger
+
+EXIT
+0
+
+OUTPUT
+Semantic eval check · PASS · find-ambiguities · codex_chatgpt:gpt-5.6-sol · reasoning=none · runs=1 · cases=1/10
+  run_id 20260825T180054387235Z-b3f50264 · pipeline ambiguity-classify-v2 v2
+  cases 1/1 passed, 0 failed · attempts exact 1/1
+  fixture 003654c092e0 · ledger /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/a-is-apple/admin-eval-ledger/runs/20260825T180054387235Z-b3f50264.json

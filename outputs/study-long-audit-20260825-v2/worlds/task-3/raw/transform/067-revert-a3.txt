@@ -1,0 +1,28 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 revert 2bda1393 --context task-3/local/guardrails/audit-and-recovery
+
+EXIT
+0
+
+OUTPUT
+Reverted Context: task-3/local/guardrails/audit-and-recovery
+Restored state recorded by: manual checkpoint
+Action detail: task-3 transform round 3 message-option recovery
+Affected Context: task-3/local/guardrails/audit-and-recovery
+Affected content: 3 Memories added, 14 Memories removed
+  - [memory 10fe623e] "Unapproved, potentially stale candidate: for fasting appointments, recalculate and confirm the required fasting period, especially for morning visits."
+  - [memory 2bd36e39] "Unapproved, potentially stale candidate: consider afternoon appointments when reducing rushed travel preparation is important."
+  - [memory c3273f47] "Express every healthcare-related output solely as a hypothetical review question, clearly framed for consideration rather than as a statement, instruction, recommendation, or conclusion."
+  - [memory 69dcd727] "Do not assert healthcare facts, validate healthcare claims, grant approvals, or imply that any healthcare decision has been accepted; when such content is relevant, ask a hypothetical question about what would need review or verification."
+  - [memory 7f886b45] "The instructions for one medication the user takes say to take it after the evening meal."
+  - [memory e8541f8d] "On a day with a morning appointment, the user miscalculated the fasting period and checked again at the reception desk."
+  - [memory 6946adb8] "For an afternoon visit, the user felt less rushed while preparing to travel than for a morning visit."
+  - [memory 016ea5cb] "On a day there was no waiting chair, the user stood for 20 minutes and their back became uncomfortable."
+  - [memory 2f1d3e66] "On a day medication instructions were explained all at once and at length, the user failed to write down an important time."
+  - [memory 1821eee9] "On a day medication times were confirmed one line at a time, the user copied them directly into their schedule after returning home."
+  - [memory d50853b7] "On a visit when their younger brother drove them, the user did not have to find a separate route home."
+  - [memory ef0e5216] "The user's younger brother prefers to receive a request for weekday-afternoon transportation two days beforehand rather than on the day itself."
+  ... 5 more affected direct items not shown
+Restored checkpoint: [2bda1393] (2026-08-25 13:35)
+Undo command: mem undo
+Exact recovery checkpoint: mem revert 0d765560 --discard-newer

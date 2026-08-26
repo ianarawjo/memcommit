@@ -1,0 +1,18 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker elaborate --from task-2/participant/proposal-workspace --goal 'Explain only existing ticker-example provenance.' --to task-3/local
+
+EXIT
+0
+
+OUTPUT
+ELABORATE APPLIED · task-3/local
+MODE · RULES_TO_CASES · VERIFICATION · UNVERIFIED · QUALITY · BEST_EFFORT
+SOURCE · task-2/participant/proposal-workspace · TARGET · task-3/local
+EFFECTS · ADD 3 MEMORIES
+
+  [memory fb2d9502] North-Star, Inc. becomes NORTHSTAR after removing the comma, hyphen, space, and terminal Inc. suffix, then rendering the derived base ticker in uppercase.
+  [memory 176230ea] Route 066, LLC becomes ROUTE066 after removing the comma, space, and terminal LLC suffix, preserving the digits 066—including the leading zero—in their original positions, and rendering the derived base ticker in uppercase.
+  [memory 83ec0fd9] Acme Corp. Class A becomes ACME.A, while Acme Corp. Class B becomes ACME.B: in each derivation, remove the terminal Corp. legal suffix, render the derived base ticker ACME in uppercase, and map the following share class to generated ticker syntax .A or .B rather than retaining the words “Class A” or “Class B.”
+
+REVIEW · mem review elaborate --receipt 6b03b787-6d51-446f-b728-4f24fdad04ab
+UNDO · mem undo

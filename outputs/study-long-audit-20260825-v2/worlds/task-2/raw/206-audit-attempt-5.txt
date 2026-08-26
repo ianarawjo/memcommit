@@ -1,0 +1,15 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 audit task-2/participant/proposal-workspace --against task-2/description
+EXIT: 0
+DURATION_SECONDS: 20.173
+
+Audit saved: 3 quality checks.
+Source: task-2/participant/proposal-workspace · 22 memories
+
+REDUNDANCIES   22 MEMORIES CHECKED · 2 GROUPS · 2 PROPOSED ABSORPTIONS
+  ≈ REDUNDANT · SEMANTIC EQUIVALENT · [MEMORY 169e0461] “Budget reconciliation: keep totals and major ca…” ↔ [MEMORY 854a7370] “For budget reconciliation, keep totals and majo…”
+  ≈ REDUNDANT · SEMANTIC EQUIVALENT · [MEMORY c612b119] “Recruitment reconciliation: before commitments,…” ↔ [MEMORY c505d730] “For recruitment reconciliation, before commitme…”
+AMBIGUITIES    0/22 MEMORIES FLAGGED
+CONFLICTS      0/22 MEMORIES INVOLVED · 0/231 PAIRS FLAGGED
+
+Review full audit:
+mem review audit --session 40337180-9b50-44ea-a688-7d0e91d19acb

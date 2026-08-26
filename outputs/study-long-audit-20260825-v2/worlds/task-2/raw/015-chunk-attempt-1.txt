@@ -1,0 +1,11 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 chunk task-2:41debba1 --method sentences --max-chars 100
+EXIT: 0
+DURATION_SECONDS: 1.323
+
+
+Proposed split of [41debba1] in Context 'task-2' → 2 chunks (method=sentences, max_chars=100)
+────────────────────────────────────────────────────────
+   1  Equal-authority synthesis rule: preserve each shared co-advi
+   2  conditions, and explain unresolved conflicts with both prove
+────────────────────────────────────────────────────────
+Done — 2 memories added in 'task-2'.

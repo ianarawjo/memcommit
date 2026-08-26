@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source chunk practice:bd813edf --method sentences
+
+EXIT
+0
+
+WALL_SECONDS
+1.317424
+
+STDOUT
+Memory [bd813edf] produced only 1 chunk(s) with method=sentences — no changes made.
+
+
+STDERR

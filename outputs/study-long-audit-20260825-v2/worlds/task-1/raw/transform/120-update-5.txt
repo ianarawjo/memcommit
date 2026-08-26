@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 update task-1/participant/construction-updates/shop-updates task-1/participant --direct --replace-stage --goal 'Keep closure and alternative-service facts explicit; add nothing unsupported.'
+
+EXIT
+1
+
+OUTPUT
+Update error: Update cannot use granted Memory Embed 'task-1/campus-wiki/event-relocations' [c1a5d80d] in Context 'task-1/participant' as semantic evidence through its local owner. EMBED authorizes live reading, not provider disclosure or derived work; select the granted Source through an operation-aware authority route instead.

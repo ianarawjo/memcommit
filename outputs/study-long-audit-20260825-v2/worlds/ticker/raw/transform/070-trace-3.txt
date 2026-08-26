@@ -1,0 +1,12 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker trace task-2/participant/proposal-workspace:ace52daf --limit 1
+
+EXIT
+0
+
+OUTPUT
+TRACE · task-2/participant/proposal-workspace
+MEMORY · ace52daf-a352-4495-a839-50fd396627c2
+LINEAGE · 7 events · 3 components
+ATTENTION · 0 limits
+DETAILS · mem trace ace52daf-a352-4495-a839-50fd396627c2 --context task-2/participant/proposal-workspace --plain

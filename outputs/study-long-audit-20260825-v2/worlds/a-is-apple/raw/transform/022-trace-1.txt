@@ -1,0 +1,12 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple trace practice:f1c940a1 --limit 3
+
+EXIT
+0
+
+OUTPUT
+TRACE · practice
+MEMORY · f1c940a1-e572-4070-94a7-be4722fdbf2b
+LINEAGE · 3 events · 2 components
+ATTENTION · 0 limits
+DETAILS · mem trace f1c940a1-e572-4070-94a7-be4722fdbf2b --context practice --plain

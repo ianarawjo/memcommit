@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 update task-3/local/guardrails/approval-and-delivery task-3/local/guardrails/audit-and-recovery --goal 'Preserve explicit recipient, purpose, item, channel, retention, and consent gates; do not apply unsupported facts.' --direct --replace-stage
+
+EXIT
+0
+
+OUTPUT
+UPDATE APPLIED · task-3/local/guardrails/approval-and-delivery → task-3/local/guardrails/audit-and-recovery
+EFFECTS · ADD 0 · EDIT 5 · REMOVE 0
+RECEIPT · 588a8c92-7e0a-4894-b7db-70bff460e7f0
+GOAL FOCUS · INLINE · INLINE · 1 ITEM
+CHECKPOINTS · task-3/local/guardrails/audit-and-recovery [ebeaed13-5a1b-4bb1-965f-dcced1b70017]
+REVIEW · mem review update --session 588a8c92-7e0a-4894-b7db-70bff460e7f0
+RECOVERY · mem undo

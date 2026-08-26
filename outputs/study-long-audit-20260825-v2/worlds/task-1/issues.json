@@ -1,0 +1,234 @@
+{
+  "schema_version": 1,
+  "study": "study-long-audit-20260825-v2",
+  "world": "task-1",
+  "issues": [
+    {
+      "id": "T1-V2-CONTEXTS-GLOBAL-OVERLOAD",
+      "title": "World-focused discovery prints every world and Grant",
+      "expected": "A focused workflow should be able to narrow Context discovery to task-1 or the current subtree while preserving Grant annotations.",
+      "actual": "Every bare Contexts call printed 105 catalog rows (125 raw lines), including unrelated task-2 and task-3 namespaces; no filter was available.",
+      "workaround": "Use literal Find/List with an exact task-1 root after manually locating it in the global catalog.",
+      "severity": "medium",
+      "classification": "usability/information-overload",
+      "evidence_ids": [
+        "task-1/core/seq-001",
+        "task-1/core/seq-022",
+        "task-1/core/seq-043",
+        "task-1/core/seq-064",
+        "task-1/core/seq-085"
+      ]
+    },
+    {
+      "id": "T1-V2-RECURSIVE-LIST-OVERLOAD",
+      "title": "Recursive List becomes an unbounded terminal dump",
+      "expected": "A recursive inspection should remain navigable or provide a bounded/summary handoff while retaining exact data access.",
+      "actual": "The accumulated participant List occupied 904 raw lines and the public wiki List occupied 580 raw lines in plain output.",
+      "workaround": "List one exact child at a time or use literal/semantic retrieval before List.",
+      "severity": "medium",
+      "classification": "usability/information-overload",
+      "evidence_ids": [
+        "task-1/core/seq-044",
+        "task-1/core/seq-086"
+      ]
+    },
+    {
+      "id": "T1-V2-COMPARE-SAME-CONTEXT-MEMORIES",
+      "title": "Compare auto-types Memory endpoints but rejects peers in one Context",
+      "expected": "Two explicit CONTEXT:UID endpoints should compare the selected Memories even when their owner Context is the same.",
+      "actual": "The command rejected two distinct facility Memory UIDs with 'Compare requires two distinct Contexts.'",
+      "workaround": "Compare Memories owned by distinct Contexts or compare their whole peer Contexts.",
+      "severity": "medium",
+      "classification": "functional/operand-contract",
+      "evidence_ids": [
+        "task-1/core/seq-016",
+        "task-1/core/seq-079"
+      ]
+    },
+    {
+      "id": "T1-V2-QUALITY-SCOPE-ASYMMETRY",
+      "title": "Quality finders expose incompatible scope grammars",
+      "expected": "Find Ambiguities and Find Conflicts should share the direct/recursive scope vocabulary already used by Find Duplicates and Find Redundancies, or clearly present an equivalent noninteractive range control.",
+      "actual": "Both commands rejected --direct at parser level and suggested --select; positional exact Context worked on later attempts.",
+      "workaround": "Use a positional exact Context for direct analysis, --all for Profile breadth, or --select only in a TTY.",
+      "severity": "low",
+      "classification": "usability/command-consistency",
+      "evidence_ids": [
+        "task-1/core/seq-019",
+        "task-1/core/seq-020",
+        "task-1/core/seq-040",
+        "task-1/core/seq-041"
+      ]
+    },
+    {
+      "id": "T1-V2-REFERENCE-GRANTED-CONTEXT-RESOLUTION",
+      "title": "Reference cannot snapshot a readable granted Context",
+      "expected": "Reference's Source Context route should resolve a readable granted public Context, as its exact granted-Memory route and Embed's whole granted-Context route do.",
+      "actual": "Reference reported task-1/campus-wiki/building-access does not exist, although Contexts/List/Show resolved it and later granted Memory Reference and whole-Context Embed succeeded.",
+      "workaround": "Reference an exact public Memory or Embed the public Context; use Copy when an owned snapshot is required.",
+      "severity": "high",
+      "classification": "functional/grant-resolution",
+      "evidence_ids": [
+        "task-1/core/seq-054",
+        "task-1/core/seq-075",
+        "task-1/core/seq-076",
+        "task-1/core/seq-097"
+      ]
+    },
+    {
+      "id": "T1-V2-CHUNK-FRAGMENTED-ATOMS",
+      "title": "Hard-bounded Chunk emits semantically incomplete fragments",
+      "expected": "Clause chunking should preserve independently intelligible atomic Memories or visibly warn that a hard character cap forced dependent fragments.",
+      "actual": "A valid clause/max-char split produced '...during the' and 'construction period.' as separate Memories; Find Ambiguities immediately flagged both as mutually dependent underspecified fragments.",
+      "workaround": "Use a larger max_chars value and immediately run Find Ambiguities before consuming chunks.",
+      "severity": "high",
+      "classification": "semantic-integrity/chunking",
+      "evidence_ids": [
+        "task-1/core/seq-036",
+        "task-1/core/seq-040",
+        "task-1/core/seq-057",
+        "task-1/core/seq-061"
+      ]
+    },
+    {
+      "id": "T1-V2-COMPARE-LEDGER-INVALID-REPAIR",
+      "title": "Compare ledger waits 109 seconds then loses the analysis",
+      "expected": "A ledger comparison should return a valid exhaustive relation ledger or fail promptly without consuming a long provider-repair cycle.",
+      "actual": "After 109.62 seconds, Compare failed because provider repair assigned DISTINCT to invalid PEER sides; no usable ledger was published.",
+      "workaround": "Use snapshot Compare for a summary and separate Find/Fit reports for relation evidence.",
+      "severity": "high",
+      "classification": "provider-schema-infrastructure/reliability",
+      "evidence_ids": [
+        "task-1/core/seq-100",
+        "task-1/core/seq-058",
+        "task-1/core/seq-105"
+      ]
+    },
+    {
+      "id": "T1-V2-FIT-TEMPORAL-OVERRIDE",
+      "title": "Fit treats a time-bounded exception as incompatible with usual hours",
+      "expected": "A June 24–August 23 construction-specific 7 a.m.–11 p.m. schedule can coexist with a store's usual recess 9 a.m.–6 p.m. schedule as an explicit temporary override.",
+      "actual": "Fit returned NO and treated the ordinary 'usual recess hours' statement as an unconditional conflict with the dated construction update.",
+      "workaround": "State override precedence explicitly in the background or preserve the normal and temporary schedules in separate time-scoped Contexts.",
+      "severity": "medium",
+      "classification": "semantic/temporal-reasoning",
+      "evidence_ids": [
+        "task-1/core/seq-105"
+      ]
+    },
+    {
+      "id": "T1-V2-ATOMIZE-WHOLE-FRAME-UNCERTAIN",
+      "title": "Whole-frame Atomize cannot reach semantic chunk normal form",
+      "expected": "Whole direct construction frames should either produce complete reviewable Atomize sessions or identify a bounded input-size/schema limit before provider work.",
+      "actual": "The 19-Memory facility frame ran for 51.07 s and returned 14 UNCERTAIN dispositions; the 15-Memory parking frame ran for 42.54 s and returned one UNCERTAIN disposition. Both rejected the whole result with no Context publication, while three focused-Memory routes succeeded.",
+      "workaround": "Use exact Memory Atomize routes and review each source-bound result; do not treat focused success as whole-frame coverage.",
+      "severity": "medium",
+      "classification": "provider-schema-infrastructure/reliability",
+      "evidence_ids": [
+        "T1-V2-TRANSFORM-001",
+        "T1-V2-TRANSFORM-073"
+      ]
+    },
+    {
+      "id": "T1-V2-AUDIT-CROSS-FRAME-LATENCY",
+      "title": "Cross-frame Audit approaches or exceeds the bounded call timeout",
+      "expected": "A complete saved cross-Context Audit should finish within the declared 300-second bounded-call window or fail early with a size/cost diagnostic.",
+      "actual": "Building-access against route-changes reached the 300-second harness timeout with no completed artifact; temporary-parking against building-access completed only after 252.01 s. Single-frame Audits completed in 18.29–30.38 s.",
+      "workaround": "Run single-frame Audit snapshots and a separate Check Conformance call for the cross-area rule frame, preserving both receipts.",
+      "severity": "medium",
+      "classification": "provider-infrastructure/performance",
+      "evidence_ids": [
+        "T1-V2-TRANSFORM-050",
+        "T1-V2-TRANSFORM-074"
+      ]
+    },
+    {
+      "id": "T1-V2-IMPACT-AUDIT-ROUTE-GAP",
+      "title": "Impact cannot consume a saved Audit session",
+      "expected": "A saved read-only Audit artifact should have an operation-aware Impact route, consistent with other saved semantic analysis sessions.",
+      "actual": "`impact audit --session deadbeef` was rejected by the command router with `No such command 'audit'`; the failure occurred at routing before artifact lookup, even though Audit is a saved session family and `review audit` exists.",
+      "workaround": "Use `review audit --session … --snapshot` to inspect the immutable artifact; no Audit-specific Impact preview is available.",
+      "severity": "low",
+      "classification": "operation-consistency/usability",
+      "evidence_ids": [
+        "T1-V2-TRANSFORM-063"
+      ]
+    },
+    {
+      "id": "T1-V2-RATIONALE-LANGUAGE-DRIFT",
+      "title": "Rationale unexpectedly switches from English to Chinese",
+      "expected": "Rationale prose should follow the English source and surrounding CLI language unless a target language is explicitly requested.",
+      "actual": "The first facility Rationale rendered its entire provenance explanation in Chinese. The four otherwise equivalent construction Rationale routes rendered English.",
+      "workaround": "Use Trace for language-stable lineage facts, or rerun Rationale and manually verify its prose against the typed provenance events.",
+      "severity": "medium",
+      "classification": "provider-presentation/usability",
+      "evidence_ids": [
+        "T1-V2-TRANSFORM-018"
+      ]
+    },
+    {
+      "id": "T1-V2-ELABORATE-UNSUPPORTED-DETAILS",
+      "title": "Bounded Elaborate invents venue verification procedures",
+      "expected": "The inline rule requiring only verified venues, dates, and reservation status should not produce concrete operational channels, active/pending booking states, or loading-entrance details absent from the verified construction Source.",
+      "actual": "Elaborate created three UNVERIFIED/BEST_EFFORT Memories that introduced an auditorium reservation channel, active and pending booking states, and a separate loading entrance for equipment. These details were not in the verified event-relocation Memories.",
+      "workaround": "Keep Elaborate output in checkpointed scratch, treat UNVERIFIED as non-publishable, and Revert unless every generated detail can be independently grounded.",
+      "severity": "high",
+      "classification": "semantic-integrity/unsupported-generation",
+      "evidence_ids": [
+        "T1-V2-TRANSFORM-033"
+      ]
+    },
+    {
+      "id": "T1-V2-AUDIT-HARNESS-SESSION-PARSE",
+      "title": "Audit evidence runner did not recover bracketed session IDs",
+      "expected": "The audit harness should recover the saved `SESSION [uid]` token so the later counted Review can consume that exact artifact.",
+      "actual": "The world-local runner recognized only a printed `mem review audit --session` command, not Audit's actual `SESSION [uid]` header, so Review attempts 1 and 4 used the sentinel `deadbeef` and failed. The underlying Audit artifacts were successfully saved.",
+      "workaround": "Read the bracketed SESSION UID from raw Audit output; do not attribute these Review failures to the product.",
+      "severity": "low",
+      "classification": "audit-harness-infrastructure",
+      "evidence_ids": [
+        "T1-V2-TRANSFORM-002",
+        "T1-V2-TRANSFORM-020",
+        "T1-V2-TRANSFORM-074",
+        "T1-V2-TRANSFORM-092"
+      ]
+    },
+    {
+      "id": "T1-V2-ADMIN-HARNESS-POST-DIGEST-INTERRUPTION",
+      "title": "Audit harness interruption lost Eval stdout after the child had exited",
+      "expected": "The world runner should persist the child output and attempt record before an operator interruption can leave a counted call unrecorded.",
+      "actual": "Eval M2 completed a durable 1/1 PASS run and the mandatory post-child identity assertion passed, but Ctrl-C arrived during the subsequent lane digest. The in-process stdout/cost wrapper was lost before phase-admin persistence.",
+      "workaround": "Recover the counted attempt from the unique durable Eval run JSON and exact post-child identity host read; never rerun the mem command.",
+      "severity": "low",
+      "classification": "audit-harness-infrastructure",
+      "evidence_ids": [
+        "T1-V2-ADMIN-025"
+      ]
+    },
+    {
+      "id": "T1-V2-ADMIN-SAME-PROFILE-CONTEXT-IMPORT-COLLISION",
+      "title": "Same-world Context Import cannot create an aliased by-value scratch copy",
+      "expected": "Importing a registered task-1 Context by value under a fresh scratch name should either create an independent identity or expose an explicit same-Profile copy route.",
+      "actual": "Both direct and recursive Context Import stopped because the managed source Context UID already existed in the active Study Profile, even though each `--as` destination was fresh. Exact Memory Import into scratch later succeeded.",
+      "workaround": "Use exact Memory Import for a selective by-value copy, or Branch/Copy within the active Profile when source identity already exists.",
+      "severity": "medium",
+      "classification": "operation-boundary/usability",
+      "evidence_ids": [
+        "T1-V2-ADMIN-012",
+        "T1-V2-ADMIN-028"
+      ]
+    },
+    {
+      "id": "T1-V2-ADMIN-INIT-MISSING-PARENT-AUTO-CREATES",
+      "title": "Init creates a missing parent chain without --parents",
+      "expected": "`init task-1/participant/admin-v2-scratch/missing-parent/leaf` should reject the absent lexical parent unless `--parents` is supplied, keeping the explicit parent-expansion method distinct.",
+      "actual": "The command exited 0 and initialized the leaf even though `missing-parent` did not exist and `--parents` was absent.",
+      "workaround": "Host-check the parent catalog before Init when missing-parent creation would broaden scope; use `--parents` only when the full chain is intentional.",
+      "severity": "medium",
+      "classification": "functional/creation-boundary",
+      "evidence_ids": [
+        "T1-V2-ADMIN-094"
+      ]
+    }
+  ]
+}

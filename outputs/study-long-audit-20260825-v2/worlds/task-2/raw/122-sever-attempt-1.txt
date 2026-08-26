@@ -1,0 +1,5 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 sever task-2/participant/proposal-workspace task-2/description task-2/participant/sever-r1 --direct
+EXIT: 1
+DURATION_SECONDS: 1.264
+
+Sever error: Sever does not copy live Memory references from 'task-2/description'.

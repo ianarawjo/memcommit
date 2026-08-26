@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple find 'banana|boat' --regex --context practice --context practice/source
+
+EXIT
+0
+
+OUTPUT
+FIND RESULTS
+PATTERN · banana|boat · REGEX · CASE SENSITIVE
+SCOPE · practice + practice/source · EXACT · EXCLUDE EMBEDS
+SCANNED 22 · MATCHED 2 · OCCURRENCES 2
+
+1 [b6e1778f] b is banana. [practice m6] → [4a8036d1] [practice/source]
+2 [4a8036d1] b is banana. [practice/source m22]

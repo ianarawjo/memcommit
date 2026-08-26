@@ -1,0 +1,18 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple elaborate --rule 'Every alphabet example must cite an existing mapping and must not introduce a new word.' --to practice
+
+EXIT
+0
+
+OUTPUT
+ELABORATE APPLIED · practice
+MODE · RULES_TO_CASES · VERIFICATION · UNVERIFIED · QUALITY · BEST_EFFORT
+SOURCE · INLINE · TARGET · practice
+EFFECTS · ADD 3 MEMORIES
+
+  [memory c780835b] For the alphabet example, cite the existing mapping “b” to “banana.”
+  [memory d399ce0f] For the alphabet example, cite the existing mapping “b” to “blueberry.”
+  [memory b857b47a] For the alphabet example, keep “blueberry” visible and treat the copied “b” to “blueberry” mapping as provisional while citing that existing mapping.
+
+REVIEW · mem review elaborate --receipt dd9a195b-d625-4218-8f91-e8cee346f343
+UNDO · mem undo

@@ -1,0 +1,23 @@
+Context: task-2/participant/proposal-workspace
+  1 memory
+  0 subcontexts
+
+  [memory 1e0e89ee] Punctuation rule and example: strip punctuation before constructing a ticker.
+                    North-Star, Inc. becomes NORTHSTAR after removing the comma, hyphen, space, and
+                    Inc. suffix.
+Authority views:
+  task-2/advisor1/ · from sixworld-v2-template-granted-memory · grant de228b3e revision 1
+    Permissions: READ + EMBED + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS
+    Analysis: RATIONALE SUBTREE + TRACE BLOCKED
+    Source boundary: DERIVE allowed · COMBINE allowed · EXPORT allowed
+    Target/artifact boundary: ACCEPT_DERIVED blocked · SAVE_BOUND_ANALYSIS allowed · SAVE_ANALYSIS allowed
+  task-2/advisor2/ · from sixworld-v2-template-granted-memory · grant 9eaf4eb3 revision 1
+    Permissions: READ + EMBED + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS
+    Analysis: RATIONALE SUBTREE + TRACE BLOCKED
+    Source boundary: DERIVE allowed · COMBINE allowed · EXPORT allowed
+    Target/artifact boundary: ACCEPT_DERIVED blocked · SAVE_BOUND_ANALYSIS allowed · SAVE_ANALYSIS allowed
+  task-2/proposal-submission-guidelines/ · from sixworld-v2-template-granted-memory · grant c768ce3e revision 1
+    Permissions: QUERY
+    Analysis: RATIONALE BLOCKED + TRACE BLOCKED
+    Source boundary: DERIVE blocked · COMBINE blocked · EXPORT blocked
+    Target/artifact boundary: ACCEPT_DERIVED blocked · SAVE_BOUND_ANALYSIS blocked · SAVE_ANALYSIS blocked

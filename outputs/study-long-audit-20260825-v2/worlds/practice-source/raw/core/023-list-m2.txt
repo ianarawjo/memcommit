@@ -1,0 +1,23 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source list practice
+
+EXIT
+0
+
+WALL_SECONDS
+1.636541
+
+STDOUT
+Context: practice
+  2 memories
+  2 subcontexts
+
+  DESCENDANT · [context d5d0a8b4] practice/description
+  VIA EMBED · [context 7e48e68e] practice/source
+
+  [memory bd813edf] CANDIDATE: classify intent as review-only or authorized editing before changing
+                    text; preserve requested scope and source meaning.
+  [reference 58f1544f] [practice/source][memory 4fe217eb] Before adding or reusing citations and refferences, verify that each source exists and supports the exact claim after reviewing the complete source. Don't invent quotations or evidence or overstate an author's contribution or a paper's status. If I asked only for review, report a verification problem first instead of silently rewriting the draft.  READ ONLY
+
+
+STDERR

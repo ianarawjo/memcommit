@@ -1,0 +1,28 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 revert f38a84d1 --context task-1/participant/construction-updates --keep
+
+EXIT
+0
+
+OUTPUT
+Reverted Context: task-1/participant/construction-updates
+Restored state recorded by: manual checkpoint
+Action detail: task-1 transform round 4 scratch recovery
+Affected Context: task-1/participant/construction-updates
+Affected content: 6 Embedded contexts added, 24 Memories removed
+  - [memory 618ec2ca] "During Main Building construction, general users cannot park in the underground garage or use its pedestrian entrance, the Main Building stairs to it, or the sloped road linking it with Outdoor Parking Lot A; Lot A is also closed. General …"
+  - [memory 018df8c8] "Staff who need to pass through the locked pedestrian entrance to the underground garage during construction must use a physical access card."
+  - [memory 089ccc19] "Construction and facilities personnel must enter the underground garage through the approved, controlled on-site access procedure."
+  - [memory 6cd19148] "Parking guidance may explain the posted garage and Lot A closures, Lot C's temporary alternative use, and Lot C's location, but it cannot check or guarantee that Lot C has an available space when asked."
+  - [memory 88095227] "The underground garage serves as temporary construction-material storage during the works, and personal items remaining after clear-out are transferred to lost and found."
+  - [memory f71d28d1] "Outdoor Parking Lot A is planned to reopen immediately after Main Building construction ends."
+  - [memory 28424365] "General users arriving at the Main Building during construction must not park in the underground garage or Outdoor Parking Lot A; they should use temporary Parking Lot C instead, while recognizing that guidance cannot verify or guarantee a…"
+  - [memory f5487172] "A staff member who needs pedestrian access through the locked underground-garage entrance during construction must use a physical access card."
+  - [memory 43f146c1] "Construction and facilities personnel entering the underground garage during the works must follow the approved, controlled on-site access procedure."
+  - [memory 9a7ee311] "Modify campus-wiki/temporary-parking: During the construction period, the underground parking garage cannot be used for general parking."
+  - [memory a4c15f7d] "Modify campus-wiki/temporary-parking: During the construction period, the pedestrian entrance door to the underground parking garage is kept locked."
+  - [memory 86f6210b] "Add campus-wiki/temporary-parking: During the construction period, instruct staff to use a physical access card to pass through the locked pedestrian entrance door to the underground parking garage."
+  ... 18 more affected direct items not shown
+Restored checkpoint: [f38a84d1] (2026-08-25 13:48)
+Undo command: mem undo
+Exact recovery checkpoint: mem revert 8be68098 --discard-newer

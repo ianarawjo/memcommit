@@ -1,0 +1,31 @@
+{
+  "sequence": 13,
+  "count_before": 257,
+  "count_after": 258,
+  "delta": 1,
+  "new_attempt_uids": [
+    "17bc426b-83d3-4ae4-8926-6c503d7e002d"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "17bc426b-83d3-4ae4-8926-6c503d7e002d",
+      "operation": "rename",
+      "command": "mem rename audit/ticker/admin-v2-scratch/import-direct audit/ticker/admin-v2-scratch/renamed-1 --force",
+      "status": "FAILED",
+      "started_at": "2026-08-25T18:12:24.425496+00:00",
+      "completed_at": "2026-08-25T18:12:24.511926+00:00",
+      "elapsed_seconds": 0.08627874999365304,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": {
+        "kind": "Exit",
+        "exit_code": 1
+      }
+    }
+  ]
+}

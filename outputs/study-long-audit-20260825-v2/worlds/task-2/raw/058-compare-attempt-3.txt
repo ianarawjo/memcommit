@@ -1,0 +1,8 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 compare task-2/advisor1/methods task-2/advisor2/methods --snapshot
+EXIT: 0
+DURATION_SECONDS: 17.83
+
+Compare · task-2/advisor1/methods ↔ task-2/advisor2/methods
+
+COMPARISON
+  Both frames share a proposal-review policy linking HCI questions to data, analysis, collection timing and tools, while documenting preregistration changes, operational risks, and safety precedence. The decisive difference is participant planning: one requires one exact target with explicit shortfall revisions, whereas the other permits a justified minimum-to-maximum range only when each bound has distinct workload, budget, and deliverable consequences.

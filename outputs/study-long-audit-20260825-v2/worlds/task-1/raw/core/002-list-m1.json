@@ -1,0 +1,11 @@
+{
+  "sequence": 2,
+  "operation": "list",
+  "attempt": 1,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 list task-1/participant/construction-updates/facility-updates --direct",
+  "exit": 0,
+  "wall_seconds": 1.473819,
+  "pre_target_digest": "5de75316639d7c019957086f41facf0cf106197cf9ab9ebdb8bb3e7ea040577d",
+  "post_target_digest": "c0d0e34fd0494769836bfc47ba46c820bb06b35db86360f2be41759e2886864a",
+  "raw_output": "raw/core/002-list-m1.txt"
+}

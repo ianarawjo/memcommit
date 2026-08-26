@@ -1,0 +1,11 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 find-duplicates task-2 --direct
+EXIT: 0
+DURATION_SECONDS: 1.314
+
+Find Duplicates · task-2 · 12 direct items checked · 1 exact group · 1 proposed absorption
+
+  DUP / EXACT  1/1 · MEMORY
+    SURVIVOR  [memory 6733c5d8]  Equal-authority synthesis rule: preserve each shared co-advisor requirement once, retain distinct conditions, and explain unresolved conflicts with both provenances.
+    ABSORB    [memory e365804f]  Equal-authority synthesis rule: preserve each shared co-advisor requirement once, retain distinct conditions, and explain unresolved conflicts with both provenances.
+
+  Read-only report. Apply exact cleanup with mem dedup.

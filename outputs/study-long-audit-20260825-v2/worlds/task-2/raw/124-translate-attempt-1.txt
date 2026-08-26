@@ -1,0 +1,13 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 translate task-2/participant/proposal-workspace:f6772ab9-ddfb-4603-86cd-1bc76831b78e --to Korean
+EXIT: 0
+DURATION_SECONDS: 5.969
+
+
+Translation view: 'task-2/participant/proposal-workspace' → Korean
+  1 translated Memory
+────────────────────────────────────────────────────────────────
+[f6772ab9] Korean · PROVIDER · UNREVIEWED
+  제안서에서는 긴 대시(—)를 사용하지 말고, 문장을 나누거나 대신 더 일반적인 문장 부호를 사용하세요.
+────────────────────────────────────────────────────────────────
+Saved translation view.
+No Context or Memory changes; source Memory UIDs remain the anchors.

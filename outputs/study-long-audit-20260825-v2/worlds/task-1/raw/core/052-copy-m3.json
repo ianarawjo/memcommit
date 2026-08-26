@@ -1,0 +1,11 @@
+{
+  "sequence": 52,
+  "operation": "copy",
+  "attempt": 3,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 copy 8b077f2a 56c34a24 --from task-1/participant/construction-updates/building-access --into task-1/participant",
+  "exit": 0,
+  "wall_seconds": 1.327583,
+  "pre_target_digest": "e55d9a4e3707ae6a54525aff22844433a826525303b99a86efc7b10db0e6e71e",
+  "post_target_digest": "32f2b8c308c60009bbbde4e82a9fd432e4e7793188aeb0a45f349b5719971a83",
+  "raw_output": "raw/core/052-copy-m3.txt"
+}

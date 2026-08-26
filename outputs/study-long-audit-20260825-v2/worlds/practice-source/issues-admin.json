@@ -1,0 +1,75 @@
+{
+  "world": "practice-source",
+  "phase": "admin",
+  "issues": [
+    {
+      "id": "PS2-A-RENAME-BRANCH-HISTORY",
+      "title": "Renaming a branched Context makes the global Undo/Redo stack unreadable",
+      "expected": "After a successful Context rename, retained Branch history remains internally addressable under the renamed owner so the exact global command-stack top UID and member set can be reconstructed before Undo or Redo.",
+      "actual": "Branch M1 created UID e8aad7e1 under `.../b1`; Rename M1 moved that same UID to `.../renamed-1` but its Branch receipt still names `.../b1`. The next protocol-required stack reconstruction raised `Branch checkpoint owner is outside its creation membership.` before it could expose a top unit. The later recursive Branch M2 itself wrote a consistent six-member receipt, but it could not be verified as the global top because reconstruction stops first on the renamed M1 checkpoint.",
+      "workaround": "Do not rename a Context that retains Branch creation history when later Undo/Redo is required. In this isolated lane, a reviewed inverse rename to the exact original name restored raw owner membership and the exact B2 top before Undo2/Redo2. Do not edit retained receipts or guess a top unit.",
+      "severity": "CRITICAL",
+      "classification": "RECOVERABILITY_COMMAND_HISTORY_INVALIDATION",
+      "reproduction": "1/1 direct Branch -> verified Undo -> verified Redo -> Rename sequence; the first later exact stack reconstruction failed. Undo2 was withheld until a reviewed inverse rename restored the exact B2 top, then Undo2/Redo2 succeeded.",
+      "evidence": [
+        "worlds/practice-source/raw/admin/001-branch-m1.txt",
+        "worlds/practice-source/raw/admin/002-undo-m1.txt",
+        "worlds/practice-source/raw/admin/003-redo-m1.txt",
+        "worlds/practice-source/raw/admin/006-rename-m1.txt",
+        "worlds/practice-source/raw/admin/037-branch-m2.txt",
+        "worlds/practice-source/admin-host-reads.json",
+        "worlds/practice-source/admin-blocker-evidence.json",
+        "/Users/KimMunyeong/.codex/audit-snapshots/memcommit-six-world-v2-20260825-code/memcommit/command_history.py:773"
+      ]
+    },
+    {
+      "id": "PS2-A-BRANCH-HISTORY-CASCADE",
+      "title": "Branching from a Branch copies owned command history into a foreign owner",
+      "expected": "Branch and checkout -b from a Branch-created Source either retain copied checkpoints only as non-owned lineage or rebind every owned command-history receipt so the new target's global Undo/Redo stack remains reconstructable.",
+      "actual": "Branch M3 copied B1's Branch M1 checkpoint into B3 unchanged. B3 has UID ea8d2437, while the copied receipt names UID e8aad7e1 at B1, so B3 is outside that checkpoint's creation membership. Checkout M3 copied the same invalid receipt plus B3's Branch M3 receipt into co3, then added its own valid creation checkpoint. Global stack reconstruction stops at B3 before exposing the Checkout3 top. The original six-Context R subtree had zero Branch checkpoints, isolating the defect to branching from the Branch-bearing B1 Source.",
+      "workaround": "Do not use a Branch-created Context as the Source of another Branch or checkout -b when later Undo/Redo verification is required. A read-only scan can identify inherited foreign-owner receipts; this audit retained them as a negative control and confirmed every remaining Undo/Redo failed before Context or current-pointer mutation.",
+      "severity": "CRITICAL",
+      "classification": "RECOVERABILITY_COPIED_COMMAND_HISTORY_INVALIDATION",
+      "reproduction": "1/1 Branch-from-Branch followed by 1/1 checkout-from-that-Branch; both targets retained foreign-owner Branch receipts and the first subsequent stack reconstruction failed.",
+      "evidence": [
+        "worlds/practice-source/raw/admin/043-branch-m3.txt",
+        "worlds/practice-source/raw/admin/044-checkout-m3.txt",
+        "worlds/practice-source/admin-host-reads.json",
+        "worlds/practice-source/admin-blocker-2-evidence.json",
+        "/Users/KimMunyeong/.codex/audit-snapshots/memcommit-six-world-v2-20260825-code/memcommit/command_history.py:773"
+      ]
+    },
+    {
+      "id": "PS2-A-INIT-STUDY-UUID-CREATES",
+      "title": "A UUID-shaped Study name passes validation and escapes the pinned Profile",
+      "expected": "The ADMIN UUID-shaped negative control fails before creating or selecting any Study/Profile, so all five init-study attempts have zero success and the pinned Profile UID/Store never changes.",
+      "actual": "`init-study 00000000-0000-0000-0000-000000000999` exited 0, created a managed Study Profile and granted-memory Profile with two new Stores, and activated Profile bb7265f4. The first post-process identity assertion detected the escape. An approved host recovery changed only registry.active_uid back to the pinned UID after preserving exact registry and three-Store byte/hash snapshots; both unexpected Profiles and Stores remain intact.",
+      "workaround": "Do not use a UUID-shaped name as an assumed invalid init-study test. Use an explicitly rejected slash, reserved name, or invalid option value. If this occurs in an isolated audit lane, stop immediately and require a reviewed identity recovery; do not issue another mem call while the runner's pinned pre-assert fails.",
+      "severity": "CRITICAL",
+      "classification": "SAFETY_PROFILE_IDENTITY_ESCAPE",
+      "reproduction": "1/1 UUID-shaped init-study attempt succeeded; the other four validation/boundary attempts did not create a Study.",
+      "evidence": [
+        "worlds/practice-source/raw/admin/095-init_study-m5.txt",
+        "worlds/practice-source/admin-host-reads.json",
+        "worlds/practice-source/recovery/seq095-init-study-profile/recovery-summary.json",
+        "worlds/practice-source/recovery/seq095-init-study-profile/registry-before.json",
+        "worlds/practice-source/recovery/seq095-init-study-profile/registry-after.json"
+      ]
+    },
+    {
+      "id": "PS2-A-INIT-SPARSE-PARENT",
+      "title": "Init without --parents creates a leaf beneath an absent lexical parent",
+      "expected": "The missing-parent ADMIN method fails without mutation unless --parents is supplied, keeping direct Init distinct from explicit parent-expanding Init.",
+      "actual": "`init practice/audit-workspace/admin-v2-scratch/missing-parent/leaf` exited 0 and created the leaf Context UID 5f47a8d5. Host inspection confirmed that the lexical parent `.../missing-parent` is still physically absent.",
+      "workaround": "Do not infer parent existence from a successful nested Init. Use `init ... --parents` when every lexical ancestor must exist, and verify the parent Context explicitly before hierarchy-dependent work.",
+      "severity": "MEDIUM",
+      "classification": "NAMESPACE_PARENT_MATERIALIZATION_CONTRACT_MISMATCH",
+      "reproduction": "1/1 missing-parent attempt without --parents created only the leaf; the explicit --parents control created/reused its declared hierarchy.",
+      "evidence": [
+        "worlds/practice-source/raw/admin/028-init-m2.txt",
+        "worlds/practice-source/raw/admin/094-init-m5.txt",
+        "worlds/practice-source/phase-admin.json"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 find-redundancies task-1/participant/construction-updates/building-access --evidence-json
+
+EXIT
+0
+
+WALL_SECONDS
+6.702031
+
+STDOUT
+{"classification":"SEMANTIC_EQUIVALENT","contract":"redundancy-evidence-v2","finding_uid":"duplicate:56c34a24-0954-5c64-9fd4-880995e6e53c:40d3dbc9-ad77-4a30-82bc-d0002e633a66","kind":"REDUNDANCY","memory_context_names":["task-1/participant/construction-updates/building-access","task-1/participant/construction-updates/building-access"],"memory_uids":["56c34a24-0954-5c64-9fd4-880995e6e53c","40d3dbc9-ad77-4a30-82bc-d0002e633a66"],"proposed_readings":[],"qualifiers":[],"question":"","reason":"Both complete Memories state that, during construction, general access through the main entrance ends at 5:00 p.m. rather than 10:00 p.m.; the edit/evidence prefixes do not change the stored claim.","review_draft":{"selected_option_uid":null,"text":""},"route":"DEDUN","source_frame_digest":"b4d62a874b504b3322da2cd1624dfa1864f9c0c3813a3e7fcfe2973825af3e8e","sources":[{"context_uid":"5a66e0ec-3497-5ccf-9d8f-08c966647677","direct_memory_digest":"c6bc3f6f58094ff23fe392059ab44c762bb147d09a0229940161e7a372409a84","display_name":"task-1/participant/construction-updates/building-access"}],"uid":"finding-8ddaa353a0fb7843a9b3feeb7a3264fafb13c958f2157dfc7ffa7a2e4db0673d"}
+
+
+STDERR

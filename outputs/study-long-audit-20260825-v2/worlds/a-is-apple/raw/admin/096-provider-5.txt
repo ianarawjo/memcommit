@@ -1,0 +1,13 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple provider probe --operation query
+
+EXIT
+0
+
+OUTPUT
+Provider ready: codex_chatgpt:gpt-5.6-sol · reasoning none
+profile: sixworld-v2-template
+profile_mode: study
+probe_scope: operation query
+route_source: study_policy
+route_digest: 5a0acf9006491e88e434f1673d1ca2a595f25ac0f6f61716e48afd6b54a33f82

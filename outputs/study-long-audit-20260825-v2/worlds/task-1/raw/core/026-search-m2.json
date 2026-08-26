@@ -1,0 +1,11 @@
+{
+  "sequence": 26,
+  "operation": "search",
+  "attempt": 2,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 search 'venue closures, alternatives, and equipment loading changes' --context task-1/participant/construction-updates/event-relocations --context task-1/campus-wiki/event-relocations --context-only --limit 8",
+  "exit": 0,
+  "wall_seconds": 5.5986,
+  "pre_target_digest": "412e22c33372e622d557de46fef3437504047af10f85d27fc25247aa58a4b89b",
+  "post_target_digest": "45cc6990312186c47b8f68bd060123c1f883898c3bacc1646b80bff804a11c87",
+  "raw_output": "raw/core/026-search-m2.txt"
+}

@@ -1,0 +1,17 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 compare task-1/participant/construction-updates/event-relocations task-1/campus-wiki/event-relocations --snapshot
+
+EXIT
+0
+
+WALL_SECONDS
+7.132908
+
+STDOUT
+Compare · task-1/participant/construction-updates/event-relocations ↔ task-1/campus-wiki/event-relocations
+
+COMPARISON
+  The construction update is a temporary override of the general event-space policies and operating assumptions: from June 24–August 23, Main Building venues accept no new reservations and tenth-floor viewing is suspended, with designated alternatives and the auditorium’s separate loading entrance replacing normal venue and equipment guidance.
+
+
+STDERR

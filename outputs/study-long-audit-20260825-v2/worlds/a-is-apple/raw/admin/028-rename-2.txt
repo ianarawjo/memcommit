@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple rename audit/a-is-apple/admin-v2-scratch/b2-tree audit/a-is-apple/admin-v2-scratch/renamed-2-tree --force
+
+EXIT
+0
+
+OUTPUT
+Renamed Context namespace 'audit/a-is-apple/admin-v2-scratch/b2-tree' to 'audit/a-is-apple/admin-v2-scratch/renamed-2-tree' (3 Contexts).

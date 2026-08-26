@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source sever --resume PENDING
+
+EXIT
+1
+
+WALL_SECONDS
+1.397103
+
+STDOUT
+
+
+STDERR
+Sever error: Invalid Sever session uid.

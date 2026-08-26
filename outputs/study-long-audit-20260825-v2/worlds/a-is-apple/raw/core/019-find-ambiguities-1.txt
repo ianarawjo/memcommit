@@ -1,0 +1,15 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple find-ambiguities practice
+
+EXIT
+0
+
+OUTPUT
+Find Ambiguities · practice · 1/4 direct memories flagged
+
+  AMBIGUITY 1/1
+  [874c746f] this edited duplicate retains the original
+  Reading 1: This edited duplicate retains the original item or content unchanged.
+  Reading 2: This edited duplicate keeps the original item or content in addition to the edited duplicate.
+  Reason: The phrase “retains the original” can mean preserving the original content within the duplicate or keeping the separate original alongside it. These readings require different handling, so the intended retention behavior cannot be determined reliably.
+  Question: Should the duplicate preserve the original content, or should the separate original also be kept?

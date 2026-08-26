@@ -1,0 +1,158 @@
+Find Redundancies · task-2 · 38 Contexts · 306 direct memories checked · 1 group · 1 proposed absorption
+
+CONTEXT 1/38 · task-2
+  0 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 2/38 · task-2/advisor1
+  0 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 3/38 · task-2/advisor1/budget
+  7 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 4/38 · task-2/advisor1/claim-evidence
+  11 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 5/38 · task-2/advisor1/compensation
+  10 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 6/38 · task-2/advisor1/emphasis
+  8 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 7/38 · task-2/advisor1/ethics
+  11 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 8/38 · task-2/advisor1/evaluation
+  6 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 9/38 · task-2/advisor1/expression
+  8 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 10/38 · task-2/advisor1/feasibility
+  11 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 11/38 · task-2/advisor1/methods
+  14 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 12/38 · task-2/advisor1/reproducibility
+  4 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 13/38 · task-2/advisor1/review
+  12 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 14/38 · task-2/advisor1/safety
+  5 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 15/38 · task-2/advisor1/scope
+  5 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 16/38 · task-2/advisor1/structure
+  17 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 17/38 · task-2/advisor1/style
+  13 direct memories checked · 1 group · 1 proposed absorption
+
+  DUN GROUP  1/1 · 2 Memories · SEMANTIC DUN
+    CLEANUP MAP · READY FOR REVIEW
+    SURVIVOR  [memory cc860653]  Split proposal prose into short sentences when a sentence contains more than one independently reviewable claim.
+    ABSORB    [memory af0d191d]  Keep one main claim in each sentence so a reviewer can locate and assess it quickly.
+    EVIDENCE 1 · SEMANTIC EQUIVALENT · Both prescribe one independently reviewable main claim per proposal sentence so reviewers can assess each claim clearly; splitting sentences with multiple claims and keeping one claim per sentence are mutually substitutable formulations.
+
+CONTEXT 18/38 · task-2/advisor1/terminology
+  8 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 19/38 · task-2/advisor2
+  0 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 20/38 · task-2/advisor2/budget
+  7 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 21/38 · task-2/advisor2/claim-evidence
+  11 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 22/38 · task-2/advisor2/compensation
+  10 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 23/38 · task-2/advisor2/emphasis
+  7 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 24/38 · task-2/advisor2/ethics
+  11 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 25/38 · task-2/advisor2/evaluation
+  7 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 26/38 · task-2/advisor2/expression
+  7 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 27/38 · task-2/advisor2/feasibility
+  11 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 28/38 · task-2/advisor2/methods
+  16 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 29/38 · task-2/advisor2/reproducibility
+  3 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 30/38 · task-2/advisor2/review
+  11 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 31/38 · task-2/advisor2/safety
+  6 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 32/38 · task-2/advisor2/scope
+  5 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 33/38 · task-2/advisor2/structure
+  17 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 34/38 · task-2/advisor2/style
+  13 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 35/38 · task-2/advisor2/terminology
+  8 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 36/38 · task-2/description
+  1 direct memory checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 37/38 · task-2/participant
+  2 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 38/38 · task-2/participant/proposal-workspace
+  3 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.

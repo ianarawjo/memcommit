@@ -1,0 +1,31 @@
+{
+  "sequence": 93,
+  "count_before": 337,
+  "count_after": 338,
+  "delta": 1,
+  "new_attempt_uids": [
+    "fe9bbdb5-5fc3-4ad7-b780-5be7026e6d4b"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "fe9bbdb5-5fc3-4ad7-b780-5be7026e6d4b",
+      "operation": "help",
+      "command": "mem help 'Show the current Context'\"'\"'s inventory, first five direct Memories, relationships, and latest checkpoints.'",
+      "status": "FAILED",
+      "started_at": "2026-08-25T18:17:12.765151+00:00",
+      "completed_at": "2026-08-25T18:17:12.788560+00:00",
+      "elapsed_seconds": 0.023246708005899563,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": {
+        "kind": "Exit",
+        "exit_code": 1
+      }
+    }
+  ]
+}

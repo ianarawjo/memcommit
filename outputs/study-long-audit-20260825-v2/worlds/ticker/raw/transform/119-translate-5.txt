@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker translate task-2/participant/proposal-workspace:7ed418b9 --to German --refresh
+
+EXIT
+0
+
+OUTPUT
+
+Translation view: 'task-2/participant/proposal-workspace' → German
+  1 translated Memory
+────────────────────────────────────────────────────────────────
+[7ed418b9] German · PROVIDER · UNREVIEWED
+  Beispiel für eine Aktiengattung: Acme Corp. Class B wird zu ACME.B, nachdem Corp. entfernt und Class B dem Suffix .B zugeordnet wurde. Der Punkt ist eine generierte Syntax für Aktiengattungen.
+────────────────────────────────────────────────────────────────
+Saved translation view.
+No Context or Memory changes; source Memory UIDs remain the anchors.

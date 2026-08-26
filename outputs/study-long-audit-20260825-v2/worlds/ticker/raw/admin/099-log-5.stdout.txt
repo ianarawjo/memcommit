@@ -1,0 +1,201 @@
+Study actions · recent first
+  [5a7009e1/3] 2026-08-25 18:17:19 +0.007s  COMMAND_FINISHED
+      status=COMPLETED
+  [5a7009e1/2] 2026-08-25 18:17:19 +0.000s  COMMAND_ENTERED
+      command=mem unlock --profile
+  [5a7009e1/1] 2026-08-25 18:17:19 +0.000s  COMMAND_STARTED
+      operation=unlock · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [508837f6/3] 2026-08-25 18:17:18 +0.007s  COMMAND_FINISHED
+      status=COMPLETED
+  [508837f6/2] 2026-08-25 18:17:18 +0.000s  COMMAND_ENTERED
+      command=mem lock --profile
+  [508837f6/1] 2026-08-25 18:17:18 +0.000s  COMMAND_STARTED
+      operation=lock · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [62270743/3] 2026-08-25 18:17:16 +0.007s  COMMAND_FINISHED
+      exit_code=1 · failure_kind=Exit · status=FAILED
+  [62270743/2] 2026-08-25 18:17:16 +0.000s  COMMAND_ENTERED
+      command=mem init-study ticker/admin-v2-final
+  [62270743/1] 2026-08-25 18:17:16 +0.000s  COMMAND_STARTED
+      operation=init-study · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [3705698c/3] 2026-08-25 18:17:15 +0.016s  COMMAND_FINISHED
+      status=COMPLETED
+  [3705698c/2] 2026-08-25 18:17:15 +0.000s  COMMAND_ENTERED
+      command=mem init audit/ticker/admin-v2-scratch/missing-parent/leaf
+  [3705698c/1] 2026-08-25 18:17:15 +0.000s  COMMAND_STARTED
+      operation=init · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [a13d2b70/3] 2026-08-25 18:17:14 +0.013s  COMMAND_FINISHED
+      exit_code=1 · failure_kind=Exit · status=FAILED
+  [a13d2b70/2] 2026-08-25 18:17:14 +0.000s  COMMAND_ENTERED
+      command=mem import context participant/construction-updates --from-profile admin-v2-ticker-missing-profile --as audit/ticker/admin-v2-scratch/import-missing --direct
+  [a13d2b70/1] 2026-08-25 18:17:14 +0.000s  COMMAND_STARTED
+      operation=import · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [fe9bbdb5/4] 2026-08-25 18:17:12 +0.016s  COMMAND_FINISHED
+      exit_code=1 · failure_kind=Exit · status=FAILED
+  [fe9bbdb5/3] 2026-08-25 18:17:12 +0.001s  HELP_LOOKUP_SUBMITTED
+      request=Show the current Context's inventory, first five direct Memories, relationships, and latest checkpoints.
+  [fe9bbdb5/2] 2026-08-25 18:17:12 +0.000s  COMMAND_ENTERED
+      command=mem help 'Show the current Context'"'"'s inventory, first five direct Memories, relationships, and latest checkpoints.'
+  [fe9bbdb5/1] 2026-08-25 18:17:12 +0.000s  COMMAND_STARTED
+      operation=help · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [06e7e908/3] 2026-08-25 18:17:11 +0.001s  COMMAND_FINISHED
+      status=COMPLETED
+  [06e7e908/2] 2026-08-25 18:17:11 +0.000s  COMMAND_ENTERED
+      command=mem eval semantic status --ledger-dir /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/admin-eval-ledger
+  [06e7e908/1] 2026-08-25 18:17:11 +0.000s  COMMAND_STARTED
+      operation=eval · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [4dd04fc4/3] 2026-08-25 18:17:10 +0.001s  COMMAND_FINISHED
+      exit_code=2 · failure_kind=MissingParameter · status=FAILED
+  [4dd04fc4/2] 2026-08-25 18:17:10 +0.000s  COMMAND_ENTERED
+      command=mem config set provider
+  [4dd04fc4/1] 2026-08-25 18:17:10 +0.000s  COMMAND_STARTED
+      operation=config · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [c873ab6e/3] 2026-08-25 18:17:08 +0.013s  COMMAND_FINISHED
+      exit_code=1 · failure_kind=Exit · status=FAILED
+  [c873ab6e/2] 2026-08-25 18:17:08 +0.000s  COMMAND_ENTERED
+      command=mem checkout audit/ticker/admin-v2-missing-target
+  [c873ab6e/1] 2026-08-25 18:17:08 +0.000s  COMMAND_STARTED
+      operation=checkout · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [c3bc893f/3] 2026-08-25 18:17:07 +0.097s  COMMAND_FINISHED
+      status=COMPLETED
+  [c3bc893f/2] 2026-08-25 18:17:07 +0.000s  COMMAND_ENTERED
+      command=mem status
+  [c3bc893f/1] 2026-08-25 18:17:07 +0.000s  COMMAND_STARTED
+      operation=status · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [a1942530/3] 2026-08-25 18:17:05 +0.488s  COMMAND_FINISHED
+      status=COMPLETED
+  [a1942530/2] 2026-08-25 18:17:05 +0.000s  COMMAND_ENTERED
+      command=mem rename audit/ticker/admin-v2-scratch/co4-tree audit/ticker/admin-v2-scratch/declined-5
+  [a1942530/1] 2026-08-25 18:17:05 +0.000s  COMMAND_STARTED
+      operation=rename · stdin_tty=False · stdout_tty=False
+  [f058bfca/3] 2026-08-25 18:17:04 +0.014s  COMMAND_FINISHED
+      exit_code=1 · failure_kind=Exit · status=FAILED
+  [f058bfca/2] 2026-08-25 18:17:04 +0.000s  COMMAND_ENTERED
+      command=mem branch audit/ticker/admin-v2-scratch/b5 --from audit/ticker/admin-v2-missing-source --direct
+  [f058bfca/1] 2026-08-25 18:17:04 +0.000s  COMMAND_STARTED
+      operation=branch · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [0b0cf695/3] 2026-08-25 18:17:02 +0.078s  COMMAND_FINISHED
+      status=COMPLETED
+  [0b0cf695/2] 2026-08-25 18:17:02 +0.000s  COMMAND_ENTERED
+      command=mem redo
+  [0b0cf695/1] 2026-08-25 18:17:02 +0.000s  COMMAND_STARTED
+      operation=redo · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [927b9221/3] 2026-08-25 18:17:01 +0.080s  COMMAND_FINISHED
+      status=COMPLETED
+  [927b9221/2] 2026-08-25 18:17:01 +0.000s  COMMAND_ENTERED
+      command=mem undo
+  [927b9221/1] 2026-08-25 18:17:01 +0.000s  COMMAND_STARTED
+      operation=undo · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [6aceed4e/3] 2026-08-25 18:16:59 +0.032s  COMMAND_FINISHED
+      status=COMPLETED
+  [6aceed4e/2] 2026-08-25 18:16:59 +0.000s  COMMAND_ENTERED
+      command=mem unlock audit/ticker/admin-v2-scratch/co4-tree --recursive
+  [6aceed4e/1] 2026-08-25 18:16:59 +0.000s  COMMAND_STARTED
+      operation=unlock · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [d86f7792/3] 2026-08-25 18:16:58 +0.072s  COMMAND_FINISHED
+      exit_code=1 · failure_kind=Exit · status=FAILED
+  [d86f7792/2] 2026-08-25 18:16:58 +0.000s  COMMAND_ENTERED
+      command=mem undo
+  [d86f7792/1] 2026-08-25 18:16:58 +0.000s  COMMAND_STARTED
+      operation=undo · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [337dcae6/3] 2026-08-25 18:16:56 +0.133s  COMMAND_FINISHED
+      exit_code=1 · failure_kind=Exit · status=FAILED
+  [337dcae6/2] 2026-08-25 18:16:56 +0.000s  COMMAND_ENTERED
+      command=mem rename audit/ticker/admin-v2-scratch/co4-tree audit/ticker/admin-v2-scratch/co4-locked-renamed --force
+  [337dcae6/1] 2026-08-25 18:16:56 +0.000s  COMMAND_STARTED
+      operation=rename · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [618d4072/3] 2026-08-25 18:16:55 +0.034s  COMMAND_FINISHED
+      status=COMPLETED
+  [618d4072/2] 2026-08-25 18:16:55 +0.000s  COMMAND_ENTERED
+      command=mem lock audit/ticker/admin-v2-scratch/co4-tree --recursive
+  [618d4072/1] 2026-08-25 18:16:55 +0.000s  COMMAND_STARTED
+      operation=lock · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [5d8afc76/3] 2026-08-25 18:16:53 +0.009s  COMMAND_FINISHED
+      status=COMPLETED
+  [5d8afc76/2] 2026-08-25 18:16:53 +0.000s  COMMAND_ENTERED
+      command=mem switch audit/ticker/admin-v2-scratch/co4-tree/proposal-workspace
+  [5d8afc76/1] 2026-08-25 18:16:53 +0.000s  COMMAND_STARTED
+      operation=switch · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [15921f51/3] 2026-08-25 18:16:52 +0.043s  COMMAND_FINISHED
+      status=COMPLETED
+  [15921f51/2] 2026-08-25 18:16:52 +0.000s  COMMAND_ENTERED
+      command=mem checkout -b audit/ticker/admin-v2-scratch/co4-tree --recursive
+  [15921f51/1] 2026-08-25 18:16:52 +0.000s  COMMAND_STARTED
+      operation=checkout · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [e21c1acf/3] 2026-08-25 18:16:50 +0.001s  COMMAND_FINISHED
+      status=COMPLETED
+  [e21c1acf/2] 2026-08-25 18:16:50 +0.000s  COMMAND_ENTERED
+      command=mem shell-init zsh
+  [e21c1acf/1] 2026-08-25 18:16:50 +0.000s  COMMAND_STARTED
+      operation=shell-init · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [bbea9c18/3] 2026-08-25 18:16:48 +0.001s  COMMAND_FINISHED
+      exit_code=1 · failure_kind=Exit · status=FAILED
+  [bbea9c18/2] 2026-08-25 18:16:48 +0.000s  COMMAND_ENTERED
+      command=mem share task-1/participant/construction-updates --to task-3/government/healthcare-agent --direct --recursive
+  [bbea9c18/1] 2026-08-25 18:16:48 +0.000s  COMMAND_STARTED
+      operation=share · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [c01cec4a/3] 2026-08-25 18:16:47 +0.007s  COMMAND_FINISHED
+      status=COMPLETED
+  [c01cec4a/2] 2026-08-25 18:16:47 +0.000s  COMMAND_ENTERED
+      command=mem pwd
+  [c01cec4a/1] 2026-08-25 18:16:47 +0.000s  COMMAND_STARTED
+      operation=pwd · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [039ffbb9/3] 2026-08-25 18:16:45 +0.007s  COMMAND_FINISHED
+      exit_code=1 · failure_kind=Exit · status=FAILED
+  [039ffbb9/2] 2026-08-25 18:16:45 +0.000s  COMMAND_ENTERED
+      command=mem provider use codex_chatgpt --operation query
+  [039ffbb9/1] 2026-08-25 18:16:45 +0.000s  COMMAND_STARTED
+      operation=provider · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [1b71804c/3] 2026-08-25 18:16:44 +0.050s  COMMAND_FINISHED
+      status=COMPLETED
+  [1b71804c/2] 2026-08-25 18:16:44 +0.000s  COMMAND_ENTERED
+      command=mem profile use sixworld-v2-template
+  [1b71804c/1] 2026-08-25 18:16:44 +0.000s  COMMAND_STARTED
+      operation=profile · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [8cac6d1c/3] 2026-08-25 18:16:43 +0.025s  COMMAND_FINISHED
+      status=COMPLETED
+  [8cac6d1c/2] 2026-08-25 18:16:43 +0.000s  COMMAND_ENTERED
+      command=mem log --operations --limit 50
+  [8cac6d1c/1] 2026-08-25 18:16:43 +0.000s  COMMAND_STARTED
+      operation=log · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [ac438ce8/3] 2026-08-25 18:16:41 +0.001s  COMMAND_FINISHED
+      exit_code=2 · failure_kind=BadParameter · status=FAILED
+  [ac438ce8/2] 2026-08-25 18:16:41 +0.000s  COMMAND_ENTERED
+      command=mem init-study admin-v2-ticker-workers --prewarm-workers 0
+  [ac438ce8/1] 2026-08-25 18:16:41 +0.000s  COMMAND_STARTED
+      operation=init-study · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [7d96a522/3] 2026-08-25 18:16:40 +0.014s  COMMAND_FINISHED
+      exit_code=1 · failure_kind=Exit · status=FAILED
+  [7d96a522/2] 2026-08-25 18:16:40 +0.000s  COMMAND_ENTERED
+      command=mem init 00000000-0000-0000-0000-000000000001
+  [7d96a522/1] 2026-08-25 18:16:40 +0.000s  COMMAND_STARTED
+      operation=init · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [0ee08986/3] 2026-08-25 18:16:38 +0.028s  COMMAND_FINISHED
+      exit_code=1 · failure_kind=Exit · status=FAILED
+  [0ee08986/2] 2026-08-25 18:16:38 +0.000s  COMMAND_ENTERED
+      command=mem import memory 37113bd0-5194-521b-9d9e-48903d819520 --from-profile task-1 --context participant/construction-updates/shop-updates --into audit/ticker/admin-v2-scratch
+  [0ee08986/1] 2026-08-25 18:16:38 +0.000s  COMMAND_STARTED
+      operation=import · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [4b135314/9] 2026-08-25 18:16:37 +6.637s  COMMAND_FINISHED
+      status=COMPLETED
+  [4b135314/8] 2026-08-25 18:16:37 +6.636s  HELP_LOOKUP_COMPLETED
+      rank_1=update · rank_2=merge · rank_3=meld
+  [4b135314/7] 2026-08-25 18:16:37 +6.636s  PROVIDER_TURN_COMPLETED
+      elapsed_seconds=6.589357666991418 · operation=help · output_characters=40 · provider=codex_chatgpt
+  [4b135314/6] 2026-08-25 18:16:30 +0.046s  PROVIDER_TURN_STARTED
+      has_schema=True · input_characters=34048 · operation=help · provider=codex_chatgpt
+  [4b135314/5] 2026-08-25 18:16:30 +0.045s  PROVIDER_CONNECT_COMPLETED
+      elapsed_seconds=0.02917804200842511 · operation=help · provider=codex_chatgpt
+  [4b135314/4] 2026-08-25 18:16:30 +0.016s  PROVIDER_CONNECT_STARTED
+      operation=help
+  [4b135314/3] 2026-08-25 18:16:30 +0.001s  HELP_LOOKUP_SUBMITTED
+      request=update
+  [4b135314/2] 2026-08-25 18:16:30 +0.000s  COMMAND_ENTERED
+      command=mem help update
+  [4b135314/1] 2026-08-25 18:16:30 +0.000s  COMMAND_STARTED
+      operation=help · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [b115cf19/3] 2026-08-25 18:16:29 +0.001s  COMMAND_FINISHED
+      status=COMPLETED
+  [b115cf19/2] 2026-08-25 18:16:29 +0.000s  COMMAND_ENTERED
+      command=mem eval semantic task2-status --all --ledger-dir /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/admin-eval-ledger
+  [b115cf19/1] 2026-08-25 18:16:29 +0.000s  COMMAND_STARTED
+      operation=eval · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24

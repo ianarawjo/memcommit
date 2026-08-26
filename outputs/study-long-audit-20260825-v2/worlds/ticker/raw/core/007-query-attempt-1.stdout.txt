@@ -1,0 +1,7 @@
+Remove a terminal legal suffix such as Inc., Corp., Ltd., or LLC before constructing the ticker, while preserving the remaining alphanumeric characters. [1]
+
+Uppercase the remaining company-name letters in their original order, without inventing letters. [2]
+
+References
+[1] Base ticker rule: remove a terminal legal suffix such as Inc., Corp., Ltd., or LLC before constructing the ticker. Preserve the remaining alphanumeric characters. — fac90a77, task-2/participant, m1
+[2] Base ticker rule: uppercase the remaining company-name letters in their original order. Do not invent letters. — 9f473e8e, task-2/participant, m2

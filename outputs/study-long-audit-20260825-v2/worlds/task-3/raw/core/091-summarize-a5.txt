@@ -1,0 +1,7 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 summarize task-3/local --recursive --plain
+
+STDOUT
+
+STDERR
+Summarize error: Summarize cannot use granted Context Embed 'task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance' [ef17277c] in Context 'task-3/local' as semantic evidence through its local owner. EMBED authorizes live reading, not provider disclosure or derived work; select the granted Source through an operation-aware authority route instead.

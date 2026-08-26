@@ -1,0 +1,12 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple query 'What is mapped to the letter a, and what uncertainty remains?' --recursive --context practice
+
+EXIT
+0
+
+OUTPUT
+The letter a is mapped to apple. [1] [2] The current practice corpus does not identify any specific uncertainty about that mapping.
+
+References
+[1] a is apple. — f1c940a1, practice, m1
+[2] a maps to apple; — 9828aed4, practice, m2

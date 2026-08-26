@@ -1,0 +1,13 @@
+Find Conflicts · task-1 · 3/7 direct memories involved · 2/21 pairs flagged
+
+  POSSIBLE CONFLICT 1/2
+  [8bdb199f] The output contains no punctuation.
+  [96a3a079] Share-class example: Acme Corp. Class B becomes ACME.B after removing Corp. and mapping
+  Reason: If “no punctuation” applies to the entire final ticker, it conflicts with ACME.B, which contains a generated dot. If it applies only to punctuation inherited from the company name, both rules are jointly explainable because the share-class dot is newly generated syntax.
+  Question: Does the no-punctuation rule exclude generated share-class dots?
+
+  POSSIBLE CONFLICT 2/2
+  [8bdb199f] The output contains no punctuation.
+  [03a9af5d] Class B to the .B suffix. The dot is generated share-class syntax.
+  Reason: If “no punctuation” covers all final output characters, it conflicts with the required .B share-class suffix. If it only requires removing punctuation from the source name, the generated share-class dot is permitted and the rules are jointly explainable.
+  Question: May a generated share-class suffix contain a dot?

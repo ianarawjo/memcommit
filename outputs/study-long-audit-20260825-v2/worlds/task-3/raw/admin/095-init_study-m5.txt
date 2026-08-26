@@ -1,0 +1,23 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 init-study 00000000-0000-0000-0000-000000000999
+
+STDIN
+<none>
+
+EXIT
+0
+
+WALL_SECONDS
+<unavailable: post-call identity assertion interrupted recording>
+
+POST_CALL_IDENTITY_HOST_ASSERTION
+FAIL: active Profile changed to 00000000-0000-0000-0000-000000000999 [c657200b-1480-446e-b5aa-6910b56d7b86]
+
+STDOUT
+<not retained: recording stopped at mandatory identity assertion>
+
+STDERR
+<not retained: recording stopped at mandatory identity assertion>
+
+OBSERVED_DURABLE_OUTCOME
+Created and selected a full managed Study Profile/Store; exact evidence: recovery/admin-seq095-init-study/evidence.json

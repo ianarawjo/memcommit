@@ -1,0 +1,15 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source find-duplicates practice
+
+EXIT
+0
+
+WALL_SECONDS
+1.319013
+
+STDOUT
+Find Duplicates · practice · 3 direct items checked · 0 exact groups · 0 proposed absorptions
+  No exact duplicate direct items.
+
+
+STDERR

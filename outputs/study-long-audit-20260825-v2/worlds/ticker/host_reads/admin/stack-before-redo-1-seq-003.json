@@ -1,0 +1,38 @@
+{
+  "label": "before-redo-1-seq-003",
+  "read_at": "2026-08-25T18:12:10.275817+00:00",
+  "undo_top": {
+    "uid": "revert:9a152230-39e2-4673-9d71-e6a3246c3b2e",
+    "command": "revert",
+    "description": "Reverted to checkpoint [3a357315]",
+    "members": [
+      {
+        "context_uid": "10c1e5b1-4d4b-566c-bf14-c385523c344e",
+        "context_name": "task-3/local/guardrails",
+        "checkpoint_uid": "9a152230-39e2-4673-9d71-e6a3246c3b2e"
+      }
+    ]
+  },
+  "redo_top": {
+    "uid": "branch:14a4bb19-2abe-47b9-b967-a5f2df320bbb",
+    "command": "branch",
+    "description": "Branched 'task-1/participant/construction-updates' to 'audit/ticker/admin-v2-scratch/b1'.",
+    "members": [
+      {
+        "context_uid": "d9bd80bb-1944-4423-8306-6e5fdfbc02d8",
+        "context_name": "audit/ticker/admin-v2-scratch/b1",
+        "checkpoint_uid": "f3b4f1c8-a0db-42f2-b43c-a837f18aa916"
+      }
+    ]
+  },
+  "undo_depth": 63,
+  "redo_depth": 1,
+  "staged_update_granted_target": null,
+  "assertions": {
+    "expected_side": "redo",
+    "expected_uid": "branch:14a4bb19-2abe-47b9-b967-a5f2df320bbb",
+    "expected_command": "branch",
+    "require_granted_null": false,
+    "result": "PASS"
+  }
+}

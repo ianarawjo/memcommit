@@ -1,0 +1,5 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 delete 84cab032-847f-4be2-88db-3c613922d688 --context task-2/participant/proposal-workspace
+EXIT: 0
+DURATION_SECONDS: 1.391
+
+Removed [84cab032] Equal-authority synthesis rule: preserve each shared co-advisor requirement once, retain distinct conditions, and explain owned unresolved conflicts with both provenances.

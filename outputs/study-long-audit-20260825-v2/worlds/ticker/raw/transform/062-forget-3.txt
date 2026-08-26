@@ -1,0 +1,19 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker forget 'remove no numeral rule that preserves source-supported digits' --context task-3/local/personal-memory
+
+EXIT
+0
+
+OUTPUT
+Consulting the configured Forget provider...
+FORGET APPLIED · SOURCE task-3/local/personal-memory
+FORGET · remove no numeral rule that preserves source-supported digits
+DIFF · 4 CHANGES
+- [1d3c790a] When deriving a ticker, preserve digits 0–9 in their original positions, including any leading zeroes, while removing spaces, punctuation, and the legal suffix; for example, Route 66, LLC becomes ROUTE66.
+~ [57de9e70] Select candidate examples only when the Source explicitly represents both the originating name and its corresponding [-numeral-containing -]ticker; do not construct or infer a ticker from an unpaired name.
+- [6ba53010] For each selected example, retain every digit 0–9 exactly as represented in the Source, including digit order, position, repetition, and leading zeroes; do not spell out, insert, delete, or reorder digits.
+~ [949c3888] Present each candidate as a separate source-to-ticker mapping and include a precise Source locator for both sides of the mapping; exclude any candidate whose [-numeral-bearing -]ticker or locator cannot be directly reviewed in the Source.
+RECEIPT · 207f4252-a2d8-4281-a299-bb0a0e9c8edf
+CHECKPOINT · 207f4252-a2d8-4281-a299-bb0a0e9c8edf
+REVIEW · mem review forget --receipt 207f4252-a2d8-4281-a299-bb0a0e9c8edf
+RECOVERY · mem undo

@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple lock
+
+EXIT
+0
+
+OUTPUT
+Locked Context 'practice'.

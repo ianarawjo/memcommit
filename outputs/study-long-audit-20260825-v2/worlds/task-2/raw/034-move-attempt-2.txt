@@ -1,0 +1,7 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 move task-2/participant:2ba58f39 --into task-2
+EXIT: 0
+DURATION_SECONDS: 1.289
+
+MOVED · 1 Memory → 'task-2' · RETARGET LINKS · after [f0ea0447] at the end
+  REMOVE 'task-2/participant' [2ba58f39] · ADD 'task-2' [2ba58f39]
+Checkpoints 'task-2' [08f56f26], 'task-2/participant' [6f8c1516].

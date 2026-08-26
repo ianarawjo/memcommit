@@ -1,0 +1,28 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker rename audit/ticker/admin-v2-scratch/co4-tree audit/ticker/admin-v2-scratch/declined-5
+
+STDIN
+'n\n'
+
+EXIT
+0
+
+WALL_SECONDS
+1.803253
+
+PRE_IDENTITY
+{"current_context": "audit/ticker/admin-v2-scratch/co4-tree", "current_context_uid": "44473ed5-f911-4bd5-8871-7e0804873207", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+IMMEDIATE_POST_IDENTITY
+{"current_context": "audit/ticker/admin-v2-scratch/co4-tree", "current_context_uid": "44473ed5-f911-4bd5-8871-7e0804873207", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+COMMAND_ATTEMPT_DELTA
+{"count_after": 333, "count_before": 332, "delta": 1, "new_attempt_uids": ["a1942530-c20e-4894-b9f1-080b050ba526"], "records": [{"command": "mem rename audit/ticker/admin-v2-scratch/co4-tree audit/ticker/admin-v2-scratch/declined-5", "completed_at": "2026-08-25T18:17:05.852739+00:00", "details": {}, "elapsed_seconds": 0.49607208400266245, "failure": null, "operation": "rename", "outcome": null, "started_at": "2026-08-25T18:17:05.356508+00:00", "status": "COMPLETED", "terminal": {"stdin_tty": false, "stdout_tty": false}, "uid": "a1942530-c20e-4894-b9f1-080b050ba526", "version": 3}], "sequence": 88}
+
+STDOUT
+This will rename ordinary Context namespace 'audit/ticker/admin-v2-scratch/co4-tree' to 'audit/ticker/admin-v2-scratch/declined-5' (2 Contexts, including 1 descendant).
+Ordinary Context references, restorable checkpoint pointers, the current Context pointer, and unapplied Meld bindings will follow the stable UIDs; query-only Context references are unchanged.
+Continue? [y/N]: Rename cancelled.
+
+
+STDERR

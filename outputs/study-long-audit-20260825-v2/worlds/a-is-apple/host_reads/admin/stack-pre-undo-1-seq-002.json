@@ -1,0 +1,20 @@
+{
+  "label": "pre-undo-1-seq-002",
+  "read_at": "2026-08-25T17:55:55.540075+00:00",
+  "undo_top": {
+    "uid": "branch:a33c3b38-f137-4a86-a5f3-f5cb38bae2a5",
+    "command": "branch",
+    "members": [
+      {
+        "context_uid": "6a9742b3-4405-4165-91fd-4056c9d81df7",
+        "context_name": "audit/a-is-apple/admin-v2-scratch/b1",
+        "checkpoint_uid": "1cb7b914-9fed-4310-8e64-75619e955928"
+      }
+    ]
+  },
+  "redo_top": null,
+  "undo_depth": 63,
+  "redo_depth": 0,
+  "staged_update_exists": false,
+  "staged_update_granted_target": null
+}

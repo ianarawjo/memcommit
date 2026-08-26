@@ -1,0 +1,19 @@
+{
+  "sequence": 79,
+  "label": "checkout-4-source",
+  "read_at": "2026-08-25T18:16:50.764501+00:00",
+  "source_root": "task-2/participant",
+  "recursive": true,
+  "lexically_disjoint_from_scratch": true,
+  "resolved_context_names": [
+    "task-2/participant",
+    "task-2/participant/proposal-workspace"
+  ],
+  "direct_item_counts": {
+    "task-2/participant": 5,
+    "task-2/participant/proposal-workspace": 6
+  },
+  "retained_branch_checkpoint_count": 0,
+  "retained_branch_checkpoints": [],
+  "result": "PASS"
+}

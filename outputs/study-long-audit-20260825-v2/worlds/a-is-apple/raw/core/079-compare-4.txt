@@ -1,0 +1,11 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple compare practice practice/source --snapshot
+
+EXIT
+0
+
+OUTPUT
+Compare · practice ↔ practice/source
+
+COMPARISON
+  The frames share the same editing, formatting, verification, and provisional banana-versus-blueberry guidance, but the reference frame additionally contains unrelated practice instructions and mappings. The decisive difference is that only the reference introduces boat as another value for b and apricot as a deliberate conflicting recovery-test alternative for a.

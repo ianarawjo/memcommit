@@ -1,0 +1,1686 @@
+{
+  "world": "task-2",
+  "phase": "admin",
+  "counted_mem_calls": 105,
+  "identity_reads": [
+    {
+      "kind": "identity-host-read",
+      "moment": "phase-entry-static-host-read",
+      "sequence": 0,
+      "timestamp": "2026-08-25T18:01:45.535908+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 1,
+      "timestamp": "2026-08-25T18:01:46.715568+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 2,
+      "timestamp": "2026-08-25T18:01:47.950396+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 3,
+      "timestamp": "2026-08-25T18:01:49.237793+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 4,
+      "timestamp": "2026-08-25T18:01:50.556357+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 5,
+      "timestamp": "2026-08-25T18:01:51.896304+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 6,
+      "timestamp": "2026-08-25T18:01:54.025889+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 7,
+      "timestamp": "2026-08-25T18:01:55.309562+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 8,
+      "timestamp": "2026-08-25T18:01:56.559860+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 9,
+      "timestamp": "2026-08-25T18:01:57.783265+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 10,
+      "timestamp": "2026-08-25T18:01:59.006507+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 11,
+      "timestamp": "2026-08-25T18:02:00.238300+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 12,
+      "timestamp": "2026-08-25T18:02:01.545053+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 13,
+      "timestamp": "2026-08-25T18:02:02.782736+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 14,
+      "timestamp": "2026-08-25T18:02:04.028126+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 15,
+      "timestamp": "2026-08-25T18:02:05.273427+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 16,
+      "timestamp": "2026-08-25T18:02:08.040201+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 17,
+      "timestamp": "2026-08-25T18:02:09.233579+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 18,
+      "timestamp": "2026-08-25T18:02:10.480364+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 19,
+      "timestamp": "2026-08-25T18:02:11.735522+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 20,
+      "timestamp": "2026-08-25T18:02:13.027052+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 21,
+      "timestamp": "2026-08-25T18:02:14.325031+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 22,
+      "timestamp": "2026-08-25T18:02:15.594856+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 23,
+      "timestamp": "2026-08-25T18:02:17.060278+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 24,
+      "timestamp": "2026-08-25T18:06:00.381096+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 25,
+      "timestamp": "2026-08-25T18:15:06.685755+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 26,
+      "timestamp": "2026-08-25T18:15:08.198097+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 27,
+      "timestamp": "2026-08-25T18:15:09.573311+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 28,
+      "timestamp": "2026-08-25T18:15:10.876138+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 29,
+      "timestamp": "2026-08-25T18:15:12.180922+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 30,
+      "timestamp": "2026-08-25T18:15:13.599661+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 31,
+      "timestamp": "2026-08-25T18:15:14.921878+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 32,
+      "timestamp": "2026-08-25T18:15:20.242265+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 33,
+      "timestamp": "2026-08-25T18:15:25.911288+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 34,
+      "timestamp": "2026-08-25T18:15:27.314495+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 35,
+      "timestamp": "2026-08-25T18:15:28.687200+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 36,
+      "timestamp": "2026-08-25T18:15:30.043645+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 37,
+      "timestamp": "2026-08-25T18:15:31.393933+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "f3013a31a62f8a5ac4057eff703d22ffb54e5b2335e968c0f4bd471da39517d6",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 38,
+      "timestamp": "2026-08-25T18:15:32.807533+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 39,
+      "timestamp": "2026-08-25T18:15:34.242693+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 40,
+      "timestamp": "2026-08-25T18:15:35.646209+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 41,
+      "timestamp": "2026-08-25T18:15:37.052523+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 42,
+      "timestamp": "2026-08-25T18:15:38.461370+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 43,
+      "timestamp": "2026-08-25T18:15:39.973870+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 44,
+      "timestamp": "2026-08-25T18:15:41.364862+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 45,
+      "timestamp": "2026-08-25T18:15:42.700655+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 46,
+      "timestamp": "2026-08-25T18:15:44.005522+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 47,
+      "timestamp": "2026-08-25T18:15:49.884964+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 48,
+      "timestamp": "2026-08-25T18:15:51.258865+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 49,
+      "timestamp": "2026-08-25T18:15:52.622787+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 50,
+      "timestamp": "2026-08-25T18:15:53.989486+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 51,
+      "timestamp": "2026-08-25T18:15:55.377536+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 52,
+      "timestamp": "2026-08-25T18:15:56.705584+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 53,
+      "timestamp": "2026-08-25T18:15:58.175465+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 54,
+      "timestamp": "2026-08-25T18:15:59.724020+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 55,
+      "timestamp": "2026-08-25T18:16:01.625124+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 56,
+      "timestamp": "2026-08-25T18:16:02.992342+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 57,
+      "timestamp": "2026-08-25T18:16:04.369287+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 58,
+      "timestamp": "2026-08-25T18:16:05.813914+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 59,
+      "timestamp": "2026-08-25T18:16:08.330433+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 60,
+      "timestamp": "2026-08-25T18:16:09.639975+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 61,
+      "timestamp": "2026-08-25T18:16:10.987422+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 62,
+      "timestamp": "2026-08-25T18:16:12.353151+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 63,
+      "timestamp": "2026-08-25T18:16:13.707345+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 64,
+      "timestamp": "2026-08-25T18:16:15.129072+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 65,
+      "timestamp": "2026-08-25T18:16:16.523018+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 66,
+      "timestamp": "2026-08-25T18:16:17.886391+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 67,
+      "timestamp": "2026-08-25T18:16:19.200227+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 68,
+      "timestamp": "2026-08-25T18:16:20.528824+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 69,
+      "timestamp": "2026-08-25T18:16:27.129676+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 70,
+      "timestamp": "2026-08-25T18:16:28.489022+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 71,
+      "timestamp": "2026-08-25T18:16:29.865352+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 72,
+      "timestamp": "2026-08-25T18:16:31.231432+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 73,
+      "timestamp": "2026-08-25T18:16:32.612634+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 74,
+      "timestamp": "2026-08-25T18:16:33.954823+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 75,
+      "timestamp": "2026-08-25T18:16:35.230098+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 76,
+      "timestamp": "2026-08-25T18:16:36.589581+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 77,
+      "timestamp": "2026-08-25T18:16:38.009180+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 78,
+      "timestamp": "2026-08-25T18:16:39.433703+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 79,
+      "timestamp": "2026-08-25T18:16:40.809281+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 80,
+      "timestamp": "2026-08-25T18:16:42.179121+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 81,
+      "timestamp": "2026-08-25T18:16:43.562415+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 82,
+      "timestamp": "2026-08-25T18:16:45.093609+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 83,
+      "timestamp": "2026-08-25T18:16:46.566157+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 84,
+      "timestamp": "2026-08-25T18:16:48.015627+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 85,
+      "timestamp": "2026-08-25T18:16:49.472320+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 86,
+      "timestamp": "2026-08-25T18:16:51.032705+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 87,
+      "timestamp": "2026-08-25T18:16:52.570896+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 88,
+      "timestamp": "2026-08-25T18:16:54.032180+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 89,
+      "timestamp": "2026-08-25T18:16:55.417568+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 90,
+      "timestamp": "2026-08-25T18:16:56.744407+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 91,
+      "timestamp": "2026-08-25T18:16:58.039228+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 92,
+      "timestamp": "2026-08-25T18:16:59.343988+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 93,
+      "timestamp": "2026-08-25T18:17:00.698081+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 94,
+      "timestamp": "2026-08-25T18:17:02.075029+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 95,
+      "timestamp": "2026-08-25T18:17:03.400309+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 96,
+      "timestamp": "2026-08-25T18:17:04.724980+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 97,
+      "timestamp": "2026-08-25T18:17:06.058621+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 98,
+      "timestamp": "2026-08-25T18:17:07.473014+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 99,
+      "timestamp": "2026-08-25T18:17:08.806782+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 100,
+      "timestamp": "2026-08-25T18:17:13.759026+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 101,
+      "timestamp": "2026-08-25T18:17:15.090962+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 102,
+      "timestamp": "2026-08-25T18:17:16.548213+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 103,
+      "timestamp": "2026-08-25T18:17:17.955557+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 104,
+      "timestamp": "2026-08-25T18:17:19.357738+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    },
+    {
+      "kind": "identity-host-read",
+      "moment": "immediately-after-counted-call",
+      "sequence": 105,
+      "timestamp": "2026-08-25T18:17:20.751008+00:00",
+      "active_profile_name": "sixworld-v2-template",
+      "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "registry_sha256": "9099f454df5044697534607f5fce09823f18728116661b7ba11f472cef097f4c",
+      "asserted_expected_identity": true
+    }
+  ],
+  "stack_reads": [
+    {
+      "kind": "command-stack-host-read",
+      "label": "after-branch1-before-undo1",
+      "after_phase_sequence": 3,
+      "timestamp": "2026-08-25T18:01:49.293243+00:00",
+      "undo_depth": 59,
+      "redo_depth": 0,
+      "undo_top": {
+        "uid": "branch:d2d55d2f-e312-4daf-a988-ed790d51a551",
+        "command": "branch",
+        "members": [
+          {
+            "context_uid": "a111c808-d3e1-4e47-a056-2e954dd82b16",
+            "context_name": "task-2/participant/admin-v2-scratch/b1",
+            "checkpoint_uid": "653cd445-e69d-4cf7-b8a2-d1f403beee67"
+          }
+        ]
+      },
+      "redo_top": null,
+      "staged_update_granted_target": null
+    },
+    {
+      "kind": "command-stack-host-read",
+      "label": "after-undo1-redo-top",
+      "after_phase_sequence": 4,
+      "timestamp": "2026-08-25T18:01:50.610697+00:00",
+      "undo_depth": 58,
+      "redo_depth": 1,
+      "undo_top": {
+        "uid": "clear:18c8bda8-7e2f-43a0-bdcf-7a08cf95b542",
+        "command": "clear",
+        "members": [
+          {
+            "context_uid": "b839b146-7576-5ec4-93a5-a98f64eba1ec",
+            "context_name": "task-2/participant/proposal-workspace",
+            "checkpoint_uid": "62564f89-bea8-4c5c-a33a-1225d933e36e"
+          }
+        ]
+      },
+      "redo_top": {
+        "uid": "branch:d2d55d2f-e312-4daf-a988-ed790d51a551",
+        "command": "branch",
+        "members": [
+          {
+            "context_uid": "a111c808-d3e1-4e47-a056-2e954dd82b16",
+            "context_name": "task-2/participant/admin-v2-scratch/b1",
+            "checkpoint_uid": "653cd445-e69d-4cf7-b8a2-d1f403beee67"
+          }
+        ]
+      },
+      "staged_update_granted_target": null
+    },
+    {
+      "kind": "command-stack-host-read",
+      "label": "after-redo1-undo-top",
+      "after_phase_sequence": 5,
+      "timestamp": "2026-08-25T18:01:51.952043+00:00",
+      "undo_depth": 59,
+      "redo_depth": 0,
+      "undo_top": {
+        "uid": "branch:d2d55d2f-e312-4daf-a988-ed790d51a551",
+        "command": "branch",
+        "members": [
+          {
+            "context_uid": "a111c808-d3e1-4e47-a056-2e954dd82b16",
+            "context_name": "task-2/participant/admin-v2-scratch/b1",
+            "checkpoint_uid": "653cd445-e69d-4cf7-b8a2-d1f403beee67"
+          }
+        ]
+      },
+      "redo_top": null,
+      "staged_update_granted_target": null
+    }
+  ],
+  "safety_reads": [
+    {
+      "kind": "source-memory-host-read",
+      "after_phase_sequence": 0,
+      "timestamp": "2026-08-25T18:01:45.536418+00:00",
+      "source_profile": "task-2",
+      "source_context": "advisor1/style",
+      "memory_uid": "807a906c-d519-59b1-8406-43c8015ef068",
+      "context_sha256": "ac99c254ff70091224ffbbe9e1f99c6bfa008f1900764296374bf41542ee70fd"
+    },
+    {
+      "kind": "share-zero-delivery-host-read",
+      "sequence": 19,
+      "timestamp": "2026-08-25T18:02:11.758599+00:00",
+      "sender_context_tree_before": "0a8b1b10a2a8593f7ce5b580689ef92f16962397379c70cb57d773f4a4521d58",
+      "sender_context_tree_after": "0a8b1b10a2a8593f7ce5b580689ef92f16962397379c70cb57d773f4a4521d58",
+      "receiver": "ABSENT or incomplete by protocol",
+      "delivery_count": 0,
+      "unchanged": true
+    },
+    {
+      "kind": "inverse-rename-raw-predicate-host-read",
+      "after_phase_sequence": 24,
+      "timestamp": "2026-08-25T18:06:00.390936+00:00",
+      "old_name_absent": true,
+      "restored_name_present": true,
+      "restored_uid": "a111c808-d3e1-4e47-a056-2e954dd82b16",
+      "expected_branch1_uid": "a111c808-d3e1-4e47-a056-2e954dd82b16",
+      "passed": true
+    },
+    {
+      "kind": "required-command-stack-host-read-failure",
+      "label": "after-inverse-rename-before-undo2",
+      "after_phase_sequence": 24,
+      "timestamp": "2026-08-25T18:06:00.427842+00:00",
+      "error": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "next_counted_command_run": false
+    },
+    {
+      "kind": "required-command-stack-host-read-failure",
+      "label": "after-branch2-before-undo2",
+      "after_phase_sequence": 24,
+      "timestamp": "2026-08-25T18:06:36.245767+00:00",
+      "error": "memcommit.command_history.CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "blocker_evidence": "outputs/study-long-audit-20260825-v2/worlds/task-2/admin-stack-blocker.json",
+      "next_counted_command_run": false
+    },
+    {
+      "kind": "malformed-history-builder-negative-control",
+      "label": "continuation-entry",
+      "after_phase_sequence": 24,
+      "timestamp": "2026-08-25T18:15:05.303715+00:00",
+      "actual": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "expected": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "matched": true
+    },
+    {
+      "kind": "malformed-history-builder-negative-control",
+      "label": "before-undo2",
+      "after_phase_sequence": 24,
+      "timestamp": "2026-08-25T18:15:05.350140+00:00",
+      "actual": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "expected": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "matched": true
+    },
+    {
+      "kind": "malformed-history-builder-negative-control",
+      "label": "after-undo2",
+      "after_phase_sequence": 25,
+      "timestamp": "2026-08-25T18:15:06.743008+00:00",
+      "actual": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "expected": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "matched": true
+    },
+    {
+      "kind": "undo-redo-fail-closed-negative-control",
+      "operation": "undo",
+      "attempt": 2,
+      "phase_sequence": 25,
+      "timestamp": "2026-08-25T18:15:06.743512+00:00",
+      "exit": 1,
+      "pre_context_tree_and_state_digest": "0eb5d0216281ce95f7365dcfdf7f400ddc13d1731000df71602806d5afb676ba",
+      "post_context_tree_and_state_digest": "0eb5d0216281ce95f7365dcfdf7f400ddc13d1731000df71602806d5afb676ba",
+      "unchanged": true,
+      "builder_error_before_and_after": true
+    },
+    {
+      "kind": "malformed-history-builder-negative-control",
+      "label": "before-redo2",
+      "after_phase_sequence": 25,
+      "timestamp": "2026-08-25T18:15:06.789045+00:00",
+      "actual": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "expected": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "matched": true
+    },
+    {
+      "kind": "malformed-history-builder-negative-control",
+      "label": "after-redo2",
+      "after_phase_sequence": 26,
+      "timestamp": "2026-08-25T18:15:08.256443+00:00",
+      "actual": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "expected": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "matched": true
+    },
+    {
+      "kind": "undo-redo-fail-closed-negative-control",
+      "operation": "redo",
+      "attempt": 2,
+      "phase_sequence": 26,
+      "timestamp": "2026-08-25T18:15:08.257100+00:00",
+      "exit": 1,
+      "pre_context_tree_and_state_digest": "0eb5d0216281ce95f7365dcfdf7f400ddc13d1731000df71602806d5afb676ba",
+      "post_context_tree_and_state_digest": "0eb5d0216281ce95f7365dcfdf7f400ddc13d1731000df71602806d5afb676ba",
+      "unchanged": true,
+      "builder_error_before_and_after": true
+    },
+    {
+      "kind": "eval-full-run-id-host-read",
+      "after_phase_sequence": 32,
+      "timestamp": "2026-08-25T18:15:20.244136+00:00",
+      "full_run_id": "20260825T181516251263Z-6753d166",
+      "ledger_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/admin-eval-ledger"
+    },
+    {
+      "kind": "share-zero-delivery-host-read",
+      "sequence": 41,
+      "timestamp": "2026-08-25T18:15:37.092582+00:00",
+      "sender_context_tree_before": "670657d5c1c59f27f76002254df7ff799946b7b93b2ca7f92209931ec0636300",
+      "sender_context_tree_after": "670657d5c1c59f27f76002254df7ff799946b7b93b2ca7f92209931ec0636300",
+      "receiver": "ABSENT or incomplete by protocol",
+      "delivery_count": 0,
+      "unchanged": true
+    },
+    {
+      "kind": "branch-created-context-host-read",
+      "label": "after-branch3",
+      "after_phase_sequence": 44,
+      "timestamp": "2026-08-25T18:15:41.379299+00:00",
+      "root": "task-2/participant/admin-v2-scratch/b3",
+      "context_names": [
+        "task-2/participant/admin-v2-scratch/b3"
+      ],
+      "context_count": 1,
+      "root_present": true
+    },
+    {
+      "kind": "branch-created-context-host-read",
+      "label": "after-checkout3",
+      "after_phase_sequence": 51,
+      "timestamp": "2026-08-25T18:15:55.393580+00:00",
+      "root": "task-2/participant/admin-v2-scratch/co3",
+      "context_names": [
+        "task-2/participant/admin-v2-scratch/co3"
+      ],
+      "context_count": 1,
+      "root_present": true
+    },
+    {
+      "kind": "malformed-history-builder-negative-control",
+      "label": "before-undo3",
+      "after_phase_sequence": 52,
+      "timestamp": "2026-08-25T18:15:56.775297+00:00",
+      "actual": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "expected": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "matched": true
+    },
+    {
+      "kind": "malformed-history-builder-negative-control",
+      "label": "after-undo3",
+      "after_phase_sequence": 53,
+      "timestamp": "2026-08-25T18:15:58.245168+00:00",
+      "actual": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "expected": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "matched": true
+    },
+    {
+      "kind": "undo-redo-fail-closed-negative-control",
+      "operation": "undo",
+      "attempt": 3,
+      "phase_sequence": 53,
+      "timestamp": "2026-08-25T18:15:58.245820+00:00",
+      "exit": 1,
+      "pre_context_tree_and_state_digest": "a0cd1e018ad15f12389ce3a1fb99ad6e417666c3de129ef3a0c3b3fe94e19148",
+      "post_context_tree_and_state_digest": "a0cd1e018ad15f12389ce3a1fb99ad6e417666c3de129ef3a0c3b3fe94e19148",
+      "unchanged": true,
+      "builder_error_before_and_after": true
+    },
+    {
+      "kind": "malformed-history-builder-negative-control",
+      "label": "before-redo3",
+      "after_phase_sequence": 53,
+      "timestamp": "2026-08-25T18:15:58.298856+00:00",
+      "actual": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "expected": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "matched": true
+    },
+    {
+      "kind": "malformed-history-builder-negative-control",
+      "label": "after-redo3",
+      "after_phase_sequence": 54,
+      "timestamp": "2026-08-25T18:15:59.792516+00:00",
+      "actual": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "expected": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "matched": true
+    },
+    {
+      "kind": "undo-redo-fail-closed-negative-control",
+      "operation": "redo",
+      "attempt": 3,
+      "phase_sequence": 54,
+      "timestamp": "2026-08-25T18:15:59.793205+00:00",
+      "exit": 1,
+      "pre_context_tree_and_state_digest": "a0cd1e018ad15f12389ce3a1fb99ad6e417666c3de129ef3a0c3b3fe94e19148",
+      "post_context_tree_and_state_digest": "a0cd1e018ad15f12389ce3a1fb99ad6e417666c3de129ef3a0c3b3fe94e19148",
+      "unchanged": true,
+      "builder_error_before_and_after": true
+    },
+    {
+      "kind": "share-zero-delivery-host-read",
+      "sequence": 62,
+      "timestamp": "2026-08-25T18:16:12.396734+00:00",
+      "sender_context_tree_before": "5d50645867730df4297e3ff1cda395857c3ae1d7386a1ddbf64d36df09d1195b",
+      "sender_context_tree_after": "5d50645867730df4297e3ff1cda395857c3ae1d7386a1ddbf64d36df09d1195b",
+      "receiver": "ABSENT or incomplete by protocol",
+      "delivery_count": 0,
+      "unchanged": true
+    },
+    {
+      "kind": "malformed-history-builder-negative-control",
+      "label": "before-redo4",
+      "after_phase_sequence": 63,
+      "timestamp": "2026-08-25T18:16:13.768303+00:00",
+      "actual": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "expected": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "matched": true
+    },
+    {
+      "kind": "malformed-history-builder-negative-control",
+      "label": "after-redo4",
+      "after_phase_sequence": 64,
+      "timestamp": "2026-08-25T18:16:15.197634+00:00",
+      "actual": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "expected": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "matched": true
+    },
+    {
+      "kind": "undo-redo-fail-closed-negative-control",
+      "operation": "redo",
+      "attempt": 4,
+      "phase_sequence": 64,
+      "timestamp": "2026-08-25T18:16:15.198332+00:00",
+      "exit": 1,
+      "pre_context_tree_and_state_digest": "a0cd1e018ad15f12389ce3a1fb99ad6e417666c3de129ef3a0c3b3fe94e19148",
+      "post_context_tree_and_state_digest": "a0cd1e018ad15f12389ce3a1fb99ad6e417666c3de129ef3a0c3b3fe94e19148",
+      "unchanged": true,
+      "builder_error_before_and_after": true
+    },
+    {
+      "kind": "share-zero-delivery-host-read",
+      "sequence": 77,
+      "timestamp": "2026-08-25T18:16:38.057513+00:00",
+      "sender_context_tree_before": "5d50645867730df4297e3ff1cda395857c3ae1d7386a1ddbf64d36df09d1195b",
+      "sender_context_tree_after": "5d50645867730df4297e3ff1cda395857c3ae1d7386a1ddbf64d36df09d1195b",
+      "receiver": "ABSENT or incomplete by protocol",
+      "delivery_count": 0,
+      "unchanged": true
+    },
+    {
+      "kind": "branch-created-context-host-read",
+      "label": "after-checkout4",
+      "after_phase_sequence": 79,
+      "timestamp": "2026-08-25T18:16:40.827075+00:00",
+      "root": "task-2/participant/admin-v2-scratch/co4-tree",
+      "context_names": [
+        "task-2/participant/admin-v2-scratch/co4-tree",
+        "task-2/participant/admin-v2-scratch/co4-tree/description",
+        "task-2/participant/admin-v2-scratch/co4-tree/source"
+      ],
+      "context_count": 3,
+      "root_present": true
+    },
+    {
+      "kind": "malformed-history-builder-negative-control",
+      "label": "before-undo4",
+      "after_phase_sequence": 82,
+      "timestamp": "2026-08-25T18:16:45.165430+00:00",
+      "actual": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "expected": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "matched": true
+    },
+    {
+      "kind": "malformed-history-builder-negative-control",
+      "label": "after-undo4",
+      "after_phase_sequence": 83,
+      "timestamp": "2026-08-25T18:16:46.635184+00:00",
+      "actual": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "expected": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "matched": true
+    },
+    {
+      "kind": "undo-redo-fail-closed-negative-control",
+      "operation": "undo",
+      "attempt": 4,
+      "phase_sequence": 83,
+      "timestamp": "2026-08-25T18:16:46.636062+00:00",
+      "exit": 1,
+      "pre_context_tree_and_state_digest": "a0011cd4b5e3fff9e660874df0e4d9dae01d7b3132053699b35669e81015bde5",
+      "post_context_tree_and_state_digest": "a0011cd4b5e3fff9e660874df0e4d9dae01d7b3132053699b35669e81015bde5",
+      "unchanged": true,
+      "builder_error_before_and_after": true
+    },
+    {
+      "kind": "malformed-history-builder-negative-control",
+      "label": "before-undo5",
+      "after_phase_sequence": 84,
+      "timestamp": "2026-08-25T18:16:48.084580+00:00",
+      "actual": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "expected": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "matched": true
+    },
+    {
+      "kind": "malformed-history-builder-negative-control",
+      "label": "after-undo5",
+      "after_phase_sequence": 85,
+      "timestamp": "2026-08-25T18:16:49.539829+00:00",
+      "actual": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "expected": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "matched": true
+    },
+    {
+      "kind": "undo-redo-fail-closed-negative-control",
+      "operation": "undo",
+      "attempt": 5,
+      "phase_sequence": 85,
+      "timestamp": "2026-08-25T18:16:49.540655+00:00",
+      "exit": 1,
+      "pre_context_tree_and_state_digest": "8e75ee1c8a217a47b54559eecac0c3eeef69a6ed53857f833d45384646725e0e",
+      "post_context_tree_and_state_digest": "8e75ee1c8a217a47b54559eecac0c3eeef69a6ed53857f833d45384646725e0e",
+      "unchanged": true,
+      "builder_error_before_and_after": true
+    },
+    {
+      "kind": "malformed-history-builder-negative-control",
+      "label": "before-redo5",
+      "after_phase_sequence": 85,
+      "timestamp": "2026-08-25T18:16:49.596120+00:00",
+      "actual": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "expected": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "matched": true
+    },
+    {
+      "kind": "malformed-history-builder-negative-control",
+      "label": "after-redo5",
+      "after_phase_sequence": 86,
+      "timestamp": "2026-08-25T18:16:51.106647+00:00",
+      "actual": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "expected": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "matched": true
+    },
+    {
+      "kind": "undo-redo-fail-closed-negative-control",
+      "operation": "redo",
+      "attempt": 5,
+      "phase_sequence": 86,
+      "timestamp": "2026-08-25T18:16:51.107695+00:00",
+      "exit": 1,
+      "pre_context_tree_and_state_digest": "8e75ee1c8a217a47b54559eecac0c3eeef69a6ed53857f833d45384646725e0e",
+      "post_context_tree_and_state_digest": "8e75ee1c8a217a47b54559eecac0c3eeef69a6ed53857f833d45384646725e0e",
+      "unchanged": true,
+      "builder_error_before_and_after": true
+    },
+    {
+      "kind": "share-zero-delivery-host-read",
+      "sequence": 103,
+      "timestamp": "2026-08-25T18:17:18.006960+00:00",
+      "sender_context_tree_before": "72c48cb4970a049954c7d56c508edaee9e090f352c509feb5aab35d2e9c6dbfa",
+      "sender_context_tree_after": "72c48cb4970a049954c7d56c508edaee9e090f352c509feb5aab35d2e9c6dbfa",
+      "receiver": "ABSENT or incomplete by protocol",
+      "delivery_count": 0,
+      "unchanged": true
+    },
+    {
+      "kind": "imported-context-uid-reference-collision-host-read",
+      "after_phase_sequence": 105,
+      "timestamp": "2026-08-25T18:22:16.723401+00:00",
+      "uid": "a759f597-4f26-5782-828b-55f1c90076bf",
+      "source_context_name": "advisor1/style",
+      "existing_reference_type": "granted_context_ref",
+      "existing_reference_name": "task-2/advisor1/style",
+      "imported_context_name": "task-2/participant/admin-v2-scratch/import-direct",
+      "source_context_sha256": "ac99c254ff70091224ffbbe9e1f99c6bfa008f1900764296374bf41542ee70fd",
+      "existing_reference_container_sha256": "0b6c8e7dfef533422f5905816b7caa7bcef7f8ccd2b24aae0b5d5b7d8beac596",
+      "imported_context_sha256": "c3eafaa1cb4de0ae41ff67c79d1cffc1075213c78d5fa059a1177333f8d30830",
+      "rename_attempt": 3,
+      "rename_error": "Error: Context reference identity and stored target name disagree for uid 'a759f597-4f26-5782-828b-55f1c90076bf'.",
+      "read_only": true
+    },
+    {
+      "kind": "final-malformed-history-builder-negative-control",
+      "after_phase_sequence": 105,
+      "timestamp": "2026-08-25T18:22:16.847902+00:00",
+      "actual": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "expected": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+      "matched": true,
+      "read_only": true
+    }
+  ],
+  "shell_checks": [
+    {
+      "kind": "shell-byte-equality-host-check",
+      "after_phase_sequence": 42,
+      "timestamp": "2026-08-25T18:15:38.463065+00:00",
+      "left": "shell-init",
+      "right": "shell-init zsh",
+      "sha256": "331d7a1e8ef85f3fcb52361281cec11034bd7ee07cfa90fc2d470e18f4b9c7ae",
+      "equal": true
+    },
+    {
+      "kind": "disposable-shell-host-check",
+      "label": "zsh-n",
+      "after_phase_sequence": 63,
+      "timestamp": "2026-08-25T18:16:13.714740+00:00",
+      "command": "zsh -n",
+      "input_sha256": "331d7a1e8ef85f3fcb52361281cec11034bd7ee07cfa90fc2d470e18f4b9c7ae",
+      "exit": 0,
+      "stdout": ""
+    },
+    {
+      "kind": "disposable-shell-host-check",
+      "label": "disposable-zsh-source-only",
+      "after_phase_sequence": 78,
+      "timestamp": "2026-08-25T18:16:39.441754+00:00",
+      "command": "zsh -dfc 'source /dev/stdin'",
+      "input_sha256": "331d7a1e8ef85f3fcb52361281cec11034bd7ee07cfa90fc2d470e18f4b9c7ae",
+      "exit": 0,
+      "stdout": ""
+    }
+  ]
+}

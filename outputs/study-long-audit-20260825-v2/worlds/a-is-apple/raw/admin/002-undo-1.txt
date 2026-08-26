@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple undo
+
+EXIT
+0
+
+OUTPUT
+Undid command: mem branch audit/a-is-apple/admin-v2-scratch/b1 --from practice --source-root-only · Affected Contexts: 1 · Affected Memories: 14 · - 14 removed · Other: 4 Memory refs removed, 2 Embedded contexts removed

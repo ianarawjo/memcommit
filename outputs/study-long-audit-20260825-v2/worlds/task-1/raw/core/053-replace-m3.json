@@ -1,0 +1,11 @@
+{
+  "sequence": 53,
+  "operation": "replace",
+  "attempt": 3,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 replace 'Modify campus-wiki/building-access:' 'EVIDENCE building-access:' --context task-1/participant",
+  "exit": 0,
+  "wall_seconds": 1.339673,
+  "pre_target_digest": "32f2b8c308c60009bbbde4e82a9fd432e4e7793188aeb0a45f349b5719971a83",
+  "post_target_digest": "0132229498257de77c974ef06c557c54080ca17f3bef64708dc7007528150c28",
+  "raw_output": "raw/core/053-replace-m3.txt"
+}

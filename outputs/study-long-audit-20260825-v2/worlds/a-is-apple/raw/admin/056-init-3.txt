@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple init audit/a-is-apple/admin-v2-scratch
+
+EXIT
+1
+
+OUTPUT
+Error: context 'audit/a-is-apple/admin-v2-scratch' already exists.

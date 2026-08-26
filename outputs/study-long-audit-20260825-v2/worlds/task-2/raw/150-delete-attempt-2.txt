@@ -1,0 +1,5 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 delete task-2/participant/proposal-workspace:337e9f61-d31c-448b-8c80-e2891688bff7
+EXIT: 0
+DURATION_SECONDS: 1.323
+
+Removed [337e9f61] Use an em dash only for a deliberate interruption or sharp contrast; otherwise split the sentence or choose ordinary punctuation.

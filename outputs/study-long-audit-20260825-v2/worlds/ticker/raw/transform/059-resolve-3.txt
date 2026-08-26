@@ -1,0 +1,12 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker resolve task-3/local/personal-memory --candidate deadbeef --revision 1 --apply
+
+EXIT
+2
+
+OUTPUT
+Usage: run_isolated_mem.py resolve [OPTIONS] [AUTO_OPERANDS]...
+Try 'run_isolated_mem.py resolve -h' for help.
+╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ No such option: --revision Did you mean --expected-revision?                 │
+╰──────────────────────────────────────────────────────────────────────────────╯

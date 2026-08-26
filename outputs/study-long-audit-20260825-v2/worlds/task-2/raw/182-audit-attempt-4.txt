@@ -1,0 +1,17 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 audit task-2/participant/proposal-workspace
+EXIT: 0
+DURATION_SECONDS: 23.703
+
+Audit saved: 3 quality checks.
+Source: task-2/participant/proposal-workspace · 16 memories
+
+REDUNDANCIES   16 MEMORIES CHECKED · 0 GROUPS · 0 PROPOSED ABSORPTIONS
+AMBIGUITIES    9/16 MEMORIES FLAGGED
+  ? UNDERSPECIFIED · [MEMORY 71a348d7] “In preregistered studies, clarify the criteria…”
+  ? UNDERSPECIFIED · [MEMORY 9f3c7d24] “In preregistered studies, clarify the location…”
+  ? UNDERSPECIFIED · [MEMORY e707e489] “Use a justified minimum-to-maximum target range…”
+  … 6 more
+CONFLICTS      0/16 MEMORIES INVOLVED · 0/120 PAIRS FLAGGED
+
+Review full audit:
+mem review audit --session ec06904e-85f9-4dd0-939d-cad887f032f1

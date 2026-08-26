@@ -1,0 +1,31 @@
+{
+  "sequence": 90,
+  "count_before": 334,
+  "count_after": 335,
+  "delta": 1,
+  "new_attempt_uids": [
+    "c873ab6e-73ed-4517-a136-def0d6daf9a2"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "c873ab6e-73ed-4517-a136-def0d6daf9a2",
+      "operation": "checkout",
+      "command": "mem checkout audit/ticker/admin-v2-missing-target",
+      "status": "FAILED",
+      "started_at": "2026-08-25T18:17:08.676654+00:00",
+      "completed_at": "2026-08-25T18:17:08.697277+00:00",
+      "elapsed_seconds": 0.020374375002575107,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": {
+        "kind": "Exit",
+        "exit_code": 1
+      }
+    }
+  ]
+}

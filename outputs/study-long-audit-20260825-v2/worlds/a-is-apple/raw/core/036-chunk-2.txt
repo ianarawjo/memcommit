@@ -1,0 +1,15 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple chunk practice:16b32e2f --method clauses --max-chars 45
+
+EXIT
+0
+
+OUTPUT
+
+Proposed split of [16b32e2f] in Context 'practice' → 3 chunks (method=clauses, max_chars=45)
+────────────────────────────────────────────────────────
+   1  a maps to apple;
+   2  copied from the original direct Memory for
+   3  provenance.
+────────────────────────────────────────────────────────
+Done — 3 memories added in 'practice'.

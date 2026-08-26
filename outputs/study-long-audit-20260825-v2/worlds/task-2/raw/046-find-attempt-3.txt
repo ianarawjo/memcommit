@@ -1,0 +1,13 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 find budget|appendix --regex --ignore-case --context task-2/advisor1/budget --context task-2/advisor2/budget
+EXIT: 0
+DURATION_SECONDS: 1.401
+
+FIND RESULTS
+PATTERN · budget|appendix · REGEX · IGNORE CASE
+SCOPE · task-2/advisor1/budget + task-2/advisor2/budget · EXACT · EXCLUDE EMBEDS
+SCANNED 14 · MATCHED 4 · OCCURRENCES 5
+
+1 [2ca1d5a1] The user tends to revise the work plan but forget a detached budget table unless the key amount is repeated beside the activity. [task-2/advisor1/budget m7]
+2 [d614b55d] Keep the main text to the total and major categories, and place quantities, unit rates, and assumptions in one compact budget table or appendix. [task-2/advisor2/budget m8]
+3 [24500129] Give each cost category, quantity, unit rate, and subtotal a stable row in the separate budget table. [task-2/advisor2/budget m9]
+4 [f4371f72] The user tends to interrupt the argument with long cost enumerations when no separate budget table is available. [task-2/advisor2/budget m14]

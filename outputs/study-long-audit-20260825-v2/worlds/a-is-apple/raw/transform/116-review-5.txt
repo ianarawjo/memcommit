@@ -1,0 +1,34 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple review distill --receipt 645658a2-4ebd-4603-bf62-ef228a4ccba2 --snapshot
+
+EXIT
+0
+
+OUTPUT
+MEM REVIEW · DISTILL
+Completed operation evidence. This Review is read-only and cannot change or apply the recorded result.
+
+STATUS · APPLIED · RECEIPT 645658a2-4ebd-4603-bf62-ef228a4ccba2
+CONTEXT · practice/source
+COMPLETED · 2026-08-25T13:24:35.269079
+OUTCOME · Added 4 distilled Rules from 'practice' to 'practice/source'
+
+SOURCE · practice
+TARGET · practice/source
+
+SOURCE OVERVIEW
+The preferred final mapping is “a is apple,” while the apricot mapping remains an explicit unresolved alternative; provenance is limited to the source’s stated original/copy relationship.
+
+APPLIED RULES · 4
+1. Use “a is apple” as the preferred final proposition for a.
+   WHY · The preferred-set evidence explicitly selects this mapping, and the direct mapping memories independently support it.
+   SUPPORT · f1c940a1-e572-4070-94a7-be4722fdbf2b, 9828aed4-6789-44ef-adf8-c4920c51f741, 84695557-3475-4604-8433-a81de7ccdcd9, b5180f53-fbee-483a-afd3-72a1433f34e9, 28cceb5f-8374-4324-89c2-d977dd68e40f
+2. Keep “a maps to apricot” explicit as a deliberate conflicting, unresolved alternative rather than treating it as the preferred result or silently reconciling it.
+   WHY · The source identifies apricot as a deliberate conflicting alternative, while the preferred set requires unresolved alternatives to remain explicit.
+   SUPPORT · 0463758c-0b68-4a53-8ae2-fc6cd38383a9, b2b2811d-7b18-4b51-a887-3a370eebe9d6, 58d18136-e574-4a87-9f47-0efd9877668c, b5180f53-fbee-483a-afd3-72a1433f34e9, 3d066ade-e4f5-4f84-9780-236357969676
+3. Record that one apple-mapping occurrence was copied from the original direct Memory for provenance, without assigning that provenance statement to the conflicting apricot alternative.
+   WHY · The provenance fragments explicitly describe a copy from the original direct Memory; the source does not make that claim about apricot.
+   SUPPORT · 84695557-3475-4604-8433-a81de7ccdcd9, 85f80b15-c921-4c2e-8042-054ac2c0c21e, a33309d8-57fe-4f7a-9abb-518eccd8246e
+4. Preserve the edited duplicate’s original assertion across its split provenance text.
+   WHY · The source explicitly states that the edited duplicate retains the original assertion, with the statement continued in the following Memory.
+   SUPPORT · 874c746f-062a-4420-b516-56438d53736b, d8c415e7-9c2b-4121-8c2f-fb685c4cb92f

@@ -1,0 +1,4 @@
+Compare · task-2/participant ↔ task-2/participant/proposal-workspace
+
+COMPARISON
+  The rules are complementary: one generally removes a terminal legal suffix while preserving the remaining alphanumeric characters, whereas the other specializes punctuation handling. Thus, for “North-Star, Inc.” it removes the comma, hyphen, space, and suffix to produce “NORTHSTAR.”

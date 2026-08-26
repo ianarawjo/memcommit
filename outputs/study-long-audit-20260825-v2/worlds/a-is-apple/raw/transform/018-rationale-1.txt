@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple rationale practice:f1c940a1
+
+EXIT
+0
+
+OUTPUT
+Rationale [f1c940a1] · practice
+
+MEMORY
+  a is apple.
+
+PROVENANCE
+  “a is apple.” was added as a standalone Memory in practice. A merge then copied it unchanged into a fresh occurrence in practice/source while retaining the original in practice.

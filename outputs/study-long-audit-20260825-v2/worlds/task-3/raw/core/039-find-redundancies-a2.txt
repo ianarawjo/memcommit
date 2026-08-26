@@ -1,0 +1,7 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 find-redundancies task-3/local --direct
+
+STDOUT
+Find Redundancies · task-3/local · 3 direct memories checked · 0 groups · 0 proposed absorptions
+
+STDERR

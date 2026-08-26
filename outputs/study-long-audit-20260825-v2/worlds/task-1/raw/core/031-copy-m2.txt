@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 copy task-1/participant/construction-updates/event-relocations:3fcfa405 --into task-1/participant
+
+EXIT
+0
+
+WALL_SECONDS
+1.339761
+
+STDOUT
+COPIED · 1 Memory → 'task-1/participant' · NEW UIDs · after [fe3ca57d] at the end
+  'task-1/participant/construction-updates/event-relocations' [3fcfa405] → [f37090b5]
+Checkpoint 'task-1/participant' [a7f3cfea].
+
+
+STDERR

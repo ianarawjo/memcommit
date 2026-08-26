@@ -1,0 +1,55 @@
+{
+  "world": "ticker",
+  "phase": "core",
+  "issues": [
+    {
+      "id": "TICK-V2-CONTEXTS-01",
+      "title": "Ticker orientation still requires a whole-Profile scan",
+      "expected": "A maintainer can focus Context discovery on the five lane-local ticker roles while preserving current and Grant annotations.",
+      "actual": "All five calls emitted the same 112-line whole-Profile catalog. The operation accepts no focus operand, so unrelated worlds and Grants occupy more than two 52-row screens at every checkpoint.",
+      "workaround": "Locate the reused ticker role Contexts once, then use exact direct operands on every operation that supports them.",
+      "severity": "MEDIUM",
+      "classification": "USABILITY_INFORMATION_OVERLOAD",
+      "reproduction": "5/5 attempts",
+      "evidence": [
+        "worlds/ticker/raw/core/001-contexts-attempt-1.stdout.txt",
+        "worlds/ticker/raw/core/022-contexts-attempt-2.stdout.txt",
+        "worlds/ticker/raw/core/043-contexts-attempt-3.stdout.txt",
+        "worlds/ticker/raw/core/064-contexts-attempt-4.stdout.txt",
+        "worlds/ticker/raw/core/085-contexts-attempt-5.stdout.txt"
+      ]
+    },
+    {
+      "id": "TICK-V2-CHUNK-RECEIPT-01",
+      "title": "Successful Chunk receipts omit every created Memory UID",
+      "expected": "A mutating split receipt maps the old UID to every new UID so Edit, Move, Reference, and automation can consume the result directly.",
+      "actual": "Four successful sentence, clause, punctuation, and length-bound splits showed the proposed text and only `Done — N memories added`; none printed a created UID or the removed Memory disposition.",
+      "workaround": "Run exact List immediately, match fragment text and position, and manually recover the new UIDs.",
+      "severity": "HIGH",
+      "classification": "USABILITY_OUTPUT_REUSE",
+      "reproduction": "4/4 successful splits; the fifth attempt was a deliberate unavailable-selector control",
+      "evidence": [
+        "worlds/ticker/raw/core/014-chunk-attempt-1.stdout.txt",
+        "worlds/ticker/raw/core/035-chunk-attempt-2.stdout.txt",
+        "worlds/ticker/raw/core/056-chunk-attempt-3.stdout.txt",
+        "worlds/ticker/raw/core/077-chunk-attempt-4.stdout.txt",
+        "worlds/ticker/raw/core/023-list-attempt-2.stdout.txt",
+        "worlds/ticker/raw/core/044-list-attempt-3.stdout.txt"
+      ]
+    },
+    {
+      "id": "TICK-V2-AMBIG-TIMEOUT-INFRA-01",
+      "title": "One direct ambiguity scan exceeded the audit provider-turn ceiling",
+      "expected": "The bounded provider call returns a validated result or an operation-owned recoverable provider error within the audit ceiling.",
+      "actual": "The direct `task-1` scan emitted no result and was terminated by the lane driver after 240 seconds. Four other ambiguity scans completed, including the late archive control.",
+      "workaround": "Preserve the frozen Source and retry in a later campaign turn; no partial result exists to reuse.",
+      "severity": "INFRASTRUCTURE",
+      "classification": "PROVIDER_INFRASTRUCTURE_TIMEOUT_NOT_PRODUCT_DEFECT",
+      "reproduction": "1/5 attempts",
+      "evidence": [
+        "worlds/ticker/raw/core/082-find-ambiguities-attempt-4.stderr.txt",
+        "worlds/ticker/raw/core/103-find-ambiguities-attempt-5.stdout.txt"
+      ]
+    }
+  ]
+}

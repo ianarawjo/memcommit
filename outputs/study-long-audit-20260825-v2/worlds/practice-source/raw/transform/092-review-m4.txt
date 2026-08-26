@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source review update --session PENDING --snapshot
+
+EXIT
+1
+
+WALL_SECONDS
+1.316679
+
+STDOUT
+
+
+STDERR
+Review error: No saved Update or Impact plan exists. Run 'mem impact' first.

@@ -1,0 +1,10 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple check-conformance practice/source --against 'text:Alternatives must remain explicit and source-grounded.'
+
+EXIT
+0
+
+OUTPUT
+CONFORMANCE · 4/6 EXAMPLES CONFORM · 0/1 RULES MET · [EXAMPLES practice/source] · [RULES TEXT Alternatives must remain explicit and source-grounded.] · 12 EXAMPLES N/A
+! VIOLATES · [EXAMPLE m000015] b is banana; · [RULE r1] Alternatives must remain explicit and source-grounded. · WHY · It reasserts only the banana mapping instead of keeping both conflicting source alternatives explicit.
+! VIOLATES · [EXAMPLE m000016] this copied mapping is provisional while · [RULE r1] Alternatives must remain explicit and source-grounded. · WHY · It labels a copied mapping provisional without explicitly identifying the competing source-grounded mappings.

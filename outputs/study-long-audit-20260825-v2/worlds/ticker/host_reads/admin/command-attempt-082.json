@@ -1,0 +1,31 @@
+{
+  "sequence": 82,
+  "count_before": 326,
+  "count_after": 327,
+  "delta": 1,
+  "new_attempt_uids": [
+    "337dcae6-5ffb-40ab-a816-21b351f84874"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "337dcae6-5ffb-40ab-a816-21b351f84874",
+      "operation": "rename",
+      "command": "mem rename audit/ticker/admin-v2-scratch/co4-tree audit/ticker/admin-v2-scratch/co4-locked-renamed --force",
+      "status": "FAILED",
+      "started_at": "2026-08-25T18:16:56.523951+00:00",
+      "completed_at": "2026-08-25T18:16:56.664237+00:00",
+      "elapsed_seconds": 0.14011941698845476,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": {
+        "kind": "Exit",
+        "exit_code": 1
+      }
+    }
+  ]
+}

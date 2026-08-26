@@ -1,0 +1,31 @@
+{
+  "sequence": 91,
+  "count_before": 335,
+  "count_after": 336,
+  "delta": 1,
+  "new_attempt_uids": [
+    "4dd04fc4-9f88-4da6-96ba-5b651b8f0d70"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "4dd04fc4-9f88-4da6-96ba-5b651b8f0d70",
+      "operation": "config",
+      "command": "mem config set provider",
+      "status": "FAILED",
+      "started_at": "2026-08-25T18:17:10.024246+00:00",
+      "completed_at": "2026-08-25T18:17:10.031883+00:00",
+      "elapsed_seconds": 0.00747979199513793,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": {
+        "kind": "MissingParameter",
+        "exit_code": 2
+      }
+    }
+  ]
+}

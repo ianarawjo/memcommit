@@ -1,0 +1,28 @@
+{
+  "sequence": 74,
+  "count_before": 318,
+  "count_after": 319,
+  "delta": 1,
+  "new_attempt_uids": [
+    "1b71804c-f9b4-43d3-89e6-66a92f8ad9f6"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "1b71804c-f9b4-43d3-89e6-66a92f8ad9f6",
+      "operation": "profile",
+      "command": "mem profile use sixworld-v2-template",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:16:44.451470+00:00",
+      "completed_at": "2026-08-25T18:16:44.509084+00:00",
+      "elapsed_seconds": 0.05746708399965428,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "sequence": 73,
+  "count_before": 317,
+  "count_after": 318,
+  "delta": 1,
+  "new_attempt_uids": [
+    "8cac6d1c-aea0-4754-9b57-48b02f99b8ed"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "8cac6d1c-aea0-4754-9b57-48b02f99b8ed",
+      "operation": "log",
+      "command": "mem log --operations --limit 50",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:16:43.054698+00:00",
+      "completed_at": "2026-08-25T18:16:43.087456+00:00",
+      "elapsed_seconds": 0.03259087500919122,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

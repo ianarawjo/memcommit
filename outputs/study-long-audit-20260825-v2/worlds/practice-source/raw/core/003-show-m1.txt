@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source show practice/source:f3ef224d
+
+EXIT
+0
+
+WALL_SECONDS
+1.287846
+
+STDOUT
+[Memory practice/source:f3ef224d-ff16-5a7a-880a-18eee2fc55b5] When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.
+
+
+STDERR

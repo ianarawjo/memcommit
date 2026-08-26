@@ -1,0 +1,38 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple find-conflicts practice
+
+EXIT
+0
+
+OUTPUT
+Find Conflicts · practice · 6/14 direct memories involved · 5/91 pairs flagged
+
+  CONFLICT 1/5
+  [f1c940a1] a is apple.
+  [0463758c] a maps to apricot;
+  Reason: Both memories assign a different value to a in the same practice context: apple versus apricot.
+  Question: Does a map to apple or apricot?
+
+  CONFLICT 2/5
+  [9828aed4] a maps to apple;
+  [0463758c] a maps to apricot;
+  Reason: Both memories map a to different values in the same practice context: apple versus apricot.
+  Question: Does a map to apple or apricot?
+
+  CONFLICT 3/5
+  [84695557] a maps to apple;
+  [0463758c] a maps to apricot;
+  Reason: Both memories map a to different values in the same practice context: apple versus apricot.
+  Question: Does a map to apple or apricot?
+
+  CONFLICT 4/5
+  [0463758c] a maps to apricot;
+  [b5180f53] Preferred set: a is apple; b is banana; c is cedar; unresolved alternatives remain explicit.
+  Reason: The preferred set says a is apple, while the other memory maps a to apricot in the same context; the preferred set also explicitly acknowledges unresolved alternatives, but that does not make the two assignments agree.
+  Question: For a, should apple or apricot apply?
+
+  CONFLICT 5/5
+  [0463758c] a maps to apricot;
+  [28cceb5f] Preferred set: a is apple; b is banana;
+  Reason: The preferred set assigns apple to a, while the other memory assigns apricot to a in the same context.
+  Question: For a, should apple or apricot apply?

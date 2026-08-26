@@ -1,0 +1,11 @@
+{
+  "sequence": 10,
+  "operation": "replace",
+  "attempt": 1,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 replace five-to-ten-minute '5\u201310-minute' --context task-1/campus-wiki/facility-updates",
+  "exit": 1,
+  "wall_seconds": 1.283647,
+  "pre_target_digest": "be047f4a616631e064ad7f8f130dc989f0e3e2a6194dbd784e06166ef259a93c",
+  "post_target_digest": "6da77af0669bfaaf1f41a5b3a1d1b8730194ff98f0b19d4d7625032779940c9a",
+  "raw_output": "raw/core/010-replace-m1.txt"
+}

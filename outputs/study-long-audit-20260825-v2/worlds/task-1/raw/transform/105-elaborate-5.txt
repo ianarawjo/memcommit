@@ -1,0 +1,18 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 elaborate --goal 'Give only verified closure and alternative-service examples already in the shop evidence.' --to task-1/participant
+
+EXIT
+0
+
+OUTPUT
+ELABORATE APPLIED · task-1/participant
+MODE · GOAL_TO_RULES · VERIFICATION · UNVERIFIED · QUALITY · BEST_EFFORT
+SOURCE · INLINE · TARGET · task-1/participant
+EFFECTS · ADD 3 MEMORIES
+
+  [memory f570f15b] Include a closure example only when the shop evidence explicitly verifies both the affected facility or service and its closed or non-operational status for the stated period.
+  [memory 7ab4a6f5] Include an alternative-service example only when the shop evidence explicitly identifies it as an alternative, and preserve every stated location, service-hour, eligibility, routing, and no-alternative constraint.
+  [memory 160a595b] Exclude any closure or alternative-service example that is inferred, merely plausible, or unsupported by the shop evidence; do not invent additional options when the evidence states or implies no verified alternative.
+
+REVIEW · mem review elaborate --receipt 00bc0e66-7555-418f-bdcb-a35a3f4daeb2
+UNDO · mem undo

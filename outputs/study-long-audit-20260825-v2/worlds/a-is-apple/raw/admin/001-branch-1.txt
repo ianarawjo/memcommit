@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple branch audit/a-is-apple/admin-v2-scratch/b1 --from practice --direct
+
+EXIT
+0
+
+OUTPUT
+Branched 'practice' → 'audit/a-is-apple/admin-v2-scratch/b1' and switched to it.

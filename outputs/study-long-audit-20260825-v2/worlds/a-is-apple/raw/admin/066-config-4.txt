@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple config set provider codex_chatgpt
+
+EXIT
+0
+
+OUTPUT
+Set semantic_provider = 'codex_chatgpt'

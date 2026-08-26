@@ -1,0 +1,5 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 elaborate --from task-2/description --to task-2/participant/proposal-workspace --as rules --number 2
+EXIT: 1
+DURATION_SECONDS: 1.413
+
+Elaborate error: Context-backed Elaborate requires only directly owned ordinary Memories in its Source.

@@ -1,0 +1,10 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker forget 'remove incomplete punctuation fragments but preserve complete examples' --context task-3/local/guardrails
+
+EXIT
+0
+
+OUTPUT
+Consulting the configured Forget provider...
+FORGET · NO CHANGE · SOURCE task-3/local/guardrails
+OUTCOME · NO CHANGE · Context unchanged · no checkpoint

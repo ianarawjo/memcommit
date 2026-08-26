@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple translate practice/source:4a8036d1 --to French
+
+EXIT
+0
+
+OUTPUT
+
+Translation view: 'practice/source' → French
+  1 translated Memory
+────────────────────────────────────────────────────────────────
+[4a8036d1] French · PROVIDER · UNREVIEWED
+  b est une banane.
+────────────────────────────────────────────────────────────────
+Saved translation view.
+No Context or Memory changes; source Memory UIDs remain the anchors.

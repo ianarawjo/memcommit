@@ -1,0 +1,23 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 log --context task-3/local/admin-v2-scratch
+
+STDIN
+<none>
+
+EXIT
+0
+
+WALL_SECONDS
+1.228559
+
+POST_CALL_IDENTITY_HOST_ASSERTION
+{"profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-3/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+STDOUT
+Log for 'task-3/local/admin-v2-scratch':
+
+DIRECT COMMANDS · task-3/local/admin-v2-scratch
+  [init] [CHECKPOINT 5efbb38e] [CONTEXT 79e525d8]  2026-08-25 13:59 · baseline for CONTEXT task-3/local/admin-v2-scratch · not counted as a command
+
+
+STDERR

@@ -1,0 +1,4 @@
+Profile: sixworld-v2-template
+Store: /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd
+Contexts 68 owned + 43 granted · Memories 511 owned + 625 granted
+Current Context: task-2/participant/admin-v2-scratch

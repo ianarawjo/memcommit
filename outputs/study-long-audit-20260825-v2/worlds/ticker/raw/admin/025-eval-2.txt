@@ -1,0 +1,40 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker eval semantic run ambiguity --provider codex_chatgpt --model gpt-5.6-sol --reasoning none --pipeline v2 --corpus calibration --runs 1 --case single-none-main-entrance-hours --ledger-dir /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/admin-eval-ledger
+
+STDIN
+<none>
+
+EXIT
+0
+
+WALL_SECONDS
+6.203068
+
+PRE_IDENTITY
+{"current_context": "audit/ticker/admin-v2-scratch", "current_context_uid": "482549cc-f61f-4262-909d-67bd9c5d5364", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+IMMEDIATE_POST_IDENTITY
+{"current_context": "audit/ticker/admin-v2-scratch", "current_context_uid": "482549cc-f61f-4262-909d-67bd9c5d5364", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+COMMAND_ATTEMPT_DELTA
+{"count_after": 270, "count_before": 269, "delta": 1, "new_attempt_uids": ["774a5208-52ac-4cf3-965b-1a713f682ec6"], "records": [{"command": "mem eval semantic run ambiguity --provider codex_chatgpt --model gpt-5.6-sol --reasoning none --pipeline v2 --corpus calibration --runs 1 --case single-none-main-entrance-hours --ledger-dir /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/admin-eval-ledger", "completed_at": "2026-08-25T18:12:47.737497+00:00", "details": {}, "elapsed_seconds": 4.832428375011659, "failure": null, "operation": "eval", "outcome": null, "started_at": "2026-08-25T18:12:42.904854+00:00", "status": "COMPLETED", "terminal": {"stdin_tty": true, "stdout_tty": false}, "uid": "774a5208-52ac-4cf3-965b-1a713f682ec6", "version": 3}], "sequence": 25}
+
+STDOUT
+Connected: codex_chatgpt:gpt-5.6-sol · reasoning none · 0.028s
+[01/01] single-none-main-entrance-hours · run 1 · PASS · 4.794s
+Semantic eval · ambiguity · classification gate
+Provider: codex_chatgpt:gpt-5.6-sol · reasoning=none · runs=1 · cases=1/10
+Corpus: CALIBRATION · leave-one-out · not an independent holdout · digest 003654c092e0
+Pipeline: ambiguity-classify-v2 · schema v2
+Score: 1/1 cases passed
+Attempts: exact 1/1 · structurally valid 1/1
+Timing: connection 0.028s · completion mean/median/p95/max 4.794s/4.794s/4.794s/4.794s · campaign 4.796s · total 4.824s
+Label distribution:
+  interpretation   NONE  HELPFUL  REQUIRED
+  SINGLE            1        0         0
+  DOMINANT          0        0         0
+  COMPETING         0        0         0
+Ledger: /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/admin-eval-ledger/runs/20260825T181242940941Z-fc958904.json
+
+
+STDERR

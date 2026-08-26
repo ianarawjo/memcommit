@@ -1,0 +1,6 @@
+FIND RESULTS
+PATTERN · north-star · LITERAL · IGNORE CASE
+SCOPE · task-2/participant/proposal-workspace · EXACT · EXCLUDE EMBEDS
+SCANNED 1 · MATCHED 1 · OCCURRENCES 1
+
+1 [1e0e89ee] Punctuation example: North-Star, Inc. becomes NORTHSTAR after removing the comma, hyphen, space, and Inc. suffix. The output contains no punctuation. [task-2/participant/proposal-workspace m1]

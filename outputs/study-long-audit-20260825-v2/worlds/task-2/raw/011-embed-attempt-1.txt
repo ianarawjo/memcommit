@@ -1,0 +1,5 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 embed task-2/advisor1/style --into task-2/participant
+EXIT: 0
+DURATION_SECONDS: 1.361
+
+Embedded 'task-2/advisor1/style' into 'task-2/participant' after [41debba1] at the end.

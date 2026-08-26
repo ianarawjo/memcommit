@@ -1,0 +1,22 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 find 'OUTDOOR PARKING LOT C' --ignore-case --context task-1/participant/construction-updates/temporary-parking --direct
+
+EXIT
+0
+
+WALL_SECONDS
+1.397027
+
+STDOUT
+FIND RESULTS
+PATTERN · OUTDOOR PARKING LOT C · LITERAL · IGNORE CASE
+SCOPE · task-1/participant/construction-updates/temporary-parking · EXACT · EXCLUDE EMBEDS
+SCANNED 15 · MATCHED 4 · OCCURRENCES 4
+
+1 [9b8a7458] Modify campus-wiki/temporary-parking: During the construction period, Outdoor Parking Lot C operates as a temporary alternative parking lot for vehicles visiting the Main Building. [task-1/participant/construction-updates/temporary-parking m9]
+2 [71a5daa6] Modify campus-wiki/temporary-parking: Based on posted information, the parking guidance agent may explain the closures of the underground parking garage and Outdoor Parking Lot A and the alternative use of Outdoor Parking Lot C during the construction period. [task-1/participant/construction-updates/temporary-parking m12]
+3 [7f72387d] Modify campus-wiki/temporary-parking: During the construction period, the parking guidance agent may explain the location of Outdoor Parking Lot C but cannot check or guarantee available spaces at the time of an inquiry. [task-1/participant/construction-updates/temporary-parking m13]
+4 [85518d54] Modify campus-wiki/temporary-parking: A visitor accustomed to parking at the Main Building may expect to be able to enter the underground parking garage or Outdoor Parking Lot A during the construction period, drive as far as the closed access road, and then search again for Outdoor Parking Lot C. [task-1/participant/construction-updates/temporary-parking m14]
+
+
+STDERR

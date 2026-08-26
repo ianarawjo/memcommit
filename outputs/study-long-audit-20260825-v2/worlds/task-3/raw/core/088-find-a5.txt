@@ -1,0 +1,18 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 find 'clinic|medication|back|appointment' --regex --context task-3/local/personal-memory/2024/03 --direct --all-results
+
+STDOUT
+FIND RESULTS
+PATTERN · clinic|medication|back|appointment · REGEX · CASE SENSITIVE
+SCOPE · task-3/local/personal-memory/2024/03 · EXACT · EXCLUDE EMBEDS
+SCANNED 10 · MATCHED 7 · OCCURRENCES 7
+
+1 [12ba4249] The instructions for one medication the user takes say to take it after the evening meal. [task-3/local/personal-memory/2024/03 m1]
+2 [051e79ff] On a day with a morning appointment, the user miscalculated the fasting period and checked again at the reception desk. [task-3/local/personal-memory/2024/03 m2]
+3 [18d58666] On a day there was no waiting chair, the user stood for 20 minutes and their back became uncomfortable. [task-3/local/personal-memory/2024/03 m4]
+4 [8fdede6e] On a day medication instructions were explained all at once and at length, the user failed to write down an important time. [task-3/local/personal-memory/2024/03 m5]
+5 [21f679f7] On a day medication times were confirmed one line at a time, the user copied them directly into their schedule after returning home. [task-3/local/personal-memory/2024/03 m6]
+6 [d7f215c6] The local agent cannot determine the current prescription or whether use continues from medication notes alone. [task-3/local/personal-memory/2024/03 m9]
+7 [e6023aed] The waiting area at that clinic has too few chairs, so there may be periods when people must wait standing. [task-3/local/personal-memory/2024/03 m10]
+
+STDERR

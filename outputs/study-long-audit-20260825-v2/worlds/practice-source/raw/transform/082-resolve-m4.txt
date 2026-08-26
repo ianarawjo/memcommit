@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source resolve practice/description:9d0c4409 --guidance 'Keep this scoped to document titles and the literal word for; preserve the narrow override.' --no-create --plain
+
+EXIT
+1
+
+WALL_SECONDS
+1.652581
+
+STDOUT
+
+
+STDERR
+Resolve error: Resolve requires at least two directly owned Memories in the selected Context.

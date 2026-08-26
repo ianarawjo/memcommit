@@ -1,0 +1,11 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 eval semantic run ambiguity --provider codex_chatgpt --model gpt-5.6-sol --reasoning none --pipeline v2 --corpus calibration --runs 1 --case single-none-main-entrance-hours --ledger-dir /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-1/admin-eval-ledger
+
+EXIT
+0 (host-inferred from durable COMPLETED 1/1 PASS run and post-child identity evidence)
+
+OUTPUT_RECOVERY
+Recovered from durable Eval ledger after child exit: run_id=20260825T181409487991Z-feb00147 · status=COMPLETED · cases=1/1 PASS · provider=codex_chatgpt:gpt-5.6-sol · completion_seconds=4.305840. Original captured stdout was lost when the audit harness was interrupted during post-call digesting.
+
+DURABLE_EVAL_LEDGER
+/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-1/admin-eval-ledger/runs/20260825T181409487991Z-feb00147.json

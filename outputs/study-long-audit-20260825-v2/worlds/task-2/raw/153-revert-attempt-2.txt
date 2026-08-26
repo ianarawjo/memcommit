@@ -1,0 +1,5 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 revert 00000000 --context task-2/participant/proposal-workspace --keep
+EXIT: 1
+DURATION_SECONDS: 1.36
+
+Error: no checkpoint with uid prefix '00000000' exists in the ordinary local Profile.

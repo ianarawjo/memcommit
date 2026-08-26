@@ -1,0 +1,135 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source log --operations --limit 50
+
+STDIN
+<none>
+
+EXIT
+0
+
+WALL_SECONDS
+1.420742
+
+POST_CALL_IDENTITY_HOST_ASSERTION
+{"profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/practice-source/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+STDOUT
+Operation attempts · recent first
+  [56779fbd] 2026-08-25 18:15  init-study      FAILED · 0.0s
+      command=mem init-study admin-v2-practice-source-workers --prewarm-workers 0
+      BadParameter · exit 2
+  [89802320] 2026-08-25 18:15  init            FAILED · 0.0s
+      command=mem init 00000000-0000-0000-0000-000000000777
+      Exit · exit 1
+  [eed1f887] 2026-08-25 18:15  import          FAILED · 0.0s
+      command=mem import memory 8b077f2a-6a9f-50f0-ae91-f6536fb226cb --from-profile task-1 --context participant/construction-updates/building-access --into practice/audit-workspace/admin-v2-scratch
+      Exit · exit 1
+  [a1e6ed3e] 2026-08-25 18:15  help            5.6s
+      command=mem help atomize
+  [16abe9f9] 2026-08-25 18:15  eval            0.0s
+      command=mem eval semantic task2-status --all --ledger-dir /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/practice-source/admin-eval-ledger
+  [de834203] 2026-08-25 18:15  config          0.0s
+      command=mem config set provider codex_chatgpt
+  [92092b16] 2026-08-25 18:15  status          FAILED · 0.0s
+      command=mem status --direct --recursive
+      Exit · exit 2
+  [7dc7e19f] 2026-08-25 18:15  branch          FAILED · 0.0s
+      command=mem branch practice/audit-workspace/admin-v2-scratch --from practice-source-v2-transform --direct
+      Exit · exit 1
+  [30d7217f] 2026-08-25 18:15  redo            FAILED · 0.0s
+      command=mem redo
+      Exit · exit 1
+  [f7f1efab] 2026-08-25 18:14  rename          1.0s
+      command=mem rename practice/audit-workspace/admin-v2-scratch/tree/leaf practice/audit-workspace/admin-v2-scratch/tree/renamed-leaf --force
+  [9efdad62] 2026-08-25 18:14  init-study      FAILED · 0.0s
+      command=mem init-study admin-v2-practice-source-study --scenario legacy-v1 --from-profile admin-v2-missing-baseline
+      NoSuchOption · exit 2
+  [16ecc583] 2026-08-25 18:14  init            FAILED · 0.0s
+      command=mem init practice/audit-workspace/admin-v2-scratch
+      Exit · exit 1
+  [395fc595] 2026-08-25 18:14  shell-init      0.0s
+      command=mem shell-init zsh
+  [30ab6c43] 2026-08-25 18:14  share           FAILED · 0.0s
+      command=mem share --to admin-v2-missing-endpoint
+      Exit · exit 1
+  [18266d0d] 2026-08-25 18:14  pwd             0.0s
+      command=mem pwd
+  [f8bd6565] 2026-08-25 18:14  provider        0.0s
+      command=mem provider status --operation query
+  [fd74962c] 2026-08-25 18:14  profile         1.5s
+      command=mem profile list
+  [fc06221e] 2026-08-25 18:14  log             0.1s
+      command=mem log --memory 8b077f2a --context practice/audit-workspace/admin-v2-scratch --limit 5
+  [6ca99921] 2026-08-25 18:14  unlock          0.0s
+      command=mem unlock --memory 8b077f2a --context practice/audit-workspace/admin-v2-scratch
+  [fe1dfdfd] 2026-08-25 18:14  lock            0.0s
+      command=mem lock --memory 8b077f2a --context practice/audit-workspace/admin-v2-scratch
+  [867cd686] 2026-08-25 18:14  import          0.0s
+      command=mem import memory 8b077f2a-6a9f-50f0-ae91-f6536fb226cb --from-profile task-1 --context participant/construction-updates/building-access --into practice/audit-workspace/admin-v2-scratch
+  [b12652e6] 2026-08-25 18:14  help            4.7s
+      command=mem help query
+  [c8f8d925] 2026-08-25 18:14  eval            0.0s
+      command=mem eval semantic check 20260825T175549774734Z-b7163e45 --ledger-dir /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/practice-source/admin-eval-ledger
+  [22f50e14] 2026-08-25 18:14  config          0.0s
+      command=mem config show
+  [04a4b75e] 2026-08-25 18:14  status          0.1s
+      command=mem status --recursive
+  [c0a5349e] 2026-08-25 18:14  redo            FAILED · 0.0s
+      command=mem redo
+      Exit · exit 1
+  [f4c42e5c] 2026-08-25 18:14  undo            FAILED · 0.0s
+      command=mem undo
+      Exit · exit 1
+  [12c68934] 2026-08-25 18:14  switch          0.0s
+      command=mem switch task-1
+  [f086ee93] 2026-08-25 18:06  checkout        0.0s
+      command=mem checkout -b practice/audit-workspace/admin-v2-scratch/co3 --direct
+  [92f4f2ba] 2026-08-25 18:06  branch          0.0s
+      command=mem branch practice/audit-workspace/admin-v2-scratch/b3 --from practice/audit-workspace/admin-v2-scratch/b1 --source-root-only
+  [53caff82] 2026-08-25 18:06  unlock          0.0s
+      command=mem unlock practice/audit-workspace/admin-v2-scratch/b2-tree --recursive
+  [96a6c813] 2026-08-25 18:06  lock            0.0s
+      command=mem lock practice/audit-workspace/admin-v2-scratch/b2-tree --recursive
+  [5e65d588] 2026-08-25 18:06  redo            0.1s
+      command=mem redo
+  [e14eb2d3] 2026-08-25 18:06  undo            0.1s
+      command=mem undo --keep
+  [28b684fc] 2026-08-25 18:06  rename          1.1s
+      command=mem rename practice/audit-workspace/admin-v2-scratch/renamed-1 practice/audit-workspace/admin-v2-scratch/b1 --force
+  [23984637] 2026-08-25 17:56  branch          0.1s
+      command=mem branch practice/audit-workspace/admin-v2-scratch/b2-tree --from practice-source-v2-transform --recursive
+  [023f2432] 2026-08-25 17:56  shell-init      0.0s
+      command=mem shell-init zsh
+  [c74e29f9] 2026-08-25 17:56  share           FAILED · 0.0s
+      command=mem share practice/admin-v2-missing-share-source --to admin-v2-missing-endpoint
+      Exit · exit 1
+  [47ab8b36] 2026-08-25 17:56  pwd             0.0s
+      command=mem pwd
+  [6ead5593] 2026-08-25 17:56  provider        0.0s
+      command=mem provider status
+  [04bbe759] 2026-08-25 17:56  profile         0.0s
+      command=mem profile create admin-v2-practice-source-inactive
+  [8c0d3dcb] 2026-08-25 17:56  log             0.0s
+      command=mem log --context practice/audit-workspace/admin-v2-scratch --manual
+  [96c57095] 2026-08-25 17:56  init-study      FAILED · 0.0s
+      command=mem init-study authoring
+      Exit · exit 1
+  [8f954df2] 2026-08-25 17:56  import          FAILED · 0.0s
+      command=mem import context participant/construction-updates --from-profile task-1 --as practice/audit-workspace/admin-v2-scratch/import-tree --recursive
+      Exit · exit 1
+  [b77ab1c7] 2026-08-25 17:56  init            0.0s
+      command=mem init practice/audit-workspace/admin-v2-scratch/tree/leaf --parents
+  [0b940f5a] 2026-08-25 17:55  help            3.5s
+      command=mem help 'Which operation gives a grounded answer from readable memories without changing them?'
+  [a498ce68] 2026-08-25 17:55  eval            4.3s
+      command=mem eval semantic run ambiguity --provider codex_chatgpt --model gpt-5.6-sol --reasoning none --pipeline v2 --corpus calibration --runs 1 --case single-none-main-entrance-hours --ledger-dir /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/practice-source/admin-eval-ledger
+  [d855a01d] 2026-08-25 17:55  config          0.0s
+      command=mem config set audit_v2_world practice-source
+  [7dd914c0] 2026-08-25 17:55  status          0.1s
+      command=mem status --branch
+  [b87f4b57] 2026-08-25 17:55  checkout        FAILED · 0.0s
+      command=mem checkout ..
+      Exit · exit 1
+
+
+STDERR

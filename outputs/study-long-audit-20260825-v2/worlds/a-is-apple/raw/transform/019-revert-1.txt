@@ -1,0 +1,28 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple revert 009152d4 --context practice/source --keep
+
+EXIT
+0
+
+OUTPUT
+Reverted Context: practice/source
+Restored state recorded by: manual checkpoint
+Action detail: a-is-apple transform round 1 recovery before destructive scratch trials
+Affected Context: practice/source
+Affected content: 18 Memories added, 1 Memory ref added, 15 Memories removed, 4 Memory refs removed, 2 Embedded contexts removed
+  - [memory a73a7425] "Use the preferred alphabet mappings: a maps to apple, b maps to banana, and c maps to cedar."
+  - [memory 8f782fc2] "a is apple."
+  - [memory 4ef299d4] "a maps to apple;"
+  - [memory c33d4fb9] "this edited duplicate retains the original"
+  - [memory e1226f43] "assertion."
+  - [reference 3d6c9417] practice:f1c940a1 "a is apple."  READ ONLY
+  - [reference b6e1778f] practice/source:4a8036d1 "b is banana."  READ ONLY
+  - [context 7e48e68e] "practice/source"
+  - [memory db08be52] "a maps to apple;"
+  - [memory 8e030925] "copied from the original direct Memory for"
+  - [memory 7eae025d] "provenance."
+  - [reference 94b522dc] practice/source:c1cf9a92 "b is boat."  READ ONLY
+  ... 28 more affected direct items not shown
+Restored checkpoint: [009152d4] (2026-08-25 13:12)
+Undo command: mem undo
+Exact recovery checkpoint: mem revert a894abf0 --discard-newer

@@ -1,0 +1,3 @@
+COPIED · 1 Memory → 'task-1' · NEW UIDs · after [0e19f3b1] at the end
+  'task-2/participant/proposal-workspace' [1e0e89ee] → [40749355]
+Checkpoint 'task-1' [fbdffc38].

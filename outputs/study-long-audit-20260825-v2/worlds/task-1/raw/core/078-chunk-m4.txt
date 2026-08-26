@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 chunk task-1/participant/construction-updates/temporary-parking:84196dc5 --method sentences --min-chars 100 --max-chars 50
+
+EXIT
+1
+
+WALL_SECONDS
+1.285866
+
+STDOUT
+
+
+STDERR
+Error: min_chars cannot be greater than max_chars.

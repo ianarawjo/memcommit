@@ -1,0 +1,40 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 search 'remaining stale public guidance after verified construction updates' --context task-1/campus-wiki --descendants --exclude-embeds --limit 20
+
+EXIT
+0
+
+WALL_SECONDS
+15.936219
+
+STDOUT
+task-1/campus-wiki/building-access
+[memory ab8dfc9d] CONSTRUCTION UPDATE — June 24–August 23: General passage through the third-floor rear entrance is closed, and general main-entrance access ends at 5:00 p.m. The existing accessible route is under reconstruction; use the temporary passage next to the main entrance to reach the first-floor lobby. Authorized students entering after 5:00 p.m. use a physical NFC student ID card. Staff and construction/facilities personnel use only the designated staff entrance. Proactively warn Central Library users and returning group tours that the former rear-entrance route is unavailable.
+[memory 1cb2aa88] The Main Building third-floor rear entrance may be used for general passage during regular opening hours in both the academic term and recess.
+[memory 36db4bf8] The accessible route beside the main entrance is an always-available route into the first-floor lobby without using stairs.
+[memory c6b97453] The end of regular opening hours for the Main Building main entrance during the academic term is 10 p.m.
+[memory 614389e2] The end of regular opening hours for the Main Building main entrance during recess is 10 p.m.
+
+task-1/campus-wiki/event-relocations
+[memory 86484518] CONSTRUCTION UPDATE — June 24–August 23: Main Building event venues accept no new reservations, and viewing in the tenth-floor exhibition/event hall is suspended. Use the detached east-building auditorium or the Engineering Building third-floor multipurpose room as designated alternatives. Relocated equipment uses the auditorium’s separate loading entrance. The event guidance agent may compare only designated alternatives and provide their reservation channels; it cannot create or restore reservations.
+[memory a2ec4e87] The exhibition and event hall on the tenth floor of the Main Building remains open for exhibition viewing during recess.
+[memory 11e4782c] The exhibition and event hall on the tenth floor of the Main Building continues to host reserved events during recess.
+[memory a0700edb] The meeting space on the first floor of the Main Building can be reserved for external events.
+
+task-1/campus-wiki/facility-updates
+[memory 0c6f3171] CONSTRUCTION UPDATE — June 24–August 23: Major facility work affects the Main Building. Elevators operate one at a time; visitor services move to the integrated campus portal; general restrooms on floors 1–3 close, with students and staff directed to Central Library, general visitors outside the Main Building, and accessible-restroom users to the Student Centre; the Innovation Hub desk closes; brief five-to-ten-minute air-conditioning interruptions may occur. Guidance is limited to publicly disclosed impacts.
+[memory d79aa629] First-time visitors expect to be able to receive immediate directions to their destination at the visitor services desk on the first floor.
+[memory 666e872c] The visitor services desk is on the first floor of the Main Building.
+[memory b3bd402a] The Innovation Hub is on the first floor of the Main Building.
+[memory b33a6790] A general restroom is on the first floor of the Main Building.
+[memory 70b6e9b8] An accessible restroom is on the first floor of the Main Building.
+[memory 6620e427] The rear entrance is on the third floor of the Main Building.
+[memory a1f3fd8f] A connecting corridor toward the Central Library is on the third floor of the Main Building.
+
+task-1/campus-wiki/temporary-parking
+[memory 1ab28435] CONSTRUCTION UPDATE — June 24–August 23: The Main Building underground garage and Outdoor Parking Lot A are closed to general parking; the garage pedestrian door is locked, the interior stairs are closed to everyone, and the Lot A access road is blocked. Outdoor Parking Lot C is the temporary visitor alternative. Authorized staff use a physical card at the garage pedestrian door, while construction/facilities personnel follow the approved controlled on-site procedure. The parking agent may explain posted closures and Lot C’s location but cannot check or guarantee real-time space availability.
+[memory 6960c0ca] General vehicles may enter and park in the Main Building underground parking garage during operating hours.
+[memory a81363fe] The Outdoor Parking Lot A–Main Building–Central Library route is normally one of the shortest routes to the library after parking.
+
+
+STDERR

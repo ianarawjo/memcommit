@@ -1,0 +1,11 @@
+{
+  "sequence": 103,
+  "operation": "find-ambiguities",
+  "attempt": 5,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 find-ambiguities task-1/campus-wiki/shop-updates",
+  "exit": 0,
+  "wall_seconds": 15.671806,
+  "pre_target_digest": "45f90f41ff9bf64081e5494ce47d0c468aabbb5a017fd5d2e74cc65344f100d6",
+  "post_target_digest": "801f54e787234df430d710ae2cb68707b18acbc6b67ccf438a5308b1e32fa621",
+  "raw_output": "raw/core/103-find-ambiguities-m5.txt"
+}

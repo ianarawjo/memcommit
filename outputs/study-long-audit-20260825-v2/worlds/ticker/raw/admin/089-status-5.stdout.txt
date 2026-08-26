@@ -1,0 +1,19 @@
+On context: audit/ticker/admin-v2-scratch/co4-tree
+
+Inventory · Memories 4 · Embedded Contexts 1 · Checkpoints 10
+
+Relationships:
+  CONTEXT REFERENCE [c458ab18] task-2/participant/proposal-workspace
+
+Memory preview · first 4 of 4:
+  [9bef3fd7] Core ticker rule: remove a terminal legal suffix such as Inc., Corp., Ltd., or LLC before constructing the ticker. Preserve the remaining alphanumeric characters.
+  [c7487556] Core ticker rule: uppercase remaining company-name letters in their original order. Do not invent letters.
+  [ce0674c3] Regression expectation: every maintained example must preserve digits, remove input punctuation, and encode a terminal share class with generated dot syntax.
+  [84606651] Conflicting regression draft: derived ticker letters must remain lowercase.
+
+Recent changes · latest 5 of 10 checkpoints:
+  0f030ef4  2026-08-25 14:17  redo          Redo command 'mem branch' [295ac76b]
+  e98a3834  2026-08-25 14:17  undo          Undo command 'mem branch' [28cf1099]
+  c5fc289c  2026-08-25 14:16  branch        Branched subtree 'task-2/participant' to 'audit/ticker/admin-v2-scratch/co4-tree'.
+  c067b096  2026-08-25 13:01  replace       Replaced 1 occurrence(s) in 1 Memory/ies across 1 Context(s).
+  6544fb39  2026-08-25 13:00  edit          Edited memory [9f473e8e]

@@ -1,0 +1,8 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 compare task-2/advisor1/style task-2/advisor2/style --snapshot
+EXIT: 0
+DURATION_SECONDS: 7.138
+
+Compare · task-2/advisor1/style ↔ task-2/advisor2/style
+
+COMPARISON
+  Both frames promote explicit responsibility, consistent authorial pronouns, and evidence-calibrated descriptions, while favoring readable, reviewable prose. The decisive difference is that one generally splits sentences containing more than one independently reviewable claim and avoids em dashes, whereas the other preserves unified rhythmic sentences and permits em dashes for deliberate interruption or sharp contrast.

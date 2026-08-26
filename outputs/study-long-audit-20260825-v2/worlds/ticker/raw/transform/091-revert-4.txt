@@ -1,0 +1,26 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker revert 24468c56 --context task-3/local --keep
+
+EXIT
+0
+
+OUTPUT
+Reverted Context: task-3/local
+Restored state recorded by: manual checkpoint
+Action detail: ticker transform round 4 pre-destructive recovery
+Affected Context: task-3/local
+Affected content: 6 Memories added, 2 Embedded contexts added, 3 Memories removed
+  - [memory 6cd9c8b5] "When a company name ends with a legal suffix followed immediately by terminal Class A or Class B, derive the base ticker by removing the legal suffix, spaces, and input punctuation, then append the generated share-class suffix .A or .B res…"
+  - [memory 9eb2eefd] "Distinguish the dot in .A or .B as newly generated share-class syntax rather than input punctuation: ordinary punctuation is stripped before ticker construction, while the share-class mapping introduces its own dot in the output."
+  - [memory c9771e13] "Given no observed company name and no observed ticker output, do not invent either a company or an output; record that no derivation can be made from the available information."
+  + [context 10c1e5b1] "task-3/local/guardrails"
+  + [context 33ffd77c] "task-3/local/personal-memory"
+  + [memory f41126fd] "Punctuation rule and example: strip punctuation before constructing a ticker. North-Star, Inc. becomes NORTHSTAR after removing the comma, hyphen, space, and Inc. suffix."
+  + [memory 7c87d868] "Numeral rule: preserve digits 0 through 9, including leading zeroes, in original positions while removing spaces and punctuation."
+  + [memory 9f5ffc96] "Numeral example: Route 66, LLC becomes ROUTE66 after removing the comma, space, and LLC suffix while preserving 66."
+  + [memory ef097645] "Share-class rule: if a legal suffix immediately precedes terminal Class A or Class B, remove the suffix and append dot-A (.A) or dot-B (.B) to the derived base ticker."
+  + [memory c2901978] "becomes NORTHSTAR after removing the comma, hyphen, space, and Inc."
+  + [memory eddf277f] "Share-class example: Acme Corp. Class B becomes ACME.B after removing Corp. and mapping Class B to the .B suffix. The dot is generated share-class syntax."
+Restored checkpoint: [24468c56] (2026-08-25 13:32)
+Undo command: mem undo
+Exact recovery checkpoint: mem revert c863d031 --discard-newer

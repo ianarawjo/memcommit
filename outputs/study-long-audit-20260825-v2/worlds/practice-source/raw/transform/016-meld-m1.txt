@@ -1,0 +1,20 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source meld --memory 'Do not turn an editing constraint into permission to edit; preserve the complete trigger and exception.' --into practice/description --direct
+
+EXIT
+0
+
+WALL_SECONDS
+17.062735
+
+STDOUT
+MELD READY · DIRECTIONAL · practice/description
+ROUTE · INCOMING INLINE MEMORY → BASELINE / TARGET practice/description
+JUDGMENTS · REQUIRED 0 · OPTIONAL 1
+SESSION · d539d954-f8b2-459f-bc34-0a6ba8b86731
+SOURCE · UNCHANGED
+IMPACT · mem impact meld --session d539d954-f8b2-459f-bc34-0a6ba8b86731
+RESUME · mem meld --sessions
+
+
+STDERR

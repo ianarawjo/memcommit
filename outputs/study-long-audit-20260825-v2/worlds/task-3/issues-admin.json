@@ -1,0 +1,304 @@
+{
+  "schema_version": 1,
+  "world": "task-3",
+  "phase": "admin",
+  "issues": [
+    {
+      "id": "T3V2-RENAME-BRANCH-STACK-OWNER-MISMATCH",
+      "title": "Renaming a Branch target invalidates its retained creation membership",
+      "classification": "functional / safety recovery / global command-stack corruption",
+      "severity": "P1 / high",
+      "regression": "independently corroborates the cross-world Rename/Branch stack defect",
+      "expected": "Renaming a Context created by Branch preserves a reconstructible producer unit under the new canonical name, so later Undo/Redo can verify and restore it.",
+      "actual": "Rename M1 changed `.../b1` to `.../renamed-1`, but its Branch receipt retained target membership `.../b1`. The read-only stack builder then failed with `Branch checkpoint owner is outside its creation membership` after Branch M2. Counted inverse Rename M2 restored `.../b1`; the exact 11-member B2 unit then rebuilt and Undo2/Redo2 both succeeded.",
+      "workaround": "Do not Rename a Branch/checkout-created Context while its creation checkpoint is retained. If no descendant has copied the invalid history, restore the exact original target name before using the global stack.",
+      "evidence_sequences": [
+        6,
+        38,
+        39,
+        40
+      ],
+      "reproduction": "One successful Branch-target Rename, one deterministic host stack failure, then one exact inverse-name recovery followed by successful Undo/Redo.",
+      "evidence": [
+        {
+          "phase": "admin",
+          "sequence": 6,
+          "operation": "rename",
+          "raw_output": "outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/006-rename-m1.txt"
+        },
+        {
+          "phase": "admin",
+          "after_sequence": 37,
+          "host_read": "outputs/study-long-audit-20260825-v2/worlds/task-3/admin-host-reads.json",
+          "label": "round2 pre-recovery stack reconstruction"
+        },
+        {
+          "phase": "admin",
+          "sequence": 38,
+          "operation": "rename",
+          "raw_output": "outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/038-rename-m2.txt"
+        },
+        {
+          "phase": "admin",
+          "sequence": 39,
+          "operation": "undo",
+          "raw_output": "outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/039-undo-m2.txt"
+        },
+        {
+          "phase": "admin",
+          "sequence": 40,
+          "operation": "redo",
+          "raw_output": "outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/040-redo-m2.txt"
+        }
+      ]
+    },
+    {
+      "id": "T3V2-BRANCH-INHERITS-CREATION-RECEIPT",
+      "title": "Branch-of-Branch copies historical creation receipts as invalid target history",
+      "classification": "functional / safety recovery / inherited command-history corruption",
+      "severity": "P1 / high",
+      "regression": "newly isolated from a clean-source negative control",
+      "expected": "Branching a live prior Branch target either omits creation-only checkpoints from the copied history or treats them as lineage, leaving the new producer unit and the Profile-global Undo/Redo stack reconstructible.",
+      "actual": "The clean `guardrails` Source had zero Branch checkpoints. B1 had one valid creation receipt. Branch M3 copied that receipt into B3, where its owner is outside the recorded B1 target membership; Checkout M3 then copied both B1 and B3 receipts into co3. Exact current creation receipts remained identifiable, but every later global stack build and six counted Undo/Redo controls failed closed.",
+      "workaround": "Use a checkpoint-history-clean ordinary Source for Branch/checkout -b. Once a target has inherited multiple creation-only receipts, there is no non-destructive global Undo workaround; retain the malformed audit state as negative evidence.",
+      "evidence_sequences": [
+        43,
+        44,
+        46,
+        47,
+        64,
+        79,
+        83,
+        85,
+        86
+      ],
+      "reproduction": "B1 → B3 → co3 created three invalid owner/creation-membership pairs; 6/6 later counted Undo/Redo calls failed with the same builder error.",
+      "evidence": [
+        {
+          "phase": "admin",
+          "sequence": 43,
+          "operation": "branch",
+          "raw_output": "outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/043-branch-m3.txt"
+        },
+        {
+          "phase": "admin",
+          "sequence": 44,
+          "operation": "checkout",
+          "raw_output": "outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/044-checkout-m3.txt"
+        },
+        {
+          "phase": "admin",
+          "sequence": 46,
+          "operation": "undo",
+          "raw_output": "outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/046-undo-m3.txt"
+        },
+        {
+          "phase": "admin",
+          "sequence": 47,
+          "operation": "redo",
+          "raw_output": "outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/047-redo-m3.txt"
+        },
+        {
+          "phase": "admin",
+          "sequence": 64,
+          "operation": "redo",
+          "raw_output": "outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/064-redo-m4.txt"
+        },
+        {
+          "phase": "admin",
+          "sequence": 83,
+          "operation": "undo",
+          "raw_output": "outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/083-undo-m4.txt"
+        },
+        {
+          "phase": "admin",
+          "sequence": 85,
+          "operation": "undo",
+          "raw_output": "outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/085-undo-m5.txt"
+        },
+        {
+          "phase": "admin",
+          "sequence": 86,
+          "operation": "redo",
+          "raw_output": "outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/086-redo-m5.txt"
+        },
+        {
+          "phase": "admin",
+          "host_read": "outputs/study-long-audit-20260825-v2/worlds/task-3/admin-host-reads.json",
+          "kind": "command_stack_reconstruction_failure_with_receipt_evidence"
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    {
+      "id": "T3V2-ADMIN-HARNESS-INTERRUPTED-CALL",
+      "title": "Checkout M5 output was lost when the parent harness received SIGINT",
+      "classification": "audit harness / operator interruption (not product behavior)",
+      "severity": "P3 / low",
+      "regression": "audit-only event",
+      "expected": "Capture the missing-target Checkout M5 exit and output once.",
+      "actual": "The pinned sequence-89 subprocess had started when SIGINT interrupted the parent communicate() call. It is retained once as exit 130 with unavailable output; exact sequence-88-post/current host digests prove it published no durable change.",
+      "workaround": "Do not replay. Preserve exit 130 plus the exact pre/post host digest bridge.",
+      "evidence_sequences": [
+        89
+      ],
+      "reproduction": "One campaign-only operator interruption; no product conclusion drawn.",
+      "evidence": [
+        {
+          "phase": "admin",
+          "sequence": 89,
+          "operation": "checkout",
+          "raw_output": "outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/089-checkout-m5.txt"
+        },
+        {
+          "phase": "admin",
+          "after_sequence": 89,
+          "host_read": "outputs/study-long-audit-20260825-v2/worlds/task-3/admin-host-reads.json",
+          "kind": "interrupted_counted_call_recovery"
+        }
+      ]
+    },
+    {
+      "id": "T3V2-INIT-STUDY-UUID-CREATES-ACTIVE-PROFILE",
+      "title": "UUID-shaped Study name was a valid high-cost input, not a safe negative control",
+      "classification": "audit input assumption / high-cost identity escape",
+      "severity": "P1 / high",
+      "regression": "new audit protocol failure; current Profile grammar permits this name",
+      "expected": "Per the ADMIN protocol, init-study M5 rejects the chosen name before creating or activating any Profile, leaving success count zero and identity pinned.",
+      "actual": "The UUID-shaped string satisfies the frozen portable Profile-name grammar. Sequence 95 exited 0, created a full managed Study Profile/Store, and selected it. The mandatory host read caught the new UID/root. The new Profile/Store were retained unchanged as evidence; only registry active_uid was atomically restored before seq96.",
+      "workaround": "For zero-success audit trials use a syntactically invalid slash name, reserved name, missing baseline, invalid worker count, or an actual TUI cancel. Do not assume a UUID-shaped Study/Profile name is invalid.",
+      "evidence_sequences": [
+        95
+      ],
+      "reproduction": "One exact non-TTY init-study call; success and identity escape were host-verified.",
+      "evidence": [
+        {
+          "phase": "admin",
+          "sequence": 95,
+          "operation": "init-study",
+          "raw_output": "outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/095-init_study-m5.txt"
+        },
+        {
+          "phase": "admin",
+          "recovery": "outputs/study-long-audit-20260825-v2/worlds/task-3/recovery/admin-seq095-init-study/evidence.json"
+        }
+      ]
+    },
+    {
+      "id": "T3V2-ADMIN-IMPORT-PREEXISTING-IDENTITY",
+      "title": "Context Import M1/M2 used identities already present in the combined Study Store",
+      "classification": "audit input assumption / pre-existing identity collision",
+      "severity": "P3 / low",
+      "regression": "audit-only source-selection limitation",
+      "expected": "Exercise successful direct and recursive by-value Context import into scratch.",
+      "actual": "Both imports safely failed because the task-1 Context UIDs already existed under their task-1 canonical names in the active combined Study Store. Memory Import M3 still exercised a successful exact by-value route.",
+      "workaround": "Choose a source Profile/Context identity not already present in the active Store.",
+      "evidence_sequences": [
+        13,
+        29,
+        52
+      ],
+      "reproduction": "Two deterministic Context identity collisions and one successful Memory import.",
+      "evidence": [
+        {
+          "phase": "admin",
+          "sequence": 13,
+          "operation": "import",
+          "raw_output": "outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/013-import-m1.txt"
+        },
+        {
+          "phase": "admin",
+          "sequence": 29,
+          "operation": "import",
+          "raw_output": "outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/029-import-m2.txt"
+        },
+        {
+          "phase": "admin",
+          "sequence": 52,
+          "operation": "import",
+          "raw_output": "outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/052-import-m3.txt"
+        }
+      ]
+    },
+    {
+      "id": "T3V2-ADMIN-RECOVERY-ROUTE-DEVIATION",
+      "title": "Stack recovery required counted ADMIN route substitutions",
+      "classification": "audit recovery / protocol route deviation",
+      "severity": "P2 / medium",
+      "regression": "campaign adaptation after a P1 recoverability defect",
+      "expected": "Execute the prescribed Rename and Lock targets while preserving five attempts per operation.",
+      "actual": "Rename M2 became the counted inverse-name recovery. Later successful Rename trials used Init-created scratch Contexts rather than Branch/Checkout targets, and Lock M4 protected the scratch subtree so the protected Undo boundary remained exercised without creating another Rename owner mismatch. Actual argv/routes are in the ledger.",
+      "workaround": "Treat these methods as recovery-adapted evidence, not exact replicas of the original rows.",
+      "evidence_sequences": [
+        38,
+        63,
+        81,
+        82,
+        84,
+        104
+      ],
+      "reproduction": "One bounded same-phase recovery path; no supplemental mem calls or replay.",
+      "evidence": [
+        {
+          "phase": "admin",
+          "sequence": 38,
+          "operation": "rename",
+          "raw_output": "outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/038-rename-m2.txt"
+        },
+        {
+          "phase": "admin",
+          "sequence": 63,
+          "operation": "rename",
+          "raw_output": "outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/063-rename-m3.txt"
+        },
+        {
+          "phase": "admin",
+          "sequence": 81,
+          "operation": "lock",
+          "raw_output": "outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/081-lock-m4.txt"
+        },
+        {
+          "phase": "admin",
+          "sequence": 82,
+          "operation": "rename",
+          "raw_output": "outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/082-rename-m4.txt"
+        },
+        {
+          "phase": "admin",
+          "sequence": 84,
+          "operation": "unlock",
+          "raw_output": "outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/084-unlock-m4.txt"
+        },
+        {
+          "phase": "admin",
+          "sequence": 104,
+          "operation": "rename",
+          "raw_output": "outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/104-rename-m5.txt"
+        }
+      ]
+    },
+    {
+      "id": "T3V2-ADMIN-INIT-PARENT-ASSUMPTION",
+      "title": "Init M5 assumed a missing lexical parent must fail without --parents",
+      "classification": "audit input assumption / documented exact-leaf behavior",
+      "severity": "P3 / low",
+      "regression": "audit-only expectation mismatch",
+      "expected": "The ADMIN row expected a missing-parent validation failure.",
+      "actual": "Init created only the exact requested nested Context and did not create a parent Context. This matches detailed Init Help: default creates the exact name; --parents additionally creates missing parent Contexts.",
+      "workaround": "Use a UID-shaped name or an existing-name collision for a deterministic safe failure.",
+      "evidence_sequences": [
+        94
+      ],
+      "reproduction": "One exact nested Init without --parents, exit 0.",
+      "evidence": [
+        {
+          "phase": "admin",
+          "sequence": 94,
+          "operation": "init",
+          "raw_output": "outputs/study-long-audit-20260825-v2/worlds/task-3/raw/admin/094-init-m5.txt"
+        }
+      ]
+    }
+  ]
+}

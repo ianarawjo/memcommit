@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 compare --from task-1/participant/construction-updates/shop-updates --to task-1/campus-wiki/shop-updates --direct --ledger --snapshot
+
+EXIT
+1
+
+WALL_SECONDS
+109.621443
+
+STDOUT
+
+
+STDERR
+Compare error: Codex compare repair remained invalid: Codex compare assigned a DISTINCT relation to invalid PEER sides.

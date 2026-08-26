@@ -1,0 +1,28 @@
+{
+  "sequence": 86,
+  "count_before": 330,
+  "count_after": 331,
+  "delta": 1,
+  "new_attempt_uids": [
+    "0b0cf695-900c-4548-b17d-ed1cc0327649"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "0b0cf695-900c-4548-b17d-ed1cc0327649",
+      "operation": "redo",
+      "command": "mem redo",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:17:02.583017+00:00",
+      "completed_at": "2026-08-25T18:17:02.668236+00:00",
+      "elapsed_seconds": 0.08501604100456461,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

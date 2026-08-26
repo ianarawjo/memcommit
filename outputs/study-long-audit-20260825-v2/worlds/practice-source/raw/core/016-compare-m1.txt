@@ -1,0 +1,17 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source compare practice/source practice
+
+EXIT
+0
+
+WALL_SECONDS
+7.313615
+
+STDOUT
+Compare · practice/source ↔ practice
+
+COMPARISON
+  The frames are substantively equivalent on review-first handling, narrowly scoped edits, terminology and formatting preservation, 20–30% cuts only when a shorter fixed limit applies, and full-source citation verification. The compared frame adds an explicit general rule to classify review-only versus authorized-editing intent before changing text, while also duplicating the citation-verification policy.
+
+
+STDERR

@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source reference practice/source:96300a95 --into practice/description
+
+EXIT
+0
+
+WALL_SECONDS
+1.331962
+
+STDOUT
+Referenced snapshot [96300a95] from 'practice/source' as [3fbf33de] in 'practice/description'.
+
+
+STDERR

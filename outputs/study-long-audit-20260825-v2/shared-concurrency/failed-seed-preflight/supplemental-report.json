@@ -1,0 +1,1726 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-08-25T18:32:12.428471+00:00",
+  "excluded_from_1980": true,
+  "code_snapshot_sha256": "a004fd87545e012a191cc2b1d06af99cd54d40049d304e292694788e01b09f84",
+  "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+  "store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/shared-concurrency/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+  "initial": {
+    "registry_sha256": "a8ff52bc746f5cf47afd783d59249850dbedbe602d74cedc9e54ef0170f650dc",
+    "state_sha256": null,
+    "staged_update_sha256": null
+  },
+  "final": {
+    "registry_sha256": "a8ff52bc746f5cf47afd783d59249850dbedbe602d74cedc9e54ef0170f650dc",
+    "state_sha256": null,
+    "staged_update_sha256": null
+  },
+  "current_rounds": [
+    {
+      "round": 1,
+      "observations": {
+        "task-1": "",
+        "task-2": "",
+        "task-3": "",
+        "ticker": "",
+        "a-is-apple": "",
+        "practice-source": ""
+      },
+      "own_context_matches": {
+        "task-1": false,
+        "task-2": false,
+        "task-3": false,
+        "ticker": false,
+        "a-is-apple": false,
+        "practice-source": false
+      }
+    },
+    {
+      "round": 2,
+      "observations": {
+        "task-1": "",
+        "task-2": "",
+        "task-3": "",
+        "ticker": "",
+        "a-is-apple": "",
+        "practice-source": ""
+      },
+      "own_context_matches": {
+        "task-1": false,
+        "task-2": false,
+        "task-3": false,
+        "ticker": false,
+        "a-is-apple": false,
+        "practice-source": false
+      }
+    },
+    {
+      "round": 3,
+      "observations": {
+        "task-1": "",
+        "task-2": "",
+        "task-3": "",
+        "ticker": "",
+        "a-is-apple": "",
+        "practice-source": ""
+      },
+      "own_context_matches": {
+        "task-1": false,
+        "task-2": false,
+        "task-3": false,
+        "ticker": false,
+        "a-is-apple": false,
+        "practice-source": false
+      }
+    },
+    {
+      "round": 4,
+      "observations": {
+        "task-1": "",
+        "task-2": "",
+        "task-3": "",
+        "ticker": "",
+        "a-is-apple": "",
+        "practice-source": ""
+      },
+      "own_context_matches": {
+        "task-1": false,
+        "task-2": false,
+        "task-3": false,
+        "ticker": false,
+        "a-is-apple": false,
+        "practice-source": false
+      }
+    },
+    {
+      "round": 5,
+      "observations": {
+        "task-1": "",
+        "task-2": "",
+        "task-3": "",
+        "ticker": "",
+        "a-is-apple": "",
+        "practice-source": ""
+      },
+      "own_context_matches": {
+        "task-1": false,
+        "task-2": false,
+        "task-3": false,
+        "ticker": false,
+        "a-is-apple": false,
+        "practice-source": false
+      }
+    }
+  ],
+  "update_receipts": {
+    "task-1": null,
+    "task-2": null,
+    "task-3": null,
+    "ticker": null,
+    "a-is-apple": null,
+    "practice-source": null
+  },
+  "implicit_diff_canaries": {
+    "task-1": [],
+    "task-2": [],
+    "task-3": [],
+    "ticker": [],
+    "a-is-apple": [],
+    "practice-source": []
+  },
+  "exact_review_canaries": {},
+  "branch_exit_codes": {
+    "task-1": 1,
+    "task-2": 1,
+    "task-3": 1,
+    "ticker": 1,
+    "a-is-apple": 1,
+    "practice-source": 1
+  },
+  "calls": [
+    {
+      "actor": "task-1",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "init",
+        "audit/shared-v2/task-1/source",
+        "--parents"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.097617,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-1",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "init",
+        "audit/shared-v2/task-1/target",
+        "--parents"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.09653,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-1",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "add",
+        "SHARED-CANARY::task-1 source assertion.",
+        "--context",
+        "audit/shared-v2/task-1/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.097437,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-1",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "add",
+        "SHARED-BASELINE::task-1 target assertion.",
+        "--context",
+        "audit/shared-v2/task-1/target"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.09665,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-2",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "init",
+        "audit/shared-v2/task-2/source",
+        "--parents"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.096567,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-2",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "init",
+        "audit/shared-v2/task-2/target",
+        "--parents"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.096711,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-2",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "add",
+        "SHARED-CANARY::task-2 source assertion.",
+        "--context",
+        "audit/shared-v2/task-2/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.096784,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-2",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "add",
+        "SHARED-BASELINE::task-2 target assertion.",
+        "--context",
+        "audit/shared-v2/task-2/target"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.096877,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-3",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "init",
+        "audit/shared-v2/task-3/source",
+        "--parents"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.098237,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-3",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "init",
+        "audit/shared-v2/task-3/target",
+        "--parents"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.098441,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-3",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "add",
+        "SHARED-CANARY::task-3 source assertion.",
+        "--context",
+        "audit/shared-v2/task-3/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.097874,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-3",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "add",
+        "SHARED-BASELINE::task-3 target assertion.",
+        "--context",
+        "audit/shared-v2/task-3/target"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.09746,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "ticker",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "init",
+        "audit/shared-v2/ticker/source",
+        "--parents"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.09707,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "ticker",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "init",
+        "audit/shared-v2/ticker/target",
+        "--parents"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.101582,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "ticker",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "add",
+        "SHARED-CANARY::ticker source assertion.",
+        "--context",
+        "audit/shared-v2/ticker/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.097408,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "ticker",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "add",
+        "SHARED-BASELINE::ticker target assertion.",
+        "--context",
+        "audit/shared-v2/ticker/target"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.09669,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "init",
+        "audit/shared-v2/a-is-apple/source",
+        "--parents"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.098721,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "init",
+        "audit/shared-v2/a-is-apple/target",
+        "--parents"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.099287,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "add",
+        "SHARED-CANARY::a-is-apple source assertion.",
+        "--context",
+        "audit/shared-v2/a-is-apple/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.12311,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "add",
+        "SHARED-BASELINE::a-is-apple target assertion.",
+        "--context",
+        "audit/shared-v2/a-is-apple/target"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.104706,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "practice-source",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "init",
+        "audit/shared-v2/practice-source/source",
+        "--parents"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.098946,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "practice-source",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "init",
+        "audit/shared-v2/practice-source/target",
+        "--parents"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.10139,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "practice-source",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "add",
+        "SHARED-CANARY::practice-source source assertion.",
+        "--context",
+        "audit/shared-v2/practice-source/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.098315,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "practice-source",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "add",
+        "SHARED-BASELINE::practice-source target assertion.",
+        "--context",
+        "audit/shared-v2/practice-source/target"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.098956,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-1",
+      "phase": "current-r1-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "switch",
+        "audit/shared-v2/task-1/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.122437,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-2",
+      "phase": "current-r1-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "switch",
+        "audit/shared-v2/task-2/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.122159,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-3",
+      "phase": "current-r1-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "switch",
+        "audit/shared-v2/task-3/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.120851,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "ticker",
+      "phase": "current-r1-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "switch",
+        "audit/shared-v2/ticker/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.121156,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "current-r1-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "switch",
+        "audit/shared-v2/a-is-apple/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.120537,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "practice-source",
+      "phase": "current-r1-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "switch",
+        "audit/shared-v2/practice-source/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.119793,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-1",
+      "phase": "current-r1-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "pwd"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.131772,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-2",
+      "phase": "current-r1-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "pwd"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.128427,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-3",
+      "phase": "current-r1-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "pwd"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.130107,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "ticker",
+      "phase": "current-r1-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "pwd"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.127955,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "current-r1-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "pwd"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.128614,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "practice-source",
+      "phase": "current-r1-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "pwd"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.13074,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-1",
+      "phase": "current-r2-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "switch",
+        "audit/shared-v2/task-1/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.189867,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-2",
+      "phase": "current-r2-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "switch",
+        "audit/shared-v2/task-2/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.186529,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-3",
+      "phase": "current-r2-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "switch",
+        "audit/shared-v2/task-3/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.199883,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "ticker",
+      "phase": "current-r2-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "switch",
+        "audit/shared-v2/ticker/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.200239,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "current-r2-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "switch",
+        "audit/shared-v2/a-is-apple/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.19373,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "practice-source",
+      "phase": "current-r2-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "switch",
+        "audit/shared-v2/practice-source/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.194075,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-1",
+      "phase": "current-r2-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "pwd"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.2271,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-2",
+      "phase": "current-r2-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "pwd"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.228848,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-3",
+      "phase": "current-r2-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "pwd"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.227726,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "ticker",
+      "phase": "current-r2-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "pwd"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.22348,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "current-r2-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "pwd"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.217952,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "practice-source",
+      "phase": "current-r2-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "pwd"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.225363,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-1",
+      "phase": "current-r3-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "switch",
+        "audit/shared-v2/task-1/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.204246,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-2",
+      "phase": "current-r3-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "switch",
+        "audit/shared-v2/task-2/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.207413,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-3",
+      "phase": "current-r3-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "switch",
+        "audit/shared-v2/task-3/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.209286,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "ticker",
+      "phase": "current-r3-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "switch",
+        "audit/shared-v2/ticker/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.203188,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "current-r3-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "switch",
+        "audit/shared-v2/a-is-apple/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.198247,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "practice-source",
+      "phase": "current-r3-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "switch",
+        "audit/shared-v2/practice-source/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.198845,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-1",
+      "phase": "current-r3-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "pwd"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.197446,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-2",
+      "phase": "current-r3-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "pwd"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.201814,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-3",
+      "phase": "current-r3-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "pwd"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.193527,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "ticker",
+      "phase": "current-r3-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "pwd"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.192977,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "current-r3-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "pwd"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.191815,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "practice-source",
+      "phase": "current-r3-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "pwd"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.193035,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-1",
+      "phase": "current-r4-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "switch",
+        "audit/shared-v2/task-1/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.202851,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-2",
+      "phase": "current-r4-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "switch",
+        "audit/shared-v2/task-2/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.199242,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-3",
+      "phase": "current-r4-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "switch",
+        "audit/shared-v2/task-3/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.212312,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "ticker",
+      "phase": "current-r4-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "switch",
+        "audit/shared-v2/ticker/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.203563,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "current-r4-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "switch",
+        "audit/shared-v2/a-is-apple/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.211967,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "practice-source",
+      "phase": "current-r4-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "switch",
+        "audit/shared-v2/practice-source/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.204183,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-1",
+      "phase": "current-r4-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "pwd"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.195487,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-2",
+      "phase": "current-r4-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "pwd"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.192991,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-3",
+      "phase": "current-r4-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "pwd"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.202035,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "ticker",
+      "phase": "current-r4-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "pwd"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.188604,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "current-r4-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "pwd"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.189537,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "practice-source",
+      "phase": "current-r4-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "pwd"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.191704,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-1",
+      "phase": "current-r5-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "switch",
+        "audit/shared-v2/task-1/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.188465,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-2",
+      "phase": "current-r5-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "switch",
+        "audit/shared-v2/task-2/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.180927,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-3",
+      "phase": "current-r5-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "switch",
+        "audit/shared-v2/task-3/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.184707,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "ticker",
+      "phase": "current-r5-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "switch",
+        "audit/shared-v2/ticker/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.188726,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "current-r5-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "switch",
+        "audit/shared-v2/a-is-apple/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.185926,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "practice-source",
+      "phase": "current-r5-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "switch",
+        "audit/shared-v2/practice-source/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.188173,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-1",
+      "phase": "current-r5-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "pwd"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.190604,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-2",
+      "phase": "current-r5-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "pwd"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.19553,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-3",
+      "phase": "current-r5-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "pwd"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.194892,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "ticker",
+      "phase": "current-r5-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "pwd"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.195457,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "current-r5-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "pwd"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.186009,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "practice-source",
+      "phase": "current-r5-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "pwd"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.188198,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-1",
+      "phase": "update-race",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "update",
+        "audit/shared-v2/task-1/source",
+        "audit/shared-v2/task-1/target",
+        "--direct",
+        "--replace-stage",
+        "--goal",
+        "Preserve only SHARED-CANARY::task-1 in this actor target."
+      ],
+      "exit": 1,
+      "wall_seconds": 0.211948,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-2",
+      "phase": "update-race",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "update",
+        "audit/shared-v2/task-2/source",
+        "audit/shared-v2/task-2/target",
+        "--direct",
+        "--replace-stage",
+        "--goal",
+        "Preserve only SHARED-CANARY::task-2 in this actor target."
+      ],
+      "exit": 1,
+      "wall_seconds": 0.208306,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-3",
+      "phase": "update-race",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "update",
+        "audit/shared-v2/task-3/source",
+        "audit/shared-v2/task-3/target",
+        "--direct",
+        "--replace-stage",
+        "--goal",
+        "Preserve only SHARED-CANARY::task-3 in this actor target."
+      ],
+      "exit": 1,
+      "wall_seconds": 0.208201,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "ticker",
+      "phase": "update-race",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "update",
+        "audit/shared-v2/ticker/source",
+        "audit/shared-v2/ticker/target",
+        "--direct",
+        "--replace-stage",
+        "--goal",
+        "Preserve only SHARED-CANARY::ticker in this actor target."
+      ],
+      "exit": 1,
+      "wall_seconds": 0.20417,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "update-race",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "update",
+        "audit/shared-v2/a-is-apple/source",
+        "audit/shared-v2/a-is-apple/target",
+        "--direct",
+        "--replace-stage",
+        "--goal",
+        "Preserve only SHARED-CANARY::a-is-apple in this actor target."
+      ],
+      "exit": 1,
+      "wall_seconds": 0.214912,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "practice-source",
+      "phase": "update-race",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "update",
+        "audit/shared-v2/practice-source/source",
+        "audit/shared-v2/practice-source/target",
+        "--direct",
+        "--replace-stage",
+        "--goal",
+        "Preserve only SHARED-CANARY::practice-source in this actor target."
+      ],
+      "exit": 1,
+      "wall_seconds": 0.212238,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-1",
+      "phase": "implicit-diff",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "diff",
+        "--raw"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.189977,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-2",
+      "phase": "implicit-diff",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "diff",
+        "--raw"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.191672,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-3",
+      "phase": "implicit-diff",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "diff",
+        "--raw"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.187913,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "ticker",
+      "phase": "implicit-diff",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "diff",
+        "--raw"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.197211,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "implicit-diff",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "diff",
+        "--raw"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.196069,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "practice-source",
+      "phase": "implicit-diff",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "diff",
+        "--raw"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.188939,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-1",
+      "phase": "branch-race",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "branch",
+        "audit/shared-v2/task-1/branch-copy",
+        "--from",
+        "audit/shared-v2/task-1/source",
+        "--direct"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.186884,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-2",
+      "phase": "branch-race",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "branch",
+        "audit/shared-v2/task-2/branch-copy",
+        "--from",
+        "audit/shared-v2/task-2/source",
+        "--direct"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.187711,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "task-3",
+      "phase": "branch-race",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "branch",
+        "audit/shared-v2/task-3/branch-copy",
+        "--from",
+        "audit/shared-v2/task-3/source",
+        "--direct"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.188049,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "ticker",
+      "phase": "branch-race",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "branch",
+        "audit/shared-v2/ticker/branch-copy",
+        "--from",
+        "audit/shared-v2/ticker/source",
+        "--direct"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.187762,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "branch-race",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "branch",
+        "audit/shared-v2/a-is-apple/branch-copy",
+        "--from",
+        "audit/shared-v2/a-is-apple/source",
+        "--direct"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.188837,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    },
+    {
+      "actor": "practice-source",
+      "phase": "branch-race",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "branch",
+        "audit/shared-v2/practice-source/branch-copy",
+        "--from",
+        "audit/shared-v2/practice-source/source",
+        "--direct"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.187535,
+      "stdout": "",
+      "stderr": "Pinned Profile name changed: expected sixworld-v2-template, got study-20260825T110027Z-59cb6a29\n"
+    }
+  ]
+}

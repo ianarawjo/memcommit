@@ -1,0 +1,11 @@
+{
+  "sequence": 28,
+  "operation": "summarize",
+  "attempt": 2,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 summarize task-1/campus-wiki/event-relocations --direct",
+  "exit": 0,
+  "wall_seconds": 1.544194,
+  "pre_target_digest": "7487a7901a8aa03943f9eca3ff8d1eb9a5a971a7ea4859c505ac248aed7b53e8",
+  "post_target_digest": "0b14029e4c877c27582b08a5da4f4abe6ff47251e75dc5767c951ad433bd8b6b",
+  "raw_output": "raw/core/028-summarize-m2.txt"
+}

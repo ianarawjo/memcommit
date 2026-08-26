@@ -1,0 +1,26 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 impact --from task-1/participant/construction-updates/event-relocations --to task-1/participant/construction-updates --direct
+
+EXIT
+0
+
+OUTPUT
+ Impact: task-1/participant/construction-updates/event-relocations -> task-1/participant/construction-updates
+ SOURCE task-1/participant/construction-updates/event-relocations → TARGET task-1/participant/construction-updates
+ IMPACT · 0 EDITS · 0 ADDITIONS · 0 REMOVALS · 0 CHANGES
+
+ PLAN
+ Mem matched the verified Source against the Target and planned only the exact target Memory changes shown below. Nothing has been applied.
+
+ PLANNED CHANGES
+  No planned changes are recorded in this Update artifact.
+
+ APPLICATION
+  (none)
+
+SUMMARY · 0 edits, 0 additions, 0 removals
+SCOPE · SOURCE SELECTED GRAPH ONLY · TARGET SELECTED GRAPH ONLY
+
+(no changes needed)
+
+No changes applied.

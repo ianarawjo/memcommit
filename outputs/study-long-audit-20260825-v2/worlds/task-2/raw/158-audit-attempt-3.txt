@@ -1,0 +1,14 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 audit task-2/participant/proposal-workspace --against task-2/description
+EXIT: 0
+DURATION_SECONDS: 18.972
+
+Audit saved: 3 quality checks.
+Source: task-2/participant/proposal-workspace · 10 memories
+
+REDUNDANCIES   10 MEMORIES CHECKED · 0 GROUPS · 0 PROPOSED ABSORPTIONS
+AMBIGUITIES    0/10 MEMORIES FLAGGED
+CONFLICTS      2/10 MEMORIES INVOLVED · 1/45 PAIRS FLAGGED
+  ! POSSIBLE CONFLICT · [MEMORY 2e9d3a1c] “In the main-text paragraph for the proposed tra…” ↔ [MEMORY 216e7051] “If the participant count changes from 40 to 50,…”
+
+Review full audit:
+mem review audit --session 6c329d82-af87-462b-aaca-6034d25d5b13

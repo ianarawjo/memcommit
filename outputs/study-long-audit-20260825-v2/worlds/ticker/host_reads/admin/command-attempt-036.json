@@ -1,0 +1,28 @@
+{
+  "sequence": 36,
+  "count_before": 280,
+  "count_after": 281,
+  "delta": 1,
+  "new_attempt_uids": [
+    "42c7212e-9f45-490e-8570-46803ae11e29"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "42c7212e-9f45-490e-8570-46803ae11e29",
+      "operation": "branch",
+      "command": "mem branch audit/ticker/admin-v2-scratch/b2-tree --from task-1/participant/construction-updates --recursive",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:13:07.769703+00:00",
+      "completed_at": "2026-08-25T18:13:07.842824+00:00",
+      "elapsed_seconds": 0.07292212500760797,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple init-study admin-v2-workers-zero --prewarm-workers 0
+
+EXIT
+2
+
+OUTPUT
+Usage: run_isolated_mem.py init-study [OPTIONS] [NAME]
+Try 'run_isolated_mem.py init-study -h' for help.
+╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Invalid value for '--prewarm-workers': 0 is not in the range x>=1.           │
+╰──────────────────────────────────────────────────────────────────────────────╯

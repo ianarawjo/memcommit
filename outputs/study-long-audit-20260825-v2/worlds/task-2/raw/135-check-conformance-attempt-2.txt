@@ -1,0 +1,5 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 check-conformance task-2/participant/proposal-workspace --against "text:A longer sentence is retained only when its clauses form one reviewable movement; otherwise split it."
+EXIT: 0
+DURATION_SECONDS: 6.695
+
+CONFORMANCE · 3/3 EXAMPLES CONFORM · 1/1 RULES MET · [EXAMPLES task-2/participant/proposal-workspace] · [RULES TEXT A longer sentence is retained only when its clauses form one reviewable movement; otherwise split it.] · 12 EXAMPLES N/A

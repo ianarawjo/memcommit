@@ -1,0 +1,31 @@
+{
+  "sequence": 70,
+  "count_before": 314,
+  "count_after": 315,
+  "delta": 1,
+  "new_attempt_uids": [
+    "0ee08986-9ad3-47ef-ba3e-d365e8dacd12"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "0ee08986-9ad3-47ef-ba3e-d365e8dacd12",
+      "operation": "import",
+      "command": "mem import memory 37113bd0-5194-521b-9d9e-48903d819520 --from-profile task-1 --context participant/construction-updates/shop-updates --into audit/ticker/admin-v2-scratch",
+      "status": "FAILED",
+      "started_at": "2026-08-25T18:16:38.877718+00:00",
+      "completed_at": "2026-08-25T18:16:38.913045+00:00",
+      "elapsed_seconds": 0.03518583299592137,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": {
+        "kind": "Exit",
+        "exit_code": 1
+      }
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 compare task-2/advisor1/evaluation task-2/advisor2/evaluation --snapshot
+EXIT: 0
+DURATION_SECONDS: 7.579
+
+Compare · task-2/advisor1/evaluation ↔ task-2/advisor2/evaluation
+
+COMPARISON
+  Both frames center evaluation on one declared primary measure, but the reference specializes in comparing design alternatives and diagnosing controlled-test limitations, whereas the compared frame turns that measure into deployment decisions with explicit thresholds while accounting for organizational effects, implementation fidelity, and changed conditions during long-term use.

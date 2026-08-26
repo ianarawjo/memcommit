@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source move practice:8517d6ae --into practice/description
+
+EXIT
+0
+
+WALL_SECONDS
+1.559560
+
+STDOUT
+MOVED · 1 Memory → 'practice/description' · RETARGET LINKS · after [824acb9d] at the end
+  REMOVE 'practice' [8517d6ae] · ADD 'practice/description' [8517d6ae]
+Checkpoints 'practice' [480a47fb], 'practice/description' [aa1012d4].
+
+
+STDERR

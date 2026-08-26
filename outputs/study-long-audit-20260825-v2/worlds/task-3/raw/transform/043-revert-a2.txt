@@ -1,0 +1,28 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 revert 30d84ca3 -c task-3/local/guardrails/audit-and-recovery -k
+
+EXIT
+0
+
+OUTPUT
+Reverted Context: task-3/local/guardrails/audit-and-recovery
+Restored state recorded by: manual checkpoint
+Action detail: task-3 transform round 2 option-target recovery
+Affected Context: task-3/local/guardrails/audit-and-recovery
+Affected content: 14 Memories added, 14 Memories removed
+  - [memory ae485224] "Share only the smallest information unit necessary for the current purpose, and redact identifiers that are unnecessary for sharing."
+  - [memory 51cb32fb] "Preserve the source’s essential meaning when generalizing or omitting content: never replace a removed value with a plausible one, and do not treat omission as evidence of the opposite fact."
+  - [memory d98f33b9] "Disclose the types of fields redacted and guard against recipients interpreting omitted, unverified content as not applicable."
+  - [memory cdb084de] "Assess re-identification risk across the combined disclosure, because multiple individually de-identified fragments can jointly identify a person."
+  - [memory 1fdf08b3] "For a benefits vendor investigating whether a payment was processed, share only the relevant status excerpt: “Payment status: pending verification.” Remove the member name, account number, email address, and street address; label those fie…"
+  - [memory 98ffe01a] "Before sending a recipient organization three separately de-identified incident fragments—an uncommon job title, a precise incident date, and a small office location—review them as one combined disclosure. If their combination could single…"
+  - [memory 63ce782e] "Select only the smallest Memory unit needed for the current purpose."
+  - [memory 051fac59] "Redact identifiers from the content when they are not needed for sharing."
+  - [memory fe940f42] "Check that generalized wording does not change the source's essential meaning."
+  - [memory 9dcc2750] "Do not replace a removed value with a plausible value."
+  - [memory 9be04247] "Show the user the types of fields that were redacted."
+  - [memory ef3054fe] "Omitting information is not a statement of the opposite fact."
+  ... 16 more affected direct items not shown
+Restored checkpoint: [30d84ca3] (2026-08-25 13:32)
+Undo command: mem undo
+Exact recovery checkpoint: mem revert 999a6064 --discard-newer

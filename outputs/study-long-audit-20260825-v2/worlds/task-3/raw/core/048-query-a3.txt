@@ -1,0 +1,26 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 query 'Which guardrails require excluding unrelated or third-party information and withholding transfer until explicit approval?' --context task-3/local/guardrails/purpose-and-scope --context task-3/local/guardrails/privacy-and-others --context task-3/local/guardrails/approval-and-delivery --context-only --exclude-embeds
+
+STDOUT
+Purpose-and-scope guardrails require including only Memories needed for the user-confirmed sharing purpose and excluding details unnecessary to that purpose. The healthcare candidate specifically limits disclosure to facts necessary for current care, excludes unrelated history, and requires explicit user approval. [1] [2] [3]
+
+Third-party guardrails require excluding a third party’s contact information unless essential to the current purpose and sharing third-party-authored content only after confirming the scope of consent; mixed user/third-party items also convey the third party’s information if shared unchanged. [4] [5] [6]
+
+Approval-and-delivery guardrails require showing the user the actual recipient, the recipient’s purpose, and the exact Memories before transmission. The local agent cannot approve external sharing for the user, and new approval is required whenever the recipient, purpose, or shared items change. [7] [8] [9] [10] [11] [12] [13]
+
+References
+[1] Include only Memories needed for the current sharing purpose confirmed by the user. — c971c24d, task-3/local/guardrails/purpose-and-scope, m1
+[2] Exclude details not needed for the current purpose from the sharing candidate. — 75944d44, task-3/local/guardrails/purpose-and-scope, m3
+[3] Healthcare candidate (review-pending, not approved): limit disclosure to facts necessary for current care, exclude unrelated history, and require explicit user approval. — 10b92448, task-3/local/guardrails/purpose-and-scope, m9
+[4] Exclude a third party's contact information unless it is essential to the current purpose. — 67035ffd, task-3/local/guardrails/privacy-and-others, m10
+[5] Share content authored by a third party only after confirming the scope of consent. — 47174c75, task-3/local/guardrails/privacy-and-others, m11
+[6] If one Memory mixes information about the user and a third party, sharing the item unchanged also conveys the third party's information. — 5cd7bde0, task-3/local/guardrails/privacy-and-others, m14
+[7] Show the user the actual recipient before transmission. — 96442184, task-3/local/guardrails/approval-and-delivery, m16
+[8] Show the user the recipient's purpose of use before transmission. — 33169da3, task-3/local/guardrails/approval-and-delivery, m17
+[9] Show the user the exact list of Memories to be conveyed before transmission. — f449bbaa, task-3/local/guardrails/approval-and-delivery, m18
+[10] Obtain new approval if the recipient changes. — 9b905e4c, task-3/local/guardrails/approval-and-delivery, m19
+[11] Obtain new approval if the sharing purpose changes. — ce35336a, task-3/local/guardrails/approval-and-delivery, m20
+[12] Obtain new approval if the shared items change. — 14d28101, task-3/local/guardrails/approval-and-delivery, m21
+[13] The local agent can present sharing candidates and recipient scope but cannot approve external sharing on the user's behalf. — d7d7f1a5, task-3/local/guardrails/approval-and-delivery, m22
+
+STDERR

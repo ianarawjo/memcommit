@@ -1,0 +1,7 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 embed task-3/local/guardrails/channel-and-format --into task-3/local
+
+STDOUT
+Embedded 'task-3/local/guardrails/channel-and-format' into 'task-3/local' after [f4f93a2f] at the end.
+
+STDERR

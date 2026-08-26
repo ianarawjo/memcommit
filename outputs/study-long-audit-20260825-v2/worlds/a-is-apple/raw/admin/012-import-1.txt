@@ -1,0 +1,10 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple import context campus-wiki/building-access --from-profile task-1 --as audit/a-is-apple/admin-v2-scratch/import-direct
+
+EXIT
+0
+
+OUTPUT
+Imported 1 Context(s) from Profile 'task-1'.
+Contexts: audit/a-is-apple/admin-v2-scratch/import-direct
+Direct Memories: 50 · source and active Profile selection unchanged

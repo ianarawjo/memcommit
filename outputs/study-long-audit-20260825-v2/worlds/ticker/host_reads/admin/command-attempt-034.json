@@ -1,0 +1,31 @@
+{
+  "sequence": 34,
+  "count_before": 278,
+  "count_after": 279,
+  "delta": 1,
+  "new_attempt_uids": [
+    "60f857d7-b473-4a85-ba71-3f127c64a882"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "60f857d7-b473-4a85-ba71-3f127c64a882",
+      "operation": "share",
+      "command": "mem share audit/ticker/missing-share-source --to task-3/government/healthcare-agent --direct",
+      "status": "FAILED",
+      "started_at": "2026-08-25T18:13:04.786990+00:00",
+      "completed_at": "2026-08-25T18:13:04.802466+00:00",
+      "elapsed_seconds": 0.015321583006880246,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": {
+        "kind": "Exit",
+        "exit_code": 1
+      }
+    }
+  ]
+}

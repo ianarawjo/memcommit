@@ -1,0 +1,5 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 summarize task-2/participant --recursive --plain
+EXIT: 1
+DURATION_SECONDS: 1.404
+
+Summarize error: Summarize cannot use granted Context Embed 'task-2/advisor1/style' [a759f597] in Context 'task-2/participant' as semantic evidence through its local owner. EMBED authorizes live reading, not provider disclosure or derived work; select the granted Source through an operation-aware authority route instead.

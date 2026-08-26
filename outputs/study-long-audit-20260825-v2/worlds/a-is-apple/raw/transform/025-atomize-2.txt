@@ -1,0 +1,40 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple atomize --context practice/source --memory 4a8036d1
+
+EXIT
+0
+
+OUTPUT
+ RESULT · atomize · practice/source
+ STATUS · ANALYSIS COMPLETE · sources=1 · projected=1 · splits=0 · children=0 · review issues=0
+
+ WHAT MEM UNDERSTOOD
+ The focused memory states that b is banana.
+
+ WHAT HAPPENED
+ The statement was preserved as one atomic commitment without splitting.
+
+ WHAT REMAINS UNRESOLVED
+ (none reported under this operation's bounded contract)
+The atomize analysis reported no unresolved finding in this bounded Context frame.
+
+ REPRESENTATIVE / BOUNDARY CASES
+ ›  1. [REPRESENTATIVE] ATOMIC · KEEP
+       KEEP: b is banana.
+
+Analysis [4e228ef1] · INPUT practice/source → OUTPUT practice/source · ORDER: SOURCE · 0/0 answered
+
+ACTIONABLE ISSUES
+  (no actionable atomize, ambiguity, or conflict issues)
+
+NO ACTIONABLE ISSUES
+
+The overview and complete atomize analysis remain saved.
+
+REFINE, COMMENT, OR ENTER A DIFFERENT READING
+> 
+
+SOURCE means canonical Context order; Memory creation timestamps are not recorded.
+No Memory changes have been applied. No checkpoint was created.
+Saved analysis [4e228ef1]: CURRENT.
+Apply the planned in-place Output with: mem atomize --save

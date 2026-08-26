@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple diff 0fd2a604 --context practice --stat
+
+EXIT
+0
+
+OUTPUT
+UNIT        CHECKPOINT · THIS CHECKPOINT VS PREVIOUS
+CHECKPOINT  0fd2a604-cec8-44e2-a3e2-cbadb3eaa28b
+CONTEXT     practice
+ACTION      checkpoint
+DESCRIPTION a-is-apple transform round 4 recovery before destructive scratch trials
+RESULT      20 DIRECT ITEMS
+SUMMARY     0 kept · 20 added · 0 edited · 21 removed

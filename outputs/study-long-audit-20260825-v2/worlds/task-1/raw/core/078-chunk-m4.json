@@ -1,0 +1,11 @@
+{
+  "sequence": 78,
+  "operation": "chunk",
+  "attempt": 4,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 chunk task-1/participant/construction-updates/temporary-parking:84196dc5 --method sentences --min-chars 100 --max-chars 50",
+  "exit": 1,
+  "wall_seconds": 1.285866,
+  "pre_target_digest": "1a40ebd6757fcbae8e1ef9e96ea7beae1b55c87eccb8d8a5fb8a3c7d911c5cfb",
+  "post_target_digest": "96d919a9fb5c5b20481d29546e41e548a634272f3b0d732b8b58d49d7f362235",
+  "raw_output": "raw/core/078-chunk-m4.txt"
+}

@@ -1,0 +1,26 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker shell-init bash
+
+STDIN
+<none>
+
+EXIT
+1
+
+WALL_SECONDS
+1.326327
+
+PRE_IDENTITY
+{"current_context": "audit/ticker/admin-v2-scratch/missing-parent/leaf", "current_context_uid": "90693e22-06fc-455c-8b3a-89c2b6e303c6", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+IMMEDIATE_POST_IDENTITY
+{"current_context": "audit/ticker/admin-v2-scratch/missing-parent/leaf", "current_context_uid": "90693e22-06fc-455c-8b3a-89c2b6e303c6", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+COMMAND_ATTEMPT_DELTA
+{"count_after": 349, "count_before": 348, "delta": 1, "new_attempt_uids": ["fcb50d04-1ab0-452d-9c95-0c76d6ec4196"], "records": [{"command": "mem shell-init bash", "completed_at": "2026-08-25T18:17:32.295692+00:00", "details": {}, "elapsed_seconds": 0.008188624997274019, "failure": {"exit_code": 1, "kind": "Exit"}, "operation": "shell-init", "outcome": null, "started_at": "2026-08-25T18:17:32.287341+00:00", "status": "FAILED", "terminal": {"stdin_tty": true, "stdout_tty": false}, "uid": "fcb50d04-1ab0-452d-9c95-0c76d6ec4196", "version": 3}], "sequence": 104}
+
+STDOUT
+
+
+STDERR
+Error: unsupported shell 'bash'; currently available: zsh.

@@ -1,0 +1,11 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 find-redundancies task-2 --direct
+EXIT: 0
+DURATION_SECONDS: 6.657
+
+Find Redundancies · task-2 · 11 direct memories checked · 1 group · 1 proposed absorption
+
+  DUN GROUP  1/1 · 2 Memories · DUP / EXACT
+    CLEANUP MAP · READY FOR REVIEW
+    SURVIVOR  [memory 6733c5d8]  Equal-authority synthesis rule: preserve each shared co-advisor requirement once, retain distinct conditions, and explain unresolved conflicts with both provenances.
+    ABSORB    [memory e365804f]  Equal-authority synthesis rule: preserve each shared co-advisor requirement once, retain distinct conditions, and explain unresolved conflicts with both provenances.
+    EVIDENCE 1 · EXACT · Stored content is identical.

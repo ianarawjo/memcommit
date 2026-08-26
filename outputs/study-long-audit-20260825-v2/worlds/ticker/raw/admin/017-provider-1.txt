@@ -1,0 +1,45 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker provider
+
+STDIN
+<none>
+
+EXIT
+0
+
+WALL_SECONDS
+1.290219
+
+PRE_IDENTITY
+{"current_context": "audit/ticker/admin-v2-scratch", "current_context_uid": "482549cc-f61f-4262-909d-67bd9c5d5364", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+IMMEDIATE_POST_IDENTITY
+{"current_context": "audit/ticker/admin-v2-scratch", "current_context_uid": "482549cc-f61f-4262-909d-67bd9c5d5364", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+COMMAND_ATTEMPT_DELTA
+{"count_after": 262, "count_before": 261, "delta": 1, "new_attempt_uids": ["3a52dab4-d81e-47c5-838b-2442db1d36dc"], "records": [{"command": "mem provider", "completed_at": "2026-08-25T18:12:31.478427+00:00", "details": {}, "elapsed_seconds": 0.013678874995093793, "failure": null, "operation": "provider", "outcome": null, "started_at": "2026-08-25T18:12:31.464604+00:00", "status": "COMPLETED", "terminal": {"stdin_tty": true, "stdout_tty": false}, "uid": "3a52dab4-d81e-47c5-838b-2442db1d36dc", "version": 3}], "sequence": 17}
+
+STDOUT
+PROFILE PROVIDER ROUTES
+profile: sixworld-v2-template
+mode: study · locked
+contact_status: not_contacted
+policy_version: semantic-provider-policy-v2
+study_config: study-provider-config-v2-fast
+study_config_digest: b549e05b6930fdacbe9dbaec09543390840a2689cd4b4ef1fa6470ca71a5f1ca
+
+default:
+  codex_chatgpt · model gpt-5.6-sol · reasoning none · tier fast · timeout 600s
+operation_routes:
+  search            codex_chatgpt · model gpt-5.6-terra · reasoning low · tier fast · timeout 600s
+  query             codex_chatgpt · model gpt-5.6-sol · reasoning none · tier fast · timeout 600s
+  help              codex_chatgpt · model gpt-5.6-sol · reasoning none · tier fast · timeout 600s
+  forget            codex_chatgpt · model gpt-5.6-sol · reasoning none · tier fast · timeout 600s
+  compare_contexts  codex_chatgpt · model gpt-5.6-sol · reasoning none · tier fast · timeout 900s
+  meld_contexts     codex_chatgpt · model gpt-5.6-sol · reasoning none · tier fast · timeout 900s
+
+configure: unavailable in a Study Profile
+verify: mem provider probe [--operation OPERATION]
+
+
+STDERR

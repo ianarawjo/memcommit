@@ -1,0 +1,7 @@
+Created empty Profile 'admin-v2-ticker-inactive'.
+Profile UID: aeb1c4e2-767c-4092-944f-0b20bbdac3c8
+Store: /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/aeb1c4e2-767c-4092-944f-0b20bbdac3c8
+Contexts 0 owned + 0 granted · Memories 0 owned + 0 granted
+Active Profile unchanged: sixworld-v2-template
+Use it with: mem profile use admin-v2-ticker-inactive
+Then create its first Context with: mem init CONTEXT

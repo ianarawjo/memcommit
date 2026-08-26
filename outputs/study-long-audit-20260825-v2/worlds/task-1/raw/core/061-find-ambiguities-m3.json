@@ -1,0 +1,11 @@
+{
+  "sequence": 61,
+  "operation": "find-ambiguities",
+  "attempt": 3,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 find-ambiguities task-1/participant/construction-updates/building-access",
+  "exit": 0,
+  "wall_seconds": 12.470884,
+  "pre_target_digest": "a1301daa3a2847a45b4fb206b59330ae1e5ca0d1eb8b7fd398a1ca5643d7db61",
+  "post_target_digest": "a72a355ae188557b43d6379e2eacd51ed97e05c99352c9801eceba3c71f9ec25",
+  "raw_output": "raw/core/061-find-ambiguities-m3.txt"
+}

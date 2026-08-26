@@ -1,0 +1,6 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 find-redundancies task-3/local/guardrails/audit-and-recovery --direct --evidence-json
+
+STDOUT
+
+STDERR

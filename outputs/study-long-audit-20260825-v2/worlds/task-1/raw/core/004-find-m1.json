@@ -1,0 +1,11 @@
+{
+  "sequence": 4,
+  "operation": "find",
+  "attempt": 1,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 find 'visitor services' --context task-1/participant/construction-updates/facility-updates --context-only",
+  "exit": 0,
+  "wall_seconds": 1.442122,
+  "pre_target_digest": "c20b93e17ac1e25626e8814d7763c3f8a1477ff943cb4e7be6b750ba31d79569",
+  "post_target_digest": "c8e92c1c3ad2644f4e4f7881b27013f4ddaf779835d8c0dadd9e2c4dd0e60c35",
+  "raw_output": "raw/core/004-find-m1.txt"
+}

@@ -1,0 +1,31 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source distill --from practice/source --to practice/description --goal 'Late verified atom candidates preserving triggers, exceptions, safeguards, protected terms, and citation-review boundaries.' --plain --direct
+
+EXIT
+0
+
+WALL_SECONDS
+22.153603
+
+STDOUT
+DISTILL APPLIED · practice/source → practice/description
+EFFECTS · ADD 12 RULES
+
+  [memory d4fee73e] When asked “How does this read?”, give an opinion and first assess sentence order and paragraph division; do not immediately edit the draft.
+  [memory 8a2ce4cc] When later asked to polish, preserve the overall structure and citation-needed markers, changing only wording that causes a problem.
+  [memory 41b14c3a] When asked to change one expression, leave nearly everything else unchanged, including selected technical or project-specific terms; for the stated absorption context, retain “distribute,” not “divide.”
+  [memory 8555ba38] When reducing a passage, preserve every required point, state repeated content once, and remove redundant or unnecessary material; for a shorter fixed limit, target roughly a 20–30% reduction.
+  [memory 9ebba590] Do not compress so aggressively that a claim becomes more categorical; retain enough wording to preserve its original strength and conditions.
+  [memory f9e735aa] Use “More broadly” only when the next idea broadens scope; for a merely related idea, use “In relation to this” or another accurate connector, and do not invent a claim just to connect paragraphs.
+  [memory c5971364] For a title about interaction with AI agent memory, preserve the intended terms “interaction,” “management,” and “AI agent memory”; do not shorten the last term to “agent memory.”
+  [memory b09e64e1] By default, format document titles in sentence case, while an explicitly named style guide may override only that capitalization default; always retain “for” when it belongs to the intended wording.
+  [memory 930e8235] By default, format titles of works consistently in italics throughout a document; an explicitly named style guide may override only this work-title formatting default.
+  [memory c8f4eaeb] When content is flagged as wrong, consult the complete original paper, book, or guide—not only an abstract or short snippet—to establish accurate information before proposing a correction.
+  [memory e3a5307d] Before adding or reusing a citation or reference, verify from the complete source that it exists and supports the exact claim; never invent quotations or evidence or overstate an author’s contribution or a paper’s status.
+  [memory df6437f5] If the request is only for review and verification reveals a problem, report that problem before rewriting rather than silently correcting the draft.
+
+REVIEW · mem review distill --receipt 713d20c8-8b36-47d5-818a-3e7df6714c53
+UNDO · mem undo
+
+
+STDERR

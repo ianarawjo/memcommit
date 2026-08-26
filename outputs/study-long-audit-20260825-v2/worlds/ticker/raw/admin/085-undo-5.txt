@@ -1,0 +1,26 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker undo
+
+STDIN
+<none>
+
+EXIT
+0
+
+WALL_SECONDS
+1.420324
+
+PRE_IDENTITY
+{"current_context": "audit/ticker/admin-v2-scratch/co4-tree/proposal-workspace", "current_context_uid": "05c78c1a-29bc-40fa-80a5-34ded311dec6", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+IMMEDIATE_POST_IDENTITY
+{"current_context": "task-2/participant", "current_context_uid": "0e19f3b1-4107-48ab-9186-8773e48b812d", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+COMMAND_ATTEMPT_DELTA
+{"count_after": 330, "count_before": 329, "delta": 1, "new_attempt_uids": ["927b9221-f528-40af-a6ce-cf8297edb8c2"], "records": [{"command": "mem undo", "completed_at": "2026-08-25T18:17:01.098724+00:00", "details": {}, "elapsed_seconds": 0.0871095000038622, "failure": null, "operation": "undo", "outcome": null, "started_at": "2026-08-25T18:17:01.011462+00:00", "status": "COMPLETED", "terminal": {"stdin_tty": true, "stdout_tty": false}, "uid": "927b9221-f528-40af-a6ce-cf8297edb8c2", "version": 3}], "sequence": 85}
+
+STDOUT
+Undid command: mem branch audit/ticker/admin-v2-scratch/co4-tree --from task-2/participant --source-descendants · Affected Contexts: 2 · Affected Memories: 10 · - 10 removed · Other: 1 direct item removed
+
+
+STDERR

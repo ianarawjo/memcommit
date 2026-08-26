@@ -1,0 +1,22 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source translate practice/source:f3ef224d --to 'plain-language English'
+
+EXIT
+0
+
+WALL_SECONDS
+5.673762
+
+STDOUT
+
+Translation view: 'practice/source' → plain-language English
+  1 translated Memory
+────────────────────────────────────────────────────────────────
+[f3ef224d] plain-language English · PROVIDER · UNREVIEWED
+  When I ask, “How does this read?”, I want your opinion. Don’t edit the draft right away. First, check the order of the sentences and how the paragraphs are divided.
+────────────────────────────────────────────────────────────────
+Saved translation view.
+No Context or Memory changes; source Memory UIDs remain the anchors.
+
+
+STDERR

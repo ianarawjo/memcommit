@@ -1,0 +1,23 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 eval semantic check 20260825T181409487991Z-feb00147 --ledger-dir /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-1/admin-eval-ledger
+
+STDIN
+<none>
+
+EXIT
+0
+
+WALL_SECONDS
+1.234033
+
+POST_CALL_IDENTITY_HOST_ASSERTION
+{"profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-1/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+STDOUT
+Semantic eval check · PASS · find-ambiguities · codex_chatgpt:gpt-5.6-sol · reasoning=none · runs=1 · cases=1/10
+  run_id 20260825T181409487991Z-feb00147 · pipeline ambiguity-classify-v2 v2
+  cases 1/1 passed, 0 failed · attempts exact 1/1
+  fixture 003654c092e0 · ledger /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-1/admin-eval-ledger/runs/20260825T181409487991Z-feb00147.json
+
+
+STDERR

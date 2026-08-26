@@ -1,0 +1,11 @@
+{
+  "sequence": 69,
+  "operation": "query",
+  "attempt": 4,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 query task-1/campus-wiki/construction-details/material-control 'Which controlled-access or material details must remain out of public temporary-parking guidance?'",
+  "exit": 0,
+  "wall_seconds": 8.76753,
+  "pre_target_digest": "8528bc09348c86581c8cf141ad7ba74c5e1e7e5b409f0823503eea975a12a4de",
+  "post_target_digest": "342bd8e74e91146217950a8709dbcb0d68c1ffcd570704e3b282019c6d1abf05",
+  "raw_output": "raw/core/069-query-m4.txt"
+}

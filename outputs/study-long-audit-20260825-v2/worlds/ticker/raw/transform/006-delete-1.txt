@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker delete dead0001 --context task-3/local
+
+EXIT
+1
+
+OUTPUT
+Error: "No direct item matching 'dead0001' in context 'task-3/local'."

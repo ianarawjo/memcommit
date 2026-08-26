@@ -1,0 +1,5 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 meld task-2/advisor1/evaluation task-2/advisor2/evaluation task-2/participant/meld-r5 --direct
+EXIT: 1
+DURATION_SECONDS: 1.437
+
+Meld error: Compare cannot use granted Context Embed 'task-2/advisor1/budget' [d6d3ee9e] in Context 'task-2/description' as semantic evidence through its local owner. EMBED authorizes live reading, not provider disclosure or derived work; select the granted Source through an operation-aware authority route instead.

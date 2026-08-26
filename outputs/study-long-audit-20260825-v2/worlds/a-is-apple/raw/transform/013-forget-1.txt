@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple forget 'remove any temporary rule not directly supported by the exact alphabet Source' --context practice/source
+
+EXIT
+0
+
+OUTPUT
+Consulting the configured Forget provider...
+FORGET APPLIED · SOURCE practice/source
+FORGET · remove any temporary rule not directly supported by the exact alphabet Source
+DIFF · 1 CHANGE
+- [eccc2e64] Preserve “a maps to apricot” as an unresolved alternative rather than replacing or silently reconciling the preferred a-to-apple mapping.
+RECEIPT · fe40ba2c-efa2-4645-8621-12da25a715d2
+CHECKPOINT · fe40ba2c-efa2-4645-8621-12da25a715d2
+REVIEW · mem review forget --receipt fe40ba2c-efa2-4645-8621-12da25a715d2
+RECOVERY · mem undo

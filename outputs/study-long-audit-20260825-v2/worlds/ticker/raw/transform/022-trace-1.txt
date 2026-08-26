@@ -1,0 +1,12 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker trace task-2/participant/proposal-workspace:1e0e89ee
+
+EXIT
+0
+
+OUTPUT
+TRACE · task-2/participant/proposal-workspace
+MEMORY · 1e0e89ee-d774-4d1a-bdcb-201985d7c563
+LINEAGE · 6 events · 2 components
+ATTENTION · 0 limits
+DETAILS · mem trace 1e0e89ee-d774-4d1a-bdcb-201985d7c563 --context task-2/participant/proposal-workspace --plain

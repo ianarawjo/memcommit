@@ -1,0 +1,71 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source impact atomize practice/description
+
+EXIT
+0
+
+WALL_SECONDS
+29.791261
+
+STDOUT
+ RESULT · atomize · practice/description
+ STATUS · ANALYSIS COMPLETE · sources=16 · projected=23 · splits=7 · children=14 · review issues=8
+
+ WHAT MEM UNDERSTOOD
+ The memories establish conservative review and editing practices: distinguish assessment from revision, preserve intended structure, terminology, claims, and conditions, verify sources fully, avoid fabricated or overstated evidence, and report detected problems before making changes when review alone was requested.
+
+ WHAT HAPPENED
+ Independent directives were separated where they could be revised individually, while conditions, exceptions, examples, transitions, and rationale-bearing qualifications remained attached to their governing commitments. Closely coupled preservation and verification requirements stayed intact when splitting would distort their operational scope.
+
+ WHAT REMAINS UNRESOLVED
+ The source-only frame does not identify what “later” is relative to, so the timing and trigger for the polishing instruction cannot be fixed during atomization. The complete context nevertheless supplies a usable progression from assessment to a subsequent polishing request.
+
+ REPRESENTATIVE / BOUNDARY CASES
+ ›  1. [REPRESENTATIVE] COMPOSITE · SPLIT
+       SPLIT: When asked “How does this read?”, treat the request as a request for an opinion: do not immediately edit the draft, and first assess sentence order and paragraph division.
+    2. [REPRESENTATIVE] ATOMIC · KEEP
+       KEEP: When a passage must make four points, retain all four while removing overly redundant material and stating repeated content only once.
+    3. [BOUNDARY] UNCERTAIN · RECONCILE
+       “Later” has no source-local antecedent, and its unresolved timing materially scopes when the polishing instruction applies.
+
+Analysis [ba3835ff] · INPUT practice/description → OUTPUT practice/description · ORDER: SOURCE · 0/8 answered
+
+ACTIONABLE ISSUES
+›  1. · SUGGESTED SPLIT · COMPOSITE · 2 CHILDREN  “When asked “How does this read?”, treat the req…”
+   2. · ATOMIZE UNCERTAINTY · UNCERTAIN · REQUIRES CONTEXT  “When later asked to polish, preserve the overal…”
+   3. · SUGGESTED SPLIT · COMPOSITE · 2 CHILDREN  “When asked to change one expression, leave almo…”
+   4. · SUGGESTED SPLIT · COMPOSITE · 2 CHILDREN  “When a next idea is merely related and does not…”
+   5. · SUGGESTED SPLIT · COMPOSITE · 2 CHILDREN  “By default, format a document title in sentence…”
+   6. · SUGGESTED SPLIT · COMPOSITE · 2 CHILDREN  “Do not invent quotations or evidence, and do no…”
+   7. · SUGGESTED SPLIT · COMPOSITE · 2 CHILDREN  “When asked to review a draft without revising i…”
+   8. · SUGGESTED SPLIT · COMPOSITE · 2 CHILDREN  “Even when a review reveals an obvious wording e…”
+
+SUGGESTED SPLIT 1/8
+
+SOURCE [c8ccbf37]
+When asked “How does this read?”, treat the request as a request for an opinion: do not immediately edit the draft, and first assess sentence order and paragraph division.
+
+CLASSIFICATION
+COMPOSITE · 2 CHILDREN
+
+WHY THIS MEMORY SPLIT
+The request interpretation and the required assessment focus are independently revisable directives under the same explicit trigger.
+
+PROPOSED CHILDREN
+1. When asked “How does this read?”, treat the request as a request for an opinion and do not immediately edit the draft.
+   EVIDENCE: When asked “How does this read?”, treat the request as a request for an opinion: do not immediately edit the draft
+2. When asked “How does this read?”, first assess sentence order and paragraph division.
+   EVIDENCE: When asked “How does this read?” | first assess sentence order and paragraph division
+
+REFINE, COMMENT, OR ENTER A DIFFERENT READING
+> 
+
+SOURCE means canonical Context order; Memory creation timestamps are not recorded.
+No Memory changes have been applied. No checkpoint was created.
+Analysis saved [ba3835ff] for mem trace/rationale.
+REOPEN · mem impact atomize --session ba3835ff-01c8-4d30-a5d3-7ebddac32b8d
+BROWSE ATOMIZE · mem impact atomize --sessions
+BROWSE ALL IMPACT · mem impact --sessions
+
+
+STDERR

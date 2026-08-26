@@ -1,0 +1,15 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source resolve practice/description --guidance 'Do not retain inferred prose-style meta-rules; leave all grounded editing constraints unchanged.' --allow-delete --plain
+
+EXIT
+0
+
+WALL_SECONDS
+7.639981
+
+STDOUT
+RESOLVE · practice/description
+FIT · YES · NO CHANGE
+
+
+STDERR

@@ -1,0 +1,13 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 translate task-2/participant/proposal-workspace:84cab032-847f-4be2-88db-3c613922d688 --to German
+EXIT: 0
+DURATION_SECONDS: 6.623
+
+
+Translation view: 'task-2/participant/proposal-workspace' → German
+  1 translated Memory
+────────────────────────────────────────────────────────────────
+[84cab032] German · PROVIDER · UNREVIEWED
+  Syntheseregel bei gleicher Autorität: Jede gemeinsame Anforderung der Co-Beratenden ist einmal zu bewahren, unterschiedliche Bedingungen sind beizubehalten, und zugeordnete ungelöste Konflikte sind unter Angabe beider Herkünfte zu erläutern.
+────────────────────────────────────────────────────────────────
+Saved translation view.
+No Context or Memory changes; source Memory UIDs remain the anchors.

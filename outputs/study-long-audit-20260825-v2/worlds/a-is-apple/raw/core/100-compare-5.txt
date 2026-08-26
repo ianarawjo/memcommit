@@ -1,0 +1,11 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple compare practice practice/source --snapshot
+
+EXIT
+0
+
+OUTPUT
+Compare · practice ↔ practice/source
+
+COMPARISON
+  The compared frame is a focused subset of the reference frame, preserving the same editing, verification, and unresolved-mapping policies, including the conditional 20–30% reduction target. The reference additionally supplies practice-task instructions, provenance and recovery-test variants, while both retain banana and blueberry as explicit alternatives rather than resolving the conflict.

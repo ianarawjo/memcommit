@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 review audit --context task-3/local --snapshot
+
+EXIT
+1
+
+OUTPUT
+Review error: Saved Audit Review uses --session and --snapshot only.

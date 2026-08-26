@@ -1,0 +1,11 @@
+{
+  "sequence": 100,
+  "operation": "compare",
+  "attempt": 5,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 compare --from task-1/participant/construction-updates/shop-updates --to task-1/campus-wiki/shop-updates --direct --ledger --snapshot",
+  "exit": 1,
+  "wall_seconds": 109.621443,
+  "pre_target_digest": "6ff89da0a9ac439f24cdb650a85abdf2e8e7c1426ecfd0ea8f016a3b41c2b1c5",
+  "post_target_digest": "605bcff3dd9d22dc26b0c1feea4e41db117520e2687dadb578668ed4bab8a249",
+  "raw_output": "raw/core/100-compare-m5.txt"
+}

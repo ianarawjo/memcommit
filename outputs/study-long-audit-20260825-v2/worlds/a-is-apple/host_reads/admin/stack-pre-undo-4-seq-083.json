@@ -1,0 +1,38 @@
+{
+  "label": "pre-undo-4-seq-083",
+  "read_at": "2026-08-25T18:05:09.552855+00:00",
+  "undo_top": {
+    "uid": "branch:b4605b43-ad64-42d7-aa10-0ec9b41652e2",
+    "command": "branch",
+    "members": [
+      {
+        "context_uid": "7d66f1a9-642d-47e7-accd-ff664b14b647",
+        "context_name": "audit/a-is-apple/admin-v2-scratch/co4-tree",
+        "checkpoint_uid": "receipt member; see target Context checkpoint"
+      },
+      {
+        "context_uid": "5cf4c90e-874e-4a59-a10c-b26187f5dca8",
+        "context_name": "audit/a-is-apple/admin-v2-scratch/co4-tree/description",
+        "checkpoint_uid": "receipt member; see target Context checkpoint"
+      },
+      {
+        "context_uid": "7f75c8a3-d470-457b-9881-f6434476b254",
+        "context_name": "audit/a-is-apple/admin-v2-scratch/co4-tree/source",
+        "checkpoint_uid": "receipt member; see target Context checkpoint"
+      }
+    ],
+    "receipt_checkpoint": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/a-is-apple/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd/contexts/audit/a-is-apple/admin-v2-scratch/co4-tree/source/checkpoints/20260825T140505-Branched-subtree-'practi-a5b368cd.json",
+    "source_root": "practice",
+    "target_root": "audit/a-is-apple/admin-v2-scratch/co4-tree",
+    "include_descendants": true,
+    "current_before": "practice",
+    "receipt_checkpoint_uid": "a5b368cd-e7cd-489a-8d19-359f88c6c5cb"
+  },
+  "redo_top": null,
+  "undo_depth": null,
+  "redo_depth": null,
+  "builder_error": "CommandHistoryError: Branch checkpoint owner is outside its creation membership.",
+  "fallback_semantics": "Exact newest branch receipt UID/member set only; no valid stack claimed.",
+  "staged_update_exists": false,
+  "staged_update_granted_target": null
+}

@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 reference task-1/campus-wiki/building-access --into task-1/participant --recursive
+
+EXIT
+1
+
+WALL_SECONDS
+1.347896
+
+STDOUT
+
+
+STDERR
+Error: Context 'task-1/campus-wiki/building-access' does not exist.

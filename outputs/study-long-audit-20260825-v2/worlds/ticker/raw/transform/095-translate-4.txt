@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker translate task-2/participant/proposal-workspace:7ed418b9 --to Spanish
+
+EXIT
+0
+
+OUTPUT
+
+Translation view: 'task-2/participant/proposal-workspace' → Spanish
+  1 translated Memory
+────────────────────────────────────────────────────────────────
+[7ed418b9] Spanish · PROVIDER · UNREVIEWED
+  Ejemplo de clase de acciones: Acme Corp. Class B se convierte en ACME.B tras eliminar Corp. y convertir Class B en el sufijo .B. El punto forma parte de la sintaxis generada para la clase de acciones.
+────────────────────────────────────────────────────────────────
+Saved translation view.
+No Context or Memory changes; source Memory UIDs remain the anchors.

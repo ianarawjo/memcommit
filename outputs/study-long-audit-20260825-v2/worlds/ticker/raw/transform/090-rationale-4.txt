@@ -1,0 +1,15 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker rationale task-2/participant/proposal-workspace:7ed418b9 --verbose --limit 60
+
+EXIT
+0
+
+OUTPUT
+Rationale [7ed418b9-5ef2-4f4e-9982-079c034b2b14] · task-2/participant/proposal-workspace
+Context UID: b839b146-7576-5ec4-93a5-a98f64eba1ec
+
+MEMORY
+  Share-class example: Acme Corp. Class B becomes ACME.B after removing Corp. and mapping Class B to the .B suffix. The dot is generated share-class syntax.
+
+PROVENANCE
+  This example was explicitly added as a standalone Memory in task-2/participant/proposal-workspace: “Acme Corp. Class B becomes ACME.B” and “The dot is generated share-class syntax.” A NEW merge copied it to task-3/local, where it was cleared, restored, later found ALREADY_PRESENT, then cleared again; another NEW copy in task-3/local/personal-memory was removed and restored, while the source remained current.

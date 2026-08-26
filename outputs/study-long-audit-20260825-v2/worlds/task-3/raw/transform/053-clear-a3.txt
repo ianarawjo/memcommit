@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 clear task-3/local/transform-missing-r3
+
+EXIT
+1
+
+OUTPUT
+Error: Context 'task-3/local/transform-missing-r3' does not exist.

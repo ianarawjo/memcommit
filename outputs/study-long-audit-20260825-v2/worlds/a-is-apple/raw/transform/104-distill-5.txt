@@ -1,0 +1,17 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple distill --from practice --to practice/source --goal 'Distill final a-is-apple evidence with every alternative and provenance boundary explicit.'
+
+EXIT
+0
+
+OUTPUT
+DISTILL APPLIED · practice → practice/source
+EFFECTS · ADD 4 RULES
+
+  [memory 7275b162] Use “a is apple” as the preferred final proposition for a.
+  [memory fc0cb358] Keep “a maps to apricot” explicit as a deliberate conflicting, unresolved alternative rather than treating it as the preferred result or silently reconciling it.
+  [memory 05742ecd] Record that one apple-mapping occurrence was copied from the original direct Memory for provenance, without assigning that provenance statement to the conflicting apricot alternative.
+  [memory 1244d573] Preserve the edited duplicate’s original assertion across its split provenance text.
+
+REVIEW · mem review distill --receipt 645658a2-4ebd-4603-bf62-ef228a4ccba2
+UNDO · mem undo

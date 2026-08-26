@@ -1,0 +1,50 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source diff practice/description --checkpoint 52a45a40 --verbose
+
+EXIT
+0
+
+WALL_SECONDS
+1.364278
+
+STDOUT
+UNIT        CHECKPOINT · THIS CHECKPOINT VS PREVIOUS
+CONTEXT     practice/description
+ CHECKPOINT  52a45a40-3974-4473-9818-15a6eaf3bbdb
+ ACTION      checkpoint
+ DESCRIPTION v2 transform round 4 safety
+
+ REVISION DIFF · RESULT 13 DIRECT ITEMS
+ SUMMARY · 12 kept · 1 added · 0 edited · 15 removed
+
+ + [ADD]    [89ff1887-d807-5a04-94d7-424fff9a93b9] memcommit is a research prototype that provides command-line and terminal user interfaces (CLI/TUI) for managing agent memory and supporting collaboration among people and agents. Through memcommit's operations and structural concepts—including Memories, Contexts, Profiles, Grants, and Sessions—you can manage agent memories as they are collected, organized, and propagated among people and agents. In this study, you will use memcommit in three different situations, each involving a different context, goal, and kind of memory.
+   [KEEP]   [cbd46e2b-722d-5fac-abb9-36abad820333] SITUATION · Before beginning the three study tasks, complete a short practice exercise to become familiar with how memcommit organizes and presents its commands. Each newline-separated editing note in `practice/source` is stored as its own Memory, preserving the boundaries between the original requests. Some notes still combine recurring constraints, rough wording, and typos.
+   [KEEP]   [1e046596-b6f1-5623-aebb-52c46b4a54be] TASK · Divide their underlying constraints into appropriate atomic Memories without performing the requested edits, adding instructions, or changing the intended meaning, so that each constraint can be reviewed independently. Open `mem help`, inspect the available operations, find the operation designed for atomization, and use it to atomize the notes and save the result as `practice/source-atomized`.
+   [KEEP]   [bce98730-d7e9-440d-9400-630f523a496d] When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.
+   [KEEP]   [3fbf33de-2655-4f08-8148-4fe57e33a544] {"content":"When I say that content looks wrong, find accurate information before proposing a correction by reading the original paper, book, or guide, not only an abstract or a short snippet.","content_sha256":"795b352f611ff2218d2c939ad0a7472d11010900eff92ef8f3d03d7255e1a2c6","target_context":{"name":"practice/source","uid":"7e48e68e-3c6f-541b-bfc1-e307abcc7a4f"},"target_memory_uid":"96300a95-2cb2-5644-bae6-f53d7b31a725","type":"memory_snapshot_ref","uid":"3fbf33de-2655-4f08-8148-4fe57e33a544"}
+   [KEEP]   [7e48e68e-3c6f-541b-bfc1-e307abcc7a4f] {"name":"practice/source","type":"context_ref","uid":"7e48e68e-3c6f-541b-bfc1-e307abcc7a4f"}
+   [KEEP]   [d0f6e587-6c4f-4ae2-a377-b3a271840d9e] If I later ask for polishing, preserve the overall strucutre and citation-needed markers, and change only wording that causes a problem.
+   [KEEP]   [6bd4bd30-3bed-4858-b6c8-4e815922c5bf] If a passage is supposed to make four points, keep all four while removing parts that are too redundent and stating repeated content only once.
+   [KEEP]   [5e5f3d04-acff-4252-98fb-ecde5a8c761c] DEFAULT CANDIDATE: use sentence case for document titles by default, subject only to an explicitly named style guide capitalization override; preserve the intended word for.
+   [KEEP]   [70720de6-5c38-4c93-a3ab-af0c71bd6470] Use consistent italics for work titles by default, subject only to an explicitly named style guide work-title-format override.
+   [KEEP]   [ee899250-8f40-4771-86c2-30deaffff4d6] {"content":"If the next idea is merely related and does not broaden the scope, don't use More broadly; use In relation to this or another accurate connector without adding a new claim merely to make two paragraphs connect.","content_sha256":"a42e4c115f46fe487863131816c163d66cf8586d523d962dc71d36f0fdd21845","target_context":{"name":"practice/source","uid":"7e48e68e-3c6f-541b-bfc1-e307abcc7a4f"},"target_memory_uid":"b976766e-d366-5065-929e-5f31e638fdbe","type":"memory_snapshot_ref","uid":"ee899250-8f40-4771-86c2-30deaffff4d6"}
+   [KEEP]   [824acb9d-695c-5d55-9997-64cc317a2203] {"name":"practice","type":"context_ref","uid":"824acb9d-695c-5d55-9997-64cc317a2203"}
+   [KEEP]   [8517d6ae-7208-419d-83c5-8edcbc10634c] AUDIT RESULT: mechanical sentence splitting detached an editing permission trigger, a protected-word object, and companion safeguards. Future atomize must keep every result independently reviewable with its complete trigger, exception, safeguard, and source provenance.
+ - [REMOVE] [6b285fc3-06a3-4a57-b51b-95f2bf412d4b] FIXED-LIMIT ATOMIC CANDIDATE: when revising a passage to meet a shorter fixed limit, remove redundant or unnecessary material while preserving every intended point and each claim’s original strength and conditions.
+ - [REMOVE] [9489d092-feef-4ae5-8cdc-7755459fe605] FIXED-LIMIT ATOMIC CANDIDATE: if meeting a shorter fixed limit would require dropping an intended point, making a qualified claim sound categorical, or removing one of its conditions, do not make that cut; shorten other redundant or unnecessary material instead.
+ - [REMOVE] [2530af88-f412-4ef1-a574-96b09398e8b7] REVIEW ATOMIC CANDIDATE: classify intent as review-only or authorized editing before changing text; preserve requested scope and source meaning.
+ - [REMOVE] [58f1544f-6be2-4772-a554-5433de7628ff] {"content":"Before adding or reusing citations and refferences, verify that each source exists and supports the exact claim after reviewing the complete source. Don't invent quotations or evidence or overstate an author's contribution or a paper's status. If I asked only for review, report a verification problem first instead of silently rewriting the draft.","content_sha256":"b1b2b135a59948222a40f7b3e233dac4931958b0341fe3c9cbc228d53f44d347","target_context":{"name":"practice/source","uid":"7e48e68e-3c6f-541b-bfc1-e307abcc7a4f"},"target_memory_uid":"4fe217eb-2b65-5fb0-92ff-733ced1e9270","type":"memory_snapshot_ref","uid":"58f1544f-6be2-4772-a554-5433de7628ff"}
+ - [REMOVE] [ea31934d-da82-4f8c-a646-77e6fcf6d288] REVIEW ATOMIC CANDIDATE: during authorized polishing, preserve overall structure and citation-needed markers.
+ - [REMOVE] [e1f6f7cf-5cb0-4366-b16e-a2bed18c054c] Change only wording that causes a problem.
+ - [REMOVE] [002f5c64-efe5-4e2b-bac0-799c4345c97f] ATOMIC CANDIDATE: if a shorter fixed limit applies, aim to remove approximately 20-30% from redundant or unnecessary material.
+ - [REMOVE] [19746ca4-ae27-4330-ad91-15d2aff9f40a] Preserve all intended points plus every claim's original strength and conditions.
+ - [REMOVE] [bc19c614-b111-4c8b-a4b3-a1108a0979b0] But don't shorten sentences so aggressively that a claim sounds more categorical; keep enough wording to preserve its original strength and conditions.
+ - [REMOVE] [eb887c08-1b2f-4697-b0a7-381e91f8848d] {"content":"When the draft has to fit a shorter fixed limit, aim to cut around 20–30% from redundant or unnecessary material.","content_sha256":"afcff3a8b9e3e739bd5e9c8c68934319fecda63110fb3b50f7f48c4c7658e659","target_context":{"name":"practice/source","uid":"7e48e68e-3c6f-541b-bfc1-e307abcc7a4f"},"target_memory_uid":"6cc4b8a3-eaff-5805-8d37-83dd4bf8872c","type":"memory_snapshot_ref","uid":"eb887c08-1b2f-4697-b0a7-381e91f8848d"}
+ - [REMOVE] [d5d0a8b4-d425-5c9f-9325-56329df711ef] {"name":"practice/description","type":"context_ref","uid":"d5d0a8b4-d425-5c9f-9325-56329df711ef"}
+ - [REMOVE] [65ba5d7d-a658-4eae-b39d-f655cf618516] By default, format a document title in sentence case rather than title case. An explicitly named style guide may override only that capitalization default; always keep for whenever it is part of the intended wording.
+ - [REMOVE] [6c1e6f7d-121a-475a-b400-353ec946dfb5] If titles of works use quotation marks in some places and italics in others, make them consistently italic throughout the document by default; an explicitly named style guide may override only this work-title format.
+ - [REMOVE] [12730fcf-e67a-4ef7-a197-2fe281c3c358] {"content":"For any titlle about interaction with AI agent memory, keep the exact terminology and intended words: use interaction and management and AI agent memory rather than agent memory.","content_sha256":"b97e515137968b7a8af5f21841a892ab34d5ac4a8b29595bf208d0910369682a","target_context":{"name":"practice/source","uid":"7e48e68e-3c6f-541b-bfc1-e307abcc7a4f"},"target_memory_uid":"44de7eff-4117-549c-a78e-f2cd3ab50133","type":"memory_snapshot_ref","uid":"12730fcf-e67a-4ef7-a197-2fe281c3c358"}
+ - [REMOVE] [af432184-637d-44c5-ad56-0f4f6b668e31] Before adding or reusing citations and refferences, verify that each source exists and supports the exact claim after reviewing the complete source. Don't invent quotations or evidence or overstate an author's contribution or a paper's status. If I asked only for review, report a verification problem first instead of silently rewriting the draft.
+
+
+STDERR

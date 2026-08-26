@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple fit --context practice --context practice/source
+
+EXIT
+0
+
+OUTPUT
+FIT · NO · [TARGETS: CONTEXT practice, practice/source] · WHY · Under the ordinary reading of these mapping assertions, m1/m2/m5 identify a with apple while m8 identifies a with apricot, and m23/m25 identify b with banana while m24/m28 identify b with blueberry. The surrounding provenance and recovery-testing fragments preserve rather than resolve these deliberate alternatives. The remaining editing preferences can coexist but do not remove the mapping conflicts.

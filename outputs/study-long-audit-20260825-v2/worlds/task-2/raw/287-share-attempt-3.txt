@@ -1,0 +1,1 @@
+Error: Non-interactive Share requires --to ENDPOINT.

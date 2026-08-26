@@ -1,0 +1,10 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple edit practice:5887b475 'b is banana; this copied mapping is provisional while boat remains visible.'
+
+EXIT
+0
+
+OUTPUT
+Edited [5887b475] in 'practice':
+  - b is banana.
+  + b is banana; this copied mapping is provisional while boat remains visible.

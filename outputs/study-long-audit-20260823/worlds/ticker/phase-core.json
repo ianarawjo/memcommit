@@ -1,0 +1,2181 @@
+{
+  "schema_version": 1,
+  "study": "study-long-audit-20260823",
+  "world": "ticker",
+  "phase": "core",
+  "world_goal": "Grow, test, and maintain reusable synthetic company-ticker rules from varied legal-suffix, punctuation, numeral, and share-class examples.",
+  "execution_boundary": {
+    "repository_root": "/Users/KimMunyeong/Github/memcommit",
+    "launcher": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli",
+    "code_snapshot": "/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code",
+    "source_digest": "cd38ddfd678b1579dbfcd83e4dbed2d684265c8d215783dc479d993fdbeae787",
+    "shared_current": "practice",
+    "profile_or_current_mutated_by_worker": false,
+    "tui": {
+      "used": true,
+      "operation": "add",
+      "attempt": 5,
+      "pty": "180x52",
+      "color_stream_verified": true
+    }
+  },
+  "bootstrap": {
+    "excluded_from_core_coverage": true,
+    "performed_serially_by_root": true,
+    "created": [
+      "audit/ticker/rules",
+      "audit/ticker/examples",
+      "audit/ticker/tests",
+      "audit/ticker/archive"
+    ],
+    "current_restored_to": "practice"
+  },
+  "excluded_status": {
+    "reason": "status has no explicit-Context route and belongs to the root serialized phase",
+    "core_attempts": 0
+  },
+  "total_attempts": 105,
+  "coverage": {
+    "contexts": 5,
+    "list": 5,
+    "show": 5,
+    "find": 5,
+    "search": 5,
+    "query": 5,
+    "summarize": 5,
+    "add": 5,
+    "copy": 5,
+    "reference": 5,
+    "embed": 5,
+    "edit": 5,
+    "move": 5,
+    "replace": 5,
+    "chunk": 5,
+    "compare": 5,
+    "find-duplicates": 5,
+    "find-redundancies": 5,
+    "find-ambiguities": 5,
+    "find-conflicts": 5,
+    "fit": 5
+  },
+  "operations": {
+    "contexts": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "initial; audit/ticker exists with 0 Memories and 0 child Contexts; shared current practice",
+          "entry_route": "direct CLI catalog",
+          "target_route": "Profile-readable namespace",
+          "scope": "all Contexts",
+          "input_provenance": "world entry discovery",
+          "consumer": "confirm ticker workspace and current-state boundary",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli contexts",
+          "exit": 0,
+          "actual": "Printed the full six-world local/granted catalog; audit/ticker was present and current remained practice.",
+          "defect_ids": [
+            "TICK-CTX-OVERLOAD"
+          ],
+          "cost": {
+            "wall_seconds": 0.44,
+            "terminal_screens": 8,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2 · early-mid; legal-suffix and punctuation examples accumulated",
+          "entry_route": "direct CLI catalog",
+          "target_route": "Profile-readable namespace",
+          "scope": "all Contexts",
+          "input_provenance": "post-bootstrap discovery",
+          "consumer": "verify rules/examples/tests/archive children",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli contexts",
+          "exit": 0,
+          "actual": "Displayed all worlds again; the four ticker children were visible among roughly eight screens.",
+          "defect_ids": [
+            "TICK-CTX-OVERLOAD"
+          ],
+          "cost": {
+            "wall_seconds": 0.44,
+            "terminal_screens": 8,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3 · mid; numeral rules/examples plus punctuation chunks accumulated",
+          "entry_route": "repeated late discovery",
+          "target_route": "Profile-readable namespace",
+          "scope": "all Contexts",
+          "input_provenance": "numeral-work checkpoint",
+          "consumer": "reconfirm local hierarchy without changing current",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli contexts",
+          "exit": 0,
+          "actual": "Repeated the entire global catalog with no task-local filter.",
+          "defect_ids": [
+            "TICK-CTX-OVERLOAD"
+          ],
+          "cost": {
+            "wall_seconds": 0.44,
+            "terminal_screens": 8,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4 · mid-late; share-class rules/examples accumulated",
+          "entry_route": "repeated late discovery",
+          "target_route": "Profile-readable namespace",
+          "scope": "all Contexts",
+          "input_provenance": "share-class checkpoint",
+          "consumer": "reconfirm child names",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli contexts",
+          "exit": 0,
+          "actual": "Repeated the entire catalog; ticker names remained stable and current was still practice.",
+          "defect_ids": [
+            "TICK-CTX-OVERLOAD"
+          ],
+          "cost": {
+            "wall_seconds": 0.44,
+            "terminal_screens": 8,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5 · late; final regression corpus, snapshots, copies, embeds, and restored uppercase rule",
+          "entry_route": "final catalog verification",
+          "target_route": "Profile-readable namespace",
+          "scope": "all Contexts",
+          "input_provenance": "final accumulated workspace",
+          "consumer": "final namespace check",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli contexts",
+          "exit": 0,
+          "actual": "Again printed every world and Grant although only audit/ticker was relevant.",
+          "defect_ids": [
+            "TICK-CTX-OVERLOAD"
+          ],
+          "cost": {
+            "wall_seconds": 0.44,
+            "terminal_screens": 8,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "list": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "initial empty root before child bootstrap",
+          "entry_route": "exact positional Context",
+          "target_route": "audit/ticker",
+          "scope": "direct",
+          "input_provenance": "world fixture",
+          "consumer": "establish empty baseline",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli list audit/ticker",
+          "exit": 0,
+          "actual": "Reported 0 Memories, 0 subcontexts, and empty.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.6,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2 · early-mid; legal-suffix and punctuation examples accumulated",
+          "entry_route": "positional Context plus --recursive",
+          "target_route": "audit/ticker",
+          "scope": "recursive lexical plus embeds",
+          "input_provenance": "round-1 rules and round-2 examples",
+          "consumer": "inspect whole evolving corpus",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli list audit/ticker --recursive",
+          "exit": 0,
+          "actual": "Rendered root snapshot Reference, four children, embedded rules, and three examples in one typed tree.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.07,
+            "terminal_screens": 2,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3 · mid; numeral rules/examples plus punctuation chunks accumulated",
+          "entry_route": "exact positional child",
+          "target_route": "audit/ticker/examples",
+          "scope": "direct",
+          "input_provenance": "post-chunk prior output",
+          "consumer": "recover chunk UIDs and inspect numeral additions",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli list audit/ticker/examples",
+          "exit": 0,
+          "actual": "Listed 8 Memories and exposed four punctuation chunk UIDs, including sentence fragments f5a18de0, 77bc8ece, and cb182fd9.",
+          "defect_ids": [
+            "TICK-CHUNK-NO-UID-HANDOFF"
+          ],
+          "cost": {
+            "wall_seconds": 0.31,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4 · mid-late; share-class rules/examples accumulated",
+          "entry_route": "exact positional child",
+          "target_route": "audit/ticker/rules",
+          "scope": "direct with typed references/embed",
+          "input_provenance": "rule maintenance state",
+          "consumer": "distinguish rules from immutable example snapshots",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli list audit/ticker/rules",
+          "exit": 0,
+          "actual": "Header said 5 memories, while the body contained 3 ordinary Memories, 2 References, and one embedded Context.",
+          "defect_ids": [
+            "TICK-LIST-TYPED-COUNT"
+          ],
+          "cost": {
+            "wall_seconds": 0.07,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5 · late; final regression corpus, snapshots, copies, embeds, and restored uppercase rule",
+          "entry_route": "exact positional child",
+          "target_route": "audit/ticker/tests",
+          "scope": "direct with embedded archive row",
+          "input_provenance": "final regression state",
+          "consumer": "verify TUI-added acceptance Memory",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli list audit/ticker/tests",
+          "exit": 0,
+          "actual": "Listed four direct regression Memories plus the embedded archive Context.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.01,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "show": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "empty root after child bootstrap",
+          "entry_route": "auto-typed canonical Context",
+          "target_route": "audit/ticker",
+          "scope": "direct Context detail",
+          "input_provenance": "fixture",
+          "consumer": "verify no hidden contents",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli show audit/ticker",
+          "exit": 0,
+          "actual": "Typed the target as a Context and showed zero Memories, References, Query Views, and embeds.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.01,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2 · early-mid; legal-suffix and punctuation examples accumulated",
+          "entry_route": "qualified direct-item locator",
+          "target_route": "audit/ticker:22335876",
+          "scope": "one immutable Reference",
+          "input_provenance": "round-1 reference receipt",
+          "consumer": "verify snapshot survives source edit",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli show audit/ticker:22335876",
+          "exit": 0,
+          "actual": "Showed the pre-edit uppercase rule snapshot and its source/target identities.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.01,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3 · mid; numeral rules/examples plus punctuation chunks accumulated",
+          "entry_route": "qualified direct Memory locator",
+          "target_route": "audit/ticker/examples:393108b1",
+          "scope": "one Memory",
+          "input_provenance": "round-3 add receipt",
+          "consumer": "feed numeral UID to copy/reference/fit",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli show audit/ticker/examples:393108b1",
+          "exit": 0,
+          "actual": "Displayed the Route 66 numeral example with its full qualified UID.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.01,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4 · mid-late; share-class rules/examples accumulated",
+          "entry_route": "qualified Reference locator",
+          "target_route": "audit/ticker/rules:b8da7bbe",
+          "scope": "one immutable snapshot",
+          "input_provenance": "round-2 reference receipt",
+          "consumer": "compare original punctuation statement with chunks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli show audit/ticker/rules:b8da7bbe",
+          "exit": 0,
+          "actual": "Displayed the intact pre-chunk North-Star punctuation example.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.02,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5 · late; final regression corpus, snapshots, copies, embeds, and restored uppercase rule",
+          "entry_route": "qualified direct Memory locator",
+          "target_route": "audit/ticker/tests:f9df608c",
+          "scope": "one Memory",
+          "input_provenance": "round-5 TUI receipt",
+          "consumer": "verify durable final regression input",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli show audit/ticker/tests:f9df608c",
+          "exit": 0,
+          "actual": "Displayed the final three-case verification Memory created in the TUI.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.01,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "find": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "empty root",
+          "entry_route": "literal pattern plus explicit Context",
+          "target_route": "audit/ticker",
+          "scope": "EXACT, exclude embeds",
+          "input_provenance": "user vocabulary before corpus exists",
+          "consumer": "empty-boundary discovery",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find \"ticker rule\" --context audit/ticker --context-only",
+          "exit": 0,
+          "actual": "Scanned 0 and returned a clear empty-scope receipt.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.01,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2 · early-mid; legal-suffix and punctuation examples accumulated",
+          "entry_route": "literal exact phrase",
+          "target_route": "audit/ticker/examples",
+          "scope": "EXACT, case-sensitive",
+          "input_provenance": "legal-suffix example text",
+          "consumer": "select dec1db32 for transfer",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find \"Incorporated\" --context audit/ticker/examples --context-only",
+          "exit": 0,
+          "actual": "Matched dec1db32 once with two occurrences.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.21,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3 · mid; numeral rules/examples plus punctuation chunks accumulated",
+          "entry_route": "literal numeral token",
+          "target_route": "audit/ticker/examples",
+          "scope": "EXACT",
+          "input_provenance": "round-3 example",
+          "consumer": "verify numeral retention and UID",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find \"66\" --context audit/ticker/examples --context-only",
+          "exit": 0,
+          "actual": "Matched 393108b1 with three occurrences of 66/ROUTE66.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.02,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4 · mid-late; share-class rules/examples accumulated",
+          "entry_route": "literal multiword class label",
+          "target_route": "audit/ticker/examples",
+          "scope": "EXACT",
+          "input_provenance": "share-class additions",
+          "consumer": "select rule/example pair",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find \"Class B\" --context audit/ticker/examples --context-only",
+          "exit": 0,
+          "actual": "Matched both share-class rule and example, with three occurrences.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.01,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5 · late; final regression corpus, snapshots, copies, embeds, and restored uppercase rule",
+          "entry_route": "literal phrase with --ignore-case",
+          "target_route": "audit/ticker/tests",
+          "scope": "EXACT, ignore case",
+          "input_provenance": "TUI-added final verification",
+          "consumer": "recover final test UID after interactive add",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find \"must produce\" --context audit/ticker/tests --context-only --ignore-case",
+          "exit": 0,
+          "actual": "Matched f9df608c and reported three occurrences.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.03,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "search": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "empty root",
+          "entry_route": "semantic natural-language search",
+          "target_route": "audit/ticker",
+          "scope": "EXACT",
+          "input_provenance": "goal question",
+          "consumer": "empty-boundary discovery",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli search \"How should a company name become a ticker?\" --context audit/ticker --context-only",
+          "exit": 0,
+          "actual": "Returned no matching items without treating other worlds as sources.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 3.38,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2 · early-mid; legal-suffix and punctuation examples accumulated",
+          "entry_route": "semantic concept search",
+          "target_route": "audit/ticker/examples",
+          "scope": "EXACT",
+          "input_provenance": "punctuation scenario",
+          "consumer": "select punctuation example",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli search \"company name with punctuation and a legal suffix\" --context audit/ticker/examples --context-only",
+          "exit": 0,
+          "actual": "Ranked 1eec22f0 as the matching punctuation example.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 4.95,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3 · mid; numeral rules/examples plus punctuation chunks accumulated",
+          "entry_route": "semantic paraphrase",
+          "target_route": "audit/ticker/examples",
+          "scope": "EXACT",
+          "input_provenance": "numeral goal",
+          "consumer": "select numeral example",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli search \"ticker example that keeps a number\" --context audit/ticker/examples --context-only",
+          "exit": 0,
+          "actual": "Ranked the Route 66 example.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 4.73,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4 · mid-late; share-class rules/examples accumulated",
+          "entry_route": "semantic paraphrase",
+          "target_route": "audit/ticker/examples",
+          "scope": "EXACT",
+          "input_provenance": "share-class goal",
+          "consumer": "select rule and example",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli search \"ticker for a company with a share class\" --context audit/ticker/examples --context-only",
+          "exit": 0,
+          "actual": "Returned both share-class rule and example.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 5.79,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5 · late; final regression corpus, snapshots, copies, embeds, and restored uppercase rule",
+          "entry_route": "semantic multi-feature query",
+          "target_route": "audit/ticker/tests",
+          "scope": "EXACT",
+          "input_provenance": "final verification goal",
+          "consumer": "verify regression-set discoverability",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli search \"final regression examples for suffix punctuation numeral and share class\" --context audit/ticker/tests --context-only",
+          "exit": 0,
+          "actual": "Ranked the final verification first and returned all three supporting example Memories.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 7.09,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "query": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "empty root",
+          "entry_route": "natural-language question plus explicit Context",
+          "target_route": "audit/ticker",
+          "scope": "EXACT",
+          "input_provenance": "world goal",
+          "consumer": "establish unsupported baseline",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli query \"What ticker-construction rules are currently known?\" --context audit/ticker --context-only",
+          "exit": 0,
+          "actual": "Explicitly answered that the complete current corpus supported no rules.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 4.44,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2 · early-mid; legal-suffix and punctuation examples accumulated",
+          "entry_route": "ordinary Query",
+          "target_route": "audit/ticker",
+          "scope": "recursive",
+          "input_provenance": "punctuation example and embedded rules",
+          "consumer": "validate NORTHSTAR derivation",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli query \"Apply the current examples: what ticker should North-Star, Inc. receive and why?\" --context audit/ticker --recursive",
+          "exit": 0,
+          "actual": "Derived NORTHSTAR correctly with four References.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 6.11,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3 · mid; numeral rules/examples plus punctuation chunks accumulated",
+          "entry_route": "ordinary Query with repeated explicit Contexts",
+          "target_route": "rules + examples",
+          "scope": "multiple exact Contexts",
+          "input_provenance": "numeral rule/example",
+          "consumer": "validate ROUTE66",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli query \"What ticker should Route 66, LLC receive under the current rules?\" --context audit/ticker/rules --context audit/ticker/examples --context-only",
+          "exit": 0,
+          "actual": "Derived ROUTE66 correctly with four typed References.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 7.98,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4 · mid-late; share-class rules/examples accumulated",
+          "entry_route": "ordinary Query with repeated explicit Contexts",
+          "target_route": "rules + examples",
+          "scope": "multiple exact Contexts",
+          "input_provenance": "share-class rule/example",
+          "consumer": "clarify input versus output punctuation",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli query \"How should the system derive a ticker for Acme Corp. Class B, and is the output dot retained input punctuation?\" --context audit/ticker/rules --context audit/ticker/examples --context-only",
+          "exit": 0,
+          "actual": "Derived ACME.B and correctly explained that the output dot is introduced by share-class mapping.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 6.51,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5 · late; final regression corpus, snapshots, copies, embeds, and restored uppercase rule",
+          "entry_route": "ordinary Query over final root",
+          "target_route": "audit/ticker",
+          "scope": "recursive lexical and embedded reach",
+          "input_provenance": "final accumulated corpus",
+          "consumer": "produce maintained algorithm and three regression outputs",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli query \"State the maintained synthetic ticker algorithm and evaluate Acme Corp. Class B, Route 66, LLC, and North-Star, Inc.\" --context audit/ticker --recursive",
+          "exit": 0,
+          "actual": "Returned the correct algorithm and outputs but expanded 14 References, repeating facts through copies and snapshots.",
+          "defect_ids": [
+            "TICK-QUERY-EVIDENCE-DUPLICATION-CANDIDATE"
+          ],
+          "cost": {
+            "wall_seconds": 7.67,
+            "terminal_screens": 2,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "summarize": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "empty root",
+          "entry_route": "positional Context",
+          "target_route": "audit/ticker",
+          "scope": "direct",
+          "input_provenance": "empty fixture",
+          "consumer": "baseline",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli summarize audit/ticker",
+          "exit": 0,
+          "actual": "Reported no ordinary Memories to summarize.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.05,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2 · early-mid; legal-suffix and punctuation examples accumulated",
+          "entry_route": "positional child",
+          "target_route": "audit/ticker/examples",
+          "scope": "direct",
+          "input_provenance": "suffix and punctuation examples",
+          "consumer": "compact current rule statement",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli summarize audit/ticker/examples",
+          "exit": 0,
+          "actual": "Produced a concise English summary of suffix removal, punctuation removal, and ACME/NORTHSTAR.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 6.21,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3 · mid; numeral rules/examples plus punctuation chunks accumulated",
+          "entry_route": "positional root plus --recursive",
+          "target_route": "audit/ticker",
+          "scope": "recursive",
+          "input_provenance": "English-only accumulated corpus",
+          "consumer": "compact cross-child algorithm",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli summarize audit/ticker --recursive",
+          "exit": 0,
+          "actual": "Produced a semantically correct summary entirely in Chinese despite an English corpus and CLI session.",
+          "defect_ids": [
+            "TICK-SUMMARY-LANGUAGE-DRIFT"
+          ],
+          "cost": {
+            "wall_seconds": 7.93,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4 · mid-late; share-class rules/examples accumulated",
+          "entry_route": "positional child",
+          "target_route": "audit/ticker/examples",
+          "scope": "direct",
+          "input_provenance": "share-class corpus",
+          "consumer": "check whether summary recovers from fragments",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli summarize audit/ticker/examples",
+          "exit": 0,
+          "actual": "Returned a concise English synthesis including leading zeroes and .A/.B share classes.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 6.83,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5 · late; final regression corpus, snapshots, copies, embeds, and restored uppercase rule",
+          "entry_route": "positional child",
+          "target_route": "audit/ticker/tests",
+          "scope": "direct",
+          "input_provenance": "final regression suite",
+          "consumer": "final test-set handoff",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli summarize audit/ticker/tests",
+          "exit": 0,
+          "actual": "Summarized all three mandatory outputs in English.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 6.57,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "add": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "empty child Contexts after serialized bootstrap",
+          "entry_route": "repeatable --memory arguments",
+          "target_route": "--context audit/ticker/rules",
+          "scope": "two exact Memories in one atomic batch",
+          "input_provenance": "world goal",
+          "consumer": "feed rule UIDs to copy/reference/edit/chunk",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli add --context audit/ticker/rules --memory \"Base ticker rule: remove a terminal legal suffix such as Inc., Corp., Ltd., or LLC before constructing the ticker.\" --memory \"Base ticker rule: uppercase the remaining company-name letters and preserve their order.\"",
+          "exit": 0,
+          "actual": "Added UIDs 8aa690b4 and 4beca63e in one checkpoint.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.41,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2 · early-mid; legal-suffix and punctuation examples accumulated",
+          "entry_route": "repeatable --memory arguments",
+          "target_route": "audit/ticker/examples",
+          "scope": "legal suffix + punctuation batch",
+          "input_provenance": "synthetic examples",
+          "consumer": "copy and search examples",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli add --context audit/ticker/examples --memory \"Legal-suffix example: Acme Incorporated becomes ACME after removing Incorporated and uppercasing Acme.\" --memory \"Punctuation example: North-Star, Inc. becomes NORTHSTAR after removing the comma, hyphen, and Inc. suffix.\"",
+          "exit": 0,
+          "actual": "Added dec1db32 and 1eec22f0.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.4,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3 · mid; numeral rules/examples plus punctuation chunks accumulated",
+          "entry_route": "repeatable --memory arguments",
+          "target_route": "audit/ticker/examples",
+          "scope": "numeral rule + example batch",
+          "input_provenance": "synthetic Route 66 case",
+          "consumer": "query, fit, copy, reference",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli add --context audit/ticker/examples --memory \"Numeral rule: preserve Arabic digits in their original positions while removing spaces and punctuation.\" --memory \"Numeral example: Route 66, LLC becomes ROUTE66 after removing the comma, space, and LLC suffix while preserving 66.\"",
+          "exit": 0,
+          "actual": "Added 1cdff944 and 393108b1.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.41,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4 · mid-late; share-class rules/examples accumulated",
+          "entry_route": "repeatable --memory arguments",
+          "target_route": "audit/ticker/examples",
+          "scope": "share-class rule + example batch",
+          "input_provenance": "synthetic Class B case",
+          "consumer": "query, fit, copy, conflict tests",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli add --context audit/ticker/examples --memory \"Share-class rule: if a legal suffix immediately precedes terminal Class A or Class B, remove the suffix and append .A or .B to the derived base ticker.\" --memory \"Share-class example: Acme Corp. Class B becomes ACME.B after removing Corp. and mapping Class B to the .B suffix.\"",
+          "exit": 0,
+          "actual": "Added 765fb534 and 105e3f35.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.4,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5 · late; final regression corpus, snapshots, copies, embeds, and restored uppercase rule",
+          "entry_route": "180x52 color PTY workbench",
+          "target_route": "explicit --context audit/ticker/tests",
+          "scope": "one reviewed draft",
+          "input_provenance": "final three-case verification text",
+          "consumer": "show/find/copy/reference final result",
+          "command": "stty rows 52 cols 180; stty size; unset NO_COLOR; export TERM=xterm-256color COLORTERM=truecolor; env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli add --context audit/ticker/tests",
+          "exit": 0,
+          "actual": "Typed one draft, saved it, focused To Do, applied, reviewed success, and closed; created f9df608c. After Ctrl-S, pressing Enter while draft retained focus reopened the editor despite a visible 'ADD 1 MEMORY · ENTER' To Do action; Tab was required first.",
+          "defect_ids": [
+            "TICK-ADD-TUI-ACTION-DISTANCE-CANDIDATE"
+          ],
+          "cost": {
+            "wall_seconds": 36,
+            "terminal_screens": 6,
+            "extra_manual_steps": 3,
+            "tui": true,
+            "pty": "180x52",
+            "color_verified": true,
+            "keys": "E, 139 text chars, Ctrl-S, Enter (reopened editor), Ctrl-S, Tab, Enter, Enter"
+          }
+        }
+      ]
+    },
+    "copy": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1 · early; empty audit/ticker corpus, then bootstrap children and two foundational rules",
+          "entry_route": "UID plus explicit --from/--into",
+          "target_route": "rules → tests",
+          "scope": "one Memory",
+          "input_provenance": "round-1 add UID 8aa690b4",
+          "consumer": "later move to examples",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli copy 8aa690b4 --from audit/ticker/rules --into audit/ticker/tests",
+          "exit": 0,
+          "actual": "Copied to new UID 9951d8e3 with explicit mapping.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.42,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2 · early-mid; legal-suffix and punctuation examples accumulated",
+          "entry_route": "two positional UIDs plus explicit endpoints",
+          "target_route": "examples → tests",
+          "scope": "ordered two-Memory batch",
+          "input_provenance": "round-2 add UIDs",
+          "consumer": "archive one and retain one regression input",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli copy dec1db32 1eec22f0 --from audit/ticker/examples --into audit/ticker/tests",
+          "exit": 0,
+          "actual": "Mapped dec1db32→8bbd4cde and 1eec22f0→3ace4104.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.43,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3 · mid; numeral rules/examples plus punctuation chunks accumulated",
+          "entry_route": "two positional UIDs plus explicit endpoints",
+          "target_route": "examples → tests",
+          "scope": "numeral rule/example batch",
+          "input_provenance": "round-3 add UIDs",
+          "consumer": "move rule to rules; retain test example",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli copy 1cdff944 393108b1 --from audit/ticker/examples --into audit/ticker/tests",
+          "exit": 0,
+          "actual": "Mapped to 8604b635 and 578b964f.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.45,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4 · mid-late; share-class rules/examples accumulated",
+          "entry_route": "two positional UIDs plus explicit endpoints",
+          "target_route": "examples → tests",
+          "scope": "share rule/example batch",
+          "input_provenance": "round-4 add UIDs",
+          "consumer": "move rule to rules; retain share-class test",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli copy 765fb534 105e3f35 --from audit/ticker/examples --into audit/ticker/tests",
+          "exit": 0,
+          "actual": "Mapped to e0a2a41c and d9ec7d18; placement was described after a Context-embed UID.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.42,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5 · late; final regression corpus, snapshots, copies, embeds, and restored uppercase rule",
+          "entry_route": "one UID plus explicit endpoints",
+          "target_route": "tests → archive",
+          "scope": "one final verification",
+          "input_provenance": "TUI add UID f9df608c",
+          "consumer": "move stable copy to rules for conflict detection",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli copy f9df608c --from audit/ticker/tests --into audit/ticker/archive",
+          "exit": 0,
+          "actual": "Copied to new UID 5fe7279c with a direct mapping.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.42,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "reference": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1 · early; empty audit/ticker corpus, then bootstrap children and two foundational rules",
+          "entry_route": "Memory UID plus explicit endpoints",
+          "target_route": "rules → root",
+          "scope": "one snapshot",
+          "input_provenance": "round-1 rule UID",
+          "consumer": "verify immutable pre-edit content",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli reference 4beca63e --from audit/ticker/rules --into audit/ticker",
+          "exit": 0,
+          "actual": "Created snapshot Reference 22335876.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.41,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2 · early-mid; legal-suffix and punctuation examples accumulated",
+          "entry_route": "Memory UID plus explicit endpoints",
+          "target_route": "examples → rules",
+          "scope": "one punctuation snapshot",
+          "input_provenance": "pre-edit 1eec22f0",
+          "consumer": "preserve intact source before chunk",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli reference 1eec22f0 --from audit/ticker/examples --into audit/ticker/rules",
+          "exit": 0,
+          "actual": "Created snapshot Reference b8da7bbe.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.42,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3 · mid; numeral rules/examples plus punctuation chunks accumulated",
+          "entry_route": "Memory UID plus explicit endpoints",
+          "target_route": "examples → rules",
+          "scope": "one numeral snapshot",
+          "input_provenance": "393108b1",
+          "consumer": "preserve verified example alongside rule",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli reference 393108b1 --from audit/ticker/examples --into audit/ticker/rules",
+          "exit": 0,
+          "actual": "Created snapshot Reference 1324e9b7.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.49,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4 · mid-late; share-class rules/examples accumulated",
+          "entry_route": "Memory UID plus explicit endpoints",
+          "target_route": "examples → rules",
+          "scope": "one share-class snapshot",
+          "input_provenance": "105e3f35",
+          "consumer": "preserve intact example before chunk",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli reference 105e3f35 --from audit/ticker/examples --into audit/ticker/rules",
+          "exit": 0,
+          "actual": "Created snapshot Reference d2d4159c.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.45,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5 · late; final regression corpus, snapshots, copies, embeds, and restored uppercase rule",
+          "entry_route": "Memory UID plus explicit endpoints",
+          "target_route": "tests → root",
+          "scope": "one final snapshot",
+          "input_provenance": "f9df608c",
+          "consumer": "retain final verification provenance",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli reference f9df608c --from audit/ticker/tests --into audit/ticker",
+          "exit": 0,
+          "actual": "Created snapshot Reference 86d40c31.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.42,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "embed": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1 · early; empty audit/ticker corpus, then bootstrap children and two foundational rules",
+          "entry_route": "Context Source plus --into",
+          "target_route": "rules → root",
+          "scope": "one live Context embed",
+          "input_provenance": "bootstrap child",
+          "consumer": "make rules reachable from root Query",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli embed audit/ticker/rules --into audit/ticker",
+          "exit": 0,
+          "actual": "Embedded rules after the root Reference.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.54,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2 · early-mid; legal-suffix and punctuation examples accumulated",
+          "entry_route": "Context Source plus --into",
+          "target_route": "examples → rules",
+          "scope": "one live Context embed",
+          "input_provenance": "round-2 examples",
+          "consumer": "make examples reachable with rules",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli embed audit/ticker/examples --into audit/ticker/rules",
+          "exit": 0,
+          "actual": "Embedded examples into rules.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.42,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3 · mid; numeral rules/examples plus punctuation chunks accumulated",
+          "entry_route": "Context Source plus --into",
+          "target_route": "archive → tests",
+          "scope": "one live Context embed",
+          "input_provenance": "archived suffix example",
+          "consumer": "retain rejected/history view beside tests",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli embed audit/ticker/archive --into audit/ticker/tests",
+          "exit": 0,
+          "actual": "Embedded archive into tests.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.5,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4 · mid-late; share-class rules/examples accumulated",
+          "entry_route": "Context Source plus --into",
+          "target_route": "tests → examples",
+          "scope": "one live Context embed",
+          "input_provenance": "accumulated tests",
+          "consumer": "make test evidence reachable from examples",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli embed audit/ticker/tests --into audit/ticker/examples",
+          "exit": 0,
+          "actual": "Embedded tests into examples.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.47,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5 · late; final regression corpus, snapshots, copies, embeds, and restored uppercase rule",
+          "entry_route": "repeat exact embed request",
+          "target_route": "tests → examples",
+          "scope": "duplicate boundary",
+          "input_provenance": "round-4 receipt",
+          "consumer": "verify idempotence guard",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli embed audit/ticker/tests --into audit/ticker/examples",
+          "exit": 1,
+          "actual": "Rejected the duplicate embed clearly and made no change.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.42,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "edit": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1 · early; empty audit/ticker corpus, then bootstrap children and two foundational rules",
+          "entry_route": "UID plus explicit --context",
+          "target_route": "rules:4beca63e",
+          "scope": "one Memory",
+          "input_provenance": "round-1 add UID",
+          "consumer": "clarify no invented letters",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli edit 4beca63e \"Core ticker rule: uppercase the remaining company-name letters in their original order; do not invent letters.\" --context audit/ticker/rules",
+          "exit": 0,
+          "actual": "Updated the rule and printed a readable before/after diff.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.45,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2 · early-mid; legal-suffix and punctuation examples accumulated",
+          "entry_route": "UID plus explicit --context",
+          "target_route": "examples:1eec22f0",
+          "scope": "one multi-sentence Memory",
+          "input_provenance": "punctuation example",
+          "consumer": "feed a natural sentence pair to chunk",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli edit 1eec22f0 \"Punctuation rule: remove punctuation before constructing the ticker. Example: North-Star, Inc. becomes NORTHSTAR after removing the comma, hyphen, and Inc. suffix.\" --context audit/ticker/examples",
+          "exit": 0,
+          "actual": "Converted the example into a two-sentence rule/example Memory.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.41,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3 · mid; numeral rules/examples plus punctuation chunks accumulated",
+          "entry_route": "UID plus explicit --context",
+          "target_route": "examples:1cdff944",
+          "scope": "one Memory",
+          "input_provenance": "numeral rule",
+          "consumer": "clarify leading-zero invariant",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli edit 1cdff944 \"Numeral rule: preserve digits 0-9, including leading zeroes, in their original positions while removing spaces and punctuation.\" --context audit/ticker/examples",
+          "exit": 0,
+          "actual": "Refined Arabic digits to digits 0-9 including leading zeroes.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.42,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4 · mid-late; share-class rules/examples accumulated",
+          "entry_route": "UID plus explicit --context",
+          "target_route": "examples:105e3f35",
+          "scope": "one two-sentence Memory",
+          "input_provenance": "share-class example",
+          "consumer": "test chunk around Corp. and ACME.B.",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli edit 105e3f35 \"Share-class example: Acme Corp. Class B becomes ACME.B. Remove Corp. and map Class B to the .B suffix.\" --context audit/ticker/examples",
+          "exit": 0,
+          "actual": "Created an intact two-sentence share-class example before chunking.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.49,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5 · late; final regression corpus, snapshots, copies, embeds, and restored uppercase rule",
+          "entry_route": "UID plus explicit --context",
+          "target_route": "rules:4beca63e",
+          "scope": "one deliberate conflict",
+          "input_provenance": "core uppercase rule",
+          "consumer": "feed conflict scan, then recover with replace",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli edit 4beca63e \"Intentionally conflicting draft: lowercase the remaining company-name letters in their original order; do not invent letters.\" --context audit/ticker/rules",
+          "exit": 0,
+          "actual": "Introduced an explicit lowercase conflict for the subsequent quality scan.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.41,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "move": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1 · early; empty audit/ticker corpus, then bootstrap children and two foundational rules",
+          "entry_route": "copied UID plus explicit endpoints",
+          "target_route": "tests → examples",
+          "scope": "one Memory, same UID",
+          "input_provenance": "copy receipt 9951d8e3",
+          "consumer": "seed examples with a rule copy",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli move 9951d8e3 --from audit/ticker/tests --into audit/ticker/examples",
+          "exit": 0,
+          "actual": "Moved 9951d8e3 with RETARGET LINKS and two checkpoints.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.5,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2 · early-mid; legal-suffix and punctuation examples accumulated",
+          "entry_route": "copied UID plus explicit endpoints",
+          "target_route": "tests → archive",
+          "scope": "one Memory",
+          "input_provenance": "copy receipt 8bbd4cde",
+          "consumer": "exercise archive lifecycle",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli move 8bbd4cde --from audit/ticker/tests --into audit/ticker/archive",
+          "exit": 0,
+          "actual": "Moved the copied Acme suffix example to archive.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.44,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3 · mid; numeral rules/examples plus punctuation chunks accumulated",
+          "entry_route": "copied UID plus explicit endpoints",
+          "target_route": "tests → rules",
+          "scope": "one Memory",
+          "input_provenance": "copy receipt 8604b635",
+          "consumer": "promote numeral rule",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli move 8604b635 --from audit/ticker/tests --into audit/ticker/rules",
+          "exit": 0,
+          "actual": "Promoted the copied numeral rule into rules with the same UID.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.45,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4 · mid-late; share-class rules/examples accumulated",
+          "entry_route": "copied UID plus explicit endpoints",
+          "target_route": "tests → rules",
+          "scope": "one Memory",
+          "input_provenance": "copy receipt e0a2a41c",
+          "consumer": "promote share-class rule",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli move e0a2a41c --from audit/ticker/tests --into audit/ticker/rules",
+          "exit": 0,
+          "actual": "Promoted the copied share-class rule.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.5,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5 · late; final regression corpus, snapshots, copies, embeds, and restored uppercase rule",
+          "entry_route": "copied UID plus explicit endpoints",
+          "target_route": "archive → rules",
+          "scope": "one Memory",
+          "input_provenance": "round-5 copy receipt 5fe7279c",
+          "consumer": "supply expected outputs for conflict scan",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli move 5fe7279c --from audit/ticker/archive --into audit/ticker/rules",
+          "exit": 0,
+          "actual": "Moved the stable final verification copy into rules.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.47,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "replace": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1 · early; empty audit/ticker corpus, then bootstrap children and two foundational rules",
+          "entry_route": "literal find/replace plus explicit Context",
+          "target_route": "audit/ticker/rules",
+          "scope": "all direct Memories",
+          "input_provenance": "round-1 rule text",
+          "consumer": "normalize rule labels",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli replace \"Base ticker rule\" \"Core ticker rule\" --context audit/ticker/rules",
+          "exit": 0,
+          "actual": "Replaced one occurrence in one Memory.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.43,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2 · early-mid; legal-suffix and punctuation examples accumulated",
+          "entry_route": "literal no-match replacement",
+          "target_route": "audit/ticker/archive",
+          "scope": "direct no-op boundary",
+          "input_provenance": "hypothetical PLC term",
+          "consumer": "verify safe empty result",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli replace \"PLC\" \"Public Limited Company\" --context audit/ticker/archive",
+          "exit": 0,
+          "actual": "Reported no matches and changed nothing.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.44,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3 · mid; numeral rules/examples plus punctuation chunks accumulated",
+          "entry_route": "literal replacement",
+          "target_route": "audit/ticker/rules",
+          "scope": "one copied rule",
+          "input_provenance": "moved numeral rule",
+          "consumer": "normalize numeral vocabulary",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli replace \"Arabic digits\" \"digits 0-9\" --context audit/ticker/rules",
+          "exit": 0,
+          "actual": "Replaced one occurrence in one Memory.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.43,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4 · mid-late; share-class rules/examples accumulated",
+          "entry_route": "punctuation-sensitive replacement",
+          "target_route": "audit/ticker/rules",
+          "scope": "one share-class rule",
+          "input_provenance": "moved rule",
+          "consumer": "make output-dot semantics explicit",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli replace \"append .A or .B\" \"append dot-A (.A) or dot-B (.B)\" --context audit/ticker/rules",
+          "exit": 0,
+          "actual": "Replaced one share-class phrase.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.43,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "late; deliberate lowercase conflict present",
+          "entry_route": "literal recovery replacement",
+          "target_route": "audit/ticker/rules",
+          "scope": "one conflicting Memory",
+          "input_provenance": "find-conflicts round-5 result",
+          "consumer": "restore maintained uppercase invariant",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli replace \"Intentionally conflicting draft: lowercase\" \"Core ticker rule: uppercase\" --context audit/ticker/rules",
+          "exit": 0,
+          "actual": "Recovered the rule after conflict detection; one occurrence changed.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.51,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "chunk": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1 · early; empty audit/ticker corpus, then bootstrap children and two foundational rules",
+          "entry_route": "qualified Memory locator",
+          "target_route": "rules:8aa690b4",
+          "scope": "single-sentence boundary",
+          "input_provenance": "round-1 add UID",
+          "consumer": "confirm indivisible rule",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli chunk audit/ticker/rules:8aa690b4",
+          "exit": 0,
+          "actual": "Produced one chunk and made no change.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.41,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2 · early-mid; legal-suffix and punctuation examples accumulated",
+          "entry_route": "qualified Memory locator",
+          "target_route": "examples:1eec22f0",
+          "scope": "two sentences with Inc. abbreviation",
+          "input_provenance": "round-2 edit output",
+          "consumer": "atomize rule/example",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli chunk audit/ticker/examples:1eec22f0",
+          "exit": 0,
+          "actual": "Split into four intended Context-dependent chunks at sentence-period boundaries, including after 'Inc.' and before 'suffix.'; printed only a count and no UIDs.",
+          "defect_ids": [
+            "TICK-CHUNK-NO-UID-HANDOFF"
+          ],
+          "cost": {
+            "wall_seconds": 0.41,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3 · mid; numeral rules/examples plus punctuation chunks accumulated",
+          "entry_route": "qualified Memory locator",
+          "target_route": "examples:393108b1",
+          "scope": "one sentence with numeral and LLC",
+          "input_provenance": "numeral example",
+          "consumer": "verify indivisible abbreviation handling",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli chunk audit/ticker/examples:393108b1",
+          "exit": 0,
+          "actual": "Produced one chunk and made no change.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.41,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4 · mid-late; share-class rules/examples accumulated",
+          "entry_route": "qualified Memory locator",
+          "target_route": "examples:105e3f35",
+          "scope": "two sentences with Corp., ACME.B., and .B",
+          "input_provenance": "round-4 edit output",
+          "consumer": "atomize share-class example",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli chunk audit/ticker/examples:105e3f35",
+          "exit": 0,
+          "actual": "Split into four intended Context-dependent chunks at Corp. and ACME.B., including a leading 'and map...' chunk; printed no new UIDs.",
+          "defect_ids": [
+            "TICK-CHUNK-NO-UID-HANDOFF"
+          ],
+          "cost": {
+            "wall_seconds": 0.48,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5 · late; final regression corpus, snapshots, copies, embeds, and restored uppercase rule",
+          "entry_route": "qualified Memory locator",
+          "target_route": "examples:1cdff944",
+          "scope": "one refined rule",
+          "input_provenance": "round-3 edited numeral rule",
+          "consumer": "late no-op safety boundary",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli chunk audit/ticker/examples:1cdff944",
+          "exit": 0,
+          "actual": "Produced one chunk and made no change.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.51,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "compare": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1 · early; empty audit/ticker corpus, then bootstrap children and two foundational rules",
+          "entry_route": "two Context positional endpoints plus --snapshot",
+          "target_route": "rules ↔ examples",
+          "scope": "two exact frames",
+          "input_provenance": "moved rule copy",
+          "consumer": "verify early rule/example relationship",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli compare audit/ticker/rules audit/ticker/examples --snapshot",
+          "exit": 0,
+          "actual": "Correctly described the shared suffix rule and rules-only uppercase constraint.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 6.45,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2 · early-mid; legal-suffix and punctuation examples accumulated",
+          "entry_route": "two child Contexts plus --snapshot",
+          "target_route": "tests ↔ examples",
+          "scope": "two exact frames",
+          "input_provenance": "copied intact punctuation test vs chunked examples",
+          "consumer": "reconcile condensed test and fragmented source",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli compare audit/ticker/tests audit/ticker/examples --snapshot",
+          "exit": 0,
+          "actual": "Recovered the shared punctuation and suffix meaning despite fragmentation.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 7.58,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3 · mid; numeral rules/examples plus punctuation chunks accumulated",
+          "entry_route": "two child Contexts plus --snapshot",
+          "target_route": "tests ↔ examples",
+          "scope": "two exact frames",
+          "input_provenance": "numeral copy and refined source",
+          "consumer": "detect leading-zero specialization",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli compare audit/ticker/tests audit/ticker/examples --snapshot",
+          "exit": 0,
+          "actual": "Correctly isolated the examples-only leading-zero refinement.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 6.9,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4 · mid-late; share-class rules/examples accumulated",
+          "entry_route": "two child Contexts plus --snapshot",
+          "target_route": "rules ↔ examples",
+          "scope": "two exact frames",
+          "input_provenance": "promoted share-class rule and chunks",
+          "consumer": "check semantic equivalence",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli compare audit/ticker/rules audit/ticker/examples --snapshot",
+          "exit": 0,
+          "actual": "Reported semantic equivalence and the rules-only no-invented-letters detail.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 7.4,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "late; lowercase conflict repaired",
+          "entry_route": "two child Contexts plus --snapshot",
+          "target_route": "rules ↔ tests",
+          "scope": "two exact frames",
+          "input_provenance": "post-recovery rule and final tests",
+          "consumer": "verify final maintained state",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli compare audit/ticker/rules audit/ticker/tests --snapshot",
+          "exit": 0,
+          "actual": "Confirmed all test examples follow the restored general policy.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 6.42,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "find-duplicates": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "empty root",
+          "entry_route": "positional Context plus --direct",
+          "target_route": "audit/ticker",
+          "scope": "0 direct items",
+          "input_provenance": "empty fixture",
+          "consumer": "baseline",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-duplicates audit/ticker --direct",
+          "exit": 0,
+          "actual": "Checked zero items and reported no exact groups.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.04,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2 · early-mid; legal-suffix and punctuation examples accumulated",
+          "entry_route": "positional child plus --direct",
+          "target_route": "audit/ticker/examples",
+          "scope": "6 direct items",
+          "input_provenance": "post-punctuation chunk state",
+          "consumer": "look for exact fragments/copies",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-duplicates audit/ticker/examples --direct",
+          "exit": 0,
+          "actual": "Reported no exact groups.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.25,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3 · mid; numeral rules/examples plus punctuation chunks accumulated",
+          "entry_route": "positional root plus --recursive",
+          "target_route": "audit/ticker",
+          "scope": "5 Contexts, 20 direct items",
+          "input_provenance": "known cross-Context copies",
+          "consumer": "workspace-wide duplicate maintenance",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-duplicates audit/ticker --recursive",
+          "exit": 0,
+          "actual": "Reported zero groups even though exact Memories existed in different child Contexts; output evaluated each Context independently.",
+          "defect_ids": [
+            "TICK-QUALITY-CROSS-CONTEXT-BLIND"
+          ],
+          "cost": {
+            "wall_seconds": 0.29,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4 · mid-late; share-class rules/examples accumulated",
+          "entry_route": "positional child plus --direct",
+          "target_route": "audit/ticker/tests",
+          "scope": "4 typed direct items, 3 ordinary",
+          "input_provenance": "test copies",
+          "consumer": "local duplicate check",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-duplicates audit/ticker/tests --direct",
+          "exit": 0,
+          "actual": "Reported no within-Context exact groups.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.39,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5 · late; final regression corpus, snapshots, copies, embeds, and restored uppercase rule",
+          "entry_route": "positional root plus --recursive",
+          "target_route": "audit/ticker",
+          "scope": "5 Contexts, 32 direct items",
+          "input_provenance": "late known snapshots/copies",
+          "consumer": "final workspace-wide duplicate maintenance",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-duplicates audit/ticker --recursive",
+          "exit": 0,
+          "actual": "Again reported zero groups by checking each Context separately despite known exact copies across children.",
+          "defect_ids": [
+            "TICK-QUALITY-CROSS-CONTEXT-BLIND"
+          ],
+          "cost": {
+            "wall_seconds": 0.43,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "find-redundancies": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "empty root",
+          "entry_route": "positional Context plus --direct",
+          "target_route": "audit/ticker",
+          "scope": "0 direct Memories",
+          "input_provenance": "empty fixture",
+          "consumer": "baseline",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-redundancies audit/ticker --direct",
+          "exit": 0,
+          "actual": "Checked zero Memories and returned no groups.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.2,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2 · early-mid; legal-suffix and punctuation examples accumulated",
+          "entry_route": "positional child plus --direct",
+          "target_route": "audit/ticker/examples",
+          "scope": "6 direct Memories",
+          "input_provenance": "whole punctuation meaning plus chunks",
+          "consumer": "detect one-to-many redundancy",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-redundancies audit/ticker/examples --direct",
+          "exit": 0,
+          "actual": "Returned zero groups although the chunk set collectively restated the pre-split punctuation meaning.",
+          "defect_ids": [
+            "TICK-REDUNDANCY-ONE-TO-MANY-CANDIDATE"
+          ],
+          "cost": {
+            "wall_seconds": 4.96,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3 · mid; numeral rules/examples plus punctuation chunks accumulated",
+          "entry_route": "positional root plus --recursive",
+          "target_route": "audit/ticker",
+          "scope": "5 Contexts, 14 direct Memories",
+          "input_provenance": "known cross-Context copies",
+          "consumer": "workspace-wide redundancy maintenance",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-redundancies audit/ticker --recursive",
+          "exit": 0,
+          "actual": "Reported zero groups because results were partitioned per Context, missing known copies across children.",
+          "defect_ids": [
+            "TICK-QUALITY-CROSS-CONTEXT-BLIND"
+          ],
+          "cost": {
+            "wall_seconds": 13.86,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4 · mid-late; share-class rules/examples accumulated",
+          "entry_route": "positional child plus --direct",
+          "target_route": "audit/ticker/tests",
+          "scope": "3 direct Memories",
+          "input_provenance": "three distinct regression examples",
+          "consumer": "local semantic redundancy check",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-redundancies audit/ticker/tests --direct",
+          "exit": 0,
+          "actual": "Reported no groups as expected for distinct cases.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 4,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5 · late; final regression corpus, snapshots, copies, embeds, and restored uppercase rule",
+          "entry_route": "positional root plus --recursive",
+          "target_route": "audit/ticker",
+          "scope": "5 Contexts, 23 direct Memories",
+          "input_provenance": "late known copies and summaries",
+          "consumer": "final workspace-wide redundancy maintenance",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-redundancies audit/ticker --recursive",
+          "exit": 0,
+          "actual": "Again reported zero groups while partitioning analysis per Context and missing known cross-child copies.",
+          "defect_ids": [
+            "TICK-QUALITY-CROSS-CONTEXT-BLIND"
+          ],
+          "cost": {
+            "wall_seconds": 13.4,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "find-ambiguities": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "empty root",
+          "entry_route": "positional exact Context",
+          "target_route": "audit/ticker",
+          "scope": "0 direct Memories",
+          "input_provenance": "empty fixture",
+          "consumer": "baseline",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-ambiguities audit/ticker",
+          "exit": 0,
+          "actual": "Reported 0/0 flagged.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.49,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2 · early-mid; legal-suffix and punctuation examples accumulated",
+          "entry_route": "positional exact child",
+          "target_route": "audit/ticker/examples",
+          "scope": "6 direct Memories",
+          "input_provenance": "post-chunk punctuation fragments",
+          "consumer": "verify whether complete-frame interpretation resolves the chunks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-ambiguities audit/ticker/examples",
+          "exit": 0,
+          "actual": "Reported 0/6; the complete frame retained adjacent 'becomes NORTHSTAR...' and 'suffix.' chunks whose combined meaning was available.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 6.59,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3 · mid; numeral rules/examples plus punctuation chunks accumulated",
+          "entry_route": "positional exact child",
+          "target_route": "audit/ticker/rules",
+          "scope": "3 direct Memories",
+          "input_provenance": "base, numeral, suffix rules",
+          "consumer": "rule clarity check",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-ambiguities audit/ticker/rules",
+          "exit": 0,
+          "actual": "Reported 0/3 flagged.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 5.1,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4 · mid-late; share-class rules/examples accumulated",
+          "entry_route": "positional exact child",
+          "target_route": "audit/ticker/examples",
+          "scope": "13 direct Memories",
+          "input_provenance": "punctuation and share-class fragments",
+          "consumer": "verify whether complete-frame interpretation resolves the chunks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-ambiguities audit/ticker/examples",
+          "exit": 0,
+          "actual": "Reported 0/13; the complete frame retained adjacent 'suffix.', 'Remove Corp.', and leading-conjunction chunks whose combined meaning was available.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 4.39,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5 · late; final regression corpus, snapshots, copies, embeds, and restored uppercase rule",
+          "entry_route": "positional exact child",
+          "target_route": "audit/ticker/examples",
+          "scope": "13 direct Memories",
+          "input_provenance": "unchanged fragmented final corpus",
+          "consumer": "confirm repeatability",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-ambiguities audit/ticker/examples",
+          "exit": 0,
+          "actual": "Repeated the contract-conforming 0/13 result over the same complete frame.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 4.39,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "find-conflicts": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "empty root",
+          "entry_route": "positional exact Context",
+          "target_route": "audit/ticker",
+          "scope": "0 pairs",
+          "input_provenance": "empty fixture",
+          "consumer": "baseline",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-conflicts audit/ticker",
+          "exit": 0,
+          "actual": "Reported 0/0 pairs flagged.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.62,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2 · early-mid; legal-suffix and punctuation examples accumulated",
+          "entry_route": "positional exact child",
+          "target_route": "audit/ticker/examples",
+          "scope": "6 direct Memories, 15 pairs",
+          "input_provenance": "suffix/punctuation corpus",
+          "consumer": "early consistency check",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-conflicts audit/ticker/examples",
+          "exit": 0,
+          "actual": "Reported no conflicts.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 4.49,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3 · mid; numeral rules/examples plus punctuation chunks accumulated",
+          "entry_route": "positional exact child",
+          "target_route": "audit/ticker/rules",
+          "scope": "3 direct Memories, 3 pairs",
+          "input_provenance": "base/numeral rules",
+          "consumer": "mid consistency check",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-conflicts audit/ticker/rules",
+          "exit": 0,
+          "actual": "Reported no conflicts.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 4.44,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4 · mid-late; share-class rules/examples accumulated",
+          "entry_route": "positional exact child",
+          "target_route": "audit/ticker/examples",
+          "scope": "13 direct Memories, 78 pairs",
+          "input_provenance": "share-class accumulated corpus",
+          "consumer": "late consistency check",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-conflicts audit/ticker/examples",
+          "exit": 0,
+          "actual": "Reported no conflicts.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 4.3,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "late; explicit lowercase draft and uppercase final examples coexist in rules",
+          "entry_route": "positional exact child",
+          "target_route": "audit/ticker/rules",
+          "scope": "5 direct Memories, 10 pairs",
+          "input_provenance": "deliberate edit plus moved final verification",
+          "consumer": "identify conflict before replace recovery",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-conflicts audit/ticker/rules",
+          "exit": 0,
+          "actual": "Correctly flagged the lowercase draft against uppercase verified outputs and asked whether letters should be lowercase or uppercase.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 5.23,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "fit": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "empty root",
+          "entry_route": "one explicit --context",
+          "target_route": "audit/ticker",
+          "scope": "empty direct frame",
+          "input_provenance": "empty fixture",
+          "consumer": "empty-source boundary",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli fit --context audit/ticker",
+          "exit": 1,
+          "actual": "Rejected the empty direct Source before inference.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.59,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2 · early-mid; legal-suffix and punctuation examples accumulated",
+          "entry_route": "two auto positional operands",
+          "target_route": "intended literal propositions",
+          "scope": "literal-colon ambiguity boundary",
+          "input_provenance": "rule/example text",
+          "consumer": "check rule-example compatibility",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli fit \"Core ticker rule: remove a terminal legal suffix before constructing the ticker.\" \"Legal-suffix example: Acme Incorporated becomes ACME after removing Incorporated and uppercasing Acme.\"",
+          "exit": 1,
+          "actual": "Mis-typed the text before the colon as Context 'Core ticker rule' and failed instead of treating the quoted sentence as a proposition.",
+          "defect_ids": [
+            "TICK-FIT-COLON-AUTO-TYPING"
+          ],
+          "cost": {
+            "wall_seconds": 0.41,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3 · mid; numeral rules/examples plus punctuation chunks accumulated",
+          "entry_route": "repeated explicit --context",
+          "target_route": "rules + examples",
+          "scope": "two exact Context frames",
+          "input_provenance": "stored numeral corpus",
+          "consumer": "check aggregate compatibility",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli fit --context audit/ticker/rules --context audit/ticker/examples",
+          "exit": 0,
+          "actual": "Returned FIT YES with both Context targets.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 7.07,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4 · mid-late; share-class rules/examples accumulated",
+          "entry_route": "repeated qualified --memory",
+          "target_route": "share rule + example",
+          "scope": "two exact Memories",
+          "input_provenance": "round-4 add UIDs",
+          "consumer": "check share-class pair",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli fit --memory audit/ticker/examples:765fb534 --memory audit/ticker/examples:105e3f35",
+          "exit": 0,
+          "actual": "Returned FIT YES with both Memory targets.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 6.91,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5 · late; final regression corpus, snapshots, copies, embeds, and restored uppercase rule",
+          "entry_route": "three repeated explicit --context",
+          "target_route": "rules + tests + examples",
+          "scope": "three exact Context frames",
+          "input_provenance": "final accumulated state",
+          "consumer": "final whole-corpus compatibility",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli fit --context audit/ticker/rules --context audit/ticker/tests --context audit/ticker/examples",
+          "exit": 0,
+          "actual": "Returned FIT YES across all three final frames.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 8.15,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    }
+  }
+}

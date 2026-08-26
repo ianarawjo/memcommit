@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 translate task-1/participant/construction-updates/building-access:8b077f2a --to Japanese
+
+EXIT
+0
+
+OUTPUT
+
+Translation view: 'task-1/participant/construction-updates/building-access' → Japanese
+  1 translated Memory
+────────────────────────────────────────────────────────────────
+[8b077f2a] Japanese · PROVIDER · UNREVIEWED
+  campus-wiki/building-access を修正：工事期間中、3階の裏口は一般の通行には使用できません。
+────────────────────────────────────────────────────────────────
+Saved translation view.
+No Context or Memory changes; source Memory UIDs remain the anchors.

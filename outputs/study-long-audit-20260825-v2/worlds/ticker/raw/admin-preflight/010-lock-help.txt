@@ -1,0 +1,28 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker lock -h
+
+EXIT
+0
+
+RAW CAPTURE STATUS
+The unplanned console stream was visible only in the orchestration call and was not retained before that aggregate output was truncated. The product command-attempt record below is the authoritative raw lifecycle evidence; console bytes are unavailable and are not reconstructed.
+
+PRODUCT COMMAND ATTEMPT
+{
+  "version": 3,
+  "uid": "ce99806b-7319-4b3d-8e1f-f75b5227bb68",
+  "operation": "lock",
+  "command": "mem lock -h",
+  "status": "COMPLETED",
+  "started_at": "2026-08-25T17:48:03.342322+00:00",
+  "completed_at": "2026-08-25T17:48:03.353283+00:00",
+  "elapsed_seconds": 0.010791749999043532,
+  "terminal": {
+    "stdin_tty": false,
+    "stdout_tty": false
+  },
+  "details": {},
+  "outcome": null,
+  "failure": null,
+  "host_path": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd/ledger/command-attempts/ce99806b-7319-4b3d-8e1f-f75b5227bb68.json"
+}

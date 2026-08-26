@@ -1,0 +1,26 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker share audit/ticker/missing-share-source --to task-3/government/healthcare-agent --direct
+
+STDIN
+<none>
+
+EXIT
+1
+
+WALL_SECONDS
+1.400985
+
+PRE_IDENTITY
+{"current_context": "audit/ticker/admin-v2-scratch/tree/leaf", "current_context_uid": "164f3813-0100-41f7-a8cb-445e13d0fb0d", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+IMMEDIATE_POST_IDENTITY
+{"current_context": "audit/ticker/admin-v2-scratch/tree/leaf", "current_context_uid": "164f3813-0100-41f7-a8cb-445e13d0fb0d", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+COMMAND_ATTEMPT_DELTA
+{"count_after": 279, "count_before": 278, "delta": 1, "new_attempt_uids": ["60f857d7-b473-4a85-ba71-3f127c64a882"], "records": [{"command": "mem share audit/ticker/missing-share-source --to task-3/government/healthcare-agent --direct", "completed_at": "2026-08-25T18:13:04.802466+00:00", "details": {}, "elapsed_seconds": 0.015321583006880246, "failure": {"exit_code": 1, "kind": "Exit"}, "operation": "share", "outcome": null, "started_at": "2026-08-25T18:13:04.786990+00:00", "status": "FAILED", "terminal": {"stdin_tty": true, "stdout_tty": false}, "uid": "60f857d7-b473-4a85-ba71-3f127c64a882", "version": 3}], "sequence": 34}
+
+STDOUT
+
+
+STDERR
+Error: Context 'audit/ticker/missing-share-source' not found.

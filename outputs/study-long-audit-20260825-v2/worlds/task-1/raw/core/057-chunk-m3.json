@@ -1,0 +1,11 @@
+{
+  "sequence": 57,
+  "operation": "chunk",
+  "attempt": 3,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 chunk task-1/participant/construction-updates/building-access:75badd84 --method clauses --break-on : --min-chars 24 --max-chars 96",
+  "exit": 0,
+  "wall_seconds": 1.385909,
+  "pre_target_digest": "153007c73828a979a9de3cfd7107f4e1409392482b416b646969d69d3ff7cebf",
+  "post_target_digest": "0dd67581f58e04738ce3d22dda229ec11170c290e33e79948f7309877df5b02d",
+  "raw_output": "raw/core/057-chunk-m3.txt"
+}

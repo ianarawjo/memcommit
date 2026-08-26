@@ -1,0 +1,16 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 show --direct --context task-2/advisor2/budget
+EXIT: 0
+DURATION_SECONDS: 1.29
+
+Context: task-2/advisor2/budget
+Access: READ GRANT · READ ONLY
+  Memories 7  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [memory d614b55d] Keep the main text to the total and major categories, and place quantities, unit rates, and assumptions in one compact budget table or appendix.
+  [memory 24500129] Give each cost category, quantity, unit rate, and subtotal a stable row in the separate budget table.
+  [memory 07bad409] Put the estimate basis in a dedicated table column so one assumption can be checked or revised without rewriting the narrative.
+  [memory abf6d361] Readers can verify arithmetic and compare categories faster in a consistent table than in amounts distributed across prose.
+  [memory 473cf3ca] Revise one table row and its subtotal when an estimate changes instead of repeating the new amount across several prose paragraphs.
+  [memory 675956de] Keep detailed arithmetic out of the main argument when readers can reach the complete table from a clear reference.
+  [memory f4371f72] The user tends to interrupt the argument with long cost enumerations when no separate budget table is available.

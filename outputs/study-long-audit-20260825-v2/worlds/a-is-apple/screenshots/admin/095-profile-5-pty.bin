@@ -1,0 +1,52 @@
+^[[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m Select a Profile or Study[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
+[0m    authoring                          Contexts 20 owned + 0 granted · Memories 205 owned + 0 granted · current=thoughts[59C[0;1m^[0m
+[0m    task-1                             Contexts 14 owned + 0 granted · Memories 375 owned + 0 granted · query=construction-details · current=campus-wiki/event-relocations[9C[0;48;5;238m [0m
+[0m    task-2                             Contexts 34 owned + 0 granted · Memories 300 owned + 0 granted · query=proposal-submission-guidelines · current=advisor1[20C[0;48;5;238m [0m
+[0m    task-3                             Contexts 42 owned + 0 granted · Memories 375 owned + 0 granted · query=government/healthcare-agent/information-request · current=personal-me[179C[0;48;5;238m [0m
+[0m    study-baseline                     Contexts 141 owned + 0 granted · Memories 1321 owned + 0 granted · current=task-1[59C[0;48;5;238m [0m
+[0m    teststudy0803                      Contexts 130 owned + 0 granted · Memories 1278 owned + 0 granted · current=task-1/participant[47C[0;48;5;238m [0m
+[0;36;1m  STUDY study-20260819T175451Z-5ce5d722 · 2 active · created=2026-08-19T17:54:52.743175+00:00[86C[0;48;5;238m [0m
+[0m    Participant · study-20260819T175451Z-5ce5d722           Contexts 68 owned + 43 granted · Memories 477 owned + 625 granted · current=practice/source[28C[0;48;5;238m [0m
+[0m    Granted memory · study-20260819T175451Z-5ce5d722-granted-memory           Contexts 75 owned + 0 granted · Memories 853 owned + 0 granted · current=task-1/campus-wiki[10C[0;48;5;238m [0m
+[0;36;1m  STUDY study-20260820T182442Z-2fbff60d · 2 active · created=2026-08-20T18:24:43.467880+00:00[86C[0;48;5;238m [0m
+[0m    Participant · study-20260820T182442Z-2fbff60d           Contexts 67 owned + 43 granted · Memories 472 owned + 625 granted · current=practice/1[33C[0;48;5;238m [0m
+[0m    Granted memory · study-20260820T182442Z-2fbff60d-granted-memory           Contexts 75 owned + 0 granted · Memories 853 owned + 0 granted · current=task-1/campus-wiki[10C[0;48;5;238m [0m
+[0;36;1m  STUDY study-20260821T125723Z-0f232e48 · 2 active · created=2026-08-21T12:57:24.844822+00:00[86C[0;48;5;238m [0m
+[0m    Participant · study-20260821T125723Z-0f232e48           Contexts 71 owned + 43 granted · Memories 516 owned + 625 granted · current=practice/3[33C[0;48;5;238m [0m
+[0m    Granted memory · study-20260821T125723Z-0f232e48-granted-memory           Contexts 75 owned + 0 granted · Memories 853 owned + 0 granted · current=task-1/campus-wiki[10C[0;48;5;238m [0m
+[0;36;1m  STUDY study-20260822T175943Z-17c35fd7 · 2 active · created=2026-08-22T17:59:45.835943+00:00[86C[0;48;5;238m [0m
+[0m    Participant · study-20260822T175943Z-17c35fd7           Contexts 68 owned + 43 granted · Memories 521 owned + 625 granted · current=practice/source[28C[0;48;5;238m [0m
+[0m    Granted memory · study-20260822T175943Z-17c35fd7-granted-memory           Contexts 75 owned + 0 granted · Memories 853 owned + 0 granted · current=task-1/campus-wiki[10C[0;48;5;238m [0m
+[0;36;1m  STUDY study-stresstest · 2 active · created=2026-08-23T01:35:45.246696+00:00[101C[0;48;5;238m [0m
+[0m    Participant · study-stresstest           Contexts 67 owned + 43 granted · Memories 471 owned + 625 granted · current=practice/elaborated-from-source[27C[0;48;5;238m [0m
+[0m    Granted memory · study-stresstest-granted-memory           Contexts 75 owned + 0 granted · Memories 853 owned + 0 granted · current=task-1/campus-wiki[25C[0;48;5;238m [0m
+[0;36;1m  STUDY stress-test-new · 2 active · created=2026-08-23T03:44:32.231568+00:00[102C[0;48;5;238m [0m
+[0m    Participant · stress-test-new           Contexts 68 owned + 43 granted · Memories 486 owned + 625 granted · current=practice/greetings2[40C[0;48;5;238m [0m
+[0m    Granted memory · stress-test-new-granted-memory           Contexts 75 owned + 0 granted · Memories 853 owned + 0 granted · current=task-1/campus-wiki[26C[0;48;5;238m [0m
+[0m    stresstest-nostudy                 Contexts 0 owned + 0 granted · Memories 0 owned + 0 granted · current=(none)[64C[0;48;5;238m [0m
+[0;36;1m  STUDY study-long-audit-20260823 · 2 active · created=2026-08-23T16:20:04.164070+00:00[92C[0;48;5;238m [0m
+[0m    Participant · study-long-audit-20260823           Contexts 122 owned + 43 granted · Memories 890 owned + 625 granted · current=task-1/participant/admin-scratch/r1-branch[6C[0;48;5;238m [0m
+[0m    Granted memory · study-long-audit-20260823-granted-memory           Contexts 75 owned + 0 granted · Memories 853 owned + 0 granted · current=task-1/campus-wiki[16C[0;48;5;238m [0m
+[0;36;1m  STUDY study-20260823T203237Z-e1dd61a6 · 2 active · created=2026-08-23T20:32:37.099422+00:00[86C[0;48;5;238m [0m
+[0m    Participant · study-20260823T203237Z-e1dd61a6           Contexts 65 owned + 43 granted · Memories 468 owned + 625 granted · current=practice[35C[0;48;5;238m [0m
+[0m    Granted memory · study-20260823T203237Z-e1dd61a6-granted-memory           Contexts 75 owned + 0 granted · Memories 853 owned + 0 granted · current=task-1/campus-wiki[10C[0;48;5;238m [0m
+[0;36;1m  STUDY study-20260824T114456Z-3e75ccdf · 2 active · created=2026-08-24T11:44:58.392932+00:00[86C[0;48;5;238m [0m
+[0m    Participant · study-20260824T114456Z-3e75ccdf           Contexts 67 owned + 43 granted · Memories 476 owned + 625 granted · current=practice/rule[30C[0;48;5;238m [0m
+[0m    Granted memory · study-20260824T114456Z-3e75ccdf-granted-memory           Contexts 75 owned + 0 granted · Memories 853 owned + 0 granted · current=task-1/campus-wiki[10C[0;48;5;238m [0m
+[0;36;1m  STUDY study-20260824T170446Z-585b70f0 · 2 active · created=2026-08-24T17:04:47.644071+00:00[86C[0;48;5;238m [0m
+[0m    Participant · study-20260824T170446Z-585b70f0           Contexts 90 owned + 43 granted · Memories 565 owned + 625 granted · current=task-3/local[31C[0;48;5;238m [0m
+[0m    Granted memory · study-20260824T170446Z-585b70f0-granted-memory           Contexts 76 owned + 0 granted · Memories 854 owned + 0 granted · current=task-1/campus-wiki[10C[0;48;5;238m [0m
+[0m    distill-xhigh-eval-20260824           Contexts 22 owned + 0 granted · Memories 39 owned + 0 granted · current=eval/interactive/reviews-ko/source[31C[0;48;5;238m [0m
+[0;36;1m  STUDY study-20260825T110027Z-59cb6a29 · 2 active · created=2026-08-25T11:00:28.624931+00:00[86C[0;48;5;238m [0m
+[0m    Participant · study-20260825T110027Z-59cb6a29           Contexts 71 owned + 43 granted · Memories 538 owned + 625 granted · current=coffee-advice/chat[25C[0;48;5;238m [0m
+[0m    Granted memory · study-20260825T110027Z-59cb6a29-granted-memory           Contexts 75 owned + 0 granted · Memories 853 owned + 0 granted · current=task-1/campus-wiki[10C[0;48;5;238m [0m
+[0;36;1m  STUDY sixworld-v2-template · 2 active · created=2026-08-25T16:31:43.316612+00:00[97C[0;48;5;238m [0m
+[0;1;7m› * Participant · sixworld-v2-template  CURRENT  Contexts 80 owned + 43 granted · Memories 651 owned + 625 granted · current=audit/a-is-apple/admin-v2-scratch/co4-tree/source[5C[0;48;5;238m [0m
+[0m    Granted memory · sixworld-v2-template-granted-memory           Contexts 75 owned + 0 granted · Memories 853 owned + 0 granted · current=task-1/campus-wiki[21C[0;48;5;238m [0m
+[0m    admin-v2-a-is-apple-inactive           Contexts 0 owned + 0 granted · Memories 0 owned + 0 granted · current=(none)[60C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[0m                                                                                                                                                                                   [179C[0;1mv[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
+[0m ↑/↓ move  Enter use  R rename  D remove Profile  [0;38;5;111;1mN new Profile[0m  Esc/q cancel  ·  43/45[87D[7A[0m[44A[J[0m[?7h[?1049l[?2004lProfile selection cancelled.

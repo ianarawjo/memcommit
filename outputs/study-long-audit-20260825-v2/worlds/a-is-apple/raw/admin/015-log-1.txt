@@ -1,0 +1,11 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple log --context audit/a-is-apple/admin-v2-scratch
+
+EXIT
+0
+
+OUTPUT
+Log for 'audit/a-is-apple/admin-v2-scratch':
+
+DIRECT COMMANDS · audit/a-is-apple/admin-v2-scratch
+  [init] [CHECKPOINT 33d6916c] [CONTEXT a89f04aa]  2026-08-25 13:56 · baseline for CONTEXT audit/a-is-apple/admin-v2-scratch · not counted as a command

@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 meld task-1/participant/construction-updates/facility-updates task-1/participant task-1/participant/transform-meld-r1
+
+EXIT
+0
+
+OUTPUT
+MELD NEEDS INPUT · SYMMETRIC · task-1/participant/transform-meld-r1
+ROUTE · task-1/participant/construction-updates/facility-updates + task-1/participant → task-1/participant/transform-meld-r1
+JUDGMENTS · REQUIRED 0 · OPTIONAL 0
+SESSION · 4478af19-1f3c-49d3-904a-b93f3edc17d2
+SOURCE · UNCHANGED
+IMPACT · mem impact meld --session 4478af19-1f3c-49d3-904a-b93f3edc17d2
+RESUME · mem meld --sessions

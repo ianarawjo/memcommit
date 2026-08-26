@@ -1,0 +1,11 @@
+{
+  "sequence": 47,
+  "operation": "search",
+  "attempt": 3,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 search 'access closures, earlier closing time, and temporary accessible route' --context task-1/participant/construction-updates --descendants --exclude-embeds --limit 10",
+  "exit": 0,
+  "wall_seconds": 12.701205,
+  "pre_target_digest": "11476e1c3380a02f0a1619942dd04e792c1926adee971d4d04bbd31b04b2af7f",
+  "post_target_digest": "b2e984164504b31efeba57079df40a85f617c5c4c6d77a3bf3df4b329b7ae2f0",
+  "raw_output": "raw/core/047-search-m3.txt"
+}

@@ -1,0 +1,61 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 impact atomize task-3/local/guardrails/purpose-and-scope
+
+EXIT
+0
+
+OUTPUT
+ RESULT · atomize · task-3/local/guardrails/purpose-and-scope
+ STATUS · ANALYSIS COMPLETE · sources=9 · projected=12 · splits=1 · children=4 · review issues=1
+
+ WHAT MEM UNDERSTOOD
+ Sharing should be purpose-specific, limited to necessary approved items and recipients, and clarified before candidate creation when the purpose is vague. Received material may be used within the requested scope absent separate restrictions, while a healthcare proposal remains pending explicit approval.
+
+ WHAT HAPPENED
+ The general sharing rules remain intact as single scoped commitments. The healthcare proposal is split into its pending status, necessary-care disclosure limit, unrelated-history exclusion, and explicit-approval requirement so each occurrence can be revised independently.
+
+ WHAT REMAINS UNRESOLVED
+ (none reported under this operation's bounded contract)
+The atomize analysis reported no unresolved finding in this bounded Context frame.
+
+ REPRESENTATIVE / BOUNDARY CASES
+ ›  1. [REPRESENTATIVE] ATOMIC · KEEP
+       KEEP: Include only Memories needed for the current sharing purpose confirmed by the user.
+    2. [REPRESENTATIVE] COMPOSITE · SPLIT
+       SPLIT: Healthcare candidate (review-pending, not approved): limit disclosure to facts necessary for current care, exclude unrelated history, and require explicit user approval.
+
+Analysis [cbcc3305] · INPUT task-3/local/guardrails/purpose-and-scope → OUTPUT task-3/local/guardrails/purpose-and-scope · ORDER: SOURCE · 0/1 answered
+
+ACTIONABLE ISSUES
+›  1. · SUGGESTED SPLIT · COMPOSITE · 4 CHILDREN  “Healthcare candidate (review-pending, not appro…”
+
+SUGGESTED SPLIT 1/1
+
+SOURCE [10b92448]
+Healthcare candidate (review-pending, not approved): limit disclosure to facts necessary for current care, exclude unrelated history, and require explicit user approval.
+
+CLASSIFICATION
+COMPOSITE · 4 CHILDREN
+
+WHY THIS MEMORY SPLIT
+The proposal contains independently revisable status, disclosure-limit, exclusion, and approval-requirement occurrences.
+
+PROPOSED CHILDREN
+1. Healthcare candidate (review-pending, not approved).
+   EVIDENCE: Healthcare candidate (review-pending, not approved)
+2. Healthcare candidate: limit disclosure to facts necessary for current care.
+   EVIDENCE: Healthcare candidate | limit disclosure to facts necessary for current care
+3. Healthcare candidate: exclude unrelated history.
+   EVIDENCE: Healthcare candidate | exclude unrelated history
+4. Healthcare candidate: require explicit user approval.
+   EVIDENCE: Healthcare candidate | require explicit user approval
+
+REFINE, COMMENT, OR ENTER A DIFFERENT READING
+> 
+
+SOURCE means canonical Context order; Memory creation timestamps are not recorded.
+No Memory changes have been applied. No checkpoint was created.
+Resumed saved analysis [cbcc3305]; the provider was not called.
+REOPEN · mem impact atomize --session cbcc3305-373f-4802-86fd-9461b98b40ee
+BROWSE ATOMIZE · mem impact atomize --sessions
+BROWSE ALL IMPACT · mem impact --sessions

@@ -1,0 +1,7 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 move 367700c4 --from task-3/local/guardrails/audit-and-recovery --into task-3/local/guardrails/audit-and-recovery
+
+STDOUT
+
+STDERR
+Error: Move Target already owns selected Memory/ies: [367700c4]. Use Edit for content or a separate reorder operation.

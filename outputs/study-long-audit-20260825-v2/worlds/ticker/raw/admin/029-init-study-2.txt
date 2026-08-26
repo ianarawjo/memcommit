@@ -1,0 +1,26 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker init-study authoring
+
+STDIN
+<none>
+
+EXIT
+1
+
+WALL_SECONDS
+1.518292
+
+PRE_IDENTITY
+{"current_context": "audit/ticker/admin-v2-scratch/tree/leaf", "current_context_uid": "164f3813-0100-41f7-a8cb-445e13d0fb0d", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+IMMEDIATE_POST_IDENTITY
+{"current_context": "audit/ticker/admin-v2-scratch/tree/leaf", "current_context_uid": "164f3813-0100-41f7-a8cb-445e13d0fb0d", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+COMMAND_ATTEMPT_DELTA
+{"count_after": 274, "count_before": 273, "delta": 1, "new_attempt_uids": ["7e969367-cc33-4a1e-8f13-e0a992afa463"], "records": [{"command": "mem init-study authoring", "completed_at": "2026-08-25T18:12:57.132462+00:00", "details": {}, "elapsed_seconds": 0.015229249998810701, "failure": {"exit_code": 1, "kind": "Exit"}, "operation": "init-study", "outcome": null, "started_at": "2026-08-25T18:12:57.117070+00:00", "status": "FAILED", "terminal": {"stdin_tty": true, "stdout_tty": false}, "uid": "7e969367-cc33-4a1e-8f13-e0a992afa463", "version": 3}], "sequence": 29}
+
+STDOUT
+
+
+STDERR
+Error: The fixed authoring name cannot identify a Study Profile.

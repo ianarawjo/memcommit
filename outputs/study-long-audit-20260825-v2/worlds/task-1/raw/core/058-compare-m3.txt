@@ -1,0 +1,17 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 compare --from task-1/participant/construction-updates --to task-1/campus-wiki --reference-descendants --compared-descendants --snapshot
+
+EXIT
+0
+
+WALL_SECONDS
+8.050877
+
+STDOUT
+Compare · task-1/participant/construction-updates ↔ task-1/campus-wiki
+
+COMPARISON
+  The frames align as temporary construction rules versus the normal baseline, with the compared frame also consolidating the same June 24–August 23 overrides. During that period, normal access, venues, parking, amenities, facilities, and routes are restricted or relocated—notably main-entrance general access ends at 5:00 p.m. instead of 10:00 p.m.
+
+
+STDERR

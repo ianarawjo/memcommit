@@ -1,0 +1,2631 @@
+{
+  "schema_version": 1,
+  "study": "study-long-audit-20260823",
+  "world": "practice-source",
+  "phase": "transform",
+  "world_goal": "Atomize practice/source editing constraints into independently reviewable units without performing the edits or changing intended meaning, while preserving triggers, exceptions, protected objects, companion safeguards, and provenance.",
+  "outcome": "Original practice/source remained unchanged. A whole-copy Atomize failed closed; a narrowed scratch-only title rule applied as two children but lost title scope on the standalone `for` child, and was checkpoint-reverted. No publication or external transfer occurred. Scratch outputs remain available for independent review.",
+  "execution_boundary": {
+    "launcher": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli",
+    "source_snapshot": "restart-stable frozen physical snapshot; all commands executed from repository root",
+    "shared_state": "Global current remained practice. No status/profile/switch/checkout/undo/redo/current-only route was counted.",
+    "fixture_boundary": "practice/source was read-only. Every destructive Context action targeted practice/audit-workspace/transform-scratch or its children.",
+    "tui": "One Diff attempt used an actual 180x52 truecolor PTY; stty reported 52 180 and the raw stream contained ANSI semantic colors."
+  },
+  "excluded_attempts": [
+    {
+      "reason": "Safety-rule probe excluded from coverage because Impact Distill had an explicit Source but silently defaulted its Target to shared current `practice`. A replacement with explicit --from and --to was executed.",
+      "operation": "impact",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli impact distill practice/audit-workspace/transform-scratch/source --goal \"preserve triggers, exceptions, safeguards, and provenance\" --direct",
+      "exit": 0,
+      "actual": "MEM DISTILL · RULE PROPOSAL CONTEXT LOCATIONS SOURCE · practice/audit-workspace/transform-scratch/source TARGET · practice · EXISTING PROPOSAL · 12 SOURCE · 13 RULES · THIS CONTEXT ONLY RANGE GOAL preserve triggers, exceptions, safeguards, and provenance SOURCE OVERVIEW A compact editorial-control family: the rules distinguish review from editing, preserve author-selected structure and terminology, constrain compression and transitions, standardize title presentation subject to explicit style-guide overrides, and require complete-source verification before factual or citation changes. PROPOSED RULES · 13 [1] W…",
+      "defect_ids": [
+        "PS-T-IMPACT-DEFAULT-CURRENT"
+      ],
+      "cost": {
+        "wall_seconds": 29.55,
+        "tui": false
+      }
+    }
+  ],
+  "actual_mem_calls": 121,
+  "total_attempts": 120,
+  "interleaving": "Five rounds each executed all 24 operations once. The excluded implicit-target Impact probe was replaced with one explicit-source-and-target Impact and is not part of the 120 counted attempts.",
+  "coverage": {
+    "atomize": 5,
+    "audit": 5,
+    "checkpoint": 5,
+    "check-conformance": 5,
+    "clear": 5,
+    "delete": 5,
+    "diff": 5,
+    "distill": 5,
+    "elaborate": 5,
+    "resolve": 5,
+    "dedup": 5,
+    "dedun": 5,
+    "forget": 5,
+    "ground": 5,
+    "impact": 5,
+    "meld": 5,
+    "merge": 5,
+    "rationale": 5,
+    "revert": 5,
+    "review": 5,
+    "sever": 5,
+    "trace": 5,
+    "translate": 5,
+    "update": 5
+  },
+  "operations": {
+    "atomize": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "round": 1,
+          "starting_state": "round 1 early state: empty transform scratch, then exact 12-Memory Source merge and direct checkpoint",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "fixed practice/source copied into scratch or explicit inline audit criterion",
+          "consumer": "independent atom review, Audit, Conformance, Rationale, Trace, and recovery",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli atomize practice/audit-workspace/transform-scratch/source",
+          "exit": 1,
+          "actual": "Whole 12-Memory scratch frame found 4 splits and 1 uncertainty in Impact, but execution failed final semantic-normal-form validation; no Context change published.",
+          "defect_ids": [
+            "PS-T-ATOMIZE-NORMAL-FORM"
+          ],
+          "cost": {
+            "wall_seconds": 9.98,
+            "terminal_screens": 1,
+            "extra_manual_steps": 1,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "round": 2,
+          "starting_state": "round 2 early-mid state: Source 12, Criteria populated from prior core candidates, Result built then checkpoint-reverted",
+          "entry_route": "exact Memory CLI",
+          "target_route": "explicit Context:UID or --memory selector",
+          "scope": "single actionable Memory with Context neighbors as evidence",
+          "input_provenance": "round-1 outputs plus existing audit-workspace candidates and saved receipts",
+          "consumer": "independent atom review, Audit, Conformance, Rationale, Trace, and recovery",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli atomize practice/audit-workspace/transform-scratch/source:c666f752",
+          "exit": 0,
+          "actual": "Exact Context:UID analysis classified the review-only workflow Memory ATOMIC/KEEP; saved CURRENT analysis only, no mutation.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 7.61,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "round": 3,
+          "starting_state": "round 3 mid state: Update-derived Result, archive evidence merge, semantic cleanup, Ground bootstrap attempts",
+          "entry_route": "exact Memory CLI",
+          "target_route": "explicit Context:UID or --memory selector",
+          "scope": "single actionable Memory with Context neighbors as evidence",
+          "input_provenance": "prior Update/Dedun/Forget output, archive evidence, exact UID, or saved session",
+          "consumer": "independent atom review, Audit, Conformance, Rationale, Trace, and recovery",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli atomize --context practice/audit-workspace/transform-scratch/source --memory 74fe914d",
+          "exit": 0,
+          "actual": "The same terminology Memory that whole-frame Impact had classified COMPOSITE/2 children was classified ATOMIC/KEEP under exact --memory scope; no mutation.",
+          "defect_ids": [
+            "PS-T-ATOMIZE-SCOPE-INCONSISTENCY"
+          ],
+          "cost": {
+            "wall_seconds": 8.7,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "round": 4,
+          "starting_state": "round 4 late-mid state: criteria narrowed through checkpoint/clear/scoped Update for actual Atomize Apply; large accumulated Result",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "narrow checkpointed criteria frame, actual Atomize children, or accumulated Result",
+          "consumer": "independent atom review, Audit, Conformance, Rationale, Trace, and recovery",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli atomize practice/audit-workspace/transform-scratch/criteria",
+          "exit": 0,
+          "actual": "Narrow one-Memory scratch Context applied 1→2 split. It detached `Always keep for...` from the document-title scope; downstream Audit flagged it underspecified and Conformance could not verify scope preservation.",
+          "defect_ids": [
+            "PS-T-ATOMIZE-SCOPE-LOSS"
+          ],
+          "cost": {
+            "wall_seconds": 28.87,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "round": 5,
+          "starting_state": "round 5 late state: 38-item Result checkpoint/clear/rebuild/revert cycle; named Ground and saved semantic artifacts available",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "late accumulated scratch, exact checkpoint/receipt/session, cached view, or prior output",
+          "consumer": "independent atom review, Audit, Conformance, Rationale, Trace, and recovery",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli atomize practice/audit-workspace/transform-scratch/result",
+          "exit": 0,
+          "actual": "Empty exact Result reported APPLIED 0/0 and created a receipt/checkpoint.",
+          "defect_ids": [
+            "PS-T-ATOMIZE-EMPTY"
+          ],
+          "cost": {
+            "wall_seconds": 0.48,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "audit": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "round": 1,
+          "starting_state": "round 1 early state: empty transform scratch, then exact 12-Memory Source merge and direct checkpoint",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "fixed practice/source copied into scratch or explicit inline audit criterion",
+          "consumer": "quality disposition and later Review",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli audit practice/audit-workspace/transform-scratch/source --snapshot",
+          "exit": 0,
+          "actual": "MEM AUDIT SAVED · 3/3 CHECKS · READ-ONLY REPORT SESSION [03485ff9] · CREATED 2026-08-23T17:54:13+00:00 SUMMARY · All quality finders completed over the same saved direct Context snapshot. Each section retains its own Memory, pair, group, or absorption unit. CHECKS · REDUNDANCIES · FINISHED · 12 MEMORIES CHECKED · 0 GROUPS · 0 PROPOSED ABSORPTIONS / AMBIGUITIES · FINISHED · 2/12 MEMORIES FLAGGED / CONFLICTS · FINISHED · 0/12 MEMORIES INVOLVED · 0/66 PAIRS FLAGGED SOURCE · practice/audit-workspace/transform-scratch/source · 12 direct Memories as captured when this Audit ran. Descendants and embedded Contexts wer…",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 19.63,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "round": 2,
+          "starting_state": "round 2 early-mid state: Source 12, Criteria populated from prior core candidates, Result built then checkpoint-reverted",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "round-1 outputs plus existing audit-workspace candidates and saved receipts",
+          "consumer": "quality disposition and later Review",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli audit practice/audit-workspace/transform-scratch/source --against practice/audit-workspace/transform-scratch/criteria --snapshot",
+          "exit": 0,
+          "actual": "MEM AUDIT SAVED · 4/4 CHECKS · READ-ONLY REPORT SESSION [ed1a1eb5] · CREATED 2026-08-23T17:57:35+00:00 SUMMARY · All quality finders completed over the same saved direct Context snapshot. Each section retains its own Memory, pair, group, or absorption unit. Conformance evaluated the same Source against 2 frozen Rules. CHECKS · REDUNDANCIES · FINISHED · 12 MEMORIES CHECKED · 0 GROUPS · 0 PROPOSED ABSORPTIONS / AMBIGUITIES · FINISHED · 4/12 MEMORIES FLAGGED / CONFLICTS · FINISHED · 0/12 MEMORIES INVOLVED · 0/66 PAIRS FLAGGED / CONFORMANCE · FINISHED · 2 Rules · 0 issues SOURCE · practice/audit-workspace/transfor…",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 29.83,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "round": 3,
+          "starting_state": "round 3 mid state: Update-derived Result, archive evidence merge, semantic cleanup, Ground bootstrap attempts",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "prior Update/Dedun/Forget output, archive evidence, exact UID, or saved session",
+          "consumer": "quality disposition and later Review",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli audit practice/audit-workspace/transform-scratch/result --snapshot",
+          "exit": 0,
+          "actual": "MEM AUDIT SAVED · 3/3 CHECKS · READ-ONLY REPORT SESSION [f88efbe5] · CREATED 2026-08-23T18:03:29+00:00 SUMMARY · All quality finders completed over the same saved direct Context snapshot. Each section retains its own Memory, pair, group, or absorption unit. CHECKS · REDUNDANCIES · FINISHED · 11 MEMORIES CHECKED · 0 GROUPS · 0 PROPOSED ABSORPTIONS / AMBIGUITIES · FINISHED · 0/11 MEMORIES FLAGGED / CONFLICTS · FINISHED · 0/11 MEMORIES INVOLVED · 0/55 PAIRS FLAGGED SOURCE · practice/audit-workspace/transform-scratch/result · 11 direct Memories as captured when this Audit ran. Descendants and embedded Contexts wer…",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 20.41,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "round": 4,
+          "starting_state": "round 4 late-mid state: criteria narrowed through checkpoint/clear/scoped Update for actual Atomize Apply; large accumulated Result",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "narrow checkpointed criteria frame, actual Atomize children, or accumulated Result",
+          "consumer": "quality disposition and later Review",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli audit practice/audit-workspace/transform-scratch/criteria --snapshot",
+          "exit": 0,
+          "actual": "MEM AUDIT SAVED · 3/3 CHECKS · READ-ONLY REPORT SESSION [1af75263] · CREATED 2026-08-23T18:09:21+00:00 SUMMARY · All quality finders completed over the same saved direct Context snapshot. Each section retains its own Memory, pair, group, or absorption unit. CHECKS · REDUNDANCIES · FINISHED · 2 MEMORIES CHECKED · 0 GROUPS · 0 PROPOSED ABSORPTIONS / AMBIGUITIES · FINISHED · 1/2 MEMORIES FLAGGED / CONFLICTS · FINISHED · 0/2 MEMORIES INVOLVED · 0/1 PAIRS FLAGGED SOURCE · practice/audit-workspace/transform-scratch/criteria · 2 direct Memories as captured when this Audit ran. Descendants and embedded Contexts were n…",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 16.41,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "round": 5,
+          "starting_state": "round 5 late state: 38-item Result checkpoint/clear/rebuild/revert cycle; named Ground and saved semantic artifacts available",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "late accumulated scratch, exact checkpoint/receipt/session, cached view, or prior output",
+          "consumer": "quality disposition and later Review",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli audit practice/audit-workspace/transform-scratch/archive --snapshot",
+          "exit": 0,
+          "actual": "MEM AUDIT SAVED · 3/3 CHECKS · READ-ONLY REPORT SESSION [6e53bd23] · CREATED 2026-08-23T18:14:03+00:00 SUMMARY · All quality finders completed over the same saved direct Context snapshot. Each section retains its own Memory, pair, group, or absorption unit. CHECKS · REDUNDANCIES · FINISHED · 3 MEMORIES CHECKED · 0 GROUPS · 0 PROPOSED ABSORPTIONS / AMBIGUITIES · FINISHED · 2/3 MEMORIES FLAGGED / CONFLICTS · FINISHED · 0/3 MEMORIES INVOLVED · 0/3 PAIRS FLAGGED SOURCE · practice/audit-workspace/transform-scratch/archive · 3 direct Memories as captured when this Audit ran. Descendants and embedded Contexts were no…",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 18.09,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "checkpoint": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "round": 1,
+          "starting_state": "round 1 early state: empty transform scratch, then exact 12-Memory Source merge and direct checkpoint",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "fixed practice/source copied into scratch or explicit inline audit criterion",
+          "consumer": "subsequent destructive trial and exact Revert",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli checkpoint practice/audit-workspace/transform-scratch/source \"round-1 pre-atomize source\"",
+          "exit": 0,
+          "actual": "[00c09d4f] 2026-08-23 13:52:43 Context 'practice/audit-workspace/transform-scratch/source' 'round-1 pre-atomize source'",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.41,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "round": 2,
+          "starting_state": "round 2 early-mid state: Source 12, Criteria populated from prior core candidates, Result built then checkpoint-reverted",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "round-1 outputs plus existing audit-workspace candidates and saved receipts",
+          "consumer": "subsequent destructive trial and exact Revert",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli checkpoint practice/audit-workspace/transform-scratch/result \"round-2 result safety\"",
+          "exit": 0,
+          "actual": "[d44b7aef] 2026-08-23 13:57:03 Context 'practice/audit-workspace/transform-scratch/result' 'round-2 result safety'",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.41,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "round": 3,
+          "starting_state": "round 3 mid state: Update-derived Result, archive evidence merge, semantic cleanup, Ground bootstrap attempts",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "prior Update/Dedun/Forget output, archive evidence, exact UID, or saved session",
+          "consumer": "subsequent destructive trial and exact Revert",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli checkpoint practice/audit-workspace/transform-scratch/archive \"round-3 archive safety\"",
+          "exit": 0,
+          "actual": "[f0c3165e] 2026-08-23 14:02:59 Context 'practice/audit-workspace/transform-scratch/archive' 'round-3 archive safety'",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.4,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "round": 4,
+          "starting_state": "round 4 late-mid state: criteria narrowed through checkpoint/clear/scoped Update for actual Atomize Apply; large accumulated Result",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "narrow checkpointed criteria frame, actual Atomize children, or accumulated Result",
+          "consumer": "subsequent destructive trial and exact Revert",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli checkpoint practice/audit-workspace/transform-scratch/criteria \"round-4 narrow atomize safety\"",
+          "exit": 0,
+          "actual": "[cf936a69] 2026-08-23 14:07:34 Context 'practice/audit-workspace/transform-scratch/criteria' 'round-4 narrow atomize safety'",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.41,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "round": 5,
+          "starting_state": "round 5 late state: 38-item Result checkpoint/clear/rebuild/revert cycle; named Ground and saved semantic artifacts available",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "late accumulated scratch, exact checkpoint/receipt/session, cached view, or prior output",
+          "consumer": "subsequent destructive trial and exact Revert",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli checkpoint practice/audit-workspace/transform-scratch/result \"round-5 result recovery\"",
+          "exit": 0,
+          "actual": "[e9e83007] 2026-08-23 14:13:43 Context 'practice/audit-workspace/transform-scratch/result' 'round-5 result recovery'",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.42,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "check-conformance": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "round": 1,
+          "starting_state": "round 1 early state: empty transform scratch, then exact 12-Memory Source merge and direct checkpoint",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "fixed practice/source copied into scratch or explicit inline audit criterion",
+          "consumer": "meaning-preservation decision",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli check-conformance practice/audit-workspace/transform-scratch/source --against \"Each atom must preserve its trigger, exception, protected object, companion safeguard, and source meaning.\"",
+          "exit": 0,
+          "actual": "CONFORMANCE · 12/12 EXAMPLES CONFORM · 1/1 RULES MET · [EXAMPLES practice/audit-workspace/transform-scratch/source] · [RULES TEXT Each atom must preserve its trigger, exception, protected object, companion safeguard, and source meaning.]",
+          "defect_ids": [
+            "PS-T-CONFORMANCE-FALSE-CONFIDENCE"
+          ],
+          "cost": {
+            "wall_seconds": 5.64,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "round": 2,
+          "starting_state": "round 2 early-mid state: Source 12, Criteria populated from prior core candidates, Result built then checkpoint-reverted",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "round-1 outputs plus existing audit-workspace candidates and saved receipts",
+          "consumer": "meaning-preservation decision",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli check-conformance practice/audit-workspace/transform-scratch/source --against practice/audit-workspace/transform-scratch/criteria",
+          "exit": 0,
+          "actual": "CONFORMANCE · 10/10 EXAMPLES CONFORM · 2/2 RULES MET · [EXAMPLES practice/audit-workspace/transform-scratch/source] · [RULES practice/audit-workspace/transform-scratch/criteria] · 2 EXAMPLES N/A",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 9.51,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "round": 3,
+          "starting_state": "round 3 mid state: Update-derived Result, archive evidence merge, semantic cleanup, Ground bootstrap attempts",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "prior Update/Dedun/Forget output, archive evidence, exact UID, or saved session",
+          "consumer": "meaning-preservation decision",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli check-conformance practice/audit-workspace/transform-scratch/result --against \"Each result must retain the complete source trigger and not perform an edit.\"",
+          "exit": 0,
+          "actual": "CONFORMANCE · 2/11 EXAMPLES CONFORM · 0/1 RULES MET · [EXAMPLES practice/audit-workspace/transform-scratch/result] · [RULES TEXT Each result must retain the complete source trigger and not perform an edit.] ! VIOLATES · [EXAMPLE m000002] If later asked to polish a draft, preserve its overall structure and citation-needed markers, changing only wording that causes a problem. · [RULE r1] Each result must retain the complete source trigger and not perform an edit. · WHY · It permits wording edits instead of requiring the result to remain unedited. ! VIOLATES · [EXAMPLE m000003] When asked to change one expression…",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 11.77,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "round": 4,
+          "starting_state": "round 4 late-mid state: criteria narrowed through checkpoint/clear/scoped Update for actual Atomize Apply; large accumulated Result",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "narrow checkpointed criteria frame, actual Atomize children, or accumulated Result",
+          "consumer": "meaning-preservation decision",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli check-conformance practice/audit-workspace/transform-scratch/criteria --against \"Each atom must preserve the original title-specific scope and exception boundary.\"",
+          "exit": 0,
+          "actual": "CONFORMANCE · 0/2 EXAMPLES CONFORM · 0/1 RULES MET · [EXAMPLES practice/audit-workspace/transform-scratch/criteria] · [RULES TEXT Each atom must preserve the original title-specific scope and exception boundary.] ? INSUFFICIENT_EVIDENCE · [EXAMPLE m000001] By default, format a document title in sentence case rather than title case. An explicitly named style guide may override only that capitalization default. · [RULE r1] Each atom must preserve the original title-specific scope and exception boundary. · WHY · Both atoms make title-related prescriptions, but no originals are provided to determine whether their …",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 5.67,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "round": 5,
+          "starting_state": "round 5 late state: 38-item Result checkpoint/clear/rebuild/revert cycle; named Ground and saved semantic artifacts available",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "late accumulated scratch, exact checkpoint/receipt/session, cached view, or prior output",
+          "consumer": "meaning-preservation decision",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli check-conformance practice/audit-workspace/transform-scratch/archive --against practice/audit-workspace/transform-scratch/criteria",
+          "exit": 0,
+          "actual": "CONFORMANCE · 0/1 EXAMPLES CONFORM · 0/1 RULES MET · [EXAMPLES practice/audit-workspace/transform-scratch/archive] · [RULES practice/audit-workspace/transform-scratch/criteria] · 2 EXAMPLES N/A · 1 RULE N/A ? INSUFFICIENT_EVIDENCE · [EXAMPLE m000001] Change only wording that causes a problem. · [RULE r2] Preserve all intended points plus every claim's original strength and conditions. · WHY · The wording-only constraint plausibly concerns preservation, but no source-and-revision pair establishes whether points, strength, and conditions were preserved.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 6.19,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "clear": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "round": 1,
+          "starting_state": "round 1 early state: empty transform scratch, then exact 12-Memory Source merge and direct checkpoint",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "fixed practice/source copied into scratch or explicit inline audit criterion",
+          "consumer": "empty/recovery boundary and Diff",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli clear practice/audit-workspace/transform-scratch/archive",
+          "exit": 0,
+          "actual": "Context 'practice/audit-workspace/transform-scratch/archive' is already empty.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.44,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "round": 2,
+          "starting_state": "round 2 early-mid state: Source 12, Criteria populated from prior core candidates, Result built then checkpoint-reverted",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "round-1 outputs plus existing audit-workspace candidates and saved receipts",
+          "consumer": "empty/recovery boundary and Diff",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli clear practice/audit-workspace/transform-scratch/result",
+          "exit": 0,
+          "actual": "Context 'practice/audit-workspace/transform-scratch/result' is already empty.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.42,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "round": 3,
+          "starting_state": "round 3 mid state: Update-derived Result, archive evidence merge, semantic cleanup, Ground bootstrap attempts",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "prior Update/Dedun/Forget output, archive evidence, exact UID, or saved session",
+          "consumer": "empty/recovery boundary and Diff",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli clear practice/audit-workspace/transform-scratch/archive",
+          "exit": 0,
+          "actual": "Cleared 10 item(s) from 'practice/audit-workspace/transform-scratch/archive'.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.41,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "round": 4,
+          "starting_state": "round 4 late-mid state: criteria narrowed through checkpoint/clear/scoped Update for actual Atomize Apply; large accumulated Result",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "narrow checkpointed criteria frame, actual Atomize children, or accumulated Result",
+          "consumer": "empty/recovery boundary and Diff",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli clear practice/audit-workspace/transform-scratch/criteria",
+          "exit": 0,
+          "actual": "Cleared 4 item(s) from 'practice/audit-workspace/transform-scratch/criteria'.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.4,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "round": 5,
+          "starting_state": "round 5 late state: 38-item Result checkpoint/clear/rebuild/revert cycle; named Ground and saved semantic artifacts available",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "late accumulated scratch, exact checkpoint/receipt/session, cached view, or prior output",
+          "consumer": "empty/recovery boundary and Diff",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli clear practice/audit-workspace/transform-scratch/result",
+          "exit": 0,
+          "actual": "Cleared 38 checkpointed scratch Result items, demonstrating accumulated mixed-output volume.",
+          "defect_ids": [
+            "PS-T-RESULT-OVERLOAD"
+          ],
+          "cost": {
+            "wall_seconds": 0.42,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "delete": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "round": 1,
+          "starting_state": "round 1 early state: empty transform scratch, then exact 12-Memory Source merge and direct checkpoint",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "fixed practice/source copied into scratch or explicit inline audit criterion",
+          "consumer": "single-item mutation/error boundary",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli delete missing-item --context practice/audit-workspace/transform-scratch/archive",
+          "exit": 1,
+          "actual": "Error: \"No direct item matching 'missing-item' in context 'practice/audit-workspace/transform-scratch/archive'.\"",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.42,
+            "terminal_screens": 1,
+            "extra_manual_steps": 1,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "round": 2,
+          "starting_state": "round 2 early-mid state: Source 12, Criteria populated from prior core candidates, Result built then checkpoint-reverted",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "round-1 outputs plus existing audit-workspace candidates and saved receipts",
+          "consumer": "single-item mutation/error boundary",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli delete still-missing --context practice/audit-workspace/transform-scratch/result",
+          "exit": 1,
+          "actual": "Error: \"No direct item matching 'still-missing' in context 'practice/audit-workspace/transform-scratch/result'.\"",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.4,
+            "terminal_screens": 1,
+            "extra_manual_steps": 1,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "round": 3,
+          "starting_state": "round 3 mid state: Update-derived Result, archive evidence merge, semantic cleanup, Ground bootstrap attempts",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "prior Update/Dedun/Forget output, archive evidence, exact UID, or saved session",
+          "consumer": "single-item mutation/error boundary",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli delete absent-after-clear --context practice/audit-workspace/transform-scratch/archive",
+          "exit": 1,
+          "actual": "Error: \"No direct item matching 'absent-after-clear' in context 'practice/audit-workspace/transform-scratch/archive'.\"",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.41,
+            "terminal_screens": 1,
+            "extra_manual_steps": 1,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "round": 4,
+          "starting_state": "round 4 late-mid state: criteria narrowed through checkpoint/clear/scoped Update for actual Atomize Apply; large accumulated Result",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "narrow checkpointed criteria frame, actual Atomize children, or accumulated Result",
+          "consumer": "single-item mutation/error boundary",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli delete 2e9643b5 --context practice/audit-workspace/transform-scratch/archive",
+          "exit": 0,
+          "actual": "Removed [2e9643b5] REVIEW DEFAULT CANDIDATE: during authorized polishing, preserve overall structure and citation-needed markers.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.41,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "round": 5,
+          "starting_state": "round 5 late state: 38-item Result checkpoint/clear/rebuild/revert cycle; named Ground and saved semantic artifacts available",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "late accumulated scratch, exact checkpoint/receipt/session, cached view, or prior output",
+          "consumer": "single-item mutation/error boundary",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli delete absent-empty-result --context practice/audit-workspace/transform-scratch/result",
+          "exit": 1,
+          "actual": "Error: \"No direct item matching 'absent-empty-result' in context 'practice/audit-workspace/transform-scratch/result'.\"",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.43,
+            "terminal_screens": 1,
+            "extra_manual_steps": 1,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "diff": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "round": 1,
+          "starting_state": "round 1 early state: empty transform scratch, then exact 12-Memory Source merge and direct checkpoint",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "fixed practice/source copied into scratch or explicit inline audit criterion",
+          "consumer": "checkpoint discovery and recovery inspection",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli diff practice/audit-workspace/transform-scratch/archive",
+          "exit": 1,
+          "actual": "Diff browser error: Interactive history selection requires a terminal. Pass a checkpoint UID explicitly or use plain log output.",
+          "defect_ids": [
+            "PS-T-DIFF-DISCOVERY"
+          ],
+          "cost": {
+            "wall_seconds": 0.42,
+            "terminal_screens": 1,
+            "extra_manual_steps": 1,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "round": 2,
+          "starting_state": "round 2 early-mid state: Source 12, Criteria populated from prior core candidates, Result built then checkpoint-reverted",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "round-1 outputs plus existing audit-workspace candidates and saved receipts",
+          "consumer": "checkpoint discovery and recovery inspection",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli diff practice/audit-workspace/transform-scratch/result",
+          "exit": 1,
+          "actual": "Diff browser error: Interactive history selection requires a terminal. Pass a checkpoint UID explicitly or use plain log output.",
+          "defect_ids": [
+            "PS-T-DIFF-DISCOVERY"
+          ],
+          "cost": {
+            "wall_seconds": 0.41,
+            "terminal_screens": 1,
+            "extra_manual_steps": 1,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "round": 3,
+          "starting_state": "round 3 mid state: Update-derived Result, archive evidence merge, semantic cleanup, Ground bootstrap attempts",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "prior Update/Dedun/Forget output, archive evidence, exact UID, or saved session",
+          "consumer": "checkpoint discovery and recovery inspection",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli diff practice/audit-workspace/transform-scratch/archive",
+          "exit": 1,
+          "actual": "Diff browser error: Interactive history selection requires a terminal. Pass a checkpoint UID explicitly or use plain log output.",
+          "defect_ids": [
+            "PS-T-DIFF-DISCOVERY"
+          ],
+          "cost": {
+            "wall_seconds": 0.43,
+            "terminal_screens": 1,
+            "extra_manual_steps": 1,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "round": 4,
+          "starting_state": "round 4 late-mid state: criteria narrowed through checkpoint/clear/scoped Update for actual Atomize Apply; large accumulated Result",
+          "entry_route": "actual 180x52 truecolor PTY",
+          "target_route": "explicit criteria Context",
+          "scope": "interactive saved-history browser",
+          "input_provenance": "narrow checkpointed criteria frame, actual Atomize children, or accumulated Result",
+          "consumer": "checkpoint discovery and recovery inspection",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli diff practice/audit-workspace/transform-scratch/criteria",
+          "exit": 0,
+          "actual": "Actual 180x52 truecolor PTY verified by stty and ANSI stream. It showed only the scoped Update checkpoint, not the later applied Atomize split/checkpoint. Tab then Escape returned one layer; a second Escape closed.",
+          "defect_ids": [
+            "PS-T-DIFF-HISTORY-OMISSION"
+          ],
+          "cost": {
+            "wall_seconds": 5.1,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": true,
+            "pty": "180x52",
+            "color": true,
+            "keys": 3,
+            "focus_switches": 1,
+            "layers_closed": 2
+          }
+        },
+        {
+          "attempt": 5,
+          "round": 5,
+          "starting_state": "round 5 late state: 38-item Result checkpoint/clear/rebuild/revert cycle; named Ground and saved semantic artifacts available",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "late accumulated scratch, exact checkpoint/receipt/session, cached view, or prior output",
+          "consumer": "checkpoint discovery and recovery inspection",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli diff e9e83007 --context practice/audit-workspace/transform-scratch/result",
+          "exit": 2,
+          "actual": "Usage: python -m memcommit.cli diff [OPTIONS] [CONTEXT_NAME] Try 'python -m memcommit.cli diff -h' for help. ╭─ Error ──────────────────────────────────────────────────────────────────────╮ │ No such option: --context │ ╰──────────────────────────────────────────────────────────────────────────────╯",
+          "defect_ids": [
+            "PS-T-DIFF-DISCOVERY"
+          ],
+          "cost": {
+            "wall_seconds": 0.41,
+            "terminal_screens": 1,
+            "extra_manual_steps": 1,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "distill": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "round": 1,
+          "starting_state": "round 1 early state: empty transform scratch, then exact 12-Memory Source merge and direct checkpoint",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "fixed practice/source copied into scratch or explicit inline audit criterion",
+          "consumer": "candidate constraint atoms for Resolve/Dedun/Forget",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli distill practice/audit-workspace/transform-scratch/source --into practice/audit-workspace/transform-scratch/result --goal \"Independently reviewable atoms preserving every trigger, exception, protected object, companion safeguard, and exact source meaning; do not perform edits.\" --direct --plain",
+          "exit": 2,
+          "actual": "Usage: python -m memcommit.cli distill [OPTIONS] [CONTEXT_NAME] Try 'python -m memcommit.cli distill -h' for help. ╭─ Error ──────────────────────────────────────────────────────────────────────╮ │ No such option: --into (Possible options: --plain, --to) │ ╰──────────────────────────────────────────────────────────────────────────────╯",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.4,
+            "terminal_screens": 1,
+            "extra_manual_steps": 1,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "round": 2,
+          "starting_state": "round 2 early-mid state: Source 12, Criteria populated from prior core candidates, Result built then checkpoint-reverted",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "round-1 outputs plus existing audit-workspace candidates and saved receipts",
+          "consumer": "candidate constraint atoms for Resolve/Dedun/Forget",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli distill --from practice/audit-workspace/transform-scratch/source --to practice/audit-workspace/transform-scratch/result --goal \"Independently reviewable atoms preserving complete applicability boundaries and source meaning; do not perform edits.\" --direct --plain",
+          "exit": 0,
+          "actual": "Added 19 Rules. Grounded operational rules were useful, but the final Rule inferred a reusable presentation/style pattern outside the requested constraint-only goal.",
+          "defect_ids": [
+            "PS-T-DISTILL-META"
+          ],
+          "cost": {
+            "wall_seconds": 29.73,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "round": 3,
+          "starting_state": "round 3 mid state: Update-derived Result, archive evidence merge, semantic cleanup, Ground bootstrap attempts",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "prior Update/Dedun/Forget output, archive evidence, exact UID, or saved session",
+          "consumer": "candidate constraint atoms for Resolve/Dedun/Forget",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli distill --from practice/audit-workspace/transform-scratch/source --to practice/audit-workspace/transform-scratch/result --goal \"Preserve applicability boundaries while separating independently revisable commitments; exclude unrelated personal style.\" --direct --plain",
+          "exit": 0,
+          "actual": "Added 17 Rules and again inferred a family presentation-form rule even though the goal explicitly excluded unrelated personal style.",
+          "defect_ids": [
+            "PS-T-DISTILL-META"
+          ],
+          "cost": {
+            "wall_seconds": 0.45,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "round": 4,
+          "starting_state": "round 4 late-mid state: criteria narrowed through checkpoint/clear/scoped Update for actual Atomize Apply; large accumulated Result",
+          "entry_route": "recursive explicit CLI",
+          "target_route": "explicit source and target Contexts",
+          "scope": "recursive readable source; exact local target",
+          "input_provenance": "narrow checkpointed criteria frame, actual Atomize children, or accumulated Result",
+          "consumer": "candidate constraint atoms for Resolve/Dedun/Forget",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli distill --from practice/audit-workspace/transform-scratch/source --to practice/audit-workspace/transform-scratch/result --goal \"Only constraint atoms, no presentation-style meta-rule; preserve exact title scope and triggers.\" --recursive --plain",
+          "exit": 0,
+          "actual": "DISTILL APPLIED · practice/audit-workspace/transform-scratch/source → practice/audit-workspace/transform-scratch/result EFFECTS · ADD 21 RULES [memory a82ef165] When asked “How does this read?”, treat the request as seeking an opinion: do not immediately edit the draft; first check sentence order and paragraph division. [memory bbeb7e16] When later asked to polish, preserve the overall structure and citation-needed markers, changing only wording that causes a problem. [memory b446f2b5] When asked to change one expression, leave almost everything else unchanged, including user-selected technical or project-spec…",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 26.44,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "round": 5,
+          "starting_state": "round 5 late state: 38-item Result checkpoint/clear/rebuild/revert cycle; named Ground and saved semantic artifacts available",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "late accumulated scratch, exact checkpoint/receipt/session, cached view, or prior output",
+          "consumer": "candidate constraint atoms for Resolve/Dedun/Forget",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli distill --from practice/audit-workspace/transform-scratch/source --to practice/audit-workspace/transform-scratch/result --goal \"Independently reviewable constraint atoms only; preserve scope, triggers, exceptions, protected words, safeguards, and provenance.\" --direct --plain",
+          "exit": 0,
+          "actual": "Added 20 Rules and again inferred a general informal/direct English style rule despite `constraint atoms only`.",
+          "defect_ids": [
+            "PS-T-DISTILL-META"
+          ],
+          "cost": {
+            "wall_seconds": 4.53,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "elaborate": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "round": 1,
+          "starting_state": "round 1 early state: empty transform scratch, then exact 12-Memory Source merge and direct checkpoint",
+          "entry_route": "exact Memory CLI",
+          "target_route": "explicit Context:UID or --memory selector",
+          "scope": "single actionable Memory with Context neighbors as evidence",
+          "input_provenance": "fixed practice/source copied into scratch or explicit inline audit criterion",
+          "consumer": "boundary examples for later Review/Forget",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli elaborate --memory \"An atom must remain meaningful without neighboring text and must not authorize an edit.\" --into practice/audit-workspace/transform-scratch/result --as rules -n 2 --direct --plain",
+          "exit": 2,
+          "actual": "Usage: python -m memcommit.cli elaborate [OPTIONS] Try 'python -m memcommit.cli elaborate -h' for help. ╭─ Error ──────────────────────────────────────────────────────────────────────╮ │ No such option: --memory Did you mean --number? │ ╰──────────────────────────────────────────────────────────────────────────────╯",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.41,
+            "terminal_screens": 1,
+            "extra_manual_steps": 1,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "round": 2,
+          "starting_state": "round 2 early-mid state: Source 12, Criteria populated from prior core candidates, Result built then checkpoint-reverted",
+          "entry_route": "inline semantic CLI",
+          "target_route": "explicit inline input and local target",
+          "scope": "direct inline input",
+          "input_provenance": "round-1 outputs plus existing audit-workspace candidates and saved receipts",
+          "consumer": "boundary examples for later Review/Forget",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli elaborate --rule \"Every atom must preserve its trigger, narrow exception, protected object, companion safeguard, and provenance.\" --rule \"Atomization must not perform the requested document edit.\" --to practice/audit-workspace/transform-scratch/result -n 2 --plain",
+          "exit": 0,
+          "actual": "ELABORATE APPLIED · practice/audit-workspace/transform-scratch/result MODE · RULES_TO_CASES · VERIFICATION · UNVERIFIED SOURCE · INLINE · TARGET · practice/audit-workspace/transform-scratch/result EFFECTS · ADD 2 MEMORIES [memory 489d5cf0] When I ask to atomize a document instruction, record each atom without editing the document: keep the condition that activates the instruction, its narrowly defined exception, the specific text or other object it protects, the safeguard that must accompany it, and the source from which it came. [memory fed77942] If atomization is requested alongside a document edit, don't ca…",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 12.21,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "round": 3,
+          "starting_state": "round 3 mid state: Update-derived Result, archive evidence merge, semantic cleanup, Ground bootstrap attempts",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "prior Update/Dedun/Forget output, archive evidence, exact UID, or saved session",
+          "consumer": "boundary examples for later Review/Forget",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli elaborate --from practice/audit-workspace/transform-scratch/criteria --to practice/audit-workspace/transform-scratch/result --as rules -n 2 --plain",
+          "exit": 1,
+          "actual": "Elaborate error: Context-backed Elaborate requires only directly owned ordinary Memories in its Source.",
+          "defect_ids": [
+            "PS-T-ELABORATE-SOURCE-TYPE"
+          ],
+          "cost": {
+            "wall_seconds": 0.4,
+            "terminal_screens": 1,
+            "extra_manual_steps": 1,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "round": 4,
+          "starting_state": "round 4 late-mid state: criteria narrowed through checkpoint/clear/scoped Update for actual Atomize Apply; large accumulated Result",
+          "entry_route": "inline semantic CLI",
+          "target_route": "explicit inline input and local target",
+          "scope": "direct inline input",
+          "input_provenance": "narrow checkpointed criteria frame, actual Atomize children, or accumulated Result",
+          "consumer": "boundary examples for later Review/Forget",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli elaborate --rule \"A title-wording atom must retain its title scope and identify the protected word for.\" --to practice/audit-workspace/transform-scratch/result -n 1 --plain",
+          "exit": 0,
+          "actual": "ELABORATE APPLIED · practice/audit-workspace/transform-scratch/result MODE · RULES_TO_CASES · VERIFICATION · UNVERIFIED SOURCE · INLINE · TARGET · practice/audit-workspace/transform-scratch/result EFFECTS · ADD 1 MEMORIES [memory 4f0d8da5] When revising the title “Interaction and management for AI agent memory,” retain “for” as part of that title’s wording; do not delete it or treat it as wording outside the title. REVIEW · mem review elaborate --receipt 5fd1d92d-dc2a-41ce-b5ba-1b5b19e12bfb UNDO · mem undo",
+          "defect_ids": [
+            "PS-T-ELABORATE-INVENTED-EXAMPLE"
+          ],
+          "cost": {
+            "wall_seconds": 10.91,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "round": 5,
+          "starting_state": "round 5 late state: 38-item Result checkpoint/clear/rebuild/revert cycle; named Ground and saved semantic artifacts available",
+          "entry_route": "inline semantic CLI",
+          "target_route": "explicit inline input and local target",
+          "scope": "direct inline input",
+          "input_provenance": "late accumulated scratch, exact checkpoint/receipt/session, cached view, or prior output",
+          "consumer": "boundary examples for later Review/Forget",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli elaborate --rule \"Do not infer a general prose style from the examples; emit only constraints grounded in source text.\" --to practice/audit-workspace/transform-scratch/result -n 2 --plain",
+          "exit": 0,
+          "actual": "ELABORATE APPLIED · practice/audit-workspace/transform-scratch/result MODE · RULES_TO_CASES · VERIFICATION · UNVERIFIED SOURCE · INLINE · TARGET · practice/audit-workspace/transform-scratch/result EFFECTS · ADD 2 MEMORIES [memory bfe4a4fc] When examples contain polished prose, emit only constraints stated in the source text; do not infer that their general prose style is required. [memory 05563389] If every example uses the same formal tone but the source text does not require that tone, omit it as a constraint and emit only constraints grounded in the source text. REVIEW · mem review elaborate --receipt e9d0c…",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 12.86,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "resolve": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "round": 1,
+          "starting_state": "round 1 early state: empty transform scratch, then exact 12-Memory Source merge and direct checkpoint",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "fixed practice/source copied into scratch or explicit inline audit criterion",
+          "consumer": "correction of inferred or over-broad candidates",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli resolve practice/audit-workspace/transform-scratch/result --guidance \"Do not convert editing notes into actual edits; keep every permission trigger and exception explicit.\" --no-create --plain",
+          "exit": 1,
+          "actual": "Resolve error: Resolve requires at least two directly owned Memories in the selected Context.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.42,
+            "terminal_screens": 1,
+            "extra_manual_steps": 1,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "round": 2,
+          "starting_state": "round 2 early-mid state: Source 12, Criteria populated from prior core candidates, Result built then checkpoint-reverted",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "round-1 outputs plus existing audit-workspace candidates and saved receipts",
+          "consumer": "correction of inferred or over-broad candidates",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli resolve practice/audit-workspace/transform-scratch/result --guidance \"Preserve meaning and do not turn examples into new permissions.\" --no-create --plain",
+          "exit": 0,
+          "actual": "Returned FIT YES / NO CHANGE for the accumulated result.",
+          "defect_ids": [
+            "PS-T-RESOLVE-NOCHANGE"
+          ],
+          "cost": {
+            "wall_seconds": 8.07,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "round": 3,
+          "starting_state": "round 3 mid state: Update-derived Result, archive evidence merge, semantic cleanup, Ground bootstrap attempts",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "prior Update/Dedun/Forget output, archive evidence, exact UID, or saved session",
+          "consumer": "correction of inferred or over-broad candidates",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli resolve practice/audit-workspace/transform-scratch/result --guidance \"Separate atomization records from instructions to edit; label examples unverified and retain exact triggers.\" --no-create --plain",
+          "exit": 0,
+          "actual": "Returned FIT YES / NO CHANGE after guidance to separate atomization records from instructions to edit.",
+          "defect_ids": [
+            "PS-T-RESOLVE-NOCHANGE"
+          ],
+          "cost": {
+            "wall_seconds": 8.62,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "round": 4,
+          "starting_state": "round 4 late-mid state: criteria narrowed through checkpoint/clear/scoped Update for actual Atomize Apply; large accumulated Result",
+          "entry_route": "exact Memory CLI",
+          "target_route": "explicit Context:UID or --memory selector",
+          "scope": "single actionable Memory with Context neighbors as evidence",
+          "input_provenance": "narrow checkpointed criteria frame, actual Atomize children, or accumulated Result",
+          "consumer": "correction of inferred or over-broad candidates",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli resolve practice/audit-workspace/transform-scratch/result:19aff386 --guidance \"Keep this scoped to document titles and the literal word for; do not broaden it to all wording.\" --no-create --plain",
+          "exit": 0,
+          "actual": "RESOLVE · practice/audit-workspace/transform-scratch/result FIT · YES · NO CHANGE",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 8.99,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "round": 5,
+          "starting_state": "round 5 late state: 38-item Result checkpoint/clear/rebuild/revert cycle; named Ground and saved semantic artifacts available",
+          "entry_route": "exact Memory CLI",
+          "target_route": "explicit Context:UID or --memory selector",
+          "scope": "single actionable Memory with Context neighbors as evidence",
+          "input_provenance": "late accumulated scratch, exact checkpoint/receipt/session, cached view, or prior output",
+          "consumer": "correction of inferred or over-broad candidates",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli resolve practice/audit-workspace/transform-scratch/result:fe498a76 --guidance \"This is an inferred presentation-style meta-rule, not a source editing constraint; remove it without changing grounded atoms.\" --no-create --plain",
+          "exit": 0,
+          "actual": "Returned FIT YES / NO CHANGE for an exact presentation-style meta-rule explicitly identified for removal; later Forget removed it.",
+          "defect_ids": [
+            "PS-T-RESOLVE-NOCHANGE"
+          ],
+          "cost": {
+            "wall_seconds": 8.77,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "dedup": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "round": 1,
+          "starting_state": "round 1 early state: empty transform scratch, then exact 12-Memory Source merge and direct checkpoint",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "fixed practice/source copied into scratch or explicit inline audit criterion",
+          "consumer": "exact cleanup before semantic cleanup",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedup practice/audit-workspace/transform-scratch/result --direct",
+          "exit": 0,
+          "actual": "No exact duplicate direct items in Context 'practice/audit-workspace/transform-scratch/result'.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.41,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "round": 2,
+          "starting_state": "round 2 early-mid state: Source 12, Criteria populated from prior core candidates, Result built then checkpoint-reverted",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "round-1 outputs plus existing audit-workspace candidates and saved receipts",
+          "consumer": "exact cleanup before semantic cleanup",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedup practice/audit-workspace/transform-scratch/result --direct",
+          "exit": 0,
+          "actual": "No exact duplicate direct items in Context 'practice/audit-workspace/transform-scratch/result'.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.4,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "round": 3,
+          "starting_state": "round 3 mid state: Update-derived Result, archive evidence merge, semantic cleanup, Ground bootstrap attempts",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "prior Update/Dedun/Forget output, archive evidence, exact UID, or saved session",
+          "consumer": "exact cleanup before semantic cleanup",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedup practice/audit-workspace/transform-scratch/result --direct",
+          "exit": 0,
+          "actual": "No exact duplicate direct items in Context 'practice/audit-workspace/transform-scratch/result'.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.41,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "round": 4,
+          "starting_state": "round 4 late-mid state: criteria narrowed through checkpoint/clear/scoped Update for actual Atomize Apply; large accumulated Result",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "narrow checkpointed criteria frame, actual Atomize children, or accumulated Result",
+          "consumer": "exact cleanup before semantic cleanup",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedup practice/audit-workspace/transform-scratch/result --direct",
+          "exit": 0,
+          "actual": "No exact duplicate direct items in Context 'practice/audit-workspace/transform-scratch/result'.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.41,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "round": 5,
+          "starting_state": "round 5 late state: 38-item Result checkpoint/clear/rebuild/revert cycle; named Ground and saved semantic artifacts available",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "late accumulated scratch, exact checkpoint/receipt/session, cached view, or prior output",
+          "consumer": "exact cleanup before semantic cleanup",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedup practice/audit-workspace/transform-scratch/result --direct",
+          "exit": 0,
+          "actual": "No exact duplicate direct items in Context 'practice/audit-workspace/transform-scratch/result'.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.4,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "dedun": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "round": 1,
+          "starting_state": "round 1 early state: empty transform scratch, then exact 12-Memory Source merge and direct checkpoint",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "fixed practice/source copied into scratch or explicit inline audit criterion",
+          "consumer": "semantic cleanup and Review",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedun practice/audit-workspace/transform-scratch/result --direct",
+          "exit": 0,
+          "actual": "No redundancies in 'practice/audit-workspace/transform-scratch/result'.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.41,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "round": 2,
+          "starting_state": "round 2 early-mid state: Source 12, Criteria populated from prior core candidates, Result built then checkpoint-reverted",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "round-1 outputs plus existing audit-workspace candidates and saved receipts",
+          "consumer": "semantic cleanup and Review",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedun practice/audit-workspace/transform-scratch/result --direct",
+          "exit": 0,
+          "actual": "No redundancies in 'practice/audit-workspace/transform-scratch/result'.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 4.68,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "round": 3,
+          "starting_state": "round 3 mid state: Update-derived Result, archive evidence merge, semantic cleanup, Ground bootstrap attempts",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "prior Update/Dedun/Forget output, archive evidence, exact UID, or saved session",
+          "consumer": "semantic cleanup and Review",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedun practice/audit-workspace/transform-scratch/result --direct",
+          "exit": 0,
+          "actual": "Dedun 'practice/audit-workspace/transform-scratch/result': absorbed 6 redundant direct item(s); kept 6 original UID(s). DUN COMPOSITION · 6 evidence links = 0 DUP / EXACT links + 6 SEMANTIC DUN links Checkpoint [8950be74] · review: mem review dedun --receipt 8950be74-3782-4f69-aea4-56c47a05964f · recovery: mem undo",
+          "defect_ids": [
+            "PS-T-DEDUN-RECEIPT"
+          ],
+          "cost": {
+            "wall_seconds": 11.37,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "round": 4,
+          "starting_state": "round 4 late-mid state: criteria narrowed through checkpoint/clear/scoped Update for actual Atomize Apply; large accumulated Result",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "narrow checkpointed criteria frame, actual Atomize children, or accumulated Result",
+          "consumer": "semantic cleanup and Review",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedun practice/audit-workspace/transform-scratch/result --direct",
+          "exit": 0,
+          "actual": "Dedun 'practice/audit-workspace/transform-scratch/result': absorbed 11 redundant direct item(s); kept 11 original UID(s). DUN COMPOSITION · 11 evidence links = 0 DUP / EXACT links + 11 SEMANTIC DUN links Checkpoint [3efc0f25] · review: mem review dedun --receipt 3efc0f25-e0b1-4c34-a3ce-97e3fe220f80 · recovery: mem undo",
+          "defect_ids": [
+            "PS-T-DEDUN-RECEIPT"
+          ],
+          "cost": {
+            "wall_seconds": 13.2,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "round": 5,
+          "starting_state": "round 5 late state: 38-item Result checkpoint/clear/rebuild/revert cycle; named Ground and saved semantic artifacts available",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "late accumulated scratch, exact checkpoint/receipt/session, cached view, or prior output",
+          "consumer": "semantic cleanup and Review",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedun practice/audit-workspace/transform-scratch/result --direct",
+          "exit": 0,
+          "actual": "Dedun 'practice/audit-workspace/transform-scratch/result': absorbed 1 redundant direct item(s); kept 1 original UID(s). DUN COMPOSITION · 1 evidence link = 0 DUP / EXACT links + 1 SEMANTIC DUN link Checkpoint [106ac92f] · review: mem review dedun --receipt 106ac92f-f6ba-461d-bf5e-223c1e65ab42 · recovery: mem undo",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 5.42,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "forget": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "round": 1,
+          "starting_state": "round 1 early state: empty transform scratch, then exact 12-Memory Source merge and direct checkpoint",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "fixed practice/source copied into scratch or explicit inline audit criterion",
+          "consumer": "remove non-constraint/meta material within scratch",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli forget practice/audit-workspace/transform-scratch/source \"Remove exact duplicate copies only; preserve every distinct constraint.\" --direct",
+          "exit": 2,
+          "actual": "Usage: python -m memcommit.cli forget [OPTIONS] [INFO] Try 'python -m memcommit.cli forget -h' for help. ╭─ Error ──────────────────────────────────────────────────────────────────────╮ │ No such option: --direct │ ╰──────────────────────────────────────────────────────────────────────────────╯",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.4,
+            "terminal_screens": 1,
+            "extra_manual_steps": 1,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "round": 2,
+          "starting_state": "round 2 early-mid state: Source 12, Criteria populated from prior core candidates, Result built then checkpoint-reverted",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "round-1 outputs plus existing audit-workspace candidates and saved receipts",
+          "consumer": "remove non-constraint/meta material within scratch",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli forget \"Remove exact duplicate copies only; preserve every distinct constraint.\" --context practice/audit-workspace/transform-scratch/source",
+          "exit": 0,
+          "actual": "Consulting the configured Forget provider... FORGET · NO CHANGE · SOURCE practice/audit-workspace/transform-scratch/source OUTCOME · NO CHANGE · Context unchanged · no checkpoint",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 21.07,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "round": 3,
+          "starting_state": "round 3 mid state: Update-derived Result, archive evidence merge, semantic cleanup, Ground bootstrap attempts",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "prior Update/Dedun/Forget output, archive evidence, exact UID, or saved session",
+          "consumer": "remove non-constraint/meta material within scratch",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli forget \"Remove only meta-observations about presentation style that are not editing constraints; preserve all operative constraints.\" --context practice/audit-workspace/transform-scratch/result",
+          "exit": 0,
+          "actual": "FORGET APPLIED · SOURCE practice/audit-workspace/transform-scratch/result EFFECTS · REMOVE 1 · EDIT 0 RECEIPT · 59da3561-689f-42bd-9991-1bc2893dc2ca CHECKPOINT · 59da3561-689f-42bd-9991-1bc2893dc2ca REVIEW · mem review forget --receipt 59da3561-689f-42bd-9991-1bc2893dc2ca RECOVERY · mem undo",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 1.23,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "round": 4,
+          "starting_state": "round 4 late-mid state: criteria narrowed through checkpoint/clear/scoped Update for actual Atomize Apply; large accumulated Result",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "narrow checkpointed criteria frame, actual Atomize children, or accumulated Result",
+          "consumer": "remove non-constraint/meta material within scratch",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli forget \"Remove generated examples that invent a concrete title not present in the source; preserve grounded constraints.\" --context practice/audit-workspace/transform-scratch/result",
+          "exit": 0,
+          "actual": "FORGET APPLIED · SOURCE practice/audit-workspace/transform-scratch/result EFFECTS · REMOVE 0 · EDIT 1 RECEIPT · ebbc8d91-6737-4b21-b4b6-8e5b766f1c58 CHECKPOINT · ebbc8d91-6737-4b21-b4b6-8e5b766f1c58 REVIEW · mem review forget --receipt ebbc8d91-6737-4b21-b4b6-8e5b766f1c58 RECOVERY · mem undo",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 13.29,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "round": 5,
+          "starting_state": "round 5 late state: 38-item Result checkpoint/clear/rebuild/revert cycle; named Ground and saved semantic artifacts available",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "late accumulated scratch, exact checkpoint/receipt/session, cached view, or prior output",
+          "consumer": "remove non-constraint/meta material within scratch",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli forget \"Remove inferred presentation-style meta-rules not explicitly stated in the source; preserve grounded editing constraints.\" --context practice/audit-workspace/transform-scratch/result",
+          "exit": 0,
+          "actual": "Consulting the configured Forget provider... FORGET APPLIED · SOURCE practice/audit-workspace/transform-scratch/result EFFECTS · REMOVE 1 · EDIT 0 RECEIPT · d8b95d7b-5a97-47b0-9902-1c3076994ee9 CHECKPOINT · d8b95d7b-5a97-47b0-9902-1c3076994ee9 REVIEW · mem review forget --receipt d8b95d7b-5a97-47b0-9902-1c3076994ee9 RECOVERY · mem undo",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 29.49,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "ground": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "round": 1,
+          "starting_state": "round 1 early state: empty transform scratch, then exact 12-Memory Source merge and direct checkpoint",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "fixed practice/source copied into scratch or explicit inline audit criterion",
+          "consumer": "durable atomization goal and stale-frame detection",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli ground --request \"Prepare independently reviewable atoms of the practice/source editing constraints without editing their subject text or changing meaning.\"",
+          "exit": 0,
+          "actual": "MEM GROUND · DRAFT GOAL Prepare independently reviewable atoms of the practice/source editing constraints without editing their subject text or changing meaning. CONTEXTS (none selected) No current Context was read. RULES (none yet) MEMORIES (none yet) CHAT YOU · STARTING REQUEST Prepare independently reviewable atoms of the practice/source editing constraints without editing their subject text or changing meaning. Run this command in an interactive terminal to interpret the Working Goal and continue the chat. DESCRIBE WHAT YOU HAVE SO FAR > ________________________________________________________________ In a…",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.4,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "round": 2,
+          "starting_state": "round 2 early-mid state: Source 12, Criteria populated from prior core candidates, Result built then checkpoint-reverted",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "round-1 outputs plus existing audit-workspace candidates and saved receipts",
+          "consumer": "durable atomization goal and stale-frame detection",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli ground practice-source-atomize --goal \"Atomize practice/source constraints without editing their subject text or changing meaning.\" --raw-context practice/audit-workspace/transform-scratch/source --derived-context practice/audit-workspace/transform-scratch/result --publication-context practice/audit-workspace/transform-scratch/archive --snapshot",
+          "exit": 2,
+          "actual": "Usage: python -m memcommit.cli ground [OPTIONS] [GROUND_NAME] Try 'python -m memcommit.cli ground -h' for help. ╭─ Error ──────────────────────────────────────────────────────────────────────╮ │ No such option: --publication-context (Possible options: │ │ --publication-target, --raw-context) │ ╰──────────────────────────────────────────────────────────────────────────────╯",
+          "defect_ids": [
+            "PS-T-GROUND-GRAMMAR"
+          ],
+          "cost": {
+            "wall_seconds": 0.4,
+            "terminal_screens": 1,
+            "extra_manual_steps": 1,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "round": 3,
+          "starting_state": "round 3 mid state: Update-derived Result, archive evidence merge, semantic cleanup, Ground bootstrap attempts",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "prior Update/Dedun/Forget output, archive evidence, exact UID, or saved session",
+          "consumer": "durable atomization goal and stale-frame detection",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli ground practice-source-atomize --goal \"Atomize practice/source constraints without editing their subject text or changing meaning.\" --raw-context practice/audit-workspace/transform-scratch/source --derived-context practice/audit-workspace/transform-scratch/result --publication-target practice/audit-workspace/transform-scratch/archive --snapshot",
+          "exit": 1,
+          "actual": "Ground error: Binding requires --description, --raw-context, --derived-context, and --publication-target.",
+          "defect_ids": [
+            "PS-T-GROUND-GRAMMAR"
+          ],
+          "cost": {
+            "wall_seconds": 0.44,
+            "terminal_screens": 1,
+            "extra_manual_steps": 1,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "round": 4,
+          "starting_state": "round 4 late-mid state: criteria narrowed through checkpoint/clear/scoped Update for actual Atomize Apply; large accumulated Result",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "narrow checkpointed criteria frame, actual Atomize children, or accumulated Result",
+          "consumer": "durable atomization goal and stale-frame detection",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli ground practice-source-atomize --goal \"Atomize practice/source constraints without editing their subject text or changing meaning.\" --description \"Preserve complete triggers, exceptions, protected objects, safeguards, and provenance in independently reviewable atoms.\" --raw-context practice/audit-workspace/transform-scratch/source --derived-context practice/audit-workspace/transform-scratch/result --publication-target practice/audit-workspace/transform-scratch/archive --snapshot",
+          "exit": 0,
+          "actual": "Created named Ground revision 0 with 12 RAW, 32 candidates, and 1 target; displayed two unrelated agent-suggested research readings.",
+          "defect_ids": [
+            "PS-T-GROUND-RESEARCH-NOISE"
+          ],
+          "cost": {
+            "wall_seconds": 0.43,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "round": 5,
+          "starting_state": "round 5 late state: 38-item Result checkpoint/clear/rebuild/revert cycle; named Ground and saved semantic artifacts available",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "late accumulated scratch, exact checkpoint/receipt/session, cached view, or prior output",
+          "consumer": "durable atomization goal and stale-frame detection",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli ground practice-source-atomize --snapshot",
+          "exit": 0,
+          "actual": "GROUND · practice-source-atomize · OPEN · STALE Revision: 0 SOURCE BRIEF · FIXED INPUT Preserve complete triggers, exceptions, protected objects, safeguards, and provenance in independently reviewable atoms. 1 · GOAL Atomize practice/source constraints without editing their subject text or changing meaning. TARGET REQUIREMENTS The Goal and requirements may be revised when Ground Memories expose a bad boundary. [EMPTY ] practice/audit-workspace/transform-scratch/archive · 3 direct Memories · 0/1 accepted [1600fcae] (not specified) 2 · RULES · STATED / DISTILLED / REVISED (none yet; state directly or distill fro…",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.43,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "impact": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "round": 1,
+          "starting_state": "round 1 early state: empty transform scratch, then exact 12-Memory Source merge and direct checkpoint",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "fixed practice/source copied into scratch or explicit inline audit criterion",
+          "consumer": "read-only preview of semantic proposal or saved session",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli impact atomize practice/audit-workspace/transform-scratch/source",
+          "exit": 0,
+          "actual": "RESULT · atomize · practice/audit-workspace/transform-scratch/source STATUS · ANALYSIS COMPLETE · sources=12 · projected=17 · splits=4 · children=9 · review issues=5 WHAT MEM UNDERSTOOD The memories define conservative editing preferences: review before rewriting, preserve structure, terminology, claims, conditions, and required wording, apply scoped formatting defaults, verify sources fully, and report verification problems before changing a draft when only review was requested. WHAT HAPPENED Separate commitments were exposed for expression-specific edits, terminology choices, capitalization and wording rules…",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.41,
+            "terminal_screens": 2,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "round": 2,
+          "starting_state": "round 2 early-mid state: Source 12, Criteria populated from prior core candidates, Result built then checkpoint-reverted",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "round-1 outputs plus existing audit-workspace candidates and saved receipts",
+          "consumer": "read-only preview of semantic proposal or saved session",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli impact distill --from practice/audit-workspace/transform-scratch/source --to practice/audit-workspace/transform-scratch/result --goal \"preserve triggers, exceptions, safeguards, and provenance\" --direct",
+          "exit": 0,
+          "actual": "MEM DISTILL · RULE PROPOSAL CONTEXT LOCATIONS SOURCE · practice/audit-workspace/transform-scratch/source TARGET · practice/audit-workspace/transform-scratch/result · EXISTING PROPOSAL · 12 SOURCE · 13 RULES · THIS CONTEXT ONLY RANGE GOAL preserve triggers, exceptions, safeguards, and provenance SOURCE OVERVIEW A compact editing-and-review policy family: respect the user’s requested operation and chosen structure/terminology, preserve meaning and required content during polishing or compression, apply explicit title-format defaults with narrow style-guide overrides, and verify claims and citations against compl…",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 4.86,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "round": 3,
+          "starting_state": "round 3 mid state: Update-derived Result, archive evidence merge, semantic cleanup, Ground bootstrap attempts",
+          "entry_route": "saved-artifact CLI",
+          "target_route": "explicit receipt/session UID",
+          "scope": "frozen prior semantic artifact",
+          "input_provenance": "prior Update/Dedun/Forget output, archive evidence, exact UID, or saved session",
+          "consumer": "read-only preview of semantic proposal or saved session",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli impact update --session b158947f-1819-47dc-9a12-2344593cd327",
+          "exit": 0,
+          "actual": "MEM UPDATE CONTEXT LOCATIONS SOURCE · practice/audit-workspace/transform-scratch/source TARGET · practice/audit-workspace/transform-scratch/result APPLIED · 0 EDITS · 11 ADDITIONS · 0 REMOVALS · 11 CHANGES PLAN The exact target Memory changes shown below were applied to the recorded Target revision. WHAT WILL CHANGE 11 exact target Memory changes in the target Context practice/audit-workspace/transform-scratch/result: 0 EDIT, 11 ADD, and 0 REMOVE. Impact shows each located before/after transition once; exact reason and source provenance remain inspectable in Items. IMPACT · UPDATE These are the exact target ch…",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.41,
+            "terminal_screens": 2,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "round": 4,
+          "starting_state": "round 4 late-mid state: criteria narrowed through checkpoint/clear/scoped Update for actual Atomize Apply; large accumulated Result",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "narrow checkpointed criteria frame, actual Atomize children, or accumulated Result",
+          "consumer": "read-only preview of semantic proposal or saved session",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli impact atomize practice/audit-workspace/transform-scratch/criteria",
+          "exit": 0,
+          "actual": "RESULT · atomize · practice/audit-workspace/transform-scratch/criteria STATUS · ANALYSIS COMPLETE · sources=2 · projected=2 · splits=0 · children=0 · review issues=0 WHAT MEM UNDERSTOOD Document titles should use sentence case by default, unless an explicitly named style guide overrides that capitalization default. The word “for” must always be retained when it belongs to the intended wording. WHAT HAPPENED The title-capitalization rule was preserved as one commitment because its style-guide exception qualifies the default rather than creating an independently revisable claim. The instruction about retaining “…",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 9.13,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "round": 5,
+          "starting_state": "round 5 late state: 38-item Result checkpoint/clear/rebuild/revert cycle; named Ground and saved semantic artifacts available",
+          "entry_route": "saved-artifact CLI",
+          "target_route": "explicit receipt/session UID",
+          "scope": "frozen prior semantic artifact",
+          "input_provenance": "late accumulated scratch, exact checkpoint/receipt/session, cached view, or prior output",
+          "consumer": "read-only preview of semantic proposal or saved session",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli impact meld --session 2c085391-7fec-4578-a921-2f7ae9fc83a1",
+          "exit": 0,
+          "actual": "Saved Meld Impact reported 0/33 Source coverage, 0 changes, and an Apply affordance despite the target having materially changed since the analysis.",
+          "defect_ids": [
+            "PS-T-IMPACT-COVERAGE"
+          ],
+          "cost": {
+            "wall_seconds": 0.44,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "meld": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "round": 1,
+          "starting_state": "round 1 early state: empty transform scratch, then exact 12-Memory Source merge and direct checkpoint",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "fixed practice/source copied into scratch or explicit inline audit criterion",
+          "consumer": "reconcile an explicit preservation safeguard with accumulated result",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli meld practice/audit-workspace/candidates practice/audit-workspace/transform-scratch/result --direct",
+          "exit": 1,
+          "actual": "Meld error: Source Context 'practice/audit-workspace/transform-scratch/result' has no readable Memory content.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.42,
+            "terminal_screens": 1,
+            "extra_manual_steps": 1,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "round": 2,
+          "starting_state": "round 2 early-mid state: Source 12, Criteria populated from prior core candidates, Result built then checkpoint-reverted",
+          "entry_route": "exact Memory CLI",
+          "target_route": "explicit Context:UID or --memory selector",
+          "scope": "single actionable Memory with Context neighbors as evidence",
+          "input_provenance": "round-1 outputs plus existing audit-workspace candidates and saved receipts",
+          "consumer": "reconcile an explicit preservation safeguard with accumulated result",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli meld --memory \"Do not turn an editing constraint into permission to edit; preserve the complete trigger and exception.\" --into practice/audit-workspace/transform-scratch/result --direct",
+          "exit": 0,
+          "actual": "MELD READY · DIRECTIONAL · practice/audit-workspace/transform-scratch/result ROUTE · INCOMING INLINE MEMORY → BASELINE / TARGET practice/audit-workspace/transform-scratch/result JUDGMENTS · REQUIRED 0 · OPTIONAL 0 SESSION · bc8fd207-3691-4d56-b642-dc8dd9dc52d0 SOURCE · UNCHANGED IMPACT · mem impact meld --session bc8fd207-3691-4d56-b642-dc8dd9dc52d0 RESUME · mem meld --sessions",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 15.66,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "round": 3,
+          "starting_state": "round 3 mid state: Update-derived Result, archive evidence merge, semantic cleanup, Ground bootstrap attempts",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "prior Update/Dedun/Forget output, archive evidence, exact UID, or saved session",
+          "consumer": "reconcile an explicit preservation safeguard with accumulated result",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli meld practice/audit-workspace/transform-scratch/source practice/audit-workspace/transform-scratch/criteria practice/audit-workspace/transform-scratch/meld-r3 --direct",
+          "exit": 1,
+          "actual": "A sequential symmetric Meld failed after 25.62s claiming a Source Context changed while Compare was analyzing; no analysis saved.",
+          "defect_ids": [
+            "PS-T-MELD-SNAPSHOT-RACE"
+          ],
+          "cost": {
+            "wall_seconds": 25.62,
+            "terminal_screens": 1,
+            "extra_manual_steps": 1,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "round": 4,
+          "starting_state": "round 4 late-mid state: criteria narrowed through checkpoint/clear/scoped Update for actual Atomize Apply; large accumulated Result",
+          "entry_route": "exact Memory CLI",
+          "target_route": "explicit Context:UID or --memory selector",
+          "scope": "single actionable Memory with Context neighbors as evidence",
+          "input_provenance": "narrow checkpointed criteria frame, actual Atomize children, or accumulated Result",
+          "consumer": "reconcile an explicit preservation safeguard with accumulated result",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli meld --memory \"Preserve the document-title scope when retaining the literal word for.\" --into practice/audit-workspace/transform-scratch/result --direct --restart",
+          "exit": 0,
+          "actual": "MELD READY · DIRECTIONAL · practice/audit-workspace/transform-scratch/result ROUTE · INCOMING INLINE MEMORY → BASELINE / TARGET practice/audit-workspace/transform-scratch/result JUDGMENTS · REQUIRED 0 · OPTIONAL 0 SESSION · 2c085391-7fec-4578-a921-2f7ae9fc83a1 SOURCE · UNCHANGED IMPACT · mem impact meld --session 2c085391-7fec-4578-a921-2f7ae9fc83a1 RESUME · mem meld --sessions",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 19,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "round": 5,
+          "starting_state": "round 5 late state: 38-item Result checkpoint/clear/rebuild/revert cycle; named Ground and saved semantic artifacts available",
+          "entry_route": "exact Memory CLI",
+          "target_route": "explicit Context:UID or --memory selector",
+          "scope": "single actionable Memory with Context neighbors as evidence",
+          "input_provenance": "late accumulated scratch, exact checkpoint/receipt/session, cached view, or prior output",
+          "consumer": "reconcile an explicit preservation safeguard with accumulated result",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli meld --memory \"Do not infer general presentation-style rules from source examples.\" --into practice/audit-workspace/transform-scratch/result --direct --restart",
+          "exit": 0,
+          "actual": "MELD READY · DIRECTIONAL · practice/audit-workspace/transform-scratch/result ROUTE · INCOMING INLINE MEMORY → BASELINE / TARGET practice/audit-workspace/transform-scratch/result JUDGMENTS · REQUIRED 0 · OPTIONAL 0 SESSION · 4fb68403-3957-4a63-b509-bb2fea67e7e8 SOURCE · UNCHANGED IMPACT · mem impact meld --session 4fb68403-3957-4a63-b509-bb2fea67e7e8 RESUME · mem meld --sessions",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 16.08,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "merge": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "round": 1,
+          "starting_state": "round 1 early state: empty transform scratch, then exact 12-Memory Source merge and direct checkpoint",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "fixed practice/source copied into scratch or explicit inline audit criterion",
+          "consumer": "accumulate exact source/evidence material in scratch",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli merge practice/source practice/audit-workspace/transform-scratch/source --direct",
+          "exit": 0,
+          "actual": "MERGE RECORDED · 'practice/source' → 'practice/audit-workspace/transform-scratch/source' · DIRECT · NEW 12 (12 memories) · ALREADY PRESENT 0 · KEPT TARGET 0 · TOOK SOURCE 0 · CREATED CONTEXTS 0 · TARGET CHANGED YES · CHECKPOINTS 1",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.41,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "round": 2,
+          "starting_state": "round 2 early-mid state: Source 12, Criteria populated from prior core candidates, Result built then checkpoint-reverted",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "round-1 outputs plus existing audit-workspace candidates and saved receipts",
+          "consumer": "accumulate exact source/evidence material in scratch",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli merge practice/audit-workspace/candidates practice/audit-workspace/transform-scratch/criteria --direct",
+          "exit": 0,
+          "actual": "MERGE RECORDED · 'practice/audit-workspace/candidates' → 'practice/audit-workspace/transform-scratch/criteria' · DIRECT · NEW 4 (2 memories, 2 embedded contexts) · ALREADY PRESENT 0 · KEPT TARGET 0 · TOOK SOURCE 0 · CREATED CONTEXTS 0 · TARGET CHANGED YES · CHECKPOINTS 1",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.41,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "round": 3,
+          "starting_state": "round 3 mid state: Update-derived Result, archive evidence merge, semantic cleanup, Ground bootstrap attempts",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "prior Update/Dedun/Forget output, archive evidence, exact UID, or saved session",
+          "consumer": "accumulate exact source/evidence material in scratch",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli merge practice/audit-workspace/review practice/audit-workspace/transform-scratch/archive --direct",
+          "exit": 0,
+          "actual": "MERGE RECORDED · 'practice/audit-workspace/review' → 'practice/audit-workspace/transform-scratch/archive' · DIRECT · NEW 10 (4 memories, 4 memory refs, 2 embedded contexts) · ALREADY PRESENT 0 · KEPT TARGET 0 · TOOK SOURCE 0 · CREATED CONTEXTS 0 · TARGET CHANGED YES · CHECKPOINTS 1",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.42,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "round": 4,
+          "starting_state": "round 4 late-mid state: criteria narrowed through checkpoint/clear/scoped Update for actual Atomize Apply; large accumulated Result",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "narrow checkpointed criteria frame, actual Atomize children, or accumulated Result",
+          "consumer": "accumulate exact source/evidence material in scratch",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli merge practice/audit-workspace/source-copies practice/audit-workspace/transform-scratch/result --direct",
+          "exit": 0,
+          "actual": "MERGE RECORDED · 'practice/audit-workspace/source-copies' → 'practice/audit-workspace/transform-scratch/result' · DIRECT · NEW 6 (6 memories) · ALREADY PRESENT 0 · KEPT TARGET 0 · TOOK SOURCE 0 · CREATED CONTEXTS 0 · TARGET CHANGED YES · CHECKPOINTS 1",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.42,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "round": 5,
+          "starting_state": "round 5 late state: 38-item Result checkpoint/clear/rebuild/revert cycle; named Ground and saved semantic artifacts available",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "late accumulated scratch, exact checkpoint/receipt/session, cached view, or prior output",
+          "consumer": "accumulate exact source/evidence material in scratch",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli merge practice/audit-workspace/transform-scratch/source practice/audit-workspace/transform-scratch/result --direct",
+          "exit": 0,
+          "actual": "MERGE RECORDED · 'practice/audit-workspace/transform-scratch/source' → 'practice/audit-workspace/transform-scratch/result' · DIRECT · NEW 12 (12 memories) · ALREADY PRESENT 0 · KEPT TARGET 0 · TOOK SOURCE 0 · CREATED CONTEXTS 0 · TARGET CHANGED YES · CHECKPOINTS 1",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.42,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "rationale": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "round": 1,
+          "starting_state": "round 1 early state: empty transform scratch, then exact 12-Memory Source merge and direct checkpoint",
+          "entry_route": "exact Memory CLI",
+          "target_route": "explicit Context:UID or --memory selector",
+          "scope": "single actionable Memory with Context neighbors as evidence",
+          "input_provenance": "fixed practice/source copied into scratch or explicit inline audit criterion",
+          "consumer": "natural-language provenance and scope inspection",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli rationale practice/source:f3ef224d --json --limit 120 --unit words",
+          "exit": 0,
+          "actual": "{ \"trace\": { \"context\": { \"uid\": \"7e48e68e-3c6f-541b-bfc1-e307abcc7a4f\", \"name\": \"practice/source\" }, \"selected_uid\": \"f3ef224d-ff16-5a7a-880a-18eee2fc55b5\", \"component_uids\": [ \"f3ef224d-ff16-5a7a-880a-18eee2fc55b5\" ], \"originals\": [], \"current\": [ { \"uid\": \"f3ef224d-ff16-5a7a-880a-18eee2fc55b5\", \"content\": \"When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.\", \"position\": 0, \"content_digest\": \"f42180ac2731580b133c60a28178c7484694134af9cd87795b387dcea63545af\" } ], \"events\": [ { \"kind\": \"HISTORY_GAP\", \"evidence\"…",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.46,
+            "terminal_screens": 4,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "round": 2,
+          "starting_state": "round 2 early-mid state: Source 12, Criteria populated from prior core candidates, Result built then checkpoint-reverted",
+          "entry_route": "exact Memory CLI",
+          "target_route": "explicit Context:UID or --memory selector",
+          "scope": "single actionable Memory with Context neighbors as evidence",
+          "input_provenance": "round-1 outputs plus existing audit-workspace candidates and saved receipts",
+          "consumer": "natural-language provenance and scope inspection",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli rationale practice/audit-workspace/transform-scratch/source:c666f752 --limit 120 --unit words",
+          "exit": 0,
+          "actual": "Rationale [c666f752] · practice/audit-workspace/transform-scratch/source MEMORY When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division. PROVENANCE The Memory originally appeared in `practice/source` as “When I ask ‘How does this read?’, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.” A merge copied it unchanged into `practice/audit-workspace/transform-scratch/source`, where it remains current.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 7.59,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "round": 3,
+          "starting_state": "round 3 mid state: Update-derived Result, archive evidence merge, semantic cleanup, Ground bootstrap attempts",
+          "entry_route": "exact Memory CLI",
+          "target_route": "explicit Context:UID or --memory selector",
+          "scope": "single actionable Memory with Context neighbors as evidence",
+          "input_provenance": "prior Update/Dedun/Forget output, archive evidence, exact UID, or saved session",
+          "consumer": "natural-language provenance and scope inspection",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli rationale practice/audit-workspace/transform-scratch/result:6ead437d --limit 80 --unit words",
+          "exit": 0,
+          "actual": "Rationale [6ead437d] · practice/audit-workspace/transform-scratch/result MEMORY When asked “How does this read?”, provide an opinion first rather than immediately editing the draft, and assess sentence order and paragraph division. PROVENANCE In practice/audit-workspace/transform-scratch/source, semantic update b158947f made “When asked ‘How does this read?’, provide an opinion first rather than immediately editing the draft, and assess sentence order and paragraph division.” a standalone Memory in practice/audit-workspace/transform-scratch/result; no later disappearance, return, edit, or removal is recorded.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 6.72,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "round": 4,
+          "starting_state": "round 4 late-mid state: criteria narrowed through checkpoint/clear/scoped Update for actual Atomize Apply; large accumulated Result",
+          "entry_route": "exact Memory CLI",
+          "target_route": "explicit Context:UID or --memory selector",
+          "scope": "single actionable Memory with Context neighbors as evidence",
+          "input_provenance": "narrow checkpointed criteria frame, actual Atomize children, or accumulated Result",
+          "consumer": "natural-language provenance and scope inspection",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli rationale practice/audit-workspace/transform-scratch/criteria:261b87e6 --limit 100 --unit words",
+          "exit": 0,
+          "actual": "Accurately narrated the Atomize split provenance for standalone `for`, but did not warn that the split had lost title scope; Audit independently found it underspecified.",
+          "defect_ids": [
+            "PS-T-RATIONALE-SCOPE-WARNING"
+          ],
+          "cost": {
+            "wall_seconds": 6.69,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "round": 5,
+          "starting_state": "round 5 late state: 38-item Result checkpoint/clear/rebuild/revert cycle; named Ground and saved semantic artifacts available",
+          "entry_route": "exact Memory CLI",
+          "target_route": "explicit Context:UID or --memory selector",
+          "scope": "single actionable Memory with Context neighbors as evidence",
+          "input_provenance": "late accumulated scratch, exact checkpoint/receipt/session, cached view, or prior output",
+          "consumer": "natural-language provenance and scope inspection",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli rationale practice/source:b976766e --json --limit 120 --unit words",
+          "exit": 0,
+          "actual": "{ \"trace\": { \"context\": { \"uid\": \"7e48e68e-3c6f-541b-bfc1-e307abcc7a4f\", \"name\": \"practice/source\" }, \"selected_uid\": \"b976766e-d366-5065-929e-5f31e638fdbe\", \"component_uids\": [ \"b976766e-d366-5065-929e-5f31e638fdbe\" ], \"originals\": [], \"current\": [ { \"uid\": \"b976766e-d366-5065-929e-5f31e638fdbe\", \"content\": \"If the next idea is merely related and does not broaden the scope, don't use More broadly; use In relation to this or another accurate connector without adding a new claim merely to make two paragraphs connect.\", \"position\": 6, \"content_digest\": \"a42e4c115f46fe487863131816c163d66cf8586d523d962dc71d36f0fdd…",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.46,
+            "terminal_screens": 4,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "revert": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "round": 1,
+          "starting_state": "round 1 early state: empty transform scratch, then exact 12-Memory Source merge and direct checkpoint",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "fixed practice/source copied into scratch or explicit inline audit criterion",
+          "consumer": "restore checkpointed scratch state",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli revert 00c09d4f --context practice/audit-workspace/transform-scratch/source --keep",
+          "exit": 0,
+          "actual": "Reverted Context: practice/audit-workspace/transform-scratch/source Restored state recorded by: manual checkpoint Action detail: round-1 pre-atomize source Affected Context: practice/audit-workspace/transform-scratch/source Affected content: no direct Context changes Restored checkpoint: [00c09d4f] (2026-08-23 13:52) Undo command: mem undo Exact recovery checkpoint: mem revert 46951cf5 --discard-newer",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.41,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "round": 2,
+          "starting_state": "round 2 early-mid state: Source 12, Criteria populated from prior core candidates, Result built then checkpoint-reverted",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "round-1 outputs plus existing audit-workspace candidates and saved receipts",
+          "consumer": "restore checkpointed scratch state",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli revert d44b7aef --context practice/audit-workspace/transform-scratch/result --keep",
+          "exit": 0,
+          "actual": "Reverted Context: practice/audit-workspace/transform-scratch/result Restored state recorded by: manual checkpoint Action detail: round-2 result safety Affected Context: practice/audit-workspace/transform-scratch/result Affected content: 21 Memories removed - [memory c85bbf0d] \"When asked “How does this read?”, treat the request as a request for an opinion rather than immediate editing; first assess sentence order and paragraph division.\" - [memory 3117d450] \"If polishing is requested later, preserve the overall structure and citation-needed markers, changing only wording that causes a problem.\" - [memory d8aba…",
+          "defect_ids": [
+            "PS-T-REVERT-OVERLOAD"
+          ],
+          "cost": {
+            "wall_seconds": 0.43,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "round": 3,
+          "starting_state": "round 3 mid state: Update-derived Result, archive evidence merge, semantic cleanup, Ground bootstrap attempts",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "prior Update/Dedun/Forget output, archive evidence, exact UID, or saved session",
+          "consumer": "restore checkpointed scratch state",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli revert f0c3165e --context practice/audit-workspace/transform-scratch/archive --keep",
+          "exit": 0,
+          "actual": "Reverted Context: practice/audit-workspace/transform-scratch/archive Restored state recorded by: manual checkpoint Action detail: round-3 archive safety Affected Context: practice/audit-workspace/transform-scratch/archive Affected content: 4 Memories added, 4 Memory refs added, 2 Embedded contexts added + [reference e80f2530] to Context \"practice/source\" [memory 96300a95] + [memory 2e9643b5] \"REVIEW DEFAULT CANDIDATE: during authorized polishing, preserve overall structure and citation-needed markers.\" + [memory 45639f77] \"Change only wording that causes a problem.\" + [reference ceccfa52] to Context \"practice/…",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.41,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "round": 4,
+          "starting_state": "round 4 late-mid state: criteria narrowed through checkpoint/clear/scoped Update for actual Atomize Apply; large accumulated Result",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "narrow checkpointed criteria frame, actual Atomize children, or accumulated Result",
+          "consumer": "restore checkpointed scratch state",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli revert cf936a69 --context practice/audit-workspace/transform-scratch/criteria --keep",
+          "exit": 0,
+          "actual": "Reverted Context: practice/audit-workspace/transform-scratch/criteria Restored state recorded by: manual checkpoint Action detail: round-4 narrow atomize safety Affected Context: practice/audit-workspace/transform-scratch/criteria Affected content: 2 Memories added, 2 Embedded contexts added, 2 Memories removed - [memory bc0f7cc5] \"By default, format a document title in sentence case rather than title case. An explicitly named style guide may override only that capitalization default.\" - [memory 261b87e6] \"Always keep “for” whenever it is part of the intended wording.\" + [context 7e48e68e] \"practice/source\" + …",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.42,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "round": 5,
+          "starting_state": "round 5 late state: 38-item Result checkpoint/clear/rebuild/revert cycle; named Ground and saved semantic artifacts available",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "late accumulated scratch, exact checkpoint/receipt/session, cached view, or prior output",
+          "consumer": "restore checkpointed scratch state",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli revert e9e83007 --context practice/audit-workspace/transform-scratch/result --keep",
+          "exit": 0,
+          "actual": "Restored 38 Memories and removed 32 late items; receipt abbreviated 70 effects as 12 lines plus `58 more`, requiring another read for full disposition.",
+          "defect_ids": [
+            "PS-T-REVERT-OVERLOAD",
+            "PS-T-RESULT-OVERLOAD"
+          ],
+          "cost": {
+            "wall_seconds": 0.43,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "review": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "round": 1,
+          "starting_state": "round 1 early state: empty transform scratch, then exact 12-Memory Source merge and direct checkpoint",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "fixed practice/source copied into scratch or explicit inline audit criterion",
+          "consumer": "independent prior-output verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli review atomize --context practice/audit-workspace/transform-scratch/source --snapshot",
+          "exit": 1,
+          "actual": "Review error: Atomize execution is not complete. Resume it with 'mem atomize'; Review opens only terminal application evidence.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.4,
+            "terminal_screens": 1,
+            "extra_manual_steps": 1,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "round": 2,
+          "starting_state": "round 2 early-mid state: Source 12, Criteria populated from prior core candidates, Result built then checkpoint-reverted",
+          "entry_route": "saved-artifact CLI",
+          "target_route": "explicit receipt/session UID",
+          "scope": "frozen prior semantic artifact",
+          "input_provenance": "round-1 outputs plus existing audit-workspace candidates and saved receipts",
+          "consumer": "independent prior-output verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli review elaborate --receipt fbea495b-9b33-44fc-9539-0e2ebb86c627 --snapshot",
+          "exit": 0,
+          "actual": "MEM REVIEW · ELABORATE Completed operation evidence. This Review is read-only and cannot change or apply the recorded result. STATUS · APPLIED · RECEIPT fbea495b-9b33-44fc-9539-0e2ebb86c627 CONTEXT · practice/audit-workspace/transform-scratch/result COMPLETED · 2026-08-23T13:59:23.623689 OUTCOME · Added 2 Elaborate Cases to 'practice/audit-workspace/transform-scratch/result' MODE · RULES_TO_CASES TARGET · practice/audit-workspace/transform-scratch/result VERIFICATION · UNVERIFIED PROPOSAL OVERVIEW Two suggested, unverified Example Memories jointly interpret an atom as a non-editing preservation record that exp…",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.45,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "round": 3,
+          "starting_state": "round 3 mid state: Update-derived Result, archive evidence merge, semantic cleanup, Ground bootstrap attempts",
+          "entry_route": "saved-artifact CLI",
+          "target_route": "explicit receipt/session UID",
+          "scope": "frozen prior semantic artifact",
+          "input_provenance": "prior Update/Dedun/Forget output, archive evidence, exact UID, or saved session",
+          "consumer": "independent prior-output verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli review forget --receipt 59da3561-689f-42bd-9991-1bc2893dc2ca --snapshot",
+          "exit": 0,
+          "actual": "MEM REVIEW · FORGET Completed operation evidence. This Review is read-only and cannot change or apply the recorded result. STATUS · APPLIED · RECEIPT 59da3561-689f-42bd-9991-1bc2893dc2ca CONTEXT · practice/audit-workspace/transform-scratch/result COMPLETED · 2026-08-23T14:05:52.121204 OUTCOME · Forgot (Remove only meta-observations about pres): removed \"Recognize the family’s presentation form\" 1. REMOVE · [b2c1c00b] BEFORE · Recognize the family’s presentation form as concise English editorial directives in first person or user-centered framing, usually pairing a triggering condition or request with an impera…",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.44,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "round": 4,
+          "starting_state": "round 4 late-mid state: criteria narrowed through checkpoint/clear/scoped Update for actual Atomize Apply; large accumulated Result",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "narrow checkpointed criteria frame, actual Atomize children, or accumulated Result",
+          "consumer": "independent prior-output verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli review atomize --context practice/audit-workspace/transform-scratch/criteria --snapshot",
+          "exit": 1,
+          "actual": "Review said Atomize execution incomplete even though Atomize had applied and printed a receipt; an intervening read-only Impact Atomize analysis had replaced the active evidence route.",
+          "defect_ids": [
+            "PS-T-REVIEW-ATOMIZE-CLOBBER"
+          ],
+          "cost": {
+            "wall_seconds": 0.41,
+            "terminal_screens": 1,
+            "extra_manual_steps": 1,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "round": 5,
+          "starting_state": "round 5 late state: 38-item Result checkpoint/clear/rebuild/revert cycle; named Ground and saved semantic artifacts available",
+          "entry_route": "saved-artifact CLI",
+          "target_route": "explicit receipt/session UID",
+          "scope": "frozen prior semantic artifact",
+          "input_provenance": "late accumulated scratch, exact checkpoint/receipt/session, cached view, or prior output",
+          "consumer": "independent prior-output verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli review dedun --receipt 106ac92f-f6ba-461d-bf5e-223c1e65ab42 --snapshot",
+          "exit": 0,
+          "actual": "MEM REVIEW · DEDUN Completed operation evidence. This Review is read-only and cannot change or apply the recorded result. STATUS · APPLIED · RECEIPT 106ac92f-f6ba-461d-bf5e-223c1e65ab42 CONTEXT · practice/audit-workspace/transform-scratch/result COMPLETED · 2026-08-23T14:15:40.785536 OUTCOME · Resolved 1 redundancy group(s); absorbed 1 direct item(s) RESOLVED GROUPS · 1 1. SURVIVOR · [bfe4a4fc] When examples contain polished prose, emit only constraints stated in the source text; do not infer that their general prose style is required. ABSORB · [05563389] If every example uses the same formal tone but the sour…",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.45,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "sever": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "round": 1,
+          "starting_state": "round 1 early state: empty transform scratch, then exact 12-Memory Source merge and direct checkpoint",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "fixed practice/source copied into scratch or explicit inline audit criterion",
+          "consumer": "selectively materialize source under explicit criteria without changing Source",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli sever practice/audit-workspace/transform-scratch/source practice/audit-workspace/candidates practice/audit-workspace/transform-scratch/sever-r1 --direct",
+          "exit": 1,
+          "actual": "Provider analysis failed closed because its application summary cited an unchanged Source Memory.",
+          "defect_ids": [
+            "PS-T-SEVER-VALIDATION"
+          ],
+          "cost": {
+            "wall_seconds": 16.55,
+            "terminal_screens": 1,
+            "extra_manual_steps": 1,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "round": 2,
+          "starting_state": "round 2 early-mid state: Source 12, Criteria populated from prior core candidates, Result built then checkpoint-reverted",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "round-1 outputs plus existing audit-workspace candidates and saved receipts",
+          "consumer": "selectively materialize source under explicit criteria without changing Source",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli sever practice/audit-workspace/transform-scratch/source practice/audit-workspace/transform-scratch/criteria practice/audit-workspace/transform-scratch/sever-r2 --direct",
+          "exit": 0,
+          "actual": "SEVER READY · practice/audit-workspace/transform-scratch/source → practice/audit-workspace/transform-scratch/sever-r2 JUDGMENTS · REQUIRED 0 OUTPUT · practice/audit-workspace/transform-scratch/sever-r2 · READY TO CREATE SESSION · fbc2459e-bfcd-4c0b-aa3f-c5673a34334c SOURCE · UNCHANGED IMPACT · mem impact sever --session fbc2459e-bfcd-4c0b-aa3f-c5673a34334c RESUME · mem sever --resume fbc2459e-bfcd-4c0b-aa3f-c5673a34334c",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 19.03,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "round": 3,
+          "starting_state": "round 3 mid state: Update-derived Result, archive evidence merge, semantic cleanup, Ground bootstrap attempts",
+          "entry_route": "saved-artifact CLI",
+          "target_route": "explicit receipt/session UID",
+          "scope": "frozen prior semantic artifact",
+          "input_provenance": "prior Update/Dedun/Forget output, archive evidence, exact UID, or saved session",
+          "consumer": "selectively materialize source under explicit criteria without changing Source",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli sever --resume fbc2459e-bfcd-4c0b-aa3f-c5673a34334c",
+          "exit": 0,
+          "actual": "SEVER READY · practice/audit-workspace/transform-scratch/source → practice/audit-workspace/transform-scratch/sever-r2 JUDGMENTS · REQUIRED 0 OUTPUT · practice/audit-workspace/transform-scratch/sever-r2 · READY TO CREATE SESSION · fbc2459e-bfcd-4c0b-aa3f-c5673a34334c SOURCE · UNCHANGED IMPACT · mem impact sever --session fbc2459e-bfcd-4c0b-aa3f-c5673a34334c RESUME · mem sever --resume fbc2459e-bfcd-4c0b-aa3f-c5673a34334c",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.43,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "round": 4,
+          "starting_state": "round 4 late-mid state: criteria narrowed through checkpoint/clear/scoped Update for actual Atomize Apply; large accumulated Result",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "narrow checkpointed criteria frame, actual Atomize children, or accumulated Result",
+          "consumer": "selectively materialize source under explicit criteria without changing Source",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli sever practice/audit-workspace/transform-scratch/source practice/audit-workspace/transform-scratch/criteria practice/audit-workspace/transform-scratch/sever-r4 --direct",
+          "exit": 1,
+          "actual": "The same unchanged-Source-citation validation failure recurred on a narrower applied-Atomize criteria frame.",
+          "defect_ids": [
+            "PS-T-SEVER-VALIDATION"
+          ],
+          "cost": {
+            "wall_seconds": 16.14,
+            "terminal_screens": 1,
+            "extra_manual_steps": 1,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "round": 5,
+          "starting_state": "round 5 late state: 38-item Result checkpoint/clear/rebuild/revert cycle; named Ground and saved semantic artifacts available",
+          "entry_route": "saved-artifact CLI",
+          "target_route": "explicit receipt/session UID",
+          "scope": "frozen prior semantic artifact",
+          "input_provenance": "late accumulated scratch, exact checkpoint/receipt/session, cached view, or prior output",
+          "consumer": "selectively materialize source under explicit criteria without changing Source",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli sever --resume fbc2459e-bfcd-4c0b-aa3f-c5673a34334c --accept",
+          "exit": 0,
+          "actual": "SEVER APPLIED · practice/audit-workspace/transform-scratch/source → practice/audit-workspace/transform-scratch/sever-r2 SAVE MODE · OTHER-SAVE DECISIONS · KEEP 4 · FORGET 8 RESULT · CREATED SEPARATELY RECEIPT · fbc2459e-bfcd-4c0b-aa3f-c5673a34334c CHECKPOINT · 3b8f7779-87f6-42d1-a0c0-77b1738f3ef4 REVIEW · mem review sever --session fbc2459e-bfcd-4c0b-aa3f-c5673a34334c RECOVERY · mem undo",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.4,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "trace": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "round": 1,
+          "starting_state": "round 1 early state: empty transform scratch, then exact 12-Memory Source merge and direct checkpoint",
+          "entry_route": "exact Memory CLI",
+          "target_route": "explicit Context:UID or --memory selector",
+          "scope": "single actionable Memory with Context neighbors as evidence",
+          "input_provenance": "fixed practice/source copied into scratch or explicit inline audit criterion",
+          "consumer": "machine/human-readable provenance and Atomize lineage",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli trace practice/source:f3ef224d --plain --limit 5",
+          "exit": 0,
+          "actual": "TRACE · practice/source [MEMORY f3ef224d] · 1 OPERATION · LATEST FIRST [current] [COMMAND 0] [MEMORY f3ef224d] (current) · Current Context differs from the last reconstructable checkpoint state. − ∅ + [f3ef224d]@1 When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division. ATTACHMENTS none LIMITS − The current Context contains changes that no retained checkpoint explains.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.43,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "round": 2,
+          "starting_state": "round 2 early-mid state: Source 12, Criteria populated from prior core candidates, Result built then checkpoint-reverted",
+          "entry_route": "exact Memory CLI",
+          "target_route": "explicit Context:UID or --memory selector",
+          "scope": "single actionable Memory with Context neighbors as evidence",
+          "input_provenance": "round-1 outputs plus existing audit-workspace candidates and saved receipts",
+          "consumer": "machine/human-readable provenance and Atomize lineage",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli trace practice/audit-workspace/transform-scratch/source:c666f752 --json --limit 5",
+          "exit": 0,
+          "actual": "{ \"context\": { \"uid\": \"13eab1ce-4c4b-4034-af29-27efbc53a274\", \"name\": \"practice/audit-workspace/transform-scratch/source\" }, \"selected_uid\": \"c666f752-a354-452d-b1ae-08aedbb64a05\", \"component_uids\": [ \"c666f752-a354-452d-b1ae-08aedbb64a05\" ], \"originals\": [ { \"uid\": \"c666f752-a354-452d-b1ae-08aedbb64a05\", \"content\": \"When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.\", \"position\": 0, \"content_digest\": \"f42180ac2731580b133c60a28178c7484694134af9cd87795b387dcea63545af\" } ], \"current\": [ { \"uid\": \"c666f752-a354-45…",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.4,
+            "terminal_screens": 2,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "round": 3,
+          "starting_state": "round 3 mid state: Update-derived Result, archive evidence merge, semantic cleanup, Ground bootstrap attempts",
+          "entry_route": "exact Memory CLI",
+          "target_route": "explicit Context:UID or --memory selector",
+          "scope": "single actionable Memory with Context neighbors as evidence",
+          "input_provenance": "prior Update/Dedun/Forget output, archive evidence, exact UID, or saved session",
+          "consumer": "machine/human-readable provenance and Atomize lineage",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli trace practice/audit-workspace/transform-scratch/source:74fe914d --json --limit 10",
+          "exit": 0,
+          "actual": "{ \"context\": { \"uid\": \"13eab1ce-4c4b-4034-af29-27efbc53a274\", \"name\": \"practice/audit-workspace/transform-scratch/source\" }, \"selected_uid\": \"74fe914d-07c5-4424-89d1-a760fdfc0388\", \"component_uids\": [ \"74fe914d-07c5-4424-89d1-a760fdfc0388\" ], \"originals\": [ { \"uid\": \"74fe914d-07c5-4424-89d1-a760fdfc0388\", \"content\": \"When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um... for example, use distribute, not divide, when material is absorbed into two parts.\", \"position\": 2, \"content_digest\": \"3b06352e813df2d425403e642333529272…",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.43,
+            "terminal_screens": 2,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "round": 4,
+          "starting_state": "round 4 late-mid state: criteria narrowed through checkpoint/clear/scoped Update for actual Atomize Apply; large accumulated Result",
+          "entry_route": "exact Memory CLI",
+          "target_route": "explicit Context:UID or --memory selector",
+          "scope": "single actionable Memory with Context neighbors as evidence",
+          "input_provenance": "narrow checkpointed criteria frame, actual Atomize children, or accumulated Result",
+          "consumer": "machine/human-readable provenance and Atomize lineage",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli trace practice/audit-workspace/transform-scratch/criteria:261b87e6 --json --limit 1",
+          "exit": 0,
+          "actual": "`--json --limit 1` returned the full three-member component, Update and Atomize events, analysis, spans, and children; the limit did not compact the JSON document.",
+          "defect_ids": [
+            "PS-T-TRACE-LIMIT"
+          ],
+          "cost": {
+            "wall_seconds": 0.41,
+            "terminal_screens": 5,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "round": 5,
+          "starting_state": "round 5 late state: 38-item Result checkpoint/clear/rebuild/revert cycle; named Ground and saved semantic artifacts available",
+          "entry_route": "exact Memory CLI",
+          "target_route": "explicit Context:UID or --memory selector",
+          "scope": "single actionable Memory with Context neighbors as evidence",
+          "input_provenance": "late accumulated scratch, exact checkpoint/receipt/session, cached view, or prior output",
+          "consumer": "machine/human-readable provenance and Atomize lineage",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli trace practice/source:b976766e --plain --limit 1",
+          "exit": 0,
+          "actual": "TRACE · practice/source [MEMORY b976766e] · 1 OPERATION · LATEST FIRST [current] [COMMAND 0] [MEMORY b976766e] (current) · Current Context differs from the last reconstructable checkpoint state. − ∅ + [b976766e]@7 If the next idea is merely related and does not broaden the scope, don't use More broadly; use In relation to this or another accurate connector without adding a new claim merely to make two paragraphs connect. ATTACHMENTS none LIMITS − The current Context contains changes that no retained checkpoint explains.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.41,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "translate": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "round": 1,
+          "starting_state": "round 1 early state: empty transform scratch, then exact 12-Memory Source merge and direct checkpoint",
+          "entry_route": "exact Memory CLI",
+          "target_route": "explicit Context:UID or --memory selector",
+          "scope": "single actionable Memory with Context neighbors as evidence",
+          "input_provenance": "fixed practice/source copied into scratch or explicit inline audit criterion",
+          "consumer": "read-only language/saved-view boundary",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli translate practice/source:f3ef224d --to \"plain-language English\"",
+          "exit": 0,
+          "actual": "Translation view: 'practice/source' → plain-language English 1 translated Memory ──────────────────────────────────────────────────────────────── [f3ef224d] plain-language English · PROVIDER · UNREVIEWED When I ask, “How does this read?”, I really want your opinion. Don't edit the draft right away. First, check the order of the sentences and how the paragraphs are divided. ──────────────────────────────────────────────────────────────── Saved translation view. No Context or Memory changes; source Memory UIDs remain the anchors.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 4.98,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "round": 2,
+          "starting_state": "round 2 early-mid state: Source 12, Criteria populated from prior core candidates, Result built then checkpoint-reverted",
+          "entry_route": "exact Memory CLI",
+          "target_route": "explicit Context:UID or --memory selector",
+          "scope": "single actionable Memory with Context neighbors as evidence",
+          "input_provenance": "round-1 outputs plus existing audit-workspace candidates and saved receipts",
+          "consumer": "read-only language/saved-view boundary",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli translate practice/source:e50c293a --to Korean",
+          "exit": 0,
+          "actual": "Translation view: 'practice/source' → Korean 1 translated Memory ──────────────────────────────────────────────────────────────── [e50c293a] Korean · PROVIDER · UNREVIEWED 나중에 다듬어 달라고 요청하더라도 전체 구조와 인용 필요 표시를 유지하고, 문제가 되는 표현만 변경하세요. ──────────────────────────────────────────────────────────────── Saved translation view. No Context or Memory changes; source Memory UIDs remain the anchors.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 6.58,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "round": 3,
+          "starting_state": "round 3 mid state: Update-derived Result, archive evidence merge, semantic cleanup, Ground bootstrap attempts",
+          "entry_route": "exact Memory CLI",
+          "target_route": "explicit Context:UID or --memory selector",
+          "scope": "single actionable Memory with Context neighbors as evidence",
+          "input_provenance": "prior Update/Dedun/Forget output, archive evidence, exact UID, or saved session",
+          "consumer": "read-only language/saved-view boundary",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli translate practice/source:6fad23ab --to French",
+          "exit": 0,
+          "actual": "Translation view: 'practice/source' → French 1 translated Memory ──────────────────────────────────────────────────────────────── [6fad23ab] French · PROVIDER · UNREVIEWED Si un passage est censé présenter quatre points, conservez-les tous les quatre tout en supprimant les parties trop redondantes et en ne formulant le contenu répété qu’une seule fois. ──────────────────────────────────────────────────────────────── Saved translation view. No Context or Memory changes; source Memory UIDs remain the anchors.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 6.11,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "round": 4,
+          "starting_state": "round 4 late-mid state: criteria narrowed through checkpoint/clear/scoped Update for actual Atomize Apply; large accumulated Result",
+          "entry_route": "exact Memory CLI",
+          "target_route": "explicit Context:UID or --memory selector",
+          "scope": "single actionable Memory with Context neighbors as evidence",
+          "input_provenance": "narrow checkpointed criteria frame, actual Atomize children, or accumulated Result",
+          "consumer": "read-only language/saved-view boundary",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli translate practice/source:7ebe67fb --to Spanish",
+          "exit": 0,
+          "actual": "Translation view: 'practice/source' → Spanish 1 translated Memory ──────────────────────────────────────────────────────────────── [7ebe67fb] Spanish · PROVIDER · UNREVIEWED Pero no acortes las oraciones de forma tan drástica que una afirmación suene más categórica; conserva suficiente texto para mantener su fuerza y sus condiciones originales. ──────────────────────────────────────────────────────────────── Saved translation view. No Context or Memory changes; source Memory UIDs remain the anchors.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 4.97,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "round": 5,
+          "starting_state": "round 5 late state: 38-item Result checkpoint/clear/rebuild/revert cycle; named Ground and saved semantic artifacts available",
+          "entry_route": "exact Memory CLI",
+          "target_route": "explicit Context:UID or --memory selector",
+          "scope": "single actionable Memory with Context neighbors as evidence",
+          "input_provenance": "late accumulated scratch, exact checkpoint/receipt/session, cached view, or prior output",
+          "consumer": "read-only language/saved-view boundary",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli translate practice/source:f3ef224d --to \"plain-language English\"",
+          "exit": 0,
+          "actual": "Translation view: 'practice/source' → plain-language English 1 translated Memory ──────────────────────────────────────────────────────────────── [f3ef224d] plain-language English · PROVIDER · UNREVIEWED When I ask, “How does this read?”, I really want your opinion. Don't edit the draft right away. First, check the order of the sentences and how the paragraphs are divided. ──────────────────────────────────────────────────────────────── Reused saved translation view; the provider was not called. No Context or Memory changes; source Memory UIDs remain the anchors.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.41,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    },
+    "update": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "round": 1,
+          "starting_state": "round 1 early state: empty transform scratch, then exact 12-Memory Source merge and direct checkpoint",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "fixed practice/source copied into scratch or explicit inline audit criterion",
+          "consumer": "scoped or whole-frame synchronization into scratch",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli update practice/audit-workspace/transform-scratch/source practice/audit-workspace/transform-scratch/result --direct",
+          "exit": 1,
+          "actual": "Update error: an applied update or its local working copy has diverged. Review it before using '--replace-stage'.",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 0.41,
+            "terminal_screens": 1,
+            "extra_manual_steps": 1,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 2,
+          "round": 2,
+          "starting_state": "round 2 early-mid state: Source 12, Criteria populated from prior core candidates, Result built then checkpoint-reverted",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "round-1 outputs plus existing audit-workspace candidates and saved receipts",
+          "consumer": "scoped or whole-frame synchronization into scratch",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli update practice/audit-workspace/transform-scratch/source practice/audit-workspace/transform-scratch/result --direct --replace-stage",
+          "exit": 0,
+          "actual": "UPDATE APPLIED · practice/audit-workspace/transform-scratch/source → practice/audit-workspace/transform-scratch/result EFFECTS · ADD 11 · EDIT 0 · REMOVE 0 RECEIPT · b158947f-1819-47dc-9a12-2344593cd327 CHECKPOINTS · practice/audit-workspace/transform-scratch/result [d26de7da-9d82-4470-ba6c-284cec38cec5] REVIEW · mem review update --session b158947f-1819-47dc-9a12-2344593cd327 RECOVERY · mem undo",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 18.82,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 3,
+          "round": 3,
+          "starting_state": "round 3 mid state: Update-derived Result, archive evidence merge, semantic cleanup, Ground bootstrap attempts",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "prior Update/Dedun/Forget output, archive evidence, exact UID, or saved session",
+          "consumer": "scoped or whole-frame synchronization into scratch",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli update practice/audit-workspace/transform-scratch/source practice/audit-workspace/transform-scratch/result --source-memory 74fe914d --target-memory 4e34ec6a --direct --replace-stage",
+          "exit": 0,
+          "actual": "UPDATE APPLIED · practice/audit-workspace/transform-scratch/source → practice/audit-workspace/transform-scratch/result OUTCOME · NO CHANGE · no Context checkpoint EFFECTS · ADD 0 · EDIT 0 · REMOVE 0 RECEIPT · 033e3f08-ebe0-4473-9094-7a343ba849ef REVIEW · mem review update --session 033e3f08-ebe0-4473-9094-7a343ba849ef",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 4.63,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 4,
+          "round": 4,
+          "starting_state": "round 4 late-mid state: criteria narrowed through checkpoint/clear/scoped Update for actual Atomize Apply; large accumulated Result",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "narrow checkpointed criteria frame, actual Atomize children, or accumulated Result",
+          "consumer": "scoped or whole-frame synchronization into scratch",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli update practice/audit-workspace/transform-scratch/source practice/audit-workspace/transform-scratch/criteria --source-memory 94419ffa --direct --replace-stage",
+          "exit": 0,
+          "actual": "UPDATE APPLIED · practice/audit-workspace/transform-scratch/source → practice/audit-workspace/transform-scratch/criteria EFFECTS · ADD 1 · EDIT 0 · REMOVE 0 RECEIPT · 950d32fc-69d0-49ed-9461-dd2220b38c05 CHECKPOINTS · practice/audit-workspace/transform-scratch/criteria [14f5a95d-f65e-4f8f-b5af-eb383742d57d] REVIEW · mem review update --session 950d32fc-69d0-49ed-9461-dd2220b38c05 RECOVERY · mem undo",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 6.4,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        },
+        {
+          "attempt": 5,
+          "round": 5,
+          "starting_state": "round 5 late state: 38-item Result checkpoint/clear/rebuild/revert cycle; named Ground and saved semantic artifacts available",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit canonical Context operand(s)",
+          "scope": "exact/direct local frame",
+          "input_provenance": "late accumulated scratch, exact checkpoint/receipt/session, cached view, or prior output",
+          "consumer": "scoped or whole-frame synchronization into scratch",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli update practice/audit-workspace/transform-scratch/criteria practice/audit-workspace/transform-scratch/result --direct --replace-stage",
+          "exit": 0,
+          "actual": "UPDATE APPLIED · practice/audit-workspace/transform-scratch/criteria → practice/audit-workspace/transform-scratch/result OUTCOME · NO CHANGE · no Context checkpoint EFFECTS · ADD 0 · EDIT 0 · REMOVE 0 RECEIPT · 15a8af79-bb18-4b71-8d92-2a25e0b71316 REVIEW · mem review update --session 15a8af79-bb18-4b71-8d92-2a25e0b71316",
+          "defect_ids": [],
+          "cost": {
+            "wall_seconds": 4.9,
+            "terminal_screens": 1,
+            "extra_manual_steps": 0,
+            "tui": false
+          }
+        }
+      ]
+    }
+  }
+}

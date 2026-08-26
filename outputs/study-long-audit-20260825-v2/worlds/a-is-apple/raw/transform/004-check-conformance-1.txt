@@ -1,0 +1,9 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple check-conformance practice --against 'text:Each letter maps to at most one preferred word.'
+
+EXIT
+0
+
+OUTPUT
+CONFORMANCE · 6/7 EXAMPLES CONFORM · 0/1 RULES MET · [EXAMPLES practice] · [RULES TEXT Each letter maps to at most one preferred word.] · 7 EXAMPLES N/A
+! VIOLATES · [EXAMPLE m000008] a maps to apricot; · [RULE r1] Each letter maps to at most one preferred word. · WHY · It assigns apricot to a while the other applicable memories prefer apple for a.

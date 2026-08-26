@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "excluded_from_1980": true,
+  "status": "complete",
+  "checks": {
+    "setup_24_success": true,
+    "five_current_rounds_one_shared_value": true,
+    "pwd_observations": true,
+    "only_one_actor_matches_per_round": true,
+    "switch_cas_failures": true,
+    "branch_current_cas_failures": true,
+    "one_update_winner": true,
+    "five_update_cas_failures": true,
+    "all_implicit_diffs_show_winner": true,
+    "registry_identity_unchanged": true
+  },
+  "counts": {
+    "recorded_calls": 115,
+    "failed_seed_preflight_calls": 102,
+    "setup_calls": 24,
+    "current_switch_calls": 30,
+    "current_switch_cas_failures": 19,
+    "pwd_calls": 30,
+    "pwd_own_matches": 5,
+    "branch_calls": 6,
+    "branch_current_cas_failures": 5,
+    "update_calls": 6,
+    "update_cas_failures": 5,
+    "implicit_diff_calls_showing_winner": 6
+  },
+  "update_winner": "ticker",
+  "interpretation": {
+    "positive": "Update CAS allowed one explicit-endpoint winner and rejected five stale saves before mutation.",
+    "remaining_boundary": "Current and implicit Diff remain Profile-global; explicit disjoint Branch also aborts when unrelated current changes."
+  }
+}

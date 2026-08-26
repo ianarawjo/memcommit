@@ -1,0 +1,11 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple show --direct --context practice
+
+EXIT
+0
+
+OUTPUT
+Context: practice
+  Memories 0  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+  (no items)

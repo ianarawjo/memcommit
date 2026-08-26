@@ -1,0 +1,3 @@
+COPIED · 1 Memory → 'task-1' · NEW UIDs · as the only direct item
+  'task-2/participant' [fac90a77] → [3156c18e]
+Checkpoint 'task-1' [a9050323].

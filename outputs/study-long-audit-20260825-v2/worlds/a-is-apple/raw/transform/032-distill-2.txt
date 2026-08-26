@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple distill --from practice/source --to practice --goal 'Distill explicit provenance rules for apple and the unresolved b alternatives.'
+
+EXIT
+0
+
+OUTPUT
+DISTILL APPLIED · practice/source → practice
+EFFECTS · ADD 1 RULES
+
+  [memory b2f0d5a2] Treat b as unresolved between the alternatives banana and blueberry; do not collapse the evidence into a single settled mapping.
+
+REVIEW · mem review distill --receipt 5a9fbca1-d357-4fe1-b845-4aa1c1660ebf
+UNDO · mem undo

@@ -1,0 +1,116 @@
+{
+  "world": "a-is-apple",
+  "phase": "multi-phase",
+  "issues": [
+    {
+      "id": "AIA-V2-CONTEXTS-01",
+      "title": "World orientation still requires a whole-Profile scan",
+      "expected": "A user growing one small world can narrow Context orientation to that world while retaining current/grant annotations.",
+      "actual": "Every `contexts` attempt emitted the same 112-row, 7,671-byte Profile inventory; the relevant current `practice` row was visible, but there is no operand to focus this operation on the world.",
+      "workaround": "Visually locate `practice` once, then use explicit Context operands for all other operations.",
+      "severity": "MEDIUM",
+      "classification": "USABILITY_INFORMATION_OVERLOAD",
+      "reproduction": "5/5 attempts",
+      "evidence": [
+        "worlds/a-is-apple/raw/core/001-contexts-1.txt",
+        "worlds/a-is-apple/raw/core/022-contexts-2.txt",
+        "worlds/a-is-apple/raw/core/043-contexts-3.txt",
+        "worlds/a-is-apple/raw/core/064-contexts-4.txt",
+        "worlds/a-is-apple/raw/core/085-contexts-5.txt"
+      ]
+    },
+    {
+      "id": "AIA-V2-CHUNK-RECEIPT-01",
+      "title": "Successful Chunk receipts omit all created Memory UIDs",
+      "expected": "A mutating receipt names every new Memory so its output can directly feed Edit, Move, Reference, or later Chunk operations.",
+      "actual": "All five successful three-way clause splits showed the proposed text and only `Done — 3 memories added`; no created UID appeared. Later exact List/Show was required to recover selectors.",
+      "workaround": "Immediately run exact List or Show and match the new fragment bodies and placement to recover their UIDs.",
+      "severity": "MEDIUM",
+      "classification": "USABILITY_OUTPUT_REUSE",
+      "reproduction": "5/5 successful splits",
+      "evidence": [
+        "worlds/a-is-apple/raw/core/015-chunk-1.txt",
+        "worlds/a-is-apple/raw/core/036-chunk-2.txt",
+        "worlds/a-is-apple/raw/core/057-chunk-3.txt",
+        "worlds/a-is-apple/raw/core/078-chunk-4.txt",
+        "worlds/a-is-apple/raw/core/099-chunk-5.txt",
+        "worlds/a-is-apple/raw/core/023-list-2.txt",
+        "worlds/a-is-apple/raw/core/045-show-3.txt"
+      ]
+    },
+    {
+      "id": "AIA-V2-CHUNK-ATOMICITY-01",
+      "title": "Clause Chunk repeatedly creates context-dependent Memories",
+      "expected": "Each resulting Memory remains independently meaningful or retains an explicit typed relation to the neighboring fragments needed to interpret it.",
+      "actual": "Every split emitted dependent fragments such as `this edited duplicate retains the original`, `assertion.`, `copied from the original direct Memory for`, `provenance.`, and `unresolved alternatives remain explicit.` The first ambiguity review then flagged one such fragment because its referent and retention meaning were unclear.",
+      "workaround": "Avoid clause Chunk for compact claims, or immediately review and Edit/Meld the fragments before treating them as independent Memories.",
+      "severity": "HIGH",
+      "classification": "SEMANTIC_SAFETY_CONTEXT_DEPENDENCE",
+      "reproduction": "5/5 splits produced at least one dependent fragment",
+      "evidence": [
+        "worlds/a-is-apple/raw/core/015-chunk-1.txt",
+        "worlds/a-is-apple/raw/core/036-chunk-2.txt",
+        "worlds/a-is-apple/raw/core/057-chunk-3.txt",
+        "worlds/a-is-apple/raw/core/078-chunk-4.txt",
+        "worlds/a-is-apple/raw/core/099-chunk-5.txt",
+        "worlds/a-is-apple/raw/core/019-find-ambiguities-1.txt"
+      ]
+    },
+    {
+      "id": "AIA-V2-AMBIG-DECODE-01",
+      "title": "Find Ambiguities repeatedly loses the whole result on a NONE/question decoder mismatch",
+      "expected": "Return a validated finding set or a stable empty report for the frozen Source frame.",
+      "actual": "Rounds 2–5 failed after provider work with `Codex find_ambiguities returned a question for NONE.` No usable report was returned. The active Context-tree digest stayed unchanged, so the failure was atomic but not recoverable from a partial result.",
+      "workaround": "Preserve the Source frame and retry; use Query/Find Conflicts for partial review, but neither substitutes for an ambiguity report. The repeated controls show retry is not reliable.",
+      "severity": "HIGH",
+      "classification": "FUNCTIONAL_RELIABILITY_PROVIDER_CONTRACT",
+      "reproduction": "4/5 attempts; round 1 was the successful control",
+      "evidence": [
+        "worlds/a-is-apple/raw/core/019-find-ambiguities-1.txt",
+        "worlds/a-is-apple/raw/core/040-find-ambiguities-2.txt",
+        "worlds/a-is-apple/raw/core/061-find-ambiguities-3.txt",
+        "worlds/a-is-apple/raw/core/082-find-ambiguities-4.txt",
+        "worlds/a-is-apple/raw/core/103-find-ambiguities-5.txt"
+      ]
+    },
+    {
+      "id": "AIA-V2-SUMMARY-SALIENCE-01",
+      "title": "Recursive Summary drops the small world's direct mappings behind larger descendants",
+      "expected": "A recursive summary of `practice` represents the direct root claims as well as the larger descendant policy corpus, especially after deliberate mapping conflicts are visible.",
+      "actual": "Rounds 2 and 4 summarized only the pre-existing editing/verification descendants. They omitted all direct a→apple claims in round 2 and all direct/root-visible a/b mappings and the b conflict in round 4, even though the adjacent Show/Find/Query routes exposed them.",
+      "workaround": "Summarize each exact Context separately or ask a focused Query, then combine the results manually.",
+      "severity": "HIGH",
+      "classification": "SEMANTIC_FIDELITY_SOURCE_SALIENCE",
+      "reproduction": "2/2 recursive summaries after mappings existed; direct-source summaries were useful controls",
+      "evidence": [
+        "worlds/a-is-apple/raw/core/024-show-2.txt",
+        "worlds/a-is-apple/raw/core/028-summarize-2.txt",
+        "worlds/a-is-apple/raw/core/067-find-4.txt",
+        "worlds/a-is-apple/raw/core/069-query-4.txt",
+        "worlds/a-is-apple/raw/core/070-summarize-4.txt",
+        "worlds/a-is-apple/raw/core/091-summarize-5.txt"
+      ]
+    },
+    {
+      "id": "AIA-V2-A-RENAME-COMMAND-STACK-01",
+      "title": "Renaming a Branch/checkout target corrupts the global Undo/Redo stack",
+      "expected": "After a successful Rename of a Context created by Branch or checkout -b, the retained producer unit remains reconstructible under the new canonical name, so later Undo/Redo can host-read and restore its exact UID/member set.",
+      "actual": "Rename#1, #2, and #3 succeeded. Thereafter every global stack build and each counted Undo/Redo control failed closed with `Branch checkpoint owner is outside its creation membership.` The renamed checkpoint owner uses the new Context name while the branch receipt's creation membership retains the old target name.",
+      "workaround": "Do not Rename a Branch/checkout-created Context while its producer remains in command history. Use explicit per-Context checkpoints/revert for recovery; there is no global Undo workaround once this mismatch exists.",
+      "severity": "HIGH",
+      "classification": "SAFETY_RECOVERY_GLOBAL_STACK_CORRUPTION_FAIL_CLOSED",
+      "reproduction": "3 successful renames followed by 8/8 Undo/Redo failures across rounds 2-5",
+      "evidence": [
+        "worlds/a-is-apple/raw/admin/004-rename-1.txt",
+        "worlds/a-is-apple/raw/admin/024-undo-2.txt",
+        "worlds/a-is-apple/raw/admin/025-redo-2.txt",
+        "worlds/a-is-apple/raw/admin/046-undo-3.txt",
+        "worlds/a-is-apple/raw/admin/047-redo-3.txt",
+        "worlds/a-is-apple/raw/admin/083-undo-4.txt",
+        "worlds/a-is-apple/raw/admin/085-undo-5.txt",
+        "worlds/a-is-apple/raw/admin/086-redo-5.txt",
+        "worlds/a-is-apple/host_reads/admin/stack-pre-undo-2-seq-024.json"
+      ]
+    }
+  ]
+}

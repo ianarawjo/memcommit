@@ -1,0 +1,17 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 summarize task-1/campus-wiki --recursive
+
+EXIT
+0
+
+WALL_SECONDS
+8.391332
+
+STDOUT
+SUMMARY · task-1/campus-wiki
+STATUS · RECURSIVE
+
+June 24–August 23 construction closes the Main Building rear passage, nearby general parking, restrooms and event venues, shortens general access to 5 p.m., and disrupts elevators and amenities. Use posted temporary entrances, Parking Lot C, off-site restrooms, designated event alternatives and confirmed accessible detours; authorized users follow controlled access, while agents provide posted guidance without real-time guarantees.
+
+
+STDERR

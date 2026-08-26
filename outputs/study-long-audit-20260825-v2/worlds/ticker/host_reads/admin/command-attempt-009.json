@@ -1,0 +1,28 @@
+{
+  "sequence": 9,
+  "count_before": 253,
+  "count_after": 254,
+  "delta": 1,
+  "new_attempt_uids": [
+    "2fb17f53-ef79-4a77-ba36-cdc74ecefd41"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "2fb17f53-ef79-4a77-ba36-cdc74ecefd41",
+      "operation": "eval",
+      "command": "mem eval semantic status --ledger-dir /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/admin-eval-ledger",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:12:19.241316+00:00",
+      "completed_at": "2026-08-25T18:12:19.249271+00:00",
+      "elapsed_seconds": 0.007795792000251822,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

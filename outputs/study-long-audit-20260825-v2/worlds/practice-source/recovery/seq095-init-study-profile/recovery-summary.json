@@ -1,0 +1,109 @@
+{
+  "schema_version": 2,
+  "recovery": "host-side atomic active_uid-only replacement",
+  "mem_recovery_calls": 0,
+  "registry_before_sha256": "01c991ffbd30eadaccd281ec9fb89875f6a21f2077eb0974efdcce427c77f59d",
+  "registry_after_sha256": "f6cc83ef54e23feed4f9c865435099ea0a493d73a78e7e9879596171d94d28b2",
+  "registry_byte_length_before": 353563,
+  "registry_byte_length_after": 353563,
+  "registry_byte_diff_count": 28,
+  "registry_only_logical_change": "active_uid",
+  "active_uid_before": "bb7265f4-8391-47f4-9112-8334f5bf7ddc",
+  "active_uid_after": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+  "generation_before": 301,
+  "generation_after": 301,
+  "profiles_before_count": 190,
+  "profiles_after_count": 190,
+  "unexpected_profiles_retained": [
+    {
+      "uid": "bb7265f4-8391-47f4-9112-8334f5bf7ddc",
+      "name": "00000000-0000-0000-0000-000000000999",
+      "kind": "MANAGED",
+      "source": {
+        "kind": "STUDY_RUN",
+        "study_uid": "f4fcef60-0617-4024-8961-f364d443ab6d",
+        "study_name": "00000000-0000-0000-0000-000000000999",
+        "created_at": "2026-08-25T18:15:49.641943+00:00",
+        "baseline_sha256": "1b2bb324a9058ddfaf1178f4f1bd9a21e6c82e8ccda4eeff92ba474ee5d3110c",
+        "baseline_profile_uid": "e2cdbdc7-3db4-4d23-b59e-2a2783545005",
+        "baseline_profile_name": "study-baseline",
+        "provider_policy_version": "study-provider-config-v2-fast",
+        "provider_policy_digest": "b549e05b6930fdacbe9dbaec09543390840a2689cd4b4ef1fa6470ca71a5f1ca"
+      }
+    },
+    {
+      "uid": "2504eed8-0656-48b1-9a69-9973ccdc6b4a",
+      "name": "00000000-0000-0000-0000-000000000999-granted-memory",
+      "kind": "MANAGED",
+      "source": {
+        "kind": "STUDY_RUN_GRANTED_MEMORY",
+        "study_uid": "f4fcef60-0617-4024-8961-f364d443ab6d",
+        "study_name": "00000000-0000-0000-0000-000000000999",
+        "created_at": "2026-08-25T18:15:49.641943+00:00",
+        "baseline_sha256": "1b2bb324a9058ddfaf1178f4f1bd9a21e6c82e8ccda4eeff92ba474ee5d3110c",
+        "baseline_profile_uid": "e2cdbdc7-3db4-4d23-b59e-2a2783545005",
+        "baseline_profile_name": "study-baseline",
+        "provider_policy_version": "study-provider-config-v2-fast",
+        "provider_policy_digest": "b549e05b6930fdacbe9dbaec09543390840a2689cd4b4ef1fa6470ca71a5f1ca"
+      }
+    }
+  ],
+  "store_snapshots_before": {
+    "original": {
+      "root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/practice-source/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+      "file_count": 1057,
+      "tree_sha256": "37953ac05ad5e0efed249b900aa6c5e095e5d44ad468876a1f5026c5c1aa9fc9",
+      "manifest": "recovery/seq095-init-study-profile/original-store-manifest.json",
+      "archive": "recovery/seq095-init-study-profile/original-store-bytes.tar.gz",
+      "archive_sha256": "9839ad7c353b6a96a5b3ea7ffdc412f86bcbec0b6e8d62f55e8398d3fc415a04",
+      "archive_size": 578761
+    },
+    "unexpected-study": {
+      "root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/practice-source/profile-control/stores/bb7265f4-8391-47f4-9112-8334f5bf7ddc",
+      "file_count": 117,
+      "tree_sha256": "416314ea80eb2723ab0cc7a750e3aef3635045c5e73ac3a195c82fd2004ef777",
+      "manifest": "recovery/seq095-init-study-profile/unexpected-study-store-manifest.json",
+      "archive": "recovery/seq095-init-study-profile/unexpected-study-store-bytes.tar.gz",
+      "archive_sha256": "f33c234babbb69ed08aba7b114cc55d75eaccb47e02e7915c8461dcf96396603",
+      "archive_size": 110304
+    },
+    "unexpected-granted-memory": {
+      "root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/practice-source/profile-control/stores/2504eed8-0656-48b1-9a69-9973ccdc6b4a",
+      "file_count": 138,
+      "tree_sha256": "1a1424f1565ee4d5807c8e8d441afef3faef656064f316b629b64cb1c3638d1a",
+      "manifest": "recovery/seq095-init-study-profile/unexpected-granted-memory-store-manifest.json",
+      "archive": "recovery/seq095-init-study-profile/unexpected-granted-memory-store-bytes.tar.gz",
+      "archive_sha256": "4744f25a8f73cf5858545e2022e75329c596a59adcd3555b68ba2dc2c6f4fd7a",
+      "archive_size": 192371
+    }
+  },
+  "store_verification_after": {
+    "original": {
+      "file_count": 1057,
+      "tree_sha256": "37953ac05ad5e0efed249b900aa6c5e095e5d44ad468876a1f5026c5c1aa9fc9",
+      "unchanged": true
+    },
+    "unexpected-study": {
+      "file_count": 117,
+      "tree_sha256": "416314ea80eb2723ab0cc7a750e3aef3635045c5e73ac3a195c82fd2004ef777",
+      "unchanged": true
+    },
+    "unexpected-granted-memory": {
+      "file_count": 138,
+      "tree_sha256": "1a1424f1565ee4d5807c8e8d441afef3faef656064f316b629b64cb1c3638d1a",
+      "unchanged": true
+    }
+  },
+  "resolved_identity": {
+    "profile_name": "sixworld-v2-template",
+    "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+    "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/practice-source/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"
+  },
+  "expected_identity": {
+    "profile_name": "sixworld-v2-template",
+    "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+    "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/practice-source/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"
+  },
+  "runner_preassert_equivalent": "PASS",
+  "result": "PASS"
+}

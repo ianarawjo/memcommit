@@ -1,0 +1,27 @@
+{
+  "label": "before-undo-1-seq-002",
+  "read_at": "2026-08-25T18:12:08.811893+00:00",
+  "undo_top": {
+    "uid": "branch:14a4bb19-2abe-47b9-b967-a5f2df320bbb",
+    "command": "branch",
+    "description": "Branched 'task-1/participant/construction-updates' to 'audit/ticker/admin-v2-scratch/b1'.",
+    "members": [
+      {
+        "context_uid": "d9bd80bb-1944-4423-8306-6e5fdfbc02d8",
+        "context_name": "audit/ticker/admin-v2-scratch/b1",
+        "checkpoint_uid": "f3b4f1c8-a0db-42f2-b43c-a837f18aa916"
+      }
+    ]
+  },
+  "redo_top": null,
+  "undo_depth": 64,
+  "redo_depth": 0,
+  "staged_update_granted_target": null,
+  "assertions": {
+    "expected_side": "undo",
+    "expected_uid": "branch:14a4bb19-2abe-47b9-b967-a5f2df320bbb",
+    "expected_command": "branch",
+    "require_granted_null": true,
+    "result": "PASS"
+  }
+}

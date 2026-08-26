@@ -1,0 +1,2227 @@
+{
+  "schema_version": 1,
+  "study": "study-long-audit-20260823",
+  "world": "task-3",
+  "phase": "core",
+  "world_goal": "Decide which personal Memories a healthcare agent may receive, exclude irrelevant, stale, third-party, or unapproved information, and transfer only a reviewed minimum.",
+  "outcome": "Fail-closed: no external transfer was executed because the exact QUERY-only recipient route failed to return the requested scope, several candidates remained stale or underspecified, and no explicit approval was present.",
+  "execution_boundary": {
+    "pre_transition": "repo-root mem executable against the fixed Study; rounds 1-3 and round-4 contexts through search",
+    "frozen_physical_snapshot": {
+      "source_digest": "cd38dd...e787",
+      "launcher": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli",
+      "applies_from": "round-4 query",
+      "later_persistent_copy": "/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code"
+    },
+    "shared_profile_rules": "No profile/switch/checkout/undo/redo/current-only command was counted. Every counted data operation used an explicit task-3 source or target; contexts is inherently Profile-wide and was used only for discovery."
+  },
+  "excluded_status_probes": [
+    {
+      "command": "mem status --context task-3",
+      "exit": 2,
+      "actual": "status rejected --context because it is current-only. This is evidence only; root owns serialized task-3 status coverage."
+    }
+  ],
+  "interleaving": "Commands were executed operation-by-operation within each round, then the complete 21-operation sequence repeated for rounds 1 through 5; no operation's five trials were run consecutively.",
+  "coverage": {
+    "contexts": 5,
+    "list": 5,
+    "show": 5,
+    "find": 5,
+    "search": 5,
+    "query": 5,
+    "summarize": 5,
+    "add": 5,
+    "copy": 5,
+    "reference": 5,
+    "embed": 5,
+    "edit": 5,
+    "move": 5,
+    "replace": 5,
+    "chunk": 5,
+    "compare": 5,
+    "find-duplicates": 5,
+    "find-redundancies": 5,
+    "find-ambiguities": 5,
+    "find-conflicts": 5,
+    "fit": 5
+  },
+  "total_trials": 105,
+  "trials": [
+    {
+      "operation": "contexts",
+      "round": 1,
+      "command": "mem contexts",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 1",
+      "entry_route": "bare command",
+      "target_route": "Profile catalog",
+      "scope": "all local and granted public names",
+      "input_provenance": "fixed Study Profile",
+      "consumer": "discover task-3 local, SHARE, QUERY-only, and READ/EXPORT routes",
+      "actual": "Printed the complete shared Profile (about 112 lines); task-3 routes were present but buried among every world.",
+      "defect_ids": [
+        "T3-CONTEXTS-OVERLOAD"
+      ],
+      "cost": {
+        "wall_seconds": 0.32,
+        "terminal_screens": 8,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "list",
+      "round": 1,
+      "command": "mem list task-3/description",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 1",
+      "entry_route": "explicit Context positional",
+      "target_route": "task-3/description",
+      "scope": "exact Context",
+      "input_provenance": "fixed task description fixture",
+      "consumer": "anchor the healthcare-sharing goal",
+      "actual": "Listed the single goal Memory 77ea44c9 and its exact scenario.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.42,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "show",
+      "round": 1,
+      "command": "mem show task-3/description:77ea44c9",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 1",
+      "entry_route": "qualified Memory locator",
+      "target_route": "task-3/description:77ea44c9",
+      "scope": "one exact Memory",
+      "input_provenance": "prior list output UID",
+      "consumer": "read the full world goal",
+      "actual": "Rendered the complete task-3 goal Memory without ambiguity.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.33,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find",
+      "round": 1,
+      "command": "mem find \"healthcare\" --context task-3/description",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 1",
+      "entry_route": "literal text search",
+      "target_route": "task-3/description",
+      "scope": "exact Context",
+      "input_provenance": "goal keyword",
+      "consumer": "locate task language",
+      "actual": "Scanned one Memory, matched one Memory and two occurrences.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.32,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "search",
+      "round": 1,
+      "command": "mem search \"Which rules determine what personal information must be excluded from the healthcare agent?\" --context task-3/local/guardrails --descendants --exclude-embeds --limit 5",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 1",
+      "entry_route": "semantic search",
+      "target_route": "task-3/local/guardrails",
+      "scope": "recursive lexical subtree; embeds excluded; top 5",
+      "input_provenance": "world-goal question",
+      "consumer": "derive an exclusion checklist",
+      "actual": "Returned redaction, third-party exclusion, purpose exclusion, metadata minimization, and do-not-convey rules.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 14.64,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "query",
+      "round": 1,
+      "command": "mem query --context task-3/remote/government/healthcare-agent/info-request/questions-and-answers \"What information does the healthcare agent need, for what purpose, and what should be excluded?\"",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 1",
+      "entry_route": "exact --context QUERY-only route",
+      "target_route": "task-3/remote/government/healthcare-agent/info-request/questions-and-answers",
+      "scope": "authorized query interface only",
+      "input_provenance": "recipient endpoint question",
+      "consumer": "determine recipient-required fields before disclosure",
+      "actual": "Answered under task-3/local/personal-memory with '(no grounded answer found)' and emitted no References, despite the explicitly requested public QUERY-only name.",
+      "defect_ids": [
+        "T3-QUERY-TARGETING"
+      ],
+      "cost": {
+        "wall_seconds": 0.37,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "summarize",
+      "round": 1,
+      "command": "mem summarize task-3/local/guardrails --recursive",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 1",
+      "entry_route": "explicit Context positional",
+      "target_route": "task-3/local/guardrails",
+      "scope": "recursive local guardrail tree",
+      "input_provenance": "fixed local guardrails",
+      "consumer": "form a sharing policy",
+      "actual": "Produced a useful combined policy covering minimization, explicit approval, recipient/purpose, third parties, delivery, and audit.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.41,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "add",
+      "round": 1,
+      "command": "mem add \"Healthcare candidate (pending): limit disclosure to facts necessary for current care and exclude unrelated history.\" --context task-3/local/guardrails/purpose-and-scope",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 1",
+      "entry_route": "direct mutation with explicit Context",
+      "target_route": "task-3/local/guardrails/purpose-and-scope",
+      "scope": "one new local Memory",
+      "input_provenance": "agent-authored goal synthesis",
+      "consumer": "stage a purpose-bound candidate rule",
+      "actual": "Added UID f690e6c3 under task-3 only.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.27,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "copy",
+      "round": 1,
+      "command": "mem copy 75944d44 --from task-3/local/guardrails/purpose-and-scope --into task-3/local",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 1",
+      "entry_route": "source UID plus explicit source/target",
+      "target_route": "purpose-and-scope → task-3/local",
+      "scope": "one local Memory",
+      "input_provenance": "prior search UID",
+      "consumer": "reuse the purpose exclusion in the workspace",
+      "actual": "Created independent copy UID edf72c05.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.34,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "reference",
+      "round": 1,
+      "command": "mem reference 9d626b1a --from task-3/local/guardrails/minimization-and-redaction --into task-3/local",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 1",
+      "entry_route": "source UID plus explicit source/target",
+      "target_route": "minimization-and-redaction → task-3/local",
+      "scope": "one local snapshot reference",
+      "input_provenance": "prior search UID",
+      "consumer": "retain traceable redaction guidance",
+      "actual": "Created snapshot reference UID 86c6f7d2.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.29,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "embed",
+      "round": 1,
+      "command": "mem embed task-3/local/guardrails/channel-and-format --into task-3/local",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 1",
+      "entry_route": "explicit source and target Contexts",
+      "target_route": "channel-and-format → task-3/local",
+      "scope": "one local embedded Context edge",
+      "input_provenance": "fixed guardrail fixture",
+      "consumer": "make delivery rules readable from workspace",
+      "actual": "Embedded the channel-and-format Context successfully.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.31,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "edit",
+      "round": 1,
+      "command": "mem edit f690e6c3 \"Healthcare candidate (pending): limit disclosure to facts necessary for current care, exclude unrelated history, and require explicit user approval.\" --context task-3/local/guardrails/purpose-and-scope",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 1",
+      "entry_route": "UID plus explicit Context",
+      "target_route": "task-3/local/guardrails/purpose-and-scope:f690e6c3",
+      "scope": "one local Memory",
+      "input_provenance": "prior add UID",
+      "consumer": "add the approval boundary",
+      "actual": "Updated the staged rule in place.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.29,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "move",
+      "round": 1,
+      "command": "mem move edf72c05 --from task-3/local --into task-3/local/guardrails/audit-and-recovery",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 1",
+      "entry_route": "UID plus explicit source/target",
+      "target_route": "task-3/local → audit-and-recovery",
+      "scope": "one local Memory",
+      "input_provenance": "prior copy UID",
+      "consumer": "place a copied rule with audit material",
+      "actual": "Moved UID edf72c05 and preserved its identity.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.31,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "replace",
+      "round": 1,
+      "command": "mem replace \"pending\" \"staged\" --context task-3/local/guardrails/purpose-and-scope",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 1",
+      "entry_route": "literal replacement with explicit Context",
+      "target_route": "task-3/local/guardrails/purpose-and-scope",
+      "scope": "direct local text",
+      "input_provenance": "prior edited text",
+      "consumer": "mark curation state without approval",
+      "actual": "Replaced one occurrence.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.29,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "chunk",
+      "round": 1,
+      "command": "mem chunk f690e6c3 --context task-3/local/guardrails/purpose-and-scope --method sentence",
+      "exit": 2,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 1",
+      "entry_route": "UID plus method option",
+      "target_route": "task-3/local/guardrails/purpose-and-scope:f690e6c3",
+      "scope": "one local Memory",
+      "input_provenance": "prior add UID",
+      "consumer": "test sentence segmentation entry route",
+      "actual": "Rejected singular method 'sentence'; valid spelling was 'sentences'.",
+      "defect_ids": [
+        "T3-OPTION-GRAMMAR"
+      ],
+      "cost": {
+        "wall_seconds": 0.3,
+        "terminal_screens": 1,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "compare",
+      "round": 1,
+      "command": "mem compare task-3/local/guardrails/purpose-and-scope task-3/local/guardrails/minimization-and-redaction --plain",
+      "exit": 2,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 1",
+      "entry_route": "two explicit Contexts plus output flag",
+      "target_route": "purpose-and-scope ↔ minimization-and-redaction",
+      "scope": "two local direct frames",
+      "input_provenance": "fixed guardrail fixtures",
+      "consumer": "contrast purpose with minimization",
+      "actual": "Rejected unsupported --plain before analysis.",
+      "defect_ids": [
+        "T3-OPTION-GRAMMAR"
+      ],
+      "cost": {
+        "wall_seconds": 0.31,
+        "terminal_screens": 1,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-duplicates",
+      "round": 1,
+      "command": "mem find-duplicates task-3/local/guardrails",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 1",
+      "entry_route": "explicit Context positional",
+      "target_route": "task-3/local/guardrails",
+      "scope": "10 direct items",
+      "input_provenance": "fixed guardrail fixture",
+      "consumer": "check exact policy duplication",
+      "actual": "Found zero exact duplicate groups.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.33,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-redundancies",
+      "round": 1,
+      "command": "mem find-redundancies task-3/local/guardrails --select",
+      "exit": 2,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 1",
+      "entry_route": "explicit Context plus guessed selection flag",
+      "target_route": "task-3/local/guardrails",
+      "scope": "intended direct policy frame",
+      "input_provenance": "sibling quality-command expectation",
+      "consumer": "check semantic duplication",
+      "actual": "Rejected unsupported --select and suggested --direct.",
+      "defect_ids": [
+        "T3-OPTION-GRAMMAR"
+      ],
+      "cost": {
+        "wall_seconds": 0.31,
+        "terminal_screens": 1,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-ambiguities",
+      "round": 1,
+      "command": "mem find-ambiguities task-3/local/guardrails/purpose-and-scope",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 1",
+      "entry_route": "explicit Context positional",
+      "target_route": "task-3/local/guardrails/purpose-and-scope",
+      "scope": "9 direct Memories",
+      "input_provenance": "fixed guardrails plus new draft",
+      "consumer": "surface unsafe underspecification",
+      "actual": "Flagged 2/9, including the new staged rule and an existing ambiguous rule.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 14.56,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-conflicts",
+      "round": 1,
+      "command": "mem find-conflicts task-3/local/guardrails/purpose-and-scope",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 1",
+      "entry_route": "explicit Context positional",
+      "target_route": "task-3/local/guardrails/purpose-and-scope",
+      "scope": "9 direct Memories / 36 pairs",
+      "input_provenance": "same policy frame",
+      "consumer": "ensure draft does not contradict policy",
+      "actual": "Flagged 0/36 pairs.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 4.44,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "fit",
+      "round": 1,
+      "command": "mem fit task-3/local/personal-memory task-3/local/guardrails/purpose-and-scope",
+      "exit": 1,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 1",
+      "entry_route": "two explicit Contexts",
+      "target_route": "personal-memory ↔ purpose-and-scope",
+      "scope": "direct frames",
+      "input_provenance": "fixed personal root and guardrail target",
+      "consumer": "test whether personal root can be curated directly",
+      "actual": "Failed because the personal root contains no direct ordinary Memories.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.39,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "contexts",
+      "round": 2,
+      "command": "mem contexts",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 2",
+      "entry_route": "bare command",
+      "target_route": "Profile catalog",
+      "scope": "all local and granted public names",
+      "input_provenance": "round-1 accumulated state",
+      "consumer": "re-orient without changing shared current",
+      "actual": "Again printed the complete shared catalog; task-3 mutations were not summarized.",
+      "defect_ids": [
+        "T3-CONTEXTS-OVERLOAD"
+      ],
+      "cost": {
+        "wall_seconds": 0.31,
+        "terminal_screens": 8,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "list",
+      "round": 2,
+      "command": "mem list task-3/local/personal-memory/2026/06",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 2",
+      "entry_route": "explicit Context positional",
+      "target_route": "task-3/local/personal-memory/2026/06",
+      "scope": "exact monthly Context",
+      "input_provenance": "fixed personal fixture",
+      "consumer": "inspect an unrelated/third-party-heavy month",
+      "actual": "Listed 10 family and barbecue Memories, establishing a strong exclusion set.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.39,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "show",
+      "round": 2,
+      "command": "mem show task-3/local/personal-memory/2026/06:e682f0fd",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 2",
+      "entry_route": "qualified Memory locator",
+      "target_route": "2026/06:e682f0fd",
+      "scope": "one exact Memory",
+      "input_provenance": "prior list UID",
+      "consumer": "inspect a likely irrelevant detail",
+      "actual": "Rendered a restaurant/hearing-repeat detail that should be excluded from healthcare sharing.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.33,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find",
+      "round": 2,
+      "command": "mem find \"appointment\" --context task-3/local/personal-memory --recursive",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 2",
+      "entry_route": "literal search with recursive scope",
+      "target_route": "task-3/local/personal-memory",
+      "scope": "300 Memories; first 10 displayed",
+      "input_provenance": "goal keyword",
+      "consumer": "enumerate health scheduling candidates",
+      "actual": "Matched 11 Memories; the first 10 mixed relevant scheduling and surrounding personal detail.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.36,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "search",
+      "round": 2,
+      "command": "mem search \"Which personal details could help the healthcare agent, including medication timing, clinic access, waiting, or transport?\" --context task-3/local/personal-memory --descendants --exclude-embeds --limit 5",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 2",
+      "entry_route": "semantic search",
+      "target_route": "task-3/local/personal-memory",
+      "scope": "recursive personal corpus; top 5",
+      "input_provenance": "goal-derived candidate categories",
+      "consumer": "select a candidate set",
+      "actual": "Returned medication timing, brother transport, clinic waiting, elevator, and accessible entrance; semantic relevance alone included third-party detail.",
+      "defect_ids": [
+        "T3-SEARCH-CURATION"
+      ],
+      "cost": {
+        "wall_seconds": 13.6,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "query",
+      "round": 2,
+      "command": "mem query task-3/remote/government/healthcare-agent/info-request/questions-and-answers --context task-3 \"What information is requested?\"",
+      "exit": 1,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 2",
+      "entry_route": "public name as positional plus local --context",
+      "target_route": "requested public Q&A under task-3",
+      "scope": "mixed positional/exact route",
+      "input_provenance": "round-1 failed endpoint",
+      "consumer": "recover recipient query using an alternate entry form",
+      "actual": "Failed: no direct item matching the public name existed in task-3.",
+      "defect_ids": [
+        "T3-QUERY-TARGETING"
+      ],
+      "cost": {
+        "wall_seconds": 0.38,
+        "terminal_screens": 1,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "summarize",
+      "round": 2,
+      "command": "mem summarize task-3/remote/government/healthcare-agent/public-guidance",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 2",
+      "entry_route": "explicit granted READ Context",
+      "target_route": "public-guidance",
+      "scope": "25 granted Memories",
+      "input_provenance": "granted fixture",
+      "consumer": "understand recipient-side retention/routing risk",
+      "actual": "Summarized recipient guidance, including uncertain retention/routing and stale-information risks.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 5.83,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "add",
+      "round": 2,
+      "command": "mem add \"NOT SHARED: medication timing is only a candidate; verify medication identity, current prescription, recipient, purpose, and relevance before approval.\" --context task-3/local",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 2",
+      "entry_route": "direct mutation with explicit Context",
+      "target_route": "task-3/local",
+      "scope": "one local Memory",
+      "input_provenance": "search result plus guardrail synthesis",
+      "consumer": "stage a withheld candidate",
+      "actual": "Added UID 8d9b3ad4.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.28,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "copy",
+      "round": 2,
+      "command": "mem copy 12ba4249 --from task-3/local/personal-memory/2024/03 --into task-3/local",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 2",
+      "entry_route": "source UID plus explicit source/target",
+      "target_route": "2024/03 → task-3/local",
+      "scope": "one personal Memory",
+      "input_provenance": "round-2 search UID",
+      "consumer": "stage medication timing for review",
+      "actual": "Created independent copy UID e02a69f7.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.31,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "reference",
+      "round": 2,
+      "command": "mem reference 3069baac --from task-3/local/personal-memory/2024/03 --into task-3/local",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 2",
+      "entry_route": "source UID plus explicit source/target",
+      "target_route": "2024/03 → task-3/local",
+      "scope": "one snapshot reference",
+      "input_provenance": "round-2 search UID",
+      "consumer": "retain third-party transport evidence without copying ownership",
+      "actual": "Created reference UID 4387354b.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.33,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "embed",
+      "round": 2,
+      "command": "mem embed task-3/local/guardrails/approval-and-delivery --into task-3/local",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 2",
+      "entry_route": "explicit source and target Contexts",
+      "target_route": "approval-and-delivery → task-3/local",
+      "scope": "one embedded local Context",
+      "input_provenance": "fixed local guardrails",
+      "consumer": "make approval rules available in workspace",
+      "actual": "Embedded successfully.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.34,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "edit",
+      "round": 2,
+      "command": "mem edit 8d9b3ad4 \"NOT SHARED: medication timing is only a candidate; verify specific medication identity, current prescription, recipient, purpose, and relevance before approval.\" --context task-3/local",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 2",
+      "entry_route": "UID plus explicit Context",
+      "target_route": "task-3/local:8d9b3ad4",
+      "scope": "one local Memory",
+      "input_provenance": "prior add UID",
+      "consumer": "make verification requirements explicit",
+      "actual": "Updated the withheld candidate.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.3,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "move",
+      "round": 2,
+      "command": "mem move e02a69f7 --from task-3/local --into task-3/local/guardrails/audit-and-recovery",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 2",
+      "entry_route": "UID plus explicit source/target",
+      "target_route": "task-3/local → audit-and-recovery",
+      "scope": "one local Memory",
+      "input_provenance": "prior copy UID",
+      "consumer": "quarantine a stale medication candidate",
+      "actual": "Moved UID e02a69f7.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.31,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "replace",
+      "round": 2,
+      "command": "mem replace \"medication identity\" \"specific medication identity\" --context task-3/local",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 2",
+      "entry_route": "literal replacement with explicit Context",
+      "target_route": "task-3/local",
+      "scope": "direct local Memories",
+      "input_provenance": "prior add text",
+      "consumer": "tighten withheld candidate wording",
+      "actual": "Replaced one occurrence.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.29,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "chunk",
+      "round": 2,
+      "command": "mem chunk 8d9b3ad4 --context task-3/local --method clauses",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 2",
+      "entry_route": "UID plus valid method",
+      "target_route": "task-3/local:8d9b3ad4",
+      "scope": "one local Memory into three",
+      "input_provenance": "prior edited candidate",
+      "consumer": "separate status, medication fact, and verification action",
+      "actual": "Produced three fragments but omitted their new UIDs; a later list revealed 82272ee8, d98449a8, and bd30d689, and all fragments lost essential sentence context.",
+      "defect_ids": [
+        "T3-CHUNK-TRACEABILITY",
+        "T3-CHUNK-SEMANTICS"
+      ],
+      "cost": {
+        "wall_seconds": 0.34,
+        "terminal_screens": 1,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "compare",
+      "round": 2,
+      "command": "mem compare task-3/local/guardrails/purpose-and-scope task-3/local/guardrails/minimization-and-redaction",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 2",
+      "entry_route": "two explicit Contexts",
+      "target_route": "purpose-and-scope ↔ minimization-and-redaction",
+      "scope": "two local direct frames",
+      "input_provenance": "round-1 flag recovery",
+      "consumer": "derive complementary disclosure rules",
+      "actual": "Produced a useful comparison of purpose limitation and minimization.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 6.49,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-duplicates",
+      "round": 2,
+      "command": "mem find-duplicates task-3/local",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 2",
+      "entry_route": "explicit Context positional",
+      "target_route": "task-3/local",
+      "scope": "direct workspace items",
+      "input_provenance": "accumulated workspace",
+      "consumer": "check exact duplicates after copy/reference/embed",
+      "actual": "Found zero exact groups.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.38,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-redundancies",
+      "round": 2,
+      "command": "mem find-redundancies task-3/local --direct",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 2",
+      "entry_route": "explicit Context plus supported direct flag",
+      "target_route": "task-3/local",
+      "scope": "3 direct Memories",
+      "input_provenance": "round-1 flag recovery",
+      "consumer": "check semantic duplication after staging",
+      "actual": "Found zero redundancy groups.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 4.63,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-ambiguities",
+      "round": 2,
+      "command": "mem find-ambiguities task-3/local",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 2",
+      "entry_route": "explicit Context positional",
+      "target_route": "task-3/local",
+      "scope": "3 direct chunk fragments",
+      "input_provenance": "chunk output",
+      "consumer": "validate whether chunks remain safe/actionable",
+      "actual": "Flagged all three fragments as underspecified, confirming semantic damage from clause chunking.",
+      "defect_ids": [
+        "T3-CHUNK-SEMANTICS"
+      ],
+      "cost": {
+        "wall_seconds": 12.73,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-conflicts",
+      "round": 2,
+      "command": "mem find-conflicts task-3/local",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 2",
+      "entry_route": "explicit Context positional",
+      "target_route": "task-3/local",
+      "scope": "3 direct Memories / 3 pairs",
+      "input_provenance": "chunk output",
+      "consumer": "check whether staged fragments contradict",
+      "actual": "Flagged zero pairs.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 7.64,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "fit",
+      "round": 2,
+      "command": "mem fit task-3/local/personal-memory/2024/03 task-3/local/guardrails/purpose-and-scope",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 2",
+      "entry_route": "two explicit Contexts",
+      "target_route": "2024/03 ↔ purpose-and-scope",
+      "scope": "10 personal Memories against guardrails",
+      "input_provenance": "exact health month",
+      "consumer": "assess candidate-month applicability",
+      "actual": "Printed only FIT YES and the two target names, without evidence, exclusions, or actionable mapping.",
+      "defect_ids": [
+        "T3-FIT-OPAQUE"
+      ],
+      "cost": {
+        "wall_seconds": 8.19,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "contexts",
+      "round": 3,
+      "command": "mem contexts",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 3",
+      "entry_route": "bare command",
+      "target_route": "Profile catalog",
+      "scope": "all local and granted public names",
+      "input_provenance": "mid-state recheck",
+      "consumer": "confirm task-3 namespaces remained isolated",
+      "actual": "Repeated the full Profile inventory with no task-root filter.",
+      "defect_ids": [
+        "T3-CONTEXTS-OVERLOAD"
+      ],
+      "cost": {
+        "wall_seconds": 0.31,
+        "terminal_screens": 8,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "list",
+      "round": 3,
+      "command": "mem list task-3/local",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 3",
+      "entry_route": "explicit Context positional",
+      "target_route": "task-3/local",
+      "scope": "exact direct workspace",
+      "input_provenance": "accumulated round-2 state",
+      "consumer": "recover chunk UIDs and review workspace",
+      "actual": "Exposed embeds, references, and the three previously unnamed chunk UIDs.",
+      "defect_ids": [
+        "T3-CHUNK-TRACEABILITY"
+      ],
+      "cost": {
+        "wall_seconds": 0.45,
+        "terminal_screens": 2,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "show",
+      "round": 3,
+      "command": "mem show task-3/local:d98449a8",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 3",
+      "entry_route": "qualified Memory locator",
+      "target_route": "task-3/local:d98449a8",
+      "scope": "one exact chunk",
+      "input_provenance": "prior list output UID",
+      "consumer": "inspect a generated clause fragment",
+      "actual": "Showed the isolated medication clause without the verification frame.",
+      "defect_ids": [
+        "T3-CHUNK-SEMANTICS"
+      ],
+      "cost": {
+        "wall_seconds": 0.33,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find",
+      "round": 3,
+      "command": "mem find \"third[- ]party\" --regex --context task-3/local/personal-memory --recursive --limit 8",
+      "exit": 2,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 3",
+      "entry_route": "regex recursive search plus guessed limit",
+      "target_route": "task-3/local/personal-memory",
+      "scope": "intended recursive personal corpus",
+      "input_provenance": "guardrail vocabulary",
+      "consumer": "bound third-party evidence volume",
+      "actual": "Rejected unsupported --limit before searching.",
+      "defect_ids": [
+        "T3-OPTION-GRAMMAR"
+      ],
+      "cost": {
+        "wall_seconds": 0.31,
+        "terminal_screens": 1,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "search",
+      "round": 3,
+      "command": "mem search \"What is the minimum necessary health information and which third-party details must be excluded?\" --context task-3/local/personal-memory/2024/03 --context task-3/local/guardrails/privacy-and-others --context-only --exclude-embeds --limit 5",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 3",
+      "entry_route": "multi-root semantic search",
+      "target_route": "2024/03 plus privacy-and-others",
+      "scope": "two exact Contexts; top 5",
+      "input_provenance": "mixed personal and policy fixtures",
+      "consumer": "jointly retrieve candidates and constraints",
+      "actual": "All five results came from privacy-and-others; the limited result set gave no personal candidate from the other requested root.",
+      "defect_ids": [
+        "T3-SEARCH-CURATION"
+      ],
+      "cost": {
+        "wall_seconds": 5.61,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "query",
+      "round": 3,
+      "command": "mem query --context task-3/remote/government/healthcare-agent/info-request/questions-and-answers --json \"What exact facts and purposes are requested?\"",
+      "exit": 2,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 3",
+      "entry_route": "exact QUERY-only context plus guessed JSON flag",
+      "target_route": "public Q&A endpoint",
+      "scope": "authorized query interface only",
+      "input_provenance": "round-1 endpoint plus machine-reuse need",
+      "consumer": "obtain a structured recipient specification",
+      "actual": "Rejected unsupported --json before querying.",
+      "defect_ids": [
+        "T3-OPTION-GRAMMAR",
+        "T3-QUERY-TARGETING"
+      ],
+      "cost": {
+        "wall_seconds": 0.31,
+        "terminal_screens": 1,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "summarize",
+      "round": 3,
+      "command": "mem summarize task-3/local/personal-memory/2024/03",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 3",
+      "entry_route": "explicit Context positional",
+      "target_route": "task-3/local/personal-memory/2024/03",
+      "scope": "10 direct personal Memories",
+      "input_provenance": "fixed health month",
+      "consumer": "form a concise candidate overview",
+      "actual": "Blended medication, clinic-standing, and brother-transport third-party detail into one prose summary with no inclusion/exclusion dispositions.",
+      "defect_ids": [
+        "T3-SUMMARY-CURATION"
+      ],
+      "cost": {
+        "wall_seconds": 5.71,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "add",
+      "round": 3,
+      "command": "mem add \"DRAFT ONLY: exclude relatives, contacts, and unrelated third-party details unless the user separately approves a necessary role.\" --context task-3/local",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 3",
+      "entry_route": "direct mutation with explicit Context",
+      "target_route": "task-3/local",
+      "scope": "one local Memory",
+      "input_provenance": "guardrail and personal-corpus synthesis",
+      "consumer": "stage an explicit third-party exclusion",
+      "actual": "Added UID b073f174.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.29,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "copy",
+      "round": 3,
+      "command": "mem copy e6023aed --from task-3/local/personal-memory/2024/03 --into task-3/local",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 3",
+      "entry_route": "source UID plus explicit source/target",
+      "target_route": "2024/03 → task-3/local",
+      "scope": "one personal Memory",
+      "input_provenance": "round-2 search UID",
+      "consumer": "stage clinic-waiting evidence",
+      "actual": "Created copy UID 99b23d4e.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.31,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "reference",
+      "round": 3,
+      "command": "mem reference task-3/local/personal-memory/2024/12:e9515d6b --into task-3/local",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 3",
+      "entry_route": "qualified source plus explicit target",
+      "target_route": "2024/12:e9515d6b → task-3/local",
+      "scope": "one snapshot reference",
+      "input_provenance": "prior semantic search UID",
+      "consumer": "retain accessible-entrance evidence",
+      "actual": "Created reference UID e9683e8b.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.33,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "embed",
+      "round": 3,
+      "command": "mem embed task-3/local/guardrails/evidence-and-uncertainty --into task-3/local",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 3",
+      "entry_route": "explicit source and target Contexts",
+      "target_route": "evidence-and-uncertainty → task-3/local",
+      "scope": "one embedded local Context",
+      "input_provenance": "fixed guardrail fixture",
+      "consumer": "make staleness rules visible in workspace",
+      "actual": "Embedded successfully.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.34,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "edit",
+      "round": 3,
+      "command": "mem edit 99b23d4e \"DRAFT ONLY candidate: the user waited because seats were unavailable; verify the current accommodation need before any approval.\" --context task-3/local",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 3",
+      "entry_route": "UID plus explicit Context",
+      "target_route": "task-3/local:99b23d4e",
+      "scope": "one local Memory",
+      "input_provenance": "prior copy UID",
+      "consumer": "turn raw episode into a reviewed candidate",
+      "actual": "Updated the copied detail and retained draft-only status.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.31,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "move",
+      "round": 3,
+      "command": "mem move b073f174 --from task-3/local --into task-3/local/guardrails/privacy-and-others",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 3",
+      "entry_route": "UID plus explicit source/target",
+      "target_route": "task-3/local → privacy-and-others",
+      "scope": "one local Memory",
+      "input_provenance": "prior add UID",
+      "consumer": "place the third-party rule with its policy family",
+      "actual": "Moved UID b073f174.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.32,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "replace",
+      "round": 3,
+      "command": "mem replace \"NOT SHARED\" \"DRAFT ONLY\" --context task-3/local --context task-3/local/guardrails/privacy-and-others",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 3",
+      "entry_route": "literal replacement across explicit Contexts",
+      "target_route": "task-3/local plus privacy-and-others",
+      "scope": "multiple local direct frames",
+      "input_provenance": "prior staged labels",
+      "consumer": "normalize non-approval vocabulary",
+      "actual": "Replaced three occurrences across the two named Contexts.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.34,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "chunk",
+      "round": 3,
+      "command": "mem chunk 99b23d4e --context task-3/local --method sentences",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 3",
+      "entry_route": "UID plus valid method",
+      "target_route": "task-3/local:99b23d4e",
+      "scope": "one local Memory",
+      "input_provenance": "prior edited candidate",
+      "consumer": "test safe sentence segmentation",
+      "actual": "Produced only one chunk and made no durable change.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.31,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "compare",
+      "round": 3,
+      "command": "mem compare task-3/local/personal-memory/2024/03 task-3/local/personal-memory/2024/12",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 3",
+      "entry_route": "two explicit Contexts",
+      "target_route": "2024/03 ↔ 2024/12",
+      "scope": "two monthly personal frames",
+      "input_provenance": "fixed personal history",
+      "consumer": "separate recurring access needs from episodic details",
+      "actual": "Produced a useful cross-month comparison.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 9.09,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-duplicates",
+      "round": 3,
+      "command": "mem find-duplicates task-3/local --recursive",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 3",
+      "entry_route": "explicit Context plus recursive scope",
+      "target_route": "task-3/local",
+      "scope": "46 Contexts / 434 items",
+      "input_provenance": "accumulated workspace",
+      "consumer": "exhaustively check exact duplicates",
+      "actual": "Found zero groups but printed 46 mostly empty Context sections, burying the conclusion.",
+      "defect_ids": [
+        "T3-RECURSIVE-OVERLOAD"
+      ],
+      "cost": {
+        "wall_seconds": 0.64,
+        "terminal_screens": 8,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-redundancies",
+      "round": 3,
+      "command": "mem find-redundancies task-3/local --recursive",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 3",
+      "entry_route": "explicit Context plus recursive scope",
+      "target_route": "task-3/local",
+      "scope": "46 Contexts / 383 Memories",
+      "input_provenance": "same recursive workspace",
+      "consumer": "exhaustively find semantic duplication",
+      "actual": "Took about 176 seconds and found one group in 2024/11, but printed 45 empty sections around it.",
+      "defect_ids": [
+        "T3-RECURSIVE-OVERLOAD"
+      ],
+      "cost": {
+        "wall_seconds": 176.3,
+        "terminal_screens": 9,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-ambiguities",
+      "round": 3,
+      "command": "mem find-ambiguities task-3/local/personal-memory/2024/03",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 3",
+      "entry_route": "explicit Context positional",
+      "target_route": "2024/03",
+      "scope": "10 direct Memories",
+      "input_provenance": "health-month fixture",
+      "consumer": "identify stale/underspecified candidate facts",
+      "actual": "Flagged 5/10: medication identity, fasting period, missed time, current prescription, and deictic clinic wording.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 15.83,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-conflicts",
+      "round": 3,
+      "command": "mem find-conflicts task-3/local/personal-memory/2024/03",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 3",
+      "entry_route": "explicit Context positional",
+      "target_route": "2024/03",
+      "scope": "10 Memories / 45 pairs",
+      "input_provenance": "same health month",
+      "consumer": "detect contradictory personal facts",
+      "actual": "Flagged zero pairs.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 4.21,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "fit",
+      "round": 3,
+      "command": "mem fit task-3/local/personal-memory/2024/03 task-3/local/guardrails/minimization-and-redaction",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 3",
+      "entry_route": "two explicit Contexts",
+      "target_route": "2024/03 ↔ minimization-and-redaction",
+      "scope": "personal frame against policy",
+      "input_provenance": "health month and minimization rules",
+      "consumer": "assess minimization applicability",
+      "actual": "Again returned only FIT YES and target names, with no evidence or selection decisions.",
+      "defect_ids": [
+        "T3-FIT-OPAQUE"
+      ],
+      "cost": {
+        "wall_seconds": 7.34,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "contexts",
+      "round": 4,
+      "command": "mem contexts",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 4",
+      "entry_route": "bare command",
+      "target_route": "Profile catalog",
+      "scope": "all local and granted public names",
+      "input_provenance": "late-state recheck",
+      "consumer": "verify grants and task-3 namespace",
+      "actual": "Repeated the complete Profile output; terminal capture itself was truncated by volume.",
+      "defect_ids": [
+        "T3-CONTEXTS-OVERLOAD"
+      ],
+      "cost": {
+        "wall_seconds": 0.33,
+        "terminal_screens": 8,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "list",
+      "round": 4,
+      "command": "mem list task-3/remote/government/healthcare-agent/public-guidance",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 4",
+      "entry_route": "explicit granted public Context",
+      "target_route": "public-guidance",
+      "scope": "25 granted Memories with authority annotations",
+      "input_provenance": "READ-granted recipient guidance",
+      "consumer": "inspect recipient-side policy in full",
+      "actual": "Listed 25 detailed guidance Memories, useful but high-volume; dcf1b441 described potentially stale medication, availability, contact, and functional information.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.39,
+        "terminal_screens": 5,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "show",
+      "round": 4,
+      "command": "mem show task-3/remote/government/healthcare-agent/public-guidance:dcf1b441",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 4",
+      "entry_route": "qualified granted Memory locator",
+      "target_route": "public-guidance:dcf1b441",
+      "scope": "one exact granted Memory",
+      "input_provenance": "prior list UID",
+      "consumer": "inspect staleness guidance",
+      "actual": "Rendered the exact granted guidance Memory successfully.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.34,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find",
+      "round": 4,
+      "command": "mem find \"third[- ]party\" --regex --context task-3/local/personal-memory --recursive --all-results",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 4",
+      "entry_route": "regex recursive search with supported full-output flag",
+      "target_route": "task-3/local/personal-memory",
+      "scope": "300 Memories / all 43 matches",
+      "input_provenance": "round-3 flag recovery",
+      "consumer": "enumerate all third-party signals",
+      "actual": "Matched 43 Memories and 47 occurrences; the first 10 plus 33-more boundary made the volume explicit.",
+      "defect_ids": [
+        "T3-SEARCH-CURATION"
+      ],
+      "cost": {
+        "wall_seconds": 0.37,
+        "terminal_screens": 8,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "search",
+      "round": 4,
+      "command": "mem search \"What current Memories mention problems during or after a medical visit?\" --context task-3/local/personal-memory/2024/03 --context-only --exclude-embeds --limit 5",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-3 accumulated state at round 4",
+      "entry_route": "semantic search with temporal wording",
+      "target_route": "2024/03",
+      "scope": "exact current readable Memories; top 5",
+      "input_provenance": "user-like natural-language query",
+      "consumer": "verify ordinary Search remains a current-corpus operation",
+      "actual": "Returned current retained Memories about back discomfort, fasting, and instructions rather than silently routing to history.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 5.78,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "query",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli query --context task-3/remote/government/healthcare-agent/info-request/questions-and-answers \"Which exact facts may be sent, why are they needed, and which facts must not be sent?\"",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 4",
+      "entry_route": "frozen launcher exact QUERY-only route",
+      "target_route": "task-3/remote/government/healthcare-agent/info-request/questions-and-answers",
+      "scope": "authorized query interface only",
+      "input_provenance": "recipient specification recheck",
+      "consumer": "obtain the external request before approval",
+      "actual": "Again labeled the answer task-3/local/personal-memory, returned no grounded answer, and emitted no References.",
+      "defect_ids": [
+        "T3-QUERY-TARGETING"
+      ],
+      "cost": {
+        "wall_seconds": 0.5,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "summarize",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli summarize task-3/local",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 4",
+      "entry_route": "frozen launcher explicit Context",
+      "target_route": "task-3/local",
+      "scope": "direct accumulated workspace",
+      "input_provenance": "rounds 1-3 local state",
+      "consumer": "review staged candidates and rules",
+      "actual": "Produced a useful direct-workspace summary.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 6.09,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "add",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli add \"REVIEW STATE: no healthcare disclosure is approved; candidate facts remain subject to recipient, purpose, currency, necessity, and third-party checks.\" --context task-3/local",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 4",
+      "entry_route": "frozen launcher direct mutation",
+      "target_route": "task-3/local",
+      "scope": "one new local Memory",
+      "input_provenance": "accumulated audit conclusion",
+      "consumer": "make the non-approval state explicit",
+      "actual": "Added UID 042856c9.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.3,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "copy",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli copy 18d58666 d7f215c6 --from task-3/local/personal-memory/2024/03 --into task-3/local",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 4",
+      "entry_route": "frozen launcher multiple source UIDs",
+      "target_route": "2024/03 → task-3/local",
+      "scope": "two personal Memories",
+      "input_provenance": "round-4 search UIDs",
+      "consumer": "stage back-discomfort and related health candidates",
+      "actual": "Created copies 4908ab5e and 5c681665.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.37,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "reference",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli reference dcf1b441 --from task-3/remote/government/healthcare-agent/public-guidance --into task-3/local",
+      "exit": 1,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 4",
+      "entry_route": "frozen launcher granted source UID plus explicit target",
+      "target_route": "public-guidance → task-3/local",
+      "scope": "one granted READ/EXPORT Memory",
+      "input_provenance": "round-4 granted list/show UID",
+      "consumer": "retain precise recipient guidance with provenance",
+      "actual": "Failed that the granted public Context does not exist locally, despite list/show readability and later successful embed.",
+      "defect_ids": [
+        "T3-GRANT-SELECTIVE-TRANSFER"
+      ],
+      "cost": {
+        "wall_seconds": 0.41,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "embed",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli embed task-3/remote/government/healthcare-agent/public-guidance --into task-3/local",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 4",
+      "entry_route": "frozen launcher explicit granted source and local target",
+      "target_route": "public-guidance → task-3/local",
+      "scope": "whole granted Context embed",
+      "input_provenance": "same granted source as failed reference",
+      "consumer": "make recipient guidance available locally",
+      "actual": "Succeeded, demonstrating a route asymmetry with selective reference/copy.",
+      "defect_ids": [
+        "T3-GRANT-SELECTIVE-TRANSFER"
+      ],
+      "cost": {
+        "wall_seconds": 0.59,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "edit",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli edit 4908ab5e \"Candidate INCLUDE (DRAFT ONLY): the user stood for 20 minutes when no waiting chair was available and experienced back discomfort; verify current accommodation relevance before approval.\" --context task-3/local",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 4",
+      "entry_route": "frozen launcher UID plus explicit Context",
+      "target_route": "task-3/local:4908ab5e",
+      "scope": "one local Memory",
+      "input_provenance": "prior multi-copy UID",
+      "consumer": "turn a raw health event into a bounded draft",
+      "actual": "Updated the candidate without implying approval.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.32,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "move",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli move 4908ab5e 5c681665 --from task-3/local --into task-3/local/guardrails/audit-and-recovery",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 4",
+      "entry_route": "frozen launcher multiple UIDs and explicit source/target",
+      "target_route": "task-3/local → audit-and-recovery",
+      "scope": "two local Memories",
+      "input_provenance": "prior multi-copy UIDs",
+      "consumer": "quarantine candidates pending verification",
+      "actual": "Moved both UIDs.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.36,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "replace",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli replace \"possible disclosure\" \"draft disclosure\" --context task-3/local",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 4",
+      "entry_route": "frozen launcher literal replacement",
+      "target_route": "task-3/local",
+      "scope": "direct local Memories",
+      "input_provenance": "late-state vocabulary check",
+      "consumer": "normalize tentative language",
+      "actual": "Completed with no unsafe broadening.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.29,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "chunk",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli chunk 042856c9 --context task-3/local --method paragraphs",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 4",
+      "entry_route": "frozen launcher UID plus paragraph method",
+      "target_route": "task-3/local:042856c9",
+      "scope": "one local Memory",
+      "input_provenance": "round-4 review-state UID",
+      "consumer": "test a no-op segmentation boundary",
+      "actual": "Produced one chunk and no durable split.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.31,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "compare",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli compare task-3/local task-3/remote/government/healthcare-agent/public-guidance",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 4",
+      "entry_route": "frozen launcher local and granted Contexts",
+      "target_route": "task-3/local ↔ public-guidance",
+      "scope": "direct local frame vs granted frame",
+      "input_provenance": "accumulated workspace and recipient policy",
+      "consumer": "contrast candidates with recipient guidance",
+      "actual": "Returned a confusing specialization statement but did surface general sharing constraints and personal instances.",
+      "defect_ids": [
+        "T3-COMPARE-CLARITY"
+      ],
+      "cost": {
+        "wall_seconds": 7.28,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-duplicates",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli find-duplicates task-3/local/personal-memory/2024/11",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 4",
+      "entry_route": "frozen launcher exact Context",
+      "target_route": "2024/11",
+      "scope": "direct monthly Memories",
+      "input_provenance": "month selected from recursive evidence",
+      "consumer": "check exact duplication in a bounded frame",
+      "actual": "Found zero exact groups.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.43,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-redundancies",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli find-redundancies task-3/local/personal-memory/2024/11 --direct",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 4",
+      "entry_route": "frozen launcher exact direct Context",
+      "target_route": "2024/11",
+      "scope": "direct monthly Memories",
+      "input_provenance": "bounded recovery from recursive overload",
+      "consumer": "verify the one semantic duplicate group directly",
+      "actual": "Found one semantic redundancy group in a compact receipt.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 5.16,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-ambiguities",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli find-ambiguities task-3/local/guardrails/audit-and-recovery",
+      "exit": 1,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 4",
+      "entry_route": "frozen launcher exact Context",
+      "target_route": "audit-and-recovery",
+      "scope": "direct accumulated audit frame",
+      "input_provenance": "late-state candidates",
+      "consumer": "surface remaining approval blockers",
+      "actual": "After about 21 seconds, failed because the provider returned a question for NONE; no partial result was published.",
+      "defect_ids": [
+        "T3-AMBIGUITY-PROVIDER"
+      ],
+      "cost": {
+        "wall_seconds": 20.98,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-conflicts",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli find-conflicts task-3/local/guardrails/privacy-and-others",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 4",
+      "entry_route": "frozen launcher exact Context",
+      "target_route": "privacy-and-others",
+      "scope": "direct policy frame",
+      "input_provenance": "fixed plus added privacy rules",
+      "consumer": "check whether new exclusion rule conflicts",
+      "actual": "Flagged zero pairs.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 3.93,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "fit",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli fit task-3/local task-3/remote/government/healthcare-agent/public-guidance",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 4",
+      "entry_route": "frozen launcher local and granted Contexts",
+      "target_route": "task-3/local ↔ public-guidance",
+      "scope": "direct local workspace against granted policy",
+      "input_provenance": "late candidates and recipient guidance",
+      "consumer": "assess overall applicability",
+      "actual": "Returned only FIT YES and target names; no evidence or safe-transfer disposition.",
+      "defect_ids": [
+        "T3-FIT-OPAQUE"
+      ],
+      "cost": {
+        "wall_seconds": 8.9,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "contexts",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli contexts",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 5",
+      "entry_route": "frozen launcher bare command",
+      "target_route": "Profile catalog",
+      "scope": "all local and granted public names",
+      "input_provenance": "final accumulated Study state",
+      "consumer": "confirm task-3 isolation and grants",
+      "actual": "Printed the full shared catalog for a fifth time and was again truncated at the capture boundary.",
+      "defect_ids": [
+        "T3-CONTEXTS-OVERLOAD"
+      ],
+      "cost": {
+        "wall_seconds": 0.43,
+        "terminal_screens": 8,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "list",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli list task-3/local/guardrails/audit-and-recovery",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 5",
+      "entry_route": "frozen launcher explicit Context",
+      "target_route": "audit-and-recovery",
+      "scope": "13 direct late-state Memories",
+      "input_provenance": "accumulated audit workspace",
+      "consumer": "review quarantined candidates and audit notes",
+      "actual": "Listed moved candidates, uncertainty rules, and late audit state in one bounded Context.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.66,
+        "terminal_screens": 3,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "show",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli show task-3/local/guardrails/audit-and-recovery:4908ab5e",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 5",
+      "entry_route": "frozen launcher qualified Memory",
+      "target_route": "audit-and-recovery:4908ab5e",
+      "scope": "one exact candidate",
+      "input_provenance": "round-4 move UID",
+      "consumer": "verify the bounded health candidate",
+      "actual": "Rendered the draft back-discomfort candidate and its verification boundary.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.34,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli find \"clinic|medication|back|appointment\" --regex --context task-3/local/personal-memory/2024/03 --all-results",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 5",
+      "entry_route": "frozen launcher regex exact search",
+      "target_route": "2024/03",
+      "scope": "10 direct Memories / all matches",
+      "input_provenance": "goal-derived health vocabulary",
+      "consumer": "enumerate the bounded month's candidate evidence",
+      "actual": "Scanned 10 and matched 7 without crossing the explicit month.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.37,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "search",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli search \"Which staged healthcare candidates are safe, current, necessary, non-third-party, and explicitly approved?\" --context task-3/local --context task-3/local/guardrails/audit-and-recovery --context-only --exclude-embeds --limit 8",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 5",
+      "entry_route": "frozen launcher multi-root semantic search",
+      "target_route": "task-3/local plus audit-and-recovery",
+      "scope": "two exact current Contexts; top 8",
+      "input_provenance": "late staged state",
+      "consumer": "assemble the final review queue",
+      "actual": "Returned review state, candidates, clause fragments, a brother-transport reference, and uncertainty notes; relevance did not itself produce safe inclusion/exclusion decisions.",
+      "defect_ids": [
+        "T3-SEARCH-CURATION"
+      ],
+      "cost": {
+        "wall_seconds": 7.64,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "query",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli query --context task-3/remote/government/healthcare-agent/info-request/questions-and-answers \"State the recipient, purpose, requested fields, prohibited fields, and retention behavior.\"",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 5",
+      "entry_route": "frozen launcher exact QUERY-only route",
+      "target_route": "task-3/remote/government/healthcare-agent/info-request/questions-and-answers",
+      "scope": "authorized query interface only",
+      "input_provenance": "third exact recipient-specification attempt",
+      "consumer": "gate any final transfer on recipient scope",
+      "actual": "For the third exact attempt, labeled the result task-3/local/personal-memory, returned no grounded answer, and emitted no References.",
+      "defect_ids": [
+        "T3-QUERY-TARGETING"
+      ],
+      "cost": {
+        "wall_seconds": 0.52,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "summarize",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli summarize task-3/local --recursive",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 5",
+      "entry_route": "frozen launcher explicit recursive Context",
+      "target_route": "task-3/local",
+      "scope": "accumulated local tree and embeds",
+      "input_provenance": "final staged state",
+      "consumer": "create a final human review overview",
+      "actual": "Produced a useful safe summary, but remained narrative rather than an executable disclosure decision.",
+      "defect_ids": [
+        "T3-SUMMARY-CURATION"
+      ],
+      "cost": {
+        "wall_seconds": 6.69,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "add",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli add \"AUDIT RESULT: no transfer was executed because the QUERY-only recipient specification did not return the requested scope and candidate facts remain stale or underspecified.\" --context task-3/local/guardrails/audit-and-recovery",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 5",
+      "entry_route": "frozen launcher direct mutation",
+      "target_route": "audit-and-recovery",
+      "scope": "one new local Memory",
+      "input_provenance": "observed query and ambiguity results",
+      "consumer": "record the fail-closed outcome",
+      "actual": "Added UID cdd33181.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.31,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "copy",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli copy dcf1b441 --from task-3/remote/government/healthcare-agent/public-guidance --into task-3/local/guardrails/audit-and-recovery",
+      "exit": 1,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 5",
+      "entry_route": "frozen launcher granted source UID plus local target",
+      "target_route": "public-guidance → audit-and-recovery",
+      "scope": "one granted READ/EXPORT Memory",
+      "input_provenance": "round-4 granted UID",
+      "consumer": "selectively retain one stale-information warning",
+      "actual": "Again failed that the granted public Context does not exist locally.",
+      "defect_ids": [
+        "T3-GRANT-SELECTIVE-TRANSFER"
+      ],
+      "cost": {
+        "wall_seconds": 0.41,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "reference",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli reference 4908ab5e --from task-3/local/guardrails/audit-and-recovery --into task-3/local",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 5",
+      "entry_route": "frozen launcher local source UID plus local target",
+      "target_route": "audit-and-recovery → task-3/local",
+      "scope": "one local snapshot reference",
+      "input_provenance": "round-5 show UID",
+      "consumer": "surface a candidate with traceability",
+      "actual": "Created reference UID e3a12172.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.34,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "embed",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli embed task-3/remote/government/healthcare-agent/public-guidance --into task-3/local",
+      "exit": 1,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 5",
+      "entry_route": "frozen launcher explicit granted source/target",
+      "target_route": "public-guidance → task-3/local",
+      "scope": "existing whole-Context embed",
+      "input_provenance": "round-4 successful embed",
+      "consumer": "test duplicate-edge safety",
+      "actual": "Failed safely because the Context was already embedded.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.44,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "edit",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli edit cdd33181 \"AUDIT RESULT: no transfer was executed and no approval was inferred because the QUERY-only recipient specification did not return the requested scope and candidate facts remain stale or underspecified.\" --context task-3/local/guardrails/audit-and-recovery",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 5",
+      "entry_route": "frozen launcher UID plus explicit Context",
+      "target_route": "audit-and-recovery:cdd33181",
+      "scope": "one local audit Memory",
+      "input_provenance": "round-5 add UID",
+      "consumer": "make non-inference explicit",
+      "actual": "Updated the audit record in place.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.31,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "move",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli move cdd33181 --from task-3/local/guardrails/audit-and-recovery --into task-3/local/guardrails/audit-and-recovery",
+      "exit": 1,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 5",
+      "entry_route": "frozen launcher same explicit source/target",
+      "target_route": "audit-and-recovery → itself",
+      "scope": "one local Memory",
+      "input_provenance": "round-5 edit UID",
+      "consumer": "test no-op ownership boundary",
+      "actual": "Rejected the move because the target already owns the Memory and suggested Edit for reordering.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.32,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "replace",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli replace \"APPROVED AND SHARED\" \"SENT\" --context task-3/local/guardrails/audit-and-recovery",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 5",
+      "entry_route": "frozen launcher literal replacement",
+      "target_route": "audit-and-recovery",
+      "scope": "direct local audit frame",
+      "input_provenance": "negative control phrase",
+      "consumer": "ensure no state falsely claims transmission",
+      "actual": "Reported no matches and left state unchanged.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.29,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "chunk",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli chunk cdd33181 --context task-3/local/guardrails/audit-and-recovery --method sentences",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 5",
+      "entry_route": "frozen launcher UID plus sentence method",
+      "target_route": "audit-and-recovery:cdd33181",
+      "scope": "one local audit Memory",
+      "input_provenance": "round-5 edited audit record",
+      "consumer": "test late-state no-op segmentation",
+      "actual": "The one-sentence audit record produced a single chunk and no meaningful split.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.31,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "compare",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli compare task-3/local/guardrails/audit-and-recovery task-3/local/guardrails/approval-and-delivery",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 5",
+      "entry_route": "frozen launcher two explicit Contexts",
+      "target_route": "audit-and-recovery ↔ approval-and-delivery",
+      "scope": "two local direct frames",
+      "input_provenance": "final audit and approval rules",
+      "consumer": "determine what remains before safe transfer",
+      "actual": "Explained that approval cannot be inferred and that recipient/purpose/item changes require renewed approval; also noted external copies may persist.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 7.23,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-duplicates",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli find-duplicates task-3/local/guardrails/audit-and-recovery",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 5",
+      "entry_route": "frozen launcher exact Context",
+      "target_route": "audit-and-recovery",
+      "scope": "13 direct items",
+      "input_provenance": "final audit frame",
+      "consumer": "check exact duplication after all staging",
+      "actual": "Found zero exact groups in a compact receipt.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.43,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-redundancies",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli find-redundancies task-3/local/guardrails/audit-and-recovery --direct",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 5",
+      "entry_route": "frozen launcher exact direct Context",
+      "target_route": "audit-and-recovery",
+      "scope": "13 direct Memories",
+      "input_provenance": "final audit frame",
+      "consumer": "check semantic duplication among quarantined records",
+      "actual": "Found zero groups.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 4.09,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-ambiguities",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli find-ambiguities task-3/local/guardrails/audit-and-recovery",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 5",
+      "entry_route": "frozen launcher exact Context recovery retry",
+      "target_route": "audit-and-recovery",
+      "scope": "13 direct Memories",
+      "input_provenance": "round-4 failed provider route",
+      "consumer": "retry the same late audit analysis",
+      "actual": "Succeeded on retry and flagged 3/13: medication identity/currentness, accommodation relevance/recipient/purpose, and the audit record's missing requested scope.",
+      "defect_ids": [
+        "T3-AMBIGUITY-PROVIDER"
+      ],
+      "cost": {
+        "wall_seconds": 17.97,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-conflicts",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli find-conflicts task-3/local/guardrails/audit-and-recovery",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 5",
+      "entry_route": "frozen launcher exact Context",
+      "target_route": "audit-and-recovery",
+      "scope": "13 direct Memories / 78 pairs",
+      "input_provenance": "final audit frame",
+      "consumer": "check whether candidates or audit statements contradict",
+      "actual": "Flagged zero pairs.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 5.11,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "fit",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli fit task-3/local/guardrails/audit-and-recovery task-3/local/guardrails/approval-and-delivery",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; task-3 accumulated state at round 5",
+      "entry_route": "frozen launcher two explicit Contexts",
+      "target_route": "audit-and-recovery ↔ approval-and-delivery",
+      "scope": "two local direct frames",
+      "input_provenance": "final audit and approval rules",
+      "consumer": "assess whether the audit state belongs under the approval policy",
+      "actual": "Returned only FIT YES and target names, with no supporting mapping.",
+      "defect_ids": [
+        "T3-FIT-OPAQUE"
+      ],
+      "cost": {
+        "wall_seconds": 11.89,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    }
+  ]
+}
+

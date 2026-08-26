@@ -1,0 +1,56 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 find-conflicts task-1/campus-wiki/building-access
+
+EXIT
+0
+
+WALL_SECONDS
+11.432528
+
+STDOUT
+Find Conflicts · task-1/campus-wiki/building-access · 8/51 direct memories involved · 7/1275 pairs flagged
+
+  CONFLICT 1/7
+  [1cb2aa88] The Main Building third-floor rear entrance may be used for general passage during regular opening hours in both the academic term and recess.
+  [ab8dfc9d] CONSTRUCTION UPDATE — June 24–August 23: General passage through the third-floor rear entrance is closed, and general main-entrance access ends at 5:00 p.m. The existing accessible route is under reconstruction; use the temporary passage next to the main entrance to reach the first-floor lobby. Authorized students entering after 5:00 p.m. use a physical NFC student ID card. Staff and construction/facilities personnel use only the designated staff entrance. Proactively warn Central Library users and returning group tours that the former rear-entrance route is unavailable.
+  Reason: The general rule permits passage through the third-floor rear entrance during regular hours in term and recess, while the construction update closes that passage from June 24 through August 23.
+  Question: Is the rear entrance open for general passage during June 24–August 23?
+
+  CONFLICT 2/7
+  [c6b97453] The end of regular opening hours for the Main Building main entrance during the academic term is 10 p.m.
+  [ab8dfc9d] CONSTRUCTION UPDATE — June 24–August 23: General passage through the third-floor rear entrance is closed, and general main-entrance access ends at 5:00 p.m. The existing accessible route is under reconstruction; use the temporary passage next to the main entrance to reach the first-floor lobby. Authorized students entering after 5:00 p.m. use a physical NFC student ID card. Staff and construction/facilities personnel use only the designated staff entrance. Proactively warn Central Library users and returning group tours that the former rear-entrance route is unavailable.
+  Reason: The academic-term schedule says main-entrance access ends at 10 p.m., while the construction update makes it end at 5 p.m. from June 24 through August 23.
+  Question: When does main-entrance access end during construction: 5 p.m. or 10 p.m.?
+
+  CONFLICT 3/7
+  [614389e2] The end of regular opening hours for the Main Building main entrance during recess is 10 p.m.
+  [ab8dfc9d] CONSTRUCTION UPDATE — June 24–August 23: General passage through the third-floor rear entrance is closed, and general main-entrance access ends at 5:00 p.m. The existing accessible route is under reconstruction; use the temporary passage next to the main entrance to reach the first-floor lobby. Authorized students entering after 5:00 p.m. use a physical NFC student ID card. Staff and construction/facilities personnel use only the designated staff entrance. Proactively warn Central Library users and returning group tours that the former rear-entrance route is unavailable.
+  Reason: The recess schedule says main-entrance access ends at 10 p.m., while the construction update makes it end at 5 p.m. from June 24 through August 23.
+  Question: When does main-entrance access end during construction: 5 p.m. or 10 p.m.?
+
+  POSSIBLE CONFLICT 4/7
+  [e3929a49] Students familiar with the route to the Central Library expect the third-floor rear entrance to be a connection normally available for passage.
+  [ab8dfc9d] CONSTRUCTION UPDATE — June 24–August 23: General passage through the third-floor rear entrance is closed, and general main-entrance access ends at 5:00 p.m. The existing accessible route is under reconstruction; use the temporary passage next to the main entrance to reach the first-floor lobby. Authorized students entering after 5:00 p.m. use a physical NFC student ID card. Staff and construction/facilities personnel use only the designated staff entrance. Proactively warn Central Library users and returning group tours that the former rear-entrance route is unavailable.
+  Reason: If the students' expectation describes availability during June 24–August 23, it conflicts with the construction closure; if it describes normal conditions outside that temporary period, both statements are jointly explainable.
+  Question: Does this expectation apply during the construction period?
+
+  CONFLICT 5/7
+  [b6987cd9] Instruct students eligible for access after regular opening hours to use a physical NFC student ID card or the registered app.
+  [ab8dfc9d] CONSTRUCTION UPDATE — June 24–August 23: General passage through the third-floor rear entrance is closed, and general main-entrance access ends at 5:00 p.m. The existing accessible route is under reconstruction; use the temporary passage next to the main entrance to reach the first-floor lobby. Authorized students entering after 5:00 p.m. use a physical NFC student ID card. Staff and construction/facilities personnel use only the designated staff entrance. Proactively warn Central Library users and returning group tours that the former rear-entrance route is unavailable.
+  Reason: The standing instruction permits eligible students after hours to use either a physical NFC card or the registered app, while the construction update requires a physical NFC card for authorized students entering after 5 p.m.
+  Question: During construction, may authorized students use the registered app after 5 p.m.?
+
+  CONFLICT 6/7
+  [36db4bf8] The accessible route beside the main entrance is an always-available route into the first-floor lobby without using stairs.
+  [ab8dfc9d] CONSTRUCTION UPDATE — June 24–August 23: General passage through the third-floor rear entrance is closed, and general main-entrance access ends at 5:00 p.m. The existing accessible route is under reconstruction; use the temporary passage next to the main entrance to reach the first-floor lobby. Authorized students entering after 5:00 p.m. use a physical NFC student ID card. Staff and construction/facilities personnel use only the designated staff entrance. Proactively warn Central Library users and returning group tours that the former rear-entrance route is unavailable.
+  Reason: The accessible route is described as always available, while the construction update says that route is under reconstruction and directs users to a temporary passage.
+  Question: Is the existing accessible route available during construction?
+
+  POSSIBLE CONFLICT 7/7
+  [804bfc6b] Tour leaders for external groups tend to want to use the same route through the third-floor rear entrance on their next visit that they used on a previous visit.
+  [ab8dfc9d] CONSTRUCTION UPDATE — June 24–August 23: General passage through the third-floor rear entrance is closed, and general main-entrance access ends at 5:00 p.m. The existing accessible route is under reconstruction; use the temporary passage next to the main entrance to reach the first-floor lobby. Authorized students entering after 5:00 p.m. use a physical NFC student ID card. Staff and construction/facilities personnel use only the designated staff entrance. Proactively warn Central Library users and returning group tours that the former rear-entrance route is unavailable.
+  Reason: If the tour leaders' desired same route is treated as guidance for visits during June 24–August 23, it conflicts with the required warning that the former rear route is unavailable; if it merely reports their preference or applies to visits outside that period, both are jointly explainable.
+  Question: Is the next visit during the construction period?
+
+
+STDERR

@@ -1,0 +1,3 @@
+COPIED · 1 Memory → 'task-3' · NEW UIDs · after [a274822b] at the end
+  'task-2/participant' [9d371105] → [8705667a]
+Checkpoint 'task-3' [0113945a].

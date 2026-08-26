@@ -1,0 +1,7 @@
+
+Proposed split of [3156c18e] in Context 'task-1' → 2 chunks (method=sentences)
+────────────────────────────────────────────────────────
+   1  Base ticker rule: remove a terminal legal suffix such as Inc
+   2  Preserve the remaining alphanumeric characters.
+────────────────────────────────────────────────────────
+Done — 2 memories added in 'task-1'.

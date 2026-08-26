@@ -1,0 +1,8 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 compare task-2/advisor1/ethics task-2/advisor2/ethics --snapshot
+EXIT: 0
+DURATION_SECONDS: 7.452
+
+Compare · task-2/advisor1/ethics ↔ task-2/advisor2/ethics
+
+COMPARISON
+  Both frames impose closely aligned HCI ethics requirements for task-specific burden mitigation, accessibility, immediate identifier separation, and equipment handling. The decisive specialization is that field studies must provide safe return to existing work, protect decliners from workplace disadvantage, and assess withdrawal risk only where a safe alternative procedure exists.

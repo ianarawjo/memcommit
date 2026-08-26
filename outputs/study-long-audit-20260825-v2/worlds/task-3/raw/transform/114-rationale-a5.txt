@@ -1,0 +1,225 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 rationale task-3/local/guardrails/approval-and-delivery:96442184 --json --limit 60
+
+EXIT
+0
+
+OUTPUT
+{
+  "trace": {
+    "context": {
+      "uid": "37cd6139-4882-5fd3-a261-97370a3b5d12",
+      "name": "task-3/local/guardrails/approval-and-delivery"
+    },
+    "selected_uid": "96442184-816a-58f1-a72d-40eb907688fe",
+    "component_uids": [
+      "96442184-816a-58f1-a72d-40eb907688fe",
+      "9c457d0d-c687-4fce-8340-7e6749ad123c"
+    ],
+    "originals": [
+      {
+        "uid": "96442184-816a-58f1-a72d-40eb907688fe",
+        "content": "Show the user the actual recipient before transmission.",
+        "position": 0,
+        "content_digest": "57deca2234fc746aa8523a205a7c2e8cd2192d88fedd1825fa0689d8d4d67e0e"
+      }
+    ],
+    "current": [
+      {
+        "uid": "96442184-816a-58f1-a72d-40eb907688fe",
+        "content": "Show the user the actual recipient before transmission.",
+        "position": 0,
+        "content_digest": "57deca2234fc746aa8523a205a7c2e8cd2192d88fedd1825fa0689d8d4d67e0e"
+      },
+      {
+        "uid": "9c457d0d-c687-4fce-8340-7e6749ad123c",
+        "content": "Show the user the actual recipient before transmission.",
+        "position": 13,
+        "content_digest": "57deca2234fc746aa8523a205a7c2e8cd2192d88fedd1825fa0689d8d4d67e0e"
+      }
+    ],
+    "events": [
+      {
+        "kind": "MERGED_IN",
+        "evidence": "RECORDED",
+        "timestamp": "2026-08-25T13:42:50.696652",
+        "checkpoint_uid": "8786a3e6-45f5-4e50-bed5-221651fcd5c2",
+        "command": "merge",
+        "description": "Merged 'task-3/local/guardrails/approval-and-delivery' into 'task-3/local/guardrails/audit-and-recovery': new 9; already present 0; kept Target 0; took Source 0",
+        "before": [
+          {
+            "uid": "96442184-816a-58f1-a72d-40eb907688fe",
+            "content": "Show the user the actual recipient before transmission.",
+            "position": 0,
+            "content_digest": "57deca2234fc746aa8523a205a7c2e8cd2192d88fedd1825fa0689d8d4d67e0e"
+          }
+        ],
+        "after": [
+          {
+            "uid": "9c457d0d-c687-4fce-8340-7e6749ad123c",
+            "content": "Show the user the actual recipient before transmission.",
+            "position": 13,
+            "content_digest": "57deca2234fc746aa8523a205a7c2e8cd2192d88fedd1825fa0689d8d4d67e0e"
+          }
+        ],
+        "reason": null,
+        "reason_codes": [
+          "MERGE",
+          "NEW"
+        ],
+        "source_occurrence": null,
+        "operation_id": null,
+        "command_operation": null,
+        "context_transition": {
+          "source": {
+            "uid": "37cd6139-4882-5fd3-a261-97370a3b5d12",
+            "name": "task-3/local/guardrails/approval-and-delivery"
+          },
+          "target": {
+            "uid": "731a18ea-cb2f-52a1-8ccb-c990928b0093",
+            "name": "task-3/local/guardrails/audit-and-recovery"
+          }
+        },
+        "child_evidence": [],
+        "declared_frame": null,
+        "declared_frame_digest": null,
+        "uncertainty_reason": null,
+        "source_review_uid": null,
+        "source_review_digest": null,
+        "source_analysis_uid": null
+      },
+      {
+        "kind": "HISTORY_GAP",
+        "evidence": "UNRECORDED",
+        "timestamp": null,
+        "checkpoint_uid": null,
+        "command": "current",
+        "description": "Current Context differs from the last reconstructable checkpoint state.",
+        "before": [],
+        "after": [
+          {
+            "uid": "96442184-816a-58f1-a72d-40eb907688fe",
+            "content": "Show the user the actual recipient before transmission.",
+            "position": 0,
+            "content_digest": "57deca2234fc746aa8523a205a7c2e8cd2192d88fedd1825fa0689d8d4d67e0e"
+          },
+          {
+            "uid": "33169da3-3a2a-5e33-8fe2-66dbe9c0b641",
+            "content": "Show the user the recipient's purpose of use before transmission.",
+            "position": 1,
+            "content_digest": "6e46688b8ddf31e2cf2c948e3bbc15441586f2018ebf162858c18e90bddd052b"
+          },
+          {
+            "uid": "f449bbaa-c795-51b3-8f19-f6f26d819445",
+            "content": "Show the user the exact list of Memories to be conveyed before transmission.",
+            "position": 2,
+            "content_digest": "3f9c1f528e0f054f1f4fcf336c17d9899d53d602e3d0b39ac736ef6b01813cae"
+          },
+          {
+            "uid": "9b905e4c-8522-5138-bc4e-b4deb308d28d",
+            "content": "Obtain new approval if the recipient changes.",
+            "position": 3,
+            "content_digest": "66d8b95523f3a505778c1a104b2907e771fb8627b05c7fd69b72a498f549f7ba"
+          },
+          {
+            "uid": "ce35336a-9b15-5448-b664-d6e8a5306d32",
+            "content": "Obtain new approval if the sharing purpose changes.",
+            "position": 4,
+            "content_digest": "3bf7bc4641a71c6043c3d68c915009c82c96d46b339ffa3b96485e4bc529499c"
+          },
+          {
+            "uid": "14d28101-761a-5d2a-8f80-d89f526b8598",
+            "content": "Obtain new approval if the shared items change.",
+            "position": 5,
+            "content_digest": "8e13d5f3495f54249c379708e25846ae09ba0169658e24916bcaad9d897a3648"
+          },
+          {
+            "uid": "d7d7f1a5-f831-5d03-9137-ae485cebb67a",
+            "content": "The local agent can present sharing candidates and recipient scope but cannot approve external sharing on the user's behalf.",
+            "position": 6,
+            "content_digest": "d68f86a647c6ad28030f5b3908ad9f6e683600ebbffabb54124f9a6e2db76162"
+          },
+          {
+            "uid": "b0db9a0f-f96d-5766-b1fb-483e89d0b4a3",
+            "content": "Unless a separate restriction is provided, a recipient organization may judge that it may retain received input as an ordinary business record.",
+            "position": 7,
+            "content_digest": "072db4dbee36adeb3df3c6275fb8dea5761047caad25a593eb249fd2e9a16428"
+          },
+          {
+            "uid": "319e6774-f20f-571e-b92f-e6c71f345320",
+            "content": "Unless a separate restriction is provided, a recipient organization may judge that it may forward input to internal processors.",
+            "position": 8,
+            "content_digest": "5678f307b61b3ccc04882e8f68ee04aaf206766da82d1048e40deadfdf471824"
+          }
+        ],
+        "reason": null,
+        "reason_codes": [],
+        "source_occurrence": null,
+        "operation_id": null,
+        "command_operation": null,
+        "context_transition": null,
+        "child_evidence": [],
+        "declared_frame": null,
+        "declared_frame_digest": null,
+        "uncertainty_reason": null,
+        "source_review_uid": null,
+        "source_review_digest": null,
+        "source_analysis_uid": null
+      }
+    ],
+    "analyses": [],
+    "warnings": [
+      "The current Context contains changes that no retained checkpoint explains."
+    ]
+  },
+  "target": {
+    "uid": "96442184-816a-58f1-a72d-40eb907688fe",
+    "content": "Show the user the actual recipient before transmission.",
+    "position": 0,
+    "content_digest": "57deca2234fc746aa8523a205a7c2e8cd2192d88fedd1825fa0689d8d4d67e0e"
+  },
+  "origin_events": [],
+  "recorded_reason_events": [],
+  "saved_analysis": null,
+  "stale_analysis": false,
+  "proposals": [
+    {
+      "session_uid": "a27f2043-3f44-432d-b789-a97ff313ad3c",
+      "status": "applied",
+      "role": "SOURCE",
+      "operation": "edit",
+      "reason": "The source adds the requirement that the recipient recorded for approved sharing be the actual recipient presented to the user before transmission.",
+      "owner_context_name": "task-3/local/guardrails/audit-and-recovery",
+      "memory_uid": "a0b32950-42b4-58a6-b1af-dd4638086d3d",
+      "source_memory_uids": [
+        "96442184-816a-58f1-a72d-40eb907688fe"
+      ]
+    }
+  ],
+  "inference": null,
+  "inference_cached": false,
+  "fallback_evidence": [],
+  "inference_error": null,
+  "warnings": [],
+  "inference_scope": {
+    "context_name": "task-3/local/guardrails/approval-and-delivery",
+    "context_count": 1,
+    "include_descendants": false
+  },
+  "recorded_evidence_available": true,
+  "character_budgets": {
+    "provenance_source": 944,
+    "provenance_limit": 160,
+    "inference_source": 0,
+    "inference_limit": 0
+  },
+  "inference_status": "NOT_REQUESTED",
+  "provenance_projection": {
+    "status": "AVAILABLE",
+    "text": "“Show the user the actual recipient before transmission.” was already a standalone Memory in task-3/local/guardrails/approval-and-delivery when a merge copied it unchanged into a fresh occurrence in task-3/local/guardrails/audit-and-recovery, while retaining the Source occurrence. The selected Source Memory remains current at the latest retained boundary; later unexplained current changes are omitted.",
+    "limit": 60,
+    "unit": "words",
+    "length": 49,
+    "ruleset_version": "rationale-natural-provenance-v5"
+  }
+}

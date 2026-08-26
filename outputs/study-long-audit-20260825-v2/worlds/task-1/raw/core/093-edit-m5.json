@@ -1,0 +1,11 @@
+{
+  "sequence": 93,
+  "operation": "edit",
+  "attempt": 5,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 edit task-1/campus-wiki/route-changes:ee271f65 'CONSTRUCTION UPDATE \u2014 June 24\u2013August 23: The indoor route through Main Building floors 1\u20133 to the Central Library, the third-floor rear-entrance route, and the Outdoor Parking Lot A\u2013Main Building\u2013Central Library route are closed. The designated accessible detour to Central Library is Outdoor Parking Lot C \u2192 Student Centre accessible entrance \u2192 Central Library west entrance. From the Main Building, the accessible-restroom route to the Student Centre is to the left. Warn users that the outdoor detour may add heat and travel burden, and recommend only routes confirmed open.'",
+  "exit": 0,
+  "wall_seconds": 1.336644,
+  "pre_target_digest": "123a4c2be4efcca9147ac0ee2c69a46d540ed6c084a660ee2f88be5f8f2910ed",
+  "post_target_digest": "1ce4185e8001f1aedfd8238c256bf08f1debd7f42b3af075389b7515925c197b",
+  "raw_output": "raw/core/093-edit-m5.txt"
+}

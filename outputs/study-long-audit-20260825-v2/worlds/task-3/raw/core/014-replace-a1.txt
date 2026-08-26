@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 replace pending review-pending --context task-3/local/guardrails/purpose-and-scope
+
+STDOUT
+Replaced 1 occurrence in 1 Memory in 'task-3/local/guardrails/purpose-and-scope'.
+Undo can restore this command.
+
+STDERR

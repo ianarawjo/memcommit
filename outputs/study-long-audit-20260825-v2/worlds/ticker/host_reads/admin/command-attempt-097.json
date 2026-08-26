@@ -1,0 +1,28 @@
+{
+  "sequence": 97,
+  "count_before": 341,
+  "count_after": 342,
+  "delta": 1,
+  "new_attempt_uids": [
+    "508837f6-a4cf-47bd-b5dd-c56d0127989f"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "508837f6-a4cf-47bd-b5dd-c56d0127989f",
+      "operation": "lock",
+      "command": "mem lock --profile",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:17:18.210375+00:00",
+      "completed_at": "2026-08-25T18:17:18.224799+00:00",
+      "elapsed_seconds": 0.014266833997680806,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

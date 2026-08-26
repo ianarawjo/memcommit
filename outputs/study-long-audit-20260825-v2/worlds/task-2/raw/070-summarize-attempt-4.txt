@@ -1,0 +1,8 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 summarize task-2/advisor2/methods --plain
+EXIT: 0
+DURATION_SECONDS: 1.441
+
+SUMMARY · task-2/advisor2/methods
+STATUS · DIRECT
+
+Each HCI question should map to field and user data, collection tools and timing, and analysis procedures. Preregistered changes need judgment criteria and a recording location. Confirmation uncertainty warrants justified bounds defining minimum completion and maximum added deliverables, sessions, facilitator time, workload, cost, and budget uncertainty. Network instability may independently cause failures, while institutional safety procedures override research schedules and data collection; feature lists alone should not be framed as design contributions.

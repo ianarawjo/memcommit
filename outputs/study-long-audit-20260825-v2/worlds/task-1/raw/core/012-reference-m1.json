@@ -1,0 +1,11 @@
+{
+  "sequence": 12,
+  "operation": "reference",
+  "attempt": 1,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 reference faea18ec --from task-1/participant/construction-updates/facility-updates --into task-1/participant",
+  "exit": 0,
+  "wall_seconds": 1.353476,
+  "pre_target_digest": "26b39275ba6efd45cb393a5f481d5dea1ed4e311e58420ad949ca1f238c10838",
+  "post_target_digest": "407a74fded4cf5d2e0246abd59b656ef69cd8f55bd9d75ed835905122579707e",
+  "raw_output": "raw/core/012-reference-m1.txt"
+}

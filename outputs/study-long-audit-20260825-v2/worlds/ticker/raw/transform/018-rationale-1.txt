@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker rationale task-2/participant/proposal-workspace:1e0e89ee
+
+EXIT
+0
+
+OUTPUT
+Rationale [1e0e89ee] · task-2/participant/proposal-workspace
+
+MEMORY
+  Punctuation rule and example: strip punctuation before constructing a ticker. North-Star, Inc. becomes NORTHSTAR after removing the comma, hyphen, space, and Inc. suffix.
+
+PROVENANCE
+  In task-2/participant/proposal-workspace, add created “Punctuation example: North-Star, Inc. becomes NORTHSTAR”; edits added “strip punctuation before constructing a ticker” and removed the final sentence. A NEW merge copied it to task-3/local while retaining the source; clear removed the copy.

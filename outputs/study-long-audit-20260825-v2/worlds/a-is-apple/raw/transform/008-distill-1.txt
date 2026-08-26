@@ -1,0 +1,15 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple distill --from practice --to practice/source --goal 'Distill only source-supported alphabet mappings and preserve unresolved alternatives.'
+
+EXIT
+0
+
+OUTPUT
+DISTILL APPLIED · practice → practice/source
+EFFECTS · ADD 2 RULES
+
+  [memory a73a7425] Use the preferred alphabet mappings: a maps to apple, b maps to banana, and c maps to cedar.
+  [memory eccc2e64] Preserve “a maps to apricot” as an unresolved alternative rather than replacing or silently reconciling the preferred a-to-apple mapping.
+
+REVIEW · mem review distill --receipt 144451e4-b2d6-4038-b73f-906c16ab9f52
+UNDO · mem undo

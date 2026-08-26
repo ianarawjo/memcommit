@@ -1,0 +1,6 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 resolve --context task-2/participant/proposal-workspace --memory 337e9f61-d31c-448b-8c80-e2891688bff7 --no-create --guidance "A longer sentence is retained only when its clauses form one reviewable movement; otherwise split it." --plain
+EXIT: 0
+DURATION_SECONDS: 7.286
+
+RESOLVE · task-2/participant/proposal-workspace
+FIT · YES · NO CHANGE

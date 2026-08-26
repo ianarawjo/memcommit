@@ -1,0 +1,11 @@
+{
+  "sequence": 27,
+  "operation": "query",
+  "attempt": 2,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 query 'How must event reservations, alternative venues, and relocated equipment guidance change during construction?' --context task-1/participant/construction-updates/event-relocations --context task-1/campus-wiki/event-relocations --context-only --exclude-embeds",
+  "exit": 0,
+  "wall_seconds": 9.810383,
+  "pre_target_digest": "45cc6990312186c47b8f68bd060123c1f883898c3bacc1646b80bff804a11c87",
+  "post_target_digest": "7487a7901a8aa03943f9eca3ff8d1eb9a5a971a7ea4859c505ac248aed7b53e8",
+  "raw_output": "raw/core/027-query-m2.txt"
+}

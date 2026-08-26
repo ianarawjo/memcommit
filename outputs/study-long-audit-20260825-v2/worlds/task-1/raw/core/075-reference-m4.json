@@ -1,0 +1,11 @@
+{
+  "sequence": 75,
+  "operation": "reference",
+  "attempt": 4,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 reference 6960c0ca --from task-1/campus-wiki/temporary-parking --into task-1/participant",
+  "exit": 0,
+  "wall_seconds": 1.32203,
+  "pre_target_digest": "dc12c68a42bf1801ad81b34e8d1ef344edf685856419b5bca4edfb7ea6b0cfe6",
+  "post_target_digest": "b865f2bdd6cde315e64992a146e3103624cbc4ae8705e594927bc92a30fff0c4",
+  "raw_output": "raw/core/075-reference-m4.txt"
+}

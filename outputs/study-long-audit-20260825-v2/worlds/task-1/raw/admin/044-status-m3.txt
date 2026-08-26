@@ -1,0 +1,25 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 status --recursive
+
+STDIN
+<none>
+
+EXIT
+0
+
+WALL_SECONDS
+1.358884
+
+POST_CALL_IDENTITY_HOST_ASSERTION
+{"profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-1/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+STDOUT
+On context: practice
+
+Recursive scope · Contexts 3  |  Memories 15
+  practice [OWNED] · CURRENT · Direct inventory empty
+  practice/description [OWNED] · Memories 3
+  practice/source [OWNED] · Memories 12
+
+
+STDERR

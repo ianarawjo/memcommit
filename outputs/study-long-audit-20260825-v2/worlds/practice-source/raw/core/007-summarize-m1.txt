@@ -1,0 +1,17 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source summarize practice/source
+
+EXIT
+0
+
+WALL_SECONDS
+6.898616
+
+STDOUT
+SUMMARY · practice/source
+STATUS · DIRECT
+
+When reviewing prose, give an opinion first, checking sentence order and paragraphs before editing. Later polishing should preserve structure, markers, terminology, intended wording, claims, conditions, and required points while removing redundancy modestly. Use accurate connectors, default sentence-case titles and italicized work titles unless a named guide overrides only those conventions, and verify complete sources before corrections or citations, reporting problems before rewriting review-only drafts.
+
+
+STDERR

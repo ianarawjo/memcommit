@@ -1,0 +1,11 @@
+{
+  "sequence": 7,
+  "operation": "summarize",
+  "attempt": 1,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 summarize task-1/participant/construction-updates/facility-updates --direct",
+  "exit": 0,
+  "wall_seconds": 1.546176,
+  "pre_target_digest": "bd08d0e94393f39cfe005c9fea435e45840c9742265406f368b6028add387873",
+  "post_target_digest": "db1ea55c1c4c02a711e7d6b368d69ed7a605028efe1c51728582e636fd32310e",
+  "raw_output": "raw/core/007-summarize-m1.txt"
+}

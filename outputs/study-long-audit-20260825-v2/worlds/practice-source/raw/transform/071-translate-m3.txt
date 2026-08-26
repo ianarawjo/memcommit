@@ -1,0 +1,22 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source translate practice/source:6fad23ab --to French
+
+EXIT
+0
+
+WALL_SECONDS
+33.976067
+
+STDOUT
+
+Translation view: 'practice/source' → French
+  1 translated Memory
+────────────────────────────────────────────────────────────────
+[6fad23ab] French · PROVIDER · UNREVIEWED
+  Si un passage est censé présenter quatre points, conservez-les tous les quatre tout en supprimant les parties trop redondantes et en ne formulant le contenu répété qu’une seule fois.
+────────────────────────────────────────────────────────────────
+Saved translation view.
+No Context or Memory changes; source Memory UIDs remain the anchors.
+
+
+STDERR

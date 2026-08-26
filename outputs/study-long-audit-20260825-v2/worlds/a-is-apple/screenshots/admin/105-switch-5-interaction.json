@@ -1,0 +1,52 @@
+{
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple switch",
+  "pty": {
+    "columns": 180,
+    "rows": 52,
+    "TERM": "xterm-256color",
+    "COLORTERM": "truecolor",
+    "NO_COLOR": "removed"
+  },
+  "profile": "sixworld-v2-template",
+  "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+  "entry_current_context": "recorded by ledger starting_state",
+  "steps": [
+    {
+      "step": 1,
+      "screenshot": "worlds/a-is-apple/screenshots/admin/105-switch-5-01-entry.png",
+      "docs_copy": "docs/screenshots/six-world-audit-v2-20260825/a-is-apple-admin/105-switch-5-01-entry.png",
+      "preceding_keys_or_text": "none",
+      "visible_state": "entry",
+      "durable_state_mutated_at_step": false
+    },
+    {
+      "step": 2,
+      "screenshot": "worlds/a-is-apple/screenshots/admin/105-switch-5-02-root-navigation.png",
+      "docs_copy": "docs/screenshots/six-world-audit-v2-20260825/a-is-apple-admin/105-switch-5-02-root-navigation.png",
+      "preceding_keys_or_text": "Left ×12",
+      "visible_state": "root-navigation",
+      "durable_state_mutated_at_step": false
+    },
+    {
+      "step": 3,
+      "screenshot": "worlds/a-is-apple/screenshots/admin/105-switch-5-03-entry-target-selected.png",
+      "docs_copy": "docs/screenshots/six-world-audit-v2-20260825/a-is-apple-admin/105-switch-5-03-entry-target-selected.png",
+      "preceding_keys_or_text": "Down",
+      "visible_state": "entry-target-selected",
+      "durable_state_mutated_at_step": false
+    },
+    {
+      "step": 4,
+      "screenshot": "worlds/a-is-apple/screenshots/admin/105-switch-5-04-success-receipt.png",
+      "docs_copy": "docs/screenshots/six-world-audit-v2-20260825/a-is-apple-admin/105-switch-5-04-success-receipt.png",
+      "preceding_keys_or_text": "Enter/Escape then process exit",
+      "visible_state": "success-receipt",
+      "durable_state_mutated_at_step": true
+    }
+  ],
+  "capture_finalization": {
+    "renderer": "actual color-preserving cumulative PTY byte-stream replay",
+    "visible_prefix_count": 2,
+    "limitation": "Keys were pre-buffered before the frozen launcher completed on some attempts. When only one visible prompt-toolkit flush survived, multiple ordered labels refer to that same actual visible frame; no synthetic state was invented."
+  }
+}

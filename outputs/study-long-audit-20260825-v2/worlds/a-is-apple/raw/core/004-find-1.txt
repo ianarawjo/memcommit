@@ -1,0 +1,13 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple find apple --direct --context practice
+
+EXIT
+0
+
+OUTPUT
+FIND RESULTS
+PATTERN · apple · LITERAL · CASE SENSITIVE
+SCOPE · practice · EXACT · EXCLUDE EMBEDS
+SCANNED 0 · MATCHED 0 · OCCURRENCES 0
+
+(scope contains no searchable Memories)

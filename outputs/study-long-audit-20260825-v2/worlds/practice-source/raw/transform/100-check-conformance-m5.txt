@@ -1,0 +1,19 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source check-conformance practice/description --against 'Every approved atom must be independently reviewable without neighboring text.'
+
+EXIT
+0
+
+WALL_SECONDS
+8.431186
+
+STDOUT
+CONFORMANCE · 0/5 EXAMPLES CONFORM · 0/1 RULES MET · [EXAMPLES practice/description] · [RULES TEXT Every approved atom must be independently reviewable without neighboring text.] · 4 EXAMPLES N/A
+! VIOLATES · [EXAMPLE m000004] When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division. · [RULE r1] Every approved atom must be independently reviewable without neighboring text. · WHY · This atom combines the opinion trigger, a prohibition on immediate editing, and two separate review checks.
+! VIOLATES · [EXAMPLE m000005] If I later ask for polishing, preserve the overall strucutre and citation-needed markers, and change only wording that causes a problem. · [RULE r1] Every approved atom must be independently reviewable without neighboring text. · WHY · This atom combines a polishing trigger with distinct structure, marker-preservation, and wording-change constraints.
+! VIOLATES · [EXAMPLE m000006] If a passage is supposed to make four points, keep all four while removing parts that are too redundent and stating repeated content only once. · [RULE r1] Every approved atom must be independently reviewable without neighboring text. · WHY · This atom combines point preservation, redundancy removal, and deduplication constraints.
+! VIOLATES · [EXAMPLE m000007] DEFAULT CANDIDATE: use sentence case for document titles by default, subject only to an explicitly named style guide capitalization override; preserve the intended word for. · [RULE r1] Every approved atom must be independently reviewable without neighboring text. · WHY · This atom is incomplete because “preserve the intended word for” lacks its protected-word object.
+! VIOLATES · [EXAMPLE m000008] Use consistent italics for work titles by default, subject only to an explicitly named style guide work-title-format override. · [RULE r1] Every approved atom must be independently reviewable without neighboring text. · WHY · This atom depends on an unspecified externally named override and therefore does not state a complete reviewable exception.
+
+
+STDERR

@@ -1,0 +1,59 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 trace task-2/participant/proposal-workspace:a9cd917a-5c65-4672-aae0-7ee0040d7094 --json --limit 20
+EXIT: 0
+DURATION_SECONDS: 1.293
+
+{
+  "context": {
+    "uid": "b839b146-7576-5ec4-93a5-a98f64eba1ec",
+    "name": "task-2/participant/proposal-workspace"
+  },
+  "selected_uid": "a9cd917a-5c65-4672-aae0-7ee0040d7094",
+  "component_uids": [
+    "a9cd917a-5c65-4672-aae0-7ee0040d7094"
+  ],
+  "originals": [],
+  "current": [
+    {
+      "uid": "a9cd917a-5c65-4672-aae0-7ee0040d7094",
+      "content": "Keep the total, major cost categories, and one-line estimate basis in the main text so the resource argument can be understood without leaving the proposal.",
+      "position": 0,
+      "content_digest": "5dc9db0be6499fc408063be04c9e1cc344986512f4d24d5697f5c53a08529c9a"
+    }
+  ],
+  "events": [
+    {
+      "kind": "MERGED_IN",
+      "evidence": "RECONSTRUCTED",
+      "timestamp": "2026-08-25T13:18:29.199362",
+      "checkpoint_uid": "e7c60590-cbb9-4fe1-898f-71ab815c5f24",
+      "command": "merge",
+      "description": "Merged 'task-2/advisor1/budget' into 'task-2/participant/proposal-workspace': new 7; already present 0; kept Target 0; took Source 0",
+      "before": [],
+      "after": [
+        {
+          "uid": "a9cd917a-5c65-4672-aae0-7ee0040d7094",
+          "content": "Keep the total, major cost categories, and one-line estimate basis in the main text so the resource argument can be understood without leaving the proposal.",
+          "position": 0,
+          "content_digest": "5dc9db0be6499fc408063be04c9e1cc344986512f4d24d5697f5c53a08529c9a"
+        }
+      ],
+      "reason": null,
+      "reason_codes": [],
+      "source_occurrence": null,
+      "operation_id": null,
+      "command_operation": null,
+      "context_transition": null,
+      "child_evidence": [],
+      "declared_frame": null,
+      "declared_frame_digest": null,
+      "uncertainty_reason": null,
+      "source_review_uid": null,
+      "source_review_digest": null,
+      "source_analysis_uid": null
+    }
+  ],
+  "analyses": [],
+  "warnings": [
+    "Checkpoint [e8f7aaa4] has invalid Update command-unit metadata; its changes cannot be correlated across Contexts."
+  ]
+}

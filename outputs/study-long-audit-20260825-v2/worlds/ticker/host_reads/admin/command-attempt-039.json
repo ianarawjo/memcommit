@@ -1,0 +1,28 @@
+{
+  "sequence": 39,
+  "count_before": 283,
+  "count_after": 284,
+  "delta": 1,
+  "new_attempt_uids": [
+    "f8c2d2d3-9d75-409b-a176-3fcfd09bfcb7"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "f8c2d2d3-9d75-409b-a176-3fcfd09bfcb7",
+      "operation": "lock",
+      "command": "mem lock audit/ticker/admin-v2-scratch/b2-tree --recursive",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:13:12.255859+00:00",
+      "completed_at": "2026-08-25T18:13:12.295917+00:00",
+      "elapsed_seconds": 0.039902832999359816,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

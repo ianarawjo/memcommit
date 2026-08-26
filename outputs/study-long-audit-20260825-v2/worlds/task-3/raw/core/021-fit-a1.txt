@@ -1,0 +1,7 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 fit task-3/local/personal-memory task-3/local/guardrails/purpose-and-scope
+
+STDOUT
+
+STDERR
+Fit error: Fit Source Context 'task-3/local/personal-memory' contains no direct ordinary Memories.

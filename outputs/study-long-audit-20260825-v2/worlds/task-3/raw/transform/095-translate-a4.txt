@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 translate -t Spanish task-3/local/guardrails/approval-and-delivery:96442184
+
+EXIT
+0
+
+OUTPUT
+
+Translation view: 'task-3/local/guardrails/approval-and-delivery' → Spanish
+  1 translated Memory
+────────────────────────────────────────────────────────────────
+[96442184] Spanish · PROVIDER · UNREVIEWED
+  Muestra al usuario el destinatario real antes de la transmisión.
+────────────────────────────────────────────────────────────────
+Saved translation view.
+No Context or Memory changes; source Memory UIDs remain the anchors.

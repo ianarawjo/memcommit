@@ -1,0 +1,11 @@
+{
+  "sequence": 38,
+  "operation": "find-duplicates",
+  "attempt": 2,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 find-duplicates --context task-1/participant/construction-updates/event-relocations --direct",
+  "exit": 0,
+  "wall_seconds": 1.284923,
+  "pre_target_digest": "6a55ecaf75739d419f9f6a275721a50df69a4188d8b3ea930dff7cc26c49239d",
+  "post_target_digest": "56a06243e5dfabbd538d634a11fc3794a1315603c81b3f2a3936cdef0bd401b1",
+  "raw_output": "raw/core/038-find-duplicates-m2.txt"
+}

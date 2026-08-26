@@ -1,0 +1,46 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 query 'What public building-access guidance must change for general users, authorized students, staff, and accessible travel?' --context task-1/campus-wiki/building-access --direct
+
+EXIT
+0
+
+WALL_SECONDS
+10.773294
+
+STDOUT
+For general users, public guidance should say that both the first-floor main entrance and the third-floor rear entrance are available for general passage during regular opening hours; term hours are 7 a.m.–10 p.m., recess hours are 8 a.m.–10 p.m., while weekend schedules are posted separately and holiday hours may differ. On-site signage takes precedence if it conflicts with posted hours. [1] [2] [3] [4] [5] [6] [7] [8] [9] [10]
+
+For authorized students after regular hours, guidance should require a physical NFC student ID card or the registered app. Nighttime access is governed by a separate eligibility policy, eligibility depends on affiliation status, and users must not follow an authenticated person inside. Authentication failures or lost credentials should be directed using the posted responsible-office or access-support information, without guessing a contact number. [11] [12] [13] [14] [15] [16] [17]
+
+For staff, guidance should distinguish the controlled staff-only entrance from the third-floor rear entrance and state that valid staff access eligibility is required. [18] [19]
+
+For accessible travel, guidance should identify the always-available, step-free route beside the main entrance into the first-floor lobby and note that this accessible entrance has an automatic door. The main entrance’s automatic door operates during regular opening hours; stroller users may also use the accessible route, and service animals may use general entrances with their users. [20] [21] [22] [23] [24]
+
+References
+[1] The Main Building third-floor rear entrance may be used for general passage during regular opening hours in both the academic term and recess. — 1cb2aa88, task-1/campus-wiki/building-access, m1
+[2] The Main Building main entrance is on the first floor. — a8b11b27, task-1/campus-wiki/building-access, m2
+[3] The Main Building rear entrance on the opposite side of the sloping site is at the third-floor level. — 62214c26, task-1/campus-wiki/building-access, m3
+[4] The end of regular opening hours for the Main Building main entrance during the academic term is 10 p.m. — c6b97453, task-1/campus-wiki/building-access, m5
+[5] The end of regular opening hours for the Main Building main entrance during recess is 10 p.m. — 614389e2, task-1/campus-wiki/building-access, m6
+[6] The start of regular opening hours for the Main Building main entrance during the academic term is 7 a.m. — cc2a0d18, task-1/campus-wiki/building-access, m18
+[7] The start of regular opening hours for the Main Building main entrance during recess is 8 a.m. — 3ca6b6b2, task-1/campus-wiki/building-access, m19
+[8] The Main Building's regular weekend opening hours are posted separately in the weekend operating schedule. — 4a01fd2b, task-1/campus-wiki/building-access, m20
+[9] The Main Building's holiday access hours may differ from regular operating hours. — 78298531, task-1/campus-wiki/building-access, m21
+[10] If the posted operating hours differ from the access signage on site, instruct people to follow the on-site signage. — 5e9fc7b5, task-1/campus-wiki/building-access, m30
+[11] Instruct students eligible for access after regular opening hours to use a physical NFC student ID card or the registered app. — b6987cd9, task-1/campus-wiki/building-access, m12
+[12] If access authentication fails, check the posted contact information for the responsible office before providing guidance. — f80ad345, task-1/campus-wiki/building-access, m13
+[13] Do not guess an unverified contact number. — 732458c0, task-1/campus-wiki/building-access, m14
+[14] Do not suggest that a person without access eligibility follow another authenticated user inside. — bb601c38, task-1/campus-wiki/building-access, m31
+[15] Direct users who have lost their access credentials to the posted access support desk. — e99d3f15, task-1/campus-wiki/building-access, m40
+[16] Nighttime access to the Main Building follows an eligibility policy separate from general opening. — 5bf2c18d, task-1/campus-wiki/building-access, m43
+[17] The validity of campus-issued access eligibility depends on the user's affiliation status. — 38a17415, task-1/campus-wiki/building-access, m44
+[18] The staff-only entrance is a controlled entrance separate from the third-floor rear entrance. — cb1e0734, task-1/campus-wiki/building-access, m15
+[19] Valid staff access eligibility is required to use the staff-only entrance. — d2f32d9e, task-1/campus-wiki/building-access, m24
+[20] The accessible route beside the main entrance is an always-available route into the first-floor lobby without using stairs. — 36db4bf8, task-1/campus-wiki/building-access, m16
+[21] The automatic door at the Main Building main entrance operates during regular opening hours. — 2b2642c9, task-1/campus-wiki/building-access, m33
+[22] Service animals may use the Main Building's general entrances together with their users. — e55771f0, task-1/campus-wiki/building-access, m34
+[23] Visitors using strollers may use the accessible route beside the main entrance. — 9374def9, task-1/campus-wiki/building-access, m36
+[24] The accessible entrance beside the main entrance has an automatic door. — 430563f2, task-1/campus-wiki/building-access, m41
+
+
+STDERR

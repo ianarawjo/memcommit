@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 atomize task-1/participant/construction-updates/temporary-parking
+
+EXIT
+1
+
+OUTPUT
+Atomize error: Atomize final validation did not reach semantic chunk normal form: ceffae14=UNCERTAIN. No Context change was published.

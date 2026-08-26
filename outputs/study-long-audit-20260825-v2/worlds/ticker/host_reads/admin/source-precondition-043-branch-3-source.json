@@ -1,0 +1,17 @@
+{
+  "sequence": 43,
+  "label": "branch-3-source",
+  "read_at": "2026-08-25T18:13:16.478053+00:00",
+  "source_root": "task-1/participant/construction-updates",
+  "recursive": false,
+  "lexically_disjoint_from_scratch": true,
+  "resolved_context_names": [
+    "task-1/participant/construction-updates"
+  ],
+  "direct_item_counts": {
+    "task-1/participant/construction-updates": 6
+  },
+  "retained_branch_checkpoint_count": 0,
+  "retained_branch_checkpoints": [],
+  "result": "PASS"
+}

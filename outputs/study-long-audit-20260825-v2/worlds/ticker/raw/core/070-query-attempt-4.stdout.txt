@@ -1,0 +1,10 @@
+Encode Acme Corp. Class B as ACME.B: remove the Corp. legal suffix, derive ACME from the remaining company name, and map terminal Class B to .B. [1] [2] [3] [4]
+
+No, the dot is not retained punctuation from the original name; it is generated share-class syntax. [5] [4]
+
+References
+[1] Base ticker rule: uppercase the remaining company-name letters in their original order. Do not invent letters. — afdea5f7, task-2, m1
+[2] Core ticker rule: remove a terminal legal suffix such as Inc., Corp., Ltd., or LLC before constructing the ticker. Preserve the remaining alphanumeric characters. — fac90a77, task-2/participant, m304
+[3] Share-class rule: if a legal suffix immediately precedes terminal Class A or Class B, remove the suffix and append .A or .B to the derived base ticker. — 054745a5, task-2/participant/proposal-workspace, m308
+[4] Share-class example: Acme Corp. Class B becomes ACME.B after removing Corp. and mapping Class B to the .B suffix. The dot is generated share-class syntax. — 7ed418b9, task-2/participant/proposal-workspace, m309
+[5] Punctuation rule and example: strip punctuation before constructing a ticker. North-Star, Inc. becomes NORTHSTAR after removing the comma, hyphen, space, and Inc. suffix. — 1e0e89ee, task-2/participant/proposal-workspace, m305

@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 diff 7cc2d89a --context task-3/local/guardrails/audit-and-recovery --stat
+
+EXIT
+0
+
+OUTPUT
+UNIT        CHECKPOINT · THIS CHECKPOINT VS PREVIOUS
+CHECKPOINT  7cc2d89a-f170-4f5b-94d8-361685656647
+CONTEXT     task-3/local/guardrails/audit-and-recovery
+ACTION      checkpoint
+DESCRIPTION task-3 transform round 5 default-direct recovery
+RESULT      15 DIRECT ITEMS
+SUMMARY     15 kept · 0 added · 0 edited · 0 removed

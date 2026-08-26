@@ -1,0 +1,15 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source replace CANDIDATE 'DEFAULT CANDIDATE' --context practice/description
+
+EXIT
+0
+
+WALL_SECONDS
+1.337562
+
+STDOUT
+Replaced 1 occurrence in 1 Memory in 'practice/description'.
+Undo can restore this command.
+
+
+STDERR

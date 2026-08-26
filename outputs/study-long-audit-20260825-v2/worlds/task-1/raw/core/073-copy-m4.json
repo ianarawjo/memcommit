@@ -1,0 +1,11 @@
+{
+  "sequence": 73,
+  "operation": "copy",
+  "attempt": 4,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 copy task-1/campus-wiki/temporary-parking:6960c0ca --into task-1/participant",
+  "exit": 0,
+  "wall_seconds": 1.39288,
+  "pre_target_digest": "398b205934a2b06db7dc43b054d2f679a5fbecc569aa1834e7638815158b2f9d",
+  "post_target_digest": "b304a48a6500918360c4548e9d9ec125649625b3c7a6c668df34e822ff20d5d7",
+  "raw_output": "raw/core/073-copy-m4.txt"
+}

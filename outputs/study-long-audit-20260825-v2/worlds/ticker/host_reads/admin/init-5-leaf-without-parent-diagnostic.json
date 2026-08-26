@@ -1,0 +1,9 @@
+{
+  "kind": "host-only post-attempt namespace read; no mem call",
+  "init_attempt": 5,
+  "init_sequence": 95,
+  "parent_context_exists": false,
+  "leaf_context_exists": true,
+  "leaf_identity": "90693e22-06fc-455c-8b3a-89c2b6e303c6",
+  "interpretation": "Default Init creates only the exact requested leaf Context and filesystem namespace directories; --parents is the mode that creates parent Context objects. The campaign's expected missing-parent failure was incorrect."
+}

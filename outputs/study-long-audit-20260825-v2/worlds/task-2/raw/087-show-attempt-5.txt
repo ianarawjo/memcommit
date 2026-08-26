@@ -1,0 +1,24 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 show --direct --context task-2
+EXIT: 0
+DURATION_SECONDS: 1.328
+
+Context: task-2
+  Memories 15  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 1
+
+Items (in context order):
+  [memory 6733c5d8] Equal-authority synthesis rule: preserve each shared co-advisor requirement once, retain distinct conditions, and explain unresolved conflicts with both provenances.
+  [memory a7545576] Equal-authority synthesis rule: preserve each shared co-advisor requirement once, retain distinct
+  [memory ebb94f01] conditions, and explain unresolved conflicts with both provenances. Apply it category by category.
+  [memory e365804f] Equal-authority synthesis rule: preserve each shared co-advisor requirement once, retain distinct conditions, and explain unresolved conflicts with both provenances.
+  [context f0ea0447] task-2/advisor2/style  VIA EMBED
+  [memory a38d684b] Equal-authority synthesis rule:
+  [memory 46d1a835] preserve each shared co-advisor requirement once, retain distinct conditions, and explain unresolved
+  [memory 824b4679] conflicts with both provenances. Record why equivalent wording was consolidated.
+  [memory 37de3165] Budget reconciliation: keep totals and major categories in the proposal body; place quantities, unit rates, assumptions, and arithmetic in a compact cross-referenced appendix.
+  [memory bbd0891f] Budget reconciliation: keep totals and major categories in the proposal body;
+  [memory 2d7d73ea] place quantities, unit rates, assumptions, and arithmetic in a compact cross-referenced appendix.
+  [memory babfdf45] This preserves detail without crowding the two-page narrative.
+  [memory d500d2e2] Recruitment reconciliation: before commitments, use a justified recruitment target range with separate workload and budget consequences; after confirmation, publish one exact recalculated target.
+  [memory d1488bbe] Recruitment reconciliation:
+  [memory 137c9ceb] before commitments, use a justified recruitment target range with separate workload and budget consequences;
+  [memory 1db0b6b0] after confirmation, publish one exact recalculated target. The transition condition is documented explicitly.

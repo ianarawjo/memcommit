@@ -1,0 +1,9 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 move 8db5e9c8 --from task-3/local --into task-3/local/guardrails/privacy-and-others
+
+STDOUT
+MOVED · 1 Memory → 'task-3/local/guardrails/privacy-and-others' · RETARGET LINKS · after [eafc4a2b] at the end
+  REMOVE 'task-3/local' [8db5e9c8] · ADD 'task-3/local/guardrails/privacy-and-others' [8db5e9c8]
+Checkpoints 'task-3/local' [e80d67d6], 'task-3/local/guardrails/privacy-and-others' [4ccc7a7f].
+
+STDERR

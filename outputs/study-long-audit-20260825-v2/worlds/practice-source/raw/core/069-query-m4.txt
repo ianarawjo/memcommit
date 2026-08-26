@@ -1,0 +1,32 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source query --context practice/source 'Which instructions are defaults, which are user-request conditions, and which can a named style guide override?'
+
+EXIT
+0
+
+WALL_SECONDS
+9.615562
+
+STDOUT
+The explicit defaults are to format document titles in sentence case and to italicize titles of works consistently throughout a document. A named style guide may override only the corresponding default: title capitalization or work-title formatting. It cannot override the requirement to retain “for” when intended. [1] [2]
+
+The user-request conditions are: when asked “How does this read?”, give an opinion and first assess sentence order and paragraph division rather than editing immediately; when later asked to polish, preserve the overall structure and citation-needed markers and change only problematic wording; when asked to change one expression, leave almost everything else—including selected technical or project-specific terms—unchanged; and when asked only for review, report a citation-verification problem before rewriting. [3] [4] [5] [6]
+
+Other task-triggered conditions apply when their stated circumstances arise: preserve all four intended points while removing redundancy; for a shorter fixed limit, target roughly a 20–30% cut from redundant or unnecessary material without making claims more categorical; use an accurate connector when the next idea is merely related; preserve the specified terminology for titles about interaction with AI agent memory; investigate the complete original source when content is said to look wrong; and verify complete sources before adding or reusing citations or references. [7] [8] [9] [10] [11] [12] [6]
+
+References
+[1] By default, format a document title in sentence case rather than title case. An explicitly named style guide may override only that capitalization default; always keep for whenever it is part of the intended wording. — 1a9d3a74, practice/source, m9
+[2] If titles of works use quotation marks in some places and italics in others, make them consistently italic throughout the document by default; an explicitly named style guide may override only this work-title format. — 94c3ce98, practice/source, m10
+[3] When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division. — f3ef224d, practice/source, m1
+[4] If I later ask for polishing, preserve the overall strucutre and citation-needed markers, and change only wording that causes a problem. — e50c293a, practice/source, m2
+[5] When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um... for example, use distribute, not divide, when material is absorbed into two parts. — 39b21971, practice/source, m3
+[6] Before adding or reusing citations and refferences, verify that each source exists and supports the exact claim after reviewing the complete source. Don't invent quotations or evidence or overstate an author's contribution or a paper's status. If I asked only for review, report a verification problem first instead of silently rewriting the draft. — 4fe217eb, practice/source, m12
+[7] If a passage is supposed to make four points, keep all four while removing parts that are too redundent and stating repeated content only once. — 6fad23ab, practice/source, m4
+[8] When the draft has to fit a shorter fixed limit, aim to cut around 20–30% from redundant or unnecessary material. — 6cc4b8a3, practice/source, m5
+[9] But don't shorten sentences so aggressively that a claim sounds more categorical; keep enough wording to preserve its original strength and conditions. — 7ebe67fb, practice/source, m6
+[10] If the next idea is merely related and does not broaden the scope, don't use More broadly; use In relation to this or another accurate connector without adding a new claim merely to make two paragraphs connect. — b976766e, practice/source, m7
+[11] For any titlle about interaction with AI agent memory, keep the exact terminology and intended words: use interaction and management and AI agent memory rather than agent memory. — 44de7eff, practice/source, m8
+[12] When I say that content looks wrong, find accurate information before proposing a correction by reading the original paper, book, or guide, not only an abstract or a short snippet. — 96300a95, practice/source, m11
+
+
+STDERR

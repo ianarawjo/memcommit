@@ -1,0 +1,5 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 update task-2 task-2/participant/proposal-workspace --direct --replace-stage --goal "Produce a final neutral rule set with both provenances and explicit unresolved exceptions." --source-memory 6733c5d8 --target-memory a9844a55-bf6c-48c8-b19f-f833f85d1a74
+EXIT: 1
+DURATION_SECONDS: 1.438
+
+Update error: Update cannot use granted Context Embed 'task-2/advisor2/style' [f0ea0447] in Context 'task-2' as semantic evidence through its local owner. EMBED authorizes live reading, not provider disclosure or derived work; select the granted Source through an operation-aware authority route instead.

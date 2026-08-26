@@ -1,0 +1,11 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple summarize practice/source --plain
+
+EXIT
+0
+
+OUTPUT
+SUMMARY · practice/source
+STATUS · DIRECT
+
+For draft feedback, give an opinion before editing and assess sentence order and paragraphs. Later edits should preserve structure, markers, selected terminology, all intended points, claim strength, conditions, and accurate connectors while removing redundancy. Use sentence-case titles and italicized work titles by default, subject to named style guides, and verify full sources before corrections or citations. “b” means banana.

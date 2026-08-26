@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 translate task-3/local/guardrails/approval-and-delivery:96442184 --to Korean
+
+EXIT
+0
+
+OUTPUT
+
+Translation view: 'task-3/local/guardrails/approval-and-delivery' → Korean
+  1 translated Memory
+────────────────────────────────────────────────────────────────
+[96442184] Korean · PROVIDER · UNREVIEWED
+  전송하기 전에 사용자에게 실제 수신자를 보여 주세요.
+────────────────────────────────────────────────────────────────
+Saved translation view.
+No Context or Memory changes; source Memory UIDs remain the anchors.

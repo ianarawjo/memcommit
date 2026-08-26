@@ -1,0 +1,28 @@
+{
+  "sequence": 54,
+  "count_before": 298,
+  "count_after": 299,
+  "delta": 1,
+  "new_attempt_uids": [
+    "90c40f56-2f6b-4fe4-9fef-ffd8a788b2d0"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "90c40f56-2f6b-4fe4-9fef-ffd8a788b2d0",
+      "operation": "lock",
+      "command": "mem lock --memory 37113bd0 --context audit/ticker/admin-v2-scratch",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:16:08.758425+00:00",
+      "completed_at": "2026-08-25T18:16:08.773699+00:00",
+      "elapsed_seconds": 0.015124457990168594,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

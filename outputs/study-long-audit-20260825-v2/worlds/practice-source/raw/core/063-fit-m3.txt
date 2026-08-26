@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source fit practice/source practice
+
+EXIT
+0
+
+WALL_SECONDS
+9.566655
+
+STDOUT
+FIT · YES · [TARGETS: CONTEXT practice/source, practice]
+
+
+STDERR

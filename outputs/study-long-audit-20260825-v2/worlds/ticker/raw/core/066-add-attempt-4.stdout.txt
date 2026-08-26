@@ -1,0 +1,4 @@
+Added 2 Memories to 'task-2/participant/proposal-workspace'.
+  [054745a5] Share-class rule: if a legal suffix immediately precedes terminal Class A or Class B, remove the suffix and append .A or .B to the derived base ticker.
+  [7ed418b9] Share-class example: Acme Corp. Class B becomes ACME.B after removing Corp. and mapping Class B to the .B suffix. The dot is generated share-class syntax.
+Checkpoint [e29e85f3].

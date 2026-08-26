@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source meld practice/source practice/description practice/transform-meld-r3 --direct
+
+EXIT
+1
+
+WALL_SECONDS
+49.685125
+
+STDOUT
+
+
+STDERR
+Meld error: A source Context changed while Compare was analyzing it; the new analysis was not saved.

@@ -1,0 +1,12 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 rationale 337e9f61-d31c-448b-8c80-e2891688bff7 --context task-2/participant/proposal-workspace --verbose
+EXIT: 0
+DURATION_SECONDS: 5.836
+
+Rationale [337e9f61-d31c-448b-8c80-e2891688bff7] · task-2/participant/proposal-workspace
+Context UID: b839b146-7576-5ec4-93a5-a98f64eba1ec
+
+MEMORY
+  Use an em dash only for a deliberate interruption or sharp contrast; otherwise split the sentence or choose ordinary punctuation.
+
+PROVENANCE
+  “Use an em dash only for a deliberate interruption or sharp contrast; otherwise split the sentence or choose ordinary punctuation.” was copied unchanged from task-2/advisor2/style into a fresh occurrence in task-2/participant/proposal-workspace, while the Source occurrence remained.

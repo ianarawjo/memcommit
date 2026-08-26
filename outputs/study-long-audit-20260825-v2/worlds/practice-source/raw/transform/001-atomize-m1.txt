@@ -1,0 +1,46 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source atomize practice/description:70720de6
+
+EXIT
+0
+
+WALL_SECONDS
+8.367969
+
+STDOUT
+ RESULT · atomize · practice/description
+ STATUS · ANALYSIS COMPLETE · sources=1 · projected=1 · splits=0 · children=0 · review issues=0
+
+ WHAT MEM UNDERSTOOD
+ Work titles should use consistent italics by default unless an explicitly named style guide overrides their formatting.
+
+ WHAT HAPPENED
+ The default formatting rule and its explicit style-guide exception were preserved together because they form one safely revisable commitment.
+
+ WHAT REMAINS UNRESOLVED
+ (none reported under this operation's bounded contract)
+The atomize analysis reported no unresolved finding in this bounded Context frame.
+
+ REPRESENTATIVE / BOUNDARY CASES
+ ›  1. [REPRESENTATIVE] ATOMIC · KEEP
+       KEEP: Use consistent italics for work titles by default, subject only to an explicitly named style guide work-title-format override.
+
+Analysis [8f5a42f1] · INPUT practice/description → OUTPUT practice/description · ORDER: SOURCE · 0/0 answered
+
+ACTIONABLE ISSUES
+  (no actionable atomize, ambiguity, or conflict issues)
+
+NO ACTIONABLE ISSUES
+
+The overview and complete atomize analysis remain saved.
+
+REFINE, COMMENT, OR ENTER A DIFFERENT READING
+> 
+
+SOURCE means canonical Context order; Memory creation timestamps are not recorded.
+No Memory changes have been applied. No checkpoint was created.
+Saved analysis [8f5a42f1]: CURRENT.
+Apply the planned in-place Output with: mem atomize --save
+
+
+STDERR

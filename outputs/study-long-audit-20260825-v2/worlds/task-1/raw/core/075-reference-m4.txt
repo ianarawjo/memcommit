@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 reference 6960c0ca --from task-1/campus-wiki/temporary-parking --into task-1/participant
+
+EXIT
+0
+
+WALL_SECONDS
+1.322030
+
+STDOUT
+Referenced snapshot [6960c0ca] from 'task-1/campus-wiki/temporary-parking' as [15566ae4] in 'task-1/participant'.
+
+
+STDERR

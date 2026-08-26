@@ -1,0 +1,20 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 find-redundancies task-1/participant/construction-updates/facility-updates --direct
+
+EXIT
+0
+
+WALL_SECONDS
+5.569782
+
+STDOUT
+Find Redundancies · task-1/participant/construction-updates/facility-updates · 19 direct memories checked · 1 group · 1 proposed absorption
+
+  DUN GROUP  1/1 · 2 Memories · SEMANTIC DUN
+    CLEANUP MAP · READY FOR REVIEW
+    SURVIVOR  [memory 99c29cea]  Add campus-wiki/facility-updates: The Main Building undergoes major facility improvement construction during summer break.
+    ABSORB    [memory 37476366]  The Main Building undergoes major facility improvement construction during summer break.
+    EVIDENCE 1 · SEMANTIC EQUIVALENT · Both complete memories state that the Main Building undergoes major facility improvement construction during summer break; the added campus-wiki prefix in m000001 is a storage-operation wrapper and does not change the claim.
+
+
+STDERR

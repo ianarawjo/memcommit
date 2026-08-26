@@ -1,0 +1,11 @@
+{
+  "sequence": 105,
+  "operation": "fit",
+  "attempt": 5,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 fit --context task-1/participant/construction-updates/route-changes --context task-1/campus-wiki/route-changes --context task-1/campus-wiki/shop-updates",
+  "exit": 0,
+  "wall_seconds": 11.816484,
+  "pre_target_digest": "68ce44773c27e0cfaa6c251146346637bc2f478233bb49020952f3d230e664a0",
+  "post_target_digest": "581a7054d1e6c776e03b9cf2075bec83d66c77ae62f619576a19e1e697306f7c",
+  "raw_output": "raw/core/105-fit-m5.txt"
+}

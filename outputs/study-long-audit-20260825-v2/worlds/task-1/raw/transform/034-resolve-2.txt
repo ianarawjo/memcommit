@@ -1,0 +1,9 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 resolve --context task-1/participant/construction-updates
+
+EXIT
+0
+
+OUTPUT
+RESOLVE · task-1/participant/construction-updates
+FIT · YES · NO CHANGE

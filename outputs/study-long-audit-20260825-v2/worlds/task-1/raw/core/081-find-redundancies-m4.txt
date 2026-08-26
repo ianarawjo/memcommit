@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 find-redundancies --context task-1/participant/construction-updates/temporary-parking --direct
+
+EXIT
+0
+
+WALL_SECONDS
+5.873931
+
+STDOUT
+Find Redundancies · task-1/participant/construction-updates/temporary-parking · 15 direct memories checked · 0 groups · 0 proposed absorptions
+
+
+STDERR

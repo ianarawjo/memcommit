@@ -1,0 +1,8 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 summarize task-2/advisor1/style --plain
+EXIT: 0
+DURATION_SECONDS: 1.452
+
+SUMMARY · task-2/advisor1/style
+STATUS · DIRECT
+
+Proposal prose should use short sentences with one reviewable claim and ordinary punctuation instead of em dashes. Authors should state their choices and commitments consistently in first-person active voice, using “we” only for matters they control and changing pronouns only when responsibility changes. Implemented, verified prototype operations should be presented as observed states; unevaluated operations should remain plans or expectations.

@@ -1,0 +1,11 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 find provenance --recursive --context task-2/participant --all-results
+EXIT: 0
+DURATION_SECONDS: 1.418
+
+FIND RESULTS
+PATTERN · provenance · LITERAL · CASE SENSITIVE
+SCOPE · task-2/participant · DESCENDANTS · FOLLOW EMBEDS
+SCANNED 305 · MATCHED 2 · OCCURRENCES 2
+
+1 [01ef6c15] Equal-authority synthesis rule: preserve each shared co-advisor requirement once, retain distinct conditions, and explain unresolved conflicts with both provenances. [task-2/description m15] → [41debba1] [task-2/participant]
+2 [018ff8f7] Equal-authority synthesis rule: preserve each shared co-advisor requirement once, retain distinct conditions, and explain unresolved conflicts with both provenances. [task-2/description m16] → [2ba58f39] [task-2/participant]

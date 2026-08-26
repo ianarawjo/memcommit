@@ -1,0 +1,28 @@
+{
+  "sequence": 44,
+  "count_before": 288,
+  "count_after": 289,
+  "delta": 1,
+  "new_attempt_uids": [
+    "4b753ece-e6e6-46f0-873a-0f7a63aae0d7"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "4b753ece-e6e6-46f0-873a-0f7a63aae0d7",
+      "operation": "switch",
+      "command": "mem switch task-2/participant",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:15:47.353152+00:00",
+      "completed_at": "2026-08-25T18:15:47.375286+00:00",
+      "elapsed_seconds": 0.021968000000924803,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

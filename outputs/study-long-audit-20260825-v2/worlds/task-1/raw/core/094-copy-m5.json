@@ -1,0 +1,11 @@
+{
+  "sequence": 94,
+  "operation": "copy",
+  "attempt": 5,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 copy --memory task-1/participant/construction-updates/shop-updates:37113bd0 --memory task-1/participant/construction-updates/route-changes:8017409a --into task-1/participant",
+  "exit": 0,
+  "wall_seconds": 1.264712,
+  "pre_target_digest": "1ce4185e8001f1aedfd8238c256bf08f1debd7f42b3af075389b7515925c197b",
+  "post_target_digest": "222011f3c908b83850dcfc4a1fb3efe4813242592a27ecbe3281ce43af70ebec",
+  "raw_output": "raw/core/094-copy-m5.txt"
+}

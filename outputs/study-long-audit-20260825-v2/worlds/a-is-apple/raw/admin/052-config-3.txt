@@ -1,0 +1,13 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple config show
+
+EXIT
+0
+
+OUTPUT
+  semantic_provider = 'codex_chatgpt'
+  semantic_model = 'gpt-5.6-sol'
+  codex_chatgpt_model = 'gpt-5.6-sol'
+  codex_chatgpt_reasoning_effort = 'none'
+  codex_chatgpt_preset = ''
+  audit_v2_world = 'a-is-apple'

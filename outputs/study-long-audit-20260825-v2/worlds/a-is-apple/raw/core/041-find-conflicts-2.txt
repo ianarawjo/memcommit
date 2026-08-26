@@ -1,0 +1,20 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple find-conflicts practice/source
+
+EXIT
+0
+
+OUTPUT
+Find Conflicts · practice/source · 3/13 direct memories involved · 2/78 pairs flagged
+
+  POSSIBLE CONFLICT 1/2
+  [e50c293a] If I later ask for polishing, preserve the overall strucutre and citation-needed markers, and change only wording that causes a problem.
+  [6cc4b8a3] When the draft has to fit a shorter fixed limit, aim to cut around 20–30% from redundant or unnecessary material.
+  Reason: Polishing permits only wording changes that address a problem while preserving the overall structure, whereas meeting a shorter fixed limit may require removing 20–30% of material. They conflict if both rules govern the same polishing request and the necessary cuts go beyond problematic wording, but remain jointly explainable if the fixed-limit request is a separate or overriding task.
+  Question: Does a shorter fixed limit override the polishing-only restriction?
+
+  POSSIBLE CONFLICT 2/2
+  [39b21971] When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um... for example, use distribute, not divide, when material is absorbed into two parts.
+  [6cc4b8a3] When the draft has to fit a shorter fixed limit, aim to cut around 20–30% from redundant or unnecessary material.
+  Reason: A request to change one expression ordinarily requires leaving almost everything else unchanged, while a simultaneous shorter-limit requirement calls for substantial cuts. They conflict if both apply to the same request, but remain jointly explainable if the fixed-limit instruction is separate or supersedes the one-expression scope.
+  Question: Does the shorter limit override the one-expression-only scope?

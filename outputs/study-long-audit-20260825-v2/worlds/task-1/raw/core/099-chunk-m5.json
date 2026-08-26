@@ -1,0 +1,11 @@
+{
+  "sequence": 99,
+  "operation": "chunk",
+  "attempt": 5,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 chunk d7660eeb --context task-1/participant --method clauses --break-on : --max-chars 72",
+  "exit": 0,
+  "wall_seconds": 1.449652,
+  "pre_target_digest": "b53814ec928f638a115d453a9d6346c8cadaeaf79e219a5c4cfd70fd0e18c2cc",
+  "post_target_digest": "6ff89da0a9ac439f24cdb650a85abdf2e8e7c1426ecfd0ea8f016a3b41c2b1c5",
+  "raw_output": "raw/core/099-chunk-m5.txt"
+}

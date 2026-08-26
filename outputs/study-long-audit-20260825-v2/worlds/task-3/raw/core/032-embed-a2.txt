@@ -1,0 +1,7 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 embed task-3/local/guardrails/approval-and-delivery --into task-3/local
+
+STDOUT
+Embedded 'task-3/local/guardrails/approval-and-delivery' into 'task-3/local' after [b341ee47] at the end.
+
+STDERR

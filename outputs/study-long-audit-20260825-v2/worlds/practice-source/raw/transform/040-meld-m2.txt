@@ -1,0 +1,20 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source meld --memory 'Keep the fixed-limit reduction attached to all-points and claim-strength safeguards.' --into practice/description --direct --restart
+
+EXIT
+0
+
+WALL_SECONDS
+15.371815
+
+STDOUT
+MELD READY · DIRECTIONAL · practice/description
+ROUTE · INCOMING INLINE MEMORY → BASELINE / TARGET practice/description
+JUDGMENTS · REQUIRED 0 · OPTIONAL 0
+SESSION · 7d8c787d-7d18-4b35-919d-f9b9e91d934d
+SOURCE · UNCHANGED
+IMPACT · mem impact meld --session 7d8c787d-7d18-4b35-919d-f9b9e91d934d
+RESUME · mem meld --sessions
+
+
+STDERR

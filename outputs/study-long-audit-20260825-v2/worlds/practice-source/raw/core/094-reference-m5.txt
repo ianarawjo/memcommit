@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source reference practice/source:b976766e --into practice/description
+
+EXIT
+0
+
+WALL_SECONDS
+1.426382
+
+STDOUT
+Referenced snapshot [b976766e] from 'practice/source' as [ee899250] in 'practice/description'.
+
+
+STDERR

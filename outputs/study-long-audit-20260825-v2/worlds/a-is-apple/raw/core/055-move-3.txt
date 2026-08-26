@@ -1,0 +1,10 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple move practice:5887b475 --into practice/source
+
+EXIT
+0
+
+OUTPUT
+MOVED · 1 Memory → 'practice/source' · RETARGET LINKS · after [c1cf9a92] at the end
+  REMOVE 'practice' [5887b475] · ADD 'practice/source' [5887b475]
+Checkpoints 'practice' [06ecbd9f], 'practice/source' [db629525].

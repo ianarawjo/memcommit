@@ -1,0 +1,44 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source query --context practice/source 'How should these notes be atomized so each result remains independently reviewable without losing triggers, exceptions, protected wording, or source-verification boundaries?'
+
+EXIT
+0
+
+WALL_SECONDS
+15.492717
+
+STDOUT
+Atomize the notes into separate rules at each distinct trigger, action, exception, protected term, or verification boundary, while keeping a condition attached to the rule it governs. For “How does this read?”, record: interpret it as a request for an opinion; do not edit immediately; first assess sentence order; and first assess paragraph division. [1]
+
+For later polishing, record separately that the overall structure and citation-needed markers must be preserved, and that wording should change only where it causes a problem. [2]
+
+For a request to change one expression, record that almost everything else must remain unchanged, including selected technical or project-specific terms. Preserve the concrete terminology example separately: when material is absorbed into two parts, use “distribute,” not “divide.” [3]
+
+For condensation, separate these reviewable constraints: retain all four intended points; remove excessive redundancy; state repeated content once; when meeting a shorter fixed limit, target roughly a 20–30% cut from redundant or unnecessary material; and do not compress so aggressively that claims become more categorical or lose their original strength and conditions. [4] [5] [6]
+
+For paragraph connectors, preserve the trigger and prohibition together: when the next idea is merely related and does not broaden scope, do not use “More broadly.” Record the permitted alternatives separately—“In relation to this” or another accurate connector—and retain the boundary against adding a new claim merely to connect paragraphs. [7]
+
+For titles about interaction with AI agent memory, preserve the exact intended terminology as independently checkable wording constraints: use “interaction,” “management,” and “AI agent memory,” rather than “agent memory.” [8]
+
+For title capitalization, record sentence case as the default and an explicitly named style guide as the only stated override to that capitalization default; independently preserve “for” whenever it belongs to the intended wording. [9]
+
+For titles of works, record consistent italics throughout the document as the default when quotation marks and italics are mixed, with an explicitly named style guide as the only stated override to this work-title-format default. [10]
+
+Keep source-verification rules separate from editing rules: when content looks wrong, consult the original paper, book, or guide rather than relying only on an abstract or short snippet; before adding or reusing citations and references, verify that each source exists and supports the exact claim after reviewing the complete source; do not invent quotations or evidence or overstate contribution or status; and when the request was review only, report a verification problem before rewriting. [11] [12]
+
+References
+[1] When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division. — f3ef224d, practice/source, m1
+[2] If I later ask for polishing, preserve the overall strucutre and citation-needed markers, and change only wording that causes a problem. — e50c293a, practice/source, m2
+[3] When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um... for example, use distribute, not divide, when material is absorbed into two parts. — 39b21971, practice/source, m3
+[4] If a passage is supposed to make four points, keep all four while removing parts that are too redundent and stating repeated content only once. — 6fad23ab, practice/source, m4
+[5] When the draft has to fit a shorter fixed limit, aim to cut around 20–30% from redundant or unnecessary material. — 6cc4b8a3, practice/source, m5
+[6] But don't shorten sentences so aggressively that a claim sounds more categorical; keep enough wording to preserve its original strength and conditions. — 7ebe67fb, practice/source, m6
+[7] If the next idea is merely related and does not broaden the scope, don't use More broadly; use In relation to this or another accurate connector without adding a new claim merely to make two paragraphs connect. — b976766e, practice/source, m7
+[8] For any titlle about interaction with AI agent memory, keep the exact terminology and intended words: use interaction and management and AI agent memory rather than agent memory. — 44de7eff, practice/source, m8
+[9] By default, format a document title in sentence case rather than title case. An explicitly named style guide may override only that capitalization default; always keep for whenever it is part of the intended wording. — 1a9d3a74, practice/source, m9
+[10] If titles of works use quotation marks in some places and italics in others, make them consistently italic throughout the document by default; an explicitly named style guide may override only this work-title format. — 94c3ce98, practice/source, m10
+[11] When I say that content looks wrong, find accurate information before proposing a correction by reading the original paper, book, or guide, not only an abstract or a short snippet. — 96300a95, practice/source, m11
+[12] Before adding or reusing citations and refferences, verify that each source exists and supports the exact claim after reviewing the complete source. Don't invent quotations or evidence or overstate an author's contribution or a paper's status. If I asked only for review, report a verification problem first instead of silently rewriting the draft. — 4fe217eb, practice/source, m12
+
+
+STDERR

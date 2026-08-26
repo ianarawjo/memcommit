@@ -1,0 +1,22 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 query "Reconcile the two budget policies without favoring either advisor." --context task-2/advisor1/budget --context task-2/advisor2/budget
+EXIT: 0
+DURATION_SECONDS: 8.282
+
+Use a layered policy: keep the total and major cost categories in the main text, place each major cost beside the activity or deliverable it enables, and include only a concise estimate basis there when it is essential to judging proportionality. [1] [2] [3] [4]
+
+Put the full quantities, unit rates, assumptions, and subtotals in a compact, clearly referenced budget table or appendix, using stable rows and a dedicated assumptions column so arithmetic is easy to verify and individual estimates can be revised cleanly. [4] [5] [6] [7] [8] [9]
+
+When an activity or estimate changes, update its table row and subtotal and also update the corresponding main-text cost sentence, preserving alignment without scattering detailed arithmetic through the argument. [10] [8] [11]
+
+References
+[1] Keep the total, major cost categories, and one-line estimate basis in the main text so the resource argument can be understood without leaving the proposal. — 05e0261e, task-2/advisor1/budget, m1
+[2] Place each major cost beside the activity or deliverable it enables in the main text. — 1083e9b3, task-2/advisor1/budget, m2
+[3] Accept a denser main-text paragraph when the estimate basis is essential to deciding whether the request is proportionate. — f7a16d08, task-2/advisor1/budget, m6
+[4] Keep the main text to the total and major categories, and place quantities, unit rates, and assumptions in one compact budget table or appendix. — d614b55d, task-2/advisor2/budget, m8
+[5] Give each cost category, quantity, unit rate, and subtotal a stable row in the separate budget table. — 24500129, task-2/advisor2/budget, m9
+[6] Put the estimate basis in a dedicated table column so one assumption can be checked or revised without rewriting the narrative. — 07bad409, task-2/advisor2/budget, m10
+[7] Readers can verify arithmetic and compare categories faster in a consistent table than in amounts distributed across prose. — abf6d361, task-2/advisor2/budget, m11
+[8] Revise one table row and its subtotal when an estimate changes instead of repeating the new amount across several prose paragraphs. — 473cf3ca, task-2/advisor2/budget, m12
+[9] Keep detailed arithmetic out of the main argument when readers can reach the complete table from a clear reference. — 675956de, task-2/advisor2/budget, m13
+[10] Update the cost sentence whenever the related activity changes so the narrative and requested amount cannot drift apart. — 2f5f9039, task-2/advisor1/budget, m5
+[11] The user tends to interrupt the argument with long cost enumerations when no separate budget table is available. — f4371f72, task-2/advisor2/budget, m14

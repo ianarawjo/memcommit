@@ -1,0 +1,11 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple init audit/a-is-apple/admin-v2-scratch/tree/leaf --parents
+
+EXIT
+0
+
+OUTPUT
+Ensured context hierarchy 'audit/a-is-apple/admin-v2-scratch/tree/leaf'.
+  Created: audit, audit/a-is-apple, audit/a-is-apple/admin-v2-scratch/tree, audit/a-is-apple/admin-v2-scratch/tree/leaf
+  Reused: audit/a-is-apple/admin-v2-scratch
+  Current: audit/a-is-apple/admin-v2-scratch/tree/leaf

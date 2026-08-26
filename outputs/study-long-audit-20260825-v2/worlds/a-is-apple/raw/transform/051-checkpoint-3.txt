@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple checkpoint practice/source 'a-is-apple transform round 3 recovery before destructive scratch trials' --direct
+
+EXIT
+0
+
+OUTPUT
+[06305367] 2026-08-25 13:17:38  Context 'practice/source'  'a-is-apple transform round 3 recovery before destructive scratch trials'

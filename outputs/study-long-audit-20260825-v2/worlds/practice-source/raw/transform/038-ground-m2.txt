@@ -1,0 +1,19 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source ground practice-source-v2-transform --goal 'Atomize practice/source constraints without editing their subject text or changing meaning.' --raw-context practice/source --derived-context practice/description --publication-context practice/description --snapshot
+
+EXIT
+2
+
+WALL_SECONDS
+1.243196
+
+STDOUT
+
+
+STDERR
+Usage: run_isolated_mem.py ground [OPTIONS] [GROUND_NAME]
+Try 'run_isolated_mem.py ground -h' for help.
+╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ No such option: --publication-context (Possible options:                     │
+│ --publication-target, --raw-context)                                         │
+╰──────────────────────────────────────────────────────────────────────────────╯

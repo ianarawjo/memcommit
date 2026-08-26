@@ -1,0 +1,21 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source find 'don'"'"'t' --context practice/source
+
+EXIT
+0
+
+WALL_SECONDS
+1.369276
+
+STDOUT
+FIND RESULTS
+PATTERN · don't · LITERAL · CASE SENSITIVE
+SCOPE · practice/source · EXACT · EXCLUDE EMBEDS
+SCANNED 12 · MATCHED 3 · OCCURRENCES 3
+
+1 [f3ef224d] When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division. [practice/source m1]
+2 [7ebe67fb] But don't shorten sentences so aggressively that a claim sounds more categorical; keep enough wording to preserve its original strength and conditions. [practice/source m6]
+3 [b976766e] If the next idea is merely related and does not broaden the scope, don't use More broadly; use In relation to this or another accurate connector without adding a new claim merely to make two paragraphs connect. [practice/source m7]
+
+
+STDERR

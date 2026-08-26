@@ -1,0 +1,28 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 revert 8d25b193 --context task-1/participant --keep
+
+EXIT
+0
+
+OUTPUT
+Reverted Context: task-1/participant
+Restored state recorded by: manual checkpoint
+Action detail: task-1 transform round 1 scratch recovery
+Affected Context: task-1/participant
+Affected content: 4 Memories added, 3 Memory refs added, 2 Embedded contexts added, 4 direct items added, 29 Memories removed
+  - [memory 0e37277b] "For campus-wiki/facility-updates, publish that the Main Building undergoes major facility-improvement construction during summer break, with the construction period running from June 24 through August 23."
+  - [memory 955f592d] "During the construction period, Main Building access and operations change as follows: elevators operate alternately one at a time; the visitor-services desk suspends in-person operations and visitor services move to the integrated campus …"
+  - [memory c996df28] "During the construction period, the Main Building's general restrooms on floors one through three are unavailable; the nearest general restroom becomes the exhibition hall on the third floor of the West Complex."
+  - [memory 2255eeaa] "Restroom redirection during the construction period depends on user and facility type: direct students, staff, and members unable to use Main Building restrooms to the Central Library; as a rule, direct general visitors to restrooms outsid…"
+  - [memory a3ec8556] "Publication may describe user-facing disruption risks caused by changed access: an Innovation Hub visitor expecting immediate in-person consultation may encounter the closed desk and then search for the online channel, while cleaning and s…"
+  - [memory 530ea9c0] "Facility guidance for the construction period must remain limited to publicly disclosed operational impacts and must not verify or infer nonpublic types of work."
+  - [memory 49c359a1] "Attributed update entries use the prefix “Add campus-wiki/facility-updates:” for added publication content and “Modify campus-wiki/facility-updates:” for modified content; the modification form is specifically evidenced for the contract-st…"
+  - [memory e2af5221] "Add campus-wiki/facility-updates: From June 24 through August 23, the Main Building undergoes major facility-improvement construction. During this period, elevators operate alternately one at a time; the visitor-services desk and the first…"
+  - [memory ed53fea0] "Add campus-wiki/facility-updates: From June 24 through August 23, the Main Building's general restrooms on floors one through three are unavailable. The nearest general restroom is the exhibition hall on the third floor of the West Complex…"
+  - [memory 84a4c7e5] "Modify campus-wiki/facility-updates: From June 24 through August 23, cleaning and security contract staff may find the designated service entrance more burdensome than the familiar lobby shift change and may go to the wrong entrance at the…"
+  - [memory 2906c6dc] "Add campus-wiki/facility-updates: The Main Building undergoes major facility improvement construction during summer break."
+  - [memory e4a605fc] "Add campus-wiki/facility-updates: During the construction period, the elevators operate alternately, one at a time."
+  ... 30 more affected direct items not shown
+Restored checkpoint: [8d25b193] (2026-08-25 13:24)
+Undo command: mem undo
+Exact recovery checkpoint: mem revert 3c0c2178 --discard-newer

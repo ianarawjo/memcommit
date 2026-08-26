@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple find-duplicates practice --direct
+
+EXIT
+0
+
+OUTPUT
+Find Duplicates · practice · 16 direct items checked · 1 exact group · 1 proposed absorption
+
+  DUP / EXACT  1/1 · MEMORY
+    SURVIVOR  [memory 9828aed4]  a maps to apple;
+    ABSORB    [memory 84695557]  a maps to apple;
+
+  Read-only report. Apply exact cleanup with mem dedup.

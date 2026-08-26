@@ -1,0 +1,31 @@
+{
+  "sequence": 94,
+  "count_before": 338,
+  "count_after": 339,
+  "delta": 1,
+  "new_attempt_uids": [
+    "a13d2b70-9533-4e56-ac80-73af1ed5a6ba"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "a13d2b70-9533-4e56-ac80-73af1ed5a6ba",
+      "operation": "import",
+      "command": "mem import context participant/construction-updates --from-profile admin-v2-ticker-missing-profile --as audit/ticker/admin-v2-scratch/import-missing --direct",
+      "status": "FAILED",
+      "started_at": "2026-08-25T18:17:14.110820+00:00",
+      "completed_at": "2026-08-25T18:17:14.131002+00:00",
+      "elapsed_seconds": 0.02003162499750033,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": {
+        "kind": "Exit",
+        "exit_code": 1
+      }
+    }
+  ]
+}

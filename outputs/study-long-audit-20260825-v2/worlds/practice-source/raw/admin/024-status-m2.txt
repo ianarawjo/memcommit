@@ -1,0 +1,27 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source status --branch
+
+STDIN
+<none>
+
+EXIT
+0
+
+WALL_SECONDS
+1.327864
+
+POST_CALL_IDENTITY_HOST_ASSERTION
+{"profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/practice-source/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+STDOUT
+Profile: sixworld-v2-template
+Context lineage: practice > audit-workspace > admin-v2-scratch
+On context: practice/audit-workspace/admin-v2-scratch
+
+Inventory · Checkpoints 1
+
+Recent changes · latest 1 of 1 checkpoints:
+  f6ddcc38  2026-08-25 13:55  init          Initialized context 'practice/audit-workspace/admin-v2-scratch'
+
+
+STDERR

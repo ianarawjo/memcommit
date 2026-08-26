@@ -1,0 +1,11 @@
+{
+  "sequence": 33,
+  "operation": "reference",
+  "attempt": 2,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 reference task-1/participant/construction-updates/event-relocations --into task-1/participant --direct",
+  "exit": 0,
+  "wall_seconds": 1.394523,
+  "pre_target_digest": "2ecd0086d7cd3cf0a8ed433bb9d43e1cb71777d870df962ce047b4fd3b3e10a7",
+  "post_target_digest": "ec1921ef14619d98fe94dabaf12adb70a70793c0d4280b773e97f3856d5ab275",
+  "raw_output": "raw/core/033-reference-m2.txt"
+}

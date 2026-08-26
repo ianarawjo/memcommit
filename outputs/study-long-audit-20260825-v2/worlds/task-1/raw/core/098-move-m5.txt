@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 move ea187cdb --from task-1/participant --into task-1/participant/construction-updates/route-changes --after 9af0f95c
+
+EXIT
+0
+
+WALL_SECONDS
+1.345261
+
+STDOUT
+MOVED · 1 Memory → 'task-1/participant/construction-updates/route-changes' · RETARGET LINKS · between [9af0f95c] and [fd27f19b]
+  REMOVE 'task-1/participant' [ea187cdb] · ADD 'task-1/participant/construction-updates/route-changes' [ea187cdb]
+Checkpoints 'task-1/participant' [2c13f636], 'task-1/participant/construction-updates/route-changes' [1bb48ff0].
+
+
+STDERR

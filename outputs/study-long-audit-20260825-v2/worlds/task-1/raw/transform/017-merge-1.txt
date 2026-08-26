@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 merge task-1/participant/construction-updates/facility-updates task-1/participant --direct --keep-target-all
+
+EXIT
+0
+
+OUTPUT
+MERGE RECORDED · 'task-1/participant/construction-updates/facility-updates' → 'task-1/participant' · DIRECT · NEW 19 (19 memories) · ALREADY PRESENT 0 · KEPT TARGET 0 · TOOK SOURCE 0 · CREATED CONTEXTS 0 · TARGET CHANGED YES · CHECKPOINTS 1

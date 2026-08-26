@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple search 'current a to apple mapping and its provenance' --context practice --context practice/source --limit 6
+
+EXIT
+0
+
+OUTPUT
+practice
+[memory 9828aed4] a maps to apple;
+[memory 874c746f] this edited duplicate retains the original
+[trace 9e5d2209] edit checkpoint · Edited memory [d2bf36b7]
+[trace a285a4c6] copy checkpoint · Copied 1 Memory/ies into 'practice' with new UIDs.
+[trace d18a973a] reference checkpoint · Referenced snapshot [f1c940a1] from 'practice' as [3d6c9417] in 'practice'
+[trace 3c857120] add checkpoint · Added: "a is apple."

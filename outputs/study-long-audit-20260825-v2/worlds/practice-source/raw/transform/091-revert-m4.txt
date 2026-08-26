@@ -1,0 +1,34 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source revert 52a45a40 --context practice/description --keep
+
+EXIT
+0
+
+WALL_SECONDS
+1.347349
+
+STDOUT
+Reverted Context: practice/description
+Restored state recorded by: manual checkpoint
+Action detail: v2 transform round 4 safety
+Affected Context: practice/description
+Affected content: 9 Memories added, 2 Memory refs added, 2 Embedded contexts added, 1 Memory removed
+  - [memory 9d0c4409] "In a document title governed by the narrow style-guide override, retain the word “for” literally as “for”; do not capitalize, replace, or remove it."
+  + [memory 89ff1887] "memcommit is a research prototype that provides command-line and terminal user interfaces (CLI/TUI) for managing agent memory and supporting collaboration among people and agents. Through memcommit's operations and structural concepts—incl…"
+  + [memory cbd46e2b] "SITUATION · Before beginning the three study tasks, complete a short practice exercise to become familiar with how memcommit organizes and presents its commands. Each newline-separated editing note in `practice/source` is stored as its own…"
+  + [memory 1e046596] "TASK · Divide their underlying constraints into appropriate atomic Memories without performing the requested edits, adding instructions, or changing the intended meaning, so that each constraint can be reviewed independently. Open `mem hel…"
+  + [memory bce98730] "When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division."
+  + [reference 3fbf33de] practice/source:96300a95 "When I say that content looks wrong, find accurate information before proposing a correction by reading the original paper, book, or guide, not only an abstract or a short snippet."  READ ONLY
+  + [context 7e48e68e] "practice/source"
+  + [memory d0f6e587] "If I later ask for polishing, preserve the overall strucutre and citation-needed markers, and change only wording that causes a problem."
+  + [memory 6bd4bd30] "If a passage is supposed to make four points, keep all four while removing parts that are too redundent and stating repeated content only once."
+  + [memory 5e5f3d04] "DEFAULT CANDIDATE: use sentence case for document titles by default, subject only to an explicitly named style guide capitalization override; preserve the intended word for."
+  + [memory 70720de6] "Use consistent italics for work titles by default, subject only to an explicitly named style guide work-title-format override."
+  + [reference ee899250] practice/source:b976766e "If the next idea is merely related and does not broaden the scope, don't use More broadly; use In relation to this or another accurate connector without adding a new claim merely to make two paragraphs connect."  READ ONLY
+  ... 2 more affected direct items not shown
+Restored checkpoint: [52a45a40] (2026-08-25 13:22)
+Undo command: mem undo
+Exact recovery checkpoint: mem revert ece4cc1a --discard-newer
+
+
+STDERR

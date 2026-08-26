@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source add 'CANDIDATE: preserve structure and citation-needed markers. Change only wording that causes a problem.' --context practice
+
+EXIT
+0
+
+WALL_SECONDS
+1.317621
+
+STDOUT
+Added [2c241a2b] CANDIDATE: preserve structure and citation-needed markers. Change only wording that causes a problem.
+
+
+STDERR

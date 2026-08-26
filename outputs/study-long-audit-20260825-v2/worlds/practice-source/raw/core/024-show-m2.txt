@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source show practice/source:e50c293a
+
+EXIT
+0
+
+WALL_SECONDS
+1.272856
+
+STDOUT
+[Memory practice/source:e50c293a-2416-50c8-b35c-45b53ff58db5] If I later ask for polishing, preserve the overall strucutre and citation-needed markers, and change only wording that causes a problem.
+
+
+STDERR

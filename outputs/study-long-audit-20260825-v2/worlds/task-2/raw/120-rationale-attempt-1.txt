@@ -1,0 +1,11 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 rationale task-2/participant/proposal-workspace:f6772ab9-ddfb-4603-86cd-1bc76831b78e
+EXIT: 0
+DURATION_SECONDS: 8.332
+
+Rationale [f6772ab9] · task-2/participant/proposal-workspace
+
+MEMORY
+  Avoid em dashes in the proposal; split the sentence or use more ordinary punctuation instead.
+
+PROVENANCE
+  The Memory first appeared in task-2/advisor1/style as “Avoid em dashes in the proposal; split the sentence or use more ordinary punctuation instead.” A merge copied it unchanged into a fresh occurrence in task-2/participant/proposal-workspace while retaining the Source occurrence.

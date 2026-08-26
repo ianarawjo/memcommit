@@ -1,0 +1,3 @@
+MOVED · 1 Memory → 'task-1' · BREAK LINKS · after [b839b146] at the end
+  REMOVE 'task-3' [c0f9e478] · ADD 'task-1' [c0f9e478]
+Checkpoints 'task-1' [3635eb77], 'task-3' [29a927b6].

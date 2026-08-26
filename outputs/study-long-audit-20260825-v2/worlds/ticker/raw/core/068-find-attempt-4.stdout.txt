@@ -1,0 +1,7 @@
+FIND RESULTS
+PATTERN · Class B · LITERAL · CASE SENSITIVE
+SCOPE · task-2/participant + task-2/participant/proposal-workspace · EXACT · EXCLUDE EMBEDS
+SCANNED 7 · MATCHED 2 · OCCURRENCES 3
+
+1 [054745a5] Share-class rule: if a legal suffix immediately precedes terminal Class A or Class B, remove the suffix and append .A or .B to the derived base ticker. [task-2/participant/proposal-workspace m6]
+2 [7ed418b9] Share-class example: Acme Corp. Class B becomes ACME.B after removing Corp. and mapping Class B to the .B suffix. The dot is generated share-class syntax. [task-2/participant/proposal-workspace m7]

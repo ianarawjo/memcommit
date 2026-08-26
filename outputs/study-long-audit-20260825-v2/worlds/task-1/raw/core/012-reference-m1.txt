@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 reference faea18ec --from task-1/participant/construction-updates/facility-updates --into task-1/participant
+
+EXIT
+0
+
+WALL_SECONDS
+1.353476
+
+STDOUT
+Referenced snapshot [faea18ec] from 'task-1/participant/construction-updates/facility-updates' as [03d9ca27] in 'task-1/participant'.
+
+
+STDERR

@@ -1,0 +1,25 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker diff 6a4d95d0 --context task-3/local/personal-memory --verbose
+
+EXIT
+0
+
+OUTPUT
+UNIT        CHECKPOINT · THIS CHECKPOINT VS PREVIOUS
+CONTEXT     task-3/local/personal-memory
+ CHECKPOINT  6a4d95d0-8dd8-4a90-87ae-1170984f7901
+ ACTION      checkpoint
+ DESCRIPTION ticker transform round 3 pre-destructive recovery
+
+ REVISION DIFF · RESULT 9 DIRECT ITEMS
+ SUMMARY · 9 kept · 0 added · 0 edited · 0 removed
+
+   [KEEP]   [f60cba75-9fe7-5097-8240-240420aac8ac] {"name":"task-3/local/personal-memory/2024","type":"context_ref","uid":"f60cba75-9fe7-5097-8240-240420aac8ac"}
+   [KEEP]   [dbe52d14-8d33-5e1e-b380-71066eab0218] {"name":"task-3/local/personal-memory/2025","type":"context_ref","uid":"dbe52d14-8d33-5e1e-b380-71066eab0218"}
+   [KEEP]   [03415050-dcfb-519c-8666-1b35d3d84253] {"name":"task-3/local/personal-memory/2026","type":"context_ref","uid":"03415050-dcfb-519c-8666-1b35d3d84253"}
+   [KEEP]   [c94b4b1a-8a36-46bb-9ed4-2e5d43a1537b] Punctuation rule and example: strip punctuation before constructing a ticker. North-Star, Inc. becomes NORTHSTAR after removing the comma, hyphen, space, and Inc. suffix.
+   [KEEP]   [3bd933f2-5cda-41e0-adae-445d34e7a116] Numeral rule: preserve digits 0 through 9, including leading zeroes, in original positions while removing spaces and punctuation.
+   [KEEP]   [f6de8d9e-273e-4700-9501-0a5318dd7487] Numeral example: Route 66, LLC becomes ROUTE66 after removing the comma, space, and LLC suffix while preserving 66.
+   [KEEP]   [74cbaa09-3adc-40d7-b236-2f271d094087] Share-class rule: if a legal suffix immediately precedes terminal Class A or Class B, remove the suffix and append dot-A (.A) or dot-B (.B) to the derived base ticker.
+   [KEEP]   [c600f4af-bc58-4b2d-9c21-90a02f925152] becomes NORTHSTAR after removing the comma, hyphen, space, and Inc.
+   [KEEP]   [4de11a71-f152-4d35-a95f-25e04949c4f6] Share-class example: Acme Corp. Class B becomes ACME.B after removing Corp. and mapping Class B to the .B suffix. The dot is generated share-class syntax.

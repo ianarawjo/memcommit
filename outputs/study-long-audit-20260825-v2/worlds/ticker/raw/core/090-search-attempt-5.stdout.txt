@@ -1,0 +1,13 @@
+task-2/participant
+[memory fac90a77] Core ticker rule: remove a terminal legal suffix such as Inc., Corp., Ltd., or LLC before constructing the ticker. Preserve the remaining alphanumeric characters.
+
+task-2/participant/proposal-workspace
+[memory 1e0e89ee] Punctuation example: North-Star, Inc. becomes NORTHSTAR after removing the comma, hyphen, space, and Inc. suffix. The output contains no punctuation.
+[memory 28120a2d] Numeral rule: preserve digits 0-9, including leading zeroes, in their original positions while removing spaces and punctuation.
+[memory ace52daf] Numeral example: Route 66, LLC becomes ROUTE66 after removing the comma, space, and LLC suffix while preserving 66.
+[memory 1e0e89ee] Punctuation rule and example: strip punctuation before constructing a ticker. North-Star, Inc. becomes NORTHSTAR after removing the comma, hyphen, space, and Inc. suffix.
+
+task-1
+[memory 96a3a079] Share-class example: Acme Corp. Class B becomes ACME.B after removing Corp. and mapping
+[memory 03a9af5d] Class B to the .B suffix. The dot is generated share-class syntax.
+[memory 49d24163] Base ticker rule: remove a terminal legal suffix such as Inc., Corp., Ltd., or LLC before constructing the ticker.

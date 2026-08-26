@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple share practice --to task-3/government/healthcare-agent --direct --recursive
+
+EXIT
+1
+
+OUTPUT
+Error: Choose either --direct or --recursive, not both.

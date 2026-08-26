@@ -1,0 +1,22 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple find 'apple|apricot|banana|boat' --regex --recursive --context practice
+
+EXIT
+0
+
+OUTPUT
+FIND RESULTS
+PATTERN · apple|apricot|banana|boat · REGEX · CASE SENSITIVE
+SCOPE · practice · DESCENDANTS · FOLLOW EMBEDS
+SCANNED 30 · MATCHED 10 · OCCURRENCES 10
+
+1 [f1c940a1] a is apple. [practice m1]
+2 [9828aed4] a maps to apple; [practice m2]
+3 [3d6c9417] a is apple. [practice m5] → [f1c940a1] [practice]
+4 [b6e1778f] b is banana. [practice m6] → [4a8036d1] [practice/source]
+5 [4a8036d1] b is banana. [practice/source m19]
+6 [c1cf9a92] b is boat. [practice/source m20]
+7 [be4139d0] b is banana; [practice/source m21]
+8 [1f9dc37a] boat remains visible. [practice/source m23]
+9 [84695557] a maps to apple; [practice m24]
+10 [94b522dc] b is boat. [practice m27] → [c1cf9a92] [practice/source]

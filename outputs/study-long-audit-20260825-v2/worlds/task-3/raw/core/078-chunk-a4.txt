@@ -1,0 +1,7 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 chunk 72eb2325 --context task-3/local --method paragraphs
+
+STDOUT
+Memory [72eb2325] produced only 1 chunk(s) with method=paragraphs — no changes made.
+
+STDERR

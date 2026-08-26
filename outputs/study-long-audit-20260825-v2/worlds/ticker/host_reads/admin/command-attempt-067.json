@@ -1,0 +1,28 @@
+{
+  "sequence": 67,
+  "count_before": 311,
+  "count_after": 312,
+  "delta": 1,
+  "new_attempt_uids": [
+    "dc1aba47-4fa5-4cdf-ad83-270efa330d67"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "dc1aba47-4fa5-4cdf-ad83-270efa330d67",
+      "operation": "config",
+      "command": "mem config set provider codex_chatgpt",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:16:28.081358+00:00",
+      "completed_at": "2026-08-25T18:16:28.089770+00:00",
+      "elapsed_seconds": 0.008250957995187491,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

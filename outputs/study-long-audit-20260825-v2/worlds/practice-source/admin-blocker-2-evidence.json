@@ -1,0 +1,99 @@
+{
+  "schema_version": 2,
+  "world": "practice-source",
+  "phase": "admin",
+  "decision_gate_after_counted_sequence": 44,
+  "additional_mem_calls_after_gate": 61,
+  "blocked_next_transaction": {
+    "at_gate_next_planned_operation": "switch",
+    "at_gate_next_planned_attempt": 3,
+    "at_gate_next_planned_argv": "switch task-1",
+    "at_gate_undo3_called": false,
+    "at_gate_reason": "The protocol-required Checkout3 stack top could not be reconstructed before Switch O or Undo3."
+  },
+  "clean_source_control": {
+    "root": "practice-source-v2-transform",
+    "contexts_scanned": 6,
+    "checkpoint_files_per_context": 1,
+    "branch_checkpoint_count": 0,
+    "conclusion": "The original disjoint R subtree did not contain a pre-existing Branch checkpoint."
+  },
+  "sequence_43_branch": {
+    "exit": 0,
+    "source": "practice/audit-workspace/admin-v2-scratch/b1",
+    "target": "practice/audit-workspace/admin-v2-scratch/b3",
+    "target_uid": "ea8d2437-a035-47cb-8ba6-f0bbdc085068",
+    "pre_target_digest": "82cf220854738ed159cbc5d839c0e4433f1272147892240b6a620ee4a4e3a974",
+    "post_target_digest": "33cbbf47c7723dc6fd9f40e55159c03b75edf86631a498a92188d7125935587e",
+    "pre_context_tree_digest": "a3f7ae85448692a0fb19584c3eeb35f3c7c7ec8657b3fdbea68f9a5a51013349",
+    "post_context_tree_digest": "d5af8efab1fadf68e4329b135916bd9d9fb7af7d0003988c8602a8369be2f151",
+    "own_creation_checkpoint": {
+      "uid": "2084392b-c951-4e18-91de-e942f92cc1f3",
+      "operation_uid": "2d646a57-621f-42b7-b9e2-97dd909980e5",
+      "owner_in_membership": true
+    },
+    "copied_invalid_checkpoint": {
+      "uid": "56a482b9-eafe-4cbb-9b79-ef2ff69b0153",
+      "operation_uid": "96234a7c-3a46-455a-a7e1-cadcf908ffa8",
+      "receipt_target_uid": "e8aad7e1-d1e0-4f56-81bf-4b7250bc1a23",
+      "receipt_target_name": "practice/audit-workspace/admin-v2-scratch/b1",
+      "owner_uid_matches": false,
+      "owner_name_matches": false
+    }
+  },
+  "sequence_44_checkout": {
+    "exit": 0,
+    "source": "practice/audit-workspace/admin-v2-scratch/b3",
+    "target": "practice/audit-workspace/admin-v2-scratch/co3",
+    "target_uid": "de468ea4-5d2d-4712-ba21-257215cacc90",
+    "pre_target_digest": "f60fd38708bc9b1c4e699773ee85a033eca1e0e315af0fb5ea510a51ff8a8b0f",
+    "post_target_digest": "237bdbaec42754a11c6cb2ae7d11f6a4b20cd28cfc9f81eda8a85ce364b81f9e",
+    "pre_context_tree_digest": "d5af8efab1fadf68e4329b135916bd9d9fb7af7d0003988c8602a8369be2f151",
+    "post_context_tree_digest": "3ecf2c545aa65758045aec0f48ad2d534e764cdce8725af4be4162ecf55eae92",
+    "own_creation_checkpoint": {
+      "uid": "cf6eb124-8096-4278-b6c3-9fe35535c2d5",
+      "operation_uid": "39879ca8-ed15-428b-be1f-59fdc4063a49",
+      "owner_in_membership": true
+    },
+    "copied_invalid_checkpoint_uids": [
+      "56a482b9-eafe-4cbb-9b79-ef2ff69b0153",
+      "2084392b-c951-4e18-91de-e942f92cc1f3"
+    ]
+  },
+  "stack_failure": {
+    "first_failing_context": "practice/audit-workspace/admin-v2-scratch/b3",
+    "error_type": "memcommit.command_history.CommandHistoryError",
+    "error": "Branch checkpoint owner is outside its creation membership.",
+    "frozen_source_point": "/Users/KimMunyeong/.codex/audit-snapshots/memcommit-six-world-v2-20260825-code/memcommit/command_history.py:779",
+    "checkout3_top_uid": "UNAVAILABLE",
+    "checkout3_member_set": "UNAVAILABLE",
+    "staged_update_granted_target": null
+  },
+  "safety_conclusion": "Branch and checkout -b copied retained Branch checkpoints without rebinding owner membership. After independent frozen-source review, the malformed history was retained as a negative control: all six remaining Undo/Redo attempts failed during stack construction before Context mutation, and ADMIN completed without supplemental deletion.",
+  "reviewed_continuation": {
+    "authorization": "Retain malformed history as a negative control; no supplemental Delete or recovery mem call; record remaining history operations as actual counted fail-closed attempts.",
+    "first_resumed_sequence": 45,
+    "final_sequence": 105,
+    "counted_attempts_after_gate": 61,
+    "history_negative_control_sequences": [
+      46,
+      47,
+      64,
+      83,
+      85,
+      86
+    ],
+    "history_negative_control_exits": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "context_mutation": false,
+    "supplemental_delete_calls": 0,
+    "recovery_mem_calls": 0,
+    "result": "COMPLETE"
+  }
+}

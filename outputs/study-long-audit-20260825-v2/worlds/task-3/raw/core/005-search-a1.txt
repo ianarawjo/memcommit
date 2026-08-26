@@ -1,0 +1,18 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 search 'Which rules determine what personal information must be excluded from the healthcare agent?' --context task-3/local/guardrails --descendants --exclude-embeds --limit 5
+
+STDOUT
+task-3/local/guardrails/privacy-and-others
+[memory 67035ffd] Exclude a third party's contact information unless it is essential to the current purpose.
+[memory 5cd7bde0] If one Memory mixes information about the user and a third party, sharing the item unchanged also conveys the third party's information.
+
+task-3/local/guardrails/minimization-and-redaction
+[memory 9d626b1a] Redact identifiers from the content when they are not needed for sharing.
+
+task-3/local/guardrails/channel-and-format
+[memory d75604e1] Ensure that document metadata does not retain unnecessary identifying information.
+
+task-3/local/guardrails/retention-and-revocation
+[memory 4004ad20] Do not convey the content of an excluded Memory to the recipient.
+
+STDERR

@@ -1,0 +1,23 @@
+{
+  "sequence": 44,
+  "label": "checkout-3-source",
+  "read_at": "2026-08-25T18:13:17.834449+00:00",
+  "source_root": "audit/ticker/admin-v2-scratch/b3",
+  "recursive": false,
+  "lexically_disjoint_from_scratch": false,
+  "resolved_context_names": [
+    "audit/ticker/admin-v2-scratch/b3"
+  ],
+  "direct_item_counts": {
+    "audit/ticker/admin-v2-scratch/b3": 6
+  },
+  "retained_branch_checkpoint_count": 1,
+  "retained_branch_checkpoints": [
+    {
+      "context": "audit/ticker/admin-v2-scratch/b3",
+      "checkpoint": "contexts/audit/ticker/admin-v2-scratch/b3/checkpoints/20260825T141317-Branched-'task-1-partici-9b6d8c1d.json",
+      "operation_uid": "d8240235-7054-4b3d-8d3a-7681d7268d23"
+    }
+  ],
+  "result": "FAIL"
+}

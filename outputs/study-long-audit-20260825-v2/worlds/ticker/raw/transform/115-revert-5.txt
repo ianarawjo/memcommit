@@ -1,0 +1,28 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker revert 3a357315 --context task-3/local/guardrails --keep
+
+EXIT
+0
+
+OUTPUT
+Reverted Context: task-3/local/guardrails
+Restored state recorded by: manual checkpoint
+Action detail: ticker transform round 5 pre-destructive recovery
+Affected Context: task-3/local/guardrails
+Affected content: 4 Memories added, 10 Embedded contexts added, 1 direct item added, 3 Memories removed
+  - [memory 273c2f80] "Construct the base ticker by removing spaces, punctuation, and the terminal legal-entity suffix from the source name, then uppercasing and concatenating the remaining characters; thus North-Star, Inc. maps to NORTHSTAR and Route 66, LLC ma…"
+  - [memory 27dd070c] "Preserve every digit, including leading zeroes, in its original relative position when constructing the ticker; removal of surrounding spaces or punctuation does not remove or reorder digits."
+  - [memory 6ff92614] "When a legal suffix immediately precedes terminal Class A or Class B, remove the legal suffix, derive the base ticker, and append generated share-class syntax .A or .B respectively; thus Acme Corp. Class B maps to ACME.B."
+  + [context 900828d4] "task-3/local/guardrails/purpose-and-scope"
+  + [context 755575aa] "task-3/local/guardrails/privacy-and-others"
+  + [context 136dface] "task-3/local/guardrails/evidence-and-uncertainty"
+  + [context 37cd6139] "task-3/local/guardrails/approval-and-delivery"
+  + [context 9fd65004] "task-3/local/guardrails/retention-and-revocation"
+  + [context cfdffebb] "task-3/local/guardrails/recipient-and-authority"
+  + [context d0f950bf] "task-3/local/guardrails/minimization-and-redaction"
+  + [context 34f4d62a] "task-3/local/guardrails/channel-and-format"
+  + [context 62523a5e] "task-3/local/guardrails/downstream-use"
+  ... 6 more affected direct items not shown
+Restored checkpoint: [3a357315] (2026-08-25 13:35)
+Undo command: mem undo
+Exact recovery checkpoint: mem revert 9a152230 --discard-newer

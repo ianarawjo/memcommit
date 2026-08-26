@@ -1,0 +1,18 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple elaborate --goal 'Explain only how provenance distinguishes preferred mappings from unresolved alternatives.' --to practice/source
+
+EXIT
+0
+
+OUTPUT
+ELABORATE APPLIED · practice/source
+MODE · GOAL_TO_RULES · VERIFICATION · UNVERIFIED · QUALITY · BEST_EFFORT
+SOURCE · INLINE · TARGET · practice/source
+EFFECTS · ADD 3 MEMORIES
+
+  [memory cd7dfe8a] For each mapping discussed, label whether its provenance identifies it as preferred or leaves it as an unresolved alternative.
+  [memory 506ca83d] When a preferred mapping and an unresolved alternative concern the same source item, present both with their respective provenance and explain only the provenance difference that supports their different status.
+  [memory 22c1519f] Do not add mappings, resolve alternatives, or infer preference from the mapping values themselves; report preference only when the cited provenance supports it, and otherwise retain the alternative as unresolved.
+
+REVIEW · mem review elaborate --receipt 430fb953-0856-47d3-a7f7-8b5ab2f4f9bd
+UNDO · mem undo

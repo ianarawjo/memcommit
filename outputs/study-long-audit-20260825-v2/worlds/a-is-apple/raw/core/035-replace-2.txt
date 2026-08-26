@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple replace canonical preferred --direct --context practice/source --plain
+
+EXIT
+0
+
+OUTPUT
+No matches. Nothing changed.

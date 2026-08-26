@@ -1,0 +1,5 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 impact update task-2 task-2/participant/proposal-workspace --source-memory 6733c5d8 --direct
+EXIT: 1
+DURATION_SECONDS: 1.36
+
+Impact error: Update cannot use granted Context Embed 'task-2/advisor2/style' [f0ea0447] in Context 'task-2' as semantic evidence through its local owner. EMBED authorizes live reading, not provider disclosure or derived work; select the granted Source through an operation-aware authority route instead.

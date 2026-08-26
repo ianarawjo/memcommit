@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple search 'conflicting mappings for the letter b' --context practice --context practice/source --limit 8
+
+EXIT
+0
+
+OUTPUT
+RELATED RESULTS
+  No matching results for: conflicting mappings for the letter b
+  Broader search: mappings for the letter b
+
+
+practice
+[memory ref b6e1778f] · RELATED · READ ONLY -> practice/source#4a8036d1 b is banana.
+
+Related results may not satisfy the original query.

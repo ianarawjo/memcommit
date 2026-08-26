@@ -1,0 +1,5 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 find-conflicts task-2
+EXIT: 0
+DURATION_SECONDS: 6.036
+
+Find Conflicts · task-2 · 0/3 direct memories involved · 0/3 pairs flagged

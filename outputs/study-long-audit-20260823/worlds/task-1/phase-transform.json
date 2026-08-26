@@ -1,0 +1,2222 @@
+{
+  "schema_version": 1,
+  "study": "study-long-audit-20260823",
+  "world": "task-1",
+  "phase": "transform",
+  "world_goal": "Transform and verify accumulated campus-wiki contribution evidence while confining destructive work to recoverable local scratch.",
+  "execution_boundary": {
+    "launcher": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli",
+    "shared_current": "practice",
+    "worker_changed_current": false,
+    "code_or_tests_changed": false
+  },
+  "bootstrap": {
+    "excluded": true,
+    "created": [
+      "task-1/participant/transform-scratch/source",
+      "task-1/participant/transform-scratch/criteria",
+      "task-1/participant/transform-scratch/result",
+      "task-1/participant/transform-scratch/archive"
+    ]
+  },
+  "excluded_atomize_serialization_correction": "Atomize was added after frozen help verification and is included here with five explicit-target attempts.",
+  "total_attempts": 120,
+  "coverage": {
+    "audit": 5,
+    "checkpoint": 5,
+    "check-conformance": 5,
+    "clear": 5,
+    "delete": 5,
+    "diff": 5,
+    "distill": 5,
+    "elaborate": 5,
+    "resolve": 5,
+    "dedup": 5,
+    "dedun": 5,
+    "forget": 5,
+    "ground": 5,
+    "impact": 5,
+    "meld": 5,
+    "merge": 5,
+    "rationale": 5,
+    "revert": 5,
+    "review": 5,
+    "sever": 5,
+    "trace": 5,
+    "translate": 5,
+    "update": 5,
+    "atomize": 5
+  },
+  "operations": {
+    "audit": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "existing task-1 corpus or empty scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli audit task-1/participant/construction-updates/facility-updates",
+          "exit": 0,
+          "actual": "Saved 3-check Audit; 7/18 ambiguities and 1/153 conflict pair.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli audit task-1/participant/transform-scratch/source --against task-1/participant/transform-scratch/criteria --snapshot",
+          "exit": 0,
+          "actual": "Saved and printed quality plus Conformance; every uncited governed claim violated both rules.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli audit task-1/participant/transform-scratch/source --select",
+          "exit": 1,
+          "actual": "Rejected interactive --select combined with explicit Context.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli audit task-1/participant/transform-scratch/missing",
+          "exit": 1,
+          "actual": "Rejected nonexistent explicit Context.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "final transformation/evidence verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli audit task-1/campus-wiki/facility-updates --against task-1/participant/transform-scratch/criteria",
+          "exit": 1,
+          "actual": "Rejected Conformance because the granted Audit target was not local.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        }
+      ]
+    },
+    "checkpoint": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "existing task-1 corpus or empty scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli checkpoint task-1/participant/transform-scratch/source \"round 1 imported facility draft\" --direct",
+          "exit": 0,
+          "actual": "Saved direct checkpoint 788560b1.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli checkpoint task-1/participant/transform-scratch/result \"round 2 before clearing distilled output\" --direct",
+          "exit": 0,
+          "actual": "Saved result checkpoint a74d02a6 before Clear.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli checkpoint task-1/participant/transform-scratch \"round 3 subtree safety checkpoint\" --recursive",
+          "exit": 0,
+          "actual": "Saved atomic five-Context set 7c1950e9.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli checkpoint task-1/participant/transform-scratch/archive \"round 4 before archive clear\" --direct",
+          "exit": 0,
+          "actual": "Saved archive checkpoint b3d3083c.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "final transformation/evidence verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli checkpoint task-1/participant/transform-scratch/archive \"round 5 before final delete\" --direct",
+          "exit": 0,
+          "actual": "Saved archive checkpoint b9cdd681.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        }
+      ]
+    },
+    "check-conformance": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "existing task-1 corpus or empty scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli check-conformance task-1/participant/transform-scratch/source --against task-1/participant/transform-scratch/criteria",
+          "exit": 1,
+          "actual": "Rejected empty Rules frame before provider.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli check-conformance task-1/participant/transform-scratch/source --against task-1/participant/transform-scratch/criteria",
+          "exit": 0,
+          "actual": "Reported detailed violations for uncited facility claims.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli check-conformance task-1/participant/transform-scratch/result --against task-1/participant/transform-scratch/criteria",
+          "exit": 0,
+          "actual": "Reported 2/2 examples conform and 2/2 rules met.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli check-conformance --rule task-1/participant/transform-scratch/criteria --example task-1/participant/transform-scratch/result",
+          "exit": 1,
+          "actual": "Rejected empty Target frame after Clear.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "final transformation/evidence verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli check-conformance task-1/participant/transform-scratch/source --against \"text:Every public wiki claim must cite verified evidence.\"",
+          "exit": 0,
+          "actual": "Literal-rule route flagged every uncited public claim.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        }
+      ]
+    },
+    "clear": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "existing task-1 corpus or empty scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli clear task-1/participant/transform-scratch/archive",
+          "exit": 0,
+          "actual": "Already-empty boundary; no change.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli clear task-1/participant/transform-scratch/result",
+          "exit": 0,
+          "actual": "Cleared 12 checkpointed scratch items.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli clear task-1/participant/transform-scratch/result",
+          "exit": 0,
+          "actual": "Cleared 13 reconstructed scratch items.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli clear task-1/participant/transform-scratch/archive",
+          "exit": 0,
+          "actual": "Cleared 10 checkpointed archive items.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "final transformation/evidence verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli clear task-1/participant/transform-scratch/result --recursive",
+          "exit": 0,
+          "actual": "Recursively cleared 12 items from one scratch Context.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "existing task-1 corpus or empty scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli delete deadbeef --context task-1/participant/transform-scratch/archive",
+          "exit": 1,
+          "actual": "Missing-item boundary; no mutation.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli delete deadbeef --context task-1/participant/transform-scratch/result",
+          "exit": 1,
+          "actual": "Missing-item boundary after Clear.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli delete missing-item --context task-1/participant/transform-scratch/archive",
+          "exit": 1,
+          "actual": "Missing selector rejected.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli delete missing-after-clear --context task-1/participant/transform-scratch/archive",
+          "exit": 1,
+          "actual": "Post-Clear missing selector rejected.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "final transformation/evidence verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli delete 3095dbd8 --context task-1/participant/transform-scratch/archive",
+          "exit": 1,
+          "actual": "Prior Impact UID was stale/not direct after Dedun; rejected without mutation.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        }
+      ]
+    },
+    "diff": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "existing task-1 corpus or empty scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli diff --stat",
+          "exit": 1,
+          "actual": "No local Update existed.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli diff --raw",
+          "exit": 0,
+          "actual": "Displayed an applied task-2 Update record, not task-1.",
+          "defect_ids": [
+            "T1-XFORM-SHARED-SESSION-BLEED"
+          ],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli diff --verbose",
+          "exit": 0,
+          "actual": "Again displayed full task-2 Update identities from shared saved state.",
+          "defect_ids": [
+            "T1-XFORM-SHARED-SESSION-BLEED"
+          ],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli diff --raw --stat",
+          "exit": 2,
+          "actual": "Rejected mutually exclusive render flags.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "final transformation/evidence verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli diff task-1/participant/transform-scratch/source",
+          "exit": 1,
+          "actual": "Explicit Context route required an interactive history selector.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        }
+      ]
+    },
+    "distill": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "existing task-1 corpus or empty scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli distill --from task-1/participant/transform-scratch/source --to task-1/participant/transform-scratch/result --goal \"Extract verified campus construction update rules\" --direct --plain",
+          "exit": 0,
+          "actual": "Applied 12 distilled rules to scratch/result and issued receipt daa82541.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli distill --from task-1/participant/transform-scratch/source --to task-1/participant/transform-scratch/result --goal \"Keep only public verified facility update rules\" --direct --plain",
+          "exit": 0,
+          "actual": "Rebuilt a narrower verified rule set.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli distill --from task-1/participant/transform-scratch/source --to task-1/participant/transform-scratch/result --direct --recursive --plain",
+          "exit": 1,
+          "actual": "Rejected conflicting scope flags.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli distill --ground missing-ground --to task-1/participant/transform-scratch/result --plain",
+          "exit": 1,
+          "actual": "Rejected Ground mode combined with Context target.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "final transformation/evidence verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli distill --from task-1/participant/transform-scratch/missing --to task-1/participant/transform-scratch/result --plain",
+          "exit": 1,
+          "actual": "Rejected missing Source.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        }
+      ]
+    },
+    "elaborate": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "existing task-1 corpus or empty scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli elaborate --goal \"Campus wiki contributions must reflect only verified construction changes\" --to task-1/participant/transform-scratch/criteria --number 2 --plain",
+          "exit": 0,
+          "actual": "Added two unverified verification rules to scratch/criteria.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli elaborate --from task-1/participant/transform-scratch/criteria --to task-1/participant/transform-scratch/result --as rules --number 2 --plain",
+          "exit": 0,
+          "actual": "Added two case propositions with UNVERIFIED status.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli elaborate --goal \"verified contribution\" --rule \"cite a source\" --to task-1/participant/transform-scratch/result --plain",
+          "exit": 1,
+          "actual": "Rejected simultaneous Goal and Rule modes.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli elaborate --ground missing-ground --from-goal --to task-1/participant/transform-scratch/result --plain",
+          "exit": 1,
+          "actual": "Rejected Ground mode combined with Target.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "final transformation/evidence verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli elaborate --rule \"Every public claim cites evidence\" --to task-1/participant/transform-scratch/result --number 0 --plain",
+          "exit": 2,
+          "actual": "Rejected non-positive proposal count.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        }
+      ]
+    },
+    "resolve": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "existing task-1 corpus or empty scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli resolve task-1/participant/transform-scratch/source --plain",
+          "exit": 0,
+          "actual": "FIT YES; no change needed.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli resolve --context task-1/participant/transform-scratch/source --memory b410d90f --guidance \"Preserve only verified public wording\" --plain",
+          "exit": 0,
+          "actual": "Exact-Memory guided route returned FIT YES; no change.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli resolve --context task-1/participant/transform-scratch/source --candidate stale-candidate --expected-revision deadbeef --apply --plain",
+          "exit": 1,
+          "actual": "Rejected stale exact candidate/revision.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli resolve task-1/participant/transform-scratch/result --plain",
+          "exit": 1,
+          "actual": "Rejected frame with fewer than two Memories.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "final transformation/evidence verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli resolve task-1/participant/transform-scratch/source --allow-delete --guidance \"Remove unsupported claims only\" --plain",
+          "exit": 0,
+          "actual": "Delete-capable analysis still returned FIT YES; no change.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        }
+      ]
+    },
+    "dedup": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "existing task-1 corpus or empty scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedup task-1/participant/transform-scratch/source --direct",
+          "exit": 0,
+          "actual": "No exact duplicates.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedup task-1/participant/transform-scratch/source --direct",
+          "exit": 0,
+          "actual": "Repeated after semantic work; no exact duplicates.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedup task-1/participant/transform-scratch --recursive",
+          "exit": 0,
+          "actual": "No per-Context exact duplicates in subtree.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedup task-1/participant/transform-scratch/archive --direct",
+          "exit": 0,
+          "actual": "No exact duplicates after repopulation.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "final transformation/evidence verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedup task-1/participant/transform-scratch/archive --recursive",
+          "exit": 0,
+          "actual": "No exact duplicates in final archive subtree.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        }
+      ]
+    },
+    "dedun": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "existing task-1 corpus or empty scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedun task-1/participant/transform-scratch/source --direct --plain",
+          "exit": 1,
+          "actual": "Rejected discovery options combined with the hidden exact-review plain route.",
+          "defect_ids": [
+            "T1-XFORM-DEDUN-PLAIN-GRAMMAR-CANDIDATE"
+          ],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedun task-1/participant/transform-scratch/source --direct",
+          "exit": 0,
+          "actual": "No redundancies.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedun task-1/participant/transform-scratch --direct --recursive",
+          "exit": 2,
+          "actual": "Rejected conflicting scope flags.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedun task-1/participant/transform-scratch/archive --direct",
+          "exit": 0,
+          "actual": "Absorbed one semantic redundancy; checkpoint e2ed8048.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "final transformation/evidence verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedun task-1/participant/transform-scratch/result --direct",
+          "exit": 0,
+          "actual": "Empty result had no redundancies.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        }
+      ]
+    },
+    "forget": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "existing task-1 corpus or empty scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli forget \"Remove only obsolete drafts already superseded by a verified replacement\" --context task-1/participant/transform-scratch/archive",
+          "exit": 0,
+          "actual": "Empty Source; no change.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli forget \"Remove draft statements that are not public campus-wiki contributions\" --context task-1/participant/transform-scratch/archive",
+          "exit": 0,
+          "actual": "Applied REMOVE 5 in scratch; receipt 12d221cf.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli forget \"Remove nothing; preserve every archived event relocation\" --context task-1/participant/transform-scratch/result",
+          "exit": 0,
+          "actual": "Empty Source; no change.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli forget \"Remove no memories from this preserved recovery archive\" --context task-1/participant/transform-scratch/result",
+          "exit": 0,
+          "actual": "No change.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "final transformation/evidence verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli forget \"Remove claims lacking a designated verification source\" --context task-1/participant/transform-scratch/result",
+          "exit": 0,
+          "actual": "No change after Clear.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        }
+      ]
+    },
+    "ground": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "existing task-1 corpus or empty scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli ground \"Prepare a verified campus-wiki contribution from the task-1 construction evidence\"",
+          "exit": 0,
+          "actual": "Printed stable unsaved draft; read no Context and created nothing.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli ground \"Organize task-1 construction evidence into public wiki contribution rules and examples\"",
+          "exit": 0,
+          "actual": "Printed unsaved draft only.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli ground \"Check whether each task-1 wiki contribution cites verification evidence\"",
+          "exit": 0,
+          "actual": "Printed unsaved draft only.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli ground \"Use only verified public construction evidence; preserve provenance; identify unsupported claims before campus-wiki contribution\"",
+          "exit": 0,
+          "actual": "Printed unsaved draft only.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "final transformation/evidence verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli ground \"Finalize a reviewable task-1 campus-wiki contribution plan without creating or selecting any Context\"",
+          "exit": 0,
+          "actual": "Printed unsaved draft only.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        }
+      ]
+    },
+    "impact": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "existing task-1 corpus or empty scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli impact --from task-1/participant/construction-updates/facility-updates --to task-1/participant/transform-scratch/result --direct",
+          "exit": 1,
+          "actual": "Declared Update prewarm invalid.",
+          "defect_ids": [
+            "T1-XFORM-UPDATE-PREWARM-INVALID"
+          ],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli impact --from task-1/participant/transform-scratch/source --to task-1/participant/transform-scratch/result --recursive",
+          "exit": 1,
+          "actual": "Declared Update prewarm invalid again.",
+          "defect_ids": [
+            "T1-XFORM-UPDATE-PREWARM-INVALID"
+          ],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli impact --sessions",
+          "exit": 1,
+          "actual": "Interactive session launcher rejected outside terminal.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli impact sever --session f5ce18b7-1749-41ea-aecc-e570b46fb25c",
+          "exit": 0,
+          "actual": "Displayed Sever impact and Apply handoff without applying.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "final transformation/evidence verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli impact --from task-1/participant/transform-scratch/source --to task-1/participant/transform-scratch/result --direct",
+          "exit": 1,
+          "actual": "Declared Update prewarm invalid again.",
+          "defect_ids": [
+            "T1-XFORM-UPDATE-PREWARM-INVALID"
+          ],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        }
+      ]
+    },
+    "meld": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "existing task-1 corpus or empty scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli meld task-1/participant/transform-scratch/source task-1/participant/transform-scratch/result --defer-all",
+          "exit": 1,
+          "actual": "Required a plain start before scripted defer.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli meld task-1/participant/transform-scratch/source task-1/participant/transform-scratch/result",
+          "exit": 1,
+          "actual": "Rejected direct MemoryRef 296a45a1.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli meld --sessions",
+          "exit": 0,
+          "actual": "Reported no saved Meld sessions.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli meld --resume deadbeef",
+          "exit": 2,
+          "actual": "No --resume option exists.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "final transformation/evidence verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli meld \"Verified campus-wiki contributions cite their source.\" --into task-1/participant/transform-scratch/result",
+          "exit": 1,
+          "actual": "Treated inline sentence as a Context name and failed.",
+          "defect_ids": [
+            "T1-XFORM-MELD-INLINE-AUTOTYPE-CANDIDATE"
+          ],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        }
+      ]
+    },
+    "merge": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "existing task-1 corpus or empty scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli merge task-1/participant/construction-updates/facility-updates task-1/participant/transform-scratch/source --direct",
+          "exit": 0,
+          "actual": "Merged 18 Memories and one MemoryRef; receipt omitted per-item UID mapping.",
+          "defect_ids": [
+            "T1-XFORM-MERGE-UID-HANDOFF"
+          ],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli merge task-1/participant/construction-updates/event-relocations task-1/participant/transform-scratch/archive --direct",
+          "exit": 0,
+          "actual": "Merged 15 Memories into archive.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli merge task-1/participant/construction-updates/facility-updates task-1/participant/transform-scratch/source --direct",
+          "exit": 0,
+          "actual": "Idempotent: 19 already present, target unchanged.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli merge task-1/participant/construction-updates/event-relocations task-1/participant/transform-scratch/archive --direct",
+          "exit": 0,
+          "actual": "Repopulated 15 items after Clear.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "final transformation/evidence verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli merge task-1/participant/construction-updates task-1/participant/transform-scratch/source --recursive --keep-target-all",
+          "exit": 0,
+          "actual": "Merged 97 items and created six descendant Contexts.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        }
+      ]
+    },
+    "rationale": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "existing task-1 corpus or empty scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli rationale task-1/participant/transform-scratch/source:cd518767 --json",
+          "exit": 1,
+          "actual": "Copied source UID did not exist after Merge remapped it.",
+          "defect_ids": [
+            "T1-XFORM-MERGE-UID-HANDOFF"
+          ],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli rationale task-1/participant/transform-scratch/source:b410d90f --json",
+          "exit": 0,
+          "actual": "JSON provenance showed merge origin and current unchanged state.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli rationale task-1/participant/transform-scratch/source:b410d90f --limit 20 --unit words",
+          "exit": 0,
+          "actual": "Printed concise 20-word provenance.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli rationale task-1/participant/transform-scratch/source:b410d90f --verbose --limit 60",
+          "exit": 0,
+          "actual": "Printed verbose identifiers and provenance.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "final transformation/evidence verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli rationale task-1/participant/transform-scratch/source:b410d90f --json --limit 120 --unit characters",
+          "exit": 0,
+          "actual": "Returned exactly character-bounded provenance.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        }
+      ]
+    },
+    "revert": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "existing task-1 corpus or empty scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli revert \"round 1 imported facility draft\" --context task-1/participant/transform-scratch/source --keep",
+          "exit": 1,
+          "actual": "Natural-language selection required TTY and suggested log+UID.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli revert 788560b1 --context task-1/participant/transform-scratch/source --keep",
+          "exit": 0,
+          "actual": "Exact checkpoint restored with no direct content delta.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli revert deadbeef --context task-1/participant/transform-scratch/archive --keep",
+          "exit": 1,
+          "actual": "Unknown checkpoint rejected.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli revert a74d02a6 --context task-1/participant/transform-scratch/result --keep",
+          "exit": 0,
+          "actual": "Restored checkpointed 12-item result.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "final transformation/evidence verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli revert b3d3083c --context task-1/participant/transform-scratch/archive --keep",
+          "exit": 0,
+          "actual": "Restored pre-Clear archive; receipt summarized 12 more affected items.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        }
+      ]
+    },
+    "review": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "existing task-1 corpus or empty scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli review audit --context task-1/participant/construction-updates/facility-updates --snapshot",
+          "exit": 1,
+          "actual": "Explained saved Audit Review requires --session.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli review audit --session 42f00d01-ab7f-4a56-af74-cecd1a4a325b --snapshot",
+          "exit": 0,
+          "actual": "Printed complete saved Audit.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli review distill --receipt daa82541-07ef-4f8d-974c-9eed468c658c --snapshot",
+          "exit": 0,
+          "actual": "Printed applied Distill evidence.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli review sever --session f5ce18b7-1749-41ea-aecc-e570b46fb25c --snapshot",
+          "exit": 1,
+          "actual": "Rejected incomplete Sever execution.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "180x52 color PTY saved-session Viewer",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "final transformation/evidence verification",
+          "command": "stty rows 52 cols 180; unset NO_COLOR; export TERM=xterm-256color COLORTERM=truecolor; env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli review audit --session 42f00d01-ab7f-4a56-af74-cecd1a4a325b",
+          "exit": 0,
+          "actual": "180x52 color TUI opened huge read-only Audit; End then Escape closed.",
+          "defect_ids": [
+            "T1-XFORM-AUDIT-TUI-OVERLOAD-CANDIDATE"
+          ],
+          "cost": {
+            "tui": true,
+            "pty": "180x52",
+            "color_verified": true,
+            "keys": "End, Escape",
+            "terminal_screens": 2
+          }
+        }
+      ]
+    },
+    "sever": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "existing task-1 corpus or empty scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli sever task-1/participant/transform-scratch/source task-1/participant/transform-scratch/criteria task-1/participant/transform-scratch/result --direct",
+          "exit": 1,
+          "actual": "Rejected existing other-save output.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli sever task-1/participant/transform-scratch/archive task-1/participant/transform-scratch/criteria --direct",
+          "exit": 0,
+          "actual": "Saved ready self-save session f5ce18b7 with no required judgments.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli sever --resume f5ce18b7-1749-41ea-aecc-e570b46fb25c",
+          "exit": 0,
+          "actual": "Resumed ready session without provider.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli sever --resume f5ce18b7-1749-41ea-aecc-e570b46fb25c --candidate deadbeef --choice recommended",
+          "exit": 1,
+          "actual": "Rejected missing/ambiguous candidate.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "final transformation/evidence verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli sever --resume f5ce18b7-1749-41ea-aecc-e570b46fb25c --accept",
+          "exit": 0,
+          "actual": "Applied safe scratch self-save: KEEP 10, FORGET 0.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        }
+      ]
+    },
+    "trace": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "existing task-1 corpus or empty scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli trace task-1/participant/transform-scratch/source:cd518767 --json",
+          "exit": 1,
+          "actual": "Original UID unavailable after Merge remapping.",
+          "defect_ids": [
+            "T1-XFORM-MERGE-UID-HANDOFF"
+          ],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli trace task-1/participant/transform-scratch/source:b410d90f --json",
+          "exit": 0,
+          "actual": "Returned merge lineage plus Atomize preview attachment.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli trace task-1/participant/transform-scratch/source:b410d90f --limit 1 --plain",
+          "exit": 0,
+          "actual": "Printed newest merge operation.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli trace task-1/participant/transform-scratch/source:b410d90f --verbose --limit 3 --plain",
+          "exit": 0,
+          "actual": "Expanded merge and Atomize evidence.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "final transformation/evidence verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli trace task-1/participant/transform-scratch/source:b410d90f --all --json",
+          "exit": 0,
+          "actual": "Returned all retained lineage as JSON.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        }
+      ]
+    },
+    "translate": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "existing task-1 corpus or empty scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli translate task-1/participant/transform-scratch/source:cd518767 --to Korean",
+          "exit": 1,
+          "actual": "Original UID unavailable after Merge remapping.",
+          "defect_ids": [
+            "T1-XFORM-MERGE-UID-HANDOFF"
+          ],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli translate task-1/participant/transform-scratch/source:b410d90f --to French",
+          "exit": 0,
+          "actual": "Saved unreviewed French view.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli translate task-1/participant/transform-scratch/source:b410d90f --to French",
+          "exit": 0,
+          "actual": "Reused cached view without provider.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli translate task-1/participant/transform-scratch/source:b410d90f --to \"Korean formal campus-wiki register\"",
+          "exit": 0,
+          "actual": "Saved formal Korean view.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "final transformation/evidence verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli translate task-1/participant/transform-scratch/source:b410d90f --to French --refresh",
+          "exit": 0,
+          "actual": "Refreshed French view via provider.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        }
+      ]
+    },
+    "update": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "existing task-1 corpus or empty scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli update task-1/participant/construction-updates/facility-updates task-1/participant/transform-scratch/result --direct",
+          "exit": 1,
+          "actual": "Declared Update prewarm invalid.",
+          "defect_ids": [
+            "T1-XFORM-UPDATE-PREWARM-INVALID"
+          ],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli update task-1/participant/transform-scratch/source task-1/participant/transform-scratch/result --recursive",
+          "exit": 1,
+          "actual": "Shared applied Update had diverged; requested --replace-stage.",
+          "defect_ids": [
+            "T1-XFORM-SHARED-SESSION-BLEED"
+          ],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli update task-1/participant/transform-scratch/source task-1/participant/transform-scratch/source --direct",
+          "exit": 1,
+          "actual": "Rejected identical endpoints.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli update task-1/participant/transform-scratch/source task-1/participant/transform-scratch/result --direct --recursive",
+          "exit": 2,
+          "actual": "Rejected conflicting scope flags.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "final transformation/evidence verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli update task-1/participant/transform-scratch/source task-1/participant/transform-scratch/result --replace-stage --direct",
+          "exit": 1,
+          "actual": "Declared Update prewarm invalid even with replacement.",
+          "defect_ids": [
+            "T1-XFORM-UPDATE-PREWARM-INVALID"
+          ],
+          "cost": {
+            "tui": false,
+            "provider_call": "no"
+          }
+        }
+      ]
+    },
+    "atomize": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "existing task-1 corpus or empty scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli atomize task-1/participant/transform-scratch/source",
+          "exit": 1,
+          "actual": "Whole frame ended with 14 UNCERTAIN validations; published no change.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli atomize --context task-1/participant/transform-scratch/source --memory b410d90f",
+          "exit": 0,
+          "actual": "Exact Memory classified ATOMIC/KEEP and saved analysis 87fbcdee without applying.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli atomize task-1/participant/transform-scratch/source --memory b410d90f",
+          "exit": 0,
+          "actual": "Resumed current saved analysis without provider.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "next interleaved round and recovery checks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli atomize --context task-1/participant/transform-scratch/result --memory deadbeef",
+          "exit": 1,
+          "actual": "Rejected missing exact Memory.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; accumulated task-1 transform scratch with recovery checkpoints",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit task-1 Context, direct item, or saved artifact",
+          "scope": "as frozen by the exact command",
+          "input_provenance": "prior-round receipt, UID, checkpoint, session, or accumulated scratch",
+          "consumer": "final transformation/evidence verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli atomize --context task-1/participant/transform-scratch/source --memory b410d90f",
+          "exit": 0,
+          "actual": "Late alias route resumed same current analysis without provider.",
+          "defect_ids": [],
+          "cost": {
+            "tui": false,
+            "provider_call": "possible or cached"
+          }
+        }
+      ]
+    }
+  }
+}
+

@@ -1,0 +1,20 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source branch practice/audit-workspace/admin-v2-scratch/b5 --from practice/admin-v2-missing-branch-source --direct
+
+STDIN
+<none>
+
+EXIT
+1
+
+WALL_SECONDS
+1.419757
+
+POST_CALL_IDENTITY_HOST_ASSERTION
+{"profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/practice-source/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+STDOUT
+
+
+STDERR
+Error: Branch requires a local Source; 'practice/admin-v2-missing-branch-source' is not in the local catalog.

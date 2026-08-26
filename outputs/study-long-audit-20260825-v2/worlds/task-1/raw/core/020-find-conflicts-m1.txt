@@ -1,0 +1,18 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 find-conflicts task-1/campus-wiki/facility-updates --direct
+
+EXIT
+2
+
+WALL_SECONDS
+1.289511
+
+STDOUT
+
+
+STDERR
+Usage: run_isolated_mem.py find-conflicts [OPTIONS] CONTEXT
+Try 'run_isolated_mem.py find-conflicts -h' for help.
+╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ No such option: --direct Did you mean --select?                              │
+╰──────────────────────────────────────────────────────────────────────────────╯

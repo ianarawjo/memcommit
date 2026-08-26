@@ -1,0 +1,67 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 profile list
+
+STDIN
+<none>
+
+EXIT
+0
+
+WALL_SECONDS
+2.269038
+
+POST_CALL_IDENTITY_HOST_ASSERTION
+{"profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-1/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+STDOUT
+  authoring                        USE     authoring Contexts 20 owned + 0 granted · Memories 205 owned + 0 granted · current=thoughts
+  task-1                           USE     managed   Contexts 14 owned + 0 granted · Memories 375 owned + 0 granted · query=construction-details · current=campus-wiki/event-relocations
+  task-2                           USE     managed   Contexts 34 owned + 0 granted · Memories 300 owned + 0 granted · query=proposal-submission-guidelines · current=advisor1
+  task-3                           USE     managed   Contexts 42 owned + 0 granted · Memories 375 owned + 0 granted · query=government/healthcare-agent/information-request · current=personal-memory
+  study-baseline                   USE     managed   Contexts 141 owned + 0 granted · Memories 1321 owned + 0 granted · current=task-1
+  teststudy0803                    USE     managed   Contexts 130 owned + 0 granted · Memories 1278 owned + 0 granted · current=task-1/participant
+  study-20260819T175451Z-5ce5d722  STUDY   created=2026-08-19T17:54:52.743175+00:00
+    ├─   Participant               USE     profile=study-20260819T175451Z-5ce5d722 · managed · Contexts 68 owned + 43 granted · Memories 477 owned + 625 granted · views=task-1/campus-wiki,task-1/campus-wiki/construction-details,task-2/advisor1,task-2/advisor2,task-2/proposal-submission-guidelines,task-3/government/healthcare-agent,task-3/remote/government/healthcare-agent/info-request/transmission-guidance,task-3/remote/government/healthcare-agent/info-request/questions-and-answers · current=practice/source
+    └─   Granted memory            USE     profile=study-20260819T175451Z-5ce5d722-granted-memory · managed · Contexts 75 owned + 0 granted · Memories 853 owned + 0 granted · current=task-1/campus-wiki
+  study-20260820T182442Z-2fbff60d  STUDY   created=2026-08-20T18:24:43.467880+00:00
+    ├─   Participant               USE     profile=study-20260820T182442Z-2fbff60d · managed · Contexts 67 owned + 43 granted · Memories 472 owned + 625 granted · views=task-1/campus-wiki,task-1/campus-wiki/construction-details,task-2/advisor1,task-2/advisor2,task-2/proposal-submission-guidelines,task-3/government/healthcare-agent,task-3/remote/government/healthcare-agent/info-request/transmission-guidance,task-3/remote/government/healthcare-agent/info-request/questions-and-answers · current=practice/1
+    └─   Granted memory            USE     profile=study-20260820T182442Z-2fbff60d-granted-memory · managed · Contexts 75 owned + 0 granted · Memories 853 owned + 0 granted · current=task-1/campus-wiki
+  study-20260821T125723Z-0f232e48  STUDY   created=2026-08-21T12:57:24.844822+00:00
+    ├─   Participant               USE     profile=study-20260821T125723Z-0f232e48 · managed · Contexts 71 owned + 43 granted · Memories 516 owned + 625 granted · views=task-1/campus-wiki,task-1/campus-wiki/construction-details,task-2/advisor1,task-2/advisor2,task-2/proposal-submission-guidelines,task-3/government/healthcare-agent,task-3/remote/government/healthcare-agent/info-request/transmission-guidance,task-3/remote/government/healthcare-agent/info-request/questions-and-answers · current=practice/3
+    └─   Granted memory            USE     profile=study-20260821T125723Z-0f232e48-granted-memory · managed · Contexts 75 owned + 0 granted · Memories 853 owned + 0 granted · current=task-1/campus-wiki
+  study-20260822T175943Z-17c35fd7  STUDY   created=2026-08-22T17:59:45.835943+00:00
+    ├─   Participant               USE     profile=study-20260822T175943Z-17c35fd7 · managed · Contexts 68 owned + 43 granted · Memories 521 owned + 625 granted · views=task-1/campus-wiki,task-1/campus-wiki/construction-details,task-2/advisor1,task-2/advisor2,task-2/proposal-submission-guidelines,task-3/government/healthcare-agent,task-3/remote/government/healthcare-agent/info-request/transmission-guidance,task-3/remote/government/healthcare-agent/info-request/questions-and-answers · current=practice/source
+    └─   Granted memory            USE     profile=study-20260822T175943Z-17c35fd7-granted-memory · managed · Contexts 75 owned + 0 granted · Memories 853 owned + 0 granted · current=task-1/campus-wiki
+  study-stresstest                 STUDY   created=2026-08-23T01:35:45.246696+00:00
+    ├─   Participant               USE     profile=study-stresstest · managed · Contexts 67 owned + 43 granted · Memories 471 owned + 625 granted · views=task-1/campus-wiki,task-1/campus-wiki/construction-details,task-2/advisor1,task-2/advisor2,task-2/proposal-submission-guidelines,task-3/government/healthcare-agent,task-3/remote/government/healthcare-agent/info-request/transmission-guidance,task-3/remote/government/healthcare-agent/info-request/questions-and-answers · current=practice/elaborated-from-source
+    └─   Granted memory            USE     profile=study-stresstest-granted-memory · managed · Contexts 75 owned + 0 granted · Memories 853 owned + 0 granted · current=task-1/campus-wiki
+  stress-test-new                  STUDY   created=2026-08-23T03:44:32.231568+00:00
+    ├─   Participant               USE     profile=stress-test-new · managed · Contexts 68 owned + 43 granted · Memories 486 owned + 625 granted · views=task-1/campus-wiki,task-1/campus-wiki/construction-details,task-2/advisor1,task-2/advisor2,task-2/proposal-submission-guidelines,task-3/government/healthcare-agent,task-3/remote/government/healthcare-agent/info-request/transmission-guidance,task-3/remote/government/healthcare-agent/info-request/questions-and-answers · current=practice/greetings2
+    └─   Granted memory            USE     profile=stress-test-new-granted-memory · managed · Contexts 75 owned + 0 granted · Memories 853 owned + 0 granted · current=task-1/campus-wiki
+  stresstest-nostudy               USE     managed   Contexts 0 owned + 0 granted · Memories 0 owned + 0 granted · current=(none)
+  study-long-audit-20260823        STUDY   created=2026-08-23T16:20:04.164070+00:00
+    ├─   Participant               USE     profile=study-long-audit-20260823 · managed · Contexts 122 owned + 43 granted · Memories 890 owned + 625 granted · views=task-1/campus-wiki,task-1/campus-wiki/construction-details,task-2/advisor1,task-2/advisor2,task-2/proposal-submission-guidelines,task-3/government/healthcare-agent,task-3/remote/government/healthcare-agent/info-request/transmission-guidance,task-3/remote/government/healthcare-agent/info-request/questions-and-answers · current=task-1/participant/admin-scratch/r1-branch
+    └─   Granted memory            USE     profile=study-long-audit-20260823-granted-memory · managed · Contexts 75 owned + 0 granted · Memories 853 owned + 0 granted · current=task-1/campus-wiki
+  study-20260823T203237Z-e1dd61a6  STUDY   created=2026-08-23T20:32:37.099422+00:00
+    ├─   Participant               USE     profile=study-20260823T203237Z-e1dd61a6 · managed · Contexts 65 owned + 43 granted · Memories 468 owned + 625 granted · views=task-1/campus-wiki,task-1/campus-wiki/construction-details,task-2/advisor1,task-2/advisor2,task-2/proposal-submission-guidelines,task-3/government/healthcare-agent,task-3/remote/government/healthcare-agent/info-request/transmission-guidance,task-3/remote/government/healthcare-agent/info-request/questions-and-answers · current=practice
+    └─   Granted memory            USE     profile=study-20260823T203237Z-e1dd61a6-granted-memory · managed · Contexts 75 owned + 0 granted · Memories 853 owned + 0 granted · current=task-1/campus-wiki
+  study-20260824T114456Z-3e75ccdf  STUDY   created=2026-08-24T11:44:58.392932+00:00
+    ├─   Participant               USE     profile=study-20260824T114456Z-3e75ccdf · managed · Contexts 67 owned + 43 granted · Memories 476 owned + 625 granted · views=task-1/campus-wiki,task-1/campus-wiki/construction-details,task-2/advisor1,task-2/advisor2,task-2/proposal-submission-guidelines,task-3/government/healthcare-agent,task-3/remote/government/healthcare-agent/info-request/transmission-guidance,task-3/remote/government/healthcare-agent/info-request/questions-and-answers · current=practice/rule
+    └─   Granted memory            USE     profile=study-20260824T114456Z-3e75ccdf-granted-memory · managed · Contexts 75 owned + 0 granted · Memories 853 owned + 0 granted · current=task-1/campus-wiki
+  study-20260824T170446Z-585b70f0  STUDY   created=2026-08-24T17:04:47.644071+00:00
+    ├─   Participant               USE     profile=study-20260824T170446Z-585b70f0 · managed · Contexts 90 owned + 43 granted · Memories 565 owned + 625 granted · views=task-1/campus-wiki,task-1/campus-wiki/construction-details,task-2/advisor1,task-2/advisor2,task-2/proposal-submission-guidelines,task-3/government/healthcare-agent,task-3/remote/government/healthcare-agent/info-request/transmission-guidance,task-3/remote/government/healthcare-agent/info-request/questions-and-answers · current=task-3/local
+    └─   Granted memory            USE     profile=study-20260824T170446Z-585b70f0-granted-memory · managed · Contexts 76 owned + 0 granted · Memories 854 owned + 0 granted · current=task-1/campus-wiki
+  distill-xhigh-eval-20260824      USE     managed   Contexts 22 owned + 0 granted · Memories 39 owned + 0 granted · current=eval/interactive/reviews-ko/source
+  study-20260825T110027Z-59cb6a29  STUDY   created=2026-08-25T11:00:28.624931+00:00
+    ├─   Participant               USE     profile=study-20260825T110027Z-59cb6a29 · managed · Contexts 71 owned + 43 granted · Memories 538 owned + 625 granted · views=task-1/campus-wiki,task-1/campus-wiki/construction-details,task-2/advisor1,task-2/advisor2,task-2/proposal-submission-guidelines,task-3/government/healthcare-agent,task-3/remote/government/healthcare-agent/info-request/transmission-guidance,task-3/remote/government/healthcare-agent/info-request/questions-and-answers · current=coffee-advice/chat
+    └─   Granted memory            USE     profile=study-20260825T110027Z-59cb6a29-granted-memory · managed · Contexts 75 owned + 0 granted · Memories 853 owned + 0 granted · current=task-1/campus-wiki
+  sixworld-v2-template             STUDY   created=2026-08-25T16:31:43.316612+00:00
+    ├─ * Participant               CURRENT profile=sixworld-v2-template · managed · Contexts 79 owned + 43 granted · Memories 498 owned + 630 granted · views=task-1/campus-wiki,task-1/campus-wiki/construction-details,task-2/advisor1,task-2/advisor2,task-2/proposal-submission-guidelines,task-3/government/healthcare-agent,task-3/remote/government/healthcare-agent/info-request/transmission-guidance,task-3/remote/government/healthcare-agent/info-request/questions-and-answers · current=task-2
+    └─   Granted memory            USE     profile=sixworld-v2-template-granted-memory · managed · Contexts 75 owned + 0 granted · Memories 858 owned + 0 granted · current=task-1/campus-wiki
+  admin-v2-task-1-inactive         USE     managed   Contexts 0 owned + 0 granted · Memories 0 owned + 0 granted · current=(none)
+Granted views are permission projections, not copied Profiles.
+Authority Profiles are ordinary switchable owners of source data.
+Deleted Profile tombstones hidden from this list: 155
+
+
+STDERR

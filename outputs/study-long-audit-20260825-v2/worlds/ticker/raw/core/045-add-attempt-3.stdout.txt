@@ -1,0 +1,4 @@
+Added 2 memories to 'task-2/participant/proposal-workspace':
+  [28120a2d] Numeral rule: preserve digits 0-9, including leading zeroes, in their original positions while removing spaces and punctuation.
+  [ace52daf] Numeral example: Route 66, LLC becomes ROUTE66 after removing the comma, space, and LLC suffix while preserving 66.
+Checkpoint [9f20f850].

@@ -1,0 +1,18 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 rationale task-1/participant/construction-updates/shop-updates:37113bd0 --verbose
+
+EXIT
+0
+
+OUTPUT
+Rationale [37113bd0-5194-521b-9d9e-48903d819520] · task-1/participant/construction-updates/shop-updates
+Context UID: 94dbac4b-70b5-5c76-b53a-1ebc69248a41
+
+MEMORY
+  Add campus-wiki/shop-updates: The ATM on the first floor of the Main Building is closed during the construction period.
+
+PROVENANCE
+  The Memory originally appeared in task-1/participant/construction-updates/shop-updates; a merge with disposition NEW copied “The ATM on the first floor of the Main Building is closed during the construction period” into a fresh occurrence in task-1/participant while retaining the Source unchanged.
+
+ATTENTION
+  The current Context contains changes that no retained checkpoint explains.

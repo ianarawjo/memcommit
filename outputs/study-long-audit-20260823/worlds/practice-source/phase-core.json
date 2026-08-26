@@ -1,0 +1,2230 @@
+{
+  "schema_version": 1,
+  "study": "study-long-audit-20260823",
+  "world": "practice-source",
+  "phase": "core",
+  "world_goal": "Prepare independently reviewable atomization of practice/source editing notes by discovering underlying constraints and linking evidence without performing the later semantic Atomize operation or changing source meaning.",
+  "execution_boundary": {
+    "source_code": "/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code",
+    "source_digest": "cd38dd...e787",
+    "launcher": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli",
+    "fixture_boundary": "practice/source remained read-only; every mutation targeted practice/audit-workspace or its source-copies/candidates/review/archive children.",
+    "shared_state_boundary": "No profile/switch/checkout/undo/redo/current-only operation was used. Global current remained practice.",
+    "tui": "No TUI was used; all phase-core routes were explicit non-interactive commands, avoiding shared current/focus state."
+  },
+  "bootstrap": {
+    "excluded_from_coverage": "Root serially created practice/audit-workspace/{source-copies,candidates,review,archive} and restored global current to practice before round-1 move.",
+    "status": "Excluded; root owns five serialized status trials."
+  },
+  "outcome": "Prepared evidence-linked semantic atomization guidance but did not run Atomize. Mechanical sentence splits demonstrated that independent reviewability requires retaining triggers, narrow exceptions, protected-word objects, companion safeguards, and provenance together.",
+  "interleaving": "Each round executed the 21 operations in the same operation order; rounds 1 through 5 accumulated early, middle, and late workspace state. No operation's five trials were consecutive.",
+  "coverage": {
+    "contexts": 5,
+    "list": 5,
+    "show": 5,
+    "find": 5,
+    "search": 5,
+    "query": 5,
+    "summarize": 5,
+    "add": 5,
+    "copy": 5,
+    "reference": 5,
+    "embed": 5,
+    "edit": 5,
+    "move": 5,
+    "replace": 5,
+    "chunk": 5,
+    "compare": 5,
+    "find-duplicates": 5,
+    "find-redundancies": 5,
+    "find-ambiguities": 5,
+    "find-conflicts": 5,
+    "fit": 5
+  },
+  "total_trials": 105,
+  "trials": [
+    {
+      "operation": "contexts",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli contexts",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 1; global current remained practice",
+      "entry_route": "frozen launcher bare inventory",
+      "target_route": "Profile catalog",
+      "scope": "all Profile-visible local and granted names",
+      "input_provenance": "fixed Study Profile",
+      "consumer": "discover practice source/workspace without changing current",
+      "actual": "Printed the full shared Profile; practice/source and audit-workspace were present but buried among task-1/2/3 and Grants.",
+      "defect_ids": [
+        "PS-CTX-OVERLOAD"
+      ],
+      "cost": {
+        "wall_seconds": 0.43,
+        "terminal_screens": 8,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "list",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli list practice/source",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 1; global current remained practice",
+      "entry_route": "frozen launcher explicit Context",
+      "target_route": "practice/source",
+      "scope": "12 direct source Memories",
+      "input_provenance": "fixed source fixture",
+      "consumer": "inventory all editing notes and source UIDs",
+      "actual": "Listed exactly 12 Memories, including review intent, polishing, one-expression scope, shortening, titles, and source verification.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.62,
+        "terminal_screens": 3,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "show",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli show practice/source:f3ef224d",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 1; global current remained practice",
+      "entry_route": "frozen launcher qualified Memory locator",
+      "target_route": "practice/source:f3ef224d",
+      "scope": "one exact source Memory",
+      "input_provenance": "round-1 list UID",
+      "consumer": "inspect review-only trigger",
+      "actual": "Rendered the full 'How does this read?' opinion-first rule.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.4,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find \"don't\" --context practice/source",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 1; global current remained practice",
+      "entry_route": "frozen launcher explicit literal/regex search",
+      "target_route": "practice/source",
+      "scope": "exact direct literal corpus",
+      "input_provenance": "source wording",
+      "consumer": "find prohibitions that constrain editing",
+      "actual": "Matched 3/12: no immediate editing, no categorical shortening, and no inaccurate More broadly connector.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.46,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "search",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli search \"Which constraints distinguish review from editing and preserve meaning during revision?\" --context practice/source --context-only --exclude-embeds --limit 6",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 1; global current remained practice",
+      "entry_route": "frozen launcher explicit semantic search",
+      "target_route": "practice/source",
+      "scope": "exact source; top 6; embeds excluded",
+      "input_provenance": "world-goal semantic question",
+      "consumer": "retrieve core atomization boundaries",
+      "actual": "Returned review intent, citation verification, structure/markers, expression scope, claim nuance, and all-points preservation.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 6.79,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "query",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli query --context practice/source \"What must a reviewer preserve, and when must they avoid editing?\"",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 1; global current remained practice",
+      "entry_route": "frozen launcher explicit ordinary Query",
+      "target_route": "practice/source",
+      "scope": "ordinary exact Query over 12 source Memories",
+      "input_provenance": "round-1 source fixture",
+      "consumer": "synthesize preservation and non-editing conditions",
+      "actual": "Answered accurately with 9 References, separating opinion-first review and verification-before-rewrite from authorized polishing.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 8.53,
+        "terminal_screens": 4,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "summarize",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli summarize practice/source",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 1; global current remained practice",
+      "entry_route": "frozen launcher explicit Context summary",
+      "target_route": "practice/source",
+      "scope": "12 direct source Memories",
+      "input_provenance": "fixed source fixture",
+      "consumer": "create a compact policy overview",
+      "actual": "Produced a concise English summary covering organization, scope, terminology, nuance, title conventions, and full-source verification.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 7.97,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "add",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli add \"AUDIT DRAFT: distinguish review-only requests from authorized editing before changing text.\" --context practice/audit-workspace",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 1; global current remained practice",
+      "entry_route": "frozen launcher explicit local add",
+      "target_route": "practice/audit-workspace",
+      "scope": "one new local Memory",
+      "input_provenance": "round-1 query synthesis",
+      "consumer": "stage a permission-boundary candidate",
+      "actual": "Added a85f2d93 only to the workspace.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.41,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "copy",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli copy practice/source:f3ef224d --into practice/audit-workspace",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 1; global current remained practice",
+      "entry_route": "frozen launcher explicit source Memory and local target",
+      "target_route": "practice/source:f3ef224d → practice/audit-workspace",
+      "scope": "one source Memory copied locally",
+      "input_provenance": "round-1 show UID",
+      "consumer": "create editable evidence copy while preserving fixture",
+      "actual": "Created local UID 5ee36dc5 and reported both source and new UID.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.47,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "reference",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli reference practice/source:4fe217eb --into practice/audit-workspace",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 1; global current remained practice",
+      "entry_route": "frozen launcher explicit snapshot reference",
+      "target_route": "practice/source:4fe217eb → practice/audit-workspace",
+      "scope": "one read-only snapshot reference",
+      "input_provenance": "round-1 search UID",
+      "consumer": "link citation verification evidence without duplicating ownership",
+      "actual": "Created reference 6f7e0d9e.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.43,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "embed",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli embed practice/source --into practice/audit-workspace",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 1; global current remained practice",
+      "entry_route": "frozen launcher explicit source and local target",
+      "target_route": "practice/source → practice/audit-workspace",
+      "scope": "whole Context embed",
+      "input_provenance": "fixed source fixture",
+      "consumer": "make the complete source traversable from workspace",
+      "actual": "Embedded the source Context successfully.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.49,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "edit",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli edit practice/audit-workspace:a85f2d93 \"AUDIT DRAFT: classify intent as review-only or authorized editing before changing text; preserve requested scope and source meaning.\"",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 1; global current remained practice",
+      "entry_route": "frozen launcher explicit workspace Memory edit",
+      "target_route": "practice/audit-workspace:a85f2d93",
+      "scope": "one workspace Memory",
+      "input_provenance": "round-1 add UID",
+      "consumer": "add scope and meaning invariants",
+      "actual": "Updated only the local candidate.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.42,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "move",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli move practice/audit-workspace:5ee36dc5 --into practice/audit-workspace/source-copies",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 1; global current remained practice",
+      "entry_route": "frozen launcher explicit workspace source/target",
+      "target_route": "workspace root → source-copies",
+      "scope": "one local copied Memory",
+      "input_provenance": "round-1 copy UID",
+      "consumer": "separate evidence copies from synthesized candidates",
+      "actual": "Moved UID 5ee36dc5 and retargeted links.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.44,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "replace",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli replace \"AUDIT DRAFT\" \"CANDIDATE\" --context practice/audit-workspace",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 1; global current remained practice",
+      "entry_route": "frozen launcher explicit local literal replacement",
+      "target_route": "practice/audit-workspace",
+      "scope": "direct local Memories",
+      "input_provenance": "round-1 edited label",
+      "consumer": "normalize staging state",
+      "actual": "Replaced one occurrence in one Memory.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.43,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "chunk",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli chunk practice/audit-workspace:a85f2d93 --method sentences",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 1; global current remained practice",
+      "entry_route": "frozen launcher explicit workspace Memory split",
+      "target_route": "practice/audit-workspace:a85f2d93",
+      "scope": "one one-sentence workspace Memory",
+      "input_provenance": "round-1 candidate UID",
+      "consumer": "test no-op sentence boundary",
+      "actual": "Reported one chunk and made no change.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.4,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "compare",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli compare practice/source practice/audit-workspace",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 1; global current remained practice",
+      "entry_route": "frozen launcher two explicit Contexts",
+      "target_route": "practice/source ↔ practice/audit-workspace",
+      "scope": "source frame vs embedded/synthesized workspace",
+      "input_provenance": "round-1 accumulated state",
+      "consumer": "check whether local work preserved source policy",
+      "actual": "Called the frames substantively equivalent and identified the extra intent-classification rule.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 7,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-duplicates",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-duplicates practice/audit-workspace",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 1; global current remained practice",
+      "entry_route": "frozen launcher explicit exact-duplicate analysis",
+      "target_route": "practice/audit-workspace",
+      "scope": "3 direct items",
+      "input_provenance": "round-1 local items/reference/embed",
+      "consumer": "check exact duplication",
+      "actual": "Reported 3 direct items and zero exact groups.",
+      "defect_ids": [
+        "PS-QUALITY-SCOPE-MISMATCH"
+      ],
+      "cost": {
+        "wall_seconds": 0.4,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-redundancies",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-redundancies practice/audit-workspace --direct",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 1; global current remained practice",
+      "entry_route": "frozen launcher explicit semantic-redundancy analysis",
+      "target_route": "practice/audit-workspace",
+      "scope": "1 direct ordinary Memory",
+      "input_provenance": "same local Context as duplicates",
+      "consumer": "check semantic redundancy",
+      "actual": "Reported 1 direct memory and zero groups, without explaining why sibling duplicate analysis counted 3 items.",
+      "defect_ids": [
+        "PS-QUALITY-SCOPE-MISMATCH"
+      ],
+      "cost": {
+        "wall_seconds": 0.45,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-ambiguities",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-ambiguities practice/audit-workspace",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 1; global current remained practice",
+      "entry_route": "frozen launcher explicit ambiguity analysis",
+      "target_route": "practice/audit-workspace",
+      "scope": "1 direct ordinary Memory",
+      "input_provenance": "round-1 candidate",
+      "consumer": "test independent reviewability",
+      "actual": "Flagged the candidate because the current request's review/edit authorization was not supplied; asked whether editing is allowed.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 6.79,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-conflicts",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-conflicts practice/audit-workspace",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 1; global current remained practice",
+      "entry_route": "frozen launcher explicit conflict analysis",
+      "target_route": "practice/audit-workspace",
+      "scope": "1 direct ordinary Memory / 0 pairs",
+      "input_provenance": "round-1 candidate",
+      "consumer": "establish empty conflict boundary",
+      "actual": "Reported zero conflicts.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.4,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "fit",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli fit practice/source practice/audit-workspace",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 1; global current remained practice",
+      "entry_route": "frozen launcher two explicit Contexts",
+      "target_route": "practice/source ↔ practice/audit-workspace",
+      "scope": "source and local frames",
+      "input_provenance": "round-1 accumulated state",
+      "consumer": "check whether workspace belongs with source policy",
+      "actual": "Returned only FIT YES and target names.",
+      "defect_ids": [
+        "PS-FIT-OPAQUE"
+      ],
+      "cost": {
+        "wall_seconds": 9.01,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "contexts",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli contexts",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 2; global current remained practice",
+      "entry_route": "frozen launcher bare inventory",
+      "target_route": "Profile catalog",
+      "scope": "all Profile-visible names including bootstrap children",
+      "input_provenance": "round-2 reorientation",
+      "consumer": "confirm workspace children without state mutation",
+      "actual": "Repeated the entire Profile; four bootstrap workspace children were visible but no practice-only filter existed.",
+      "defect_ids": [
+        "PS-CTX-OVERLOAD"
+      ],
+      "cost": {
+        "wall_seconds": 0.42,
+        "terminal_screens": 8,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "list",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli list practice/audit-workspace/source-copies",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 2; global current remained practice",
+      "entry_route": "frozen launcher explicit Context",
+      "target_route": "source-copies",
+      "scope": "1 direct copied Memory",
+      "input_provenance": "round-1 move output",
+      "consumer": "verify copied review-intent evidence",
+      "actual": "Listed UID 5ee36dc5 and its full text.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.58,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "show",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli show practice/source:e50c293a",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 2; global current remained practice",
+      "entry_route": "frozen launcher qualified Memory locator",
+      "target_route": "practice/source:e50c293a",
+      "scope": "one exact source Memory",
+      "input_provenance": "round-1 list UID",
+      "consumer": "inspect polishing trigger and preservation rule",
+      "actual": "Rendered the full polishing Memory, including the source typo 'strucutre'.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.4,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find \"strucutre|redundent|titlle|refferences\" --regex --context practice/source --all-results",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 2; global current remained practice",
+      "entry_route": "frozen launcher explicit literal/regex search",
+      "target_route": "practice/source",
+      "scope": "exact regex corpus; all matches",
+      "input_provenance": "visible fixture spelling",
+      "consumer": "separate wording noise from semantic constraints",
+      "actual": "Found 4 known misspellings in 4 source Memories without changing them.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.46,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "search",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli search \"Which notes constrain structure, wording, citations, and factual verification?\" --context practice/source --context-only --exclude-embeds --limit 7",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 2; global current remained practice",
+      "entry_route": "frozen launcher explicit semantic search",
+      "target_route": "practice/source",
+      "scope": "exact source; top 7",
+      "input_provenance": "round-2 categories",
+      "consumer": "retrieve editing and evidence constraints",
+      "actual": "Returned source verification, original-source lookup, polishing, review intent, expression scope, all-points preservation, and claim nuance.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 6.96,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "query",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli query --context practice/source \"What are the exact title, terminology, and style-guide override rules?\"",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 2; global current remained practice",
+      "entry_route": "frozen launcher explicit ordinary Query",
+      "target_route": "practice/source",
+      "scope": "ordinary exact Query",
+      "input_provenance": "title-related source Memories",
+      "consumer": "extract protected wording and narrow overrides",
+      "actual": "Accurately separated exact AI-memory terminology, sentence-case default, protected 'for', consistent italics, and two narrow style-guide overrides with 3 References.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 7.33,
+        "terminal_screens": 3,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "summarize",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli summarize practice/audit-workspace/source-copies",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 2; global current remained practice",
+      "entry_route": "frozen launcher explicit Context summary",
+      "target_route": "source-copies",
+      "scope": "1 direct English Memory",
+      "input_provenance": "round-1 copied evidence",
+      "consumer": "summarize the review-intent evidence",
+      "actual": "Returned an otherwise accurate summary entirely in Korean despite the English source and English CLI session.",
+      "defect_ids": [
+        "PS-SUMMARY-LANGUAGE"
+      ],
+      "cost": {
+        "wall_seconds": 5.65,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "add",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli add \"CANDIDATE: preserve structure and citation-needed markers. Change only wording that causes a problem.\" --context practice/audit-workspace/candidates",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 2; global current remained practice",
+      "entry_route": "frozen launcher explicit local add",
+      "target_route": "candidates",
+      "scope": "one new two-sentence local Memory",
+      "input_provenance": "round-2 source/query synthesis",
+      "consumer": "stage polishing constraints",
+      "actual": "Added d9051c38.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.5,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "copy",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli copy practice/source:e50c293a --into practice/audit-workspace/source-copies",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 2; global current remained practice",
+      "entry_route": "frozen launcher explicit source Memory and local target",
+      "target_route": "practice/source:e50c293a → source-copies",
+      "scope": "one source Memory copied locally",
+      "input_provenance": "round-2 show UID",
+      "consumer": "retain the exact polishing source beside candidate",
+      "actual": "Created copy 6d87e031 with source/new UID mapping.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.5,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "reference",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli reference practice/source:96300a95 --into practice/audit-workspace/review",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 2; global current remained practice",
+      "entry_route": "frozen launcher explicit snapshot reference",
+      "target_route": "practice/source:96300a95 → review",
+      "scope": "one snapshot reference",
+      "input_provenance": "round-2 search UID",
+      "consumer": "link original-source lookup rule",
+      "actual": "Created reference e80f2530.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.45,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "embed",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli embed practice/source --into practice/audit-workspace/candidates",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 2; global current remained practice",
+      "entry_route": "frozen launcher explicit source and local target",
+      "target_route": "practice/source → candidates",
+      "scope": "whole Context embed",
+      "input_provenance": "fixed source fixture",
+      "consumer": "keep source accessible beside candidates",
+      "actual": "Embedded successfully.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.5,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "edit",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli edit practice/audit-workspace/candidates:d9051c38 \"CANDIDATE: during authorized polishing, preserve overall structure and citation-needed markers. Change only wording that causes a problem.\"",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 2; global current remained practice",
+      "entry_route": "frozen launcher explicit workspace Memory edit",
+      "target_route": "candidates:d9051c38",
+      "scope": "one local Memory",
+      "input_provenance": "round-2 add UID",
+      "consumer": "restore the permission trigger before split",
+      "actual": "Updated the candidate with 'during authorized polishing'.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.53,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "move",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli move practice/audit-workspace/candidates:d9051c38 --into practice/audit-workspace/review",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 2; global current remained practice",
+      "entry_route": "frozen launcher explicit workspace source/target",
+      "target_route": "candidates → review",
+      "scope": "one local Memory",
+      "input_provenance": "round-2 edited candidate",
+      "consumer": "place a ready-for-review candidate with source reference",
+      "actual": "Moved UID d9051c38.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.64,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "replace",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli replace \"CANDIDATE\" \"REVIEW CANDIDATE\" --context practice/audit-workspace/review",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 2; global current remained practice",
+      "entry_route": "frozen launcher explicit local literal replacement",
+      "target_route": "review",
+      "scope": "direct local ordinary Memories",
+      "input_provenance": "round-2 moved label",
+      "consumer": "mark review state",
+      "actual": "Replaced one occurrence in one Memory.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.61,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "chunk",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli chunk practice/audit-workspace/review:d9051c38 --method sentences",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 2; global current remained practice",
+      "entry_route": "frozen launcher explicit workspace Memory split",
+      "target_route": "review:d9051c38",
+      "scope": "one two-sentence workspace Memory",
+      "input_provenance": "round-2 moved candidate",
+      "consumer": "test sentence-level atomization",
+      "actual": "Created two Memories but receipt omitted their UIDs and truncated both previews; later list found 5c952adf and 517e7fa5. The second result lost the authorized-polishing trigger.",
+      "defect_ids": [
+        "PS-CHUNK-RECEIPT",
+        "PS-CHUNK-CONTEXT-LOSS"
+      ],
+      "cost": {
+        "wall_seconds": 0.52,
+        "terminal_screens": 1,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "compare",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli compare practice/source practice/audit-workspace/source-copies",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 2; global current remained practice",
+      "entry_route": "frozen launcher two explicit Contexts",
+      "target_route": "practice/source ↔ source-copies",
+      "scope": "12-source frame vs 2-copy subset",
+      "input_provenance": "round-2 evidence copies",
+      "consumer": "verify copied subset relationship",
+      "actual": "Correctly described the shorter frame as the review-intent and polishing subset.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 5.55,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-duplicates",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-duplicates practice/audit-workspace --recursive",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 2; global current remained practice",
+      "entry_route": "frozen launcher explicit exact-duplicate analysis",
+      "target_route": "practice/audit-workspace",
+      "scope": "5 Contexts / 9 direct items",
+      "input_provenance": "round-2 accumulated tree",
+      "consumer": "check exact duplicates across workspace",
+      "actual": "Found zero groups but printed one empty section per Context.",
+      "defect_ids": [
+        "PS-QUALITY-SCOPE-MISMATCH"
+      ],
+      "cost": {
+        "wall_seconds": 0.47,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-redundancies",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-redundancies practice/audit-workspace/candidates --direct",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 2; global current remained practice",
+      "entry_route": "frozen launcher explicit semantic-redundancy analysis",
+      "target_route": "candidates",
+      "scope": "0 direct ordinary Memories",
+      "input_provenance": "post-move empty candidate Context",
+      "consumer": "exercise empty semantic-analysis boundary",
+      "actual": "Returned a compact zero-memory result.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.41,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-ambiguities",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-ambiguities practice/source",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 2; global current remained practice",
+      "entry_route": "frozen launcher explicit ambiguity analysis",
+      "target_route": "practice/source",
+      "scope": "12 direct source Memories",
+      "input_provenance": "fixed source fixture",
+      "consumer": "identify ambiguous constraints before atomization",
+      "actual": "Flagged 4/12: distribute example scope, fixed-limit precedence, exact title words, and whether 'for' alone or all wording is protected.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 17.66,
+        "terminal_screens": 5,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-conflicts",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-conflicts practice/source",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 2; global current remained practice",
+      "entry_route": "frozen launcher explicit conflict analysis",
+      "target_route": "practice/source",
+      "scope": "12 Memories / 66 pairs",
+      "input_provenance": "same source frame",
+      "consumer": "test policy consistency",
+      "actual": "Flagged zero pairs.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 5.45,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "fit",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli fit practice/source practice/audit-workspace/candidates",
+      "exit": 1,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 2; global current remained practice",
+      "entry_route": "frozen launcher two explicit Contexts",
+      "target_route": "practice/source ↔ candidates",
+      "scope": "source vs empty direct candidate frame",
+      "input_provenance": "post-move empty state",
+      "consumer": "test empty fit boundary",
+      "actual": "Failed that candidates contains no direct ordinary Memories.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.57,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "contexts",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli contexts",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 3; global current remained practice",
+      "entry_route": "frozen launcher bare inventory",
+      "target_route": "Profile catalog",
+      "scope": "all Profile-visible names",
+      "input_provenance": "mid-state reorientation",
+      "consumer": "confirm shared current stayed practice",
+      "actual": "Repeated the complete Profile with no practice-only narrowing.",
+      "defect_ids": [
+        "PS-CTX-OVERLOAD"
+      ],
+      "cost": {
+        "wall_seconds": 0.42,
+        "terminal_screens": 8,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "list",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli list practice/audit-workspace/review",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 3; global current remained practice",
+      "entry_route": "frozen launcher explicit Context",
+      "target_route": "review",
+      "scope": "3 displayed Memories",
+      "input_provenance": "round-2 chunk output",
+      "consumer": "recover generated UIDs and inspect references",
+      "actual": "Revealed generated UIDs 5c952adf and 517e7fa5 plus one read-only source reference.",
+      "defect_ids": [
+        "PS-CHUNK-RECEIPT"
+      ],
+      "cost": {
+        "wall_seconds": 0.62,
+        "terminal_screens": 2,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "show",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli show practice/audit-workspace/review:5c952adf",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 3; global current remained practice",
+      "entry_route": "frozen launcher qualified Memory locator",
+      "target_route": "review:5c952adf",
+      "scope": "one exact generated Memory",
+      "input_provenance": "round-3 list output UID",
+      "consumer": "inspect the first split result",
+      "actual": "Showed the trigger-bearing preservation half.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.47,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find \"default\" --context practice/source",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 3; global current remained practice",
+      "entry_route": "frozen launcher explicit literal/regex search",
+      "target_route": "practice/source",
+      "scope": "exact literal corpus",
+      "input_provenance": "source vocabulary",
+      "consumer": "locate default-vs-override constraints",
+      "actual": "Matched the two title-default Memories and three occurrences.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.47,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "search",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli search \"What conditions limit shortening and redundancy removal without strengthening claims?\" --context practice/source --context practice/audit-workspace/review --context-only --exclude-embeds --limit 6",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 3; global current remained practice",
+      "entry_route": "frozen launcher explicit semantic search",
+      "target_route": "practice/source plus review",
+      "scope": "two exact roots; top 6",
+      "input_provenance": "source and prior split output",
+      "consumer": "retrieve a companion constraint set",
+      "actual": "Returned only three source Memories: all points, 20–30% target, and claim strength; no coverage notice for the review root.",
+      "defect_ids": [
+        "PS-MULTIROOT-COVERAGE"
+      ],
+      "cost": {
+        "wall_seconds": 5.48,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "query",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli query --context practice/source \"How should shortening preserve claims while meeting a fixed limit?\"",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 3; global current remained practice",
+      "entry_route": "frozen launcher explicit ordinary Query",
+      "target_route": "practice/source",
+      "scope": "ordinary exact Query",
+      "input_provenance": "shortening-related source",
+      "consumer": "form a coupled shortening rule",
+      "actual": "Accurately joined all-points preservation, 20–30% target, and claim-strength safeguard with 3 References.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 7.27,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "summarize",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli summarize practice/audit-workspace/review",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 3; global current remained practice",
+      "entry_route": "frozen launcher explicit Context summary",
+      "target_route": "review",
+      "scope": "2 ordinary Memories plus 1 reference",
+      "input_provenance": "round-2 split and reference",
+      "consumer": "review the staged polishing rule",
+      "actual": "Summarized only the two ordinary split Memories; silently omitted the original-source verification reference.",
+      "defect_ids": [
+        "PS-SUMMARY-REFERENCE-LOSS"
+      ],
+      "cost": {
+        "wall_seconds": 4.92,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "add",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli add \"CANDIDATE: when a shorter fixed limit applies, target approximately 20–30% cuts from redundant or unnecessary material. Preserve every intended point and each claim's original strength and conditions.\" --context practice/audit-workspace/candidates",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 3; global current remained practice",
+      "entry_route": "frozen launcher explicit local add",
+      "target_route": "candidates",
+      "scope": "one new two-sentence local Memory",
+      "input_provenance": "round-3 Query synthesis",
+      "consumer": "stage a coupled shortening constraint",
+      "actual": "Added 64f4fedc.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.41,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "copy",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli copy practice/source:6fad23ab practice/source:7ebe67fb --into practice/audit-workspace/source-copies",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 3; global current remained practice",
+      "entry_route": "frozen launcher explicit source Memory and local target",
+      "target_route": "two source Memories → source-copies",
+      "scope": "multiple source copies",
+      "input_provenance": "round-3 search UIDs",
+      "consumer": "retain all-points and claim-strength evidence",
+      "actual": "Created c7e481f7 and f03cec4d with complete mappings.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.42,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "reference",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli reference practice/source:6cc4b8a3 --into practice/audit-workspace/review",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 3; global current remained practice",
+      "entry_route": "frozen launcher explicit snapshot reference",
+      "target_route": "practice/source:6cc4b8a3 → review",
+      "scope": "one snapshot reference",
+      "input_provenance": "round-3 search UID",
+      "consumer": "link the fixed-limit target",
+      "actual": "Created ceccfa52.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.43,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "embed",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli embed practice/audit-workspace/source-copies --into practice/audit-workspace/candidates",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 3; global current remained practice",
+      "entry_route": "frozen launcher explicit source and local target",
+      "target_route": "source-copies → candidates",
+      "scope": "whole local evidence Context",
+      "input_provenance": "rounds 1-3 source copies",
+      "consumer": "keep supporting evidence reachable beside candidate",
+      "actual": "Embedded successfully.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.41,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "edit",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli edit practice/audit-workspace/candidates:64f4fedc \"CANDIDATE: if a shorter fixed limit applies, aim to remove approximately 20–30% from redundant or unnecessary material. Preserve all intended points plus every claim's original strength and conditions.\"",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 3; global current remained practice",
+      "entry_route": "frozen launcher explicit workspace Memory edit",
+      "target_route": "candidates:64f4fedc",
+      "scope": "one local Memory",
+      "input_provenance": "round-3 add UID",
+      "consumer": "align wording with source without changing meaning",
+      "actual": "Updated only the candidate.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.45,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "move",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli move practice/audit-workspace/source-copies:c7e481f7 --into practice/audit-workspace/archive",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 3; global current remained practice",
+      "entry_route": "frozen launcher explicit workspace source/target",
+      "target_route": "source-copies → archive",
+      "scope": "one local evidence copy",
+      "input_provenance": "round-3 copy UID",
+      "consumer": "mark one inspected evidence copy as archived",
+      "actual": "Moved UID c7e481f7.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.52,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "replace",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli replace \"CANDIDATE\" \"ATOMIC CANDIDATE\" --context practice/audit-workspace/candidates",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 3; global current remained practice",
+      "entry_route": "frozen launcher explicit local literal replacement",
+      "target_route": "candidates",
+      "scope": "one direct candidate",
+      "input_provenance": "round-3 edited label",
+      "consumer": "mark candidate for split test",
+      "actual": "Replaced one occurrence.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.47,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "chunk",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli chunk practice/audit-workspace/candidates:64f4fedc --method sentences",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 3; global current remained practice",
+      "entry_route": "frozen launcher explicit workspace Memory split",
+      "target_route": "candidates:64f4fedc",
+      "scope": "one two-sentence workspace Memory",
+      "input_provenance": "round-3 coupled shortening candidate",
+      "consumer": "test whether companion safeguards remain reviewable",
+      "actual": "Created two Memories but omitted UIDs and truncated previews; later list found 9ed3e8ce and 60dfc5f4.",
+      "defect_ids": [
+        "PS-CHUNK-RECEIPT",
+        "PS-CHUNK-CONTEXT-LOSS"
+      ],
+      "cost": {
+        "wall_seconds": 0.5,
+        "terminal_screens": 1,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "compare",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli compare practice/source practice/audit-workspace/archive",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 3; global current remained practice",
+      "entry_route": "frozen launcher two explicit Contexts",
+      "target_route": "practice/source ↔ archive",
+      "scope": "source frame vs one evidence copy",
+      "input_provenance": "round-3 archived copy",
+      "consumer": "verify narrow subset meaning",
+      "actual": "Correctly described the archived four-points rule as a specific instance of the broader policy.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 5.13,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-duplicates",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-duplicates practice/audit-workspace --recursive",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 3; global current remained practice",
+      "entry_route": "frozen launcher explicit exact-duplicate analysis",
+      "target_route": "practice/audit-workspace",
+      "scope": "5 Contexts / 15 direct items",
+      "input_provenance": "round-3 accumulated tree",
+      "consumer": "repeat exact duplicate check at mid state",
+      "actual": "Found zero groups and again printed five per-Context empty sections.",
+      "defect_ids": [
+        "PS-QUALITY-SCOPE-MISMATCH"
+      ],
+      "cost": {
+        "wall_seconds": 0.48,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-redundancies",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-redundancies practice/audit-workspace/source-copies --direct",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 3; global current remained practice",
+      "entry_route": "frozen launcher explicit semantic-redundancy analysis",
+      "target_route": "source-copies",
+      "scope": "3 direct ordinary Memories",
+      "input_provenance": "round-3 evidence copies",
+      "consumer": "check semantic overlap in bounded evidence",
+      "actual": "Found zero groups.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 5.18,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-ambiguities",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-ambiguities practice/audit-workspace/candidates",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 3; global current remained practice",
+      "entry_route": "frozen launcher explicit ambiguity analysis",
+      "target_route": "candidates",
+      "scope": "2 generated ordinary Memories",
+      "input_provenance": "round-3 chunk output",
+      "consumer": "test split independence",
+      "actual": "Flagged 9ed3e8ce because fixed limit and reduction baseline were absent; the preservation half was not flagged.",
+      "defect_ids": [
+        "PS-CHUNK-CONTEXT-LOSS"
+      ],
+      "cost": {
+        "wall_seconds": 6.75,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-conflicts",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-conflicts practice/audit-workspace/source-copies",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 3; global current remained practice",
+      "entry_route": "frozen launcher explicit conflict analysis",
+      "target_route": "source-copies",
+      "scope": "3 Memories / 3 pairs",
+      "input_provenance": "bounded source copies",
+      "consumer": "check copied constraints for contradiction",
+      "actual": "Flagged zero pairs.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 5.03,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "fit",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli fit practice/source practice/audit-workspace/candidates",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 3; global current remained practice",
+      "entry_route": "frozen launcher two explicit Contexts",
+      "target_route": "practice/source ↔ candidates",
+      "scope": "source vs two generated candidates",
+      "input_provenance": "round-3 split state",
+      "consumer": "assess candidate applicability",
+      "actual": "Returned only FIT YES and target names.",
+      "defect_ids": [
+        "PS-FIT-OPAQUE"
+      ],
+      "cost": {
+        "wall_seconds": 13.17,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "contexts",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli contexts",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 4; global current remained practice",
+      "entry_route": "frozen launcher bare inventory",
+      "target_route": "Profile catalog",
+      "scope": "all Profile-visible names",
+      "input_provenance": "late-state reorientation",
+      "consumer": "confirm no source/current mutation",
+      "actual": "Repeated the complete shared catalog.",
+      "defect_ids": [
+        "PS-CTX-OVERLOAD"
+      ],
+      "cost": {
+        "wall_seconds": 0.43,
+        "terminal_screens": 8,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "list",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli list practice/audit-workspace/candidates",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 4; global current remained practice",
+      "entry_route": "frozen launcher explicit Context",
+      "target_route": "candidates",
+      "scope": "2 ordinary Memories plus 2 embedded Contexts",
+      "input_provenance": "round-3 chunk output",
+      "consumer": "recover split UIDs and inspect evidence edges",
+      "actual": "Revealed 9ed3e8ce and 60dfc5f4; displayed both source and source-copies embeds.",
+      "defect_ids": [
+        "PS-CHUNK-RECEIPT"
+      ],
+      "cost": {
+        "wall_seconds": 0.59,
+        "terminal_screens": 2,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "show",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli show practice/audit-workspace/candidates:60dfc5f4",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 4; global current remained practice",
+      "entry_route": "frozen launcher qualified Memory locator",
+      "target_route": "candidates:60dfc5f4",
+      "scope": "one exact generated Memory",
+      "input_provenance": "round-4 list output UID",
+      "consumer": "inspect detached companion safeguard",
+      "actual": "Showed the standalone all-points/claim-strength safeguard without its fixed-limit trigger.",
+      "defect_ids": [
+        "PS-CHUNK-CONTEXT-LOSS"
+      ],
+      "cost": {
+        "wall_seconds": 0.4,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find \"style guide\" --context practice/source",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 4; global current remained practice",
+      "entry_route": "frozen launcher explicit literal/regex search",
+      "target_route": "practice/source",
+      "scope": "exact literal corpus",
+      "input_provenance": "title-rule vocabulary",
+      "consumer": "locate narrow override clauses",
+      "actual": "Matched the two title rules.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.46,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "search",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli search \"Which constraints are exceptions, defaults, or conditional overrides rather than unconditional rules?\" --context practice/source --context practice/audit-workspace/candidates --context-only --exclude-embeds --limit 8",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 4; global current remained practice",
+      "entry_route": "frozen launcher explicit semantic search",
+      "target_route": "practice/source plus candidates",
+      "scope": "two exact roots; top 8",
+      "input_provenance": "defaults/overrides question",
+      "consumer": "retrieve conditions that must survive atomization",
+      "actual": "All 8 results came from source; the candidate branch's zero contribution was not summarized.",
+      "defect_ids": [
+        "PS-MULTIROOT-COVERAGE"
+      ],
+      "cost": {
+        "wall_seconds": 7.46,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "query",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli query --context practice/source \"Which instructions are defaults, which are user-request conditions, and which can a named style guide override?\"",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 4; global current remained practice",
+      "entry_route": "frozen launcher explicit ordinary Query",
+      "target_route": "practice/source",
+      "scope": "ordinary exact Query",
+      "input_provenance": "all 12 source notes",
+      "consumer": "classify triggers/defaults/overrides",
+      "actual": "Produced a strong classification but used all 12 Memories and 12 References, making the core two override rules expensive to review.",
+      "defect_ids": [
+        "PS-QUERY-REFERENCE-OVERLOAD"
+      ],
+      "cost": {
+        "wall_seconds": 13.24,
+        "terminal_screens": 7,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "summarize",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli summarize practice/audit-workspace/candidates",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 4; global current remained practice",
+      "entry_route": "frozen launcher explicit Context summary",
+      "target_route": "candidates",
+      "scope": "2 ordinary split Memories plus embeds",
+      "input_provenance": "round-3 split state",
+      "consumer": "recombine shortening pair for orientation",
+      "actual": "Recombined the two ordinary candidates into a useful sentence but did not disclose that embedded evidence was excluded from DIRECT status.",
+      "defect_ids": [
+        "PS-SUMMARY-REFERENCE-LOSS"
+      ],
+      "cost": {
+        "wall_seconds": 5.48,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "add",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli add \"CANDIDATE: use sentence case for document titles by default, subject only to an explicitly named style guide capitalization override. Use consistent italics for work titles by default, subject only to an explicitly named style guide work-title-format override.\" --context practice/audit-workspace/candidates",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 4; global current remained practice",
+      "entry_route": "frozen launcher explicit local add",
+      "target_route": "candidates",
+      "scope": "one new two-sentence local Memory",
+      "input_provenance": "round-4 Query synthesis",
+      "consumer": "stage two narrow title defaults",
+      "actual": "Added 18cdea2a.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.41,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "copy",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli copy practice/source:1a9d3a74 practice/source:94c3ce98 --into practice/audit-workspace/source-copies",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 4; global current remained practice",
+      "entry_route": "frozen launcher explicit source Memory and local target",
+      "target_route": "two source Memories → source-copies",
+      "scope": "multiple source copies",
+      "input_provenance": "round-4 title UIDs",
+      "consumer": "retain exact title-rule evidence",
+      "actual": "Created daea867d and 0be5f070.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.41,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "reference",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli reference practice/source:44de7eff --into practice/audit-workspace/review",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 4; global current remained practice",
+      "entry_route": "frozen launcher explicit snapshot reference",
+      "target_route": "practice/source:44de7eff → review",
+      "scope": "one snapshot reference",
+      "input_provenance": "round-4 search result",
+      "consumer": "link protected title terminology",
+      "actual": "Created b658d9ca.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.42,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "embed",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli embed practice/audit-workspace/archive --into practice/audit-workspace/review",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 4; global current remained practice",
+      "entry_route": "frozen launcher explicit source and local target",
+      "target_route": "archive → review",
+      "scope": "whole local Context embed",
+      "input_provenance": "round-3 archived evidence",
+      "consumer": "keep reviewed evidence reachable",
+      "actual": "Embedded successfully.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.4,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "edit",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli edit practice/audit-workspace/candidates:18cdea2a \"CANDIDATE: use sentence case for document titles by default, subject only to an explicitly named style guide capitalization override; preserve the intended word for. Use consistent italics for work titles by default, subject only to an explicitly named style guide work-title-format override.\"",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 4; global current remained practice",
+      "entry_route": "frozen launcher explicit workspace Memory edit",
+      "target_route": "candidates:18cdea2a",
+      "scope": "one local Memory",
+      "input_provenance": "round-4 add UID and source title rule",
+      "consumer": "preserve the source's protected word",
+      "actual": "Updated only the candidate, retaining the source's awkward but intended 'for'.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.4,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "move",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli move practice/audit-workspace/candidates:18cdea2a --into practice/audit-workspace/review",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 4; global current remained practice",
+      "entry_route": "frozen launcher explicit workspace source/target",
+      "target_route": "candidates → review",
+      "scope": "one local Memory",
+      "input_provenance": "round-4 edited candidate",
+      "consumer": "place title defaults in review queue",
+      "actual": "Moved UID 18cdea2a.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.46,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "replace",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli replace \"CANDIDATE\" \"DEFAULT CANDIDATE\" --context practice/audit-workspace/review",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 4; global current remained practice",
+      "entry_route": "frozen launcher explicit local literal replacement",
+      "target_route": "review",
+      "scope": "all direct matching ordinary Memories",
+      "input_provenance": "round-4 review labels",
+      "consumer": "label the title-default candidate",
+      "actual": "Replaced 2 occurrences in 2 Memories, also changing the older 'REVIEW CANDIDATE' to 'REVIEW DEFAULT CANDIDATE'; no per-Memory preview or selection was offered.",
+      "defect_ids": [
+        "PS-REPLACE-BROAD-MATCH"
+      ],
+      "cost": {
+        "wall_seconds": 0.41,
+        "terminal_screens": 1,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "chunk",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli chunk practice/audit-workspace/review:18cdea2a --method sentences",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 4; global current remained practice",
+      "entry_route": "frozen launcher explicit workspace Memory split",
+      "target_route": "review:18cdea2a",
+      "scope": "one two-sentence workspace Memory",
+      "input_provenance": "round-4 title candidate",
+      "consumer": "split two distinct defaults",
+      "actual": "Created two Memories but omitted UIDs and truncated previews; later list found aea1196f and 17260887. The first result preserved an incomplete 'word for' object.",
+      "defect_ids": [
+        "PS-CHUNK-RECEIPT",
+        "PS-CHUNK-CONTEXT-LOSS"
+      ],
+      "cost": {
+        "wall_seconds": 0.39,
+        "terminal_screens": 1,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "compare",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli compare practice/source practice/audit-workspace/review",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 4; global current remained practice",
+      "entry_route": "frozen launcher two explicit Contexts",
+      "target_route": "practice/source ↔ review",
+      "scope": "source frame vs staged review frame",
+      "input_provenance": "round-4 accumulated review",
+      "consumer": "measure policy coverage",
+      "actual": "Called review a narrower restatement and listed missing opinion-first, minimal-expression, claim-strength, connector, and citation-verification requirements.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 7.07,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-duplicates",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-duplicates practice/audit-workspace/review",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 4; global current remained practice",
+      "entry_route": "frozen launcher explicit exact-duplicate analysis",
+      "target_route": "review",
+      "scope": "8 direct items",
+      "input_provenance": "round-4 references/ordinary/embed",
+      "consumer": "check exact duplication",
+      "actual": "Reported 8 items and zero exact groups.",
+      "defect_ids": [
+        "PS-QUALITY-SCOPE-MISMATCH"
+      ],
+      "cost": {
+        "wall_seconds": 0.41,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-redundancies",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-redundancies practice/audit-workspace/review --direct",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 4; global current remained practice",
+      "entry_route": "frozen launcher explicit semantic-redundancy analysis",
+      "target_route": "review",
+      "scope": "4 direct ordinary Memories",
+      "input_provenance": "same review Context",
+      "consumer": "check semantic redundancy",
+      "actual": "Reported 4 memories and zero groups, again differing from duplicate-analysis item cardinality.",
+      "defect_ids": [
+        "PS-QUALITY-SCOPE-MISMATCH"
+      ],
+      "cost": {
+        "wall_seconds": 4.5,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-ambiguities",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-ambiguities practice/audit-workspace/review",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 4; global current remained practice",
+      "entry_route": "frozen launcher explicit ambiguity analysis",
+      "target_route": "review",
+      "scope": "4 direct ordinary Memories",
+      "input_provenance": "round-4 split state",
+      "consumer": "test independent title/polishing constraints",
+      "actual": "Flagged detached 'Change only wording...' and incomplete 'preserve the intended word for'.",
+      "defect_ids": [
+        "PS-CHUNK-CONTEXT-LOSS"
+      ],
+      "cost": {
+        "wall_seconds": 9.73,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-conflicts",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-conflicts practice/audit-workspace/review",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 4; global current remained practice",
+      "entry_route": "frozen launcher explicit conflict analysis",
+      "target_route": "review",
+      "scope": "4 Memories / 6 pairs",
+      "input_provenance": "same split state",
+      "consumer": "test interaction of detached constraints",
+      "actual": "Flagged 2 possible conflicts: wording-only versus capitalization and wording-only versus italics formatting, consequences introduced by losing the polishing trigger/scope.",
+      "defect_ids": [
+        "PS-CHUNK-CONTEXT-LOSS"
+      ],
+      "cost": {
+        "wall_seconds": 8.84,
+        "terminal_screens": 3,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "fit",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli fit practice/source practice/audit-workspace/review",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 4; global current remained practice",
+      "entry_route": "frozen launcher two explicit Contexts",
+      "target_route": "practice/source ↔ review",
+      "scope": "source vs staged review frame",
+      "input_provenance": "round-4 review state",
+      "consumer": "check review applicability",
+      "actual": "Returned only FIT YES and target names.",
+      "defect_ids": [
+        "PS-FIT-OPAQUE"
+      ],
+      "cost": {
+        "wall_seconds": 8.9,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "contexts",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli contexts",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 5; global current remained practice",
+      "entry_route": "frozen launcher bare inventory",
+      "target_route": "Profile catalog",
+      "scope": "all Profile-visible names",
+      "input_provenance": "final accumulated Study state",
+      "consumer": "final isolation check",
+      "actual": "Printed the full shared Profile for a fifth time.",
+      "defect_ids": [
+        "PS-CTX-OVERLOAD"
+      ],
+      "cost": {
+        "wall_seconds": 0.41,
+        "terminal_screens": 8,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "list",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli list practice/audit-workspace/review",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 5; global current remained practice",
+      "entry_route": "frozen launcher explicit Context",
+      "target_route": "review",
+      "scope": "7 Memories plus 1 embedded Context",
+      "input_provenance": "round-4 chunk output",
+      "consumer": "recover title-split UIDs and inspect broad replace effect",
+      "actual": "Revealed aea1196f and 17260887, three references, and the unintended 'REVIEW DEFAULT CANDIDATE' relabel.",
+      "defect_ids": [
+        "PS-CHUNK-RECEIPT",
+        "PS-REPLACE-BROAD-MATCH"
+      ],
+      "cost": {
+        "wall_seconds": 0.61,
+        "terminal_screens": 3,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "show",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli show practice/audit-workspace/review:aea1196f",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 5; global current remained practice",
+      "entry_route": "frozen launcher qualified Memory locator",
+      "target_route": "review:aea1196f",
+      "scope": "one exact generated Memory",
+      "input_provenance": "round-5 list output UID",
+      "consumer": "inspect incomplete protected-word atom",
+      "actual": "Showed 'preserve the intended word for' with no object after 'for'.",
+      "defect_ids": [
+        "PS-CHUNK-CONTEXT-LOSS"
+      ],
+      "cost": {
+        "wall_seconds": 0.4,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find \"only|before|unless|if|when\" --regex --context practice/source --all-results",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 5; global current remained practice",
+      "entry_route": "frozen launcher explicit literal/regex search",
+      "target_route": "practice/source",
+      "scope": "exact regex corpus; all results",
+      "input_provenance": "trigger vocabulary",
+      "consumer": "enumerate conditions that must remain attached",
+      "actual": "Matched 7/12 source Memories and 12 trigger/boundary occurrences.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.45,
+        "terminal_screens": 3,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "search",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli search \"Which candidate constraints lost their trigger, exception, or companion rule after splitting?\" --context practice/source --context practice/audit-workspace/candidates --context practice/audit-workspace/review --context-only --exclude-embeds --limit 10",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 5; global current remained practice",
+      "entry_route": "frozen launcher explicit semantic search",
+      "target_route": "source plus candidates plus review",
+      "scope": "three exact roots; top 10",
+      "input_provenance": "late split diagnostics",
+      "consumer": "locate damaged atoms",
+      "actual": "Returned only detached 517e7fa5 and 60dfc5f4, omitting source companions and other known damaged title atom aea1196f.",
+      "defect_ids": [
+        "PS-MULTIROOT-COVERAGE"
+      ],
+      "cost": {
+        "wall_seconds": 11.7,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "query",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli query --context practice/source \"How should these notes be atomized so each result remains independently reviewable without losing triggers, exceptions, protected wording, or source-verification boundaries?\"",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 5; global current remained practice",
+      "entry_route": "frozen launcher explicit ordinary Query",
+      "target_route": "practice/source",
+      "scope": "ordinary exact Query",
+      "input_provenance": "all 12 source Memories plus observed split failures",
+      "consumer": "produce semantic-phase preparation guidance",
+      "actual": "Produced 11 coherent atom proposals, deliberately keeping fixed-limit safeguard pairs and full citation/review boundary together, with all 12 source References.",
+      "defect_ids": [
+        "PS-QUERY-REFERENCE-OVERLOAD"
+      ],
+      "cost": {
+        "wall_seconds": 15.65,
+        "terminal_screens": 10,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "summarize",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli summarize practice/audit-workspace/review",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 5; global current remained practice",
+      "entry_route": "frozen launcher explicit Context summary",
+      "target_route": "review",
+      "scope": "4 ordinary Memories plus references and embed",
+      "input_provenance": "final review state",
+      "consumer": "review late policy state",
+      "actual": "Summarized ordinary polishing/title rules but silently omitted source-verification, fixed-limit, terminology, connector references, and embedded evidence.",
+      "defect_ids": [
+        "PS-SUMMARY-REFERENCE-LOSS"
+      ],
+      "cost": {
+        "wall_seconds": 5.54,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "add",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli add \"AUDIT RESULT: mechanical sentence splitting can detach permissions, triggers, exceptions, and companion safeguards. Future atomize must retain each constraint's complete applicability boundary and provenance.\" --context practice/audit-workspace/review",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 5; global current remained practice",
+      "entry_route": "frozen launcher explicit local add",
+      "target_route": "review",
+      "scope": "one new two-sentence local Memory",
+      "input_provenance": "rounds 2-5 split evidence",
+      "consumer": "record safe semantic-phase invariant",
+      "actual": "Added 5b1d1cb6.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.48,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "copy",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli copy practice/source:4fe217eb --into practice/audit-workspace/source-copies",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 5; global current remained practice",
+      "entry_route": "frozen launcher explicit source Memory and local target",
+      "target_route": "practice/source:4fe217eb → source-copies",
+      "scope": "one source Memory copied locally",
+      "input_provenance": "round-5 atomization Query reference",
+      "consumer": "retain full citation/review boundary evidence",
+      "actual": "Created 6c329f16 with source/new UID mapping.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.41,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "reference",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli reference practice/source:b976766e --into practice/audit-workspace/review",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 5; global current remained practice",
+      "entry_route": "frozen launcher explicit snapshot reference",
+      "target_route": "practice/source:b976766e → review",
+      "scope": "one snapshot reference",
+      "input_provenance": "round-5 trigger Find",
+      "consumer": "link connector-scope evidence",
+      "actual": "Created 904ba5e7.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.4,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "embed",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli embed practice/audit-workspace/source-copies --into practice/audit-workspace/review",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 5; global current remained practice",
+      "entry_route": "frozen launcher explicit source and local target",
+      "target_route": "source-copies → review",
+      "scope": "whole local evidence Context",
+      "input_provenance": "final evidence-copy collection",
+      "consumer": "make all retained source copies reachable from review",
+      "actual": "Embedded successfully.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.47,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "edit",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli edit practice/audit-workspace/review:5b1d1cb6 \"AUDIT RESULT: mechanical sentence splitting detached an editing permission trigger, a protected-word object, and companion safeguards. Future atomize must keep every result independently reviewable with its complete trigger, exception, safeguard, and source provenance.\"",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 5; global current remained practice",
+      "entry_route": "frozen launcher explicit workspace Memory edit",
+      "target_route": "review:5b1d1cb6",
+      "scope": "one local audit Memory",
+      "input_provenance": "round-5 add UID and concrete failures",
+      "consumer": "state exact future atomize invariant",
+      "actual": "Updated the audit result with observed loss classes.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.4,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "move",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli move practice/audit-workspace/review:5b1d1cb6 --into practice/audit-workspace/archive",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 5; global current remained practice",
+      "entry_route": "frozen launcher explicit workspace source/target",
+      "target_route": "review → archive",
+      "scope": "one local audit Memory",
+      "input_provenance": "round-5 edited result",
+      "consumer": "freeze the core-phase conclusion for semantic phase",
+      "actual": "Moved UID 5b1d1cb6.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.44,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "replace",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli replace \"APPROVED ATOM\" \"FINAL ATOM\" --context practice/audit-workspace/archive",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 5; global current remained practice",
+      "entry_route": "frozen launcher explicit local literal replacement",
+      "target_route": "archive",
+      "scope": "direct local Memories",
+      "input_provenance": "negative-control approval phrase",
+      "consumer": "verify no result was falsely approved/finalized",
+      "actual": "Reported no matches and changed nothing.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.43,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "chunk",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli chunk practice/audit-workspace/archive:5b1d1cb6 --method paragraphs",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 5; global current remained practice",
+      "entry_route": "frozen launcher explicit workspace Memory split",
+      "target_route": "archive:5b1d1cb6",
+      "scope": "one single-paragraph audit Memory",
+      "input_provenance": "round-5 archived conclusion",
+      "consumer": "test a safe no-op split boundary",
+      "actual": "Reported one paragraph chunk and made no change.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.39,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "compare",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli compare practice/audit-workspace/source-copies practice/audit-workspace/review",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 5; global current remained practice",
+      "entry_route": "frozen launcher two explicit Contexts",
+      "target_route": "source-copies ↔ review",
+      "scope": "two accumulated local evidence/review frames",
+      "input_provenance": "final workspace state",
+      "consumer": "check coverage and conditional shortening meaning",
+      "actual": "Found shared review/polishing/formatting/source-verification policy and correctly emphasized that 20–30% cutting is authorized only under a shorter fixed limit.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 6.12,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-duplicates",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-duplicates practice/audit-workspace --recursive",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 5; global current remained practice",
+      "entry_route": "frozen launcher explicit exact-duplicate analysis",
+      "target_route": "practice/audit-workspace",
+      "scope": "5 Contexts / 25 direct items",
+      "input_provenance": "final accumulated tree",
+      "consumer": "final exact duplicate sweep",
+      "actual": "Found zero groups but again printed five empty Context sections.",
+      "defect_ids": [
+        "PS-QUALITY-SCOPE-MISMATCH"
+      ],
+      "cost": {
+        "wall_seconds": 0.51,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-redundancies",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-redundancies practice/audit-workspace/review --direct",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 5; global current remained practice",
+      "entry_route": "frozen launcher explicit semantic-redundancy analysis",
+      "target_route": "review",
+      "scope": "4 direct ordinary Memories",
+      "input_provenance": "final review frame",
+      "consumer": "final semantic redundancy check",
+      "actual": "Found zero groups; references and embeds were not included in the stated memory count.",
+      "defect_ids": [
+        "PS-QUALITY-SCOPE-MISMATCH"
+      ],
+      "cost": {
+        "wall_seconds": 5.57,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-ambiguities",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-ambiguities practice/audit-workspace/archive",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 5; global current remained practice",
+      "entry_route": "frozen launcher explicit ambiguity analysis",
+      "target_route": "archive",
+      "scope": "2 direct ordinary Memories",
+      "input_provenance": "archived source copy and audit result",
+      "consumer": "check handoff completeness",
+      "actual": "Flagged the four-points unit ambiguity and said the audit result lacks attached original text/provenance needed to reconstruct compliant atoms.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 13.31,
+        "terminal_screens": 3,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-conflicts",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-conflicts practice/audit-workspace/candidates",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 5; global current remained practice",
+      "entry_route": "frozen launcher explicit conflict analysis",
+      "target_route": "candidates",
+      "scope": "2 generated Memories / 1 pair",
+      "input_provenance": "round-3 split pair",
+      "consumer": "test whether detached companion constraints remain jointly safe",
+      "actual": "Flagged a possible conflict when a fixed limit would require cutting intended points/conditions, demonstrating why the pair must remain coupled or explicitly prioritized.",
+      "defect_ids": [
+        "PS-CHUNK-CONTEXT-LOSS"
+      ],
+      "cost": {
+        "wall_seconds": 6.5,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "fit",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli fit practice/source practice/audit-workspace/archive",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; practice/audit-workspace accumulated state at round 5; global current remained practice",
+      "entry_route": "frozen launcher two explicit Contexts",
+      "target_route": "practice/source ↔ archive",
+      "scope": "source vs archived evidence/audit result",
+      "input_provenance": "final handoff state",
+      "consumer": "check semantic-phase relevance",
+      "actual": "Returned only FIT YES and target names.",
+      "defect_ids": [
+        "PS-FIT-OPAQUE"
+      ],
+      "cost": {
+        "wall_seconds": 6.73,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    }
+  ]
+}
+

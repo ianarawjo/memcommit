@@ -1,0 +1,27 @@
+{
+  "label": "before-empty-redo-4-seq-064",
+  "read_at": "2026-08-25T18:16:22.787434+00:00",
+  "undo_top": {
+    "uid": "checkpoint:2efd5b13-24fa-4e79-86ec-b4401ffe7aa1",
+    "command": "import",
+    "description": "Imported Memory [37113bd0] from Profile 'task-1' Context 'participant/construction-updates/shop-updates'.",
+    "members": [
+      {
+        "context_uid": "482549cc-f61f-4262-909d-67bd9c5d5364",
+        "context_name": "audit/ticker/admin-v2-scratch",
+        "checkpoint_uid": "2efd5b13-24fa-4e79-86ec-b4401ffe7aa1"
+      }
+    ]
+  },
+  "redo_top": null,
+  "undo_depth": 67,
+  "redo_depth": 0,
+  "staged_update_granted_target": null,
+  "assertions": {
+    "expected_side": null,
+    "expected_uid": null,
+    "expected_command": null,
+    "require_granted_null": false,
+    "result": "PASS"
+  }
+}

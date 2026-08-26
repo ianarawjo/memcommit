@@ -1,0 +1,236 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source rationale practice/source:f3ef224d --json --limit 120 --unit words
+
+EXIT
+0
+
+WALL_SECONDS
+7.111893
+
+STDOUT
+{
+  "trace": {
+    "context": {
+      "uid": "7e48e68e-3c6f-541b-bfc1-e307abcc7a4f",
+      "name": "practice/source"
+    },
+    "selected_uid": "f3ef224d-ff16-5a7a-880a-18eee2fc55b5",
+    "component_uids": [
+      "635c8904-893c-46bc-a522-bc975a61ebfe",
+      "f3ef224d-ff16-5a7a-880a-18eee2fc55b5"
+    ],
+    "originals": [
+      {
+        "uid": "f3ef224d-ff16-5a7a-880a-18eee2fc55b5",
+        "content": "When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.",
+        "position": 0,
+        "content_digest": "f42180ac2731580b133c60a28178c7484694134af9cd87795b387dcea63545af"
+      }
+    ],
+    "current": [
+      {
+        "uid": "f3ef224d-ff16-5a7a-880a-18eee2fc55b5",
+        "content": "When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.",
+        "position": 0,
+        "content_digest": "f42180ac2731580b133c60a28178c7484694134af9cd87795b387dcea63545af"
+      },
+      {
+        "uid": "635c8904-893c-46bc-a522-bc975a61ebfe",
+        "content": "When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.",
+        "position": 16,
+        "content_digest": "f42180ac2731580b133c60a28178c7484694134af9cd87795b387dcea63545af"
+      }
+    ],
+    "events": [
+      {
+        "kind": "MERGED_IN",
+        "evidence": "RECORDED",
+        "timestamp": "2026-08-25T13:14:46.717194",
+        "checkpoint_uid": "d418975a-f7fd-472d-8036-0d89534783d6",
+        "command": "merge",
+        "description": "Merged 'practice/source' into 'practice/description': new 12; already present 0; kept Target 0; took Source 0",
+        "before": [
+          {
+            "uid": "f3ef224d-ff16-5a7a-880a-18eee2fc55b5",
+            "content": "When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.",
+            "position": 0,
+            "content_digest": "f42180ac2731580b133c60a28178c7484694134af9cd87795b387dcea63545af"
+          }
+        ],
+        "after": [
+          {
+            "uid": "635c8904-893c-46bc-a522-bc975a61ebfe",
+            "content": "When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.",
+            "position": 16,
+            "content_digest": "f42180ac2731580b133c60a28178c7484694134af9cd87795b387dcea63545af"
+          }
+        ],
+        "reason": null,
+        "reason_codes": [
+          "MERGE",
+          "NEW"
+        ],
+        "source_occurrence": null,
+        "operation_id": null,
+        "command_operation": null,
+        "context_transition": {
+          "source": {
+            "uid": "7e48e68e-3c6f-541b-bfc1-e307abcc7a4f",
+            "name": "practice/source"
+          },
+          "target": {
+            "uid": "d5d0a8b4-d425-5c9f-9325-56329df711ef",
+            "name": "practice/description"
+          }
+        },
+        "child_evidence": [],
+        "declared_frame": null,
+        "declared_frame_digest": null,
+        "uncertainty_reason": null,
+        "source_review_uid": null,
+        "source_review_digest": null,
+        "source_analysis_uid": null
+      },
+      {
+        "kind": "HISTORY_GAP",
+        "evidence": "UNRECORDED",
+        "timestamp": null,
+        "checkpoint_uid": null,
+        "command": "current",
+        "description": "Current Context differs from the last reconstructable checkpoint state.",
+        "before": [],
+        "after": [
+          {
+            "uid": "f3ef224d-ff16-5a7a-880a-18eee2fc55b5",
+            "content": "When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.",
+            "position": 0,
+            "content_digest": "f42180ac2731580b133c60a28178c7484694134af9cd87795b387dcea63545af"
+          },
+          {
+            "uid": "e50c293a-2416-50c8-b35c-45b53ff58db5",
+            "content": "If I later ask for polishing, preserve the overall strucutre and citation-needed markers, and change only wording that causes a problem.",
+            "position": 1,
+            "content_digest": "54a5172e2681d9166f312bdd9994b8f0cd8598fc96ccf6f5ab897555765d17bd"
+          },
+          {
+            "uid": "39b21971-6ad4-561f-830e-99377eeeab09",
+            "content": "When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um... for example, use distribute, not divide, when material is absorbed into two parts.",
+            "position": 2,
+            "content_digest": "3b06352e813df2d425403e64233352927276146f1e3f1d1d49e763068aae7ce1"
+          },
+          {
+            "uid": "6fad23ab-406e-5298-98e5-0bf00b224b21",
+            "content": "If a passage is supposed to make four points, keep all four while removing parts that are too redundent and stating repeated content only once.",
+            "position": 3,
+            "content_digest": "190a7a74a898a6ee302d338ee060ec28cadc6031d96795e0dacfd708d3f4118f"
+          },
+          {
+            "uid": "6cc4b8a3-eaff-5805-8d37-83dd4bf8872c",
+            "content": "When the draft has to fit a shorter fixed limit, aim to cut around 20–30% from redundant or unnecessary material.",
+            "position": 4,
+            "content_digest": "afcff3a8b9e3e739bd5e9c8c68934319fecda63110fb3b50f7f48c4c7658e659"
+          },
+          {
+            "uid": "7ebe67fb-e08d-50b1-8c3b-af25d70462eb",
+            "content": "But don't shorten sentences so aggressively that a claim sounds more categorical; keep enough wording to preserve its original strength and conditions.",
+            "position": 5,
+            "content_digest": "a7e35d0324a1884ebd711c71d3df51189dad9b268c8415e491c80b3401c72506"
+          },
+          {
+            "uid": "b976766e-d366-5065-929e-5f31e638fdbe",
+            "content": "If the next idea is merely related and does not broaden the scope, don't use More broadly; use In relation to this or another accurate connector without adding a new claim merely to make two paragraphs connect.",
+            "position": 6,
+            "content_digest": "a42e4c115f46fe487863131816c163d66cf8586d523d962dc71d36f0fdd21845"
+          },
+          {
+            "uid": "44de7eff-4117-549c-a78e-f2cd3ab50133",
+            "content": "For any titlle about interaction with AI agent memory, keep the exact terminology and intended words: use interaction and management and AI agent memory rather than agent memory.",
+            "position": 7,
+            "content_digest": "b97e515137968b7a8af5f21841a892ab34d5ac4a8b29595bf208d0910369682a"
+          },
+          {
+            "uid": "1a9d3a74-12a1-50f1-96d0-bcaa09a65406",
+            "content": "By default, format a document title in sentence case rather than title case. An explicitly named style guide may override only that capitalization default; always keep for whenever it is part of the intended wording.",
+            "position": 8,
+            "content_digest": "f91f31415c48d252ad9dfde45c404ea926ea8eae8241762b1471052431ab464c"
+          },
+          {
+            "uid": "94c3ce98-85f3-51e2-a351-8cb92ec040c3",
+            "content": "If titles of works use quotation marks in some places and italics in others, make them consistently italic throughout the document by default; an explicitly named style guide may override only this work-title format.",
+            "position": 9,
+            "content_digest": "f52ad44c87b3dedc2dbb00040864241bd5a9f9df75d2f9012a419fa1218df796"
+          },
+          {
+            "uid": "96300a95-2cb2-5644-bae6-f53d7b31a725",
+            "content": "When I say that content looks wrong, find accurate information before proposing a correction by reading the original paper, book, or guide, not only an abstract or a short snippet.",
+            "position": 10,
+            "content_digest": "795b352f611ff2218d2c939ad0a7472d11010900eff92ef8f3d03d7255e1a2c6"
+          },
+          {
+            "uid": "4fe217eb-2b65-5fb0-92ff-733ced1e9270",
+            "content": "Before adding or reusing citations and refferences, verify that each source exists and supports the exact claim after reviewing the complete source. Don't invent quotations or evidence or overstate an author's contribution or a paper's status. If I asked only for review, report a verification problem first instead of silently rewriting the draft.",
+            "position": 11,
+            "content_digest": "b1b2b135a59948222a40f7b3e233dac4931958b0341fe3c9cbc228d53f44d347"
+          }
+        ],
+        "reason": null,
+        "reason_codes": [],
+        "source_occurrence": null,
+        "operation_id": null,
+        "command_operation": null,
+        "context_transition": null,
+        "child_evidence": [],
+        "declared_frame": null,
+        "declared_frame_digest": null,
+        "uncertainty_reason": null,
+        "source_review_uid": null,
+        "source_review_digest": null,
+        "source_analysis_uid": null
+      }
+    ],
+    "analyses": [],
+    "warnings": [
+      "The current Context contains changes that no retained checkpoint explains."
+    ]
+  },
+  "target": {
+    "uid": "f3ef224d-ff16-5a7a-880a-18eee2fc55b5",
+    "content": "When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.",
+    "position": 0,
+    "content_digest": "f42180ac2731580b133c60a28178c7484694134af9cd87795b387dcea63545af"
+  },
+  "origin_events": [],
+  "recorded_reason_events": [],
+  "saved_analysis": null,
+  "stale_analysis": false,
+  "proposals": [],
+  "inference": null,
+  "inference_cached": false,
+  "fallback_evidence": [],
+  "inference_error": null,
+  "warnings": [],
+  "inference_scope": {
+    "context_name": "practice/source",
+    "context_count": 1,
+    "include_descendants": false
+  },
+  "recorded_evidence_available": true,
+  "character_budgets": {
+    "provenance_source": 2428,
+    "provenance_limit": 160,
+    "inference_source": 0,
+    "inference_limit": 0
+  },
+  "inference_status": "NOT_REQUESTED",
+  "provenance_projection": {
+    "status": "AVAILABLE",
+    "text": "The Memory was already present in practice/source as “When I ask ‘How does this read?’, I really want an opinion,” continuing with instructions to seek an opinion before editing and first check sentence order and paragraph division. A merge with disposition NEW copied it unchanged into a fresh practice/description occurrence while retaining the source occurrence; the retained history records no disappearance, return, edit, or removal, and later unexplained current changes are outside its boundary.",
+    "limit": 120,
+    "unit": "words",
+    "length": 74,
+    "ruleset_version": "rationale-natural-provenance-v5"
+  }
+}
+
+
+STDERR

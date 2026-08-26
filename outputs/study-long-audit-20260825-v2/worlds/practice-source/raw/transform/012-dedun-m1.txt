@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source dedun practice/description --direct
+
+EXIT
+0
+
+WALL_SECONDS
+6.089048
+
+STDOUT
+No redundancies in 'practice/description'.
+
+
+STDERR

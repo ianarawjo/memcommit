@@ -1,0 +1,11 @@
+{
+  "sequence": 1,
+  "operation": "contexts",
+  "attempt": 1,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 contexts",
+  "exit": 0,
+  "wall_seconds": 1.248914,
+  "pre_target_digest": "7146ba8f1771217b940b1f97e4bb374d8145b4df92fa80f24ea71f22a6c59969",
+  "post_target_digest": "5de75316639d7c019957086f41facf0cf106197cf9ab9ebdb8bb3e7ea040577d",
+  "raw_output": "raw/core/001-contexts-m1.txt"
+}

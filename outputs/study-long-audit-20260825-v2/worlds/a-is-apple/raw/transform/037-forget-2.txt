@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple forget 'remove examples that introduce a word absent from the Source evidence' --context practice
+
+EXIT
+0
+
+OUTPUT
+Consulting the configured Forget provider...
+FORGET APPLIED · SOURCE practice
+FORGET · remove examples that introduce a word absent from the Source evidence
+DIFF · 1 CHANGE
+~ [b2f0d5a2] Treat b as unresolved [-between the alternatives banana and-][+as+] blueberry; do not collapse the evidence into a single settled mapping.
+RECEIPT · 00c235ca-73ce-4686-8d83-9cdebb75889d
+CHECKPOINT · 00c235ca-73ce-4686-8d83-9cdebb75889d
+REVIEW · mem review forget --receipt 00c235ca-73ce-4686-8d83-9cdebb75889d
+RECOVERY · mem undo

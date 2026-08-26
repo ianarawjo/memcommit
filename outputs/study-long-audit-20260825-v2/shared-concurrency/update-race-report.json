@@ -1,0 +1,293 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-08-25T18:35:25.293421+00:00",
+  "excluded_from_1980": true,
+  "receipts": {
+    "task-1": null,
+    "task-2": null,
+    "task-3": null,
+    "ticker": "5c1c9f63-4711-4d5f-b305-1ea72f2d0f22",
+    "a-is-apple": null,
+    "practice-source": null
+  },
+  "update_exits": {
+    "task-1": 1,
+    "task-2": 1,
+    "task-3": 1,
+    "ticker": 0,
+    "a-is-apple": 1,
+    "practice-source": 1
+  },
+  "update_canaries": {
+    "task-1": [],
+    "task-2": [],
+    "task-3": [],
+    "ticker": [],
+    "a-is-apple": [],
+    "practice-source": []
+  },
+  "diff_exits": {
+    "task-1": 0,
+    "task-2": 0,
+    "task-3": 0,
+    "ticker": 0,
+    "a-is-apple": 0,
+    "practice-source": 0
+  },
+  "implicit_diff_canaries": {
+    "task-1": [],
+    "task-2": [],
+    "task-3": [],
+    "ticker": [],
+    "a-is-apple": [],
+    "practice-source": []
+  },
+  "review_exits": {
+    "ticker": 0
+  },
+  "exact_review_canaries": {
+    "ticker": []
+  },
+  "calls": [
+    {
+      "actor": "task-1",
+      "phase": "update-race-safe-canary",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "update",
+        "--from",
+        "audit/shared-v2/task-1/source",
+        "--to",
+        "audit/shared-v2/task-1/target",
+        "--direct",
+        "--replace-stage",
+        "--goal",
+        "Preserve only SHARED_CANARY_task_1 in this target."
+      ],
+      "exit": 1,
+      "wall_seconds": 6.971692,
+      "stdout": "",
+      "stderr": "Update error: The active update record changed before it could be saved.\n"
+    },
+    {
+      "actor": "task-2",
+      "phase": "update-race-safe-canary",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "update",
+        "--from",
+        "audit/shared-v2/task-2/source",
+        "--to",
+        "audit/shared-v2/task-2/target",
+        "--direct",
+        "--replace-stage",
+        "--goal",
+        "Preserve only SHARED_CANARY_task_2 in this target."
+      ],
+      "exit": 1,
+      "wall_seconds": 6.788149,
+      "stdout": "",
+      "stderr": "Update error: The active update record changed before it could be saved.\n"
+    },
+    {
+      "actor": "task-3",
+      "phase": "update-race-safe-canary",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "update",
+        "--from",
+        "audit/shared-v2/task-3/source",
+        "--to",
+        "audit/shared-v2/task-3/target",
+        "--direct",
+        "--replace-stage",
+        "--goal",
+        "Preserve only SHARED_CANARY_task_3 in this target."
+      ],
+      "exit": 1,
+      "wall_seconds": 7.814436,
+      "stdout": "",
+      "stderr": "Update error: The active update record changed before it could be saved.\n"
+    },
+    {
+      "actor": "ticker",
+      "phase": "update-race-safe-canary",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "update",
+        "--from",
+        "audit/shared-v2/ticker/source",
+        "--to",
+        "audit/shared-v2/ticker/target",
+        "--direct",
+        "--replace-stage",
+        "--goal",
+        "Preserve only SHARED_CANARY_ticker in this target."
+      ],
+      "exit": 0,
+      "wall_seconds": 6.744087,
+      "stdout": "UPDATE APPLIED · audit/shared-v2/ticker/source → audit/shared-v2/ticker/target\nEFFECTS · ADD 1 · EDIT 0 · REMOVE 0\nRECEIPT · 5c1c9f63-4711-4d5f-b305-1ea72f2d0f22\nGOAL FOCUS · INLINE · INLINE · 1 ITEM\nCHECKPOINTS · audit/shared-v2/ticker/target [7cb28f63-25f4-4947-8ae3-0254342386a0]\nREVIEW · mem review update --session 5c1c9f63-4711-4d5f-b305-1ea72f2d0f22\nRECOVERY · mem undo\n",
+      "stderr": ""
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "update-race-safe-canary",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "update",
+        "--from",
+        "audit/shared-v2/a-is-apple/source",
+        "--to",
+        "audit/shared-v2/a-is-apple/target",
+        "--direct",
+        "--replace-stage",
+        "--goal",
+        "Preserve only SHARED_CANARY_a_is_apple in this target."
+      ],
+      "exit": 1,
+      "wall_seconds": 6.927892,
+      "stdout": "",
+      "stderr": "Update error: The active update record changed before it could be saved.\n"
+    },
+    {
+      "actor": "practice-source",
+      "phase": "update-race-safe-canary",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "update",
+        "--from",
+        "audit/shared-v2/practice-source/source",
+        "--to",
+        "audit/shared-v2/practice-source/target",
+        "--direct",
+        "--replace-stage",
+        "--goal",
+        "Preserve only SHARED_CANARY_practice_source in this target."
+      ],
+      "exit": 1,
+      "wall_seconds": 7.76113,
+      "stdout": "",
+      "stderr": "Update error: The active update record changed before it could be saved.\n"
+    },
+    {
+      "actor": "task-1",
+      "phase": "implicit-diff-after-update-race",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "diff",
+        "--raw"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.514611,
+      "stdout": "Applied local update\naudit/shared-v2/ticker/source → audit/shared-v2/ticker/target\n1 change · 0 edited · 1 added · 0 removed\n\ndiff --mem audit/shared-v2/ticker/target#74c41f02-5c74-4b68-974e-20def40a6b82\nnew memory\n--- /dev/null\n+++ b/audit/shared-v2/ticker/target#74c41f02-5c74-4b68-974e-20def40a6b82\n@@ -0,0 +1 @@\n+SHARED-CANARY::ticker source assertion.\n\\ No newline at end of file\nSources: audit/shared-v2/ticker/source#71c23858-e777-4636-8048-3ae936d1ccff\nReason: The source provides genuinely missing ticker information for the supplied target context.\n",
+      "stderr": ""
+    },
+    {
+      "actor": "task-2",
+      "phase": "implicit-diff-after-update-race",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "diff",
+        "--raw"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.514816,
+      "stdout": "Applied local update\naudit/shared-v2/ticker/source → audit/shared-v2/ticker/target\n1 change · 0 edited · 1 added · 0 removed\n\ndiff --mem audit/shared-v2/ticker/target#74c41f02-5c74-4b68-974e-20def40a6b82\nnew memory\n--- /dev/null\n+++ b/audit/shared-v2/ticker/target#74c41f02-5c74-4b68-974e-20def40a6b82\n@@ -0,0 +1 @@\n+SHARED-CANARY::ticker source assertion.\n\\ No newline at end of file\nSources: audit/shared-v2/ticker/source#71c23858-e777-4636-8048-3ae936d1ccff\nReason: The source provides genuinely missing ticker information for the supplied target context.\n",
+      "stderr": ""
+    },
+    {
+      "actor": "task-3",
+      "phase": "implicit-diff-after-update-race",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "diff",
+        "--raw"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.516616,
+      "stdout": "Applied local update\naudit/shared-v2/ticker/source → audit/shared-v2/ticker/target\n1 change · 0 edited · 1 added · 0 removed\n\ndiff --mem audit/shared-v2/ticker/target#74c41f02-5c74-4b68-974e-20def40a6b82\nnew memory\n--- /dev/null\n+++ b/audit/shared-v2/ticker/target#74c41f02-5c74-4b68-974e-20def40a6b82\n@@ -0,0 +1 @@\n+SHARED-CANARY::ticker source assertion.\n\\ No newline at end of file\nSources: audit/shared-v2/ticker/source#71c23858-e777-4636-8048-3ae936d1ccff\nReason: The source provides genuinely missing ticker information for the supplied target context.\n",
+      "stderr": ""
+    },
+    {
+      "actor": "ticker",
+      "phase": "implicit-diff-after-update-race",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "diff",
+        "--raw"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.513201,
+      "stdout": "Applied local update\naudit/shared-v2/ticker/source → audit/shared-v2/ticker/target\n1 change · 0 edited · 1 added · 0 removed\n\ndiff --mem audit/shared-v2/ticker/target#74c41f02-5c74-4b68-974e-20def40a6b82\nnew memory\n--- /dev/null\n+++ b/audit/shared-v2/ticker/target#74c41f02-5c74-4b68-974e-20def40a6b82\n@@ -0,0 +1 @@\n+SHARED-CANARY::ticker source assertion.\n\\ No newline at end of file\nSources: audit/shared-v2/ticker/source#71c23858-e777-4636-8048-3ae936d1ccff\nReason: The source provides genuinely missing ticker information for the supplied target context.\n",
+      "stderr": ""
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "implicit-diff-after-update-race",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "diff",
+        "--raw"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.504576,
+      "stdout": "Applied local update\naudit/shared-v2/ticker/source → audit/shared-v2/ticker/target\n1 change · 0 edited · 1 added · 0 removed\n\ndiff --mem audit/shared-v2/ticker/target#74c41f02-5c74-4b68-974e-20def40a6b82\nnew memory\n--- /dev/null\n+++ b/audit/shared-v2/ticker/target#74c41f02-5c74-4b68-974e-20def40a6b82\n@@ -0,0 +1 @@\n+SHARED-CANARY::ticker source assertion.\n\\ No newline at end of file\nSources: audit/shared-v2/ticker/source#71c23858-e777-4636-8048-3ae936d1ccff\nReason: The source provides genuinely missing ticker information for the supplied target context.\n",
+      "stderr": ""
+    },
+    {
+      "actor": "practice-source",
+      "phase": "implicit-diff-after-update-race",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "diff",
+        "--raw"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.509292,
+      "stdout": "Applied local update\naudit/shared-v2/ticker/source → audit/shared-v2/ticker/target\n1 change · 0 edited · 1 added · 0 removed\n\ndiff --mem audit/shared-v2/ticker/target#74c41f02-5c74-4b68-974e-20def40a6b82\nnew memory\n--- /dev/null\n+++ b/audit/shared-v2/ticker/target#74c41f02-5c74-4b68-974e-20def40a6b82\n@@ -0,0 +1 @@\n+SHARED-CANARY::ticker source assertion.\n\\ No newline at end of file\nSources: audit/shared-v2/ticker/source#71c23858-e777-4636-8048-3ae936d1ccff\nReason: The source provides genuinely missing ticker information for the supplied target context.\n",
+      "stderr": ""
+    },
+    {
+      "actor": "ticker",
+      "phase": "exact-review-after-update-race",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "review",
+        "update",
+        "--session",
+        "5c1c9f63-4711-4d5f-b305-1ea72f2d0f22",
+        "--snapshot"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.209044,
+      "stdout": " MEM REVIEW · UPDATE\n CONTEXT LOCATIONS\n   SOURCE · audit/shared-v2/ticker/source\n   TARGET · audit/shared-v2/ticker/target\n APPLIED · REVIEW · 0 EDITS · 1 ADDITIONS · 0 REMOVALS · 1 CHANGES\n\n PLAN\n The exact target Memory changes shown below were applied to the recorded Target revision.\n\n WHAT WILL CHANGE\n 1 exact target Memory changes in the target Context audit/shared-v2/ticker/target: 0 EDIT, 1 ADD, and 0 REMOVE. Impact shows each located before/after transition once; exact reason and source provenance remain inspectable in Items.\n\n APPLICATION · 0\n  (none)\n\naudit/shared-v2/ticker/target Memory [74c41f02-5c74-4b68-974e-20def40a6b82]\n  OWNER\n    Context audit/shared-v2/ticker/target [f4d062df-7edf-4253-bd4f-762b8ca32b14]\n  MEMORY UID\n    74c41f02-5c74-4b68-974e-20def40a6b82\n  AFTER\n    SHARED-CANARY::ticker source assertion.\n  REASON\n    The source provides genuinely missing ticker information for the supplied target context.\n  SOURCE REFERENCES\n    1. Context audit/shared-v2/ticker/source [97fc2b38-1e67-4183-bc0c-5afa93030a16]\n    Memory [71c23858-e777-4636-8048-3ae936d1ccff]\n    Content SHA-256: 90cda1703dc458804b894cc267c2e3d863e628d3560317f82d357bc094dc9c27\n",
+      "stderr": ""
+    }
+  ]
+}

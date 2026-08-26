@@ -1,0 +1,5 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 elaborate --goal "Produce a final neutral rule set with both provenances and explicit unresolved exceptions." --to task-2/participant/proposal-workspace --number 1 --strict
+EXIT: 1
+DURATION_SECONDS: 1.322
+
+Elaborate error: Strict Elaborate applies only when generating Cases from Rules.

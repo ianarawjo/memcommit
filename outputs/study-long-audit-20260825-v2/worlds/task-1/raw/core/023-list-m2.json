@@ -1,0 +1,11 @@
+{
+  "sequence": 23,
+  "operation": "list",
+  "attempt": 2,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 ls task-1/campus-wiki/event-relocations --direct",
+  "exit": 0,
+  "wall_seconds": 1.46133,
+  "pre_target_digest": "73da5dd84420297114b9ee17599666ffd99b6864541294fd576ad3ab20cb6b40",
+  "post_target_digest": "27a0e124e2a29a786d84df12ac7e46a1d5f6e28b27c7e8e47894c7f2671a67ca",
+  "raw_output": "raw/core/023-list-m2.txt"
+}

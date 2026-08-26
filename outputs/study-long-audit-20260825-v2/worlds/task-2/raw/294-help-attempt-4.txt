@@ -1,0 +1,12 @@
+mem status ┬ Show the current Context's inventory, first five direct Memories, relationships, and
+           │ latest checkpoints.
+           └ WHEN · Getting oriented to what the current Context contains, how it is connected, and
+                    which operations were recently applied.
+
+mem pwd ┬ Print the current canonical Context name without loading its contents.
+        └ WHEN · Confirming the active Context in a script or terminal.
+
+mem list ┬ List a Context's direct items—Memories, Memory references, query views, and embedded
+         │ Contexts—and its readable child Contexts. Use -r to recursively include items from
+         │ descendant and embedded Contexts; ls is the compact alias.
+         └ WHEN · Inspecting the structure and direct contents of a Context.

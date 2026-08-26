@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 meld task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance task-3/local --direct
+
+EXIT
+0
+
+OUTPUT
+MELD READY · DIRECTIONAL · task-3/local
+ROUTE · INCOMING task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance → BASELINE / TARGET task-3/local
+JUDGMENTS · REQUIRED 0 · OPTIONAL 0
+SESSION · f89c35cc-b0c0-4716-af82-50a38fe7e905
+SOURCE · UNCHANGED
+IMPACT · mem impact meld --session f89c35cc-b0c0-4716-af82-50a38fe7e905
+RESUME · mem meld --sessions

@@ -1,0 +1,55 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 atomize task-2/participant/proposal-workspace:84cab032-847f-4be2-88db-3c613922d688 --all
+EXIT: 0
+DURATION_SECONDS: 8.664
+
+ RESULT · atomize · task-2/participant/proposal-workspace
+ STATUS · ANALYSIS COMPLETE · sources=1 · projected=3 · splits=1 · children=3 · review issues=1
+
+ WHAT MEM UNDERSTOOD
+ The rule requires shared co-advisor requirements to be preserved once, distinct conditions to be retained, and owned unresolved conflicts to be explained with both provenances.
+
+ WHAT HAPPENED
+ The three independently revisable synthesis requirements were separated while the equal-authority scope remained attached to each one.
+
+ WHAT REMAINS UNRESOLVED
+ (none reported under this operation's bounded contract)
+The atomize analysis reported no unresolved finding in this bounded Context frame.
+
+ REPRESENTATIVE / BOUNDARY CASES
+ ›  1. [REPRESENTATIVE] COMPOSITE · SPLIT
+       SPLIT: Equal-authority synthesis rule: preserve each shared co-advisor requirement once, retain distinct conditions, and explain owned unresolved conflicts with both provenances.
+
+Analysis [dcff1e3e] · INPUT task-2/participant/proposal-workspace → OUTPUT task-2/participant/proposal-workspace · ORDER: SOURCE · 0/1 answered
+
+ACTIONABLE ISSUES
+›  1. · SUGGESTED SPLIT · COMPOSITE · 3 CHILDREN  “Equal-authority synthesis rule: preserve each s…”
+
+SUGGESTED SPLIT 1/1
+
+SOURCE [84cab032]
+Equal-authority synthesis rule: preserve each shared co-advisor requirement once, retain distinct conditions, and explain owned unresolved conflicts with both provenances.
+
+CLASSIFICATION
+COMPOSITE · 3 CHILDREN
+
+WHY THIS MEMORY SPLIT
+The source states three independently revisable requirements under one explicit equal-authority synthesis scope.
+
+PROPOSED CHILDREN
+1. Equal-authority synthesis rule: preserve each shared co-advisor requirement once.
+   EVIDENCE: Equal-authority synthesis rule: | preserve each shared co-advisor requirement once
+2. Equal-authority synthesis rule: retain distinct conditions.
+   EVIDENCE: Equal-authority synthesis rule: | retain distinct conditions
+3. Equal-authority synthesis rule: explain owned unresolved conflicts with both provenances.
+   EVIDENCE: Equal-authority synthesis rule: | explain owned unresolved conflicts with both provenances
+
+REFINE, COMMENT, OR ENTER A DIFFERENT READING
+> 
+
+ALL ATOMIZE RESULTS
+  1. COMPOSITE [84cab032] Equal-authority synthesis rule: preserve each shared co-advisor require…
+
+SOURCE means canonical Context order; Memory creation timestamps are not recorded.
+No Memory changes have been applied. No checkpoint was created.
+Saved analysis [dcff1e3e]: CURRENT.
+Apply the planned in-place Output with: mem atomize --save

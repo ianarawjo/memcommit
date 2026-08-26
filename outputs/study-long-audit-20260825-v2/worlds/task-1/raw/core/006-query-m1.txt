@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 query task-1/campus-wiki/construction-details 'What public construction dates may be stated without exposing internal work details?'
+
+EXIT
+0
+
+WALL_SECONDS
+5.518727
+
+STDOUT
+The available source does not provide any public construction dates.
+
+
+STDERR

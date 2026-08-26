@@ -1,0 +1,11 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple summarize practice --recursive --plain
+
+EXIT
+0
+
+OUTPUT
+SUMMARY · practice
+STATUS · RECURSIVE
+
+Editing should begin with structural opinion, preserve intended structure, terminology, claims, conditions, markers, and all required points, remove redundancy carefully, and use accurate connectors. Titles default to sentence case and italicized work titles unless a named guide overrides those defaults. Corrections and citations require complete-source verification; review-only requests should report problems before rewriting.

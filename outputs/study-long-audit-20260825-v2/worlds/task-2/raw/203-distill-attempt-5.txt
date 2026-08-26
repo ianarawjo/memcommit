@@ -1,0 +1,14 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 distill --from task-2 --to task-2/participant/proposal-workspace --goal "Produce a final neutral rule set with both provenances and explicit unresolved exceptions." --direct
+EXIT: 0
+DURATION_SECONDS: 16.654
+
+DISTILL APPLIED · task-2 → task-2/participant/proposal-workspace
+EFFECTS · ADD 4 RULES
+
+  [memory 24e348f6] Reconcile equal-authority advisor input neutrally: preserve each shared or duplicate requirement once, retain advisor-specific conditions and both provenances, and explicitly record unresolved conflicts with assigned owners; neither source has tie-breaking priority.
+  [memory 1ac3573f] When equivalent wording is consolidated, record why it was treated as equivalent, and apply the reconciliation process category by category.
+  [memory 854a7370] For budget reconciliation, keep totals and major categories in the proposal body, while placing quantities, unit rates, assumptions, and arithmetic in a compact cross-referenced appendix so detail is preserved without crowding the two-page narrative.
+  [memory c505d730] For recruitment reconciliation, before commitments use a justified target range and state separate workload and budget consequences; after confirmation publish one exact recalculated target, explicitly documenting the transition condition.
+
+REVIEW · mem review distill --receipt 37efeccd-6f18-4505-a616-8c2186fc8e75
+UNDO · mem undo

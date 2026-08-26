@@ -1,0 +1,23 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source elaborate --rule 'An atom must remain meaningful without neighboring text and must not authorize an edit.' --to practice/description --number 2 --plain
+
+EXIT
+0
+
+WALL_SECONDS
+9.820263
+
+STDOUT
+ELABORATE APPLIED · practice/description
+MODE · RULES_TO_CASES · VERIFICATION · UNVERIFIED · QUALITY · BEST_EFFORT
+SOURCE · INLINE · TARGET · practice/description
+EFFECTS · ADD 2 MEMORIES
+
+  [memory 83848cf2] When asked to review a draft without revising it, identify and explain any problems, but do not change the draft.
+  [memory b1767464] Even when a review reveals an obvious wording error, report the error and a reason it is problematic; wait for a separate request before editing the wording.
+
+REVIEW · mem review elaborate --receipt 4e9ad64a-e131-497f-ab78-e683420defa7
+UNDO · mem undo
+
+
+STDERR

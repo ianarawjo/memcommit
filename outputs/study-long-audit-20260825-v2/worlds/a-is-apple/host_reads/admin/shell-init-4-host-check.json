@@ -1,0 +1,6 @@
+{
+  "host_command": "zsh -dfc source-only; whence -w mem; function never invoked",
+  "exit": 0,
+  "stdout": "mem: function\n",
+  "stderr": ""
+}

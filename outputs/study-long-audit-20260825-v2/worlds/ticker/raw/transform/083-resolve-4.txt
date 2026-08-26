@@ -1,0 +1,9 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker resolve task-3/local --guidance 'Preserve uncertainty and do not invent examples.' --plain
+
+EXIT
+0
+
+OUTPUT
+RESOLVE · task-3/local
+FIT · YES · NO CHANGE

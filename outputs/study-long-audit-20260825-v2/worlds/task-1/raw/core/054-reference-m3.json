@@ -1,0 +1,11 @@
+{
+  "sequence": 54,
+  "operation": "reference",
+  "attempt": 3,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 reference task-1/campus-wiki/building-access --into task-1/participant --recursive",
+  "exit": 1,
+  "wall_seconds": 1.347896,
+  "pre_target_digest": "0132229498257de77c974ef06c557c54080ca17f3bef64708dc7007528150c28",
+  "post_target_digest": "2daa66564f5791f77281d60cc3be47eaf56181fcc535a687d6ce8d669fda66be",
+  "raw_output": "raw/core/054-reference-m3.txt"
+}

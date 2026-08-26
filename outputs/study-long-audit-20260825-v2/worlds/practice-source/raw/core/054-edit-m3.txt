@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source edit practice:187fb3ae 'CANDIDATE: if a shorter fixed limit applies, aim to remove approximately 20-30% from redundant or unnecessary material. Preserve all intended points plus every claim'"'"'s original strength and conditions.'
+
+EXIT
+0
+
+WALL_SECONDS
+1.316497
+
+STDOUT
+Edited [187fb3ae] in 'practice':
+  - CANDIDATE: when a shorter fixed limit applies, target approximately 20-30% cuts from redundant or unnecessary material. Preserve every intended point and each claim's original strength and conditions.
+  + CANDIDATE: if a shorter fixed limit applies, aim to remove approximately 20-30% from redundant or unnecessary material. Preserve all intended points plus every claim's original strength and conditions.
+
+
+STDERR

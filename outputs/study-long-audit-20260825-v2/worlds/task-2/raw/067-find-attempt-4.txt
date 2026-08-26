@@ -1,0 +1,11 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 find participant --context task-2/advisor1/methods --context task-2/advisor2/methods
+EXIT: 0
+DURATION_SECONDS: 1.548
+
+FIND RESULTS
+PATTERN · participant · LITERAL · CASE SENSITIVE
+SCOPE · task-2/advisor1/methods + task-2/advisor2/methods · EXACT · EXCLUDE EMBEDS
+SCANNED 30 · MATCHED 2 · OCCURRENCES 2
+
+1 [df53a41c] Commit to one exact target number of participants so the schedule, workload, and budget can be checked against the same quantity. [task-2/advisor1/methods m4]
+2 [0ecc319a] Calculate the required sessions, facilitator hours, and participant payments from the same exact target rather than from separate rough estimates. [task-2/advisor1/methods m12]

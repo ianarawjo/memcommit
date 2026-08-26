@@ -1,0 +1,11 @@
+{
+  "sequence": 63,
+  "operation": "fit",
+  "attempt": 3,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 fit --memory task-1/participant/construction-updates/building-access:8b077f2a --memory task-1/campus-wiki/building-access:1cb2aa88 --background 'The construction period is June 24 through August 23.'",
+  "exit": 0,
+  "wall_seconds": 7.18254,
+  "pre_target_digest": "30320b4bb7b793230ea7f2e13859219885cf8e180e9ecc4a58627ac82ec2bfd0",
+  "post_target_digest": "c962ce58778285d16ae455e7512e96fa18a500e6f231eb6e9a39d6585997798f",
+  "raw_output": "raw/core/063-fit-m3.txt"
+}

@@ -1,0 +1,11 @@
+{
+  "sequence": 62,
+  "operation": "find-conflicts",
+  "attempt": 3,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 find-conflicts task-1/campus-wiki/building-access",
+  "exit": 0,
+  "wall_seconds": 11.432528,
+  "pre_target_digest": "a72a355ae188557b43d6379e2eacd51ed97e05c99352c9801eceba3c71f9ec25",
+  "post_target_digest": "30320b4bb7b793230ea7f2e13859219885cf8e180e9ecc4a58627ac82ec2bfd0",
+  "raw_output": "raw/core/062-find-conflicts-m3.txt"
+}

@@ -1,0 +1,11 @@
+{
+  "sequence": 87,
+  "operation": "show",
+  "attempt": 5,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 show task-1/campus-wiki/route-changes:ee271f65",
+  "exit": 0,
+  "wall_seconds": 1.392452,
+  "pre_target_digest": "0b87ff5b49333dd9f0196458c7a32c5ab1ace7aaf8d37cb75d542d7a30efd636",
+  "post_target_digest": "82b205fd5b84ef895b2392844142dec9a21c5c45281937f6f694fbaf8f184611",
+  "raw_output": "raw/core/087-show-m5.txt"
+}

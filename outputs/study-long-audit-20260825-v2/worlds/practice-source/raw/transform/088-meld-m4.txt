@@ -1,0 +1,20 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source meld --memory 'Preserve document-title scope when retaining the literal word for.' --into practice/description --direct --restart
+
+EXIT
+0
+
+WALL_SECONDS
+7.368913
+
+STDOUT
+MELD READY · DIRECTIONAL · practice/description
+ROUTE · INCOMING INLINE MEMORY → BASELINE / TARGET practice/description
+JUDGMENTS · REQUIRED 0 · OPTIONAL 0
+SESSION · 0e93158f-eb5d-4b89-834a-e6176df6ff53
+SOURCE · UNCHANGED
+IMPACT · mem impact meld --session 0e93158f-eb5d-4b89-834a-e6176df6ff53
+RESUME · mem meld --sessions
+
+
+STDERR

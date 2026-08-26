@@ -1,0 +1,5 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 delete a9cd917a-5c65-4672-aae0-7ee0040d7094 --context task-2/participant/proposal-workspace
+EXIT: 0
+DURATION_SECONDS: 1.315
+
+Removed [a9cd917a] Keep the total, major cost categories, and one-line estimate basis in the main text so the resource argument can be understood without leaving the proposal.

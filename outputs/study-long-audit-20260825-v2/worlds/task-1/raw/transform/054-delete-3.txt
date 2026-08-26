@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 delete dead0003 --context task-1/participant
+
+EXIT
+1
+
+OUTPUT
+Error: "No direct item matching 'dead0003' in context 'task-1/participant'."

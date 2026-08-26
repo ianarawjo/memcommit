@@ -1,0 +1,12 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker rationale task-2/participant/proposal-workspace:7ed418b9 --format json --max-chars 80
+
+EXIT
+2
+
+OUTPUT
+Usage: run_isolated_mem.py rationale [OPTIONS] [SELECTOR]
+Try 'run_isolated_mem.py rationale -h' for help.
+╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ No such option: --format                                                     │
+╰──────────────────────────────────────────────────────────────────────────────╯

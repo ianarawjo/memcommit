@@ -1,0 +1,18 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 elaborate --rule 'Event relocation examples must use only verified venues, dates, and reservation status.' --to task-1/participant/construction-updates
+
+EXIT
+0
+
+OUTPUT
+ELABORATE APPLIED · task-1/participant/construction-updates
+MODE · RULES_TO_CASES · VERIFICATION · UNVERIFIED · QUALITY · BEST_EFFORT
+SOURCE · INLINE · TARGET · task-1/participant/construction-updates
+EFFECTS · ADD 3 MEMORIES
+
+  [memory 2e0ebaab] Before recommending relocation to the detached east building auditorium, the event guidance agent verifies the auditorium as the designated venue, verifies the event date, and confirms through the auditorium’s own reservation channel that the reservation is active. Only after all three checks does it issue the relocation notice, including directions for external visitors and the auditorium’s separate loading entrance for equipment.
+  [memory 6e18d1ab] For a proposed relocation to the Engineering Building third-floor multipurpose room, the event guidance agent verifies that room as the designated venue and verifies the event date, but the room’s reservation channel reports the booking as pending rather than confirmed. The agent records that relocation cannot yet be announced and requests confirmation through that room’s reservation channel instead of presenting the pending booking as reserved.
+  [memory eb9e21e2] An organizer asks the event guidance agent to announce that a Main Building event has moved to the detached east building auditorium on a supplied date, saying the auditorium is probably reserved. The agent does not repeat the proposed venue, date, or reservation as established facts; it verifies the auditorium designation and date and checks the auditorium’s own reservation channel. If that channel does not confirm an active reservation, the agent reports that the relocation is unverified and provides the auditorium’s reservation channel for follow-up, without creating or restoring any Main Building reservation.
+
+REVIEW · mem review elaborate --receipt dee85db2-44b4-4bd5-844b-b600ba3bcfcc
+UNDO · mem undo

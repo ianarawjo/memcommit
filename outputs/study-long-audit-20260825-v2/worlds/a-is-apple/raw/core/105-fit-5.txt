@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple fit --context practice --context practice/source
+
+EXIT
+0
+
+OUTPUT
+FIT · NO · [TARGETS: CONTEXT practice, practice/source] · WHY · The apple assertions for “a” conflict with the explicit alternative that “a maps to apricot,” and the banana assertions for “b” conflict with the repeated assertions that “b is blueberry.” Descriptions of the alternatives as deliberate, provisional, or unresolved do not ordinarily make the competing direct mappings jointly true.

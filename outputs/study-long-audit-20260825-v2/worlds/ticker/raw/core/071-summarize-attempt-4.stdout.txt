@@ -1,0 +1,4 @@
+SUMMARY · task-1
+STATUS · DIRECT
+
+To construct the base ticker, remove any terminal legal suffix such as Inc., Corp., Ltd., or LLC and all punctuation and spaces. For example, “North-Star, Inc.” becomes “NORTHSTAR” after removing the comma, hyphen, space, and suffix; the output contains no punctuation.

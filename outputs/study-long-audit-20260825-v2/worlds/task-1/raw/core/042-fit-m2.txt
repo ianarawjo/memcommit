@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 fit --context task-1/participant/construction-updates/event-relocations --context task-1/campus-wiki/event-relocations
+
+EXIT
+0
+
+WALL_SECONDS
+14.670587
+
+STDOUT
+FIT · YES · [TARGETS: CONTEXT task-1/participant/construction-updates/event-relocations, task-1/campus-wiki/event-relocations]
+
+
+STDERR

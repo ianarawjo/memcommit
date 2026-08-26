@@ -1,0 +1,28 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 revert d685d49d --context task-3/local --keep
+
+EXIT
+0
+
+OUTPUT
+Reverted Context: task-3/local
+Restored state recorded by: manual checkpoint
+Action detail: task-3 transform round 1 direct recovery
+Affected Context: task-3/local
+Affected content: 5 Memories added, 6 Memory refs added, 5 Embedded contexts added, 1 direct item added, 12 Memories removed
+  - [memory 1143e619] "Select for disclosure only Memories and details necessary for the user's confirmed current sharing purpose; if that purpose is not specific, obtain clarification before creating disclosure candidates."
+  - [memory 7f82dc72] "Treat sharing approval as limited to the reviewed recipients, purposes, and items; prior approval for another purpose does not authorize reuse."
+  - [memory c5c6298b] "For the user’s confirmed current purpose of helping Dr. Chen adjust the user’s present prescription, disclose only the user-provided current medication name and dosage after the user reviews those exact details and explicitly approves send…"
+  - [memory 7293b63f] "Include only Memories needed for the current sharing purpose confirmed by the user."
+  - [memory e13aac8e] "Do not reuse a Memory approved once for a different purpose."
+  - [memory 959356ff] "Exclude details not needed for the current purpose from the sharing candidate."
+  - [memory c010eae5] "If the sharing purpose is not specific, ask the user to clarify it before creating candidates."
+  - [memory fd34929a] "The recipient scope of sharing approval is limited to the reviewed recipients."
+  - [memory 0836f68a] "The purpose scope of sharing approval is limited to the reviewed purposes."
+  - [memory b1a78648] "The item scope of sharing approval is limited to the reviewed items."
+  - [memory 59212a96] "Unless a separate restriction is conveyed, a receiving agent may judge that it is free to use received material within the requested scope."
+  - [memory 03292b16] "Healthcare candidate (review-pending, not approved): limit disclosure to facts necessary for current care, exclude unrelated history, and require explicit user approval."
+  ... 17 more affected direct items not shown
+Restored checkpoint: [d685d49d] (2026-08-25 13:29)
+Undo command: mem undo
+Exact recovery checkpoint: mem revert 49c5e904 --discard-newer

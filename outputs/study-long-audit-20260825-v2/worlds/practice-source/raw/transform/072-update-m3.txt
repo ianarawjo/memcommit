@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source update practice/source practice/description --source-memory f3ef224d --target-memory bce98730 --direct --replace-stage
+
+EXIT
+1
+
+WALL_SECONDS
+1.328022
+
+STDOUT
+
+
+STDERR
+Update error: Source and target Context graphs overlap; update requires independent Contexts.

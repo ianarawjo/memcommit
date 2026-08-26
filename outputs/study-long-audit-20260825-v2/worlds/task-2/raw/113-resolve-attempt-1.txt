@@ -1,0 +1,6 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 resolve --context task-2/participant/proposal-workspace --memory f6772ab9-ddfb-4603-86cd-1bc76831b78e --no-create --guidance "A shared style rule must retain both advisor provenances and name any source-specific sentence condition." --plain
+EXIT: 0
+DURATION_SECONDS: 6.971
+
+RESOLVE · task-2/participant/proposal-workspace
+FIT · YES · NO CHANGE

@@ -1,0 +1,17 @@
+{
+  "sequence": 46,
+  "label": "checkout-3-source",
+  "read_at": "2026-08-25T18:15:50.032982+00:00",
+  "source_root": "task-2/participant",
+  "recursive": false,
+  "lexically_disjoint_from_scratch": true,
+  "resolved_context_names": [
+    "task-2/participant"
+  ],
+  "direct_item_counts": {
+    "task-2/participant": 5
+  },
+  "retained_branch_checkpoint_count": 0,
+  "retained_branch_checkpoints": [],
+  "result": "PASS"
+}

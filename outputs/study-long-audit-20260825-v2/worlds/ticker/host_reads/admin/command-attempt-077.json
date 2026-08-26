@@ -1,0 +1,31 @@
+{
+  "sequence": 77,
+  "count_before": 321,
+  "count_after": 322,
+  "delta": 1,
+  "new_attempt_uids": [
+    "bbea9c18-cbbd-4a97-ae1d-d24601f0e3a7"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "bbea9c18-cbbd-4a97-ae1d-d24601f0e3a7",
+      "operation": "share",
+      "command": "mem share task-1/participant/construction-updates --to task-3/government/healthcare-agent --direct --recursive",
+      "status": "FAILED",
+      "started_at": "2026-08-25T18:16:48.972130+00:00",
+      "completed_at": "2026-08-25T18:16:48.980224+00:00",
+      "elapsed_seconds": 0.007913791996543296,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": {
+        "kind": "Exit",
+        "exit_code": 1
+      }
+    }
+  ]
+}

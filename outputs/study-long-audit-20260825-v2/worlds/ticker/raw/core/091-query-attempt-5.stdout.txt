@@ -1,0 +1,17 @@
+The maintained algorithm is to remove a terminal legal suffix such as Inc., Corp., Ltd., or LLC; strip spaces and punctuation; preserve the remaining letters and digits in their original order, including leading zeroes; and uppercase the letters without inventing characters. A share class is represented with generated suffix syntax such as .B. [1] [2] [3] [4] [5] [6]
+
+North-Star, Inc. evaluates to NORTHSTAR after removing Inc., the comma, hyphen, and space. [7] [3]
+
+Route 66, LLC evaluates to ROUTE66 after removing LLC, the comma, and the space while preserving 66. [8]
+
+Acme Corp. Class B evaluates to ACME.B after removing Corp. and mapping Class B to the generated .B share-class suffix. [5] [6]
+
+References
+[1] Core ticker rule: remove a terminal legal suffix such as Inc., Corp., Ltd., or LLC before constructing the ticker. Preserve the remaining alphanumeric characters. — fac90a77, task-2/participant, m8
+[2] Base ticker rule: uppercase the remaining company-name letters in their original order. Do not invent letters. — afdea5f7, task-2, m6
+[3] Punctuation rule and example: strip punctuation before constructing a ticker. North-Star, Inc. becomes NORTHSTAR after removing the comma, hyphen, space, and Inc. suffix. — 1e0e89ee, task-2/participant/proposal-workspace, m10
+[4] Numeral rule: preserve digits 0-9, including leading zeroes, in their original positions while removing spaces and punctuation. — 28120a2d, task-2/participant/proposal-workspace, m11
+[5] Share-class example: Acme Corp. Class B becomes ACME.B after removing Corp. and mapping — 96a3a079, task-1, m19
+[6] Class B to the .B suffix. The dot is generated share-class syntax. — 03a9af5d, task-1, m20
+[7] Punctuation example: North-Star, Inc. becomes NORTHSTAR after removing the comma, hyphen, space, and Inc. suffix. The output contains no punctuation. — 1e0e89ee, task-2/participant/proposal-workspace, m9
+[8] Numeral example: Route 66, LLC becomes ROUTE66 after removing the comma, space, and LLC suffix while preserving 66. — ace52daf, task-2/participant/proposal-workspace, m12

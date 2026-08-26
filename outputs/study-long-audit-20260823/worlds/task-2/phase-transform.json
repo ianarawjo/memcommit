@@ -1,0 +1,1811 @@
+{
+  "world": "task-2",
+  "phase": "transform",
+  "launcher": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli",
+  "operations": {
+    "audit": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli audit task-2/participant/transform-scratch/source --snapshot",
+          "exit": 0,
+          "starting_state": "round-1 empty scratch",
+          "entry_route": "audit round-1 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "fixed fixture/direct input",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Saved empty 3-check audit 797d9148.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 2,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli audit task-2/participant/transform-scratch/result --snapshot",
+          "exit": 0,
+          "starting_state": "round-2 first distilled result",
+          "entry_route": "audit round-2 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Saved 7-Memory audit 1a3773fe with 3 ambiguities.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 3,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli audit task-2/participant/transform-scratch/source --against task-2/participant/transform-scratch/criteria --snapshot",
+          "exit": 0,
+          "starting_state": "round-3 populated source and criteria",
+          "entry_route": "audit round-3 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Saved 4-check audit fca10395; conformance had 3 gaps.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 4,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli audit task-2/participant/transform-scratch/archive --snapshot",
+          "exit": 0,
+          "starting_state": "round-4 duplicate-heavy archive and recovery",
+          "entry_route": "audit round-4 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Saved 21-Memory audit f93c5dd3; output was truncated and found six redundancy groups.",
+          "defect_ids": [
+            "T2T-AUDIT-OVERLOAD-01"
+          ],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 5,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli audit task-2/participant/transform-scratch/archive --against task-2/participant/transform-scratch/criteria --snapshot",
+          "exit": 0,
+          "starting_state": "round-5 final destructive recovery",
+          "entry_route": "audit round-5 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Saved final 12-Memory audit 744c5fcf with all 10 rules conforming.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        }
+      ]
+    },
+    "checkpoint": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli checkpoint task-2/participant/transform-scratch/source \"round-1 pre-destructive empty source\"",
+          "exit": 0,
+          "starting_state": "round-1 empty scratch",
+          "entry_route": "checkpoint round-1 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "fixed fixture/direct input",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Created 476a4d52.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 2,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli checkpoint task-2/participant/transform-scratch/archive \"round-2 pre-clear archive\"",
+          "exit": 0,
+          "starting_state": "round-2 first distilled result",
+          "entry_route": "checkpoint round-2 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Created fec621d2.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 3,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli checkpoint task-2/participant/transform-scratch/source \"round-3 populated source recovery point\"",
+          "exit": 0,
+          "starting_state": "round-3 populated source and criteria",
+          "entry_route": "checkpoint round-3 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Created a4d26880.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 4,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli checkpoint task-2/participant/transform-scratch/criteria \"round-4 criteria before clear and recovery\"",
+          "exit": 0,
+          "starting_state": "round-4 duplicate-heavy archive and recovery",
+          "entry_route": "checkpoint round-4 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Created d06cd602.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 5,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli checkpoint task-2/participant/transform-scratch/result \"round-5 result before clear/recover\"",
+          "exit": 0,
+          "starting_state": "round-5 final destructive recovery",
+          "entry_route": "checkpoint round-5 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Created 897130a5.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        }
+      ]
+    },
+    "check-conformance": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli check-conformance task-2/participant/transform-scratch/source --against \"text:Each mapping must preserve both advisor provenances.\"",
+          "exit": 1,
+          "starting_state": "round-1 empty scratch",
+          "entry_route": "check-conformance round-1 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "fixed fixture/direct input",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Rejected empty Target.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 2,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli check-conformance task-2/participant/transform-scratch/result --against \"text:Preserve both advisor provenances.\"",
+          "exit": 0,
+          "starting_state": "round-2 first distilled result",
+          "entry_route": "check-conformance round-2 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "3/3 examples conformed to literal rule.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 3,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli check-conformance task-2/participant/transform-scratch/source --against task-2/participant/transform-scratch/criteria",
+          "exit": 0,
+          "starting_state": "round-3 populated source and criteria",
+          "entry_route": "check-conformance round-3 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Only 2/7 examples fully conformed; long per-rule gap report.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 4,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli check-conformance task-2/participant/transform-scratch/archive --against task-2/participant/transform-scratch/criteria",
+          "exit": 0,
+          "starting_state": "round-4 duplicate-heavy archive and recovery",
+          "entry_route": "check-conformance round-4 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "21/21 examples conformed to 10/10 rules.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 5,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli check-conformance task-2/participant/transform-scratch/source --against task-2/participant/transform-scratch/criteria",
+          "exit": 0,
+          "starting_state": "round-5 final destructive recovery",
+          "entry_route": "check-conformance round-5 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "2/6 examples conformed; two violations and several evidence gaps.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        }
+      ]
+    },
+    "clear": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli clear task-2/participant/transform-scratch/source --force",
+          "exit": 0,
+          "starting_state": "round-1 empty scratch",
+          "entry_route": "clear round-1 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "fixed fixture/direct input",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Empty no-op.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 2,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli clear task-2/participant/transform-scratch/archive --force",
+          "exit": 0,
+          "starting_state": "round-2 first distilled result",
+          "entry_route": "clear round-2 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Empty no-op.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 3,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli clear task-2/participant/transform-scratch/archive --recursive --force",
+          "exit": 0,
+          "starting_state": "round-3 populated source and criteria",
+          "entry_route": "clear round-3 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Empty subtree no-op.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 4,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli clear task-2/participant/transform-scratch/criteria --force",
+          "exit": 0,
+          "starting_state": "round-4 duplicate-heavy archive and recovery",
+          "entry_route": "clear round-4 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Cleared 10 criteria after checkpoint.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 5,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli clear task-2/participant/transform-scratch/result --force",
+          "exit": 0,
+          "starting_state": "round-5 final destructive recovery",
+          "entry_route": "clear round-5 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Cleared 22 result items after checkpoint.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        }
+      ]
+    },
+    "delete": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli delete deadbeef --context task-2/participant/transform-scratch/source",
+          "exit": 1,
+          "starting_state": "round-1 empty scratch",
+          "entry_route": "delete round-1 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "fixed fixture/direct input",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Safe missing-item rejection; no mutation.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 2,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli delete deadbeef --context task-2/participant/transform-scratch/archive",
+          "exit": 1,
+          "starting_state": "round-2 first distilled result",
+          "entry_route": "delete round-2 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Safe missing-item rejection; no mutation.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 3,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli delete deadbeef --context task-2/participant/transform-scratch/archive",
+          "exit": 1,
+          "starting_state": "round-3 populated source and criteria",
+          "entry_route": "delete round-3 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Safe missing-item rejection; no mutation.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 4,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli delete deadbeef --context task-2/participant/transform-scratch/criteria",
+          "exit": 1,
+          "starting_state": "round-4 duplicate-heavy archive and recovery",
+          "entry_route": "delete round-4 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Safe missing-item rejection; no mutation.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 5,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli delete deadbeef --context task-2/participant/transform-scratch/result",
+          "exit": 1,
+          "starting_state": "round-5 final destructive recovery",
+          "entry_route": "delete round-5 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Safe missing-item rejection; no mutation.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        }
+      ]
+    },
+    "diff": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli diff task-2/participant/transform-scratch/source --stat",
+          "exit": 2,
+          "starting_state": "round-1 empty scratch",
+          "entry_route": "diff round-1 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "fixed fixture/direct input",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Context plus --stat rejected.",
+          "defect_ids": [
+            "T2T-DIFF-ROUTE-01"
+          ],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 2,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli diff task-2/participant/transform-scratch/result",
+          "exit": 1,
+          "starting_state": "round-2 first distilled result",
+          "entry_route": "diff round-2 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Non-TTY history selection rejected.",
+          "defect_ids": [
+            "T2T-DIFF-ROUTE-01"
+          ],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 3,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli diff task-2/participant/transform-scratch/source --raw",
+          "exit": 2,
+          "starting_state": "round-3 populated source and criteria",
+          "entry_route": "diff round-3 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Context plus --raw rejected.",
+          "defect_ids": [
+            "T2T-DIFF-ROUTE-01"
+          ],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 4,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli diff task-2/participant/transform-scratch/criteria --verbose",
+          "exit": 2,
+          "starting_state": "round-4 duplicate-heavy archive and recovery",
+          "entry_route": "diff round-4 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Context plus --verbose rejected.",
+          "defect_ids": [
+            "T2T-DIFF-ROUTE-01"
+          ],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 5,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli diff 897130a5",
+          "exit": 1,
+          "starting_state": "round-5 final destructive recovery",
+          "entry_route": "diff round-5 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Checkpoint UID was treated as unavailable Context.",
+          "defect_ids": [
+            "T2T-DIFF-ROUTE-01"
+          ],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        }
+      ]
+    },
+    "distill": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli distill --from task-2/participant/proposal-workspace --to task-2/participant/transform-scratch/result --goal \"Distill neutral co-advisor proposal rules\"",
+          "exit": 0,
+          "starting_state": "round-1 empty scratch",
+          "entry_route": "distill round-1 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "fixed fixture/direct input",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Added 7 neutral rules.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 2,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli distill --from task-2/participant/transform-scratch/result --to task-2/participant/transform-scratch/criteria --goal \"Distill executable neutrality criteria\"",
+          "exit": 0,
+          "starting_state": "round-2 first distilled result",
+          "entry_route": "distill round-2 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Added 7 criteria rules.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 3,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli distill --from task-2/participant/transform-scratch/source --to task-2/participant/transform-scratch/archive --goal \"Preserve neutral rules with provenance\"",
+          "exit": 0,
+          "starting_state": "round-3 populated source and criteria",
+          "entry_route": "distill round-3 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Added 8 archive rules.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 4,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli distill --from task-2/participant/transform-scratch/archive --to task-2/participant/transform-scratch/criteria --goal \"Recover neutral criteria after clear\"",
+          "exit": 0,
+          "starting_state": "round-4 duplicate-heavy archive and recovery",
+          "entry_route": "distill round-4 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Recovered 9 criteria after clear.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 5,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli distill --from task-2/participant/transform-scratch/source --to task-2/participant/transform-scratch/result --goal \"Recover final neutral policy after destructive clear\"",
+          "exit": 0,
+          "starting_state": "round-5 final destructive recovery",
+          "entry_route": "distill round-5 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Recovered 6 rules after result clear.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        }
+      ]
+    },
+    "elaborate": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli elaborate --from task-2/participant/proposal-workspace --to task-2/participant/transform-scratch/result --goal \"Explain when exact targets and ranges apply\"",
+          "exit": 1,
+          "starting_state": "round-1 empty scratch",
+          "entry_route": "elaborate round-1 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "fixed fixture/direct input",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Rejected incompatible inline goal plus --from.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 2,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli elaborate --goal \"Explain evidence for equal advisor treatment\" --to task-2/participant/transform-scratch/criteria",
+          "exit": 0,
+          "starting_state": "round-2 first distilled result",
+          "entry_route": "elaborate round-2 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Added 3 unverified rules.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 3,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli elaborate --rule \"A source-specific rule must name its triggering condition.\" --to task-2/participant/transform-scratch/archive",
+          "exit": 0,
+          "starting_state": "round-3 populated source and criteria",
+          "entry_route": "elaborate round-3 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Added 3 illustrative cases.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 4,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli elaborate --goal \"Add per-requirement dual attribution evidence\" --to task-2/participant/transform-scratch/result",
+          "exit": 0,
+          "starting_state": "round-4 duplicate-heavy archive and recovery",
+          "entry_route": "elaborate round-4 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Added 3 attribution rules.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 5,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli elaborate --rule \"Every synthesized rule must carry advisor1, advisor2, or both as provenance.\" --to task-2/participant/transform-scratch/result",
+          "exit": 0,
+          "starting_state": "round-5 final destructive recovery",
+          "entry_route": "elaborate round-5 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Added 3 provenance cases.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        }
+      ]
+    },
+    "resolve": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli resolve --context task-2/participant/transform-scratch/source",
+          "exit": 1,
+          "starting_state": "round-1 empty scratch",
+          "entry_route": "resolve round-1 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "fixed fixture/direct input",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Rejected empty source.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 2,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli resolve --context task-2/participant/transform-scratch/result",
+          "exit": 0,
+          "starting_state": "round-2 first distilled result",
+          "entry_route": "resolve round-2 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "FIT YES; no change.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 3,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli resolve --context task-2/participant/transform-scratch/source",
+          "exit": 0,
+          "starting_state": "round-3 populated source and criteria",
+          "entry_route": "resolve round-3 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "FIT YES; no change.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 4,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli resolve --context task-2/participant/transform-scratch/archive",
+          "exit": 0,
+          "starting_state": "round-4 duplicate-heavy archive and recovery",
+          "entry_route": "resolve round-4 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "FIT YES; no change.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 5,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli resolve --context task-2/participant/transform-scratch/result",
+          "exit": 0,
+          "starting_state": "round-5 final destructive recovery",
+          "entry_route": "resolve round-5 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "FIT YES; no change.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        }
+      ]
+    },
+    "dedup": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedup task-2/participant/transform-scratch/source --direct",
+          "exit": 0,
+          "starting_state": "round-1 empty scratch",
+          "entry_route": "dedup round-1 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "fixed fixture/direct input",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "No duplicates.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 2,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedup task-2/participant/transform-scratch/result --direct",
+          "exit": 0,
+          "starting_state": "round-2 first distilled result",
+          "entry_route": "dedup round-2 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "No duplicates.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 3,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedup task-2/participant/transform-scratch/source --direct",
+          "exit": 0,
+          "starting_state": "round-3 populated source and criteria",
+          "entry_route": "dedup round-3 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "No duplicates.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 4,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedup task-2/participant/transform-scratch/archive --direct",
+          "exit": 0,
+          "starting_state": "round-4 duplicate-heavy archive and recovery",
+          "entry_route": "dedup round-4 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Removed one exact duplicate; checkpoint 847e0ab7.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 5,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedup task-2/participant/transform-scratch/result --direct",
+          "exit": 0,
+          "starting_state": "round-5 final destructive recovery",
+          "entry_route": "dedup round-5 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "No duplicates after recovery.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        }
+      ]
+    },
+    "dedun": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedun task-2/participant/transform-scratch/source",
+          "exit": 0,
+          "starting_state": "round-1 empty scratch",
+          "entry_route": "dedun round-1 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "fixed fixture/direct input",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "No redundancies.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 2,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedun task-2/participant/transform-scratch/result",
+          "exit": 0,
+          "starting_state": "round-2 first distilled result",
+          "entry_route": "dedun round-2 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "No redundancies.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 3,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedun task-2/participant/transform-scratch/source",
+          "exit": 0,
+          "starting_state": "round-3 populated source and criteria",
+          "entry_route": "dedun round-3 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "No redundancies.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 4,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedun task-2/participant/transform-scratch/archive",
+          "exit": 0,
+          "starting_state": "round-4 duplicate-heavy archive and recovery",
+          "entry_route": "dedun round-4 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Absorbed five semantic redundancies; checkpoint 2ff7766b.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 5,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedun task-2/participant/transform-scratch/result",
+          "exit": 0,
+          "starting_state": "round-5 final destructive recovery",
+          "entry_route": "dedun round-5 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "No redundancies after recovery.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        }
+      ]
+    },
+    "forget": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli forget \"remove any scratch statement that privileges one advisor\" --context task-2/participant/transform-scratch/source",
+          "exit": 0,
+          "starting_state": "round-1 empty scratch",
+          "entry_route": "forget round-1 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "fixed fixture/direct input",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Empty no-change.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 2,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli forget \"remove rules that do not preserve both provenances\" --context task-2/participant/transform-scratch/result",
+          "exit": 0,
+          "starting_state": "round-2 first distilled result",
+          "entry_route": "forget round-2 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "No change.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 3,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli forget \"remove any duplicate neutral rule\" --context task-2/participant/transform-scratch/source",
+          "exit": 0,
+          "starting_state": "round-3 populated source and criteria",
+          "entry_route": "forget round-3 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Removed one and edited one, checkpoint ba9e083b.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 4,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli forget \"remove illustrative cases unrelated to the proposal facts\" --context task-2/participant/transform-scratch/archive",
+          "exit": 0,
+          "starting_state": "round-4 duplicate-heavy archive and recovery",
+          "entry_route": "forget round-4 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Removed three illustrative cases, checkpoint 33af8a4c.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 5,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli forget \"remove any rule that cannot be traced to advisor provenance\" --context task-2/participant/transform-scratch/result",
+          "exit": 0,
+          "starting_state": "round-5 final destructive recovery",
+          "entry_route": "forget round-5 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "No change.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        }
+      ]
+    },
+    "ground": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli ground --request \"Build a neutral co-advisor transformation plan from task-2\"",
+          "exit": 0,
+          "starting_state": "round-1 empty scratch",
+          "entry_route": "ground round-1 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "fixed fixture/direct input",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Printed stable unsaved Ground draft; created nothing and read no current Context.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 2,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli ground --request \"Check the task-2 transformation criteria without creating a Ground\"",
+          "exit": 0,
+          "starting_state": "round-2 first distilled result",
+          "entry_route": "ground round-2 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Printed stable unsaved Ground draft; created nothing and read no current Context.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 3,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli ground \"Explain how to recover a neutral transformation after a stale result\"",
+          "exit": 0,
+          "starting_state": "round-3 populated source and criteria",
+          "entry_route": "ground round-3 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Printed stable unsaved Ground draft; created nothing and read no current Context.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 4,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli ground --request \"Review recovered criteria against the equal-advisor goal\"",
+          "exit": 0,
+          "starting_state": "round-4 duplicate-heavy archive and recovery",
+          "entry_route": "ground round-4 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Printed stable unsaved Ground draft; created nothing and read no current Context.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 5,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli ground --request \"Summarize the final recovery evidence without creating a Ground\"",
+          "exit": 0,
+          "starting_state": "round-5 final destructive recovery",
+          "entry_route": "ground round-5 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Printed stable unsaved Ground draft; created nothing and read no current Context.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        }
+      ]
+    },
+    "impact": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli impact task-2/participant/proposal-workspace",
+          "exit": 2,
+          "starting_state": "round-1 empty scratch",
+          "entry_route": "impact round-1 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "fixed fixture/direct input",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Rejected positional Context because Impact is a command group.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 2,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli impact --from task-2/participant/transform-scratch/result --to task-2/participant/transform-scratch/criteria --direct",
+          "exit": 0,
+          "starting_state": "round-2 first distilled result",
+          "entry_route": "impact round-2 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Update preview found no changes.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 3,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli impact atomize task-2/participant/transform-scratch/source",
+          "exit": 0,
+          "starting_state": "round-3 populated source and criteria",
+          "entry_route": "impact round-3 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Saved atomize impact 3d9eab1d with four actionable issues.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 4,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli impact update task-2/participant/transform-scratch/archive task-2/participant/transform-scratch/result --direct",
+          "exit": 0,
+          "starting_state": "round-4 duplicate-heavy archive and recovery",
+          "entry_route": "impact round-4 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Update preview found no changes.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 5,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli impact meld --session deadbeef",
+          "exit": 1,
+          "starting_state": "round-5 final destructive recovery",
+          "entry_route": "impact round-5 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Rejected unavailable Meld artifact.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        }
+      ]
+    },
+    "meld": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli meld task-2/participant/transform-scratch/source task-2/participant/transform-scratch/criteria task-2/participant/transform-scratch/result",
+          "exit": 1,
+          "starting_state": "round-1 empty scratch",
+          "entry_route": "meld round-1 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "fixed fixture/direct input",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Rejected nonempty symmetric result.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 2,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli meld task-2/participant/transform-scratch/result task-2/participant/transform-scratch/criteria task-2/participant/transform-scratch/archive",
+          "exit": 1,
+          "starting_state": "round-2 first distilled result",
+          "entry_route": "meld round-2 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Declared Compare prewarm invalid.",
+          "defect_ids": [
+            "T2T-MELD-PREWARM-01"
+          ],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 3,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli meld task-2/participant/transform-scratch/source task-2/participant/transform-scratch/criteria task-2/participant/transform-scratch/meld-r3",
+          "exit": 1,
+          "starting_state": "round-3 populated source and criteria",
+          "entry_route": "meld round-3 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Declared Compare prewarm invalid.",
+          "defect_ids": [
+            "T2T-MELD-PREWARM-01"
+          ],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 4,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli meld task-2/participant/transform-scratch/archive task-2/participant/transform-scratch/criteria task-2/participant/transform-scratch/meld-r4",
+          "exit": 1,
+          "starting_state": "round-4 duplicate-heavy archive and recovery",
+          "entry_route": "meld round-4 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Declared Compare prewarm invalid.",
+          "defect_ids": [
+            "T2T-MELD-PREWARM-01"
+          ],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 5,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli meld task-2/participant/transform-scratch/source task-2/participant/transform-scratch/criteria task-2/participant/transform-scratch/meld-r5",
+          "exit": 1,
+          "starting_state": "round-5 final destructive recovery",
+          "entry_route": "meld round-5 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Declared Compare prewarm invalid.",
+          "defect_ids": [
+            "T2T-MELD-PREWARM-01"
+          ],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        }
+      ]
+    },
+    "merge": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli merge task-2/participant/transform-scratch/source task-2/participant/transform-scratch/result",
+          "exit": 0,
+          "starting_state": "round-1 empty scratch",
+          "entry_route": "merge round-1 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "fixed fixture/direct input",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Empty merge recorded no target change.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 2,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli merge task-2/participant/transform-scratch/result task-2/participant/transform-scratch/source",
+          "exit": 0,
+          "starting_state": "round-2 first distilled result",
+          "entry_route": "merge round-2 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Copied 7 rules into source.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 3,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli merge task-2/participant/transform-scratch/criteria task-2/participant/transform-scratch/archive",
+          "exit": 0,
+          "starting_state": "round-3 populated source and criteria",
+          "entry_route": "merge round-3 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Copied 10 criteria into archive.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 4,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli merge task-2/participant/transform-scratch/archive task-2/participant/transform-scratch/result",
+          "exit": 0,
+          "starting_state": "round-4 duplicate-heavy archive and recovery",
+          "entry_route": "merge round-4 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Copied 12 curated archive items into result.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 5,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli merge task-2/participant/transform-scratch/source task-2/participant/transform-scratch/result",
+          "exit": 0,
+          "starting_state": "round-5 final destructive recovery",
+          "entry_route": "merge round-5 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Copied six current source items during recovery.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        }
+      ]
+    },
+    "rationale": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli rationale task-2/participant/proposal-workspace:a5b61b44",
+          "exit": 0,
+          "starting_state": "round-1 empty scratch",
+          "entry_route": "rationale round-1 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "fixed fixture/direct input",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Reported original add/edit provenance.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 2,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli rationale task-2/participant/transform-scratch/result:0fe35239",
+          "exit": 0,
+          "starting_state": "round-2 first distilled result",
+          "entry_route": "rationale round-2 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Returned provenance in Chinese despite English request and Memory.",
+          "defect_ids": [
+            "T2T-RATIONALE-LANGUAGE-01"
+          ],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 3,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli rationale task-2/participant/transform-scratch/source:0fe35239 --verbose",
+          "exit": 1,
+          "starting_state": "round-3 populated source and criteria",
+          "entry_route": "rationale round-3 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Rejected stale/missing UID after Forget changed source.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 4,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli rationale task-2/participant/transform-scratch/archive:caffc5dc",
+          "exit": 0,
+          "starting_state": "round-4 duplicate-heavy archive and recovery",
+          "entry_route": "rationale round-4 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Explained distill provenance.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 5,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli rationale task-2/participant/transform-scratch/source:56ec74e6",
+          "exit": 0,
+          "starting_state": "round-5 final destructive recovery",
+          "entry_route": "rationale round-5 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Explained result-to-source merge provenance.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        }
+      ]
+    },
+    "revert": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli revert deadbeef --context task-2/participant/transform-scratch/source",
+          "exit": 1,
+          "starting_state": "round-1 empty scratch",
+          "entry_route": "revert round-1 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "fixed fixture/direct input",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Missing checkpoint rejection.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 2,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli revert deadbeef --context task-2/participant/transform-scratch/archive",
+          "exit": 1,
+          "starting_state": "round-2 first distilled result",
+          "entry_route": "revert round-2 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Missing checkpoint rejection.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 3,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli revert deadbeef --context task-2/participant/transform-scratch/source",
+          "exit": 1,
+          "starting_state": "round-3 populated source and criteria",
+          "entry_route": "revert round-3 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Missing checkpoint rejection.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 4,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli revert d06cd602 --context task-2/participant/transform-scratch/criteria --keep",
+          "exit": 0,
+          "starting_state": "round-4 duplicate-heavy archive and recovery",
+          "entry_route": "revert round-4 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Restored 10 prior criteria after clear/distill; full effect receipt.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 5,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli revert 897130a5 --context task-2/participant/transform-scratch/result --keep",
+          "exit": 0,
+          "starting_state": "round-5 final destructive recovery",
+          "entry_route": "revert round-5 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Restored 22-item result checkpoint after clear/rebuild; full effect receipt.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        }
+      ]
+    },
+    "review": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli review audit --context task-2/participant/proposal-workspace",
+          "exit": 1,
+          "starting_state": "round-1 empty scratch",
+          "entry_route": "review round-1 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "fixed fixture/direct input",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Rejected unsupported audit --context route.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 2,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli review audit --session 797d9148 --snapshot",
+          "exit": 1,
+          "starting_state": "round-2 first distilled result",
+          "entry_route": "review round-2 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Short audit session prefix reported unavailable.",
+          "defect_ids": [
+            "T2T-SESSION-ID-01"
+          ],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 3,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli review distill --receipt aa31463f",
+          "exit": 0,
+          "starting_state": "round-3 populated source and criteria",
+          "entry_route": "review round-3 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Displayed distill receipt and all seven rules.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 4,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli review forget --receipt ba9e083b",
+          "exit": 0,
+          "starting_state": "round-4 duplicate-heavy archive and recovery",
+          "entry_route": "review round-4 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Displayed Forget remove/edit evidence.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 5,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli review update --session a920e9d2",
+          "exit": 1,
+          "starting_state": "round-5 final destructive recovery",
+          "entry_route": "review round-5 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Short update session prefix reported unavailable.",
+          "defect_ids": [
+            "T2T-SESSION-ID-01"
+          ],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        }
+      ]
+    },
+    "sever": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli sever task-2/participant/transform-scratch/source task-2/participant/transform-scratch/criteria task-2/participant/transform-scratch/result",
+          "exit": 1,
+          "starting_state": "round-1 empty scratch",
+          "entry_route": "sever round-1 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "fixed fixture/direct input",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Rejected existing result Context.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 2,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli sever task-2/participant/transform-scratch/result task-2/participant/transform-scratch/criteria task-2/participant/transform-scratch/sever-r2",
+          "exit": 0,
+          "starting_state": "round-2 first distilled result",
+          "entry_route": "sever round-2 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "READY sessions with zero required judgments.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 3,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli sever task-2/participant/transform-scratch/source task-2/participant/transform-scratch/criteria task-2/participant/transform-scratch/sever-r3",
+          "exit": 0,
+          "starting_state": "round-3 populated source and criteria",
+          "entry_route": "sever round-3 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "READY sessions with zero required judgments.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 4,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli sever task-2/participant/transform-scratch/archive task-2/participant/transform-scratch/criteria task-2/participant/transform-scratch/sever-r4",
+          "exit": 0,
+          "starting_state": "round-4 duplicate-heavy archive and recovery",
+          "entry_route": "sever round-4 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "READY sessions with zero required judgments.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 5,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli sever task-2/participant/transform-scratch/source task-2/participant/transform-scratch/criteria task-2/participant/transform-scratch/sever-r5",
+          "exit": 0,
+          "starting_state": "round-5 final destructive recovery",
+          "entry_route": "sever round-5 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "READY sessions with zero required judgments.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        }
+      ]
+    },
+    "trace": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli trace task-2/participant/proposal-workspace:a5b61b44 --limit 10",
+          "exit": 0,
+          "starting_state": "round-1 empty scratch",
+          "entry_route": "trace round-1 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "fixed fixture/direct input",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Two-event original lineage.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 2,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli trace task-2/participant/transform-scratch/result:0fe35239 --limit 5",
+          "exit": 0,
+          "starting_state": "round-2 first distilled result",
+          "entry_route": "trace round-2 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "One-event distilled lineage.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 3,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli trace task-2/participant/transform-scratch/source:0fe35239 --verbose --limit 5",
+          "exit": 1,
+          "starting_state": "round-3 populated source and criteria",
+          "entry_route": "trace round-3 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Rejected stale UID after Forget.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 4,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli trace task-2/participant/transform-scratch/archive:caffc5dc --limit 8",
+          "exit": 0,
+          "starting_state": "round-4 duplicate-heavy archive and recovery",
+          "entry_route": "trace round-4 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "One-event archive lineage.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 5,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli trace task-2/participant/transform-scratch/source:56ec74e6 --limit 10",
+          "exit": 0,
+          "starting_state": "round-5 final destructive recovery",
+          "entry_route": "trace round-5 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "One-event merged source lineage.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        }
+      ]
+    },
+    "translate": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli translate task-2/participant/proposal-workspace:a5b61b44 --to Korean",
+          "exit": 0,
+          "starting_state": "round-1 empty scratch",
+          "entry_route": "translate round-1 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "fixed fixture/direct input",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Korean view saved process-locally.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 2,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli translate task-2/participant/transform-scratch/result:0fe35239 --to French",
+          "exit": 0,
+          "starting_state": "round-2 first distilled result",
+          "entry_route": "translate round-2 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "French view saved process-locally.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 3,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli translate task-2/participant/transform-scratch/source:0fe35239 --to Japanese",
+          "exit": 1,
+          "starting_state": "round-3 populated source and criteria",
+          "entry_route": "translate round-3 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Rejected stale UID after Forget.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 4,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli translate task-2/participant/transform-scratch/archive:caffc5dc --to Spanish",
+          "exit": 0,
+          "starting_state": "round-4 duplicate-heavy archive and recovery",
+          "entry_route": "translate round-4 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Spanish view saved process-locally.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 5,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli translate task-2/participant/transform-scratch/source:56ec74e6 --to German",
+          "exit": 0,
+          "starting_state": "round-5 final destructive recovery",
+          "entry_route": "translate round-5 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "German view saved process-locally.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        }
+      ]
+    },
+    "update": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli update task-2/participant/transform-scratch/source task-2/participant/transform-scratch/result --direct",
+          "exit": 1,
+          "starting_state": "round-1 empty scratch",
+          "entry_route": "update round-1 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "fixed fixture/direct input",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Rejected empty Source.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 2,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli update task-2/participant/transform-scratch/result task-2/participant/transform-scratch/source --direct",
+          "exit": 0,
+          "starting_state": "round-2 first distilled result",
+          "entry_route": "update round-2 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Applied no-change receipt a920e9d2.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 3,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli update task-2/participant/transform-scratch/criteria task-2/participant/transform-scratch/source --direct",
+          "exit": 1,
+          "starting_state": "round-3 populated source and criteria",
+          "entry_route": "update round-3 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Rejected diverged applied update; requested --replace-stage.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 4,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli update task-2/participant/transform-scratch/archive task-2/participant/transform-scratch/result --replace-stage --direct",
+          "exit": 0,
+          "starting_state": "round-4 duplicate-heavy archive and recovery",
+          "entry_route": "update round-4 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "No-change replacement-stage receipt.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 5,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli update task-2/participant/transform-scratch/source task-2/participant/transform-scratch/result --replace-stage --direct",
+          "exit": 0,
+          "starting_state": "round-5 final destructive recovery",
+          "entry_route": "update round-5 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "No-change final receipt.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        }
+      ]
+    },
+    "atomize": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli atomize task-2/participant/transform-scratch/source",
+          "exit": 0,
+          "starting_state": "round-1 empty scratch",
+          "entry_route": "atomize round-1 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "fixed fixture/direct input",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Applied empty normal form with receipt c3e23acd.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 2,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli atomize --context task-2/participant/transform-scratch/result",
+          "exit": 1,
+          "starting_state": "round-2 first distilled result",
+          "entry_route": "atomize round-2 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Produced no output for over 150 seconds and was manually aborted.",
+          "defect_ids": [
+            "T2T-ATOMIZE-HANG-01"
+          ],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 3,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli atomize task-2/participant/transform-scratch/source:0fe35239",
+          "exit": 1,
+          "starting_state": "round-3 populated source and criteria",
+          "entry_route": "atomize round-3 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Rejected stale exact UID after Forget.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 4,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli atomize --context task-2/participant/transform-scratch/archive --memory caffc5dc",
+          "exit": 0,
+          "starting_state": "round-4 duplicate-heavy archive and recovery",
+          "entry_route": "atomize round-4 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Saved single-Memory analysis 5dc3786c with two children.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        },
+        {
+          "attempt": 5,
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli atomize --context task-2/participant/transform-scratch/source --memory 56ec74e6",
+          "exit": 0,
+          "starting_state": "round-5 final destructive recovery",
+          "entry_route": "atomize round-5 explicit route",
+          "target_route": "explicit task-2 local scratch or named saved evidence",
+          "scope": "round-specific exact, multiple, empty, stale, protected, or recovery boundary",
+          "input_provenance": "prior operation output and accumulated scratch state",
+          "consumer": "neutral co-advisor transformation and recovery audit",
+          "actual": "Saved single-Memory analysis aaee6215 with two children.",
+          "defect_ids": [],
+          "cost": "actual CLI/provider output reviewed; no TUI was required for this attempt"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "sequence": 27,
+  "read_at": "2026-08-25T18:00:46.762610+00:00",
+  "active_profile_name": "sixworld-v2-template",
+  "active_profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+  "resolved_store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/a-is-apple/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+  "expected": {
+    "name": "sixworld-v2-template",
+    "uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+    "store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/a-is-apple/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"
+  },
+  "matches": true
+}

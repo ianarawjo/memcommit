@@ -1,0 +1,11 @@
+{
+  "sequence": 24,
+  "operation": "show",
+  "attempt": 2,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 show task-1/campus-wiki/event-relocations:a0700edb",
+  "exit": 0,
+  "wall_seconds": 1.324227,
+  "pre_target_digest": "27a0e124e2a29a786d84df12ac7e46a1d5f6e28b27c7e8e47894c7f2671a67ca",
+  "post_target_digest": "ccdec44247ee6b56558f1415ee22d7b98c9a3b8b4eb3f54e5a76c398e5023e8c",
+  "raw_output": "raw/core/024-show-m2.txt"
+}

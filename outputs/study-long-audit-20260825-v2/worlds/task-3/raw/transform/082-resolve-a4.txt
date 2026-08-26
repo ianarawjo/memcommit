@@ -1,0 +1,9 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 resolve task-3/local:c13fb226 --guidance 'Do not convert public guidance into user-specific factual acceptance.' --no-create --plain
+
+EXIT
+0
+
+OUTPUT
+RESOLVE · task-3/local
+FIT · YES · NO CHANGE

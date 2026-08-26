@@ -1,0 +1,52 @@
+^[[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m Select a Context[0m
+[0m Roots · audit · practice · task-1 · task-2 · task-3[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
+[0m    ▾ audit[168C[0;1m^[0m
+[0m      ▾ audit/a-is-apple[155C[0;48;5;238m [0m
+[0m        ▾ audit/a-is-apple/admin-v2-scratch[136C[0;48;5;238m [0m
+[0m          ▸ audit/a-is-apple/admin-v2-scratch/b3[131C[0;48;5;238m [0m
+[0m          ▾ audit/a-is-apple/admin-v2-scratch/co4-tree[125C[0;48;5;238m [0m
+[0m            ▸ audit/a-is-apple/admin-v2-scratch/co4-tree/description[111C[0;48;5;238m [0m
+[0;1;7m› *         ▸ audit/a-is-apple/admin-v2-scratch/co4-tree/source[116C[0;48;5;238m [0m
+[0m          ▸ audit/a-is-apple/admin-v2-scratch/import-direct[120C[0;48;5;238m [0m
+[0m          ▸ audit/a-is-apple/admin-v2-scratch/renamed-1[124C[0;48;5;238m [0m
+[0m          ▸ audit/a-is-apple/admin-v2-scratch/renamed-2-tree[119C[0;48;5;238m [0m
+[0m          ▸ audit/a-is-apple/admin-v2-scratch/renamed-3[124C[0;48;5;238m [0m
+[0m          ▸ audit/a-is-apple/admin-v2-scratch/tree[129C[0;48;5;238m [0m
+[0m    ▸ practice[165C[0;48;5;238m [0m
+[0m    ▸ task-1[167C[0;48;5;238m [0m
+[0m    ▸ task-2[167C[0;48;5;238m [0m
+[0m    ▸ task-3[167C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[0m                                                                                                                                                                                   [179C[0;1mv[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
+[0m ↑↓ move  ←→ expand  A expand all  m THIS Context: show items · M EVERY Context: show items  y copy Context  Y copy visible branch  Enter switch  q cancel · 7/16 · 123 selectable[178D[42A[0m[9A[J[0m[?7h[?1049l[?2004lSwitch cancelled.

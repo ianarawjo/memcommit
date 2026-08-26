@@ -1,0 +1,17 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 forget 'Remove any temporary item that infers recipient, purpose, consent, channel, or retention; preserve the human decision gate.' --context task-3/local/guardrails/audit-and-recovery
+
+EXIT
+0
+
+OUTPUT
+Consulting the configured Forget provider...
+FORGET APPLIED · SOURCE task-3/local/guardrails/audit-and-recovery
+FORGET · Remove any temporary item that infers recipient, purpose, consent, channel, or retention; preserve the human decision gate.
+DIFF · 2 CHANGES
+- [6ea7bcc1] Candidate INCLUDE (DRAFT ONLY): the user stood for 20 minutes when no waiting chair was available and experienced back discomfort; verify current accommodation necessity before approval.
+~ [367700c4] AUDIT RESULT: no transfer was executed and no approval was inferred; candidate facts remain stale or underspecified and require the user's [-exact-][+decision+] [-recipient,-][+before+] [-purpose,-][+any+] [-item, channel, and retention decision.-][+transfer.+]
+RECEIPT · f0744551-43b9-4edf-a866-28699d670558
+CHECKPOINT · f0744551-43b9-4edf-a866-28699d670558
+REVIEW · mem review forget --receipt f0744551-43b9-4edf-a866-28699d670558
+RECOVERY · mem undo

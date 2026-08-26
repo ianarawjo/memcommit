@@ -1,0 +1,30 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker init-study admin-v2-ticker-workers --prewarm-workers 0
+
+STDIN
+<none>
+
+EXIT
+2
+
+WALL_SECONDS
+1.345584
+
+PRE_IDENTITY
+{"current_context": "task-2/participant", "current_context_uid": "0e19f3b1-4107-48ab-9186-8773e48b812d", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+IMMEDIATE_POST_IDENTITY
+{"current_context": "task-2/participant", "current_context_uid": "0e19f3b1-4107-48ab-9186-8773e48b812d", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+COMMAND_ATTEMPT_DELTA
+{"count_after": 317, "count_before": 316, "delta": 1, "new_attempt_uids": ["ac438ce8-f0e6-4711-b00c-f81d1ab6a7fa"], "records": [{"command": "mem init-study admin-v2-ticker-workers --prewarm-workers 0", "completed_at": "2026-08-25T18:16:41.699689+00:00", "details": {}, "elapsed_seconds": 0.0076590410026255995, "failure": {"exit_code": 2, "kind": "BadParameter"}, "operation": "init-study", "outcome": null, "started_at": "2026-08-25T18:16:41.691869+00:00", "status": "FAILED", "terminal": {"stdin_tty": true, "stdout_tty": false}, "uid": "ac438ce8-f0e6-4711-b00c-f81d1ab6a7fa", "version": 3}], "sequence": 72}
+
+STDOUT
+
+
+STDERR
+Usage: run_isolated_mem.py init-study [OPTIONS] [NAME]
+Try 'run_isolated_mem.py init-study -h' for help.
+╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Invalid value for '--prewarm-workers': 0 is not in the range x>=1.           │
+╰──────────────────────────────────────────────────────────────────────────────╯

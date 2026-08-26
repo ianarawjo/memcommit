@@ -1,0 +1,17 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 rationale task-1/participant/construction-updates/temporary-parking:84196dc5
+
+EXIT
+0
+
+OUTPUT
+Rationale [84196dc5] · task-1/participant/construction-updates/temporary-parking
+
+MEMORY
+  Modify campus-wiki/temporary-parking: During the construction period, the underground parking garage cannot be used for general parking.
+
+PROVENANCE
+  The Memory originally appeared in task-1/participant/construction-updates/temporary-parking; merging that Context into task-1/participant/construction-updates created a fresh Target copy, “During the construction period, the underground parking garage cannot be used for general parking,” while retaining the unchanged Source occurrence.
+
+ATTENTION
+  The current Context contains changes that no retained checkpoint explains.

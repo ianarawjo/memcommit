@@ -1,0 +1,17 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source search 'What conditions limit shortening and redundancy removal without strengthening claims?' --context practice/source --context practice --context-only --exclude-embeds --limit 6
+
+EXIT
+0
+
+WALL_SECONDS
+6.764003
+
+STDOUT
+practice/source
+[memory 7ebe67fb] But don't shorten sentences so aggressively that a claim sounds more categorical; keep enough wording to preserve its original strength and conditions.
+[memory 6fad23ab] If a passage is supposed to make four points, keep all four while removing parts that are too redundent and stating repeated content only once.
+[memory 6cc4b8a3] When the draft has to fit a shorter fixed limit, aim to cut around 20–30% from redundant or unnecessary material.
+
+
+STDERR

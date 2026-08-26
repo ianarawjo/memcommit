@@ -1,0 +1,7 @@
+{
+  "host_comparison": "counted stdout payload after raw audit wrapper OUTPUT marker",
+  "M1_raw": "worlds/a-is-apple/raw/admin/020-shell-init-1.txt",
+  "M2_raw": "worlds/a-is-apple/raw/admin/042-shell-init-2.txt",
+  "byte_equal_to_M1": true,
+  "earlier_false_value_cause": "Harness process restart lost its in-memory M1 bytes; corrected from immutable raw evidence."
+}

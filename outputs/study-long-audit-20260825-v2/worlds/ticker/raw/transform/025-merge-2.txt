@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker merge task-2/participant task-3/local/guardrails --direct --keep-target-all
+
+EXIT
+0
+
+OUTPUT
+MERGE RECORDED · 'task-2/participant' → 'task-3/local/guardrails' · DIRECT · NEW 5 (4 memories, 1 embedded context) · ALREADY PRESENT 0 · KEPT TARGET 0 · TOOK SOURCE 0 · CREATED CONTEXTS 0 · TARGET CHANGED YES · CHECKPOINTS 1

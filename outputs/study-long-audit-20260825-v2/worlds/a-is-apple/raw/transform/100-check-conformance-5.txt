@@ -1,0 +1,13 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple check-conformance practice/source --against practice
+
+EXIT
+0
+
+OUTPUT
+CONFORMANCE · 2/6 EXAMPLES CONFORM · 1/3 RULES MET · [EXAMPLES practice/source] · [RULES practice] · 12 EXAMPLES N/A · 11 RULES N/A
+! VIOLATES · [EXAMPLE m000016] this copied mapping is provisional while · [RULE r11] Preferred set: a is apple; b is banana; c is cedar; unresolved alternatives remain explicit. · WHY · The provisional-copy fragment does not establish any preferred mapping or explicit unresolved alternative.
+! VIOLATES · [EXAMPLE m000014] b is blueberry. · [RULE r12] Preferred set: a is apple; b is banana; · WHY · It maps b to blueberry instead of the preferred banana.
+! VIOLATES · [EXAMPLE m000016] this copied mapping is provisional while · [RULE r12] Preferred set: a is apple; b is banana; · WHY · The fragment does not state the preferred b-to-banana mapping.
+! VIOLATES · [EXAMPLE m000017] blueberry remains visible. · [RULE r12] Preferred set: a is apple; b is banana; · WHY · The fragment keeps blueberry visible without stating the preferred b-to-banana mapping.
+! VIOLATES · [EXAMPLE m000018] b is blueberry. · [RULE r12] Preferred set: a is apple; b is banana; · WHY · It maps b to blueberry instead of the preferred banana.

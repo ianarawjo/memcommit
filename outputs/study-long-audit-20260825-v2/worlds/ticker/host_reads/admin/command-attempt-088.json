@@ -1,0 +1,28 @@
+{
+  "sequence": 88,
+  "count_before": 332,
+  "count_after": 333,
+  "delta": 1,
+  "new_attempt_uids": [
+    "a1942530-c20e-4894-b9f1-080b050ba526"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "a1942530-c20e-4894-b9f1-080b050ba526",
+      "operation": "rename",
+      "command": "mem rename audit/ticker/admin-v2-scratch/co4-tree audit/ticker/admin-v2-scratch/declined-5",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:17:05.356508+00:00",
+      "completed_at": "2026-08-25T18:17:05.852739+00:00",
+      "elapsed_seconds": 0.49607208400266245,
+      "terminal": {
+        "stdin_tty": false,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

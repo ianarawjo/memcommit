@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple eval semantic task2-status --all --ledger-dir /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/a-is-apple/admin-eval-ledger
+
+EXIT
+0
+
+OUTPUT
+No Task 2 V1 discovery runs found.

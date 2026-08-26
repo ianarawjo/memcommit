@@ -1,0 +1,11 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple compare practice/source practice --snapshot
+
+EXIT
+0
+
+OUTPUT
+Compare · practice/source ↔ practice
+
+COMPARISON
+  The frames share the same editing, formatting, verification, and provisional banana/boat claims; the compared frame additionally introduces an apple mapping, including duplicated and provenance-qualified forms, while otherwise repeating the reference content.

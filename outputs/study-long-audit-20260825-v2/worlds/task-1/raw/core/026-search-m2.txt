@@ -1,0 +1,22 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 search 'venue closures, alternatives, and equipment loading changes' --context task-1/participant/construction-updates/event-relocations --context task-1/campus-wiki/event-relocations --context-only --limit 8
+
+EXIT
+0
+
+WALL_SECONDS
+5.598600
+
+STDOUT
+task-1/participant/construction-updates/event-relocations
+[memory 9ab36f33] Add campus-wiki/event-relocations: During the construction period, the separate loading entrance of the auditorium in the detached east building is converted into the loading point for event equipment relocated from the Main Building.
+[memory 686d630d] Add campus-wiki/event-relocations: During the construction period, direct users to the auditorium in the detached east building as an alternative to Main Building event venues.
+[memory 967fc4ad] Add campus-wiki/event-relocations: During the construction period, direct users to the third-floor multipurpose room in the Engineering Building as an alternative to Main Building event venues.
+[memory 9d4a1560] Add campus-wiki/event-relocations: During the construction period, the auditorium in the detached east building is converted into an alternative event space for Main Building events.
+[memory 3fcfa405] Modify campus-wiki/event-relocations: Viewing in the tenth-floor exhibition and event hall is suspended during the construction period.
+[memory 1754ab18] Modify campus-wiki/event-relocations: Do not accept new reservations for Main Building event venues during the construction period.
+[memory 8bf7a20c] Modify campus-wiki/event-relocations: An external event operator may assume that the existing Main Building loading procedure remains valid during the construction period, send equipment to the existing loading entrance, or check the access rules for the alternative venue too late.
+[memory eee1213e] Modify campus-wiki/event-relocations: During the construction period, the event guidance agent cannot create or restore reservations for Main Building event venues and may provide only the reservation channel for each alternative space.
+
+
+STDERR

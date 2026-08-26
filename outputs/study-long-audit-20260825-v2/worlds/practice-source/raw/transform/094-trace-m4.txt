@@ -1,0 +1,705 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source trace practice/source:1a9d3a74 --json --limit 1
+
+EXIT
+0
+
+WALL_SECONDS
+1.568161
+
+STDOUT
+{
+  "context": {
+    "uid": "7e48e68e-3c6f-541b-bfc1-e307abcc7a4f",
+    "name": "practice/source"
+  },
+  "selected_uid": "1a9d3a74-12a1-50f1-96d0-bcaa09a65406",
+  "component_uids": [
+    "1a9d3a74-12a1-50f1-96d0-bcaa09a65406",
+    "67192e6c-1f9d-4d97-b2cc-f9b8d1ea808a",
+    "82f7de7c-c780-4e94-994e-fa54996f12ce"
+  ],
+  "originals": [
+    {
+      "uid": "1a9d3a74-12a1-50f1-96d0-bcaa09a65406",
+      "content": "By default, format a document title in sentence case rather than title case. An explicitly named style guide may override only that capitalization default; always keep for whenever it is part of the intended wording.",
+      "position": 8,
+      "content_digest": "f91f31415c48d252ad9dfde45c404ea926ea8eae8241762b1471052431ab464c"
+    }
+  ],
+  "current": [
+    {
+      "uid": "1a9d3a74-12a1-50f1-96d0-bcaa09a65406",
+      "content": "By default, format a document title in sentence case rather than title case. An explicitly named style guide may override only that capitalization default; always keep for whenever it is part of the intended wording.",
+      "position": 8,
+      "content_digest": "f91f31415c48d252ad9dfde45c404ea926ea8eae8241762b1471052431ab464c"
+    }
+  ],
+  "events": [
+    {
+      "kind": "MERGED_IN",
+      "evidence": "RECORDED",
+      "timestamp": "2026-08-25T13:14:46.717194",
+      "checkpoint_uid": "d418975a-f7fd-472d-8036-0d89534783d6",
+      "command": "merge",
+      "description": "Merged 'practice/source' into 'practice/description': new 12; already present 0; kept Target 0; took Source 0",
+      "before": [
+        {
+          "uid": "1a9d3a74-12a1-50f1-96d0-bcaa09a65406",
+          "content": "By default, format a document title in sentence case rather than title case. An explicitly named style guide may override only that capitalization default; always keep for whenever it is part of the intended wording.",
+          "position": 8,
+          "content_digest": "f91f31415c48d252ad9dfde45c404ea926ea8eae8241762b1471052431ab464c"
+        }
+      ],
+      "after": [
+        {
+          "uid": "67192e6c-1f9d-4d97-b2cc-f9b8d1ea808a",
+          "content": "By default, format a document title in sentence case rather than title case. An explicitly named style guide may override only that capitalization default; always keep for whenever it is part of the intended wording.",
+          "position": 24,
+          "content_digest": "f91f31415c48d252ad9dfde45c404ea926ea8eae8241762b1471052431ab464c"
+        }
+      ],
+      "reason": null,
+      "reason_codes": [
+        "MERGE",
+        "NEW"
+      ],
+      "source_occurrence": null,
+      "operation_id": null,
+      "command_operation": null,
+      "context_transition": {
+        "source": {
+          "uid": "7e48e68e-3c6f-541b-bfc1-e307abcc7a4f",
+          "name": "practice/source"
+        },
+        "target": {
+          "uid": "d5d0a8b4-d425-5c9f-9325-56329df711ef",
+          "name": "practice/description"
+        }
+      },
+      "child_evidence": [],
+      "declared_frame": null,
+      "declared_frame_digest": null,
+      "uncertainty_reason": null,
+      "source_review_uid": null,
+      "source_review_digest": null,
+      "source_analysis_uid": null
+    },
+    {
+      "kind": "RESTORED",
+      "evidence": "RECORDED",
+      "timestamp": "2026-08-25T13:14:55.127956",
+      "checkpoint_uid": "aba16e4b-7687-46a4-a046-bb32a65a5232",
+      "command": "revert",
+      "description": "Pre-revert to [c30e6bd3] — revert here to undo",
+      "before": [
+        {
+          "uid": "c8ccbf37-b892-4435-a7b8-f101e261284a",
+          "content": "When asked “How does this read?”, treat the request as a request for an opinion: do not immediately edit the draft, and first assess sentence order and paragraph division.",
+          "position": 0,
+          "content_digest": "069eb25c45f48f296942911d46af2709c31ce2ee72e94356f314b5f145b53738"
+        },
+        {
+          "uid": "a9ebb067-71c8-4b0b-ba52-3c7078bf17f9",
+          "content": "When later asked to polish, preserve the overall structure and citation-needed markers, changing only wording that causes a problem.",
+          "position": 1,
+          "content_digest": "3e2e4eb94e87e6fc14279161a66bed963629ac62942c3cebb81c15ad30b05080"
+        },
+        {
+          "uid": "599ff378-ff7a-41cd-bd8a-7a7966ff9f81",
+          "content": "When asked to change one expression, leave almost everything else unchanged, including the user-selected technical or project-specific terminology; for the stated absorption-into-two-parts example, retain “distribute” rather than replacing it with “divide.”",
+          "position": 2,
+          "content_digest": "00e451fa8e0efc335621e2ce7bd9595d63304cf82e1507633a5cdafe165c267c"
+        },
+        {
+          "uid": "98f1423d-aa53-4865-b40a-d0303e75b3e0",
+          "content": "When a passage must make four points, retain all four while removing overly redundant material and stating repeated content only once.",
+          "position": 3,
+          "content_digest": "69da4ffd2916f5f6b204f00a63eac4e804270c6fa7b90f72a545ad21ad95ecb9"
+        },
+        {
+          "uid": "c93197aa-2e9f-4878-baa6-f4fd483335c7",
+          "content": "When a draft must meet a shorter fixed limit, target an approximately 20–30% reduction by cutting redundant or unnecessary material.",
+          "position": 4,
+          "content_digest": "249e97aa4ef8c773df0b6c7b57c6ee52247aca7dce1f641820aec4ae11053822"
+        },
+        {
+          "uid": "7e826188-00e8-41c3-89b4-c918072c3836",
+          "content": "Do not shorten sentences so aggressively that a claim becomes more categorical; retain enough wording to preserve the claim’s original strength and conditions.",
+          "position": 5,
+          "content_digest": "4e4bb0ea29ab88ec4dbc50e9a4b5320bc63d17d349203f1a7531a75111818cf8"
+        },
+        {
+          "uid": "8a743d78-406a-4d43-98fd-20918d18c398",
+          "content": "When a next idea is merely related and does not broaden the scope, do not use “More broadly”; use “In relation to this” or another accurate connector, and do not add a new claim solely to connect the paragraphs.",
+          "position": 6,
+          "content_digest": "ae344361b16dd343a3d0836c78c996c46f4cedb4a58d55f8504726566c04469d"
+        },
+        {
+          "uid": "399e5239-acbb-484e-99ee-38c663966e14",
+          "content": "For any title about interaction with AI agent memory, preserve the intended terminology: use “interaction,” “management,” and “AI agent memory,” not “agent memory.”",
+          "position": 7,
+          "content_digest": "f4200ce013b314be65983d7a33961a009eef2ad50049e9ad3382bf77d68d1e3f"
+        },
+        {
+          "uid": "6fb7dc3a-7e5b-408b-b49f-47812678508b",
+          "content": "By default, format a document title in sentence case rather than title case; an explicitly named style guide may override only this capitalization default, and “for” must always be retained whenever it is intended wording.",
+          "position": 8,
+          "content_digest": "651bdf4c6c483c6ca279dc2f7a80f250975b2f7b9c3e2d08d57ba457b28169d4"
+        },
+        {
+          "uid": "cbea7a4e-a233-4bad-8e5f-133f2f66db41",
+          "content": "If work titles are inconsistently placed in quotation marks and italics, make them consistently italic throughout the document by default; an explicitly named style guide may override only this work-title formatting default.",
+          "position": 9,
+          "content_digest": "81811c90719a2c51663abcd6707feaafd9f4151fdfa6714f04497593d314001c"
+        },
+        {
+          "uid": "fe282ebc-07f4-4f39-bfc1-90672fa3bf58",
+          "content": "When told that content looks wrong, consult the complete original paper, book, or guide to find accurate information before proposing a correction; do not rely only on an abstract or short snippet.",
+          "position": 10,
+          "content_digest": "bdf5681ff47a185447dfdd57be8ee2c8169d55992f27206526ac7fa9ad40a930"
+        },
+        {
+          "uid": "30b82df9-8300-4dfc-b573-0bc3a3bcdd08",
+          "content": "Before adding or reusing citations and references, verify from each complete source that it exists and supports the exact claim.",
+          "position": 11,
+          "content_digest": "51595cfe59eb53ec6c5fa46432b650831efdf0c4fbabfd455bebf537f55f9fbc"
+        },
+        {
+          "uid": "09f769b3-a7da-4d62-9ebc-09d765c1e872",
+          "content": "Do not invent quotations or evidence, and do not overstate an author’s contribution or a paper’s status.",
+          "position": 12,
+          "content_digest": "c63af5ef92cff100390fe620405a2ecc2f86da6aa0dfd0640c94eac04c2d1ff3"
+        },
+        {
+          "uid": "5526b599-a63b-4b8a-8917-e9f6d1df7e90",
+          "content": "If the user requested review only and citation verification finds a problem, report the problem first rather than silently rewriting the draft.",
+          "position": 13,
+          "content_digest": "fc7d274a4eb4d0f0417121b0ab5bc23a5a21c1ca37d7b7af467189afbc8e6eb8"
+        },
+        {
+          "uid": "83848cf2-2c60-49e5-9fc3-ee7aac684e79",
+          "content": "When asked to review a draft without revising it, identify and explain any problems, but do not change the draft.",
+          "position": 14,
+          "content_digest": "b8e17ec92f5db74783dd861c379a54ae21966a290f587b85c9174f29ae20e355"
+        },
+        {
+          "uid": "b1767464-11e0-428f-abb8-46eff3e1a392",
+          "content": "Even when a review reveals an obvious wording error, report the error and a reason it is problematic; wait for a separate request before editing the wording.",
+          "position": 15,
+          "content_digest": "3aa12679804fcb041f6a23a23c2e3b350e63c82484ec32dbc8c786da69ffe757"
+        },
+        {
+          "uid": "635c8904-893c-46bc-a522-bc975a61ebfe",
+          "content": "When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.",
+          "position": 16,
+          "content_digest": "f42180ac2731580b133c60a28178c7484694134af9cd87795b387dcea63545af"
+        },
+        {
+          "uid": "1afd6a32-08e4-4be6-bc93-e78f4606e248",
+          "content": "If I later ask for polishing, preserve the overall strucutre and citation-needed markers, and change only wording that causes a problem.",
+          "position": 17,
+          "content_digest": "54a5172e2681d9166f312bdd9994b8f0cd8598fc96ccf6f5ab897555765d17bd"
+        },
+        {
+          "uid": "e877b52a-d44f-456f-895d-1c9474dcd046",
+          "content": "When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um... for example, use distribute, not divide, when material is absorbed into two parts.",
+          "position": 18,
+          "content_digest": "3b06352e813df2d425403e64233352927276146f1e3f1d1d49e763068aae7ce1"
+        },
+        {
+          "uid": "c4898408-a743-4ffb-92aa-60540af9ff3f",
+          "content": "If a passage is supposed to make four points, keep all four while removing parts that are too redundent and stating repeated content only once.",
+          "position": 19,
+          "content_digest": "190a7a74a898a6ee302d338ee060ec28cadc6031d96795e0dacfd708d3f4118f"
+        },
+        {
+          "uid": "b429bd6a-10c2-4e4f-bbec-68abeab39813",
+          "content": "When the draft has to fit a shorter fixed limit, aim to cut around 20–30% from redundant or unnecessary material.",
+          "position": 20,
+          "content_digest": "afcff3a8b9e3e739bd5e9c8c68934319fecda63110fb3b50f7f48c4c7658e659"
+        },
+        {
+          "uid": "02d6403b-4a8c-4b08-a2cc-c170d9b35f47",
+          "content": "But don't shorten sentences so aggressively that a claim sounds more categorical; keep enough wording to preserve its original strength and conditions.",
+          "position": 21,
+          "content_digest": "a7e35d0324a1884ebd711c71d3df51189dad9b268c8415e491c80b3401c72506"
+        },
+        {
+          "uid": "7ea4e91b-74a2-4830-b5c9-5b96791b5835",
+          "content": "If the next idea is merely related and does not broaden the scope, don't use More broadly; use In relation to this or another accurate connector without adding a new claim merely to make two paragraphs connect.",
+          "position": 22,
+          "content_digest": "a42e4c115f46fe487863131816c163d66cf8586d523d962dc71d36f0fdd21845"
+        },
+        {
+          "uid": "5b34f905-3f26-4221-8b72-6f7ad395bfa2",
+          "content": "For any titlle about interaction with AI agent memory, keep the exact terminology and intended words: use interaction and management and AI agent memory rather than agent memory.",
+          "position": 23,
+          "content_digest": "b97e515137968b7a8af5f21841a892ab34d5ac4a8b29595bf208d0910369682a"
+        },
+        {
+          "uid": "67192e6c-1f9d-4d97-b2cc-f9b8d1ea808a",
+          "content": "By default, format a document title in sentence case rather than title case. An explicitly named style guide may override only that capitalization default; always keep for whenever it is part of the intended wording.",
+          "position": 24,
+          "content_digest": "f91f31415c48d252ad9dfde45c404ea926ea8eae8241762b1471052431ab464c"
+        },
+        {
+          "uid": "288741d0-3d5f-43ee-a8c9-0e70ced4f4d7",
+          "content": "If titles of works use quotation marks in some places and italics in others, make them consistently italic throughout the document by default; an explicitly named style guide may override only this work-title format.",
+          "position": 25,
+          "content_digest": "f52ad44c87b3dedc2dbb00040864241bd5a9f9df75d2f9012a419fa1218df796"
+        },
+        {
+          "uid": "07b7d0b0-00a7-469d-93b7-24947608fcdf",
+          "content": "When I say that content looks wrong, find accurate information before proposing a correction by reading the original paper, book, or guide, not only an abstract or a short snippet.",
+          "position": 26,
+          "content_digest": "795b352f611ff2218d2c939ad0a7472d11010900eff92ef8f3d03d7255e1a2c6"
+        },
+        {
+          "uid": "1c5c951d-e5aa-41c4-b6ec-c4e10c995974",
+          "content": "Before adding or reusing citations and refferences, verify that each source exists and supports the exact claim after reviewing the complete source. Don't invent quotations or evidence or overstate an author's contribution or a paper's status. If I asked only for review, report a verification problem first instead of silently rewriting the draft.",
+          "position": 27,
+          "content_digest": "b1b2b135a59948222a40f7b3e233dac4931958b0341fe3c9cbc228d53f44d347"
+        }
+      ],
+      "after": [
+        {
+          "uid": "89ff1887-d807-5a04-94d7-424fff9a93b9",
+          "content": "memcommit is a research prototype that provides command-line and terminal user interfaces (CLI/TUI) for managing agent memory and supporting collaboration among people and agents. Through memcommit's operations and structural concepts—including Memories, Contexts, Profiles, Grants, and Sessions—you can manage agent memories as they are collected, organized, and propagated among people and agents. In this study, you will use memcommit in three different situations, each involving a different context, goal, and kind of memory.",
+          "position": 0,
+          "content_digest": "1a74fe7df8276cc7096cf44fac07691c5b84e602aab80f9aadec79de754848a1"
+        },
+        {
+          "uid": "cbd46e2b-722d-5fac-abb9-36abad820333",
+          "content": "SITUATION · Before beginning the three study tasks, complete a short practice exercise to become familiar with how memcommit organizes and presents its commands. Each newline-separated editing note in `practice/source` is stored as its own Memory, preserving the boundaries between the original requests. Some notes still combine recurring constraints, rough wording, and typos.",
+          "position": 1,
+          "content_digest": "02cba2a177a1a35147ea693bbde2610dcda4633418953ba7c7d20516dafd3026"
+        },
+        {
+          "uid": "1e046596-b6f1-5623-aebb-52c46b4a54be",
+          "content": "TASK · Divide their underlying constraints into appropriate atomic Memories without performing the requested edits, adding instructions, or changing the intended meaning, so that each constraint can be reviewed independently. Open `mem help`, inspect the available operations, find the operation designed for atomization, and use it to atomize the notes and save the result as `practice/source-atomized`.",
+          "position": 2,
+          "content_digest": "858af436af321890856458f2c8289e67eae71cf8fb7f53e197aea2f1c75697e7"
+        },
+        {
+          "uid": "bce98730-d7e9-440d-9400-630f523a496d",
+          "content": "When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.",
+          "position": 3,
+          "content_digest": "f42180ac2731580b133c60a28178c7484694134af9cd87795b387dcea63545af"
+        },
+        {
+          "uid": "d0f6e587-6c4f-4ae2-a377-b3a271840d9e",
+          "content": "If I later ask for polishing, preserve the overall strucutre and citation-needed markers, and change only wording that causes a problem.",
+          "position": 4,
+          "content_digest": "54a5172e2681d9166f312bdd9994b8f0cd8598fc96ccf6f5ab897555765d17bd"
+        },
+        {
+          "uid": "6bd4bd30-3bed-4858-b6c8-4e815922c5bf",
+          "content": "If a passage is supposed to make four points, keep all four while removing parts that are too redundent and stating repeated content only once.",
+          "position": 5,
+          "content_digest": "190a7a74a898a6ee302d338ee060ec28cadc6031d96795e0dacfd708d3f4118f"
+        },
+        {
+          "uid": "5e5f3d04-acff-4252-98fb-ecde5a8c761c",
+          "content": "DEFAULT CANDIDATE: use sentence case for document titles by default, subject only to an explicitly named style guide capitalization override; preserve the intended word for.",
+          "position": 6,
+          "content_digest": "7e734eda64b4a58369b3c2fa70fedf098f4a5ece79b5bd19e01dcbcbce0f9b6e"
+        },
+        {
+          "uid": "70720de6-5c38-4c93-a3ab-af0c71bd6470",
+          "content": "Use consistent italics for work titles by default, subject only to an explicitly named style guide work-title-format override.",
+          "position": 7,
+          "content_digest": "807f23e80dd3ff8e8756fbcf83778944a3841d74029f99c4c88e28aaa5b2f2c1"
+        },
+        {
+          "uid": "8517d6ae-7208-419d-83c5-8edcbc10634c",
+          "content": "AUDIT RESULT: mechanical sentence splitting detached an editing permission trigger, a protected-word object, and companion safeguards. Future atomize must keep every result independently reviewable with its complete trigger, exception, safeguard, and source provenance.",
+          "position": 8,
+          "content_digest": "2e83098f9f8d7d1b217c53dc3b3e010eb98568a7aa842bec714dc529a2bf1702"
+        }
+      ],
+      "reason": null,
+      "reason_codes": [],
+      "source_occurrence": null,
+      "operation_id": null,
+      "command_operation": null,
+      "context_transition": null,
+      "child_evidence": [],
+      "declared_frame": null,
+      "declared_frame_digest": null,
+      "uncertainty_reason": null,
+      "source_review_uid": null,
+      "source_review_digest": null,
+      "source_analysis_uid": null
+    },
+    {
+      "kind": "MERGED_IN",
+      "evidence": "RECORDED",
+      "timestamp": "2026-08-25T13:17:33.176747",
+      "checkpoint_uid": "71856802-1282-410f-9c9c-5c905c55ede3",
+      "command": "merge",
+      "description": "Merged 'practice/source' into 'practice/description': new 12; already present 0; kept Target 0; took Source 0",
+      "before": [
+        {
+          "uid": "1a9d3a74-12a1-50f1-96d0-bcaa09a65406",
+          "content": "By default, format a document title in sentence case rather than title case. An explicitly named style guide may override only that capitalization default; always keep for whenever it is part of the intended wording.",
+          "position": 8,
+          "content_digest": "f91f31415c48d252ad9dfde45c404ea926ea8eae8241762b1471052431ab464c"
+        }
+      ],
+      "after": [
+        {
+          "uid": "82f7de7c-c780-4e94-994e-fa54996f12ce",
+          "content": "By default, format a document title in sentence case rather than title case. An explicitly named style guide may override only that capitalization default; always keep for whenever it is part of the intended wording.",
+          "position": 19,
+          "content_digest": "f91f31415c48d252ad9dfde45c404ea926ea8eae8241762b1471052431ab464c"
+        }
+      ],
+      "reason": null,
+      "reason_codes": [
+        "MERGE",
+        "NEW"
+      ],
+      "source_occurrence": null,
+      "operation_id": null,
+      "command_operation": null,
+      "context_transition": {
+        "source": {
+          "uid": "7e48e68e-3c6f-541b-bfc1-e307abcc7a4f",
+          "name": "practice/source"
+        },
+        "target": {
+          "uid": "d5d0a8b4-d425-5c9f-9325-56329df711ef",
+          "name": "practice/description"
+        }
+      },
+      "child_evidence": [],
+      "declared_frame": null,
+      "declared_frame_digest": null,
+      "uncertainty_reason": null,
+      "source_review_uid": null,
+      "source_review_digest": null,
+      "source_analysis_uid": null
+    },
+    {
+      "kind": "RESTORED",
+      "evidence": "RECORDED",
+      "timestamp": "2026-08-25T13:17:41.340915",
+      "checkpoint_uid": "758313fe-49f6-4a1c-a456-49dd3473d6d5",
+      "command": "revert",
+      "description": "Pre-revert to [f056775b] — revert here to undo",
+      "before": [
+        {
+          "uid": "206dcf8c-d824-4042-abba-253460f702c5",
+          "content": "Match the intervention to the request: for “How does this read?” or review-only requests, assess and report issues before editing—checking sentence order and paragraph division—and report verification problems rather than silently rewriting; polish only when later requested.",
+          "position": 0,
+          "content_digest": "9cd7d2451bcb7f7b8e706bdfff747c7d7d5c3a0631f52f917dd56475f51a861a"
+        },
+        {
+          "uid": "d77dc74f-01d2-4a6c-b607-e75745b93f48",
+          "content": "When polishing or changing a specific expression, make the smallest necessary wording change while preserving the draft’s overall structure, citation-needed markers, and author-selected technical or project-specific terminology; for material absorbed into two parts, retain “distribute,” not “divide.”",
+          "position": 1,
+          "content_digest": "13c4f5b28b8e9645c042fb89da6f926904d39dcbdf55bad271193478f20a456d"
+        },
+        {
+          "uid": "b602fbfb-ec5f-4f17-8dd0-7d42d9b682e7",
+          "content": "When reducing a passage, preserve every required point, remove redundant material, state repeated content once, and—when a shorter fixed limit applies—target roughly a 20–30% cut from redundant or unnecessary material without making claims more categorical or losing their original strength and conditions.",
+          "position": 2,
+          "content_digest": "33418715983fe2b4993e94e2497f02b264d67af482c370c0242fa8cb415a90a6"
+        },
+        {
+          "uid": "248ac36c-a822-4359-906a-500d4a68c379",
+          "content": "Use connectors that truthfully represent the relation between ideas: when the next idea is related but does not broaden scope, do not use “More broadly”; use “In relation to this” or another accurate connector, and do not invent a claim merely to connect paragraphs.",
+          "position": 3,
+          "content_digest": "c138ee92ecbbe99cc54daf1f776ba7b231c23071b2c8a6a1ae7494a20679506d"
+        },
+        {
+          "uid": "031e91e1-b13d-4da5-b3e2-57a3548cf708",
+          "content": "For any title about interaction with AI agent memory, preserve the intended terms “interaction,” “management,” and “AI agent memory”; do not shorten the last term to “agent memory.”",
+          "position": 4,
+          "content_digest": "d61bb65dd4d39d6e73c1a070560eed56d934eed06c2cbf3bbaa04fe12e819dbc"
+        },
+        {
+          "uid": "45fccde1-ba5e-4454-88e7-ca9b88c2bfd8",
+          "content": "By default, capitalize document titles in sentence case, while always retaining “for” when it is intended wording; an explicitly named style guide may override only the capitalization default.",
+          "position": 5,
+          "content_digest": "4488aee22daacf979142911505fb07a30986bc5f35a785e19364484965c3754d"
+        },
+        {
+          "uid": "a0a3ed87-42bf-45e3-99c0-e3a1d5a5f773",
+          "content": "By default, format titles of works consistently in italics throughout a document rather than mixing quotation marks and italics; an explicitly named style guide may override only this work-title format.",
+          "position": 6,
+          "content_digest": "74f5cadddd123af3e4fdf164dcac1ea742212eb7a5f3950f5251e44445504660"
+        },
+        {
+          "uid": "23a8fa5a-b988-4f51-8949-a3dfbcf153ee",
+          "content": "Before correcting content that appears wrong, or adding or reusing citations and references, review the complete original paper, book, guide, or other source—not merely an abstract or short snippet—and verify both that the source exists and that it supports the exact claim.",
+          "position": 7,
+          "content_digest": "e58cdab889b26cc6a3cb2c2477c35a0a1ace4d6bd61f78e90922f115a8dda695"
+        },
+        {
+          "uid": "af9ebb14-91e6-49bf-8662-fb41a8ea412d",
+          "content": "Do not invent quotations or evidence, or overstate an author’s contribution or a paper’s status.",
+          "position": 8,
+          "content_digest": "aa614dc79f6f6b30bcfd473a344fcaa240c1d7e8b9b8a33f33126677d4c26058"
+        },
+        {
+          "uid": "dd85d58b-b17a-4413-bc79-aedd2de770b4",
+          "content": "Atomize the source-verification practice as: “Trigger: before correcting apparently wrong content or adding or reusing citations or references. Narrow exception: none stated. Protected object: the exact claim and its supporting source. Companion safeguard: review the complete original paper, book, guide, or other source rather than an abstract or short snippet, verify that the source exists and supports the exact claim, and do not invent quotations or evidence or overstate an author’s contribution or a paper’s status. Provenance: the established source-verification and evidence-integrity practices.” This atom records the editing constraint but does not correct content, add a citation, or alter a document.",
+          "position": 9,
+          "content_digest": "aa6f08c40bccf2195812e791ab3d9e7b42ee9684a64f06f249f07c91a6df5d02"
+        },
+        {
+          "uid": "5c043436-3913-4de3-9d2d-70451f596386",
+          "content": "Atomize the title-capitalization practice as: “Trigger: when capitalizing a document title. Narrow exception: an explicitly named style guide may override only the capitalization default. Protected object: the intended wording, including ‘for.’ Companion safeguard: otherwise use sentence case and retain ‘for’ whenever it is intended. Provenance: the established document-title capitalization practice.” If a draft title is supplied, store this atom without recasing, deleting, or otherwise editing the title.",
+          "position": 10,
+          "content_digest": "f35f0aaf3a92dfd0cdba6f0d4bc94a4e583c75c5f89126cd04ce8f93fea367dc"
+        },
+        {
+          "uid": "b051932e-ced0-44ae-871a-1e180c1b5ff7",
+          "content": "When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.",
+          "position": 11,
+          "content_digest": "f42180ac2731580b133c60a28178c7484694134af9cd87795b387dcea63545af"
+        },
+        {
+          "uid": "e6f5ef9a-da4d-46ac-8600-6d1d0002efe1",
+          "content": "If I later ask for polishing, preserve the overall strucutre and citation-needed markers, and change only wording that causes a problem.",
+          "position": 12,
+          "content_digest": "54a5172e2681d9166f312bdd9994b8f0cd8598fc96ccf6f5ab897555765d17bd"
+        },
+        {
+          "uid": "a2f8855c-a7ee-4fb2-9571-58a51f1e91f9",
+          "content": "When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um... for example, use distribute, not divide, when material is absorbed into two parts.",
+          "position": 13,
+          "content_digest": "3b06352e813df2d425403e64233352927276146f1e3f1d1d49e763068aae7ce1"
+        },
+        {
+          "uid": "f2311735-f76a-40c6-b44a-0291d4143cc2",
+          "content": "If a passage is supposed to make four points, keep all four while removing parts that are too redundent and stating repeated content only once.",
+          "position": 14,
+          "content_digest": "190a7a74a898a6ee302d338ee060ec28cadc6031d96795e0dacfd708d3f4118f"
+        },
+        {
+          "uid": "8a1a17e0-0b8f-4f0b-ab0b-73133254b0d2",
+          "content": "When the draft has to fit a shorter fixed limit, aim to cut around 20–30% from redundant or unnecessary material.",
+          "position": 15,
+          "content_digest": "afcff3a8b9e3e739bd5e9c8c68934319fecda63110fb3b50f7f48c4c7658e659"
+        },
+        {
+          "uid": "d7a14d0b-395c-430e-b13b-fa3eb69093a1",
+          "content": "But don't shorten sentences so aggressively that a claim sounds more categorical; keep enough wording to preserve its original strength and conditions.",
+          "position": 16,
+          "content_digest": "a7e35d0324a1884ebd711c71d3df51189dad9b268c8415e491c80b3401c72506"
+        },
+        {
+          "uid": "3028aad5-7d02-48d3-8c74-df78cd4c5e22",
+          "content": "If the next idea is merely related and does not broaden the scope, don't use More broadly; use In relation to this or another accurate connector without adding a new claim merely to make two paragraphs connect.",
+          "position": 17,
+          "content_digest": "a42e4c115f46fe487863131816c163d66cf8586d523d962dc71d36f0fdd21845"
+        },
+        {
+          "uid": "316b5039-4097-4d96-b83c-2e992850cd50",
+          "content": "For any titlle about interaction with AI agent memory, keep the exact terminology and intended words: use interaction and management and AI agent memory rather than agent memory.",
+          "position": 18,
+          "content_digest": "b97e515137968b7a8af5f21841a892ab34d5ac4a8b29595bf208d0910369682a"
+        },
+        {
+          "uid": "82f7de7c-c780-4e94-994e-fa54996f12ce",
+          "content": "By default, format a document title in sentence case rather than title case. An explicitly named style guide may override only that capitalization default; always keep for whenever it is part of the intended wording.",
+          "position": 19,
+          "content_digest": "f91f31415c48d252ad9dfde45c404ea926ea8eae8241762b1471052431ab464c"
+        },
+        {
+          "uid": "f1951eef-857c-47d6-b153-0ec1fea513a7",
+          "content": "If titles of works use quotation marks in some places and italics in others, make them consistently italic throughout the document by default; an explicitly named style guide may override only this work-title format.",
+          "position": 20,
+          "content_digest": "f52ad44c87b3dedc2dbb00040864241bd5a9f9df75d2f9012a419fa1218df796"
+        },
+        {
+          "uid": "e9e00caa-c837-4c97-bad3-c0c0e13c0b10",
+          "content": "When I say that content looks wrong, find accurate information before proposing a correction by reading the original paper, book, or guide, not only an abstract or a short snippet.",
+          "position": 21,
+          "content_digest": "795b352f611ff2218d2c939ad0a7472d11010900eff92ef8f3d03d7255e1a2c6"
+        },
+        {
+          "uid": "c8d4574a-39fb-4445-9627-30c29e44f0dd",
+          "content": "Before adding or reusing citations and refferences, verify that each source exists and supports the exact claim after reviewing the complete source. Don't invent quotations or evidence or overstate an author's contribution or a paper's status. If I asked only for review, report a verification problem first instead of silently rewriting the draft.",
+          "position": 22,
+          "content_digest": "b1b2b135a59948222a40f7b3e233dac4931958b0341fe3c9cbc228d53f44d347"
+        }
+      ],
+      "after": [
+        {
+          "uid": "89ff1887-d807-5a04-94d7-424fff9a93b9",
+          "content": "memcommit is a research prototype that provides command-line and terminal user interfaces (CLI/TUI) for managing agent memory and supporting collaboration among people and agents. Through memcommit's operations and structural concepts—including Memories, Contexts, Profiles, Grants, and Sessions—you can manage agent memories as they are collected, organized, and propagated among people and agents. In this study, you will use memcommit in three different situations, each involving a different context, goal, and kind of memory.",
+          "position": 0,
+          "content_digest": "1a74fe7df8276cc7096cf44fac07691c5b84e602aab80f9aadec79de754848a1"
+        },
+        {
+          "uid": "cbd46e2b-722d-5fac-abb9-36abad820333",
+          "content": "SITUATION · Before beginning the three study tasks, complete a short practice exercise to become familiar with how memcommit organizes and presents its commands. Each newline-separated editing note in `practice/source` is stored as its own Memory, preserving the boundaries between the original requests. Some notes still combine recurring constraints, rough wording, and typos.",
+          "position": 1,
+          "content_digest": "02cba2a177a1a35147ea693bbde2610dcda4633418953ba7c7d20516dafd3026"
+        },
+        {
+          "uid": "1e046596-b6f1-5623-aebb-52c46b4a54be",
+          "content": "TASK · Divide their underlying constraints into appropriate atomic Memories without performing the requested edits, adding instructions, or changing the intended meaning, so that each constraint can be reviewed independently. Open `mem help`, inspect the available operations, find the operation designed for atomization, and use it to atomize the notes and save the result as `practice/source-atomized`.",
+          "position": 2,
+          "content_digest": "858af436af321890856458f2c8289e67eae71cf8fb7f53e197aea2f1c75697e7"
+        },
+        {
+          "uid": "bce98730-d7e9-440d-9400-630f523a496d",
+          "content": "When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.",
+          "position": 3,
+          "content_digest": "f42180ac2731580b133c60a28178c7484694134af9cd87795b387dcea63545af"
+        },
+        {
+          "uid": "d0f6e587-6c4f-4ae2-a377-b3a271840d9e",
+          "content": "If I later ask for polishing, preserve the overall strucutre and citation-needed markers, and change only wording that causes a problem.",
+          "position": 4,
+          "content_digest": "54a5172e2681d9166f312bdd9994b8f0cd8598fc96ccf6f5ab897555765d17bd"
+        },
+        {
+          "uid": "6bd4bd30-3bed-4858-b6c8-4e815922c5bf",
+          "content": "If a passage is supposed to make four points, keep all four while removing parts that are too redundent and stating repeated content only once.",
+          "position": 5,
+          "content_digest": "190a7a74a898a6ee302d338ee060ec28cadc6031d96795e0dacfd708d3f4118f"
+        },
+        {
+          "uid": "5e5f3d04-acff-4252-98fb-ecde5a8c761c",
+          "content": "DEFAULT CANDIDATE: use sentence case for document titles by default, subject only to an explicitly named style guide capitalization override; preserve the intended word for.",
+          "position": 6,
+          "content_digest": "7e734eda64b4a58369b3c2fa70fedf098f4a5ece79b5bd19e01dcbcbce0f9b6e"
+        },
+        {
+          "uid": "70720de6-5c38-4c93-a3ab-af0c71bd6470",
+          "content": "Use consistent italics for work titles by default, subject only to an explicitly named style guide work-title-format override.",
+          "position": 7,
+          "content_digest": "807f23e80dd3ff8e8756fbcf83778944a3841d74029f99c4c88e28aaa5b2f2c1"
+        },
+        {
+          "uid": "8517d6ae-7208-419d-83c5-8edcbc10634c",
+          "content": "AUDIT RESULT: mechanical sentence splitting detached an editing permission trigger, a protected-word object, and companion safeguards. Future atomize must keep every result independently reviewable with its complete trigger, exception, safeguard, and source provenance.",
+          "position": 8,
+          "content_digest": "2e83098f9f8d7d1b217c53dc3b3e010eb98568a7aa842bec714dc529a2bf1702"
+        }
+      ],
+      "reason": null,
+      "reason_codes": [],
+      "source_occurrence": null,
+      "operation_id": null,
+      "command_operation": null,
+      "context_transition": null,
+      "child_evidence": [],
+      "declared_frame": null,
+      "declared_frame_digest": null,
+      "uncertainty_reason": null,
+      "source_review_uid": null,
+      "source_review_digest": null,
+      "source_analysis_uid": null
+    },
+    {
+      "kind": "HISTORY_GAP",
+      "evidence": "UNRECORDED",
+      "timestamp": null,
+      "checkpoint_uid": null,
+      "command": "current",
+      "description": "Current Context differs from the last reconstructable checkpoint state.",
+      "before": [],
+      "after": [
+        {
+          "uid": "f3ef224d-ff16-5a7a-880a-18eee2fc55b5",
+          "content": "When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.",
+          "position": 0,
+          "content_digest": "f42180ac2731580b133c60a28178c7484694134af9cd87795b387dcea63545af"
+        },
+        {
+          "uid": "e50c293a-2416-50c8-b35c-45b53ff58db5",
+          "content": "If I later ask for polishing, preserve the overall strucutre and citation-needed markers, and change only wording that causes a problem.",
+          "position": 1,
+          "content_digest": "54a5172e2681d9166f312bdd9994b8f0cd8598fc96ccf6f5ab897555765d17bd"
+        },
+        {
+          "uid": "39b21971-6ad4-561f-830e-99377eeeab09",
+          "content": "When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um... for example, use distribute, not divide, when material is absorbed into two parts.",
+          "position": 2,
+          "content_digest": "3b06352e813df2d425403e64233352927276146f1e3f1d1d49e763068aae7ce1"
+        },
+        {
+          "uid": "6fad23ab-406e-5298-98e5-0bf00b224b21",
+          "content": "If a passage is supposed to make four points, keep all four while removing parts that are too redundent and stating repeated content only once.",
+          "position": 3,
+          "content_digest": "190a7a74a898a6ee302d338ee060ec28cadc6031d96795e0dacfd708d3f4118f"
+        },
+        {
+          "uid": "6cc4b8a3-eaff-5805-8d37-83dd4bf8872c",
+          "content": "When the draft has to fit a shorter fixed limit, aim to cut around 20–30% from redundant or unnecessary material.",
+          "position": 4,
+          "content_digest": "afcff3a8b9e3e739bd5e9c8c68934319fecda63110fb3b50f7f48c4c7658e659"
+        },
+        {
+          "uid": "7ebe67fb-e08d-50b1-8c3b-af25d70462eb",
+          "content": "But don't shorten sentences so aggressively that a claim sounds more categorical; keep enough wording to preserve its original strength and conditions.",
+          "position": 5,
+          "content_digest": "a7e35d0324a1884ebd711c71d3df51189dad9b268c8415e491c80b3401c72506"
+        },
+        {
+          "uid": "b976766e-d366-5065-929e-5f31e638fdbe",
+          "content": "If the next idea is merely related and does not broaden the scope, don't use More broadly; use In relation to this or another accurate connector without adding a new claim merely to make two paragraphs connect.",
+          "position": 6,
+          "content_digest": "a42e4c115f46fe487863131816c163d66cf8586d523d962dc71d36f0fdd21845"
+        },
+        {
+          "uid": "44de7eff-4117-549c-a78e-f2cd3ab50133",
+          "content": "For any titlle about interaction with AI agent memory, keep the exact terminology and intended words: use interaction and management and AI agent memory rather than agent memory.",
+          "position": 7,
+          "content_digest": "b97e515137968b7a8af5f21841a892ab34d5ac4a8b29595bf208d0910369682a"
+        },
+        {
+          "uid": "1a9d3a74-12a1-50f1-96d0-bcaa09a65406",
+          "content": "By default, format a document title in sentence case rather than title case. An explicitly named style guide may override only that capitalization default; always keep for whenever it is part of the intended wording.",
+          "position": 8,
+          "content_digest": "f91f31415c48d252ad9dfde45c404ea926ea8eae8241762b1471052431ab464c"
+        },
+        {
+          "uid": "94c3ce98-85f3-51e2-a351-8cb92ec040c3",
+          "content": "If titles of works use quotation marks in some places and italics in others, make them consistently italic throughout the document by default; an explicitly named style guide may override only this work-title format.",
+          "position": 9,
+          "content_digest": "f52ad44c87b3dedc2dbb00040864241bd5a9f9df75d2f9012a419fa1218df796"
+        },
+        {
+          "uid": "96300a95-2cb2-5644-bae6-f53d7b31a725",
+          "content": "When I say that content looks wrong, find accurate information before proposing a correction by reading the original paper, book, or guide, not only an abstract or a short snippet.",
+          "position": 10,
+          "content_digest": "795b352f611ff2218d2c939ad0a7472d11010900eff92ef8f3d03d7255e1a2c6"
+        },
+        {
+          "uid": "4fe217eb-2b65-5fb0-92ff-733ced1e9270",
+          "content": "Before adding or reusing citations and refferences, verify that each source exists and supports the exact claim after reviewing the complete source. Don't invent quotations or evidence or overstate an author's contribution or a paper's status. If I asked only for review, report a verification problem first instead of silently rewriting the draft.",
+          "position": 11,
+          "content_digest": "b1b2b135a59948222a40f7b3e233dac4931958b0341fe3c9cbc228d53f44d347"
+        }
+      ],
+      "reason": null,
+      "reason_codes": [],
+      "source_occurrence": null,
+      "operation_id": null,
+      "command_operation": null,
+      "context_transition": null,
+      "child_evidence": [],
+      "declared_frame": null,
+      "declared_frame_digest": null,
+      "uncertainty_reason": null,
+      "source_review_uid": null,
+      "source_review_digest": null,
+      "source_analysis_uid": null
+    }
+  ],
+  "analyses": [],
+  "warnings": [
+    "The current Context contains changes that no retained checkpoint explains."
+  ]
+}
+
+
+STDERR

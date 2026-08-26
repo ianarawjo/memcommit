@@ -1,0 +1,31 @@
+{
+  "sequence": 104,
+  "count_before": 348,
+  "count_after": 349,
+  "delta": 1,
+  "new_attempt_uids": [
+    "fcb50d04-1ab0-452d-9c95-0c76d6ec4196"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "fcb50d04-1ab0-452d-9c95-0c76d6ec4196",
+      "operation": "shell-init",
+      "command": "mem shell-init bash",
+      "status": "FAILED",
+      "started_at": "2026-08-25T18:17:32.287341+00:00",
+      "completed_at": "2026-08-25T18:17:32.295692+00:00",
+      "elapsed_seconds": 0.008188624997274019,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": {
+        "kind": "Exit",
+        "exit_code": 1
+      }
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 provider status
+
+STDIN
+<none>
+
+EXIT
+0
+
+WALL_SECONDS
+1.228155
+
+POST_CALL_IDENTITY_HOST_ASSERTION
+{"profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-3/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+STDOUT
+scope: profile_default
+profile: sixworld-v2-template
+profile_mode: study
+route_source: study_policy
+policy_version: semantic-provider-policy-v2
+study_config: study-provider-config-v2-fast
+study_config_digest: b549e05b6930fdacbe9dbaec09543390840a2689cd4b4ef1fa6470ca71a5f1ca
+route_digest: e7b4e9360effbde221997daa96862a6ca89e7fc40ee0b5c731a64f86115f7ddc
+provider: codex_chatgpt
+model: gpt-5.6-sol
+timeout_seconds: 600
+reasoning: none
+service_tier: fast
+max_output_tokens: 16384
+
+
+STDERR

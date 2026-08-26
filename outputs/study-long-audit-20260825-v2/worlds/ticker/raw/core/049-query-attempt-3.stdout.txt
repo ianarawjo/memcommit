@@ -1,0 +1,7 @@
+Route 66, LLC should receive the ticker ROUTE66 after removing the LLC suffix, comma, and spaces while preserving and uppercasing the remaining letters and retaining 66. [1] [2] [3] [4]
+
+References
+[1] Core ticker rule: remove a terminal legal suffix such as Inc., Corp., Ltd., or LLC before constructing the ticker. Preserve the remaining alphanumeric characters. — fac90a77, task-2/participant, m1
+[2] Core ticker rule: uppercase remaining company-name letters in their original order. Do not invent letters. — 9f473e8e, task-2/participant, m2
+[3] Numeral rule: preserve digits 0-9, including leading zeroes, in their original positions while removing spaces and punctuation. — 28120a2d, task-2/participant/proposal-workspace, m4
+[4] Numeral example: Route 66, LLC becomes ROUTE66 after removing the comma, space, and LLC suffix while preserving 66. — ace52daf, task-2/participant/proposal-workspace, m5

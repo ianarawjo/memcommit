@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 reference task-1/participant/construction-updates/event-relocations --into task-1/participant --direct
+
+EXIT
+0
+
+WALL_SECONDS
+1.394523
+
+STDOUT
+Referenced direct Context snapshot 'task-1/participant/construction-updates/event-relocations' (1 Context) as [1600961e] in 'task-1/participant'.
+
+
+STDERR

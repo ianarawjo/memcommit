@@ -1,0 +1,5 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 rationale task-2/participant/proposal-workspace --limit 60 --unit words
+EXIT: 1
+DURATION_SECONDS: 6.707
+
+Rationale error: The Rationale provider exceeded the requested complete-narrative limit of 60 words.

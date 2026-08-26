@@ -1,0 +1,18 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 elaborate --goal 'Explain only verified accessible-route alternatives and access-hour changes.' --to task-1/participant
+
+EXIT
+0
+
+OUTPUT
+ELABORATE APPLIED · task-1/participant
+MODE · GOAL_TO_RULES · VERIFICATION · UNVERIFIED · QUALITY · BEST_EFFORT
+SOURCE · INLINE · TARGET · task-1/participant
+EFFECTS · ADD 3 MEMORIES
+
+  [memory 449c3e32] Before publishing any accessible-route alternative, require a current authoritative source to verify the route’s entry point, destination, applicable period, and intended users; omit the alternative if any of those elements cannot be verified.
+  [memory 313234c4] Before publishing any access-hour change, require a current authoritative source to verify the affected entrance or access point, the previous and changed hours, the effective period, and any eligibility or credential conditions; omit the change if any element cannot be verified.
+  [memory a70351e0] Limit the explanation to verified accessible-route alternatives and verified access-hour changes, clearly labeling each item by category and effective period; exclude closures, construction details, staff-routing instructions, credential procedures, and other context unless needed to understand a verified alternative or hours change and independently verified.
+
+REVIEW · mem review elaborate --receipt 1a674076-7354-4dc9-9d72-42a4f7cf57ba
+UNDO · mem undo

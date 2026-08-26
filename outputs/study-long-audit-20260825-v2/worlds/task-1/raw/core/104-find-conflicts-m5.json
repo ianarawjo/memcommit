@@ -1,0 +1,11 @@
+{
+  "sequence": 104,
+  "operation": "find-conflicts",
+  "attempt": 5,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 find-conflicts task-1/campus-wiki/route-changes",
+  "exit": 0,
+  "wall_seconds": 21.433042,
+  "pre_target_digest": "801f54e787234df430d710ae2cb68707b18acbc6b67ccf438a5308b1e32fa621",
+  "post_target_digest": "68ce44773c27e0cfaa6c251146346637bc2f478233bb49020952f3d230e664a0",
+  "raw_output": "raw/core/104-find-conflicts-m5.txt"
+}

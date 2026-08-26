@@ -1,0 +1,34 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker log --context audit/ticker/admin-v2-scratch --memory 37113bd0 --limit 5
+
+STDIN
+<none>
+
+EXIT
+0
+
+WALL_SECONDS
+1.364415
+
+PRE_IDENTITY
+{"current_context": "task-2/participant", "current_context_uid": "0e19f3b1-4107-48ab-9186-8773e48b812d", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+IMMEDIATE_POST_IDENTITY
+{"current_context": "task-2/participant", "current_context_uid": "0e19f3b1-4107-48ab-9186-8773e48b812d", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+COMMAND_ATTEMPT_DELTA
+{"count_after": 301, "count_before": 300, "delta": 1, "new_attempt_uids": ["7d84cdab-fd6c-416e-9646-ec69b1cdfdc1"], "records": [{"command": "mem log --context audit/ticker/admin-v2-scratch --memory 37113bd0 --limit 5", "completed_at": "2026-08-25T18:16:11.537153+00:00", "details": {"memory_report": {"context_name": "audit/ticker/admin-v2-scratch", "memory_uid": "37113bd0-5194-521b-9d9e-48903d819520", "operation": "trace"}, "read_report": {"context_names": ["audit/ticker/admin-v2-scratch"], "memory_uid": "37113bd0-5194-521b-9d9e-48903d819520", "operation": "trace", "profile_selected": false, "ranges": ["DIRECT"], "selection_mode": "SINGLE", "target_names": ["audit/ticker/admin-v2-scratch"]}}, "elapsed_seconds": 0.04762879200279713, "failure": null, "operation": "log", "outcome": null, "started_at": "2026-08-25T18:16:11.489366+00:00", "status": "COMPLETED", "terminal": {"stdin_tty": true, "stdout_tty": false}, "uid": "7d84cdab-fd6c-416e-9646-ec69b1cdfdc1", "version": 3}], "sequence": 56}
+
+STDOUT
+TRACE · audit/ticker/admin-v2-scratch
+[MEMORY 37113bd0] · 1 OPERATION · LATEST FIRST
+
+[import] [CHECKPOINT 2efd5b13] [MEMORY 37113bd0]  2026-08-25 14:16 · Imported Memory [37113bd0] from Profile 'task-1' Context 'participant/construction-updates/shop-updates'.
+  − ∅
+  + [37113bd0]@1 The ATM on the first floor of the Main Building is closed during the construction period.
+
+ATTACHMENTS
+  none
+
+
+STDERR

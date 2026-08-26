@@ -1,0 +1,11 @@
+{
+  "sequence": 83,
+  "operation": "find-conflicts",
+  "attempt": 4,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 find-conflicts task-1/campus-wiki/temporary-parking",
+  "exit": 0,
+  "wall_seconds": 10.574262,
+  "pre_target_digest": "bc0af6e7a25e4b4045b05f8d67fb2c6dcae78e0683bcf778b88f6e962c4c5343",
+  "post_target_digest": "18333dba7f92bd93e1b5db1dff9ca02e8cd6381b4ff24fd5f0c11831d27b137c",
+  "raw_output": "raw/core/083-find-conflicts-m4.txt"
+}

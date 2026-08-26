@@ -1,0 +1,27 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple status
+
+EXIT
+0
+
+OUTPUT
+On context: audit/a-is-apple/admin-v2-scratch/co4-tree/source
+
+Inventory · Memories 18 · Memory Refs 1 · Checkpoints 36
+
+Relationships:
+  MEMORY REF [3e9ffb8f] practice#b5180f53
+
+Memory preview · first 5 of 18:
+  [58a5844e] When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.
+  [363bc9ea] If I later ask for polishing, preserve the overall strucutre and citation-needed markers, and change only wording that causes a problem.
+  [f6bc429e] When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um... for example, use distribute, not divide, when material is absorbed into two parts.
+  [0ac86770] If a passage is supposed to make four points, keep all four while removing parts that are too redundent and stating repeated content only once.
+  [6e4c4e12] When the draft has to fit a shorter fixed limit, aim to cut around 20–30% from redundant or unnecessary material.
+
+Recent changes · latest 5 of 36 checkpoints:
+  a5b368cd  2026-08-25 14:05  branch        Branched subtree 'practice' to 'audit/a-is-apple/admin-v2-scratch/co4-tree'.
+  7fb8c641  2026-08-25 13:25  revert        Pre-revert to [b369b639] — revert here to undo
+  69dfce3e  2026-08-25 13:25  merge         Merged 'practice' into 'practice/source': new 20; already present 0; kept Target 0; took Source 0
+  f4a88ec3  2026-08-25 13:25  dedun         Resolved 2 redundancy group(s); absorbed 2 direct item(s)
+  a9d3e865  2026-08-25 13:24  elaborate     Added 3 Elaborate Rules to 'practice/source'

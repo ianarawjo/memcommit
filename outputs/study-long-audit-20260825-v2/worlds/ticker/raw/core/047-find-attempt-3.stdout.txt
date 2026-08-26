@@ -1,0 +1,6 @@
+FIND RESULTS
+PATTERN · Route\s+66 · REGEX · CASE SENSITIVE
+SCOPE · task-2/participant/proposal-workspace · EXACT · EXCLUDE EMBEDS
+SCANNED 3 · MATCHED 1 · OCCURRENCES 1
+
+1 [ace52daf] Numeral example: Route 66, LLC becomes ROUTE66 after removing the comma, space, and LLC suffix while preserving 66. [task-2/participant/proposal-workspace m3]

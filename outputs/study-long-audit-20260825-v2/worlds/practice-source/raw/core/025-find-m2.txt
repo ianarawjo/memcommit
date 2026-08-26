@@ -1,0 +1,22 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source find 'strucutre|redundent|titlle|refferences' --regex --context practice/source --all-results
+
+EXIT
+0
+
+WALL_SECONDS
+1.370138
+
+STDOUT
+FIND RESULTS
+PATTERN · strucutre|redundent|titlle|refferences · REGEX · CASE SENSITIVE
+SCOPE · practice/source · EXACT · EXCLUDE EMBEDS
+SCANNED 12 · MATCHED 4 · OCCURRENCES 4
+
+1 [e50c293a] If I later ask for polishing, preserve the overall strucutre and citation-needed markers, and change only wording that causes a problem. [practice/source m2]
+2 [6fad23ab] If a passage is supposed to make four points, keep all four while removing parts that are too redundent and stating repeated content only once. [practice/source m4]
+3 [44de7eff] For any titlle about interaction with AI agent memory, keep the exact terminology and intended words: use interaction and management and AI agent memory rather than agent memory. [practice/source m8]
+4 [4fe217eb] Before adding or reusing citations and refferences, verify that each source exists and supports the exact claim after reviewing the complete source. Don't invent quotations or evidence or overstate an author's contribution or a paper's status. If I asked only for review, report a verification problem first instead of silently rewriting the draft. [practice/source m12]
+
+
+STDERR

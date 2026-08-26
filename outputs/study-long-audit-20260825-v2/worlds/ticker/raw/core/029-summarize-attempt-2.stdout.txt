@@ -1,0 +1,4 @@
+SUMMARY · task-2/participant/proposal-workspace
+STATUS · DIRECT
+
+North-Star, Inc. is normalized to NORTHSTAR by removing the comma, hyphen, space, and Inc. suffix, leaving an output with no punctuation.

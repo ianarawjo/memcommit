@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source embed practice/source --into practice/description
+
+EXIT
+0
+
+WALL_SECONDS
+1.347809
+
+STDOUT
+Embedded 'practice/source' into 'practice/description' after [3fbf33de] at the end.
+
+
+STDERR

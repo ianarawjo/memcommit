@@ -1,0 +1,13 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 query task-3/remote/government/healthcare-agent/info-request/questions-and-answers 'State the recipient scope, purpose categories, transmitted-unit rule, possible downstream uses, and what this endpoint cannot do.'
+
+STDOUT
+The recipient is the government healthcare institution; relevant third parties—outside people or organizations providing healthcare-related support or processing—may also receive submitted information.
+
+Purposes and possible downstream uses include healthcare-related support or processing and, depending on the information type, service improvement. The exact services, third parties, recipients, and scope of use cannot be identified by this endpoint.
+
+All content actually sent through the institution’s transmission screen is treated as one consented sharing unit. Merely mentioning information in this conversation does not transmit it.
+
+This endpoint can only explain sharing consequences. It cannot access personal Memories or institution records; select, include, exclude, edit, or transmit content; perform downstream processing; execute appointments or transactions; change permissions; or control, delete, or alter the retention of transmitted records and copies.
+
+STDERR

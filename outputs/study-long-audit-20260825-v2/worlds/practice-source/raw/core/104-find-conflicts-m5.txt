@@ -1,0 +1,32 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source find-conflicts practice
+
+EXIT
+0
+
+WALL_SECONDS
+9.541079
+
+STDOUT
+Find Conflicts · practice · 4/9 direct memories involved · 3/36 pairs flagged
+
+  POSSIBLE CONFLICT 1/3
+  [28fbce32] Change only wording that causes a problem.
+  [0a614986] ATOMIC CANDIDATE: if a shorter fixed limit applies, aim to remove approximately 20-30% from redundant or unnecessary material.
+  Reason: If the shorter fixed limit makes a 20–30% reduction necessary, changing only wording that independently causes a problem conflicts with removing otherwise acceptable redundant or unnecessary material; they remain jointly explainable if excess length itself makes that material problematic.
+  Question: Does exceeding the shorter fixed limit make redundant or unnecessary wording a problem that may be changed?
+
+  POSSIBLE CONFLICT 2/3
+  [0a614986] ATOMIC CANDIDATE: if a shorter fixed limit applies, aim to remove approximately 20-30% from redundant or unnecessary material.
+  [7a909bed] Preserve all intended points plus every claim's original strength and conditions.
+  Reason: Removing 20–30% can conflict with preserving all intended points if the removable material expresses intended points; both rules remain jointly explainable when the reduction can come entirely from redundancy or material that expresses no intended point.
+  Question: May any intended point be removed to meet the shorter limit?
+
+  POSSIBLE CONFLICT 3/3
+  [0a614986] ATOMIC CANDIDATE: if a shorter fixed limit applies, aim to remove approximately 20-30% from redundant or unnecessary material.
+  [aef3486b] But don't shorten sentences so aggressively that a claim sounds more categorical; keep enough wording to preserve its original strength and conditions.
+  Reason: A 20–30% shortening target can conflict with retaining enough wording to preserve claim strength and conditions when the target cannot be reached without over-compressing claims; they remain jointly explainable when redundant or unnecessary material supplies the full reduction.
+  Question: Which takes priority if the 20–30% reduction cannot be achieved without altering a claim’s strength or conditions?
+
+
+STDERR

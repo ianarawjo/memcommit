@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source delete missing-transform-r2 --context practice/description
+
+EXIT
+1
+
+WALL_SECONDS
+1.270637
+
+STDOUT
+
+
+STDERR
+Error: "No direct item matching 'missing-transform-r2' in context 'practice/description'."

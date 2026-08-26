@@ -1,0 +1,7 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 reference 9d626b1a --from task-3/local/guardrails/minimization-and-redaction --into task-3/local
+
+STDOUT
+Referenced snapshot [9d626b1a] from 'task-3/local/guardrails/minimization-and-redaction' as [f4f93a2f] in 'task-3/local'.
+
+STDERR

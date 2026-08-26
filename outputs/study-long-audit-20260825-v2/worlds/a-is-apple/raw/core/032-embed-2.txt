@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple embed practice/source --into practice
+
+EXIT
+0
+
+OUTPUT
+Embedded 'practice/source' into 'practice' after [b6e1778f] at the end.

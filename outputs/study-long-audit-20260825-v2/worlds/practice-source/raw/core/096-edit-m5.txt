@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source edit practice:8517d6ae 'AUDIT RESULT: mechanical sentence splitting detached an editing permission trigger, a protected-word object, and companion safeguards. Future atomize must keep every result independently reviewable with its complete trigger, exception, safeguard, and source provenance.'
+
+EXIT
+0
+
+WALL_SECONDS
+1.335119
+
+STDOUT
+Edited [8517d6ae] in 'practice':
+  - AUDIT RESULT: mechanical sentence splitting can detach permissions, triggers, exceptions, and companion safeguards. Future atomize must retain each constraint's complete applicability boundary and provenance.
+  + AUDIT RESULT: mechanical sentence splitting detached an editing permission trigger, a protected-word object, and companion safeguards. Future atomize must keep every result independently reviewable with its complete trigger, exception, safeguard, and source provenance.
+
+
+STDERR

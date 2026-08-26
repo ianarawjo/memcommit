@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 translate task-1/participant/construction-updates/temporary-parking:84196dc5 --to Spanish
+
+EXIT
+0
+
+OUTPUT
+
+Translation view: 'task-1/participant/construction-updates/temporary-parking' → Spanish
+  1 translated Memory
+────────────────────────────────────────────────────────────────
+[84196dc5] Spanish · PROVIDER · UNREVIEWED
+  Modificar campus-wiki/temporary-parking: Durante el período de construcción, el estacionamiento subterráneo no se puede utilizar para el estacionamiento general.
+────────────────────────────────────────────────────────────────
+Saved translation view.
+No Context or Memory changes; source Memory UIDs remain the anchors.

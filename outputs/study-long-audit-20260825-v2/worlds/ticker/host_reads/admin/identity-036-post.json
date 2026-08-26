@@ -1,0 +1,19 @@
+{
+  "sequence": 36,
+  "position": "post",
+  "label": "Admin 36 immediate post-call",
+  "read_at": "2026-08-25T18:13:07.901181+00:00",
+  "actual": {
+    "profile_name": "sixworld-v2-template",
+    "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+    "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+    "current_context": "audit/ticker/admin-v2-scratch/b2-tree",
+    "current_context_uid": "86573764-296a-456a-9302-2a8599bdc8a4"
+  },
+  "expected": {
+    "profile_name": "sixworld-v2-template",
+    "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+    "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"
+  },
+  "matches": true
+}

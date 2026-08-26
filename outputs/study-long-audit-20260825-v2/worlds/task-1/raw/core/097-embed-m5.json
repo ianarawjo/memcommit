@@ -1,0 +1,11 @@
+{
+  "sequence": 97,
+  "operation": "embed",
+  "attempt": 5,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 embed --from task-1/campus-wiki/route-changes --into task-1/participant",
+  "exit": 0,
+  "wall_seconds": 1.41368,
+  "pre_target_digest": "a3ff2aef4422d9380fa2806f1785d3e4a455e74f3867b01c7c9dbb5fa559eeea",
+  "post_target_digest": "c773b32d5eca599c58fb77f6a5ed07fb98dbf0f3d95112dccc8a116c6214faa4",
+  "raw_output": "raw/core/097-embed-m5.txt"
+}

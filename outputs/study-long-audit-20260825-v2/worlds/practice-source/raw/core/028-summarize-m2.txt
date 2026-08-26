@@ -1,0 +1,17 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source summarize practice
+
+EXIT
+0
+
+WALL_SECONDS
+8.146743
+
+STDOUT
+SUMMARY · practice
+STATUS · DIRECT
+
+Before changing text, determine whether the request is review-only or authorizes editing, while preserving the requested scope and the source’s meaning.
+
+
+STDERR

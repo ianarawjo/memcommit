@@ -1,0 +1,28 @@
+{
+  "sequence": 95,
+  "count_before": 339,
+  "count_after": 340,
+  "delta": 1,
+  "new_attempt_uids": [
+    "3705698c-4a46-4234-bced-6e94a2314385"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "3705698c-4a46-4234-bced-6e94a2314385",
+      "operation": "init",
+      "command": "mem init audit/ticker/admin-v2-scratch/missing-parent/leaf",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:17:15.476000+00:00",
+      "completed_at": "2026-08-25T18:17:15.499030+00:00",
+      "elapsed_seconds": 0.022836249991087243,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

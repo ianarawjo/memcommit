@@ -1,0 +1,12 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 trace task-1/participant/construction-updates/facility-updates:99c29cea --limit 3
+
+EXIT
+0
+
+OUTPUT
+TRACE · task-1/participant/construction-updates/facility-updates
+MEMORY · 99c29cea-9270-5a77-952c-b3f48da55612
+LINEAGE · 2 events · 2 components
+ATTENTION · 0 limits
+DETAILS · mem trace 99c29cea-9270-5a77-952c-b3f48da55612 --context task-1/participant/construction-updates/facility-updates --plain

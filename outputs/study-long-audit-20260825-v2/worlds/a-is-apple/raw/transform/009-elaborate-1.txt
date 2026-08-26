@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple elaborate --from practice --goal 'Explain only the existing mapping provenance.' --to practice/source
+
+EXIT
+1
+
+OUTPUT
+Elaborate error: Context-backed Elaborate requires only directly owned ordinary Memories in its Source.

@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker distill --from task-2/participant/proposal-workspace --to task-3/local/guardrails --goal 'Produce a complete source-grounded regression rule set for the three maintained examples.' --direct --plain
+
+EXIT
+0
+
+OUTPUT
+DISTILL APPLIED · task-2/participant/proposal-workspace → task-3/local/guardrails
+EFFECTS · ADD 3 RULES
+
+  [memory 273c2f80] Construct the base ticker by removing spaces, punctuation, and the terminal legal-entity suffix from the source name, then uppercasing and concatenating the remaining characters; thus North-Star, Inc. maps to NORTHSTAR and Route 66, LLC maps to ROUTE66.
+  [memory 27dd070c] Preserve every digit, including leading zeroes, in its original relative position when constructing the ticker; removal of surrounding spaces or punctuation does not remove or reorder digits.
+  [memory 6ff92614] When a legal suffix immediately precedes terminal Class A or Class B, remove the legal suffix, derive the base ticker, and append generated share-class syntax .A or .B respectively; thus Acme Corp. Class B maps to ACME.B.
+
+REVIEW · mem review distill --receipt 1bfe848c-1e47-441a-be4f-7a07bd68c46f
+UNDO · mem undo

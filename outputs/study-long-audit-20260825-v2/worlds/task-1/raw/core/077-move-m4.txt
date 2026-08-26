@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 move 6960c0ca --from task-1/campus-wiki/temporary-parking --into task-1/participant
+
+EXIT
+1
+
+WALL_SECONDS
+1.303993
+
+STDOUT
+
+
+STDERR
+Error: Move cannot use granted Source 'task-1/campus-wiki/temporary-parking': EXPORT permits a retained Copy, not deletion or cross-Profile ownership transfer. Copy it into a local Context first, then move the local copy.

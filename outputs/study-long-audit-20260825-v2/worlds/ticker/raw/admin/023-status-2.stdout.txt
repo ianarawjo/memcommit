@@ -1,0 +1,8 @@
+Profile: sixworld-v2-template
+Context lineage: audit > ticker > admin-v2-scratch
+On context: audit/ticker/admin-v2-scratch
+
+Inventory · Checkpoints 1
+
+Recent changes · latest 1 of 1 checkpoints:
+  d97f03e0  2026-08-25 14:12  init          Initialized context 'audit/ticker/admin-v2-scratch'

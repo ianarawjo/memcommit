@@ -1,0 +1,5 @@
+{
+  "sender_delivery_state": "e96baf6df7a7b148b4107cce30ab678a69e74f4ab8b787262de1b27e5082a719",
+  "receiver_delivery_state": "639b93de7148a66d0b10a19e48188afc53d208e3088a40dc5b4783e96f4adcc8",
+  "digest_semantics": "All delivery-visible durable state excluding append-only Study command audit ledger and lock files."
+}

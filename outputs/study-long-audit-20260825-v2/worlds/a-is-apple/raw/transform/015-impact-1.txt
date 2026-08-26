@@ -1,0 +1,68 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple impact atomize practice
+
+EXIT
+0
+
+OUTPUT
+ RESULT · atomize · practice
+ STATUS · ANALYSIS COMPLETE · sources=14 · projected=18 · splits=2 · children=6 · review issues=10
+
+ WHAT MEM UNDERSTOOD
+ The context records apple mappings, an explicit apricot alternative, a preferred set covering apple, banana, and cedar, and notes that alternatives remain explicit. Several fragments also describe duplication, provenance, conflict, and recovery testing when read together.
+
+ WHAT HAPPENED
+ The preferred set was split into its three independently revisable assignments and its statement about unresolved alternatives. Complete single commitments were preserved, while source-local fragments and unresolved demonstratives were left unsplit rather than borrowing neighboring text.
+
+ WHAT REMAINS UNRESOLVED
+ Without a candidate-local frame, “this,” “the original,” and the incomplete phrases about assertion, provenance, conflict, and recovery testing cannot be resolved sufficiently for safe atomization, although neighboring Memories provide ordinary contextual readings for the separate quality scan.
+
+ REPRESENTATIVE / BOUNDARY CASES
+ ›  1. [REPRESENTATIVE] ATOMIC · KEEP
+       KEEP: a is apple.
+    2. [REPRESENTATIVE] NON_PROPOSITIONAL · KEEP_CLASSIFIED
+       KEEP_CLASSIFIED: assertion.
+    3. [REPRESENTATIVE] COMPOSITE · SPLIT
+       SPLIT: Preferred set: a is apple; b is banana; c is cedar; unresolved alternatives remain explicit.
+    4. [BOUNDARY] CONFLICT · YES
+       The two assertions assign different values, apple and apricot, to the same subject under aligned scope.
+    5. [BOUNDARY] UNCERTAIN · RECONCILE
+       The demonstrative and the referent of “the original” are unresolved within the source.
+
+Analysis [bd9a4b5b] · INPUT practice → OUTPUT practice · ORDER: SOURCE · 0/10 answered
+
+ACTIONABLE ISSUES
+›  1. · CONFLICT · YES  “a is apple.”
+   2. · CONFLICT · YES  “a maps to apple;”
+   3. · ATOMIZE UNCERTAINTY · UNCERTAIN · REQUIRES CONTEXT  “this edited duplicate retains the original”
+   4. · CONFLICT · YES  “a maps to apple;”
+   5. · ATOMIZE UNCERTAINTY · UNCERTAIN · REQUIRES CONTEXT  “copied from the original direct Memory for”
+   6. · CONFLICT · YES  “a maps to apricot;”
+   7. · CONFLICT · YES  “a maps to apricot;”
+   8. · ATOMIZE UNCERTAINTY · UNCERTAIN · REQUIRES CONTEXT  “this is a deliberate conflicting”
+   9. · SUGGESTED SPLIT · COMPOSITE · 4 CHILDREN  “Preferred set: a is apple; b is banana; c is ce…”
+  10. · SUGGESTED SPLIT · COMPOSITE · 2 CHILDREN  “Preferred set: a is apple; b is banana;”
+
+CONFLICT 1/10
+
+SOURCE 1 [f1c940a1]
+a is apple.
+
+SOURCE 2 [0463758c]
+a maps to apricot;
+
+CLASSIFICATION
+YES
+
+WHY THESE MEMORIES CONFLICT
+The two assertions assign different values, apple and apricot, to the same subject under aligned scope.
+
+REFINE, COMMENT, OR ENTER A DIFFERENT READING
+> 
+
+SOURCE means canonical Context order; Memory creation timestamps are not recorded.
+No Memory changes have been applied. No checkpoint was created.
+Resumed saved analysis [bd9a4b5b]; the provider was not called.
+REOPEN · mem impact atomize --session bd9a4b5b-5776-4349-9524-7d697385c83a
+BROWSE ATOMIZE · mem impact atomize --sessions
+BROWSE ALL IMPACT · mem impact --sessions

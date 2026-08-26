@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source dedun practice/description --direct
+
+EXIT
+0
+
+WALL_SECONDS
+9.482702
+
+STDOUT
+Dedun 'practice/description': absorbed 4 redundant direct item(s); kept 4 original UID(s).
+DUN COMPOSITION · 4 evidence links = 0 DUP / EXACT links + 4 SEMANTIC DUN links
+Checkpoint [0b874f92] · review: mem review dedun --receipt 0b874f92-0b06-4352-a112-2c2e96275621 · recovery: mem undo
+
+
+STDERR

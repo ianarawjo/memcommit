@@ -1,0 +1,28 @@
+{
+  "sequence": 102,
+  "count_before": 346,
+  "count_after": 347,
+  "delta": 1,
+  "new_attempt_uids": [
+    "861ca819-08e7-4255-a8a6-015b8a5a9b36"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "861ca819-08e7-4255-a8a6-015b8a5a9b36",
+      "operation": "pwd",
+      "command": "mem pwd",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:17:28.950347+00:00",
+      "completed_at": "2026-08-25T18:17:28.964474+00:00",
+      "elapsed_seconds": 0.013958541007013991,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple find apple --recursive --context practice
+
+EXIT
+0
+
+OUTPUT
+FIND RESULTS
+PATTERN · apple · LITERAL · CASE SENSITIVE
+SCOPE · practice · DESCENDANTS · FOLLOW EMBEDS
+SCANNED 20 · MATCHED 3 · OCCURRENCES 3
+
+1 [f1c940a1] a is apple. [practice m1]
+2 [9828aed4] a maps to apple; [practice m2]
+3 [3d6c9417] a is apple. [practice m5] → [f1c940a1] [practice]

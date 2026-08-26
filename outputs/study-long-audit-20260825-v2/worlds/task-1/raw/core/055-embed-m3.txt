@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 embed task-1/participant/construction-updates/building-access --into task-1/participant
+
+EXIT
+0
+
+WALL_SECONDS
+1.359108
+
+STDOUT
+Embedded 'task-1/participant/construction-updates/building-access' into 'task-1/participant' after [40d3dbc9] at the end.
+
+
+STDERR

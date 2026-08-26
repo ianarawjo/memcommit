@@ -1,0 +1,10 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple edit practice/source:16b32e2f 'a maps to apple; copied from the original direct Memory for provenance.'
+
+EXIT
+0
+
+OUTPUT
+Edited [16b32e2f] in 'practice/source':
+  - a is apple.
+  + a maps to apple; copied from the original direct Memory for provenance.

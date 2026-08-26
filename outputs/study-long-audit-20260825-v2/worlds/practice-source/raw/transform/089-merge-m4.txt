@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source merge practice/description practice/description --direct
+
+EXIT
+1
+
+WALL_SECONDS
+1.335070
+
+STDOUT
+
+
+STDERR
+Error: cannot merge a context into itself.

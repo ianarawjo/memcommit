@@ -1,0 +1,34 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source revert c30e6bd3 --context practice/description --keep
+
+EXIT
+0
+
+WALL_SECONDS
+1.290347
+
+STDOUT
+Reverted Context: practice/description
+Restored state recorded by: manual checkpoint
+Action detail: v2 transform round 1 safety
+Affected Context: practice/description
+Affected content: 9 Memories added, 2 Memory refs added, 2 Embedded contexts added, 28 Memories removed
+  - [memory c8ccbf37] "When asked “How does this read?”, treat the request as a request for an opinion: do not immediately edit the draft, and first assess sentence order and paragraph division."
+  - [memory a9ebb067] "When later asked to polish, preserve the overall structure and citation-needed markers, changing only wording that causes a problem."
+  - [memory 599ff378] "When asked to change one expression, leave almost everything else unchanged, including the user-selected technical or project-specific terminology; for the stated absorption-into-two-parts example, retain “distribute” rather than replacing…"
+  - [memory 98f1423d] "When a passage must make four points, retain all four while removing overly redundant material and stating repeated content only once."
+  - [memory c93197aa] "When a draft must meet a shorter fixed limit, target an approximately 20–30% reduction by cutting redundant or unnecessary material."
+  - [memory 7e826188] "Do not shorten sentences so aggressively that a claim becomes more categorical; retain enough wording to preserve the claim’s original strength and conditions."
+  - [memory 8a743d78] "When a next idea is merely related and does not broaden the scope, do not use “More broadly”; use “In relation to this” or another accurate connector, and do not add a new claim solely to connect the paragraphs."
+  - [memory 399e5239] "For any title about interaction with AI agent memory, preserve the intended terminology: use “interaction,” “management,” and “AI agent memory,” not “agent memory.”"
+  - [memory 6fb7dc3a] "By default, format a document title in sentence case rather than title case; an explicitly named style guide may override only this capitalization default, and “for” must always be retained whenever it is intended wording."
+  - [memory cbea7a4e] "If work titles are inconsistently placed in quotation marks and italics, make them consistently italic throughout the document by default; an explicitly named style guide may override only this work-title formatting default."
+  - [memory fe282ebc] "When told that content looks wrong, consult the complete original paper, book, or guide to find accurate information before proposing a correction; do not rely only on an abstract or short snippet."
+  - [memory 30b82df9] "Before adding or reusing citations and references, verify from each complete source that it exists and supports the exact claim."
+  ... 29 more affected direct items not shown
+Restored checkpoint: [c30e6bd3] (2026-08-25 13:12)
+Undo command: mem undo
+Exact recovery checkpoint: mem revert aba16e4b --discard-newer
+
+
+STDERR

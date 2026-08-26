@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 move task-1/participant:f37090b5 --into task-1/participant/construction-updates/event-relocations --retarget-links
+
+EXIT
+0
+
+WALL_SECONDS
+1.497572
+
+STDOUT
+MOVED · 1 Memory → 'task-1/participant/construction-updates/event-relocations' · RETARGET LINKS · after [8bf7a20c] at the end
+  REMOVE 'task-1/participant' [f37090b5] · ADD 'task-1/participant/construction-updates/event-relocations' [f37090b5]
+Checkpoints 'task-1/participant' [528d59de], 'task-1/participant/construction-updates/event-relocations' [1c4bf6b9].
+
+
+STDERR

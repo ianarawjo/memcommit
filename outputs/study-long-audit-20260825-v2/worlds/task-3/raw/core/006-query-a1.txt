@@ -1,0 +1,17 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 query task-3/remote/government/healthcare-agent/info-request/questions-and-answers 'What information may the healthcare-support process request, and what remains outside this Q&A endpoint'\''s authority?'
+
+STDOUT
+The healthcare-support process may request information such as:
+
+- Mobility, ability to stand or wait, building access, seating or route needs, and communication preferences.
+- Environmental needs, such as a low-noise rest area.
+- Preferred explanation methods, including one question at a time, checklists, or line-by-line medication explanations, plus situations and exceptions.
+- Scheduling information, such as weekly availability, recurring time preferences, day-before reminders, and continuity preferences.
+- Support-contact details, including a family member’s role, contact information, and convenient contact methods or times.
+
+Private reasons behind a limitation or preference are not subjects this Q&A endpoint asks about. However, if the user sends them through the institution’s transmission screen, they become part of the entire consented submission and may be shared with relevant healthcare-support third parties or used for service improvement, depending on the information type. Merely mentioning information in this conversation does not transmit it.
+
+This endpoint can explain those sharing consequences, but it cannot determine actual accessibility needs, eligibility, truthfulness, current medication directions, current availability, or which support method fits every situation. It also cannot access personal Memories, calendars, institutional records, or transmission copies; select, edit, send, or delete information; alter permissions; contact family members; process payments; schedule appointments; or control retention and downstream use of submitted records.
+
+STDERR

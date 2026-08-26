@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source clear practice/description --recursive
+
+EXIT
+0
+
+WALL_SECONDS
+1.359585
+
+STDOUT
+Cleared 13 item(s) from 1 Context(s) under 'practice/description'. Undo can restore this command as one unit.
+
+
+STDERR

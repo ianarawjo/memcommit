@@ -1,0 +1,5 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 fit --context task-2/advisor1/budget --context task-2/advisor2/budget
+EXIT: 0
+DURATION_SECONDS: 8.774
+
+FIT · NO · [TARGETS: CONTEXT task-2/advisor1/budget, task-2/advisor2/budget] · WHY · m3 requires the quantity and unit-rate basis for each major cost in the same requesting paragraph, and m1 keeps a one-line estimate basis in the main text. By contrast, m8 places quantities, unit rates, and assumptions in a compact table or appendix while limiting the main text to totals and major categories; m10 and m13 reinforce locating the estimate basis and detailed arithmetic outside the main argument. Under ordinary readings, these are incompatible placement requirements for the same cost details.

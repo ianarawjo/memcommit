@@ -1,0 +1,7 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 show task-3/local/guardrails/audit-and-recovery:6ea7bcc1
+
+STDOUT
+[Memory task-3/local/guardrails/audit-and-recovery:6ea7bcc1-4a79-4701-8c68-6ee311382e97] Candidate INCLUDE (DRAFT ONLY): the user stood for 20 minutes when no waiting chair was available and experienced back discomfort; verify current accommodation necessity before approval.
+
+STDERR

@@ -1,0 +1,28 @@
+{
+  "sequence": 55,
+  "count_before": 299,
+  "count_after": 300,
+  "delta": 1,
+  "new_attempt_uids": [
+    "87bcecd2-a270-4f67-8615-575ad802b661"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "87bcecd2-a270-4f67-8615-575ad802b661",
+      "operation": "unlock",
+      "command": "mem unlock --memory 37113bd0 --context audit/ticker/admin-v2-scratch",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:16:10.119940+00:00",
+      "completed_at": "2026-08-25T18:16:10.135469+00:00",
+      "elapsed_seconds": 0.015376750001451,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

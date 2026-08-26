@@ -1,0 +1,10 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 summarize task-3/local/guardrails --recursive --plain
+
+STDOUT
+SUMMARY · task-3/local/guardrails
+STATUS · RECURSIVE
+
+External sharing requires a specific purpose, verified recipient and authority, minimal necessary content, explicit user approval of recipient, purpose, items, channel, and protections, plus renewed approval for changes or secondary processors. Third-party data, uncertainty, provenance, redactions, downstream restrictions, retention, and failures must be handled transparently; approval cannot be inferred or granted by the agent. Recipient retention, forwarding, processing, deletion, and correction synchronization cannot be assumed, while removing a draft leaves local source Memories available.
+
+STDERR

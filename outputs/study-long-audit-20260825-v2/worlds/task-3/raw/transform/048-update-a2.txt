@@ -1,0 +1,13 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 update --from task-3/local/guardrails/minimization-and-redaction --to task-3/local/guardrails/audit-and-recovery -d --replace-stage
+
+EXIT
+0
+
+OUTPUT
+UPDATE APPLIED · task-3/local/guardrails/minimization-and-redaction → task-3/local/guardrails/audit-and-recovery
+EFFECTS · ADD 1 · EDIT 0 · REMOVE 0
+RECEIPT · 7102ebad-886e-49b7-bd7a-68e173db6d5c
+CHECKPOINTS · task-3/local/guardrails/audit-and-recovery [a3b34a32-0211-4548-b01c-a69461808419]
+REVIEW · mem review update --session 7102ebad-886e-49b7-bd7a-68e173db6d5c
+RECOVERY · mem undo

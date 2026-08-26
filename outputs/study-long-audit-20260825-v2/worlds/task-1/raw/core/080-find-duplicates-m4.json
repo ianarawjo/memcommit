@@ -1,0 +1,11 @@
+{
+  "sequence": 80,
+  "operation": "find-duplicates",
+  "attempt": 4,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 find-duplicates task-1/campus-wiki/temporary-parking --direct",
+  "exit": 0,
+  "wall_seconds": 1.317104,
+  "pre_target_digest": "fa23145b799f9cfebd537b4f518e7d2ba993176e1c9184dfc4d587a20b2ecf86",
+  "post_target_digest": "b5cb54dc89bef3a425d22cede61c5b449b6f02f11505cfcc898ca4175ead16da",
+  "raw_output": "raw/core/080-find-duplicates-m4.txt"
+}

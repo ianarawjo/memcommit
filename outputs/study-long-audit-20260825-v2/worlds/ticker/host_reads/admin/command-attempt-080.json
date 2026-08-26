@@ -1,0 +1,28 @@
+{
+  "sequence": 80,
+  "count_before": 324,
+  "count_after": 325,
+  "delta": 1,
+  "new_attempt_uids": [
+    "5d8afc76-f527-4659-8b91-005afe8e4270"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "5d8afc76-f527-4659-8b91-005afe8e4270",
+      "operation": "switch",
+      "command": "mem switch audit/ticker/admin-v2-scratch/co4-tree/proposal-workspace",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:16:53.662225+00:00",
+      "completed_at": "2026-08-25T18:16:53.678242+00:00",
+      "elapsed_seconds": 0.015865666005993262,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

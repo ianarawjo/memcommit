@@ -1,0 +1,26 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker share --to audit/ticker/missing-receiver
+
+STDIN
+<none>
+
+EXIT
+1
+
+WALL_SECONDS
+1.324114
+
+PRE_IDENTITY
+{"current_context": "task-2/participant", "current_context_uid": "0e19f3b1-4107-48ab-9186-8773e48b812d", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+IMMEDIATE_POST_IDENTITY
+{"current_context": "task-2/participant", "current_context_uid": "0e19f3b1-4107-48ab-9186-8773e48b812d", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+COMMAND_ATTEMPT_DELTA
+{"count_after": 305, "count_before": 304, "delta": 1, "new_attempt_uids": ["ad1de5e0-0bd6-42d5-9bae-7e8bd714e754"], "records": [{"command": "mem share --to audit/ticker/missing-receiver", "completed_at": "2026-08-25T18:16:18.244304+00:00", "details": {}, "elapsed_seconds": 0.007884874998126179, "failure": {"exit_code": 1, "kind": "Exit"}, "operation": "share", "outcome": null, "started_at": "2026-08-25T18:16:18.236230+00:00", "status": "FAILED", "terminal": {"stdin_tty": true, "stdout_tty": false}, "uid": "ad1de5e0-0bd6-42d5-9bae-7e8bd714e754", "version": 3}], "sequence": 60}
+
+STDOUT
+
+
+STDERR
+Error: Non-interactive Share requires SOURCE.

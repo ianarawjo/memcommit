@@ -1,0 +1,20 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 find 'visitor services' --context task-1/participant/construction-updates/facility-updates --context-only
+
+EXIT
+0
+
+WALL_SECONDS
+1.442122
+
+STDOUT
+FIND RESULTS
+PATTERN · visitor services · LITERAL · CASE SENSITIVE
+SCOPE · task-1/participant/construction-updates/facility-updates · EXACT · EXCLUDE EMBEDS
+SCANNED 17 · MATCHED 2 · OCCURRENCES 2
+
+1 [5e34a7f5] Add campus-wiki/facility-updates: The visitor services desk suspends in-person operations during the construction period. [task-1/participant/construction-updates/facility-updates m3]
+2 [f460b6d0] Add campus-wiki/facility-updates: During the construction period, visitor services are replaced by the visitor menu in the integrated campus portal. [task-1/participant/construction-updates/facility-updates m4]
+
+
+STDERR

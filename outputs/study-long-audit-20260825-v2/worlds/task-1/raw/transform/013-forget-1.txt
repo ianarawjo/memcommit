@@ -1,0 +1,10 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 forget 'remove temporary facility rules that lack a verified date or source' --context task-1/participant
+
+EXIT
+0
+
+OUTPUT
+Consulting the configured Forget provider...
+FORGET · NO CHANGE · SOURCE task-1/participant
+OUTCOME · NO CHANGE · Context unchanged · no checkpoint

@@ -1,0 +1,31 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 diff 2bda1393 --context task-3/local/guardrails/audit-and-recovery --verbose
+
+EXIT
+0
+
+OUTPUT
+UNIT        CHECKPOINT · THIS CHECKPOINT VS PREVIOUS
+CONTEXT     task-3/local/guardrails/audit-and-recovery
+ CHECKPOINT  2bda1393-88a4-472c-ad54-6aa2e88eac9b
+ ACTION      checkpoint
+ DESCRIPTION task-3 transform round 3 message-option recovery
+
+ REVISION DIFF · RESULT 15 DIRECT ITEMS
+ SUMMARY · 15 kept · 0 added · 0 edited · 0 removed
+
+   [KEEP]   [c0ce508e-2777-54e3-806d-632adbdb9073] Record the source Memory locator for approved sharing.
+   [KEEP]   [a0b32950-42b4-58a6-b1af-dd4638086d3d] Record the recipient of approved sharing.
+   [KEEP]   [620a1dee-b131-586f-a838-64d853c44a92] Record the purpose of approved sharing.
+   [KEEP]   [26256211-0509-5c26-a54c-e83b4bde5a4e] Record the approval time.
+   [KEEP]   [0d377136-da0b-570b-8deb-c662bee5bcbb] If a transmission error occurs, inform the user of the failure state.
+   [KEEP]   [d26befa6-62a2-5923-a31b-71e73a31e164] The local agent can reconstruct its own approval and transmission records but cannot trace unrecorded external processing.
+   [KEEP]   [d5d34316-4878-53d9-9ba8-d4d4d3d13752] A copy conveyed to an external system may not automatically synchronize with a later correction to the local Memory.
+   [KEEP]   [fe68d351-4ae7-5c4c-a4e2-d6c4c7aa0220] If a user's local record conflicts with an external system's audit record, an external system operator may place greater trust in its own audit record.
+   [KEEP]   [91ecb893-81ec-460c-b81e-9d453fdbefe1] Exclude details not needed for the current purpose from the sharing candidate.
+   [KEEP]   [f7e4bea5-f31d-47ef-b66f-08cedabcfce0] The instructions for one medication the user takes say to take it after the evening meal.
+   [KEEP]   [6ea7bcc1-4a79-4701-8c68-6ee311382e97] Candidate INCLUDE (DRAFT ONLY): the user stood for 20 minutes when no waiting chair was available and experienced back discomfort; verify current accommodation necessity before approval.
+   [KEEP]   [692e0872-3dea-4421-b7ea-a3878de69424] The local agent cannot determine the current prescription or whether use continues from medication notes alone.
+   [KEEP]   [367700c4-ab9e-4da7-86bf-7c4b7810ed06] AUDIT RESULT: no transfer was executed and no approval was inferred; candidate facts remain stale or underspecified and require the user's exact recipient, purpose, item, channel, and retention decision.
+   [KEEP]   [4993eb1a-89a3-49bb-94cf-d1ba52c0c35b] Treat historical medication instructions, availability, contact information, and functional experiences as possibly stale when current status would materially affect review.
+   [KEEP]   [3b8fc5f3-bdc2-42af-8410-574d7b38d78e] When preparing approved sharing, use only the smallest necessary Memory unit, redact unnecessary identifiers without substituting plausible values, verify that generalization preserves essential meaning, disclose the types of fields redacted, and treat omissions as unverified rather than as opposite facts or “not applicable.” Consider re-identification risk when combining de-identified fragments.

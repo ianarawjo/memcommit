@@ -1,0 +1,52 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 find-ambiguities task-1/campus-wiki/shop-updates
+
+EXIT
+0
+
+WALL_SECONDS
+15.671806
+
+STDOUT
+Find Ambiguities · task-1/campus-wiki/shop-updates · 6/51 direct memories flagged
+
+  UNDERSPECIFIED 1/6
+  [b03652e7] Identify and provide guidance to an alternative location of the same type as the closed facility.
+  Reading: Identify an open facility of the same type as the facility that is closed and provide directions or location guidance to it.
+  Reason: The phrase "the closed facility" does not identify which closed facility is being handled. The construction update closes an ATM, two stores, and a cafe, whose same-type alternatives differ; the appropriate alternative and guidance cannot be determined reliably without the facility type.
+  Question: Which closed facility does the user need an alternative to: the ATM, a store, or the cafe?
+
+  AMBIGUITY 2/6
+  [cf273ead] Each store determines the prices of products sold at the Campus Store.
+  Reading 1: Each individual Campus Store location sets the prices of the products it sells.
+  Reading 2: Each store operator sets prices for products sold through the Campus Store system.
+  Reason: The phrase "each store" most naturally refers to each Campus Store location, but it could refer to each operator or vendor. This affects who should be identified as responsible for a price and whether prices may differ by location; clarification would make price-responsibility guidance more precise.
+  Question: Does "each store" mean each Campus Store location or each store operator?
+
+  UNDERSPECIFIED 3/6
+  [56b07b71] Contact the operator of the relevant ATM regarding a retained ATM card or transaction error.
+  Reading: For a retained card or transaction error, contact the operator responsible for the ATM involved.
+  Reason: The instruction requires contacting "the operator of the relevant ATM," but the frame says the Main Building and West Complex ATMs have different operators and supplies neither the affected ATM nor either operator's contact details. The correct operator and contact route cannot be determined reliably.
+  Question: Which ATM was involved, and what posted operator contact is shown for it?
+
+  UNDERSPECIFIED 4/6
+  [1ff36f44] Check the relevant store's official notice for extended operating hours during exam periods.
+  Reading: Check the official notice for the store in question to determine whether it has extended exam-period hours.
+  Reason: The operation depends on "the relevant store," but no particular store is identified and the frame contains multiple stores with different locations and schedules. The correct official notice and any applicable extended hours cannot be determined reliably.
+  Question: Which store's exam-period hours should be checked?
+
+  AMBIGUITY 5/6
+  [45b26dcc] External visitors often expect to be able to use a cafe in the same building as a public event.
+  Reading 1: External visitors often expect a cafe to be available in the building where the public event they are attending is held.
+  Reading 2: External visitors often expect to be allowed to use any cafe located in the same building as a public event.
+  Reason: The phrase "use a cafe" most naturally concerns the cafe's availability, but it can also concern visitors' permission to use it. This changes whether guidance should address opening status or access eligibility; clarification would make the expectation more precise.
+  Question: Is the expectation about the cafe being open or about external visitors being permitted to use it?
+
+  UNDERSPECIFIED 6/6
+  [5ea2bbd5] Direct users to report service issues to the relevant facility's posted contact point.
+  Reading: Direct a user reporting a service issue to the posted contact point for the facility concerned.
+  Reason: The instruction depends on "the relevant facility," but no facility or posted contact point is identified. Because the frame covers stores, food facilities, ATMs, and other amenities with different responsible parties, the destination for the report cannot be determined reliably.
+  Question: Which facility has the service issue?
+
+
+STDERR

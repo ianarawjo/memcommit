@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source meld --memory 'Do not infer general presentation-style rules from source examples.' --into practice/description --direct --restart
+
+EXIT
+1
+
+WALL_SECONDS
+1.349295
+
+STDOUT
+
+
+STDERR
+Meld error: Context-to-Context meld version 1 supports direct owned Memories only; unsupported direct item(s): 3fbf33de, ee899250.

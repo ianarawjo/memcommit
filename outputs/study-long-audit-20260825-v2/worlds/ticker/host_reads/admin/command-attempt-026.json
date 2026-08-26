@@ -1,0 +1,28 @@
+{
+  "sequence": 26,
+  "count_before": 270,
+  "count_after": 271,
+  "delta": 1,
+  "new_attempt_uids": [
+    "dc242ebe-8bd2-4fb2-8217-ac2c7900210c"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "dc242ebe-8bd2-4fb2-8217-ac2c7900210c",
+      "operation": "help",
+      "command": "mem help 'How do I inspect where I am and what the current Context contains?'",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:12:49.082428+00:00",
+      "completed_at": "2026-08-25T18:12:52.693276+00:00",
+      "elapsed_seconds": 3.6106505419884343,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

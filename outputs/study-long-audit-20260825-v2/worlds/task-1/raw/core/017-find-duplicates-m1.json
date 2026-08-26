@@ -1,0 +1,11 @@
+{
+  "sequence": 17,
+  "operation": "find-duplicates",
+  "attempt": 1,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 find-duplicates task-1/participant/construction-updates/facility-updates --direct",
+  "exit": 0,
+  "wall_seconds": 1.241824,
+  "pre_target_digest": "26d2300e5c99209f9f1807cfc0b641f19be8ab06aea6618d94f39931833aea06",
+  "post_target_digest": "49a10402a3eef6274f7415b1a4f1198b7e613d52f411826bb33a802dba08aa91",
+  "raw_output": "raw/core/017-find-duplicates-m1.txt"
+}

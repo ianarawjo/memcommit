@@ -1,0 +1,10 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 find concise --context task-2/advisor1/style --context task-2/advisor2/style
+EXIT: 0
+DURATION_SECONDS: 1.443
+
+FIND RESULTS
+PATTERN · concise · LITERAL · CASE SENSITIVE
+SCOPE · task-2/advisor1/style + task-2/advisor2/style · EXACT · EXCLUDE EMBEDS
+SCANNED 26 · MATCHED 0 · OCCURRENCES 0
+
+(no matching Memories)

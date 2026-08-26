@@ -1,0 +1,20 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source chunk practice:2c241a2b --method sentences
+
+EXIT
+0
+
+WALL_SECONDS
+1.365251
+
+STDOUT
+
+Proposed split of [2c241a2b] in Context 'practice' → 2 chunks (method=sentences)
+────────────────────────────────────────────────────────
+   1  REVIEW CANDIDATE: during authorized polishing, preserve over
+   2  Change only wording that causes a problem.
+────────────────────────────────────────────────────────
+Done — 2 memories added in 'practice'.
+
+
+STDERR

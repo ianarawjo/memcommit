@@ -1,0 +1,5 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 distill --from task-2/advisor1/style --to task-2/participant/proposal-workspace --goal "Preserve advisor1 style conditions while keeping equal co-advisor authority explicit." --direct
+EXIT: 1
+DURATION_SECONDS: 1.209
+
+Distill error: Distill currently requires an entirely local Source frame; granted Context distillation is not yet authorized.

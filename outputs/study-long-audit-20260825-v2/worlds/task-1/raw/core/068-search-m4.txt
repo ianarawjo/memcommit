@@ -1,0 +1,27 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 search 'ordinary parking access that the construction closes' --context task-1/campus-wiki/temporary-parking --direct --limit 3
+
+EXIT
+0
+
+WALL_SECONDS
+6.364378
+
+STDOUT
+task-1/campus-wiki/temporary-parking
+  (no primary matches)
+
+RELATED RESULTS
+  No matching results for: ordinary parking access that the construction closes
+  Broader search: alternative ordinary parking access outside the Main Building construction zone
+
+
+task-1/campus-wiki/temporary-parking
+[memory 6a37c02f] · RELATED Outdoor Parking Lot C is outside the Main Building construction zone.
+[memory c0ac84d9] · RELATED Outdoor Parking Lot C accepts visitor vehicles during posted operating hours.
+[memory df455ec8] · RELATED Outdoor Parking Lot C uses an access road separate from the Main Building underground parking garage.
+
+Related results may not satisfy the original query.
+
+
+STDERR

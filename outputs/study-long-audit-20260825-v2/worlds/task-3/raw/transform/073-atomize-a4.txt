@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 atomize task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance:deadbeef --all
+
+EXIT
+1
+
+OUTPUT
+Atomize error: Context 'task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance' does not exist locally.

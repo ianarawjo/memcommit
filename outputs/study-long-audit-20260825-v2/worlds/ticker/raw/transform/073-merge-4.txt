@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker merge task-2/participant/proposal-workspace task-3/local --direct --keep-target-all
+
+EXIT
+0
+
+OUTPUT
+MERGE RECORDED · 'task-2/participant/proposal-workspace' → 'task-3/local' · DIRECT · NEW 0 · ALREADY PRESENT 6 · KEPT TARGET 0 · TOOK SOURCE 0 · CREATED CONTEXTS 0 · TARGET CHANGED NO · CHECKPOINTS 1

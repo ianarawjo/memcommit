@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker distill --from task-2/participant/proposal-workspace --to task-3/local/personal-memory --goal 'Extract numeral-preservation rules and retain leading-zero conditions.' --direct --plain
+
+EXIT
+0
+
+OUTPUT
+DISTILL APPLIED · task-2/participant/proposal-workspace → task-3/local/personal-memory
+EFFECTS · ADD 1 RULES
+
+  [memory 1d3c790a] When deriving a ticker, preserve digits 0–9 in their original positions, including any leading zeroes, while removing spaces, punctuation, and the legal suffix; for example, Route 66, LLC becomes ROUTE66.
+
+REVIEW · mem review distill --receipt 557399e6-0740-4a3b-8789-331296126918
+UNDO · mem undo

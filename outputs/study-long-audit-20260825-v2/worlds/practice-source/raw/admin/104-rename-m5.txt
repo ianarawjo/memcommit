@@ -1,0 +1,22 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source rename practice/audit-workspace/admin-v2-scratch/co4-tree practice/audit-workspace/admin-v2-scratch/renamed-co4-cancel
+
+STDIN
+'n\n'
+
+EXIT
+0
+
+WALL_SECONDS
+1.903478
+
+POST_CALL_IDENTITY_HOST_ASSERTION
+{"profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/practice-source/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+STDOUT
+This will rename ordinary Context namespace 'practice/audit-workspace/admin-v2-scratch/co4-tree' to 'practice/audit-workspace/admin-v2-scratch/renamed-co4-cancel' (10 Contexts, including 9 descendants).
+Ordinary Context references, restorable checkpoint pointers, the current Context pointer, and unapplied Meld bindings will follow the stable UIDs; query-only Context references are unchanged.
+Continue? [y/N]: Rename cancelled.
+
+
+STDERR

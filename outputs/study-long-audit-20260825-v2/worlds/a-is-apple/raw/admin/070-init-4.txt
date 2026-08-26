@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple init 11111111-1111-4111-8111-111111111111
+
+EXIT
+1
+
+OUTPUT
+Error: Invalid context name '11111111-1111-4111-8111-111111111111': not portable; a Context name must not have the shape of a Memory UUID or visible UID prefix.

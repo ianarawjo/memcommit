@@ -1,0 +1,11 @@
+{
+  "sequence": 32,
+  "operation": "replace",
+  "attempt": 2,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 replace 'Modify campus-wiki/event-relocations:' 'EVIDENCE event-relocations:' --context task-1/participant",
+  "exit": 0,
+  "wall_seconds": 1.370263,
+  "pre_target_digest": "7abb41c90662e80432fabdb369615b526bb36d89ddf8a2afc256a72230a11bb3",
+  "post_target_digest": "2ecd0086d7cd3cf0a8ed433bb9d43e1cb71777d870df962ce047b4fd3b3e10a7",
+  "raw_output": "raw/core/032-replace-m2.txt"
+}

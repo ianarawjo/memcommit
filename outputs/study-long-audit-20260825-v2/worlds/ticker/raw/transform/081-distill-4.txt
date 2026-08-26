@@ -1,0 +1,15 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker distill --from task-2/participant/proposal-workspace --to task-3/local --goal 'Extract share-class syntax and distinguish generated dots from input punctuation.' --direct --plain
+
+EXIT
+0
+
+OUTPUT
+DISTILL APPLIED · task-2/participant/proposal-workspace → task-3/local
+EFFECTS · ADD 2 RULES
+
+  [memory 6cd9c8b5] When a company name ends with a legal suffix followed immediately by terminal Class A or Class B, derive the base ticker by removing the legal suffix, spaces, and input punctuation, then append the generated share-class suffix .A or .B respectively.
+  [memory 9eb2eefd] Distinguish the dot in .A or .B as newly generated share-class syntax rather than input punctuation: ordinary punctuation is stripped before ticker construction, while the share-class mapping introduces its own dot in the output.
+
+REVIEW · mem review distill --receipt 9d6eaea9-1b64-4a2f-8ace-f7e85ecd16d6
+UNDO · mem undo

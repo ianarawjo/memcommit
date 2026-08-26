@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 copy task-1/campus-wiki/temporary-parking:6960c0ca --into task-1/participant
+
+EXIT
+0
+
+WALL_SECONDS
+1.392880
+
+STDOUT
+COPIED · 1 Memory → 'task-1/participant' · NEW UIDs · after [5a66e0ec] at the end
+  'task-1/campus-wiki/temporary-parking' [6960c0ca] → [811200e1]
+Checkpoint 'task-1/participant' [512c6b9f].
+
+
+STDERR

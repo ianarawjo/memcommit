@@ -1,0 +1,12 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 trace task-3/local/guardrails/approval-and-delivery:96442184 --limit 3
+
+EXIT
+0
+
+OUTPUT
+TRACE · task-3/local/guardrails/approval-and-delivery
+MEMORY · 96442184-816a-58f1-a72d-40eb907688fe
+LINEAGE · 1 events · 1 components
+ATTENTION · 1 limits
+DETAILS · mem trace 96442184-816a-58f1-a72d-40eb907688fe --context task-3/local/guardrails/approval-and-delivery --plain

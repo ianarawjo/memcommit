@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple rationale practice/source:4a8036d1
+
+EXIT
+0
+
+OUTPUT
+Rationale [4a8036d1] · practice/source
+
+MEMORY
+  b is banana.
+
+PROVENANCE
+  “b is banana.” was added directly as a standalone Memory in practice/source, cleared, restored, and copied unchanged to a fresh practice occurrence while remaining at source; it was cleared, restored again, then copied to another fresh practice occurrence.

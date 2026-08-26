@@ -1,0 +1,23 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 query "State a neutral combined style policy and cite both advisors." --context task-2/advisor1/style --context task-2/advisor2/style
+EXIT: 0
+DURATION_SECONDS: 8.053
+
+Use concise, reviewable sentences with one main claim, but preserve a longer sentence when its connected clauses are clearer and more rhythmic together. Avoid decorative or repeated em dashes; reserve them for deliberate interruption or sharp contrast, and otherwise use ordinary punctuation or split the sentence. Use a consistent first-person pronoun for decisions and commitments owned by the author or named team, while making procedural passages action-first for clarity and checklist reuse. Present implemented and verified behavior as observed; present unimplemented, unevaluated, or field-unconfirmed behavior as a plan, expectation, or condition. [1] [2] [3] [4] [5] [6] [7] [8] [9] [10] [11] [12] [13] [14] [15] [16]
+
+References
+[1] Avoid em dashes in the proposal; split the sentence or use more ordinary punctuation instead. — 33503d41, task-2/advisor1/style, m1
+[2] Use first-person active voice for choices and commitments owned by the proposal author so responsibility remains explicit throughout the work plan. — 807a906c, task-2/advisor1/style, m3
+[3] Describe prototype operations that have already been implemented and verified as observed states. — e463a3b5, task-2/advisor1/style, m4
+[4] Describe prototype operations not yet implemented or evaluated as plans or expectations. — fef78af8, task-2/advisor1/style, m5
+[5] Use “we” only for decisions and commitments the authors control, not for external facts or actions owned by another party. — 6c282ef7, task-2/advisor1/style, m7
+[6] The user should use one first-person pronoun consistently for the same authorial role and should not alternate between “I” and “we” unless the responsible party actually changes. — 58565355, task-2/advisor1/style, m8
+[7] Split proposal prose into short sentences when a sentence contains more than one independently reviewable claim. — cc860653, task-2/advisor1/style, m10
+[8] Keep one main claim in each sentence so a reviewer can locate and assess it quickly. — af0d191d, task-2/advisor1/style, m11
+[9] Use an em dash only for a deliberate interruption or sharp contrast; otherwise split the sentence or choose ordinary punctuation. — 9bd2a9da, task-2/advisor2/style, m14
+[10] In procedural passages, begin each sentence with the action, condition, or output instead of repeating “we” so the steps remain easy to follow and reuse. — e3e20261, task-2/advisor2/style, m15
+[11] Write system behaviors confirmed in the actual usage environment as observed states. — 8d8d0e8d, task-2/advisor2/style, m16
+[12] Write system behaviors not yet confirmed in the field as conditional plans. — 8c74ba87, task-2/advisor2/style, m17
+[13] Do not mechanically split connected thoughts into separate short sentences when doing so destroys the intended reading rhythm. — 1d181223, task-2/advisor2/style, m19
+[14] Preserve a longer sentence when its clauses form one continuous movement that is easier to follow together than apart. — a5ce5f9f, task-2/advisor2/style, m20
+[15] Write procedural sentences so their opening phrase can be reused as a checklist item without changing the step's meaning. — ddf40413, task-2/advisor2/style, m22
+[16] The user should choose “I” as an individual author or “we” for a named team and should not mix them when describing the same responsible party. — 6b7aaddf, task-2/advisor2/style, m23

@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 elaborate --from task-3/local/guardrails/approval-and-delivery --to task-3/local/guardrails/audit-and-recovery --as goal --number 1 --strict --plain
+
+EXIT
+1
+
+OUTPUT
+Elaborate error: Elaborate --as goal requires exactly one direct Source Memory.

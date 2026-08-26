@@ -1,0 +1,3 @@
+COPIED · 1 Memory → 'task-1' · NEW UIDs · between [b839b146] and [c0f9e478]
+  'task-2/participant/proposal-workspace' [7ed418b9] → [dec2a215]
+Checkpoint 'task-1' [1d92ceb6].

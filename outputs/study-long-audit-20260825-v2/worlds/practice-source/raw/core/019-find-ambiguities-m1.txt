@@ -1,0 +1,21 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source find-ambiguities practice
+
+EXIT
+0
+
+WALL_SECONDS
+8.962703
+
+STDOUT
+Find Ambiguities · practice · 1/1 direct memories flagged
+
+  AMBIGUITY 1/1
+  [bd813edf] CANDIDATE: classify intent as review-only or authorized editing before changing text; preserve requested scope and source meaning.
+  Reading 1: This is a review-only request, so evaluate the text without changing it.
+  Reading 2: This authorizes editing, so changes may be made while preserving the requested scope and source meaning.
+  Reason: The phrase “classify intent as review-only or authorized editing” leaves the request’s authorization status unspecified. That status must be determined reliably before deciding whether text may be changed; preservation constraints do not resolve whether editing is permitted.
+  Question: Is this request review-only, or are text edits authorized?
+
+
+STDERR

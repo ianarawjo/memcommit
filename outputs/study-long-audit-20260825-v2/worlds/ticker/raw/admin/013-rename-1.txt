@@ -1,0 +1,26 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker rename audit/ticker/admin-v2-scratch/import-direct audit/ticker/admin-v2-scratch/renamed-1 --force
+
+STDIN
+<none>
+
+EXIT
+1
+
+WALL_SECONDS
+1.360154
+
+PRE_IDENTITY
+{"current_context": "audit/ticker/admin-v2-scratch", "current_context_uid": "482549cc-f61f-4262-909d-67bd9c5d5364", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+IMMEDIATE_POST_IDENTITY
+{"current_context": "audit/ticker/admin-v2-scratch", "current_context_uid": "482549cc-f61f-4262-909d-67bd9c5d5364", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+COMMAND_ATTEMPT_DELTA
+{"count_after": 258, "count_before": 257, "delta": 1, "new_attempt_uids": ["17bc426b-83d3-4ae4-8926-6c503d7e002d"], "records": [{"command": "mem rename audit/ticker/admin-v2-scratch/import-direct audit/ticker/admin-v2-scratch/renamed-1 --force", "completed_at": "2026-08-25T18:12:24.511926+00:00", "details": {}, "elapsed_seconds": 0.08627874999365304, "failure": {"exit_code": 1, "kind": "Exit"}, "operation": "rename", "outcome": null, "started_at": "2026-08-25T18:12:24.425496+00:00", "status": "FAILED", "terminal": {"stdin_tty": true, "stdout_tty": false}, "uid": "17bc426b-83d3-4ae4-8926-6c503d7e002d", "version": 3}], "sequence": 13}
+
+STDOUT
+
+
+STDERR
+Error: Context 'audit/ticker/admin-v2-scratch/import-direct' not found.

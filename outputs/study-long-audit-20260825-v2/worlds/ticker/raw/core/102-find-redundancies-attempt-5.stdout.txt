@@ -1,0 +1,206 @@
+Find Redundancies · task-3 · 50 Contexts · 407 direct memories checked · 1 group · 1 proposed absorption
+
+CONTEXT 1/50 · task-3
+  6 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 2/50 · task-3/description
+  1 direct memory checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 3/50 · task-3/local
+  0 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 4/50 · task-3/local/guardrails
+  0 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 5/50 · task-3/local/guardrails/approval-and-delivery
+  9 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 6/50 · task-3/local/guardrails/audit-and-recovery
+  8 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 7/50 · task-3/local/guardrails/channel-and-format
+  8 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 8/50 · task-3/local/guardrails/downstream-use
+  8 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 9/50 · task-3/local/guardrails/evidence-and-uncertainty
+  6 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 10/50 · task-3/local/guardrails/minimization-and-redaction
+  8 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 11/50 · task-3/local/guardrails/privacy-and-others
+  6 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 12/50 · task-3/local/guardrails/purpose-and-scope
+  8 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 13/50 · task-3/local/guardrails/recipient-and-authority
+  8 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 14/50 · task-3/local/guardrails/retention-and-revocation
+  6 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 15/50 · task-3/local/personal-memory
+  0 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 16/50 · task-3/local/personal-memory/2024
+  0 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 17/50 · task-3/local/personal-memory/2024/01
+  10 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 18/50 · task-3/local/personal-memory/2024/02
+  10 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 19/50 · task-3/local/personal-memory/2024/03
+  10 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 20/50 · task-3/local/personal-memory/2024/04
+  10 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 21/50 · task-3/local/personal-memory/2024/05
+  10 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 22/50 · task-3/local/personal-memory/2024/06
+  10 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 23/50 · task-3/local/personal-memory/2024/07
+  10 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 24/50 · task-3/local/personal-memory/2024/08
+  10 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 25/50 · task-3/local/personal-memory/2024/09
+  10 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 26/50 · task-3/local/personal-memory/2024/10
+  10 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 27/50 · task-3/local/personal-memory/2024/11
+  10 direct memories checked · 1 group · 1 proposed absorption
+
+  DUN GROUP  1/1 · 2 Memories · SEMANTIC DUN
+    CLEANUP MAP · READY FOR REVIEW
+    SURVIVOR  [memory 9e70b92e]  The user's mother does not want the reason for her visit disclosed in the user's external schedule.
+    ABSORB    [memory d76686fd]  Do not include the mother's reason for a visit when conveying the user's availability externally.
+    EVIDENCE 1 · SEMANTIC EQUIVALENT · Both memories state the same privacy constraint: the mother's reason for a visit must not be disclosed in the user's externally shared schedule or availability.
+
+CONTEXT 28/50 · task-3/local/personal-memory/2024/12
+  10 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 29/50 · task-3/local/personal-memory/2025
+  0 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 30/50 · task-3/local/personal-memory/2025/01
+  10 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 31/50 · task-3/local/personal-memory/2025/02
+  10 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 32/50 · task-3/local/personal-memory/2025/03
+  10 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 33/50 · task-3/local/personal-memory/2025/04
+  10 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 34/50 · task-3/local/personal-memory/2025/05
+  10 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 35/50 · task-3/local/personal-memory/2025/06
+  10 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 36/50 · task-3/local/personal-memory/2025/07
+  10 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 37/50 · task-3/local/personal-memory/2025/08
+  10 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 38/50 · task-3/local/personal-memory/2025/09
+  10 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 39/50 · task-3/local/personal-memory/2025/10
+  10 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 40/50 · task-3/local/personal-memory/2025/11
+  10 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 41/50 · task-3/local/personal-memory/2025/12
+  10 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 42/50 · task-3/local/personal-memory/2026
+  0 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 43/50 · task-3/local/personal-memory/2026/01
+  10 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 44/50 · task-3/local/personal-memory/2026/02
+  10 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 45/50 · task-3/local/personal-memory/2026/03
+  10 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 46/50 · task-3/local/personal-memory/2026/04
+  10 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 47/50 · task-3/local/personal-memory/2026/05
+  10 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 48/50 · task-3/local/personal-memory/2026/06
+  10 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 49/50 · task-3/remote/government/healthcare-agent/info-request/transmission-guidance
+  0 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 50/50 · task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance
+  25 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.

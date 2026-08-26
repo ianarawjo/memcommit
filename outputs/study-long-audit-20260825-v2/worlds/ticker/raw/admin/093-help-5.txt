@@ -1,0 +1,26 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker help 'Show the current Context'"'"'s inventory, first five direct Memories, relationships, and latest checkpoints.'
+
+STDIN
+<none>
+
+EXIT
+1
+
+WALL_SECONDS
+1.296632
+
+PRE_IDENTITY
+{"current_context": "audit/ticker/admin-v2-scratch/co4-tree", "current_context_uid": "44473ed5-f911-4bd5-8871-7e0804873207", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+IMMEDIATE_POST_IDENTITY
+{"current_context": "audit/ticker/admin-v2-scratch/co4-tree", "current_context_uid": "44473ed5-f911-4bd5-8871-7e0804873207", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+COMMAND_ATTEMPT_DELTA
+{"count_after": 338, "count_before": 337, "delta": 1, "new_attempt_uids": ["fe9bbdb5-5fc3-4ad7-b780-5be7026e6d4b"], "records": [{"command": "mem help 'Show the current Context'\"'\"'s inventory, first five direct Memories, relationships, and latest checkpoints.'", "completed_at": "2026-08-25T18:17:12.788560+00:00", "details": {}, "elapsed_seconds": 0.023246708005899563, "failure": {"exit_code": 1, "kind": "Exit"}, "operation": "help", "outcome": null, "started_at": "2026-08-25T18:17:12.765151+00:00", "status": "FAILED", "terminal": {"stdin_tty": true, "stdout_tty": false}, "uid": "fe9bbdb5-5fc3-4ad7-b780-5be7026e6d4b", "version": 3}], "sequence": 93}
+
+STDOUT
+
+
+STDERR
+Help error: Study lookup requires original task wording; the request exactly matches at least 50% of one Help Description/WHEN entry.

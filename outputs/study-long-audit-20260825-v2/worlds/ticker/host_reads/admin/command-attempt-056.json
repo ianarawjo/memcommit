@@ -1,0 +1,49 @@
+{
+  "sequence": 56,
+  "count_before": 300,
+  "count_after": 301,
+  "delta": 1,
+  "new_attempt_uids": [
+    "7d84cdab-fd6c-416e-9646-ec69b1cdfdc1"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "7d84cdab-fd6c-416e-9646-ec69b1cdfdc1",
+      "operation": "log",
+      "command": "mem log --context audit/ticker/admin-v2-scratch --memory 37113bd0 --limit 5",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:16:11.489366+00:00",
+      "completed_at": "2026-08-25T18:16:11.537153+00:00",
+      "elapsed_seconds": 0.04762879200279713,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {
+        "memory_report": {
+          "operation": "trace",
+          "context_name": "audit/ticker/admin-v2-scratch",
+          "memory_uid": "37113bd0-5194-521b-9d9e-48903d819520"
+        },
+        "read_report": {
+          "operation": "trace",
+          "context_names": [
+            "audit/ticker/admin-v2-scratch"
+          ],
+          "target_names": [
+            "audit/ticker/admin-v2-scratch"
+          ],
+          "selection_mode": "SINGLE",
+          "ranges": [
+            "DIRECT"
+          ],
+          "profile_selected": false,
+          "memory_uid": "37113bd0-5194-521b-9d9e-48903d819520"
+        }
+      },
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

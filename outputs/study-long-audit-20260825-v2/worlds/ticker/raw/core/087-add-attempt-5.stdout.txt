@@ -1,0 +1,4 @@
+Added 2 Memories to 'task-2/participant'.
+  [9d371105] Regression expectation: every maintained example must preserve digits, remove input punctuation, and encode a terminal share class with generated dot syntax.
+  [90a5ab77] Conflicting regression draft: derived ticker letters must remain lowercase.
+Checkpoint [3a1fea1a].

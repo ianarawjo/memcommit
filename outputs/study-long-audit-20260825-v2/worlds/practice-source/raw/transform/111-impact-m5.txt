@@ -1,0 +1,36 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source impact meld --session 0e93158f-eb5d-4b89-834a-e6176df6ff53
+
+EXIT
+0
+
+WALL_SECONDS
+1.313672
+
+STDOUT
+ MEM MELD · DIRECTIONAL
+ CONTEXT LOCATIONS
+   INCOMING · INLINE MEMORY
+   BASELINE / TARGET · practice/description
+ READY_TO_APPLY · DIRECTIONAL MODE · 1 RELATIONS · 0 required + 0 helpful ISSUES · 0 CHANGES · 0/2 SOURCE COVERAGE
+
+ UNDERSTOOD
+ The incoming guidance is already fully represented by the more precise baseline rule, including its document-title scope and literal retention requirement. No baseline change is warranted.
+
+ ACCOUNTING
+ Source coverage · 0/2
+Relation coverage · 0/1
+Final Memories · 0 (PRESERVE 0 · COALESCE 0 · SYNTHESIZE 0 · USER_ADD 0)
+Open issues · REQUIRED 0 · HELPFUL 0
+Cross-relation results · 0
+
+ ISSUES · 0
+  No current Meld issues.
+ IMPACT · DIRECTIONAL MELD
+ These are the exact proposed baseline effects of this directional Meld.
+
+TO DO
+[ APPLY? ]  Continue to Meld Apply · Enter to open the owning Meld workflow; this choice does not apply anything yet.
+
+
+STDERR

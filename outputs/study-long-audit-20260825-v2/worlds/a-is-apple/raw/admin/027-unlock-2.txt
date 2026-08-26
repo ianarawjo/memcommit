@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple unlock audit/a-is-apple/admin-v2-scratch/b2-tree --recursive
+
+EXIT
+0
+
+OUTPUT
+Unlocked Context namespace 'audit/a-is-apple/admin-v2-scratch/b2-tree' recursively (3 Contexts, 3 changed).

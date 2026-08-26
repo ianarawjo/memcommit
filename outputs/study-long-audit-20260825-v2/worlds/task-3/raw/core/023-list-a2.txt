@@ -1,0 +1,28 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 list task-3/local/personal-memory/2026/06 --direct
+
+STDOUT
+Context: task-3/local/personal-memory/2026/06
+  10 memories
+  0 subcontexts
+
+  [memory cce43b8e] The user keeps four folding chairs for family barbecues in storage.
+  [memory e682f0fd] When six family members gathered in a noisy indoor restaurant, the user asked
+                    several times for the person across from them to repeat what was said.
+  [memory c1f2b53e] The user held the next gathering in their father's yard and moved between seats
+                    while speaking with everyone.
+  [memory 56d5befe] On a day the user started the barbecue at midday, sunlight led them to finish
+                    the meal quickly.
+  [memory 83d73ede] The next time, the user started at 6 p.m. and remained outside until sunset.
+  [memory cf0947e8] Because the side dishes brought by the user's mother and older sister had no
+                    labels, the user opened the same container twice.
+  [memory d42e48ca] At the next gathering, the user wrote each food's name and who brought it on a
+                    small piece of paper.
+  [memory 3958627e] After a barbecue, the user's younger brother prefers to divide leftover food
+                    into small containers to take home rather than discard it.
+  [memory 1f24b5c2] The local agent can summarize preparation and responses from prior family
+                    barbecues but cannot know the next attendees or weather.
+  [memory d88b1b21] The user's father's yard receives strong direct sunlight at midday; after 6
+                    p.m., shade and wind lower the felt temperature.
+
+STDERR

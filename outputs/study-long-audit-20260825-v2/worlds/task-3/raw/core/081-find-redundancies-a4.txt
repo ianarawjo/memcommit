@@ -1,0 +1,51 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 find-redundancies task-3/local/guardrails --recursive
+
+STDOUT
+Find Redundancies · task-3/local/guardrails · 11 Contexts · 81 direct memories checked · 0 groups · 0 proposed absorptions
+
+CONTEXT 1/11 · task-3/local/guardrails
+  0 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 2/11 · task-3/local/guardrails/approval-and-delivery
+  9 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 3/11 · task-3/local/guardrails/audit-and-recovery
+  12 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 4/11 · task-3/local/guardrails/channel-and-format
+  8 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 5/11 · task-3/local/guardrails/downstream-use
+  8 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 6/11 · task-3/local/guardrails/evidence-and-uncertainty
+  6 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 7/11 · task-3/local/guardrails/minimization-and-redaction
+  8 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 8/11 · task-3/local/guardrails/privacy-and-others
+  7 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 9/11 · task-3/local/guardrails/purpose-and-scope
+  9 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 10/11 · task-3/local/guardrails/recipient-and-authority
+  8 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+CONTEXT 11/11 · task-3/local/guardrails/retention-and-revocation
+  6 direct memories checked · 0 groups · 0 proposed absorptions
+  No redundancies.
+
+STDERR

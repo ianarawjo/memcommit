@@ -1,0 +1,17 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source compare practice practice/description
+
+EXIT
+0
+
+WALL_SECONDS
+7.001119
+
+STDOUT
+Compare · practice ↔ practice/description
+
+COMPARISON
+  The frames are semantically equivalent, expressing the same atomization task, editing safeguards, verification duties, terminology and formatting defaults, and the conditional 20–30% reduction target for a shorter fixed limit. Their only material difference is ordering and duplication, which does not alter meaning or authority.
+
+
+STDERR

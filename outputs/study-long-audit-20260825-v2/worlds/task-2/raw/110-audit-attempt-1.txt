@@ -1,0 +1,14 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 audit task-2/participant/proposal-workspace
+EXIT: 0
+DURATION_SECONDS: 26.364
+
+Audit saved: 3 quality checks.
+Source: task-2/participant/proposal-workspace · 13 memories
+
+REDUNDANCIES   13 MEMORIES CHECKED · 1 GROUP · 1 PROPOSED ABSORPTION
+  ≈ REDUNDANT · SEMANTIC EQUIVALENT · [MEMORY 87e0817b] “Split proposal prose into short sentences when…” ↔ [MEMORY df173722] “Keep one main claim in each sentence so a revie…”
+AMBIGUITIES    0/13 MEMORIES FLAGGED
+CONFLICTS      0/13 MEMORIES INVOLVED · 0/78 PAIRS FLAGGED
+
+Review full audit:
+mem review audit --session 5f26547a-249e-41d8-ad2d-ec1c56c2ebe0

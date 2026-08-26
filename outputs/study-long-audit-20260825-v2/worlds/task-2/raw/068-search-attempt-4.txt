@@ -1,0 +1,19 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 search "Which ethics policies are duplicates, conditional differences, or conflicts?" --context task-2/advisor1/ethics --context task-2/advisor2/ethics --limit 9
+EXIT: 0
+DURATION_SECONDS: 7.901
+
+RELATED RESULTS
+  No matching results for: Which ethics policies are duplicates, conditional differences, or conflicts?
+  Broader search: ethics policies for user studies
+
+
+task-2/advisor1/ethics
+[memory 7d0b3072] · RELATED HCI ethics reviewers verify that expected burdens and mitigation strategies correspond to each user study task.
+[memory e93ea2ee] · RELATED Link expected participant burden in each user study task to its corresponding mitigation strategy.
+
+task-2/advisor2/ethics
+[memory 26407eb8] · RELATED The HCI ethics reviewer verifies that anticipated burden and mitigation strategies correspond for each field user study task.
+[memory bc8c1327] · RELATED Link anticipated participant burden with its mitigation strategies for each field user study task.
+[memory 885d1cf3] · RELATED The user's withdrawal risk can be adequately assessed only when a safe alternative procedure exists for field tasks.
+
+Related results may not satisfy the original query.

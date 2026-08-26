@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 meld --memory 'Minimum necessary does not establish currentness or approval.' --into task-3/local/guardrails/audit-and-recovery --direct
+
+EXIT
+0
+
+OUTPUT
+MELD READY · DIRECTIONAL · task-3/local/guardrails/audit-and-recovery
+ROUTE · INCOMING INLINE MEMORY → BASELINE / TARGET task-3/local/guardrails/audit-and-recovery
+JUDGMENTS · REQUIRED 0 · OPTIONAL 0
+SESSION · 7b06c6b8-f2ce-4823-b81a-28c10059de81
+SOURCE · UNCHANGED
+IMPACT · mem impact meld --session 7b06c6b8-f2ce-4823-b81a-28c10059de81
+RESUME · mem meld --sessions

@@ -1,0 +1,2463 @@
+{
+  "schema_version": 1,
+  "study": "study-long-audit-20260823",
+  "world": "task-3",
+  "phase": "transform",
+  "world_goal": "Decide the minimum necessary first-party information a healthcare agent may receive, exclude third-party, stale, unconfirmed, or unapproved information, and keep all transformations local until explicit external approval.",
+  "outcome": "Fail-closed. No external share was attempted. Scratch-source curation removed third-party transport and unverified medication details. Sever materialized a separate empty local result because the retained frame lacked confirmed purpose/approval; the personal-memory fixture and granted remote sources were never mutated.",
+  "execution_boundary": {
+    "launcher": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli",
+    "source_snapshot": "restart-stable frozen physical snapshot; commands executed from repository root",
+    "shared_state": "Global current remained practice. No status/profile/switch/checkout/undo/redo/current-only route was used.",
+    "mutation_boundary": "Only task-3/local/transform-scratch children and the named task3-healthcare-transform Ground were changed. Personal-memory and granted remote fixtures remained read-only."
+  },
+  "bootstrap_excluded": "Five fixture Memories were copied to scratch/source, four criteria were prepared, disposable archive fixtures were added, and scratch child Contexts were created before coverage; these setup calls are not among the 120 trials.",
+  "interleaving": "Each round executed all 24 operations once in catalog order; rounds 1 through 5 produced meaningful early/mid/late accumulated state. No operation's five attempts were consecutive.",
+  "coverage": {
+    "audit": 5,
+    "atomize": 5,
+    "checkpoint": 5,
+    "check-conformance": 5,
+    "clear": 5,
+    "delete": 5,
+    "diff": 5,
+    "distill": 5,
+    "elaborate": 5,
+    "resolve": 5,
+    "dedup": 5,
+    "dedun": 5,
+    "forget": 5,
+    "ground": 5,
+    "impact": 5,
+    "meld": 5,
+    "merge": 5,
+    "rationale": 5,
+    "revert": 5,
+    "review": 5,
+    "sever": 5,
+    "trace": 5,
+    "translate": 5,
+    "update": 5
+  },
+  "total_trials": 120,
+  "trials": [
+    {
+      "operation": "audit",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli audit task-3/local/transform-scratch/source --against task-3/local/transform-scratch/criteria --snapshot",
+      "exit": 0,
+      "starting_state": "early scratch: source 5, criteria 4, result empty, archive 1",
+      "entry_route": "explicit two-Context CLI",
+      "target_route": "source against criteria",
+      "scope": "exact local frames",
+      "input_provenance": "copied personal candidates + policy criteria",
+      "consumer": "later Review and minimization decision",
+      "actual": "4/4 checks; missing purpose/currency and medication ambiguity; saved session 9ae79761.",
+      "defect_ids": [
+        "T3T-AUDIT-CURATION"
+      ],
+      "cost": {
+        "wall_seconds": 22.18,
+        "terminal_screens": 3,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "atomize",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli atomize task-3/local/transform-scratch/source:b19c001e",
+      "exit": 0,
+      "starting_state": "early scratch: source 5, criteria 4, result empty, archive 1",
+      "entry_route": "exact Context:UID",
+      "target_route": "source:b19c001e",
+      "scope": "single Memory",
+      "input_provenance": "copied first-party access event",
+      "consumer": "Trace/Rationale evidence anchor",
+      "actual": "ATOMIC KEEP; saved analysis fdad7cde; no Memory change.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 7.45,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "checkpoint",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli checkpoint task-3/local/transform-scratch \"round-1 before destructive trials\" --recursive",
+      "exit": 0,
+      "starting_state": "early scratch: source 5, criteria 4, result empty, archive 1",
+      "entry_route": "recursive Context CLI",
+      "target_route": "transform-scratch subtree",
+      "scope": "recursive set",
+      "input_provenance": "pre-destructive accumulated workspace",
+      "consumer": "round-1 Revert recovery",
+      "actual": "Created checkpoint set UID 777af68d.",
+      "defect_ids": [
+        "T3T-CHECKPOINT-SET-UID"
+      ],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "check-conformance",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli check-conformance task-3/local/transform-scratch/source --against task-3/local/transform-scratch/criteria",
+      "exit": 0,
+      "starting_state": "early scratch: source 5, criteria 4, result empty, archive 1",
+      "entry_route": "explicit Context frames",
+      "target_route": "source against criteria",
+      "scope": "all source×criterion pairs",
+      "input_provenance": "candidate and criterion fixtures",
+      "consumer": "curation coverage review",
+      "actual": "Reported 10 repetitive INSUFFICIENT_EVIDENCE lines across the pair matrix.",
+      "defect_ids": [
+        "T3T-CONFORMANCE-OVERLOAD"
+      ],
+      "cost": {
+        "wall_seconds": 8.95,
+        "terminal_screens": 4,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "clear",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli clear task-3/local/transform-scratch/archive",
+      "exit": 0,
+      "starting_state": "early scratch: source 5, criteria 4, result empty, archive 1",
+      "entry_route": "explicit Context CLI",
+      "target_route": "archive",
+      "scope": "exact destructive scratch Context",
+      "input_provenance": "disposable sentinel",
+      "consumer": "checkpoint/revert boundary",
+      "actual": "Cleared 1 scratch Memory.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "delete",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli delete deadbeef --context task-3/local/transform-scratch/result",
+      "exit": 1,
+      "starting_state": "early scratch: source 5, criteria 4, result empty, archive 1",
+      "entry_route": "explicit missing UID",
+      "target_route": "result:deadbeef",
+      "scope": "single-item recovery boundary",
+      "input_provenance": "synthetic absent selector",
+      "consumer": "error specificity check",
+      "actual": "Failed closed: no direct item matched; no mutation.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "diff",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli diff task-3/local/transform-scratch/result --stat",
+      "exit": 2,
+      "starting_state": "early scratch: source 5, criteria 4, result empty, archive 1",
+      "entry_route": "explicit Context plus summary flag",
+      "target_route": "result",
+      "scope": "Context history summary request",
+      "input_provenance": "empty early result",
+      "consumer": "checkpoint discovery",
+      "actual": "Parser rejected explicit Context with --stat/--raw/--verbose.",
+      "defect_ids": [
+        "T3T-DIFF-ROUTE"
+      ],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "distill",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli distill task-3/local/transform-scratch/source --into task-3/local/transform-scratch/result --goal \"minimum necessary healthcare disclosure\" --direct --plain",
+      "exit": 0,
+      "starting_state": "early scratch: source 5, criteria 4, result empty, archive 1",
+      "entry_route": "direct semantic transform",
+      "target_route": "source → result",
+      "scope": "exact source",
+      "input_provenance": "five copied personal candidates",
+      "consumer": "candidate disclosure rule set",
+      "actual": "Added 6 rules, including medication and brother transport despite minimum-necessary goal.",
+      "defect_ids": [
+        "T3T-DISTILL-GOAL-DRIFT"
+      ],
+      "cost": {
+        "wall_seconds": 21.16,
+        "terminal_screens": 3,
+        "extra_manual_steps": 2,
+        "tui": false
+      }
+    },
+    {
+      "operation": "elaborate",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli elaborate task-3/local/transform-scratch/criteria --into task-3/local/transform-scratch/result --as rules -n 2 --direct --plain",
+      "exit": 0,
+      "starting_state": "early scratch: source 5, criteria 4, result empty, archive 1",
+      "entry_route": "Context-derived semantic transform",
+      "target_route": "criteria → result",
+      "scope": "exact criteria",
+      "input_provenance": "policy criteria",
+      "consumer": "reviewable rule examples",
+      "actual": "Added 2 rules that asserted explicitly confirmed upcoming clinic purposes not in evidence.",
+      "defect_ids": [
+        "T3T-ELABORATE-HALLUCINATION"
+      ],
+      "cost": {
+        "wall_seconds": 14.81,
+        "terminal_screens": 2,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "resolve",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli resolve task-3/local/transform-scratch/source --guidance \"Do not infer approval, purpose, currency, or recipient.\" --no-create --plain",
+      "exit": 0,
+      "starting_state": "early scratch: source 5, criteria 4, result empty, archive 1",
+      "entry_route": "whole Context guidance",
+      "target_route": "source",
+      "scope": "exact source; no-create",
+      "input_provenance": "audited missing prerequisites",
+      "consumer": "safe correction test",
+      "actual": "FIT YES / NO CHANGE; did not expose per-Memory disposition.",
+      "defect_ids": [
+        "T3T-RESOLVE-OPAQUE"
+      ],
+      "cost": {
+        "wall_seconds": 6.41,
+        "terminal_screens": 1,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "dedup",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedup task-3/local/transform-scratch/result --direct",
+      "exit": 0,
+      "starting_state": "early scratch: source 5, criteria 4, result empty, archive 1",
+      "entry_route": "direct exact-duplicate pass",
+      "target_route": "result",
+      "scope": "exact Context",
+      "input_provenance": "early derived result",
+      "consumer": "cleanup before further transforms",
+      "actual": "No exact duplicates.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "dedun",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedun task-3/local/transform-scratch/result --direct",
+      "exit": 0,
+      "starting_state": "early scratch: source 5, criteria 4, result empty, archive 1",
+      "entry_route": "direct semantic redundancy pass",
+      "target_route": "result",
+      "scope": "exact Context",
+      "input_provenance": "early derived result",
+      "consumer": "semantic cleanup",
+      "actual": "No redundancies.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "forget",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli forget task-3/local/transform-scratch/source \"Remove third-party logistics and unverified medication details.\" --direct",
+      "exit": 0,
+      "starting_state": "early scratch: source 5, criteria 4, result empty, archive 1",
+      "entry_route": "whole-frame destructive transform",
+      "target_route": "source",
+      "scope": "exact scratch source",
+      "input_provenance": "copied personal candidates + direct instruction",
+      "consumer": "minimum-necessary local source",
+      "actual": "Removed medication and brother Memories only from scratch; receipt 0d1581bf.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 9.52,
+        "terminal_screens": 2,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "ground",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli ground --request \"Prepare a minimum-necessary healthcare disclosure\" --goal \"Share only approved necessary facts\" --raw-context task-3/local/transform-scratch/source",
+      "exit": 1,
+      "starting_state": "early scratch: source 5, criteria 4, result empty, archive 1",
+      "entry_route": "request plus binding options",
+      "target_route": "unsaved Ground",
+      "scope": "explicit request + Context binding",
+      "input_provenance": "world goal + scratch source",
+      "consumer": "workflow bootstrap",
+      "actual": "Parser rejected --request combined with Ground binding options.",
+      "defect_ids": [
+        "T3T-GROUND-STATE"
+      ],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "impact",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli impact forget task-3/local/transform-scratch/source \"Remove anything not confirmed current, necessary, and approved.\"",
+      "exit": 0,
+      "starting_state": "early scratch: source 5, criteria 4, result empty, archive 1",
+      "entry_route": "semantic preview",
+      "target_route": "Forget on source",
+      "scope": "whole-frame preview",
+      "input_provenance": "remaining three first-party candidates",
+      "consumer": "pre-Forget safety decision",
+      "actual": "Preview proposed DROP for all 3; no Apply; wrapped words mid-token.",
+      "defect_ids": [
+        "T3T-IMPACT-PRESENTATION"
+      ],
+      "cost": {
+        "wall_seconds": 6.9,
+        "terminal_screens": 3,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "meld",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli meld task-3/local/transform-scratch/criteria task-3/local/transform-scratch/result --direct",
+      "exit": 1,
+      "starting_state": "early scratch: source 5, criteria 4, result empty, archive 1",
+      "entry_route": "two-Context direct",
+      "target_route": "criteria + result → result",
+      "scope": "exact local frames",
+      "input_provenance": "policy plus derived rules",
+      "consumer": "coherent disclosure rule set",
+      "actual": "Failed after provider response: invalid paired relation r_source_facts_and_style.",
+      "defect_ids": [
+        "T3T-MELD-RELIABILITY"
+      ],
+      "cost": {
+        "wall_seconds": 15.68,
+        "terminal_screens": 1,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "merge",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli merge task-3/local/transform-scratch/criteria task-3/local/transform-scratch/result --direct",
+      "exit": 0,
+      "starting_state": "early scratch: source 5, criteria 4, result empty, archive 1",
+      "entry_route": "structural source→target",
+      "target_route": "criteria → result",
+      "scope": "exact local frames",
+      "input_provenance": "policy criteria",
+      "consumer": "preserve criteria alongside derived rules",
+      "actual": "Recorded 4 new Memories.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "rationale",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli rationale task-3/local/transform-scratch/source:b19c001e --json",
+      "exit": 1,
+      "starting_state": "early scratch: source 5, criteria 4, result empty, archive 1",
+      "entry_route": "exact Memory JSON",
+      "target_route": "source:b19c001e",
+      "scope": "single Memory",
+      "input_provenance": "copied access event",
+      "consumer": "bounded provenance narrative",
+      "actual": "Failed closed because provider exceeded default complete-narrative limit 40.",
+      "defect_ids": [
+        "T3T-RATIONALE-LIMIT"
+      ],
+      "cost": {
+        "wall_seconds": 8.01,
+        "terminal_screens": 1,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "revert",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli revert 777af68d --context task-3/local/transform-scratch --keep",
+      "exit": 1,
+      "starting_state": "early scratch: source 5, criteria 4, result empty, archive 1",
+      "entry_route": "checkpoint-set UID recovery",
+      "target_route": "transform-scratch subtree",
+      "scope": "recursive checkpoint set",
+      "input_provenance": "round-1 checkpoint output",
+      "consumer": "restore destructive trials",
+      "actual": "Could not resolve the displayed checkpoint-set UID prefix.",
+      "defect_ids": [
+        "T3T-CHECKPOINT-SET-UID"
+      ],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "review",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli review audit --session 9ae79761 --context task-3/local/transform-scratch/source --snapshot",
+      "exit": 1,
+      "starting_state": "early scratch: source 5, criteria 4, result empty, archive 1",
+      "entry_route": "saved-session review probe",
+      "target_route": "audit session prefix + source",
+      "scope": "session + Context",
+      "input_provenance": "prior Audit output",
+      "consumer": "independent review",
+      "actual": "Rejected command shape: saved Audit Review accepts session/snapshot, not Context.",
+      "defect_ids": [
+        "T3T-REVIEW-ARTIFACT"
+      ],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "sever",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli sever task-3/local/transform-scratch/source task-3/local/transform-scratch/criteria --into task-3/local/transform-scratch/result --direct",
+      "exit": 1,
+      "starting_state": "early scratch: source 5, criteria 4, result empty, archive 1",
+      "entry_route": "whole-frame selective curation",
+      "target_route": "source + criteria → existing result",
+      "scope": "exact scratch frames",
+      "input_provenance": "remaining source + criteria",
+      "consumer": "safe separately created disclosure",
+      "actual": "Failed before provider because output Context already existed.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "trace",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli trace task-3/local/transform-scratch/source:b19c001e --plain --limit 10",
+      "exit": 0,
+      "starting_state": "early scratch: source 5, criteria 4, result empty, archive 1",
+      "entry_route": "exact Memory plain",
+      "target_route": "source:b19c001e",
+      "scope": "single component",
+      "input_provenance": "copy-created source Memory",
+      "consumer": "provenance verification",
+      "actual": "Showed one copy event and one saved Atomize analysis.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "translate",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli translate task-3/local/transform-scratch/source:b19c001e --to \"plain-language English\"",
+      "exit": 0,
+      "starting_state": "early scratch: source 5, criteria 4, result empty, archive 1",
+      "entry_route": "exact Memory",
+      "target_route": "source:b19c001e",
+      "scope": "single Memory",
+      "input_provenance": "copied access event",
+      "consumer": "reviewable recipient wording",
+      "actual": "Saved unreviewed translation view; source unchanged.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 5.21,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "update",
+      "round": 1,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli update task-3/local/transform-scratch/source task-3/local/transform-scratch/result --direct",
+      "exit": 1,
+      "starting_state": "early scratch: source 5, criteria 4, result empty, archive 1",
+      "entry_route": "direct source→target",
+      "target_route": "source → result",
+      "scope": "exact local frames",
+      "input_provenance": "curated source + accumulated target",
+      "consumer": "synchronize candidate state",
+      "actual": "Rejected divergent prior stage and instructed --replace-stage.",
+      "defect_ids": [
+        "T3T-UPDATE-STAGE"
+      ],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "audit",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli audit task-3/local/transform-scratch/archive --snapshot",
+      "exit": 0,
+      "starting_state": "early-mid accumulated scratch: source 3 after selective Forget, criteria 4, result 12, archive duplicate fixture",
+      "entry_route": "single-Context snapshot",
+      "target_route": "archive",
+      "scope": "exact local Context",
+      "input_provenance": "sentinel + exact duplicate fixture",
+      "consumer": "Dedup evidence",
+      "actual": "Saved session 03ba41a4 and found one exact-duplicate group.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "atomize",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli atomize --context task-3/local/transform-scratch/criteria",
+      "exit": 0,
+      "starting_state": "early-mid accumulated scratch: source 3 after selective Forget, criteria 4, result 12, archive duplicate fixture",
+      "entry_route": "--context alias",
+      "target_route": "criteria",
+      "scope": "whole exact Context",
+      "input_provenance": "four criteria including combined criterion",
+      "consumer": "criteria normalization",
+      "actual": "Applied 1 split into two children; receipt e4b81eea, checkpoint b719c409.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "checkpoint",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli checkpoint task-3/local/transform-scratch/archive \"round-2 archive safety\"",
+      "exit": 0,
+      "starting_state": "early-mid accumulated scratch: source 3 after selective Forget, criteria 4, result 12, archive duplicate fixture",
+      "entry_route": "direct Context CLI",
+      "target_route": "archive",
+      "scope": "exact Context",
+      "input_provenance": "duplicate fixture",
+      "consumer": "clear/revert safety",
+      "actual": "Created checkpoint 238eb6bd.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "check-conformance",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli check-conformance task-3/local/transform-scratch/source --against \"Do not infer current necessity or approval from relevance.\"",
+      "exit": 0,
+      "starting_state": "early-mid accumulated scratch: source 3 after selective Forget, criteria 4, result 12, archive duplicate fixture",
+      "entry_route": "Context + inline requirement",
+      "target_route": "source",
+      "scope": "whole source against instruction",
+      "input_provenance": "curated source + direct safety rule",
+      "consumer": "instruction conformance",
+      "actual": "Reported 2/2 conform and one N/A.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 5.77,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "clear",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli clear task-3/local/transform-scratch/archive",
+      "exit": 0,
+      "starting_state": "early-mid accumulated scratch: source 3 after selective Forget, criteria 4, result 12, archive duplicate fixture",
+      "entry_route": "explicit Context CLI",
+      "target_route": "archive",
+      "scope": "exact destructive scratch Context",
+      "input_provenance": "three checkpointed fixtures",
+      "consumer": "revert recovery",
+      "actual": "Cleared 3 Memories.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "delete",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli delete missing-item --context task-3/local/transform-scratch/result",
+      "exit": 1,
+      "starting_state": "early-mid accumulated scratch: source 3 after selective Forget, criteria 4, result 12, archive duplicate fixture",
+      "entry_route": "explicit missing selector",
+      "target_route": "result:missing-item",
+      "scope": "single-item boundary",
+      "input_provenance": "synthetic absent selector",
+      "consumer": "error recovery",
+      "actual": "Failed closed with no mutation.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "diff",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli diff task-3/local/transform-scratch/archive",
+      "exit": 1,
+      "starting_state": "early-mid accumulated scratch: source 3 after selective Forget, criteria 4, result 12, archive duplicate fixture",
+      "entry_route": "non-TTY explicit Context",
+      "target_route": "archive",
+      "scope": "interactive history route",
+      "input_provenance": "clear after direct checkpoint",
+      "consumer": "recover cleared fixtures",
+      "actual": "Rejected non-TTY route: interactive selection requires a terminal or explicit checkpoint.",
+      "defect_ids": [
+        "T3T-DIFF-ROUTE"
+      ],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "distill",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli distill task-3/local/transform-scratch/source --into task-3/local/transform-scratch/result --goal \"cautious first-party facts only\" --direct --plain",
+      "exit": 0,
+      "starting_state": "early-mid accumulated scratch: source 3 after selective Forget, criteria 4, result 12, archive duplicate fixture",
+      "entry_route": "direct semantic transform",
+      "target_route": "source → result",
+      "scope": "exact source",
+      "input_provenance": "post-Forget first-party source",
+      "consumer": "late disclosure guardrails",
+      "actual": "Added 2 cautious rules.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 9.48,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "elaborate",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli elaborate --memory \"Do not infer purpose or approval.\" --into task-3/local/transform-scratch/result --as rules -n 2 --direct --plain",
+      "exit": 0,
+      "starting_state": "early-mid accumulated scratch: source 3 after selective Forget, criteria 4, result 12, archive duplicate fixture",
+      "entry_route": "inline Memory",
+      "target_route": "inline → result",
+      "scope": "single direct input",
+      "input_provenance": "user-authored safety rule",
+      "consumer": "safe examples",
+      "actual": "Added 2 rules that preserved verification/approval boundaries.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 7.11,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "resolve",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli resolve task-3/local/transform-scratch/result --guidance \"Remove inferred upcoming healthcare purposes.\" --no-create --plain",
+      "exit": 0,
+      "starting_state": "early-mid accumulated scratch: source 3 after selective Forget, criteria 4, result 12, archive duplicate fixture",
+      "entry_route": "whole Context guidance",
+      "target_route": "result",
+      "scope": "exact result; no-create",
+      "input_provenance": "prior Elaborate outputs",
+      "consumer": "remove unsupported assertions",
+      "actual": "Reported FIT YES / NO CHANGE while unsupported purpose assertions remained.",
+      "defect_ids": [
+        "T3T-RESOLVE-UNSUPPORTED"
+      ],
+      "cost": {
+        "wall_seconds": 9.45,
+        "terminal_screens": 1,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "dedup",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedup task-3/local/transform-scratch/result --direct",
+      "exit": 0,
+      "starting_state": "early-mid accumulated scratch: source 3 after selective Forget, criteria 4, result 12, archive duplicate fixture",
+      "entry_route": "direct exact-duplicate pass",
+      "target_route": "result",
+      "scope": "exact accumulated Context",
+      "input_provenance": "prior semantic outputs",
+      "consumer": "cleanup",
+      "actual": "No exact duplicates.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "dedun",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedun task-3/local/transform-scratch/result --direct",
+      "exit": 0,
+      "starting_state": "early-mid accumulated scratch: source 3 after selective Forget, criteria 4, result 12, archive duplicate fixture",
+      "entry_route": "direct semantic redundancy pass",
+      "target_route": "result",
+      "scope": "exact accumulated Context",
+      "input_provenance": "prior semantic outputs",
+      "consumer": "cleanup",
+      "actual": "No redundancies.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "forget",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli forget task-3/local/transform-scratch/source \"Remove insurance numbers.\" --direct",
+      "exit": 0,
+      "starting_state": "early-mid accumulated scratch: source 3 after selective Forget, criteria 4, result 12, archive duplicate fixture",
+      "entry_route": "whole-frame destructive transform",
+      "target_route": "source",
+      "scope": "exact scratch source",
+      "input_provenance": "curated source + absent criterion",
+      "consumer": "safe no-op boundary",
+      "actual": "No change; no insurance numbers existed.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "ground",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli ground --request \"Prepare a minimum-necessary healthcare disclosure without assuming approval.\"",
+      "exit": 0,
+      "starting_state": "early-mid accumulated scratch: source 3 after selective Forget, criteria 4, result 12, archive duplicate fixture",
+      "entry_route": "request-only non-TTY",
+      "target_route": "unsaved Ground",
+      "scope": "dialogue request",
+      "input_provenance": "world goal",
+      "consumer": "blank Ground behavior",
+      "actual": "Printed an unsaved draft; did not read current Context or create state.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "impact",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli impact atomize task-3/local/transform-scratch/source",
+      "exit": 0,
+      "starting_state": "early-mid accumulated scratch: source 3 after selective Forget, criteria 4, result 12, archive duplicate fixture",
+      "entry_route": "operation impact preview",
+      "target_route": "Atomize on source",
+      "scope": "whole exact Context",
+      "input_provenance": "three retained source Memories",
+      "consumer": "atomization decision",
+      "actual": "All 3 classified atomic; analysis d62c36ec; no change.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 13.14,
+        "terminal_screens": 3,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "meld",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli meld task-3/local/transform-scratch/source task-3/local/transform-scratch/criteria --into task-3/local/transform-scratch/meld-r2 --direct",
+      "exit": 1,
+      "starting_state": "early-mid accumulated scratch: source 3 after selective Forget, criteria 4, result 12, archive duplicate fixture",
+      "entry_route": "two-Context fresh target",
+      "target_route": "source + criteria → meld-r2",
+      "scope": "exact local frames",
+      "input_provenance": "curated source + atomized criteria",
+      "consumer": "combined review frame",
+      "actual": "Failed: declared Compare prewarm invalid.",
+      "defect_ids": [
+        "T3T-MELD-RELIABILITY"
+      ],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "merge",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli merge task-3/local/transform-scratch/source task-3/local/transform-scratch/result --direct",
+      "exit": 0,
+      "starting_state": "early-mid accumulated scratch: source 3 after selective Forget, criteria 4, result 12, archive duplicate fixture",
+      "entry_route": "structural source→target",
+      "target_route": "source → result",
+      "scope": "exact local frames",
+      "input_provenance": "curated three-Memory source",
+      "consumer": "retain exact evidence",
+      "actual": "Recorded 3 new Memories.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "rationale",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli rationale task-3/local/transform-scratch/source:b19c001e --limit 120 --unit words",
+      "exit": 0,
+      "starting_state": "early-mid accumulated scratch: source 3 after selective Forget, criteria 4, result 12, archive duplicate fixture",
+      "entry_route": "exact Memory bounded prose",
+      "target_route": "source:b19c001e",
+      "scope": "single Memory",
+      "input_provenance": "copy provenance",
+      "consumer": "human-readable evidence",
+      "actual": "Returned concise 45-word copy provenance within explicit bound.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "revert",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli revert 238eb6bd --context task-3/local/transform-scratch/archive --keep",
+      "exit": 0,
+      "starting_state": "early-mid accumulated scratch: source 3 after selective Forget, criteria 4, result 12, archive duplicate fixture",
+      "entry_route": "direct checkpoint recovery",
+      "target_route": "archive",
+      "scope": "exact Context checkpoint",
+      "input_provenance": "round-2 clear",
+      "consumer": "restore duplicate fixture",
+      "actual": "Restored 3 Memories and created recovery checkpoint 70b6b30a.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "review",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli review audit --session 9ae79761 --snapshot",
+      "exit": 1,
+      "starting_state": "early-mid accumulated scratch: source 3 after selective Forget, criteria 4, result 12, archive duplicate fixture",
+      "entry_route": "saved-session prefix",
+      "target_route": "Audit session prefix",
+      "scope": "snapshot",
+      "input_provenance": "prior printed Audit session",
+      "consumer": "independent review",
+      "actual": "Artifact unavailable despite prior Audit output advertising the session prefix.",
+      "defect_ids": [
+        "T3T-REVIEW-ARTIFACT"
+      ],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "sever",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli sever task-3/local/transform-scratch/source task-3/local/transform-scratch/criteria --into task-3/local/transform-scratch/sever-r2 --direct",
+      "exit": 0,
+      "starting_state": "early-mid accumulated scratch: source 3 after selective Forget, criteria 4, result 12, archive duplicate fixture",
+      "entry_route": "whole-frame fresh target",
+      "target_route": "source + criteria → sever-r2",
+      "scope": "exact local frames",
+      "input_provenance": "curated source + criteria",
+      "consumer": "review-before-apply disclosure candidate",
+      "actual": "READY; source unchanged; session 036f70bb.",
+      "defect_ids": [
+        "T3T-SEVER-CLASSIFICATION"
+      ],
+      "cost": {
+        "wall_seconds": 9.12,
+        "terminal_screens": 2,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "trace",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli trace task-3/local/transform-scratch/source:b19c001e --json --limit 5",
+      "exit": 0,
+      "starting_state": "early-mid accumulated scratch: source 3 after selective Forget, criteria 4, result 12, archive duplicate fixture",
+      "entry_route": "exact Memory JSON",
+      "target_route": "source:b19c001e",
+      "scope": "single component",
+      "input_provenance": "copy + Atomize analysis",
+      "consumer": "machine-readable provenance",
+      "actual": "Returned structured trace including d62 analysis; output was 724 tokens.",
+      "defect_ids": [
+        "T3T-TRACE-LIMIT"
+      ],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "translate",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli translate task-3/local/transform-scratch/source:b19c001e --to Korean",
+      "exit": 0,
+      "starting_state": "early-mid accumulated scratch: source 3 after selective Forget, criteria 4, result 12, archive duplicate fixture",
+      "entry_route": "exact Memory",
+      "target_route": "source:b19c001e",
+      "scope": "single Memory",
+      "input_provenance": "copied access event",
+      "consumer": "alternate-language review",
+      "actual": "Saved Korean translation; source unchanged.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "update",
+      "round": 2,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli update task-3/local/transform-scratch/source task-3/local/transform-scratch/result --direct --replace-stage",
+      "exit": 0,
+      "starting_state": "early-mid accumulated scratch: source 3 after selective Forget, criteria 4, result 12, archive duplicate fixture",
+      "entry_route": "replace-stage recovery",
+      "target_route": "source → result",
+      "scope": "exact local frames",
+      "input_provenance": "source + previously staged target",
+      "consumer": "recover divergent stage",
+      "actual": "Applied NO CHANGE; receipt 72ed1283.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "audit",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli audit task-3/local/transform-scratch/result --snapshot",
+      "exit": 1,
+      "starting_state": "mid accumulated scratch: source 3, criteria 5 after Atomize, result 17, archive checkpointed duplicate fixture",
+      "entry_route": "single-Context snapshot",
+      "target_route": "result",
+      "scope": "exact accumulated Context",
+      "input_provenance": "mixed rules, examples, source copies",
+      "consumer": "quality audit",
+      "actual": "After 27.89s provider returned a question for NONE; no partial result.",
+      "defect_ids": [
+        "T3T-AUDIT-CURATION"
+      ],
+      "cost": {
+        "wall_seconds": 27.89,
+        "terminal_screens": 1,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "atomize",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli atomize --context task-3/local/transform-scratch/source --memory 0a69e247",
+      "exit": 0,
+      "starting_state": "mid accumulated scratch: source 3, criteria 5 after Atomize, result 17, archive checkpointed duplicate fixture",
+      "entry_route": "--context plus --memory",
+      "target_route": "source:0a69e247",
+      "scope": "single exact Memory",
+      "input_provenance": "clinic chair fact",
+      "consumer": "atomicity check",
+      "actual": "ATOMIC KEEP; analysis 69790980; no Memory change.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 8.54,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "checkpoint",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli checkpoint task-3/local/transform-scratch/archive \"round-3 archive safety\"",
+      "exit": 0,
+      "starting_state": "mid accumulated scratch: source 3, criteria 5 after Atomize, result 17, archive checkpointed duplicate fixture",
+      "entry_route": "direct Context CLI",
+      "target_route": "archive",
+      "scope": "exact Context",
+      "input_provenance": "restored fixture",
+      "consumer": "delete/revert safety",
+      "actual": "Created checkpoint 16d90912.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "check-conformance",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli check-conformance task-3/local/transform-scratch/result --against task-3/local/transform-scratch/criteria",
+      "exit": 1,
+      "starting_state": "mid accumulated scratch: source 3, criteria 5 after Atomize, result 17, archive checkpointed duplicate fixture",
+      "entry_route": "explicit two-Context CLI",
+      "target_route": "result against criteria",
+      "scope": "large all-pairs frame",
+      "input_provenance": "accumulated result + atomized criteria",
+      "consumer": "curation coverage",
+      "actual": "Failed closed: provider did not account for every target Memory.",
+      "defect_ids": [
+        "T3T-CONFORMANCE-OVERLOAD"
+      ],
+      "cost": {
+        "wall_seconds": 13.13,
+        "terminal_screens": 1,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "clear",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli clear task-3/local/transform-scratch",
+      "exit": 0,
+      "starting_state": "mid accumulated scratch: source 3, criteria 5 after Atomize, result 17, archive checkpointed duplicate fixture",
+      "entry_route": "explicit root Context",
+      "target_route": "transform-scratch root",
+      "scope": "exact empty parent only",
+      "input_provenance": "empty parent with populated children",
+      "consumer": "no-op boundary",
+      "actual": "Reported already empty; descendants were preserved.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "delete",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli delete 0c727ec8 --context task-3/local/transform-scratch/archive",
+      "exit": 0,
+      "starting_state": "mid accumulated scratch: source 3, criteria 5 after Atomize, result 17, archive checkpointed duplicate fixture",
+      "entry_route": "exact UID deletion",
+      "target_route": "archive:0c727ec8",
+      "scope": "single scratch Memory",
+      "input_provenance": "known disposable sentinel",
+      "consumer": "checkpoint recovery",
+      "actual": "Deleted the sentinel only.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "diff",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli diff 16d90912",
+      "exit": 1,
+      "starting_state": "mid accumulated scratch: source 3, criteria 5 after Atomize, result 17, archive checkpointed duplicate fixture",
+      "entry_route": "checkpoint UID as positional",
+      "target_route": "16d90912",
+      "scope": "direct locator ambiguity",
+      "input_provenance": "prior Checkpoint output",
+      "consumer": "checkpoint comparison",
+      "actual": "Interpreted the checkpoint UID as a Context name and failed.",
+      "defect_ids": [
+        "T3T-DIFF-ROUTE"
+      ],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "distill",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli distill task-3/local/transform-scratch/source --into task-3/local/transform-scratch/result --recursive --goal \"cautious first-party facts only\" --direct --plain",
+      "exit": 0,
+      "starting_state": "mid accumulated scratch: source 3, criteria 5 after Atomize, result 17, archive checkpointed duplicate fixture",
+      "entry_route": "recursive source transform",
+      "target_route": "source subtree → result",
+      "scope": "recursive source",
+      "input_provenance": "curated source with empty descendants",
+      "consumer": "scope-boundary comparison",
+      "actual": "Added 3 cautious rules.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 14.67,
+        "terminal_screens": 2,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "elaborate",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli elaborate task-3/local/transform-scratch/criteria --into task-3/local/transform-scratch/result --as rules -n 1 --direct --plain",
+      "exit": 0,
+      "starting_state": "mid accumulated scratch: source 3, criteria 5 after Atomize, result 17, archive checkpointed duplicate fixture",
+      "entry_route": "Context-derived semantic transform",
+      "target_route": "criteria → result",
+      "scope": "exact criteria",
+      "input_provenance": "atomized criteria",
+      "consumer": "one review example",
+      "actual": "Invented an upcoming clinic/seating purpose (UID 7b0207b6).",
+      "defect_ids": [
+        "T3T-ELABORATE-HALLUCINATION"
+      ],
+      "cost": {
+        "wall_seconds": 12.31,
+        "terminal_screens": 2,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "resolve",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli resolve task-3/local/transform-scratch/result:7b0207b6 --guidance \"This purpose is unconfirmed; do not state it as fact.\" --no-create --plain",
+      "exit": 0,
+      "starting_state": "mid accumulated scratch: source 3, criteria 5 after Atomize, result 17, archive checkpointed duplicate fixture",
+      "entry_route": "exact Memory guidance",
+      "target_route": "result:7b0207b6",
+      "scope": "single exact derived Memory",
+      "input_provenance": "prior unsupported Elaborate output",
+      "consumer": "correction",
+      "actual": "Recognized missing grounding and requested input; made no change.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 39.5,
+        "terminal_screens": 3,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "dedup",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedup task-3/local/transform-scratch/archive --direct",
+      "exit": 0,
+      "starting_state": "mid accumulated scratch: source 3, criteria 5 after Atomize, result 17, archive checkpointed duplicate fixture",
+      "entry_route": "direct exact-duplicate pass",
+      "target_route": "archive",
+      "scope": "exact Context",
+      "input_provenance": "known duplicate fixture",
+      "consumer": "cleanup/revert evidence",
+      "actual": "Removed one duplicate; checkpoint 41703e28.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "dedun",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedun task-3/local/transform-scratch/archive --direct",
+      "exit": 0,
+      "starting_state": "mid accumulated scratch: source 3, criteria 5 after Atomize, result 17, archive checkpointed duplicate fixture",
+      "entry_route": "direct semantic redundancy pass",
+      "target_route": "archive",
+      "scope": "exact Context after Dedup",
+      "input_provenance": "sentinel + one duplicate survivor",
+      "consumer": "semantic cleanup",
+      "actual": "No redundancies.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "forget",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli forget task-3/local/transform-scratch/source \"Remove parking details.\" --direct",
+      "exit": 0,
+      "starting_state": "mid accumulated scratch: source 3, criteria 5 after Atomize, result 17, archive checkpointed duplicate fixture",
+      "entry_route": "whole-frame destructive transform",
+      "target_route": "source",
+      "scope": "exact scratch source",
+      "input_provenance": "curated source + absent criterion",
+      "consumer": "safe no-op boundary",
+      "actual": "No change.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "ground",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli ground task3-healthcare-transform --goal \"Prepare a minimum-necessary healthcare disclosure without assuming approval.\" --raw-context task-3/local/transform-scratch/source --derived-context task-3/local/transform-scratch/result --publication-context task-3/local/transform-scratch/archive --snapshot",
+      "exit": 0,
+      "starting_state": "mid accumulated scratch: source 3, criteria 5 after Atomize, result 17, archive checkpointed duplicate fixture",
+      "entry_route": "named Ground creation",
+      "target_route": "task3-healthcare-transform",
+      "scope": "explicit bound Contexts",
+      "input_provenance": "world goal + accumulated scratch",
+      "consumer": "durable workflow state",
+      "actual": "Created revision 0 FRESH Ground, 3 RAW → 23 candidates → 1 target; no Context content changes.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "impact",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli impact sever --session 036f70bb-964c-4f1c-8f92-7784334cea48",
+      "exit": 0,
+      "starting_state": "mid accumulated scratch: source 3, criteria 5 after Atomize, result 17, archive checkpointed duplicate fixture",
+      "entry_route": "saved-session impact",
+      "target_route": "Sever session 036f70bb",
+      "scope": "frozen prior analysis",
+      "input_provenance": "round-2 Sever result",
+      "consumer": "pre-apply safety review",
+      "actual": "Previewed FORGET for all 3; called clinic/reception facts unnecessary third-party logistics; no Apply.",
+      "defect_ids": [
+        "T3T-SEVER-CLASSIFICATION"
+      ],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "meld",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli meld --memory \"Do not infer approval from relevance.\" --into task-3/local/transform-scratch/result --direct",
+      "exit": 0,
+      "starting_state": "mid accumulated scratch: source 3, criteria 5 after Atomize, result 17, archive checkpointed duplicate fixture",
+      "entry_route": "inline Memory into existing Context",
+      "target_route": "inline → result",
+      "scope": "single inline source + target frame",
+      "input_provenance": "user-authored safety rule + accumulated result",
+      "consumer": "reviewable meld proposal",
+      "actual": "READY; optional issue only; session 1008ce17.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 26.09,
+        "terminal_screens": 2,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "merge",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli merge task-3/local/transform-scratch/criteria task-3/local/transform-scratch/result --direct",
+      "exit": 0,
+      "starting_state": "mid accumulated scratch: source 3, criteria 5 after Atomize, result 17, archive checkpointed duplicate fixture",
+      "entry_route": "structural source→target",
+      "target_route": "criteria → result",
+      "scope": "exact local frames",
+      "input_provenance": "atomized criteria",
+      "consumer": "preserve exact criteria",
+      "actual": "Recorded 2 new and 3 already-present Memories.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "rationale",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli rationale task-3/local/transform-scratch/criteria:38f5e487 --limit 80 --unit words",
+      "exit": 0,
+      "starting_state": "mid accumulated scratch: source 3, criteria 5 after Atomize, result 17, archive checkpointed duplicate fixture",
+      "entry_route": "exact Memory bounded prose",
+      "target_route": "criteria:38f5e487",
+      "scope": "single split child",
+      "input_provenance": "Atomize lineage",
+      "consumer": "explain normalized criterion",
+      "actual": "Returned grounded split provenance.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "revert",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli revert 16d90912 --context task-3/local/transform-scratch/archive --keep",
+      "exit": 0,
+      "starting_state": "mid accumulated scratch: source 3, criteria 5 after Atomize, result 17, archive checkpointed duplicate fixture",
+      "entry_route": "direct checkpoint recovery",
+      "target_route": "archive",
+      "scope": "exact Context checkpoint",
+      "input_provenance": "round-3 delete and Dedup",
+      "consumer": "restore fixture",
+      "actual": "Restored sentinel and duplicate state.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "review",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli review sever --session 036f70bb-964c-4f1c-8f92-7784334cea48 --snapshot",
+      "exit": 1,
+      "starting_state": "mid accumulated scratch: source 3, criteria 5 after Atomize, result 17, archive checkpointed duplicate fixture",
+      "entry_route": "saved Sever session review",
+      "target_route": "Sever session 036f70bb",
+      "scope": "snapshot",
+      "input_provenance": "prior READY analysis",
+      "consumer": "independent review",
+      "actual": "Correctly blocked because execution was incomplete and instructed resume.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "sever",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli sever --resume 036f70bb-964c-4f1c-8f92-7784334cea48",
+      "exit": 0,
+      "starting_state": "mid accumulated scratch: source 3, criteria 5 after Atomize, result 17, archive checkpointed duplicate fixture",
+      "entry_route": "saved-session resume",
+      "target_route": "Sever session 036f70bb",
+      "scope": "frozen whole frame",
+      "input_provenance": "round-2 READY result",
+      "consumer": "review continuation",
+      "actual": "Reopened READY state; Source remained unchanged.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "trace",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli trace task-3/local/transform-scratch/criteria:38f5e487 --verbose --all --plain",
+      "exit": 0,
+      "starting_state": "mid accumulated scratch: source 3, criteria 5 after Atomize, result 17, archive checkpointed duplicate fixture",
+      "entry_route": "exact Memory verbose",
+      "target_route": "criteria:38f5e487",
+      "scope": "full component",
+      "input_provenance": "add + Atomize split evidence",
+      "consumer": "deep provenance review",
+      "actual": "Returned exact spans and lineage in 774 tokens.",
+      "defect_ids": [
+        "T3T-TRACE-LIMIT"
+      ],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "translate",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli translate task-3/local/transform-scratch/criteria:38f5e487 --to French",
+      "exit": 0,
+      "starting_state": "mid accumulated scratch: source 3, criteria 5 after Atomize, result 17, archive checkpointed duplicate fixture",
+      "entry_route": "exact Memory",
+      "target_route": "criteria:38f5e487",
+      "scope": "single Memory",
+      "input_provenance": "normalized criterion",
+      "consumer": "alternate-language review",
+      "actual": "Saved French translation; source unchanged.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "update",
+      "round": 3,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli update task-3/local/transform-scratch/criteria task-3/local/transform-scratch/result --direct --replace-stage",
+      "exit": 0,
+      "starting_state": "mid accumulated scratch: source 3, criteria 5 after Atomize, result 17, archive checkpointed duplicate fixture",
+      "entry_route": "replace-stage source→target",
+      "target_route": "criteria → result",
+      "scope": "exact local frames",
+      "input_provenance": "atomized criteria + accumulated result",
+      "consumer": "synchronize rules",
+      "actual": "Applied NO CHANGE; receipt a5af8d89.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "audit",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli audit task-3/local/transform-scratch/criteria --snapshot",
+      "exit": 0,
+      "starting_state": "late-mid accumulated scratch: source 3, criteria 5, result 25 before clear/recovery",
+      "entry_route": "single-Context snapshot",
+      "target_route": "criteria",
+      "scope": "exact criteria",
+      "input_provenance": "atomized privacy criteria",
+      "consumer": "criterion quality review",
+      "actual": "Saved session f09ecbdf; flagged all 5 abstract criteria as underspecified without task-specific purpose/details.",
+      "defect_ids": [
+        "T3T-AUDIT-CURATION"
+      ],
+      "cost": {
+        "wall_seconds": 23.86,
+        "terminal_screens": 3,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "atomize",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli atomize task-3/local/transform-scratch/criteria",
+      "exit": 0,
+      "starting_state": "late-mid accumulated scratch: source 3, criteria 5, result 25 before clear/recovery",
+      "entry_route": "positional Context",
+      "target_route": "criteria",
+      "scope": "whole exact Context",
+      "input_provenance": "previously applied Atomize result",
+      "consumer": "cache/idempotence boundary",
+      "actual": "Reused applied analysis e4b81eea; no new checkpoint.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "checkpoint",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli checkpoint task-3/local/transform-scratch/result \"round-4 result safety\"",
+      "exit": 0,
+      "starting_state": "late-mid accumulated scratch: source 3, criteria 5, result 25 before clear/recovery",
+      "entry_route": "direct Context CLI",
+      "target_route": "result",
+      "scope": "exact Context",
+      "input_provenance": "25-item accumulated result",
+      "consumer": "clear/revert safety",
+      "actual": "Created checkpoint 612e09c8.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "check-conformance",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli check-conformance task-3/local/transform-scratch/source --against task-3/local/transform-scratch/criteria:38f5e487",
+      "exit": 0,
+      "starting_state": "late-mid accumulated scratch: source 3, criteria 5, result 25 before clear/recovery",
+      "entry_route": "Context against exact criterion Memory",
+      "target_route": "source against criteria:38f5e487",
+      "scope": "three source items × one rule",
+      "input_provenance": "curated source + normalized retention criterion",
+      "consumer": "focused coverage",
+      "actual": "All 3 reported insufficient evidence.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "clear",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli clear task-3/local/transform-scratch/result",
+      "exit": 0,
+      "starting_state": "late-mid accumulated scratch: source 3, criteria 5, result 25 before clear/recovery",
+      "entry_route": "explicit Context CLI",
+      "target_route": "result",
+      "scope": "exact destructive scratch Context",
+      "input_provenance": "25 checkpointed mixed derived items",
+      "consumer": "TUI Diff and Revert recovery",
+      "actual": "Cleared 25 Memories.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "delete",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli delete ffffffff --context task-3/local/transform-scratch/archive",
+      "exit": 1,
+      "starting_state": "late-mid accumulated scratch: source 3, criteria 5, result 25 before clear/recovery",
+      "entry_route": "explicit missing UID",
+      "target_route": "archive:ffffffff",
+      "scope": "single-item boundary",
+      "input_provenance": "synthetic absent selector",
+      "consumer": "late error recovery",
+      "actual": "Failed closed with no mutation.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "diff",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli diff task-3/local/transform-scratch/result",
+      "exit": 0,
+      "starting_state": "late-mid accumulated scratch: source 3, criteria 5, result 25 before clear/recovery",
+      "entry_route": "actual 180x52 truecolor PTY",
+      "target_route": "result",
+      "scope": "interactive checkpoint/history browser",
+      "input_provenance": "25-item Clear after direct checkpoint",
+      "consumer": "select recovery point then inspect history",
+      "actual": "Opened color TUI with 25 removals and 13 history items; Down, Tab, Down, Backspace, Escape navigated and closed.",
+      "defect_ids": [
+        "T3T-DIFF-ROUTE",
+        "T3T-RESULT-OVERLOAD"
+      ],
+      "cost": {
+        "pty": "180x52",
+        "color": true,
+        "keys": 5,
+        "terminal_screens": 3,
+        "focus_switches": 2,
+        "extra_manual_steps": 5,
+        "tui": true
+      }
+    },
+    {
+      "operation": "distill",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli distill task-3/local/transform-scratch/source --into task-3/local/transform-scratch/result --goal \"State uncertainty and withhold facts until purpose and approval are confirmed.\" --direct --plain",
+      "exit": 0,
+      "starting_state": "late-mid accumulated scratch: source 3, criteria 5, result 25 before clear/recovery",
+      "entry_route": "direct semantic transform after clear",
+      "target_route": "source → empty result",
+      "scope": "exact source",
+      "input_provenance": "curated first-party source + safety goal",
+      "consumer": "clean result reconstruction",
+      "actual": "Added 7 stylistic rules and mostly ignored the withholding goal.",
+      "defect_ids": [
+        "T3T-DISTILL-GOAL-DRIFT"
+      ],
+      "cost": {
+        "wall_seconds": 26.75,
+        "terminal_screens": 3,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "elaborate",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli elaborate task-3/local/transform-scratch/criteria --into task-3/local/transform-scratch/result --as rules -n 1 --direct --plain",
+      "exit": 0,
+      "starting_state": "late-mid accumulated scratch: source 3, criteria 5, result 25 before clear/recovery",
+      "entry_route": "Context-derived semantic transform after clear",
+      "target_route": "criteria → result",
+      "scope": "exact criteria",
+      "input_provenance": "privacy criteria",
+      "consumer": "fresh result example",
+      "actual": "Invented current treatment, step-free access, stairs, and knee-pain facts in Memory 5b0ae9f4.",
+      "defect_ids": [
+        "T3T-ELABORATE-HALLUCINATION"
+      ],
+      "cost": {
+        "wall_seconds": 10.62,
+        "terminal_screens": 2,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "resolve",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli resolve task-3/local/transform-scratch/result:5b0ae9f4 --guidance \"These facts are unsupported; remove the treatment, step-free, stairs, and knee-pain claims.\" --no-create --plain",
+      "exit": 0,
+      "starting_state": "late-mid accumulated scratch: source 3, criteria 5, result 25 before clear/recovery",
+      "entry_route": "exact Memory corrective guidance",
+      "target_route": "result:5b0ae9f4",
+      "scope": "single exact derived Memory",
+      "input_provenance": "unsupported Elaborate output",
+      "consumer": "remove hallucinated content",
+      "actual": "Reported FIT YES / NO CHANGE, leaving every explicitly challenged claim intact.",
+      "defect_ids": [
+        "T3T-RESOLVE-UNSUPPORTED"
+      ],
+      "cost": {
+        "wall_seconds": 11.78,
+        "terminal_screens": 2,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "dedup",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedup task-3/local/transform-scratch/result --direct",
+      "exit": 0,
+      "starting_state": "late-mid accumulated scratch: source 3, criteria 5, result 25 before clear/recovery",
+      "entry_route": "direct exact-duplicate pass",
+      "target_route": "result",
+      "scope": "exact rebuilt Context",
+      "input_provenance": "round-4 derived outputs",
+      "consumer": "cleanup",
+      "actual": "No exact duplicates.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "dedun",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedun task-3/local/transform-scratch/result --direct",
+      "exit": 0,
+      "starting_state": "late-mid accumulated scratch: source 3, criteria 5, result 25 before clear/recovery",
+      "entry_route": "direct semantic redundancy pass",
+      "target_route": "result",
+      "scope": "exact rebuilt Context",
+      "input_provenance": "round-4 derived outputs",
+      "consumer": "cleanup",
+      "actual": "No redundancies.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "forget",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli forget task-3/local/transform-scratch/source \"Remove names, phone numbers, and addresses.\" --direct",
+      "exit": 0,
+      "starting_state": "late-mid accumulated scratch: source 3, criteria 5, result 25 before clear/recovery",
+      "entry_route": "whole-frame destructive transform",
+      "target_route": "source",
+      "scope": "exact scratch source",
+      "input_provenance": "curated source + absent identifiers",
+      "consumer": "safe no-op boundary",
+      "actual": "No change.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "ground",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli ground task3-healthcare-transform --snapshot",
+      "exit": 0,
+      "starting_state": "late-mid accumulated scratch: source 3, criteria 5, result 25 before clear/recovery",
+      "entry_route": "named Ground snapshot",
+      "target_route": "task3-healthcare-transform",
+      "scope": "durable binding snapshot",
+      "input_provenance": "revision-0 Ground + changed result/archive",
+      "consumer": "staleness detection",
+      "actual": "Reported STALE and blocked Ground decisions because result/archive diverged.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "impact",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli impact meld --session 1008ce17-42fd-4267-b74a-8b7d2f2dfaf7",
+      "exit": 0,
+      "starting_state": "late-mid accumulated scratch: source 3, criteria 5, result 25 before clear/recovery",
+      "entry_route": "saved-session impact",
+      "target_route": "Meld session 1008ce17",
+      "scope": "frozen prior analysis",
+      "input_provenance": "inline approval rule + older 24-item target",
+      "consumer": "pre-apply review",
+      "actual": "Proposed ADD; showed 1/24 coverage and an optional combine issue.",
+      "defect_ids": [
+        "T3T-RESULT-OVERLOAD"
+      ],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "meld",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli meld --memory \"Do not treat usefulness as user approval.\" --into task-3/local/transform-scratch/result --direct",
+      "exit": 1,
+      "starting_state": "late-mid accumulated scratch: source 3, criteria 5, result 25 before clear/recovery",
+      "entry_route": "second inline Memory into existing target",
+      "target_route": "inline → result",
+      "scope": "single inline source + changed target",
+      "input_provenance": "new safety rule + existing Meld state",
+      "consumer": "stale-session recovery",
+      "actual": "Rejected because target already had a Meld from different sources; instructed --restart.",
+      "defect_ids": [
+        "T3T-MELD-RELIABILITY"
+      ],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "merge",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli merge task-3/local/transform-scratch/criteria task-3/local/transform-scratch/result --direct",
+      "exit": 0,
+      "starting_state": "late-mid accumulated scratch: source 3, criteria 5, result 25 before clear/recovery",
+      "entry_route": "structural source→target",
+      "target_route": "criteria → result",
+      "scope": "exact local frames",
+      "input_provenance": "criteria + rebuilt result",
+      "consumer": "restore exact criteria",
+      "actual": "Recorded 5 new Memories.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "rationale",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli rationale task-3/local/transform-scratch/result:5b0ae9f4 --limit 80 --unit words",
+      "exit": 0,
+      "starting_state": "late-mid accumulated scratch: source 3, criteria 5, result 25 before clear/recovery",
+      "entry_route": "exact derived Memory prose",
+      "target_route": "result:5b0ae9f4",
+      "scope": "single Memory",
+      "input_provenance": "hallucinated Elaborate output",
+      "consumer": "inspect origin and warnings",
+      "actual": "Repeated the invented Memory's origin without warning that its facts lacked source evidence.",
+      "defect_ids": [
+        "T3T-RATIONALE-SEMANTIC-WARNING"
+      ],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "revert",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli revert 612e09c8 --context task-3/local/transform-scratch/result --keep",
+      "exit": 0,
+      "starting_state": "late-mid accumulated scratch: source 3, criteria 5, result 25 before clear/recovery",
+      "entry_route": "direct checkpoint recovery",
+      "target_route": "result",
+      "scope": "exact Context checkpoint",
+      "input_provenance": "round-4 clear + transforms",
+      "consumer": "restore pre-round-4 accumulated state",
+      "actual": "Restored 25 Memories and removed 13 temporary items; receipt abbreviated 38 effects as '+12 …26 more'.",
+      "defect_ids": [
+        "T3T-RESULT-OVERLOAD"
+      ],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "review",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli review update --session 72ed1283 --snapshot",
+      "exit": 1,
+      "starting_state": "late-mid accumulated scratch: source 3, criteria 5, result 25 before clear/recovery",
+      "entry_route": "saved Update session review",
+      "target_route": "Update receipt prefix",
+      "scope": "snapshot",
+      "input_provenance": "round-2 Update output",
+      "consumer": "independent review",
+      "actual": "Artifact unavailable although the Update receipt had been printed.",
+      "defect_ids": [
+        "T3T-REVIEW-ARTIFACT"
+      ],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "sever",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli sever task-3/local/transform-scratch/source task-3/local/transform-scratch/criteria --into task-3/local/transform-scratch/sever-r4 --direct",
+      "exit": 0,
+      "starting_state": "late-mid accumulated scratch: source 3, criteria 5, result 25 before clear/recovery",
+      "entry_route": "whole-frame fresh target",
+      "target_route": "source + criteria → sever-r4",
+      "scope": "exact local frames",
+      "input_provenance": "curated source + atomized criteria",
+      "consumer": "minimum-necessary local result",
+      "actual": "READY; source unchanged; session 6b22ac1f; all three later classified FORGET.",
+      "defect_ids": [
+        "T3T-SEVER-CLASSIFICATION"
+      ],
+      "cost": {
+        "wall_seconds": 9.38,
+        "terminal_screens": 2,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "trace",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli trace task-3/local/transform-scratch/source:b19c001e --plain --limit 1",
+      "exit": 0,
+      "starting_state": "late-mid accumulated scratch: source 3, criteria 5, result 25 before clear/recovery",
+      "entry_route": "exact Memory minimal prose",
+      "target_route": "source:b19c001e",
+      "scope": "single component",
+      "input_provenance": "copy provenance",
+      "consumer": "minimum-output boundary",
+      "actual": "Returned one copy event and no attachments.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "translate",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli translate task-3/local/transform-scratch/source:0a69e247 --to Spanish",
+      "exit": 0,
+      "starting_state": "late-mid accumulated scratch: source 3, criteria 5, result 25 before clear/recovery",
+      "entry_route": "exact alternate Memory",
+      "target_route": "source:0a69e247",
+      "scope": "single Memory",
+      "input_provenance": "clinic chair fact",
+      "consumer": "recipient-language variant",
+      "actual": "Saved Spanish translation; source unchanged.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "update",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli update task-3/local/transform-scratch/source task-3/local/transform-scratch/result --direct --replace-stage",
+      "exit": 0,
+      "starting_state": "late-mid accumulated scratch: source 3, criteria 5, result 25 before clear/recovery",
+      "entry_route": "replace-stage source→target",
+      "target_route": "source → result",
+      "scope": "exact local frames",
+      "input_provenance": "restored result + curated source",
+      "consumer": "late synchronization",
+      "actual": "Applied NO CHANGE; receipt 5c0e2d19.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "audit",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli audit task-3/local/transform-scratch/source --against task-3/local/transform-scratch/criteria --snapshot",
+      "exit": 0,
+      "starting_state": "late accumulated scratch after result recovery and semantic dedun; no external transfer",
+      "entry_route": "repeat exact frozen frame at late state",
+      "target_route": "source against criteria",
+      "scope": "exact local frames",
+      "input_provenance": "curated source + atomized criteria",
+      "consumer": "stability/reproduction check",
+      "actual": "Saved session 0c00cf37; no ambiguity/conflict, but 2 conformance issues for purpose/currency.",
+      "defect_ids": [
+        "T3T-AUDIT-CURATION"
+      ],
+      "cost": {
+        "wall_seconds": 24.6,
+        "terminal_screens": 3,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "atomize",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli atomize task-3/local/transform-scratch",
+      "exit": 0,
+      "starting_state": "late accumulated scratch after result recovery and semantic dedun; no external transfer",
+      "entry_route": "positional empty root Context",
+      "target_route": "transform-scratch root",
+      "scope": "exact parent with no direct Memories",
+      "input_provenance": "empty boundary",
+      "consumer": "empty behavior",
+      "actual": "Reported ATOMIZE APPLIED for 0/0 and created receipt a765244d plus checkpoint 7c541d30.",
+      "defect_ids": [
+        "T3T-ATOMIZE-EMPTY"
+      ],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "checkpoint",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli checkpoint task-3/local/transform-scratch/archive \"round-5 clear safety\"",
+      "exit": 0,
+      "starting_state": "late accumulated scratch after result recovery and semantic dedun; no external transfer",
+      "entry_route": "direct Context CLI",
+      "target_route": "archive",
+      "scope": "exact Context",
+      "input_provenance": "three restored fixtures",
+      "consumer": "final clear/revert safety",
+      "actual": "Created checkpoint 9fbd9e78.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "check-conformance",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli check-conformance task-3/local/transform-scratch/source --against \"Do not infer approval or purpose.\"",
+      "exit": 0,
+      "starting_state": "late accumulated scratch after result recovery and semantic dedun; no external transfer",
+      "entry_route": "Context + late inline requirement",
+      "target_route": "source",
+      "scope": "whole source against instruction",
+      "input_provenance": "curated source + direct safety rule",
+      "consumer": "late stability check",
+      "actual": "Reported all 3 insufficient, preserving the missing-approval boundary.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 5.66,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "clear",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli clear task-3/local/transform-scratch/archive",
+      "exit": 0,
+      "starting_state": "late accumulated scratch after result recovery and semantic dedun; no external transfer",
+      "entry_route": "explicit Context CLI",
+      "target_route": "archive",
+      "scope": "exact destructive scratch Context",
+      "input_provenance": "three checkpointed fixtures",
+      "consumer": "final TUI Diff/Revert",
+      "actual": "Cleared 3 Memories.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "delete",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli delete not-present --context task-3/local/transform-scratch/result",
+      "exit": 1,
+      "starting_state": "late accumulated scratch after result recovery and semantic dedun; no external transfer",
+      "entry_route": "explicit missing selector",
+      "target_route": "result:not-present",
+      "scope": "single-item late boundary",
+      "input_provenance": "synthetic absent selector",
+      "consumer": "error stability",
+      "actual": "Failed closed with no mutation.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "diff",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli diff task-3/local/transform-scratch/archive",
+      "exit": 0,
+      "starting_state": "late accumulated scratch after result recovery and semantic dedun; no external transfer",
+      "entry_route": "actual 180x52 truecolor PTY",
+      "target_route": "archive",
+      "scope": "interactive checkpoint/history browser",
+      "input_provenance": "three-item Clear after checkpoint",
+      "consumer": "verify late recovery route",
+      "actual": "Opened color TUI showing 3 removals and 16 history items; Escape closed.",
+      "defect_ids": [
+        "T3T-DIFF-ROUTE"
+      ],
+      "cost": {
+        "pty": "180x52",
+        "color": true,
+        "keys": 1,
+        "terminal_screens": 1,
+        "focus_switches": 0,
+        "extra_manual_steps": 1,
+        "tui": true
+      }
+    },
+    {
+      "operation": "distill",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli distill task-3/local/transform-scratch/source --into task-3/local/transform-scratch/result --goal \"Preserve uncertainty and withhold until purpose and approval are explicit.\" --direct --plain",
+      "exit": 0,
+      "starting_state": "late accumulated scratch after result recovery and semantic dedun; no external transfer",
+      "entry_route": "direct late semantic transform",
+      "target_route": "source → result",
+      "scope": "exact source",
+      "input_provenance": "curated source + stronger safety goal",
+      "consumer": "late guardrail addition",
+      "actual": "Added one uncertainty rule but omitted the withholding requirement.",
+      "defect_ids": [
+        "T3T-DISTILL-GOAL-DRIFT"
+      ],
+      "cost": {
+        "wall_seconds": 11.39,
+        "terminal_screens": 2,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "elaborate",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli elaborate --memory \"Never invent a purpose, approval, diagnosis, or treatment; label examples as unverified.\" --into task-3/local/transform-scratch/result --as rules -n 2 --direct --plain",
+      "exit": 0,
+      "starting_state": "late accumulated scratch after result recovery and semantic dedun; no external transfer",
+      "entry_route": "inline Memory",
+      "target_route": "inline → result",
+      "scope": "single direct input",
+      "input_provenance": "explicit anti-inference rule",
+      "consumer": "safe late examples",
+      "actual": "Added 2 examples explicitly labeled suggested and unverified.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 14.06,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "resolve",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli resolve task-3/local/transform-scratch/result:5e237cbc --guidance \"Remove the unsupported upcoming-visit and seating-purpose assertion everywhere.\" --no-create --plain",
+      "exit": 0,
+      "starting_state": "late accumulated scratch after result recovery and semantic dedun; no external transfer",
+      "entry_route": "exact Memory with whole-result consequence",
+      "target_route": "result:5e237cbc",
+      "scope": "single mutable selector amid related immutable items",
+      "input_provenance": "round-1 unsupported Elaborate output",
+      "consumer": "late correction",
+      "actual": "Returned NEEDS INPUT because only one item was mutable while related conflicting items remained outside scope.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 16.63,
+        "terminal_screens": 3,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "dedup",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedup task-3/local/transform-scratch/result --direct",
+      "exit": 0,
+      "starting_state": "late accumulated scratch after result recovery and semantic dedun; no external transfer",
+      "entry_route": "direct exact-duplicate pass",
+      "target_route": "result",
+      "scope": "exact late Context",
+      "input_provenance": "restored + late derived items",
+      "consumer": "late cleanup",
+      "actual": "No exact duplicates.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "dedun",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedun task-3/local/transform-scratch/result --direct",
+      "exit": 0,
+      "starting_state": "late accumulated scratch after result recovery and semantic dedun; no external transfer",
+      "entry_route": "direct semantic redundancy pass",
+      "target_route": "result",
+      "scope": "exact late Context",
+      "input_provenance": "restored + late derived items",
+      "consumer": "late semantic cleanup",
+      "actual": "Absorbed 7 redundant Memories and kept 3; checkpoint 0ef4115b.",
+      "defect_ids": [
+        "T3T-DEDUN-RECEIPT"
+      ],
+      "cost": {
+        "wall_seconds": 7.78,
+        "terminal_screens": 2,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "forget",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli forget task-3/local/transform-scratch/source \"Remove diagnosis and treatment claims.\" --direct",
+      "exit": 0,
+      "starting_state": "late accumulated scratch after result recovery and semantic dedun; no external transfer",
+      "entry_route": "whole-frame destructive transform",
+      "target_route": "source",
+      "scope": "exact scratch source",
+      "input_provenance": "curated source + absent clinical claims",
+      "consumer": "late safe no-op",
+      "actual": "No change.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "ground",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli ground task3-healthcare-transform --add-rule \"Require explicit approval before any external disclosure.\" --if-revision 0 --snapshot",
+      "exit": 1,
+      "starting_state": "late accumulated scratch after result recovery and semantic dedun; no external transfer",
+      "entry_route": "named Ground revision edit",
+      "target_route": "task3-healthcare-transform",
+      "scope": "explicit revision CAS",
+      "input_provenance": "round-3 created revision-0 Ground",
+      "consumer": "stale-safe rule update",
+      "actual": "Said to create the Ground workspace before applying a local edit, despite earlier successful named creation/snapshot.",
+      "defect_ids": [
+        "T3T-GROUND-STATE"
+      ],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "impact",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli impact update --session 5c0e2d19",
+      "exit": 0,
+      "starting_state": "late accumulated scratch after result recovery and semantic dedun; no external transfer",
+      "entry_route": "saved-session impact",
+      "target_route": "Update receipt 5c0e2d19",
+      "scope": "frozen applied analysis",
+      "input_provenance": "round-4 Update output",
+      "consumer": "late audit of applied no-op",
+      "actual": "Found the applied Update and showed 0 changes, contrasting Review artifact failure.",
+      "defect_ids": [
+        "T3T-REVIEW-ARTIFACT"
+      ],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "meld",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli meld --memory \"Do not treat relevance or apparent usefulness as user approval.\" --into task-3/local/transform-scratch/result --direct --restart",
+      "exit": 0,
+      "starting_state": "late accumulated scratch after result recovery and semantic dedun; no external transfer",
+      "entry_route": "inline Memory restart recovery",
+      "target_route": "inline → result",
+      "scope": "single inline source + late target",
+      "input_provenance": "user-authored safety rule + stale Meld state",
+      "consumer": "fresh reviewable proposal",
+      "actual": "Restart succeeded; READY with 0 required/optional judgments; session 8d6c3a67.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 18.47,
+        "terminal_screens": 1,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "merge",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli merge task-3/local/transform-scratch/source task-3/local/transform-scratch/result --direct",
+      "exit": 0,
+      "starting_state": "late accumulated scratch after result recovery and semantic dedun; no external transfer",
+      "entry_route": "structural late source→target",
+      "target_route": "source → result",
+      "scope": "exact local frames",
+      "input_provenance": "curated three-Memory source + post-Dedun result",
+      "consumer": "re-anchor exact source evidence",
+      "actual": "Recorded NEW 3; target changed; checkpoint created.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "rationale",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli rationale task-3/local/transform-scratch/source:b19c001e --json --limit 120 --unit words",
+      "exit": 0,
+      "starting_state": "late accumulated scratch after result recovery and semantic dedun; no external transfer",
+      "entry_route": "exact Memory bounded JSON",
+      "target_route": "source:b19c001e",
+      "scope": "single Memory",
+      "input_provenance": "recorded copy event",
+      "consumer": "machine-readable late provenance",
+      "actual": "AVAILABLE 45-word projection; inference NOT_REQUESTED; exact recorded event retained.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "revert",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli revert 9fbd9e78 --context task-3/local/transform-scratch/archive --keep",
+      "exit": 0,
+      "starting_state": "late accumulated scratch after result recovery and semantic dedun; no external transfer",
+      "entry_route": "direct checkpoint recovery",
+      "target_route": "archive",
+      "scope": "exact Context checkpoint",
+      "input_provenance": "round-5 clear",
+      "consumer": "restore late fixture",
+      "actual": "Restored all 3 Memories and printed exact recovery checkpoint 188ea277.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "review",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli review atomize --context task-3/local/transform-scratch/criteria --snapshot",
+      "exit": 0,
+      "starting_state": "late accumulated scratch after result recovery and semantic dedun; no external transfer",
+      "entry_route": "operation + exact Context review",
+      "target_route": "criteria Atomize result",
+      "scope": "exact applied analysis",
+      "input_provenance": "round-2 applied Atomize artifact",
+      "consumer": "independent semantic review",
+      "actual": "Displayed applied 4→5 Atomize result, source evidence, split reason, and both children.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "sever",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli sever --resume 6b22ac1f-651c-424e-9432-98f7d56e3e07 --accept",
+      "exit": 0,
+      "starting_state": "late accumulated scratch after result recovery and semantic dedun; no external transfer",
+      "entry_route": "saved-session explicit Apply",
+      "target_route": "Sever session 6b22ac1f",
+      "scope": "frozen whole frame; create-new result",
+      "input_provenance": "round-4 READY analysis",
+      "consumer": "materialize locally, never share externally",
+      "actual": "Applied locally to new sever-r4 with KEEP 0 / FORGET 3; source unchanged; empty result is fail-closed.",
+      "defect_ids": [
+        "T3T-SEVER-CLASSIFICATION"
+      ],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "trace",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli trace task-3/local/transform-scratch/criteria:38f5e487 --json --limit 1",
+      "exit": 0,
+      "starting_state": "late accumulated scratch after result recovery and semantic dedun; no external transfer",
+      "entry_route": "exact Memory minimal-limit JSON",
+      "target_route": "criteria:38f5e487",
+      "scope": "single component requested",
+      "input_provenance": "recorded add + Atomize split",
+      "consumer": "machine-readable lineage",
+      "actual": "Returned the complete component, two events, analyses and child spans in 1737 tokens despite limit 1.",
+      "defect_ids": [
+        "T3T-TRACE-LIMIT"
+      ],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "translate",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli translate task-3/local/transform-scratch/source:b19c001e --to \"plain-language English\"",
+      "exit": 0,
+      "starting_state": "late accumulated scratch after result recovery and semantic dedun; no external transfer",
+      "entry_route": "exact Memory saved-view route",
+      "target_route": "source:b19c001e",
+      "scope": "single Memory",
+      "input_provenance": "round-1 saved translation",
+      "consumer": "cache reuse verification",
+      "actual": "Reused saved translation without provider call; source unchanged.",
+      "defect_ids": [],
+      "cost": {
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "update",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli update task-3/local/transform-scratch/criteria task-3/local/transform-scratch/result --direct --replace-stage",
+      "exit": 0,
+      "starting_state": "late accumulated scratch after result recovery and semantic dedun; no external transfer",
+      "entry_route": "late replace-stage source→target",
+      "target_route": "criteria → result",
+      "scope": "exact local frames",
+      "input_provenance": "atomized criteria + post-Merge result",
+      "consumer": "final synchronization",
+      "actual": "Applied NO CHANGE; receipt 3a8bd102.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 4.47,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    }
+  ]
+}

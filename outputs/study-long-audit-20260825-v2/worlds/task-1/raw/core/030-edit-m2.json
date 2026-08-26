@@ -1,0 +1,11 @@
+{
+  "sequence": 30,
+  "operation": "edit",
+  "attempt": 2,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 edit 86484518 'CONSTRUCTION UPDATE \u2014 June 24\u2013August 23: Main Building event venues accept no new reservations, and viewing in the tenth-floor exhibition/event hall is suspended. Use the detached east-building auditorium or the Engineering Building third-floor multipurpose room as designated alternatives. Relocated equipment uses the auditorium\u2019s separate loading entrance. The event guidance agent may compare only designated alternatives and provide their reservation channels; it cannot create or restore reservations.' --context task-1/campus-wiki/event-relocations",
+  "exit": 0,
+  "wall_seconds": 1.315859,
+  "pre_target_digest": "552552c94a0b78f062f9f3aead680cac05ff78ea1e3fe4b3da8011fe450b3079",
+  "post_target_digest": "809fce7d2e22f7aed9c2fdc1b594c0f3331344cf3af27209b25224c103a64c7c",
+  "raw_output": "raw/core/030-edit-m2.txt"
+}

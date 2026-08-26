@@ -1,0 +1,44 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 find-conflicts task-1/campus-wiki/event-relocations
+
+EXIT
+0
+
+WALL_SECONDS
+11.656621
+
+STDOUT
+Find Conflicts · task-1/campus-wiki/event-relocations · 6/51 direct memories involved · 5/1275 pairs flagged
+
+  POSSIBLE CONFLICT 1/5
+  [a0700edb] The meeting space on the first floor of the Main Building can be reserved for external events.
+  [86484518] CONSTRUCTION UPDATE — June 24–August 23: Main Building event venues accept no new reservations, and viewing in the tenth-floor exhibition/event hall is suspended. Use the detached east-building auditorium or the Engineering Building third-floor multipurpose room as designated alternatives. Relocated equipment uses the auditorium’s separate loading entrance. The event guidance agent may compare only designated alternatives and provide their reservation channels; it cannot create or restore reservations.
+  Reason: The first-floor meeting space is generally reservable for external events, but the construction update bars new reservations at Main Building event venues from June 24 through August 23. The claims conflict if the general statement is meant to cover that period, but are jointly explainable if it describes availability outside the temporary closure.
+  Question: Does the first-floor space remain reservable from June 24 through August 23?
+
+  POSSIBLE CONFLICT 2/5
+  [63986020] The meeting space on the first floor of the Main Building can be reserved for campus meetings.
+  [86484518] CONSTRUCTION UPDATE — June 24–August 23: Main Building event venues accept no new reservations, and viewing in the tenth-floor exhibition/event hall is suspended. Use the detached east-building auditorium or the Engineering Building third-floor multipurpose room as designated alternatives. Relocated equipment uses the auditorium’s separate loading entrance. The event guidance agent may compare only designated alternatives and provide their reservation channels; it cannot create or restore reservations.
+  Reason: The first-floor meeting space is generally reservable for campus meetings, but the construction update bars new reservations at Main Building event venues from June 24 through August 23. The claims conflict if the general statement is meant to cover that period, but are jointly explainable if it describes availability outside the temporary closure.
+  Question: Does the first-floor space remain reservable from June 24 through August 23?
+
+  CONFLICT 3/5
+  [a2ec4e87] The exhibition and event hall on the tenth floor of the Main Building remains open for exhibition viewing during recess.
+  [86484518] CONSTRUCTION UPDATE — June 24–August 23: Main Building event venues accept no new reservations, and viewing in the tenth-floor exhibition/event hall is suspended. Use the detached east-building auditorium or the Engineering Building third-floor multipurpose room as designated alternatives. Relocated equipment uses the auditorium’s separate loading entrance. The event guidance agent may compare only designated alternatives and provide their reservation channels; it cannot create or restore reservations.
+  Reason: The hall is said to remain open for exhibition viewing during recess, while the construction update expressly suspends viewing there from June 24 through August 23; for the overlapping recess period, both cannot apply.
+  Question: Is tenth-floor exhibition viewing open from June 24 through August 23?
+
+  POSSIBLE CONFLICT 4/5
+  [11e4782c] The exhibition and event hall on the tenth floor of the Main Building continues to host reserved events during recess.
+  [86484518] CONSTRUCTION UPDATE — June 24–August 23: Main Building event venues accept no new reservations, and viewing in the tenth-floor exhibition/event hall is suspended. Use the detached east-building auditorium or the Engineering Building third-floor multipurpose room as designated alternatives. Relocated equipment uses the auditorium’s separate loading entrance. The event guidance agent may compare only designated alternatives and provide their reservation channels; it cannot create or restore reservations.
+  Reason: The hall is generally said to continue hosting already reserved events during recess, while the update says Main Building venues accept no new reservations during the construction period. These conflict if “continues to host reserved events” includes events newly reserved during that period, but remain jointly explainable if existing reservations are honored while only new reservations are barred.
+  Question: Are previously approved tenth-floor events still hosted from June 24 through August 23?
+
+  POSSIBLE CONFLICT 5/5
+  [ed4e7c60] The event information agent can compare published event spaces.
+  [86484518] CONSTRUCTION UPDATE — June 24–August 23: Main Building event venues accept no new reservations, and viewing in the tenth-floor exhibition/event hall is suspended. Use the detached east-building auditorium or the Engineering Building third-floor multipurpose room as designated alternatives. Relocated equipment uses the auditorium’s separate loading entrance. The event guidance agent may compare only designated alternatives and provide their reservation channels; it cannot create or restore reservations.
+  Reason: The agent may generally compare published event spaces, whereas the construction update permits comparison only of designated alternatives. The claims conflict if the general authority still applies during the update, but are jointly explainable if the restriction is temporary and the broader authority applies outside June 24–August 23.
+  Question: During June 24–August 23, may the agent compare spaces other than the designated alternatives?
+
+
+STDERR

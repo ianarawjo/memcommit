@@ -1,0 +1,209 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple impact update practice/source practice --direct
+
+EXIT
+0
+
+OUTPUT
+ Impact: practice/source -> practice
+ SOURCE practice/source → TARGET practice
+ IMPACT · 0 EDITS · 11 ADDITIONS · 0 REMOVALS · 11 CHANGES
+
+ PLAN
+ Mem matched the verified Source against the Target and planned only the exact target Memory changes shown below. Nothing has been applied.
+
+ PLANNED CHANGES
+ ›  1. [CHANGE] practice Memory [12bbbbe0-598a-48d5-a990-e8549a5be7b1]
+       ADD · PLANNED · Adds a missing review preference to the supplied target Context.
+    2. [CHANGE] practice Memory [43b7a14b-ec26-4294-9b90-60b533aabd66]
+       ADD · PLANNED · Adds a missing polishing preference.
+    3. [CHANGE] practice Memory [cf4b3396-7017-48d5-abe4-5ca2d37d3182]
+       ADD · PLANNED · Adds a missing minimal-edit and terminology preference.
+    4. [CHANGE] practice Memory [a239c1f9-001a-46d6-8cf4-d7a81c7ddff7]
+       ADD · PLANNED · Adds a missing content-preservation preference.
+    5. [CHANGE] practice Memory [0fd563c9-d703-4160-a47c-8b156f494247]
+       ADD · PLANNED · Consolidates related, missing guidance about shortening drafts.
+    6. [CHANGE] practice Memory [5c6e7bca-0e5e-42cb-b5bd-0abbd5195df8]
+       ADD · PLANNED · Adds a missing connector preference.
+    7. [CHANGE] practice Memory [ec4c57fc-da86-4149-824d-146edf2b41d4]
+       ADD · PLANNED · Adds a missing title-terminology preference.
+    8. [CHANGE] practice Memory [4d31ae79-1969-4fe2-b071-a7f8ea4b016f]
+       ADD · PLANNED · Adds a missing title-capitalization preference.
+    9. [CHANGE] practice Memory [bf48eff0-d9ff-4023-b883-88c1c84c8a38]
+       ADD · PLANNED · Adds a missing work-title formatting preference.
+   10. [CHANGE] practice Memory [cf2d9cb5-7a7d-4a53-a2e4-05ad53b4f0ea]
+       ADD · PLANNED · Consolidates related, missing source-verification requirements.
+   11. [CHANGE] practice Memory [751250fd-a275-4bae-b0c1-a027212feb98]
+       ADD · PLANNED · Adds the explicit canonical mapping to its named target Context while preserving its unresolved-alt…
+
+ APPLICATION
+  (none)
+
+SUMMARY · 0 edits, 11 additions, 0 removals
+SCOPE · SOURCE SELECTED GRAPH ONLY · TARGET SELECTED GRAPH ONLY
+
+EXACT PLANNED CHANGE DETAILS
+
+ADD practice Memory [12bbbbe0-598a-48d5-a990-e8549a5be7b1]
+  OWNER
+    Context practice [824acb9d-695c-5d55-9997-64cc317a2203]
+  MEMORY UID
+    12bbbbe0-598a-48d5-a990-e8549a5be7b1
+  AFTER
+    When asked “How does this read?”, provide an opinion first rather than immediately editing; begin by checking sentence order and paragraph division.
+  REASON
+    Adds a missing review preference to the supplied target Context.
+  SOURCE REFERENCES
+    1. Context practice/source [7e48e68e-3c6f-541b-bfc1-e307abcc7a4f]
+    Memory [f3ef224d-ff16-5a7a-880a-18eee2fc55b5]
+    Content SHA-256: f42180ac2731580b133c60a28178c7484694134af9cd87795b387dcea63545af
+
+ADD practice Memory [43b7a14b-ec26-4294-9b90-60b533aabd66]
+  OWNER
+    Context practice [824acb9d-695c-5d55-9997-64cc317a2203]
+  MEMORY UID
+    43b7a14b-ec26-4294-9b90-60b533aabd66
+  AFTER
+    If later asked to polish a draft, preserve its overall structure and citation-needed markers, changing only wording that causes a problem.
+  REASON
+    Adds a missing polishing preference.
+  SOURCE REFERENCES
+    1. Context practice/source [7e48e68e-3c6f-541b-bfc1-e307abcc7a4f]
+    Memory [e50c293a-2416-50c8-b35c-45b53ff58db5]
+    Content SHA-256: 54a5172e2681d9166f312bdd9994b8f0cd8598fc96ccf6f5ab897555765d17bd
+
+ADD practice Memory [cf4b3396-7017-48d5-abe4-5ca2d37d3182]
+  OWNER
+    Context practice [824acb9d-695c-5d55-9997-64cc317a2203]
+  MEMORY UID
+    cf4b3396-7017-48d5-abe4-5ca2d37d3182
+  AFTER
+    When asked to change one expression, leave almost everything else unchanged, including selected technical or project-specific terminology; for example, use “distribute,” not “divide,” when material is absorbed into two parts.
+  REASON
+    Adds a missing minimal-edit and terminology preference.
+  SOURCE REFERENCES
+    1. Context practice/source [7e48e68e-3c6f-541b-bfc1-e307abcc7a4f]
+    Memory [39b21971-6ad4-561f-830e-99377eeeab09]
+    Content SHA-256: 3b06352e813df2d425403e64233352927276146f1e3f1d1d49e763068aae7ce1
+
+ADD practice Memory [a239c1f9-001a-46d6-8cf4-d7a81c7ddff7]
+  OWNER
+    Context practice [824acb9d-695c-5d55-9997-64cc317a2203]
+  MEMORY UID
+    a239c1f9-001a-46d6-8cf4-d7a81c7ddff7
+  AFTER
+    If a passage must make four points, retain all four while removing redundancy and stating repeated content only once.
+  REASON
+    Adds a missing content-preservation preference.
+  SOURCE REFERENCES
+    1. Context practice/source [7e48e68e-3c6f-541b-bfc1-e307abcc7a4f]
+    Memory [6fad23ab-406e-5298-98e5-0bf00b224b21]
+    Content SHA-256: 190a7a74a898a6ee302d338ee060ec28cadc6031d96795e0dacfd708d3f4118f
+
+ADD practice Memory [0fd563c9-d703-4160-a47c-8b156f494247]
+  OWNER
+    Context practice [824acb9d-695c-5d55-9997-64cc317a2203]
+  MEMORY UID
+    0fd563c9-d703-4160-a47c-8b156f494247
+  AFTER
+    When fitting a draft to a shorter fixed limit, aim to cut about 20–30% from redundant or unnecessary material, but preserve the original strength and conditions of claims rather than making them sound more categorical.
+  REASON
+    Consolidates related, missing guidance about shortening drafts.
+  SOURCE REFERENCES
+    1. Context practice/source [7e48e68e-3c6f-541b-bfc1-e307abcc7a4f]
+    Memory [6cc4b8a3-eaff-5805-8d37-83dd4bf8872c]
+    Content SHA-256: afcff3a8b9e3e739bd5e9c8c68934319fecda63110fb3b50f7f48c4c7658e659
+    
+    2. Context practice/source [7e48e68e-3c6f-541b-bfc1-e307abcc7a4f]
+    Memory [7ebe67fb-e08d-50b1-8c3b-af25d70462eb]
+    Content SHA-256: a7e35d0324a1884ebd711c71d3df51189dad9b268c8415e491c80b3401c72506
+
+ADD practice Memory [5c6e7bca-0e5e-42cb-b5bd-0abbd5195df8]
+  OWNER
+    Context practice [824acb9d-695c-5d55-9997-64cc317a2203]
+  MEMORY UID
+    5c6e7bca-0e5e-42cb-b5bd-0abbd5195df8
+  AFTER
+    If the next idea is merely related and does not broaden the scope, avoid “More broadly”; use “In relation to this” or another accurate connector without adding a new claim solely to connect paragraphs.
+  REASON
+    Adds a missing connector preference.
+  SOURCE REFERENCES
+    1. Context practice/source [7e48e68e-3c6f-541b-bfc1-e307abcc7a4f]
+    Memory [b976766e-d366-5065-929e-5f31e638fdbe]
+    Content SHA-256: a42e4c115f46fe487863131816c163d66cf8586d523d962dc71d36f0fdd21845
+
+ADD practice Memory [ec4c57fc-da86-4149-824d-146edf2b41d4]
+  OWNER
+    Context practice [824acb9d-695c-5d55-9997-64cc317a2203]
+  MEMORY UID
+    ec4c57fc-da86-4149-824d-146edf2b41d4
+  AFTER
+    For titles about interaction with AI agent memory, preserve the intended terminology: use “interaction,” “management,” and “AI agent memory” rather than “agent memory.”
+  REASON
+    Adds a missing title-terminology preference.
+  SOURCE REFERENCES
+    1. Context practice/source [7e48e68e-3c6f-541b-bfc1-e307abcc7a4f]
+    Memory [44de7eff-4117-549c-a78e-f2cd3ab50133]
+    Content SHA-256: b97e515137968b7a8af5f21841a892ab34d5ac4a8b29595bf208d0910369682a
+
+ADD practice Memory [4d31ae79-1969-4fe2-b071-a7f8ea4b016f]
+  OWNER
+    Context practice [824acb9d-695c-5d55-9997-64cc317a2203]
+  MEMORY UID
+    4d31ae79-1969-4fe2-b071-a7f8ea4b016f
+  AFTER
+    By default, format document titles in sentence case rather than title case. An explicitly named style guide may override only that capitalization default; always retain “for” when it is part of the intended wording.
+  REASON
+    Adds a missing title-capitalization preference.
+  SOURCE REFERENCES
+    1. Context practice/source [7e48e68e-3c6f-541b-bfc1-e307abcc7a4f]
+    Memory [1a9d3a74-12a1-50f1-96d0-bcaa09a65406]
+    Content SHA-256: f91f31415c48d252ad9dfde45c404ea926ea8eae8241762b1471052431ab464c
+
+ADD practice Memory [bf48eff0-d9ff-4023-b883-88c1c84c8a38]
+  OWNER
+    Context practice [824acb9d-695c-5d55-9997-64cc317a2203]
+  MEMORY UID
+    bf48eff0-d9ff-4023-b883-88c1c84c8a38
+  AFTER
+    By default, format titles of works consistently in italics throughout a document rather than mixing quotation marks and italics; an explicitly named style guide may override only this formatting default.
+  REASON
+    Adds a missing work-title formatting preference.
+  SOURCE REFERENCES
+    1. Context practice/source [7e48e68e-3c6f-541b-bfc1-e307abcc7a4f]
+    Memory [94c3ce98-85f3-51e2-a351-8cb92ec040c3]
+    Content SHA-256: f52ad44c87b3dedc2dbb00040864241bd5a9f9df75d2f9012a419fa1218df796
+
+ADD practice Memory [cf2d9cb5-7a7d-4a53-a2e4-05ad53b4f0ea]
+  OWNER
+    Context practice [824acb9d-695c-5d55-9997-64cc317a2203]
+  MEMORY UID
+    cf2d9cb5-7a7d-4a53-a2e4-05ad53b4f0ea
+  AFTER
+    When content appears wrong, consult the complete original paper, book, or guide—not merely an abstract or short snippet—before proposing a correction. Before adding or reusing citations and references, verify that each source exists and supports the exact claim after reviewing the complete source; do not invent quotations or evidence or overstate an author’s contribution or a paper’s status. If only a review was requested, report verification problems before rewriting.
+  REASON
+    Consolidates related, missing source-verification requirements.
+  SOURCE REFERENCES
+    1. Context practice/source [7e48e68e-3c6f-541b-bfc1-e307abcc7a4f]
+    Memory [96300a95-2cb2-5644-bae6-f53d7b31a725]
+    Content SHA-256: 795b352f611ff2218d2c939ad0a7472d11010900eff92ef8f3d03d7255e1a2c6
+    
+    2. Context practice/source [7e48e68e-3c6f-541b-bfc1-e307abcc7a4f]
+    Memory [4fe217eb-2b65-5fb0-92ff-733ced1e9270]
+    Content SHA-256: b1b2b135a59948222a40f7b3e233dac4931958b0341fe3c9cbc228d53f44d347
+
+ADD practice Memory [751250fd-a275-4bae-b0c1-a027212feb98]
+  OWNER
+    Context practice [824acb9d-695c-5d55-9997-64cc317a2203]
+  MEMORY UID
+    751250fd-a275-4bae-b0c1-a027212feb98
+  AFTER
+    Canonical set: a is apple; b is banana; c is cedar; unresolved alternatives remain explicit.
+  REASON
+    Adds the explicit canonical mapping to its named target Context while preserving its unresolved-alternatives qualification.
+  SOURCE REFERENCES
+    1. Context practice [824acb9d-695c-5d55-9997-64cc317a2203]
+    Memory [b5180f53-fbee-483a-afd3-72a1433f34e9]
+    Content SHA-256: 297d35c874264eed8c7de27c4e95dc01caac0310ad5dcea59a61a8a09f8181e9
+
+No changes applied.

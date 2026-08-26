@@ -1,0 +1,4 @@
+Added 2 Memories to 'task-2/participant'.
+  [fac90a77] Base ticker rule: remove a terminal legal suffix such as Inc., Corp., Ltd., or LLC before constructing the ticker. Preserve the remaining alphanumeric characters.
+  [9f473e8e] Base ticker rule: uppercase the remaining company-name letters in their original order. Do not invent letters.
+Checkpoint [6f95f0f9].

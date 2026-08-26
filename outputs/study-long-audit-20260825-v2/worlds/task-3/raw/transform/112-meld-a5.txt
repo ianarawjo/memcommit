@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 meld task-3/local/guardrails/approval-and-delivery task-3/local/guardrails/audit-and-recovery --to task-3/local/transform-meld-r5 --direct
+
+EXIT
+0
+
+OUTPUT
+MELD NEEDS INPUT · SYMMETRIC · task-3/local/transform-meld-r5
+ROUTE · task-3/local/guardrails/approval-and-delivery + task-3/local/guardrails/audit-and-recovery → task-3/local/transform-meld-r5
+JUDGMENTS · REQUIRED 0 · OPTIONAL 3
+SESSION · 3d66f1b3-d0ba-450a-9c88-9231c4d97921
+SOURCE · UNCHANGED
+IMPACT · mem impact meld --session 3d66f1b3-d0ba-450a-9c88-9231c4d97921
+RESUME · mem meld --sessions

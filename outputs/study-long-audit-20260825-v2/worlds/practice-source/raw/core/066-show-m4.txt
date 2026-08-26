@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source show practice:7a909bed
+
+EXIT
+0
+
+WALL_SECONDS
+1.427098
+
+STDOUT
+[Memory practice:7a909bed-7295-4a36-b53e-84edc69744ec] Preserve all intended points plus every claim's original strength and conditions.
+
+
+STDERR

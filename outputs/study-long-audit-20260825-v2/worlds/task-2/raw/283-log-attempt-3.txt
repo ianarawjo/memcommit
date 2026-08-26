@@ -1,0 +1,9 @@
+TRACE · task-2/participant/admin-v2-scratch
+[MEMORY 807a906c] · 1 OPERATION · LATEST FIRST
+
+[import] [CHECKPOINT 18f767ca] [MEMORY 807a906c]  2026-08-25 14:15 · Imported Memory [807a906c] from Profile 'task-2' Context 'advisor1/style'.
+  − ∅
+  + [807a906c]@1 Write design decisions chosen by the research team and user study actions in the first-person active voice.
+
+ATTACHMENTS
+  none

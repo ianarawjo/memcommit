@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 translate task-3/local/guardrails/approval-and-delivery:96442184 --to German --refresh
+
+EXIT
+0
+
+OUTPUT
+
+Translation view: 'task-3/local/guardrails/approval-and-delivery' → German
+  1 translated Memory
+────────────────────────────────────────────────────────────────
+[96442184] German · PROVIDER · UNREVIEWED
+  Zeige dem Benutzer vor der Übermittlung den tatsächlichen Empfänger.
+────────────────────────────────────────────────────────────────
+Saved translation view.
+No Context or Memory changes; source Memory UIDs remain the anchors.

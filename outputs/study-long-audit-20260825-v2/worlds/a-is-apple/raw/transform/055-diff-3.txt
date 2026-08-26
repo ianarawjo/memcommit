@@ -1,0 +1,56 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple diff 06305367 --context practice/source --verbose
+
+EXIT
+0
+
+OUTPUT
+UNIT        CHECKPOINT · THIS CHECKPOINT VS PREVIOUS
+CONTEXT     practice/source
+ CHECKPOINT  06305367-a822-4295-a871-99dd7d28efae
+ ACTION      checkpoint
+ DESCRIPTION a-is-apple transform round 3 recovery before destructive scratch trials
+
+ REVISION DIFF · RESULT 19 DIRECT ITEMS
+ SUMMARY · 0 kept · 19 added · 0 edited · 21 removed
+
+ - [REMOVE] [a73a7425-4bb7-4db4-9f9f-a78b7481377b] Use the preferred alphabet mappings: a maps to apple, b maps to banana, and c maps to cedar.
+ - [REMOVE] [8f782fc2-72f7-4e2e-8d60-ec60c4523eb4] a is apple.
+ - [REMOVE] [4ef299d4-770e-4d4d-a537-49c4a042b153] a maps to apple;
+ - [REMOVE] [c33d4fb9-6517-4400-bb70-df27334005ba] this edited duplicate retains the original
+ - [REMOVE] [e1226f43-3732-4d0a-aaac-9865fdceced8] assertion.
+ - [REMOVE] [3d6c9417-7086-4043-9407-46f535230e6c] {"content":"a is apple.","content_sha256":"47398c1717bfd3f093b0ebc34169259e40f4838a252d8c001b0084e054d1f881","target_context":{"name":"practice","uid":"824acb9d-695c-5d55-9997-64cc317a2203"},"target_memory_uid":"f1c940a1-e572-4070-94a7-be4722fdbf2b","type":"memory_snapshot_ref","uid":"3d6c9417-7086-4043-9407-46f535230e6c"}
+ - [REMOVE] [b6e1778f-482b-49b4-94fc-5055a94fb0ff] {"content":"b is banana.","content_sha256":"485ce501c9dc4e9e891198f6943dbd683142867b0806b66b147c8fed3d82c6ea","target_context":{"name":"practice/source","uid":"7e48e68e-3c6f-541b-bfc1-e307abcc7a4f"},"target_memory_uid":"4a8036d1-67a5-497a-b287-98d1302d4619","type":"memory_snapshot_ref","uid":"b6e1778f-482b-49b4-94fc-5055a94fb0ff"}
+ - [REMOVE] [7e48e68e-3c6f-541b-bfc1-e307abcc7a4f] {"name":"practice/source","type":"context_ref","uid":"7e48e68e-3c6f-541b-bfc1-e307abcc7a4f"}
+ - [REMOVE] [db08be52-37ff-4bc8-882d-8e73630c89b1] a maps to apple;
+ - [REMOVE] [8e030925-0e51-458d-bc3c-7085ea9dac41] copied from the original direct Memory for
+ - [REMOVE] [7eae025d-a7b3-45e6-8f16-e7acab07a0cd] provenance.
+ - [REMOVE] [94b522dc-e113-4dd0-b826-04ff3415040f] {"content":"b is boat.","content_sha256":"cd96b211546ad1a7273e041b12cd3fa7fb4369a245673a965324741f0af9d3dd","target_context":{"name":"practice/source","uid":"7e48e68e-3c6f-541b-bfc1-e307abcc7a4f"},"target_memory_uid":"c1cf9a92-dbf1-41f4-a0e4-8e2a3e701b3f","type":"memory_snapshot_ref","uid":"94b522dc-e113-4dd0-b826-04ff3415040f"}
+ - [REMOVE] [976fa18c-5ee6-4131-b9e4-f73b385edc10] {"content":"a is apple.","content_sha256":"47398c1717bfd3f093b0ebc34169259e40f4838a252d8c001b0084e054d1f881","target_context":{"name":"practice/source","uid":"7e48e68e-3c6f-541b-bfc1-e307abcc7a4f"},"target_memory_uid":"dfc0640c-49d4-4ccf-8497-bf296599cb91","type":"memory_snapshot_ref","uid":"976fa18c-5ee6-4131-b9e4-f73b385edc10"}
+ - [REMOVE] [d5d0a8b4-d425-5c9f-9325-56329df711ef] {"name":"practice/description","type":"context_ref","uid":"d5d0a8b4-d425-5c9f-9325-56329df711ef"}
+ - [REMOVE] [6260c4d1-d7ee-4455-9683-ae28ecd86d3a] a maps to apricot;
+ - [REMOVE] [53c7f793-24da-4a36-884b-cb7003cbdc5a] this is a deliberate conflicting
+ - [REMOVE] [44700125-16eb-4aef-8bcd-12d9d3dfe66c] alternative for recovery testing.
+ - [REMOVE] [1af14da6-9134-40aa-b7a7-012294ab7f6e] Preferred set: a is apple; b is banana; c is cedar; unresolved alternatives remain explicit.
+ - [REMOVE] [bc74b7fc-8bb4-46d1-92a1-e4826b046263] Preferred set: a is apple; b is banana;
+ - [REMOVE] [b6199309-7146-4ece-bcc9-c51dd8ab13a2] c is cedar;
+ - [REMOVE] [650c8d5f-ec0e-4861-8314-f1eb4ee6d22a] unresolved alternatives remain explicit.
+ + [ADD]    [f3ef224d-ff16-5a7a-880a-18eee2fc55b5] When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.
+ + [ADD]    [e50c293a-2416-50c8-b35c-45b53ff58db5] If I later ask for polishing, preserve the overall strucutre and citation-needed markers, and change only wording that causes a problem.
+ + [ADD]    [39b21971-6ad4-561f-830e-99377eeeab09] When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um... for example, use distribute, not divide, when material is absorbed into two parts.
+ + [ADD]    [6fad23ab-406e-5298-98e5-0bf00b224b21] If a passage is supposed to make four points, keep all four while removing parts that are too redundent and stating repeated content only once.
+ + [ADD]    [6cc4b8a3-eaff-5805-8d37-83dd4bf8872c] When the draft has to fit a shorter fixed limit, aim to cut around 20–30% from redundant or unnecessary material.
+ + [ADD]    [7ebe67fb-e08d-50b1-8c3b-af25d70462eb] But don't shorten sentences so aggressively that a claim sounds more categorical; keep enough wording to preserve its original strength and conditions.
+ + [ADD]    [b976766e-d366-5065-929e-5f31e638fdbe] If the next idea is merely related and does not broaden the scope, don't use More broadly; use In relation to this or another accurate connector without adding a new claim merely to make two paragraphs connect.
+ + [ADD]    [44de7eff-4117-549c-a78e-f2cd3ab50133] For any titlle about interaction with AI agent memory, keep the exact terminology and intended words: use interaction and management and AI agent memory rather than agent memory.
+ + [ADD]    [1a9d3a74-12a1-50f1-96d0-bcaa09a65406] By default, format a document title in sentence case rather than title case. An explicitly named style guide may override only that capitalization default; always keep for whenever it is part of the intended wording.
+ + [ADD]    [94c3ce98-85f3-51e2-a351-8cb92ec040c3] If titles of works use quotation marks in some places and italics in others, make them consistently italic throughout the document by default; an explicitly named style guide may override only this work-title format.
+ + [ADD]    [96300a95-2cb2-5644-bae6-f53d7b31a725] When I say that content looks wrong, find accurate information before proposing a correction by reading the original paper, book, or guide, not only an abstract or a short snippet.
+ + [ADD]    [4fe217eb-2b65-5fb0-92ff-733ced1e9270] Before adding or reusing citations and refferences, verify that each source exists and supports the exact claim after reviewing the complete source. Don't invent quotations or evidence or overstate an author's contribution or a paper's status. If I asked only for review, report a verification problem first instead of silently rewriting the draft.
+ + [ADD]    [4a8036d1-67a5-497a-b287-98d1302d4619] b is banana.
+ + [ADD]    [c1cf9a92-dbf1-41f4-a0e4-8e2a3e701b3f] b is blueberry.
+ + [ADD]    [be4139d0-97c4-4baa-a90f-b35120bcd188] b is banana;
+ + [ADD]    [7ab9caeb-ce39-4b2b-bf3e-2ebe3665e5c7] this copied mapping is provisional while
+ + [ADD]    [1f9dc37a-578a-4502-ad6a-3e66d79d04f0] blueberry remains visible.
+ + [ADD]    [584c69df-42df-4a4a-8cf1-8c5ec4453d69] b is blueberry.
+ + [ADD]    [3e9ffb8f-a60c-43ca-8018-12e09a8fe571] {"content":"Canonical set: a is apple; b is banana; c is cedar; unresolved alternatives remain explicit.","content_sha256":"297d35c874264eed8c7de27c4e95dc01caac0310ad5dcea59a61a8a09f8181e9","target_context":{"name":"practice","uid":"824acb9d-695c-5d55-9997-64cc317a2203"},"target_memory_uid":"b5180f53-fbee-483a-afd3-72a1433f34e9","type":"memory_snapshot_ref","uid":"3e9ffb8f-a60c-43ca-8018-12e09a8fe571"}

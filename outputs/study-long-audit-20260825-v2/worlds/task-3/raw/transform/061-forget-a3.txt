@@ -1,0 +1,21 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 forget 'Remove only personal statements that are stale, third-party, or unsupported as current; preserve explicit uncertainty.' --context task-3/local/guardrails/audit-and-recovery
+
+EXIT
+0
+
+OUTPUT
+Consulting the configured Forget provider...
+FORGET APPLIED · SOURCE task-3/local/guardrails/audit-and-recovery
+FORGET · Remove only personal statements that are stale, third-party, or unsupported as current; preserve explicit uncertainty.
+DIFF · 6 CHANGES
+- [f7e4bea5] The instructions for one medication the user takes say to take it after the evening meal.
+- [6ea7bcc1] Candidate INCLUDE (DRAFT ONLY): the user stood for 20 minutes when no waiting chair was available and experienced back discomfort; verify current accommodation necessity before approval.
+- [9c4287bf] Unapproved, potentially stale candidate: verify current medication instructions and ongoing use from an authoritative current source; medication notes alone cannot establish either.
+- [a4f7cd8f] Unapproved, potentially stale candidate: review whether seating or another accommodation is available when standing could aggravate back discomfort.
+- [63ce433b] Unapproved, potentially stale candidate: review medication timing instructions one line at a time and record them directly in the schedule; lengthy all-at-once explanations risk omission.
+- [74e1b200] Unapproved, potentially stale candidate: for a weekday-afternoon ride from the younger brother, ask about two days in advance; if he drives, a separate route home may be unnecessary.
+RECEIPT · 4e3e79a9-bf92-4e57-a2d7-2d768eafa3f7
+CHECKPOINT · 4e3e79a9-bf92-4e57-a2d7-2d768eafa3f7
+REVIEW · mem review forget --receipt 4e3e79a9-bf92-4e57-a2d7-2d768eafa3f7
+RECOVERY · mem undo

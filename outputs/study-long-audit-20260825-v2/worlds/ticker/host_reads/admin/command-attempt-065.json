@@ -1,0 +1,31 @@
+{
+  "sequence": 65,
+  "count_before": 309,
+  "count_after": 310,
+  "delta": 1,
+  "new_attempt_uids": [
+    "da7afbb6-a68a-4792-a130-d30c556d4f75"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "da7afbb6-a68a-4792-a130-d30c556d4f75",
+      "operation": "branch",
+      "command": "mem branch audit/ticker/admin-v2-scratch --from task-1/participant/construction-updates --direct",
+      "status": "FAILED",
+      "started_at": "2026-08-25T18:16:25.408046+00:00",
+      "completed_at": "2026-08-25T18:16:25.428725+00:00",
+      "elapsed_seconds": 0.020518459001323208,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": {
+        "kind": "Exit",
+        "exit_code": 1
+      }
+    }
+  ]
+}

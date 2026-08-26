@@ -1,0 +1,17 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source compare practice/source practice/description
+
+EXIT
+0
+
+WALL_SECONDS
+8.449009
+
+STDOUT
+Compare · practice/source ↔ practice/description
+
+COMPARISON
+  The frames share the same editing and verification policy, but the compared frame embeds duplicate and atomized instances within a practice exercise that explicitly requires separating constraints without performing edits or changing meaning; the reference frame presents only the consolidated rules.
+
+
+STDERR

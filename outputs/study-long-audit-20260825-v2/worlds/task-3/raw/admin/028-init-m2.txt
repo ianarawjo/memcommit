@@ -1,0 +1,23 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 init task-3/local/admin-v2-scratch/tree/leaf --parents
+
+STDIN
+<none>
+
+EXIT
+0
+
+WALL_SECONDS
+1.196235
+
+POST_CALL_IDENTITY_HOST_ASSERTION
+{"profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-3/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+STDOUT
+Ensured context hierarchy 'task-3/local/admin-v2-scratch/tree/leaf'.
+  Created: task-3/local/admin-v2-scratch/tree, task-3/local/admin-v2-scratch/tree/leaf
+  Reused: task-3, task-3/local, task-3/local/admin-v2-scratch
+  Current: task-3/local/admin-v2-scratch/tree/leaf
+
+
+STDERR

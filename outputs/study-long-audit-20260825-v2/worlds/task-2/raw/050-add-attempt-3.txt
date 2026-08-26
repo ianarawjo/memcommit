@@ -1,0 +1,5 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 add "Budget reconciliation: keep totals and major categories in the main text; place quantities, unit rates, assumptions, and arithmetic in a compact cross-referenced appendix." --context task-2/participant
+EXIT: 0
+DURATION_SECONDS: 1.296
+
+Added [b2e2dea7] Budget reconciliation: keep totals and major categories in the main text; place quantities, unit rates, assumptions, and arithmetic in a compact cross-referenced appendix.

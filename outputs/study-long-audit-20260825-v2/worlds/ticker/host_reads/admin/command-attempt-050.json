@@ -1,0 +1,28 @@
+{
+  "sequence": 50,
+  "count_before": 294,
+  "count_after": 295,
+  "delta": 1,
+  "new_attempt_uids": [
+    "4fc239be-4ffc-4f8e-b511-e95e6c31ecbf"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "4fc239be-4ffc-4f8e-b511-e95e6c31ecbf",
+      "operation": "config",
+      "command": "mem config show",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:15:57.175258+00:00",
+      "completed_at": "2026-08-25T18:15:57.183407+00:00",
+      "elapsed_seconds": 0.00797341699944809,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

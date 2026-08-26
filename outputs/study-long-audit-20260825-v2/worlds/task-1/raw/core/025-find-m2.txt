@@ -1,0 +1,23 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 find 'reservations?|auditorium' --regex --ignore-case --context task-1/participant/construction-updates/event-relocations --context-only
+
+EXIT
+0
+
+WALL_SECONDS
+1.408405
+
+STDOUT
+FIND RESULTS
+PATTERN · reservations?|auditorium · REGEX · IGNORE CASE
+SCOPE · task-1/participant/construction-updates/event-relocations · EXACT · EXCLUDE EMBEDS
+SCANNED 10 · MATCHED 5 · OCCURRENCES 6
+
+1 [1754ab18] Modify campus-wiki/event-relocations: Do not accept new reservations for Main Building event venues during the construction period. [task-1/participant/construction-updates/event-relocations m2]
+2 [686d630d] Add campus-wiki/event-relocations: During the construction period, direct users to the auditorium in the detached east building as an alternative to Main Building event venues. [task-1/participant/construction-updates/event-relocations m3]
+3 [9d4a1560] Add campus-wiki/event-relocations: During the construction period, the auditorium in the detached east building is converted into an alternative event space for Main Building events. [task-1/participant/construction-updates/event-relocations m5]
+4 [eee1213e] Modify campus-wiki/event-relocations: During the construction period, the event guidance agent cannot create or restore reservations for Main Building event venues and may provide only the reservation channel for each alternative space. [task-1/participant/construction-updates/event-relocations m7]
+5 [9ab36f33] Add campus-wiki/event-relocations: During the construction period, the separate loading entrance of the auditorium in the detached east building is converted into the loading point for event equipment relocated from the Main Building. [task-1/participant/construction-updates/event-relocations m9]
+
+
+STDERR

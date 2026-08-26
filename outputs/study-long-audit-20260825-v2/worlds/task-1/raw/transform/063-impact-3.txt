@@ -1,0 +1,12 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 impact audit --session deadbeef
+
+EXIT
+2
+
+OUTPUT
+Usage: run_isolated_mem.py impact [OPTIONS] COMMAND [ARGS]...
+Try 'run_isolated_mem.py impact -h' for help.
+╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ No such command 'audit'.                                                     │
+╰──────────────────────────────────────────────────────────────────────────────╯

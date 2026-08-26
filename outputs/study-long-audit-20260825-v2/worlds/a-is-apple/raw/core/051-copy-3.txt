@@ -1,0 +1,10 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple copy practice/source:4a8036d1 --into practice
+
+EXIT
+0
+
+OUTPUT
+COPIED · 1 Memory → 'practice' · NEW UIDs · after [a33309d8] at the end
+  'practice/source' [4a8036d1] → [5887b475]
+Checkpoint 'practice' [8b8c3e0e].

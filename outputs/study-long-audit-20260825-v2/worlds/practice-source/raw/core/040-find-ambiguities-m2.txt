@@ -1,0 +1,42 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source find-ambiguities practice/source
+
+EXIT
+0
+
+WALL_SECONDS
+14.841915
+
+STDOUT
+Find Ambiguities · practice/source · 4/12 direct memories flagged
+
+  AMBIGUITY 1/4
+  [39b21971] When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um... for example, use distribute, not divide, when material is absorbed into two parts.
+  Reading 1: Use “distribute,” not “divide,” specifically when describing material being absorbed into two parts.
+  Reading 2: Use “distribute,” not “divide,” generally whenever something is allocated or separated into two parts.
+  Reason: The scope of “when material is absorbed into two parts” is not fully clear. The dominant reading limits the terminology preference to that described process, but a broader rule for all two-part allocations remains possible; clarification would make later word substitutions more precise.
+  Question: Should the “distribute, not divide” preference apply only to material being absorbed into two parts, or to any two-part allocation?
+
+  AMBIGUITY 2/4
+  [6cc4b8a3] When the draft has to fit a shorter fixed limit, aim to cut around 20–30% from redundant or unnecessary material.
+  Reading 1: When a shorter fixed limit applies, target a 20–30% reduction in the draft’s total length, mainly by removing redundant or unnecessary material.
+  Reading 2: When a shorter fixed limit applies, remove about 20–30% of the material identified as redundant or unnecessary, rather than 20–30% of the whole draft.
+  Reason: The base of “cut around 20–30% from redundant or unnecessary material” is unclear. The dominant reading treats the percentage as a total-length reduction achieved through those cuts, while it could instead quantify only the removable material; clarification would make the target length more precise.
+  Question: Is the 20–30% reduction measured against the whole draft or only the redundant and unnecessary material?
+
+  AMBIGUITY 3/4
+  [44de7eff] For any titlle about interaction with AI agent memory, keep the exact terminology and intended words: use interaction and management and AI agent memory rather than agent memory.
+  Reading 1: In titles about interaction with AI agent memory, retain all three intended terms: “interaction,” “management,” and “AI agent memory.”
+  Reading 2: In such titles, preserve whichever of “interaction” and “management” was originally intended, and always use “AI agent memory” rather than “agent memory.”
+  Reason: The coordination in “use interaction and management and AI agent memory” is ambiguous about whether every covered title must contain both “interaction” and “management.” The dominant reading requires all three terms, but the preservation-oriented surrounding rules leave the second reading live; clarification would determine which title wording must be retained.
+  Question: Must every covered title include both “interaction” and “management,” as well as “AI agent memory”?
+
+  AMBIGUITY 4/4
+  [1a9d3a74] By default, format a document title in sentence case rather than title case. An explicitly named style guide may override only that capitalization default; always keep for whenever it is part of the intended wording.
+  Reading 1: Always retain the word “for” when it belongs to the intended title wording, even if a named style guide overrides sentence-case capitalization.
+  Reading 2: Always retain the word or phrase represented by “for” whenever it belongs to the intended wording, although the Memory does not identify any broader phrase.
+  Reason: The phrase “always keep for” most ordinarily refers to the literal word “for,” but its unusual wording could be a truncated reference to a longer intended expression. This does not prevent applying the capitalization rule, but clarification would make title-word preservation more precise.
+  Question: Does “always keep for” mean that the literal word “for” must be retained?
+
+
+STDERR

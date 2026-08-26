@@ -1,0 +1,11 @@
+{
+  "sequence": 44,
+  "operation": "list",
+  "attempt": 3,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 list task-1/participant --recursive",
+  "exit": 0,
+  "wall_seconds": 1.558153,
+  "pre_target_digest": "638977e369fec8db48a4138490d7c06aacc1c7ae297df1c6b58a5751679c609d",
+  "post_target_digest": "3b57d93dc70dd3af57ad3680da9fcf4e07f811d7e2d642c1b267fd314c15a850",
+  "raw_output": "raw/core/044-list-m3.txt"
+}

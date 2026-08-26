@@ -1,0 +1,220 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 log --actions --limit 100
+
+STDIN
+<none>
+
+EXIT
+0
+
+WALL_SECONDS
+1.331750
+
+POST_CALL_IDENTITY_HOST_ASSERTION
+{"profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-1/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+STDOUT
+Study actions · recent first
+  [68e74142/3] 2026-08-25 18:25:02 +0.007s  COMMAND_FINISHED
+      status=COMPLETED
+  [68e74142/2] 2026-08-25 18:25:02 +0.000s  COMMAND_ENTERED
+      command=mem unlock --profile
+  [68e74142/1] 2026-08-25 18:25:02 +0.000s  COMMAND_STARTED
+      operation=unlock · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [0806d552/3] 2026-08-25 18:24:56 +0.007s  COMMAND_FINISHED
+      status=COMPLETED
+  [0806d552/2] 2026-08-25 18:24:56 +0.000s  COMMAND_ENTERED
+      command=mem lock --profile
+  [0806d552/1] 2026-08-25 18:24:56 +0.000s  COMMAND_STARTED
+      operation=lock · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [af8cf9de/3] 2026-08-25 18:24:50 +0.001s  COMMAND_FINISHED
+      exit_code=2 · failure_kind=BadParameter · status=FAILED
+  [af8cf9de/2] 2026-08-25 18:24:50 +0.000s  COMMAND_ENTERED
+      command=mem init-study admin-v2-task-1-bad-workers-neg --from-profile study-baseline --prewarm-workers -1
+  [af8cf9de/1] 2026-08-25 18:24:50 +0.000s  COMMAND_STARTED
+      operation=init-study · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [b3b82320/3] 2026-08-25 18:24:45 +0.016s  COMMAND_FINISHED
+      status=COMPLETED
+  [b3b82320/2] 2026-08-25 18:24:45 +0.000s  COMMAND_ENTERED
+      command=mem init task-1/participant/admin-v2-scratch/missing-parent/leaf
+  [b3b82320/1] 2026-08-25 18:24:45 +0.000s  COMMAND_STARTED
+      operation=init · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [cfc11fa6/3] 2026-08-25 18:24:39 +0.012s  COMMAND_FINISHED
+      exit_code=1 · failure_kind=Exit · status=FAILED
+  [cfc11fa6/2] 2026-08-25 18:24:39 +0.000s  COMMAND_ENTERED
+      command=mem import context participant/construction-updates --from-profile admin-v2-missing-source-profile --as task-1/participant/admin-v2-scratch/import-missing --direct
+  [cfc11fa6/1] 2026-08-25 18:24:39 +0.000s  COMMAND_STARTED
+      operation=import · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [f30f5567/4] 2026-08-25 18:24:33 +0.015s  COMMAND_FINISHED
+      exit_code=1 · failure_kind=Exit · status=FAILED
+  [f30f5567/3] 2026-08-25 18:24:33 +0.001s  HELP_LOOKUP_SUBMITTED
+      request=Generate an LLM-based answer from readable Context knowledge or an authorized concealed query-only view.
+  [f30f5567/2] 2026-08-25 18:24:33 +0.000s  COMMAND_ENTERED
+      command=mem help 'Generate an LLM-based answer from readable Context knowledge or an authorized concealed query-only view.'
+  [f30f5567/1] 2026-08-25 18:24:33 +0.000s  COMMAND_STARTED
+      operation=help · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [221e6ba6/3] 2026-08-25 18:24:28 +0.001s  COMMAND_FINISHED
+      status=COMPLETED
+  [221e6ba6/2] 2026-08-25 18:24:28 +0.000s  COMMAND_ENTERED
+      command=mem eval semantic status --ledger-dir /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-1/admin-eval-ledger
+  [221e6ba6/1] 2026-08-25 18:24:28 +0.000s  COMMAND_STARTED
+      operation=eval · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [16a27438/3] 2026-08-25 18:24:22 +0.001s  COMMAND_FINISHED
+      exit_code=2 · failure_kind=MissingParameter · status=FAILED
+  [16a27438/2] 2026-08-25 18:24:22 +0.000s  COMMAND_ENTERED
+      command=mem config set provider
+  [16a27438/1] 2026-08-25 18:24:22 +0.000s  COMMAND_STARTED
+      operation=config · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [b28b647d/3] 2026-08-25 18:24:16 +0.012s  COMMAND_FINISHED
+      exit_code=1 · failure_kind=Exit · status=FAILED
+  [b28b647d/2] 2026-08-25 18:24:16 +0.000s  COMMAND_ENTERED
+      command=mem checkout task-1/participant/admin-v2-missing-checkout
+  [b28b647d/1] 2026-08-25 18:24:16 +0.000s  COMMAND_STARTED
+      operation=checkout · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [cab26b12/3] 2026-08-25 18:24:11 +0.013s  COMMAND_FINISHED
+      exit_code=1 · failure_kind=Exit · status=FAILED
+  [cab26b12/2] 2026-08-25 18:24:11 +0.000s  COMMAND_ENTERED
+      command=mem branch task-1/participant/admin-v2-scratch/b5 --from task-1/participant/admin-v2-missing-branch-source --direct
+  [cab26b12/1] 2026-08-25 18:24:11 +0.000s  COMMAND_STARTED
+      operation=branch · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [0c73e906/3] 2026-08-25 18:24:05 +0.091s  COMMAND_FINISHED
+      status=COMPLETED
+  [0c73e906/2] 2026-08-25 18:24:05 +0.000s  COMMAND_ENTERED
+      command=mem status
+  [0c73e906/1] 2026-08-25 18:24:05 +0.000s  COMMAND_STARTED
+      operation=status · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [e15db21d/3] 2026-08-25 18:24:00 +0.092s  COMMAND_FINISHED
+      status=COMPLETED
+  [e15db21d/2] 2026-08-25 18:23:59 +0.000s  COMMAND_ENTERED
+      command=mem redo
+  [e15db21d/1] 2026-08-25 18:23:59 +0.000s  COMMAND_STARTED
+      operation=redo · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [b25a7216/3] 2026-08-25 18:23:54 +0.092s  COMMAND_FINISHED
+      status=COMPLETED
+  [b25a7216/2] 2026-08-25 18:23:54 +0.000s  COMMAND_ENTERED
+      command=mem undo
+  [b25a7216/1] 2026-08-25 18:23:54 +0.000s  COMMAND_STARTED
+      operation=undo · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [725066f6/3] 2026-08-25 18:23:48 +0.034s  COMMAND_FINISHED
+      status=COMPLETED
+  [725066f6/2] 2026-08-25 18:23:48 +0.001s  COMMAND_ENTERED
+      command=mem unlock task-1/participant/admin-v2-scratch/co4-tree --recursive
+  [725066f6/1] 2026-08-25 18:23:48 +0.000s  COMMAND_STARTED
+      operation=unlock · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [f4dbf3a8/3] 2026-08-25 18:23:42 +0.081s  COMMAND_FINISHED
+      exit_code=1 · failure_kind=Exit · status=FAILED
+  [f4dbf3a8/2] 2026-08-25 18:23:42 +0.000s  COMMAND_ENTERED
+      command=mem undo
+  [f4dbf3a8/1] 2026-08-25 18:23:42 +0.000s  COMMAND_STARTED
+      operation=undo · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [5ff64e26/3] 2026-08-25 18:23:36 +0.263s  COMMAND_FINISHED
+      exit_code=1 · failure_kind=Exit · status=FAILED
+  [5ff64e26/2] 2026-08-25 18:23:36 +0.000s  COMMAND_ENTERED
+      command=mem rename task-1/participant/admin-v2-scratch/co4-tree task-1/participant/admin-v2-scratch/renamed-co4-tree --force
+  [5ff64e26/1] 2026-08-25 18:23:36 +0.000s  COMMAND_STARTED
+      operation=rename · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [4cd41528/3] 2026-08-25 18:23:30 +0.029s  COMMAND_FINISHED
+      status=COMPLETED
+  [4cd41528/2] 2026-08-25 18:23:30 +0.000s  COMMAND_ENTERED
+      command=mem lock task-1/participant/admin-v2-scratch/co4-tree --recursive
+  [4cd41528/1] 2026-08-25 18:23:30 +0.000s  COMMAND_STARTED
+      operation=lock · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [79768cdf/3] 2026-08-25 18:23:24 +0.008s  COMMAND_FINISHED
+      status=COMPLETED
+  [79768cdf/2] 2026-08-25 18:23:24 +0.000s  COMMAND_ENTERED
+      command=mem switch task-1/participant/admin-v2-scratch/co4-tree/description
+  [79768cdf/1] 2026-08-25 18:23:24 +0.000s  COMMAND_STARTED
+      operation=switch · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [a12cc416/3] 2026-08-25 18:23:19 +0.038s  COMMAND_FINISHED
+      status=COMPLETED
+  [a12cc416/2] 2026-08-25 18:23:19 +0.000s  COMMAND_ENTERED
+      command=mem checkout -b task-1/participant/admin-v2-scratch/co4-tree --recursive
+  [a12cc416/1] 2026-08-25 18:23:19 +0.000s  COMMAND_STARTED
+      operation=checkout · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [786884c9/3] 2026-08-25 18:23:13 +0.001s  COMMAND_FINISHED
+      status=COMPLETED
+  [786884c9/2] 2026-08-25 18:23:13 +0.000s  COMMAND_ENTERED
+      command=mem shell-init zsh
+  [786884c9/1] 2026-08-25 18:23:13 +0.000s  COMMAND_STARTED
+      operation=shell-init · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [70bef6ef/3] 2026-08-25 18:23:06 +0.001s  COMMAND_FINISHED
+      exit_code=1 · failure_kind=Exit · status=FAILED
+  [70bef6ef/2] 2026-08-25 18:23:06 +0.000s  COMMAND_ENTERED
+      command=mem share task-1/participant/admin-v2-scratch --direct --recursive
+  [70bef6ef/1] 2026-08-25 18:23:06 +0.000s  COMMAND_STARTED
+      operation=share · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [62c3ed59/3] 2026-08-25 18:23:00 +0.007s  COMMAND_FINISHED
+      status=COMPLETED
+  [62c3ed59/2] 2026-08-25 18:23:00 +0.000s  COMMAND_ENTERED
+      command=mem pwd
+  [62c3ed59/1] 2026-08-25 18:23:00 +0.000s  COMMAND_STARTED
+      operation=pwd · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [6777b046/3] 2026-08-25 18:22:54 +0.007s  COMMAND_FINISHED
+      exit_code=1 · failure_kind=Exit · status=FAILED
+  [6777b046/2] 2026-08-25 18:22:54 +0.000s  COMMAND_ENTERED
+      command=mem provider use codex_chatgpt --operation query
+  [6777b046/1] 2026-08-25 18:22:54 +0.000s  COMMAND_STARTED
+      operation=provider · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [551fd0cd/3] 2026-08-25 18:22:48 +0.048s  COMMAND_FINISHED
+      status=COMPLETED
+  [551fd0cd/2] 2026-08-25 18:22:48 +0.000s  COMMAND_ENTERED
+      command=mem profile use sixworld-v2-template
+  [551fd0cd/1] 2026-08-25 18:22:48 +0.000s  COMMAND_STARTED
+      operation=profile · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [c84da8be/3] 2026-08-25 18:22:43 +0.024s  COMMAND_FINISHED
+      status=COMPLETED
+  [c84da8be/2] 2026-08-25 18:22:43 +0.000s  COMMAND_ENTERED
+      command=mem log --operations --limit 50
+  [c84da8be/1] 2026-08-25 18:22:43 +0.000s  COMMAND_STARTED
+      operation=log · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [e6e6cfc0/3] 2026-08-25 18:22:37 +0.001s  COMMAND_FINISHED
+      exit_code=2 · failure_kind=BadParameter · status=FAILED
+  [e6e6cfc0/2] 2026-08-25 18:22:37 +0.000s  COMMAND_ENTERED
+      command=mem init-study admin-v2-task-1-workers --prewarm-workers 0
+  [e6e6cfc0/1] 2026-08-25 18:22:37 +0.000s  COMMAND_STARTED
+      operation=init-study · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [60c7ebbb/3] 2026-08-25 18:22:31 +0.013s  COMMAND_FINISHED
+      exit_code=1 · failure_kind=Exit · status=FAILED
+  [60c7ebbb/2] 2026-08-25 18:22:31 +0.000s  COMMAND_ENTERED
+      command=mem init 00000000-0000-0000-0000-000000000777
+  [60c7ebbb/1] 2026-08-25 18:22:31 +0.000s  COMMAND_STARTED
+      operation=init · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [a5315a46/3] 2026-08-25 18:22:26 +0.026s  COMMAND_FINISHED
+      exit_code=1 · failure_kind=Exit · status=FAILED
+  [a5315a46/2] 2026-08-25 18:22:26 +0.000s  COMMAND_ENTERED
+      command=mem import memory 8b077f2a-6a9f-50f0-ae91-f6536fb226cb --from-profile task-1 --context participant/construction-updates/building-access --into task-1/participant/admin-v2-scratch
+  [a5315a46/1] 2026-08-25 18:22:26 +0.000s  COMMAND_STARTED
+      operation=import · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [168d4165/9] 2026-08-25 18:22:20 +3.999s  COMMAND_FINISHED
+      status=COMPLETED
+  [168d4165/8] 2026-08-25 18:22:20 +3.997s  HELP_LOOKUP_COMPLETED
+      rank_1=atomize · rank_2=chunk · rank_3=distill
+  [168d4165/7] 2026-08-25 18:22:20 +3.996s  PROVIDER_TURN_COMPLETED
+      elapsed_seconds=3.9554167089954717 · operation=help · output_characters=44 · provider=codex_chatgpt
+  [168d4165/6] 2026-08-25 18:22:16 +0.041s  PROVIDER_TURN_STARTED
+      has_schema=True · input_characters=34049 · operation=help · provider=codex_chatgpt
+  [168d4165/5] 2026-08-25 18:22:16 +0.040s  PROVIDER_CONNECT_COMPLETED
+      elapsed_seconds=0.02471716700529214 · operation=help · provider=codex_chatgpt
+  [168d4165/4] 2026-08-25 18:22:16 +0.015s  PROVIDER_CONNECT_STARTED
+      operation=help
+  [168d4165/3] 2026-08-25 18:22:16 +0.001s  HELP_LOOKUP_SUBMITTED
+      request=atomize
+  [168d4165/2] 2026-08-25 18:22:16 +0.000s  COMMAND_ENTERED
+      command=mem help atomize
+  [168d4165/1] 2026-08-25 18:22:16 +0.000s  COMMAND_STARTED
+      operation=help · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [d5f375bc/3] 2026-08-25 18:22:11 +0.001s  COMMAND_FINISHED
+      status=COMPLETED
+  [d5f375bc/2] 2026-08-25 18:22:11 +0.000s  COMMAND_ENTERED
+      command=mem eval semantic task2-status --all --ledger-dir /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-1/admin-eval-ledger
+  [d5f375bc/1] 2026-08-25 18:22:11 +0.000s  COMMAND_STARTED
+      operation=eval · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+  [60ad4cd6/3] 2026-08-25 18:22:05 +0.001s  COMMAND_FINISHED
+      status=COMPLETED
+  [60ad4cd6/2] 2026-08-25 18:22:05 +0.000s  COMMAND_ENTERED
+      command=mem config set provider codex_chatgpt
+  [60ad4cd6/1] 2026-08-25 18:22:05 +0.000s  COMMAND_STARTED
+      operation=config · stdin_tty=True · stdout_tty=False · terminal_columns=80 · terminal_rows=24
+
+
+STDERR

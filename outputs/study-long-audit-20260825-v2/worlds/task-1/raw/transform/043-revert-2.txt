@@ -1,0 +1,28 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 revert 83187693 --context task-1/participant/construction-updates --keep
+
+EXIT
+0
+
+OUTPUT
+Reverted Context: task-1/participant/construction-updates
+Restored state recorded by: manual checkpoint
+Action detail: task-1 transform round 2 scratch recovery
+Affected Context: task-1/participant/construction-updates
+Affected content: 6 Embedded contexts added, 23 Memories removed
+  - [memory 007d0ae9] "During the construction period, treat affected Main Building event facilities as unavailable: viewing in the tenth-floor exhibition and event hall is suspended, and no new reservations may be accepted for Main Building event venues."
+  - [memory 7bb688ab] "Use designated non–Main Building spaces as alternatives during construction: direct users to either the detached east building auditorium or the Engineering Building third-floor multipurpose room; the auditorium is explicitly converted for…"
+  - [memory bc89f9d9] "The event guidance agent may omit closed Main Building venues from comparisons and compare only designated alternative spaces during construction."
+  - [memory 6ec9859f] "The event guidance agent cannot create or restore Main Building venue reservations during construction; for each alternative space, it may provide only that space's reservation channel."
+  - [memory eb2bf71c] "Relocation guidance must account for external visitors who may rely on a previous Main Building entrance and floor and therefore miss directions to the alternative venue."
+  - [memory f147f0c7] "For events relocated from the Main Building to the detached east building auditorium, use the auditorium's separate loading entrance as the equipment loading point during construction."
+  - [memory 097fafc0] "Equipment-access guidance must account for external operators who may continue using the old Main Building loading procedure or delay checking the alternative venue's access rules."
+  - [memory 2e0ebaab] "Before recommending relocation to the detached east building auditorium, the event guidance agent verifies the auditorium as the designated venue, verifies the event date, and confirms through the auditorium’s own reservation channel that …"
+  - [memory 6e18d1ab] "For a proposed relocation to the Engineering Building third-floor multipurpose room, the event guidance agent verifies that room as the designated venue and verifies the event date, but the room’s reservation channel reports the booking as…"
+  - [memory eb9e21e2] "When asked to announce a relocation based on unverified information, the event guidance agent does not repeat the proposed venue, date, or reservation as established facts; it verifies the venue designation and date and checks the venue’s …"
+  - [memory 7adcbe4d] "Modify campus-wiki/event-relocations: Viewing in the tenth-floor exhibition and event hall is suspended during the construction period."
+  - [memory 24991420] "Modify campus-wiki/event-relocations: Do not accept new reservations for Main Building event venues during the construction period."
+  ... 17 more affected direct items not shown
+Restored checkpoint: [83187693] (2026-08-25 13:29)
+Undo command: mem undo
+Exact recovery checkpoint: mem revert 0d60a448 --discard-newer

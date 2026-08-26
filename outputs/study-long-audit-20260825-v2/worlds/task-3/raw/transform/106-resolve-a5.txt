@@ -1,0 +1,9 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 resolve task-3/local/guardrails/audit-and-recovery --guidance 'Retain the exact human approval gate; do not infer recipient, purpose, or consent.' --allow-delete --plain
+
+EXIT
+0
+
+OUTPUT
+RESOLVE · task-3/local/guardrails/audit-and-recovery
+FIT · YES · NO CHANGE

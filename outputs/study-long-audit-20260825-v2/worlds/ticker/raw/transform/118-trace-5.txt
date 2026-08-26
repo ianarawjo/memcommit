@@ -1,0 +1,606 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker trace task-2/participant/proposal-workspace:7ed418b9 --all --json
+
+EXIT
+0
+
+OUTPUT
+{
+  "context": {
+    "uid": "b839b146-7576-5ec4-93a5-a98f64eba1ec",
+    "name": "task-2/participant/proposal-workspace"
+  },
+  "selected_uid": "7ed418b9-5ef2-4f4e-9982-079c034b2b14",
+  "component_uids": [
+    "4de11a71-f152-4d35-a95f-25e04949c4f6",
+    "7ed418b9-5ef2-4f4e-9982-079c034b2b14",
+    "eddf277f-7223-452c-8740-8b6deff5fb5f"
+  ],
+  "originals": [
+    {
+      "uid": "7ed418b9-5ef2-4f4e-9982-079c034b2b14",
+      "content": "Share-class example: Acme Corp. Class B becomes ACME.B after removing Corp. and mapping Class B to the .B suffix. The dot is generated share-class syntax.",
+      "position": 4,
+      "content_digest": "59b658711b42d6594784c16b01837aa33225fb038e8ff4c1a7418eebe26bdcb8"
+    }
+  ],
+  "current": [
+    {
+      "uid": "4de11a71-f152-4d35-a95f-25e04949c4f6",
+      "content": "Share-class example: Acme Corp. Class B becomes ACME.B after removing Corp. and mapping Class B to the .B suffix. The dot is generated share-class syntax.",
+      "position": 5,
+      "content_digest": "59b658711b42d6594784c16b01837aa33225fb038e8ff4c1a7418eebe26bdcb8"
+    },
+    {
+      "uid": "7ed418b9-5ef2-4f4e-9982-079c034b2b14",
+      "content": "Share-class example: Acme Corp. Class B becomes ACME.B after removing Corp. and mapping Class B to the .B suffix. The dot is generated share-class syntax.",
+      "position": 5,
+      "content_digest": "59b658711b42d6594784c16b01837aa33225fb038e8ff4c1a7418eebe26bdcb8"
+    },
+    {
+      "uid": "eddf277f-7223-452c-8740-8b6deff5fb5f",
+      "content": "Share-class example: Acme Corp. Class B becomes ACME.B after removing Corp. and mapping Class B to the .B suffix. The dot is generated share-class syntax.",
+      "position": 5,
+      "content_digest": "59b658711b42d6594784c16b01837aa33225fb038e8ff4c1a7418eebe26bdcb8"
+    }
+  ],
+  "events": [
+    {
+      "kind": "CREATED",
+      "evidence": "RECORDED",
+      "timestamp": "2026-08-25T12:55:27.364120",
+      "checkpoint_uid": "e29e85f3-7000-4c25-bc25-d9e0b8a44570",
+      "command": "add",
+      "description": "Added 2 explicitly supplied memories",
+      "before": [],
+      "after": [
+        {
+          "uid": "7ed418b9-5ef2-4f4e-9982-079c034b2b14",
+          "content": "Share-class example: Acme Corp. Class B becomes ACME.B after removing Corp. and mapping Class B to the .B suffix. The dot is generated share-class syntax.",
+          "position": 4,
+          "content_digest": "59b658711b42d6594784c16b01837aa33225fb038e8ff4c1a7418eebe26bdcb8"
+        }
+      ],
+      "reason": null,
+      "reason_codes": [],
+      "source_occurrence": {
+        "mode": "explicit",
+        "ordinal": 2,
+        "total": 2,
+        "line_number": null,
+        "raw_line": "Share-class example: Acme Corp. Class B becomes ACME.B after removing Corp. and mapping Class B to the .B suffix. The dot is generated share-class syntax.",
+        "exact_raw_source": false
+      },
+      "operation_id": null,
+      "command_operation": null,
+      "context_transition": null,
+      "child_evidence": [],
+      "declared_frame": null,
+      "declared_frame_digest": null,
+      "uncertainty_reason": null,
+      "source_review_uid": null,
+      "source_review_digest": null,
+      "source_analysis_uid": null
+    },
+    {
+      "kind": "MERGED_IN",
+      "evidence": "RECORDED",
+      "timestamp": "2026-08-25T13:21:46.006270",
+      "checkpoint_uid": "ed1e85bb-f351-481d-a947-117b192b8bcf",
+      "command": "merge",
+      "description": "Merged 'task-2/participant/proposal-workspace' into 'task-3/local': new 6; already present 0; kept Target 0; took Source 0",
+      "before": [
+        {
+          "uid": "7ed418b9-5ef2-4f4e-9982-079c034b2b14",
+          "content": "Share-class example: Acme Corp. Class B becomes ACME.B after removing Corp. and mapping Class B to the .B suffix. The dot is generated share-class syntax.",
+          "position": 5,
+          "content_digest": "59b658711b42d6594784c16b01837aa33225fb038e8ff4c1a7418eebe26bdcb8"
+        }
+      ],
+      "after": [
+        {
+          "uid": "eddf277f-7223-452c-8740-8b6deff5fb5f",
+          "content": "Share-class example: Acme Corp. Class B becomes ACME.B after removing Corp. and mapping Class B to the .B suffix. The dot is generated share-class syntax.",
+          "position": 5,
+          "content_digest": "59b658711b42d6594784c16b01837aa33225fb038e8ff4c1a7418eebe26bdcb8"
+        }
+      ],
+      "reason": null,
+      "reason_codes": [
+        "MERGE",
+        "NEW"
+      ],
+      "source_occurrence": null,
+      "operation_id": null,
+      "command_operation": null,
+      "context_transition": {
+        "source": {
+          "uid": "b839b146-7576-5ec4-93a5-a98f64eba1ec",
+          "name": "task-2/participant/proposal-workspace"
+        },
+        "target": {
+          "uid": "0f514d5f-1e47-5a33-a9ee-0125528a5129",
+          "name": "task-3/local"
+        }
+      },
+      "child_evidence": [],
+      "declared_frame": null,
+      "declared_frame_digest": null,
+      "uncertainty_reason": null,
+      "source_review_uid": null,
+      "source_review_digest": null,
+      "source_analysis_uid": null
+    },
+    {
+      "kind": "REMOVED",
+      "evidence": "RECORDED",
+      "timestamp": "2026-08-25T13:22:43.566446",
+      "checkpoint_uid": "51d4a2a2-7867-4d47-8b23-21abcf55b3c1",
+      "command": "clear",
+      "description": "Cleared all 8 item(s) from 'task-3/local'",
+      "before": [
+        {
+          "uid": "eddf277f-7223-452c-8740-8b6deff5fb5f",
+          "content": "Share-class example: Acme Corp. Class B becomes ACME.B after removing Corp. and mapping Class B to the .B suffix. The dot is generated share-class syntax.",
+          "position": 5,
+          "content_digest": "59b658711b42d6594784c16b01837aa33225fb038e8ff4c1a7418eebe26bdcb8"
+        }
+      ],
+      "after": [],
+      "reason": null,
+      "reason_codes": [],
+      "source_occurrence": null,
+      "operation_id": null,
+      "command_operation": null,
+      "context_transition": null,
+      "child_evidence": [],
+      "declared_frame": null,
+      "declared_frame_digest": null,
+      "uncertainty_reason": null,
+      "source_review_uid": null,
+      "source_review_digest": null,
+      "source_analysis_uid": null
+    },
+    {
+      "kind": "RESTORED",
+      "evidence": "RECORDED",
+      "timestamp": "2026-08-25T13:23:57.687643",
+      "checkpoint_uid": "68952cf5-7b8c-423a-b5d5-63b75e0bfbe9",
+      "command": "revert",
+      "description": "Pre-revert to [2fef9dd0] — revert here to undo",
+      "before": [
+        {
+          "uid": "0abaa001-81a7-408a-a7f7-57a7aaf0fbd6",
+          "content": "Remove a terminal legal-entity suffix, such as Inc., LLC, or Corp., when deriving the base ticker.",
+          "position": 0,
+          "content_digest": "5f190374e28edf3a1022e3da7203eb7a8999083fa45d49dac5b8033c03e5968b"
+        },
+        {
+          "uid": "c1afeaa9-a501-44c2-917b-ee94a4d8cea3",
+          "content": "Render the derived base ticker in uppercase.",
+          "position": 1,
+          "content_digest": "02e5b9f562c0afc0f682c97a57a1ba3e6fac724d179c6fbbfdb1f4ba91a112af"
+        },
+        {
+          "uid": "76c3c3ee-747b-49f3-8646-2eca4f4ce7fa",
+          "content": "When terminal Class A or Class B follows a legal suffix, remove the legal suffix and append .A or .B, respectively, to the derived base ticker.",
+          "position": 2,
+          "content_digest": "c08efe0108401902d57fb30a65ca51ccd9a8e1a281781a4f3d0fc06dda9f7ff7"
+        },
+        {
+          "uid": "fb2d9502-78dd-4cff-af50-d46a0c335b15",
+          "content": "North-Star, Inc. becomes NORTHSTAR after removing the comma, hyphen, space, and terminal Inc. suffix, then rendering the derived base ticker in uppercase.",
+          "position": 3,
+          "content_digest": "5538f5d2861c20aed3ac5e11d497ffc7d39d576863b194319199f2b7e9bfd5d3"
+        },
+        {
+          "uid": "176230ea-8442-470a-9f49-b6a05e80385f",
+          "content": "Route 066, LLC becomes ROUTE066 after removing the comma, space, and terminal LLC suffix, preserving the digits 066—including the leading zero—in their original positions, and rendering the derived base ticker in uppercase.",
+          "position": 4,
+          "content_digest": "0f53c1b7f383a75adfc5ca7033a4d26e9ba4cfea5e511df818f1674406dc9890"
+        },
+        {
+          "uid": "83ec0fd9-08e5-46a2-a44f-67a5569d58de",
+          "content": "Acme Corp. Class A becomes ACME.A, while Acme Corp. Class B becomes ACME.B: in each derivation, remove the terminal Corp. legal suffix, render the derived base ticker ACME in uppercase, and map the following share class to generated ticker syntax .A or .B rather than retaining the words “Class A” or “Class B.”",
+          "position": 5,
+          "content_digest": "c5d3ee3bbca475766dc60167ec45953e8080ca34dfdd43bc4343b7833e277cfd"
+        }
+      ],
+      "after": [
+        {
+          "uid": "f41126fd-2de1-4acf-ac9e-6df57f0d77f9",
+          "content": "Punctuation rule and example: strip punctuation before constructing a ticker. North-Star, Inc. becomes NORTHSTAR after removing the comma, hyphen, space, and Inc. suffix.",
+          "position": 0,
+          "content_digest": "42c3d5b7bbea46568c5851dc289933813f3cfbb625b96959114758dac827042a"
+        },
+        {
+          "uid": "7c87d868-2c86-4b3b-af9e-93d0ba7bde18",
+          "content": "Numeral rule: preserve digits 0 through 9, including leading zeroes, in original positions while removing spaces and punctuation.",
+          "position": 1,
+          "content_digest": "7607933f3785f2f9976468c31e1e7810f9116f7d89e50659fd4d6588d10a73df"
+        },
+        {
+          "uid": "9f5ffc96-086d-4d72-ba20-45b5fc7d43f5",
+          "content": "Numeral example: Route 66, LLC becomes ROUTE66 after removing the comma, space, and LLC suffix while preserving 66.",
+          "position": 2,
+          "content_digest": "2bf2e9939fff7c9d9e36ba956795847740d2a2198d7647230b4247274963fe21"
+        },
+        {
+          "uid": "ef097645-e0c5-4f81-9e85-4c1b33701ab7",
+          "content": "Share-class rule: if a legal suffix immediately precedes terminal Class A or Class B, remove the suffix and append dot-A (.A) or dot-B (.B) to the derived base ticker.",
+          "position": 3,
+          "content_digest": "d67baa82867e6e652588b56342888b2a9049ffa65957f60ab14e6c87216d8a8a"
+        },
+        {
+          "uid": "c2901978-aed8-42c3-b40c-0ae0e79b75bd",
+          "content": "becomes NORTHSTAR after removing the comma, hyphen, space, and Inc.",
+          "position": 4,
+          "content_digest": "dfda86d9f39d5cdb13e11867604bd1370213121712c426003df9f2b6c62f75c6"
+        },
+        {
+          "uid": "eddf277f-7223-452c-8740-8b6deff5fb5f",
+          "content": "Share-class example: Acme Corp. Class B becomes ACME.B after removing Corp. and mapping Class B to the .B suffix. The dot is generated share-class syntax.",
+          "position": 5,
+          "content_digest": "59b658711b42d6594784c16b01837aa33225fb038e8ff4c1a7418eebe26bdcb8"
+        }
+      ],
+      "reason": null,
+      "reason_codes": [],
+      "source_occurrence": null,
+      "operation_id": null,
+      "command_operation": null,
+      "context_transition": null,
+      "child_evidence": [],
+      "declared_frame": null,
+      "declared_frame_digest": null,
+      "uncertainty_reason": null,
+      "source_review_uid": null,
+      "source_review_digest": null,
+      "source_analysis_uid": null
+    },
+    {
+      "kind": "MERGED_IN",
+      "evidence": "RECORDED",
+      "timestamp": "2026-08-25T13:29:27.151177",
+      "checkpoint_uid": "798f50d6-c44d-4138-b3e7-cfe0a315828b",
+      "command": "merge",
+      "description": "Merged 'task-2/participant/proposal-workspace' into 'task-3/local/personal-memory': new 6; already present 0; kept Target 0; took Source 0",
+      "before": [
+        {
+          "uid": "7ed418b9-5ef2-4f4e-9982-079c034b2b14",
+          "content": "Share-class example: Acme Corp. Class B becomes ACME.B after removing Corp. and mapping Class B to the .B suffix. The dot is generated share-class syntax.",
+          "position": 5,
+          "content_digest": "59b658711b42d6594784c16b01837aa33225fb038e8ff4c1a7418eebe26bdcb8"
+        }
+      ],
+      "after": [
+        {
+          "uid": "4de11a71-f152-4d35-a95f-25e04949c4f6",
+          "content": "Share-class example: Acme Corp. Class B becomes ACME.B after removing Corp. and mapping Class B to the .B suffix. The dot is generated share-class syntax.",
+          "position": 5,
+          "content_digest": "59b658711b42d6594784c16b01837aa33225fb038e8ff4c1a7418eebe26bdcb8"
+        }
+      ],
+      "reason": null,
+      "reason_codes": [
+        "MERGE",
+        "NEW"
+      ],
+      "source_occurrence": null,
+      "operation_id": null,
+      "command_operation": null,
+      "context_transition": {
+        "source": {
+          "uid": "b839b146-7576-5ec4-93a5-a98f64eba1ec",
+          "name": "task-2/participant/proposal-workspace"
+        },
+        "target": {
+          "uid": "33ffd77c-a567-5239-b4a0-25503553d5f0",
+          "name": "task-3/local/personal-memory"
+        }
+      },
+      "child_evidence": [],
+      "declared_frame": null,
+      "declared_frame_digest": null,
+      "uncertainty_reason": null,
+      "source_review_uid": null,
+      "source_review_digest": null,
+      "source_analysis_uid": null
+    },
+    {
+      "kind": "REMOVED",
+      "evidence": "RECORDED",
+      "timestamp": "2026-08-25T13:29:58.697514",
+      "checkpoint_uid": "d8555dcd-9764-4e52-8c66-303611e42c20",
+      "command": "remove",
+      "description": "Removed memory [4de11a71]: \"Share-class example: Acme Corp. Class B becomes ACME.B after removing Corp. and \"",
+      "before": [
+        {
+          "uid": "4de11a71-f152-4d35-a95f-25e04949c4f6",
+          "content": "Share-class example: Acme Corp. Class B becomes ACME.B after removing Corp. and mapping Class B to the .B suffix. The dot is generated share-class syntax.",
+          "position": 5,
+          "content_digest": "59b658711b42d6594784c16b01837aa33225fb038e8ff4c1a7418eebe26bdcb8"
+        }
+      ],
+      "after": [],
+      "reason": null,
+      "reason_codes": [],
+      "source_occurrence": null,
+      "operation_id": null,
+      "command_operation": null,
+      "context_transition": null,
+      "child_evidence": [],
+      "declared_frame": null,
+      "declared_frame_digest": null,
+      "uncertainty_reason": null,
+      "source_review_uid": null,
+      "source_review_digest": null,
+      "source_analysis_uid": null
+    },
+    {
+      "kind": "RESTORED",
+      "evidence": "RECORDED",
+      "timestamp": "2026-08-25T13:32:12.722419",
+      "checkpoint_uid": "1e16385d-02f5-4dce-9593-125bb09c240e",
+      "command": "revert",
+      "description": "Pre-revert to [6a4d95d0] — revert here to undo",
+      "before": [
+        {
+          "uid": "57de9e70-def1-4664-8883-f634bac7750c",
+          "content": "Select candidate examples only when the Source explicitly represents both the originating name and its corresponding ticker; do not construct or infer a ticker from an unpaired name.",
+          "position": 0,
+          "content_digest": "310f1eb50f9d320da5d60bc0756d405b3e3d7f449dcea494d6e958db4c9b91be"
+        },
+        {
+          "uid": "949c3888-2525-4736-abb6-4338704d7b41",
+          "content": "Present each candidate as a separate source-to-ticker mapping and include a precise Source locator for both sides of the mapping; exclude any candidate whose ticker or locator cannot be directly reviewed in the Source.",
+          "position": 1,
+          "content_digest": "bfe59ef1cf3d26cb46db03b241df3aedaaa07d04571dca4c0c6af00c2b66bc94"
+        }
+      ],
+      "after": [
+        {
+          "uid": "c94b4b1a-8a36-46bb-9ed4-2e5d43a1537b",
+          "content": "Punctuation rule and example: strip punctuation before constructing a ticker. North-Star, Inc. becomes NORTHSTAR after removing the comma, hyphen, space, and Inc. suffix.",
+          "position": 0,
+          "content_digest": "42c3d5b7bbea46568c5851dc289933813f3cfbb625b96959114758dac827042a"
+        },
+        {
+          "uid": "3bd933f2-5cda-41e0-adae-445d34e7a116",
+          "content": "Numeral rule: preserve digits 0 through 9, including leading zeroes, in original positions while removing spaces and punctuation.",
+          "position": 1,
+          "content_digest": "7607933f3785f2f9976468c31e1e7810f9116f7d89e50659fd4d6588d10a73df"
+        },
+        {
+          "uid": "f6de8d9e-273e-4700-9501-0a5318dd7487",
+          "content": "Numeral example: Route 66, LLC becomes ROUTE66 after removing the comma, space, and LLC suffix while preserving 66.",
+          "position": 2,
+          "content_digest": "2bf2e9939fff7c9d9e36ba956795847740d2a2198d7647230b4247274963fe21"
+        },
+        {
+          "uid": "74cbaa09-3adc-40d7-b236-2f271d094087",
+          "content": "Share-class rule: if a legal suffix immediately precedes terminal Class A or Class B, remove the suffix and append dot-A (.A) or dot-B (.B) to the derived base ticker.",
+          "position": 3,
+          "content_digest": "d67baa82867e6e652588b56342888b2a9049ffa65957f60ab14e6c87216d8a8a"
+        },
+        {
+          "uid": "c600f4af-bc58-4b2d-9c21-90a02f925152",
+          "content": "becomes NORTHSTAR after removing the comma, hyphen, space, and Inc.",
+          "position": 4,
+          "content_digest": "dfda86d9f39d5cdb13e11867604bd1370213121712c426003df9f2b6c62f75c6"
+        },
+        {
+          "uid": "4de11a71-f152-4d35-a95f-25e04949c4f6",
+          "content": "Share-class example: Acme Corp. Class B becomes ACME.B after removing Corp. and mapping Class B to the .B suffix. The dot is generated share-class syntax.",
+          "position": 5,
+          "content_digest": "59b658711b42d6594784c16b01837aa33225fb038e8ff4c1a7418eebe26bdcb8"
+        }
+      ],
+      "reason": null,
+      "reason_codes": [],
+      "source_occurrence": null,
+      "operation_id": null,
+      "command_operation": null,
+      "context_transition": null,
+      "child_evidence": [],
+      "declared_frame": null,
+      "declared_frame_digest": null,
+      "uncertainty_reason": null,
+      "source_review_uid": null,
+      "source_review_digest": null,
+      "source_analysis_uid": null
+    },
+    {
+      "kind": "MERGED_IN",
+      "evidence": "RECORDED",
+      "timestamp": "2026-08-25T13:32:44.046366",
+      "checkpoint_uid": "b8af4581-fb19-4d09-8fb0-faa229af93fb",
+      "command": "merge",
+      "description": "Merged 'task-2/participant/proposal-workspace' into 'task-3/local': new 0; already present 6; kept Target 0; took Source 0",
+      "before": [
+        {
+          "uid": "7ed418b9-5ef2-4f4e-9982-079c034b2b14",
+          "content": "Share-class example: Acme Corp. Class B becomes ACME.B after removing Corp. and mapping Class B to the .B suffix. The dot is generated share-class syntax.",
+          "position": 5,
+          "content_digest": "59b658711b42d6594784c16b01837aa33225fb038e8ff4c1a7418eebe26bdcb8"
+        },
+        {
+          "uid": "eddf277f-7223-452c-8740-8b6deff5fb5f",
+          "content": "Share-class example: Acme Corp. Class B becomes ACME.B after removing Corp. and mapping Class B to the .B suffix. The dot is generated share-class syntax.",
+          "position": 5,
+          "content_digest": "59b658711b42d6594784c16b01837aa33225fb038e8ff4c1a7418eebe26bdcb8"
+        }
+      ],
+      "after": [
+        {
+          "uid": "eddf277f-7223-452c-8740-8b6deff5fb5f",
+          "content": "Share-class example: Acme Corp. Class B becomes ACME.B after removing Corp. and mapping Class B to the .B suffix. The dot is generated share-class syntax.",
+          "position": 5,
+          "content_digest": "59b658711b42d6594784c16b01837aa33225fb038e8ff4c1a7418eebe26bdcb8"
+        }
+      ],
+      "reason": null,
+      "reason_codes": [
+        "MERGE",
+        "ALREADY_PRESENT"
+      ],
+      "source_occurrence": null,
+      "operation_id": null,
+      "command_operation": null,
+      "context_transition": {
+        "source": {
+          "uid": "b839b146-7576-5ec4-93a5-a98f64eba1ec",
+          "name": "task-2/participant/proposal-workspace"
+        },
+        "target": {
+          "uid": "0f514d5f-1e47-5a33-a9ee-0125528a5129",
+          "name": "task-3/local"
+        }
+      },
+      "child_evidence": [],
+      "declared_frame": null,
+      "declared_frame_digest": null,
+      "uncertainty_reason": null,
+      "source_review_uid": null,
+      "source_review_digest": null,
+      "source_analysis_uid": null
+    },
+    {
+      "kind": "REMOVED",
+      "evidence": "RECORDED",
+      "timestamp": "2026-08-25T13:33:58.989427",
+      "checkpoint_uid": "ea1ac3ff-b459-4f5f-8705-dff45a33ec64",
+      "command": "clear",
+      "description": "Cleared all 8 item(s) from 'task-3/local'",
+      "before": [
+        {
+          "uid": "eddf277f-7223-452c-8740-8b6deff5fb5f",
+          "content": "Share-class example: Acme Corp. Class B becomes ACME.B after removing Corp. and mapping Class B to the .B suffix. The dot is generated share-class syntax.",
+          "position": 5,
+          "content_digest": "59b658711b42d6594784c16b01837aa33225fb038e8ff4c1a7418eebe26bdcb8"
+        }
+      ],
+      "after": [],
+      "reason": null,
+      "reason_codes": [],
+      "source_occurrence": null,
+      "operation_id": null,
+      "command_operation": null,
+      "context_transition": null,
+      "child_evidence": [],
+      "declared_frame": null,
+      "declared_frame_digest": null,
+      "uncertainty_reason": null,
+      "source_review_uid": null,
+      "source_review_digest": null,
+      "source_analysis_uid": null
+    },
+    {
+      "kind": "RESTORED",
+      "evidence": "RECORDED",
+      "timestamp": "2026-08-25T13:34:55.494089",
+      "checkpoint_uid": "c863d031-0d74-4dbc-ab87-eb55ab5f156d",
+      "command": "revert",
+      "description": "Pre-revert to [24468c56] — revert here to undo",
+      "before": [
+        {
+          "uid": "6cd9c8b5-80e1-442f-bbb2-bc54e74d5697",
+          "content": "When a company name ends with a legal suffix followed immediately by terminal Class A or Class B, derive the base ticker by removing the legal suffix, spaces, and input punctuation, then append the generated share-class suffix .A or .B respectively.",
+          "position": 0,
+          "content_digest": "d881325b53c77f8ddad82f4c47b34b2beddd5e2b68223df53f5bc509aa2bf9c8"
+        },
+        {
+          "uid": "9eb2eefd-b46f-4552-a39d-0e9d37d3a0b2",
+          "content": "Distinguish the dot in .A or .B as newly generated share-class syntax rather than input punctuation: ordinary punctuation is stripped before ticker construction, while the share-class mapping introduces its own dot in the output.",
+          "position": 1,
+          "content_digest": "17ebb9e1cfaed6b42bbbe517e87419f4224a903761d3074a46d60d5783b55472"
+        },
+        {
+          "uid": "c9771e13-5ed5-4787-a486-04ce5cec50c5",
+          "content": "Given no observed company name and no observed ticker output, do not invent either a company or an output; record that no derivation can be made from the available information.",
+          "position": 2,
+          "content_digest": "df6d6a5f3427ec5fc1ce74e59cc52d1f755a7593a35e57b39917b380f963ade7"
+        }
+      ],
+      "after": [
+        {
+          "uid": "f41126fd-2de1-4acf-ac9e-6df57f0d77f9",
+          "content": "Punctuation rule and example: strip punctuation before constructing a ticker. North-Star, Inc. becomes NORTHSTAR after removing the comma, hyphen, space, and Inc. suffix.",
+          "position": 0,
+          "content_digest": "42c3d5b7bbea46568c5851dc289933813f3cfbb625b96959114758dac827042a"
+        },
+        {
+          "uid": "7c87d868-2c86-4b3b-af9e-93d0ba7bde18",
+          "content": "Numeral rule: preserve digits 0 through 9, including leading zeroes, in original positions while removing spaces and punctuation.",
+          "position": 1,
+          "content_digest": "7607933f3785f2f9976468c31e1e7810f9116f7d89e50659fd4d6588d10a73df"
+        },
+        {
+          "uid": "9f5ffc96-086d-4d72-ba20-45b5fc7d43f5",
+          "content": "Numeral example: Route 66, LLC becomes ROUTE66 after removing the comma, space, and LLC suffix while preserving 66.",
+          "position": 2,
+          "content_digest": "2bf2e9939fff7c9d9e36ba956795847740d2a2198d7647230b4247274963fe21"
+        },
+        {
+          "uid": "ef097645-e0c5-4f81-9e85-4c1b33701ab7",
+          "content": "Share-class rule: if a legal suffix immediately precedes terminal Class A or Class B, remove the suffix and append dot-A (.A) or dot-B (.B) to the derived base ticker.",
+          "position": 3,
+          "content_digest": "d67baa82867e6e652588b56342888b2a9049ffa65957f60ab14e6c87216d8a8a"
+        },
+        {
+          "uid": "c2901978-aed8-42c3-b40c-0ae0e79b75bd",
+          "content": "becomes NORTHSTAR after removing the comma, hyphen, space, and Inc.",
+          "position": 4,
+          "content_digest": "dfda86d9f39d5cdb13e11867604bd1370213121712c426003df9f2b6c62f75c6"
+        },
+        {
+          "uid": "eddf277f-7223-452c-8740-8b6deff5fb5f",
+          "content": "Share-class example: Acme Corp. Class B becomes ACME.B after removing Corp. and mapping Class B to the .B suffix. The dot is generated share-class syntax.",
+          "position": 5,
+          "content_digest": "59b658711b42d6594784c16b01837aa33225fb038e8ff4c1a7418eebe26bdcb8"
+        }
+      ],
+      "reason": null,
+      "reason_codes": [],
+      "source_occurrence": null,
+      "operation_id": null,
+      "command_operation": null,
+      "context_transition": null,
+      "child_evidence": [],
+      "declared_frame": null,
+      "declared_frame_digest": null,
+      "uncertainty_reason": null,
+      "source_review_uid": null,
+      "source_review_digest": null,
+      "source_analysis_uid": null
+    }
+  ],
+  "analyses": [
+    {
+      "kind": "ATOMIZE_PREVIEW",
+      "status": "CURRENT",
+      "analysis_uid": "d9d8ee92-70c2-4d6b-9f21-1e20ae5f9ad6",
+      "created_at": "2026-08-25T17:35:34.421758+00:00",
+      "memory_uid": "7ed418b9-5ef2-4f4e-9982-079c034b2b14",
+      "classification": "ATOMIC",
+      "action": "KEEP",
+      "reason": "The source contains one focal share-class conversion whose transformation steps and dot-syntax explanation are qualifying facets, not independently revisable commitments.",
+      "reason_codes": [
+        "A01_ONE_FOCUS",
+        "A02_SCOPE_ATTACHED",
+        "A03_RELATION_PRESERVED",
+        "A09_SIZE_IS_LINT"
+      ],
+      "children": [],
+      "lint": [
+        "SIZE_REVIEW"
+      ],
+      "declared_frame": null,
+      "declared_frame_reason": null,
+      "source_review_uid": null,
+      "source_review_digest": null,
+      "source_review_analysis_uid": null
+    }
+  ],
+  "warnings": []
+}

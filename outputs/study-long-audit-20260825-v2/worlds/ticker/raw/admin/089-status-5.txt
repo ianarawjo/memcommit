@@ -1,0 +1,44 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker status
+
+STDIN
+<none>
+
+EXIT
+0
+
+WALL_SECONDS
+1.426126
+
+PRE_IDENTITY
+{"current_context": "audit/ticker/admin-v2-scratch/co4-tree", "current_context_uid": "44473ed5-f911-4bd5-8871-7e0804873207", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+IMMEDIATE_POST_IDENTITY
+{"current_context": "audit/ticker/admin-v2-scratch/co4-tree", "current_context_uid": "44473ed5-f911-4bd5-8871-7e0804873207", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+COMMAND_ATTEMPT_DELTA
+{"count_after": 334, "count_before": 333, "delta": 1, "new_attempt_uids": ["c3bc893f-c2b2-49a2-a98a-dbc893de6300"], "records": [{"command": "mem status", "completed_at": "2026-08-25T18:17:07.334975+00:00", "details": {}, "elapsed_seconds": 0.10424862500804011, "failure": null, "operation": "status", "outcome": null, "started_at": "2026-08-25T18:17:07.230565+00:00", "status": "COMPLETED", "terminal": {"stdin_tty": true, "stdout_tty": false}, "uid": "c3bc893f-c2b2-49a2-a98a-dbc893de6300", "version": 3}], "sequence": 89}
+
+STDOUT
+On context: audit/ticker/admin-v2-scratch/co4-tree
+
+Inventory · Memories 4 · Embedded Contexts 1 · Checkpoints 10
+
+Relationships:
+  CONTEXT REFERENCE [c458ab18] task-2/participant/proposal-workspace
+
+Memory preview · first 4 of 4:
+  [9bef3fd7] Core ticker rule: remove a terminal legal suffix such as Inc., Corp., Ltd., or LLC before constructing the ticker. Preserve the remaining alphanumeric characters.
+  [c7487556] Core ticker rule: uppercase remaining company-name letters in their original order. Do not invent letters.
+  [ce0674c3] Regression expectation: every maintained example must preserve digits, remove input punctuation, and encode a terminal share class with generated dot syntax.
+  [84606651] Conflicting regression draft: derived ticker letters must remain lowercase.
+
+Recent changes · latest 5 of 10 checkpoints:
+  0f030ef4  2026-08-25 14:17  redo          Redo command 'mem branch' [295ac76b]
+  e98a3834  2026-08-25 14:17  undo          Undo command 'mem branch' [28cf1099]
+  c5fc289c  2026-08-25 14:16  branch        Branched subtree 'task-2/participant' to 'audit/ticker/admin-v2-scratch/co4-tree'.
+  c067b096  2026-08-25 13:01  replace       Replaced 1 occurrence(s) in 1 Memory/ies across 1 Context(s).
+  6544fb39  2026-08-25 13:00  edit          Edited memory [9f473e8e]
+
+
+STDERR

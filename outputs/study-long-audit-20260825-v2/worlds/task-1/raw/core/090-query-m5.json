@@ -1,0 +1,11 @@
+{
+  "sequence": 90,
+  "operation": "query",
+  "attempt": 5,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 query 'Across every readable campus-wiki area, which verified construction changes have been published and what remains stale?' --context task-1/campus-wiki --descendants --exclude-embeds",
+  "exit": 0,
+  "wall_seconds": 17.462632,
+  "pre_target_digest": "531dda1ffaf590bdecca0bf184104bb0034ef230693632f4f61d1e9a7ad81b62",
+  "post_target_digest": "d46287e584d9290067abc68021584593de16c46b9f38fc3b020349bb614eff81",
+  "raw_output": "raw/core/090-query-m5.txt"
+}

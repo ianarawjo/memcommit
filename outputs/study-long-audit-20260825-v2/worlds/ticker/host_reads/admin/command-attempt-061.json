@@ -1,0 +1,28 @@
+{
+  "sequence": 61,
+  "count_before": 305,
+  "count_after": 306,
+  "delta": 1,
+  "new_attempt_uids": [
+    "2a84d359-0c53-441b-ae63-3aa520dccb49"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "2a84d359-0c53-441b-ae63-3aa520dccb49",
+      "operation": "shell-init",
+      "command": "mem shell-init zsh",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:16:19.879581+00:00",
+      "completed_at": "2026-08-25T18:16:19.887600+00:00",
+      "elapsed_seconds": 0.007867791995522566,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

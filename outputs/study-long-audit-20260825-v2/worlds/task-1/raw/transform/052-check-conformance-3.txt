@@ -1,0 +1,11 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 check-conformance task-1/participant/construction-updates/building-access --against 'text:Accessible-route claims must retain temporary alternatives and construction dates.'
+
+EXIT
+0
+
+OUTPUT
+CONFORMANCE · 0/3 EXAMPLES CONFORM · 0/1 RULES MET · [EXAMPLES task-1/participant/construction-updates/building-access] · [RULES TEXT Accessible-route claims must retain temporary alternatives and construction dates.] · 12 EXAMPLES N/A
+! VIOLATES · [EXAMPLE m000003] Modify campus-wiki/building-access: During the construction period, the existing accessible route cannot be used because it is being reconstructed. · [RULE r1] Accessible-route claims must retain temporary alternatives and construction dates. · WHY · The accessible-route closure omits both the temporary alternative and construction dates.
+! VIOLATES · [EXAMPLE m000004] Add campus-wiki/building-access: The temporary accessible route next to the main entrance can be used throughout the construction period. · [RULE r1] Accessible-route claims must retain temporary alternatives and construction dates. · WHY · The temporary accessible-route claim omits construction dates.
+! VIOLATES · [EXAMPLE m000009] Add campus-wiki/building-access: During the construction period, the general accessible route bypasses the existing accessible route under reconstruction and leads from the temporary passage next to the main entrance to the first-floor lobby. · [RULE r1] Accessible-route claims must retain temporary alternatives and construction dates. · WHY · The accessible-route detour claim omits construction dates.

@@ -1,0 +1,31 @@
+{
+  "sequence": 72,
+  "count_before": 316,
+  "count_after": 317,
+  "delta": 1,
+  "new_attempt_uids": [
+    "ac438ce8-f0e6-4711-b00c-f81d1ab6a7fa"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "ac438ce8-f0e6-4711-b00c-f81d1ab6a7fa",
+      "operation": "init-study",
+      "command": "mem init-study admin-v2-ticker-workers --prewarm-workers 0",
+      "status": "FAILED",
+      "started_at": "2026-08-25T18:16:41.691869+00:00",
+      "completed_at": "2026-08-25T18:16:41.699689+00:00",
+      "elapsed_seconds": 0.0076590410026255995,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": {
+        "kind": "BadParameter",
+        "exit_code": 2
+      }
+    }
+  ]
+}

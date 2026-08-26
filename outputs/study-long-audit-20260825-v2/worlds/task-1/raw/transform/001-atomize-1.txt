@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 atomize task-1/participant/construction-updates/facility-updates
+
+EXIT
+1
+
+OUTPUT
+Atomize error: Atomize final validation did not reach semantic chunk normal form: 26131bc5=UNCERTAIN, 5e34a7f5=UNCERTAIN, f460b6d0=UNCERTAIN, cd0830c7=UNCERTAIN, d73ccf7b=UNCERTAIN, b9dda61f=UNCERTAIN, 7a58eb23=UNCERTAIN, cb4f2f04=UNCERTAIN, 0df15633=UNCERTAIN, aa595f26=UNCERTAIN, 8e868c0f=UNCERTAIN, 1dbffba3=UNCERTAIN, ecf1c8bb=UNCERTAIN, 0c87297c=UNCERTAIN. No Context change was published.

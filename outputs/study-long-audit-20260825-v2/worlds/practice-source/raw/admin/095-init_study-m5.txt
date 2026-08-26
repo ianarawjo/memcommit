@@ -1,0 +1,23 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source init-study 00000000-0000-0000-0000-000000000999
+
+STDIN
+<none>
+
+EXIT
+0
+
+WALL_SECONDS
+<not retained: the first post-process identity assertion stopped raw persistence>
+
+POST_CALL_IDENTITY_HOST_ASSERTION
+FAIL · {"profile_name": "00000000-0000-0000-0000-000000000999", "profile_uid": "bb7265f4-8391-47f4-9112-8334f5bf7ddc", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/practice-source/profile-control/stores/bb7265f4-8391-47f4-9112-8334f5bf7ddc"}
+
+STDOUT
+<not retained: durable success reconstructed from the registry, Study action ledger, and two new managed Store roots before host recovery>
+
+STDERR
+<none observed before the post-call assertion failure>
+
+NO_REPLAY_EVIDENCE
+The registry retained Study Profile bb7265f4-8391-47f4-9112-8334f5bf7ddc and granted-memory Profile 2504eed8-0656-48b1-9a69-9973ccdc6b4a, both with study_uid f4fcef60-0617-4024-8961-f364d443ab6d and created_at 2026-08-25T18:15:49.641943+00:00. Exact registry and Store byte/hash snapshots are under recovery/seq095-init-study-profile/.

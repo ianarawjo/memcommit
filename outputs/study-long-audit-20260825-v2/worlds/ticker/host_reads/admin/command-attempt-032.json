@@ -1,0 +1,28 @@
+{
+  "sequence": 32,
+  "count_before": 276,
+  "count_after": 277,
+  "delta": 1,
+  "new_attempt_uids": [
+    "867aeec4-ebb6-4ccf-a891-81a2fc645c85"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "867aeec4-ebb6-4ccf-a891-81a2fc645c85",
+      "operation": "provider",
+      "command": "mem provider status",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:13:01.675046+00:00",
+      "completed_at": "2026-08-25T18:13:01.690056+00:00",
+      "elapsed_seconds": 0.01486237499921117,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

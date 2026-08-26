@@ -1,0 +1,17 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 summarize task-1/campus-wiki/event-relocations --direct
+
+EXIT
+0
+
+WALL_SECONDS
+1.544194
+
+STDOUT
+SUMMARY · task-1/campus-wiki/event-relocations
+STATUS · DIRECT
+
+Use only verified operating venues, schedules, and confirmed approvals: check class, event, facilities, and holiday constraints, and never treat unchecked or held space as reserved. Requests go through the portal, with sponsorship or registered accounts where applicable; organizers remain responsible for capacity, access, logistics, safety, and separate support. The agent may compare public details but cannot reserve, guarantee seats or approval, or access private lists.
+
+
+STDERR

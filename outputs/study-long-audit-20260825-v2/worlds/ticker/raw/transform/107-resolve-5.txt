@@ -1,0 +1,9 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker resolve task-3/local/guardrails --guidance 'Keep complete claims and delete only irrecoverable scratch fragments.' --allow-delete --plain
+
+EXIT
+0
+
+OUTPUT
+RESOLVE · task-3/local/guardrails
+FIT · YES · NO CHANGE

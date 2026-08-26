@@ -1,0 +1,37 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source impact distill --from practice/source --to practice/description --goal 'preserve triggers, exceptions, safeguards, and provenance' --direct
+
+EXIT
+0
+
+WALL_SECONDS
+19.856331
+
+STDOUT
+ MEM DISTILL · RULE PROPOSAL
+ CONTEXT LOCATIONS
+   SOURCE · practice/source
+   TARGET · practice/description · EXISTING
+ PROPOSAL · 12 SOURCE · 6 RULES · THIS CONTEXT ONLY RANGE
+
+ GOAL
+ preserve triggers, exceptions, safeguards, and provenance
+
+ SOURCE OVERVIEW
+ A compact operational hierarchy that preserves the source’s request triggers, local-edit constraints, exceptions, epistemic safeguards, and provenance requirements.
+
+ PROPOSED RULES · 6
+ [1] Match the intervention to the user’s request: when asked how a draft reads or asked only for review, assess and report issues before editing; when later asked to polish, preserve the overall structure and citation-needed markers and change only wording that causes a problem; when asked to change one expression, leave almost everything else—including selected technical or project-specific terms—unchanged. — SUPPORT 4 · BOUNDARY 0
+
+ [2] During review, first check sentence order and paragraph division; during polishing or local edits, preserve the author’s intended terminology and distinctions, such as “distribute” rather than “divide” for absorption into two parts and, in relevant titles, the exact concepts “interaction,” “management,” and “AI agent memory” rather than “agent memory.” — SUPPORT 3 · BOUNDARY 0
+
+ [3] When consolidating or shortening a passage, retain every intended point, state repeated content only once, and remove redundant or unnecessary material; for a shorter fixed limit, target roughly a 20–30% cut, but do not compress so aggressively that claims become more categorical or lose their original strength or conditions. — SUPPORT 3 · BOUNDARY 0
+
+ [4] Use connectors that accurately represent the relationship between ideas: if the next idea is merely related and does not broaden scope, do not use “More broadly”; use “In relation to this” or another accurate connector, and do not invent a claim solely to connect paragraphs. — SUPPORT 1 · BOUNDARY 0
+
+ [5] By default, format document titles in sentence case and titles of works consistently in italics throughout the document. An explicitly named style guide may override only the corresponding default—capitalization for document titles or formatting for work titles—and must not alter intended wording, including retaining “for” whenever it is intended. — SUPPORT 2 · BOUNDARY 0
+
+ [6] Before proposing a factual correction, adding or reusing a citation or reference, or accepting a quotation or attribution, review the complete original paper, book, guide, or other source—not merely an abstract or snippet—and verify that the source exists and supports the exact claim. Do not invent quotations or evidence or overstate an author’s contribution or a paper’s status; if the request is only for review, report any verification problem before rewriting. — SUPPORT 2 · BOUNDARY 0
+
+
+STDERR

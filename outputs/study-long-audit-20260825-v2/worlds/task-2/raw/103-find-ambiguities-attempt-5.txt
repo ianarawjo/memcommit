@@ -1,0 +1,74 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 find-ambiguities task-2
+EXIT: 0
+DURATION_SECONDS: 24.532
+
+Find Ambiguities · task-2 · 11/19 direct memories flagged
+
+  UNDERSPECIFIED 1/11
+  [a38d684b] Equal-authority synthesis rule:
+  Reading: Apply the equal-authority synthesis rule stated elsewhere in the context.
+  Reason: The heading “Equal-authority synthesis rule” has one ordinary referent in the combined context, but standing alone it omits the rule’s operative details. Clarification would make the memory more precise and independently usable, although the supplied context already provides the rule, so no explicit operation is blocked.
+  Question: Should the full equal-authority synthesis rule be included here?
+
+  AMBIGUITY 2/11
+  [46d1a835] preserve each shared co-advisor requirement once, retain distinct conditions, and explain unresolved
+  Reading 1: Preserve each requirement shared by the co-advisors once, retain distinct conditions, and explain unresolved conflicts with both source provenances.
+  Reading 2: Preserve each generally shared co-advisor requirement once, retain distinct conditions, and explain unresolved conflicts with both source provenances.
+  Reason: The expression “each shared co-advisor requirement” most naturally means requirements common to the co-advisors, but “shared” can also describe requirements jointly held or communicated more broadly. The consolidation decision could therefore differ at the margins; clarification would make the duplicate-detection scope more precise.
+  Question: Does “shared” mean a requirement common to both co-advisors?
+
+  AMBIGUITY 3/11
+  [824b4679] conflicts with both provenances. Record why equivalent wording was consolidated.
+  Reading 1: Explain unresolved conflicts with both co-advisors’ provenances, and record why equivalent wording was consolidated.
+  Reading 2: Explain unresolved conflicts using both provenance records available in the context, and record why equivalent wording was consolidated.
+  Reason: The phrase “both provenances” dominantly refers to the two co-advisor sources, but it could refer more generally to two provenance records attached to a conflict. This affects which source attributions must be recorded; clarification would make the provenance requirement more precise.
+  Question: Does “both provenances” mean the provenance of each co-advisor?
+
+  UNDERSPECIFIED 4/11
+  [2d7d73ea] place quantities, unit rates, assumptions, and arithmetic in a compact cross-referenced appendix.
+  Reading: Place the budget quantities, unit rates, assumptions, and arithmetic in a compact appendix cross-referenced from the proposal body.
+  Reason: The omitted object and location are ordinarily supplied by the budget-reconciliation memories, yielding one reading. Clarification would improve standalone precision about what the appendix cross-references, but the combined context supplies a usable instruction and no operation is blocked.
+  Question: Should this explicitly say that the proposal body cross-references the budget appendix?
+
+  UNDERSPECIFIED 5/11
+  [babfdf45] This preserves detail without crowding the two-page narrative.
+  Reading: Moving detailed budget calculations to the appendix preserves those details without crowding the two-page proposal narrative.
+  Reason: The demonstrative “This” ordinarily refers to the immediately supplied budget-reconciliation arrangement. Clarification would improve standalone traceability, but the context resolves the antecedent and no operational result depends on further resolution.
+  Question: Should “This” be replaced with “Moving detailed budget calculations to the appendix”?
+
+  UNDERSPECIFIED 6/11
+  [d1488bbe] Recruitment reconciliation:
+  Reading: Apply the recruitment-reconciliation rule stated elsewhere in the context.
+  Reason: The heading “Recruitment reconciliation” has one ordinary referent in the combined context, but standing alone it omits the rule’s operative details. Clarification would make the memory independently usable, although the complete context supplies the rule and no explicit operation is blocked.
+  Question: Should the full recruitment-reconciliation rule be included here?
+
+  UNDERSPECIFIED 7/11
+  [137c9ceb] before commitments, use a justified recruitment target range with separate workload and budget consequences;
+  Reading: Before commitments are made, use a justified recruitment-target range and separately calculate its workload and budget consequences.
+  Reason: The transition phrase “before commitments” has one ordinary reading, but the context does not identify which commitments or the event that ends this phase. A reliable operational switch from a range to an exact target cannot be determined, and the timing of recalculation and publication consequently cannot be verified.
+  Question: Which commitment or confirmation event triggers the switch from a target range to one exact target?
+
+  UNDERSPECIFIED 8/11
+  [1db0b6b0] after confirmation, publish one exact recalculated target. The transition condition is documented explicitly.
+  Reading: After the relevant recruitment confirmation, publish one exact recalculated target and explicitly document the condition that triggered the transition.
+  Reason: The expressions “after confirmation” and “transition condition” point to a single kind of phase change, but the context never specifies what must be confirmed. The exact point at which the target must be recalculated and published cannot be determined reliably or verified.
+  Question: What exactly must be confirmed before the exact recalculated target is published?
+
+  UNDERSPECIFIED 9/11
+  [51b5bbeb] Final neutral policy:
+  Reading: Apply the final neutral policy stated elsewhere in the context.
+  Reason: The heading “Final neutral policy” has one ordinary referent in the combined context, but standing alone it omits the policy’s operative details. Clarification would make the memory independently usable, although the complete context supplies the policy and no explicit operation is blocked.
+  Question: Should the full final neutral policy be included here?
+
+  UNDERSPECIFIED 10/11
+  [c3abe161] preserve duplicate requirements once, state advisor-specific conditions, retain both provenances, and assign owners to
+  Reading: Preserve duplicate co-advisor requirements once, state conditions specific to each advisor, retain both source provenances, and assign owners to unresolved conflicts that require ownership.
+  Reason: The sentence fragment has one ordinary completion from the adjacent policy memories. Clarification would improve standalone precision about the object of “assign owners to,” but the combined context resolves it and no operational decision is blocked.
+  Question: Should this explicitly end with “owned unresolved conflicts”?
+
+  AMBIGUITY 11/11
+  [1d476894] any owned unresolved conflicts. No source has tie-breaking priority.
+  Reading 1: Assign owners to unresolved conflicts that require ownership, and give neither co-advisor source tie-breaking priority.
+  Reading 2: Assign owners to all conflicts already owned by someone but still unresolved, and give neither source tie-breaking priority.
+  Reason: The phrase “owned unresolved conflicts” dominantly means unresolved conflicts for which an owner must be assigned, but it can also mean conflicts that already have owners. That distinction affects whether ownership is created or merely recorded; clarification would make the assignment step precise.
+  Question: Does “owned unresolved conflicts” mean conflicts that need an owner assigned, or conflicts that already have one?

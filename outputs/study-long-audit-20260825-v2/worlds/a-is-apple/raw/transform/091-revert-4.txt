@@ -1,0 +1,28 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple revert 0fd2a604 --context practice --keep
+
+EXIT
+0
+
+OUTPUT
+Reverted Context: practice
+Restored state recorded by: manual checkpoint
+Action detail: a-is-apple transform round 4 recovery before destructive scratch trials
+Affected Context: practice
+Affected content: 14 Memories added, 4 Memory refs added, 2 Embedded contexts added, 18 Memories removed, 1 Memory ref removed
+  - [memory 3081f925] "When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division."
+  - [memory a3e8b951] "If I later ask for polishing, preserve the overall strucutre and citation-needed markers, and change only wording that causes a problem."
+  - [memory 2bb91265] "When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um... for example, use distribute, not divide, when material is absorbed into two parts."
+  - [memory 888791bb] "If a passage is supposed to make four points, keep all four while removing parts that are too redundent and stating repeated content only once."
+  - [memory 59d603de] "When the draft has to fit a shorter fixed limit, aim to cut around 20–30% from redundant or unnecessary material."
+  - [memory 3e8f5dd2] "But don't shorten sentences so aggressively that a claim sounds more categorical; keep enough wording to preserve its original strength and conditions."
+  - [memory 2f50a04d] "If the next idea is merely related and does not broaden the scope, don't use More broadly; use In relation to this or another accurate connector without adding a new claim merely to make two paragraphs connect."
+  - [memory 77d22e20] "For any titlle about interaction with AI agent memory, keep the exact terminology and intended words: use interaction and management and AI agent memory rather than agent memory."
+  - [memory f32e88a1] "By default, format a document title in sentence case rather than title case. An explicitly named style guide may override only that capitalization default; always keep for whenever it is part of the intended wording."
+  - [memory fcb68c3f] "If titles of works use quotation marks in some places and italics in others, make them consistently italic throughout the document by default; an explicitly named style guide may override only this work-title format."
+  - [memory e06c24a7] "When I say that content looks wrong, find accurate information before proposing a correction by reading the original paper, book, or guide, not only an abstract or a short snippet."
+  - [memory ab2d128b] "Before adding or reusing citations and refferences, verify that each source exists and supports the exact claim after reviewing the complete source. Don't invent quotations or evidence or overstate an author's contribution or a paper's sta…"
+  ... 27 more affected direct items not shown
+Restored checkpoint: [0fd2a604] (2026-08-25 13:21)
+Undo command: mem undo
+Exact recovery checkpoint: mem revert 8ab13f8c --discard-newer

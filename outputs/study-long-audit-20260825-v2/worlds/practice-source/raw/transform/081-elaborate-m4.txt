@@ -1,0 +1,22 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source elaborate --rule 'A title-wording atom must retain document-title scope, the narrow style-guide override, and the literal protected word for.' --to practice/description --number 1 --plain
+
+EXIT
+0
+
+WALL_SECONDS
+8.063947
+
+STDOUT
+ELABORATE APPLIED · practice/description
+MODE · RULES_TO_CASES · VERIFICATION · UNVERIFIED · QUALITY · BEST_EFFORT
+SOURCE · INLINE · TARGET · practice/description
+EFFECTS · ADD 1 MEMORIES
+
+  [memory 9d0c4409] In a document title governed by the narrow style-guide override, retain the word “for” literally as “for”; do not capitalize, replace, or remove it.
+
+REVIEW · mem review elaborate --receipt aa292f61-bce9-406a-aee3-5119f0627457
+UNDO · mem undo
+
+
+STDERR

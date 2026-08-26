@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 translate task-1/participant/construction-updates/event-relocations:3fcfa405 --to French
+
+EXIT
+0
+
+OUTPUT
+
+Translation view: 'task-1/participant/construction-updates/event-relocations' → French
+  1 translated Memory
+────────────────────────────────────────────────────────────────
+[3fcfa405] French · PROVIDER · UNREVIEWED
+  Modifier campus-wiki/event-relocations : Les visites dans la salle d’exposition et d’événements du dixième étage sont suspendues pendant la durée des travaux.
+────────────────────────────────────────────────────────────────
+Saved translation view.
+No Context or Memory changes; source Memory UIDs remain the anchors.

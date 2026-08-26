@@ -1,0 +1,5 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 merge task-2/advisor1/budget task-2/participant/proposal-workspace --direct
+EXIT: 0
+DURATION_SECONDS: 1.391
+
+MERGE RECORDED · 'task-2/advisor1/budget' → 'task-2/participant/proposal-workspace' · DIRECT · NEW 7 (7 memories) · ALREADY PRESENT 0 · KEPT TARGET 0 · TOOK SOURCE 0 · CREATED CONTEXTS 0 · TARGET CHANGED YES · CHECKPOINTS 1

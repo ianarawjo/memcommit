@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source ground practice-source-v2-transform --goal 'Atomize practice/source constraints without editing subject text or changing meaning.' --description 'Preserve complete triggers, exceptions, protected objects, safeguards, and provenance in independently reviewable atoms.' --raw-context practice/source --derived-context practice/description --publication-target practice/description --snapshot
+
+EXIT
+1
+
+WALL_SECONDS
+1.366008
+
+STDOUT
+
+
+STDERR
+Ground error: Grounding workbench Contexts must be independent.

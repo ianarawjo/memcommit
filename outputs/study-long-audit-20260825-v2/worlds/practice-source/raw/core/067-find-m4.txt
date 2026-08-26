@@ -1,0 +1,20 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source find 'style guide' --context practice/source
+
+EXIT
+0
+
+WALL_SECONDS
+1.507702
+
+STDOUT
+FIND RESULTS
+PATTERN · style guide · LITERAL · CASE SENSITIVE
+SCOPE · practice/source · EXACT · EXCLUDE EMBEDS
+SCANNED 12 · MATCHED 2 · OCCURRENCES 2
+
+1 [1a9d3a74] By default, format a document title in sentence case rather than title case. An explicitly named style guide may override only that capitalization default; always keep for whenever it is part of the intended wording. [practice/source m9]
+2 [94c3ce98] If titles of works use quotation marks in some places and italics in others, make them consistently italic throughout the document by default; an explicitly named style guide may override only this work-title format. [practice/source m10]
+
+
+STDERR

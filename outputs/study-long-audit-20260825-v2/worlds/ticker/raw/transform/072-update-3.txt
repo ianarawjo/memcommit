@@ -1,0 +1,13 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker update task-2/participant task-3/local/personal-memory --direct --replace-stage
+
+EXIT
+0
+
+OUTPUT
+UPDATE APPLIED · task-2/participant → task-3/local/personal-memory
+EFFECTS · ADD 0 · EDIT 1 · REMOVE 0
+RECEIPT · 87c4841e-96bb-40a8-a972-e52c53b99256
+CHECKPOINTS · task-3/local/personal-memory [ac6c5278-a37e-4ac4-9646-6269cb6c2127]
+REVIEW · mem review update --session 87c4841e-96bb-40a8-a972-e52c53b99256
+RECOVERY · mem undo

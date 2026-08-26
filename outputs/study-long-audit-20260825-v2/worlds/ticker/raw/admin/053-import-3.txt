@@ -1,0 +1,28 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker import memory 37113bd0-5194-521b-9d9e-48903d819520 --from-profile task-1 --context participant/construction-updates/shop-updates --into audit/ticker/admin-v2-scratch
+
+STDIN
+<none>
+
+EXIT
+0
+
+WALL_SECONDS
+1.361959
+
+PRE_IDENTITY
+{"current_context": "task-2/participant", "current_context_uid": "0e19f3b1-4107-48ab-9186-8773e48b812d", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+IMMEDIATE_POST_IDENTITY
+{"current_context": "task-2/participant", "current_context_uid": "0e19f3b1-4107-48ab-9186-8773e48b812d", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+COMMAND_ATTEMPT_DELTA
+{"count_after": 298, "count_before": 297, "delta": 1, "new_attempt_uids": ["46d6b39f-a7b3-4554-aaa7-c03551cffdeb"], "records": [{"command": "mem import memory 37113bd0-5194-521b-9d9e-48903d819520 --from-profile task-1 --context participant/construction-updates/shop-updates --into audit/ticker/admin-v2-scratch", "completed_at": "2026-08-25T18:16:07.376492+00:00", "details": {}, "elapsed_seconds": 0.036461875002714805, "failure": null, "operation": "import", "outcome": null, "started_at": "2026-08-25T18:16:07.339838+00:00", "status": "COMPLETED", "terminal": {"stdin_tty": true, "stdout_tty": false}, "uid": "46d6b39f-a7b3-4554-aaa7-c03551cffdeb", "version": 3}], "sequence": 53}
+
+STDOUT
+Imported Memory [37113bd0] into Context 'audit/ticker/admin-v2-scratch'.
+The ATM on the first floor of the Main Building is closed during the construction period.
+Source and active Profile selection unchanged.
+
+
+STDERR

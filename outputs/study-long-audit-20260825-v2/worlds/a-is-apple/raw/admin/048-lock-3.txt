@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple lock audit/a-is-apple/admin-v2-scratch/co3:f1c940a1
+
+EXIT
+1
+
+OUTPUT
+Error: No directly owned Memory with uid starting with 'f1c940a1' exists in Context 'audit/a-is-apple/admin-v2-scratch/co3'.

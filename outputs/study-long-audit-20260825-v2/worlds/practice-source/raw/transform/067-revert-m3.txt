@@ -1,0 +1,34 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source revert b4ea26c7 --context practice/description --keep
+
+EXIT
+0
+
+WALL_SECONDS
+1.291462
+
+STDOUT
+Reverted Context: practice/description
+Restored state recorded by: manual checkpoint
+Action detail: v2 transform round 3 safety
+Affected Context: practice/description
+Affected content: 1 Memory added, 11 Memories removed, 3 Memory refs removed, 1 Embedded context removed
+  - [memory 6b285fc3] "FIXED-LIMIT ATOMIC CANDIDATE: when revising a passage to meet a shorter fixed limit, remove redundant or unnecessary material while preserving every intended point and each claim’s original strength and conditions."
+  - [memory 9489d092] "FIXED-LIMIT ATOMIC CANDIDATE: if meeting a shorter fixed limit would require dropping an intended point, making a qualified claim sound categorical, or removing one of its conditions, do not make that cut; shorten other redundant or unnece…"
+  - [memory 2530af88] "REVIEW ATOMIC CANDIDATE: classify intent as review-only or authorized editing before changing text; preserve requested scope and source meaning."
+  - [reference 58f1544f] practice/source:4fe217eb "Before adding or reusing citations and refferences, verify that each source exists and supports the exact claim after reviewing the complete source. Don't invent quotations or evidence or overstate an author's contribution or a paper's sta…"  READ ONLY
+  - [memory ea31934d] "REVIEW ATOMIC CANDIDATE: during authorized polishing, preserve overall structure and citation-needed markers."
+  - [memory e1f6f7cf] "Change only wording that causes a problem."
+  - [memory 002f5c64] "ATOMIC CANDIDATE: if a shorter fixed limit applies, aim to remove approximately 20-30% from redundant or unnecessary material."
+  - [memory 19746ca4] "Preserve all intended points plus every claim's original strength and conditions."
+  - [memory bc19c614] "But don't shorten sentences so aggressively that a claim sounds more categorical; keep enough wording to preserve its original strength and conditions."
+  - [reference eb887c08] practice/source:6cc4b8a3 "When the draft has to fit a shorter fixed limit, aim to cut around 20–30% from redundant or unnecessary material."  READ ONLY
+  - [context d5d0a8b4] "practice/description"
+  - [memory 65ba5d7d] "By default, format a document title in sentence case rather than title case. An explicitly named style guide may override only that capitalization default; always keep for whenever it is part of the intended wording."
+  ... 4 more affected direct items not shown
+Restored checkpoint: [b4ea26c7] (2026-08-25 13:18)
+Undo command: mem undo
+Exact recovery checkpoint: mem revert d9cfd4ca --discard-newer
+
+
+STDERR

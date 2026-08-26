@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source sever practice/source practice/description practice/transform-sever-r5 --source-root-only --criteria-root-only
+
+EXIT
+1
+
+WALL_SECONDS
+1.321236
+
+STDOUT
+
+
+STDERR
+Sever error: Sever does not copy live Memory references from 'practice/description'.

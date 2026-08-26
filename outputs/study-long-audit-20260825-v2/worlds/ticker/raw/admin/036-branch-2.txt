@@ -1,0 +1,26 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker branch audit/ticker/admin-v2-scratch/b2-tree --from task-1/participant/construction-updates --recursive
+
+STDIN
+<none>
+
+EXIT
+0
+
+WALL_SECONDS
+1.362917
+
+PRE_IDENTITY
+{"current_context": "audit/ticker/admin-v2-scratch/tree/leaf", "current_context_uid": "164f3813-0100-41f7-a8cb-445e13d0fb0d", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+IMMEDIATE_POST_IDENTITY
+{"current_context": "audit/ticker/admin-v2-scratch/b2-tree", "current_context_uid": "86573764-296a-456a-9302-2a8599bdc8a4", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+COMMAND_ATTEMPT_DELTA
+{"count_after": 281, "count_before": 280, "delta": 1, "new_attempt_uids": ["42c7212e-9f45-490e-8570-46803ae11e29"], "records": [{"command": "mem branch audit/ticker/admin-v2-scratch/b2-tree --from task-1/participant/construction-updates --recursive", "completed_at": "2026-08-25T18:13:07.842824+00:00", "details": {}, "elapsed_seconds": 0.07292212500760797, "failure": null, "operation": "branch", "outcome": null, "started_at": "2026-08-25T18:13:07.769703+00:00", "status": "COMPLETED", "terminal": {"stdin_tty": true, "stdout_tty": false}, "uid": "42c7212e-9f45-490e-8570-46803ae11e29", "version": 3}], "sequence": 36}
+
+STDOUT
+Branched subtree 'task-1/participant/construction-updates' → 'audit/ticker/admin-v2-scratch/b2-tree' · 7 Context(s), 6 descendant(s); switched to its root.
+
+
+STDERR

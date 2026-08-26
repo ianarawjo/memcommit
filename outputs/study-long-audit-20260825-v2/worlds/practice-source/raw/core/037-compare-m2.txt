@@ -1,0 +1,17 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source compare practice/source practice/description
+
+EXIT
+0
+
+WALL_SECONDS
+6.297081
+
+STDOUT
+Compare · practice/source ↔ practice/description
+
+COMPARISON
+  The compared frame reproduces the reference’s editing and verification rules, but embeds them—sometimes duplicated—within a practice task that requires atomizing the notes without performing edits, adding instructions, or changing meaning. The reference instead presents those rules directly, including the conditional 20–30% reduction target.
+
+
+STDERR

@@ -1,0 +1,11 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 rationale task-2/participant/proposal-workspace:a9cd917a-5c65-4672-aae0-7ee0040d7094 --limit 80 --unit characters
+EXIT: 0
+DURATION_SECONDS: 5.874
+
+Rationale [a9cd917a] · task-2/participant/proposal-workspace
+
+MEMORY
+  Keep the total, major cost categories, and one-line estimate basis in the main text so the resource argument can be understood without leaving the proposal.
+
+PROVENANCE
+  从“task-2/advisor1/budget”合并至提案工作区时，该内容以 NEW 新建为独立记忆，来源仍保留；此后无消失、返回、编辑或移除。

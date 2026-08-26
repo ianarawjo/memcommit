@@ -1,0 +1,13 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 translate task-2/participant/proposal-workspace:207b72f8-754a-4add-8641-cf0abe8059f6 --to Spanish
+EXIT: 0
+DURATION_SECONDS: 5.688
+
+
+Translation view: 'task-2/participant/proposal-workspace' → Spanish
+  1 translated Memory
+────────────────────────────────────────────────────────────────
+[207b72f8] Spanish · PROVIDER · UNREVIEWED
+  Especifique las fuentes de datos de campo y de los usuarios, así como los procedimientos de análisis correspondientes a todas las preguntas de investigación de HCI.
+────────────────────────────────────────────────────────────────
+Saved translation view.
+No Context or Memory changes; source Memory UIDs remain the anchors.

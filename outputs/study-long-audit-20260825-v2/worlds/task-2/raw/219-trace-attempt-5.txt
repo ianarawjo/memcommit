@@ -1,0 +1,210 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 trace task-2/participant/proposal-workspace:84cab032-847f-4be2-88db-3c613922d688 --all --json
+EXIT: 0
+DURATION_SECONDS: 1.358
+
+{
+  "context": {
+    "uid": "b839b146-7576-5ec4-93a5-a98f64eba1ec",
+    "name": "task-2/participant/proposal-workspace"
+  },
+  "selected_uid": "84cab032-847f-4be2-88db-3c613922d688",
+  "component_uids": [
+    "6733c5d8-49be-4db9-8515-8cdbf9023414",
+    "84cab032-847f-4be2-88db-3c613922d688"
+  ],
+  "originals": [
+    {
+      "uid": "6733c5d8-49be-4db9-8515-8cdbf9023414",
+      "content": "Equal-authority synthesis rule: preserve each shared co-advisor requirement once, retain distinct conditions, and explain unresolved conflicts with both provenances.",
+      "position": 0,
+      "content_digest": "ee6ef11c0648242021576e4dfb33cd121f81664cb7a535530a390f62e38f0bc9"
+    }
+  ],
+  "current": [
+    {
+      "uid": "6733c5d8-49be-4db9-8515-8cdbf9023414",
+      "content": "Equal-authority synthesis rule: preserve each shared co-advisor requirement once, retain distinct conditions, and explain owned unresolved conflicts with both provenances.",
+      "position": 0,
+      "content_digest": "108bc87e1e6c1f3a5228341a2aebcd324cdd8b3eae222e2596fd3e1a258a3e10"
+    },
+    {
+      "uid": "84cab032-847f-4be2-88db-3c613922d688",
+      "content": "Equal-authority synthesis rule: preserve each shared co-advisor requirement once, retain distinct conditions, and explain owned unresolved conflicts with both provenances.",
+      "position": 0,
+      "content_digest": "108bc87e1e6c1f3a5228341a2aebcd324cdd8b3eae222e2596fd3e1a258a3e10"
+    }
+  ],
+  "events": [
+    {
+      "kind": "CREATED",
+      "evidence": "INFERRED",
+      "timestamp": "2026-08-25T12:45:32.330567",
+      "checkpoint_uid": "51d4aa4f-7b64-42b4-9352-7a74c30a23b8",
+      "command": "copy",
+      "description": "Copied 1 Memory/ies into 'task-2' with new UIDs.",
+      "before": [],
+      "after": [
+        {
+          "uid": "6733c5d8-49be-4db9-8515-8cdbf9023414",
+          "content": "Equal-authority synthesis rule: preserve each shared co-advisor requirement once, retain distinct conditions, and explain unresolved conflicts with both provenances.",
+          "position": 0,
+          "content_digest": "ee6ef11c0648242021576e4dfb33cd121f81664cb7a535530a390f62e38f0bc9"
+        }
+      ],
+      "reason": null,
+      "reason_codes": [],
+      "source_occurrence": null,
+      "operation_id": null,
+      "command_operation": null,
+      "context_transition": null,
+      "child_evidence": [],
+      "declared_frame": null,
+      "declared_frame_digest": null,
+      "uncertainty_reason": null,
+      "source_review_uid": null,
+      "source_review_digest": null,
+      "source_analysis_uid": null
+    },
+    {
+      "kind": "EDITED",
+      "evidence": "RECONSTRUCTED",
+      "timestamp": "2026-08-25T12:50:30.258170",
+      "checkpoint_uid": "ee8e0646-8044-4e61-882f-c23142b6da27",
+      "command": "replace",
+      "description": "Replaced 5 occurrence(s) in 5 Memory/ies across 1 Context(s).",
+      "before": [
+        {
+          "uid": "6733c5d8-49be-4db9-8515-8cdbf9023414",
+          "content": "Equal-authority synthesis rule: preserve each shared co-advisor requirement once, retain distinct conditions, and explain unresolved conflicts with both provenances.",
+          "position": 0,
+          "content_digest": "ee6ef11c0648242021576e4dfb33cd121f81664cb7a535530a390f62e38f0bc9"
+        }
+      ],
+      "after": [
+        {
+          "uid": "6733c5d8-49be-4db9-8515-8cdbf9023414",
+          "content": "Equal-authority synthesis rule: preserve each shared co-advisor requirement once, retain distinct conditions, and explain owned unresolved conflicts with both provenances.",
+          "position": 0,
+          "content_digest": "108bc87e1e6c1f3a5228341a2aebcd324cdd8b3eae222e2596fd3e1a258a3e10"
+        }
+      ],
+      "reason": null,
+      "reason_codes": [],
+      "source_occurrence": null,
+      "operation_id": null,
+      "command_operation": null,
+      "context_transition": null,
+      "child_evidence": [],
+      "declared_frame": null,
+      "declared_frame_digest": null,
+      "uncertainty_reason": null,
+      "source_review_uid": null,
+      "source_review_digest": null,
+      "source_analysis_uid": null
+    },
+    {
+      "kind": "MERGED_IN",
+      "evidence": "RECORDED",
+      "timestamp": "2026-08-25T13:23:52.523026",
+      "checkpoint_uid": "f43dad51-a521-4cbf-949a-e87353a01648",
+      "command": "merge",
+      "description": "Merged 'task-2' into 'task-2/participant/proposal-workspace': new 19; already present 0; kept Target 0; took Source 0",
+      "before": [
+        {
+          "uid": "6733c5d8-49be-4db9-8515-8cdbf9023414",
+          "content": "Equal-authority synthesis rule: preserve each shared co-advisor requirement once, retain distinct conditions, and explain owned unresolved conflicts with both provenances.",
+          "position": 0,
+          "content_digest": "108bc87e1e6c1f3a5228341a2aebcd324cdd8b3eae222e2596fd3e1a258a3e10"
+        }
+      ],
+      "after": [
+        {
+          "uid": "84cab032-847f-4be2-88db-3c613922d688",
+          "content": "Equal-authority synthesis rule: preserve each shared co-advisor requirement once, retain distinct conditions, and explain owned unresolved conflicts with both provenances.",
+          "position": 0,
+          "content_digest": "108bc87e1e6c1f3a5228341a2aebcd324cdd8b3eae222e2596fd3e1a258a3e10"
+        }
+      ],
+      "reason": null,
+      "reason_codes": [
+        "MERGE",
+        "NEW"
+      ],
+      "source_occurrence": null,
+      "operation_id": null,
+      "command_operation": null,
+      "context_transition": {
+        "source": {
+          "uid": "1eca3116-f2e0-4827-9837-b26337236da8",
+          "name": "task-2"
+        },
+        "target": {
+          "uid": "b839b146-7576-5ec4-93a5-a98f64eba1ec",
+          "name": "task-2/participant/proposal-workspace"
+        }
+      },
+      "child_evidence": [],
+      "declared_frame": null,
+      "declared_frame_digest": null,
+      "uncertainty_reason": null,
+      "source_review_uid": null,
+      "source_review_digest": null,
+      "source_analysis_uid": null
+    }
+  ],
+  "analyses": [
+    {
+      "kind": "ATOMIZE_PREVIEW",
+      "status": "STALE",
+      "analysis_uid": "dcff1e3e-8d79-4d8a-8eb2-bcd8863ac526",
+      "created_at": "2026-08-25T17:24:47.585377+00:00",
+      "memory_uid": "84cab032-847f-4be2-88db-3c613922d688",
+      "classification": "COMPOSITE",
+      "action": "SPLIT",
+      "reason": "The source states three independently revisable requirements under one explicit equal-authority synthesis scope.",
+      "reason_codes": [
+        "A01_ONE_FOCUS",
+        "A02_SCOPE_ATTACHED",
+        "A04_SOURCE_GROUNDED",
+        "A05_MINIMAL_EXPANSION"
+      ],
+      "children": [
+        {
+          "content": "Equal-authority synthesis rule: preserve each shared co-advisor requirement once.",
+          "source_spans": [
+            "Equal-authority synthesis rule:",
+            "preserve each shared co-advisor requirement once"
+          ],
+          "frame_spans": []
+        },
+        {
+          "content": "Equal-authority synthesis rule: retain distinct conditions.",
+          "source_spans": [
+            "Equal-authority synthesis rule:",
+            "retain distinct conditions"
+          ],
+          "frame_spans": []
+        },
+        {
+          "content": "Equal-authority synthesis rule: explain owned unresolved conflicts with both provenances.",
+          "source_spans": [
+            "Equal-authority synthesis rule:",
+            "explain owned unresolved conflicts with both provenances"
+          ],
+          "frame_spans": []
+        }
+      ],
+      "lint": [
+        "SIZE_REVIEW"
+      ],
+      "declared_frame": null,
+      "declared_frame_reason": null,
+      "source_review_uid": null,
+      "source_review_digest": null,
+      "source_review_analysis_uid": null
+    }
+  ],
+  "warnings": [
+    "Checkpoint [e8f7aaa4] has invalid Update command-unit metadata; its changes cannot be correlated across Contexts."
+  ]
+}

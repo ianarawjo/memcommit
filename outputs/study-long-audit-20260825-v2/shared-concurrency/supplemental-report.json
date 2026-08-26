@@ -1,0 +1,1726 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-08-25T18:34:20.945191+00:00",
+  "excluded_from_1980": true,
+  "code_snapshot_sha256": "a004fd87545e012a191cc2b1d06af99cd54d40049d304e292694788e01b09f84",
+  "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+  "store_root": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/shared-concurrency/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+  "initial": {
+    "registry_sha256": "10916bf9966dbab89c9481945664edefc704bb8100490b32f6dd93f844c1e4f7",
+    "state_sha256": "0e99e0514647ce14d3090f36d3711fb32b8f33e5315e470e2be8224f69a7c146",
+    "staged_update_sha256": null
+  },
+  "final": {
+    "registry_sha256": "10916bf9966dbab89c9481945664edefc704bb8100490b32f6dd93f844c1e4f7",
+    "state_sha256": "d97c0acfacc00df3a9ecee48a33d82d406fc96e0d26c5ff23869f84ef23e0318",
+    "staged_update_sha256": null
+  },
+  "current_rounds": [
+    {
+      "round": 1,
+      "observations": {
+        "task-1": "audit/shared-v2/a-is-apple/source",
+        "task-2": "audit/shared-v2/a-is-apple/source",
+        "task-3": "audit/shared-v2/a-is-apple/source",
+        "ticker": "audit/shared-v2/a-is-apple/source",
+        "a-is-apple": "audit/shared-v2/a-is-apple/source",
+        "practice-source": "audit/shared-v2/a-is-apple/source"
+      },
+      "own_context_matches": {
+        "task-1": false,
+        "task-2": false,
+        "task-3": false,
+        "ticker": false,
+        "a-is-apple": true,
+        "practice-source": false
+      }
+    },
+    {
+      "round": 2,
+      "observations": {
+        "task-1": "audit/shared-v2/task-1/source",
+        "task-2": "audit/shared-v2/task-1/source",
+        "task-3": "audit/shared-v2/task-1/source",
+        "ticker": "audit/shared-v2/task-1/source",
+        "a-is-apple": "audit/shared-v2/task-1/source",
+        "practice-source": "audit/shared-v2/task-1/source"
+      },
+      "own_context_matches": {
+        "task-1": true,
+        "task-2": false,
+        "task-3": false,
+        "ticker": false,
+        "a-is-apple": false,
+        "practice-source": false
+      }
+    },
+    {
+      "round": 3,
+      "observations": {
+        "task-1": "audit/shared-v2/a-is-apple/source",
+        "task-2": "audit/shared-v2/a-is-apple/source",
+        "task-3": "audit/shared-v2/a-is-apple/source",
+        "ticker": "audit/shared-v2/a-is-apple/source",
+        "a-is-apple": "audit/shared-v2/a-is-apple/source",
+        "practice-source": "audit/shared-v2/a-is-apple/source"
+      },
+      "own_context_matches": {
+        "task-1": false,
+        "task-2": false,
+        "task-3": false,
+        "ticker": false,
+        "a-is-apple": true,
+        "practice-source": false
+      }
+    },
+    {
+      "round": 4,
+      "observations": {
+        "task-1": "audit/shared-v2/ticker/source",
+        "task-2": "audit/shared-v2/ticker/source",
+        "task-3": "audit/shared-v2/ticker/source",
+        "ticker": "audit/shared-v2/ticker/source",
+        "a-is-apple": "audit/shared-v2/ticker/source",
+        "practice-source": "audit/shared-v2/ticker/source"
+      },
+      "own_context_matches": {
+        "task-1": false,
+        "task-2": false,
+        "task-3": false,
+        "ticker": true,
+        "a-is-apple": false,
+        "practice-source": false
+      }
+    },
+    {
+      "round": 5,
+      "observations": {
+        "task-1": "audit/shared-v2/task-2/source",
+        "task-2": "audit/shared-v2/task-2/source",
+        "task-3": "audit/shared-v2/task-2/source",
+        "ticker": "audit/shared-v2/task-2/source",
+        "a-is-apple": "audit/shared-v2/task-2/source",
+        "practice-source": "audit/shared-v2/task-2/source"
+      },
+      "own_context_matches": {
+        "task-1": false,
+        "task-2": true,
+        "task-3": false,
+        "ticker": false,
+        "a-is-apple": false,
+        "practice-source": false
+      }
+    }
+  ],
+  "update_receipts": {
+    "task-1": null,
+    "task-2": null,
+    "task-3": null,
+    "ticker": null,
+    "a-is-apple": null,
+    "practice-source": null
+  },
+  "implicit_diff_canaries": {
+    "task-1": [],
+    "task-2": [],
+    "task-3": [],
+    "ticker": [],
+    "a-is-apple": [],
+    "practice-source": []
+  },
+  "exact_review_canaries": {},
+  "branch_exit_codes": {
+    "task-1": 1,
+    "task-2": 1,
+    "task-3": 1,
+    "ticker": 0,
+    "a-is-apple": 1,
+    "practice-source": 1
+  },
+  "calls": [
+    {
+      "actor": "task-1",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "init",
+        "audit/shared-v2/task-1/source",
+        "--parents"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.273628,
+      "stdout": "Ensured context hierarchy 'audit/shared-v2/task-1/source'.\n  Created: audit, audit/shared-v2, audit/shared-v2/task-1, audit/shared-v2/task-1/source\n  Current: audit/shared-v2/task-1/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "task-1",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "init",
+        "audit/shared-v2/task-1/target",
+        "--parents"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.196836,
+      "stdout": "Ensured context hierarchy 'audit/shared-v2/task-1/target'.\n  Created: audit/shared-v2/task-1/target\n  Reused: audit, audit/shared-v2, audit/shared-v2/task-1\n  Current: audit/shared-v2/task-1/target\n",
+      "stderr": ""
+    },
+    {
+      "actor": "task-1",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "add",
+        "SHARED-CANARY::task-1 source assertion.",
+        "--context",
+        "audit/shared-v2/task-1/source"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.191665,
+      "stdout": "Added [a5b3ad21] SHARED-CANARY::task-1 source assertion.\n",
+      "stderr": ""
+    },
+    {
+      "actor": "task-1",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "add",
+        "SHARED-BASELINE::task-1 target assertion.",
+        "--context",
+        "audit/shared-v2/task-1/target"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.212655,
+      "stdout": "Added [87a8dfd5] SHARED-BASELINE::task-1 target assertion.\n",
+      "stderr": ""
+    },
+    {
+      "actor": "task-2",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "init",
+        "audit/shared-v2/task-2/source",
+        "--parents"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.197652,
+      "stdout": "Ensured context hierarchy 'audit/shared-v2/task-2/source'.\n  Created: audit/shared-v2/task-2, audit/shared-v2/task-2/source\n  Reused: audit, audit/shared-v2\n  Current: audit/shared-v2/task-2/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "task-2",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "init",
+        "audit/shared-v2/task-2/target",
+        "--parents"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.191781,
+      "stdout": "Ensured context hierarchy 'audit/shared-v2/task-2/target'.\n  Created: audit/shared-v2/task-2/target\n  Reused: audit, audit/shared-v2, audit/shared-v2/task-2\n  Current: audit/shared-v2/task-2/target\n",
+      "stderr": ""
+    },
+    {
+      "actor": "task-2",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "add",
+        "SHARED-CANARY::task-2 source assertion.",
+        "--context",
+        "audit/shared-v2/task-2/source"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.184033,
+      "stdout": "Added [3d83a760] SHARED-CANARY::task-2 source assertion.\n",
+      "stderr": ""
+    },
+    {
+      "actor": "task-2",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "add",
+        "SHARED-BASELINE::task-2 target assertion.",
+        "--context",
+        "audit/shared-v2/task-2/target"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.196819,
+      "stdout": "Added [2df62ea4] SHARED-BASELINE::task-2 target assertion.\n",
+      "stderr": ""
+    },
+    {
+      "actor": "task-3",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "init",
+        "audit/shared-v2/task-3/source",
+        "--parents"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.238718,
+      "stdout": "Ensured context hierarchy 'audit/shared-v2/task-3/source'.\n  Created: audit/shared-v2/task-3, audit/shared-v2/task-3/source\n  Reused: audit, audit/shared-v2\n  Current: audit/shared-v2/task-3/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "task-3",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "init",
+        "audit/shared-v2/task-3/target",
+        "--parents"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.190545,
+      "stdout": "Ensured context hierarchy 'audit/shared-v2/task-3/target'.\n  Created: audit/shared-v2/task-3/target\n  Reused: audit, audit/shared-v2, audit/shared-v2/task-3\n  Current: audit/shared-v2/task-3/target\n",
+      "stderr": ""
+    },
+    {
+      "actor": "task-3",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "add",
+        "SHARED-CANARY::task-3 source assertion.",
+        "--context",
+        "audit/shared-v2/task-3/source"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.175923,
+      "stdout": "Added [1dd9969b] SHARED-CANARY::task-3 source assertion.\n",
+      "stderr": ""
+    },
+    {
+      "actor": "task-3",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "add",
+        "SHARED-BASELINE::task-3 target assertion.",
+        "--context",
+        "audit/shared-v2/task-3/target"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.194707,
+      "stdout": "Added [8dc33477] SHARED-BASELINE::task-3 target assertion.\n",
+      "stderr": ""
+    },
+    {
+      "actor": "ticker",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "init",
+        "audit/shared-v2/ticker/source",
+        "--parents"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.204424,
+      "stdout": "Ensured context hierarchy 'audit/shared-v2/ticker/source'.\n  Created: audit/shared-v2/ticker, audit/shared-v2/ticker/source\n  Reused: audit, audit/shared-v2\n  Current: audit/shared-v2/ticker/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "ticker",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "init",
+        "audit/shared-v2/ticker/target",
+        "--parents"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.185888,
+      "stdout": "Ensured context hierarchy 'audit/shared-v2/ticker/target'.\n  Created: audit/shared-v2/ticker/target\n  Reused: audit, audit/shared-v2, audit/shared-v2/ticker\n  Current: audit/shared-v2/ticker/target\n",
+      "stderr": ""
+    },
+    {
+      "actor": "ticker",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "add",
+        "SHARED-CANARY::ticker source assertion.",
+        "--context",
+        "audit/shared-v2/ticker/source"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.186113,
+      "stdout": "Added [71c23858] SHARED-CANARY::ticker source assertion.\n",
+      "stderr": ""
+    },
+    {
+      "actor": "ticker",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "add",
+        "SHARED-BASELINE::ticker target assertion.",
+        "--context",
+        "audit/shared-v2/ticker/target"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.189025,
+      "stdout": "Added [4c88ea90] SHARED-BASELINE::ticker target assertion.\n",
+      "stderr": ""
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "init",
+        "audit/shared-v2/a-is-apple/source",
+        "--parents"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.200401,
+      "stdout": "Ensured context hierarchy 'audit/shared-v2/a-is-apple/source'.\n  Created: audit/shared-v2/a-is-apple, audit/shared-v2/a-is-apple/source\n  Reused: audit, audit/shared-v2\n  Current: audit/shared-v2/a-is-apple/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "init",
+        "audit/shared-v2/a-is-apple/target",
+        "--parents"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.184914,
+      "stdout": "Ensured context hierarchy 'audit/shared-v2/a-is-apple/target'.\n  Created: audit/shared-v2/a-is-apple/target\n  Reused: audit, audit/shared-v2, audit/shared-v2/a-is-apple\n  Current: audit/shared-v2/a-is-apple/target\n",
+      "stderr": ""
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "add",
+        "SHARED-CANARY::a-is-apple source assertion.",
+        "--context",
+        "audit/shared-v2/a-is-apple/source"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.180032,
+      "stdout": "Added [c7bfdd81] SHARED-CANARY::a-is-apple source assertion.\n",
+      "stderr": ""
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "add",
+        "SHARED-BASELINE::a-is-apple target assertion.",
+        "--context",
+        "audit/shared-v2/a-is-apple/target"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.185515,
+      "stdout": "Added [da8a3698] SHARED-BASELINE::a-is-apple target assertion.\n",
+      "stderr": ""
+    },
+    {
+      "actor": "practice-source",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "init",
+        "audit/shared-v2/practice-source/source",
+        "--parents"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.203516,
+      "stdout": "Ensured context hierarchy 'audit/shared-v2/practice-source/source'.\n  Created: audit/shared-v2/practice-source, audit/shared-v2/practice-source/source\n  Reused: audit, audit/shared-v2\n  Current: audit/shared-v2/practice-source/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "practice-source",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "init",
+        "audit/shared-v2/practice-source/target",
+        "--parents"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.186634,
+      "stdout": "Ensured context hierarchy 'audit/shared-v2/practice-source/target'.\n  Created: audit/shared-v2/practice-source/target\n  Reused: audit, audit/shared-v2, audit/shared-v2/practice-source\n  Current: audit/shared-v2/practice-source/target\n",
+      "stderr": ""
+    },
+    {
+      "actor": "practice-source",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "add",
+        "SHARED-CANARY::practice-source source assertion.",
+        "--context",
+        "audit/shared-v2/practice-source/source"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.202182,
+      "stdout": "Added [9b9ed065] SHARED-CANARY::practice-source source assertion.\n",
+      "stderr": ""
+    },
+    {
+      "actor": "practice-source",
+      "phase": "setup",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "add",
+        "SHARED-BASELINE::practice-source target assertion.",
+        "--context",
+        "audit/shared-v2/practice-source/target"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.187797,
+      "stdout": "Added [a456c3c7] SHARED-BASELINE::practice-source target assertion.\n",
+      "stderr": ""
+    },
+    {
+      "actor": "task-1",
+      "phase": "current-r1-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "switch",
+        "audit/shared-v2/task-1/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 1.458832,
+      "stdout": "",
+      "stderr": "Error: cannot switch to context 'audit/shared-v2/task-1/source': The current Context changed before it could be switched.\n"
+    },
+    {
+      "actor": "task-2",
+      "phase": "current-r1-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "switch",
+        "audit/shared-v2/task-2/source"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.457278,
+      "stdout": "Switched to context 'audit/shared-v2/task-2/source'.\n",
+      "stderr": ""
+    },
+    {
+      "actor": "task-3",
+      "phase": "current-r1-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "switch",
+        "audit/shared-v2/task-3/source"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.457296,
+      "stdout": "Switched to context 'audit/shared-v2/task-3/source'.\n",
+      "stderr": ""
+    },
+    {
+      "actor": "ticker",
+      "phase": "current-r1-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "switch",
+        "audit/shared-v2/ticker/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 1.457337,
+      "stdout": "",
+      "stderr": "Error: cannot switch to context 'audit/shared-v2/ticker/source': The current Context changed before it could be switched.\n"
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "current-r1-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "switch",
+        "audit/shared-v2/a-is-apple/source"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.457415,
+      "stdout": "Switched to context 'audit/shared-v2/a-is-apple/source'.\n",
+      "stderr": ""
+    },
+    {
+      "actor": "practice-source",
+      "phase": "current-r1-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "switch",
+        "audit/shared-v2/practice-source/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 1.455434,
+      "stdout": "",
+      "stderr": "Error: cannot switch to context 'audit/shared-v2/practice-source/source': The current Context changed before it could be switched.\n"
+    },
+    {
+      "actor": "task-1",
+      "phase": "current-r1-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "pwd"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.45687,
+      "stdout": "audit/shared-v2/a-is-apple/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "task-2",
+      "phase": "current-r1-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "pwd"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.456502,
+      "stdout": "audit/shared-v2/a-is-apple/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "task-3",
+      "phase": "current-r1-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "pwd"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.455373,
+      "stdout": "audit/shared-v2/a-is-apple/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "ticker",
+      "phase": "current-r1-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "pwd"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.45536,
+      "stdout": "audit/shared-v2/a-is-apple/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "current-r1-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "pwd"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.454837,
+      "stdout": "audit/shared-v2/a-is-apple/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "practice-source",
+      "phase": "current-r1-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "pwd"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.454218,
+      "stdout": "audit/shared-v2/a-is-apple/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "task-1",
+      "phase": "current-r2-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "switch",
+        "audit/shared-v2/task-1/source"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.455354,
+      "stdout": "Switched to context 'audit/shared-v2/task-1/source'.\n",
+      "stderr": ""
+    },
+    {
+      "actor": "task-2",
+      "phase": "current-r2-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "switch",
+        "audit/shared-v2/task-2/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 1.454674,
+      "stdout": "",
+      "stderr": "Error: cannot switch to context 'audit/shared-v2/task-2/source': The current Context changed before it could be switched.\n"
+    },
+    {
+      "actor": "task-3",
+      "phase": "current-r2-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "switch",
+        "audit/shared-v2/task-3/source"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.452953,
+      "stdout": "Switched to context 'audit/shared-v2/task-3/source'.\n",
+      "stderr": ""
+    },
+    {
+      "actor": "ticker",
+      "phase": "current-r2-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "switch",
+        "audit/shared-v2/ticker/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 1.453254,
+      "stdout": "",
+      "stderr": "Error: cannot switch to context 'audit/shared-v2/ticker/source': The current Context changed before it could be switched.\n"
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "current-r2-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "switch",
+        "audit/shared-v2/a-is-apple/source"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.452387,
+      "stdout": "Already on 'audit/shared-v2/a-is-apple/source'.\n",
+      "stderr": ""
+    },
+    {
+      "actor": "practice-source",
+      "phase": "current-r2-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "switch",
+        "audit/shared-v2/practice-source/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 1.452239,
+      "stdout": "",
+      "stderr": "Error: cannot switch to context 'audit/shared-v2/practice-source/source': The current Context changed before it could be switched.\n"
+    },
+    {
+      "actor": "task-1",
+      "phase": "current-r2-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "pwd"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.453065,
+      "stdout": "audit/shared-v2/task-1/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "task-2",
+      "phase": "current-r2-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "pwd"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.456122,
+      "stdout": "audit/shared-v2/task-1/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "task-3",
+      "phase": "current-r2-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "pwd"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.451478,
+      "stdout": "audit/shared-v2/task-1/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "ticker",
+      "phase": "current-r2-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "pwd"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.453898,
+      "stdout": "audit/shared-v2/task-1/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "current-r2-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "pwd"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.450495,
+      "stdout": "audit/shared-v2/task-1/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "practice-source",
+      "phase": "current-r2-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "pwd"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.449551,
+      "stdout": "audit/shared-v2/task-1/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "task-1",
+      "phase": "current-r3-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "switch",
+        "audit/shared-v2/task-1/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 1.452937,
+      "stdout": "",
+      "stderr": "Error: cannot switch to context 'audit/shared-v2/task-1/source': The current Context changed before it could be switched.\n"
+    },
+    {
+      "actor": "task-2",
+      "phase": "current-r3-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "switch",
+        "audit/shared-v2/task-2/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 1.452852,
+      "stdout": "",
+      "stderr": "Error: cannot switch to context 'audit/shared-v2/task-2/source': The current Context changed before it could be switched.\n"
+    },
+    {
+      "actor": "task-3",
+      "phase": "current-r3-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "switch",
+        "audit/shared-v2/task-3/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 1.451976,
+      "stdout": "",
+      "stderr": "Error: cannot switch to context 'audit/shared-v2/task-3/source': The current Context changed before it could be switched.\n"
+    },
+    {
+      "actor": "ticker",
+      "phase": "current-r3-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "switch",
+        "audit/shared-v2/ticker/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 1.45065,
+      "stdout": "",
+      "stderr": "Error: cannot switch to context 'audit/shared-v2/ticker/source': The current Context changed before it could be switched.\n"
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "current-r3-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "switch",
+        "audit/shared-v2/a-is-apple/source"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.450837,
+      "stdout": "Switched to context 'audit/shared-v2/a-is-apple/source'.\n",
+      "stderr": ""
+    },
+    {
+      "actor": "practice-source",
+      "phase": "current-r3-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "switch",
+        "audit/shared-v2/practice-source/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 1.450573,
+      "stdout": "",
+      "stderr": "Error: cannot switch to context 'audit/shared-v2/practice-source/source': The current Context changed before it could be switched.\n"
+    },
+    {
+      "actor": "task-1",
+      "phase": "current-r3-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "pwd"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.438608,
+      "stdout": "audit/shared-v2/a-is-apple/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "task-2",
+      "phase": "current-r3-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "pwd"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.438969,
+      "stdout": "audit/shared-v2/a-is-apple/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "task-3",
+      "phase": "current-r3-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "pwd"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.437679,
+      "stdout": "audit/shared-v2/a-is-apple/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "ticker",
+      "phase": "current-r3-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "pwd"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.436706,
+      "stdout": "audit/shared-v2/a-is-apple/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "current-r3-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "pwd"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.437464,
+      "stdout": "audit/shared-v2/a-is-apple/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "practice-source",
+      "phase": "current-r3-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "pwd"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.439935,
+      "stdout": "audit/shared-v2/a-is-apple/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "task-1",
+      "phase": "current-r4-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "switch",
+        "audit/shared-v2/task-1/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 1.441626,
+      "stdout": "",
+      "stderr": "Error: cannot switch to context 'audit/shared-v2/task-1/source': The current Context changed before it could be switched.\n"
+    },
+    {
+      "actor": "task-2",
+      "phase": "current-r4-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "switch",
+        "audit/shared-v2/task-2/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 1.447598,
+      "stdout": "",
+      "stderr": "Error: cannot switch to context 'audit/shared-v2/task-2/source': The current Context changed before it could be switched.\n"
+    },
+    {
+      "actor": "task-3",
+      "phase": "current-r4-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "switch",
+        "audit/shared-v2/task-3/source"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.441132,
+      "stdout": "Switched to context 'audit/shared-v2/task-3/source'.\n",
+      "stderr": ""
+    },
+    {
+      "actor": "ticker",
+      "phase": "current-r4-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "switch",
+        "audit/shared-v2/ticker/source"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.447046,
+      "stdout": "Switched to context 'audit/shared-v2/ticker/source'.\n",
+      "stderr": ""
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "current-r4-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "switch",
+        "audit/shared-v2/a-is-apple/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 1.44667,
+      "stdout": "",
+      "stderr": "Error: cannot switch to context 'audit/shared-v2/a-is-apple/source': The current Context changed before it could be switched.\n"
+    },
+    {
+      "actor": "practice-source",
+      "phase": "current-r4-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "switch",
+        "audit/shared-v2/practice-source/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 1.444583,
+      "stdout": "",
+      "stderr": "Error: cannot switch to context 'audit/shared-v2/practice-source/source': The current Context changed before it could be switched.\n"
+    },
+    {
+      "actor": "task-1",
+      "phase": "current-r4-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "pwd"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.44348,
+      "stdout": "audit/shared-v2/ticker/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "task-2",
+      "phase": "current-r4-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "pwd"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.443357,
+      "stdout": "audit/shared-v2/ticker/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "task-3",
+      "phase": "current-r4-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "pwd"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.442158,
+      "stdout": "audit/shared-v2/ticker/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "ticker",
+      "phase": "current-r4-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "pwd"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.442133,
+      "stdout": "audit/shared-v2/ticker/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "current-r4-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "pwd"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.440997,
+      "stdout": "audit/shared-v2/ticker/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "practice-source",
+      "phase": "current-r4-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "pwd"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.441108,
+      "stdout": "audit/shared-v2/ticker/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "task-1",
+      "phase": "current-r5-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "switch",
+        "audit/shared-v2/task-1/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 1.451198,
+      "stdout": "",
+      "stderr": "Error: cannot switch to context 'audit/shared-v2/task-1/source': The current Context changed before it could be switched.\n"
+    },
+    {
+      "actor": "task-2",
+      "phase": "current-r5-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "switch",
+        "audit/shared-v2/task-2/source"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.451127,
+      "stdout": "Switched to context 'audit/shared-v2/task-2/source'.\n",
+      "stderr": ""
+    },
+    {
+      "actor": "task-3",
+      "phase": "current-r5-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "switch",
+        "audit/shared-v2/task-3/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 1.449404,
+      "stdout": "",
+      "stderr": "Error: cannot switch to context 'audit/shared-v2/task-3/source': The current Context changed before it could be switched.\n"
+    },
+    {
+      "actor": "ticker",
+      "phase": "current-r5-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "switch",
+        "audit/shared-v2/ticker/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 1.449871,
+      "stdout": "",
+      "stderr": "Error: cannot switch to context 'audit/shared-v2/ticker/source': The current Context changed before it could be switched.\n"
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "current-r5-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "switch",
+        "audit/shared-v2/a-is-apple/source"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.448698,
+      "stdout": "Switched to context 'audit/shared-v2/a-is-apple/source'.\n",
+      "stderr": ""
+    },
+    {
+      "actor": "practice-source",
+      "phase": "current-r5-switch",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "switch",
+        "audit/shared-v2/practice-source/source"
+      ],
+      "exit": 1,
+      "wall_seconds": 1.44879,
+      "stdout": "",
+      "stderr": "Error: cannot switch to context 'audit/shared-v2/practice-source/source': The current Context changed before it could be switched.\n"
+    },
+    {
+      "actor": "task-1",
+      "phase": "current-r5-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "pwd"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.459389,
+      "stdout": "audit/shared-v2/task-2/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "task-2",
+      "phase": "current-r5-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "pwd"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.460424,
+      "stdout": "audit/shared-v2/task-2/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "task-3",
+      "phase": "current-r5-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "pwd"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.461726,
+      "stdout": "audit/shared-v2/task-2/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "ticker",
+      "phase": "current-r5-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "pwd"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.454957,
+      "stdout": "audit/shared-v2/task-2/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "current-r5-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "pwd"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.453867,
+      "stdout": "audit/shared-v2/task-2/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "practice-source",
+      "phase": "current-r5-pwd",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "pwd"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.45932,
+      "stdout": "audit/shared-v2/task-2/source\n",
+      "stderr": ""
+    },
+    {
+      "actor": "task-1",
+      "phase": "update-race",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "update",
+        "audit/shared-v2/task-1/source",
+        "audit/shared-v2/task-1/target",
+        "--direct",
+        "--replace-stage",
+        "--goal",
+        "Preserve only SHARED-CANARY::task-1 in this actor target."
+      ],
+      "exit": 1,
+      "wall_seconds": 1.44705,
+      "stdout": "",
+      "stderr": "Update error: A qualified Memory locator must use exactly one CONTEXT:UID separator.\n"
+    },
+    {
+      "actor": "task-2",
+      "phase": "update-race",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "update",
+        "audit/shared-v2/task-2/source",
+        "audit/shared-v2/task-2/target",
+        "--direct",
+        "--replace-stage",
+        "--goal",
+        "Preserve only SHARED-CANARY::task-2 in this actor target."
+      ],
+      "exit": 1,
+      "wall_seconds": 1.448782,
+      "stdout": "",
+      "stderr": "Update error: A qualified Memory locator must use exactly one CONTEXT:UID separator.\n"
+    },
+    {
+      "actor": "task-3",
+      "phase": "update-race",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "update",
+        "audit/shared-v2/task-3/source",
+        "audit/shared-v2/task-3/target",
+        "--direct",
+        "--replace-stage",
+        "--goal",
+        "Preserve only SHARED-CANARY::task-3 in this actor target."
+      ],
+      "exit": 1,
+      "wall_seconds": 1.44783,
+      "stdout": "",
+      "stderr": "Update error: A qualified Memory locator must use exactly one CONTEXT:UID separator.\n"
+    },
+    {
+      "actor": "ticker",
+      "phase": "update-race",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "update",
+        "audit/shared-v2/ticker/source",
+        "audit/shared-v2/ticker/target",
+        "--direct",
+        "--replace-stage",
+        "--goal",
+        "Preserve only SHARED-CANARY::ticker in this actor target."
+      ],
+      "exit": 1,
+      "wall_seconds": 1.447101,
+      "stdout": "",
+      "stderr": "Update error: A qualified Memory locator must use exactly one CONTEXT:UID separator.\n"
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "update-race",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "update",
+        "audit/shared-v2/a-is-apple/source",
+        "audit/shared-v2/a-is-apple/target",
+        "--direct",
+        "--replace-stage",
+        "--goal",
+        "Preserve only SHARED-CANARY::a-is-apple in this actor target."
+      ],
+      "exit": 1,
+      "wall_seconds": 1.446434,
+      "stdout": "",
+      "stderr": "Update error: A qualified Memory locator must use exactly one CONTEXT:UID separator.\n"
+    },
+    {
+      "actor": "practice-source",
+      "phase": "update-race",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "update",
+        "audit/shared-v2/practice-source/source",
+        "audit/shared-v2/practice-source/target",
+        "--direct",
+        "--replace-stage",
+        "--goal",
+        "Preserve only SHARED-CANARY::practice-source in this actor target."
+      ],
+      "exit": 1,
+      "wall_seconds": 1.44658,
+      "stdout": "",
+      "stderr": "Update error: A qualified Memory locator must use exactly one CONTEXT:UID separator.\n"
+    },
+    {
+      "actor": "task-1",
+      "phase": "implicit-diff",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "diff",
+        "--raw"
+      ],
+      "exit": 1,
+      "wall_seconds": 1.445838,
+      "stdout": "",
+      "stderr": "Diff error: no local update. Run 'mem update --to <context>' first.\n"
+    },
+    {
+      "actor": "task-2",
+      "phase": "implicit-diff",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "diff",
+        "--raw"
+      ],
+      "exit": 1,
+      "wall_seconds": 1.447194,
+      "stdout": "",
+      "stderr": "Diff error: no local update. Run 'mem update --to <context>' first.\n"
+    },
+    {
+      "actor": "task-3",
+      "phase": "implicit-diff",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "diff",
+        "--raw"
+      ],
+      "exit": 1,
+      "wall_seconds": 1.44666,
+      "stdout": "",
+      "stderr": "Diff error: no local update. Run 'mem update --to <context>' first.\n"
+    },
+    {
+      "actor": "ticker",
+      "phase": "implicit-diff",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "diff",
+        "--raw"
+      ],
+      "exit": 1,
+      "wall_seconds": 1.445401,
+      "stdout": "",
+      "stderr": "Diff error: no local update. Run 'mem update --to <context>' first.\n"
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "implicit-diff",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "diff",
+        "--raw"
+      ],
+      "exit": 1,
+      "wall_seconds": 1.446429,
+      "stdout": "",
+      "stderr": "Diff error: no local update. Run 'mem update --to <context>' first.\n"
+    },
+    {
+      "actor": "practice-source",
+      "phase": "implicit-diff",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "diff",
+        "--raw"
+      ],
+      "exit": 1,
+      "wall_seconds": 1.444975,
+      "stdout": "",
+      "stderr": "Diff error: no local update. Run 'mem update --to <context>' first.\n"
+    },
+    {
+      "actor": "task-1",
+      "phase": "branch-race",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-1",
+        "branch",
+        "audit/shared-v2/task-1/branch-copy",
+        "--from",
+        "audit/shared-v2/task-1/source",
+        "--direct"
+      ],
+      "exit": 1,
+      "wall_seconds": 1.478226,
+      "stdout": "",
+      "stderr": "Error: The current Context changed before the branch could be created.\n"
+    },
+    {
+      "actor": "task-2",
+      "phase": "branch-race",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-2",
+        "branch",
+        "audit/shared-v2/task-2/branch-copy",
+        "--from",
+        "audit/shared-v2/task-2/source",
+        "--direct"
+      ],
+      "exit": 1,
+      "wall_seconds": 1.483832,
+      "stdout": "",
+      "stderr": "Error: The current Context changed before the branch could be created.\n"
+    },
+    {
+      "actor": "task-3",
+      "phase": "branch-race",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "task-3",
+        "branch",
+        "audit/shared-v2/task-3/branch-copy",
+        "--from",
+        "audit/shared-v2/task-3/source",
+        "--direct"
+      ],
+      "exit": 1,
+      "wall_seconds": 1.481952,
+      "stdout": "",
+      "stderr": "Error: The current Context changed before the branch could be created.\n"
+    },
+    {
+      "actor": "ticker",
+      "phase": "branch-race",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "ticker",
+        "branch",
+        "audit/shared-v2/ticker/branch-copy",
+        "--from",
+        "audit/shared-v2/ticker/source",
+        "--direct"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.474928,
+      "stdout": "Branched 'audit/shared-v2/ticker/source' → 'audit/shared-v2/ticker/branch-copy' and switched to it.\n",
+      "stderr": ""
+    },
+    {
+      "actor": "a-is-apple",
+      "phase": "branch-race",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "a-is-apple",
+        "branch",
+        "audit/shared-v2/a-is-apple/branch-copy",
+        "--from",
+        "audit/shared-v2/a-is-apple/source",
+        "--direct"
+      ],
+      "exit": 1,
+      "wall_seconds": 1.477201,
+      "stdout": "",
+      "stderr": "Error: The current Context changed before the branch could be created.\n"
+    },
+    {
+      "actor": "practice-source",
+      "phase": "branch-race",
+      "argv": [
+        "/opt/anaconda3/bin/python",
+        "/Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_shared_mem.py",
+        "practice-source",
+        "branch",
+        "audit/shared-v2/practice-source/branch-copy",
+        "--from",
+        "audit/shared-v2/practice-source/source",
+        "--direct"
+      ],
+      "exit": 1,
+      "wall_seconds": 1.481341,
+      "stdout": "",
+      "stderr": "Error: The current Context changed before the branch could be created.\n"
+    }
+  ]
+}

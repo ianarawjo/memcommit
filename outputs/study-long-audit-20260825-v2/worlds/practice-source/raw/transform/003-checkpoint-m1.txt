@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source checkpoint practice/description 'v2 transform round 1 safety'
+
+EXIT
+0
+
+WALL_SECONDS
+1.255702
+
+STDOUT
+[c30e6bd3] 2026-08-25 13:12:33  Context 'practice/description'  'v2 transform round 1 safety'
+
+
+STDERR

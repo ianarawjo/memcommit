@@ -1,0 +1,21 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple forget 'remove generated claims unrelated to the a-is-apple mappings' --context practice
+
+EXIT
+0
+
+OUTPUT
+Consulting the configured Forget provider...
+FORGET APPLIED · SOURCE practice
+FORGET · remove generated claims unrelated to the a-is-apple mappings
+DIFF · 6 CHANGES
+- [ec34724d] Map “b” to “banana.”
+- [79959824] Map “b” to “blueberry.”
+- [470fd7d4] Treat the copied mapping as provisional while keeping “blueberry” visible.
+- [c780835b] For the alphabet example, cite the existing mapping “b” to “banana.”
+- [d399ce0f] For the alphabet example, cite the existing mapping “b” to “blueberry.”
+- [b857b47a] For the alphabet example, keep “blueberry” visible and treat the copied “b” to “blueberry” mapping as provisional while citing that existing mapping.
+RECEIPT · 3af0e2a3-04e2-424f-8d52-b512b13fe7f9
+CHECKPOINT · 3af0e2a3-04e2-424f-8d52-b512b13fe7f9
+REVIEW · mem review forget --receipt 3af0e2a3-04e2-424f-8d52-b512b13fe7f9
+RECOVERY · mem undo

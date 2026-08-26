@@ -1,0 +1,59 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source atomize --context practice/description --memory 5e5f3d04
+
+EXIT
+0
+
+WALL_SECONDS
+9.116572
+
+STDOUT
+ RESULT · atomize · practice/description
+ STATUS · ANALYSIS COMPLETE · sources=1 · projected=2 · splits=1 · children=2 · review issues=1
+
+ WHAT MEM UNDERSTOOD
+ Document titles should normally use sentence case unless an explicitly named style guide overrides capitalization, and the intended word “for” should be preserved.
+
+ WHAT HAPPENED
+ The capitalization rule and its explicit style-guide exception were preserved together, while the separate protected-word instruction was split into its own independently reviewable item.
+
+ WHAT REMAINS UNRESOLVED
+ (none reported under this operation's bounded contract)
+The atomize analysis reported no unresolved finding in this bounded Context frame.
+
+ REPRESENTATIVE / BOUNDARY CASES
+ ›  1. [REPRESENTATIVE] COMPOSITE · SPLIT
+       SPLIT: DEFAULT CANDIDATE: use sentence case for document titles by default, subject only to an explicitly named style guide capitalization override; preserve the intended word for.
+
+Analysis [cc4fdaf3] · INPUT practice/description → OUTPUT practice/description · ORDER: SOURCE · 0/1 answered
+
+ACTIONABLE ISSUES
+›  1. · SUGGESTED SPLIT · COMPOSITE · 2 CHILDREN  “DEFAULT CANDIDATE: use sentence case for docume…”
+
+SUGGESTED SPLIT 1/1
+
+SOURCE [5e5f3d04]
+DEFAULT CANDIDATE: use sentence case for document titles by default, subject only to an explicitly named style guide capitalization override; preserve the intended word for.
+
+CLASSIFICATION
+COMPOSITE · 2 CHILDREN
+
+WHY THIS MEMORY SPLIT
+The source contains two independently revisable instructions: a default capitalization rule with its exception and a separate requirement to preserve the intended word “for”.
+
+PROPOSED CHILDREN
+1. Use sentence case for document titles by default, subject only to an explicitly named style guide capitalization override.
+   EVIDENCE: use sentence case for document titles by default, subject only to an explicitly named style guide capitalization override
+2. Preserve the intended word for.
+   EVIDENCE: preserve the intended word for
+
+REFINE, COMMENT, OR ENTER A DIFFERENT READING
+> 
+
+SOURCE means canonical Context order; Memory creation timestamps are not recorded.
+No Memory changes have been applied. No checkpoint was created.
+Saved analysis [cc4fdaf3]: CURRENT.
+Apply the planned in-place Output with: mem atomize --save
+
+
+STDERR

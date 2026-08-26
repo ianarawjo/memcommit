@@ -1,0 +1,23 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source query --context practice/source 'What are the exact title, terminology, and style-guide override rules?'
+
+EXIT
+0
+
+WALL_SECONDS
+8.142740
+
+STDOUT
+For any title about interaction with AI agent memory, preserve the exact intended terminology: use “interaction,” “management,” and “AI agent memory,” rather than “agent memory.” [1]
+
+By default, format a document title in sentence case, not title case, and always retain “for” when it is part of the intended wording. An explicitly named style guide may override only this capitalization default. [2]
+
+By default, format titles of works consistently in italics throughout the document rather than mixing quotation marks and italics. An explicitly named style guide may override only this work-title formatting rule. [3]
+
+References
+[1] For any titlle about interaction with AI agent memory, keep the exact terminology and intended words: use interaction and management and AI agent memory rather than agent memory. — 44de7eff, practice/source, m8
+[2] By default, format a document title in sentence case rather than title case. An explicitly named style guide may override only that capitalization default; always keep for whenever it is part of the intended wording. — 1a9d3a74, practice/source, m9
+[3] If titles of works use quotation marks in some places and italics in others, make them consistently italic throughout the document by default; an explicitly named style guide may override only this work-title format. — 94c3ce98, practice/source, m10
+
+
+STDERR

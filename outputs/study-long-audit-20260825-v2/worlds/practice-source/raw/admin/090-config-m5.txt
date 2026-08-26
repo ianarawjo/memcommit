@@ -1,0 +1,24 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source config set provider
+
+STDIN
+<none>
+
+EXIT
+2
+
+WALL_SECONDS
+1.326917
+
+POST_CALL_IDENTITY_HOST_ASSERTION
+{"profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/practice-source/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+STDOUT
+
+
+STDERR
+Usage: run_isolated_mem.py config set [OPTIONS] KEY VALUE
+Try 'run_isolated_mem.py config set -h' for help.
+╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Missing argument 'VALUE'.                                                    │
+╰──────────────────────────────────────────────────────────────────────────────╯

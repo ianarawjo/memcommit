@@ -1,0 +1,15 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple distill --from practice --to practice/source --goal 'Distill a compact recovery rule set without inventing new letter mappings.'
+
+EXIT
+0
+
+OUTPUT
+DISTILL APPLIED · practice → practice/source
+EFFECTS · ADD 2 RULES
+
+  [memory b443aa3f] Recover the preferred set as exactly: a maps to apple, b maps to banana, and c maps to cedar; do not introduce mappings for other letters.
+  [memory fe3ff968] Keep unresolved alternatives explicit during recovery instead of silently replacing the preferred mapping.
+
+REVIEW · mem review distill --receipt 3b3fd89d-ec96-4c34-8d1a-b08f406fd9cc
+UNDO · mem undo

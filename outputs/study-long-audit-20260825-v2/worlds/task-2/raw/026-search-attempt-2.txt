@@ -1,0 +1,14 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 search "How can budget detail remain auditable while fitting a two-page proposal?" --context task-2/advisor1/budget --context task-2/advisor2/budget --limit 7
+EXIT: 0
+DURATION_SECONDS: 7.21
+
+task-2/advisor2/budget
+[memory d614b55d] Keep the main text to the total and major categories, and place quantities, unit rates, and assumptions in one compact budget table or appendix.
+[memory 07bad409] Put the estimate basis in a dedicated table column so one assumption can be checked or revised without rewriting the narrative.
+[memory 24500129] Give each cost category, quantity, unit rate, and subtotal a stable row in the separate budget table.
+[memory 675956de] Keep detailed arithmetic out of the main argument when readers can reach the complete table from a clear reference.
+[memory abf6d361] Readers can verify arithmetic and compare categories faster in a consistent table than in amounts distributed across prose.
+
+task-2/advisor1/budget
+[memory 05e0261e] Keep the total, major cost categories, and one-line estimate basis in the main text so the resource argument can be understood without leaving the proposal.
+[memory f7a16d08] Accept a denser main-text paragraph when the estimate basis is essential to deciding whether the request is proportionate.

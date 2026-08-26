@@ -1,0 +1,11 @@
+{
+  "sequence": 86,
+  "operation": "list",
+  "attempt": 5,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 list task-1/campus-wiki --recursive",
+  "exit": 0,
+  "wall_seconds": 1.485785,
+  "pre_target_digest": "8fb7214f84405dbc6890c81c58d03a68e4fcf29bdda0b1191acef0ae3a80c9e6",
+  "post_target_digest": "0b87ff5b49333dd9f0196458c7a32c5ab1ace7aaf8d37cb75d542d7a30efd636",
+  "raw_output": "raw/core/086-list-m5.txt"
+}

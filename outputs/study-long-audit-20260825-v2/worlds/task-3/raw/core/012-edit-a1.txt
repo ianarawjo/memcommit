@@ -1,0 +1,9 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 edit 10b92448 'Healthcare candidate (pending, not approved): limit disclosure to facts necessary for current care, exclude unrelated history, and require explicit user approval.' --context task-3/local/guardrails/purpose-and-scope
+
+STDOUT
+Edited [10b92448] in 'task-3/local/guardrails/purpose-and-scope':
+  - Healthcare candidate (pending): limit disclosure to facts necessary for current care, exclude unrelated history, and require explicit user approval.
+  + Healthcare candidate (pending, not approved): limit disclosure to facts necessary for current care, exclude unrelated history, and require explicit user approval.
+
+STDERR

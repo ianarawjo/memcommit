@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 check-conformance task-1/participant/construction-updates/event-relocations --against task-1/participant/construction-updates/building-access
+
+EXIT
+0
+
+OUTPUT
+CONFORMANCE · 0/0 EXAMPLES CONFORM · 0/0 RULES MET · [EXAMPLES task-1/participant/construction-updates/event-relocations] · [RULES task-1/participant/construction-updates/building-access] · 13 EXAMPLES N/A · 15 RULES N/A

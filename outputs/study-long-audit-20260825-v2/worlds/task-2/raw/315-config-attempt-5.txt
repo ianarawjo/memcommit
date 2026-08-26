@@ -1,0 +1,5 @@
+Usage: run_isolated_mem.py config set [OPTIONS] KEY VALUE
+Try 'run_isolated_mem.py config set -h' for help.
+╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Missing argument 'VALUE'.                                                    │
+╰──────────────────────────────────────────────────────────────────────────────╯

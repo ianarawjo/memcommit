@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source show practice:2dd9352e
+
+EXIT
+0
+
+WALL_SECONDS
+1.310773
+
+STDOUT
+[Memory practice:2dd9352e-887d-4fa6-a5da-f4495b1aee1d] REVIEW CANDIDATE: during authorized polishing, preserve overall structure and citation-needed markers.
+
+
+STDERR

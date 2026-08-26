@@ -1,0 +1,7 @@
+{
+  "pre_profile_universe_delivery_digest": "5a342c646ebfd102a00ab7e6b265907668790ef67ac44b3ae880780c780acb45",
+  "post_profile_universe_delivery_digest": "5a342c646ebfd102a00ab7e6b265907668790ef67ac44b3ae880780c780acb45",
+  "unchanged": true,
+  "delivery_count": 0,
+  "digest_semantics": "registry plus all Profile Store Context/state/write-protection artifacts; audit ledgers and lock files excluded"
+}

@@ -1,0 +1,31 @@
+{
+  "sequence": 103,
+  "count_before": 347,
+  "count_after": 348,
+  "delta": 1,
+  "new_attempt_uids": [
+    "ef016b42-d78a-4842-bc94-401b8b795195"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "ef016b42-d78a-4842-bc94-401b8b795195",
+      "operation": "share",
+      "command": "mem share task-1/participant/construction-updates --to task-3/missing-endpoint --direct",
+      "status": "FAILED",
+      "started_at": "2026-08-25T18:17:30.644589+00:00",
+      "completed_at": "2026-08-25T18:17:30.658720+00:00",
+      "elapsed_seconds": 0.013900624995585531,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": {
+        "kind": "Exit",
+        "exit_code": 1
+      }
+    }
+  ]
+}

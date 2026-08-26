@@ -1,0 +1,11 @@
+{
+  "sequence": 84,
+  "operation": "fit",
+  "attempt": 4,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 fit --memory task-1/participant/construction-updates/temporary-parking:84196dc5 --memory task-1/campus-wiki/temporary-parking:6960c0ca --background 'The construction period is June 24 through August 23, with Outdoor Parking Lot C as the temporary visitor alternative.'",
+  "exit": 0,
+  "wall_seconds": 7.210721,
+  "pre_target_digest": "18333dba7f92bd93e1b5db1dff9ca02e8cd6381b4ff24fd5f0c11831d27b137c",
+  "post_target_digest": "94990e1f151836473bae833be843fc6c9abca41a06ad5ea9e03ab3052621d221",
+  "raw_output": "raw/core/084-fit-m4.txt"
+}

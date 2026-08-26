@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 translate task-3/local/guardrails/approval-and-delivery:96442184 -t Japanese --refresh
+
+EXIT
+0
+
+OUTPUT
+
+Translation view: 'task-3/local/guardrails/approval-and-delivery' → Japanese
+  1 translated Memory
+────────────────────────────────────────────────────────────────
+[96442184] Japanese · PROVIDER · UNREVIEWED
+  送信前に、実際の受信者をユーザーに表示する。
+────────────────────────────────────────────────────────────────
+Saved translation view.
+No Context or Memory changes; source Memory UIDs remain the anchors.

@@ -1,0 +1,22 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source translate practice/source:7ebe67fb --to Spanish
+
+EXIT
+0
+
+WALL_SECONDS
+6.004556
+
+STDOUT
+
+Translation view: 'practice/source' → Spanish
+  1 translated Memory
+────────────────────────────────────────────────────────────────
+[7ebe67fb] Spanish · PROVIDER · UNREVIEWED
+  Pero no acortes las frases de forma tan agresiva que una afirmación suene más categórica; conserva suficiente redacción para mantener su fuerza y sus condiciones originales.
+────────────────────────────────────────────────────────────────
+Saved translation view.
+No Context or Memory changes; source Memory UIDs remain the anchors.
+
+
+STDERR

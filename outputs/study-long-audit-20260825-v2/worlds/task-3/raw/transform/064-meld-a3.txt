@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 meld --from task-3/local/personal-memory/2024/03 --to task-3/local/guardrails/audit-and-recovery --direct
+
+EXIT
+1
+
+OUTPUT
+Meld error: The target already has a meld from different sources. Use --restart to replace it.

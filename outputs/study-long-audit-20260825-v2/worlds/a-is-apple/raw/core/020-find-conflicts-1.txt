@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple find-conflicts practice
+
+EXIT
+0
+
+OUTPUT
+Find Conflicts · practice · 0/4 direct memories involved · 0/6 pairs flagged

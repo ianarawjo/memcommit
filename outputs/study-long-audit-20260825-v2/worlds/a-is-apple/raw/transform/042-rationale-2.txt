@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple rationale practice/source:4a8036d1
+
+EXIT
+0
+
+OUTPUT
+Rationale [4a8036d1] · practice/source
+
+MEMORY
+  b is banana.
+
+PROVENANCE
+  “b is banana.” was added as a standalone Memory in practice/source, disappeared when that Context was cleared, and returned when its earlier state was restored. A NEW merge then copied it unchanged into practice while retaining the practice/source occurrence.

@@ -1,0 +1,4 @@
+Log for 'audit/ticker/admin-v2-scratch':
+
+DIRECT COMMANDS · audit/ticker/admin-v2-scratch
+  [init] [CHECKPOINT d97f03e0] [CONTEXT 482549cc]  2026-08-25 14:12 · baseline for CONTEXT audit/ticker/admin-v2-scratch · not counted as a command

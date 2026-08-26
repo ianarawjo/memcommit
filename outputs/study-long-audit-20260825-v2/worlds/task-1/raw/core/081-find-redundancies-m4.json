@@ -1,0 +1,11 @@
+{
+  "sequence": 81,
+  "operation": "find-redundancies",
+  "attempt": 4,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 find-redundancies --context task-1/participant/construction-updates/temporary-parking --direct",
+  "exit": 0,
+  "wall_seconds": 5.873931,
+  "pre_target_digest": "b5cb54dc89bef3a425d22cede61c5b449b6f02f11505cfcc898ca4175ead16da",
+  "post_target_digest": "ac4a216f172c7bcc3e33969ecf0e90d7dcddb050e3c215f0f8b876b5601abf9d",
+  "raw_output": "raw/core/081-find-redundancies-m4.txt"
+}

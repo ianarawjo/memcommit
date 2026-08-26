@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple meld practice practice/source practice/aia-meld-r5
+
+EXIT
+1
+
+OUTPUT
+Meld error: A source Context changed while Compare was analyzing it; the new analysis was not saved.

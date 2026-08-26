@@ -1,0 +1,7 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 add 'NOT SHARED: exclude relatives, contacts, and unrelated third-party details unless the user separately approves a necessary support role.' --context task-3/local
+
+STDOUT
+Added [8db5e9c8] NOT SHARED: exclude relatives, contacts, and unrelated third-party details unless the user separately approves a necessary support role.
+
+STDERR

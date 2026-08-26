@@ -1,0 +1,24 @@
+{
+  "kind": "host-only frozen-code diagnosis; no mem call",
+  "status_attempt": 3,
+  "status_sequence": 49,
+  "current_context": {
+    "name": "task-2/participant",
+    "uid": "0e19f3b1-4107-48ab-9186-8773e48b812d"
+  },
+  "embedded_item": {
+    "runtime_type": "ContextSnapshotRef",
+    "occurrence_uid": "c458ab18-ff6e-4bf1-9ada-74a8acd0200e",
+    "public_name": "task-2/participant/proposal-workspace",
+    "target_context_uid": "b839b146-7576-5ec4-93a5-a98f64eba1ec"
+  },
+  "live_target": {
+    "name": "task-2/participant/proposal-workspace",
+    "uid": "b839b146-7576-5ec4-93a5-a98f64eba1ec"
+  },
+  "identity_comparisons": {
+    "occurrence_uid_equals_live_uid": false,
+    "target_context_uid_equals_live_uid": true
+  },
+  "inference": "Frozen Status recursive traversal treats ContextSnapshotRef as Context and passes the occurrence UID as expected_uid; the live target correctly matches target_context_uid instead, so the read fails with an identity-change error."
+}

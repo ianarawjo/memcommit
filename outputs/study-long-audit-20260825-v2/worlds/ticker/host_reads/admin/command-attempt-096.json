@@ -1,0 +1,31 @@
+{
+  "sequence": 96,
+  "count_before": 340,
+  "count_after": 341,
+  "delta": 1,
+  "new_attempt_uids": [
+    "62270743-655b-4932-933f-1fcd326b00c3"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "62270743-655b-4932-933f-1fcd326b00c3",
+      "operation": "init-study",
+      "command": "mem init-study ticker/admin-v2-final",
+      "status": "FAILED",
+      "started_at": "2026-08-25T18:17:16.831856+00:00",
+      "completed_at": "2026-08-25T18:17:16.846215+00:00",
+      "elapsed_seconds": 0.014190333007718436,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": {
+        "kind": "Exit",
+        "exit_code": 1
+      }
+    }
+  ]
+}

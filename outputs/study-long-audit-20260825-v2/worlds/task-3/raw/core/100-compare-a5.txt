@@ -1,0 +1,28 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 compare task-3/local/guardrails/audit-and-recovery task-3/local/guardrails/approval-and-delivery --direct --snapshot --refresh
+
+STDOUT
+MEM COMPARE · SYMMETRIC PEERS
+Reference: task-3/local/guardrails/audit-and-recovery
+Compared:  task-3/local/guardrails/approval-and-delivery
+SCOPE · REFERENCE SELECTED GRAPH ONLY · COMPARED SELECTED GRAPH ONLY
+Analysis: a0639c34 · NEW
+METRICS · MEMORIES 14 + 9 · RELATIONS 18 · POTENTIAL CONFLICTS 0
+EQUIVALENT 0 · COMPATIBLE 2 · SCOPED 0 · CONFLICT 0 · DISTINCT 16 · UNCLEAR 0
+
+WHAT MEM UNDERSTOOD
+Both frames address controlled external sharing, but they contribute largely complementary policies: the reference emphasizes auditability, minimization, stale-data cautions, and concrete candidate facts, while the compared frame emphasizes pre-transmission disclosure, renewed approval after changes, user-only authorization, and recipient retention or forwarding risks.
+
+WHAT BOTH CONTAIN · 2
+Both require recipient and purpose information to support approved sharing, with one frame recording it and the other displaying it before transmission.
+
+ONLY IN task-3/local/guardrails/audit-and-recovery · 11 · not automatically a deficiency
+The reference adds audit-record requirements, transmission-failure handling, minimization, synchronization and traceability limits, stale-data cautions, medication and accommodation context, and a no-transfer audit finding.
+
+ONLY IN task-3/local/guardrails/approval-and-delivery · 5 · not automatically a deficiency
+The compared frame adds itemized pre-transmission disclosure, renewed approval after scope changes, a prohibition on agent approval, and warnings about recipient retention and internal forwarding.
+
+The complete source-linked relation ledger is saved. Inspect it with:
+  mem compare task-3/local/guardrails/audit-and-recovery task-3/local/guardrails/approval-and-delivery --ledger
+
+STDERR

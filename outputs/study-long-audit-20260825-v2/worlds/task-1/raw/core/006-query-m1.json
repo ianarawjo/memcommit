@@ -1,0 +1,11 @@
+{
+  "sequence": 6,
+  "operation": "query",
+  "attempt": 1,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 query task-1/campus-wiki/construction-details 'What public construction dates may be stated without exposing internal work details?'",
+  "exit": 0,
+  "wall_seconds": 5.518727,
+  "pre_target_digest": "289217ef389c0f4d6a8d58d9655e6d33e7d0e25e786e4f57fdefdf3db4d4b65f",
+  "post_target_digest": "bd08d0e94393f39cfe005c9fea435e45840c9742265406f368b6028add387873",
+  "raw_output": "raw/core/006-query-m1.txt"
+}

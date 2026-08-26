@@ -1,0 +1,26 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker checkout audit/ticker/admin-v2-missing-target
+
+STDIN
+<none>
+
+EXIT
+1
+
+WALL_SECONDS
+1.318750
+
+PRE_IDENTITY
+{"current_context": "audit/ticker/admin-v2-scratch/co4-tree", "current_context_uid": "44473ed5-f911-4bd5-8871-7e0804873207", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+IMMEDIATE_POST_IDENTITY
+{"current_context": "audit/ticker/admin-v2-scratch/co4-tree", "current_context_uid": "44473ed5-f911-4bd5-8871-7e0804873207", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+COMMAND_ATTEMPT_DELTA
+{"count_after": 335, "count_before": 334, "delta": 1, "new_attempt_uids": ["c873ab6e-73ed-4517-a136-def0d6daf9a2"], "records": [{"command": "mem checkout audit/ticker/admin-v2-missing-target", "completed_at": "2026-08-25T18:17:08.697277+00:00", "details": {}, "elapsed_seconds": 0.020374375002575107, "failure": {"exit_code": 1, "kind": "Exit"}, "operation": "checkout", "outcome": null, "started_at": "2026-08-25T18:17:08.676654+00:00", "status": "FAILED", "terminal": {"stdin_tty": true, "stdout_tty": false}, "uid": "c873ab6e-73ed-4517-a136-def0d6daf9a2", "version": 3}], "sequence": 90}
+
+STDOUT
+
+
+STDERR
+Error: context 'audit/ticker/admin-v2-missing-target' does not exist.

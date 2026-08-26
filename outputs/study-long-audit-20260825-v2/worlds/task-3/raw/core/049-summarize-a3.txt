@@ -1,0 +1,10 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 summarize task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance --direct --plain
+
+STDOUT
+SUMMARY · task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance
+STATUS · DIRECT
+
+This public summary offers preliminary cues for minimizing and accurately presenting necessary healthcare-support information, including using summaries or preferences and checking possibly stale details. The agent may prepare an editable candidate, but transmission requires explicit approval and verified scope, recipient, purpose, and channel. Delivery, retention, deletion, routing, internal processing, service-improvement use, and downstream permissions remain governed by authorized policy and may be unknown.
+
+STDERR

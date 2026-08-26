@@ -1,0 +1,11 @@
+{
+  "sequence": 67,
+  "operation": "find",
+  "attempt": 4,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 find 'OUTDOOR PARKING LOT C' --ignore-case --context task-1/participant/construction-updates/temporary-parking --direct",
+  "exit": 0,
+  "wall_seconds": 1.397027,
+  "pre_target_digest": "326977c2016c8291040c129d4499ec7b7642a1c33023067d13c2091ba18fc648",
+  "post_target_digest": "45694d30c61f417ed621e45a4e432506839562dbd846828cab924ef558e9c707",
+  "raw_output": "raw/core/067-find-m4.txt"
+}

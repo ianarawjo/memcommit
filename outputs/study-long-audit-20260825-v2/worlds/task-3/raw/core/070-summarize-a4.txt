@@ -1,0 +1,10 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 summarize task-3/local --direct --plain
+
+STDOUT
+SUMMARY · task-3/local
+STATUS · DIRECT
+
+Medication timing remains a draft candidate, requiring verification of the specific medication, its current status, recipient, purpose, and relevance before approval. A separate draft candidate says the user waited because seats were unavailable; the current accommodation need must likewise be verified before approval.
+
+STDERR

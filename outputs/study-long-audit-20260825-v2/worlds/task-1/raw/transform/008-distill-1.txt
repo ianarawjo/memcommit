@@ -1,0 +1,20 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 distill --from task-1/participant/construction-updates/facility-updates --to task-1/participant --goal 'Distill dated facility changes for publication; retain source attribution and all verified qualifications.'
+
+EXIT
+0
+
+OUTPUT
+DISTILL APPLIED · task-1/participant/construction-updates/facility-updates → task-1/participant
+EFFECTS · ADD 7 RULES
+
+  [memory 0e37277b] For campus-wiki/facility-updates, publish that the Main Building undergoes major facility-improvement construction during summer break, with the construction period running from June 24 through August 23.
+  [memory 955f592d] During the construction period, Main Building access and operations change as follows: elevators operate alternately one at a time; the visitor-services desk suspends in-person operations and visitor services move to the integrated campus portal's visitor menu; the first-floor Innovation Hub consultation desk does not operate; and air conditioning may occasionally be interrupted for five to ten minutes for facility inspections.
+  [memory c996df28] During the construction period, the Main Building's general restrooms on floors one through three are unavailable; the nearest general restroom becomes the exhibition hall on the third floor of the West Complex.
+  [memory 2255eeaa] Restroom redirection during the construction period depends on user and facility type: direct students, staff, and members unable to use Main Building restrooms to the Central Library; as a rule, direct general visitors to restrooms outside the Main Building; and direct users unable to use the Main Building's accessible restroom to the Student Centre.
+  [memory a3ec8556] Publication may describe user-facing disruption risks caused by changed access: an Innovation Hub visitor expecting immediate in-person consultation may encounter the closed desk and then search for the online channel, while cleaning and security contract staff may find the designated service entrance burdensome and go to the wrong entrance at shift start.
+  [memory 530ea9c0] Facility guidance for the construction period must remain limited to publicly disclosed operational impacts and must not verify or infer nonpublic types of work.
+  [memory 49c359a1] Attributed update entries use the prefix “Add campus-wiki/facility-updates:” for added publication content and “Modify campus-wiki/facility-updates:” for modified content; the modification form is specifically evidenced for the contract-staff entrance-impact statement.
+
+REVIEW · mem review distill --receipt c72b119d-0bf4-4917-99f1-bcc099eecaf5
+UNDO · mem undo

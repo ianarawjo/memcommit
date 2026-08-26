@@ -1,0 +1,15 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 find-duplicates task-1/campus-wiki/temporary-parking --direct
+
+EXIT
+0
+
+WALL_SECONDS
+1.317104
+
+STDOUT
+Find Duplicates · task-1/campus-wiki/temporary-parking · 51 direct items checked · 0 exact groups · 0 proposed absorptions
+  No exact duplicate direct items.
+
+
+STDERR

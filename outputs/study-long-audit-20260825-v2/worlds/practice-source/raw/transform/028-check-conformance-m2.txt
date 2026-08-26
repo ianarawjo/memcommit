@@ -1,0 +1,15 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source check-conformance practice/description --against 'Each result must retain complete source scope and must not perform the requested edit.'
+
+EXIT
+0
+
+WALL_SECONDS
+7.077118
+
+STDOUT
+CONFORMANCE · 5/6 EXAMPLES CONFORM · 0/1 RULES MET · [EXAMPLES practice/description] · [RULES TEXT Each result must retain complete source scope and must not perform the requested edit.] · 3 EXAMPLES N/A
+! VIOLATES · [EXAMPLE m000007] DEFAULT CANDIDATE: use sentence case for document titles by default, subject only to an explicitly named style guide capitalization override; preserve the intended word for. · [RULE r1] Each result must retain complete source scope and must not perform the requested edit. · WHY · The fragment loses the source scope needed to identify what intended word must be preserved.
+
+
+STDERR

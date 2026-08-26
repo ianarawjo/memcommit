@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 forget 'Remove only temporary items that imply disclosure approval; preserve explicit decision gates and exclusions.' --context task-3/local
+
+EXIT
+0
+
+OUTPUT
+Consulting the configured Forget provider...
+FORGET APPLIED · SOURCE task-3/local
+FORGET · Remove only temporary items that imply disclosure approval; preserve explicit decision gates and exclusions.
+DIFF · 1 CHANGE
+- [f44c4d34] For the review-pending healthcare candidate, disclosure would be limited to facts necessary for current care, would exclude unrelated history, and would require explicit user approval; it is not yet approved.
+RECEIPT · f3027c9a-3c2d-40bd-9f21-2a3d56d6ee51
+CHECKPOINT · f3027c9a-3c2d-40bd-9f21-2a3d56d6ee51
+REVIEW · mem review forget --receipt f3027c9a-3c2d-40bd-9f21-2a3d56d6ee51
+RECOVERY · mem undo

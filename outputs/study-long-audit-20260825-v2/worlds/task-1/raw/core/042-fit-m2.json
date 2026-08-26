@@ -1,0 +1,11 @@
+{
+  "sequence": 42,
+  "operation": "fit",
+  "attempt": 2,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 fit --context task-1/participant/construction-updates/event-relocations --context task-1/campus-wiki/event-relocations",
+  "exit": 0,
+  "wall_seconds": 14.670587,
+  "pre_target_digest": "b97f89aca41ad84120b06ddfd54649c6ba7814f399f10c524bbb6d3830d88fc9",
+  "post_target_digest": "7b9406e499577776c2591ef8f5b9fcd1ff8cde45e9176642aa627dd3da2fe634",
+  "raw_output": "raw/core/042-fit-m2.txt"
+}

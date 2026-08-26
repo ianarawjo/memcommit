@@ -1,0 +1,116 @@
+Operation attempts · recent first
+  [ac438ce8] 2026-08-25 18:16  init-study      FAILED · 0.0s
+      command=mem init-study admin-v2-ticker-workers --prewarm-workers 0
+      BadParameter · exit 2
+  [7d96a522] 2026-08-25 18:16  init            FAILED · 0.0s
+      command=mem init 00000000-0000-0000-0000-000000000001
+      Exit · exit 1
+  [0ee08986] 2026-08-25 18:16  import          FAILED · 0.0s
+      command=mem import memory 37113bd0-5194-521b-9d9e-48903d819520 --from-profile task-1 --context participant/construction-updates/shop-updates --into audit/ticker/admin-v2-scratch
+      Exit · exit 1
+  [4b135314] 2026-08-25 18:16  help            6.6s
+      command=mem help update
+  [b115cf19] 2026-08-25 18:16  eval            0.0s
+      command=mem eval semantic task2-status --all --ledger-dir /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/admin-eval-ledger
+  [dc1aba47] 2026-08-25 18:16  config          0.0s
+      command=mem config set provider codex_chatgpt
+  [2fcf4dff] 2026-08-25 18:16  status          FAILED · 0.0s
+      command=mem status --direct --recursive
+      Exit · exit 2
+  [da7afbb6] 2026-08-25 18:16  branch          FAILED · 0.0s
+      command=mem branch audit/ticker/admin-v2-scratch --from task-1/participant/construction-updates --direct
+      Exit · exit 1
+  [92b4f7d6] 2026-08-25 18:16  redo            FAILED · 0.1s
+      command=mem redo
+      Exit · exit 1
+  [a7c3bf10] 2026-08-25 18:16  init-study      FAILED · 0.0s
+      command=mem init-study admin-v2-ticker-missing-baseline --scenario legacy-v1 --from-profile admin-v2-missing-baseline
+      NoSuchOption · exit 2
+  [3c035ac8] 2026-08-25 18:16  init            FAILED · 0.0s
+      command=mem init audit/ticker/admin-v2-scratch
+      Exit · exit 1
+  [2a84d359] 2026-08-25 18:16  shell-init      0.0s
+      command=mem shell-init zsh
+  [ad1de5e0] 2026-08-25 18:16  share           FAILED · 0.0s
+      command=mem share --to audit/ticker/missing-receiver
+      Exit · exit 1
+  [371d9e94] 2026-08-25 18:16  pwd             0.0s
+      command=mem pwd
+  [6dcbc404] 2026-08-25 18:16  provider        0.0s
+      command=mem provider status --operation query
+  [87ff05a8] 2026-08-25 18:16  profile         1.0s
+      command=mem profile list
+  [7d84cdab] 2026-08-25 18:16  log             0.0s
+      command=mem log --context audit/ticker/admin-v2-scratch --memory 37113bd0 --limit 5
+  [87bcecd2] 2026-08-25 18:16  unlock          0.0s
+      command=mem unlock --memory 37113bd0 --context audit/ticker/admin-v2-scratch
+  [90c40f56] 2026-08-25 18:16  lock            0.0s
+      command=mem lock --memory 37113bd0 --context audit/ticker/admin-v2-scratch
+  [46d6b39f] 2026-08-25 18:16  import          0.0s
+      command=mem import memory 37113bd0-5194-521b-9d9e-48903d819520 --from-profile task-1 --context participant/construction-updates/shop-updates --into audit/ticker/admin-v2-scratch
+  [db9af24d] 2026-08-25 18:15  help            6.0s
+      command=mem help query
+  [ed8d4b7c] 2026-08-25 18:15  eval            0.0s
+      command=mem eval semantic check 20260825T181242940941Z-fc958904 --ledger-dir /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/admin-eval-ledger
+  [4fc239be] 2026-08-25 18:15  config          0.0s
+      command=mem config show
+  [600cedd5] 2026-08-25 18:15  status          FAILED · 0.1s
+      command=mem status --recursive
+      Exit · exit 1
+  [1d4d63cb] 2026-08-25 18:15  redo            0.1s
+      command=mem redo
+  [9fc952c3] 2026-08-25 18:15  undo            0.1s
+      command=mem undo
+  [b922f4a2] 2026-08-25 18:15  checkout        FAILED · 0.0s
+      command=mem checkout -b audit/ticker/admin-v2-scratch/co3 --direct
+      Exit · exit 1
+  [1c66e5c3] 2026-08-25 18:15  rename          1.0s
+      command=mem rename audit/ticker/admin-v2-scratch/tree/leaf audit/ticker/admin-v2-scratch/co3 --force
+  [4b753ece] 2026-08-25 18:15  switch          0.0s
+      command=mem switch task-2/participant
+  [df9a0569] 2026-08-25 18:13  branch          0.0s
+      command=mem branch audit/ticker/admin-v2-scratch/b3 --from task-1/participant/construction-updates --source-root-only
+  [7c1d3520] 2026-08-25 18:13  checkout        0.0s
+      command=mem checkout ..
+  [f5959906] 2026-08-25 18:13  rename          FAILED · 0.1s
+      command=mem rename audit/ticker/admin-v2-scratch/import-tree audit/ticker/admin-v2-scratch/b3 --force
+      Exit · exit 1
+  [6594aecc] 2026-08-25 18:13  unlock          0.0s
+      command=mem unlock audit/ticker/admin-v2-scratch/b2-tree --recursive
+  [f8c2d2d3] 2026-08-25 18:13  lock            0.0s
+      command=mem lock audit/ticker/admin-v2-scratch/b2-tree --recursive
+  [8400f837] 2026-08-25 18:13  redo            0.1s
+      command=mem redo
+  [3bf074c6] 2026-08-25 18:13  undo            0.1s
+      command=mem undo --keep
+  [42c7212e] 2026-08-25 18:13  branch          0.1s
+      command=mem branch audit/ticker/admin-v2-scratch/b2-tree --from task-1/participant/construction-updates --recursive
+  [0d48f882] 2026-08-25 18:13  shell-init      0.0s
+      command=mem shell-init zsh
+  [60f857d7] 2026-08-25 18:13  share           FAILED · 0.0s
+      command=mem share audit/ticker/missing-share-source --to task-3/government/healthcare-agent --direct
+      Exit · exit 1
+  [e60bb42d] 2026-08-25 18:13  pwd             0.0s
+      command=mem pwd
+  [867aeec4] 2026-08-25 18:13  provider        0.0s
+      command=mem provider status
+  [30e53e0a] 2026-08-25 18:13  profile         0.0s
+      command=mem profile create admin-v2-ticker-inactive
+  [343fab65] 2026-08-25 18:12  log             0.0s
+      command=mem log --context audit/ticker/admin-v2-scratch --manual
+  [7e969367] 2026-08-25 18:12  init-study      FAILED · 0.0s
+      command=mem init-study authoring
+      Exit · exit 1
+  [2f1e4bce] 2026-08-25 18:12  init            0.0s
+      command=mem init audit/ticker/admin-v2-scratch/tree/leaf --parents
+  [0eb77763] 2026-08-25 18:12  import          FAILED · 0.0s
+      command=mem import context participant/construction-updates --from-profile task-1 --as audit/ticker/admin-v2-scratch/import-tree --recursive
+      Exit · exit 1
+  [dc242ebe] 2026-08-25 18:12  help            3.6s
+      command=mem help 'How do I inspect where I am and what the current Context contains?'
+  [774a5208] 2026-08-25 18:12  eval            4.8s
+      command=mem eval semantic run ambiguity --provider codex_chatgpt --model gpt-5.6-sol --reasoning none --pipeline v2 --corpus calibration --runs 1 --case single-none-main-entrance-hours --ledger-dir /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/admin-eval-ledger
+  [4070f299] 2026-08-25 18:12  config          0.0s
+      command=mem config set audit_v2_world ticker
+  [8e51a0d5] 2026-08-25 18:12  status          0.1s
+      command=mem status --branch

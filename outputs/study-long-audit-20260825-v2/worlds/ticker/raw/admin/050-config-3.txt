@@ -1,0 +1,31 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker config show
+
+STDIN
+<none>
+
+EXIT
+0
+
+WALL_SECONDS
+1.288393
+
+PRE_IDENTITY
+{"current_context": "task-2/participant", "current_context_uid": "0e19f3b1-4107-48ab-9186-8773e48b812d", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+IMMEDIATE_POST_IDENTITY
+{"current_context": "task-2/participant", "current_context_uid": "0e19f3b1-4107-48ab-9186-8773e48b812d", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+COMMAND_ATTEMPT_DELTA
+{"count_after": 295, "count_before": 294, "delta": 1, "new_attempt_uids": ["4fc239be-4ffc-4f8e-b511-e95e6c31ecbf"], "records": [{"command": "mem config show", "completed_at": "2026-08-25T18:15:57.183407+00:00", "details": {}, "elapsed_seconds": 0.00797341699944809, "failure": null, "operation": "config", "outcome": null, "started_at": "2026-08-25T18:15:57.175258+00:00", "status": "COMPLETED", "terminal": {"stdin_tty": true, "stdout_tty": false}, "uid": "4fc239be-4ffc-4f8e-b511-e95e6c31ecbf", "version": 3}], "sequence": 50}
+
+STDOUT
+  semantic_provider = 'codex_chatgpt'
+  semantic_model = 'gpt-5.6-sol'
+  codex_chatgpt_model = 'gpt-5.6-sol'
+  codex_chatgpt_reasoning_effort = 'none'
+  codex_chatgpt_preset = ''
+  audit_v2_world = 'ticker'
+
+
+STDERR

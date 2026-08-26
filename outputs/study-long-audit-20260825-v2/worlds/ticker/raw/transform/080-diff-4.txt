@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker diff 24468c56 --context task-3/local --stat
+
+EXIT
+0
+
+OUTPUT
+UNIT        CHECKPOINT · THIS CHECKPOINT VS PREVIOUS
+CHECKPOINT  24468c56-b898-4331-8de6-c3697282540b
+CONTEXT     task-3/local
+ACTION      checkpoint
+DESCRIPTION ticker transform round 4 pre-destructive recovery
+RESULT      8 DIRECT ITEMS
+SUMMARY     8 kept · 0 added · 0 edited · 0 removed

@@ -1,0 +1,11 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 update task-2/advisor1/style task-2/participant/proposal-workspace --direct --replace-stage --goal "Preserve advisor1 style conditions while keeping equal co-advisor authority explicit."
+EXIT: 0
+DURATION_SECONDS: 5.566
+
+UPDATE APPLIED · task-2/advisor1/style → task-2/participant/proposal-workspace
+EFFECTS · ADD 1 · EDIT 0 · REMOVE 0
+RECEIPT · f451a277-adee-4e84-9605-3312a5164c37
+GOAL FOCUS · INLINE · INLINE · 1 ITEM
+CHECKPOINTS · task-2/participant/proposal-workspace [e8f7aaa4-bcbc-4cc8-bbe6-e727419fbbfb]
+REVIEW · mem review update --session f451a277-adee-4e84-9605-3312a5164c37
+RECOVERY · mem undo

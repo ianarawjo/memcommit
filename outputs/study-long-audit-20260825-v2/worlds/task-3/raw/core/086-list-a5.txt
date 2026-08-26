@@ -1,0 +1,29 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 list task-3/local/guardrails/audit-and-recovery --direct
+
+STDOUT
+Context: task-3/local/guardrails/audit-and-recovery
+  12 memories
+  0 subcontexts
+
+  [memory c0ce508e] Record the source Memory locator for approved sharing.
+  [memory a0b32950] Record the recipient of approved sharing.
+  [memory 620a1dee] Record the purpose of approved sharing.
+  [memory 26256211] Record the approval time.
+  [memory 0d377136] If a transmission error occurs, inform the user of the failure state.
+  [memory d26befa6] The local agent can reconstruct its own approval and transmission records but
+                    cannot trace unrecorded external processing.
+  [memory d5d34316] A copy conveyed to an external system may not automatically synchronize with a
+                    later correction to the local Memory.
+  [memory fe68d351] If a user's local record conflicts with an external system's audit record, an
+                    external system operator may place greater trust in its own audit record.
+  [memory 91ecb893] Exclude details not needed for the current purpose from the sharing candidate.
+  [memory f7e4bea5] The instructions for one medication the user takes say to take it after the
+                    evening meal.
+  [memory 6ea7bcc1] Candidate INCLUDE (DRAFT ONLY): the user stood for 20 minutes when no waiting
+                    chair was available and experienced back discomfort; verify current
+                    accommodation necessity before approval.
+  [memory 692e0872] The local agent cannot determine the current prescription or whether use
+                    continues from medication notes alone.
+
+STDERR

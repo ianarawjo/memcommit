@@ -1,0 +1,28 @@
+{
+  "sequence": 84,
+  "count_before": 328,
+  "count_after": 329,
+  "delta": 1,
+  "new_attempt_uids": [
+    "6aceed4e-b4b8-4629-a032-173dc00143be"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "6aceed4e-b4b8-4629-a032-173dc00143be",
+      "operation": "unlock",
+      "command": "mem unlock audit/ticker/admin-v2-scratch/co4-tree --recursive",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:16:59.536012+00:00",
+      "completed_at": "2026-08-25T18:16:59.575985+00:00",
+      "elapsed_seconds": 0.03982433299825061,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

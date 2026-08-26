@@ -1,0 +1,11 @@
+{
+  "sequence": 13,
+  "operation": "embed",
+  "attempt": 1,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 embed task-1/participant/construction-updates/facility-updates --into task-1/participant",
+  "exit": 0,
+  "wall_seconds": 1.280876,
+  "pre_target_digest": "407a74fded4cf5d2e0246abd59b656ef69cd8f55bd9d75ed835905122579707e",
+  "post_target_digest": "ea5cf86e142019a801828ccae5994b1b398bec8a6da6232575ffe5f3fe84e068",
+  "raw_output": "raw/core/013-embed-m1.txt"
+}

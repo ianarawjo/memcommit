@@ -1,0 +1,12 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 search 'What is the minimum necessary health information and which third-party details must be excluded?' --context task-3/local/personal-memory/2024/03 --context task-3/local/guardrails/privacy-and-others --context-only --exclude-embeds --limit 5
+
+STDOUT
+task-3/local/guardrails/privacy-and-others
+[memory 67035ffd] Exclude a third party's contact information unless it is essential to the current purpose.
+[memory 5cd7bde0] If one Memory mixes information about the user and a third party, sharing the item unchanged also conveys the third party's information.
+[memory 4af0efc1] Generalize rare combinations of details that could enable re-identification before sharing.
+[memory 47174c75] Share content authored by a third party only after confirming the scope of consent.
+[memory eafc4a2b] A third party may not expect their information to be conveyed to an external agent.
+
+STDERR

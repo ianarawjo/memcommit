@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source show practice/description:5e5f3d04
+
+EXIT
+0
+
+WALL_SECONDS
+1.406810
+
+STDOUT
+[Memory practice/description:5e5f3d04-acff-4252-98fb-ecde5a8c761c] DEFAULT CANDIDATE: use sentence case for document titles by default, subject only to an explicitly named style guide capitalization override; preserve the intended word for.
+
+
+STDERR

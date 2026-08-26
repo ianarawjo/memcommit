@@ -1,0 +1,11 @@
+{
+  "sequence": 3,
+  "operation": "show",
+  "attempt": 1,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 show task-1/participant/construction-updates/facility-updates:faea18ec",
+  "exit": 0,
+  "wall_seconds": 1.195165,
+  "pre_target_digest": "c0d0e34fd0494769836bfc47ba46c820bb06b35db86360f2be41759e2886864a",
+  "post_target_digest": "c20b93e17ac1e25626e8814d7763c3f8a1477ff943cb4e7be6b750ba31d79569",
+  "raw_output": "raw/core/003-show-m1.txt"
+}

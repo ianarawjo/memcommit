@@ -1,0 +1,1 @@
+Referenced snapshot [9d371105] from 'task-2/participant' as [3def679f] in 'task-2'.

@@ -1,0 +1,15 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source resolve practice/description --guidance 'Keep every permission trigger and exception explicit; do not convert editing notes into actual edits.' --no-create --plain
+
+EXIT
+0
+
+WALL_SECONDS
+7.746866
+
+STDOUT
+RESOLVE · practice/description
+FIT · YES · NO CHANGE
+
+
+STDERR

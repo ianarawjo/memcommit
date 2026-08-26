@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 distill --from task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance --to task-3/local --goal 'Distill public transmission guidance into local review rules while preserving Grant provenance and no-send status.' --direct --plain
+
+EXIT
+1
+
+OUTPUT
+Distill error: Distill currently requires an entirely local Source frame; granted Context distillation is not yet authorized.

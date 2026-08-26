@@ -1,0 +1,28 @@
+{
+  "sequence": 31,
+  "count_before": 275,
+  "count_after": 276,
+  "delta": 1,
+  "new_attempt_uids": [
+    "30e53e0a-08e8-4f90-95dc-a44367b14ca0"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "30e53e0a-08e8-4f90-95dc-a44367b14ca0",
+      "operation": "profile",
+      "command": "mem profile create admin-v2-ticker-inactive",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:13:00.122222+00:00",
+      "completed_at": "2026-08-25T18:13:00.143459+00:00",
+      "elapsed_seconds": 0.02103516699571628,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source check-conformance practice/source --against 'Each atom must preserve its complete trigger, exception, protected object, companion safeguard, provenance, and source meaning.'
+
+EXIT
+0
+
+WALL_SECONDS
+7.631510
+
+STDOUT
+CONFORMANCE · 8/12 EXAMPLES CONFORM · 0/1 RULES MET · [EXAMPLES practice/source] · [RULES TEXT Each atom must preserve its complete trigger, exception, protected object, companion safeguard, provenance, and source meaning.]
+! VIOLATES · [EXAMPLE m000002] If I later ask for polishing, preserve the overall strucutre and citation-needed markers, and change only wording that causes a problem. · [RULE r1] Each atom must preserve its complete trigger, exception, protected object, companion safeguard, provenance, and source meaning. · WHY · The atom misspells “structure,” failing exact preservation of the protected wording.
+! VIOLATES · [EXAMPLE m000004] If a passage is supposed to make four points, keep all four while removing parts that are too redundent and stating repeated content only once. · [RULE r1] Each atom must preserve its complete trigger, exception, protected object, companion safeguard, provenance, and source meaning. · WHY · The atom misspells “redundant,” corrupting the source wording.
+! VIOLATES · [EXAMPLE m000008] For any titlle about interaction with AI agent memory, keep the exact terminology and intended words: use interaction and management and AI agent memory rather than agent memory. · [RULE r1] Each atom must preserve its complete trigger, exception, protected object, companion safeguard, provenance, and source meaning. · WHY · The atom misspells “title,” so the complete trigger is not faithfully preserved.
+! VIOLATES · [EXAMPLE m000012] Before adding or reusing citations and refferences, verify that each source exists and supports the exact claim after reviewing the complete source. Don't invent quotations or evidence or overstate an author's contribution or a paper's status. If I asked only for review, report a verification problem first instead of silently rewriting the draft. · [RULE r1] Each atom must preserve its complete trigger, exception, protected object, companion safeguard, provenance, and source meaning. · WHY · The atom misspells “references,” altering the safeguarded citation terminology.
+
+
+STDERR

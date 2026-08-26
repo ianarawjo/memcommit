@@ -1,0 +1,10 @@
+
+Proposed split of [40749355] in Context 'task-1' → 5 chunks (method=clauses)
+────────────────────────────────────────────────────────
+   1  Punctuation example:
+   2  North-Star, Inc.
+   3  becomes NORTHSTAR after removing the comma, hyphen, space, a
+   4  suffix.
+   5  The output contains no punctuation.
+────────────────────────────────────────────────────────
+Done — 5 memories added in 'task-1'.

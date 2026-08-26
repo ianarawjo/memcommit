@@ -1,0 +1,44 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple ground --request 'Explain the recovery checkpoint boundary without creating or selecting a Ground.'
+
+EXIT
+0
+
+OUTPUT
+MEM GROUND · DRAFT
+
+GOAL
+  Explain the recovery checkpoint boundary without creating or selecting a Ground.
+
+CONTEXTS
+  (none selected)
+  No current Context was read.
+
+RULES
+  (none yet)
+
+MEMORIES
+  (none yet)
+
+CHAT
+  YOU · STARTING REQUEST
+  Explain the recovery checkpoint boundary without creating or selecting a Ground.
+
+  Run this command in an interactive terminal to interpret
+  the Working Goal and continue the chat.
+
+DESCRIBE WHAT YOU HAVE SO FAR
+
+> ________________________________________________________________
+  In a TTY, this submitted request starts the agent's Context discovery turn.
+
+NEXT
+  The agent will confirm the Goal and portable GROUND_NAME,
+  compare name-only Contexts, and may show one NEW? Context
+  plus unsaved Rule and Memory drafts.
+  Only the exact mem ground creation command can be approved.
+  Nothing is created until you approve that command.
+
+No Ground has been created.
+No Context or Context Memory changes have been applied.
+No checkpoint has been created.

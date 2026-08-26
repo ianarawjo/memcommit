@@ -1,0 +1,11 @@
+{
+  "sequence": 40,
+  "operation": "find-ambiguities",
+  "attempt": 2,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 find-ambiguities task-1/participant/construction-updates/event-relocations",
+  "exit": 0,
+  "wall_seconds": 14.104155,
+  "pre_target_digest": "ecd2cf9ff9d441d7af487714eaa914a76b1a736f85b3ee49407caad68353f38a",
+  "post_target_digest": "b7c2252f283356193d95deecf9b9bfb97e09bf3eb9101d776bd20a0a45c8dbb8",
+  "raw_output": "raw/core/040-find-ambiguities-m2.txt"
+}

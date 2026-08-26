@@ -1,0 +1,15 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple chunk practice/source:5887b475 --method clauses --max-chars 42
+
+EXIT
+0
+
+OUTPUT
+
+Proposed split of [5887b475] in Context 'practice/source' → 3 chunks (method=clauses, max_chars=42)
+────────────────────────────────────────────────────────
+   1  b is banana;
+   2  this copied mapping is provisional while
+   3  boat remains visible.
+────────────────────────────────────────────────────────
+Done — 3 memories added in 'practice/source'.

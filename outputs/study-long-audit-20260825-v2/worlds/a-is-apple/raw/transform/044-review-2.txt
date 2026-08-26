@@ -1,0 +1,25 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple review distill --receipt 5a9fbca1-d357-4fe1-b845-4aa1c1660ebf --snapshot
+
+EXIT
+0
+
+OUTPUT
+MEM REVIEW · DISTILL
+Completed operation evidence. This Review is read-only and cannot change or apply the recorded result.
+
+STATUS · APPLIED · RECEIPT 5a9fbca1-d357-4fe1-b845-4aa1c1660ebf
+CONTEXT · practice
+COMPLETED · 2026-08-25T13:15:00.270928
+OUTCOME · Added 1 distilled Rules from 'practice/source' to 'practice'
+
+SOURCE · practice/source
+TARGET · practice
+
+SOURCE OVERVIEW
+No supported provenance rule for apple is present. For b, the source supports two conflicting alternatives and a provisional/unresolved status rather than a resolved mapping.
+
+APPLIED RULES · 1
+1. Treat b as unresolved between the alternatives banana and blueberry; do not collapse the evidence into a single settled mapping.
+   WHY · The source explicitly assigns both values to b. Blueberry is repeated and said to remain visible, while the copied mapping is described as provisional, so neither alternative can be silently discarded nor treated as uniquely established.
+   SUPPORT · 4a8036d1-67a5-497a-b287-98d1302d4619, c1cf9a92-dbf1-41f4-a0e4-8e2a3e701b3f, be4139d0-97c4-4baa-a90f-b35120bcd188, 7ab9caeb-ce39-4b2b-bf3e-2ebe3665e5c7, 1f9dc37a-578a-4502-ad6a-3e66d79d04f0, 584c69df-42df-4a4a-8cf1-8c5ec4453d69

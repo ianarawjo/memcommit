@@ -1,0 +1,2228 @@
+{
+  "schema_version": 1,
+  "study": "study-long-audit-20260823",
+  "world": "task-1",
+  "phase": "core",
+  "world_goal": "Reflect and contribute verified Main Building construction changes across every affected campus-wiki area.",
+  "execution_boundary": {
+    "pre_transition": "repo-root mem executable against the fixed Study; commands through round-4 find-ambiguities",
+    "frozen_physical_snapshot": {
+      "source_digest": "cd38dd...e787",
+      "launcher": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli",
+      "applies_from": "round-4 find-conflicts"
+    },
+    "shared_profile_rules": "No profile/switch/checkout/undo/redo/current-only command was used for coverage; all mutable targets stayed under task-1 local namespace."
+  },
+  "excluded_status_probes": [
+    {
+      "command": "mem status task-1/description",
+      "exit": 2,
+      "actual": "status rejected the explicit positional Context as unexpected arguments."
+    },
+    {
+      "command": "mem status --context task-1/description",
+      "exit": 2,
+      "actual": "status rejected --context; root will perform serialized current-Context coverage."
+    }
+  ],
+  "coverage": {
+    "contexts": 5,
+    "list": 5,
+    "show": 5,
+    "find": 5,
+    "search": 5,
+    "query": 5,
+    "summarize": 5,
+    "add": 5,
+    "copy": 5,
+    "reference": 5,
+    "embed": 5,
+    "edit": 5,
+    "move": 5,
+    "replace": 5,
+    "chunk": 5,
+    "compare": 5,
+    "find-duplicates": 5,
+    "find-redundancies": 5,
+    "find-ambiguities": 5,
+    "find-conflicts": 5,
+    "fit": 5
+  },
+  "total_trials": 105,
+  "trials": [
+    {
+      "operation": "contexts",
+      "round": 1,
+      "command": "mem contexts",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 1",
+      "entry_route": "bare command",
+      "target_route": "profile catalog",
+      "scope": "all local and public names",
+      "input_provenance": "entry discovery",
+      "consumer": "choose task-1 sources",
+      "actual": "Printed every task-1/2/3 and practice Context plus Grants; current marker was practice.",
+      "defect_ids": [
+        "T1-CTX-OVERLOAD"
+      ],
+      "cost": {
+        "wall_seconds": 0.28,
+        "terminal_screens": 8,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "contexts",
+      "round": 2,
+      "command": "mem contexts",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 2",
+      "entry_route": "bare command",
+      "target_route": "profile catalog",
+      "scope": "all local and public names",
+      "input_provenance": "round-1 recheck",
+      "consumer": "confirm created local state remains in task-1",
+      "actual": "Repeated the complete multi-world catalog; Memory changes were not summarized.",
+      "defect_ids": [
+        "T1-CTX-OVERLOAD"
+      ],
+      "cost": {
+        "wall_seconds": 0.28,
+        "terminal_screens": 8,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "contexts",
+      "round": 3,
+      "command": "mem contexts",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 3",
+      "entry_route": "bare command",
+      "target_route": "profile catalog",
+      "scope": "all local and public names",
+      "input_provenance": "mid-state recheck",
+      "consumer": "select granted facility child",
+      "actual": "Repeated the complete catalog and exposed task-1 public grant capability labels.",
+      "defect_ids": [
+        "T1-CTX-OVERLOAD",
+        "T1-PERMISSION-CONTRADICTION"
+      ],
+      "cost": {
+        "wall_seconds": 0.31,
+        "terminal_screens": 8,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "contexts",
+      "round": 4,
+      "command": "mem contexts",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 4",
+      "entry_route": "bare command",
+      "target_route": "profile catalog",
+      "scope": "all local and public names",
+      "input_provenance": "late-state recheck",
+      "consumer": "verify no Context creation outside task-1",
+      "actual": "Repeated all worlds; no filtering or task-root narrowing was available.",
+      "defect_ids": [
+        "T1-CTX-OVERLOAD"
+      ],
+      "cost": {
+        "wall_seconds": 0.29,
+        "terminal_screens": 8,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "contexts",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli contexts",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; accumulated late task-1 state",
+      "entry_route": "frozen launcher bare command",
+      "target_route": "profile catalog",
+      "scope": "all local and public names",
+      "input_provenance": "final coverage verification",
+      "consumer": "verify namespace boundary",
+      "actual": "Repeated the full catalog; task-1 remained the only mutated namespace.",
+      "defect_ids": [
+        "T1-CTX-OVERLOAD"
+      ],
+      "cost": {
+        "wall_seconds": 0.44,
+        "terminal_screens": 8,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "list",
+      "round": 1,
+      "command": "mem list task-1/description",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 1",
+      "entry_route": "positional Context",
+      "target_route": "task-1/description",
+      "scope": "direct",
+      "input_provenance": "world fixture",
+      "consumer": "show goal",
+      "actual": "Listed one goal Memory with usable UID 2db26309.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.33,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "list",
+      "round": 2,
+      "command": "mem list task-1/participant --recursive",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 2",
+      "entry_route": "positional Context + recursive flag",
+      "target_route": "task-1/participant",
+      "scope": "lexical descendants + embeds",
+      "input_provenance": "round-1 local draft",
+      "consumer": "inspect complete working set",
+      "actual": "Produced about 786 lines, traversed local update children and embedded granted wiki data, and was tool-truncated.",
+      "defect_ids": [
+        "T1-RECURSIVE-LIST-OVERLOAD"
+      ],
+      "cost": {
+        "wall_seconds": 0.45,
+        "terminal_screens": 44,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "list",
+      "round": 3,
+      "command": "mem list task-1/campus-wiki/facility-updates",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 3",
+      "entry_route": "positional public Context",
+      "target_route": "task-1/campus-wiki/facility-updates",
+      "scope": "direct granted READ",
+      "input_provenance": "contexts output",
+      "consumer": "select stale wiki facts",
+      "actual": "Listed 50 granted Memories, but header combined broad capabilities with READ ONLY.",
+      "defect_ids": [
+        "T1-PERMISSION-CONTRADICTION"
+      ],
+      "cost": {
+        "wall_seconds": 0.42,
+        "terminal_screens": 12,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "list",
+      "round": 4,
+      "command": "mem list task-1/participant",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 4",
+      "entry_route": "positional Context",
+      "target_route": "task-1/participant",
+      "scope": "direct mixed item types",
+      "input_provenance": "prior reference/embed/copy outputs",
+      "consumer": "inspect workspace composition",
+      "actual": "Header said 3 memories while rows comprised one Memory, two Memory refs, a Context ref, and embedded Contexts.",
+      "defect_ids": [
+        "T1-LIST-COUNT-LABEL"
+      ],
+      "cost": {
+        "wall_seconds": 0.45,
+        "terminal_screens": 3,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "list",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli list task-1/participant/construction-updates/route-changes",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; accumulated late task-1 state",
+      "entry_route": "frozen launcher positional Context",
+      "target_route": "task-1/participant/construction-updates/route-changes",
+      "scope": "direct",
+      "input_provenance": "chunk round-5 output without UIDs",
+      "consumer": "recover new chunk selectors",
+      "actual": "Listed 13 Memories and revealed the three new chunk UIDs 72d82106, 1ee85ccc, and 19b7f431.",
+      "defect_ids": [
+        "T1-CHUNK-NO-UID-HANDOFF"
+      ],
+      "cost": {
+        "wall_seconds": 0.64,
+        "terminal_screens": 8,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "show",
+      "round": 1,
+      "command": "mem show task-1/description",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 1",
+      "entry_route": "canonical Context",
+      "target_route": "task-1/description",
+      "scope": "whole direct Context",
+      "input_provenance": "contexts/list discovery",
+      "consumer": "read world instructions",
+      "actual": "Rendered the single task goal without unrelated data.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.31,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "show",
+      "round": 2,
+      "command": "mem show task-1/participant/construction-updates/facility-updates:cd518767",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 2",
+      "entry_route": "qualified Context:Memory",
+      "target_route": "local facility draft cd518767",
+      "scope": "one exact Memory",
+      "input_provenance": "move/replace receipt",
+      "consumer": "verify mutation result",
+      "actual": "Showed the edited draft at its moved owner.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.27,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "show",
+      "round": 3,
+      "command": "mem show task-1/campus-wiki/facility-updates:d79aa629",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 3",
+      "entry_route": "qualified public Context:Memory",
+      "target_route": "granted facility Memory d79aa629",
+      "scope": "one exact granted Memory",
+      "input_provenance": "list round-3 UID",
+      "consumer": "inspect existing expectation",
+      "actual": "Showed the granted visitor-desk expectation directly.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.27,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "show",
+      "round": 4,
+      "command": "mem show task-1/participant",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 4",
+      "entry_route": "canonical Context",
+      "target_route": "task-1/participant",
+      "scope": "mixed direct Context",
+      "input_provenance": "reference/embed outputs",
+      "consumer": "verify typed relationships",
+      "actual": "Separated one Memory, two Memory refs, one Context ref, and two embedded Contexts.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.32,
+        "terminal_screens": 3,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "show",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli show task-1/participant/construction-updates/facility-updates:296a45a1",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; accumulated late task-1 state",
+      "entry_route": "frozen launcher qualified selector",
+      "target_route": "reference 296a45a1",
+      "scope": "one exact immutable snapshot",
+      "input_provenance": "reference receipt then edit+move",
+      "consumer": "verify snapshot independence",
+      "actual": "Showed the pre-edit checklist snapshot, original source Context identity, and target Memory UID after the source moved.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.41,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find",
+      "round": 1,
+      "command": "mem find \"Main Building construction changes\" --context task-1/participant/construction-updates --recursive",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 1",
+      "entry_route": "pattern + explicit Context",
+      "target_route": "local construction root",
+      "scope": "descendants + embeds",
+      "input_provenance": "goal phrase",
+      "consumer": "decide search refinement",
+      "actual": "Literal case-sensitive scan of 375 items returned zero.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.24,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find",
+      "round": 2,
+      "command": "mem find \"Wiki update draft\" --context task-1/participant/construction-updates/facility-updates --context-only",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 2",
+      "entry_route": "pattern + explicit Context",
+      "target_route": "local facility child",
+      "scope": "exact, exclude embeds",
+      "input_provenance": "replace receipt text",
+      "consumer": "recover draft UID",
+      "actual": "Matched cd518767 once with owner and ordinal.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.32,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find",
+      "round": 3,
+      "command": "mem find \"visitor services desk\" --context task-1/campus-wiki/facility-updates --context-only",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 3",
+      "entry_route": "pattern + public Context",
+      "target_route": "granted facility child",
+      "scope": "exact granted READ",
+      "input_provenance": "list round-3 vocabulary",
+      "consumer": "identify stale wiki facts",
+      "actual": "Matched two granted Memories with callable UIDs.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.34,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find",
+      "round": 4,
+      "command": "mem find \"outdoor parking lot c\" --context task-1/participant/construction-updates/temporary-parking --ignore-case",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 4",
+      "entry_route": "pattern + ignore-case",
+      "target_route": "local parking child",
+      "scope": "exact, exclude embeds",
+      "input_provenance": "query-derived phrase",
+      "consumer": "collect alternative-parking rules",
+      "actual": "Matched four relevant local Memories.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.38,
+        "terminal_screens": 3,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli find \"Wiki relocation draft\" --context task-1/participant/construction-updates/event-relocations --context-only",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; accumulated late task-1 state",
+      "entry_route": "frozen launcher pattern + Context",
+      "target_route": "local event child",
+      "scope": "exact",
+      "input_provenance": "chunk outputs",
+      "consumer": "recover chunk selectors",
+      "actual": "Recovered two similar chunk UIDs, requiring manual disambiguation after chunk omitted them.",
+      "defect_ids": [
+        "T1-CHUNK-NO-UID-HANDOFF"
+      ],
+      "cost": {
+        "wall_seconds": 0.47,
+        "terminal_screens": 2,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "search",
+      "round": 1,
+      "command": "mem search \"Main Building construction changes\" --context task-1/participant/construction-updates --recursive",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 1",
+      "entry_route": "semantic query + Context",
+      "target_route": "local construction root",
+      "scope": "descendants + embeds",
+      "input_provenance": "goal phrase after empty find",
+      "consumer": "choose key changes",
+      "actual": "Returned five relevant updates across facility, event, and shop children.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 14.54,
+        "terminal_screens": 3,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "search",
+      "round": 2,
+      "command": "mem search \"where should Main Building events and equipment move\" --context task-1/participant/construction-updates/event-relocations --context-only",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 2",
+      "entry_route": "semantic question + Context",
+      "target_route": "local event child",
+      "scope": "exact",
+      "input_provenance": "world goal",
+      "consumer": "draft relocation plan",
+      "actual": "Returned two venue alternatives and the auditorium loading entrance.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 5.66,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "search",
+      "round": 3,
+      "command": "mem search \"outdated wiki guidance that construction updates must replace\" --context task-1/campus-wiki --recursive",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 3",
+      "entry_route": "semantic contrast query",
+      "target_route": "granted campus wiki root",
+      "scope": "descendants + embeds",
+      "input_provenance": "compare goal",
+      "consumer": "identify stale statements",
+      "actual": "Returned no primary matches and only two broad related guidance Memories, not the stale facts sought.",
+      "defect_ids": [
+        "T1-SEARCH-INVERSE-MISS"
+      ],
+      "cost": {
+        "wall_seconds": 7.25,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "search",
+      "round": 4,
+      "command": "mem search \"ordinary parking access that construction closes\" --context task-1/campus-wiki/temporary-parking --context-only",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 4",
+      "entry_route": "semantic contrast query",
+      "target_route": "granted parking child",
+      "scope": "exact",
+      "input_provenance": "compare round-4 question",
+      "consumer": "identify open policies to replace",
+      "actual": "Returned no primary matches and four generic related parking cautions, missing the explicit garage-open Memory.",
+      "defect_ids": [
+        "T1-SEARCH-INVERSE-MISS"
+      ],
+      "cost": {
+        "wall_seconds": 6.11,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "search",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli search \"official accessible detour to Central Library\" --context task-1/participant/construction-updates/route-changes --context-only",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; accumulated late task-1 state",
+      "entry_route": "frozen launcher semantic query",
+      "target_route": "local route child",
+      "scope": "exact",
+      "input_provenance": "prior query summary",
+      "consumer": "select route changes",
+      "actual": "Returned the designated Lot C–Student Centre–Library route and west-entrance rule.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 5.89,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "query",
+      "round": 1,
+      "command": "mem query \"Which confirmed construction changes must be reflected across the campus wiki?\" --context task-1/participant/construction-updates --recursive",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 1",
+      "entry_route": "ordinary question + Context",
+      "target_route": "local construction root",
+      "scope": "descendants + embeds",
+      "input_provenance": "world goal",
+      "consumer": "create global update plan",
+      "actual": "Produced a useful six-area answer but appended 56 full reference rows, making the output thousands of tokens.",
+      "defect_ids": [
+        "T1-QUERY-REFERENCE-OVERLOAD"
+      ],
+      "cost": {
+        "wall_seconds": 21.71,
+        "terminal_screens": 30,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "query",
+      "round": 2,
+      "command": "mem query task-1/campus-wiki/construction-details \"What dates and work scope are publicly confirmed for the Main Building construction?\"",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 2",
+      "entry_route": "canonical query-only public name",
+      "target_route": "task-1/campus-wiki/construction-details",
+      "scope": "opaque QUERY route",
+      "input_provenance": "contexts public name",
+      "consumer": "check concealed-source boundary",
+      "actual": "Answered that dates were unavailable and internal scope was not publicly confirmed; no repeated -c anchor was needed.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 4.86,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "query",
+      "round": 3,
+      "command": "mem query \"Which existing campus-wiki statements conflict with the verified construction updates?\" --context task-1/campus-wiki --recursive",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 3",
+      "entry_route": "ordinary question + public Context",
+      "target_route": "task-1/campus-wiki",
+      "scope": "recursive granted scope",
+      "input_provenance": "compare goal",
+      "consumer": "build replacement map",
+      "actual": "Produced 62 references and unexpectedly included task-1/participant update Memories despite the selected public wiki target.",
+      "defect_ids": [
+        "T1-QUERY-REFERENCE-OVERLOAD",
+        "T1-QUERY-SCOPE-BLEED-CANDIDATE"
+      ],
+      "cost": {
+        "wall_seconds": 22.78,
+        "terminal_screens": 34,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "query",
+      "round": 4,
+      "command": "mem query \"What ordinary parking access does this wiki currently claim?\" --context task-1/campus-wiki/temporary-parking --context-only",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 4",
+      "entry_route": "ordinary question + explicit public Context",
+      "target_route": "task-1/campus-wiki/temporary-parking",
+      "scope": "exact granted READ",
+      "input_provenance": "search round-4 miss",
+      "consumer": "recover existing parking policy",
+      "actual": "Returned '(no grounded answer found)' under task-1/participant/construction-updates instead of the requested granted parking Context.",
+      "defect_ids": [
+        "T1-GRANTED-ORDINARY-QUERY-MISROUTE"
+      ],
+      "cost": {
+        "wall_seconds": 0.42,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "query",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli query \"Where is the visitor services desk and what can its agent verify?\" --context task-1/campus-wiki/facility-updates --context-only",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; accumulated late task-1 state",
+      "entry_route": "frozen launcher ordinary question + explicit public Context",
+      "target_route": "task-1/campus-wiki/facility-updates",
+      "scope": "exact granted READ",
+      "input_provenance": "list/show granted evidence",
+      "consumer": "verify query routing",
+      "actual": "Again returned no grounded answer under task-1/participant/construction-updates, reproducing the wrong-target route.",
+      "defect_ids": [
+        "T1-GRANTED-ORDINARY-QUERY-MISROUTE"
+      ],
+      "cost": {
+        "wall_seconds": 0.52,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "summarize",
+      "round": 1,
+      "command": "mem summarize task-1/participant/construction-updates",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 1",
+      "entry_route": "positional Context",
+      "target_route": "local construction root",
+      "scope": "direct",
+      "input_provenance": "world fixture",
+      "consumer": "decide breadth",
+      "actual": "Correctly reported that the selected root has no ordinary direct Memories.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.37,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "summarize",
+      "round": 2,
+      "command": "mem summarize task-1/participant/construction-updates --recursive",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 2",
+      "entry_route": "positional Context + recursive",
+      "target_route": "local construction root",
+      "scope": "descendants + embeds",
+      "input_provenance": "query round-1 evidence",
+      "consumer": "produce compact plan",
+      "actual": "Produced a concise, useful construction override summary with dates and all major categories.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 10.88,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "summarize",
+      "round": 3,
+      "command": "mem summarize task-1/campus-wiki/facility-updates --direct",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 3",
+      "entry_route": "public Context + direct",
+      "target_route": "granted facility child",
+      "scope": "exact READ",
+      "input_provenance": "list round-3 evidence",
+      "consumer": "understand current wiki baseline",
+      "actual": "Summarized the existing directory and agent limits without disclosing unrelated children.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.32,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "summarize",
+      "round": 4,
+      "command": "mem summarize task-1/participant --direct",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 4",
+      "entry_route": "local Context + direct",
+      "target_route": "task-1/participant",
+      "scope": "one direct draft, refs excluded",
+      "input_provenance": "edited access draft",
+      "consumer": "check draft meaning",
+      "actual": "Summarized the access draft with dates and after-hours credential exception.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 5.14,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "summarize",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli summarize task-1/participant --recursive",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; accumulated late task-1 state",
+      "entry_route": "frozen launcher Context + recursive",
+      "target_route": "task-1/participant",
+      "scope": "descendants + embeds",
+      "input_provenance": "all accumulated local artifacts",
+      "consumer": "produce final compact handoff",
+      "actual": "Produced a compact final summary of dates, six update categories, alternatives, exceptions, and uncertainty limits.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 6.64,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "add",
+      "round": 1,
+      "command": "mem add \"Audit draft: The Main Building construction period runs from June 24 through August 23.\" --context task-1/participant",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 1",
+      "entry_route": "text + explicit Context",
+      "target_route": "task-1/participant",
+      "scope": "direct local write",
+      "input_provenance": "query/search evidence",
+      "consumer": "seed editable draft",
+      "actual": "Added cd518767.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.27,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "add",
+      "round": 2,
+      "command": "mem add \"Relocation draft: Main Building event venues stop accepting reservations. Use the detached east-building auditorium or Engineering Building multipurpose room. Route relocated equipment through the auditorium loading entrance.\" --context task-1/participant",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 2",
+      "entry_route": "multi-sentence text + Context",
+      "target_route": "task-1/participant",
+      "scope": "direct local write",
+      "input_provenance": "search round-2 evidence",
+      "consumer": "seed copy/chunk flow",
+      "actual": "Added 71dc4e8e.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.27,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "add",
+      "round": 3,
+      "command": "mem add \"Access draft: During construction, general main-entrance access ends at 5:00 p.m.; the third-floor rear entrance closes; authorized students use a physical NFC card after 5:00 p.m.\" --context task-1/participant",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 3",
+      "entry_route": "text + Context",
+      "target_route": "task-1/participant",
+      "scope": "direct local write",
+      "input_provenance": "query/compare evidence",
+      "consumer": "seed refinement flow",
+      "actual": "Added 0cbf281c.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.27,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "add",
+      "round": 4,
+      "command": "mem add \"Parking draft: Close the Main Building underground garage and Outdoor Lot A to general parking. Use Outdoor Lot C for temporary visitor parking. Staff use physical-card access only where authorized.\" --context task-1/participant",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 4",
+      "entry_route": "multi-sentence text + Context",
+      "target_route": "task-1/participant",
+      "scope": "direct local write",
+      "input_provenance": "find/search parking evidence",
+      "consumer": "seed authority-transfer and chunk flow",
+      "actual": "Added 8165b7a0.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.3,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "add",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli add \"Final contribution checklist: publish the June 24–August 23 dates. Replace normal access, parking, venue, shop, facility, and route guidance with the verified temporary rules. Preserve audience-specific exceptions and uncertainty limits.\" --context task-1/participant",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; accumulated late task-1 state",
+      "entry_route": "frozen launcher multi-sentence text + Context",
+      "target_route": "task-1/participant",
+      "scope": "direct local write",
+      "input_provenance": "summaries and queries",
+      "consumer": "seed final handoff chain",
+      "actual": "Added b9716213.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.52,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "copy",
+      "round": 1,
+      "command": "mem copy task-1/participant:cd518767 task-1/participant/construction-updates/facility-updates",
+      "exit": 1,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 1",
+      "entry_route": "two positional operands",
+      "target_route": "intended local draft to facility child",
+      "scope": "parser accepted but reversed semantic roles",
+      "input_provenance": "add receipt",
+      "consumer": "learn transfer grammar",
+      "actual": "Treated the target Context as a global Memory selector and reported no matching UID; did not show the corrected --from/--into form.",
+      "defect_ids": [
+        "T1-TRANSFER-DISCOVERABILITY"
+      ],
+      "cost": {
+        "wall_seconds": 0.33,
+        "terminal_screens": 1,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "copy",
+      "round": 2,
+      "command": "mem copy 71dc4e8e --from task-1/participant --into task-1/participant/construction-updates/event-relocations",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 2",
+      "entry_route": "selector + --from/--into",
+      "target_route": "local participant to event child",
+      "scope": "one exact Memory",
+      "input_provenance": "add round-2 UID",
+      "consumer": "branch draft",
+      "actual": "Copied to new UID 823886b4 and printed both source and destination UIDs.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.3,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "copy",
+      "round": 3,
+      "command": "mem copy 8b077f2a 56c34a24 --from task-1/participant/construction-updates/building-access --into task-1/participant",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 3",
+      "entry_route": "multiple selectors + --from/--into",
+      "target_route": "building child to participant",
+      "scope": "two exact local Memories",
+      "input_provenance": "find/query UIDs",
+      "consumer": "create multi-item workspace",
+      "actual": "Copied two Memories to 3dda1d61 and c72a4ef2.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.28,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "copy",
+      "round": 4,
+      "command": "mem copy 6960c0ca --from task-1/campus-wiki/temporary-parking --into task-1/participant",
+      "exit": 1,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 4",
+      "entry_route": "selector + public --from + local --into",
+      "target_route": "granted parking to local workspace",
+      "scope": "one granted Memory with EXPORT shown",
+      "input_provenance": "list/show granted UID",
+      "consumer": "bring baseline into local comparison",
+      "actual": "Rejected the displayed public Context as not existing locally despite READ+EXPORT presentation.",
+      "defect_ids": [
+        "T1-GRANTED-EXPORT-HANDOFF"
+      ],
+      "cost": {
+        "wall_seconds": 0.32,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "copy",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli copy b9716213 --from task-1/participant --into task-1/participant/construction-updates/route-changes",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; accumulated late task-1 state",
+      "entry_route": "frozen launcher selector + --from/--into",
+      "target_route": "participant to route child",
+      "scope": "one exact local Memory",
+      "input_provenance": "add round-5 UID",
+      "consumer": "preserve pre-edit branch",
+      "actual": "Copied to c3bf40b4 and printed the new UID.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.42,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "reference",
+      "round": 1,
+      "command": "mem reference task-1/participant/construction-updates/facility-updates task-1/participant:cd518767",
+      "exit": 2,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 1",
+      "entry_route": "two positional operands",
+      "target_route": "intended facility reference into participant",
+      "scope": "syntax rejection",
+      "input_provenance": "list/add evidence",
+      "consumer": "learn reference grammar",
+      "actual": "Usage allowed only one positional item and pointed to help without naming --from/--into in the error.",
+      "defect_ids": [
+        "T1-TRANSFER-DISCOVERABILITY"
+      ],
+      "cost": {
+        "wall_seconds": 0.29,
+        "terminal_screens": 1,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "reference",
+      "round": 2,
+      "command": "mem reference 8b077f2a --from task-1/participant/construction-updates/building-access --into task-1/participant",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 2",
+      "entry_route": "selector + --from/--into",
+      "target_route": "building Memory to participant",
+      "scope": "one exact local Memory",
+      "input_provenance": "find/query UID",
+      "consumer": "retain immutable evidence",
+      "actual": "Created snapshot reference 46c34545.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.27,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "reference",
+      "round": 3,
+      "command": "mem reference task-1/participant/construction-updates/shop-updates --into task-1/participant --direct",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 3",
+      "entry_route": "Context + --into + direct",
+      "target_route": "shop child to participant",
+      "scope": "direct Context snapshot",
+      "input_provenance": "contexts/list route",
+      "consumer": "retain grouped shop evidence",
+      "actual": "Created one Context snapshot reference b68d0e1d.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.28,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "reference",
+      "round": 4,
+      "command": "mem reference 6960c0ca --from task-1/campus-wiki/temporary-parking --into task-1/participant",
+      "exit": 1,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 4",
+      "entry_route": "selector + public --from + local --into",
+      "target_route": "granted parking to participant",
+      "scope": "one granted Memory with EXPORT shown",
+      "input_provenance": "granted list UID",
+      "consumer": "retain baseline evidence",
+      "actual": "Rejected the public source as not existing locally, matching copy's grant handoff failure.",
+      "defect_ids": [
+        "T1-GRANTED-EXPORT-HANDOFF"
+      ],
+      "cost": {
+        "wall_seconds": 0.29,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "reference",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli reference b9716213 --from task-1/participant --into task-1/participant/construction-updates/facility-updates",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; accumulated late task-1 state",
+      "entry_route": "frozen launcher selector + --from/--into",
+      "target_route": "participant to facility child",
+      "scope": "one exact local snapshot",
+      "input_provenance": "add round-5 UID",
+      "consumer": "verify snapshot after edit/move",
+      "actual": "Created snapshot reference 296a45a1; later show confirmed pre-edit content.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.41,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "embed",
+      "round": 1,
+      "command": "mem embed task-1/participant/construction-updates/facility-updates task-1/participant",
+      "exit": 2,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 1",
+      "entry_route": "two positional operands",
+      "target_route": "intended child into participant",
+      "scope": "syntax rejection",
+      "input_provenance": "contexts route",
+      "consumer": "learn embed grammar",
+      "actual": "Usage allowed only one positional item and did not put --into in the error body.",
+      "defect_ids": [
+        "T1-TRANSFER-DISCOVERABILITY"
+      ],
+      "cost": {
+        "wall_seconds": 0.29,
+        "terminal_screens": 1,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "embed",
+      "round": 2,
+      "command": "mem embed task-1/participant/construction-updates/building-access:56c34a24 --into task-1/participant",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 2",
+      "entry_route": "qualified Memory + --into",
+      "target_route": "building Memory into participant",
+      "scope": "one live local Memory embed",
+      "input_provenance": "find/query UID",
+      "consumer": "test live evidence",
+      "actual": "Created embedded Memory e3781fbb.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.27,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "embed",
+      "round": 3,
+      "command": "mem embed task-1/campus-wiki/facility-updates --into task-1/participant",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 3",
+      "entry_route": "public Context + --into",
+      "target_route": "granted facility child into local participant",
+      "scope": "one granted Context embed",
+      "input_provenance": "contexts/list public route",
+      "consumer": "compose baseline workspace",
+      "actual": "Created granted Context embed 0b57fe07 without modifying authority data.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.28,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "embed",
+      "round": 4,
+      "command": "mem embed task-1/participant/construction-updates --into task-1/participant",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 4",
+      "entry_route": "local descendant Context + --into",
+      "target_route": "construction root into lexical ancestor",
+      "scope": "one local Context embed",
+      "input_provenance": "recursive list route",
+      "consumer": "test overlapping reach",
+      "actual": "Embedded the lexical descendant into its ancestor; command did not warn about redundant lexical+embed reach.",
+      "defect_ids": [
+        "T1-OVERLAPPING-REACH-CANDIDATE"
+      ],
+      "cost": {
+        "wall_seconds": 0.29,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "embed",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli embed task-1/campus-wiki/facility-updates --into task-1/participant",
+      "exit": 1,
+      "starting_state": "frozen physical snapshot cd38dd...e787; accumulated late task-1 state",
+      "entry_route": "frozen launcher duplicate public Context + --into",
+      "target_route": "granted facility child into participant",
+      "scope": "duplicate embed boundary",
+      "input_provenance": "round-3 embed receipt",
+      "consumer": "verify idempotence",
+      "actual": "Rejected the duplicate with a direct already-embedded error and made no change.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.42,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "edit",
+      "round": 1,
+      "command": "mem edit cd518767 \"Audit draft: Construction runs June 24 through August 23; update all affected campus-wiki areas.\" --context task-1/participant",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 1",
+      "entry_route": "selector + text + Context",
+      "target_route": "draft cd518767",
+      "scope": "exact local Memory",
+      "input_provenance": "add receipt",
+      "consumer": "refine draft",
+      "actual": "Edited in place and showed before/after.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.27,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "edit",
+      "round": 2,
+      "command": "mem edit task-1/participant:71dc4e8e \"Relocation draft: Stop new Main Building venue reservations. Direct events to the detached east-building auditorium or Engineering Building multipurpose room, and use the auditorium loading entrance for relocated equipment.\"",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 2",
+      "entry_route": "qualified selector + text",
+      "target_route": "draft 71dc4e8e",
+      "scope": "exact local Memory",
+      "input_provenance": "add/copy receipt",
+      "consumer": "differentiate copy from source",
+      "actual": "Edited original while copied branch retained old content.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.32,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "edit",
+      "round": 3,
+      "command": "mem edit 0cbf281c \"Access draft: From June 24 through August 23, general main-entrance access ends at 5:00 p.m., the third-floor rear entrance closes, and authorized students use a physical NFC card after 5:00 p.m.\" --context task-1/participant",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 3",
+      "entry_route": "selector + text + Context",
+      "target_route": "access draft",
+      "scope": "exact local Memory",
+      "input_provenance": "ambiguity feedback",
+      "consumer": "add missing dates",
+      "actual": "Edited with before/after receipt.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.33,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "edit",
+      "round": 4,
+      "command": "mem edit task-1/participant:8165b7a0 \"Parking draft: From June 24 through August 23, close the Main Building underground garage and Outdoor Lot A to general parking. Use Outdoor Lot C for temporary visitor parking. Staff use physical-card access only where authorized.\"",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 4",
+      "entry_route": "qualified selector + text",
+      "target_route": "parking draft",
+      "scope": "exact local Memory",
+      "input_provenance": "ambiguity pattern from prior rounds",
+      "consumer": "add effective dates",
+      "actual": "Edited with before/after receipt.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.28,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "edit",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli edit b9716213 \"Final contribution checklist: publish the June 24–August 23 dates. Replace normal access, parking, venue, shop, facility, and route guidance with verified temporary rules. Keep audience exceptions, accessible alternatives, and uncertainty limits explicit.\" --context task-1/participant",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; accumulated late task-1 state",
+      "entry_route": "frozen launcher selector + text + Context",
+      "target_route": "final checklist",
+      "scope": "exact local Memory",
+      "input_provenance": "reference/copy receipts",
+      "consumer": "test branch and snapshot independence",
+      "actual": "Edited original after copy/reference; receipt showed exact text delta.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.42,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "move",
+      "round": 1,
+      "command": "mem move cd518767 --from task-1/participant --into task-1/participant/construction-updates/facility-updates",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 1",
+      "entry_route": "selector + --from/--into",
+      "target_route": "participant to facility child",
+      "scope": "one exact local Memory",
+      "input_provenance": "edit receipt",
+      "consumer": "place draft by topic",
+      "actual": "Moved with same UID and printed both checkpoints.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.29,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "move",
+      "round": 2,
+      "command": "mem move task-1/participant:71dc4e8e --into task-1/participant/construction-updates/event-relocations",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 2",
+      "entry_route": "qualified selector + --into",
+      "target_route": "participant to event child",
+      "scope": "one exact local Memory",
+      "input_provenance": "edit receipt",
+      "consumer": "place refined event draft",
+      "actual": "Moved with same UID and retarget-links receipt.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.25,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "move",
+      "round": 3,
+      "command": "mem move 3dda1d61 c72a4ef2 --from task-1/participant --into task-1/participant/construction-updates/building-access",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 3",
+      "entry_route": "multiple selectors + --from/--into",
+      "target_route": "participant to building child",
+      "scope": "two exact local Memories",
+      "input_provenance": "copy receipt",
+      "consumer": "test multi-move and duplicate detection",
+      "actual": "Moved both UIDs and created intentional exact duplicates.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.36,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "move",
+      "round": 4,
+      "command": "mem move 8165b7a0 --from task-1/participant --to task-1/participant/construction-updates/temporary-parking",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 4",
+      "entry_route": "selector + --from/--to alias",
+      "target_route": "participant to parking child",
+      "scope": "one exact local Memory",
+      "input_provenance": "edit receipt",
+      "consumer": "test alias and topical placement",
+      "actual": "Moved with same UID and two checkpoint IDs.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.33,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "move",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli move b9716213 --from task-1/participant --into task-1/participant/construction-updates/route-changes",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; accumulated late task-1 state",
+      "entry_route": "frozen launcher selector + --from/--into",
+      "target_route": "participant to route child",
+      "scope": "one exact local Memory",
+      "input_provenance": "edit receipt",
+      "consumer": "place final original beside copied branch",
+      "actual": "Moved with same UID and retarget-links receipt.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.4,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "replace",
+      "round": 1,
+      "command": "mem replace \"Audit draft\" \"Wiki update draft\" --context task-1/participant/construction-updates/facility-updates",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 1",
+      "entry_route": "pattern + replacement + Context",
+      "target_route": "local facility child",
+      "scope": "direct deterministic",
+      "input_provenance": "move receipt",
+      "consumer": "normalize draft label",
+      "actual": "Replaced one occurrence in one Memory.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.29,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "replace",
+      "round": 2,
+      "command": "mem replace \"Relocation draft:\" \"Wiki relocation draft:\" --context task-1/participant/construction-updates/event-relocations",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 2",
+      "entry_route": "pattern + replacement + Context",
+      "target_route": "local event child",
+      "scope": "direct deterministic",
+      "input_provenance": "copy+move outputs",
+      "consumer": "normalize both branches",
+      "actual": "Replaced two occurrences across two Memories.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.28,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "replace",
+      "round": 3,
+      "command": "mem replace \"construction ends September 1\" \"construction ends August 23\" --context task-1/participant",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 3",
+      "entry_route": "pattern + replacement + Context",
+      "target_route": "task-1/participant",
+      "scope": "direct no-match boundary",
+      "input_provenance": "hypothetical correction",
+      "consumer": "verify safe empty result",
+      "actual": "Reported no matches and no change.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.29,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "replace",
+      "round": 4,
+      "command": "mem replace \"Outdoor Lot\" \"Outdoor Parking Lot\" --context task-1/participant/construction-updates/temporary-parking",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 4",
+      "entry_route": "pattern + replacement + Context",
+      "target_route": "local parking child",
+      "scope": "direct deterministic",
+      "input_provenance": "edited parking draft",
+      "consumer": "normalize terminology",
+      "actual": "Replaced two occurrences in one Memory.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.25,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "replace",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli replace \"Final contribution checklist:\" \"Contribution plan:\" --context task-1/participant/construction-updates/route-changes",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; accumulated late task-1 state",
+      "entry_route": "frozen launcher pattern + replacement + Context",
+      "target_route": "local route child",
+      "scope": "direct deterministic",
+      "input_provenance": "copy+move final branches",
+      "consumer": "normalize both final branches",
+      "actual": "Replaced two occurrences across two Memories.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.43,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "chunk",
+      "round": 1,
+      "command": "mem chunk task-1/participant/construction-updates/facility-updates:cd518767",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 1",
+      "entry_route": "qualified Memory",
+      "target_route": "facility draft",
+      "scope": "one Memory",
+      "input_provenance": "replace receipt",
+      "consumer": "test indivisible boundary",
+      "actual": "Reported one chunk and no change.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.27,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "chunk",
+      "round": 2,
+      "command": "mem chunk task-1/participant/construction-updates/event-relocations:823886b4",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 2",
+      "entry_route": "qualified Memory",
+      "target_route": "copied event draft",
+      "scope": "one multi-sentence Memory",
+      "input_provenance": "copy receipt",
+      "consumer": "split compound draft",
+      "actual": "Added three Memories but printed no new UIDs and did not explicitly state the old UID disposition.",
+      "defect_ids": [
+        "T1-CHUNK-NO-UID-HANDOFF"
+      ],
+      "cost": {
+        "wall_seconds": 0.27,
+        "terminal_screens": 2,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "chunk",
+      "round": 3,
+      "command": "mem chunk task-1/participant/construction-updates/event-relocations",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 3",
+      "entry_route": "Context positional",
+      "target_route": "event child",
+      "scope": "all direct Memories",
+      "input_provenance": "round-2 chunk state",
+      "consumer": "split remaining compound draft",
+      "actual": "Replaced one Memory with two chunks but printed no new UIDs.",
+      "defect_ids": [
+        "T1-CHUNK-NO-UID-HANDOFF"
+      ],
+      "cost": {
+        "wall_seconds": 0.34,
+        "terminal_screens": 2,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "chunk",
+      "round": 4,
+      "command": "mem chunk task-1/participant/construction-updates/temporary-parking:8165b7a0",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 4",
+      "entry_route": "qualified Memory",
+      "target_route": "parking draft",
+      "scope": "one multi-sentence Memory",
+      "input_provenance": "move+replace receipt",
+      "consumer": "split parking draft",
+      "actual": "Added three Memories but printed no new UIDs.",
+      "defect_ids": [
+        "T1-CHUNK-NO-UID-HANDOFF"
+      ],
+      "cost": {
+        "wall_seconds": 0.4,
+        "terminal_screens": 2,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "chunk",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli chunk task-1/participant/construction-updates/route-changes:b9716213",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; accumulated late task-1 state",
+      "entry_route": "frozen launcher qualified Memory",
+      "target_route": "final route checklist",
+      "scope": "one multi-sentence Memory",
+      "input_provenance": "move+replace receipt",
+      "consumer": "split final plan",
+      "actual": "Added three Memories but printed no new UIDs; list was required to recover them.",
+      "defect_ids": [
+        "T1-CHUNK-NO-UID-HANDOFF"
+      ],
+      "cost": {
+        "wall_seconds": 0.41,
+        "terminal_screens": 2,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "compare",
+      "round": 1,
+      "command": "mem compare task-1/participant/construction-updates/facility-updates task-1/campus-wiki/facility-updates --snapshot",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 1",
+      "entry_route": "two positional Contexts + snapshot",
+      "target_route": "local facility vs granted facility",
+      "scope": "direct/direct",
+      "input_provenance": "local and granted lists",
+      "consumer": "understand override",
+      "actual": "Produced a concise transient comparison of construction overrides.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 7.2,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "compare",
+      "round": 2,
+      "command": "mem compare --from task-1/participant/construction-updates/event-relocations --to task-1/campus-wiki/event-relocations --snapshot",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 2",
+      "entry_route": "--from/--to + snapshot",
+      "target_route": "local event vs granted event",
+      "scope": "direct/direct",
+      "input_provenance": "event drafts and granted baseline",
+      "consumer": "build venue update summary",
+      "actual": "Produced a concise comparison including alternatives and agent limits.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 7.97,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "compare",
+      "round": 3,
+      "command": "mem compare --from task-1/participant/construction-updates --to task-1/campus-wiki --reference-descendants --compared-descendants --snapshot",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 3",
+      "entry_route": "--from/--to + descendant flags",
+      "target_route": "full local updates vs full granted wiki",
+      "scope": "recursive/recursive",
+      "input_provenance": "round-2 summaries",
+      "consumer": "check whole contribution",
+      "actual": "Produced a compact overall temporary-override summary.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 9.27,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "compare",
+      "round": 4,
+      "command": "mem compare task-1/participant/construction-updates/temporary-parking:84196dc5 task-1/campus-wiki/temporary-parking:6960c0ca --snapshot",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 4",
+      "entry_route": "two qualified Memory selectors",
+      "target_route": "local closure vs granted open policy",
+      "scope": "memory/memory across Contexts",
+      "input_provenance": "query/search UID evidence",
+      "consumer": "confirm exact contradiction",
+      "actual": "Produced a clear one-paragraph override explanation.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 5.25,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "compare",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli compare task-1/participant/construction-updates/route-changes:c3bf40b4 task-1/participant/construction-updates/route-changes:72d82106 --snapshot",
+      "exit": 1,
+      "starting_state": "frozen physical snapshot cd38dd...e787; accumulated late task-1 state",
+      "entry_route": "frozen launcher two qualified Memory selectors",
+      "target_route": "copied whole plan vs one chunk in same Context",
+      "scope": "memory/memory same owner",
+      "input_provenance": "copy+chunk+list UIDs",
+      "consumer": "compare branch with chunk",
+      "actual": "Rejected the two distinct Memories because Compare requires two distinct Contexts.",
+      "defect_ids": [
+        "T1-COMPARE-SAME-CONTEXT-MEMORY"
+      ],
+      "cost": {
+        "wall_seconds": 0.41,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-duplicates",
+      "round": 1,
+      "command": "mem find-duplicates --context task-1/participant/construction-updates/facility-updates --direct",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 1",
+      "entry_route": "--context + direct",
+      "target_route": "local facility child",
+      "scope": "direct",
+      "input_provenance": "round-1 draft",
+      "consumer": "check exact duplicates",
+      "actual": "Checked 18 items and found none.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.27,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-duplicates",
+      "round": 2,
+      "command": "mem find-duplicates --context task-1/participant/construction-updates/event-relocations --context-only",
+      "exit": 2,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 2",
+      "entry_route": "--context + shared-looking scope flag",
+      "target_route": "local event child",
+      "scope": "intended exact",
+      "input_provenance": "round-2 copy/chunk state",
+      "consumer": "check exact duplicates",
+      "actual": "Rejected --context-only although Find accepts it and this finder accepts --direct.",
+      "defect_ids": [
+        "T1-QUALITY-SCOPE-GRAMMAR"
+      ],
+      "cost": {
+        "wall_seconds": 0.29,
+        "terminal_screens": 1,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-duplicates",
+      "round": 3,
+      "command": "mem find-duplicates task-1/participant --recursive",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 3",
+      "entry_route": "positional Context + recursive",
+      "target_route": "task-1/participant",
+      "scope": "8 local Contexts",
+      "input_provenance": "copy+move outputs",
+      "consumer": "detect intentional duplicates",
+      "actual": "Found two exact duplicate pairs in building-access with survivor/absorb UIDs.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.38,
+        "terminal_screens": 4,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-duplicates",
+      "round": 4,
+      "command": "mem find-duplicates --context task-1/participant/construction-updates/temporary-parking --direct",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 4",
+      "entry_route": "--context + direct",
+      "target_route": "local parking child",
+      "scope": "direct",
+      "input_provenance": "chunk round-4 state",
+      "consumer": "check exact duplicates",
+      "actual": "Checked 18 items and found none.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.28,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-duplicates",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli find-duplicates --context task-1/participant --recursive",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; accumulated late task-1 state",
+      "entry_route": "frozen launcher --context + recursive",
+      "target_route": "task-1/participant",
+      "scope": "8 local Contexts",
+      "input_provenance": "late accumulated state",
+      "consumer": "verify duplicate persistence",
+      "actual": "Again found the same two exact pairs among 103 direct items.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 0.47,
+        "terminal_screens": 4,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-redundancies",
+      "round": 1,
+      "command": "mem find-redundancies task-1/participant/construction-updates/facility-updates --direct",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 1",
+      "entry_route": "positional Context + direct",
+      "target_route": "local facility child",
+      "scope": "direct",
+      "input_provenance": "round-1 draft",
+      "consumer": "check semantic duplication",
+      "actual": "Found the date draft semantically redundant with faea18ec.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 5.01,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-redundancies",
+      "round": 2,
+      "command": "mem find-redundancies task-1/participant/construction-updates/event-relocations --direct",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 2",
+      "entry_route": "positional Context + direct",
+      "target_route": "local event child",
+      "scope": "direct",
+      "input_provenance": "copy/edit/chunk state",
+      "consumer": "check semantic duplication",
+      "actual": "Reported no groups across 14 Memories.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 5.48,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-redundancies",
+      "round": 3,
+      "command": "mem find-redundancies task-1/participant --recursive",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 3",
+      "entry_route": "positional Context + recursive",
+      "target_route": "task-1/participant",
+      "scope": "8 local Contexts",
+      "input_provenance": "intentional copies and chunks",
+      "consumer": "find cleanup candidates",
+      "actual": "Found two exact duplicate groups and one semantic event-draft group.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 27.45,
+        "terminal_screens": 6,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-redundancies",
+      "round": 4,
+      "command": "mem find-redundancies --context task-1/participant/construction-updates/temporary-parking --direct",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 4",
+      "entry_route": "--context + direct",
+      "target_route": "local parking child",
+      "scope": "direct",
+      "input_provenance": "chunk round-4 state",
+      "consumer": "check semantic duplication",
+      "actual": "Reported no groups across 18 Memories.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 4.72,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-redundancies",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli find-redundancies task-1/participant/construction-updates/route-changes --direct",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; accumulated late task-1 state",
+      "entry_route": "frozen launcher positional Context + direct",
+      "target_route": "local route child",
+      "scope": "direct",
+      "input_provenance": "whole copied plan plus three chunks",
+      "consumer": "check one-to-many redundancy",
+      "actual": "Reported no groups; the whole copied plan and its collective chunks were not related.",
+      "defect_ids": [
+        "T1-ONE-TO-MANY-REDUNDANCY-CANDIDATE"
+      ],
+      "cost": {
+        "wall_seconds": 4.76,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-ambiguities",
+      "round": 1,
+      "command": "mem find-ambiguities --context task-1/participant/construction-updates/facility-updates --direct",
+      "exit": 2,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 1",
+      "entry_route": "--context + direct",
+      "target_route": "local facility child",
+      "scope": "intended exact",
+      "input_provenance": "round-1 draft",
+      "consumer": "check ambiguity",
+      "actual": "Rejected --direct even though peer quality commands use it.",
+      "defect_ids": [
+        "T1-QUALITY-SCOPE-GRAMMAR"
+      ],
+      "cost": {
+        "wall_seconds": 0.3,
+        "terminal_screens": 1,
+        "extra_manual_steps": 1,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-ambiguities",
+      "round": 2,
+      "command": "mem find-ambiguities --context task-1/participant/construction-updates/event-relocations",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 2",
+      "entry_route": "--context",
+      "target_route": "local event child",
+      "scope": "direct only",
+      "input_provenance": "chunked event drafts",
+      "consumer": "review actionable ambiguity",
+      "actual": "Flagged all 14 Memories, mostly because dates live in sibling facility-updates; output exceeded 3,000 tokens and took about 43 seconds.",
+      "defect_ids": [
+        "T1-QUALITY-CONTEXT-ISOLATION",
+        "T1-QUALITY-REPORT-OVERLOAD"
+      ],
+      "cost": {
+        "wall_seconds": 42.53,
+        "terminal_screens": 24,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-ambiguities",
+      "round": 3,
+      "command": "mem find-ambiguities task-1/participant",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 3",
+      "entry_route": "positional Context",
+      "target_route": "task-1/participant",
+      "scope": "one direct Memory only",
+      "input_provenance": "edited access draft",
+      "consumer": "review compressed instruction",
+      "actual": "Correctly exposed two readings of rear-entrance closure timing.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 9.95,
+        "terminal_screens": 3,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-ambiguities",
+      "round": 4,
+      "command": "mem find-ambiguities --context task-1/participant/construction-updates/temporary-parking",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 4",
+      "entry_route": "--context",
+      "target_route": "local parking child",
+      "scope": "direct only",
+      "input_provenance": "parking chunks",
+      "consumer": "review parking completeness",
+      "actual": "Flagged 8/18, including missing year and genuine access-procedure details; sibling date/location evidence could not be included.",
+      "defect_ids": [
+        "T1-QUALITY-CONTEXT-ISOLATION"
+      ],
+      "cost": {
+        "wall_seconds": 27.95,
+        "terminal_screens": 14,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-ambiguities",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli find-ambiguities task-1/participant/construction-updates/route-changes",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; accumulated late task-1 state",
+      "entry_route": "frozen launcher positional Context",
+      "target_route": "local route child",
+      "scope": "direct only",
+      "input_provenance": "final chunks and route rules",
+      "consumer": "review route completeness",
+      "actual": "Flagged 5/13, including whole-plan items as underspecified because verified rules live in sibling Contexts.",
+      "defect_ids": [
+        "T1-QUALITY-CONTEXT-ISOLATION"
+      ],
+      "cost": {
+        "wall_seconds": 17.9,
+        "terminal_screens": 9,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-conflicts",
+      "round": 1,
+      "command": "mem find-conflicts --context task-1/participant/construction-updates/facility-updates",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 1",
+      "entry_route": "--context",
+      "target_route": "local facility child",
+      "scope": "direct",
+      "input_provenance": "round-1 draft",
+      "consumer": "review conflicts",
+      "actual": "Flagged West Complex vs Central Library restroom guidance as possible conflict with audience-scope caveat.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 6.94,
+        "terminal_screens": 3,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-conflicts",
+      "round": 2,
+      "command": "mem find-conflicts task-1/participant/construction-updates/event-relocations",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 2",
+      "entry_route": "positional Context",
+      "target_route": "local event child",
+      "scope": "direct",
+      "input_provenance": "round-2 event state",
+      "consumer": "review conflicts",
+      "actual": "Reported zero pairs.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 4.07,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-conflicts",
+      "round": 3,
+      "command": "mem find-conflicts --context task-1/participant/construction-updates/building-access",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 3",
+      "entry_route": "--context",
+      "target_route": "local building child",
+      "scope": "direct",
+      "input_provenance": "intentional duplicates and expectation Memory",
+      "consumer": "review conflicts",
+      "actual": "Flagged a descriptive mistaken student expectation against the rule intended to prevent it.",
+      "defect_ids": [
+        "T1-QUALITY-DESCRIPTIVE-AS-NORMATIVE"
+      ],
+      "cost": {
+        "wall_seconds": 6.63,
+        "terminal_screens": 3,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-conflicts",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli find-conflicts --context task-1/participant/construction-updates/temporary-parking",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; round-4 accumulated task-1 state",
+      "entry_route": "frozen launcher --context",
+      "target_route": "local parking child",
+      "scope": "direct",
+      "input_provenance": "parking chunks and expectation Memories",
+      "consumer": "review conflicts",
+      "actual": "Flagged five pairs; four depended on treating a visitor's mistaken expectation as permission, and one inferred that staff pedestrian access must use closed stairs.",
+      "defect_ids": [
+        "T1-QUALITY-DESCRIPTIVE-AS-NORMATIVE"
+      ],
+      "cost": {
+        "wall_seconds": 14.77,
+        "terminal_screens": 10,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "find-conflicts",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli find-conflicts task-1/participant/construction-updates/route-changes",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; accumulated late task-1 state",
+      "entry_route": "frozen launcher positional Context",
+      "target_route": "local route child",
+      "scope": "direct",
+      "input_provenance": "final route state",
+      "consumer": "verify conflict baseline",
+      "actual": "Reported zero pairs.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 4.33,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "fit",
+      "round": 1,
+      "command": "mem fit \"The Main Building general restrooms are closed during construction.\" \"Students and staff should use Central Library restrooms.\" --background \"The first through third floor general restrooms close from June 24 through August 23.\"",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 1",
+      "entry_route": "literal propositions + background",
+      "target_route": "process-local propositions",
+      "scope": "two claims + one background",
+      "input_provenance": "query evidence",
+      "consumer": "check joint applicability",
+      "actual": "Returned FIT YES.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 7.41,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "fit",
+      "round": 2,
+      "command": "mem fit --context task-1/participant/construction-updates/event-relocations --context task-1/campus-wiki/event-relocations",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 2",
+      "entry_route": "two --context operands",
+      "target_route": "local event + granted event",
+      "scope": "two direct Contexts",
+      "input_provenance": "compare inputs",
+      "consumer": "check override package",
+      "actual": "Returned FIT YES.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 10.59,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "fit",
+      "round": 3,
+      "command": "mem fit --memory task-1/participant/construction-updates/building-access:8b077f2a --memory task-1/campus-wiki/building-access:1cb2aa88",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 3",
+      "entry_route": "two qualified --memory operands",
+      "target_route": "local closure + granted open policy",
+      "scope": "two exact Memories",
+      "input_provenance": "query reference UIDs",
+      "consumer": "confirm contradiction",
+      "actual": "Returned FIT NO with a clear overlap explanation.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 6.15,
+        "terminal_screens": 2,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    },
+    {
+      "operation": "fit",
+      "round": 4,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli fit --memory task-1/participant/construction-updates/temporary-parking:84196dc5 --memory task-1/campus-wiki/temporary-parking:6960c0ca --background \"The construction period is June 24 through August 23.\"",
+      "exit": 0,
+      "starting_state": "pre-transition shared Study; task-1 accumulated state at round 4",
+      "entry_route": "frozen launcher two Memories + background",
+      "target_route": "local closure + granted open policy",
+      "scope": "two exact Memories + literal background",
+      "input_provenance": "compare round-4 UIDs",
+      "consumer": "confirm dated contradiction",
+      "actual": "Returned FIT NO with the exact overlap interval.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 6.9,
+        "terminal_screens": 2,
+        "extra_manual_steps": "frozen physical snapshot cd38dd...e787; round-4 accumulated task-1 state",
+        "tui": false
+      }
+    },
+    {
+      "operation": "fit",
+      "round": 5,
+      "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/tmp/memcommit-study-long-audit-20260823-code.yfgwbK python -m memcommit.cli fit --context task-1/participant/construction-updates/route-changes --context task-1/campus-wiki/route-changes --context task-1/participant/construction-updates/facility-updates",
+      "exit": 0,
+      "starting_state": "frozen physical snapshot cd38dd...e787; accumulated late task-1 state",
+      "entry_route": "frozen launcher three --context operands",
+      "target_route": "local route + granted route + local facility",
+      "scope": "three direct Contexts",
+      "input_provenance": "final accumulated state",
+      "consumer": "check multi-source compatibility",
+      "actual": "Returned FIT YES with all three typed targets.",
+      "defect_ids": [],
+      "cost": {
+        "wall_seconds": 11.9,
+        "terminal_screens": 1,
+        "extra_manual_steps": 0,
+        "tui": false
+      }
+    }
+  ]
+}
+

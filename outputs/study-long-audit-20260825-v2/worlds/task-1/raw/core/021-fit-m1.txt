@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 fit 'During construction, Main Building visitor services are not available in person.' 'Visitors should use the integrated campus portal.' --background 'The verified construction period is June 24 through August 23, and public guidance must not expose internal work details.'
+
+EXIT
+0
+
+WALL_SECONDS
+7.685128
+
+STDOUT
+FIT · YES · [TARGETS: PROPOSITION p1, p2, BACKGROUND k1]
+
+
+STDERR

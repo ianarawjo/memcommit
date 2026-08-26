@@ -1,0 +1,11 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple summarize practice --plain
+
+EXIT
+0
+
+OUTPUT
+SUMMARY · practice
+STATUS · DIRECT
+
+The selected Context contains no ordinary Memories to summarize.

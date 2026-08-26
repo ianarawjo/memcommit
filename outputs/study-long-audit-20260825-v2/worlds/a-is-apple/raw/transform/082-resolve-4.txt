@@ -1,0 +1,12 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple resolve --context practice
+
+EXIT
+0
+
+OUTPUT
+RESOLVE · practice
+TEMPORARY INTERPRETATION · Express the two mappings as retained alternatives by updating m1 locally; leave the citation and provisional-copy memories unchanged.
+ASSUMPTION · “Map” and “existing mapping” are being used descriptively for retained alternative example associations rather than for one single-valued mapping entry.
+NEEDS INPUT · A local safe-alternative repair reaches MAY while preserving both associations and the provisional blueberry condition.
+NO CHANGE · Grounding is required before Apply

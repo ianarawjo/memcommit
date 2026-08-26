@@ -1,0 +1,11 @@
+{
+  "sequence": 77,
+  "operation": "move",
+  "attempt": 4,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 move 6960c0ca --from task-1/campus-wiki/temporary-parking --into task-1/participant",
+  "exit": 1,
+  "wall_seconds": 1.303993,
+  "pre_target_digest": "22cc5fe512f9083f54ce30478b453308902f0fc676ae37f548a204d125bda64e",
+  "post_target_digest": "1a40ebd6757fcbae8e1ef9e96ea7beae1b55c87eccb8d8a5fb8a3c7d911c5cfb",
+  "raw_output": "raw/core/077-move-m4.txt"
+}

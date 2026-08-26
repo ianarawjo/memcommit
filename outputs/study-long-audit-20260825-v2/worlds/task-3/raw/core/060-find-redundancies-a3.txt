@@ -1,0 +1,7 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 find-redundancies task-3/local/personal-memory/2024/11 --direct --evidence-json
+
+STDOUT
+{"classification":"SEMANTIC_EQUIVALENT","contract":"redundancy-evidence-v2","finding_uid":"duplicate:9e70b92e-1d8d-51ef-962d-bd9b348a56d5:d76686fd-9f1d-5d94-931b-4b49c86a8f4e","kind":"REDUNDANCY","memory_context_names":["task-3/local/personal-memory/2024/11","task-3/local/personal-memory/2024/11"],"memory_uids":["9e70b92e-1d8d-51ef-962d-bd9b348a56d5","d76686fd-9f1d-5d94-931b-4b49c86a8f4e"],"proposed_readings":[],"qualifiers":[],"question":"","reason":"Both memories impose the same privacy rule: when the user's schedule or availability is communicated externally, the mother's reason for a visit must not be disclosed.","review_draft":{"selected_option_uid":null,"text":""},"route":"DEDUN","source_frame_digest":"9f722c73257ec60ea2efe88decc614248554d8b08ff7bf9085b1d05188ec3496","sources":[{"context_uid":"0d5e1eef-1669-5589-94ba-b46c9c2080dc","direct_memory_digest":"a0b5cfb73045a8568da2b3bd2b66074f1e32ba563ffd6d4ddf3fb33911238141","display_name":"task-3/local/personal-memory/2024/11"}],"uid":"finding-ba862dd02931246ad0d7fe37d457fe7410b78ce826ed5587e71e4774cfa4a2c5"}
+
+STDERR

@@ -1,0 +1,134 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 log --operations --limit 50
+
+STDIN
+<none>
+
+EXIT
+0
+
+WALL_SECONDS
+1.292552
+
+POST_CALL_IDENTITY_HOST_ASSERTION
+{"profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-3/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+STDOUT
+Operation attempts · recent first
+  [df54c0df] 2026-08-25 18:10  init-study      FAILED · 0.0s
+      command=mem init-study admin-v2-task-3-workers --prewarm-workers 0
+      BadParameter · exit 2
+  [4102eb26] 2026-08-25 18:10  init            FAILED · 0.0s
+      command=mem init 00000000-0000-0000-0000-000000000777
+      Exit · exit 1
+  [88a2cdef] 2026-08-25 18:10  import          FAILED · 0.0s
+      command=mem import memory 8b077f2a-6a9f-50f0-ae91-f6536fb226cb --from-profile task-1 --context participant/construction-updates/building-access --into task-3/local/admin-v2-scratch
+      Exit · exit 1
+  [78e915c8] 2026-08-25 18:10  help            4.5s
+      command=mem help atomize
+  [7fa54d3f] 2026-08-25 18:10  eval            0.0s
+      command=mem eval semantic task2-status --all --ledger-dir /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-3/admin-eval-ledger
+  [79cb6229] 2026-08-25 18:10  config          0.0s
+      command=mem config set provider codex_chatgpt
+  [36498750] 2026-08-25 18:10  status          FAILED · 0.0s
+      command=mem status --direct --recursive
+      Exit · exit 2
+  [1f05c47e] 2026-08-25 18:10  branch          FAILED · 0.0s
+      command=mem branch task-3/local/admin-v2-scratch --from task-3/local/guardrails --direct
+      Exit · exit 1
+  [b0428026] 2026-08-25 18:10  redo            FAILED · 0.1s
+      command=mem redo
+      Exit · exit 1
+  [cf044468] 2026-08-25 18:10  rename          1.2s
+      command=mem rename task-3/local/admin-v2-scratch/tree/leaf task-3/local/admin-v2-scratch/tree/leaf-renamed --force
+  [a6bbf409] 2026-08-25 18:10  init-study      FAILED · 0.0s
+      command=mem init-study admin-v2-task-3-study --scenario legacy-v1 --from-profile admin-v2-missing-baseline
+      NoSuchOption · exit 2
+  [9366214d] 2026-08-25 18:10  init            FAILED · 0.0s
+      command=mem init task-3/local/admin-v2-scratch
+      Exit · exit 1
+  [5ee6e45b] 2026-08-25 18:10  shell-init      0.0s
+      command=mem shell-init zsh
+  [9667fbd2] 2026-08-25 18:10  share           FAILED · 0.0s
+      command=mem share --to admin-v2-missing-endpoint
+      Exit · exit 1
+  [3251818c] 2026-08-25 18:10  pwd             0.0s
+      command=mem pwd
+  [e3bdaa73] 2026-08-25 18:10  provider        0.0s
+      command=mem provider status --operation query
+  [4208deb7] 2026-08-25 18:10  profile         1.0s
+      command=mem profile list
+  [deafda5f] 2026-08-25 18:10  log             0.1s
+      command=mem log --memory 8b077f2a --context task-3/local/admin-v2-scratch --limit 5
+  [4166023d] 2026-08-25 18:10  unlock          0.0s
+      command=mem unlock --memory 8b077f2a --context task-3/local/admin-v2-scratch
+  [dcdaa78e] 2026-08-25 18:10  lock            0.0s
+      command=mem lock --memory 8b077f2a --context task-3/local/admin-v2-scratch
+  [899150d3] 2026-08-25 18:10  import          0.0s
+      command=mem import memory 8b077f2a-6a9f-50f0-ae91-f6536fb226cb --from-profile task-1 --context participant/construction-updates/building-access --into task-3/local/admin-v2-scratch
+  [e0bf3aab] 2026-08-25 18:10  help            4.2s
+      command=mem help query
+  [67b22edf] 2026-08-25 18:10  eval            0.0s
+      command=mem eval semantic check 20260825T175959817698Z-f8e5fd34 --ledger-dir /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-3/admin-eval-ledger
+  [a7f42315] 2026-08-25 18:10  config          0.0s
+      command=mem config show
+  [fc8edc1d] 2026-08-25 18:10  status          0.1s
+      command=mem status --recursive
+  [b6113bd8] 2026-08-25 18:10  redo            FAILED · 0.1s
+      command=mem redo
+      Exit · exit 1
+  [3dbbc54e] 2026-08-25 18:10  undo            FAILED · 0.1s
+      command=mem undo
+      Exit · exit 1
+  [d821b857] 2026-08-25 18:10  switch          0.0s
+      command=mem switch task-1
+  [42067324] 2026-08-25 18:06  checkout        0.0s
+      command=mem checkout -b task-3/local/admin-v2-scratch/co3 --direct
+  [f77f2bc8] 2026-08-25 18:06  branch          0.0s
+      command=mem branch task-3/local/admin-v2-scratch/b3 --from task-3/local/admin-v2-scratch/b1 --source-root-only
+  [184c5c79] 2026-08-25 18:06  unlock          0.0s
+      command=mem unlock task-3/local/admin-v2-scratch/b2-tree --recursive
+  [8782ee15] 2026-08-25 18:06  lock            0.0s
+      command=mem lock task-3/local/admin-v2-scratch/b2-tree --recursive
+  [daafe0fb] 2026-08-25 18:06  redo            0.1s
+      command=mem redo
+  [29996472] 2026-08-25 18:06  undo            0.1s
+      command=mem undo --keep
+  [4e45cabf] 2026-08-25 18:06  rename          1.2s
+      command=mem rename task-3/local/admin-v2-scratch/renamed-1 task-3/local/admin-v2-scratch/b1 --force
+  [d9c36b25] 2026-08-25 18:00  branch          0.1s
+      command=mem branch task-3/local/admin-v2-scratch/b2-tree --from task-3/local/guardrails --recursive
+  [edc52ca1] 2026-08-25 18:00  shell-init      0.0s
+      command=mem shell-init zsh
+  [129f3e79] 2026-08-25 18:00  share           FAILED · 0.0s
+      command=mem share task-3/local/admin-v2-missing-share-source --to admin-v2-missing-endpoint
+      Exit · exit 1
+  [1719a661] 2026-08-25 18:00  pwd             0.0s
+      command=mem pwd
+  [2993a30a] 2026-08-25 18:00  provider        0.0s
+      command=mem provider status
+  [ce47f7d1] 2026-08-25 18:00  profile         0.0s
+      command=mem profile create admin-v2-task-3-inactive
+  [5bafa1fa] 2026-08-25 18:00  log             0.0s
+      command=mem log --context task-3/local/admin-v2-scratch --manual
+  [54465b6e] 2026-08-25 18:00  init-study      FAILED · 0.0s
+      command=mem init-study authoring
+      Exit · exit 1
+  [79d13ce6] 2026-08-25 18:00  import          FAILED · 0.0s
+      command=mem import context participant/construction-updates --from-profile task-1 --as task-3/local/admin-v2-scratch/import-tree --recursive
+      Exit · exit 1
+  [d2c0ee30] 2026-08-25 18:00  init            0.0s
+      command=mem init task-3/local/admin-v2-scratch/tree/leaf --parents
+  [6ced0ef7] 2026-08-25 18:00  help            6.1s
+      command=mem help 'Which operation gives a grounded answer from readable memories without changing them?'
+  [5e5ab9a3] 2026-08-25 17:59  eval            4.8s
+      command=mem eval semantic run ambiguity --provider codex_chatgpt --model gpt-5.6-sol --reasoning none --pipeline v2 --corpus calibration --runs 1 --case single-none-main-entrance-hours --ledger-dir /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-3/admin-eval-ledger
+  [ca789230] 2026-08-25 17:59  config          0.0s
+      command=mem config set audit_v2_world task-3
+  [6168a24f] 2026-08-25 17:59  status          0.1s
+      command=mem status --branch
+  [0a7695f6] 2026-08-25 17:59  checkout        0.0s
+      command=mem checkout ..
+
+
+STDERR

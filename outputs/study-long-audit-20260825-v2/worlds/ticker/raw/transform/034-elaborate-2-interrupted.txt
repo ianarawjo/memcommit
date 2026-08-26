@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker elaborate --rule 'A ticker example must state both input company and complete output.' --to task-3/local/guardrails --number 2
+
+EXIT
+130
+
+OUTPUT
+The pinned command began and received SIGINT while the transform driver was being stopped to correct future Audit-session, Meld-setup, and Forget-option wiring. It emitted no command output and made no durable Context-tree change. This counted attempt was not rerun.

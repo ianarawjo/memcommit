@@ -1,0 +1,20 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source rationale practice/description:cbd46e2b --limit 100 --unit words
+
+EXIT
+0
+
+WALL_SECONDS
+8.431979
+
+STDOUT
+Rationale [cbd46e2b] · practice/description
+
+MEMORY
+  SITUATION · Before beginning the three study tasks, complete a short practice exercise to become familiar with how memcommit organizes and presents its commands. Each newline-separated editing note in `practice/source` is stored as its own Memory, preserving the boundaries between the original requests. Some notes still combine recurring constraints, rough wording, and typos.
+
+PROVENANCE
+  The selected Memory originally appeared in `practice/description` between the study overview and the task to atomize newline-separated notes from `practice/source`; it already stood alone as the situation description, with no retained split, atomize, or other derivation operation recording how it became a standalone Memory. A clear removed it, a revert restored it unchanged, another clear removed it again, and another revert returned the same content, beginning “SITUATION · Before beginning the three study tasks” and retaining that surrounding overview-and-task context; it remains current without a recorded edit.
+
+
+STDERR

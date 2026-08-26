@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source distill --from practice/source --to practice/description --goal 'Only constraint atoms; no presentation-style meta-rules; retain exact title scope, named overrides, and protected wording.' --plain --recursive
+
+EXIT
+1
+
+WALL_SECONDS
+26.210375
+
+STDOUT
+
+
+STDERR
+Distill error: The proposed Distill Rules do not fit the Goal; no generated Memories were added.

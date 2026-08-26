@@ -1,0 +1,12 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 trace task-1/participant/construction-updates/shop-updates:37113bd0 --limit 7 --verbose
+
+EXIT
+0
+
+OUTPUT
+TRACE · task-1/participant/construction-updates/shop-updates
+MEMORY · 37113bd0-5194-521b-9d9e-48903d819520
+LINEAGE · 3 events · 2 components
+ATTENTION · 1 limits
+DETAILS · mem trace 37113bd0-5194-521b-9d9e-48903d819520 --context task-1/participant/construction-updates/shop-updates --plain

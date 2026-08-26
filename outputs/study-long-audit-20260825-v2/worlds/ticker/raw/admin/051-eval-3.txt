@@ -1,0 +1,29 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker eval semantic check 20260825T181242940941Z-fc958904 --ledger-dir /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/admin-eval-ledger
+
+STDIN
+<none>
+
+EXIT
+0
+
+WALL_SECONDS
+1.386570
+
+PRE_IDENTITY
+{"current_context": "task-2/participant", "current_context_uid": "0e19f3b1-4107-48ab-9186-8773e48b812d", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+IMMEDIATE_POST_IDENTITY
+{"current_context": "task-2/participant", "current_context_uid": "0e19f3b1-4107-48ab-9186-8773e48b812d", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+COMMAND_ATTEMPT_DELTA
+{"count_after": 296, "count_before": 295, "delta": 1, "new_attempt_uids": ["ed8d4b7c-83f4-4817-a749-d6ff6470db43"], "records": [{"command": "mem eval semantic check 20260825T181242940941Z-fc958904 --ledger-dir /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/admin-eval-ledger", "completed_at": "2026-08-25T18:15:58.605058+00:00", "details": {}, "elapsed_seconds": 0.008566583011997864, "failure": null, "operation": "eval", "outcome": null, "started_at": "2026-08-25T18:15:58.596329+00:00", "status": "COMPLETED", "terminal": {"stdin_tty": true, "stdout_tty": false}, "uid": "ed8d4b7c-83f4-4817-a749-d6ff6470db43", "version": 3}], "sequence": 51}
+
+STDOUT
+Semantic eval check · PASS · find-ambiguities · codex_chatgpt:gpt-5.6-sol · reasoning=none · runs=1 · cases=1/10
+  run_id 20260825T181242940941Z-fc958904 · pipeline ambiguity-classify-v2 v2
+  cases 1/1 passed, 0 failed · attempts exact 1/1
+  fixture 003654c092e0 · ledger /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/admin-eval-ledger/runs/20260825T181242940941Z-fc958904.json
+
+
+STDERR

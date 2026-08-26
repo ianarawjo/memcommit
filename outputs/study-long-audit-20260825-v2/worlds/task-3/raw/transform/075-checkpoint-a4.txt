@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 checkpoint -c task-3/local -m 'task-3 transform round 4 short-option recovery' -d
+
+EXIT
+0
+
+OUTPUT
+[27bebff8] 2026-08-25 13:37:53  Context 'task-3/local'  'task-3 transform round 4 short-option recovery'

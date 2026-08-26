@@ -1,0 +1,11 @@
+{
+  "sequence": 88,
+  "operation": "find",
+  "attempt": 5,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 find 'CONSTRUCTION UPDATE' --context task-1/campus-wiki/building-access --context task-1/campus-wiki/event-relocations --context task-1/campus-wiki/facility-updates --context task-1/campus-wiki/temporary-parking --context-only --all-results",
+  "exit": 0,
+  "wall_seconds": 1.402663,
+  "pre_target_digest": "82b205fd5b84ef895b2392844142dec9a21c5c45281937f6f694fbaf8f184611",
+  "post_target_digest": "cb01436d1a5eba9ce415af4bbb3737e8ed1b7bf7815a71f48f95a8c36114074e",
+  "raw_output": "raw/core/088-find-m5.txt"
+}

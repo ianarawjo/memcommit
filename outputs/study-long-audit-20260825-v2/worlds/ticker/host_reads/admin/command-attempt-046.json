@@ -1,0 +1,31 @@
+{
+  "sequence": 46,
+  "count_before": 290,
+  "count_after": 291,
+  "delta": 1,
+  "new_attempt_uids": [
+    "b922f4a2-6623-4b33-a795-3a85f704c30e"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "b922f4a2-6623-4b33-a795-3a85f704c30e",
+      "operation": "checkout",
+      "command": "mem checkout -b audit/ticker/admin-v2-scratch/co3 --direct",
+      "status": "FAILED",
+      "started_at": "2026-08-25T18:15:51.306008+00:00",
+      "completed_at": "2026-08-25T18:15:51.327946+00:00",
+      "elapsed_seconds": 0.021794125001179054,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": {
+        "kind": "Exit",
+        "exit_code": 1
+      }
+    }
+  ]
+}

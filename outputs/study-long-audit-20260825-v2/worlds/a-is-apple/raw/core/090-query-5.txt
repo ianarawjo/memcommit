@@ -1,0 +1,21 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple query 'State the best-supported mappings for a, b, and c while preserving unresolved alternatives and provenance.' --recursive --context practice
+
+EXIT
+0
+
+OUTPUT
+The best-supported mapping for a is apple; the unresolved alternative is apricot. [1] [2] [3] [4] [5]
+
+For b, banana and blueberry remain unresolved alternatives; banana has support in both practice and practice/source, while blueberry is supported in practice/source. [6] [7] [8] [9] The complete current corpus provides no mapping for c.
+
+References
+[1] a is apple. — f1c940a1, practice, m1
+[2] a maps to apple; — 9828aed4, practice, m2
+[3] a maps to apple; — 84695557, practice, m23
+[4] a is apple. — 976fa18c, practice, m26
+[5] a maps to apricot; — 0463758c, practice, m30
+[6] b is banana. — b6e1778f, practice, m5
+[7] b is blueberry. — c1cf9a92, practice/source, m18
+[8] b is banana; — be4139d0, practice/source, m19
+[9] b is blueberry. — 584c69df, practice/source, m22

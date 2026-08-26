@@ -1,0 +1,75 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker shell-init zsh
+
+STDIN
+<none>
+
+EXIT
+0
+
+WALL_SECONDS
+1.334773
+
+PRE_IDENTITY
+{"current_context": "task-2/participant", "current_context_uid": "0e19f3b1-4107-48ab-9186-8773e48b812d", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+IMMEDIATE_POST_IDENTITY
+{"current_context": "task-2/participant", "current_context_uid": "0e19f3b1-4107-48ab-9186-8773e48b812d", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+COMMAND_ATTEMPT_DELTA
+{"count_after": 306, "count_before": 305, "delta": 1, "new_attempt_uids": ["2a84d359-0c53-441b-ae63-3aa520dccb49"], "records": [{"command": "mem shell-init zsh", "completed_at": "2026-08-25T18:16:19.887600+00:00", "details": {}, "elapsed_seconds": 0.007867791995522566, "failure": null, "operation": "shell-init", "outcome": null, "started_at": "2026-08-25T18:16:19.879581+00:00", "status": "COMPLETED", "terminal": {"stdin_tty": true, "stdout_tty": false}, "uid": "2a84d359-0c53-441b-ae63-3aa520dccb49", "version": 3}], "sequence": 61}
+
+STDOUT
+# memcommit: isolate Study history and prefill selections from `mem help`.
+function mem {
+  emulate -L zsh
+  if [[ -o interactive && $ZSH_SUBSHELL -eq 0
+        && -t 0 && -t 1 && -t 2
+        && $# -ge 1
+        && ( $1 == init-study || $1 == initstudy ) ]]; then
+    local _mem_arg _mem_init_study_help=0
+    for _mem_arg in "$@"; do
+      if [[ $_mem_arg == --help ]]; then
+        _mem_init_study_help=1
+        break
+      fi
+    done
+    if (( ! _mem_init_study_help )); then
+      # A child process cannot edit its parent's history. Push rather than
+      # erase the prior list so accidental Up-arrow recall starts empty while
+      # an intentional `fc -P` can still restore the previous shell owner.
+      builtin fc -p
+    fi
+  fi
+  if [[ -o interactive && $ZSH_SUBSHELL -eq 0
+        && -t 0 && -t 1 && -t 2
+        && $# -eq 1 && $1 == help ]]; then
+    local _mem_selected _mem_status
+    _mem_selected="$(command mem help --emit-selection)"
+    _mem_status=$?
+    if (( _mem_status != 0 )); then
+      return $_mem_status
+    fi
+    if [[ -z $_mem_selected ]]; then
+      return 0
+    fi
+    if [[ $_mem_selected != mem && $_mem_selected != 'mem '* ]]; then
+      builtin print -u2 -- 'mem: invalid command selection'
+      return 1
+    fi
+    case $_mem_selected in
+      # `#` is a literal separator in the audited query-view Memory form, not
+      # shell syntax introduced by terminal input.
+      (*[!A-Za-z0-9_./:=#\ \[\]\"-]*)
+        builtin print -u2 -- 'mem: unsafe command selection'
+        return 1
+        ;;
+    esac
+    builtin print -rz -- "${_mem_selected} "
+    return 0
+  fi
+  command mem "$@"
+}
+
+
+STDERR

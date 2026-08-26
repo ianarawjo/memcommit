@@ -1,0 +1,618 @@
+Recursive scope: task-2
+  Contexts 39  |  Memories 309  |  Memory Refs 1  |  Query Views 2  |  Embedded Contexts 35
+
+Context: task-2
+  Memories 0  |  Memory Refs 1  |  Query Views 1  |  Embedded Contexts 0
+
+Items (in context order):
+  [reference afdea5f7] [task-2/participant][memory 9f473e8e]  READ ONLY
+           Base ticker rule: uppercase the remaining company-name letters in their original order. Do not invent letters.
+  [query view c768ce3e] task-2/proposal-submission-guidelines
+
+Context: task-2/advisor1
+Access: READ GRANT · READ ONLY
+Reach: DESCENDANT
+  Memories 0  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 16
+
+Items (in context order):
+  [context 0ff7abfd] task-2/advisor1/structure  VIA EMBED
+  [context 6f253a9e] task-2/advisor1/emphasis  VIA EMBED
+  [context a759f597] task-2/advisor1/style  VIA EMBED
+  [context b0c4b50c] task-2/advisor1/claim-evidence  VIA EMBED
+  [context 39a6f298] task-2/advisor1/expression  VIA EMBED
+  [context 7699c7c5] task-2/advisor1/terminology  VIA EMBED
+  [context d2f78b99] task-2/advisor1/methods  VIA EMBED
+  [context 30568e2f] task-2/advisor1/evaluation  VIA EMBED
+  [context 5cdea05f] task-2/advisor1/ethics  VIA EMBED
+  [context 6db29abe] task-2/advisor1/scope  VIA EMBED
+  [context cd6c1fab] task-2/advisor1/safety  VIA EMBED
+  [context 52db6b06] task-2/advisor1/feasibility  VIA EMBED
+  [context 7d293f75] task-2/advisor1/reproducibility  VIA EMBED
+  [context d6d3ee9e] task-2/advisor1/budget  VIA EMBED
+  [context 7ba75d6b] task-2/advisor1/compensation  VIA EMBED
+  [context 57ec8c37] task-2/advisor1/review  VIA EMBED
+
+Context: task-2/advisor1/structure
+Access: READ GRANT · READ ONLY
+Reach: VIA EMBED
+  Memories 17  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [memory 44249c8a] Complete the problem framing within the first two sentences so the reader reaches the proposal's central issue before any supporting background.
+  [memory 21371c6c] Use the first sentence for the concrete problem and the second for its consequence; reserve later sentences for the proposed response.
+  [memory f69ea80c] Specify the user, context, and interaction to be explored in the primary HCI research question.
+  [memory 18ebdcbc] Provide one compact visual summary when proposing an unfamiliar interaction procedure.
+  [memory 5ab99a77] Mark the conditions that move an unfamiliar interaction procedure from one step to the next in its visual summary.
+  [memory b9b7932b] Present the master’s research schedule as phased periods for exploration, design, prototyping, and user evaluation.
+  [memory fc0a3a72] Link one reviewable deliverable to each phase of the master’s research.
+  [memory 2f7092a7] Place the gap left by HCI-related research and the proposed design and empirical contributions in close proximity.
+  [memory a1857f07] Divide a two-page proposal with short descriptive subheadings so a reader can jump directly to the problem, proposed response, and next steps.
+  [memory 895b5ac9] Give the problem and proposed response their own descriptive subheadings instead of relying only on paragraph transitions.
+  [memory 3005f4c5] Give the next steps and requested support their own descriptive subheading so they remain easy to find on a return visit.
+  [memory 4913f63e] Place pilot observation or initial prototype results near sentences supporting feasibility claims.
+  [memory 8ecaec22] Readers often decide what a proposal is about from its first two sentences before scanning the rest of the page.
+  [memory a4536b84] When setup continues past the second sentence, readers who are skimming often retain the background topic but miss the exact problem being proposed.
+  [memory 2312cb6e] Reuse the same short subheadings in discussion so a reader can return to a section without searching through the whole page.
+  [memory 1d90043b] Use visible subheadings as a completeness check: an empty or missing section makes an omitted part of the proposal immediately apparent.
+  [memory b77fe6ec] Readers often scan section labels before deciding which paragraph to read closely.
+
+Context: task-2/advisor1/emphasis
+Access: READ GRANT · READ ONLY
+Reach: VIA EMBED
+  Memories 8  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [memory 4a1de8df] Do not exceed two primary HCI contributions.
+  [memory b5b6a901] Name each design or empirical contribution and present it in a single sentence.
+  [memory e89de514] In studies recruiting community participants, emphasize the time burden associated with participation.
+  [memory f7025cbb] In studies recruiting community participants, emphasize the travel burden associated with participation.
+  [memory a42891a1] HCI reviewers find it difficult to identify primary contributions when named design or empirical contributions exceed two.
+  [memory 9d7169d5] Emphasize the core design decisions that formative evaluation will change rather than a polished product demonstration.
+  [memory f8931b4e] Emphasize design principles transferable to other similar interactions as the primary contribution, rather than the performance of a specific prototype.
+  [memory 9bf9e735] Formative evaluation creates grounds for modification in subsequent iterations rather than definitively determining the superiority of design alternatives.
+
+Context: task-2/advisor1/style
+Access: READ GRANT · READ ONLY
+Reach: VIA EMBED
+  Memories 13  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [memory 33503d41] Avoid em dashes in the proposal; split the sentence or use more ordinary punctuation instead.
+  [memory 79437c17] The user tends to place several independently reviewable claims in one long sentence.
+  [memory 807a906c] Use first-person active voice for choices and commitments owned by the proposal author so responsibility remains explicit throughout the work plan.
+  [memory e463a3b5] Describe prototype operations that have already been implemented and verified as observed states.
+  [memory fef78af8] Describe prototype operations not yet implemented or evaluated as plans or expectations.
+  [memory ff8f0b12] When a commitment is phrased passively, readers may interpret it as uncertainty, evasiveness, or reluctance to take responsibility.
+  [memory 6c282ef7] Use “we” only for decisions and commitments the authors control, not for external facts or actions owned by another party.
+  [memory 58565355] The user should use one first-person pronoun consistently for the same authorial role and should not alternate between “I” and “we” unless the responsible party actually changes.
+  [memory bec16e02] The user tends to hide unsettled commitments behind passive phrases such as “will be considered” or “is expected.”
+  [memory cc860653] Split proposal prose into short sentences when a sentence contains more than one independently reviewable claim.
+  [memory af0d191d] Keep one main claim in each sentence so a reviewer can locate and assess it quickly.
+  [memory 13dc50e1] The user tends to repeat em dashes when a sentence already contains several clauses.
+  [memory 358230d3] Repeated em dashes can shift a reviewer’s attention from the proposal’s argument to suspicion that its prose was generated by AI.
+
+Context: task-2/advisor1/claim-evidence
+Access: READ GRANT · READ ONLY
+Reach: VIA EMBED
+  Memories 11  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [memory 06f6c673] Attach adjacent evidence or citations to verifiable claims about user behavior or technology effects.
+  [memory 58991ce7] Distinguish between results observed in the pilot and expectations to be confirmed in the main user study using different expressions.
+  [memory f5adf029] Do not use verbs that imply proving causation if the design does not support causal inference.
+  [memory b2a7ff8a] For topics with sufficient HCI research evidence, prioritize citing recent comprehensive studies over listing individual cases.
+  [memory 1f0c95f4] Explain how each design choice was derived to address specific user needs.
+  [memory cd475113] Support each core claim with evidence that directly examined it rather than with indirect summaries.
+  [memory 86fe1306] Reviewers first check the direct evidence placed closest to the core claim.
+  [memory 5d022e45] Connect the proposed conceptual design principle to at least one observable user behavior.
+  [memory 9939e9e8] Identify which design judgment—retain, modify, or discard—each piece of evidence from formative evaluation supports.
+  [memory 41060e8e] Results from controlled formative studies do not directly prove effects in actual long-term use.
+  [memory ec54ce10] The user can have an explanation approved as a conceptual contribution only if it is falsifiable with observable data.
+
+Context: task-2/advisor1/expression
+Access: READ GRANT · READ ONLY
+Reach: VIA EMBED
+  Memories 8  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [memory 51fa3fcc] Use a flow diagram rather than a sequence table when alternate procedural branches lead to different outcomes.
+  [memory e686bd4d] Draw alternate branches and their resulting outcomes in the same flow diagram so readers can compare them at once.
+  [memory 019662a9] The visual fidelity of a prototype may differ from its functional fidelity.
+  [memory a6dfe9a7] A flow diagram can make alternate branches and their different outcomes visible in one view.
+  [memory 7047a23d] HCI reviewers often skim prototype screens and interaction flow diagrams before reading the main text.
+  [memory 50a71968] Readers can understand the overall branching shape of a procedure more quickly from a flow diagram than from rows read one at a time.
+  [memory ae1610f6] Redrawing a branching flow diagram after a procedural change usually takes longer than updating one row in a table.
+  [memory d2825b84] Reviewers often inspect the proposal’s main visual before reading the procedural explanation in full.
+
+Context: task-2/advisor1/terminology
+Access: READ GRANT · READ ONLY
+Reach: VIA EMBED
+  Memories 8  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [memory 949a884d] Use the same term throughout the proposal for the same interaction concept or interface element.
+  [memory 2f484151] Use abbreviations only for recurring terms of three or more words.
+  [memory 21131a6f] Present the full name and abbreviation together when using an abbreviation for the first time.
+  [memory e02c3110] Prioritize the research role over diagnostic labels or deficits when referring to participants.
+  [memory af028910] Reviewers from different subfields struggle to infer undefined abbreviations from context alone.
+  [memory 39792d18] Use the term formative evaluation for studies seeking design modification evidence, and distinguish it from final efficacy judgments.
+  [memory bcaa8c30] The user can have contribution labels such as principles, models, or guidelines approved only if they align with the abstraction level of the actual deliverables.
+  [memory 82ad9fe2] Design principles describe the relationship between conditions and outcomes rather than serving as instructions that merely replicate a single screen layout.
+
+Context: task-2/advisor1/methods
+Access: READ GRANT · READ ONLY
+Reach: VIA EMBED
+  Memories 14  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [memory c8bcefee] Link each HCI research question directly to corresponding user data and analysis procedures.
+  [memory 8747b27e] In preregistered studies, specify the conditions under which deviations from the plan are permissible.
+  [memory c3ad4ad8] In preregistered studies, specify how to record content that deviates from the plan.
+  [memory df53a41c] Commit to one exact target number of participants so the schedule, workload, and budget can be checked against the same quantity.
+  [memory 24d49198] Specify the interview protocols, recording devices, or log tools used to collect each type of user data.
+  [memory 2f367cf3] Specify whether each type of user data is collected before, during, or after the interaction.
+  [memory 91db3bd1] Readers cannot tell whether the schedule and budget agree when different sections imply different target counts.
+  [memory 49746579] In formative evaluation prototypes, implementation instability exists as an independent cause of task failure alongside design choices.
+  [memory 20d116ab] If a prototype safety signal occurs during formative evaluation, existing institutional safety procedures take precedence over planned data collection.
+  [memory 881bc037] Reviewers judge answerability by tracing the path from each research question to the data and analysis.
+  [memory 9a969676] The author of this proposal tends to present implemented feature lists directly as design contributions.
+  [memory 0ecc319a] Calculate the required sessions, facilitator hours, and participant payments from the same exact target rather than from separate rough estimates.
+  [memory c4dfdb65] If recruitment falls below the exact target, state the shortfall explicitly and revise the affected schedule or deliverable.
+  [memory a7c3a123] Do not use a wide range merely to postpone choosing the quantity that the rest of the proposal must support.
+
+Context: task-2/advisor1/evaluation
+Access: READ GRANT · READ ONLY
+Reach: VIA EMBED
+  Memories 6  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [memory a50f6ecb] Specify a single representative measure that serves as the criterion for retaining, modifying, or discarding compared design alternatives.
+  [memory 44c61beb] HCI review panels verify whether clear criteria for judging design alternatives are established using the declared primary measure.
+  [memory 23202824] Collect process measures to diagnose interaction steps where problems occurred, alongside the primary outcome measure.
+  [memory 65ae88bf] Interpret evaluation results as differences between compared design alternatives rather than as success or failure of a single prototype.
+  [memory 79af5e5f] Check boundary cases to verify whether the derived design principles retain explanatory power for adjacent situations not included in the comparison.
+  [memory 3a65fc8b] Controlled evaluation environments do not reproduce time pressure, peer intervention, or voluntary termination conditions found in daily use.
+
+Context: task-2/advisor1/ethics
+Access: READ GRANT · READ ONLY
+Reach: VIA EMBED
+  Memories 11  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [memory e93ea2ee] Link expected participant burden in each user study task to its corresponding mitigation strategy.
+  [memory 6ecf6a7b] Specify the accommodations necessary for participants to access the prototype and research tasks.
+  [memory bc41fce0] Specify how accessibility accommodations will be provided during user study sessions.
+  [memory 9768e0d9] Describe how personal identifiers will be separated from research data immediately after collection.
+  [memory e874407e] Specify the equipment to be loaned to participants who lack necessary devices.
+  [memory df16dca6] Describe the procedure for returning equipment loaned to participants.
+  [memory 7d0b3072] HCI ethics reviewers verify that expected burdens and mitigation strategies correspond to each user study task.
+  [memory 407a4c1c] Inform participants that the formative evaluation prototype is not a finished service.
+  [memory 28646fd3] Set an upper limit on cumulative task burden when requesting repeated evaluations from the same participant.
+  [memory 218aafb6] The author of this proposal tends to emphasize expected benefits of the prototype over participant burden.
+  [memory 1ecb7268] In organizations where leaders or institutional staff handle recruitment, recruitment authority and academic or professional evaluation authority may be combined in the same role.
+
+Context: task-2/advisor1/scope
+Access: READ GRANT · READ ONLY
+Reach: VIA EMBED
+  Memories 5  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [memory e594a6ab] Define in one sentence the user groups and usage contexts to which the design knowledge does not apply.
+  [memory 31cdacff] Reviewers judge the generalization boundary of results through explicitly excluded targets and situations.
+  [memory 1459d986] Specify user goals, interaction conditions, and technological constraints under which the proposed design knowledge can be transferred.
+  [memory 1db5fcd6] Small-scale formative studies can support analytic generalization distinct from statistical representativeness when results are expressed in terms of design conditions and mechanisms.
+  [memory fd29c315] The author of this proposal tends to apply design knowledge derived from an accessible sample to a broader user population.
+
+Context: task-2/advisor1/safety
+Access: READ GRANT · READ ONLY
+Reach: VIA EMBED
+  Memories 5  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [memory 9d6f5228] Specify the order and recipients for reporting serious discomfort during the study.
+  [memory 00ed485d] Field staff rely on a pre-defined contact sequence when serious discomfort is reported.
+  [memory 9c6e1561] Establish criteria for halting the use of a design alternative if recurring severe errors appear during formative evaluation.
+  [memory 2381ecf7] Do not include a design alternative halted for safety reasons in subsequent evaluation iterations without modification.
+  [memory c5ce1b00] Even in controlled environments, delayed prototype recovery procedures increase session interruption time and alter data collection conditions for the same task.
+
+Context: task-2/advisor1/feasibility
+Access: READ GRANT · READ ONLY
+Reach: VIA EMBED
+  Memories 11  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [memory b150c774] Mark unverified schedule assumptions as such.
+  [memory 6c7d14ed] Mark unverified recruitment assumptions as such.
+  [memory 00bf39b5] Mark unverified technical assumptions as such.
+  [memory 3ae97c88] Clarify which stage of prototype fabrication or user study each requested resource is used for.
+  [memory e2b5c1f0] Operations reviewers judge feasibility based on the personnel assigned to each procedure.
+  [memory f636b400] Operations reviewers judge feasibility based on the equipment assigned to each procedure.
+  [memory 49385488] Operations reviewers judge feasibility based on the time allocated to each procedure.
+  [memory f1c22a48] Verify that the planned number of formative evaluation iterations is feasible within the time for prototype modification and recruitment resources.
+  [memory 4d69f030] Include only the minimum functionality required to compare primary design assumptions in the scope of the formative evaluation prototype.
+  [memory 152f8621] The user's iterative design plan can be judged feasible only if time and personnel are allocated for modifying the prototype between iterations.
+  [memory 1877a138] Delays in participant recruitment can compress the time available for prototype modification between formative evaluations.
+
+Context: task-2/advisor1/reproducibility
+Access: READ GRANT · READ ONLY
+Reach: VIA EMBED
+  Memories 4  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [memory fb400759] HCI reviewers find it difficult to assess the reproducibility of results if the prototype version used in the evaluation is not disclosed.
+  [memory e52e8470] Record the manipulated and fixed elements of compared design alternatives so that other researchers can reconstruct them.
+  [memory 8f4edf8c] Records of formative evaluation decisions enable the reconstruction of connections between raw data, interpretation, and design modifications.
+  [memory 87662a7e] The user must make it possible to trace which observations each prototype version reflects so the process of deriving design knowledge can be reviewed.
+
+Context: task-2/advisor1/budget
+Access: READ GRANT · READ ONLY
+Reach: VIA EMBED
+  Memories 7  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [memory 05e0261e] Keep the total, major cost categories, and one-line estimate basis in the main text so the resource argument can be understood without leaving the proposal.
+  [memory 1083e9b3] Place each major cost beside the activity or deliverable it enables in the main text.
+  [memory 3652f268] State the quantity and unit-rate basis for each major cost in the same paragraph that requests it.
+  [memory 4e1e1201] Readers may question a proposed priority when its cost cannot be checked on the same page as the claimed benefit.
+  [memory 2f5f9039] Update the cost sentence whenever the related activity changes so the narrative and requested amount cannot drift apart.
+  [memory f7a16d08] Accept a denser main-text paragraph when the estimate basis is essential to deciding whether the request is proportionate.
+  [memory 2ca1d5a1] The user tends to revise the work plan but forget a detached budget table unless the key amount is repeated beside the activity.
+
+Context: task-2/advisor1/compensation
+Access: READ GRANT · READ ONLY
+Reach: VIA EMBED
+  Memories 10  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [memory 0ae46268] Calculate user study compensation budgets based on estimated participation burden, combining session time and preparation effort.
+  [memory bdda6e22] Compensate for required travel time in face-to-face user studies as well.
+  [memory f49b1d0a] Compensate for the actual time participants spent in sessions, regardless of research modality.
+  [memory 1f4d05e4] Leave cash payment as an available compensation method for face-to-face studies.
+  [memory abcba764] If compensation equity is explained, do not require finalizing the payment method at the proposal stage.
+  [memory c6a28f37] Apply the same base hourly rate to face-to-face and remote studies if task burden is equal.
+  [memory 874de649] Participants judge compensation fairness based on the total burden, combining session time with required travel and preparation time.
+  [memory 529559f5] Account in compensation for the burden of rescheduling iterations and returning for multiple formative evaluation sessions.
+  [memory c8be56ee] Compensate participants for time already invested even if a session is terminated early due to prototype errors.
+  [memory bdac8cf8] The author of this proposal tends to exclude preparation burden between sessions when calculating compensation for iterative studies.
+
+Context: task-2/advisor1/review
+Access: READ GRANT · READ ONLY
+Reach: VIA EMBED
+  Memories 12  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [memory 0dda8eb3] Conduct one review prior to submission focusing solely on the validity of user problems, design interventions, and evaluation logic.
+  [memory c8e0c9dd] Cross-check whether research questions align with the core functions of the prototype.
+  [memory f93c5baa] Cross-check whether evaluation tasks align with representative measures.
+  [memory 8dae0ad6] Cross-check whether collected evidence aligns with design and operational decisions to be changed.
+  [memory 0f89ab25] Verify at the end that user problems, design interventions, user studies, and expected contributions form a coherent logical flow.
+  [memory 3e4a9a3b] HCI reviewers view the validity of design interventions as low if research questions are not linked to prototype functions.
+  [memory fb785649] HCI reviewers view the validity of evaluation plans as low if evaluation tasks do not produce representative measures.
+  [memory 02f8ddd8] HCI reviewers view the practicality of contributions as low if collected evidence cannot change design or operational decisions.
+  [memory d17ba26c] Cross-check at the end whether each research question, formative evaluation data, and design modification judgment are seamlessly connected.
+  [memory 48a91d19] Review whether the application conditions of proposed design principles and boundary cases of failure are presented together.
+  [memory 774341c9] The user can have contributions reviewed only if prototype outcomes and the transferable design knowledge derived from them are separated.
+  [memory 877015ae] The scope of observation in controlled formative evaluations does not include long-term adaptation and operational changes in real-world usage contexts.
+
+Context: task-2/advisor2
+Access: READ GRANT · READ ONLY
+Reach: DESCENDANT
+  Memories 0  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 16
+
+Items (in context order):
+  [context 09c95ce6] task-2/advisor2/structure  VIA EMBED
+  [context 398f9930] task-2/advisor2/emphasis  VIA EMBED
+  [context f0ea0447] task-2/advisor2/style  VIA EMBED
+  [context 1ca4b72a] task-2/advisor2/claim-evidence  VIA EMBED
+  [context cf8e8baf] task-2/advisor2/expression  VIA EMBED
+  [context a2976fe7] task-2/advisor2/terminology  VIA EMBED
+  [context 531f5f15] task-2/advisor2/methods  VIA EMBED
+  [context 6e9f8ad5] task-2/advisor2/evaluation  VIA EMBED
+  [context fa36b485] task-2/advisor2/ethics  VIA EMBED
+  [context 86efd53c] task-2/advisor2/scope  VIA EMBED
+  [context 4283d797] task-2/advisor2/safety  VIA EMBED
+  [context 2a4a102a] task-2/advisor2/feasibility  VIA EMBED
+  [context 5f2f3c0f] task-2/advisor2/reproducibility  VIA EMBED
+  [context ae02c2b2] task-2/advisor2/budget  VIA EMBED
+  [context 4ffbd453] task-2/advisor2/compensation  VIA EMBED
+  [context 3398ba87] task-2/advisor2/review  VIA EMBED
+
+Context: task-2/advisor2/structure
+Access: READ GRANT · READ ONLY
+Reach: VIA EMBED
+  Memories 17  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [memory e32f543b] Allow the problem framing to extend through a third sentence when a concrete person, setting, or use situation is needed to make the issue understandable.
+  [memory 6bbb0f69] Use the third sentence for the specific setting and consequence rather than compressing them into an abstract two-sentence summary.
+  [memory 48e887dc] Explicitly specify the users, operational stakeholders, and actual usage environment in the primary HCI research question.
+  [memory e34bce0c] Provide one compact visual summary when proposing an unfamiliar interaction procedure.
+  [memory 68ad56f9] Mark the conditions that move an unfamiliar interaction procedure from one step to the next in its visual summary.
+  [memory eca301ff] Present the master’s research schedule as phase-specific milestones for field understanding, system implementation, user study, and analysis.
+  [memory cbd977cd] Link deliverables that determine entry into the next phase to each milestone of the master’s research.
+  [memory 9283aedb] Directly connect the gap in the actual usage context with the proposed design and operational contributions in a single flow.
+  [memory c5c04ab1] Avoid extra subheadings in a two-page proposal; use paragraph transitions to preserve one continuous argument from problem to proposed response and next steps.
+  [memory 87203bcf] Begin each paragraph by connecting it to the previous claim so the short proposal reads as an argument rather than a stack of labeled fragments.
+  [memory c9591180] Place preliminary results from field observations or technical validations near sentences supporting feasibility claims.
+  [memory 0ac685f9] Readers may misinterpret a compressed opening when the person, setting, or consequence is only implied.
+  [memory 5567fb3c] A two-sentence opening can become so general that readers understand the topic but cannot picture the situation the proposal intends to change.
+  [memory 32cef408] Use paragraph transitions instead of extra headings when the repeated labels would consume space needed for the argument itself.
+  [memory 3579fcc0] End each paragraph with the question or consequence that the next paragraph answers.
+  [memory 2c2aa1af] A continuous sequence of problem, consequence, response, and next step makes the relationship among claims audible without repeating section labels.
+  [memory 1fb62d5b] Readers may experience very short headed sections as an outline because each new label interrupts the connection to the previous paragraph.
+
+Context: task-2/advisor2/emphasis
+Access: READ GRANT · READ ONLY
+Reach: VIA EMBED
+  Memories 7  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [memory d59dc83b] Do not exceed two primary HCI contributions that readers must remember.
+  [memory 328de462] Present each design or operational contribution as a single named sentence.
+  [memory eab1dac5] In studies recruiting organizational members, emphasize workflow constraints.
+  [memory f90e616a] In studies recruiting organizational members, emphasize manager approval constraints.
+  [memory 78a1c87a] HCI reviewers find it difficult to identify primary contributions when named design and operational contributions exceed two.
+  [memory 7af2db41] Highlight one primary field operational decision to be changed by evaluation results as the central claim.
+  [memory 2312f35d] Specify prototype features unnecessary for reviewing the primary field problem as secondary scope.
+
+Context: task-2/advisor2/style
+Access: READ GRANT · READ ONLY
+Reach: VIA EMBED
+  Memories 13  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [memory 9bd2a9da] Use an em dash only for a deliberate interruption or sharp contrast; otherwise split the sentence or choose ordinary punctuation.
+  [memory e3e20261] In procedural passages, begin each sentence with the action, condition, or output instead of repeating “we” so the steps remain easy to follow and reuse.
+  [memory 8d8d0e8d] Write system behaviors confirmed in the actual usage environment as observed states.
+  [memory 8c74ba87] Write system behaviors not yet confirmed in the field as conditional plans.
+  [memory 1f29de31] Readers can reconstruct a sequence more accurately when each sentence begins with the action or condition rather than the author.
+  [memory 1d181223] Do not mechanically split connected thoughts into separate short sentences when doing so destroys the intended reading rhythm.
+  [memory a5ce5f9f] Preserve a longer sentence when its clauses form one continuous movement that is easier to follow together than apart.
+  [memory 888ce8af] The user understands that short sentences are easier to scan but feels that uniformly segmented prose loses its reading rhythm.
+  [memory ddf40413] Write procedural sentences so their opening phrase can be reused as a checklist item without changing the step's meaning.
+  [memory 6b7aaddf] The user should choose “I” as an individual author or “we” for a named team and should not mix them when describing the same responsible party.
+  [memory 89c2ce30] Action-first procedural sentences can be reordered or copied into a checklist more easily because their subject is the step rather than the proposal author.
+  [memory 9f1b647a] The user can explain whether an em dash marks an intentional interruption or contrast rather than using it decoratively.
+  [memory 49a42872] An em dash creates a stronger interruption than a comma and can make a deliberate contrast easier to hear in the sentence.
+
+Context: task-2/advisor2/claim-evidence
+Access: READ GRANT · READ ONLY
+Reach: VIA EMBED
+  Memories 11  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [memory b39cf79f] Place observational evidence or sources adjacent to claims regarding user needs or field effects.
+  [memory b95e0185] Distinguish at the sentence level between facts already confirmed in the field and predictions to be examined in the user study.
+  [memory f82f1e1f] Do not use verbs implying proof of causality if the design does not support causal inference.
+  [memory b5461283] Prioritize citations of recent systems and field research in rapidly changing HCI topics.
+  [memory 87340c01] Explain the user or operational stakeholder needs that each design choice aims to address.
+  [memory 8b15a9ad] Support each important conclusion with the closest evidence that directly examined it.
+  [memory 565a2263] Reviewers first check direct evidence placed closest to important conclusions.
+  [memory 27b58ee9] Use field cases in which people completed tasks by working around existing tools as evidence for the need for the design.
+  [memory cf7e9410] Distinguish between problems reported by operational stakeholders and those directly observed by the researcher as separate forms of evidence.
+  [memory ad643b33] Field breakdown logs can reveal both system failures and user adaptive behaviors, including their timing and conditions.
+  [memory 546548e3] In field sites introducing new systems, formal procedures often coexist with existing manual routines for a period, making it difficult to isolate the effects of single design changes.
+
+Context: task-2/advisor2/expression
+Access: READ GRANT · READ ONLY
+Reach: VIA EMBED
+  Memories 7  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [memory 4264c20d] Use a sequence table rather than a flow diagram when the procedure is likely to change repeatedly during drafting.
+  [memory 70a8c3f0] The visual fidelity of a prototype and its level of connection to actual data and services may differ.
+  [memory b410aa8d] Service flow diagrams indicate human-system transitions that are not revealed by individual screens alone.
+  [memory a385fbb1] HCI reviewers often scan system structure and service flow diagrams before the main text.
+  [memory 22254f16] Give each step, actor, condition, and outcome a stable row in the sequence table.
+  [memory 32028269] Updating one row in a sequence table is usually faster than redrawing a branching diagram after a procedural change.
+  [memory 939ee3d0] Readers can check sequence tables step by step but may find the overall branching shape less immediate.
+
+Context: task-2/advisor2/terminology
+Access: READ GRANT · READ ONLY
+Reach: VIA EMBED
+  Memories 8  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [memory e2ae95ed] Do not change names referring to the same user roles, system functions, or operational stages midway.
+  [memory 4be60357] Use abbreviations only for long recurring terms in a two-page proposal.
+  [memory 0dd5d707] Present the full term and abbreviation together when using an abbreviation for the first time.
+  [memory 9b3f0cde] Refer to participants based on the roles they perform in the study rather than their status.
+  [memory 8c896114] Reviewers from different subfields find it difficult to infer an abbreviation from context alone when it is not defined at first use.
+  [memory dc9e3f25] When introducing an operational role for the first time, define both the decisions it can make and the actions it performs.
+  [memory 04956cab] Individuals holding identical job titles may possess different system modification privileges and data access rights depending on their deployment site.
+  [memory fc8613e8] The user tends to group distinct field roles under the single label “user.”
+
+Context: task-2/advisor2/methods
+Access: READ GRANT · READ ONLY
+Reach: VIA EMBED
+  Memories 16  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [memory 90be328f] Specify field and user data sources and analysis procedures corresponding to all HCI research questions.
+  [memory 452ab231] In preregistered studies, clarify the criteria for judging plan changes.
+  [memory 9c979f39] In preregistered studies, clarify the location for recording plan changes.
+  [memory 8a49f598] Use a justified minimum-to-maximum target range when confirmations can change, and tie the minimum and maximum to different workload and budget cases.
+  [memory 629cb159] Specify the observation records, system logs, or interview tools used to collect each type of field and user data.
+  [memory b565c5c9] Specify whether each type of field and user data will be collected before, during, or after deployment.
+  [memory 251a4b3c] Readers cannot assess a target range unless both bounds have a stated consequence for schedule, workload, or cost.
+  [memory f150891e] In field deployments, network and service instability exist as independent causes of task failure alongside design choices.
+  [memory 7860d9d6] If a safety signal occurs in the field system, existing institutional safety procedures take precedence over the research schedule and data collection plan.
+  [memory 4fc24f87] Reviewers judge answerability by tracing the path from each research question to its data sources and analysis procedures.
+  [memory 2db331a6] The user authoring this proposal tends to present implemented feature lists directly as design contributions.
+  [memory 40f23f85] Define what can still be completed at the minimum target instead of treating every number inside the range as operationally identical.
+  [memory 9527ccb8] Use a bounded range to absorb expected confirmation changes without pretending that one early estimate is guaranteed.
+  [memory 3ff9ec36] Show how session count and facilitator time change at the minimum and maximum bounds.
+  [memory 9e1c3629] Define the additional workload or deliverable enabled at the maximum target so the upper bound is not an arbitrary cushion.
+  [memory 7ba672db] A bounded range preserves uncertainty honestly but makes the final workload and budget less certain than one fixed target.
+
+Context: task-2/advisor2/evaluation
+Access: READ GRANT · READ ONLY
+Reach: VIA EMBED
+  Memories 7  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [memory f27576c7] Specify a single representative measure that will drive operational decisions to maintain, modify, or discontinue the deployed design.
+  [memory 8608bdf3] The HCI review panel verifies whether operational decisions can be made based on the declared primary measure.
+  [memory b06bb706] Establish decision thresholds indicating at what levels key metrics trigger maintaining, modifying, or discontinuing the design.
+  [memory 473ec6e8] Evaluate whether reducing workload for one role creates new tasks for other roles through the proposed design changes.
+  [memory 935cf79f] Distinguish usability from organizational adoption intent as separate evaluation outcomes.
+  [memory bea0e97f] Implementation fidelity indicates whether planned features and operational procedures were delivered in the field according to intended specifications.
+  [memory dbe435ff] Initial evaluations and long-term operation do not share identical measurement conditions due to differences in system exposure duration and frequency of repeated use.
+
+Context: task-2/advisor2/ethics
+Access: READ GRANT · READ ONLY
+Reach: VIA EMBED
+  Memories 11  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [memory bc8c1327] Link anticipated participant burden with its mitigation strategies for each field user study task.
+  [memory 578f6fdf] Specify the accommodations necessary for participants to access the field system and research tasks.
+  [memory 6804d5db] Specify how accessibility accommodations will be provided in the field user study.
+  [memory 448f23d0] Describe how personal identifiers will be separated from research data immediately upon collection.
+  [memory b97f3e2f] List equipment to be loaned when participants lack necessary gear.
+  [memory d05964ea] Describe the procedure for returning equipment loaned to participants.
+  [memory 26407eb8] The HCI ethics reviewer verifies that anticipated burden and mitigation strategies correspond for each field user study task.
+  [memory 7e0ba411] Ensure that participants can safely return to existing work procedures if they discontinue research participation.
+  [memory a6fbea37] Specify that organizational members who decline research participation will not face disadvantages in task assignment or performance evaluation.
+  [memory 885d1cf3] The user's withdrawal risk can be adequately assessed only when a safe alternative procedure exists for field tasks.
+  [memory 520b4c9f] The user tends to assume that a short session also entails little burden from work interruption and exposure to a manager.
+
+Context: task-2/advisor2/scope
+Access: READ GRANT · READ ONLY
+Reach: VIA EMBED
+  Memories 5  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [memory 6cfd5026] Specify in one sentence the user population and actual usage environment to which the design knowledge applies.
+  [memory 5bc7cf05] Reviewers judge the generalization boundary of results through the specified target population and environment.
+  [memory 25731e2b] Specify the workflow, technical infrastructure, and operational-authority conditions that must match before applying the design guidelines at another field site.
+  [memory d79ba448] The transferability of field design knowledge depends not only on user characteristics but also on workflow and technological–organizational infrastructure.
+  [memory cde0ee2b] The user tends to apply results confirmed at one deployment site to all similar organizations.
+
+Context: task-2/advisor2/safety
+Access: READ GRANT · READ ONLY
+Reach: VIA EMBED
+  Memories 6  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [memory ceb095a9] List whom to notify and in what order if serious discomfort is reported during the study.
+  [memory 962d7645] Field staff rely on the pre-defined contact sequence when serious discomfort is reported.
+  [memory a3270872] Define the thresholds for participant harm, operational disruption, and data anomalies at which deployment and data collection must cease.
+  [memory f6dd1368] Establish procedures to restore existing systems and workflow states after suspending field deployment.
+  [memory 342e4697] The user's stop plan can be judged feasible only when it identifies who has authority to order recovery and who is responsible for carrying it out.
+  [memory 6c4e9175] In organizations where error reporting is linked to individual performance evaluations, safety signal records may be separated from research decision logs, potentially breaking the traceability path for the same incident.
+
+Context: task-2/advisor2/feasibility
+Access: READ GRANT · READ ONLY
+Reach: VIA EMBED
+  Memories 11  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [memory 5c9755f8] Mark unverified schedule assumptions as such.
+  [memory 75af48aa] Mark unverified recruitment assumptions as such.
+  [memory 292e33b0] Mark unverified technical assumptions as such.
+  [memory c0c1fd8d] Trace back the resources required for each core prototype feature and field research procedure.
+  [memory 7be25c27] Operations reviewers judge feasibility by examining the personnel required for each procedure.
+  [memory 1aae182f] Operations reviewers judge feasibility by examining the equipment required for each procedure.
+  [memory 84f6e5e3] Operations reviewers judge feasibility by examining the time required for each procedure.
+  [memory 16a461c4] Document separately the commitments and confirmation status of field partners required for recruitment, installation, and operational support.
+  [memory 0ce26892] Designate a responsible party for software updates, equipment inspections, and user support during the deployment period.
+  [memory 4f35fd0c] The user's deployment readiness can be assessed only when dependencies on external services and field personnel are visible.
+  [memory 3b96bf66] Field schedules and assigned personnel may change due to operational factors beyond the researcher’s control.
+
+Context: task-2/advisor2/reproducibility
+Access: READ GRANT · READ ONLY
+Reach: VIA EMBED
+  Memories 3  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [memory 40f11374] HCI reviewers find it difficult to assess result reproducibility if the system version used in the field deployment is not disclosed.
+  [memory cc72ad54] Record changes in system configurations, field procedures, and data collection tools during deployment, along with their timestamps and rationales.
+  [memory 75f22b45] The history of deployment versions and configuration changes provides necessary evidence for interpreting results from different field sites.
+
+Context: task-2/advisor2/budget
+Access: READ GRANT · READ ONLY
+Reach: VIA EMBED
+  Memories 7  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [memory d614b55d] Keep the main text to the total and major categories, and place quantities, unit rates, and assumptions in one compact budget table or appendix.
+  [memory 24500129] Give each cost category, quantity, unit rate, and subtotal a stable row in the separate budget table.
+  [memory 07bad409] Put the estimate basis in a dedicated table column so one assumption can be checked or revised without rewriting the narrative.
+  [memory abf6d361] Readers can verify arithmetic and compare categories faster in a consistent table than in amounts distributed across prose.
+  [memory 473cf3ca] Revise one table row and its subtotal when an estimate changes instead of repeating the new amount across several prose paragraphs.
+  [memory 675956de] Keep detailed arithmetic out of the main argument when readers can reach the complete table from a clear reference.
+  [memory f4371f72] The user tends to interrupt the argument with long cost enumerations when no separate budget table is available.
+
+Context: task-2/advisor2/compensation
+Access: READ GRANT · READ ONLY
+Reach: VIA EMBED
+  Memories 10  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [memory be9e402b] Calculate user research compensation budgets based on the estimated participation burden, combining session time with required technical and travel preparation.
+  [memory 85157c57] Compensate participants who withdraw from the study midway for their actual participation time.
+  [memory 8abeab95] Compensate for the time actually spent in sessions, regardless of the research modality.
+  [memory 9b59c6ed] Allow the issuance of gift cards of equivalent value to participants in remote studies who cannot use electronic transfers.
+  [memory 5c6c461d] Do not treat an unresolved payment method as a deficiency at the proposal stage.
+  [memory 44abc098] Allow differential compensation amounts for on-site and remote studies when participation burden varies due to travel or technical preparation.
+  [memory 2a252668] Participants judge the fairness of compensation based on the combined burden of session time and required technical and travel preparation.
+  [memory 7e647a83] In longitudinal studies requiring diary entries and repeated reporting, include out-of-session recording time in compensation calculations.
+  [memory d77affab] Distinguish between participant research compensation and labor costs for field staff performing installation and operational support as part of their duties.
+  [memory 0c470c6b] The user tends to count session time but omit participants’ advance setup and follow-up reporting time.
+
+Context: task-2/advisor2/review
+Access: READ GRANT · READ ONLY
+Reach: VIA EMBED
+  Memories 11  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [memory 6d203c86] Conduct one review prior to submission focusing solely on the validity of user problems, system interventions, and field evaluation logic.
+  [memory 6b75bfb1] Cross-check whether research questions align with the core functions of the system.
+  [memory 3abfda89] Cross-check whether field tasks align with representative measures.
+  [memory f14f1974] Cross-check whether the evidence to be collected aligns with the design and operational decisions to be changed.
+  [memory 6ba1d344] Finally verify that the user problem, system intervention, field evaluation, and expected contribution form one coherent logical flow.
+  [memory 4a85ebbd] HCI reviewers view the validity of design interventions as low if research questions do not connect to system functions.
+  [memory 75c4c71d] HCI reviewers view the validity of evaluation plans as low if field tasks fail to generate representative measures.
+  [memory 577e5506] HCI reviewers view the practical utility of contributions as low if collected evidence cannot change design or operational decisions.
+  [memory 9ce34a9a] Before submission, conduct a sequential walkthrough with field liaisons of installation failures, operational interruptions, and recovery scenarios.
+  [memory f8253f92] Verify in one sentence how each proposed contribution could actually alter specific design or operational decisions.
+  [memory f5ad6933] The user must distinguish unconfirmed field partners and equipment from finalized ones so remaining execution risks can be assessed.
+
+Context: task-2/description
+Reach: DESCENDANT
+  Memories 1  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [memory 62ecc8ac] Imagine that you are a graduate student preparing a two-page research proposal with two co-advisors who have equal authority. Each advisor has provided an agent memory store containing their writing policies on structure, emphasis, claims and evidence, tone, and terminology. Both sets of guidance are useful, but they are not identical: some policies apply in different contexts, some conflict with one another, and others express the same underlying idea in different ways. Your task is to combine the stores without favoring either advisor by consolidating duplicates, clarifying contexts, and either reconciling conflicts or preserving them with explanations.
+
+Context: task-2/participant
+Reach: DESCENDANT
+  Memories 2  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 1
+
+Items (in context order):
+  [memory fac90a77] Core ticker rule: remove a terminal legal suffix such as Inc., Corp., Ltd., or LLC before constructing the ticker. Preserve the remaining alphanumeric characters.
+  [memory 9f473e8e] Core ticker rule: uppercase remaining company-name letters in their original order. Do not invent letters.
+  [reference c458ab18] task-2/participant/proposal-workspace  READ ONLY
+
+Context: task-2/participant/proposal-workspace
+Access: context reference · READ ONLY
+Reach: VIA EMBED
+  Memories 1  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+Items (in context order):
+  [memory 1e0e89ee] Punctuation example: North-Star, Inc. becomes NORTHSTAR after removing the comma, hyphen, space, and Inc. suffix. The output contains no punctuation.
+
+Context: task-2/participant/proposal-workspace
+Reach: DESCENDANT
+  Memories 5  |  Memory Refs 0  |  Query Views 1  |  Embedded Contexts 2
+
+Items (in context order):
+  [memory 1e0e89ee] Punctuation rule and example: strip punctuation before constructing a ticker. North-Star, Inc. becomes NORTHSTAR after removing the comma, hyphen, space, and Inc. suffix.
+  [memory 28120a2d] Numeral rule: preserve digits 0 through 9, including leading zeroes, in original positions while removing spaces and punctuation.
+  [memory ace52daf] Numeral example: Route 66, LLC becomes ROUTE66 after removing the comma, space, and LLC suffix while preserving 66.
+  [memory 054745a5] Share-class rule: if a legal suffix immediately precedes terminal Class A or Class B, remove the suffix and append .A or .B to the derived base ticker.
+  [memory 7ed418b9] Share-class example: Acme Corp. Class B becomes ACME.B after removing Corp. and mapping Class B to the .B suffix. The dot is generated share-class syntax.
+  [context fdc991fe] task-2/advisor1  READ GRANT
+  [context 13a0a0d6] task-2/advisor2  READ GRANT
+  [query view c768ce3e] task-2/proposal-submission-guidelines  QUERY GRANT

@@ -1,0 +1,20 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 query task-1/campus-wiki/construction-details/material-control 'Which controlled-access or material details must remain out of public temporary-parking guidance?'
+
+EXIT
+0
+
+WALL_SECONDS
+8.767530
+
+STDOUT
+Keep these details out of public temporary-parking guidance:
+
+- Exact underground storage zones and what materials or tools are stored in each.
+- Pallet-placement boundaries near pedestrian passages and fire-protection equipment.
+- Badge-controlled pedestrian-door entry procedures.
+- The vehicle-ramp checkpoint and its approved access hours.
+- Advance confirmation procedures for supplier storage zones and delivery times.
+
+
+STDERR

@@ -1,0 +1,124 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple log --operations --limit 50
+
+EXIT
+0
+
+OUTPUT
+Operation attempts · recent first
+  [b794cc0a] 2026-08-25 18:04  init-study      FAILED · 0.0s
+      command=mem init-study admin-v2-workers-zero --prewarm-workers 0
+      BadParameter · exit 2
+  [985a628e] 2026-08-25 18:04  init            FAILED · 0.0s
+      command=mem init 11111111-1111-4111-8111-111111111111
+      Exit · exit 1
+  [4d83161f] 2026-08-25 18:04  import          FAILED · 0.0s
+      command=mem import memory 1cb2aa88 --from-profile task-1 --context campus-wiki/building-access --into audit/a-is-apple/admin-v2-scratch
+      Exit · exit 1
+  [d037ff39] 2026-08-25 18:02  help            NOT FINALIZED
+      command=mem help --emit-selection
+  [48ad0f8c] 2026-08-25 18:02  eval            0.0s
+      command=mem eval semantic task2-status --all --ledger-dir /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/a-is-apple/admin-eval-ledger
+  [7fe64964] 2026-08-25 18:02  config          0.0s
+      command=mem config set provider codex_chatgpt
+  [0a6c8440] 2026-08-25 18:02  status          FAILED · 0.0s
+      command=mem status --direct --recursive
+      Exit · exit 2
+  [c68d680b] 2026-08-25 18:02  redo            FAILED · 0.0s
+      command=mem redo
+      Exit · exit 1
+  [457fd8da] 2026-08-25 18:02  shell-init      0.0s
+      command=mem shell-init zsh
+  [23c72df1] 2026-08-25 18:02  share           CANCELLED · 0.6s
+      command=mem share --to task-3/government/healthcare-agent
+  [f8478363] 2026-08-25 18:02  pwd             0.0s
+      command=mem pwd
+  [4bbff41e] 2026-08-25 18:02  provider        0.0s
+      command=mem provider status --operation query
+  [8a49ec18] 2026-08-25 18:02  profile         1.0s
+      command=mem profile list
+  [f828cd13] 2026-08-25 18:02  log             FAILED · 0.0s
+      command=mem log --context audit/a-is-apple/admin-v2-scratch/co3 --memory f1c940a1 --limit 5
+      Exit · exit 1
+  [bbceccdf] 2026-08-25 18:02  init-study      FAILED · 0.0s
+      command=mem init-study admin-v2-missing-baseline --from-profile missing-admin-v2-baseline
+      Exit · exit 1
+  [90614f67] 2026-08-25 18:02  init            FAILED · 0.0s
+      command=mem init audit/a-is-apple/admin-v2-scratch
+      Exit · exit 1
+  [f81ba9f0] 2026-08-25 18:02  import          0.0s
+      command=mem import memory 1cb2aa88 --from-profile task-1 --context campus-wiki/building-access --into audit/a-is-apple/admin-v2-scratch
+  [1e053d82] 2026-08-25 18:02  help            0.3s
+      command=mem help
+  [6d899900] 2026-08-25 18:02  eval            0.0s
+      command=mem eval semantic check 20260825T180054387235Z-b3f50264 --ledger-dir /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/a-is-apple/admin-eval-ledger
+  [aa89dbc8] 2026-08-25 18:01  config          0.0s
+      command=mem config show
+  [5b8fb2af] 2026-08-25 18:01  status          0.1s
+      command=mem status --recursive
+  [1e312d09] 2026-08-25 18:01  rename          1.6s
+      command=mem rename audit/a-is-apple/admin-v2-scratch/co3 audit/a-is-apple/admin-v2-scratch/renamed-3 --force
+  [5284e474] 2026-08-25 18:01  unlock          FAILED · 0.0s
+      command=mem unlock audit/a-is-apple/admin-v2-scratch/co3:f1c940a1
+      Exit · exit 1
+  [03ddbe45] 2026-08-25 18:01  lock            FAILED · 0.0s
+      command=mem lock audit/a-is-apple/admin-v2-scratch/co3:f1c940a1
+      Exit · exit 1
+  [369f171d] 2026-08-25 18:01  redo            FAILED · 0.0s
+      command=mem redo
+      Exit · exit 1
+  [065d2ee7] 2026-08-25 18:01  undo            FAILED · 0.0s
+      command=mem undo
+      Exit · exit 1
+  [ed621d18] 2026-08-25 18:01  switch          0.0s
+      command=mem switch practice
+  [e5c760b9] 2026-08-25 18:01  checkout        0.0s
+      command=mem checkout -b audit/a-is-apple/admin-v2-scratch/co3 --direct
+  [7e446623] 2026-08-25 18:01  branch          0.1s
+      command=mem branch audit/a-is-apple/admin-v2-scratch/b3 --from audit/a-is-apple/admin-v2-scratch/renamed-1 --source-root-only
+  [7c6d76d3] 2026-08-25 18:01  shell-init      0.0s
+      command=mem shell-init zsh
+  [ad5a8c9c] 2026-08-25 18:01  share           CANCELLED · 0.6s
+      command=mem share
+  [72c6aa43] 2026-08-25 18:01  pwd             0.0s
+      command=mem pwd
+  [4272ba5d] 2026-08-25 18:01  provider        0.0s
+      command=mem provider status
+  [a9109ddf] 2026-08-25 18:01  profile         0.0s
+      command=mem profile create admin-v2-a-is-apple-inactive
+  [fdde7ed3] 2026-08-25 18:01  log             0.0s
+      command=mem log --context audit/a-is-apple/admin-v2-scratch --manual
+  [276ec1e4] 2026-08-25 18:01  init-study      FAILED · 0.0s
+      command=mem init-study authoring
+      Exit · exit 1
+  [e68d8acd] 2026-08-25 18:01  init            0.0s
+      command=mem init audit/a-is-apple/admin-v2-scratch/tree/leaf --parents
+  [e06b777c] 2026-08-25 18:01  import          FAILED · 0.0s
+      command=mem import context campus-wiki --from-profile task-1 --as audit/a-is-apple/admin-v2-scratch/import-tree --recursive
+      Exit · exit 1
+  [09c8f05c] 2026-08-25 18:00  help            6.6s
+      command=mem help 'Which command shows my current Context and branch orientation?'
+  [e21376e9] 2026-08-25 18:00  eval            4.3s
+      command=mem eval semantic run ambiguity --provider codex_chatgpt --model gpt-5.6-sol --reasoning none --pipeline v2 --corpus calibration --runs 1 --case single-none-main-entrance-hours --ledger-dir /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/a-is-apple/admin-eval-ledger
+  [4a530a8a] 2026-08-25 18:00  config          0.0s
+      command=mem config set audit_v2_world a-is-apple
+  [6811b591] 2026-08-25 18:00  status          0.1s
+      command=mem status --branch
+  [1631d07b] 2026-08-25 18:00  checkout        0.0s
+      command=mem checkout ..
+  [a7d1af91] 2026-08-25 18:00  rename          1.4s
+      command=mem rename audit/a-is-apple/admin-v2-scratch/b2-tree audit/a-is-apple/admin-v2-scratch/renamed-2-tree --force
+  [c4a3e4d1] 2026-08-25 18:00  unlock          0.0s
+      command=mem unlock audit/a-is-apple/admin-v2-scratch/b2-tree --recursive
+  [b9bc35c4] 2026-08-25 18:00  lock            0.0s
+      command=mem lock audit/a-is-apple/admin-v2-scratch/b2-tree --recursive
+  [319c1a12] 2026-08-25 18:00  redo            FAILED · 0.0s
+      command=mem redo
+      Exit · exit 1
+  [c15f2c03] 2026-08-25 18:00  undo            FAILED · 0.1s
+      command=mem undo --keep
+      Exit · exit 1
+  [ecfa823a] 2026-08-25 17:59  branch          0.1s
+      command=mem branch audit/a-is-apple/admin-v2-scratch/b2-tree --from practice --recursive
+  [639bd5d4] 2026-08-25 17:59  switch          0.0s
+      command=mem switch --next

@@ -1,0 +1,31 @@
+{
+  "sequence": 63,
+  "count_before": 307,
+  "count_after": 308,
+  "delta": 1,
+  "new_attempt_uids": [
+    "a7c3bf10-b89a-425e-8124-fa809c6d2138"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "a7c3bf10-b89a-425e-8124-fa809c6d2138",
+      "operation": "init-study",
+      "command": "mem init-study admin-v2-ticker-missing-baseline --scenario legacy-v1 --from-profile admin-v2-missing-baseline",
+      "status": "FAILED",
+      "started_at": "2026-08-25T18:16:22.634242+00:00",
+      "completed_at": "2026-08-25T18:16:22.642342+00:00",
+      "elapsed_seconds": 0.007939040995552205,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": {
+        "kind": "NoSuchOption",
+        "exit_code": 2
+      }
+    }
+  ]
+}

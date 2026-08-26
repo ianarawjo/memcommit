@@ -1,0 +1,12 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker check-conformance task-2/participant/proposal-workspace --against 'text:Share classes use generated dot-A or dot-B syntax.' --plain
+
+EXIT
+2
+
+OUTPUT
+Usage: run_isolated_mem.py check-conformance [OPTIONS] [TARGET_CONTEXT]
+Try 'run_isolated_mem.py check-conformance -h' for help.
+╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ No such option: --plain Did you mean --against?                              │
+╰──────────────────────────────────────────────────────────────────────────────╯

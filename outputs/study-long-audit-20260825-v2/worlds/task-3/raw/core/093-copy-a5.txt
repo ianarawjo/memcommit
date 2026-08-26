@@ -1,0 +1,9 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 copy dcf1b441 --from task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance --into task-3/local/guardrails/audit-and-recovery
+
+STDOUT
+COPIED · 1 Memory → 'task-3/local/guardrails/audit-and-recovery' · NEW UIDs · after [367700c4] at the end
+  'task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance' [dcf1b441] → [4993eb1a]
+Checkpoint 'task-3/local/guardrails/audit-and-recovery' [66b0733d].
+
+STDERR

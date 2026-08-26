@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 rationale --context task-3/local/guardrails/approval-and-delivery --limit 160 --unit characters --json
+
+EXIT
+1
+
+OUTPUT
+Rationale error: JSON output requires an explicit item UID.

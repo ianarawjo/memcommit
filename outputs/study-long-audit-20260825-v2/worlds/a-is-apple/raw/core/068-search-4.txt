@@ -1,0 +1,18 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple search 'evidence and provenance for alphabet mapping conflicts' --context practice --context practice/source --limit 8
+
+EXIT
+0
+
+OUTPUT
+practice
+[memory ref b6e1778f] · READ ONLY -> practice/source#4a8036d1 b is banana.
+[memory ref 94b522dc] · READ ONLY -> practice/source#c1cf9a92 b is boat.
+[memory 874c746f] this edited duplicate retains the original
+[memory d8c415e7] assertion.
+[memory 85f80b15] copied from the original direct Memory for
+
+practice/source
+[memory be4139d0] b is banana;
+[memory 7ab9caeb] this copied mapping is provisional while
+[memory 1f9dc37a] boat remains visible.

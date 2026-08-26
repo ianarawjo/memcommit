@@ -1,0 +1,27 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 status
+
+STDIN
+<none>
+
+EXIT
+0
+
+WALL_SECONDS
+1.344635
+
+POST_CALL_IDENTITY_HOST_ASSERTION
+{"profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-1/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+STDOUT
+On context: task-1/participant/admin-v2-scratch/co4-tree
+
+Inventory · Checkpoints 3
+
+Recent changes · latest 3 of 3 checkpoints:
+  86b1463d  2026-08-25 14:24  redo          Redo command 'mem branch' [24a6b2ee]
+  2876cf88  2026-08-25 14:23  undo          Undo command 'mem branch' [a732890a]
+  226b7888  2026-08-25 14:23  branch        Branched subtree 'task-2' to 'task-1/participant/admin-v2-scratch/co4-tree'.
+
+
+STDERR

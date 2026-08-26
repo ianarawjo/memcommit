@@ -1,0 +1,115 @@
+Find Duplicates · task-2 · 38 Contexts checked · 340 direct items checked · 0 exact groups · 0 proposed absorptions
+
+CONTEXT 1/38 · task-2
+  No exact duplicate direct items.
+
+CONTEXT 2/38 · task-2/advisor1
+  No exact duplicate direct items.
+
+CONTEXT 3/38 · task-2/advisor1/budget
+  No exact duplicate direct items.
+
+CONTEXT 4/38 · task-2/advisor1/claim-evidence
+  No exact duplicate direct items.
+
+CONTEXT 5/38 · task-2/advisor1/compensation
+  No exact duplicate direct items.
+
+CONTEXT 6/38 · task-2/advisor1/emphasis
+  No exact duplicate direct items.
+
+CONTEXT 7/38 · task-2/advisor1/ethics
+  No exact duplicate direct items.
+
+CONTEXT 8/38 · task-2/advisor1/evaluation
+  No exact duplicate direct items.
+
+CONTEXT 9/38 · task-2/advisor1/expression
+  No exact duplicate direct items.
+
+CONTEXT 10/38 · task-2/advisor1/feasibility
+  No exact duplicate direct items.
+
+CONTEXT 11/38 · task-2/advisor1/methods
+  No exact duplicate direct items.
+
+CONTEXT 12/38 · task-2/advisor1/reproducibility
+  No exact duplicate direct items.
+
+CONTEXT 13/38 · task-2/advisor1/review
+  No exact duplicate direct items.
+
+CONTEXT 14/38 · task-2/advisor1/safety
+  No exact duplicate direct items.
+
+CONTEXT 15/38 · task-2/advisor1/scope
+  No exact duplicate direct items.
+
+CONTEXT 16/38 · task-2/advisor1/structure
+  No exact duplicate direct items.
+
+CONTEXT 17/38 · task-2/advisor1/style
+  No exact duplicate direct items.
+
+CONTEXT 18/38 · task-2/advisor1/terminology
+  No exact duplicate direct items.
+
+CONTEXT 19/38 · task-2/advisor2
+  No exact duplicate direct items.
+
+CONTEXT 20/38 · task-2/advisor2/budget
+  No exact duplicate direct items.
+
+CONTEXT 21/38 · task-2/advisor2/claim-evidence
+  No exact duplicate direct items.
+
+CONTEXT 22/38 · task-2/advisor2/compensation
+  No exact duplicate direct items.
+
+CONTEXT 23/38 · task-2/advisor2/emphasis
+  No exact duplicate direct items.
+
+CONTEXT 24/38 · task-2/advisor2/ethics
+  No exact duplicate direct items.
+
+CONTEXT 25/38 · task-2/advisor2/evaluation
+  No exact duplicate direct items.
+
+CONTEXT 26/38 · task-2/advisor2/expression
+  No exact duplicate direct items.
+
+CONTEXT 27/38 · task-2/advisor2/feasibility
+  No exact duplicate direct items.
+
+CONTEXT 28/38 · task-2/advisor2/methods
+  No exact duplicate direct items.
+
+CONTEXT 29/38 · task-2/advisor2/reproducibility
+  No exact duplicate direct items.
+
+CONTEXT 30/38 · task-2/advisor2/review
+  No exact duplicate direct items.
+
+CONTEXT 31/38 · task-2/advisor2/safety
+  No exact duplicate direct items.
+
+CONTEXT 32/38 · task-2/advisor2/scope
+  No exact duplicate direct items.
+
+CONTEXT 33/38 · task-2/advisor2/structure
+  No exact duplicate direct items.
+
+CONTEXT 34/38 · task-2/advisor2/style
+  No exact duplicate direct items.
+
+CONTEXT 35/38 · task-2/advisor2/terminology
+  No exact duplicate direct items.
+
+CONTEXT 36/38 · task-2/description
+  No exact duplicate direct items.
+
+CONTEXT 37/38 · task-2/participant
+  No exact duplicate direct items.
+
+CONTEXT 38/38 · task-2/participant/proposal-workspace
+  No exact duplicate direct items.

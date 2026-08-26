@@ -1,0 +1,26 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker provider use codex_chatgpt --operation query
+
+STDIN
+<none>
+
+EXIT
+1
+
+WALL_SECONDS
+1.353114
+
+PRE_IDENTITY
+{"current_context": "task-2/participant", "current_context_uid": "0e19f3b1-4107-48ab-9186-8773e48b812d", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+IMMEDIATE_POST_IDENTITY
+{"current_context": "task-2/participant", "current_context_uid": "0e19f3b1-4107-48ab-9186-8773e48b812d", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+COMMAND_ATTEMPT_DELTA
+{"count_after": 320, "count_before": 319, "delta": 1, "new_attempt_uids": ["039ffbb9-2bec-4a53-a4fd-c1f4123770b1"], "records": [{"command": "mem provider use codex_chatgpt --operation query", "completed_at": "2026-08-25T18:16:45.905512+00:00", "details": {}, "elapsed_seconds": 0.014026832999661565, "failure": {"exit_code": 1, "kind": "Exit"}, "operation": "provider", "outcome": null, "started_at": "2026-08-25T18:16:45.891248+00:00", "status": "FAILED", "terminal": {"stdin_tty": true, "stdout_tty": false}, "uid": "039ffbb9-2bec-4a53-a4fd-c1f4123770b1", "version": 3}], "sequence": 75}
+
+STDOUT
+
+
+STDERR
+Provider configuration error: Provider configuration is fixed for this Study Profile. Switch to an ordinary Profile to edit provider routes.

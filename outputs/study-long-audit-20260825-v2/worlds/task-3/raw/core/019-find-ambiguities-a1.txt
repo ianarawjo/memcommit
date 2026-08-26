@@ -1,0 +1,21 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 find-ambiguities task-3/local/guardrails/purpose-and-scope
+
+STDOUT
+Find Ambiguities · task-3/local/guardrails/purpose-and-scope · 2/9 direct memories flagged
+
+  AMBIGUITY 1/2
+  [b5618dee] Unless a separate restriction is conveyed, a receiving agent may judge that it is free to use received material within the requested scope.
+  Reading 1: Unless the sender communicates an additional restriction, the receiving agent may treat the received material as usable for any activity within the requested purpose, recipient, and item scope.
+  Reading 2: Unless an additional restriction is communicated by any relevant party, the receiving agent may treat the received material as usable within the requested scope.
+  Reason: The passive expression “a separate restriction is conveyed” does not identify who must convey the restriction or to whom. The dominant reading makes the sender’s communicated restrictions controlling, but another relevant party’s restrictions remain possible; clarification would make the receiving agent’s authority more precise.
+  Question: Who can impose the separate restriction, and to whom must it be conveyed?
+
+  AMBIGUITY 2/2
+  [10b92448] Healthcare candidate (review-pending, not approved): limit disclosure to facts necessary for current care, exclude unrelated history, and require explicit user approval.
+  Reading 1: This is a proposed healthcare-sharing candidate that has not yet been approved; it may disclose only facts necessary for the current care, must exclude unrelated history, and requires explicit user approval before sharing.
+  Reading 2: This is a proposed rule for constructing healthcare-sharing candidates: include only facts necessary for current care, exclude unrelated history, and require explicit user approval for each resulting candidate.
+  Reason: The label “Healthcare candidate (review-pending, not approved)” most ordinarily describes this specific candidate’s approval status, but it can also describe a candidate-level rule or template. This distinction affects whether approval applies only to this disclosure or must be obtained separately for every candidate; clarification would make the approval workflow more precise.
+  Question: Is this one pending disclosure candidate, or a rule for all healthcare disclosure candidates?
+
+STDERR

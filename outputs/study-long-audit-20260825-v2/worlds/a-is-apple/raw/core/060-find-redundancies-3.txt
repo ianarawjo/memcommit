@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple find-redundancies practice/source --direct
+
+EXIT
+0
+
+OUTPUT
+Find Redundancies · practice/source · 17 direct memories checked · 1 group · 1 proposed absorption
+
+  DUN GROUP  1/1 · 2 Memories · SEMANTIC DUN
+    CLEANUP MAP · READY FOR REVIEW
+    SURVIVOR  [memory 4a8036d1]  b is banana.
+    ABSORB    [memory be4139d0]  b is banana;
+    EVIDENCE 1 · SEMANTIC EQUIVALENT · The two complete memories make the same claim that b is banana; the only difference is terminal punctuation.

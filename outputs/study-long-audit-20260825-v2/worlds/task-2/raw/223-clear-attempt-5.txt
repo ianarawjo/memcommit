@@ -1,0 +1,5 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 clear task-2/participant/proposal-workspace --recursive
+EXIT: 0
+DURATION_SECONDS: 1.434
+
+Cleared 20 item(s) from 1 Context(s) under 'task-2/participant/proposal-workspace'. Undo can restore this command as one unit.

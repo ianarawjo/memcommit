@@ -1,0 +1,15 @@
+Connected: codex_chatgpt:gpt-5.6-luna · reasoning low · 0.029s
+[01/01] single-none-main-entrance-hours · run 1 · PASS · 3.927s
+Semantic eval · ambiguity · classification gate
+Provider: codex_chatgpt:gpt-5.6-luna · reasoning=low · runs=1 · cases=1/10
+Corpus: CALIBRATION · leave-one-out · not an independent holdout · digest 003654c092e0
+Pipeline: ambiguity-classify-v2 · schema v2
+Score: 1/1 cases passed
+Attempts: exact 1/1 · structurally valid 1/1
+Timing: connection 0.029s · completion mean/median/p95/max 3.927s/3.927s/3.927s/3.927s · campaign 3.929s · total 3.958s
+Label distribution:
+  interpretation   NONE  HELPFUL  REQUIRED
+  SINGLE            1        0         0
+  DOMINANT          0        0         0
+  COMPETING         0        0         0
+Ledger: /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/admin-eval-ledger/runs/20260825T181516251263Z-6753d166.json

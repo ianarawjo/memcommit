@@ -1,0 +1,10 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple edit practice/source:dfc0640c 'a maps to apricot; this is a deliberate conflicting alternative for recovery testing.'
+
+EXIT
+0
+
+OUTPUT
+Edited [dfc0640c] in 'practice/source':
+  - a is apple.
+  + a maps to apricot; this is a deliberate conflicting alternative for recovery testing.

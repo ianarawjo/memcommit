@@ -1,0 +1,9 @@
+Context: task-2
+  0 memories
+  5 subcontexts
+
+  DESCENDANT · [context fdc991fe] task-2/advisor1
+  DESCENDANT · [context 13a0a0d6] task-2/advisor2
+  DESCENDANT · [context 0ebdb381] task-2/description
+  DESCENDANT · [context 0e19f3b1] task-2/participant
+  [query view c768ce3e] task-2/proposal-submission-guidelines

@@ -1,0 +1,19 @@
+{
+  "sequence": 93,
+  "position": "pre",
+  "label": "Admin 93 pre-call",
+  "read_at": "2026-08-25T18:17:11.530754+00:00",
+  "actual": {
+    "profile_name": "sixworld-v2-template",
+    "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+    "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+    "current_context": "audit/ticker/admin-v2-scratch/co4-tree",
+    "current_context_uid": "44473ed5-f911-4bd5-8871-7e0804873207"
+  },
+  "expected": {
+    "profile_name": "sixworld-v2-template",
+    "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd",
+    "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"
+  },
+  "matches": true
+}

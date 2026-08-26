@@ -1,0 +1,21 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source query --context practice/source 'How should shortening preserve claims while meeting a fixed limit?'
+
+EXIT
+0
+
+WALL_SECONDS
+6.463702
+
+STDOUT
+Keep every intended point, remove redundant or unnecessary material, and state repeated content only once; for a shorter fixed limit, aim to cut about 20–30%. [1] [2]
+
+Do not compress so aggressively that claims become more categorical: retain the wording needed to preserve their original strength and conditions. [3]
+
+References
+[1] If a passage is supposed to make four points, keep all four while removing parts that are too redundent and stating repeated content only once. — 6fad23ab, practice/source, m4
+[2] When the draft has to fit a shorter fixed limit, aim to cut around 20–30% from redundant or unnecessary material. — 6cc4b8a3, practice/source, m5
+[3] But don't shorten sentences so aggressively that a claim sounds more categorical; keep enough wording to preserve its original strength and conditions. — 7ebe67fb, practice/source, m6
+
+
+STDERR

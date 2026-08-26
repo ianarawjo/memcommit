@@ -1,0 +1,26 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker branch audit/ticker/admin-v2-scratch/b5 --from audit/ticker/admin-v2-missing-source --direct
+
+STDIN
+<none>
+
+EXIT
+1
+
+WALL_SECONDS
+1.311872
+
+PRE_IDENTITY
+{"current_context": "audit/ticker/admin-v2-scratch/co4-tree", "current_context_uid": "44473ed5-f911-4bd5-8871-7e0804873207", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+IMMEDIATE_POST_IDENTITY
+{"current_context": "audit/ticker/admin-v2-scratch/co4-tree", "current_context_uid": "44473ed5-f911-4bd5-8871-7e0804873207", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+COMMAND_ATTEMPT_DELTA
+{"count_after": 332, "count_before": 331, "delta": 1, "new_attempt_uids": ["f058bfca-763a-477d-b2ff-bb488b937154"], "records": [{"command": "mem branch audit/ticker/admin-v2-scratch/b5 --from audit/ticker/admin-v2-missing-source --direct", "completed_at": "2026-08-25T18:17:04.021221+00:00", "details": {}, "elapsed_seconds": 0.020821832993533462, "failure": {"exit_code": 1, "kind": "Exit"}, "operation": "branch", "outcome": null, "started_at": "2026-08-25T18:17:04.000242+00:00", "status": "FAILED", "terminal": {"stdin_tty": true, "stdout_tty": false}, "uid": "f058bfca-763a-477d-b2ff-bb488b937154", "version": 3}], "sequence": 87}
+
+STDOUT
+
+
+STDERR
+Error: Branch requires a local Source; 'audit/ticker/admin-v2-missing-source' is not in the local catalog.

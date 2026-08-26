@@ -1,0 +1,8 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 summarize task-2/advisor2/style --plain
+EXIT: 0
+DURATION_SECONDS: 1.361
+
+SUMMARY · task-2/advisor2/style
+STATUS · DIRECT
+
+Use action-, condition-, or output-first procedural sentences that remain reusable as checklist items, while preserving longer connected sentences when splitting would harm rhythm. Present field-confirmed behavior as observed and unconfirmed behavior as conditional. Keep authorship consistently “I” or a named team’s “we,” and reserve em dashes for deliberate interruption or sharp contrast.

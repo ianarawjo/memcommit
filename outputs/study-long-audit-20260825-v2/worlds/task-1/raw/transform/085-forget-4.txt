@@ -1,0 +1,17 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 forget 'remove temporary parking claims that collapse general, staff, and construction access roles' --context task-1/participant/construction-updates
+
+EXIT
+0
+
+OUTPUT
+Consulting the configured Forget provider...
+FORGET APPLIED · SOURCE task-1/participant/construction-updates
+FORGET · remove temporary parking claims that collapse general, staff, and construction access roles
+DIFF · 2 CHANGES
+~ [f5487172] A staff member who needs pedestrian access through the locked underground-garage entrance during construction must use a physical access [-card; this staff route does not authorize general-user parking or substitute for the controlled construction-access procedure.-][+card.+]
+~ [43f146c1] Construction and facilities personnel entering the underground garage during the works must follow the approved, controlled on-site access [-procedure; neither temporary Lot C guidance for general users nor a staff physical access card alone replaces that -]procedure.
+RECEIPT · adb40aaf-46df-4384-a45f-2c76c3627dd5
+CHECKPOINT · adb40aaf-46df-4384-a45f-2c76c3627dd5
+REVIEW · mem review forget --receipt adb40aaf-46df-4384-a45f-2c76c3627dd5
+RECOVERY · mem undo

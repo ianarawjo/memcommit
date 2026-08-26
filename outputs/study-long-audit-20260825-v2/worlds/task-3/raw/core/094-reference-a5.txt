@@ -1,0 +1,7 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 reference 6ea7bcc1 --from task-3/local/guardrails/audit-and-recovery --into task-3/local
+
+STDOUT
+Referenced snapshot [6ea7bcc1] from 'task-3/local/guardrails/audit-and-recovery' as [4ae11913] in 'task-3/local'.
+
+STDERR

@@ -1,0 +1,28 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 revert --context task-3/local 27bebff8 --keep
+
+EXIT
+0
+
+OUTPUT
+Reverted Context: task-3/local
+Restored state recorded by: manual checkpoint
+Action detail: task-3 transform round 4 short-option recovery
+Affected Context: task-3/local
+Affected content: 5 Memories added, 6 Memory refs added, 5 Embedded contexts added, 1 direct item added, 27 Memories removed
+  - [memory c13fb226] "Suggested Example Memory: A user asks whether their current submission is approved. Use relevant public guidance only to draft a local review checklist, label the approval status as unverified until it is confirmed from an authorized curre…"
+  - [memory 6bb0779b] "Suggested Example Memory: Public guidance matches every item on a user's local checklist, but the user asks for confirmation that their account is currently approved. Treat the matching checklist as insufficient proof, report the approval …"
+  - [memory d2c03485] "This Context is a synthetic, publicly distributable summary of high-level considerations for reviewing a possible transmission to a government healthcare institution system; it does not replace detailed guidance or applicable institutional…"
+  - [memory ff378580] "The local review agent may refer to this public summary when explaining possible transmission considerations, but it cannot confirm exact services, recipients, retention, receipt, or downstream handling."
+  - [memory 54243449] "The local review agent cannot treat this guidance, a prepared draft, or a recipient request as the user's approval to transmit information."
+  - [memory e27cb391] "Use these public Memories only as preliminary review cues, identify material unknowns, and consult an authorized source before relying on details they do not establish."
+  - [memory a56fb08f] "Consider whether each detail is necessary for the healthcare-support purpose under review, and flag unrelated personal details for exclusion from the outbound draft."
+  - [memory 692dfa55] "When a private causal event is not needed for the healthcare-support purpose, consider whether a summary or preference can preserve the relevant conditions with less disclosure."
+  - [memory e57fa7e1] "When summarizing a personal event, avoid presenting conditions, exceptions, time bounds, or uncertainty as more definite than the source supports."
+  - [memory 24cbf00c] "Treat historical medication instructions, availability, contact information, and functional experiences as possibly stale when current status would materially affect review."
+  - [memory 66e2e759] "Adding detail makes more material available after delivery, but this public guidance does not determine whether or how a recipient will copy, retain, or use it."
+  - [memory ae617efc] "A user may expect locally reviewed content to remain editable until explicit submission; confirm that expectation instead of assuming it applies."
+  ... 32 more affected direct items not shown
+Restored checkpoint: [27bebff8] (2026-08-25 13:37)
+Undo command: mem undo
+Exact recovery checkpoint: mem revert 0b62134d --discard-newer

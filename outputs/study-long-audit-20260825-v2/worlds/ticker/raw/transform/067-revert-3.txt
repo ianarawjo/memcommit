@@ -1,0 +1,26 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker revert 6a4d95d0 --context task-3/local/personal-memory --keep
+
+EXIT
+0
+
+OUTPUT
+Reverted Context: task-3/local/personal-memory
+Restored state recorded by: manual checkpoint
+Action detail: ticker transform round 3 pre-destructive recovery
+Affected Context: task-3/local/personal-memory
+Affected content: 6 Memories added, 3 Embedded contexts added, 2 Memories removed
+  - [memory 57de9e70] "Select candidate examples only when the Source explicitly represents both the originating name and its corresponding ticker; do not construct or infer a ticker from an unpaired name."
+  - [memory 949c3888] "Present each candidate as a separate source-to-ticker mapping and include a precise Source locator for both sides of the mapping; exclude any candidate whose ticker or locator cannot be directly reviewed in the Source."
+  + [context f60cba75] "task-3/local/personal-memory/2024"
+  + [context dbe52d14] "task-3/local/personal-memory/2025"
+  + [context 03415050] "task-3/local/personal-memory/2026"
+  + [memory c94b4b1a] "Punctuation rule and example: strip punctuation before constructing a ticker. North-Star, Inc. becomes NORTHSTAR after removing the comma, hyphen, space, and Inc. suffix."
+  + [memory 3bd933f2] "Numeral rule: preserve digits 0 through 9, including leading zeroes, in original positions while removing spaces and punctuation."
+  + [memory f6de8d9e] "Numeral example: Route 66, LLC becomes ROUTE66 after removing the comma, space, and LLC suffix while preserving 66."
+  + [memory 74cbaa09] "Share-class rule: if a legal suffix immediately precedes terminal Class A or Class B, remove the suffix and append dot-A (.A) or dot-B (.B) to the derived base ticker."
+  + [memory c600f4af] "becomes NORTHSTAR after removing the comma, hyphen, space, and Inc."
+  + [memory 4de11a71] "Share-class example: Acme Corp. Class B becomes ACME.B after removing Corp. and mapping Class B to the .B suffix. The dot is generated share-class syntax."
+Restored checkpoint: [6a4d95d0] (2026-08-25 13:29)
+Undo command: mem undo
+Exact recovery checkpoint: mem revert 1e16385d --discard-newer

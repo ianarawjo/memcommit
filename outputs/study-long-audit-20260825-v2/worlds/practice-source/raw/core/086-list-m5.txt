@@ -1,0 +1,49 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source list practice/description
+
+EXIT
+0
+
+WALL_SECONDS
+1.567132
+
+STDOUT
+Context: practice/description
+  9 memories
+  1 subcontext
+
+  VIA EMBED · [context 7e48e68e] practice/source
+
+  [memory 89ff1887] memcommit is a research prototype that provides command-line and terminal user
+                    interfaces (CLI/TUI) for managing agent memory and supporting collaboration
+                    among people and agents. Through memcommit's operations and structural
+                    concepts—including Memories, Contexts, Profiles, Grants, and Sessions—you can
+                    manage agent memories as they are collected, organized, and propagated among
+                    people and agents. In this study, you will use memcommit in three different
+                    situations, each involving a different context, goal, and kind of memory.
+  [memory cbd46e2b] SITUATION · Before beginning the three study tasks, complete a short practice
+                    exercise to become familiar with how memcommit organizes and presents its
+                    commands. Each newline-separated editing note in `practice/source` is stored as
+                    its own Memory, preserving the boundaries between the original requests. Some
+                    notes still combine recurring constraints, rough wording, and typos.
+  [memory 1e046596] TASK · Divide their underlying constraints into appropriate atomic Memories
+                    without performing the requested edits, adding instructions, or changing the
+                    intended meaning, so that each constraint can be reviewed independently. Open
+                    `mem help`, inspect the available operations, find the operation designed for
+                    atomization, and use it to atomize the notes and save the result as
+                    `practice/source-atomized`.
+  [memory bce98730] When I ask “How does this read?”, I really want an opinion, so don't edit the
+                    draft immediately; first check the sentence order and paragraph division.
+  [reference 3fbf33de] [practice/source][memory 96300a95] When I say that content looks wrong, find accurate information before proposing a correction by reading the original paper, book, or guide, not only an abstract or a short snippet.  READ ONLY
+  [memory d0f6e587] If I later ask for polishing, preserve the overall strucutre and citation-needed
+                    markers, and change only wording that causes a problem.
+  [memory 6bd4bd30] If a passage is supposed to make four points, keep all four while removing parts
+                    that are too redundent and stating repeated content only once.
+  [memory 5e5f3d04] DEFAULT CANDIDATE: use sentence case for document titles by default, subject
+                    only to an explicitly named style guide capitalization override; preserve the
+                    intended word for.
+  [memory 70720de6] Use consistent italics for work titles by default, subject only to an explicitly
+                    named style guide work-title-format override.
+
+
+STDERR

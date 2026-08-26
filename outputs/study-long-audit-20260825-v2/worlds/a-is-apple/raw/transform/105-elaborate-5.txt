@@ -1,0 +1,18 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple elaborate --goal 'Give only source-grounded examples already present in the a-is-apple evidence.' --to practice/source
+
+EXIT
+0
+
+OUTPUT
+ELABORATE APPLIED · practice/source
+MODE · GOAL_TO_RULES · VERIFICATION · UNVERIFIED · QUALITY · BEST_EFFORT
+SOURCE · INLINE · TARGET · practice/source
+EFFECTS · ADD 3 MEMORIES
+
+  [memory fa3dc76b] Include “a is apple” as an example and present it as the preferred final proposition for a.
+  [memory 0567f01c] If “a maps to apricot” is included, label it as a deliberate conflicting, unresolved alternative; do not present it as preferred or reconcile it with “a is apple.”
+  [memory cc28bc10] When giving provenance for an apple-mapping example, retain that one occurrence was copied from the original direct Memory and preserve the edited duplicate’s original assertion across its split provenance text; do not assign the apple provenance statement to the apricot alternative.
+
+REVIEW · mem review elaborate --receipt a9d3e865-badc-464d-ac32-3028e6db986b
+UNDO · mem undo

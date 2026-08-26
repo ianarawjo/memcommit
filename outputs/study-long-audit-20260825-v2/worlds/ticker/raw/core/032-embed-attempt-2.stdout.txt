@@ -1,0 +1,1 @@
+Embedded 'task-2/participant/proposal-workspace' into 'task-1' after [40749355] at the end.

@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 review audit --session deadbeef --snapshot
+
+EXIT
+1
+
+OUTPUT
+Review error: Saved audit review artifact UID 'deadbeef' is unavailable.

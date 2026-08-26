@@ -1,0 +1,28 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source query --context practice/source 'What must a reviewer preserve, and when must they avoid editing?'
+
+EXIT
+0
+
+WALL_SECONDS
+7.209045
+
+STDOUT
+A reviewer must preserve the draft’s overall structure and citation-needed markers during polishing; retain almost everything else—including selected technical or project-specific terms—when changing one expression; keep every intended point; and preserve the original strength and conditions of claims when shortening. [1] [2] [3] [4]
+
+They must also preserve exact intended terminology in titles, including “interaction,” “management,” “AI agent memory,” and “for” when intended. [5] [6]
+
+They must avoid editing when asked only for an opinion such as “How does this read?” and should first assess sentence order and paragraph division. If a review uncovers a citation-verification problem, they must report it before rewriting rather than silently editing the draft. [7] [8]
+
+References
+[1] If I later ask for polishing, preserve the overall strucutre and citation-needed markers, and change only wording that causes a problem. — e50c293a, practice/source, m2
+[2] When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um... for example, use distribute, not divide, when material is absorbed into two parts. — 39b21971, practice/source, m3
+[3] If a passage is supposed to make four points, keep all four while removing parts that are too redundent and stating repeated content only once. — 6fad23ab, practice/source, m4
+[4] But don't shorten sentences so aggressively that a claim sounds more categorical; keep enough wording to preserve its original strength and conditions. — 7ebe67fb, practice/source, m6
+[5] For any titlle about interaction with AI agent memory, keep the exact terminology and intended words: use interaction and management and AI agent memory rather than agent memory. — 44de7eff, practice/source, m8
+[6] By default, format a document title in sentence case rather than title case. An explicitly named style guide may override only that capitalization default; always keep for whenever it is part of the intended wording. — 1a9d3a74, practice/source, m9
+[7] When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division. — f3ef224d, practice/source, m1
+[8] Before adding or reusing citations and refferences, verify that each source exists and supports the exact claim after reviewing the complete source. Don't invent quotations or evidence or overstate an author's contribution or a paper's status. If I asked only for review, report a verification problem first instead of silently rewriting the draft. — 4fe217eb, practice/source, m12
+
+
+STDERR

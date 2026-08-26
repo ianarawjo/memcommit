@@ -1,0 +1,11 @@
+{
+  "sequence": 41,
+  "operation": "find-conflicts",
+  "attempt": 2,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 find-conflicts task-1/campus-wiki/event-relocations",
+  "exit": 0,
+  "wall_seconds": 11.656621,
+  "pre_target_digest": "b7c2252f283356193d95deecf9b9bfb97e09bf3eb9101d776bd20a0a45c8dbb8",
+  "post_target_digest": "b97f89aca41ad84120b06ddfd54649c6ba7814f399f10c524bbb6d3830d88fc9",
+  "raw_output": "raw/core/041-find-conflicts-m2.txt"
+}

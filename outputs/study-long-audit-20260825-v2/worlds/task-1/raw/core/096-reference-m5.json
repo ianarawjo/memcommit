@@ -1,0 +1,11 @@
+{
+  "sequence": 96,
+  "operation": "reference",
+  "attempt": 5,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 reference --from task-1/participant/construction-updates/route-changes --into task-1/participant --direct",
+  "exit": 0,
+  "wall_seconds": 1.371466,
+  "pre_target_digest": "aebb63ea5f203bcedaac59815cca6bf707abf23962252c0a7e465d2532e9f525",
+  "post_target_digest": "a3ff2aef4422d9380fa2806f1785d3e4a455e74f3867b01c7c9dbb5fa559eeea",
+  "raw_output": "raw/core/096-reference-m5.txt"
+}

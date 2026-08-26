@@ -1,0 +1,12 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 trace task-1/participant/construction-updates/temporary-parking:84196dc5 --limit 6
+
+EXIT
+0
+
+OUTPUT
+TRACE · task-1/participant/construction-updates/temporary-parking
+MEMORY · 84196dc5-9ae8-5663-866a-048024119fd2
+LINEAGE · 3 events · 2 components
+ATTENTION · 1 limits
+DETAILS · mem trace 84196dc5-9ae8-5663-866a-048024119fd2 --context task-1/participant/construction-updates/temporary-parking --plain

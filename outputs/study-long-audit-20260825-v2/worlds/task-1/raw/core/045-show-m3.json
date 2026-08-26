@@ -1,0 +1,11 @@
+{
+  "sequence": 45,
+  "operation": "show",
+  "attempt": 3,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 show task-1/campus-wiki/building-access",
+  "exit": 0,
+  "wall_seconds": 1.503356,
+  "pre_target_digest": "3b57d93dc70dd3af57ad3680da9fcf4e07f811d7e2d642c1b267fd314c15a850",
+  "post_target_digest": "3c72e6b5bbb4274fa6a2701812a7ac81e4a7b17f88c0b237e92770fae4aba821",
+  "raw_output": "raw/core/045-show-m3.txt"
+}

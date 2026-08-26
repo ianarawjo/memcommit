@@ -1,0 +1,26 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source profile create admin-v2-practice-source-inactive
+
+STDIN
+<none>
+
+EXIT
+0
+
+WALL_SECONDS
+1.298165
+
+POST_CALL_IDENTITY_HOST_ASSERTION
+{"profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/practice-source/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+STDOUT
+Created empty Profile 'admin-v2-practice-source-inactive'.
+Profile UID: 9e8b7501-2534-4db7-ab4c-7387ed821d11
+Store: /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/practice-source/profile-control/stores/9e8b7501-2534-4db7-ab4c-7387ed821d11
+Contexts 0 owned + 0 granted · Memories 0 owned + 0 granted
+Active Profile unchanged: sixworld-v2-template
+Use it with: mem profile use admin-v2-practice-source-inactive
+Then create its first Context with: mem init CONTEXT
+
+
+STDERR

@@ -1,0 +1,11 @@
+{
+  "sequence": 89,
+  "operation": "search",
+  "attempt": 5,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 search 'remaining stale public guidance after verified construction updates' --context task-1/campus-wiki --descendants --exclude-embeds --limit 20",
+  "exit": 0,
+  "wall_seconds": 15.936219,
+  "pre_target_digest": "cb01436d1a5eba9ce415af4bbb3737e8ed1b7bf7815a71f48f95a8c36114074e",
+  "post_target_digest": "531dda1ffaf590bdecca0bf184104bb0034ef230693632f4f61d1e9a7ad81b62",
+  "raw_output": "raw/core/089-search-m5.txt"
+}

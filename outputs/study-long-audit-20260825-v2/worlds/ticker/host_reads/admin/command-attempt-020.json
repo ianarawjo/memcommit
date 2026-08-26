@@ -1,0 +1,28 @@
+{
+  "sequence": 20,
+  "count_before": 264,
+  "count_after": 265,
+  "delta": 1,
+  "new_attempt_uids": [
+    "92674eb9-ab56-48b8-a2b7-e2fbdb968e9e"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "92674eb9-ab56-48b8-a2b7-e2fbdb968e9e",
+      "operation": "shell-init",
+      "command": "mem shell-init",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:12:36.114017+00:00",
+      "completed_at": "2026-08-25T18:12:36.121646+00:00",
+      "elapsed_seconds": 0.00747508299537003,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

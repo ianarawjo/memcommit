@@ -1,0 +1,15 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple status --branch
+
+EXIT
+0
+
+OUTPUT
+Profile: sixworld-v2-template
+Context lineage: audit > a-is-apple > admin-v2-scratch
+On context: audit/a-is-apple/admin-v2-scratch
+
+Inventory · Checkpoints 1
+
+Recent changes · latest 1 of 1 checkpoints:
+  33d6916c  2026-08-25 13:56  init          Initialized context 'audit/a-is-apple/admin-v2-scratch'

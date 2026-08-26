@@ -1,0 +1,11 @@
+{
+  "sequence": 76,
+  "operation": "embed",
+  "attempt": 4,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 embed task-1/campus-wiki/temporary-parking --into task-1/participant",
+  "exit": 0,
+  "wall_seconds": 1.344747,
+  "pre_target_digest": "b865f2bdd6cde315e64992a146e3103624cbc4ae8705e594927bc92a30fff0c4",
+  "post_target_digest": "22cc5fe512f9083f54ce30478b453308902f0fc676ae37f548a204d125bda64e",
+  "raw_output": "raw/core/076-embed-m4.txt"
+}

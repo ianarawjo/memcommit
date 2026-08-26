@@ -1,0 +1,30 @@
+{
+  "label": "pre-redo-1-seq-003",
+  "read_at": "2026-08-25T17:55:57.003623+00:00",
+  "undo_top": {
+    "uid": "revert:7fb8c641-7618-4ffd-9b73-84a7f865b0f8",
+    "command": "revert",
+    "members": [
+      {
+        "context_uid": "7e48e68e-3c6f-541b-bfc1-e307abcc7a4f",
+        "context_name": "practice/source",
+        "checkpoint_uid": "7fb8c641-7618-4ffd-9b73-84a7f865b0f8"
+      }
+    ]
+  },
+  "redo_top": {
+    "uid": "branch:a33c3b38-f137-4a86-a5f3-f5cb38bae2a5",
+    "command": "branch",
+    "members": [
+      {
+        "context_uid": "6a9742b3-4405-4165-91fd-4056c9d81df7",
+        "context_name": "audit/a-is-apple/admin-v2-scratch/b1",
+        "checkpoint_uid": "1cb7b914-9fed-4310-8e64-75619e955928"
+      }
+    ]
+  },
+  "undo_depth": 62,
+  "redo_depth": 1,
+  "staged_update_exists": false,
+  "staged_update_granted_target": null
+}

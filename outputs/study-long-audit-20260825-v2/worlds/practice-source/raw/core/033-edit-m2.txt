@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source edit practice:2c241a2b 'CANDIDATE: during authorized polishing, preserve overall structure and citation-needed markers. Change only wording that causes a problem.'
+
+EXIT
+0
+
+WALL_SECONDS
+1.315374
+
+STDOUT
+Edited [2c241a2b] in 'practice':
+  - CANDIDATE: preserve structure and citation-needed markers. Change only wording that causes a problem.
+  + CANDIDATE: during authorized polishing, preserve overall structure and citation-needed markers. Change only wording that causes a problem.
+
+
+STDERR

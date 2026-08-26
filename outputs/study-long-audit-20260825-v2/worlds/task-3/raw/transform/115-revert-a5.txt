@@ -1,0 +1,27 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 revert -c task-3/local/guardrails/audit-and-recovery 7cc2d89a
+
+EXIT
+0
+
+OUTPUT
+Reverted Context: task-3/local/guardrails/audit-and-recovery
+Restored state recorded by: manual checkpoint
+Action detail: task-3 transform round 5 default-direct recovery
+Affected Context: task-3/local/guardrails/audit-and-recovery
+Affected content: 2 Memories added, 1 Memory edited, 9 Memories removed
+  ~ [memory 367700c4] "AUDIT RESULT: no transfer was executed and no approval was inferred; candidate facts remain stale or underspecified and require the user's decision before any transfer." → "AUDIT RESULT: no transfer was executed and no approval was inferred; candidate facts remain stale or underspecified and require the user's exact recipient, purpose, item, channel, and retention decision."
+  - [memory 9c457d0d] "Show the user the actual recipient before transmission."
+  - [memory ab6b15ed] "Show the user the recipient's purpose of use before transmission."
+  - [memory b555c66a] "Show the user the exact list of Memories to be conveyed before transmission."
+  - [memory 9f9bcb77] "Obtain new approval if the recipient changes."
+  - [memory 0e8f5e60] "Obtain new approval if the sharing purpose changes."
+  - [memory ca28edcf] "Obtain new approval if the shared items change."
+  - [memory 35b2bdc3] "The local agent can present sharing candidates and recipient scope but cannot approve external sharing on the user's behalf."
+  - [memory 027d9933] "Unless a separate restriction is provided, a recipient organization may judge that it may retain received input as an ordinary business record."
+  - [memory 4f889967] "Unless a separate restriction is provided, a recipient organization may judge that it may forward input to internal processors."
+  + [memory c0ce508e] "Record the source Memory locator for approved sharing."
+  + [memory 6ea7bcc1] "Candidate INCLUDE (DRAFT ONLY): the user stood for 20 minutes when no waiting chair was available and experienced back discomfort; verify current accommodation necessity before approval."
+Restored checkpoint: [7cc2d89a] (2026-08-25 13:40)
+Undo command: mem undo
+Exact recovery checkpoint: mem revert 8c5e80a8 --discard-newer

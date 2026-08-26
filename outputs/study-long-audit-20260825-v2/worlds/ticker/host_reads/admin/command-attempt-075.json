@@ -1,0 +1,31 @@
+{
+  "sequence": 75,
+  "count_before": 319,
+  "count_after": 320,
+  "delta": 1,
+  "new_attempt_uids": [
+    "039ffbb9-2bec-4a53-a4fd-c1f4123770b1"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "039ffbb9-2bec-4a53-a4fd-c1f4123770b1",
+      "operation": "provider",
+      "command": "mem provider use codex_chatgpt --operation query",
+      "status": "FAILED",
+      "started_at": "2026-08-25T18:16:45.891248+00:00",
+      "completed_at": "2026-08-25T18:16:45.905512+00:00",
+      "elapsed_seconds": 0.014026832999661565,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": {
+        "kind": "Exit",
+        "exit_code": 1
+      }
+    }
+  ]
+}

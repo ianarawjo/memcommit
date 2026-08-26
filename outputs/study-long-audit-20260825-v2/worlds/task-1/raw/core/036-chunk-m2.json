@@ -1,0 +1,11 @@
+{
+  "sequence": 36,
+  "operation": "chunk",
+  "attempt": 2,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 chunk f37090b5 --context task-1/participant/construction-updates/event-relocations --method clauses --break-on : --max-chars 88",
+  "exit": 0,
+  "wall_seconds": 1.498488,
+  "pre_target_digest": "29416ca0614c0a4b01c8548364e03548360239f02338d741e00dc371e15ce426",
+  "post_target_digest": "3a39b543ba6c60f32ed6708ea3b2ed05e1e2b58378c4899ce4d4a7fe358af24b",
+  "raw_output": "raw/core/036-chunk-m2.txt"
+}

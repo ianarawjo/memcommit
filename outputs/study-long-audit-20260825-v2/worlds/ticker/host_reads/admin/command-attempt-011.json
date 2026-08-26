@@ -1,0 +1,28 @@
+{
+  "sequence": 11,
+  "count_before": 255,
+  "count_after": 256,
+  "delta": 1,
+  "new_attempt_uids": [
+    "de940871-91a9-4a05-b407-eac1b27dbcd2"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "de940871-91a9-4a05-b407-eac1b27dbcd2",
+      "operation": "init",
+      "command": "mem init audit/ticker/admin-v2-scratch",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:12:21.774243+00:00",
+      "completed_at": "2026-08-25T18:12:21.796233+00:00",
+      "elapsed_seconds": 0.021795666005345993,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

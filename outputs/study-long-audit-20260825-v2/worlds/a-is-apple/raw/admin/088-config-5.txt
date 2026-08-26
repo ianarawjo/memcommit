@@ -1,0 +1,12 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple config set provider
+
+EXIT
+2
+
+OUTPUT
+Usage: run_isolated_mem.py config set [OPTIONS] KEY VALUE
+Try 'run_isolated_mem.py config set -h' for help.
+╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Missing argument 'VALUE'.                                                    │
+╰──────────────────────────────────────────────────────────────────────────────╯

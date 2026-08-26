@@ -1,0 +1,12 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 find 'third[- ]party' --regex --context task-3/local/personal-memory --recursive --all-results
+
+STDOUT
+FIND RESULTS
+PATTERN · third[- ]party · REGEX · CASE SENSITIVE
+SCOPE · task-3/local/personal-memory · DESCENDANTS · FOLLOW EMBEDS
+SCANNED 325 · MATCHED 0 · OCCURRENCES 0
+
+(no matching Memories)
+
+STDERR

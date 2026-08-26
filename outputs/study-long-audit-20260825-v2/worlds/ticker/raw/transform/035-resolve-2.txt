@@ -1,0 +1,9 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker resolve task-3/local/guardrails --memory 93126130 --guidance 'Recover a complete standalone ticker claim' --plain
+
+EXIT
+0
+
+OUTPUT
+RESOLVE · task-3/local/guardrails
+FIT · YES · NO CHANGE

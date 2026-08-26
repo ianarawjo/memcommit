@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker atomize --context task-3/local --memory 00000000
+
+EXIT
+1
+
+OUTPUT
+Atomize error: No direct Memory has a uid starting with '00000000'.

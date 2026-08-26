@@ -1,0 +1,191 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple impact --from practice/source --to practice --direct
+
+EXIT
+0
+
+OUTPUT
+ Impact: practice/source -> practice
+ SOURCE practice/source → TARGET practice
+ IMPACT · 1 EDITS · 6 ADDITIONS · 0 REMOVALS · 7 CHANGES
+
+ PLAN
+ Mem matched the verified Source against the Target and planned only the exact target Memory changes shown below. Nothing has been applied.
+
+ PLANNED CHANGES
+ ›  1. [CHANGE] practice Memory [b2f0d5a2-403e-4cf8-b9ba-f844a400dd4d]
+       EDIT · PLANNED · The canonical source settles b as banana while explicitly requiring unresolved alternatives, includ…
+    2. [CHANGE] practice Memory [8cb02049-eb98-49b7-ab08-6839a97db5f0]
+       ADD · PLANNED · These related editing preferences are not present in the target context.
+    3. [CHANGE] practice Memory [b3ce2c1f-9804-4549-8404-869246bf2ba9]
+       ADD · PLANNED · These related condensation preferences are missing from the target context.
+    4. [CHANGE] practice Memory [1aa9fab2-8d11-40f6-8292-0fbaeabeb3a7]
+       ADD · PLANNED · This connector preference is missing from the target context.
+    5. [CHANGE] practice Memory [e84d228d-1bf1-40fa-9038-bc523c547dd2]
+       ADD · PLANNED · These related title wording and formatting preferences are missing from the target context.
+    6. [CHANGE] practice Memory [6b24a175-d9c4-4127-85ff-d3e380c633ff]
+       ADD · PLANNED · These source-verification and review preferences are missing from the target context.
+    7. [CHANGE] practice Memory [5b800e71-fc48-40b2-8e7a-5374031f9762]
+       ADD · PLANNED · The canonical mapping for c is genuinely missing from the target context.
+
+ APPLICATION
+  (none)
+
+SUMMARY · 1 edit, 6 additions, 0 removals
+SCOPE · SOURCE SELECTED GRAPH ONLY · TARGET SELECTED GRAPH ONLY
+
+EXACT PLANNED CHANGE DETAILS
+
+EDIT practice Memory [b2f0d5a2-403e-4cf8-b9ba-f844a400dd4d]
+  OWNER
+    Context practice [824acb9d-695c-5d55-9997-64cc317a2203]
+  MEMORY UID
+    b2f0d5a2-403e-4cf8-b9ba-f844a400dd4d
+  BEFORE
+    Treat b as unresolved as blueberry; do not collapse the evidence into a single settled mapping.
+  AFTER
+    b is banana; unresolved alternatives remain explicit.
+  REASON
+    The canonical source settles b as banana while explicitly requiring unresolved alternatives, including blueberry, to remain visible.
+  SOURCE REFERENCES
+    1. Context practice/source [7e48e68e-3c6f-541b-bfc1-e307abcc7a4f]
+    Memory [4a8036d1-67a5-497a-b287-98d1302d4619]
+    Content SHA-256: 485ce501c9dc4e9e891198f6943dbd683142867b0806b66b147c8fed3d82c6ea
+    
+    2. Context practice/source [7e48e68e-3c6f-541b-bfc1-e307abcc7a4f]
+    Memory [c1cf9a92-dbf1-41f4-a0e4-8e2a3e701b3f]
+    Content SHA-256: 62ff806ad71dda3059bad49ce0c596e99f19417c403a049b28bc8ca8e470e111
+    
+    3. Context practice/source [7e48e68e-3c6f-541b-bfc1-e307abcc7a4f]
+    Memory [be4139d0-97c4-4baa-a90f-b35120bcd188]
+    Content SHA-256: c6e29c529cecfabb8baad8c90f77adb0267aac88ba2314a531086f5c9e2b3195
+    
+    4. Context practice/source [7e48e68e-3c6f-541b-bfc1-e307abcc7a4f]
+    Memory [7ab9caeb-ce39-4b2b-bf3e-2ebe3665e5c7]
+    Content SHA-256: a9a51d6eacc3f94ebae7737f02ce6e3693301773123750f211e1cd1e58cdb850
+    
+    5. Context practice/source [7e48e68e-3c6f-541b-bfc1-e307abcc7a4f]
+    Memory [1f9dc37a-578a-4502-ad6a-3e66d79d04f0]
+    Content SHA-256: c26578bd737e8c5d3c78c285f7ed39042333a9bc030cb3c71db9ed46526db5af
+    
+    6. Context practice/source [7e48e68e-3c6f-541b-bfc1-e307abcc7a4f]
+    Memory [584c69df-42df-4a4a-8cf1-8c5ec4453d69]
+    Content SHA-256: 62ff806ad71dda3059bad49ce0c596e99f19417c403a049b28bc8ca8e470e111
+    
+    7. Context practice [824acb9d-695c-5d55-9997-64cc317a2203]
+    Memory [b5180f53-fbee-483a-afd3-72a1433f34e9]
+    Content SHA-256: 297d35c874264eed8c7de27c4e95dc01caac0310ad5dcea59a61a8a09f8181e9
+
+ADD practice Memory [8cb02049-eb98-49b7-ab08-6839a97db5f0]
+  OWNER
+    Context practice [824acb9d-695c-5d55-9997-64cc317a2203]
+  MEMORY UID
+    8cb02049-eb98-49b7-ab08-6839a97db5f0
+  AFTER
+    Editing preferences: When asked “How does this read?”, give an opinion first and assess sentence order and paragraph division rather than immediately editing. If later asked to polish, preserve the overall structure and citation-needed markers, changing only problematic wording. For a requested expression change, leave nearly everything else unchanged, including chosen technical or project-specific terms; for example, use “distribute,” not “divide,” when material is absorbed into two parts.
+  REASON
+    These related editing preferences are not present in the target context.
+  SOURCE REFERENCES
+    1. Context practice/source [7e48e68e-3c6f-541b-bfc1-e307abcc7a4f]
+    Memory [f3ef224d-ff16-5a7a-880a-18eee2fc55b5]
+    Content SHA-256: f42180ac2731580b133c60a28178c7484694134af9cd87795b387dcea63545af
+    
+    2. Context practice/source [7e48e68e-3c6f-541b-bfc1-e307abcc7a4f]
+    Memory [e50c293a-2416-50c8-b35c-45b53ff58db5]
+    Content SHA-256: 54a5172e2681d9166f312bdd9994b8f0cd8598fc96ccf6f5ab897555765d17bd
+    
+    3. Context practice/source [7e48e68e-3c6f-541b-bfc1-e307abcc7a4f]
+    Memory [39b21971-6ad4-561f-830e-99377eeeab09]
+    Content SHA-256: 3b06352e813df2d425403e64233352927276146f1e3f1d1d49e763068aae7ce1
+
+ADD practice Memory [b3ce2c1f-9804-4549-8404-869246bf2ba9]
+  OWNER
+    Context practice [824acb9d-695c-5d55-9997-64cc317a2203]
+  MEMORY UID
+    b3ce2c1f-9804-4549-8404-869246bf2ba9
+  AFTER
+    When condensing a passage, retain every intended point, remove redundant material, and state repeated content once. For a shorter fixed limit, aim to cut about 20–30% from redundant or unnecessary material without making claims sound more categorical or losing their original conditions.
+  REASON
+    These related condensation preferences are missing from the target context.
+  SOURCE REFERENCES
+    1. Context practice/source [7e48e68e-3c6f-541b-bfc1-e307abcc7a4f]
+    Memory [6fad23ab-406e-5298-98e5-0bf00b224b21]
+    Content SHA-256: 190a7a74a898a6ee302d338ee060ec28cadc6031d96795e0dacfd708d3f4118f
+    
+    2. Context practice/source [7e48e68e-3c6f-541b-bfc1-e307abcc7a4f]
+    Memory [6cc4b8a3-eaff-5805-8d37-83dd4bf8872c]
+    Content SHA-256: afcff3a8b9e3e739bd5e9c8c68934319fecda63110fb3b50f7f48c4c7658e659
+    
+    3. Context practice/source [7e48e68e-3c6f-541b-bfc1-e307abcc7a4f]
+    Memory [7ebe67fb-e08d-50b1-8c3b-af25d70462eb]
+    Content SHA-256: a7e35d0324a1884ebd711c71d3df51189dad9b268c8415e491c80b3401c72506
+
+ADD practice Memory [1aa9fab2-8d11-40f6-8292-0fbaeabeb3a7]
+  OWNER
+    Context practice [824acb9d-695c-5d55-9997-64cc317a2203]
+  MEMORY UID
+    1aa9fab2-8d11-40f6-8292-0fbaeabeb3a7
+  AFTER
+    When the next idea is related but does not broaden scope, avoid “More broadly”; use “In relation to this” or another accurate connector, without adding a new claim merely to connect paragraphs.
+  REASON
+    This connector preference is missing from the target context.
+  SOURCE REFERENCES
+    1. Context practice/source [7e48e68e-3c6f-541b-bfc1-e307abcc7a4f]
+    Memory [b976766e-d366-5065-929e-5f31e638fdbe]
+    Content SHA-256: a42e4c115f46fe487863131816c163d66cf8586d523d962dc71d36f0fdd21845
+
+ADD practice Memory [e84d228d-1bf1-40fa-9038-bc523c547dd2]
+  OWNER
+    Context practice [824acb9d-695c-5d55-9997-64cc317a2203]
+  MEMORY UID
+    e84d228d-1bf1-40fa-9038-bc523c547dd2
+  AFTER
+    For titles about interaction with AI agent memory, preserve the intended terminology: use “interaction,” “management,” and “AI agent memory” rather than “agent memory.” Format document titles in sentence case by default and retain “for” whenever intended. Use italics consistently for titles of works by default. An explicitly named style guide may override only the applicable capitalization or work-title-format default.
+  REASON
+    These related title wording and formatting preferences are missing from the target context.
+  SOURCE REFERENCES
+    1. Context practice/source [7e48e68e-3c6f-541b-bfc1-e307abcc7a4f]
+    Memory [44de7eff-4117-549c-a78e-f2cd3ab50133]
+    Content SHA-256: b97e515137968b7a8af5f21841a892ab34d5ac4a8b29595bf208d0910369682a
+    
+    2. Context practice/source [7e48e68e-3c6f-541b-bfc1-e307abcc7a4f]
+    Memory [1a9d3a74-12a1-50f1-96d0-bcaa09a65406]
+    Content SHA-256: f91f31415c48d252ad9dfde45c404ea926ea8eae8241762b1471052431ab464c
+    
+    3. Context practice/source [7e48e68e-3c6f-541b-bfc1-e307abcc7a4f]
+    Memory [94c3ce98-85f3-51e2-a351-8cb92ec040c3]
+    Content SHA-256: f52ad44c87b3dedc2dbb00040864241bd5a9f9df75d2f9012a419fa1218df796
+
+ADD practice Memory [6b24a175-d9c4-4127-85ff-d3e380c633ff]
+  OWNER
+    Context practice [824acb9d-695c-5d55-9997-64cc317a2203]
+  MEMORY UID
+    6b24a175-d9c4-4127-85ff-d3e380c633ff
+  AFTER
+    When content appears wrong, consult the complete original paper, book, or guide—not only an abstract or snippet—before proposing a correction. Before adding or reusing citations and references, verify that each source exists and supports the exact claim after reviewing the complete source. Do not invent quotations or evidence or overstate an author’s contribution or a paper’s status. If asked only for review, report verification problems before rewriting.
+  REASON
+    These source-verification and review preferences are missing from the target context.
+  SOURCE REFERENCES
+    1. Context practice/source [7e48e68e-3c6f-541b-bfc1-e307abcc7a4f]
+    Memory [96300a95-2cb2-5644-bae6-f53d7b31a725]
+    Content SHA-256: 795b352f611ff2218d2c939ad0a7472d11010900eff92ef8f3d03d7255e1a2c6
+    
+    2. Context practice/source [7e48e68e-3c6f-541b-bfc1-e307abcc7a4f]
+    Memory [4fe217eb-2b65-5fb0-92ff-733ced1e9270]
+    Content SHA-256: b1b2b135a59948222a40f7b3e233dac4931958b0341fe3c9cbc228d53f44d347
+
+ADD practice Memory [5b800e71-fc48-40b2-8e7a-5374031f9762]
+  OWNER
+    Context practice [824acb9d-695c-5d55-9997-64cc317a2203]
+  MEMORY UID
+    5b800e71-fc48-40b2-8e7a-5374031f9762
+  AFTER
+    c is cedar.
+  REASON
+    The canonical mapping for c is genuinely missing from the target context.
+  SOURCE REFERENCES
+    1. Context practice [824acb9d-695c-5d55-9997-64cc317a2203]
+    Memory [b5180f53-fbee-483a-afd3-72a1433f34e9]
+    Content SHA-256: 297d35c874264eed8c7de27c4e95dc01caac0310ad5dcea59a61a8a09f8181e9
+
+No changes applied.

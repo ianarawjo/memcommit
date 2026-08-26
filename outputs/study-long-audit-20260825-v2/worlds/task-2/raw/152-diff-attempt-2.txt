@@ -1,0 +1,5 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 diff 00000000 --context task-2/participant/proposal-workspace --raw
+EXIT: 1
+DURATION_SECONDS: 1.333
+
+Diff error: Checkpoint UID '00000000' is unavailable.

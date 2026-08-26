@@ -1,0 +1,9 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 copy 75944d44 --from task-3/local/guardrails/purpose-and-scope --into task-3/local
+
+STDOUT
+COPIED · 1 Memory → 'task-3/local' · NEW UIDs · after [33ffd77c] at the end
+  'task-3/local/guardrails/purpose-and-scope' [75944d44] → [91ecb893]
+Checkpoint 'task-3/local' [9e7ed9d2].
+
+STDERR

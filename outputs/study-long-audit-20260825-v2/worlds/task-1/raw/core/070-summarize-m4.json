@@ -1,0 +1,11 @@
+{
+  "sequence": 70,
+  "operation": "summarize",
+  "attempt": 4,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 summarize task-1/participant/construction-updates/temporary-parking --direct",
+  "exit": 0,
+  "wall_seconds": 1.46444,
+  "pre_target_digest": "342bd8e74e91146217950a8709dbcb0d68c1ffcd570704e3b282019c6d1abf05",
+  "post_target_digest": "608c18f5987226ecec9bba3a88ccb0d74a2001066a4e1699e71542582eadfc5c",
+  "raw_output": "raw/core/070-summarize-m4.txt"
+}

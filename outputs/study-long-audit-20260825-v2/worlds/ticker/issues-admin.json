@@ -1,0 +1,55 @@
+{
+  "world": "ticker",
+  "phase": "admin",
+  "issues": [
+    {
+      "id": "TICK-V2-A-STATUS-SNAPSHOT-UID-01",
+      "title": "Recursive Status compares a ContextSnapshotRef occurrence UID to the live target UID",
+      "expected": "`status --recursive` on `task-2/participant` follows its retained Context snapshot using the snapshot's target Context identity and renders a read-only frame.",
+      "actual": "Status exited 1 with `An embedded Context identity changed during Status.` Host diagnosis shows occurrence UID c458ab18 differs from the live target UID b839b146, while the snapshot's explicit target_context_uid correctly equals b839b146.",
+      "workaround": "Use `status --short`, default direct Status, or an exact direct read that does not follow embedded snapshot occurrences.",
+      "severity": "HIGH",
+      "classification": "FUNCTIONAL_READ_FAILURE_CONTEXT_SNAPSHOT_IDENTITY",
+      "reproduction": "1/1 recursive Status on the snapshot-bearing task-2/participant Context",
+      "evidence": [
+        "worlds/ticker/raw/admin/049-status-3.txt",
+        "worlds/ticker/host_reads/admin/status-3-context-snapshot-identity-diagnostic.json"
+      ]
+    },
+    {
+      "id": "TICK-V2-A-IMPORT-FIXTURE-01",
+      "title": "Cumulative ticker identity collisions invalidated the Admin import/Rename fixture",
+      "expected": "Admin Context import M1/M2 creates fresh by-value scratch fixtures that positive-control Rename M1/M2 can rename without touching Branch/Checkout targets.",
+      "actual": "The cumulative ticker Profile already contained the task-1 Context stable UIDs, so both imports rejected aliasing the same identities and both dependent Renames found no Source. Branch3 consequently succeeded; the harness stopped before unsafe Checkout3 cloning and continued with an explicit clean-O target-collision route and exact Branch3 Undo/Redo.",
+      "workaround": "Preflight imported stable identities host-side and choose a source Context whose UID is absent from the active cumulative Profile, or reserve init-created scratch fixtures for all positive Renames.",
+      "severity": "CAMPAIGN_LIMITATION",
+      "classification": "CAMPAIGN_FIXTURE_STABLE_IDENTITY_COLLISION",
+      "reproduction": "2/2 Context imports and their 2/2 dependent positive Renames",
+      "evidence": [
+        "worlds/ticker/raw/admin/012-import-1.txt",
+        "worlds/ticker/raw/admin/013-rename-1.txt",
+        "worlds/ticker/raw/admin/027-import-2.txt",
+        "worlds/ticker/raw/admin/041-rename-2.txt",
+        "worlds/ticker/raw/admin/043-branch-3.txt",
+        "worlds/ticker/host_reads/admin/source-precondition-046-checkout-3-source.json",
+        "worlds/ticker/host_reads/admin/stack-round3-resume-actual-branch3-producer.json",
+        "worlds/ticker/raw/admin/045-rename-3.txt",
+        "worlds/ticker/raw/admin/046-checkout-3.txt"
+      ]
+    },
+    {
+      "id": "TICK-V2-A-INIT-EXPECTATION-01",
+      "title": "Admin protocol incorrectly expected default Init to reject a missing lexical parent",
+      "expected": "The campaign protocol expected `init C/missing-parent/leaf` without `--parents` to fail.",
+      "actual": "Init correctly created only the exact leaf Context and switched to it; no parent Context object exists. The current operation contract reserves parent-Context creation for `--parents`.",
+      "workaround": "Use a collision, invalid UID-shaped name, or another documented validation failure for a negative Init method; treat a missing lexical parent as a valid exact-leaf route.",
+      "severity": "CAMPAIGN_LIMITATION",
+      "classification": "CAMPAIGN_PROTOCOL_EXPECTATION_MISMATCH",
+      "reproduction": "1/1 default exact-leaf Init with an absent parent Context",
+      "evidence": [
+        "worlds/ticker/raw/admin/095-init-5.txt",
+        "worlds/ticker/host_reads/admin/init-5-leaf-without-parent-diagnostic.json"
+      ]
+    }
+  ]
+}

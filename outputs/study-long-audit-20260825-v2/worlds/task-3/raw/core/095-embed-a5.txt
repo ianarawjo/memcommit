@@ -1,0 +1,7 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 embed task-3/local/guardrails/audit-and-recovery:367700c4 --into task-3/local
+
+STDOUT
+Embedded Memory [367700c4] from 'task-3/local/guardrails/audit-and-recovery' as [e5239fd9] in 'task-3/local' after [4ae11913] at the end.
+
+STDERR

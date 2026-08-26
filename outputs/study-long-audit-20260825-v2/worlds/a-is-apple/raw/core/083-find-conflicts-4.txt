@@ -1,0 +1,26 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple find-conflicts practice
+
+EXIT
+0
+
+OUTPUT
+Find Conflicts · practice · 4/10 direct memories involved · 3/45 pairs flagged
+
+  CONFLICT 1/3
+  [f1c940a1] a is apple.
+  [0463758c] a maps to apricot;
+  Reason: One memory identifies a as apple, while the other maps the same a to apricot; under the ordinary single-valued reading, both cannot apply.
+  Question: Does a map to apple or apricot?
+
+  CONFLICT 2/3
+  [9828aed4] a maps to apple;
+  [0463758c] a maps to apricot;
+  Reason: The two memories assign different values, apple and apricot, to the same key a.
+  Question: Does a map to apple or apricot?
+
+  CONFLICT 3/3
+  [84695557] a maps to apple;
+  [0463758c] a maps to apricot;
+  Reason: The two memories assign different values, apple and apricot, to the same key a.
+  Question: Does a map to apple or apricot?

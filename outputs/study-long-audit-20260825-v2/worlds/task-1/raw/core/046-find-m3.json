@@ -1,0 +1,11 @@
+{
+  "sequence": 46,
+  "operation": "find",
+  "attempt": 3,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 find 'third-floor rear entrance' --context task-1/participant/construction-updates/building-access --context task-1/campus-wiki/building-access --context-only --exclude-embeds",
+  "exit": 0,
+  "wall_seconds": 1.578081,
+  "pre_target_digest": "3c72e6b5bbb4274fa6a2701812a7ac81e4a7b17f88c0b237e92770fae4aba821",
+  "post_target_digest": "11476e1c3380a02f0a1619942dd04e792c1926adee971d4d04bbd31b04b2af7f",
+  "raw_output": "raw/core/046-find-m3.txt"
+}

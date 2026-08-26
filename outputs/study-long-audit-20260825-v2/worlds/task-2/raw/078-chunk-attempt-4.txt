@@ -1,0 +1,12 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 chunk task-2:93582936 --method clauses --max-chars 115
+EXIT: 0
+DURATION_SECONDS: 1.291
+
+
+Proposed split of [93582936] in Context 'task-2' → 3 chunks (method=clauses, max_chars=115)
+────────────────────────────────────────────────────────
+   1  Recruitment reconciliation:
+   2  before commitments, use a justified recruitment target range
+   3  after confirmation, publish one exact recalculated target. T
+────────────────────────────────────────────────────────
+Done — 3 memories added in 'task-2'.

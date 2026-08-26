@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 merge task-3/local/guardrails/approval-and-delivery task-3/local/guardrails/audit-and-recovery -d --take-source-all
+
+EXIT
+0
+
+OUTPUT
+MERGE RECORDED · 'task-3/local/guardrails/approval-and-delivery' → 'task-3/local/guardrails/audit-and-recovery' · DIRECT · NEW 9 (9 memories) · ALREADY PRESENT 0 · KEPT TARGET 0 · TOOK SOURCE 0 · CREATED CONTEXTS 0 · TARGET CHANGED YES · CHECKPOINTS 1

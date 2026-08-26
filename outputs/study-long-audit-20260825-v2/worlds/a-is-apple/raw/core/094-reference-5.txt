@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple reference practice:b5180f53 --into practice/source
+
+EXIT
+0
+
+OUTPUT
+Referenced snapshot [b5180f53] from 'practice' as [3e9ffb8f] in 'practice/source'.

@@ -1,0 +1,48 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple query 'What conflicts and provenance records are visible?' --recursive --context practice
+
+EXIT
+0
+
+OUTPUT
+A visible conflict in `practice/source` assigns “b” to both boat and banana. The banana mapping is marked provisional while boat remains visible. [1] [2] [3] [4]
+
+In `practice`, the reference says “b is banana,” which differs from the boat mapping visible in `practice/source`. [5] [1]
+
+The visible provenance for the “a” mapping includes an original “a is apple” memory, duplicate “a maps to apple” memories, an edited-duplicate note, and a copied-from-original provenance note. [6] [7] [8] [9] [10] [11] [12]
+
+The recorded provenance operations include additions, copies, references, edits, moves, embedding, and clause-based chunking. Specifically, the checkpoints record adding “a is apple” and both “b” mappings; copying memories into `practice` and `practice/source`; creating references within `practice` and from `practice/source` into `practice`; editing memories; moving memories between the two contexts with retarget live-link policy; embedding `practice/source` into `practice`; and chunking memories into three parts. [13] [14] [15] [16] [17] [18] [19] [20] [21] [22] [23] [24] [25] [26] [27] [28] [29] [30] [31] [32]
+
+References
+[1] b is boat. — c1cf9a92, practice/source, m18
+[2] b is banana; — be4139d0, practice/source, m19
+[3] this copied mapping is provisional while — 7ab9caeb, practice/source, m20
+[4] boat remains visible. — 1f9dc37a, practice/source, m21
+[5] b is banana. — b6e1778f, practice, m5
+[6] a is apple. — f1c940a1, practice, m1
+[7] a maps to apple; — 9828aed4, practice, m2
+[8] this edited duplicate retains the original — 874c746f, practice, m3
+[9] assertion. — d8c415e7, practice, m4
+[10] a maps to apple; — 84695557, practice, m22
+[11] copied from the original direct Memory for — 85f80b15, practice, m23
+[12] provenance. — a33309d8, practice, m24
+[13] move checkpoint Moved 1 Memory/ies into 'practice/source' with retarget live-link policy. — 06ecbd9f, practice, m28
+[14] edit checkpoint Edited memory [5887b475] — 33277ce6, practice, m29
+[15] reference checkpoint Referenced snapshot [c1cf9a92] from 'practice/source' as [94b522dc] in 'practice' — 8a494c49, practice, m30
+[16] copy checkpoint Copied 1 Memory/ies into 'practice' with new UIDs. — 8b8c3e0e, practice, m31
+[17] chunk checkpoint Chunked 1 Memory(s) into 3 Memories (method=clauses, max_chars=45) — 89183dc5, practice, m32
+[18] move checkpoint Moved 1 Memory/ies into 'practice' with retarget live-link policy. — 28167005, practice, m33
+[19] embed checkpoint Embedded 'practice/source' into 'practice' after [b6e1778f] at the end — 8427c1a5, practice, m34
+[20] reference checkpoint Referenced snapshot [4a8036d1] from 'practice/source' as [b6e1778f] in 'practice' — 7168c4cc, practice, m35
+[21] chunk checkpoint Chunked 1 Memory(s) into 3 Memories (method=clauses, max_chars=45) — c0f8b4e5, practice, m36
+[22] edit checkpoint Edited memory [d2bf36b7] — 9e5d2209, practice, m37
+[23] reference checkpoint Referenced snapshot [f1c940a1] from 'practice' as [3d6c9417] in 'practice' — d18a973a, practice, m38
+[24] copy checkpoint Copied 1 Memory/ies into 'practice' with new UIDs. — a285a4c6, practice, m39
+[25] add checkpoint Added: "a is apple." — 3c857120, practice, m40
+[26] chunk checkpoint Chunked 1 Memory(s) into 3 Memories (method=clauses, max_chars=42) — dc156547, practice/source, m41
+[27] move checkpoint Moved 1 Memory/ies into 'practice/source' with retarget live-link policy. — db629525, practice/source, m42
+[28] add checkpoint Added: "b is boat." — b4b66a20, practice/source, m43
+[29] move checkpoint Moved 1 Memory/ies into 'practice' with retarget live-link policy. — a2ce6516, practice/source, m44
+[30] edit checkpoint Edited memory [16b32e2f] — 44b9e3c2, practice/source, m45
+[31] copy checkpoint Copied 1 Memory/ies into 'practice/source' with new UIDs. — a8cf6aa9, practice/source, m46
+[32] add checkpoint Added: "b is banana." — 7390686b, practice/source, m47

@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 fit --context task-1/participant/construction-updates/route-changes --context task-1/campus-wiki/route-changes --context task-1/campus-wiki/shop-updates
+
+EXIT
+0
+
+WALL_SECONDS
+11.816484
+
+STDOUT
+FIT · NO · [TARGETS: CONTEXT task-1/participant/construction-updates/route-changes, task-1/campus-wiki/route-changes, task-1/campus-wiki/shop-updates] · WHY · m62 states that the Engineering Building Campus Store's usual recess hours are 9:00 a.m.–6:00 p.m., while m111 states without qualification that during the June 24–August 23 construction update it operates 7:00 a.m.–11:00 p.m. In the ordinary campus context, that summer construction period overlaps recess, so the two operating-hour claims conflict. By contrast, m61 concerns the Main Building Campus Store's normal recess hours and can coexist with m111's temporary closure of that store.
+
+
+STDERR

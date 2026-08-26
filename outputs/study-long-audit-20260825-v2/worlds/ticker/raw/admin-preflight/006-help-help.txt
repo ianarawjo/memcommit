@@ -1,0 +1,28 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker help -h
+
+EXIT
+0
+
+RAW CAPTURE STATUS
+The unplanned console stream was visible only in the orchestration call and was not retained before that aggregate output was truncated. The product command-attempt record below is the authoritative raw lifecycle evidence; console bytes are unavailable and are not reconstructed.
+
+PRODUCT COMMAND ATTEMPT
+{
+  "version": 3,
+  "uid": "3d67ae42-3c65-499c-82c8-027b7504be11",
+  "operation": "help",
+  "command": "mem help -h",
+  "status": "COMPLETED",
+  "started_at": "2026-08-25T17:47:58.698454+00:00",
+  "completed_at": "2026-08-25T17:47:58.707649+00:00",
+  "elapsed_seconds": 0.009018791999551468,
+  "terminal": {
+    "stdin_tty": false,
+    "stdout_tty": false
+  },
+  "details": {},
+  "outcome": null,
+  "failure": null,
+  "host_path": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd/ledger/command-attempts/3d67ae42-3c65-499c-82c8-027b7504be11.json"
+}

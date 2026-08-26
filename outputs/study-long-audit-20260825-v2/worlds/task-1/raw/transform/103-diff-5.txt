@@ -1,0 +1,219 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 diff f148d6a8 --context task-1/participant --raw
+
+EXIT
+0
+
+OUTPUT
+UNIT        CHECKPOINT · THIS CHECKPOINT VS PREVIOUS
+CHECKPOINT  f148d6a8-e3f3-48f5-9393-cb20e57093ad
+CONTEXT     task-1/participant
+ACTION      checkpoint
+DESCRIPTION task-1 transform round 5 scratch recovery
+RESULT      13 DIRECT ITEMS
+SUMMARY     0 kept · 13 added · 0 edited · 21 removed
+
+diff --mem task-1/participant#28e52f8b-7916-4a0f-b7d1-3f85b81bee5e
+--- a/task-1/participant#28e52f8b-7916-4a0f-b7d1-3f85b81bee5e
++++ /dev/null
+@@ -1 +0,0 @@
+-The existing accessible route is unavailable while it is being reconstructed; throughout the construction period, the accessible alternative bypasses it and runs from the temporary passage next to the main entrance to the first-floor lobby.
+\ No newline at end of file
+diff --mem task-1/participant#f180290f-d8fa-4528-918a-87da127b968f
+--- a/task-1/participant#f180290f-d8fa-4528-918a-87da127b968f
++++ /dev/null
+@@ -1 +0,0 @@
+-Students authorized to enter after 5:00 p.m. must use a physical NFC student ID card rather than the app.
+\ No newline at end of file
+diff --mem task-1/participant#47c9625c-b8c4-4676-9706-b0e8fa4e9980
+--- a/task-1/participant#47c9625c-b8c4-4676-9706-b0e8fa4e9980
++++ /dev/null
+@@ -1 +0,0 @@
+-During the construction period, staff and construction/facilities personnel must use only the designated staff entrance, not the third-floor rear entrance.
+\ No newline at end of file
+diff --mem task-1/participant#449c3e32-68dd-4b2d-8129-439f48ccb3e0
+--- a/task-1/participant#449c3e32-68dd-4b2d-8129-439f48ccb3e0
++++ /dev/null
+@@ -1 +0,0 @@
+-Before publishing any accessible-route alternative, require a current authoritative source to verify the route’s entry point, destination, applicable period, and intended users; omit the alternative if any of those elements cannot be verified.
+\ No newline at end of file
+diff --mem task-1/participant#313234c4-4178-480a-af55-c6c29e1019c8
+--- a/task-1/participant#313234c4-4178-480a-af55-c6c29e1019c8
++++ /dev/null
+@@ -1 +0,0 @@
+-Before publishing any access-hour change, require a current authoritative source to verify the affected entrance or access point, the previous and changed hours, the effective period, and any eligibility or credential conditions; omit the change if any element cannot be verified.
+\ No newline at end of file
+diff --mem task-1/participant#a70351e0-754c-4862-ac89-bf7bbea607a8
+--- a/task-1/participant#a70351e0-754c-4862-ac89-bf7bbea607a8
++++ /dev/null
+@@ -1 +0,0 @@
+-Limit the explanation to verified accessible-route alternatives and verified access-hour changes, clearly labeling each item by category and effective period; exclude closures, construction details, staff-routing instructions, credential procedures, and other context unless needed to understand a verified alternative or hours change and independently verified.
+\ No newline at end of file
+diff --mem task-1/participant#168aec62-9bf8-4750-89dd-aa0ca48b0571
+--- a/task-1/participant#168aec62-9bf8-4750-89dd-aa0ca48b0571
++++ /dev/null
+@@ -1 +0,0 @@
+-Modify campus-wiki/building-access: During the construction period, the third-floor rear entrance cannot be used for general passage.
+\ No newline at end of file
+diff --mem task-1/participant#051c1958-ec44-4932-af20-a9f744306743
+--- a/task-1/participant#051c1958-ec44-4932-af20-a9f744306743
++++ /dev/null
+@@ -1 +0,0 @@
+-Modify campus-wiki/building-access: During the construction period, the end time for general access through the main entrance is shortened from 10:00 p.m. to 5:00 p.m.
+\ No newline at end of file
+diff --mem task-1/participant#d8f1e158-9036-4c7f-9625-12bd40bc2b24
+--- a/task-1/participant#d8f1e158-9036-4c7f-9625-12bd40bc2b24
++++ /dev/null
+@@ -1 +0,0 @@
+-Modify campus-wiki/building-access: During the construction period, the existing accessible route cannot be used because it is being reconstructed.
+\ No newline at end of file
+diff --mem task-1/participant#ee1b72ab-3492-42c9-923a-5d0804c22ff6
+--- a/task-1/participant#ee1b72ab-3492-42c9-923a-5d0804c22ff6
++++ /dev/null
+@@ -1 +0,0 @@
+-Add campus-wiki/building-access: The temporary accessible route next to the main entrance can be used throughout the construction period.
+\ No newline at end of file
+diff --mem task-1/participant#dc5970d1-e719-4830-bd38-6375de486da2
+--- a/task-1/participant#dc5970d1-e719-4830-bd38-6375de486da2
++++ /dev/null
+@@ -1 +0,0 @@
+-Modify campus-wiki/building-access: Instruct students authorized to enter after 5:00 p.m. to use a physical NFC student ID card rather than the app.
+\ No newline at end of file
+diff --mem task-1/participant#3d7e76a7-421d-468f-af8c-0393f6f083dd
+--- a/task-1/participant#3d7e76a7-421d-468f-af8c-0393f6f083dd
++++ /dev/null
+@@ -1 +0,0 @@
+-Modify campus-wiki/building-access: During the construction period, instruct staff and construction/facilities personnel to use only the designated staff entrance instead of the third-floor rear entrance.
+\ No newline at end of file
+diff --mem task-1/participant#93bd7a05-94a0-4e4f-9b41-9c2e3a72f27d
+--- a/task-1/participant#93bd7a05-94a0-4e4f-9b41-9c2e3a72f27d
++++ /dev/null
+@@ -1 +0,0 @@
+-Modify campus-wiki/building-access: In access guidance during the construction period, the access guidance agent may prioritize the 5:00 p.m. closing of the main entrance and the closure of the third-floor rear entrance.
+\ No newline at end of file
+diff --mem task-1/participant#c22d7d83-fb10-4201-a521-22e8e9327d74
+--- a/task-1/participant#c22d7d83-fb10-4201-a521-22e8e9327d74
++++ /dev/null
+@@ -1 +0,0 @@
+-Modify campus-wiki/building-access: A student accustomed to reaching the Central Library through the third-floor rear entrance may expect to be able to pass through during the construction period, go as far as the closed rear entrance, and then turn back or search again for an alternative route there.
+\ No newline at end of file
+diff --mem task-1/participant#b805e586-a492-412f-a80a-119c9c15cf9c
+--- a/task-1/participant#b805e586-a492-412f-a80a-119c9c15cf9c
++++ /dev/null
+@@ -1 +0,0 @@
+-Add campus-wiki/building-access: During the construction period, the general accessible route bypasses the existing accessible route under reconstruction and leads from the temporary passage next to the main entrance to the first-floor lobby.
+\ No newline at end of file
+diff --mem task-1/participant#f72f8b6c-0249-48de-9a9c-002f0d8b2153
+--- a/task-1/participant#f72f8b6c-0249-48de-9a9c-002f0d8b2153
++++ /dev/null
+@@ -1 +0,0 @@
+-Add campus-wiki/building-access: Proactively inform students who are trying to reach the Central Library or who normally use the third-floor rear entrance that they cannot use that route during the construction period.
+\ No newline at end of file
+diff --mem task-1/participant#b661e038-dca0-4802-bf68-1e2aed7d0b98
+--- a/task-1/participant#b661e038-dca0-4802-bf68-1e2aed7d0b98
++++ /dev/null
+@@ -1 +0,0 @@
+-Modify campus-wiki/building-access: A leader of an external group tour may expect the route used on a previous visit to remain valid during the construction period and lead the visiting group to the closed third-floor rear entrance.
+\ No newline at end of file
+diff --mem task-1/participant#184091f2-8da0-4338-9f9f-84acf81ebbee
+--- a/task-1/participant#184091f2-8da0-4338-9f9f-84acf81ebbee
++++ /dev/null
+@@ -1 +0,0 @@
+-EVIDENCE building-access:
+\ No newline at end of file
+diff --mem task-1/participant#3718e883-d96f-4339-bac5-de0a17685e25
+--- a/task-1/participant#3718e883-d96f-4339-bac5-de0a17685e25
++++ /dev/null
+@@ -1 +0,0 @@
+-During the construction period, the third-floor rear entrance cannot be used for general
+\ No newline at end of file
+diff --mem task-1/participant#a63359b1-a27e-4d85-9225-63bed39a8ef3
+--- a/task-1/participant#a63359b1-a27e-4d85-9225-63bed39a8ef3
++++ /dev/null
+@@ -1 +0,0 @@
+-passage.
+\ No newline at end of file
+diff --mem task-1/participant#bb389eb4-d54c-40e7-90ec-5405a734042b
+--- a/task-1/participant#bb389eb4-d54c-40e7-90ec-5405a734042b
++++ /dev/null
+@@ -1 +0,0 @@
+-EVIDENCE building-access: During the construction period, the end time for general access through the main entrance is shortened from 10:00 p.m. to 5:00 p.m.
+\ No newline at end of file
+diff --mem task-1/participant#03d9ca27-724d-4c24-bf34-61148bd58b79
+--- /dev/null
++++ b/task-1/participant#03d9ca27-724d-4c24-bf34-61148bd58b79
+@@ -0,0 +1 @@
++{"content":"Add campus-wiki/facility-updates: The construction period runs from June 24 through August 23.","content_sha256":"eca1360a046a45d01f80d742252a67085d87f528c40871569f00f44210c76f8d","target_context":{"name":"task-1/participant/construction-updates/facility-updates","uid":"fe3ca57d-565a-5839-a78f-15f9a224e75d"},"target_memory_uid":"faea18ec-3091-571f-be3f-345bdbf086b3","type":"memory_snapshot_ref","uid":"03d9ca27-724d-4c24-bf34-61148bd58b79"}
+\ No newline at end of file
+diff --mem task-1/participant#fe3ca57d-565a-5839-a78f-15f9a224e75d
+--- /dev/null
++++ b/task-1/participant#fe3ca57d-565a-5839-a78f-15f9a224e75d
+@@ -0,0 +1 @@
++{"name":"task-1/participant/construction-updates/facility-updates","type":"context_ref","uid":"fe3ca57d-565a-5839-a78f-15f9a224e75d"}
+\ No newline at end of file
+diff --mem task-1/participant#1600961e-68bd-4764-b341-b337badd86ac
+--- /dev/null
++++ b/task-1/participant#1600961e-68bd-4764-b341-b337badd86ac
+@@ -0,0 +1 @@
++{"content_sha256":"b96bb82d6e9dc27e7a39e9823c93d88ffc4d8ae001dd2068cee741c6635fc27b","snapshot":{"contexts":[{"memories":{"1754ab18-13ca-5e07-a40c-eb12e45dcd1e":{"content":"Modify campus-wiki/event-relocations: Do not accept new reservations for Main Building event venues during the construction period.","type":"memory","uid":"1754ab18-13ca-5e07-a40c-eb12e45dcd1e"},"2587dbb3-dc02-5e13-b1de-9d704c7a706a":{"content":"Modify campus-wiki/event-relocations: During the construction period, the event guidance agent may exclude closed Main Building event venues from comparison candidates and compare only designated alternative spaces.","type":"memory","uid":"2587dbb3-dc02-5e13-b1de-9d704c7a706a"},"3fcfa405-cf3d-500e-810b-28ddc81fefca":{"content":"Modify campus-wiki/event-relocations: Viewing in the tenth-floor exhibition and event hall is suspended during the construction period.","type":"memory","uid":"3fcfa405-cf3d-500e-810b-28ddc81fefca"},"686d630d-defe-5aa1-a28d-470b3ebb9059":{"content":"Add campus-wiki/event-relocations: During the construction period, direct users to the auditorium in the detached east building as an alternative to Main Building event venues.","type":"memory","uid":"686d630d-defe-5aa1-a28d-470b3ebb9059"},"8bf7a20c-ced2-51ad-8847-1fbb946ea3a5":{"content":"Modify campus-wiki/event-relocations: An external event operator may assume that the existing Main Building loading procedure remains valid during the construction period, send equipment to the existing loading entrance, or check the access rules for the alternative venue too late.","type":"memory","uid":"8bf7a20c-ced2-51ad-8847-1fbb946ea3a5"},"967fc4ad-d6e6-5f2c-b3e0-973f163f9a9a":{"content":"Add campus-wiki/event-relocations: During the construction period, direct users to the third-floor multipurpose room in the Engineering Building as an alternative to Main Building event venues.","type":"memory","uid":"967fc4ad-d6e6-5f2c-b3e0-973f163f9a9a"},"9ab36f33-97ce-5790-8b2e-d0ab195039ef":{"content":"Add campus-wiki/event-relocations: During the construction period, the separate loading entrance of the auditorium in the detached east building is converted into the loading point for event equipment relocated from the Main Building.","type":"memory","uid":"9ab36f33-97ce-5790-8b2e-d0ab195039ef"},"9d4a1560-5a6d-5c3f-8414-a56f1acc7f18":{"content":"Add campus-wiki/event-relocations: During the construction period, the auditorium in the detached east building is converted into an alternative event space for Main Building events.","type":"memory","uid":"9d4a1560-5a6d-5c3f-8414-a56f1acc7f18"},"b867c632-6a7e-55c8-8371-91b3f0e1bb89":{"content":"Modify campus-wiki/event-relocations: An external visitor who has previously visited a Main Building event venue may expect the entrance and floor from the previous visit to remain unchanged and miss guidance about the alternative venue during the construction period.","type":"memory","uid":"b867c632-6a7e-55c8-8371-91b3f0e1bb89"},"eee1213e-3582-5c9a-bde8-78af7b216df0":{"content":"Modify campus-wiki/event-relocations: During the construction period, the event guidance agent cannot create or restore reservations for Main Building event venues and may provide only the reservation channel for each alternative space.","type":"memory","uid":"eee1213e-3582-5c9a-bde8-78af7b216df0"}},"name":"task-1/participant/construction-updates/event-relocations","order":["3fcfa405-cf3d-500e-810b-28ddc81fefca","1754ab18-13ca-5e07-a40c-eb12e45dcd1e","686d630d-defe-5aa1-a28d-470b3ebb9059","967fc4ad-d6e6-5f2c-b3e0-973f163f9a9a","9d4a1560-5a6d-5c3f-8414-a56f1acc7f18","2587dbb3-dc02-5e13-b1de-9d704c7a706a","eee1213e-3582-5c9a-bde8-78af7b216df0","b867c632-6a7e-55c8-8371-91b3f0e1bb89","9ab36f33-97ce-5790-8b2e-d0ab195039ef","8bf7a20c-ced2-51ad-8847-1fbb946ea3a5"],"uid":"f95f7748-b112-5084-ad52-6848cdf1280b"}],"lexical_context_names":["task-1/participant/construction-updates/event-relocations"],"recursive":false,"root":{"name":"task-1/participant/construction-updates/event-relocations","uid":"f95f7748-b112-5084-ad52-6848cdf1280b"},"schema_version":1},"target_context":{"name":"task-1/participant/construction-updates/event-relocations","uid":"f95f7748-b112-5084-ad52-6848cdf1280b"},"type":"context_snapshot_ref","uid":"1600961e-68bd-4764-b341-b337badd86ac"}
+\ No newline at end of file
+diff --mem task-1/participant#c1a5d80d-1652-43da-bc88-8bd107ce20cd
+--- /dev/null
++++ b/task-1/participant#c1a5d80d-1652-43da-bc88-8bd107ce20cd
+@@ -0,0 +1 @@
++{"grant_source":{"attachment_context_name":"task-1/participant/construction-updates","attachment_context_uid":"6c15d7c6-408a-56fa-8bc4-691c468af7b2","authority_context_name":"task-1/campus-wiki/event-relocations","authority_profile_uid":"01203d49-da6a-4ee1-9cb6-8321890e8559","context_uid":"c56f66c9-ea2f-504b-85f3-69eb66929924","grant_revision_at_creation":1,"grant_uid":"99a7586d-6467-5837-b208-22a38986a4d3","grantee_profile_uid":"8d6d6360-c3eb-40f9-a490-5c7b2a242bfd","memory_uid":"a0700edb-d51a-54f3-88e9-6096cec36b1e","public_name":"task-1/campus-wiki/event-relocations","resource_name":"task-1/campus-wiki","resource_uid":"a63350c9-cff1-5f32-a091-57e3cef17a77"},"target_context":{"name":"task-1/campus-wiki/event-relocations","uid":"c56f66c9-ea2f-504b-85f3-69eb66929924"},"target_memory_uid":"a0700edb-d51a-54f3-88e9-6096cec36b1e","type":"granted_memory_ref","uid":"c1a5d80d-1652-43da-bc88-8bd107ce20cd"}
+\ No newline at end of file
+diff --mem task-1/participant#5a66e0ec-3497-5ccf-9d8f-08c966647677
+--- /dev/null
++++ b/task-1/participant#5a66e0ec-3497-5ccf-9d8f-08c966647677
+@@ -0,0 +1 @@
++{"name":"task-1/participant/construction-updates/building-access","type":"context_ref","uid":"5a66e0ec-3497-5ccf-9d8f-08c966647677"}
+\ No newline at end of file
+diff --mem task-1/participant#811200e1-2ea1-4907-8384-9c61dd748714
+--- /dev/null
++++ b/task-1/participant#811200e1-2ea1-4907-8384-9c61dd748714
+@@ -0,0 +1 @@
++OUTDATED WIKI EVIDENCE: General vehicles may enter and park in the Main Building underground parking garage during operating hours.
+\ No newline at end of file
+diff --mem task-1/participant#15566ae4-29d1-4856-8172-9424f00e8fc4
+--- /dev/null
++++ b/task-1/participant#15566ae4-29d1-4856-8172-9424f00e8fc4
+@@ -0,0 +1 @@
++{"content":"General vehicles may enter and park in the Main Building underground parking garage during operating hours.","content_sha256":"ba9f80db44671014277cb0cc9afedb2f8a0af4b57f61641dbe23b146964317a1","grant_source":{"attachment_context_name":"task-1/participant/construction-updates","attachment_context_uid":"6c15d7c6-408a-56fa-8bc4-691c468af7b2","authority_context_name":"task-1/campus-wiki/temporary-parking","authority_profile_uid":"01203d49-da6a-4ee1-9cb6-8321890e8559","context_uid":"c0d853a6-985e-574f-a921-7602a470d432","grant_revision_at_creation":1,"grant_uid":"99a7586d-6467-5837-b208-22a38986a4d3","grantee_profile_uid":"8d6d6360-c3eb-40f9-a490-5c7b2a242bfd","memory_uid":"6960c0ca-295d-5449-91dc-d9293a6bb79d","public_name":"task-1/campus-wiki/temporary-parking","resource_name":"task-1/campus-wiki","resource_uid":"a63350c9-cff1-5f32-a091-57e3cef17a77"},"target_context":{"name":"task-1/campus-wiki/temporary-parking","uid":"c0d853a6-985e-574f-a921-7602a470d432"},"target_memory_uid":"6960c0ca-295d-5449-91dc-d9293a6bb79d","type":"memory_snapshot_ref","uid":"15566ae4-29d1-4856-8172-9424f00e8fc4"}
+\ No newline at end of file
+diff --mem task-1/participant#c0d853a6-985e-574f-a921-7602a470d432
+--- /dev/null
++++ b/task-1/participant#c0d853a6-985e-574f-a921-7602a470d432
+@@ -0,0 +1 @@
++{"attachment_context_name":"task-1/participant/construction-updates","attachment_context_uid":"6c15d7c6-408a-56fa-8bc4-691c468af7b2","authority_context_name":"task-1/campus-wiki/temporary-parking","authority_profile_uid":"01203d49-da6a-4ee1-9cb6-8321890e8559","grant_revision_at_creation":1,"grant_uid":"99a7586d-6467-5837-b208-22a38986a4d3","grantee_profile_uid":"8d6d6360-c3eb-40f9-a490-5c7b2a242bfd","name":"task-1/campus-wiki/temporary-parking","resource_name":"task-1/campus-wiki","resource_uid":"a63350c9-cff1-5f32-a091-57e3cef17a77","type":"granted_context_ref","uid":"c0d853a6-985e-574f-a921-7602a470d432"}
+\ No newline at end of file
+diff --mem task-1/participant#7318538c-dafd-4473-a7c5-84ab35cc2c1e
+--- /dev/null
++++ b/task-1/participant#7318538c-dafd-4473-a7c5-84ab35cc2c1e
+@@ -0,0 +1 @@
++EVIDENCE shop-updates:
+\ No newline at end of file
+diff --mem task-1/participant#f87be62b-a326-4e68-a239-4a4fdf7091de
+--- /dev/null
++++ b/task-1/participant#f87be62b-a326-4e68-a239-4a4fdf7091de
+@@ -0,0 +1 @@
++The ATM on the first floor of the Main Building is closed during the
+\ No newline at end of file
+diff --mem task-1/participant#e5e75e03-54dc-4589-bf5e-5676722fae3a
+--- /dev/null
++++ b/task-1/participant#e5e75e03-54dc-4589-bf5e-5676722fae3a
+@@ -0,0 +1 @@
++construction period.
+\ No newline at end of file
+diff --mem task-1/participant#6ce9f67b-d1ba-4f3c-86b9-3bc16c9f886f
+--- /dev/null
++++ b/task-1/participant#6ce9f67b-d1ba-4f3c-86b9-3bc16c9f886f
+@@ -0,0 +1 @@
++{"content_sha256":"07df207bb0538fd6f83c475b7b860ffa0b4a78d97015cde6cff24d3ac7b074f6","snapshot":{"contexts":[{"memories":{"2d20c61d-ff20-5bb6-bcdc-3dcbf6c3e21f":{"content":"Add campus-wiki/route-changes: The Outdoor Parking Lot A–Main Building–Central Library route is closed during the construction period.","type":"memory","uid":"2d20c61d-ff20-5bb6-bcdc-3dcbf6c3e21f"},"638f272f-9fbd-5d1f-bfd8-b01618424065":{"content":"Modify campus-wiki/route-changes: During the construction period, the route guidance agent may exclude from comparison candidates closed routes that pass through the first through third floors of the Main Building, the third-floor rear entrance, or Outdoor Parking Lot A.","type":"memory","uid":"638f272f-9fbd-5d1f-bfd8-b01618424065"},"8017409a-8af8-5a55-a49e-e9ccb44b9f34":{"content":"Add campus-wiki/route-changes: The indoor route that passed through the first through third floors of the Main Building to the Central Library cannot be used during the construction period.","type":"memory","uid":"8017409a-8af8-5a55-a49e-e9ccb44b9f34"},"8276ab56-741f-5f60-ab77-79fe6dc0ba55":{"content":"Add campus-wiki/route-changes: When providing directions to the accessible restroom in the Student Centre during the construction period, instruct users to take the accessible route to the left as viewed from the Main Building.","type":"memory","uid":"8276ab56-741f-5f60-ab77-79fe6dc0ba55"},"9af0f95c-0a5e-584e-ba7b-92789e071f7e":{"content":"Add campus-wiki/route-changes: During the construction period, the designated alternative accessible route to the Central Library is Outdoor Parking Lot C–Student Centre accessible entrance–Central Library west entrance.","type":"memory","uid":"9af0f95c-0a5e-584e-ba7b-92789e071f7e"},"a8bb36e1-2629-5b8f-b4dc-af9b88020dc9":{"content":"Modify campus-wiki/route-changes: A student who prefers the air-conditioned indoor route through the Main Building in summer may experience substantial heat and travel burden when redirected to an outdoor alternative route during the construction period.","type":"memory","uid":"a8bb36e1-2629-5b8f-b4dc-af9b88020dc9"},"ba9d70f9-02c4-56d9-ac23-f2a532c22488":{"content":"Modify campus-wiki/route-changes: If the indoor shortcut through the Main Building is closed during the construction period, a mobility-support companion may reconfirm the distance and slope of the alternative accessible route before accompanying the user.","type":"memory","uid":"ba9d70f9-02c4-56d9-ac23-f2a532c22488"},"dbb3c40c-7699-509d-901d-be9de2f110dc":{"content":"Add campus-wiki/route-changes: The route from the third-floor rear entrance to the Central Library is closed during the construction period.","type":"memory","uid":"dbb3c40c-7699-509d-901d-be9de2f110dc"},"fd27f19b-5f2c-51ee-a9b2-7182120163cb":{"content":"Add campus-wiki/route-changes: During the construction period, the Central Library west entrance is designated as the official alternative entrance for the closed connecting route through the Main Building.","type":"memory","uid":"fd27f19b-5f2c-51ee-a9b2-7182120163cb"}},"name":"task-1/participant/construction-updates/route-changes","order":["8017409a-8af8-5a55-a49e-e9ccb44b9f34","dbb3c40c-7699-509d-901d-be9de2f110dc","2d20c61d-ff20-5bb6-bcdc-3dcbf6c3e21f","a8bb36e1-2629-5b8f-b4dc-af9b88020dc9","8276ab56-741f-5f60-ab77-79fe6dc0ba55","9af0f95c-0a5e-584e-ba7b-92789e071f7e","fd27f19b-5f2c-51ee-a9b2-7182120163cb","638f272f-9fbd-5d1f-bfd8-b01618424065","ba9d70f9-02c4-56d9-ac23-f2a532c22488"],"uid":"725d4213-9ce1-569c-9e91-e4cd0d046bd5"}],"lexical_context_names":["task-1/participant/construction-updates/route-changes"],"recursive":false,"root":{"name":"task-1/participant/construction-updates/route-changes","uid":"725d4213-9ce1-569c-9e91-e4cd0d046bd5"},"schema_version":1},"target_context":{"name":"task-1/participant/construction-updates/route-changes","uid":"725d4213-9ce1-569c-9e91-e4cd0d046bd5"},"type":"context_snapshot_ref","uid":"6ce9f67b-d1ba-4f3c-86b9-3bc16c9f886f"}
+\ No newline at end of file
+diff --mem task-1/participant#5cb64d0a-a8b5-5547-95df-d6dae155dce4
+--- /dev/null
++++ b/task-1/participant#5cb64d0a-a8b5-5547-95df-d6dae155dce4
+@@ -0,0 +1 @@
++{"attachment_context_name":"task-1/participant/construction-updates","attachment_context_uid":"6c15d7c6-408a-56fa-8bc4-691c468af7b2","authority_context_name":"task-1/campus-wiki/route-changes","authority_profile_uid":"01203d49-da6a-4ee1-9cb6-8321890e8559","grant_revision_at_creation":1,"grant_uid":"99a7586d-6467-5837-b208-22a38986a4d3","grantee_profile_uid":"8d6d6360-c3eb-40f9-a490-5c7b2a242bfd","name":"task-1/campus-wiki/route-changes","resource_name":"task-1/campus-wiki","resource_uid":"a63350c9-cff1-5f32-a091-57e3cef17a77","type":"granted_context_ref","uid":"5cb64d0a-a8b5-5547-95df-d6dae155dce4"}
+\ No newline at end of file

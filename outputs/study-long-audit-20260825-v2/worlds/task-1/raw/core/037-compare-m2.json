@@ -1,0 +1,11 @@
+{
+  "sequence": 37,
+  "operation": "compare",
+  "attempt": 2,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 compare task-1/participant/construction-updates/event-relocations task-1/campus-wiki/event-relocations --snapshot",
+  "exit": 0,
+  "wall_seconds": 7.132908,
+  "pre_target_digest": "3a39b543ba6c60f32ed6708ea3b2ed05e1e2b58378c4899ce4d4a7fe358af24b",
+  "post_target_digest": "6a55ecaf75739d419f9f6a275721a50df69a4188d8b3ea930dff7cc26c49239d",
+  "raw_output": "raw/core/037-compare-m2.txt"
+}

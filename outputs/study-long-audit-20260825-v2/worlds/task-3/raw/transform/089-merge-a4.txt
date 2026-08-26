@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 merge --from task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance --to task-3/local -d --keep-target-all
+
+EXIT
+0
+
+OUTPUT
+MERGE RECORDED · 'task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance' → 'task-3/local' · DIRECT · NEW 25 (25 memories) · ALREADY PRESENT 0 · KEPT TARGET 0 · TOOK SOURCE 0 · CREATED CONTEXTS 0 · TARGET CHANGED YES · CHECKPOINTS 1

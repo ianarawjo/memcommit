@@ -1,0 +1,35 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 find-duplicates task-1/participant/construction-updates --recursive
+
+EXIT
+0
+
+WALL_SECONDS
+1.507453
+
+STDOUT
+Find Duplicates · task-1/participant/construction-updates · 7 Contexts checked · 90 direct items checked · 0 exact groups · 0 proposed absorptions
+
+CONTEXT 1/7 · task-1/participant/construction-updates
+  No exact duplicate direct items.
+
+CONTEXT 2/7 · task-1/participant/construction-updates/building-access
+  No exact duplicate direct items.
+
+CONTEXT 3/7 · task-1/participant/construction-updates/event-relocations
+  No exact duplicate direct items.
+
+CONTEXT 4/7 · task-1/participant/construction-updates/facility-updates
+  No exact duplicate direct items.
+
+CONTEXT 5/7 · task-1/participant/construction-updates/route-changes
+  No exact duplicate direct items.
+
+CONTEXT 6/7 · task-1/participant/construction-updates/shop-updates
+  No exact duplicate direct items.
+
+CONTEXT 7/7 · task-1/participant/construction-updates/temporary-parking
+  No exact duplicate direct items.
+
+
+STDERR

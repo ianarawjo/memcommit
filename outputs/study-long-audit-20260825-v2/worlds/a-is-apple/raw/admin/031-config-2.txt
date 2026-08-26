@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple config set audit_v2_world a-is-apple
+
+EXIT
+0
+
+OUTPUT
+Set audit_v2_world = 'a-is-apple'

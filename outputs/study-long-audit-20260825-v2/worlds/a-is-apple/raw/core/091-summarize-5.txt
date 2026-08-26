@@ -1,0 +1,11 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple summarize practice/source --plain
+
+EXIT
+0
+
+OUTPUT
+SUMMARY · practice/source
+STATUS · DIRECT
+
+For draft feedback, give an opinion first, checking sentence order and paragraphs before editing. Polish minimally, preserving structure, markers, terminology, all intended points, nuance, and conditions; cut redundancy moderately when required. Follow specified title conventions unless a named guide overrides them. Verify complete original sources and flag citation problems before rewriting. The mapping says b is both banana and blueberry, with the copied mapping provisional while blueberry remains visible.

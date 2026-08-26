@@ -1,0 +1,17 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 summarize task-1/participant/construction-updates/facility-updates --direct
+
+EXIT
+0
+
+WALL_SECONDS
+1.546176
+
+STDOUT
+SUMMARY · task-1/participant/construction-updates/facility-updates
+STATUS · DIRECT
+
+From June 24 through August 23, major Main Building improvements leave one elevator operating at a time, suspend in-person visitor and Innovation Hub desks, shift visitor services to the campus portal, close first- to third-floor restrooms, and occasionally interrupt cooling for five to ten minutes. Students, staff, and members should use Central Library restrooms; visitors should generally use facilities outside the building, with the West Complex exhibition hall nearest, while accessible-restroom users go to the Student Centre. Contract staff must use the designated service entrance, and guidance is limited to disclosed impacts, not nonpublic work.
+
+
+STDERR

@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source forget 'Remove generated examples that invent concrete source text; preserve grounded constraints and explicitly hypothetical examples.' --context practice/description
+
+EXIT
+0
+
+WALL_SECONDS
+18.430385
+
+STDOUT
+Consulting the configured Forget provider...
+FORGET · NO CHANGE · SOURCE practice/description
+OUTCOME · NO CHANGE · Context unchanged · no checkpoint
+
+
+STDERR

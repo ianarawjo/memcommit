@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker dedup task-3/local --direct
+
+EXIT
+0
+
+OUTPUT
+No exact duplicate direct items in Context 'task-3/local'.

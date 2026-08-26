@@ -1,0 +1,11 @@
+{
+  "sequence": 18,
+  "operation": "find-redundancies",
+  "attempt": 1,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 find-redundancies task-1/participant/construction-updates/facility-updates --direct",
+  "exit": 0,
+  "wall_seconds": 5.569782,
+  "pre_target_digest": "49a10402a3eef6274f7415b1a4f1198b7e613d52f411826bb33a802dba08aa91",
+  "post_target_digest": "6a8ac4a2d507e298c3496128afa119a5c5a1039b381716593aaf92b27a8f4f6d",
+  "raw_output": "raw/core/018-find-redundancies-m1.txt"
+}

@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple find-redundancies practice --direct
+
+EXIT
+0
+
+OUTPUT
+Find Redundancies · practice · 4 direct memories checked · 1 group · 1 proposed absorption
+
+  DUN GROUP  1/1 · 2 Memories · SEMANTIC DUN
+    CLEANUP MAP · READY FOR REVIEW
+    SURVIVOR  [memory f1c940a1]  a is apple.
+    ABSORB    [memory 9828aed4]  a maps to apple;
+    EVIDENCE 1 · SEMANTIC EQUIVALENT · Both indivisible memories state the same mapping: a corresponds to apple, with no differing scope or conditions.

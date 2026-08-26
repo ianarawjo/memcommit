@@ -1,0 +1,22 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple eval semantic run ambiguity --provider codex_chatgpt --model gpt-5.6-sol --reasoning none --pipeline v2 --corpus calibration --runs 1 --case single-none-main-entrance-hours --ledger-dir /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/a-is-apple/admin-eval-ledger
+
+EXIT
+0
+
+OUTPUT
+Connected: codex_chatgpt:gpt-5.6-sol · reasoning none · 0.024s
+[01/01] single-none-main-entrance-hours · run 1 · PASS · 4.229s
+Semantic eval · ambiguity · classification gate
+Provider: codex_chatgpt:gpt-5.6-sol · reasoning=none · runs=1 · cases=1/10
+Corpus: CALIBRATION · leave-one-out · not an independent holdout · digest 003654c092e0
+Pipeline: ambiguity-classify-v2 · schema v2
+Score: 1/1 cases passed
+Attempts: exact 1/1 · structurally valid 1/1
+Timing: connection 0.024s · completion mean/median/p95/max 4.229s/4.229s/4.229s/4.229s · campaign 4.231s · total 4.256s
+Label distribution:
+  interpretation   NONE  HELPFUL  REQUIRED
+  SINGLE            1        0         0
+  DOMINANT          0        0         0
+  COMPETING         0        0         0
+Ledger: /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/a-is-apple/admin-eval-ledger/runs/20260825T180054387235Z-b3f50264.json

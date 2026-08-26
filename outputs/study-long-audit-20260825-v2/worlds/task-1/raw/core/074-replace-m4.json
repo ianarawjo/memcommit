@@ -1,0 +1,11 @@
+{
+  "sequence": 74,
+  "operation": "replace",
+  "attempt": 4,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 replace 'General vehicles may enter and park' 'OUTDATED WIKI EVIDENCE: General vehicles may enter and park' --context task-1/participant",
+  "exit": 0,
+  "wall_seconds": 1.45749,
+  "pre_target_digest": "b304a48a6500918360c4548e9d9ec125649625b3c7a6c668df34e822ff20d5d7",
+  "post_target_digest": "dc12c68a42bf1801ad81b34e8d1ef344edf685856419b5bca4edfb7ea6b0cfe6",
+  "raw_output": "raw/core/074-replace-m4.txt"
+}

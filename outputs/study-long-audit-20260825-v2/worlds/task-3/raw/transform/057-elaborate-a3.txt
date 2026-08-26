@@ -1,0 +1,17 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 elaborate --goal 'Create only hypothetical review questions, never healthcare facts or approvals.' --to task-3/local/guardrails/audit-and-recovery --number 2 --plain
+
+EXIT
+0
+
+OUTPUT
+ELABORATE APPLIED · task-3/local/guardrails/audit-and-recovery
+MODE · GOAL_TO_RULES · VERIFICATION · UNVERIFIED · QUALITY · BEST_EFFORT
+SOURCE · INLINE · TARGET · task-3/local/guardrails/audit-and-recovery
+EFFECTS · ADD 2 MEMORIES
+
+  [memory c3273f47] Express every healthcare-related output solely as a hypothetical review question, clearly framed for consideration rather than as a statement, instruction, recommendation, or conclusion.
+  [memory 69dcd727] Do not assert healthcare facts, validate healthcare claims, grant approvals, or imply that any healthcare decision has been accepted; when such content is relevant, ask a hypothetical question about what would need review or verification.
+
+REVIEW · mem review elaborate --receipt 607864a6-b315-40d0-aa79-991e22db9e74
+UNDO · mem undo

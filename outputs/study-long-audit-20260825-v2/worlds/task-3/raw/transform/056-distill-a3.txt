@@ -1,0 +1,19 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 distill --from task-3/local/personal-memory/2024/03 --to task-3/local/guardrails/audit-and-recovery --goal 'Distill candidate-review rules from personal evidence while marking every fact unapproved and potentially stale.' --direct --plain
+
+EXIT
+0
+
+OUTPUT
+DISTILL APPLIED · task-3/local/personal-memory/2024/03 → task-3/local/guardrails/audit-and-recovery
+EFFECTS · ADD 6 RULES
+
+  [memory 9c4287bf] Unapproved, potentially stale candidate: verify current medication instructions and ongoing use from an authoritative current source; medication notes alone cannot establish either.
+  [memory 10fe623e] Unapproved, potentially stale candidate: for fasting appointments, recalculate and confirm the required fasting period, especially for morning visits.
+  [memory 2bd36e39] Unapproved, potentially stale candidate: consider afternoon appointments when reducing rushed travel preparation is important.
+  [memory a4f7cd8f] Unapproved, potentially stale candidate: review whether seating or another accommodation is available when standing could aggravate back discomfort.
+  [memory 63ce433b] Unapproved, potentially stale candidate: review medication timing instructions one line at a time and record them directly in the schedule; lengthy all-at-once explanations risk omission.
+  [memory 74e1b200] Unapproved, potentially stale candidate: for a weekday-afternoon ride from the younger brother, ask about two days in advance; if he drives, a separate route home may be unnecessary.
+
+REVIEW · mem review distill --receipt f22f1807-e1be-4aa5-90b8-6c17d22c3d98
+UNDO · mem undo

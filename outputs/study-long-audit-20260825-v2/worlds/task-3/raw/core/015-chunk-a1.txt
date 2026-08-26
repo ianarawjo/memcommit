@@ -1,0 +1,12 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 chunk 10b92448 --context task-3/local/guardrails/purpose-and-scope --method sentence
+
+STDOUT
+
+STDERR
+Usage: run_isolated_mem.py chunk [OPTIONS] [MEMORY_SELECTOR]
+Try 'run_isolated_mem.py chunk -h' for help.
+╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Invalid value for '--method' / '-m': 'sentence' is not one of                │
+│ 'markdown_headers', 'paragraphs', 'sentences', 'clauses'.                    │
+╰──────────────────────────────────────────────────────────────────────────────╯

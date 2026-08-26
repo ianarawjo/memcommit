@@ -1,0 +1,6 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 replace "unresolved conflicts" "owned unresolved conflicts" --direct --context task-2 --plain
+EXIT: 0
+DURATION_SECONDS: 1.351
+
+Replaced 5 occurrences in 5 Memories in 'task-2'.
+Undo can restore this command.

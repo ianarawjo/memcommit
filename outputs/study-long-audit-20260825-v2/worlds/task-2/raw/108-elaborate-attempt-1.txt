@@ -1,0 +1,5 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 elaborate --rule "A shared style rule must retain both advisor provenances and name any source-specific sentence condition." --to task-2/participant/proposal-workspace --number 2 --strict
+EXIT: 1
+DURATION_SECONDS: 201.507
+
+Elaborate error: Elaborate rejected a generated Case collection that did not conform to every Source Rule (Rule 1: PARTIALLY_CONFORMS).

@@ -1,0 +1,51 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source impact atomize practice/description --all
+
+EXIT
+0
+
+WALL_SECONDS
+7.172400
+
+STDOUT
+ RESULT · atomize · practice/description
+ STATUS · ANALYSIS COMPLETE · sources=1 · projected=1 · splits=0 · children=0 · review issues=0
+
+ WHAT MEM UNDERSTOOD
+ A narrow style-guide override requires the word “for” in a governed document title to remain literally “for,” without capitalization, replacement, or removal.
+
+ WHAT HAPPENED
+ The requirement remains one atom because retaining the literal word and prohibiting capitalization, replacement, or removal jointly define the same governed formatting commitment.
+
+ WHAT REMAINS UNRESOLVED
+ (none reported under this operation's bounded contract)
+The atomize analysis reported no unresolved finding in this bounded Context frame.
+
+ REPRESENTATIVE / BOUNDARY CASES
+ ›  1. [REPRESENTATIVE] ATOMIC · KEEP
+       KEEP: In a document title governed by the narrow style-guide override, retain the word “for” literally as “for”; do not capitalize, replace, or remove it.
+
+Analysis [c35996af] · INPUT practice/description → OUTPUT practice/description · ORDER: SOURCE · 0/0 answered
+
+ACTIONABLE ISSUES
+  (no actionable atomize, ambiguity, or conflict issues)
+
+NO ACTIONABLE ISSUES
+
+The overview and complete atomize analysis remain saved.
+
+REFINE, COMMENT, OR ENTER A DIFFERENT READING
+> 
+
+ALL ATOMIZE RESULTS
+  1. ATOMIC [9d0c4409] In a document title governed by the narrow style-guide override, retain…
+
+SOURCE means canonical Context order; Memory creation timestamps are not recorded.
+No Memory changes have been applied. No checkpoint was created.
+Analysis saved [c35996af] for mem trace/rationale.
+REOPEN · mem impact atomize --session c35996af-74ed-4126-a242-80d463f40a5d
+BROWSE ATOMIZE · mem impact atomize --sessions
+BROWSE ALL IMPACT · mem impact --sessions
+
+
+STDERR

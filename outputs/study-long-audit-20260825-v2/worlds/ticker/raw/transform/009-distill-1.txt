@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker distill --from task-2/participant/proposal-workspace --to task-3/local --goal 'Extract only reusable suffix and uppercase ticker rules.' --direct --plain
+
+EXIT
+0
+
+OUTPUT
+DISTILL APPLIED · task-2/participant/proposal-workspace → task-3/local
+EFFECTS · ADD 3 RULES
+
+  [memory 0abaa001] Remove a terminal legal-entity suffix, such as Inc., LLC, or Corp., when deriving the base ticker.
+  [memory c1afeaa9] Render the derived base ticker in uppercase.
+  [memory 76c3c3ee] When terminal Class A or Class B follows a legal suffix, remove the legal suffix and append .A or .B, respectively, to the derived base ticker.
+
+REVIEW · mem review distill --receipt 0caa3792-b952-400d-b091-71454125abe3
+UNDO · mem undo

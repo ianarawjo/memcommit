@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source find-redundancies practice/description --direct
+
+EXIT
+0
+
+WALL_SECONDS
+5.916216
+
+STDOUT
+Find Redundancies · practice/description · 5 direct memories checked · 0 groups · 0 proposed absorptions
+
+
+STDERR

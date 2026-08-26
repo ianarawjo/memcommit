@@ -1,0 +1,38 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 find-conflicts task-1/campus-wiki/temporary-parking
+
+EXIT
+0
+
+WALL_SECONDS
+10.574262
+
+STDOUT
+Find Conflicts · task-1/campus-wiki/temporary-parking · 5/51 direct memories involved · 4/1275 pairs flagged
+
+  POSSIBLE CONFLICT 1/4
+  [6960c0ca] General vehicles may enter and park in the Main Building underground parking garage during operating hours.
+  [1ab28435] CONSTRUCTION UPDATE — June 24–August 23: The Main Building underground garage and Outdoor Parking Lot A are closed to general parking; the garage pedestrian door is locked, the interior stairs are closed to everyone, and the Lot A access road is blocked. Outdoor Parking Lot C is the temporary visitor alternative. Authorized staff use a physical card at the garage pedestrian door, while construction/facilities personnel follow the approved controlled on-site procedure. The parking agent may explain posted closures and Lot C’s location but cannot check or guarantee real-time space availability.
+  Reason: The general rule permits general vehicles in the garage during operating hours, while the dated construction update prohibits general parking there from June 24 through August 23. They conflict if the general rule is meant to cover that construction period, but are jointly explainable if it describes normal operations outside the temporary closure.
+  Question: Does the garage-access rule apply during June 24–August 23?
+
+  POSSIBLE CONFLICT 2/4
+  [67d07765] The pedestrian entrance to the underground parking garage is open to general pedestrians during operating hours.
+  [1ab28435] CONSTRUCTION UPDATE — June 24–August 23: The Main Building underground garage and Outdoor Parking Lot A are closed to general parking; the garage pedestrian door is locked, the interior stairs are closed to everyone, and the Lot A access road is blocked. Outdoor Parking Lot C is the temporary visitor alternative. Authorized staff use a physical card at the garage pedestrian door, while construction/facilities personnel follow the approved controlled on-site procedure. The parking agent may explain posted closures and Lot C’s location but cannot check or guarantee real-time space availability.
+  Reason: The general rule opens the garage pedestrian entrance to general pedestrians during operating hours, while the dated update says that door is locked during June 24–August 23, with card access only for authorized staff. They conflict if the general rule includes the construction period, but are jointly explainable as normal versus temporary conditions.
+  Question: Does the pedestrian-entrance rule apply during June 24–August 23?
+
+  POSSIBLE CONFLICT 3/4
+  [489960d6] The interior stairs leading down from the Main Building lobby to the underground parking garage are available during operating hours.
+  [1ab28435] CONSTRUCTION UPDATE — June 24–August 23: The Main Building underground garage and Outdoor Parking Lot A are closed to general parking; the garage pedestrian door is locked, the interior stairs are closed to everyone, and the Lot A access road is blocked. Outdoor Parking Lot C is the temporary visitor alternative. Authorized staff use a physical card at the garage pedestrian door, while construction/facilities personnel follow the approved controlled on-site procedure. The parking agent may explain posted closures and Lot C’s location but cannot check or guarantee real-time space availability.
+  Reason: The general rule makes the interior stairs available during operating hours, while the dated update closes them to everyone from June 24 through August 23. They conflict if the general rule includes that period, but are jointly explainable if it governs only normal operations.
+  Question: Does the interior-stairs rule apply during June 24–August 23?
+
+  POSSIBLE CONFLICT 4/4
+  [a81363fe] The Outdoor Parking Lot A–Main Building–Central Library route is normally one of the shortest routes to the library after parking.
+  [1ab28435] CONSTRUCTION UPDATE — June 24–August 23: The Main Building underground garage and Outdoor Parking Lot A are closed to general parking; the garage pedestrian door is locked, the interior stairs are closed to everyone, and the Lot A access road is blocked. Outdoor Parking Lot C is the temporary visitor alternative. Authorized staff use a physical card at the garage pedestrian door, while construction/facilities personnel follow the approved controlled on-site procedure. The parking agent may explain posted closures and Lot C’s location but cannot check or guarantee real-time space availability.
+  Reason: The route is normally one of the shortest routes after parking, but the dated update closes Lot A to general parking and blocks its access road from June 24 through August 23. The claims conflict if the route statement is intended as usable guidance during that period, but remain jointly explainable if “normally” excludes the temporary closure.
+  Question: Is the Lot A–library route intended to apply during June 24–August 23?
+
+
+STDERR

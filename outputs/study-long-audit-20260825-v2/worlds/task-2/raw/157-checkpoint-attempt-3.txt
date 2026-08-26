@@ -1,0 +1,5 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 checkpoint task-2/participant/proposal-workspace "task-2 transform round 3 before destructive cleanup" --direct
+EXIT: 0
+DURATION_SECONDS: 1.359
+
+[888cdcf4] 2026-08-25 13:19:00  Context 'task-2/participant/proposal-workspace'  'task-2 transform round 3 before destructive cleanup'

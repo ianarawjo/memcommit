@@ -1,0 +1,12 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple trace practice/source:4a8036d1 --limit 4
+
+EXIT
+0
+
+OUTPUT
+TRACE · practice/source
+MEMORY · 4a8036d1-67a5-497a-b287-98d1302d4619
+LINEAGE · 5 events · 2 components
+ATTENTION · 0 limits
+DETAILS · mem trace 4a8036d1-67a5-497a-b287-98d1302d4619 --context practice/source --plain

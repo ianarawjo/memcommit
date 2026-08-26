@@ -1,0 +1,9 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple eval semantic status --ledger-dir /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/a-is-apple/admin-eval-ledger
+
+EXIT
+0
+
+OUTPUT
+No semantic evaluation campaigns yet.
+Run: mem eval semantic run ambiguity

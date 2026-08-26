@@ -1,0 +1,28 @@
+{
+  "sequence": 25,
+  "count_before": 269,
+  "count_after": 270,
+  "delta": 1,
+  "new_attempt_uids": [
+    "774a5208-52ac-4cf3-965b-1a713f682ec6"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "774a5208-52ac-4cf3-965b-1a713f682ec6",
+      "operation": "eval",
+      "command": "mem eval semantic run ambiguity --provider codex_chatgpt --model gpt-5.6-sol --reasoning none --pipeline v2 --corpus calibration --runs 1 --case single-none-main-entrance-hours --ledger-dir /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/admin-eval-ledger",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:12:42.904854+00:00",
+      "completed_at": "2026-08-25T18:12:47.737497+00:00",
+      "elapsed_seconds": 4.832428375011659,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

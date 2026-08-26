@@ -1,0 +1,37 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker help 'How do I inspect where I am and what the current Context contains?'
+
+STDIN
+<none>
+
+EXIT
+0
+
+WALL_SECONDS
+4.910417
+
+PRE_IDENTITY
+{"current_context": "audit/ticker/admin-v2-scratch", "current_context_uid": "482549cc-f61f-4262-909d-67bd9c5d5364", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+IMMEDIATE_POST_IDENTITY
+{"current_context": "audit/ticker/admin-v2-scratch", "current_context_uid": "482549cc-f61f-4262-909d-67bd9c5d5364", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+COMMAND_ATTEMPT_DELTA
+{"count_after": 271, "count_before": 270, "delta": 1, "new_attempt_uids": ["dc242ebe-8bd2-4fb2-8217-ac2c7900210c"], "records": [{"command": "mem help 'How do I inspect where I am and what the current Context contains?'", "completed_at": "2026-08-25T18:12:52.693276+00:00", "details": {}, "elapsed_seconds": 3.6106505419884343, "failure": null, "operation": "help", "outcome": null, "started_at": "2026-08-25T18:12:49.082428+00:00", "status": "COMPLETED", "terminal": {"stdin_tty": true, "stdout_tty": false}, "uid": "dc242ebe-8bd2-4fb2-8217-ac2c7900210c", "version": 3}], "sequence": 26}
+
+STDOUT
+mem status ┬ Show the current Context's inventory, first five direct Memories, relationships, and
+           │ latest checkpoints.
+           └ WHEN · Getting oriented to what the current Context contains, how it is connected, and
+                    which operations were recently applied.
+
+mem pwd ┬ Print the current canonical Context name without loading its contents.
+        └ WHEN · Confirming the active Context in a script or terminal.
+
+mem list ┬ List a Context's direct items—Memories, Memory references, query views, and embedded
+         │ Contexts—and its readable child Contexts. Use -r to recursively include items from
+         │ descendant and embedded Contexts; ls is the compact alias.
+         └ WHEN · Inspecting the structure and direct contents of a Context.
+
+
+STDERR

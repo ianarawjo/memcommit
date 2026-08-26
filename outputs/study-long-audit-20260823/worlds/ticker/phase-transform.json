@@ -1,0 +1,1861 @@
+{
+  "schema_version": 1,
+  "study": "study-long-audit-20260823",
+  "world": "ticker",
+  "phase": "transform",
+  "world_goal": "Transform, verify, and maintain reusable synthetic ticker rules for legal suffixes, punctuation, numerals, and share classes inside recoverable ticker scratch.",
+  "execution_boundary": {
+    "launcher": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli",
+    "shared_current": "practice",
+    "worker_changed_current": false,
+    "code_or_tests_changed": false,
+    "physical_snapshot": "/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code",
+    "tui": "One Review attempt used a verified 180x52 color PTY."
+  },
+  "bootstrap": {
+    "excluded": true,
+    "created": [
+      "audit/ticker/transform-scratch/source",
+      "audit/ticker/transform-scratch/criteria",
+      "audit/ticker/transform-scratch/result",
+      "audit/ticker/transform-scratch/archive"
+    ]
+  },
+  "total_attempts": 120,
+  "coverage": {
+    "atomize": 5,
+    "audit": 5,
+    "checkpoint": 5,
+    "check-conformance": 5,
+    "clear": 5,
+    "delete": 5,
+    "diff": 5,
+    "distill": 5,
+    "elaborate": 5,
+    "resolve": 5,
+    "dedup": 5,
+    "dedun": 5,
+    "forget": 5,
+    "ground": 5,
+    "impact": 5,
+    "meld": 5,
+    "merge": 5,
+    "rationale": 5,
+    "revert": 5,
+    "review": 5,
+    "sever": 5,
+    "trace": 5,
+    "translate": 5,
+    "update": 5
+  },
+  "operations": {
+    "atomize": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; early ticker scratch",
+          "entry_route": "direct frozen CLI",
+          "target_route": "canonical local Context",
+          "scope": "exact/direct",
+          "input_provenance": "world fixture",
+          "consumer": "next round",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli atomize audit/ticker/transform-scratch/source",
+          "exit": 1,
+          "actual": "Whole frame: four context-dependent chunks UNCERTAIN; no mutation.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "Context plus prior UID/receipt",
+          "scope": "prior-output/exact",
+          "input_provenance": "prior operation output",
+          "consumer": "downstream review",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli atomize --context audit/ticker/transform-scratch/source --memory d1eb7878",
+          "exit": 0,
+          "actual": "Saved exact-fragment analysis da7329d4; REQUIRES CONTEXT.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit recursive/session route",
+          "scope": "recursive, multiple, or replay",
+          "input_provenance": "mid-state accumulated output",
+          "consumer": "recovery",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli atomize audit/ticker/transform-scratch/source --memory d1eb7878",
+          "exit": 0,
+          "actual": "Resumed exact analysis without provider call.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "empty/stale/protected route",
+          "scope": "empty/stale/recovery",
+          "input_provenance": "deliberate boundary fixture",
+          "consumer": "safe continuation",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli atomize --context audit/ticker/transform-scratch/result --memory deadbeef",
+          "exit": 1,
+          "actual": "Rejected missing exact Memory safely.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; late ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "late exact or TUI route",
+          "scope": "late-state/exact",
+          "input_provenance": "late accumulated state",
+          "consumer": "final verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli atomize --context audit/ticker/transform-scratch/source --memory e2ed2f20",
+          "exit": 0,
+          "actual": "Saved atomic KEEP analysis 842f92b1; no mutation.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        }
+      ]
+    },
+    "audit": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; early ticker scratch",
+          "entry_route": "direct frozen CLI",
+          "target_route": "canonical local Context",
+          "scope": "exact/direct",
+          "input_provenance": "world fixture",
+          "consumer": "next round",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli audit audit/ticker/examples --snapshot",
+          "exit": 0,
+          "actual": "Session dd711b19: 0/13 ambiguities over a complete frame containing visible context-dependent chunks.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "Context plus prior UID/receipt",
+          "scope": "prior-output/exact",
+          "input_provenance": "prior operation output",
+          "consumer": "downstream review",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli audit audit/ticker/transform-scratch/source --against audit/ticker/transform-scratch/criteria --snapshot",
+          "exit": 1,
+          "actual": "25s decoder failure: not every target Memory accounted for; no partial result.",
+          "defect_ids": [
+            "TICK-XFORM-005"
+          ],
+          "cost": "manual reread or workaround required"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit recursive/session route",
+          "scope": "recursive, multiple, or replay",
+          "input_provenance": "mid-state accumulated output",
+          "consumer": "recovery",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli audit audit/ticker/transform-scratch/source --select",
+          "exit": 1,
+          "actual": "Rejected explicit Context plus interactive selection.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "empty/stale/protected route",
+          "scope": "empty/stale/recovery",
+          "input_provenance": "deliberate boundary fixture",
+          "consumer": "safe continuation",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli audit audit/ticker/transform-scratch/missing",
+          "exit": 1,
+          "actual": "Rejected nonexistent Context.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; late ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "late exact or TUI route",
+          "scope": "late-state/exact",
+          "input_provenance": "late accumulated state",
+          "consumer": "final verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli audit audit/ticker/transform-scratch/source --snapshot",
+          "exit": 0,
+          "actual": "Session 15fbeba0 again reported 0/13 ambiguities over the complete frame containing five visible context-dependent chunks.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        }
+      ]
+    },
+    "checkpoint": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; early ticker scratch",
+          "entry_route": "direct frozen CLI",
+          "target_route": "canonical local Context",
+          "scope": "exact/direct",
+          "input_provenance": "world fixture",
+          "consumer": "next round",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli checkpoint audit/ticker/transform-scratch/source \"round 1 imported ticker examples\" --direct",
+          "exit": 0,
+          "actual": "Saved 1731491b.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "Context plus prior UID/receipt",
+          "scope": "prior-output/exact",
+          "input_provenance": "prior operation output",
+          "consumer": "downstream review",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli checkpoint audit/ticker/transform-scratch/result \"round 2 before clearing distilled output\" --direct",
+          "exit": 0,
+          "actual": "Saved 3e67d7d6.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit recursive/session route",
+          "scope": "recursive, multiple, or replay",
+          "input_provenance": "mid-state accumulated output",
+          "consumer": "recovery",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli checkpoint audit/ticker/transform-scratch \"round 3 subtree safety\" --recursive",
+          "exit": 0,
+          "actual": "Saved five-Context set dd0fe5f5.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "empty/stale/protected route",
+          "scope": "empty/stale/recovery",
+          "input_provenance": "deliberate boundary fixture",
+          "consumer": "safe continuation",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli checkpoint audit/ticker/transform-scratch/archive \"round 4 before ticker archive clear\" --direct",
+          "exit": 0,
+          "actual": "Saved 973c33d6.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; late ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "late exact or TUI route",
+          "scope": "late-state/exact",
+          "input_provenance": "late accumulated state",
+          "consumer": "final verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli checkpoint audit/ticker/transform-scratch \"round 5 final subtree safety\" --recursive",
+          "exit": 0,
+          "actual": "Saved five-Context set d87c8362.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        }
+      ]
+    },
+    "check-conformance": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; early ticker scratch",
+          "entry_route": "direct frozen CLI",
+          "target_route": "canonical local Context",
+          "scope": "exact/direct",
+          "input_provenance": "world fixture",
+          "consumer": "next round",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli check-conformance audit/ticker/transform-scratch/source --against audit/ticker/transform-scratch/criteria",
+          "exit": 1,
+          "actual": "Rejected empty Rules criteria.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "Context plus prior UID/receipt",
+          "scope": "prior-output/exact",
+          "input_provenance": "prior operation output",
+          "consumer": "downstream review",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli check-conformance audit/ticker/transform-scratch/source --against audit/ticker/transform-scratch/criteria",
+          "exit": 0,
+          "actual": "Flagged incomplete punctuation/share-class fragments.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit recursive/session route",
+          "scope": "recursive, multiple, or replay",
+          "input_provenance": "mid-state accumulated output",
+          "consumer": "recovery",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli check-conformance audit/ticker/transform-scratch/result --against audit/ticker/transform-scratch/criteria",
+          "exit": 0,
+          "actual": "Reported many insufficiencies over prior output.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "empty/stale/protected route",
+          "scope": "empty/stale/recovery",
+          "input_provenance": "deliberate boundary fixture",
+          "consumer": "safe continuation",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli check-conformance audit/ticker/transform-scratch/result --against audit/ticker/rules",
+          "exit": 1,
+          "actual": "Rejected invalid criteria frame.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; late ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "late exact or TUI route",
+          "scope": "late-state/exact",
+          "input_provenance": "late accumulated state",
+          "consumer": "final verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli check-conformance audit/ticker/transform-scratch/source --against \"text:Every ticker example must include its input subject and complete output.\" --plain",
+          "exit": 2,
+          "actual": "Rejected unsupported --plain.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        }
+      ]
+    },
+    "clear": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; early ticker scratch",
+          "entry_route": "direct frozen CLI",
+          "target_route": "canonical local Context",
+          "scope": "exact/direct",
+          "input_provenance": "world fixture",
+          "consumer": "next round",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli clear audit/ticker/transform-scratch/archive",
+          "exit": 0,
+          "actual": "Already empty.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "Context plus prior UID/receipt",
+          "scope": "prior-output/exact",
+          "input_provenance": "prior operation output",
+          "consumer": "downstream review",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli clear audit/ticker/transform-scratch/result",
+          "exit": 0,
+          "actual": "Removed seven checkpointed rules.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit recursive/session route",
+          "scope": "recursive, multiple, or replay",
+          "input_provenance": "mid-state accumulated output",
+          "consumer": "recovery",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli clear audit/ticker/transform-scratch/result",
+          "exit": 0,
+          "actual": "Removed six checkpointed later rules.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "empty/stale/protected route",
+          "scope": "empty/stale/recovery",
+          "input_provenance": "deliberate boundary fixture",
+          "consumer": "safe continuation",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli clear audit/ticker/transform-scratch/archive",
+          "exit": 0,
+          "actual": "Already empty after checkpoint.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; late ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "late exact or TUI route",
+          "scope": "late-state/exact",
+          "input_provenance": "late accumulated state",
+          "consumer": "final verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli clear audit/ticker/transform-scratch/result --recursive --yes",
+          "exit": 2,
+          "actual": "Rejected unsupported --yes; no deletion.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        }
+      ]
+    },
+    "delete": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; early ticker scratch",
+          "entry_route": "direct frozen CLI",
+          "target_route": "canonical local Context",
+          "scope": "exact/direct",
+          "input_provenance": "world fixture",
+          "consumer": "next round",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli delete deadbeef --context audit/ticker/transform-scratch/archive",
+          "exit": 1,
+          "actual": "Missing direct item; unchanged.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "Context plus prior UID/receipt",
+          "scope": "prior-output/exact",
+          "input_provenance": "prior operation output",
+          "consumer": "downstream review",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli delete deadbeef --context audit/ticker/transform-scratch/result",
+          "exit": 1,
+          "actual": "Missing direct item in nonempty target.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit recursive/session route",
+          "scope": "recursive, multiple, or replay",
+          "input_provenance": "mid-state accumulated output",
+          "consumer": "recovery",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli delete deadbeef-stale --context audit/ticker/transform-scratch/archive",
+          "exit": 1,
+          "actual": "Stale selector rejected.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "empty/stale/protected route",
+          "scope": "empty/stale/recovery",
+          "input_provenance": "deliberate boundary fixture",
+          "consumer": "safe continuation",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli delete deadbeef-after-clear --context audit/ticker/transform-scratch/archive",
+          "exit": 1,
+          "actual": "Post-clear missing selector rejected.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; late ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "late exact or TUI route",
+          "scope": "late-state/exact",
+          "input_provenance": "late accumulated state",
+          "consumer": "final verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli delete deadbeef-final --context audit/ticker/transform-scratch/archive",
+          "exit": 1,
+          "actual": "Late missing selector rejected.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        }
+      ]
+    },
+    "diff": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; early ticker scratch",
+          "entry_route": "direct frozen CLI",
+          "target_route": "canonical local Context",
+          "scope": "exact/direct",
+          "input_provenance": "world fixture",
+          "consumer": "next round",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli diff --stat",
+          "exit": 1,
+          "actual": "Showed unrelated task-3 applied Update.",
+          "defect_ids": [
+            "TICK-XFORM-002"
+          ],
+          "cost": "manual reread or workaround required"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "Context plus prior UID/receipt",
+          "scope": "prior-output/exact",
+          "input_provenance": "prior operation output",
+          "consumer": "downstream review",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli diff --raw",
+          "exit": 1,
+          "actual": "Again showed stale task-3 Update.",
+          "defect_ids": [
+            "TICK-XFORM-002"
+          ],
+          "cost": "manual reread or workaround required"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit recursive/session route",
+          "scope": "recursive, multiple, or replay",
+          "input_provenance": "mid-state accumulated output",
+          "consumer": "recovery",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli diff --verbose",
+          "exit": 0,
+          "actual": "Printed unrelated task-3 Update with full IDs.",
+          "defect_ids": [
+            "TICK-XFORM-002"
+          ],
+          "cost": "manual reread or workaround required"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "empty/stale/protected route",
+          "scope": "empty/stale/recovery",
+          "input_provenance": "deliberate boundary fixture",
+          "consumer": "safe continuation",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli diff --raw --stat",
+          "exit": 2,
+          "actual": "Rejected conflicting render flags.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; late ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "late exact or TUI route",
+          "scope": "late-state/exact",
+          "input_provenance": "late accumulated state",
+          "consumer": "final verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli diff audit/ticker/transform-scratch/source audit/ticker/transform-scratch/result",
+          "exit": 2,
+          "actual": "Rejected second positional endpoint.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        }
+      ]
+    },
+    "distill": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; early ticker scratch",
+          "entry_route": "direct frozen CLI",
+          "target_route": "canonical local Context",
+          "scope": "exact/direct",
+          "input_provenance": "world fixture",
+          "consumer": "next round",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli distill --from audit/ticker/transform-scratch/source --to audit/ticker/transform-scratch/result --goal \"Extract reusable synthetic ticker rules\" --direct --plain",
+          "exit": 0,
+          "actual": "Added seven rules; receipt abad4c93.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "Context plus prior UID/receipt",
+          "scope": "prior-output/exact",
+          "input_provenance": "prior operation output",
+          "consumer": "downstream review",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli distill --from audit/ticker/transform-scratch/source --to audit/ticker/transform-scratch/result --goal \"Keep complete ticker rules\" --direct --plain",
+          "exit": 0,
+          "actual": "Added six rules; receipt 2ea47453.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit recursive/session route",
+          "scope": "recursive, multiple, or replay",
+          "input_provenance": "mid-state accumulated output",
+          "consumer": "recovery",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli distill --from audit/ticker/transform-scratch/source --to audit/ticker/transform-scratch/result --direct --recursive --plain",
+          "exit": 1,
+          "actual": "Rejected direct plus recursive.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "empty/stale/protected route",
+          "scope": "empty/stale/recovery",
+          "input_provenance": "deliberate boundary fixture",
+          "consumer": "safe continuation",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli distill --ground missing-ground --to audit/ticker/transform-scratch/result --plain",
+          "exit": 1,
+          "actual": "Rejected missing Ground.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; late ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "late exact or TUI route",
+          "scope": "late-state/exact",
+          "input_provenance": "late accumulated state",
+          "consumer": "final verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli distill audit/ticker/transform-scratch/missing audit/ticker/transform-scratch/result --goal \"Recover one ticker rule\" --direct --plain",
+          "exit": 2,
+          "actual": "Rejected second positional Context.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        }
+      ]
+    },
+    "elaborate": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; early ticker scratch",
+          "entry_route": "direct frozen CLI",
+          "target_route": "canonical local Context",
+          "scope": "exact/direct",
+          "input_provenance": "world fixture",
+          "consumer": "next round",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli elaborate --goal \"Define complete ticker transformations\" --to audit/ticker/transform-scratch/criteria --number 2 --plain",
+          "exit": 0,
+          "actual": "Added Rules 843217ca and afa02a84.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "Context plus prior UID/receipt",
+          "scope": "prior-output/exact",
+          "input_provenance": "prior operation output",
+          "consumer": "downstream review",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli elaborate --from audit/ticker/transform-scratch/criteria --to audit/ticker/transform-scratch/result --as rules --number 2 --plain",
+          "exit": 1,
+          "actual": "Rejected mixed MemoryRef/embed Source.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit recursive/session route",
+          "scope": "recursive, multiple, or replay",
+          "input_provenance": "mid-state accumulated output",
+          "consumer": "recovery",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli elaborate --goal \"ticker examples\" --rule \"each example is standalone\" --to audit/ticker/transform-scratch/result --plain",
+          "exit": 1,
+          "actual": "Rejected combined source forms.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "empty/stale/protected route",
+          "scope": "empty/stale/recovery",
+          "input_provenance": "deliberate boundary fixture",
+          "consumer": "safe continuation",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli elaborate --ground missing-ground --from-goal --to audit/ticker/transform-scratch/result --plain",
+          "exit": 1,
+          "actual": "Rejected missing Ground.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; late ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "late exact or TUI route",
+          "scope": "late-state/exact",
+          "input_provenance": "late accumulated state",
+          "consumer": "final verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli elaborate \"Create ticker examples\" audit/ticker/transform-scratch/result --number 0 --plain",
+          "exit": 2,
+          "actual": "Rejected number 0.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        }
+      ]
+    },
+    "resolve": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; early ticker scratch",
+          "entry_route": "direct frozen CLI",
+          "target_route": "canonical local Context",
+          "scope": "exact/direct",
+          "input_provenance": "world fixture",
+          "consumer": "next round",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli resolve audit/ticker/transform-scratch/source --plain",
+          "exit": 0,
+          "actual": "FIT YES / NO CHANGE on fragmented source.",
+          "defect_ids": [
+            "TICK-XFORM-008"
+          ],
+          "cost": "manual reread or workaround required"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "Context plus prior UID/receipt",
+          "scope": "prior-output/exact",
+          "input_provenance": "prior operation output",
+          "consumer": "downstream review",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli resolve audit/ticker/transform-scratch/source --memory d1eb7878 --guidance \"Recover complete example\" --plain",
+          "exit": 0,
+          "actual": "Exact fragment still FIT YES / NO CHANGE.",
+          "defect_ids": [
+            "TICK-XFORM-008"
+          ],
+          "cost": "manual reread or workaround required"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit recursive/session route",
+          "scope": "recursive, multiple, or replay",
+          "input_provenance": "mid-state accumulated output",
+          "consumer": "recovery",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli resolve audit/ticker/transform-scratch/source --candidate deadbeef --revision 1 --apply",
+          "exit": 1,
+          "actual": "Rejected stale candidate safely.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "empty/stale/protected route",
+          "scope": "empty/stale/recovery",
+          "input_provenance": "deliberate boundary fixture",
+          "consumer": "safe continuation",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli resolve audit/ticker/transform-scratch/result --plain",
+          "exit": 1,
+          "actual": "Rejected fewer than two Memories.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; late ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "late exact or TUI route",
+          "scope": "late-state/exact",
+          "input_provenance": "late accumulated state",
+          "consumer": "final verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli resolve audit/ticker/transform-scratch/source --guidance \"Keep complete claims; delete irrecoverable fragments.\" --allow-delete --plain",
+          "exit": 0,
+          "actual": "Again FIT YES / NO CHANGE despite fragments.",
+          "defect_ids": [
+            "TICK-XFORM-008"
+          ],
+          "cost": "manual reread or workaround required"
+        }
+      ]
+    },
+    "dedup": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; early ticker scratch",
+          "entry_route": "direct frozen CLI",
+          "target_route": "canonical local Context",
+          "scope": "exact/direct",
+          "input_provenance": "world fixture",
+          "consumer": "next round",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedup audit/ticker/transform-scratch/source --direct",
+          "exit": 0,
+          "actual": "No duplicates.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "Context plus prior UID/receipt",
+          "scope": "prior-output/exact",
+          "input_provenance": "prior operation output",
+          "consumer": "downstream review",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedup audit/ticker/transform-scratch/source",
+          "exit": 0,
+          "actual": "No duplicates in accumulated source.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit recursive/session route",
+          "scope": "recursive, multiple, or replay",
+          "input_provenance": "mid-state accumulated output",
+          "consumer": "recovery",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedup audit/ticker/transform-scratch --recursive",
+          "exit": 0,
+          "actual": "No subtree duplicate groups.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "empty/stale/protected route",
+          "scope": "empty/stale/recovery",
+          "input_provenance": "deliberate boundary fixture",
+          "consumer": "safe continuation",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedup audit/ticker/transform-scratch/archive",
+          "exit": 0,
+          "actual": "No archived duplicates.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; late ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "late exact or TUI route",
+          "scope": "late-state/exact",
+          "input_provenance": "late accumulated state",
+          "consumer": "final verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedup audit/ticker/transform-scratch/archive --recursive --plain",
+          "exit": 2,
+          "actual": "Rejected unsupported --plain.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        }
+      ]
+    },
+    "dedun": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; early ticker scratch",
+          "entry_route": "direct frozen CLI",
+          "target_route": "canonical local Context",
+          "scope": "exact/direct",
+          "input_provenance": "world fixture",
+          "consumer": "next round",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedun audit/ticker/transform-scratch/source --direct --plain",
+          "exit": 1,
+          "actual": "Rejected discovery options with exact replay.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "Context plus prior UID/receipt",
+          "scope": "prior-output/exact",
+          "input_provenance": "prior operation output",
+          "consumer": "downstream review",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedun audit/ticker/transform-scratch/source --direct",
+          "exit": 0,
+          "actual": "No redundancies.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit recursive/session route",
+          "scope": "recursive, multiple, or replay",
+          "input_provenance": "mid-state accumulated output",
+          "consumer": "recovery",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedun audit/ticker/transform-scratch/source --recursive",
+          "exit": 2,
+          "actual": "Rejected recursive form.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "empty/stale/protected route",
+          "scope": "empty/stale/recovery",
+          "input_provenance": "deliberate boundary fixture",
+          "consumer": "safe continuation",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedun audit/ticker/transform-scratch/archive",
+          "exit": 0,
+          "actual": "No redundancies.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; late ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "late exact or TUI route",
+          "scope": "late-state/exact",
+          "input_provenance": "late accumulated state",
+          "consumer": "final verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli dedun audit/ticker/transform-scratch/result --direct",
+          "exit": 0,
+          "actual": "No result redundancies.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        }
+      ]
+    },
+    "forget": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; early ticker scratch",
+          "entry_route": "direct frozen CLI",
+          "target_route": "canonical local Context",
+          "scope": "exact/direct",
+          "input_provenance": "world fixture",
+          "consumer": "next round",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli forget \"Remove obsolete ticker drafts\" --context audit/ticker/transform-scratch/archive",
+          "exit": 0,
+          "actual": "Empty archive; no change.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "Context plus prior UID/receipt",
+          "scope": "prior-output/exact",
+          "input_provenance": "prior operation output",
+          "consumer": "downstream review",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli forget \"Remove only incomplete fragments\" --context audit/ticker/transform-scratch/archive",
+          "exit": 0,
+          "actual": "Empty archive; no change.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit recursive/session route",
+          "scope": "recursive, multiple, or replay",
+          "input_provenance": "mid-state accumulated output",
+          "consumer": "recovery",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli forget \"Remove nothing\" --context audit/ticker/transform-scratch/result",
+          "exit": 0,
+          "actual": "Empty result; no change.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "empty/stale/protected route",
+          "scope": "empty/stale/recovery",
+          "input_provenance": "deliberate boundary fixture",
+          "consumer": "safe continuation",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli forget \"Remove no verified tests\" --context audit/ticker/transform-scratch/result",
+          "exit": 0,
+          "actual": "Protected result; no change.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; late ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "late exact or TUI route",
+          "scope": "late-state/exact",
+          "input_provenance": "late accumulated state",
+          "consumer": "final verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli forget \"Remove incomplete examples\" --context audit/ticker/transform-scratch/result --plain",
+          "exit": 2,
+          "actual": "Rejected unsupported --plain.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        }
+      ]
+    },
+    "ground": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; early ticker scratch",
+          "entry_route": "direct frozen CLI",
+          "target_route": "canonical local Context",
+          "scope": "exact/direct",
+          "input_provenance": "world fixture",
+          "consumer": "next round",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli ground \"Plan a reusable synthetic ticker corpus without creating it.\"",
+          "exit": 0,
+          "actual": "Stable unsaved draft; no Context read/create.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "Context plus prior UID/receipt",
+          "scope": "prior-output/exact",
+          "input_provenance": "prior operation output",
+          "consumer": "downstream review",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli ground \"Cover legal suffix and punctuation examples without creating anything.\"",
+          "exit": 0,
+          "actual": "Unsaved draft; no current read.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit recursive/session route",
+          "scope": "recursive, multiple, or replay",
+          "input_provenance": "mid-state accumulated output",
+          "consumer": "recovery",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli ground \"Plan numeral-preserving examples; do not create a Ground.\"",
+          "exit": 0,
+          "actual": "Unsaved draft plus TTY continuation hint.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "empty/stale/protected route",
+          "scope": "empty/stale/recovery",
+          "input_provenance": "deliberate boundary fixture",
+          "consumer": "safe continuation",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli ground \"Plan share-class rules without creating a Ground.\"",
+          "exit": 0,
+          "actual": "Unsaved late-state draft.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; late ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "late exact or TUI route",
+          "scope": "late-state/exact",
+          "input_provenance": "late accumulated state",
+          "consumer": "final verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli ground \"Design a synthetic company ticker rulebook covering legal suffixes, punctuation, numerals, and share classes without creating anything yet.\"",
+          "exit": 0,
+          "actual": "Confirmed no Context, checkpoint, or Ground creation.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        }
+      ]
+    },
+    "impact": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; early ticker scratch",
+          "entry_route": "direct frozen CLI",
+          "target_route": "canonical local Context",
+          "scope": "exact/direct",
+          "input_provenance": "world fixture",
+          "consumer": "next round",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli impact --from audit/ticker/examples --to audit/ticker/transform-scratch/result --direct",
+          "exit": 0,
+          "actual": "No change but dumped full source frame and hashes.",
+          "defect_ids": [
+            "TICK-XFORM-004"
+          ],
+          "cost": "manual reread or workaround required"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "Context plus prior UID/receipt",
+          "scope": "prior-output/exact",
+          "input_provenance": "prior operation output",
+          "consumer": "downstream review",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli impact --from audit/ticker/transform-scratch/source --to audit/ticker/transform-scratch/result --recursive",
+          "exit": 0,
+          "actual": "Repeated large full-frame/hash report for no change.",
+          "defect_ids": [
+            "TICK-XFORM-004"
+          ],
+          "cost": "manual reread or workaround required"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit recursive/session route",
+          "scope": "recursive, multiple, or replay",
+          "input_provenance": "mid-state accumulated output",
+          "consumer": "recovery",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli impact --sessions",
+          "exit": 1,
+          "actual": "Non-TTY rejected interactive session picker.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "empty/stale/protected route",
+          "scope": "empty/stale/recovery",
+          "input_provenance": "deliberate boundary fixture",
+          "consumer": "safe continuation",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli impact meld --session df8a46bb-ef7c-4e17-b400-dc245c88610a",
+          "exit": 0,
+          "actual": "One unresolved Meld relation; Apply handoff.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; late ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "late exact or TUI route",
+          "scope": "late-state/exact",
+          "input_provenance": "late accumulated state",
+          "consumer": "final verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli impact --session c95cae09-85db-45c1-b9f8-55e1f7cadfcb --plain",
+          "exit": 2,
+          "actual": "Rejected missing operation subcommand.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        }
+      ]
+    },
+    "meld": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; early ticker scratch",
+          "entry_route": "direct frozen CLI",
+          "target_route": "canonical local Context",
+          "scope": "exact/direct",
+          "input_provenance": "world fixture",
+          "consumer": "next round",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli meld audit/ticker/transform-scratch/source audit/ticker/transform-scratch/result --defer-all",
+          "exit": 1,
+          "actual": "Rejected defer before initial analysis.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "Context plus prior UID/receipt",
+          "scope": "prior-output/exact",
+          "input_provenance": "prior operation output",
+          "consumer": "downstream review",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli meld audit/ticker/transform-scratch/source audit/ticker/transform-scratch/result",
+          "exit": 0,
+          "actual": "Saved df8a46bb with one required decision.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit recursive/session route",
+          "scope": "recursive, multiple, or replay",
+          "input_provenance": "mid-state accumulated output",
+          "consumer": "recovery",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli meld --sessions",
+          "exit": 1,
+          "actual": "Non-TTY rejected session picker.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "empty/stale/protected route",
+          "scope": "empty/stale/recovery",
+          "input_provenance": "deliberate boundary fixture",
+          "consumer": "safe continuation",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli meld audit/ticker/transform-scratch/source audit/ticker/transform-scratch/result --defer-all",
+          "exit": 1,
+          "actual": "Rejected empty result route.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; late ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "late exact or TUI route",
+          "scope": "late-state/exact",
+          "input_provenance": "late accumulated state",
+          "consumer": "final verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli meld \"Combine fragmented ticker examples into complete standalone claims\" --plain",
+          "exit": 2,
+          "actual": "Rejected unsupported --plain.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        }
+      ]
+    },
+    "merge": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; early ticker scratch",
+          "entry_route": "direct frozen CLI",
+          "target_route": "canonical local Context",
+          "scope": "exact/direct",
+          "input_provenance": "world fixture",
+          "consumer": "next round",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli merge audit/ticker/examples audit/ticker/transform-scratch/source --direct --keep-target-all",
+          "exit": 0,
+          "actual": "NEW 14; aggregate receipt lacked UID map.",
+          "defect_ids": [
+            "TICK-XFORM-003"
+          ],
+          "cost": "manual reread or workaround required"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "Context plus prior UID/receipt",
+          "scope": "prior-output/exact",
+          "input_provenance": "prior operation output",
+          "consumer": "downstream review",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli merge audit/ticker/rules audit/ticker/transform-scratch/criteria --direct --keep-target-all",
+          "exit": 0,
+          "actual": "NEW 9 mixed items.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit recursive/session route",
+          "scope": "recursive, multiple, or replay",
+          "input_provenance": "mid-state accumulated output",
+          "consumer": "recovery",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli merge audit/ticker/examples audit/ticker/transform-scratch/source --direct --keep-target-all",
+          "exit": 0,
+          "actual": "Idempotent NEW 0 / ALREADY 14.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "empty/stale/protected route",
+          "scope": "empty/stale/recovery",
+          "input_provenance": "deliberate boundary fixture",
+          "consumer": "safe continuation",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli merge audit/ticker/tests audit/ticker/transform-scratch/archive --direct --keep-target-all",
+          "exit": 0,
+          "actual": "NEW 5 archived items.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; late ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "late exact or TUI route",
+          "scope": "late-state/exact",
+          "input_provenance": "late accumulated state",
+          "consumer": "final verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli merge audit/ticker/rules audit/ticker/transform-scratch/source --direct --keep-target-all",
+          "exit": 0,
+          "actual": "Late NEW 9; no per-item UID handoff.",
+          "defect_ids": [
+            "TICK-XFORM-003"
+          ],
+          "cost": "manual reread or workaround required"
+        }
+      ]
+    },
+    "rationale": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; early ticker scratch",
+          "entry_route": "direct frozen CLI",
+          "target_route": "canonical local Context",
+          "scope": "exact/direct",
+          "input_provenance": "world fixture",
+          "consumer": "next round",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli rationale audit/ticker/transform-scratch/source:9951d8e3 --json",
+          "exit": 1,
+          "actual": "Old pre-Merge UID failed.",
+          "defect_ids": [
+            "TICK-XFORM-003"
+          ],
+          "cost": "manual reread or workaround required"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "Context plus prior UID/receipt",
+          "scope": "prior-output/exact",
+          "input_provenance": "prior operation output",
+          "consumer": "downstream review",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli rationale audit/ticker/transform-scratch/source:d1eb7878 --json",
+          "exit": 0,
+          "actual": "Returned Merge provenance.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit recursive/session route",
+          "scope": "recursive, multiple, or replay",
+          "input_provenance": "mid-state accumulated output",
+          "consumer": "recovery",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli rationale audit/ticker/transform-scratch/source:d1eb7878 --limit 20 --unit words",
+          "exit": 0,
+          "actual": "Bounded rationale.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "empty/stale/protected route",
+          "scope": "empty/stale/recovery",
+          "input_provenance": "deliberate boundary fixture",
+          "consumer": "safe continuation",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli rationale audit/ticker/transform-scratch/source:d1eb7878 --verbose --limit 60",
+          "exit": 0,
+          "actual": "Verbose reconstructed evidence.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; late ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "late exact or TUI route",
+          "scope": "late-state/exact",
+          "input_provenance": "late accumulated state",
+          "consumer": "final verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli rationale audit/ticker/transform-scratch/source:e2ed2f20 --format json --max-chars 80",
+          "exit": 2,
+          "actual": "Rejected unsupported --format.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        }
+      ]
+    },
+    "revert": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; early ticker scratch",
+          "entry_route": "direct frozen CLI",
+          "target_route": "canonical local Context",
+          "scope": "exact/direct",
+          "input_provenance": "world fixture",
+          "consumer": "next round",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli revert \"round 1 imported ticker examples\" --context audit/ticker/transform-scratch/source",
+          "exit": 1,
+          "actual": "Description rejected; UID required.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "Context plus prior UID/receipt",
+          "scope": "prior-output/exact",
+          "input_provenance": "prior operation output",
+          "consumer": "downstream review",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli revert 1731491b --context audit/ticker/transform-scratch/source",
+          "exit": 0,
+          "actual": "Exact checkpoint; no content delta.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit recursive/session route",
+          "scope": "recursive, multiple, or replay",
+          "input_provenance": "mid-state accumulated output",
+          "consumer": "recovery",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli revert deadbeef --context audit/ticker/transform-scratch/archive",
+          "exit": 1,
+          "actual": "Missing checkpoint rejected.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "empty/stale/protected route",
+          "scope": "empty/stale/recovery",
+          "input_provenance": "deliberate boundary fixture",
+          "consumer": "safe continuation",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli revert 3e67d7d6 --context audit/ticker/transform-scratch/result",
+          "exit": 0,
+          "actual": "Restored seven result Memories.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; late ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "late exact or TUI route",
+          "scope": "late-state/exact",
+          "input_provenance": "late accumulated state",
+          "consumer": "final verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli revert 973c33d6 --context audit/ticker/transform-scratch/archive --keep",
+          "exit": 0,
+          "actual": "Removed 4 Memories + 1 embed; recovery 678075bd.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        }
+      ]
+    },
+    "review": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; early ticker scratch",
+          "entry_route": "direct frozen CLI",
+          "target_route": "canonical local Context",
+          "scope": "exact/direct",
+          "input_provenance": "world fixture",
+          "consumer": "next round",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli review audit --context audit/ticker/examples --snapshot",
+          "exit": 1,
+          "actual": "Session ID required.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "Context plus prior UID/receipt",
+          "scope": "prior-output/exact",
+          "input_provenance": "prior operation output",
+          "consumer": "downstream review",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli review audit --session dd711b19-ec42-4be0-9456-50f9f8444667 --snapshot",
+          "exit": 0,
+          "actual": "Full Audit showed the frozen context-dependent chunks and the saved 0/13 ambiguity result.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit recursive/session route",
+          "scope": "recursive, multiple, or replay",
+          "input_provenance": "mid-state accumulated output",
+          "consumer": "recovery",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli review distill --session abad4c93-8ca8-455e-aa3e-9519a7184e70 --snapshot",
+          "exit": 0,
+          "actual": "Distill evidence retained consecutive fragments.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "empty/stale/protected route",
+          "scope": "empty/stale/recovery",
+          "input_provenance": "deliberate boundary fixture",
+          "consumer": "safe continuation",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli review meld --session df8a46bb-ef7c-4e17-b400-dc245c88610a --snapshot",
+          "exit": 1,
+          "actual": "Incomplete Meld rejected.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; late ticker state",
+          "entry_route": "actual 180x52 color PTY",
+          "target_route": "late exact or TUI route",
+          "scope": "late-state/exact",
+          "input_provenance": "late accumulated state",
+          "consumer": "final verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli review audit --session dd711b19-ec42-4be0-9456-50f9f8444667",
+          "exit": 0,
+          "actual": "180x52 color TUI showed the frozen chunks and contract-conforming zero-finding result; Escape closed.",
+          "defect_ids": [],
+          "cost": "180x52 color PTY; one screen; one Escape"
+        }
+      ]
+    },
+    "sever": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; early ticker scratch",
+          "entry_route": "direct frozen CLI",
+          "target_route": "canonical local Context",
+          "scope": "exact/direct",
+          "input_provenance": "world fixture",
+          "consumer": "next round",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli sever audit/ticker/transform-scratch/source audit/ticker/transform-scratch/criteria audit/ticker/transform-scratch/result --direct",
+          "exit": 1,
+          "actual": "Existing result rejected.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "Context plus prior UID/receipt",
+          "scope": "prior-output/exact",
+          "input_provenance": "prior operation output",
+          "consumer": "downstream review",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli sever audit/ticker/transform-scratch/source audit/ticker/transform-scratch/criteria --direct",
+          "exit": 1,
+          "actual": "Mixed live refs/embed criterion rejected.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit recursive/session route",
+          "scope": "recursive, multiple, or replay",
+          "input_provenance": "mid-state accumulated output",
+          "consumer": "recovery",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli sever --resume c95cae09-85db-45c1-b9f8-55e1f7cadfcb",
+          "exit": 0,
+          "actual": "Resumed prepared review without Apply.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "empty/stale/protected route",
+          "scope": "empty/stale/recovery",
+          "input_provenance": "deliberate boundary fixture",
+          "consumer": "safe continuation",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli sever audit/ticker/transform-scratch/source audit/ticker/transform-scratch/result --direct",
+          "exit": 0,
+          "actual": "Prepared READY self-save c95cae09.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; late ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "late exact or TUI route",
+          "scope": "late-state/exact",
+          "input_provenance": "late accumulated state",
+          "consumer": "final verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli sever --resume c95cae09-85db-45c1-b9f8-55e1f7cadfcb --accept",
+          "exit": 0,
+          "actual": "Applied KEEP 8 / FORGET 5; checkpoint 0c73620d.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        }
+      ]
+    },
+    "trace": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; early ticker scratch",
+          "entry_route": "direct frozen CLI",
+          "target_route": "canonical local Context",
+          "scope": "exact/direct",
+          "input_provenance": "world fixture",
+          "consumer": "next round",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli trace audit/ticker/transform-scratch/source:9951d8e3",
+          "exit": 1,
+          "actual": "Old pre-Merge UID failed.",
+          "defect_ids": [
+            "TICK-XFORM-003"
+          ],
+          "cost": "manual reread or workaround required"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "Context plus prior UID/receipt",
+          "scope": "prior-output/exact",
+          "input_provenance": "prior operation output",
+          "consumer": "downstream review",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli trace audit/ticker/transform-scratch/source:d1eb7878 --json",
+          "exit": 0,
+          "actual": "Structured Merge provenance.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit recursive/session route",
+          "scope": "recursive, multiple, or replay",
+          "input_provenance": "mid-state accumulated output",
+          "consumer": "recovery",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli trace audit/ticker/transform-scratch/source:d1eb7878 --limit 1",
+          "exit": 0,
+          "actual": "One bounded event.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "empty/stale/protected route",
+          "scope": "empty/stale/recovery",
+          "input_provenance": "deliberate boundary fixture",
+          "consumer": "safe continuation",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli trace audit/ticker/transform-scratch/source:d1eb7878 --verbose",
+          "exit": 0,
+          "actual": "Verbose history plus Atomize evidence.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; late ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "late exact or TUI route",
+          "scope": "late-state/exact",
+          "input_provenance": "late accumulated state",
+          "consumer": "final verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli trace audit/ticker/transform-scratch/source:e2ed2f20 --all --json",
+          "exit": 0,
+          "actual": "One MERGED_IN event and digest.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        }
+      ]
+    },
+    "translate": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; early ticker scratch",
+          "entry_route": "direct frozen CLI",
+          "target_route": "canonical local Context",
+          "scope": "exact/direct",
+          "input_provenance": "world fixture",
+          "consumer": "next round",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli translate audit/ticker/transform-scratch/source:9951d8e3 --to Korean",
+          "exit": 1,
+          "actual": "Old pre-Merge UID failed.",
+          "defect_ids": [
+            "TICK-XFORM-003"
+          ],
+          "cost": "manual reread or workaround required"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "Context plus prior UID/receipt",
+          "scope": "prior-output/exact",
+          "input_provenance": "prior operation output",
+          "consumer": "downstream review",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli translate audit/ticker/transform-scratch/source:d1eb7878 --to French",
+          "exit": 0,
+          "actual": "Saved French fragment view.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit recursive/session route",
+          "scope": "recursive, multiple, or replay",
+          "input_provenance": "mid-state accumulated output",
+          "consumer": "recovery",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli translate audit/ticker/transform-scratch/source:d1eb7878 --to French",
+          "exit": 0,
+          "actual": "Reused cached view.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "empty/stale/protected route",
+          "scope": "empty/stale/recovery",
+          "input_provenance": "deliberate boundary fixture",
+          "consumer": "safe continuation",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli translate audit/ticker/transform-scratch/source:d1eb7878 --to \"Korean formal ticker register\"",
+          "exit": 0,
+          "actual": "Saved formal Korean view.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; late ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "late exact or TUI route",
+          "scope": "late-state/exact",
+          "input_provenance": "late accumulated state",
+          "consumer": "final verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli translate audit/ticker/transform-scratch/source:e2ed2f20 --language French --refresh",
+          "exit": 2,
+          "actual": "Rejected --language; route is --to.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        }
+      ]
+    },
+    "update": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round 1; early ticker scratch",
+          "entry_route": "direct frozen CLI",
+          "target_route": "canonical local Context",
+          "scope": "exact/direct",
+          "input_provenance": "world fixture",
+          "consumer": "next round",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli update audit/ticker/examples audit/ticker/transform-scratch/result --direct",
+          "exit": 1,
+          "actual": "Resolved to another world's applied Update.",
+          "defect_ids": [
+            "TICK-XFORM-002"
+          ],
+          "cost": "manual reread or workaround required"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round 2; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "Context plus prior UID/receipt",
+          "scope": "prior-output/exact",
+          "input_provenance": "prior operation output",
+          "consumer": "downstream review",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli update audit/ticker/transform-scratch/source audit/ticker/transform-scratch/result --recursive",
+          "exit": 1,
+          "actual": "Again selected incompatible shared update state.",
+          "defect_ids": [
+            "TICK-XFORM-002"
+          ],
+          "cost": "manual reread or workaround required"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round 3; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "explicit recursive/session route",
+          "scope": "recursive, multiple, or replay",
+          "input_provenance": "mid-state accumulated output",
+          "consumer": "recovery",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli update audit/ticker/transform-scratch/source audit/ticker/transform-scratch/source --direct",
+          "exit": 1,
+          "actual": "Same-endpoint request rejected safely.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round 4; accumulated ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "empty/stale/protected route",
+          "scope": "empty/stale/recovery",
+          "input_provenance": "deliberate boundary fixture",
+          "consumer": "safe continuation",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli update audit/ticker/transform-scratch/source audit/ticker/transform-scratch/result --direct --recursive",
+          "exit": 2,
+          "actual": "Conflicting scope flags rejected.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round 5; late ticker state",
+          "entry_route": "direct frozen CLI",
+          "target_route": "late exact or TUI route",
+          "scope": "late-state/exact",
+          "input_provenance": "late accumulated state",
+          "consumer": "final verification",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli update audit/ticker/transform-scratch/source audit/ticker/transform-scratch/result --replace-stage --direct",
+          "exit": 0,
+          "actual": "Fresh route: NO CHANGE; receipt ea0fbe78.",
+          "defect_ids": [],
+          "cost": "no unusual interaction cost"
+        }
+      ]
+    }
+  }
+}

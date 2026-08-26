@@ -1,0 +1,28 @@
+{
+  "sequence": 98,
+  "count_before": 342,
+  "count_after": 343,
+  "delta": 1,
+  "new_attempt_uids": [
+    "5a7009e1-a7d9-416f-9f86-01a94e30dcd7"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "5a7009e1-a7d9-416f-9f86-01a94e30dcd7",
+      "operation": "unlock",
+      "command": "mem unlock --profile",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:17:19.606905+00:00",
+      "completed_at": "2026-08-25T18:17:19.621907+00:00",
+      "elapsed_seconds": 0.014794624992646277,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

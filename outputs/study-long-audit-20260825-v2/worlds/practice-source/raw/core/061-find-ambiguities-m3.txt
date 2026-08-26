@@ -1,0 +1,21 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source find-ambiguities practice
+
+EXIT
+0
+
+WALL_SECONDS
+9.047038
+
+STDOUT
+Find Ambiguities · practice · 1/6 direct memories flagged
+
+  AMBIGUITY 1/1
+  [0a614986] ATOMIC CANDIDATE: if a shorter fixed limit applies, aim to remove approximately 20-30% from redundant or unnecessary material.
+  Reading 1: If a shorter explicit length limit applies, reduce redundant or unnecessary material by approximately 20–30%, while treating the fixed limit as controlling.
+  Reading 2: If a shorter explicit length limit applies, target a final text that is approximately 20–30% shorter by removing redundant or unnecessary material.
+  Reason: The phrase “remove approximately 20–30%” can ordinarily refer either to the amount of redundant material removed or to the overall reduction in text length. The first reading is more natural because it directly modifies “from redundant or unnecessary material,” but the second remains possible; clarification would make the editing target more precise and could change how much text is cut.
+  Question: Should the 20–30% target measure redundant material removed or the overall reduction in text length?
+
+
+STDERR

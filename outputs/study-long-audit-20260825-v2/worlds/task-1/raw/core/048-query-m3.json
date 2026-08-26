@@ -1,0 +1,11 @@
+{
+  "sequence": 48,
+  "operation": "query",
+  "attempt": 3,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 query 'What public building-access guidance must change for general users, authorized students, staff, and accessible travel?' --context task-1/campus-wiki/building-access --direct",
+  "exit": 0,
+  "wall_seconds": 10.773294,
+  "pre_target_digest": "b2e984164504b31efeba57079df40a85f617c5c4c6d77a3bf3df4b329b7ae2f0",
+  "post_target_digest": "689492fad109a63cbd8e316948199ae7c865bd9a84a406ce7c38066a31533caf",
+  "raw_output": "raw/core/048-query-m3.txt"
+}

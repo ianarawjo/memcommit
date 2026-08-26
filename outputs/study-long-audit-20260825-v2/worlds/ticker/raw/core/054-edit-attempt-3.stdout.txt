@@ -1,0 +1,4 @@
+Edited 1 memories in 'task-2/participant/proposal-workspace':
+  [28120a2d]
+  - Numeral rule: preserve digits 0-9, including leading zeroes, in their original positions while removing spaces and punctuation.
+  + Numeral rule: preserve digits 0-9, including leading zeroes, in original positions while removing spaces and punctuation.

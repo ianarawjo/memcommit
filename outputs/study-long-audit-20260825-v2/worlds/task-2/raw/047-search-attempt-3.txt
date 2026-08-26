@@ -1,0 +1,13 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 search "How should an exact participant target and a justified target range coexist?" --context task-2/advisor1/methods --context task-2/advisor2/methods --limit 8
+EXIT: 0
+DURATION_SECONDS: 7.949
+
+task-2/advisor2/methods
+[memory 8a49f598] Use a justified minimum-to-maximum target range when confirmations can change, and tie the minimum and maximum to different workload and budget cases.
+[memory 251a4b3c] Readers cannot assess a target range unless both bounds have a stated consequence for schedule, workload, or cost.
+[memory 7ba672db] A bounded range preserves uncertainty honestly but makes the final workload and budget less certain than one fixed target.
+[memory 3ff9ec36] Show how session count and facilitator time change at the minimum and maximum bounds.
+
+task-2/advisor1/methods
+[memory df53a41c] Commit to one exact target number of participants so the schedule, workload, and budget can be checked against the same quantity.
+[memory a7c3a123] Do not use a wide range merely to postpone choosing the quantity that the rest of the proposal must support.

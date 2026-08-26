@@ -1,0 +1,9 @@
+
+Proposed split of [f665e16a] in Context 'task-3' → 4 chunks (method=sentences, break_on=',')
+────────────────────────────────────────────────────────
+   1  Numeral example: Route 66,
+   2  LLC becomes ROUTE66 after removing the comma,
+   3  space,
+   4  and LLC suffix while preserving 66.
+────────────────────────────────────────────────────────
+Done — 4 memories added in 'task-3'.

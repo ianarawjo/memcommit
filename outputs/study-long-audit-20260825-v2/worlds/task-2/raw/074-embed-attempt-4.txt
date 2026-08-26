@@ -1,0 +1,5 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 embed task-2/proposal-submission-guidelines --into task-2/participant
+EXIT: 1
+DURATION_SECONDS: 1.323
+
+Error: Grant c768ce3e does not allow embed access to 'task-2/proposal-submission-guidelines'.

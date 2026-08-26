@@ -1,0 +1,11 @@
+{
+  "sequence": 66,
+  "operation": "show",
+  "attempt": 4,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 show 84196dc5",
+  "exit": 0,
+  "wall_seconds": 1.503552,
+  "pre_target_digest": "36085ce311d10c4e01e513f0a546818e72c919b73712c0e779b23c7694c758f2",
+  "post_target_digest": "326977c2016c8291040c129d4499ec7b7642a1c33023067d13c2091ba18fc648",
+  "raw_output": "raw/core/066-show-m4.txt"
+}

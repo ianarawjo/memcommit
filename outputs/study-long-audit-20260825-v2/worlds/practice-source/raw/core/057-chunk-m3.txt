@@ -1,0 +1,20 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source chunk practice:187fb3ae --method sentences
+
+EXIT
+0
+
+WALL_SECONDS
+1.416181
+
+STDOUT
+
+Proposed split of [187fb3ae] in Context 'practice' → 2 chunks (method=sentences)
+────────────────────────────────────────────────────────
+   1  ATOMIC CANDIDATE: if a shorter fixed limit applies, aim to r
+   2  Preserve all intended points plus every claim's original str
+────────────────────────────────────────────────────────
+Done — 2 memories added in 'practice'.
+
+
+STDERR

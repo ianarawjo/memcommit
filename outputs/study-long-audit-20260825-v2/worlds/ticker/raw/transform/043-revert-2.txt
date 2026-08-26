@@ -1,0 +1,28 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker revert a9a9ae56 --context task-3/local/guardrails --keep
+
+EXIT
+0
+
+OUTPUT
+Reverted Context: task-3/local/guardrails
+Restored state recorded by: manual checkpoint
+Action detail: ticker transform round 2 pre-destructive recovery
+Affected Context: task-3/local/guardrails
+Affected content: 4 Memories added, 10 Embedded contexts added, 1 direct item added, 2 Memories removed
+  - [memory 93126130] "When constructing a ticker from a company name, remove punctuation and spaces from the base name; also remove the stated legal-entity suffix where applicable."
+  - [memory 51968038] "Punctuation removal does not remove digits: preserve digits, including leading zeroes, in their original positions while removing spaces and punctuation."
+  + [context 900828d4] "task-3/local/guardrails/purpose-and-scope"
+  + [context 755575aa] "task-3/local/guardrails/privacy-and-others"
+  + [context 136dface] "task-3/local/guardrails/evidence-and-uncertainty"
+  + [context 37cd6139] "task-3/local/guardrails/approval-and-delivery"
+  + [context 9fd65004] "task-3/local/guardrails/retention-and-revocation"
+  + [context cfdffebb] "task-3/local/guardrails/recipient-and-authority"
+  + [context d0f950bf] "task-3/local/guardrails/minimization-and-redaction"
+  + [context 34f4d62a] "task-3/local/guardrails/channel-and-format"
+  + [context 62523a5e] "task-3/local/guardrails/downstream-use"
+  + [context 731a18ea] "task-3/local/guardrails/audit-and-recovery"
+  ... 5 more affected direct items not shown
+Restored checkpoint: [a9a9ae56] (2026-08-25 13:24)
+Undo command: mem undo
+Exact recovery checkpoint: mem revert 5ae23f9d --discard-newer

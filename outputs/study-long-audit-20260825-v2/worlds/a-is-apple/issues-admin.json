@@ -1,0 +1,58 @@
+{
+  "world": "a-is-apple",
+  "phase": "admin",
+  "issues": [
+    {
+      "id": "AIA-V2-A-RENAME-COMMAND-STACK-01",
+      "title": "Renaming a Branch/checkout target corrupts the global Undo/Redo stack",
+      "expected": "After a successful Rename of a Context created by Branch or checkout -b, the retained producer unit remains reconstructible under the new canonical name, so later Undo/Redo can host-read and restore its exact UID/member set.",
+      "actual": "Rename#1, #2, and #3 succeeded. Thereafter every global stack build and each counted Undo/Redo control failed closed with `Branch checkpoint owner is outside its creation membership.` The renamed checkpoint owner uses the new Context name while the branch receipt's creation membership retains the old target name.",
+      "workaround": "Do not Rename a Branch/checkout-created Context while its producer remains in command history. Use explicit per-Context checkpoints/revert for recovery; there is no global Undo workaround once this mismatch exists.",
+      "severity": "HIGH",
+      "classification": "SAFETY_RECOVERY_GLOBAL_STACK_CORRUPTION_FAIL_CLOSED",
+      "reproduction": "3 successful renames followed by 8/8 Undo/Redo failures across rounds 2-5",
+      "evidence": [
+        "worlds/a-is-apple/raw/admin/004-rename-1.txt",
+        "worlds/a-is-apple/raw/admin/024-undo-2.txt",
+        "worlds/a-is-apple/raw/admin/025-redo-2.txt",
+        "worlds/a-is-apple/raw/admin/046-undo-3.txt",
+        "worlds/a-is-apple/raw/admin/047-redo-3.txt",
+        "worlds/a-is-apple/raw/admin/083-undo-4.txt",
+        "worlds/a-is-apple/raw/admin/085-undo-5.txt",
+        "worlds/a-is-apple/raw/admin/086-redo-5.txt",
+        "worlds/a-is-apple/host_reads/admin/stack-pre-undo-2-seq-024.json"
+      ]
+    }
+  ],
+  "limitations": [
+    {
+      "id": "AIA-V2-A-TUI-PREBUFFER-CAPTURE",
+      "classification": "AUDIT_HARNESS_INTERACTION_LIMITATION",
+      "actual": "Help --emit-selection and Branch M5 received scripted keys before the frozen launcher completed. They remained open until terminated and are recorded as exit 124; their actual PTY streams/screens are retained. Other nine TUI attempts completed, including the final Switch restoration to practice.",
+      "evidence": [
+        "worlds/a-is-apple/raw/admin/068-help-4.txt",
+        "worlds/a-is-apple/raw/admin/101-branch-5.txt",
+        "worlds/a-is-apple/screenshots/admin/068-help-4-pty.bin",
+        "worlds/a-is-apple/screenshots/admin/101-branch-5-pty.bin"
+      ]
+    },
+    {
+      "id": "AIA-V2-A-LOCK-M3-SELECTOR",
+      "classification": "AUDIT_INPUT_ASSUMPTION_LIMITATION",
+      "actual": "Lock/Unlock M3 used the Source Memory prefix f1c940a1 after branching; Branch remapped Memory UIDs, so both exact-Memory commands safely rejected the missing target instead of exercising a successful exact lock pair.",
+      "evidence": [
+        "worlds/a-is-apple/raw/admin/048-lock-3.txt",
+        "worlds/a-is-apple/raw/admin/049-unlock-3.txt"
+      ]
+    },
+    {
+      "id": "AIA-V2-A-LOG-M3-POST-RENAME",
+      "classification": "AUDIT_ORDERING_LIMITATION",
+      "actual": "Log M3 named the pre-Rename checkout target `.../co3` after Rename M3 had already moved it to `.../renamed-3`, so the exact-Memory history route safely failed at Context resolution instead of rendering a five-row Memory log.",
+      "evidence": [
+        "worlds/a-is-apple/raw/admin/050-rename-3.txt",
+        "worlds/a-is-apple/raw/admin/058-log-3.txt"
+      ]
+    }
+  ]
+}

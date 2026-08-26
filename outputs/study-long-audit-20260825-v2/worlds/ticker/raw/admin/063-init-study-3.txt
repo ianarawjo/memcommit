@@ -1,0 +1,30 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker init-study admin-v2-ticker-missing-baseline --scenario legacy-v1 --from-profile admin-v2-missing-baseline
+
+STDIN
+<none>
+
+EXIT
+2
+
+WALL_SECONDS
+1.347913
+
+PRE_IDENTITY
+{"current_context": "task-2/participant", "current_context_uid": "0e19f3b1-4107-48ab-9186-8773e48b812d", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+IMMEDIATE_POST_IDENTITY
+{"current_context": "task-2/participant", "current_context_uid": "0e19f3b1-4107-48ab-9186-8773e48b812d", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+COMMAND_ATTEMPT_DELTA
+{"count_after": 308, "count_before": 307, "delta": 1, "new_attempt_uids": ["a7c3bf10-b89a-425e-8124-fa809c6d2138"], "records": [{"command": "mem init-study admin-v2-ticker-missing-baseline --scenario legacy-v1 --from-profile admin-v2-missing-baseline", "completed_at": "2026-08-25T18:16:22.642342+00:00", "details": {}, "elapsed_seconds": 0.007939040995552205, "failure": {"exit_code": 2, "kind": "NoSuchOption"}, "operation": "init-study", "outcome": null, "started_at": "2026-08-25T18:16:22.634242+00:00", "status": "FAILED", "terminal": {"stdin_tty": true, "stdout_tty": false}, "uid": "a7c3bf10-b89a-425e-8124-fa809c6d2138", "version": 3}], "sequence": 63}
+
+STDOUT
+
+
+STDERR
+Usage: run_isolated_mem.py init-study [OPTIONS] [NAME]
+Try 'run_isolated_mem.py init-study -h' for help.
+╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ No such option: --scenario                                                   │
+╰──────────────────────────────────────────────────────────────────────────────╯

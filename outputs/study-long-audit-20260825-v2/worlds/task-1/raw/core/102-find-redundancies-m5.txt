@@ -1,0 +1,13 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 find-redundancies task-1/campus-wiki/shop-updates --evidence-json
+
+EXIT
+0
+
+WALL_SECONDS
+6.507151
+
+STDOUT
+
+
+STDERR

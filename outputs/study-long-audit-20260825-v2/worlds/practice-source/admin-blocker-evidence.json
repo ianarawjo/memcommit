@@ -1,0 +1,106 @@
+{
+  "schema_version": 2,
+  "world": "practice-source",
+  "phase": "admin",
+  "decision_gate_after_counted_sequence": 37,
+  "additional_mem_calls_after_gate": 0,
+  "blocked_next_call": {
+    "operation": "undo",
+    "attempt": 2,
+    "planned_argv": "undo --keep",
+    "reason_not_called": "The protocol-required exact undo-stack top UID/member assertion could not complete."
+  },
+  "triggering_host_read": {
+    "label": "round2 immediately before Undo2 --keep",
+    "call_site": "worlds/practice-source/run_admin_audit.py:514",
+    "stack_builder_call_site": "worlds/practice-source/run_admin_audit.py:168",
+    "error_type": "memcommit.command_history.CommandHistoryError",
+    "error": "Branch checkpoint owner is outside its creation membership.",
+    "frozen_source_point": "/Users/KimMunyeong/.codex/audit-snapshots/memcommit-six-world-v2-20260825-code/memcommit/command_history.py:779",
+    "frozen_source_sha256": "6f8b963a4589911a15222d7ed0e05829ec31ab855a27ef44f3bae84ec0c41ef9",
+    "traceback_frames": [
+      "run_admin_audit.py:642 main -> round_2",
+      "run_admin_audit.py:514 round_2 -> stack_snapshot",
+      "run_admin_audit.py:168 stack_snapshot -> build_command_stacks",
+      "command_history.py:1036 build_command_stacks -> _context_parts",
+      "command_history.py:779 _context_parts -> CommandHistoryError"
+    ]
+  },
+  "causal_checkpoint": {
+    "context_uid": "e8aad7e1-d1e0-4f56-81bf-4b7250bc1a23",
+    "current_owner_name": "practice/audit-workspace/admin-v2-scratch/renamed-1",
+    "checkpoint_uid": "56a482b9-eafe-4cbb-9b79-ef2ff69b0153",
+    "checkpoint_command": "branch",
+    "branch_unit_uid": "branch:96234a7c-3a46-455a-a7e1-cadcf908ffa8",
+    "receipt_target_name": "practice/audit-workspace/admin-v2-scratch/b1",
+    "receipt_target_uid": "e8aad7e1-d1e0-4f56-81bf-4b7250bc1a23",
+    "owner_uid_matches_receipt": true,
+    "owner_name_matches_receipt": false,
+    "rename_sequence": 6,
+    "rename_pre_target_digest": "1146340acb366e23ae6d8be2397a7b4f61d2078b86641065f7890607eb26bcc2",
+    "rename_post_target_digest": "ab727024794c9b7cd60e8bf1ea527aff196417469bf2a26ed3a762642f812747",
+    "rename_pre_context_tree_digest": "c7a67dbb30d17667b058968bced6de8b5dfed6066a4af4fc9d809fb15a4ef9ce",
+    "rename_post_context_tree_digest": "3c3a319b4364c2e44756b65efc501698d7cd7fcc245b9c41ec73f878821088b4"
+  },
+  "sequence_37_branch_receipt": {
+    "command_exit": 0,
+    "operation_uid": "f5beb417-13ee-45e9-b9e3-95b230c9d420",
+    "unit_uid_from_exact_receipt": "branch:f5beb417-13ee-45e9-b9e3-95b230c9d420",
+    "stack_top_verification": "BLOCKED_BY_EARLIER_RENAMED_CHECKPOINT",
+    "source_root": "practice-source-v2-transform",
+    "target_root": "practice/audit-workspace/admin-v2-scratch/b2-tree",
+    "pre_target_digest": "c5729d5e433185bbb61fa2c148326d659e77c3fbfa94c8d564c2ddbc4f897c07",
+    "post_target_digest": "180f37191d514bd3f44162142fc108e114e34d4674b61475cb6e0c97b2630762",
+    "pre_context_tree_digest": "00d5b0d2703d34aaf73837335c8506587dc7189695b61d7aac62b2043eda9586",
+    "post_context_tree_digest": "e8852ddc4154ced5997cd30a816b10f2f653159b013f71e00fa2bbffc297f04e",
+    "member_set_from_exact_receipt": [
+      {
+        "context_uid": "8fbc83d4-3c3f-49fe-b735-f63e068d7b47",
+        "context_name": "practice/audit-workspace/admin-v2-scratch/b2-tree",
+        "checkpoint_uid": "21f34fea-7685-4353-a66d-337bf07d9146"
+      },
+      {
+        "context_uid": "532149eb-a80b-4d50-b5d4-4b4c7477992c",
+        "context_name": "practice/audit-workspace/admin-v2-scratch/b2-tree/contexts",
+        "checkpoint_uid": "12282a3b-ce02-4f0d-9d7d-ee39b618a8cd"
+      },
+      {
+        "context_uid": "d470144f-61b8-4a7a-88a3-cb6fe6788224",
+        "context_name": "practice/audit-workspace/admin-v2-scratch/b2-tree/examples",
+        "checkpoint_uid": "1b299e7e-bee9-4539-b86c-24da00780123"
+      },
+      {
+        "context_uid": "7bb30fd2-1a68-40dd-b824-0647c8386073",
+        "context_name": "practice/audit-workspace/admin-v2-scratch/b2-tree/goals",
+        "checkpoint_uid": "5ec59ed6-e4b4-40c3-99a3-65acc08611d4"
+      },
+      {
+        "context_uid": "6f0b9de7-87aa-4b4b-88cd-47116622567d",
+        "context_name": "practice/audit-workspace/admin-v2-scratch/b2-tree/relations",
+        "checkpoint_uid": "4e6d99a0-e6c3-45fb-81da-7e6f771ccb92"
+      },
+      {
+        "context_uid": "b6492e53-fb93-40fd-95d2-90df1b889151",
+        "context_name": "practice/audit-workspace/admin-v2-scratch/b2-tree/rules",
+        "checkpoint_uid": "191b16e5-6677-4cbd-8695-02da8d11fd84"
+      }
+    ],
+    "all_member_owner_uid_and_name_pairs_match_receipt": true,
+    "post_call_identity_assertion": "PASS",
+    "practice_source_sha256": "3c7872e184194b45295052ec4efe40c9088f1b962e12fd4d30cfd2aeed7de212"
+  },
+  "reviewed_resolution": {
+    "counted_sequence": 38,
+    "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source rename practice/audit-workspace/admin-v2-scratch/renamed-1 practice/audit-workspace/admin-v2-scratch/b1 --force",
+    "exit": 0,
+    "raw_owner_in_membership": true,
+    "recovered_b2_top_unit_uid": "branch:f5beb417-13ee-45e9-b9e3-95b230c9d420",
+    "recovered_b2_member_count": 6,
+    "undo2_sequence": 39,
+    "undo2_exit": 0,
+    "redo2_sequence": 40,
+    "redo2_exit": 0,
+    "result": "PASS"
+  },
+  "safety_conclusion": "The reviewed inverse rename restored the exact old owner membership and permitted verified Undo2/Redo2. This recovery does not make copying Branch-bearing Source history into a new Branch safe; that separate boundary is recorded in admin-blocker-2-evidence.json."
+}

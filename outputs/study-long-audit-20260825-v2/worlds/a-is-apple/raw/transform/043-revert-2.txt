@@ -1,0 +1,28 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple revert d1394ef6 --context practice --keep
+
+EXIT
+0
+
+OUTPUT
+Reverted Context: practice
+Restored state recorded by: manual checkpoint
+Action detail: a-is-apple transform round 2 recovery before destructive scratch trials
+Affected Context: practice
+Affected content: 14 Memories added, 4 Memory refs added, 2 Embedded contexts added, 20 Memories removed, 1 Memory ref removed
+  - [memory b2f0d5a2] "Treat b as unresolved as blueberry; do not collapse the evidence into a single settled mapping."
+  - [memory a2306093] "a is apple."
+  - [memory da5068ed] "When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division."
+  - [memory b2017a25] "If I later ask for polishing, preserve the overall strucutre and citation-needed markers, and change only wording that causes a problem."
+  - [memory f4d49cc0] "When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um... for example, use distribute, not divide, when material is absorbed into two parts."
+  - [memory d266af5a] "If a passage is supposed to make four points, keep all four while removing parts that are too redundent and stating repeated content only once."
+  - [memory 039f1af0] "When the draft has to fit a shorter fixed limit, aim to cut around 20–30% from redundant or unnecessary material."
+  - [memory 2559237b] "But don't shorten sentences so aggressively that a claim sounds more categorical; keep enough wording to preserve its original strength and conditions."
+  - [memory 0e539b06] "If the next idea is merely related and does not broaden the scope, don't use More broadly; use In relation to this or another accurate connector without adding a new claim merely to make two paragraphs connect."
+  - [memory b88a2e26] "For any titlle about interaction with AI agent memory, keep the exact terminology and intended words: use interaction and management and AI agent memory rather than agent memory."
+  - [memory 5270d53f] "By default, format a document title in sentence case rather than title case. An explicitly named style guide may override only that capitalization default; always keep for whenever it is part of the intended wording."
+  - [memory 2774a7f9] "If titles of works use quotation marks in some places and italics in others, make them consistently italic throughout the document by default; an explicitly named style guide may override only this work-title format."
+  ... 29 more affected direct items not shown
+Restored checkpoint: [d1394ef6] (2026-08-25 13:14)
+Undo command: mem undo
+Exact recovery checkpoint: mem revert 528c3ff6 --discard-newer

@@ -1,0 +1,11 @@
+{
+  "sequence": 68,
+  "operation": "search",
+  "attempt": 4,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 search 'ordinary parking access that the construction closes' --context task-1/campus-wiki/temporary-parking --direct --limit 3",
+  "exit": 0,
+  "wall_seconds": 6.364378,
+  "pre_target_digest": "45694d30c61f417ed621e45a4e432506839562dbd846828cab924ef558e9c707",
+  "post_target_digest": "8528bc09348c86581c8cf141ad7ba74c5e1e7e5b409f0823503eea975a12a4de",
+  "raw_output": "raw/core/068-search-m4.txt"
+}

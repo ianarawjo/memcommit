@@ -1,0 +1,8 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 compare task-2/advisor1/budget task-2/advisor2/budget --snapshot
+EXIT: 0
+DURATION_SECONDS: 6.134
+
+Compare · task-2/advisor1/budget ↔ task-2/advisor2/budget
+
+COMPARISON
+  Both frames require the total and major cost categories in the main text but diverge on where the estimate basis belongs: one keeps each major cost’s quantity and unit rate beside its activity for same-page verification, while the other moves those details and assumptions to a referenced table or appendix for easier revision and comparison.

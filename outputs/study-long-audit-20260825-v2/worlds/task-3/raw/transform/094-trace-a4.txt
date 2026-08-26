@@ -1,0 +1,19 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 trace task-3/local/guardrails/approval-and-delivery:96442184 --limit 6 --plain
+
+EXIT
+0
+
+OUTPUT
+TRACE · task-3/local/guardrails/approval-and-delivery
+[MEMORY 96442184] · 1 OPERATION · LATEST FIRST
+
+[current] [COMMAND 0] [MEMORY 96442184]  (current) · Current Context differs from the last reconstructable checkpoint state.
+  − ∅
+  + [96442184]@1 Show the user the actual recipient before transmission.
+
+ATTACHMENTS
+  none
+
+LIMITS
+  − The current Context contains changes that no retained checkpoint explains.

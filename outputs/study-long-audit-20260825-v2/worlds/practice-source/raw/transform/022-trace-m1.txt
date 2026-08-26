@@ -1,0 +1,33 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source trace practice/source:f3ef224d --plain --limit 5
+
+EXIT
+0
+
+WALL_SECONDS
+1.312240
+
+STDOUT
+TRACE · practice/source
+[MEMORY f3ef224d] · 3 OPERATIONS · LATEST FIRST
+
+[current] [COMMAND 2] [MEMORY f3ef224d]  (current) · Current Context differs from the last reconstructable checkpoint state.
+  − ∅
+  + [f3ef224d]@1 When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.
+
+[revert] [CHECKPOINT aba16e4b] [MEMORY 635c8904]  2026-08-25 13:14 · Pre-revert to [c30e6bd3] — revert here to undo
+  − [635c8904]@17 When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.
+  + ∅
+
+[merge] [CHECKPOINT d418975a] [MEMORIES 2]  2026-08-25 13:14 · practice/source → practice/description · Memory content unchanged
+  Source: [f3ef224d] When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.
+  Target: [635c8904] When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.
+
+ATTACHMENTS
+  none
+
+LIMITS
+  − The current Context contains changes that no retained checkpoint explains.
+
+
+STDERR

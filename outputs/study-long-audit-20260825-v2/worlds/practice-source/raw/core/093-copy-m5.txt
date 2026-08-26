@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source copy practice/source:4fe217eb --into practice
+
+EXIT
+0
+
+WALL_SECONDS
+1.440875
+
+STDOUT
+COPIED · 1 Memory → 'practice' · NEW UIDs · after [8517d6ae] at the end
+  'practice/source' [4fe217eb] → [9a7f919a]
+Checkpoint 'practice' [aef1ceef].
+
+
+STDERR

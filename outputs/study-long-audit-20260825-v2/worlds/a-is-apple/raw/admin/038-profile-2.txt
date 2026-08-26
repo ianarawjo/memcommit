@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple profile create admin-v2-a-is-apple-inactive
+
+EXIT
+0
+
+OUTPUT
+Created empty Profile 'admin-v2-a-is-apple-inactive'.
+Profile UID: d925a7c9-3c5f-4ba2-8b56-a4dbb048e5c6
+Store: /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/a-is-apple/profile-control/stores/d925a7c9-3c5f-4ba2-8b56-a4dbb048e5c6
+Contexts 0 owned + 0 granted · Memories 0 owned + 0 granted
+Active Profile unchanged: sixworld-v2-template
+Use it with: mem profile use admin-v2-a-is-apple-inactive
+Then create its first Context with: mem init CONTEXT

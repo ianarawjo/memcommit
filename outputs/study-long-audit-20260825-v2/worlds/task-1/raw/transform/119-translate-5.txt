@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 translate task-1/participant/construction-updates/shop-updates:37113bd0 --to German
+
+EXIT
+0
+
+OUTPUT
+
+Translation view: 'task-1/participant/construction-updates/shop-updates' → German
+  1 translated Memory
+────────────────────────────────────────────────────────────────
+[37113bd0] German · PROVIDER · UNREVIEWED
+  Zu campus-wiki/shop-updates hinzufügen: Der Geldautomat im ersten Stock des Hauptgebäudes ist während der Bauarbeiten außer Betrieb.
+────────────────────────────────────────────────────────────────
+Saved translation view.
+No Context or Memory changes; source Memory UIDs remain the anchors.

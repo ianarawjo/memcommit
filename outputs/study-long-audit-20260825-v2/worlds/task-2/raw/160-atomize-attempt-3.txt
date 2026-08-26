@@ -1,0 +1,5 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 atomize a9cd917a-5c65-4672-aae0-7ee0040d7094 --context task-2/participant/proposal-workspace
+EXIT: 2
+DURATION_SECONDS: 1.322
+
+Atomize error: Auto-typed Memory cannot be combined with --context; use CONTEXT:UID or --context CONTEXT --memory UID.

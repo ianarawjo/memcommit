@@ -1,0 +1,15 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple chunk practice:d2bf36b7 --method clauses --max-chars 45
+
+EXIT
+0
+
+OUTPUT
+
+Proposed split of [d2bf36b7] in Context 'practice' → 3 chunks (method=clauses, max_chars=45)
+────────────────────────────────────────────────────────
+   1  a maps to apple;
+   2  this edited duplicate retains the original
+   3  assertion.
+────────────────────────────────────────────────────────
+Done — 3 memories added in 'practice'.

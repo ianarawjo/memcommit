@@ -1,0 +1,7 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 compare task-3/local/personal-memory/2024/03:18d58666 task-3/local/personal-memory/2024/03:e6023aed --snapshot
+
+STDOUT
+
+STDERR
+Compare error: Compare requires two distinct Contexts.

@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source replace 'APPROVED ATOM' 'FINAL ATOM' --context practice/description
+
+EXIT
+0
+
+WALL_SECONDS
+1.478556
+
+STDOUT
+No matches. Nothing changed.
+
+
+STDERR

@@ -1,0 +1,26 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker import context participant/construction-updates/shop-updates --from-profile task-1 --as audit/ticker/admin-v2-scratch/import-direct --direct
+
+STDIN
+<none>
+
+EXIT
+1
+
+WALL_SECONDS
+1.298469
+
+PRE_IDENTITY
+{"current_context": "audit/ticker/admin-v2-scratch", "current_context_uid": "482549cc-f61f-4262-909d-67bd9c5d5364", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+IMMEDIATE_POST_IDENTITY
+{"current_context": "audit/ticker/admin-v2-scratch", "current_context_uid": "482549cc-f61f-4262-909d-67bd9c5d5364", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+COMMAND_ATTEMPT_DELTA
+{"count_after": 257, "count_before": 256, "delta": 1, "new_attempt_uids": ["e090cc47-4550-4aaf-996e-04be7d5c3795"], "records": [{"command": "mem import context participant/construction-updates/shop-updates --from-profile task-1 --as audit/ticker/admin-v2-scratch/import-direct --direct", "completed_at": "2026-08-25T18:12:23.125047+00:00", "details": {}, "elapsed_seconds": 0.04792708301101811, "failure": {"exit_code": 1, "kind": "Exit"}, "operation": "import", "outcome": null, "started_at": "2026-08-25T18:12:23.076963+00:00", "status": "FAILED", "terminal": {"stdin_tty": true, "stdout_tty": false}, "uid": "e090cc47-4550-4aaf-996e-04be7d5c3795", "version": 3}], "sequence": 12}
+
+STDOUT
+
+
+STDERR
+Error: Context identity [94dbac4b] already exists as 'task-1/participant/construction-updates/shop-updates' in the active Profile.

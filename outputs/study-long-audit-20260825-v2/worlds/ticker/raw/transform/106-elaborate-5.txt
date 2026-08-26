@@ -1,0 +1,12 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker elaborate 'Create only examples already supported by the ticker Source' task-3/local/guardrails --number 0 --plain
+
+EXIT
+2
+
+OUTPUT
+Usage: run_isolated_mem.py elaborate [OPTIONS]
+Try 'run_isolated_mem.py elaborate -h' for help.
+╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Invalid value for '--number' / '--n' / '-n': 0 is not in the range x>=1.     │
+╰──────────────────────────────────────────────────────────────────────────────╯

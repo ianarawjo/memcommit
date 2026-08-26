@@ -1,0 +1,20 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple find-conflicts practice/source
+
+EXIT
+0
+
+OUTPUT
+Find Conflicts · practice/source · 3/17 direct memories involved · 2/136 pairs flagged
+
+  CONFLICT 1/2
+  [4a8036d1] b is banana.
+  [c1cf9a92] b is boat.
+  Reason: The same mapping assigns b to two different objects, banana and boat, with no stated scope distinction.
+  Question: Does b mean banana or boat?
+
+  CONFLICT 2/2
+  [c1cf9a92] b is boat.
+  [be4139d0] b is banana;
+  Reason: The same mapping assigns b to boat in one memory and banana in the other; the punctuation difference does not alter the claims.
+  Question: Does b mean boat or banana?

@@ -1,0 +1,7 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 show task-3/local/personal-memory/2026/06:e682f0fd
+
+STDOUT
+[Memory task-3/local/personal-memory/2026/06:e682f0fd-e92f-566e-b1ec-1d5ebf091b60] When six family members gathered in a noisy indoor restaurant, the user asked several times for the person across from them to repeat what was said.
+
+STDERR

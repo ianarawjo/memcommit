@@ -1,0 +1,27 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source trace practice/source:b976766e --plain --limit 1
+
+EXIT
+0
+
+WALL_SECONDS
+1.452778
+
+STDOUT
+TRACE · practice/source
+[MEMORY b976766e] · 7 OPERATIONS · LATEST FIRST · SHOWING 1 OF 7
+
+[current] [COMMAND 6] [MEMORY b976766e]  (current) · Current Context differs from the last reconstructable checkpoint state.
+  − ∅
+  + [b976766e]@7 If the next idea is merely related and does not broaden the scope, don't use More broadly; use In relation to this or another accurate connector without adding a new claim merely to make two paragraphs connect.
+
+… 6 OLDER OPERATIONS HIDDEN · use --all or --limit N
+
+ATTACHMENTS
+  none
+
+LIMITS
+  − The current Context contains changes that no retained checkpoint explains.
+
+
+STDERR

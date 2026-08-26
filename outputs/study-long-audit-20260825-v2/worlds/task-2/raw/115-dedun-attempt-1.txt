@@ -1,0 +1,7 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 dedun task-2/participant/proposal-workspace --direct
+EXIT: 0
+DURATION_SECONDS: 8.049
+
+Dedun 'task-2/participant/proposal-workspace': absorbed 1 redundant direct item(s); kept 1 original UID(s).
+DUN COMPOSITION · 1 evidence link = 0 DUP / EXACT links + 1 SEMANTIC DUN link
+Checkpoint [7948580e] · review: mem review dedun --receipt 7948580e-e4fe-4764-be52-f9e70a25aa26 · recovery: mem undo

@@ -1,0 +1,39 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 provider
+
+STDIN
+<none>
+
+EXIT
+0
+
+WALL_SECONDS
+1.215063
+
+POST_CALL_IDENTITY_HOST_ASSERTION
+{"profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-3/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+STDOUT
+PROFILE PROVIDER ROUTES
+profile: sixworld-v2-template
+mode: study · locked
+contact_status: not_contacted
+policy_version: semantic-provider-policy-v2
+study_config: study-provider-config-v2-fast
+study_config_digest: b549e05b6930fdacbe9dbaec09543390840a2689cd4b4ef1fa6470ca71a5f1ca
+
+default:
+  codex_chatgpt · model gpt-5.6-sol · reasoning none · tier fast · timeout 600s
+operation_routes:
+  search            codex_chatgpt · model gpt-5.6-terra · reasoning low · tier fast · timeout 600s
+  query             codex_chatgpt · model gpt-5.6-sol · reasoning none · tier fast · timeout 600s
+  help              codex_chatgpt · model gpt-5.6-sol · reasoning none · tier fast · timeout 600s
+  forget            codex_chatgpt · model gpt-5.6-sol · reasoning none · tier fast · timeout 600s
+  compare_contexts  codex_chatgpt · model gpt-5.6-sol · reasoning none · tier fast · timeout 900s
+  meld_contexts     codex_chatgpt · model gpt-5.6-sol · reasoning none · tier fast · timeout 900s
+
+configure: unavailable in a Study Profile
+verify: mem provider probe [--operation OPERATION]
+
+
+STDERR

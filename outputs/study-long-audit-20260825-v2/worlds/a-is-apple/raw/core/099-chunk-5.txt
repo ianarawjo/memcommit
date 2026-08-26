@@ -1,0 +1,15 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple chunk practice:1765d4fd --method clauses --max-chars 48
+
+EXIT
+0
+
+OUTPUT
+
+Proposed split of [1765d4fd] in Context 'practice' → 3 chunks (method=clauses, max_chars=48)
+────────────────────────────────────────────────────────
+   1  Preferred set: a is apple; b is banana;
+   2  c is cedar;
+   3  unresolved alternatives remain explicit.
+────────────────────────────────────────────────────────
+Done — 3 memories added in 'practice'.

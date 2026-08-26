@@ -1,0 +1,19 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple search 'preferred final alphabet mappings and unresolved alternatives' --context practice --context practice/source --limit 10
+
+EXIT
+0
+
+OUTPUT
+practice
+[memory 9828aed4] a maps to apple;
+[memory 0463758c] a maps to apricot;
+[memory ref 94b522dc] · READ ONLY -> practice/source#c1cf9a92 b is boat.
+[memory b2b2811d] this is a deliberate conflicting
+[memory 58d18136] alternative for recovery testing.
+
+practice/source
+[memory be4139d0] b is banana;
+[memory 584c69df] b is blueberry.
+[memory 7ab9caeb] this copied mapping is provisional while
+[memory 1f9dc37a] blueberry remains visible.

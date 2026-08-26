@@ -1,0 +1,34 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source find-ambiguities practice/description
+
+EXIT
+0
+
+WALL_SECONDS
+11.382240
+
+STDOUT
+Find Ambiguities · practice/description · 3/8 direct memories flagged
+
+  AMBIGUITY 1/3
+  [bce98730] When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.
+  Reading 1: When asked “How does this read?”, provide an opinion after assessing sentence order and paragraph division, and do not immediately edit the draft.
+  Reading 2: When asked “How does this read?”, first assess sentence order and paragraph division, then provide an opinion; edits may follow afterward without a separate request.
+  Reason: The sequence “don't edit the draft immediately; first check” most naturally prohibits editing in response to the initial question, but it can also mean only that assessment must precede editing. This affects whether an edit may be produced after the assessment without an additional polishing request; clarification would make that response boundary precise.
+  Question: Should “How does this read?” produce feedback only, with edits deferred until you explicitly request them?
+
+  AMBIGUITY 2/3
+  [d0f6e587] If I later ask for polishing, preserve the overall strucutre and citation-needed markers, and change only wording that causes a problem.
+  Reading 1: When polishing, preserve the draft's overall structure and all citation-needed markers, changing only wording that creates a substantive problem.
+  Reading 2: When polishing, preserve the draft's overall structure and all citation-needed markers, changing only wording that creates any perceived issue, including minor stylistic awkwardness.
+  Reason: The phrase “causes a problem” dominantly refers to substantive defects but can ordinarily include minor stylistic issues. This changes how narrowly a polishing pass may alter wording; clarification would make the permitted edit threshold more precise.
+  Question: During polishing, should wording change only for substantive problems, or also for minor stylistic awkwardness?
+
+  UNDERSPECIFIED 3/3
+  [5e5f3d04] DEFAULT CANDIDATE: use sentence case for document titles by default, subject only to an explicitly named style guide capitalization override; preserve the intended word for.
+  Reading: Use sentence case for document titles unless an explicitly named style guide overrides capitalization, and preserve the intended word for an unstated object or purpose.
+  Reason: The fragment “preserve the intended word for” is incomplete and does not identify what word, expression, or purpose must be preserved. The capitalization rule is usable, but the additional preservation operation cannot be performed or reliably verified without the missing object.
+  Question: What word or expression should be preserved, and what is it intended to denote?
+
+
+STDERR

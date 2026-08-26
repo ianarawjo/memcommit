@@ -1,0 +1,86 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 find-conflicts task-1/campus-wiki/route-changes
+
+EXIT
+0
+
+WALL_SECONDS
+21.433042
+
+STDOUT
+Find Conflicts · task-1/campus-wiki/route-changes · 12/50 direct memories involved · 12/1225 pairs flagged
+
+  CONFLICT 1/12
+  [ee271f65] CONSTRUCTION UPDATE — June 24–August 23: The indoor route through Main Building floors 1–3 to the Central Library, the third-floor rear-entrance route, and the Outdoor Parking Lot A–Main Building–Central Library route are closed. The designated accessible detour to Central Library is Outdoor Parking Lot C → Student Centre accessible entrance → Central Library west entrance. From the Main Building, the accessible-restroom route to the Student Centre is to the left. Warn users that the outdoor detour may add heat and travel burden, and recommend only routes confirmed open.
+  [4369c450] In summer, students prefer the air-conditioned indoor route from the first to the third floor of the Main Building over the outdoor route.
+  Reason: The construction update says the indoor Main Building floors 1–3 route is closed from June 24 through August 23 and requires recommending only confirmed-open routes, while the other memory ordinarily presents that indoor route as the preferred summer route without the closure qualification.
+  Question: During June 24–August 23, should users be directed to the closed indoor route or the designated outdoor detour?
+
+  CONFLICT 2/12
+  [ee271f65] CONSTRUCTION UPDATE — June 24–August 23: The indoor route through Main Building floors 1–3 to the Central Library, the third-floor rear-entrance route, and the Outdoor Parking Lot A–Main Building–Central Library route are closed. The designated accessible detour to Central Library is Outdoor Parking Lot C → Student Centre accessible entrance → Central Library west entrance. From the Main Building, the accessible-restroom route to the Student Centre is to the left. Warn users that the outdoor detour may add heat and travel burden, and recommend only routes confirmed open.
+  [f9832b10] Mobility support companions prefer the indoor route through the Main Building to the Central Library because it is less affected by weather.
+  Reason: The construction update closes the indoor Main Building route to the Central Library for the stated period and directs users to an outdoor accessible detour, whereas the other memory favors that closed indoor route for mobility support companions.
+  Question: During June 24–August 23, should mobility support companions use the closed indoor route or the designated outdoor detour?
+
+  POSSIBLE CONFLICT 3/12
+  [ee271f65] CONSTRUCTION UPDATE — June 24–August 23: The indoor route through Main Building floors 1–3 to the Central Library, the third-floor rear-entrance route, and the Outdoor Parking Lot A–Main Building–Central Library route are closed. The designated accessible detour to Central Library is Outdoor Parking Lot C → Student Centre accessible entrance → Central Library west entrance. From the Main Building, the accessible-restroom route to the Student Centre is to the left. Warn users that the outdoor detour may add heat and travel burden, and recommend only routes confirmed open.
+  [2af1d276] Using the elevator from the first-floor lobby of the Main Building provides step-free access to the level of the third-floor rear entrance.
+  Reason: If the elevator access is part of the indoor Main Building floors 1–3 route to the Central Library, the update's temporary closure conflicts with treating it as usable step-free access; if the statement only describes the elevator's physical connection to the rear-entrance level, both are jointly explainable.
+  Question: Is the elevator route to the third-floor rear-entrance level open during June 24–August 23?
+
+  POSSIBLE CONFLICT 4/12
+  [ee271f65] CONSTRUCTION UPDATE — June 24–August 23: The indoor route through Main Building floors 1–3 to the Central Library, the third-floor rear-entrance route, and the Outdoor Parking Lot A–Main Building–Central Library route are closed. The designated accessible detour to Central Library is Outdoor Parking Lot C → Student Centre accessible entrance → Central Library west entrance. From the Main Building, the accessible-restroom route to the Student Centre is to the left. Warn users that the outdoor detour may add heat and travel burden, and recommend only routes confirmed open.
+  [6fad00c2] The above-ground route between the Main Building and the Central Library has a rest bench midway.
+  Reason: If the above-ground Main Building–Central Library route is the third-floor rear-entrance route closed by the update, describing its bench remains factually compatible but may misleadingly imply a usable route; if it refers to another above-ground path or only records a physical feature, both are jointly explainable.
+  Question: Is this bench on the third-floor rear-entrance route closed during construction?
+
+  CONFLICT 5/12
+  [ee271f65] CONSTRUCTION UPDATE — June 24–August 23: The indoor route through Main Building floors 1–3 to the Central Library, the third-floor rear-entrance route, and the Outdoor Parking Lot A–Main Building–Central Library route are closed. The designated accessible detour to Central Library is Outdoor Parking Lot C → Student Centre accessible entrance → Central Library west entrance. From the Main Building, the accessible-restroom route to the Student Centre is to the left. Warn users that the outdoor detour may add heat and travel burden, and recommend only routes confirmed open.
+  [6c4eeef5] Students going to the library after parking prefer the familiar, short Outdoor Parking Lot A–Main Building–Central Library route.
+  Reason: The construction update closes the Outdoor Parking Lot A–Main Building–Central Library route for June 24–August 23 and requires recommending only confirmed-open routes, while the other memory promotes that route based on familiarity and shortness without respecting the temporary closure.
+  Question: During June 24–August 23, should students use the closed Lot A route or the designated open detour?
+
+  POSSIBLE CONFLICT 6/12
+  [ee271f65] CONSTRUCTION UPDATE — June 24–August 23: The indoor route through Main Building floors 1–3 to the Central Library, the third-floor rear-entrance route, and the Outdoor Parking Lot A–Main Building–Central Library route are closed. The designated accessible detour to Central Library is Outdoor Parking Lot C → Student Centre accessible entrance → Central Library west entrance. From the Main Building, the accessible-restroom route to the Student Centre is to the left. Warn users that the outdoor detour may add heat and travel burden, and recommend only routes confirmed open.
+  [08d5128e] The route guidance agent can distinguish stair routes from elevator routes on the public map.
+  Reason: If distinguishing routes on the public map is taken to establish their current usability, it conflicts with the update's requirement to rely on confirmed-open routes amid temporary closures; if it means only classifying mapped route types, both are jointly explainable.
+  Question: Does map-based route classification include current closure status?
+
+  POSSIBLE CONFLICT 7/12
+  [8f2f2422] The Outdoor Parking Lot A–Main Building–Central Library route is usually short.
+  [6ded9e53] The Outdoor Parking Lot A–Main Building–Central Library route has a long indoor section.
+  Reason: A route can ordinarily be short overall while having a long indoor section, so the claims are jointly explainable; but if 'short' and 'long' are intended as ratings of the same route length rather than different aspects, they conflict.
+  Question: Does “short” describe total route length while “long” describes only its indoor section?
+
+  POSSIBLE CONFLICT 8/12
+  [4369c450] In summer, students prefer the air-conditioned indoor route from the first to the third floor of the Main Building over the outdoor route.
+  [02df0e1e] Recommend only routes that are currently confirmed to be open.
+  Reason: The preference for the indoor route is compatible with recommending only confirmed-open routes when it is open, but conflicts if it is meant to govern recommendations while that route is unconfirmed or closed.
+  Question: Does the summer preference apply only when the indoor route is confirmed open?
+
+  POSSIBLE CONFLICT 9/12
+  [02df0e1e] Recommend only routes that are currently confirmed to be open.
+  [f9832b10] Mobility support companions prefer the indoor route through the Main Building to the Central Library because it is less affected by weather.
+  Reason: Preferring the indoor route is compatible with the confirmed-open-only rule when that route is open, but conflicts if the preference is meant to justify recommending it during its temporary closure.
+  Question: Does the companions’ indoor-route preference apply only when that route is confirmed open?
+
+  POSSIBLE CONFLICT 10/12
+  [02df0e1e] Recommend only routes that are currently confirmed to be open.
+  [6c4eeef5] Students going to the library after parking prefer the familiar, short Outdoor Parking Lot A–Main Building–Central Library route.
+  Reason: The Lot A route may be familiar and short yet still be excluded whenever it is not confirmed open; the claims conflict only if the stated preference is intended as an unconditional recommendation.
+  Question: Should the Lot A route be preferred only when it is confirmed open?
+
+  POSSIBLE CONFLICT 11/12
+  [02df0e1e] Recommend only routes that are currently confirmed to be open.
+  [5a6b05a2] Check the current notice for the destination entrance before giving directions.
+  Reason: Recommending only confirmed-open routes and checking the current destination-entrance notice are complementary if the notice is part of confirmation; they conflict only if the notice is treated as sufficient while other route segments remain unconfirmed.
+  Question: Does checking the destination-entrance notice confirm the entire route is open?
+
+  POSSIBLE CONFLICT 12/12
+  [78ebae58] The route guidance agent can compare routes using stored geographic information.
+  [08d5128e] The route guidance agent can distinguish stair routes from elevator routes on the public map.
+  Reason: The agent can distinguish stair and elevator routes from stored map data, but may still be unable to compare routes in the broader sense if current accessibility or closure information is required; under a purely geographic reading the capabilities are jointly explainable, while an unrestricted capability reading creates tension with the limited map distinction.
+  Question: Does route comparison cover only stored geography, or also current route availability?
+
+
+STDERR

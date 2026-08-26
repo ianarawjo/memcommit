@@ -1,0 +1,17 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 compare task-1/participant/construction-updates/temporary-parking:84196dc5 task-1/campus-wiki/temporary-parking:6960c0ca --snapshot
+
+EXIT
+0
+
+WALL_SECONDS
+5.871873
+
+STDOUT
+Compare · task-1/participant/construction-updates/temporary-parking ↔ task-1/campus-wiki/temporary-parking
+
+COMPARISON
+  The construction-period rule temporarily overrides the normal policy allowing general vehicles to enter and park in the Main Building underground garage during operating hours: throughout construction, the garage cannot be used for general parking.
+
+
+STDERR

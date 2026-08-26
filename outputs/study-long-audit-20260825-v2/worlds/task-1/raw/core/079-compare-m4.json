@@ -1,0 +1,11 @@
+{
+  "sequence": 79,
+  "operation": "compare",
+  "attempt": 4,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 compare task-1/participant/construction-updates/temporary-parking:84196dc5 task-1/campus-wiki/temporary-parking:6960c0ca --snapshot",
+  "exit": 0,
+  "wall_seconds": 5.871873,
+  "pre_target_digest": "96d919a9fb5c5b20481d29546e41e548a634272f3b0d732b8b58d49d7f362235",
+  "post_target_digest": "fa23145b799f9cfebd537b4f518e7d2ba993176e1c9184dfc4d587a20b2ecf86",
+  "raw_output": "raw/core/079-compare-m4.txt"
+}

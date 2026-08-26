@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source review atomize --context practice/description --snapshot
+
+EXIT
+1
+
+WALL_SECONDS
+1.348758
+
+STDOUT
+
+
+STDERR
+Review error: The source Context changed after this atomize analysis was saved. Refresh it explicitly before reopening current work.

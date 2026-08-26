@@ -1,0 +1,13 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 translate task-2/participant/proposal-workspace:a9cd917a-5c65-4672-aae0-7ee0040d7094 --to Japanese --refresh
+EXIT: 0
+DURATION_SECONDS: 5.776
+
+
+Translation view: 'task-2/participant/proposal-workspace' → Japanese
+  1 translated Memory
+────────────────────────────────────────────────────────────────
+[a9cd917a] Japanese · PROVIDER · UNREVIEWED
+  リソースに関する論拠を提案書から離れずに理解できるよう、総額、主要な費用区分、および見積もり根拠の要約を本文に残してください。
+────────────────────────────────────────────────────────────────
+Saved translation view.
+No Context or Memory changes; source Memory UIDs remain the anchors.

@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple translate practice:f1c940a1 --to Korean
+
+EXIT
+0
+
+OUTPUT
+
+Translation view: 'practice' → Korean
+  1 translated Memory
+────────────────────────────────────────────────────────────────
+[f1c940a1] Korean · PROVIDER · UNREVIEWED
+  a는 사과입니다.
+────────────────────────────────────────────────────────────────
+Saved translation view.
+No Context or Memory changes; source Memory UIDs remain the anchors.

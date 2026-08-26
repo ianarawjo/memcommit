@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple sever practice practice/source practice/aia-sever-r5 --direct
+
+EXIT
+1
+
+OUTPUT
+Sever error: Sever does not copy live Memory references from 'practice'.

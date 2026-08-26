@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source merge practice/source practice/description --direct --keep-target-all
+
+EXIT
+0
+
+WALL_SECONDS
+1.361073
+
+STDOUT
+MERGE RECORDED · 'practice/source' → 'practice/description' · DIRECT · NEW 12 (12 memories) · ALREADY PRESENT 0 · KEPT TARGET 0 · TOOK SOURCE 0 · CREATED CONTEXTS 0 · TARGET CHANGED YES · CHECKPOINTS 1
+
+
+STDERR

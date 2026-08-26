@@ -1,0 +1,13 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 translate task-2/participant/proposal-workspace:337e9f61-d31c-448b-8c80-e2891688bff7 --to French
+EXIT: 0
+DURATION_SECONDS: 6.879
+
+
+Translation view: 'task-2/participant/proposal-workspace' → French
+  1 translated Memory
+────────────────────────────────────────────────────────────────
+[337e9f61] French · PROVIDER · UNREVIEWED
+  N’utilisez un tiret cadratin que pour marquer une interruption délibérée ou un contraste saisissant ; sinon, scindez la phrase ou choisissez une ponctuation ordinaire.
+────────────────────────────────────────────────────────────────
+Saved translation view.
+No Context or Memory changes; source Memory UIDs remain the anchors.

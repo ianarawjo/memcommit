@@ -1,0 +1,7 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 embed task-3/local/guardrails/evidence-and-uncertainty --into task-3/local
+
+STDOUT
+Embedded 'task-3/local/guardrails/evidence-and-uncertainty' into 'task-3/local' after [17f6da53] at the end.
+
+STDERR

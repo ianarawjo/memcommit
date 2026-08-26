@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker translate task-2/participant/proposal-workspace:1e0e89ee --to Korean
+
+EXIT
+0
+
+OUTPUT
+
+Translation view: 'task-2/participant/proposal-workspace' → Korean
+  1 translated Memory
+────────────────────────────────────────────────────────────────
+[1e0e89ee] Korean · PROVIDER · UNREVIEWED
+  구두점 규칙 및 예시: 티커를 구성하기 전에 구두점을 제거합니다. North-Star, Inc.는 쉼표, 하이픈, 공백 및 Inc. 접미사를 제거한 후 NORTHSTAR가 됩니다.
+────────────────────────────────────────────────────────────────
+Saved translation view.
+No Context or Memory changes; source Memory UIDs remain the anchors.

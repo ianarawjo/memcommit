@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple status --short
+
+EXIT
+0
+
+OUTPUT
+practice [OWNED] · Memories 14 · Memory Refs 4 · Embedded Contexts 2 · Checkpoints 36

@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source find-conflicts practice
+
+EXIT
+0
+
+WALL_SECONDS
+1.297285
+
+STDOUT
+Find Conflicts · practice · 0/1 direct memories involved · 0/0 pairs flagged
+
+
+STDERR

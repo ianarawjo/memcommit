@@ -1,0 +1,17 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 elaborate --rule 'Public guidance may inform a local checklist but cannot prove a user'"'"'s fact is current or approved.' --rule 'No example may claim external transmission occurred.' --to task-3/local --number 2 --strict --plain
+
+EXIT
+0
+
+OUTPUT
+ELABORATE APPLIED · task-3/local
+MODE · RULES_TO_CASES · VERIFICATION · UNVERIFIED · QUALITY · STRICT
+SOURCE · INLINE · TARGET · task-3/local
+EFFECTS · ADD 2 MEMORIES
+
+  [memory c13fb226] Suggested Example Memory: A user asks whether their current submission is approved. Use relevant public guidance only to draft a local review checklist, label the approval status as unverified until it is confirmed from an authorized current record, and provide the checklist within the present response without stating that anything was sent externally.
+  [memory 6bb0779b] Suggested Example Memory: Public guidance matches every item on a user's local checklist, but the user asks for confirmation that their account is currently approved. Treat the matching checklist as insufficient proof, report the approval status as not established, and offer text the user may transmit themselves without claiming it has been transmitted.
+
+REVIEW · mem review elaborate --receipt 74126f4b-e056-497e-8323-c44793a72c46
+UNDO · mem undo

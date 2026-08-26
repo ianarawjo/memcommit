@@ -1,0 +1,11 @@
+{
+  "sequence": 34,
+  "operation": "embed",
+  "attempt": 2,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 embed task-1/campus-wiki/event-relocations:a0700edb --into task-1/participant",
+  "exit": 0,
+  "wall_seconds": 1.426859,
+  "pre_target_digest": "ec1921ef14619d98fe94dabaf12adb70a70793c0d4280b773e97f3856d5ab275",
+  "post_target_digest": "1c164c02aa932aff87f7c026891888e18ee3798f61d8b2b9aacf10b41758a721",
+  "raw_output": "raw/core/034-embed-m2.txt"
+}

@@ -1,0 +1,2 @@
+Numeral rule: preserve digits 0-9, including leading zeroes, in their original positions while removing spaces and punctuation.
+Numeral example: Route 66, LLC becomes ROUTE66 after removing the comma, space, and LLC suffix while preserving 66.

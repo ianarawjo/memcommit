@@ -1,0 +1,29 @@
+{
+  "sequence": 36,
+  "label": "branch-2-source",
+  "read_at": "2026-08-25T18:13:06.524488+00:00",
+  "source_root": "task-1/participant/construction-updates",
+  "recursive": true,
+  "lexically_disjoint_from_scratch": true,
+  "resolved_context_names": [
+    "task-1/participant/construction-updates/building-access",
+    "task-1/participant/construction-updates",
+    "task-1/participant/construction-updates/event-relocations",
+    "task-1/participant/construction-updates/facility-updates",
+    "task-1/participant/construction-updates/route-changes",
+    "task-1/participant/construction-updates/shop-updates",
+    "task-1/participant/construction-updates/temporary-parking"
+  ],
+  "direct_item_counts": {
+    "task-1/participant/construction-updates/building-access": 11,
+    "task-1/participant/construction-updates": 6,
+    "task-1/participant/construction-updates/event-relocations": 10,
+    "task-1/participant/construction-updates/facility-updates": 17,
+    "task-1/participant/construction-updates/route-changes": 9,
+    "task-1/participant/construction-updates/shop-updates": 13,
+    "task-1/participant/construction-updates/temporary-parking": 15
+  },
+  "retained_branch_checkpoint_count": 0,
+  "retained_branch_checkpoints": [],
+  "result": "PASS"
+}

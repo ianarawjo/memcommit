@@ -1,0 +1,7 @@
+Find Ambiguities · task-3 · 1/6 direct memories flagged
+
+  UNDERSPECIFIED 1/1
+  [8705667a] Regression expectation: every maintained example must preserve digits, remove input punctuation, and encode a terminal share class with generated dot syntax.
+  Reading: For every maintained regression example, preserve all digits, remove punctuation present in the input, and represent any terminal share class using generated dot syntax.
+  Reason: The scope of “every maintained example” is missing: the context identifies the Route 66 LLC example but does not provide the full maintained example set or expected outputs. Therefore, it cannot be determined reliably which regression cases must be checked or whether each case satisfies all three requirements.
+  Question: Which maintained examples and expected outputs must be checked?

@@ -1,0 +1,13 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 search "Which style requirements are shared, and where do the advisors differ?" --context task-2/advisor1/style --context task-2/advisor2/style --limit 6
+EXIT: 0
+DURATION_SECONDS: 8.225
+
+task-2/advisor1/style
+[memory 33503d41] Avoid em dashes in the proposal; split the sentence or use more ordinary punctuation instead.
+[memory e463a3b5] Describe prototype operations that have already been implemented and verified as observed states.
+[memory 58565355] The user should use one first-person pronoun consistently for the same authorial role and should not alternate between “I” and “we” unless the responsible party actually changes.
+
+task-2/advisor2/style
+[memory 9bd2a9da] Use an em dash only for a deliberate interruption or sharp contrast; otherwise split the sentence or choose ordinary punctuation.
+[memory 8d8d0e8d] Write system behaviors confirmed in the actual usage environment as observed states.
+[memory 6b7aaddf] The user should choose “I” as an individual author or “we” for a named team and should not mix them when describing the same responsible party.

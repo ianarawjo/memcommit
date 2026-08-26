@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 diff 8d25b193 --context task-1/participant --stat
+
+EXIT
+0
+
+OUTPUT
+UNIT        CHECKPOINT · THIS CHECKPOINT VS PREVIOUS
+CHECKPOINT  8d25b193-2b4f-49e1-a64f-0a6f93970f49
+CONTEXT     task-1/participant
+ACTION      checkpoint
+DESCRIPTION task-1 transform round 1 scratch recovery
+RESULT      13 DIRECT ITEMS
+SUMMARY     13 kept · 0 added · 0 edited · 0 removed

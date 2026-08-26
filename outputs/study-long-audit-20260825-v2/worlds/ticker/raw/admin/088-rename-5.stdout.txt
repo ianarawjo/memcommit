@@ -1,0 +1,3 @@
+This will rename ordinary Context namespace 'audit/ticker/admin-v2-scratch/co4-tree' to 'audit/ticker/admin-v2-scratch/declined-5' (2 Contexts, including 1 descendant).
+Ordinary Context references, restorable checkpoint pointers, the current Context pointer, and unapplied Meld bindings will follow the stable UIDs; query-only Context references are unchanged.
+Continue? [y/N]: Rename cancelled.

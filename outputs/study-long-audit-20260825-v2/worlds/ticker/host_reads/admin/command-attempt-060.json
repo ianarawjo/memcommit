@@ -1,0 +1,31 @@
+{
+  "sequence": 60,
+  "count_before": 304,
+  "count_after": 305,
+  "delta": 1,
+  "new_attempt_uids": [
+    "ad1de5e0-0bd6-42d5-9bae-7e8bd714e754"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "ad1de5e0-0bd6-42d5-9bae-7e8bd714e754",
+      "operation": "share",
+      "command": "mem share --to audit/ticker/missing-receiver",
+      "status": "FAILED",
+      "started_at": "2026-08-25T18:16:18.236230+00:00",
+      "completed_at": "2026-08-25T18:16:18.244304+00:00",
+      "elapsed_seconds": 0.007884874998126179,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": {
+        "kind": "Exit",
+        "exit_code": 1
+      }
+    }
+  ]
+}

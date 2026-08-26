@@ -1,0 +1,20 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 query "Explain when to use an exact participant count versus a justified range." --context task-2/advisor1/methods --context task-2/advisor2/methods
+EXIT: 0
+DURATION_SECONDS: 8.366
+
+Use one exact participant target when recruitment is sufficiently predictable and the proposal needs a single checkable basis for its schedule, workload, budget, session count, facilitator hours, and participant payments. If recruitment misses that target, report the shortfall and revise the affected schedule or deliverable; do not use a wide range merely to defer the decision. [1] [2] [3] [4]
+
+Use a justified minimum-to-maximum range when confirmations are expected to change. Tie each bound to a distinct operational case: state what remains feasible at the minimum, how sessions and facilitator time vary across the bounds, and what added workload or deliverable the maximum enables. This represents uncertainty honestly, but leaves final workload and budget less certain than a fixed target. [5] [6] [7] [8] [9] [10] [11]
+
+References
+[1] Commit to one exact target number of participants so the schedule, workload, and budget can be checked against the same quantity. — df53a41c, task-2/advisor1/methods, m4
+[2] Calculate the required sessions, facilitator hours, and participant payments from the same exact target rather than from separate rough estimates. — 0ecc319a, task-2/advisor1/methods, m12
+[3] If recruitment falls below the exact target, state the shortfall explicitly and revise the affected schedule or deliverable. — c4dfdb65, task-2/advisor1/methods, m13
+[4] Do not use a wide range merely to postpone choosing the quantity that the rest of the proposal must support. — a7c3a123, task-2/advisor1/methods, m14
+[5] Use a justified minimum-to-maximum target range when confirmations can change, and tie the minimum and maximum to different workload and budget cases. — 8a49f598, task-2/advisor2/methods, m18
+[6] Readers cannot assess a target range unless both bounds have a stated consequence for schedule, workload, or cost. — 251a4b3c, task-2/advisor2/methods, m21
+[7] Define what can still be completed at the minimum target instead of treating every number inside the range as operationally identical. — 40f23f85, task-2/advisor2/methods, m26
+[8] Use a bounded range to absorb expected confirmation changes without pretending that one early estimate is guaranteed. — 9527ccb8, task-2/advisor2/methods, m27
+[9] Show how session count and facilitator time change at the minimum and maximum bounds. — 3ff9ec36, task-2/advisor2/methods, m28
+[10] Define the additional workload or deliverable enabled at the maximum target so the upper bound is not an arbitrary cushion. — 9e1c3629, task-2/advisor2/methods, m29
+[11] A bounded range preserves uncertainty honestly but makes the final workload and budget less certain than one fixed target. — 7ba672db, task-2/advisor2/methods, m30

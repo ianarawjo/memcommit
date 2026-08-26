@@ -1,0 +1,10 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple import memory 1cb2aa88 --from-profile task-1 --context campus-wiki/building-access --into audit/a-is-apple/admin-v2-scratch
+
+EXIT
+0
+
+OUTPUT
+Imported Memory [1cb2aa88] into Context 'audit/a-is-apple/admin-v2-scratch'.
+The Main Building third-floor rear entrance may be used for general passage during regular opening hours in both the academic term and recess.
+Source and active Profile selection unchanged.

@@ -1,0 +1,31 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 eval semantic status --ledger-dir /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-3/admin-eval-ledger
+
+STDIN
+<none>
+
+EXIT
+0
+
+WALL_SECONDS
+1.265620
+
+POST_CALL_IDENTITY_HOST_ASSERTION
+{"profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-3/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+STDOUT
+Semantic eval scoreboard · latest comparable campaigns
+
+find-ambiguities · codex_chatgpt:gpt-5.6-sol · ambiguity-classify-v2 · schema v2 · COMPLETED · CALIBRATION@003654c092e0 · reasoning=none · runs=1 · cases=1/10
+  CALIBRATION score 1/1 · failed 0
+  attempts exact=1/1 · structurally-valid=1/1
+  failures none
+  time connection=0.025s completion(mean/median/p95/max)=4.749s/4.749s/4.749s/4.749s campaign=4.751s total=4.777s
+Label distribution:
+  interpretation   NONE  HELPFUL  REQUIRED
+  SINGLE            1        0         0
+  DOMINANT          0        0         0
+  COMPETING         0        0         0
+
+
+STDERR

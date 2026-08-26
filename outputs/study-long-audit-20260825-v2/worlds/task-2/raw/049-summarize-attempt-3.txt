@@ -1,0 +1,8 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 summarize task-2/advisor1/budget --plain
+EXIT: 0
+DURATION_SECONDS: 1.404
+
+SUMMARY · task-2/advisor1/budget
+STATUS · DIRECT
+
+The proposal should keep its total and major costs in the main text beside enabled activities or deliverables, with quantity, unit-rate, and one-line estimate bases, so benefits and proportionality are checkable on the same page. Denser prose is acceptable when essential; key amounts should not rely solely on a detached table and must track work-plan revisions.

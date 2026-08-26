@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker atomize task-2/participant/proposal-workspace
+
+EXIT
+1
+
+OUTPUT
+Atomize error: Atomize final validation did not reach semantic chunk normal form: 1e0e89ee=COMPOSITE, c0f9e478=UNCERTAIN. No Context change was published.

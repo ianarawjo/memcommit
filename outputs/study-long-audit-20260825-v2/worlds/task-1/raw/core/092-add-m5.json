@@ -1,0 +1,11 @@
+{
+  "sequence": 92,
+  "operation": "add",
+  "attempt": 5,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 add 'CONSTRUCTION UPDATE \u2014 June 24\u2013August 23: The Main Building ATM, 24-hour unattended store, Campus Store, and first-floor cafe are closed. Use the West Complex first-floor ATM and the Engineering Building Campus Store, which operates 7:00 a.m.\u201311:00 p.m.; there is no on-campus replacement store after 11:00 p.m. Only staff may use the Innovation Hub coffee machine during the cafe closure. Amenities guidance must omit closed facilities, use posted alternatives, and must not claim real-time inventory or payment availability.' --to task-1/campus-wiki/shop-updates",
+  "exit": 0,
+  "wall_seconds": 1.379505,
+  "pre_target_digest": "39eedda9b332181a80530d874276552359f97f4a3fcac7ad2bcf832029f6225b",
+  "post_target_digest": "123a4c2be4efcca9147ac0ee2c69a46d540ed6c084a660ee2f88be5f8f2910ed",
+  "raw_output": "raw/core/092-add-m5.txt"
+}

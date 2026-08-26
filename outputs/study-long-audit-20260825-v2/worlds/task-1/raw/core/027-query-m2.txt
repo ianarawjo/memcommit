@@ -1,0 +1,39 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 query 'How must event reservations, alternative venues, and relocated equipment guidance change during construction?' --context task-1/participant/construction-updates/event-relocations --context task-1/campus-wiki/event-relocations --context-only --exclude-embeds
+
+EXIT
+0
+
+WALL_SECONDS
+9.810383
+
+STDOUT
+During construction, suspend viewing in the Main Building’s tenth-floor exhibition and event hall, stop accepting new reservations for Main Building event venues, and do not create or restore such reservations. Guidance may exclude those closed venues from comparisons and provide only the reservation channel for each designated alternative space. [1] [2] [3] [4]
+
+Direct users instead to the detached east building auditorium—which is converted into an alternative event space—or to the Engineering Building’s third-floor multipurpose room. Present only confirmed operating alternatives, check schedules before implying a reservation, and confirm daily operation against the official event schedule and facilities notices. [5] [6] [7] [8] [9] [10]
+
+Relocation guidance must clearly warn visitors that the venue, entrance, and floor have changed so returning visitors do not follow their previous Main Building route. [11] [12]
+
+For equipment relocated from the Main Building, direct deliveries to the detached east auditorium’s separate loading entrance, now serving as the loading point. Explicitly confirm the alternative venue’s loading entrance, access rules, loading time, and route to the stage in advance, because the old Main Building loading procedure no longer applies. [13] [14] [15] [16] [17]
+
+References
+[1] Modify campus-wiki/event-relocations: Viewing in the tenth-floor exhibition and event hall is suspended during the construction period. — 3fcfa405, task-1/participant/construction-updates/event-relocations, m1
+[2] Modify campus-wiki/event-relocations: Do not accept new reservations for Main Building event venues during the construction period. — 1754ab18, task-1/participant/construction-updates/event-relocations, m2
+[3] Modify campus-wiki/event-relocations: During the construction period, the event guidance agent may exclude closed Main Building event venues from comparison candidates and compare only designated alternative spaces. — 2587dbb3, task-1/participant/construction-updates/event-relocations, m6
+[4] Modify campus-wiki/event-relocations: During the construction period, the event guidance agent cannot create or restore reservations for Main Building event venues and may provide only the reservation channel for each alternative space. — eee1213e, task-1/participant/construction-updates/event-relocations, m7
+[5] Add campus-wiki/event-relocations: During the construction period, direct users to the auditorium in the detached east building as an alternative to Main Building event venues. — 686d630d, task-1/participant/construction-updates/event-relocations, m3
+[6] Add campus-wiki/event-relocations: During the construction period, direct users to the third-floor multipurpose room in the Engineering Building as an alternative to Main Building event venues. — 967fc4ad, task-1/participant/construction-updates/event-relocations, m4
+[7] Add campus-wiki/event-relocations: During the construction period, the auditorium in the detached east building is converted into an alternative event space for Main Building events. — 9d4a1560, task-1/participant/construction-updates/event-relocations, m5
+[8] Present only spaces confirmed to be operating as alternative event venues. — 50369ec7, task-1/campus-wiki/event-relocations, m17
+[9] Do not present a space whose available schedule has not been checked as though it were a confirmed reservation. — a3c819d4, task-1/campus-wiki/event-relocations, m18
+[10] Check both the official event schedule and facilities notices to confirm whether a space is operating that day. — 232cd8db, task-1/campus-wiki/event-relocations, m44
+[11] Modify campus-wiki/event-relocations: An external visitor who has previously visited a Main Building event venue may expect the entrance and floor from the previous visit to remain unchanged and miss guidance about the alternative venue during the construction period. — b867c632, task-1/participant/construction-updates/event-relocations, m8
+[12] External visitors who have previously been to an event venue in the Main Building tend to look for the same entrance and floor they used on their previous visit when they visit again. — 2a0f0a0e, task-1/campus-wiki/event-relocations, m19
+[13] Add campus-wiki/event-relocations: During the construction period, the separate loading entrance of the auditorium in the detached east building is converted into the loading point for event equipment relocated from the Main Building. — 9ab36f33, task-1/participant/construction-updates/event-relocations, m9
+[14] Modify campus-wiki/event-relocations: An external event operator may assume that the existing Main Building loading procedure remains valid during the construction period, send equipment to the existing loading entrance, or check the access rules for the alternative venue too late. — 8bf7a20c, task-1/participant/construction-updates/event-relocations, m10
+[15] External event operators expect the loading entrance and route to the stage to be clearly confirmed by the day before the event. — 4bc2268d, task-1/campus-wiki/event-relocations, m27
+[16] Event operators bringing equipment expect the loading entrance and route to the stage to be clearly stated in the reservation confirmation. — 13211336, task-1/campus-wiki/event-relocations, m47
+[17] External event vendors expect the campus sponsoring department to confirm the loading time and route. — cc2a4dc4, task-1/campus-wiki/event-relocations, m53
+
+
+STDERR

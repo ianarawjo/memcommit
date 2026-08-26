@@ -1,0 +1,11 @@
+{
+  "sequence": 31,
+  "operation": "copy",
+  "attempt": 2,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 copy task-1/participant/construction-updates/event-relocations:3fcfa405 --into task-1/participant",
+  "exit": 0,
+  "wall_seconds": 1.339761,
+  "pre_target_digest": "809fce7d2e22f7aed9c2fdc1b594c0f3331344cf3af27209b25224c103a64c7c",
+  "post_target_digest": "7abb41c90662e80432fabdb369615b526bb36d89ddf8a2afc256a72230a11bb3",
+  "raw_output": "raw/core/031-copy-m2.txt"
+}

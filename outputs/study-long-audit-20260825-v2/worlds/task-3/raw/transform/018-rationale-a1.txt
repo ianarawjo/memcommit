@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 rationale task-3/local/guardrails/approval-and-delivery:96442184
+
+EXIT
+0
+
+OUTPUT
+Rationale [96442184] · task-3/local/guardrails/approval-and-delivery
+
+MEMORY
+  Show the user the actual recipient before transmission.
+
+PROVENANCE — no retained history
+
+ATTENTION
+  The current Context contains changes that no retained checkpoint explains.

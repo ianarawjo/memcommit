@@ -1,0 +1,11 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple compare practice practice/source --snapshot
+
+EXIT
+0
+
+OUTPUT
+Compare · practice ↔ practice/source
+
+COMPARISON
+  The frames share the same editing and verification policy, including preserving intended structure and terminology, retaining four required points, and cutting around 20–30% only when a shorter fixed limit applies without strengthening claims. The reference additionally contains fragmented provenance-like assertions about apple and banana mappings.

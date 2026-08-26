@@ -1,0 +1,22 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 find appointment --context task-3/local/personal-memory --recursive --all-results
+
+STDOUT
+FIND RESULTS
+PATTERN · appointment · LITERAL · CASE SENSITIVE
+SCOPE · task-3/local/personal-memory · DESCENDANTS · FOLLOW EMBEDS
+SCANNED 325 · MATCHED 11 · OCCURRENCES 11
+
+1 [051e79ff] On a day with a morning appointment, the user miscalculated the fasting period and checked again at the reception desk. [task-3/local/personal-memory/2024/03 m22]
+2 [71e27b0c] The user called to reschedule an appointment at lunchtime but did not reach anyone. [task-3/local/personal-memory/2024/04 m34]
+3 [5141ca66] The scheduling staff at that clinic expect requests to change appointments to arrive by telephone. [task-3/local/personal-memory/2024/04 m38]
+4 [7aece7ae] The local agent can track completed checkups and scheduled appointments but cannot determine whether a follow-up visit is needed. [task-3/local/personal-memory/2024/04 m40]
+5 [84b4519d] The user's available days and times vary by week, making it difficult to apply last month's free time directly to the next appointment. [task-3/local/personal-memory/2024/09 m81]
+6 [25994612] The user once canceled an appointment booked for the same weekday as in the previous month. [task-3/local/personal-memory/2024/09 m82]
+7 [54d29daf] On a day with two consecutive morning appointments, the user ate lunch at 3 p.m. [task-3/local/personal-memory/2024/09 m84]
+8 [375957b9] On a day the user left an hour between appointments, they ate while traveling. [task-3/local/personal-memory/2024/09 m85]
+9 [4c8759cc] The user was able to reschedule the appointment after providing only a new time, without a reason. [task-3/local/personal-memory/2024/11 m103]
+10 [4cb45120] The user learned on site that the elevator was under inspection and delayed the appointment. [task-3/local/personal-memory/2024/12 m113]
+11 [f9197c33] The user feels that a reminder the day before an appointment gives them enough time to recheck preparation items. [task-3/local/personal-memory/2025/02 m140]
+
+STDERR

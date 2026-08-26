@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker rationale task-2/participant/proposal-workspace:ace52daf --limit 20 --unit words
+
+EXIT
+0
+
+OUTPUT
+Rationale [ace52daf] · task-2/participant/proposal-workspace
+
+MEMORY
+  Numeral example: Route 66, LLC becomes ROUTE66 after removing the comma, space, and LLC suffix while preserving 66.
+
+PROVENANCE
+  Added from round-3-numerals.txt; copied unchanged from proposal-workspace into local, cleared, restored, then copied into personal-memory and cleared there.

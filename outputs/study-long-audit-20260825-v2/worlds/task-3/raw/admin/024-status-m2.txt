@@ -1,0 +1,52 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 status --branch
+
+STDIN
+<none>
+
+EXIT
+0
+
+WALL_SECONDS
+1.321204
+
+POST_CALL_IDENTITY_HOST_ASSERTION
+{"profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-3/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+STDOUT
+Profile: sixworld-v2-template
+Context lineage: task-3 > local
+On context: task-3/local
+
+Inventory · Memories 5 · Memory Refs 6 · Embedded Contexts 6 · Checkpoints 38
+
+Relationships:
+  MEMORY REF [f4f93a2f] task-3/local/guardrails/minimization-and-redaction#9d626b1a
+  MEMORY REF [b341ee47] task-3/local/personal-memory/2024/03#3069baac
+  MEMORY REF [17f6da53] task-3/local/personal-memory/2024/12#e9515d6b
+  MEMORY REF [111bd655] task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance#dcf1b441
+  MEMORY REF [4ae11913] task-3/local/guardrails/audit-and-recovery#6ea7bcc1
+  MEMORY REF [e5239fd9] task-3/local/guardrails/audit-and-recovery#367700c4
+  EMBEDDED CONTEXT [10c1e5b1] task-3/local/guardrails
+  EMBEDDED CONTEXT [33ffd77c] task-3/local/personal-memory
+  EMBEDDED CONTEXT [34f4d62a] task-3/local/guardrails/channel-and-format
+  EMBEDDED CONTEXT [37cd6139] task-3/local/guardrails/approval-and-delivery
+  EMBEDDED CONTEXT [136dface] task-3/local/guardrails/evidence-and-uncertainty
+  EMBEDDED CONTEXT [ef17277c] task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance
+
+Memory preview · first 5 of 5:
+  [26a4a267] DRAFT ONLY:
+  [eebb79a4] medication timing is a candidate;
+  [d0f1069a] verify the specific medication identity, current status, recipient, purpose, and relevance before approval.
+  [8247c919] DRAFT ONLY candidate: the user waited because seats were unavailable; verify the current accommodation need before any approval.
+  [72eb2325] REVIEW STATE: no healthcare disclosure is approved; candidates remain subject to recipient, purpose, currency, necessity, third-party, and exact-item checks.
+
+Recent changes · latest 5 of 38 checkpoints:
+  0b62134d  2026-08-25 13:39  revert        Pre-revert to [27bebff8] — revert here to undo
+  85d326bf  2026-08-25 13:39  merge         Merged 'task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance' into 'task-3/local': new 25; already present 0; kept Target 0; took Source 0
+  74126f4b  2026-08-25 13:38  elaborate     Added 2 Elaborate Cases to 'task-3/local'
+  ca91caf1  2026-08-25 13:38  clear         Cleared all 17 item(s) from 'task-3/local'
+  27bebff8  2026-08-25 13:37  checkpoint    task-3 transform round 4 short-option recovery
+
+
+STDERR

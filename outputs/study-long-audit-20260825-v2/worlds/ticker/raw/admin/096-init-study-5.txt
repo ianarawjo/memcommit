@@ -1,0 +1,26 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker init-study ticker/admin-v2-final
+
+STDIN
+<none>
+
+EXIT
+1
+
+WALL_SECONDS
+1.304865
+
+PRE_IDENTITY
+{"current_context": "audit/ticker/admin-v2-scratch/missing-parent/leaf", "current_context_uid": "90693e22-06fc-455c-8b3a-89c2b6e303c6", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+IMMEDIATE_POST_IDENTITY
+{"current_context": "audit/ticker/admin-v2-scratch/missing-parent/leaf", "current_context_uid": "90693e22-06fc-455c-8b3a-89c2b6e303c6", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+COMMAND_ATTEMPT_DELTA
+{"count_after": 341, "count_before": 340, "delta": 1, "new_attempt_uids": ["62270743-655b-4932-933f-1fcd326b00c3"], "records": [{"command": "mem init-study ticker/admin-v2-final", "completed_at": "2026-08-25T18:17:16.846215+00:00", "details": {}, "elapsed_seconds": 0.014190333007718436, "failure": {"exit_code": 1, "kind": "Exit"}, "operation": "init-study", "outcome": null, "started_at": "2026-08-25T18:17:16.831856+00:00", "status": "FAILED", "terminal": {"stdin_tty": true, "stdout_tty": false}, "uid": "62270743-655b-4932-933f-1fcd326b00c3", "version": 3}], "sequence": 96}
+
+STDOUT
+
+
+STDERR
+Error: Study Profile name is invalid.

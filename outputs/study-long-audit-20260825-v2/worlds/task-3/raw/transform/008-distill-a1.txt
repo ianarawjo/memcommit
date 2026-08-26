@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 distill --from task-3/local/guardrails/purpose-and-scope --to task-3/local --goal 'Distill only disclosure-selection rules; preserve necessity, currency, third-party exclusion, and explicit approval boundaries.' --direct --plain
+
+EXIT
+0
+
+OUTPUT
+DISTILL APPLIED · task-3/local/guardrails/purpose-and-scope → task-3/local
+EFFECTS · ADD 3 RULES
+
+  [memory 1143e619] Select for disclosure only Memories and details necessary for the user's confirmed current sharing purpose; if that purpose is not specific, obtain clarification before creating disclosure candidates.
+  [memory 7f82dc72] Treat sharing approval as limited to the reviewed recipients, purposes, and items; prior approval for another purpose does not authorize reuse.
+  [memory f44c4d34] For the review-pending healthcare candidate, disclosure would be limited to facts necessary for current care, would exclude unrelated history, and would require explicit user approval; it is not yet approved.
+
+REVIEW · mem review distill --receipt c87e7419-474b-4dc2-9765-21c0fa87c370
+UNDO · mem undo

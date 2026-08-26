@@ -1,0 +1,28 @@
+{
+  "sequence": 6,
+  "count_before": 250,
+  "count_after": 251,
+  "delta": 1,
+  "new_attempt_uids": [
+    "a2dc9a6f-ffe3-48ae-8a06-b012733486c5"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "a2dc9a6f-ffe3-48ae-8a06-b012733486c5",
+      "operation": "unlock",
+      "command": "mem unlock",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:12:15.329031+00:00",
+      "completed_at": "2026-08-25T18:12:15.343907+00:00",
+      "elapsed_seconds": 0.014681665998068638,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

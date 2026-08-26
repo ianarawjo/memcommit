@@ -1,0 +1,28 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 find 'third-floor rear entrance' --context task-1/participant/construction-updates/building-access --context task-1/campus-wiki/building-access --context-only --exclude-embeds
+
+EXIT
+0
+
+WALL_SECONDS
+1.578081
+
+STDOUT
+FIND RESULTS
+PATTERN · third-floor rear entrance · LITERAL · CASE SENSITIVE
+SCOPE · task-1/participant/construction-updates/building-access + task-1/campus-wiki/building-access · EXACT · EXCLUDE EMBEDS
+SCANNED 61 · MATCHED 10 · OCCURRENCES 10
+
+1 [8b077f2a] Modify campus-wiki/building-access: During the construction period, the third-floor rear entrance cannot be used for general passage. [task-1/participant/construction-updates/building-access m1]
+2 [f1b7843e] Modify campus-wiki/building-access: During the construction period, instruct staff and construction/facilities personnel to use only the designated staff entrance instead of the third-floor rear entrance. [task-1/participant/construction-updates/building-access m6]
+3 [be002fc9] Modify campus-wiki/building-access: In access guidance during the construction period, the access guidance agent may prioritize the 5:00 p.m. closing of the main entrance and the closure of the third-floor rear entrance. [task-1/participant/construction-updates/building-access m7]
+4 [2d8e8c75] Modify campus-wiki/building-access: A student accustomed to reaching the Central Library through the third-floor rear entrance may expect to be able to pass through during the construction period, go as far as the closed rear entrance, and then turn back or search again for an alternative route there. [task-1/participant/construction-updates/building-access m8]
+5 [ebc1d272] Add campus-wiki/building-access: Proactively inform students who are trying to reach the Central Library or who normally use the third-floor rear entrance that they cannot use that route during the construction period. [task-1/participant/construction-updates/building-access m10]
+6 [31f5b67b] Modify campus-wiki/building-access: A leader of an external group tour may expect the route used on a previous visit to remain valid during the construction period and lead the visiting group to the closed third-floor rear entrance. [task-1/participant/construction-updates/building-access m11]
+7 [1cb2aa88] The Main Building third-floor rear entrance may be used for general passage during regular opening hours in both the academic term and recess. [task-1/campus-wiki/building-access m12]
+8 [e3929a49] Students familiar with the route to the Central Library expect the third-floor rear entrance to be a connection normally available for passage. [task-1/campus-wiki/building-access m18]
+9 [cb1e0734] The staff-only entrance is a controlled entrance separate from the third-floor rear entrance. [task-1/campus-wiki/building-access m26]
+10 [804bfc6b] Tour leaders for external groups tend to want to use the same route through the third-floor rear entrance on their next visit that they used on a previous visit. [task-1/campus-wiki/building-access m28]
+
+
+STDERR

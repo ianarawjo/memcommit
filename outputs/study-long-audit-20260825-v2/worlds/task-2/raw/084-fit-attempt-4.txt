@@ -1,0 +1,5 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 fit --context task-2/advisor1/ethics --context task-2/advisor2/ethics
+EXIT: 0
+DURATION_SECONDS: 8.148
+
+FIT · YES · [TARGETS: CONTEXT task-2/advisor1/ethics, task-2/advisor2/ethics]

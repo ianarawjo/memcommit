@@ -1,0 +1,28 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source log --memory 8b077f2a --context practice/audit-workspace/admin-v2-scratch --limit 5
+
+STDIN
+<none>
+
+EXIT
+0
+
+WALL_SECONDS
+1.343205
+
+POST_CALL_IDENTITY_HOST_ASSERTION
+{"profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/practice-source/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+STDOUT
+TRACE · practice/audit-workspace/admin-v2-scratch
+[MEMORY 8b077f2a] · 1 OPERATION · LATEST FIRST
+
+[import] [CHECKPOINT 686b7ea4] [MEMORY 8b077f2a]  2026-08-25 14:14 · Imported Memory [8b077f2a] from Profile 'task-1' Context 'participant/construction-updates/building-access'.
+  − ∅
+  + [8b077f2a]@1 During the construction period, the third-floor rear entrance cannot be used for general passage.
+
+ATTACHMENTS
+  none
+
+
+STDERR

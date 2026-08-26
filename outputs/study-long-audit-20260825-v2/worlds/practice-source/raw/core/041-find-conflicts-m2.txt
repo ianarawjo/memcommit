@@ -1,0 +1,68 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source find-conflicts practice/source
+
+EXIT
+0
+
+WALL_SECONDS
+15.930420
+
+STDOUT
+Find Conflicts · practice/source · 6/12 direct memories involved · 9/66 pairs flagged
+
+  POSSIBLE CONFLICT 1/9
+  [e50c293a] If I later ask for polishing, preserve the overall strucutre and citation-needed markers, and change only wording that causes a problem.
+  [44de7eff] For any titlle about interaction with AI agent memory, keep the exact terminology and intended words: use interaction and management and AI agent memory rather than agent memory.
+  Reason: If polishing a title counts as changing only wording that causes a problem, preserving its overall structure can conflict with the exact required title terminology when the draft uses different terms; if title terminology is an independently mandatory exception, both rules are jointly explainable.
+  Question: Does the exact title terminology override structure preservation during polishing?
+
+  POSSIBLE CONFLICT 2/9
+  [e50c293a] If I later ask for polishing, preserve the overall strucutre and citation-needed markers, and change only wording that causes a problem.
+  [1a9d3a74] By default, format a document title in sentence case rather than title case. An explicitly named style guide may override only that capitalization default; always keep for whenever it is part of the intended wording.
+  Reason: Polishing preserves overall structure and changes only problematic wording, while sentence-case formatting may require capitalization changes even when capitalization is not otherwise a problem; they are jointly explainable if title capitalization defaults are an allowed formatting exception.
+  Question: May polishing change title capitalization to sentence case by default?
+
+  POSSIBLE CONFLICT 3/9
+  [e50c293a] If I later ask for polishing, preserve the overall strucutre and citation-needed markers, and change only wording that causes a problem.
+  [94c3ce98] If titles of works use quotation marks in some places and italics in others, make them consistently italic throughout the document by default; an explicitly named style guide may override only this work-title format.
+  Reason: Polishing changes only wording that causes a problem and preserves overall structure, whereas consistently italicizing work titles may require non-wording formatting changes; they are jointly explainable if formatting consistency is outside the restriction on wording changes.
+  Question: May polishing also normalize work-title formatting?
+
+  POSSIBLE CONFLICT 4/9
+  [39b21971] When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um... for example, use distribute, not divide, when material is absorbed into two parts.
+  [6cc4b8a3] When the draft has to fit a shorter fixed limit, aim to cut around 20–30% from redundant or unnecessary material.
+  Reason: A request to change one expression ordinarily requires leaving almost everything else unchanged, but a simultaneous fixed-limit requirement calls for cutting about 20–30%; the rules conflict if both govern the same edit and are jointly explainable if the fixed-limit task is separate or explicitly broader.
+  Question: When changing one expression in a draft over its fixed limit, should the rest also be cut?
+
+  POSSIBLE CONFLICT 5/9
+  [39b21971] When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um... for example, use distribute, not divide, when material is absorbed into two parts.
+  [44de7eff] For any titlle about interaction with AI agent memory, keep the exact terminology and intended words: use interaction and management and AI agent memory rather than agent memory.
+  Reason: The one-expression rule preserves the user's selected technical or project-specific terms, while the title rule mandates exact terminology that could replace such selected terms in a title; they are jointly explainable if the requested expression is outside the protected title terminology or the title rule overrides it.
+  Question: Does the exact title terminology override a one-expression-only request?
+
+  POSSIBLE CONFLICT 6/9
+  [39b21971] When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um... for example, use distribute, not divide, when material is absorbed into two parts.
+  [1a9d3a74] By default, format a document title in sentence case rather than title case. An explicitly named style guide may override only that capitalization default; always keep for whenever it is part of the intended wording.
+  Reason: Changing one expression while leaving almost everything else unchanged can conflict with independently converting a title to sentence case; both are jointly explainable if capitalization normalization is outside the requested scope or already satisfied.
+  Question: During a one-expression change, should title capitalization also be normalized?
+
+  POSSIBLE CONFLICT 7/9
+  [39b21971] When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um... for example, use distribute, not divide, when material is absorbed into two parts.
+  [94c3ce98] If titles of works use quotation marks in some places and italics in others, make them consistently italic throughout the document by default; an explicitly named style guide may override only this work-title format.
+  Reason: Changing one expression while leaving almost everything else unchanged can conflict with independently making all work titles italic; both are jointly explainable if formatting normalization is outside the requested scope or already consistent.
+  Question: During a one-expression change, should work-title formatting also be normalized?
+
+  POSSIBLE CONFLICT 8/9
+  [6cc4b8a3] When the draft has to fit a shorter fixed limit, aim to cut around 20–30% from redundant or unnecessary material.
+  [44de7eff] For any titlle about interaction with AI agent memory, keep the exact terminology and intended words: use interaction and management and AI agent memory rather than agent memory.
+  Reason: Cutting 20–30% for a shorter fixed limit may require shortening or deleting title wording, while the title rule requires exact intended terminology; they are jointly explainable when the needed reduction can come entirely from other material.
+  Question: May the required title wording ever be shortened to meet the fixed limit?
+
+  CONFLICT 9/9
+  [44de7eff] For any titlle about interaction with AI agent memory, keep the exact terminology and intended words: use interaction and management and AI agent memory rather than agent memory.
+  [1a9d3a74] By default, format a document title in sentence case rather than title case. An explicitly named style guide may override only that capitalization default; always keep for whenever it is part of the intended wording.
+  Reason: For a title about interaction with AI agent memory, the exact-terminology rule requires the phrase “AI agent memory,” while the capitalization rule defaults the title to sentence case. Under ordinary sentence case, the internal word “AI” remains uppercase as an initialism, so these rules are compatible; however, the exact-words rule also requires “interaction” and “management,” and the capitalization rule cannot alter those words. There is no semantic conflict.
+  Question: Should the required AI-memory title wording also follow sentence-case capitalization?
+
+
+STDERR

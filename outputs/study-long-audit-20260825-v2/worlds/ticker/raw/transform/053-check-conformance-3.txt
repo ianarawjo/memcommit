@@ -1,0 +1,10 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker check-conformance task-2/participant --against 'text:Digits 0 through 9 must remain in original order.'
+
+EXIT
+0
+
+OUTPUT
+CONFORMANCE · 0/2 EXAMPLES CONFORM · 0/1 RULES MET · [EXAMPLES task-2/participant] · [RULES TEXT Digits 0 through 9 must remain in original order.] · 2 EXAMPLES N/A
+? INSUFFICIENT_EVIDENCE · [EXAMPLE m000001] Core ticker rule: remove a terminal legal suffix such as Inc., Corp., Ltd., or LLC before constructing the ticker. Preserve the remaining alphanumeric characters. · [RULE r1] Digits 0 through 9 must remain in original order. · WHY · Digit preservation is required, but no ordered digit example establishes whether digits 0 through 9 retain their original order.
+? INSUFFICIENT_EVIDENCE · [EXAMPLE m000003] Regression expectation: every maintained example must preserve digits, remove input punctuation, and encode a terminal share class with generated dot syntax. · [RULE r1] Digits 0 through 9 must remain in original order. · WHY · Digit preservation is required, but no ordered digit example establishes whether digits 0 through 9 retain their original order.

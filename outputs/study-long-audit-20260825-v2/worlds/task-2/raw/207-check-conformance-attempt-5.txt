@@ -1,0 +1,5 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 check-conformance task-2/participant/proposal-workspace --against "text:No advisor has tie-breaking priority, and every unresolved conflict needs an owner and explanation."
+EXIT: 0
+DURATION_SECONDS: 6.96
+
+CONFORMANCE · 11/11 EXAMPLES CONFORM · 1/1 RULES MET · [EXAMPLES task-2/participant/proposal-workspace] · [RULES TEXT No advisor has tie-breaking priority, and every unresolved conflict needs an owner and explanation.] · 11 EXAMPLES N/A

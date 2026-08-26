@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source impact update --session PENDING
+
+EXIT
+1
+
+WALL_SECONDS
+1.315062
+
+STDOUT
+
+
+STDERR
+Impact error: No saved Update or directional Impact plan exists. Run 'mem impact --from SOURCE --to TARGET' first.

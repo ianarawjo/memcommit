@@ -1,0 +1,4 @@
+Log for 'task-2/participant/admin-v2-scratch':
+
+DIRECT COMMANDS · task-2/participant/admin-v2-scratch
+  [init] [CHECKPOINT ef7e9d02] [CONTEXT 21982d45]  2026-08-25 14:02 · baseline for CONTEXT task-2/participant/admin-v2-scratch · not counted as a command

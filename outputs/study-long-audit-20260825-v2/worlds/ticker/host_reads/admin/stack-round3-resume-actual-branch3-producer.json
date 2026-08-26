@@ -1,0 +1,27 @@
+{
+  "label": "round3-resume-actual-branch3-producer",
+  "read_at": "2026-08-25T18:15:46.061286+00:00",
+  "undo_top": {
+    "uid": "branch:d8240235-7054-4b3d-8d3a-7681d7268d23",
+    "command": "branch",
+    "description": "Branched 'task-1/participant/construction-updates' to 'audit/ticker/admin-v2-scratch/b3'.",
+    "members": [
+      {
+        "context_uid": "4c325b22-c650-47e3-8979-0f3ec2934661",
+        "context_name": "audit/ticker/admin-v2-scratch/b3",
+        "checkpoint_uid": "9b6d8c1d-5145-45d6-9b4c-f33ce003fe05"
+      }
+    ]
+  },
+  "redo_top": null,
+  "undo_depth": 66,
+  "redo_depth": 0,
+  "staged_update_granted_target": null,
+  "assertions": {
+    "expected_side": "undo",
+    "expected_uid": null,
+    "expected_command": "branch",
+    "require_granted_null": true,
+    "result": "PASS"
+  }
+}

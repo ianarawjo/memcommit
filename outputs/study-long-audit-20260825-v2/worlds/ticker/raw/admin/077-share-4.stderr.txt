@@ -1,0 +1,1 @@
+Error: Choose either --direct or --recursive, not both.

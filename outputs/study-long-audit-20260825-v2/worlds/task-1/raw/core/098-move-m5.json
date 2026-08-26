@@ -1,0 +1,11 @@
+{
+  "sequence": 98,
+  "operation": "move",
+  "attempt": 5,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 move ea187cdb --from task-1/participant --into task-1/participant/construction-updates/route-changes --after 9af0f95c",
+  "exit": 0,
+  "wall_seconds": 1.345261,
+  "pre_target_digest": "c773b32d5eca599c58fb77f6a5ed07fb98dbf0f3d95112dccc8a116c6214faa4",
+  "post_target_digest": "b53814ec928f638a115d453a9d6346c8cadaeaf79e219a5c4cfd70fd0e18c2cc",
+  "raw_output": "raw/core/098-move-m5.txt"
+}

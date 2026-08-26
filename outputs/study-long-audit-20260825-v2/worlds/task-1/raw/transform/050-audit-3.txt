@@ -1,0 +1,9 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 audit task-1/participant/construction-updates/building-access --against task-1/participant/construction-updates/route-changes --snapshot
+
+EXIT
+124
+
+OUTPUT
+
+AUDIT RUNNER TIMEOUT after 300 seconds; child process terminated.

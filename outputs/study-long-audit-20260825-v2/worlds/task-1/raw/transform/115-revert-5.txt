@@ -1,0 +1,28 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 revert f148d6a8 --context task-1/participant --keep
+
+EXIT
+0
+
+OUTPUT
+Reverted Context: task-1/participant
+Restored state recorded by: manual checkpoint
+Action detail: task-1 transform round 5 scratch recovery
+Affected Context: task-1/participant
+Affected content: 4 Memories added, 3 Memory refs added, 2 Embedded contexts added, 4 direct items added, 21 Memories removed
+  - [memory c5e5f937] "During the construction period, treat the first-floor Main Building ATM, 24-hour unattended store, Campus Store, and cafe as closed or non-operational, and exclude them from amenity recommendations."
+  - [memory e011268a] "For ATM use during the construction period, direct users from the Main Building ATM to the ATM on the first floor of the West Complex; the changed route does not pass through the Main Building construction zone."
+  - [memory ce9fa4a9] "For users of the Main Building's closed 24-hour unattended store, identify the Campus Store in the Engineering Building as the alternative only from 7:00 a.m. to 11:00 p.m.; after 11:00 p.m., state that no alternative on-campus store is av…"
+  - [memory 34622dcf] "During the Main Building cafe closure, identify the coffee machine inside the first-floor Innovation Hub as an alternative only for staff."
+  - [memory 9b7b40fd] "Recommend only the posted alternative facilities, preserving their stated locations, service hours, eligibility limits, and periods with no alternative rather than inferring additional options."
+  - [memory f570f15b] "Include a closure example only when the shop evidence explicitly verifies both the affected facility or service and its closed or non-operational status for the stated period."
+  - [memory 7ab4a6f5] "Include an alternative-service example only when the shop evidence explicitly identifies it as an alternative, and preserve every stated location, service-hour, eligibility, routing, and no-alternative constraint."
+  - [memory 160a595b] "Exclude any closure or alternative-service example that is inferred, merely plausible, or unsupported by the shop evidence; do not invent additional options when the evidence states or implies no verified alternative."
+  - [memory d804a3b5] "Add campus-wiki/shop-updates: The ATM on the first floor of the Main Building is closed during the construction period."
+  - [memory 7623305a] "Add campus-wiki/shop-updates: The 24-hour unattended store on the first floor of the Main Building is closed during the construction period."
+  - [memory f031bd47] "Add campus-wiki/shop-updates: During the construction period, direct users of the Main Building ATM to the ATM on the first floor of the West Complex."
+  - [memory a8a0245e] "Add campus-wiki/shop-updates: During the construction period, direct users of the Main Building's 24-hour store to the Campus Store in the Engineering Building between 7:00 a.m. and 11:00 p.m."
+  ... 22 more affected direct items not shown
+Restored checkpoint: [f148d6a8] (2026-08-25 13:53)
+Undo command: mem undo
+Exact recovery checkpoint: mem revert 902db98e --discard-newer

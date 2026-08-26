@@ -1,0 +1,1594 @@
+{
+  "world": "a-is-apple",
+  "phase": "core",
+  "launcher": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli",
+  "operations": {
+    "contexts": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round-1 empty audit/a-is-apple before descendant bootstrap",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli contexts",
+          "exit": 0,
+          "entry_route": "global inventory",
+          "target_route": "Profile readable namespace",
+          "scope": "all readable",
+          "input_provenance": "fixed Study",
+          "consumer": "orientation",
+          "actual": "Showed empty world root among the complete shared Profile.",
+          "defect_ids": [
+            "AIA-CONTEXTS-01"
+          ],
+          "cost": "about 128 lines"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round-2 after descendant bootstrap and initial a/b root mappings",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli contexts",
+          "exit": 0,
+          "entry_route": "global inventory",
+          "target_route": "Profile readable namespace",
+          "scope": "all readable",
+          "input_provenance": "bootstrap state",
+          "consumer": "verify descendants",
+          "actual": "Showed source, working, archive, and comparisons descendants.",
+          "defect_ids": [
+            "AIA-CONTEXTS-01"
+          ],
+          "cost": "about 128 lines"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round-3 after source embed, snapshot archive, and first chunks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli contexts",
+          "exit": 0,
+          "entry_route": "global inventory",
+          "target_route": "Profile readable namespace",
+          "scope": "all readable",
+          "input_provenance": "accumulated state",
+          "consumer": "current safety",
+          "actual": "Current remained practice; output was truncated by capture.",
+          "defect_ids": [
+            "AIA-CONTEXTS-01"
+          ],
+          "cost": "full Profile scan"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round-4 after deliberate b conflict and archive embedding",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli contexts",
+          "exit": 0,
+          "entry_route": "global inventory",
+          "target_route": "Profile readable namespace",
+          "scope": "all readable",
+          "input_provenance": "accumulated state",
+          "consumer": "current safety",
+          "actual": "Repeated the same whole-Profile inventory.",
+          "defect_ids": [
+            "AIA-CONTEXTS-01"
+          ],
+          "cost": "full Profile scan"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round-5 late accumulated state with source/archive/comparisons projections",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli contexts",
+          "exit": 0,
+          "entry_route": "global inventory",
+          "target_route": "Profile readable namespace",
+          "scope": "all readable",
+          "input_provenance": "final state",
+          "consumer": "final current safety",
+          "actual": "Current remained practice and world descendants remained present.",
+          "defect_ids": [
+            "AIA-CONTEXTS-01"
+          ],
+          "cost": "full Profile scan"
+        }
+      ]
+    },
+    "list": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round-1 empty audit/a-is-apple before descendant bootstrap",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli list --direct audit/a-is-apple",
+          "exit": 0,
+          "entry_route": "explicit Context",
+          "target_route": "world root",
+          "scope": "direct exact",
+          "input_provenance": "empty fixture",
+          "consumer": "baseline",
+          "actual": "Reported 0 Memories and 0 subcontexts.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round-2 after descendant bootstrap and initial a/b root mappings",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli list --recursive audit/a-is-apple",
+          "exit": 0,
+          "entry_route": "explicit Context",
+          "target_route": "world root",
+          "scope": "recursive descendants",
+          "input_provenance": "prior bootstrap",
+          "consumer": "topology review",
+          "actual": "Listed three root items and four empty descendants.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round-3 after source embed, snapshot archive, and first chunks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli list --direct audit/a-is-apple/working",
+          "exit": 0,
+          "entry_route": "explicit Context",
+          "target_route": "working",
+          "scope": "direct exact",
+          "input_provenance": "prior embed",
+          "consumer": "embed verification",
+          "actual": "Showed source VIA EMBED and no direct Memories.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round-4 after deliberate b conflict and archive embedding",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli list --direct audit/a-is-apple/source",
+          "exit": 0,
+          "entry_route": "explicit Context",
+          "target_route": "source",
+          "scope": "direct exact",
+          "input_provenance": "prior mutations",
+          "consumer": "UID recovery",
+          "actual": "Listed eight direct Memories including chunk fragments.",
+          "defect_ids": [
+            "AIA-CHUNK-01"
+          ],
+          "cost": "manual UID matching"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round-5 late accumulated state with source/archive/comparisons projections",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli list --recursive audit/a-is-apple",
+          "exit": 0,
+          "entry_route": "explicit Context",
+          "target_route": "world root",
+          "scope": "recursive descendants and embeds",
+          "input_provenance": "final state",
+          "consumer": "whole-world review",
+          "actual": "Repeated source and archive content under lexical and embedded paths.",
+          "defect_ids": [
+            "AIA-LIST-REPEAT-01"
+          ],
+          "cost": "592 tokens and duplicate reading"
+        }
+      ]
+    },
+    "show": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round-1 empty audit/a-is-apple before descendant bootstrap",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli show --direct --context audit/a-is-apple",
+          "exit": 0,
+          "entry_route": "explicit --context",
+          "target_route": "world root",
+          "scope": "direct exact",
+          "input_provenance": "empty fixture",
+          "consumer": "baseline",
+          "actual": "Displayed an empty Context.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round-2 after descendant bootstrap and initial a/b root mappings",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli show --direct --context audit/a-is-apple/working",
+          "exit": 0,
+          "entry_route": "explicit --context",
+          "target_route": "working",
+          "scope": "direct exact",
+          "input_provenance": "bootstrap",
+          "consumer": "empty boundary",
+          "actual": "Displayed empty working before its embed.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round-3 after source embed, snapshot archive, and first chunks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli show --recursive --context audit/a-is-apple/working",
+          "exit": 0,
+          "entry_route": "explicit --context",
+          "target_route": "working",
+          "scope": "recursive embeds",
+          "input_provenance": "prior source embed",
+          "consumer": "projection review",
+          "actual": "Displayed source plus four Memories through VIA EMBED.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round-4 after deliberate b conflict and archive embedding",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli show --direct --context audit/a-is-apple/archive",
+          "exit": 0,
+          "entry_route": "explicit --context",
+          "target_route": "archive",
+          "scope": "direct exact",
+          "input_provenance": "prior References",
+          "consumer": "snapshot verification",
+          "actual": "Displayed two read-only b References.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round-5 late accumulated state with source/archive/comparisons projections",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli show --recursive --context audit/a-is-apple/working",
+          "exit": 0,
+          "entry_route": "explicit --context",
+          "target_route": "working",
+          "scope": "recursive three embeds",
+          "input_provenance": "late state",
+          "consumer": "balanced review",
+          "actual": "Displayed source, archive, and comparisons with ten Memories and three References.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        }
+      ]
+    },
+    "find": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round-1 empty audit/a-is-apple before descendant bootstrap",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find \"apple\" --direct --context audit/a-is-apple",
+          "exit": 0,
+          "entry_route": "literal find",
+          "target_route": "world root",
+          "scope": "direct exact",
+          "input_provenance": "empty fixture",
+          "consumer": "empty boundary",
+          "actual": "Scanned zero and returned no results.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round-2 after descendant bootstrap and initial a/b root mappings",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find \"apple\" --recursive --context audit/a-is-apple",
+          "exit": 0,
+          "entry_route": "literal find",
+          "target_route": "world root",
+          "scope": "recursive descendants",
+          "input_provenance": "prior add/reference",
+          "consumer": "provenance check",
+          "actual": "Matched the original and its snapshot Reference.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round-3 after source embed, snapshot archive, and first chunks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find \"banana|boat\" --regex --context audit/a-is-apple --context audit/a-is-apple/source",
+          "exit": 0,
+          "entry_route": "regex multiple",
+          "target_route": "root plus source",
+          "scope": "multiple exact",
+          "input_provenance": "prior conflict setup",
+          "consumer": "conflict evidence",
+          "actual": "Returned boat from root and banana from source.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round-4 after deliberate b conflict and archive embedding",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find \"cedar\" --recursive --context audit/a-is-apple/working",
+          "exit": 0,
+          "entry_route": "literal find",
+          "target_route": "working",
+          "scope": "recursive embeds",
+          "input_provenance": "prior chunk",
+          "consumer": "projection check",
+          "actual": "Found cedar through the source embed.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round-5 late accumulated state with source/archive/comparisons projections",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find \"^[abc] (is|maps)\" --regex --recursive --context audit/a-is-apple",
+          "exit": 0,
+          "entry_route": "regex find",
+          "target_route": "world root",
+          "scope": "recursive descendants and embeds",
+          "input_provenance": "late state",
+          "consumer": "final mapping inventory",
+          "actual": "Matched 12 but displayed only 10 until an --all-results rerun.",
+          "defect_ids": [],
+          "cost": "10-result pagination"
+        }
+      ]
+    },
+    "search": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round-1 empty audit/a-is-apple before descendant bootstrap",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli search \"alphabet letter to word mapping\" --context audit/a-is-apple --limit 5",
+          "exit": 0,
+          "entry_route": "semantic search",
+          "target_route": "world root",
+          "scope": "exact top-5",
+          "input_provenance": "empty fixture",
+          "consumer": "empty boundary",
+          "actual": "Returned no matching items.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round-2 after descendant bootstrap and initial a/b root mappings",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli search \"current letter mappings\" --context audit/a-is-apple --context audit/a-is-apple/working --limit 6",
+          "exit": 0,
+          "entry_route": "semantic multiple",
+          "target_route": "root plus working",
+          "scope": "multiple exact",
+          "input_provenance": "prior state",
+          "consumer": "mapping discovery",
+          "actual": "Returned a->apple and provisional b->boat.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round-3 after source embed, snapshot archive, and first chunks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli search \"conflicting mappings for b\" --context audit/a-is-apple --context audit/a-is-apple/source --limit 8",
+          "exit": 0,
+          "entry_route": "semantic multiple",
+          "target_route": "root plus source",
+          "scope": "multiple exact",
+          "input_provenance": "prior mappings",
+          "consumer": "conflict discovery",
+          "actual": "Returned banana and boat from separate Contexts.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round-4 after deliberate b conflict and archive embedding",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli search \"evidence for the b mapping conflict\" --context audit/a-is-apple/source --context audit/a-is-apple/archive --limit 8",
+          "exit": 0,
+          "entry_route": "semantic multiple",
+          "target_route": "source plus archive",
+          "scope": "multiple exact plus trace",
+          "input_provenance": "prior conflicts",
+          "consumer": "conflict evidence audit",
+          "actual": "Returned both mappings and add checkpoint traces.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round-5 late accumulated state with source/archive/comparisons projections",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli search \"preferred final alphabet mappings and unresolved alternatives\" --context audit/a-is-apple/source --context audit/a-is-apple/comparisons --limit 10",
+          "exit": 0,
+          "entry_route": "semantic multiple",
+          "target_route": "source plus comparisons",
+          "scope": "multiple exact",
+          "input_provenance": "late state",
+          "consumer": "final evidence",
+          "actual": "Returned a/b/c source mappings and blueberry alternative.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        }
+      ]
+    },
+    "query": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round-1 empty audit/a-is-apple before descendant bootstrap",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli query \"What alphabet-to-word mappings are stored?\" --context audit/a-is-apple",
+          "exit": 0,
+          "entry_route": "ordinary query",
+          "target_route": "world root",
+          "scope": "exact empty",
+          "input_provenance": "direct question",
+          "consumer": "baseline answer",
+          "actual": "Correctly stated no mapping existed.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round-2 after descendant bootstrap and initial a/b root mappings",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli query \"What is mapped to the letter a, and what uncertainty remains?\" --recursive --context audit/a-is-apple",
+          "exit": 0,
+          "entry_route": "ordinary query",
+          "target_route": "world root",
+          "scope": "recursive",
+          "input_provenance": "prior mutations",
+          "consumer": "a mapping answer",
+          "actual": "Answered a->apple with one citation.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round-3 after source embed, snapshot archive, and first chunks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli query \"Which mappings are established, provisional, or conflicting?\" --recursive --context audit/a-is-apple",
+          "exit": 0,
+          "entry_route": "ordinary query",
+          "target_route": "world root",
+          "scope": "recursive descendants",
+          "input_provenance": "prior conflict",
+          "consumer": "state classification",
+          "actual": "Classified a as established, b boat as provisional, and b banana as conflicting.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round-4 after deliberate b conflict and archive embedding",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli query \"What conflicts and provenance records are visible from working?\" --recursive --context audit/a-is-apple/working",
+          "exit": 0,
+          "entry_route": "ordinary query",
+          "target_route": "working",
+          "scope": "recursive embeds and traces",
+          "input_provenance": "prior outputs",
+          "consumer": "audit explanation",
+          "actual": "Returned mapping evidence plus nine checkpoint-history citations.",
+          "defect_ids": [],
+          "cost": "17 citations"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round-5 late accumulated state with source/archive/comparisons projections",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli query \"State the best-supported mapping for a, b, and c, preserving unresolved alternatives and provenance.\" --recursive --context audit/a-is-apple/working",
+          "exit": 0,
+          "entry_route": "ordinary query",
+          "target_route": "working",
+          "scope": "recursive embeds",
+          "input_provenance": "late state",
+          "consumer": "final synthesis",
+          "actual": "Answered a apple, b banana with boat/blueberry alternatives, and provisional c cedar.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        }
+      ]
+    },
+    "summarize": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round-1 empty audit/a-is-apple before descendant bootstrap",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli summarize audit/a-is-apple --plain",
+          "exit": 0,
+          "entry_route": "explicit Context",
+          "target_route": "world root",
+          "scope": "direct empty",
+          "input_provenance": "empty fixture",
+          "consumer": "baseline",
+          "actual": "Said there were no ordinary Memories.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round-2 after descendant bootstrap and initial a/b root mappings",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli summarize audit/a-is-apple --recursive --plain",
+          "exit": 0,
+          "entry_route": "explicit Context",
+          "target_route": "world root",
+          "scope": "recursive descendants",
+          "input_provenance": "prior mutations",
+          "consumer": "early digest",
+          "actual": "Summarized a apple and provisional b boat.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round-3 after source embed, snapshot archive, and first chunks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli summarize audit/a-is-apple --recursive --plain",
+          "exit": 0,
+          "entry_route": "explicit Context",
+          "target_route": "world root",
+          "scope": "recursive descendants",
+          "input_provenance": "conflict state",
+          "consumer": "mid digest",
+          "actual": "Summarized a apple, b boat/banana conflict, and provenance.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round-4 after deliberate b conflict and archive embedding",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli summarize audit/a-is-apple/working --recursive --plain",
+          "exit": 0,
+          "entry_route": "explicit Context",
+          "target_route": "working",
+          "scope": "recursive embeds",
+          "input_provenance": "English-only stored content",
+          "consumer": "working digest",
+          "actual": "Unexpectedly returned the summary in Korean.",
+          "defect_ids": [
+            "AIA-SUMMARY-LANGUAGE-01"
+          ],
+          "cost": "language switch requires reread"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round-5 late accumulated state with source/archive/comparisons projections",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli summarize audit/a-is-apple/source --plain",
+          "exit": 0,
+          "entry_route": "explicit Context",
+          "target_route": "source",
+          "scope": "direct exact",
+          "input_provenance": "late state",
+          "consumer": "final digest",
+          "actual": "Returned an English a/b/c mapping summary.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        }
+      ]
+    },
+    "add": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round-1 empty audit/a-is-apple before descendant bootstrap",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli add \"a is apple.\" --context audit/a-is-apple",
+          "exit": 0,
+          "entry_route": "direct text",
+          "target_route": "world root",
+          "scope": "one Memory",
+          "input_provenance": "direct seed",
+          "consumer": "start knowledge set",
+          "actual": "Added b86c92b2.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round-2 after descendant bootstrap and initial a/b root mappings",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli add \"b is banana.\" --context audit/a-is-apple/source",
+          "exit": 0,
+          "entry_route": "direct text",
+          "target_route": "source",
+          "scope": "one Memory",
+          "input_provenance": "direct mapping",
+          "consumer": "extend set",
+          "actual": "Added b8ffd254.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round-3 after source embed, snapshot archive, and first chunks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli add \"b is boat.\" --context audit/a-is-apple/source",
+          "exit": 0,
+          "entry_route": "direct text",
+          "target_route": "source",
+          "scope": "one conflicting Memory",
+          "input_provenance": "deliberate conflict",
+          "consumer": "recovery test",
+          "actual": "Added c683fa9b.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round-4 after deliberate b conflict and archive embedding",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli add \"a is apple.\" --context audit/a-is-apple/source",
+          "exit": 0,
+          "entry_route": "direct text",
+          "target_route": "source",
+          "scope": "one duplicate seed",
+          "input_provenance": "deliberate duplicate",
+          "consumer": "dedup test",
+          "actual": "Added 863d44bc.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round-5 late accumulated state with source/archive/comparisons projections",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli add \"Canonical set: a is apple; b is banana; c is cedar; unresolved alternatives stay in comparisons.\" --context audit/a-is-apple/working",
+          "exit": 0,
+          "entry_route": "direct text",
+          "target_route": "working",
+          "scope": "one synthesis Memory",
+          "input_provenance": "prior query output",
+          "consumer": "final set",
+          "actual": "Added d2784f16.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        }
+      ]
+    },
+    "copy": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round-1 empty audit/a-is-apple before descendant bootstrap",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli copy audit/a-is-apple:b86c92b2 --into audit/a-is-apple",
+          "exit": 0,
+          "entry_route": "qualified selector",
+          "target_route": "world root",
+          "scope": "same-Context copy",
+          "input_provenance": "prior add UID",
+          "consumer": "duplicate/edit seed",
+          "actual": "Created 3d2e441d.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round-2 after descendant bootstrap and initial a/b root mappings",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli copy audit/a-is-apple:b86c92b2 --into audit/a-is-apple/working",
+          "exit": 0,
+          "entry_route": "qualified selector",
+          "target_route": "working",
+          "scope": "cross-Context copy",
+          "input_provenance": "prior add UID",
+          "consumer": "working draft",
+          "actual": "Created 03f1c9cd.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round-3 after source embed, snapshot archive, and first chunks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli copy audit/a-is-apple/source:c683fa9b --into audit/a-is-apple/working",
+          "exit": 0,
+          "entry_route": "qualified selector",
+          "target_route": "working",
+          "scope": "cross-Context copy",
+          "input_provenance": "prior conflict UID",
+          "consumer": "new-letter draft",
+          "actual": "Created c907559b.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round-4 after deliberate b conflict and archive embedding",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli copy audit/a-is-apple/source:863d44bc --into audit/a-is-apple/source",
+          "exit": 0,
+          "entry_route": "qualified selector",
+          "target_route": "source",
+          "scope": "same-Context duplicate",
+          "input_provenance": "prior add UID",
+          "consumer": "duplicate test",
+          "actual": "Created 68d3efa8.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round-5 late accumulated state with source/archive/comparisons projections",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli copy audit/a-is-apple/working:d2784f16 --into audit/a-is-apple/working",
+          "exit": 0,
+          "entry_route": "qualified selector",
+          "target_route": "working",
+          "scope": "same-Context copy",
+          "input_provenance": "final add UID",
+          "consumer": "preserve full synthesis",
+          "actual": "Created eaf120ca.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        }
+      ]
+    },
+    "reference": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round-1 empty audit/a-is-apple before descendant bootstrap",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli reference audit/a-is-apple:b86c92b2 --into audit/a-is-apple",
+          "exit": 0,
+          "entry_route": "qualified selector",
+          "target_route": "world root",
+          "scope": "snapshot Reference",
+          "input_provenance": "prior add UID",
+          "consumer": "baseline provenance",
+          "actual": "Created 11a855fa.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round-2 after descendant bootstrap and initial a/b root mappings",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli reference audit/a-is-apple/source:b8ffd254 --into audit/a-is-apple/archive",
+          "exit": 0,
+          "entry_route": "qualified selector",
+          "target_route": "archive",
+          "scope": "snapshot Reference",
+          "input_provenance": "prior source add",
+          "consumer": "banana provenance",
+          "actual": "Created 45eb1490.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round-3 after source embed, snapshot archive, and first chunks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli reference audit/a-is-apple/source:c683fa9b --into audit/a-is-apple/archive",
+          "exit": 0,
+          "entry_route": "qualified selector",
+          "target_route": "archive",
+          "scope": "snapshot Reference",
+          "input_provenance": "prior conflict add",
+          "consumer": "boat recovery",
+          "actual": "Created b4c64a6e.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round-4 after deliberate b conflict and archive embedding",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli reference audit/a-is-apple/source:863d44bc --into audit/a-is-apple/archive",
+          "exit": 0,
+          "entry_route": "qualified selector",
+          "target_route": "archive",
+          "scope": "snapshot Reference",
+          "input_provenance": "duplicate seed",
+          "consumer": "a provenance",
+          "actual": "Created 504e0205.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round-5 late accumulated state with source/archive/comparisons projections",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli reference audit/a-is-apple/working:d2784f16 --into audit/a-is-apple/archive",
+          "exit": 0,
+          "entry_route": "qualified selector",
+          "target_route": "archive",
+          "scope": "snapshot Reference",
+          "input_provenance": "final add",
+          "consumer": "final-draft provenance",
+          "actual": "Created 887f9585.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        }
+      ]
+    },
+    "embed": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round-1 empty audit/a-is-apple before descendant bootstrap",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli embed audit/a-is-apple --into audit/a-is-apple",
+          "exit": 1,
+          "entry_route": "self embed",
+          "target_route": "world root",
+          "scope": "cycle boundary",
+          "input_provenance": "empty topology",
+          "consumer": "safety check",
+          "actual": "Rejected self-embedding clearly.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round-2 after descendant bootstrap and initial a/b root mappings",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli embed audit/a-is-apple/source --into audit/a-is-apple/working",
+          "exit": 0,
+          "entry_route": "explicit source",
+          "target_route": "working",
+          "scope": "local Context embed",
+          "input_provenance": "bootstrap source",
+          "consumer": "source projection",
+          "actual": "Embedded source.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round-3 after source embed, snapshot archive, and first chunks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli embed audit/a-is-apple/archive --into audit/a-is-apple/working",
+          "exit": 0,
+          "entry_route": "explicit source",
+          "target_route": "working",
+          "scope": "local Context embed",
+          "input_provenance": "snapshot archive",
+          "consumer": "provenance projection",
+          "actual": "Embedded archive.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round-4 after deliberate b conflict and archive embedding",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli embed audit/a-is-apple/comparisons --into audit/a-is-apple/working",
+          "exit": 0,
+          "entry_route": "explicit source",
+          "target_route": "working",
+          "scope": "local Context embed",
+          "input_provenance": "alternative store",
+          "consumer": "comparison projection",
+          "actual": "Embedded comparisons.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round-5 late accumulated state with source/archive/comparisons projections",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli embed audit/a-is-apple --into audit/a-is-apple/working",
+          "exit": 0,
+          "entry_route": "ancestor embed",
+          "target_route": "working",
+          "scope": "recursive reach cycle",
+          "input_provenance": "late topology",
+          "consumer": "whole-world projection",
+          "actual": "Accepted lexical ancestor embed, creating a deduplicated cycle.",
+          "defect_ids": [
+            "AIA-EMBED-CYCLE-01"
+          ],
+          "cost": "non-obvious topology"
+        }
+      ]
+    },
+    "edit": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round-1 empty audit/a-is-apple before descendant bootstrap",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli edit audit/a-is-apple:3d2e441d \"b is banana; this is a provisional second mapping.\"",
+          "exit": 0,
+          "entry_route": "qualified selector",
+          "target_route": "world root",
+          "scope": "single Memory",
+          "input_provenance": "prior copy",
+          "consumer": "create b draft",
+          "actual": "Changed copied a into provisional b.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round-2 after descendant bootstrap and initial a/b root mappings",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli edit audit/a-is-apple/working:03f1c9cd \"a maps to apple; this canonical mapping was copied from the original statement; retain the source UID for provenance.\"",
+          "exit": 0,
+          "entry_route": "qualified selector",
+          "target_route": "working",
+          "scope": "single Memory",
+          "input_provenance": "prior copy",
+          "consumer": "provenance draft",
+          "actual": "Expanded the a mapping.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round-3 after source embed, snapshot archive, and first chunks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli edit audit/a-is-apple/working:c907559b \"c is cherry; this mapping is provisional until a reviewer confirms the chosen word.\"",
+          "exit": 0,
+          "entry_route": "qualified selector",
+          "target_route": "working",
+          "scope": "single Memory",
+          "input_provenance": "prior copy",
+          "consumer": "create c draft",
+          "actual": "Changed copied b into provisional c.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round-4 after deliberate b conflict and archive embedding",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli edit audit/a-is-apple/source:f9fbc251 \"a maps to apple, copied from original Memory b86c92b2 with provenance preserved.\"",
+          "exit": 0,
+          "entry_route": "qualified selector",
+          "target_route": "source",
+          "scope": "single fragment",
+          "input_provenance": "prior ambiguity",
+          "consumer": "repair provenance fragment",
+          "actual": "Made one chunk independently precise.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round-5 late accumulated state with source/archive/comparisons projections",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli edit audit/a-is-apple/source:68d3efa8 \"d is dog.\"",
+          "exit": 0,
+          "entry_route": "qualified selector",
+          "target_route": "source",
+          "scope": "single duplicate",
+          "input_provenance": "prior duplicate report",
+          "consumer": "resolve duplicate",
+          "actual": "Converted absorbed a candidate into d.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        }
+      ]
+    },
+    "move": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round-1 empty audit/a-is-apple before descendant bootstrap",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli move audit/a-is-apple:3d2e441d --into audit/a-is-apple",
+          "exit": 1,
+          "entry_route": "qualified selector",
+          "target_route": "same Context",
+          "scope": "same-target boundary",
+          "input_provenance": "prior edit",
+          "consumer": "reorder attempt",
+          "actual": "Rejected because target already owned the Memory.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round-2 after descendant bootstrap and initial a/b root mappings",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli move audit/a-is-apple/working:03f1c9cd --into audit/a-is-apple/source",
+          "exit": 0,
+          "entry_route": "qualified selector",
+          "target_route": "source",
+          "scope": "cross-Context",
+          "input_provenance": "prior edit",
+          "consumer": "publish a provenance",
+          "actual": "Moved and checkpointed both Contexts.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round-3 after source embed, snapshot archive, and first chunks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli move audit/a-is-apple/working:c907559b --into audit/a-is-apple/source",
+          "exit": 0,
+          "entry_route": "qualified selector",
+          "target_route": "source",
+          "scope": "cross-Context",
+          "input_provenance": "prior edit",
+          "consumer": "publish c draft",
+          "actual": "Moved and checkpointed both Contexts.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round-4 after deliberate b conflict and archive embedding",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli move audit/a-is-apple/source:c683fa9b --into audit/a-is-apple/comparisons",
+          "exit": 0,
+          "entry_route": "qualified selector",
+          "target_route": "comparisons",
+          "scope": "cross-Context recovery",
+          "input_provenance": "prior conflict report",
+          "consumer": "separate b alternative",
+          "actual": "Moved live Memory while archive snapshot preserved boat.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round-5 late accumulated state with source/archive/comparisons projections",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli move audit/a-is-apple/working:d2784f16 --into audit/a-is-apple/source",
+          "exit": 0,
+          "entry_route": "qualified selector",
+          "target_route": "source",
+          "scope": "cross-Context",
+          "input_provenance": "final add",
+          "consumer": "publish final set",
+          "actual": "Moved final synthesis to source while its copy remained working.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        }
+      ]
+    },
+    "replace": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round-1 empty audit/a-is-apple before descendant bootstrap",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli replace \"banana\" \"boat\" --direct --context audit/a-is-apple --plain",
+          "exit": 0,
+          "entry_route": "literal replace",
+          "target_route": "world root",
+          "scope": "direct exact",
+          "input_provenance": "prior edit",
+          "consumer": "revise provisional b",
+          "actual": "Replaced one occurrence.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round-2 after descendant bootstrap and initial a/b root mappings",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli replace \"canonical\" \"preferred\" --direct --context audit/a-is-apple/source --plain",
+          "exit": 0,
+          "entry_route": "literal replace",
+          "target_route": "source",
+          "scope": "direct exact",
+          "input_provenance": "prior moved draft",
+          "consumer": "normalize status",
+          "actual": "Replaced one occurrence.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round-3 after source embed, snapshot archive, and first chunks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli replace \"cherry\" \"cedar\" --direct --context audit/a-is-apple/source --plain",
+          "exit": 0,
+          "entry_route": "literal replace",
+          "target_route": "source",
+          "scope": "direct exact",
+          "input_provenance": "prior moved draft",
+          "consumer": "revise c",
+          "actual": "Replaced one occurrence.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round-4 after deliberate b conflict and archive embedding",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli replace \"boat\" \"blueberry\" --direct --context audit/a-is-apple/comparisons --plain",
+          "exit": 0,
+          "entry_route": "literal replace",
+          "target_route": "comparisons",
+          "scope": "direct exact",
+          "input_provenance": "prior moved conflict",
+          "consumer": "retain alternate without source conflict",
+          "actual": "Replaced one occurrence.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round-5 late accumulated state with source/archive/comparisons projections",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli replace \"Canonical set\" \"Preferred set\" --direct --context audit/a-is-apple/source --plain",
+          "exit": 0,
+          "entry_route": "literal replace",
+          "target_route": "source",
+          "scope": "direct exact",
+          "input_provenance": "final moved set",
+          "consumer": "mark preference",
+          "actual": "Replaced one occurrence.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        }
+      ]
+    },
+    "chunk": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round-1 empty audit/a-is-apple before descendant bootstrap",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli chunk audit/a-is-apple:3d2e441d --method clauses --max-chars 80",
+          "exit": 0,
+          "entry_route": "qualified selector",
+          "target_route": "world root",
+          "scope": "one Memory clause method",
+          "input_provenance": "short draft",
+          "consumer": "no-split boundary",
+          "actual": "Produced one chunk and made no change.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round-2 after descendant bootstrap and initial a/b root mappings",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli chunk audit/a-is-apple/source:03f1c9cd --method clauses --max-chars 70",
+          "exit": 0,
+          "entry_route": "qualified selector",
+          "target_route": "source",
+          "scope": "one Memory clause method",
+          "input_provenance": "prior move/replace",
+          "consumer": "provenance units",
+          "actual": "Created three Memories without output UIDs.",
+          "defect_ids": [
+            "AIA-CHUNK-01",
+            "AIA-CHUNK-02"
+          ],
+          "cost": "follow-up list/find"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round-3 after source embed, snapshot archive, and first chunks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli chunk audit/a-is-apple/source:c907559b --method clauses --max-chars 60",
+          "exit": 0,
+          "entry_route": "qualified selector",
+          "target_route": "source",
+          "scope": "one Memory clause method",
+          "input_provenance": "prior move/replace",
+          "consumer": "c review units",
+          "actual": "Created three dependent fragments without output UIDs.",
+          "defect_ids": [
+            "AIA-CHUNK-01",
+            "AIA-CHUNK-02"
+          ],
+          "cost": "ambiguity cleanup"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round-4 after deliberate b conflict and archive embedding",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli chunk audit/a-is-apple:3d2e441d --method clauses --max-chars 50",
+          "exit": 0,
+          "entry_route": "qualified selector",
+          "target_route": "world root",
+          "scope": "one Memory clause method",
+          "input_provenance": "short draft",
+          "consumer": "second no-split boundary",
+          "actual": "Produced one chunk and made no change.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round-5 late accumulated state with source/archive/comparisons projections",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli chunk audit/a-is-apple/source:d2784f16 --method clauses --max-chars 70",
+          "exit": 0,
+          "entry_route": "qualified selector",
+          "target_route": "source",
+          "scope": "one Memory clause method",
+          "input_provenance": "final moved set",
+          "consumer": "final chunk boundary",
+          "actual": "Created two fragments without output UIDs.",
+          "defect_ids": [
+            "AIA-CHUNK-01",
+            "AIA-CHUNK-02"
+          ],
+          "cost": "follow-up ambiguity review"
+        }
+      ]
+    },
+    "compare": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round-1 empty audit/a-is-apple before descendant bootstrap",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli compare audit/a-is-apple audit/a-is-apple --snapshot",
+          "exit": 1,
+          "entry_route": "two explicit Contexts",
+          "target_route": "same world root twice",
+          "scope": "distinctness boundary",
+          "input_provenance": "empty/early state",
+          "consumer": "same-target safety",
+          "actual": "Rejected because Compare requires distinct Contexts.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round-2 after descendant bootstrap and initial a/b root mappings",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli compare audit/a-is-apple audit/a-is-apple/source --snapshot",
+          "exit": 0,
+          "entry_route": "two explicit Contexts",
+          "target_route": "root versus source",
+          "scope": "exact snapshots",
+          "input_provenance": "early mapping state",
+          "consumer": "mapping comparison",
+          "actual": "Correctly found b boat versus banana but falsely attached the a provenance phrase to banana.",
+          "defect_ids": [
+            "AIA-COMPARE-ASSOCIATION-01"
+          ],
+          "cost": "manual source audit"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round-3 after source embed, snapshot archive, and first chunks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli compare audit/a-is-apple/source audit/a-is-apple/archive --snapshot",
+          "exit": 0,
+          "entry_route": "two explicit Contexts",
+          "target_route": "source versus archive",
+          "scope": "direct plus References",
+          "input_provenance": "conflict state",
+          "consumer": "snapshot comparison",
+          "actual": "Reported shared b alternatives and extra c provenance.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round-4 after deliberate b conflict and archive embedding",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli compare audit/a-is-apple/source audit/a-is-apple/comparisons --snapshot",
+          "exit": 0,
+          "entry_route": "two explicit Contexts",
+          "target_route": "source versus comparisons",
+          "scope": "direct exact",
+          "input_provenance": "post-recovery state",
+          "consumer": "alternative comparison",
+          "actual": "Correctly isolated b banana versus blueberry.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round-5 late accumulated state with source/archive/comparisons projections",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli compare audit/a-is-apple/source audit/a-is-apple/comparisons --snapshot",
+          "exit": 0,
+          "entry_route": "two explicit Contexts",
+          "target_route": "source versus comparisons",
+          "scope": "late exact",
+          "input_provenance": "final state",
+          "consumer": "final preference check",
+          "actual": "Kept banana preferred and blueberry unresolved.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        }
+      ]
+    },
+    "find-duplicates": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round-1 empty audit/a-is-apple before descendant bootstrap",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-duplicates audit/a-is-apple --direct",
+          "exit": 0,
+          "entry_route": "explicit Context",
+          "target_route": "world root",
+          "scope": "direct items",
+          "input_provenance": "early state",
+          "consumer": "baseline duplicate check",
+          "actual": "Found zero groups.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round-2 after descendant bootstrap and initial a/b root mappings",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-duplicates audit/a-is-apple/source --direct",
+          "exit": 0,
+          "entry_route": "explicit Context",
+          "target_route": "source",
+          "scope": "direct items",
+          "input_provenance": "post-chunk state",
+          "consumer": "duplicate check",
+          "actual": "Found zero groups.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round-3 after source embed, snapshot archive, and first chunks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-duplicates audit/a-is-apple/source --direct",
+          "exit": 0,
+          "entry_route": "explicit Context",
+          "target_route": "source",
+          "scope": "direct items",
+          "input_provenance": "conflict state",
+          "consumer": "duplicate check",
+          "actual": "Found zero groups.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round-4 after deliberate b conflict and archive embedding",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-duplicates audit/a-is-apple/source --direct",
+          "exit": 0,
+          "entry_route": "explicit Context",
+          "target_route": "source",
+          "scope": "direct items",
+          "input_provenance": "deliberate duplicate",
+          "consumer": "cleanup decision",
+          "actual": "Found 863d44bc and 68d3efa8 as one exact group.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round-5 late accumulated state with source/archive/comparisons projections",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-duplicates audit/a-is-apple/source --direct",
+          "exit": 0,
+          "entry_route": "explicit Context",
+          "target_route": "source",
+          "scope": "direct items",
+          "input_provenance": "post-edit final state",
+          "consumer": "verify cleanup",
+          "actual": "Found zero groups.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        }
+      ]
+    },
+    "find-redundancies": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round-1 empty audit/a-is-apple before descendant bootstrap",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-redundancies audit/a-is-apple --direct",
+          "exit": 0,
+          "entry_route": "explicit Context",
+          "target_route": "world root",
+          "scope": "direct Memories",
+          "input_provenance": "early state",
+          "consumer": "baseline redundancy",
+          "actual": "Found zero groups.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round-2 after descendant bootstrap and initial a/b root mappings",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-redundancies audit/a-is-apple/source --direct",
+          "exit": 0,
+          "entry_route": "explicit Context",
+          "target_route": "source",
+          "scope": "direct Memories",
+          "input_provenance": "post-chunk state",
+          "consumer": "redundancy check",
+          "actual": "Found zero groups.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round-3 after source embed, snapshot archive, and first chunks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-redundancies audit/a-is-apple/source --direct",
+          "exit": 0,
+          "entry_route": "explicit Context",
+          "target_route": "source",
+          "scope": "direct Memories",
+          "input_provenance": "conflict state",
+          "consumer": "redundancy check",
+          "actual": "Found zero groups.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round-4 after deliberate b conflict and archive embedding",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-redundancies audit/a-is-apple/source --direct",
+          "exit": 0,
+          "entry_route": "explicit Context",
+          "target_route": "source",
+          "scope": "direct Memories",
+          "input_provenance": "deliberate duplicate",
+          "consumer": "cleanup decision",
+          "actual": "Reported one exact absorption.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round-5 late accumulated state with source/archive/comparisons projections",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-redundancies audit/a-is-apple/source --direct",
+          "exit": 0,
+          "entry_route": "explicit Context",
+          "target_route": "source",
+          "scope": "direct Memories",
+          "input_provenance": "post-edit final state",
+          "consumer": "verify cleanup",
+          "actual": "Found zero groups.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        }
+      ]
+    },
+    "find-ambiguities": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round-1 empty audit/a-is-apple before descendant bootstrap",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-ambiguities audit/a-is-apple",
+          "exit": 0,
+          "entry_route": "explicit Context",
+          "target_route": "world root",
+          "scope": "default direct",
+          "input_provenance": "provisional b",
+          "consumer": "clarity check",
+          "actual": "Flagged provisional mapping without confirmation criterion.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round-2 after descendant bootstrap and initial a/b root mappings",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-ambiguities audit/a-is-apple/source",
+          "exit": 0,
+          "entry_route": "explicit Context",
+          "target_route": "source",
+          "scope": "default direct",
+          "input_provenance": "first chunks",
+          "consumer": "clarity check",
+          "actual": "Flagged missing source UID fragment.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round-3 after source embed, snapshot archive, and first chunks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-ambiguities audit/a-is-apple/source",
+          "exit": 1,
+          "entry_route": "explicit Context",
+          "target_route": "source",
+          "scope": "default direct",
+          "input_provenance": "second chunks and conflict",
+          "consumer": "clarity check",
+          "actual": "Failed decoder validation: provider returned a question for NONE.",
+          "defect_ids": [
+            "AIA-AMBIG-DECODE-01"
+          ],
+          "cost": "22 seconds then no report"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round-4 after deliberate b conflict and archive embedding",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-ambiguities audit/a-is-apple/source",
+          "exit": 0,
+          "entry_route": "explicit Context",
+          "target_route": "source",
+          "scope": "default direct",
+          "input_provenance": "duplicate state",
+          "consumer": "clarity check",
+          "actual": "Flagged three chunk-dependent ambiguities.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round-5 late accumulated state with source/archive/comparisons projections",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-ambiguities audit/a-is-apple/source",
+          "exit": 0,
+          "entry_route": "explicit Context",
+          "target_route": "source",
+          "scope": "default direct",
+          "input_provenance": "final chunks",
+          "consumer": "final clarity gate",
+          "actual": "Flagged three dependent or underspecified fragments.",
+          "defect_ids": [
+            "AIA-CHUNK-02"
+          ],
+          "cost": "11.7 seconds"
+        }
+      ]
+    },
+    "find-conflicts": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round-1 empty audit/a-is-apple before descendant bootstrap",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-conflicts audit/a-is-apple",
+          "exit": 0,
+          "entry_route": "explicit Context",
+          "target_route": "world root",
+          "scope": "default direct",
+          "input_provenance": "early state",
+          "consumer": "baseline conflict",
+          "actual": "Found zero pairs.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round-2 after descendant bootstrap and initial a/b root mappings",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-conflicts audit/a-is-apple/source",
+          "exit": 0,
+          "entry_route": "explicit Context",
+          "target_route": "source",
+          "scope": "default direct",
+          "input_provenance": "post-chunk state",
+          "consumer": "conflict check",
+          "actual": "Found zero pairs.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round-3 after source embed, snapshot archive, and first chunks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-conflicts audit/a-is-apple/source",
+          "exit": 0,
+          "entry_route": "explicit Context",
+          "target_route": "source",
+          "scope": "default direct",
+          "input_provenance": "deliberate b conflict",
+          "consumer": "conflict diagnosis",
+          "actual": "Flagged banana versus boat with a clear question.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round-4 after deliberate b conflict and archive embedding",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-conflicts audit/a-is-apple/source",
+          "exit": 0,
+          "entry_route": "explicit Context",
+          "target_route": "source",
+          "scope": "default direct",
+          "input_provenance": "after move to comparisons",
+          "consumer": "verify recovery",
+          "actual": "Found zero pairs.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round-5 late accumulated state with source/archive/comparisons projections",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli find-conflicts audit/a-is-apple/source",
+          "exit": 0,
+          "entry_route": "explicit Context",
+          "target_route": "source",
+          "scope": "default direct",
+          "input_provenance": "final state",
+          "consumer": "final conflict gate",
+          "actual": "Found zero pairs.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        }
+      ]
+    },
+    "fit": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "starting_state": "round-1 empty audit/a-is-apple before descendant bootstrap",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli fit --context audit/a-is-apple --context audit/a-is-apple",
+          "exit": 0,
+          "entry_route": "repeated explicit context",
+          "target_route": "world root deduplicated",
+          "scope": "same exact Context",
+          "input_provenance": "early state",
+          "consumer": "same-frame fit",
+          "actual": "Returned FIT YES with one deduplicated target.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 2,
+          "starting_state": "round-2 after descendant bootstrap and initial a/b root mappings",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli fit --context audit/a-is-apple --context audit/a-is-apple/source",
+          "exit": 0,
+          "entry_route": "repeated explicit contexts",
+          "target_route": "root plus source",
+          "scope": "multiple exact",
+          "input_provenance": "boat/banana state",
+          "consumer": "conflict gate",
+          "actual": "Returned FIT NO for b boat versus banana.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 3,
+          "starting_state": "round-3 after source embed, snapshot archive, and first chunks",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli fit --context audit/a-is-apple/source --context audit/a-is-apple/archive",
+          "exit": 1,
+          "entry_route": "repeated explicit contexts",
+          "target_route": "source plus archive",
+          "scope": "multiple exact",
+          "input_provenance": "archive References only",
+          "consumer": "reference-only boundary",
+          "actual": "Rejected because archive has no direct ordinary Memories.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 4,
+          "starting_state": "round-4 after deliberate b conflict and archive embedding",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli fit --context audit/a-is-apple/source --context audit/a-is-apple/comparisons",
+          "exit": 0,
+          "entry_route": "repeated explicit contexts",
+          "target_route": "source plus comparisons",
+          "scope": "multiple exact",
+          "input_provenance": "banana/blueberry state",
+          "consumer": "alternative gate",
+          "actual": "Returned FIT NO.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        },
+        {
+          "attempt": 5,
+          "starting_state": "round-5 late accumulated state with source/archive/comparisons projections",
+          "command": "env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/KimMunyeong/.codex/audit-snapshots/memcommit-study-long-audit-20260823-code python -m memcommit.cli fit --context audit/a-is-apple/source --context audit/a-is-apple/comparisons",
+          "exit": 0,
+          "entry_route": "repeated explicit contexts",
+          "target_route": "source plus comparisons",
+          "scope": "multiple exact",
+          "input_provenance": "final state",
+          "consumer": "final compatibility gate",
+          "actual": "Returned FIT NO and noted the alternative was not typed as unresolved.",
+          "defect_ids": [],
+          "cost": "one CLI command"
+        }
+      ]
+    }
+  }
+}

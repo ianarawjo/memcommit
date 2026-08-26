@@ -1,0 +1,28 @@
+{
+  "sequence": 69,
+  "count_before": 313,
+  "count_after": 314,
+  "delta": 1,
+  "new_attempt_uids": [
+    "4b135314-3f25-4f18-b5ec-e7e7e14df750"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "4b135314-3f25-4f18-b5ec-e7e7e14df750",
+      "operation": "help",
+      "command": "mem help update",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:16:30.829716+00:00",
+      "completed_at": "2026-08-25T18:16:37.474507+00:00",
+      "elapsed_seconds": 6.644555292004952,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

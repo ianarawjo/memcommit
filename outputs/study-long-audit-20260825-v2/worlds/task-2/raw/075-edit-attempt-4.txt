@@ -1,0 +1,7 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 edit task-2/participant:93582936 "Recruitment reconciliation: before commitments, use a justified participant target range with separate workload and budget consequences; after confirmation, publish one exact recalculated target. The transition condition is documented explicitly."
+EXIT: 0
+DURATION_SECONDS: 1.393
+
+Edited [93582936] in 'task-2/participant':
+  - Recruitment reconciliation: before commitments, use a justified participant target range with separate workload and budget consequences; after confirmation, publish one exact recalculated target.
+  + Recruitment reconciliation: before commitments, use a justified participant target range with separate workload and budget consequences; after confirmation, publish one exact recalculated target. The transition condition is documented explicitly.

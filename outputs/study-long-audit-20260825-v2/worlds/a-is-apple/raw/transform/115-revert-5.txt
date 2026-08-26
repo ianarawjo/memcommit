@@ -1,0 +1,28 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple revert b369b639 --context practice/source --keep
+
+EXIT
+0
+
+OUTPUT
+Reverted Context: practice/source
+Restored state recorded by: manual checkpoint
+Action detail: a-is-apple transform round 5 recovery before destructive scratch trials
+Affected Context: practice/source
+Affected content: 18 Memories added, 1 Memory ref added, 19 Memories removed, 4 Memory refs removed, 2 Embedded contexts removed
+  - [memory 7275b162] "Use “a is apple” as the preferred final proposition for a."
+  - [memory fc0cb358] "Keep “a maps to apricot” explicit as a deliberate conflicting, unresolved alternative rather than treating it as the preferred result or silently reconciling it."
+  - [memory 05742ecd] "Record that one apple-mapping occurrence was copied from the original direct Memory for provenance, without assigning that provenance statement to the conflicting apricot alternative."
+  - [memory 1244d573] "Preserve the edited duplicate’s original assertion across its split provenance text."
+  - [memory cc28bc10] "When giving provenance for an apple-mapping example, retain that one occurrence was copied from the original direct Memory and preserve the edited duplicate’s original assertion across its split provenance text; do not assign the apple pro…"
+  - [memory a2333313] "a is apple."
+  - [memory b0cf630e] "a maps to apple;"
+  - [memory f0c76e77] "this edited duplicate retains the original"
+  - [memory 372d7d1d] "assertion."
+  - [reference 3d6c9417] practice:f1c940a1 "a is apple."  READ ONLY
+  - [reference b6e1778f] practice/source:4a8036d1 "b is banana."  READ ONLY
+  - [context 7e48e68e] "practice/source"
+  ... 32 more affected direct items not shown
+Restored checkpoint: [b369b639] (2026-08-25 13:23)
+Undo command: mem undo
+Exact recovery checkpoint: mem revert 7fb8c641 --discard-newer

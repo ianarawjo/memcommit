@@ -1,0 +1,28 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple revert 06305367 --context practice/source --keep
+
+EXIT
+0
+
+OUTPUT
+Reverted Context: practice/source
+Restored state recorded by: manual checkpoint
+Action detail: a-is-apple transform round 3 recovery before destructive scratch trials
+Affected Context: practice/source
+Affected content: 18 Memories added, 1 Memory ref added, 19 Memories removed, 4 Memory refs removed, 2 Embedded contexts removed
+  - [memory b443aa3f] "Recover the preferred set as exactly: a maps to apple, b maps to banana, and c maps to cedar; do not introduce mappings for other letters."
+  - [memory fe3ff968] "Keep unresolved alternatives explicit during recovery instead of silently replacing the preferred mapping."
+  - [memory cd7dfe8a] "For each mapping discussed, label whether its provenance identifies it as preferred or leaves it as an unresolved alternative."
+  - [memory 506ca83d] "When a preferred mapping and an unresolved alternative concern the same source item, present both with their respective provenance and explain only the provenance difference that supports their different status."
+  - [memory 22c1519f] "Do not add mappings, resolve alternatives, or infer preference from the mapping values themselves; report preference only when the cited provenance supports it, and otherwise retain the alternative as unresolved."
+  - [memory 136a560e] "a is apple."
+  - [memory b0e0be1c] "a maps to apple;"
+  - [memory 715187fa] "this edited duplicate retains the original"
+  - [memory 363f2765] "assertion."
+  - [reference 3d6c9417] practice:f1c940a1 "a is apple."  READ ONLY
+  - [reference b6e1778f] practice/source:4a8036d1 "b is banana."  READ ONLY
+  - [context 7e48e68e] "practice/source"
+  ... 32 more affected direct items not shown
+Restored checkpoint: [06305367] (2026-08-25 13:17)
+Undo command: mem undo
+Exact recovery checkpoint: mem revert bbacdb65 --discard-newer

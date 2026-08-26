@@ -1,0 +1,12 @@
+Semantic eval scoreboard · latest comparable campaigns
+
+find-ambiguities · codex_chatgpt:gpt-5.6-sol · ambiguity-classify-v2 · schema v2 · COMPLETED · CALIBRATION@003654c092e0 · reasoning=none · runs=1 · cases=1/10
+  CALIBRATION score 1/1 · failed 0
+  attempts exact=1/1 · structurally-valid=1/1
+  failures none
+  time connection=0.028s completion(mean/median/p95/max)=4.794s/4.794s/4.794s/4.794s campaign=4.796s total=4.824s
+Label distribution:
+  interpretation   NONE  HELPFUL  REQUIRED
+  SINGLE            1        0         0
+  DOMINANT          0        0         0
+  COMPETING         0        0         0

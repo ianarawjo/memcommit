@@ -1,0 +1,20 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source diff --checkpoint b4ea26c7 --stat
+
+EXIT
+0
+
+WALL_SECONDS
+1.333104
+
+STDOUT
+UNIT        CHECKPOINT · THIS CHECKPOINT VS PREVIOUS
+CHECKPOINT  b4ea26c7-0efe-47d4-8d25-791a916bb463
+CONTEXT     practice/description
+ACTION      checkpoint
+DESCRIPTION v2 transform round 3 safety
+RESULT      13 DIRECT ITEMS
+SUMMARY     0 kept · 13 added · 0 edited · 23 removed
+
+
+STDERR

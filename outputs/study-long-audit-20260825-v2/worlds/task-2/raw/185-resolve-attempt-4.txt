@@ -1,0 +1,6 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 resolve --context task-2/participant/proposal-workspace --memory 207b72f8-754a-4add-8641-cf0abe8059f6 --no-create --guidance "An exact target applies after commitments; a justified range applies while confirmations can change." --plain --yes
+EXIT: 0
+DURATION_SECONDS: 9.132
+
+RESOLVE · task-2/participant/proposal-workspace
+FIT · YES · NO CHANGE

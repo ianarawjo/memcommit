@@ -1,0 +1,11 @@
+{
+  "sequence": 5,
+  "operation": "search",
+  "attempt": 1,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 search 'verified public facility impacts during Main Building construction' --context task-1/participant/construction-updates/facility-updates --context-only",
+  "exit": 0,
+  "wall_seconds": 9.62425,
+  "pre_target_digest": "c8e92c1c3ad2644f4e4f7881b27013f4ddaf779835d8c0dadd9e2c4dd0e60c35",
+  "post_target_digest": "289217ef389c0f4d6a8d58d9655e6d33e7d0e25e786e4f57fdefdf3db4d4b65f",
+  "raw_output": "raw/core/005-search-m1.txt"
+}

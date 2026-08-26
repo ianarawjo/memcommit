@@ -1,0 +1,9 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 atomize task-3/local/guardrails/purpose-and-scope
+
+EXIT
+124
+
+OUTPUT
+
+AUDIT HARNESS TIMEOUT after 360 seconds; child process terminated.

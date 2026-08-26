@@ -1,0 +1,7 @@
+Created empty Profile 'admin-v2-task-2-inactive'.
+Profile UID: 8e1230b2-6202-4e78-8c8c-2faa68e20013
+Store: /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-2/profile-control/stores/8e1230b2-6202-4e78-8c8c-2faa68e20013
+Contexts 0 owned + 0 granted · Memories 0 owned + 0 granted
+Active Profile unchanged: sixworld-v2-template
+Use it with: mem profile use admin-v2-task-2-inactive
+Then create its first Context with: mem init CONTEXT

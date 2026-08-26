@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 replace 'NOT SHARED' 'DRAFT ONLY' --context task-3/local --context task-3/local/guardrails/privacy-and-others
+
+STDOUT
+Replaced 1 occurrence in 1 Memory in 'task-3/local/guardrails/privacy-and-others'.
+Undo can restore this command.
+
+STDERR

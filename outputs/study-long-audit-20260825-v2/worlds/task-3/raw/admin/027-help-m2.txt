@@ -1,0 +1,31 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 help 'Which operation gives a grounded answer from readable memories without changing them?'
+
+STDIN
+<none>
+
+EXIT
+0
+
+WALL_SECONDS
+7.331874
+
+POST_CALL_IDENTITY_HOST_ASSERTION
+{"profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-3/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+STDOUT
+mem query ┬ Generate an LLM-based answer from readable Context knowledge or an authorized concealed
+          │ query-only view.
+          └ WHEN · Getting a grounded natural-language answer instead of a list of matching
+                   Memories.
+
+mem search ┬ Semantically rank Memories relevant to a natural-language request across selected
+           │ Contexts.
+           └ WHEN · Finding relevant Memories through meaning and context, including related content
+                    without obvious keyword overlap.
+
+mem summarize ┬ Show an LLM-derived overview of ordinary Memories in a readable Context scope.
+              └ WHEN · Obtaining a concise overview of a Context or subtree.
+
+
+STDERR

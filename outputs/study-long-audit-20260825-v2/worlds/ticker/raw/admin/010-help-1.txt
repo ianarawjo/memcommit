@@ -1,0 +1,93 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker help
+
+STDIN
+<none>
+
+EXIT
+0
+
+WALL_SECONDS
+1.245003
+
+PRE_IDENTITY
+{"current_context": "task-1/participant/construction-updates", "current_context_uid": "6c15d7c6-408a-56fa-8bc4-691c468af7b2", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+IMMEDIATE_POST_IDENTITY
+{"current_context": "task-1/participant/construction-updates", "current_context_uid": "6c15d7c6-408a-56fa-8bc4-691c468af7b2", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+COMMAND_ATTEMPT_DELTA
+{"count_after": 255, "count_before": 254, "delta": 1, "new_attempt_uids": ["05873ba5-a9a8-487f-8257-0981b2eb3fa5"], "records": [{"command": "mem help", "completed_at": "2026-08-25T18:12:20.522991+00:00", "details": {}, "elapsed_seconds": 0.008209584004362114, "failure": null, "operation": "help", "outcome": null, "started_at": "2026-08-25T18:12:20.514632+00:00", "status": "COMPLETED", "terminal": {"stdin_tty": true, "stdout_tty": false}, "uid": "05873ba5-a9a8-487f-8257-0981b2eb3fa5", "version": 3}], "sequence": 10}
+
+STDOUT
+mem command inventory
+
+add                 - Add one or more Memories to the current or explicit Context.
+atomize             - Immediately atomize the current Context into independently reviewable Memories and save the full analysis for Review.
+audit               - Run Duplicate, Ambiguity, and Conflict checks plus optional Rule Conformance, save the result, and print its Review receipt.
+branch              - Copy a Context or subtree into a new branch and switch to it.
+check-conformance   - Check one Context or saved Ground Examples against explicit Rules or condition propositions and report conformance issues.
+checkout            - Switch Contexts using Git-style syntax; with -b, create and switch to a new Context branch.
+checkpoint          - Save the current or an explicit local Context as a manual recovery point for Diff or Revert.
+chunk               - Mechanically split all splittable direct Memories in one Context, or one selected Memory, at configured sentence, clause, structural, literal, or size boundaries.
+clear               - Immediately remove all direct items from one Context or, with --recursive, its local lexical subtree; Undo can restore the command.
+compare             - Compare Memories in two Contexts and report what they share, what differs, and what appears only on one side.
+config (legacy)     - Read or write stored global configuration values.
+contexts            - List local Contexts and readable cross-Profile Context views.
+copy                - Copy one or more directly owned Memories into an existing local Context.
+dedun               - Immediately resolve role-aware exact plus direct-Memory semantic redundancies (dun), retaining the first existing UID in each group.
+dedup               - Remove same-role exact duplicates (dup) immediately, retaining the first existing UID for each role-specific identity group.
+delete (remove)     - Select a Context or direct item to delete, or name it by locator, name, or UID.
+diff                - Show one checkpoint-versus-previous diff or the active Update.
+distill             - Derive higher-level Rules or condition propositions from Case or Example propositions in a bounded Context, optionally guided by a Goal.
+edit                - Directly replace the content of one or more Memories selected by UID or prefix.
+elaborate           - Expand an abstract Goal, Rule, or condition into multiple more specific candidate propositions.
+embed               - Place a live link to one Memory or Context inside a local Target while retaining Source ownership.
+eval (legacy)       - Run and inspect the existing semantic evaluation campaigns.
+find                - Find exact text or explicit regular-expression (regex) matches in readable Memories.
+find-ambiguities    - Report ambiguous direct Memories in the current, explicit, or all readable Contexts.
+find-conflicts      - Report conflicting direct Memory pairs in the current, explicit, or all readable Contexts.
+find-duplicates     - Report same-role exact duplicate direct items.
+find-redundancies   - Report same-role exact direct items and semantically redundant direct Memories.
+fit                 - Judge whether a defined set of Memories or other propositions is jointly compatible under ordinary interpretation, returning YES, MAY, or NO.
+forget              - Apply one complete keep/edit/delete decision batch for an instruction.
+ground [PARTIAL]    - Develop an abstract idea into a reviewable Ground by shaping its Goal, Rules, and example Memories together.
+help                - Enter the interactive command browser and open syntax help.
+impact              - Preview or inspect an operation's expected Context effects without applying them.
+import [PARTIAL]    - Import a clean-baseline Profile, Context tree, or Memory by value while preserving resource identity.
+init                - Create a new empty Context and make it the current working Context.
+init-study          - Copy one Study baseline into an isolated participant/authority Profile pair.
+list (ls)           - List a Context's direct items—Memories, Memory references, query views, and embedded Contexts—and its readable child Contexts. Use -r to recursively include items from descendant and embedded Contexts; ls is the compact alias.
+lock                - Lock the current Context, an auto-typed Context or direct Memory target, a recursive Context set, or the explicit Profile.
+log                 - Print or search recorded Context, Memory, and Profile history.
+meld                - Semantically incorporate an incoming Context into an authoritative baseline, or derive a separate Result from two equal peers.
+merge               - Add Source-only items to a selected Target, leave exact matches unchanged, and choose Source or Target for stored-item conflicts.
+move                - Move one or more directly owned Memories into another existing local Context.
+profile             - Create, select, and manage local MemoryStore Profiles. Profiles can be renamed or permanently removed, and Study headings can be renamed through the picker or explicit profile subcommands.
+provider [PARTIAL]  - Select and verify Codex, Ollama, or OpenRouter semantic execution.
+pwd                 - Print the current canonical Context name without loading its contents.
+query               - Generate an LLM-based answer from readable Context knowledge or an authorized concealed query-only view.
+rationale           - Explain where one Memory came from and how it changed over time.
+redo                - Redo the most recently undone recorded Context command.
+reference           - Copy one Source Memory version or direct/recursive Context scope into a Target as an immutable read-only snapshot.
+rename              - Rename an ordinary Context namespace and all lexical descendants while preserving their stable identities.
+replace             - Immediately replace every literal or explicit regular-expression match in ordinary local Memories as one Undoable command.
+resolve             - Automatically interpret incompatibility Issues in one complete direct-Memory Context frame and verify one small Fit-YES plan.
+revert              - Restore the current or an explicit local Context to a selected checkpoint after reviewing that revision's complete result.
+review              - Inspect terminal execution evidence or a saved report and, where supported, record report responses. Review never applies Memories.
+search              - Semantically rank Memories relevant to a natural-language request across selected Contexts.
+sever               - Save a Result by selecting, transforming, or excluding Source Memories according to a Criteria Context.
+share               - Send one exact Context or lexical Context subtree through a grant-backed receiver endpoint.
+shell-init          - Print opt-in shell integration for interactive command prefill.
+show                - Show a Memory, reference, embedded Context, or complete Context contents. Use -r to include readable descendants and embedded Contexts as separate owner-preserving blocks.
+status              - Show the current Context's inventory, first five direct Memories, relationships, and latest checkpoints.
+summarize           - Show an LLM-derived overview of ordinary Memories in a readable Context scope.
+switch              - Enter the interactive Context picker, or switch to an explicit Context.
+trace               - Trace one retained Memory through its recorded lineage.
+translate [PARTIAL] - Generate and save a reusable translated view of one Context or Memory while preserving the original content.
+undo                - Undo the most recent recorded command as one unit.
+unlock              - Unlock the current Context, an auto-typed Context or direct Memory target, a recursive Context set, or the explicit Profile.
+update              - Update a Target Context from a Source Context, resolving required execution decisions before atomic Apply.
+
+
+STDERR

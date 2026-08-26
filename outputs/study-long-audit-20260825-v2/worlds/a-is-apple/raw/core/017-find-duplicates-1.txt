@@ -1,0 +1,9 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple find-duplicates practice --direct
+
+EXIT
+0
+
+OUTPUT
+Find Duplicates · practice · 5 direct items checked · 0 exact groups · 0 proposed absorptions
+  No exact duplicate direct items.

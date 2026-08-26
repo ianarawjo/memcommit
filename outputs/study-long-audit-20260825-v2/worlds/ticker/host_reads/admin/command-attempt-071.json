@@ -1,0 +1,31 @@
+{
+  "sequence": 71,
+  "count_before": 315,
+  "count_after": 316,
+  "delta": 1,
+  "new_attempt_uids": [
+    "7d96a522-4beb-49fd-aafc-a3686e7a6dfa"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "7d96a522-4beb-49fd-aafc-a3686e7a6dfa",
+      "operation": "init",
+      "command": "mem init 00000000-0000-0000-0000-000000000001",
+      "status": "FAILED",
+      "started_at": "2026-08-25T18:16:40.289990+00:00",
+      "completed_at": "2026-08-25T18:16:40.311086+00:00",
+      "elapsed_seconds": 0.02087687500170432,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": {
+        "kind": "Exit",
+        "exit_code": 1
+      }
+    }
+  ]
+}

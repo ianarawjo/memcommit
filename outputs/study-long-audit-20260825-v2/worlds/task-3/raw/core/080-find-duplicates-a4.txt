@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 find-duplicates task-3/local/personal-memory/2024/11 --direct
+
+STDOUT
+Find Duplicates · task-3/local/personal-memory/2024/11 · 10 direct items checked · 0 exact groups · 0 proposed absorptions
+  No exact duplicate direct items.
+
+STDERR

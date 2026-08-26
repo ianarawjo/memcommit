@@ -1,0 +1,15 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple chunk practice:dfc0640c --method clauses --max-chars 42
+
+EXIT
+0
+
+OUTPUT
+
+Proposed split of [dfc0640c] in Context 'practice' → 3 chunks (method=clauses, max_chars=42)
+────────────────────────────────────────────────────────
+   1  a maps to apricot;
+   2  this is a deliberate conflicting
+   3  alternative for recovery testing.
+────────────────────────────────────────────────────────
+Done — 3 memories added in 'practice'.

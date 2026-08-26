@@ -1,0 +1,37 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker eval semantic status --ledger-dir /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/admin-eval-ledger
+
+STDIN
+<none>
+
+EXIT
+0
+
+WALL_SECONDS
+1.352091
+
+PRE_IDENTITY
+{"current_context": "audit/ticker/admin-v2-scratch/co4-tree", "current_context_uid": "44473ed5-f911-4bd5-8871-7e0804873207", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+IMMEDIATE_POST_IDENTITY
+{"current_context": "audit/ticker/admin-v2-scratch/co4-tree", "current_context_uid": "44473ed5-f911-4bd5-8871-7e0804873207", "profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+COMMAND_ATTEMPT_DELTA
+{"count_after": 337, "count_before": 336, "delta": 1, "new_attempt_uids": ["06e7e908-15d1-4e3c-9145-c9206e9909eb"], "records": [{"command": "mem eval semantic status --ledger-dir /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/ticker/admin-eval-ledger", "completed_at": "2026-08-25T18:17:11.441719+00:00", "details": {}, "elapsed_seconds": 0.008178208008757792, "failure": null, "operation": "eval", "outcome": null, "started_at": "2026-08-25T18:17:11.433388+00:00", "status": "COMPLETED", "terminal": {"stdin_tty": true, "stdout_tty": false}, "uid": "06e7e908-15d1-4e3c-9145-c9206e9909eb", "version": 3}], "sequence": 92}
+
+STDOUT
+Semantic eval scoreboard · latest comparable campaigns
+
+find-ambiguities · codex_chatgpt:gpt-5.6-sol · ambiguity-classify-v2 · schema v2 · COMPLETED · CALIBRATION@003654c092e0 · reasoning=none · runs=1 · cases=1/10
+  CALIBRATION score 1/1 · failed 0
+  attempts exact=1/1 · structurally-valid=1/1
+  failures none
+  time connection=0.028s completion(mean/median/p95/max)=4.794s/4.794s/4.794s/4.794s campaign=4.796s total=4.824s
+Label distribution:
+  interpretation   NONE  HELPFUL  REQUIRED
+  SINGLE            1        0         0
+  DOMINANT          0        0         0
+  COMPETING         0        0         0
+
+
+STDERR

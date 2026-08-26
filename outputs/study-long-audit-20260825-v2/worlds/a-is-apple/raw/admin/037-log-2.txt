@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple log --context audit/a-is-apple/admin-v2-scratch --manual
+
+EXIT
+0
+
+OUTPUT
+No manual checkpoints for 'audit/a-is-apple/admin-v2-scratch' yet.

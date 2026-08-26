@@ -1,0 +1,4 @@
+SUMMARY · task-2/participant
+STATUS · DIRECT
+
+To construct a base ticker, first remove any terminal legal suffix such as Inc., Corp., Ltd., or LLC, then preserve the remaining alphanumeric characters and uppercase the company-name letters in their original order without inventing letters.

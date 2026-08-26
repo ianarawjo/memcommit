@@ -1,0 +1,17 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source summarize practice
+
+EXIT
+0
+
+WALL_SECONDS
+8.656822
+
+STDOUT
+SUMMARY · practice
+STATUS · DIRECT
+
+For text review, determine whether the request is review-only or authorizes edits before changing anything. When polishing is authorized, change only problematic wording, preserve structure, citation-needed markers, all intended points, and each claim’s strength and conditions; if a tighter limit applies, remove about 20–30% of redundant material without making claims sound categorical.
+
+
+STDERR

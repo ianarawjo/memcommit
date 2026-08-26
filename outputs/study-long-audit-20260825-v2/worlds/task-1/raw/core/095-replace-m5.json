@@ -1,0 +1,11 @@
+{
+  "sequence": 95,
+  "operation": "replace",
+  "attempt": 5,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 replace 'Add campus-wiki/shop-updates:' 'EVIDENCE shop-updates:' --context task-1/participant",
+  "exit": 0,
+  "wall_seconds": 1.350067,
+  "pre_target_digest": "222011f3c908b83850dcfc4a1fb3efe4813242592a27ecbe3281ce43af70ebec",
+  "post_target_digest": "aebb63ea5f203bcedaac59815cca6bf707abf23962252c0a7e465d2532e9f525",
+  "raw_output": "raw/core/095-replace-m5.txt"
+}

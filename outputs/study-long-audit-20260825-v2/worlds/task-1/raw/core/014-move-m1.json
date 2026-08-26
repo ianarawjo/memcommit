@@ -1,0 +1,11 @@
+{
+  "sequence": 14,
+  "operation": "move",
+  "attempt": 1,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 move 6d5be06d --from task-1/participant --into task-1/participant/construction-updates/facility-updates",
+  "exit": 0,
+  "wall_seconds": 1.361829,
+  "pre_target_digest": "ea5cf86e142019a801828ccae5994b1b398bec8a6da6232575ffe5f3fe84e068",
+  "post_target_digest": "cde4a0683a627366867c265a62eb18fcfeb8ec67eaaefd5b120c29dcf0b40e1e",
+  "raw_output": "raw/core/014-move-m1.txt"
+}

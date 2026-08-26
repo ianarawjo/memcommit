@@ -1,0 +1,28 @@
+{
+  "sequence": 7,
+  "count_before": 251,
+  "count_after": 252,
+  "delta": 1,
+  "new_attempt_uids": [
+    "2cd0093f-be2a-461d-9319-d1d6adb3e85f"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "2cd0093f-be2a-461d-9319-d1d6adb3e85f",
+      "operation": "status",
+      "command": "mem status --short",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:12:16.589933+00:00",
+      "completed_at": "2026-08-25T18:12:16.692793+00:00",
+      "elapsed_seconds": 0.10270483400381636,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

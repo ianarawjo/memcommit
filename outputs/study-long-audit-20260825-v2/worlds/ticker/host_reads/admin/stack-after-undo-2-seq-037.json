@@ -1,0 +1,68 @@
+{
+  "label": "after-undo-2-seq-037",
+  "read_at": "2026-08-25T18:13:09.548534+00:00",
+  "undo_top": {
+    "uid": "branch:14a4bb19-2abe-47b9-b967-a5f2df320bbb",
+    "command": "branch",
+    "description": "Branched 'task-1/participant/construction-updates' to 'audit/ticker/admin-v2-scratch/b1'.",
+    "members": [
+      {
+        "context_uid": "d9bd80bb-1944-4423-8306-6e5fdfbc02d8",
+        "context_name": "audit/ticker/admin-v2-scratch/b1",
+        "checkpoint_uid": "f3b4f1c8-a0db-42f2-b43c-a837f18aa916"
+      }
+    ]
+  },
+  "redo_top": {
+    "uid": "branch:1a34725d-14da-4adc-a033-add29f0b72b5",
+    "command": "branch",
+    "description": "Branched subtree 'task-1/participant/construction-updates' to 'audit/ticker/admin-v2-scratch/b2-tree'.",
+    "members": [
+      {
+        "context_uid": "86573764-296a-456a-9302-2a8599bdc8a4",
+        "context_name": "audit/ticker/admin-v2-scratch/b2-tree",
+        "checkpoint_uid": "2d93c8c9-59c0-404b-b07c-889020367e86"
+      },
+      {
+        "context_uid": "f7e9279d-b7b7-4223-bfe4-b8b3c2929d6a",
+        "context_name": "audit/ticker/admin-v2-scratch/b2-tree/building-access",
+        "checkpoint_uid": "d1192184-a485-416e-9d40-8f1c486a3140"
+      },
+      {
+        "context_uid": "a45d9f4a-a8f1-441b-85e9-5969b63b148a",
+        "context_name": "audit/ticker/admin-v2-scratch/b2-tree/event-relocations",
+        "checkpoint_uid": "826958ef-de5e-4bbd-b16a-63989f7d3676"
+      },
+      {
+        "context_uid": "ed0e0d6b-2d0c-45c4-bbc3-50193c9b0218",
+        "context_name": "audit/ticker/admin-v2-scratch/b2-tree/facility-updates",
+        "checkpoint_uid": "21cdc87d-34b1-4fc3-8585-b4f170379fe5"
+      },
+      {
+        "context_uid": "cf2a21a8-0e63-4b2d-945e-325f6840fe03",
+        "context_name": "audit/ticker/admin-v2-scratch/b2-tree/route-changes",
+        "checkpoint_uid": "3f130247-b21a-4648-8b30-1b3251fa0040"
+      },
+      {
+        "context_uid": "5ea31eba-34a2-44b5-a1ef-1116e93b214e",
+        "context_name": "audit/ticker/admin-v2-scratch/b2-tree/shop-updates",
+        "checkpoint_uid": "ed27c1a6-257a-44de-9031-623c1c4e6a4c"
+      },
+      {
+        "context_uid": "95335b0c-6dcf-451d-a125-ccde2aad5047",
+        "context_name": "audit/ticker/admin-v2-scratch/b2-tree/temporary-parking",
+        "checkpoint_uid": "062a6008-b181-451c-8c12-18f082abac05"
+      }
+    ]
+  },
+  "undo_depth": 64,
+  "redo_depth": 1,
+  "staged_update_granted_target": null,
+  "assertions": {
+    "expected_side": "redo",
+    "expected_uid": "branch:1a34725d-14da-4adc-a033-add29f0b72b5",
+    "expected_command": "branch",
+    "require_granted_null": false,
+    "result": "PASS"
+  }
+}

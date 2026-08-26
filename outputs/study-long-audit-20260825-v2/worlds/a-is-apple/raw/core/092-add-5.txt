@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple add 'Canonical set: a is apple; b is banana; c is cedar; unresolved alternatives remain explicit.' --context practice
+
+EXIT
+0
+
+OUTPUT
+Added [b5180f53] Canonical set: a is apple; b is banana; c is cedar; unresolved alternatives remain explicit.

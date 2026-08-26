@@ -1,0 +1,26 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 query "Produce a final equal-authority evaluation policy with source-grounded conditions." --context task-2/advisor1/evaluation --context task-2/advisor2/evaluation
+EXIT: 0
+DURATION_SECONDS: 9.107
+
+Use one declared representative primary measure as the common decision criterion for retaining or maintaining, modifying, or discarding or discontinuing each compared design alternative; the HCI review panel should verify that judgments and operational decisions can be made from that measure. [1] [2] [3] [4]
+
+Predefine thresholds for the key metrics that trigger each decision, and interpret results as differences among alternatives rather than as the isolated success or failure of one prototype. [5] [6]
+
+Collect process measures alongside the primary outcome to locate problematic interaction steps; separately evaluate usability, organizational adoption intent, implementation fidelity, and whether workload reductions for one role create tasks for others. [7] [8] [9] [10]
+
+Qualify conclusions by testing adjacent boundary cases and by recognizing that controlled settings omit daily-use conditions such as time pressure, peer intervention, and voluntary termination, while initial and long-term evaluations differ in exposure duration and repeated-use frequency. [11] [12] [13]
+
+References
+[1] Specify a single representative measure that serves as the criterion for retaining, modifying, or discarding compared design alternatives. — a50f6ecb, task-2/advisor1/evaluation, m1
+[2] HCI review panels verify whether clear criteria for judging design alternatives are established using the declared primary measure. — 44c61beb, task-2/advisor1/evaluation, m2
+[3] Specify a single representative measure that will drive operational decisions to maintain, modify, or discontinue the deployed design. — f27576c7, task-2/advisor2/evaluation, m7
+[4] The HCI review panel verifies whether operational decisions can be made based on the declared primary measure. — 8608bdf3, task-2/advisor2/evaluation, m8
+[5] Establish decision thresholds indicating at what levels key metrics trigger maintaining, modifying, or discontinuing the design. — b06bb706, task-2/advisor2/evaluation, m9
+[6] Interpret evaluation results as differences between compared design alternatives rather than as success or failure of a single prototype. — 65ae88bf, task-2/advisor1/evaluation, m4
+[7] Collect process measures to diagnose interaction steps where problems occurred, alongside the primary outcome measure. — 23202824, task-2/advisor1/evaluation, m3
+[8] Evaluate whether reducing workload for one role creates new tasks for other roles through the proposed design changes. — 473ec6e8, task-2/advisor2/evaluation, m10
+[9] Distinguish usability from organizational adoption intent as separate evaluation outcomes. — 935cf79f, task-2/advisor2/evaluation, m11
+[10] Implementation fidelity indicates whether planned features and operational procedures were delivered in the field according to intended specifications. — bea0e97f, task-2/advisor2/evaluation, m12
+[11] Check boundary cases to verify whether the derived design principles retain explanatory power for adjacent situations not included in the comparison. — 79af5e5f, task-2/advisor1/evaluation, m5
+[12] Controlled evaluation environments do not reproduce time pressure, peer intervention, or voluntary termination conditions found in daily use. — 3a65fc8b, task-2/advisor1/evaluation, m6
+[13] Initial evaluations and long-term operation do not share identical measurement conditions due to differences in system exposure duration and frequency of repeated use. — dbe435ff, task-2/advisor2/evaluation, m13

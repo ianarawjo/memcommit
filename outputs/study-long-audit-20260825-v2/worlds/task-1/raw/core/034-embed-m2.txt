@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 embed task-1/campus-wiki/event-relocations:a0700edb --into task-1/participant
+
+EXIT
+0
+
+WALL_SECONDS
+1.426859
+
+STDOUT
+Embedded Memory [a0700edb] from 'task-1/campus-wiki/event-relocations' as [c1a5d80d] in 'task-1/participant' after [1600961e] at the end.
+
+
+STDERR

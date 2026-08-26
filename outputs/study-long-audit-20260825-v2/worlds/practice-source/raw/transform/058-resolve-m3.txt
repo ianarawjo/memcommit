@@ -1,0 +1,15 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source resolve --context practice/description --memory cbd46e2b --guidance 'Retain complete source scope and provenance; do not broaden the selected atom.' --no-create --plain
+
+EXIT
+0
+
+WALL_SECONDS
+7.476525
+
+STDOUT
+RESOLVE · practice/description
+FIT · YES · NO CHANGE
+
+
+STDERR

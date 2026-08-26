@@ -1,0 +1,6 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 resolve --context task-2/participant/proposal-workspace --memory a9cd917a-5c65-4672-aae0-7ee0040d7094 --no-create --guidance "Budget totals remain visible while arithmetic placement records the triggering review condition." --plain
+EXIT: 0
+DURATION_SECONDS: 9.158
+
+RESOLVE · task-2/participant/proposal-workspace
+FIT · YES · NO CHANGE

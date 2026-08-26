@@ -1,0 +1,28 @@
+{
+  "sequence": 24,
+  "count_before": 268,
+  "count_after": 269,
+  "delta": 1,
+  "new_attempt_uids": [
+    "4070f299-7298-45bb-abca-ee04cc620850"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "4070f299-7298-45bb-abca-ee04cc620850",
+      "operation": "config",
+      "command": "mem config set audit_v2_world ticker",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:12:41.501184+00:00",
+      "completed_at": "2026-08-25T18:12:41.509565+00:00",
+      "elapsed_seconds": 0.008236958994530141,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

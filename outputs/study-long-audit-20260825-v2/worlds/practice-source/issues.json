@@ -1,0 +1,382 @@
+{
+  "world": "practice-source",
+  "phase": "all",
+  "issues": [
+    {
+      "id": "PS2-CHUNK-CONTEXT-LOSS",
+      "title": "Sentence splitting makes three constraints unsafe to review independently",
+      "expected": "Each chunk keeps its applicability trigger, protected object, exception, and companion safeguard with the action it governs.",
+      "actual": "Three two-sentence splits detached the authorized-polishing trigger, detached the fixed-limit action from all-points and claim-strength safeguards, and left `preserve the intended word for` without a complete protected object/context.",
+      "workaround": "Do not treat sentence or clause Chunk as semantic atomization; keep each trigger, safeguard, exception, protected literal, and provenance with its governed action.",
+      "severity": "HIGH",
+      "classification": "SEMANTIC_SAFETY_CONFIRMED_REGRESSION",
+      "reproduction": "3/3 multi-chunk splits with downstream Show/Ambiguities/Conflicts confirmation",
+      "evidence": [
+        "worlds/practice-source/raw/core/036-chunk-m2.txt",
+        "worlds/practice-source/raw/core/057-chunk-m3.txt",
+        "worlds/practice-source/raw/core/061-find-ambiguities-m3.txt",
+        "worlds/practice-source/raw/core/066-show-m4.txt",
+        "worlds/practice-source/raw/core/078-chunk-m4.txt",
+        "worlds/practice-source/raw/core/082-find-ambiguities-m4.txt",
+        "worlds/practice-source/raw/core/087-show-m5.txt",
+        "worlds/practice-source/raw/core/103-find-ambiguities-m5.txt",
+        "worlds/practice-source/raw/core/104-find-conflicts-m5.txt"
+      ]
+    },
+    {
+      "id": "PS2-CONFLICT-SELF-CONTRADICTION",
+      "title": "Conflict classification contradicts its own reason",
+      "expected": "A CONFLICT disposition identifies an incompatible pair; a pair the analysis finds compatible is excluded or classified as not a conflict.",
+      "actual": "One pair was labeled `CONFLICT 9/9` while its own Reason explicitly said `There is no semantic conflict`; the run also treated several separately triggered request modes as possible simultaneous conflicts.",
+      "workaround": "Read every Reason and manually discard any Conflict whose explanation says the pair is compatible; do not rewrite source from the headline count.",
+      "severity": "HIGH",
+      "classification": "FUNCTIONAL_SEMANTIC_SELF_CONTRADICTION",
+      "reproduction": "1 explicit self-contradictory disposition in a 9-pair report",
+      "evidence": [
+        "worlds/practice-source/raw/core/041-find-conflicts-m2.txt"
+      ]
+    },
+    {
+      "id": "PS2-CHUNK-RECEIPT",
+      "title": "Successful multi-chunk receipts omit reusable identities",
+      "expected": "A successful split prints every created UID and complete text for direct reuse.",
+      "actual": "All three two-Memory receipts omitted both new UIDs and truncated both previews, including mid-word truncation.",
+      "workaround": "Immediately List the exact Context, match complete text, and reuse the discovered UID.",
+      "severity": "MEDIUM",
+      "classification": "USABILITY_OUTPUT_REUSE_CONFIRMED_REGRESSION",
+      "reproduction": "3/3 successful two-Memory splits",
+      "evidence": [
+        "worlds/practice-source/raw/core/036-chunk-m2.txt",
+        "worlds/practice-source/raw/core/044-list-m3.txt",
+        "worlds/practice-source/raw/core/057-chunk-m3.txt",
+        "worlds/practice-source/raw/core/066-show-m4.txt",
+        "worlds/practice-source/raw/core/078-chunk-m4.txt",
+        "worlds/practice-source/raw/core/086-list-m5.txt"
+      ]
+    },
+    {
+      "id": "PS2-MULTIROOT-COVERAGE",
+      "title": "Search does not report zero-contribution roots",
+      "expected": "Multi-root Search reports a disposition per requested root so not searched, no hit, and globally ranked-out are distinguishable.",
+      "actual": "Two two-root searches returned only source results, and a three-root diagnostic returned only two practice fragments while omitting the known damaged description fragment and all branch dispositions.",
+      "workaround": "Search each exact Context independently and reconcile results manually.",
+      "severity": "MEDIUM",
+      "classification": "INFORMATION_COVERAGE_CONFIRMED_REGRESSION",
+      "reproduction": "3/3 multi-root attempts",
+      "evidence": [
+        "worlds/practice-source/raw/core/047-search-m3.txt",
+        "worlds/practice-source/raw/core/068-search-m4.txt",
+        "worlds/practice-source/raw/core/089-search-m5.txt"
+      ]
+    },
+    {
+      "id": "PS2-SUMMARY-EVIDENCE-OMISSION",
+      "title": "DIRECT summaries silently exclude direct References and Embeds",
+      "expected": "Summary incorporates readable direct evidence or explicitly names excluded item types.",
+      "actual": "Four evidence-rich scratch summaries used only ordinary Memories and did not explain that directly listed References and live Context Embeds were excluded.",
+      "workaround": "Treat Summary as an ordinary-Memory orientation view and separately inspect List, Show, Query, and Compare evidence.",
+      "severity": "MEDIUM",
+      "classification": "INFORMATION_TRANSPARENCY_CONFIRMED_REGRESSION",
+      "reproduction": "4/4 evidence-rich scratch summaries",
+      "evidence": [
+        "worlds/practice-source/raw/core/023-list-m2.txt",
+        "worlds/practice-source/raw/core/028-summarize-m2.txt",
+        "worlds/practice-source/raw/core/049-summarize-m3.txt",
+        "worlds/practice-source/raw/core/070-summarize-m4.txt",
+        "worlds/practice-source/raw/core/086-list-m5.txt",
+        "worlds/practice-source/raw/core/091-summarize-m5.txt"
+      ]
+    },
+    {
+      "id": "PS2-QUALITY-SCOPE-MISMATCH",
+      "title": "Sibling direct-scope counts remain opaque",
+      "expected": "Duplicate and redundancy receipts explain which direct item types they count and expose comparable corpus summaries.",
+      "actual": "The same early Context reported 3 direct items for Duplicates versus 1 direct memory for Redundancies; the same late Context reported 10 versus 8 without explaining either gap.",
+      "workaround": "Use List to reconstruct item types and infer that exact Duplicates includes structural items while semantic Redundancies includes ordinary Memories only.",
+      "severity": "MEDIUM",
+      "classification": "USABILITY_CONTRACT_OPACITY_CONFIRMED_REGRESSION",
+      "reproduction": "2 exact same-state sibling-command pairs",
+      "evidence": [
+        "worlds/practice-source/raw/core/017-find-duplicates-m1.txt",
+        "worlds/practice-source/raw/core/018-find-redundancies-m1.txt",
+        "worlds/practice-source/raw/core/080-find-duplicates-m4.txt",
+        "worlds/practice-source/raw/core/081-find-redundancies-m4.txt"
+      ]
+    },
+    {
+      "id": "PS2-FIT-OPAQUE",
+      "title": "Positive Fit has no evidence or source-to-target mapping",
+      "expected": "Fit identifies source-to-target coverage and highlights missing triggers, provenance, exceptions, or damaged boundaries.",
+      "actual": "All five attempts printed only FIT YES and Context names, including after downstream commands proved an incomplete title rule and split-induced conflicts.",
+      "workaround": "Build the mapping manually with Query, Compare, Show, Ambiguities, Conflicts, and source UIDs; do not treat FIT YES as meaning-preservation proof.",
+      "severity": "MEDIUM",
+      "classification": "SEMANTIC_EXPLAINABILITY_CONFIRMED_REGRESSION",
+      "reproduction": "5/5 attempts",
+      "evidence": [
+        "worlds/practice-source/raw/core/021-fit-m1.txt",
+        "worlds/practice-source/raw/core/042-fit-m2.txt",
+        "worlds/practice-source/raw/core/063-fit-m3.txt",
+        "worlds/practice-source/raw/core/084-fit-m4.txt",
+        "worlds/practice-source/raw/core/105-fit-m5.txt"
+      ]
+    },
+    {
+      "id": "PS2-CTX-OVERLOAD",
+      "title": "Context discovery cannot narrow to the working subtree",
+      "expected": "A practice workflow can inventory the practice subtree while retaining hierarchy and Grant annotations.",
+      "actual": "Every Contexts attempt printed the same 112-row whole-Profile inventory; the three practice rows were buried among unrelated task trees and Grants and no prefix/subtree operand exists.",
+      "workaround": "Scan once for the practice prefix, then carry exact Context names into scoped commands.",
+      "severity": "MEDIUM",
+      "classification": "USABILITY_INFORMATION_OVERLOAD_CONFIRMED_REGRESSION",
+      "reproduction": "5/5 attempts",
+      "evidence": [
+        "worlds/practice-source/raw/core/001-contexts-m1.txt",
+        "worlds/practice-source/raw/core/022-contexts-m2.txt",
+        "worlds/practice-source/raw/core/043-contexts-m3.txt",
+        "worlds/practice-source/raw/core/064-contexts-m4.txt",
+        "worlds/practice-source/raw/core/085-contexts-m5.txt"
+      ]
+    },
+    {
+      "id": "PS2-QUERY-REFERENCE-OVERLOAD",
+      "title": "Exhaustive answers bury the reusable atom list",
+      "expected": "Broad Query preserves coverage while foregrounding a compact candidate list and structured source mappings.",
+      "actual": "Two queries expanded to all 12 full inline References; the final useful atomization proposal occupied 44 captured lines and emitted no reusable atom-to-source-UID structure.",
+      "workaround": "Save prose manually and return to source UIDs with List/Show, or ask one narrow constraint-family question at a time.",
+      "severity": "LOW",
+      "classification": "USABILITY_INFORMATION_DENSITY_CONFIRMED_REGRESSION",
+      "reproduction": "2 exhaustive all-source queries",
+      "evidence": [
+        "worlds/practice-source/raw/core/069-query-m4.txt",
+        "worlds/practice-source/raw/core/090-query-m5.txt"
+      ]
+    },
+    {
+      "id": "PS2-T-CONFORMANCE-SOURCE-TYPO",
+      "title": "Conformance treats source-preserved typos as failures to preserve the source",
+      "expected": "A rule requiring preservation of source meaning judges the supplied source as the reference frame and does not invent corrected protected wording that is absent from it.",
+      "actual": "The direct source check marked 4/12 Memories nonconforming because `strucutre`, `redundent`, `titlle`, and `refferences` were misspelled, then claimed those exact source spellings failed exact preservation of corrected words that the source never contained.",
+      "workaround": "Treat these four findings as reviewer-facing typo observations, not evidence that the source failed to preserve itself; use a separately declared spelling-correction rule when that is the intended check.",
+      "severity": "HIGH",
+      "classification": "SEMANTIC_SELF_REFERENCE_FALSE_NEGATIVE",
+      "reproduction": "1/1 direct source-meaning conformance route; four false-negative dispositions in one complete report",
+      "evidence": [
+        "worlds/practice-source/raw/transform/004-check-conformance-m1.txt"
+      ]
+    },
+    {
+      "id": "PS2-T-DIFF-CURRENT",
+      "title": "Checkpoint Diff hides the destructive current state after Clear",
+      "expected": "Immediately after checkpointing and clearing the same scratch Context, an explicit checkpoint Diff exposes the recoverable checkpoint versus the current empty state.",
+      "actual": "Rounds 1, 2, and 4 cleared `practice/description`, but Diff rendered `THIS CHECKPOINT VS PREVIOUS`. Round 1 reported 13 kept and 0 removed; later rounds described older revision history rather than the current cleared state.",
+      "workaround": "Verify current state separately with an exact read-only List/Show, retain the checkpoint UID, and use Revert for recovery; do not infer post-Clear state from checkpoint Diff.",
+      "severity": "HIGH",
+      "classification": "SAFETY_RECOVERY_OBSERVABILITY",
+      "reproduction": "3/3 same-target Checkpoint→Clear→Diff windows",
+      "evidence": [
+        "worlds/practice-source/raw/transform/003-checkpoint-m1.txt",
+        "worlds/practice-source/raw/transform/005-clear-m1.txt",
+        "worlds/practice-source/raw/transform/007-diff-m1.txt",
+        "worlds/practice-source/raw/transform/027-checkpoint-m2.txt",
+        "worlds/practice-source/raw/transform/029-clear-m2.txt",
+        "worlds/practice-source/raw/transform/031-diff-m2.txt",
+        "worlds/practice-source/raw/transform/075-checkpoint-m4.txt",
+        "worlds/practice-source/raw/transform/077-clear-m4.txt",
+        "worlds/practice-source/raw/transform/079-diff-m4.txt"
+      ]
+    },
+    {
+      "id": "PS2-T-ELABORATE-FABRICATED-SOURCE",
+      "title": "Strict Elaborate fabricates quoted source instructions",
+      "expected": "Strict elaboration from the inline anti-inference rule remains hypothetical or quotes only wording present in the supplied rule/source frame.",
+      "actual": "The strict result introduced `Given the source instruction “Keep the heading exactly as supplied”` and `the sole source instruction “Preserve every technical term”`; neither quoted instruction exists in practice/source or the supplied inline rule. The receipt labels the results UNVERIFIED but writes them as source-grounded premises.",
+      "workaround": "Keep the result in checkpointed scratch, rewrite examples parametrically, and verify every claimed source quotation against exact source UIDs before reuse.",
+      "severity": "MEDIUM",
+      "classification": "SEMANTIC_PROVENANCE_FABRICATION",
+      "reproduction": "2 fabricated quoted premises in the round-5 STRICT result",
+      "evidence": [
+        "worlds/practice-source/raw/transform/105-elaborate-m5.txt"
+      ]
+    },
+    {
+      "id": "PS2-T-DEDUN-RECEIPT",
+      "title": "Dedun receipt hides survivor and absorption mappings",
+      "expected": "A semantic cleanup that absorbs multiple items prints each survivor UID and absorbed-to-survivor link for immediate independent review and trace reuse.",
+      "actual": "The late cleanup reported 4 absorbed, 4 kept, and 4 semantic DUN links, but printed no survivor UID or absorption mapping; only an aggregate checkpoint/review route remained.",
+      "workaround": "Open the exact Review receipt immediately and compare an exact List/Trace before another mutation.",
+      "severity": "MEDIUM",
+      "classification": "USABILITY_OUTPUT_REUSE_CONFIRMED_REGRESSION",
+      "reproduction": "1/1 transforming Dedun result; four earlier no-redundancy controls required no mapping",
+      "evidence": [
+        "worlds/practice-source/raw/transform/108-dedun-m5.txt"
+      ]
+    },
+    {
+      "id": "PS2-T-GROUND-GRAMMAR",
+      "title": "Ground binding grammar is discovered through sequential failures",
+      "expected": "A binding attempt uses operation-consistent names or one validation failure prints the complete exact required form.",
+      "actual": "`--publication-context` was rejected in favor of `--publication-target`; the corrected call then revealed that `--description` was also mandatory. The fully specified next route reached a separate independence boundary.",
+      "workaround": "Supply name, goal, description, `--raw-context`, `--derived-context`, and `--publication-target` together, then ensure the three bound Context graphs are independent.",
+      "severity": "MEDIUM",
+      "classification": "USABILITY_COMMAND_GRAMMAR_CONFIRMED_REGRESSION",
+      "reproduction": "Two sequential parser/validation failures",
+      "evidence": [
+        "worlds/practice-source/raw/transform/038-ground-m2.txt",
+        "worlds/practice-source/raw/transform/062-ground-m3.txt",
+        "worlds/practice-source/raw/transform/086-ground-m4.txt"
+      ]
+    },
+    {
+      "id": "PS2-T-IMPACT-ZERO-COVERAGE",
+      "title": "Saved Meld Impact offers Apply with zero source coverage and zero changes",
+      "expected": "A proposal with zero current Source coverage and no final Memories/changes foregrounds inapplicability or requires restart instead of presenting an Apply affordance.",
+      "actual": "Impact reported READY_TO_APPLY, 0/2 Source coverage, 0 final Memories, and 0 changes, then rendered `[ APPLY? ] Continue to Meld Apply` without an equally prominent stale/inapplicable warning.",
+      "workaround": "Do not apply the saved session; restart Meld against the current explicit target and re-check complete coverage.",
+      "severity": "HIGH",
+      "classification": "SAFETY_STALE_PROPOSAL_DECISION_CONFIRMED_REGRESSION",
+      "reproduction": "1 late saved-session Impact after cumulative target changes",
+      "evidence": [
+        "worlds/practice-source/raw/transform/088-meld-m4.txt",
+        "worlds/practice-source/raw/transform/111-impact-m5.txt"
+      ]
+    },
+    {
+      "id": "PS2-T-MELD-SNAPSHOT-RACE",
+      "title": "Sequential Meld reports that a Source changed during Compare",
+      "expected": "A strictly sequential explicit Source/target/Result command keeps its frozen sources stable or identifies a genuine external before/after revision.",
+      "actual": "The Context-to-Context Meld ran for 49.69 seconds and failed that a Source changed while Compare was analyzing it. No audit command ran concurrently and no analysis was saved; directional inline Meld controls completed.",
+      "workaround": "Retain the failure evidence and use a narrow inline Memory plus explicit baseline and `--restart`; avoid spending another whole-frame provider turn without a new snapshot.",
+      "severity": "HIGH",
+      "classification": "FUNCTIONAL_SNAPSHOT_SELF_INVALIDATION_CONFIRMED_REGRESSION",
+      "reproduction": "1 sequential whole-Context route; three directional inline controls succeeded",
+      "evidence": [
+        "worlds/practice-source/raw/transform/016-meld-m1.txt",
+        "worlds/practice-source/raw/transform/040-meld-m2.txt",
+        "worlds/practice-source/raw/transform/064-meld-m3.txt",
+        "worlds/practice-source/raw/transform/088-meld-m4.txt"
+      ]
+    },
+    {
+      "id": "PS2-T-MIXED-EVIDENCE-DEAD-END",
+      "title": "Cumulative live evidence makes Ground, Meld, Sever, and Update unusable without a clean-room copy",
+      "expected": "Exact selectors such as `--source-memory`, `--direct`, `--source-root-only`, and `--criteria-root-only` can safely narrow to eligible owned Memories while unrelated live References/Embeds remain visible evidence.",
+      "actual": "Once scratch contained source References/Embeds, all five Updates failed graph-overlap checks even with exact source/target Memory selectors; four Sever routes rejected live References; a fully bound Ground rejected dependent Contexts; and late directional Meld rejected two otherwise unrelated direct References before inference.",
+      "workaround": "Copy only intended owned Memories into new independent lane-local Contexts, retaining an external source-UID mapping, then run the transform there. This adds a clean-room preparation step and separates visible evidence from execution.",
+      "severity": "MEDIUM",
+      "classification": "WORKFLOW_INTEROPERABILITY_MIXED_ITEM_TOPOLOGY",
+      "reproduction": "11/11 executable routes exposed the same accumulated graph/item-family boundary",
+      "evidence": [
+        "worlds/practice-source/raw/transform/021-sever-m1.txt",
+        "worlds/practice-source/raw/transform/024-update-m1.txt",
+        "worlds/practice-source/raw/transform/045-sever-m2.txt",
+        "worlds/practice-source/raw/transform/048-update-m2.txt",
+        "worlds/practice-source/raw/transform/069-sever-m3.txt",
+        "worlds/practice-source/raw/transform/072-update-m3.txt",
+        "worlds/practice-source/raw/transform/086-ground-m4.txt",
+        "worlds/practice-source/raw/transform/096-update-m4.txt",
+        "worlds/practice-source/raw/transform/112-meld-m5.txt",
+        "worlds/practice-source/raw/transform/117-sever-m5.txt",
+        "worlds/practice-source/raw/transform/120-update-m5.txt"
+      ]
+    },
+    {
+      "id": "PS2-T-REVERT-OVERLOAD",
+      "title": "Every large Revert receipt truncates its restoration manifest",
+      "expected": "A large recovery remains compact while exposing a complete machine-reusable effect manifest or an exact non-mutating follow-up command.",
+      "actual": "All five Reverts affected more than 12 direct items and printed only 12 previews followed by 2–29 omitted items. Counts and a recovery checkpoint remained, but the receipt alone could not verify every restored/removed identity.",
+      "workaround": "Retain the exact checkpoint UID and verify the restored Context separately with List/Diff/Trace; treat the Revert receipt as aggregate evidence only.",
+      "severity": "MEDIUM",
+      "classification": "USABILITY_RECOVERY_EVIDENCE_CONFIRMED_REGRESSION",
+      "reproduction": "5/5 recovery windows",
+      "evidence": [
+        "worlds/practice-source/raw/transform/019-revert-m1.txt",
+        "worlds/practice-source/raw/transform/043-revert-m2.txt",
+        "worlds/practice-source/raw/transform/067-revert-m3.txt",
+        "worlds/practice-source/raw/transform/091-revert-m4.txt",
+        "worlds/practice-source/raw/transform/115-revert-m5.txt"
+      ]
+    },
+    {
+      "id": "PS2-T-TRACE-LIMIT",
+      "title": "JSON Trace ignores the requested one-operation limit",
+      "expected": "`trace --json --limit 1` bounds lineage-affecting command units to one, consistent with the documented Trace operation-limit contract.",
+      "actual": "The response was 705 lines / 43,339 bytes and returned the full three-Member component plus multiple events, analyses, spans, and children despite `--limit 1`.",
+      "workaround": "Parse only the needed JSON fields or use plain Trace for a bounded human receipt; do not assume JSON payload size follows `--limit`.",
+      "severity": "MEDIUM",
+      "classification": "FUNCTIONAL_OUTPUT_BOUND_CONFIRMED_REGRESSION",
+      "reproduction": "1 direct minimal-limit JSON route",
+      "evidence": [
+        "worlds/practice-source/raw/transform/094-trace-m4.txt"
+      ]
+    },
+    {
+      "id": "PS2-A-RENAME-BRANCH-HISTORY",
+      "title": "Renaming a branched Context makes the global Undo/Redo stack unreadable",
+      "expected": "After a successful Context rename, retained Branch history remains internally addressable under the renamed owner so the exact global command-stack top UID and member set can be reconstructed before Undo or Redo.",
+      "actual": "Branch M1 created UID e8aad7e1 under `.../b1`; Rename M1 moved that same UID to `.../renamed-1` but its Branch receipt still names `.../b1`. The next protocol-required stack reconstruction raised `Branch checkpoint owner is outside its creation membership.` before it could expose a top unit. The later recursive Branch M2 itself wrote a consistent six-member receipt, but it could not be verified as the global top because reconstruction stops first on the renamed M1 checkpoint.",
+      "workaround": "Do not rename a Context that retains Branch creation history when later Undo/Redo is required. In this isolated lane, a reviewed inverse rename to the exact original name restored raw owner membership and the exact B2 top before Undo2/Redo2. Do not edit retained receipts or guess a top unit.",
+      "severity": "CRITICAL",
+      "classification": "RECOVERABILITY_COMMAND_HISTORY_INVALIDATION",
+      "reproduction": "1/1 direct Branch -> verified Undo -> verified Redo -> Rename sequence; the first later exact stack reconstruction failed. Undo2 was withheld until a reviewed inverse rename restored the exact B2 top, then Undo2/Redo2 succeeded.",
+      "evidence": [
+        "worlds/practice-source/raw/admin/001-branch-m1.txt",
+        "worlds/practice-source/raw/admin/002-undo-m1.txt",
+        "worlds/practice-source/raw/admin/003-redo-m1.txt",
+        "worlds/practice-source/raw/admin/006-rename-m1.txt",
+        "worlds/practice-source/raw/admin/037-branch-m2.txt",
+        "worlds/practice-source/admin-host-reads.json",
+        "worlds/practice-source/admin-blocker-evidence.json",
+        "/Users/KimMunyeong/.codex/audit-snapshots/memcommit-six-world-v2-20260825-code/memcommit/command_history.py:773"
+      ]
+    },
+    {
+      "id": "PS2-A-BRANCH-HISTORY-CASCADE",
+      "title": "Branching from a Branch copies owned command history into a foreign owner",
+      "expected": "Branch and checkout -b from a Branch-created Source either retain copied checkpoints only as non-owned lineage or rebind every owned command-history receipt so the new target's global Undo/Redo stack remains reconstructable.",
+      "actual": "Branch M3 copied B1's Branch M1 checkpoint into B3 unchanged. B3 has UID ea8d2437, while the copied receipt names UID e8aad7e1 at B1, so B3 is outside that checkpoint's creation membership. Checkout M3 copied the same invalid receipt plus B3's Branch M3 receipt into co3, then added its own valid creation checkpoint. Global stack reconstruction stops at B3 before exposing the Checkout3 top. The original six-Context R subtree had zero Branch checkpoints, isolating the defect to branching from the Branch-bearing B1 Source.",
+      "workaround": "Do not use a Branch-created Context as the Source of another Branch or checkout -b when later Undo/Redo verification is required. A read-only scan can identify inherited foreign-owner receipts; this audit retained them as a negative control and confirmed every remaining Undo/Redo failed before Context or current-pointer mutation.",
+      "severity": "CRITICAL",
+      "classification": "RECOVERABILITY_COPIED_COMMAND_HISTORY_INVALIDATION",
+      "reproduction": "1/1 Branch-from-Branch followed by 1/1 checkout-from-that-Branch; both targets retained foreign-owner Branch receipts and the first subsequent stack reconstruction failed.",
+      "evidence": [
+        "worlds/practice-source/raw/admin/043-branch-m3.txt",
+        "worlds/practice-source/raw/admin/044-checkout-m3.txt",
+        "worlds/practice-source/admin-host-reads.json",
+        "worlds/practice-source/admin-blocker-2-evidence.json",
+        "/Users/KimMunyeong/.codex/audit-snapshots/memcommit-six-world-v2-20260825-code/memcommit/command_history.py:773"
+      ]
+    },
+    {
+      "id": "PS2-A-INIT-STUDY-UUID-CREATES",
+      "title": "A UUID-shaped Study name passes validation and escapes the pinned Profile",
+      "expected": "The ADMIN UUID-shaped negative control fails before creating or selecting any Study/Profile, so all five init-study attempts have zero success and the pinned Profile UID/Store never changes.",
+      "actual": "`init-study 00000000-0000-0000-0000-000000000999` exited 0, created a managed Study Profile and granted-memory Profile with two new Stores, and activated Profile bb7265f4. The first post-process identity assertion detected the escape. An approved host recovery changed only registry.active_uid back to the pinned UID after preserving exact registry and three-Store byte/hash snapshots; both unexpected Profiles and Stores remain intact.",
+      "workaround": "Do not use a UUID-shaped name as an assumed invalid init-study test. Use an explicitly rejected slash, reserved name, or invalid option value. If this occurs in an isolated audit lane, stop immediately and require a reviewed identity recovery; do not issue another mem call while the runner's pinned pre-assert fails.",
+      "severity": "CRITICAL",
+      "classification": "SAFETY_PROFILE_IDENTITY_ESCAPE",
+      "reproduction": "1/1 UUID-shaped init-study attempt succeeded; the other four validation/boundary attempts did not create a Study.",
+      "evidence": [
+        "worlds/practice-source/raw/admin/095-init_study-m5.txt",
+        "worlds/practice-source/admin-host-reads.json",
+        "worlds/practice-source/recovery/seq095-init-study-profile/recovery-summary.json",
+        "worlds/practice-source/recovery/seq095-init-study-profile/registry-before.json",
+        "worlds/practice-source/recovery/seq095-init-study-profile/registry-after.json"
+      ]
+    },
+    {
+      "id": "PS2-A-INIT-SPARSE-PARENT",
+      "title": "Init without --parents creates a leaf beneath an absent lexical parent",
+      "expected": "The missing-parent ADMIN method fails without mutation unless --parents is supplied, keeping direct Init distinct from explicit parent-expanding Init.",
+      "actual": "`init practice/audit-workspace/admin-v2-scratch/missing-parent/leaf` exited 0 and created the leaf Context UID 5f47a8d5. Host inspection confirmed that the lexical parent `.../missing-parent` is still physically absent.",
+      "workaround": "Do not infer parent existence from a successful nested Init. Use `init ... --parents` when every lexical ancestor must exist, and verify the parent Context explicitly before hierarchy-dependent work.",
+      "severity": "MEDIUM",
+      "classification": "NAMESPACE_PARENT_MATERIALIZATION_CONTRACT_MISMATCH",
+      "reproduction": "1/1 missing-parent attempt without --parents created only the leaf; the explicit --parents control created/reused its declared hierarchy.",
+      "evidence": [
+        "worlds/practice-source/raw/admin/028-init-m2.txt",
+        "worlds/practice-source/raw/admin/094-init-m5.txt",
+        "worlds/practice-source/phase-admin.json"
+      ]
+    }
+  ]
+}

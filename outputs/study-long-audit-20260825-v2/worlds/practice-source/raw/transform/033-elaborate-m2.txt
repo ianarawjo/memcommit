@@ -1,0 +1,23 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source elaborate --rule 'Every atom must preserve its trigger, narrow exception, protected object, companion safeguard, and provenance.' --rule 'Atomization must not perform the requested document edit.' --to practice/description --number 2 --plain
+
+EXIT
+0
+
+WALL_SECONDS
+15.807784
+
+STDOUT
+ELABORATE APPLIED · practice/description
+MODE · RULES_TO_CASES · VERIFICATION · UNVERIFIED · QUALITY · BEST_EFFORT
+SOURCE · INLINE · TARGET · practice/description
+EFFECTS · ADD 2 MEMORIES
+
+  [memory dd85d58b] Atomize the source-verification practice as: “Trigger: before correcting apparently wrong content or adding or reusing citations or references. Narrow exception: none stated. Protected object: the exact claim and its supporting source. Companion safeguard: review the complete original paper, book, guide, or other source rather than an abstract or short snippet, verify that the source exists and supports the exact claim, and do not invent quotations or evidence or overstate an author’s contribution or a paper’s status. Provenance: the established source-verification and evidence-integrity practices.” This atom records the editing constraint but does not correct content, add a citation, or alter a document.
+  [memory 5c043436] Atomize the title-capitalization practice as: “Trigger: when capitalizing a document title. Narrow exception: an explicitly named style guide may override only the capitalization default. Protected object: the intended wording, including ‘for.’ Companion safeguard: otherwise use sentence case and retain ‘for’ whenever it is intended. Provenance: the established document-title capitalization practice.” If a draft title is supplied, store this atom without recasing, deleting, or otherwise editing the title.
+
+REVIEW · mem review elaborate --receipt 8679662b-7e8d-4953-8302-1968f7697f47
+UNDO · mem undo
+
+
+STDERR

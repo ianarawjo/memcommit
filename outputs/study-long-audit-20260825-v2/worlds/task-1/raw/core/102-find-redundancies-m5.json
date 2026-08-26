@@ -1,0 +1,11 @@
+{
+  "sequence": 102,
+  "operation": "find-redundancies",
+  "attempt": 5,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 find-redundancies task-1/campus-wiki/shop-updates --evidence-json",
+  "exit": 0,
+  "wall_seconds": 6.507151,
+  "pre_target_digest": "b07a438635f0ee0bc24d33edf6166338c71a7dd2ae7e64f5063b3b0163738143",
+  "post_target_digest": "45f90f41ff9bf64081e5494ce47d0c468aabbb5a017fd5d2e74cc65344f100d6",
+  "raw_output": "raw/core/102-find-redundancies-m5.txt"
+}

@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source search 'Which candidate constraints lost their trigger, exception, or companion rule after splitting?' --context practice/source --context practice --context practice/description --context-only --exclude-embeds --limit 10
+
+EXIT
+0
+
+WALL_SECONDS
+12.886492
+
+STDOUT
+practice
+[memory 28fbce32] Change only wording that causes a problem.
+[memory 7a909bed] Preserve all intended points plus every claim's original strength and conditions.
+
+
+STDERR

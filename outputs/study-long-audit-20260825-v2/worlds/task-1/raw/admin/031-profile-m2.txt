@@ -1,0 +1,26 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 profile create admin-v2-task-1-inactive
+
+STDIN
+<none>
+
+EXIT
+0
+
+WALL_SECONDS
+1.259928
+
+POST_CALL_IDENTITY_HOST_ASSERTION
+{"profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-1/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+STDOUT
+Created empty Profile 'admin-v2-task-1-inactive'.
+Profile UID: 5d4c58fb-fd1d-41c4-ad60-6b0003a71508
+Store: /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-1/profile-control/stores/5d4c58fb-fd1d-41c4-ad60-6b0003a71508
+Contexts 0 owned + 0 granted · Memories 0 owned + 0 granted
+Active Profile unchanged: sixworld-v2-template
+Use it with: mem profile use admin-v2-task-1-inactive
+Then create its first Context with: mem init CONTEXT
+
+
+STDERR

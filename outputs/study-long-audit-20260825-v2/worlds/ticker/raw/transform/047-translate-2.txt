@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker translate task-2/participant/proposal-workspace:ace52daf --to French
+
+EXIT
+0
+
+OUTPUT
+
+Translation view: 'task-2/participant/proposal-workspace' → French
+  1 translated Memory
+────────────────────────────────────────────────────────────────
+[ace52daf] French · PROVIDER · UNREVIEWED
+  Exemple avec des chiffres : Route 66, LLC devient ROUTE66 après suppression de la virgule, de l’espace et du suffixe LLC, tout en conservant 66.
+────────────────────────────────────────────────────────────────
+Saved translation view.
+No Context or Memory changes; source Memory UIDs remain the anchors.

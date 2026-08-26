@@ -1,0 +1,57 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker impact --from task-2/participant/proposal-workspace --to task-3/local --direct
+
+EXIT
+0
+
+OUTPUT
+ Impact: task-2/participant/proposal-workspace -> task-3/local
+ SOURCE task-2/participant/proposal-workspace → TARGET task-3/local
+ IMPACT · 0 EDITS · 2 ADDITIONS · 0 REMOVALS · 2 CHANGES
+
+ PLAN
+ Mem matched the verified Source against the Target and planned only the exact target Memory changes shown below. Nothing has been applied.
+
+ PLANNED CHANGES
+ ›  1. [CHANGE] task-3/local Memory [256f0f0b-d944-4338-9a27-6e68525051e4]
+       ADD · PLANNED · The general numeral-preservation rule is not captured by the existing target memories; the target c…
+    2. [CHANGE] task-3/local Memory [0a34c722-f024-4172-a3c9-7884e9330e2e]
+       ADD · PLANNED · This distinct verified example is missing; the existing target example concerns Route 066 and prese…
+
+ APPLICATION
+  (none)
+
+SUMMARY · 0 edits, 2 additions, 0 removals
+SCOPE · SOURCE SELECTED GRAPH ONLY · TARGET SELECTED GRAPH ONLY
+
+EXACT PLANNED CHANGE DETAILS
+
+ADD task-3/local Memory [256f0f0b-d944-4338-9a27-6e68525051e4]
+  OWNER
+    Context task-3/local [0f514d5f-1e47-5a33-a9ee-0125528a5129]
+  MEMORY UID
+    256f0f0b-d944-4338-9a27-6e68525051e4
+  AFTER
+    Preserve digits 0 through 9, including leading zeroes, in their original positions when deriving a ticker, while removing spaces and punctuation.
+  REASON
+    The general numeral-preservation rule is not captured by the existing target memories; the target contains only one specific numeral example.
+  SOURCE REFERENCES
+    1. Context task-2/participant/proposal-workspace [b839b146-7576-5ec4-93a5-a98f64eba1ec]
+    Memory [28120a2d-dc34-491e-bf33-77c9164b7daa]
+    Content SHA-256: 7607933f3785f2f9976468c31e1e7810f9116f7d89e50659fd4d6588d10a73df
+
+ADD task-3/local Memory [0a34c722-f024-4172-a3c9-7884e9330e2e]
+  OWNER
+    Context task-3/local [0f514d5f-1e47-5a33-a9ee-0125528a5129]
+  MEMORY UID
+    0a34c722-f024-4172-a3c9-7884e9330e2e
+  AFTER
+    Route 66, LLC becomes ROUTE66 after removing the comma, space, and terminal LLC suffix while preserving 66.
+  REASON
+    This distinct verified example is missing; the existing target example concerns Route 066 and preserves a leading zero.
+  SOURCE REFERENCES
+    1. Context task-2/participant/proposal-workspace [b839b146-7576-5ec4-93a5-a98f64eba1ec]
+    Memory [ace52daf-a352-4495-a839-50fd396627c2]
+    Content SHA-256: 2bf2e9939fff7c9d9e36ba956795847740d2a2198d7647230b4247274963fe21
+
+No changes applied.

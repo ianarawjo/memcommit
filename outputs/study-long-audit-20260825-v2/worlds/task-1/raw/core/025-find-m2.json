@@ -1,0 +1,11 @@
+{
+  "sequence": 25,
+  "operation": "find",
+  "attempt": 2,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 find 'reservations?|auditorium' --regex --ignore-case --context task-1/participant/construction-updates/event-relocations --context-only",
+  "exit": 0,
+  "wall_seconds": 1.408405,
+  "pre_target_digest": "ccdec44247ee6b56558f1415ee22d7b98c9a3b8b4eb3f54e5a76c398e5023e8c",
+  "post_target_digest": "412e22c33372e622d557de46fef3437504047af10f85d27fc25247aa58a4b89b",
+  "raw_output": "raw/core/025-find-m2.txt"
+}

@@ -1,0 +1,13 @@
+On context: task-2/participant/admin-v2-scratch/co4-tree/source
+
+Inventory · Memories 12 · Checkpoints 1
+
+Memory preview · first 5 of 12:
+  [779c64e7] When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.
+  [9130c9fc] If I later ask for polishing, preserve the overall strucutre and citation-needed markers, and change only wording that causes a problem.
+  [66d7d3ec] When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um... for example, use distribute, not divide, when material is absorbed into two parts.
+  [76e8118e] If a passage is supposed to make four points, keep all four while removing parts that are too redundent and stating repeated content only once.
+  [60c06cd9] When the draft has to fit a shorter fixed limit, aim to cut around 20–30% from redundant or unnecessary material.
+
+Recent changes · latest 1 of 1 checkpoints:
+  23e35bc6  2026-08-25 14:16  branch        Branched subtree 'practice' to 'task-2/participant/admin-v2-scratch/co4-tree'.

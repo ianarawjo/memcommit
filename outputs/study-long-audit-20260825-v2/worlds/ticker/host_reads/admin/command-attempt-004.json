@@ -1,0 +1,28 @@
+{
+  "sequence": 4,
+  "count_before": 248,
+  "count_after": 249,
+  "delta": 1,
+  "new_attempt_uids": [
+    "2669299d-9cc9-452b-94be-68c0219288c6"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "2669299d-9cc9-452b-94be-68c0219288c6",
+      "operation": "checkout",
+      "command": "mem checkout task-1/participant/construction-updates",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:12:12.780010+00:00",
+      "completed_at": "2026-08-25T18:12:12.797767+00:00",
+      "elapsed_seconds": 0.01762491700355895,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

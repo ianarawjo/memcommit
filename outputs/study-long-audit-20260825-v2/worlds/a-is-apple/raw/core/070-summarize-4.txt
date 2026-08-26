@@ -1,0 +1,11 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple summarize practice --recursive --plain
+
+EXIT
+0
+
+OUTPUT
+SUMMARY · practice
+STATUS · RECURSIVE
+
+“How does this read?” requests opinion on order and paragraphing, not immediate editing. Later polishing should preserve structure, markers, terminology, points, nuance, and intended title wording while removing redundancy; shortening may cut 20–30%. Use accurate connectors, default sentence case and italicized work titles unless a named guide overrides, and fully verify sources before corrections or citations.

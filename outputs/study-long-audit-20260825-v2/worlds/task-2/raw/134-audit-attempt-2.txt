@@ -1,0 +1,14 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 audit task-2/participant/proposal-workspace
+EXIT: 0
+DURATION_SECONDS: 22.034
+
+Audit saved: 3 quality checks.
+Source: task-2/participant/proposal-workspace · 15 memories
+
+REDUNDANCIES   15 MEMORIES CHECKED · 0 GROUPS · 0 PROPOSED ABSORPTIONS
+AMBIGUITIES    1/15 MEMORIES FLAGGED
+  ? UNDERSPECIFIED · [MEMORY 70bfa18e] “Apply advisor2’s established style conditions t…”
+CONFLICTS      0/15 MEMORIES INVOLVED · 0/105 PAIRS FLAGGED
+
+Review full audit:
+mem review audit --session 7beee45b-2411-41ed-a5ef-7b0f69c0e6db

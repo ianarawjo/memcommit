@@ -1,0 +1,24 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker review audit --session a5e22fc7 --snapshot
+
+EXIT
+0
+
+OUTPUT
+MEM AUDIT
+ SAVED · 3/3 CHECKS · READ-ONLY REPORT
+ SESSION [a5e22fc7] · CREATED 2026-08-25T17:29:51+00:00
+ SUMMARY · All quality finders completed over the same saved direct Context snapshot. Each section retains its own Memory, pair, group, or absorption unit.
+ CHECKS · REDUNDANCIES · FINISHED · 4 MEMORIES CHECKED · 0 GROUPS · 0 PROPOSED ABSORPTIONS / AMBIGUITIES · FINISHED · 1/4 MEMORIES FLAGGED / CONFLICTS · FINISHED · 2/4 MEMORIES INVOLVED · 1/6 PAIRS FLAGGED
+ SOURCE · task-2/participant · 4 direct Memories as captured when this Audit ran. Descendants and embedded Contexts were not analyzed.
+ SNAPSHOT · [fac90a77] Core ticker rule: remove a terminal legal suffix such as Inc., Corp., Ltd., or LLC before constructing the ticker. Preserve the remaining alphanumeric characters. / [9f473e8e] Core ticker rule: uppercase remaining company-name letters in their original order. Do not invent letters. / [9d371105] Regression expectation: every maintained example must preserve digits, remove input punctuation, and encode a terminal share class with generated dot syntax. / [90a5ab77] Conflicting regression draft: derived ticker letters must remain lowercase.
+ REDUNDANCIES · 4 MEMORIES CHECKED · 0 GROUPS · 0 PROPOSED ABSORPTIONS · [SOURCE task-2/participant]
+ No redundancy evidence in this analysis.
+ AMBIGUITIES · 1/4 MEMORIES FLAGGED · [SOURCE task-2/participant]
+ ? AMBIGUOUS · [MEMORY 90a5ab77] “Conflicting regression draft: derived ticker letters must remain lowercase.” · WHY · The phrase “Conflicting regression draft” does not establish whether its lowercase requirement is rejected or authoritative, while the core rule explicitly requires uppercase letters. The expected case of derived ticker letters therefore cannot be determined reliably for implementation or regression verification. — This draft is obsolete or erroneous, so derived ticker letters must follow the core rule and be uppercase. / This draft introduces an exception or replacement rule requiring derived ticker letters to remain lowercase. · QUESTION · Should derived ticker letters be uppercase under the core rule, or does the lowercase draft override it?
+ CONFLICTS · 2/4 MEMORIES INVOLVED · 1/6 PAIRS FLAGGED · [SOURCE task-2/participant]
+ ! CONFLICT · [MEMORY 9f473e8e] “Core ticker rule: uppercase remaining company-name letters in their original order. Do not invent letters.” ↔ [MEMORY 90a5ab77] “Conflicting regression draft: derived ticker letters must remain lowercase.” · WHY · One rule requires derived ticker letters to be uppercase, while the other requires them to remain lowercase. · QUESTION · Should derived ticker letters be uppercase or lowercase?
+ PROVENANCE
+ REDUNDANCIES · duplicates-v1-draft · codex_chatgpt:gpt-5.6-sol · reasoning none / AMBIGUITIES · ambiguity-v1-draft · codex_chatgpt:gpt-5.6-sol · reasoning none / CONFLICTS · conflict-v2-draft · codex_chatgpt:gpt-5.6-sol · reasoning none
+ BOUNDARY
+ This saved Audit is a model-assisted finding record, not proof that the Source is free of quality problems. Saved historical review notes do not alter the snapshot, Context, or Memories. This Viewer cannot select a reading, write a response, rerun a finder, or apply a Memory change.

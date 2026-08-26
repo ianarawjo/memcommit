@@ -1,0 +1,7 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 chunk 8db5e9c8 --context task-3/local/guardrails/privacy-and-others --method sentences
+
+STDOUT
+Memory [8db5e9c8] produced only 1 chunk(s) with method=sentences — no changes made.
+
+STDERR

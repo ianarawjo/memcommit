@@ -1,0 +1,9 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple replace 'Canonical set' 'Preferred set' --direct --context practice --plain
+
+EXIT
+0
+
+OUTPUT
+Replaced 1 occurrence in 1 Memory in 'practice'.
+Undo can restore this command.

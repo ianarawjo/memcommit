@@ -1,0 +1,22 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source translate practice/source:e50c293a --to Korean
+
+EXIT
+0
+
+WALL_SECONDS
+5.254800
+
+STDOUT
+
+Translation view: 'practice/source' → Korean
+  1 translated Memory
+────────────────────────────────────────────────────────────────
+[e50c293a] Korean · PROVIDER · UNREVIEWED
+  나중에 다듬어 달라고 요청하더라도 전체 구조와 인용 필요 표시를 유지하고, 문제가 되는 표현만 수정하세요.
+────────────────────────────────────────────────────────────────
+Saved translation view.
+No Context or Memory changes; source Memory UIDs remain the anchors.
+
+
+STDERR

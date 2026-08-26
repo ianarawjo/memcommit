@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source chunk practice/description:8517d6ae --method paragraphs
+
+EXIT
+0
+
+WALL_SECONDS
+1.541520
+
+STDOUT
+Memory [8517d6ae] produced only 1 chunk(s) with method=paragraphs — no changes made.
+
+
+STDERR

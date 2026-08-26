@@ -1,0 +1,10 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 compare task-3/local/guardrails/purpose-and-scope task-3/local/guardrails/minimization-and-redaction --direct --snapshot
+
+STDOUT
+Compare · task-3/local/guardrails/purpose-and-scope ↔ task-3/local/guardrails/minimization-and-redaction
+
+COMPARISON
+  Both frames require purpose-limited, minimal disclosure, while the compared frame specializes this principle into redaction and faithful generalization practices. Its decisive caution is that omission may be misread as “not applicable” and that combining de-identified fragments can still re-identify a person, whereas the reference frame instead requires clarification and renewed approval when scope changes.
+
+STDERR

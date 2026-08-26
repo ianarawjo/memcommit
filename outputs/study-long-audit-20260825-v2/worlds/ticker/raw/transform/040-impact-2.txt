@@ -1,0 +1,73 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker impact update task-2/participant/proposal-workspace task-3/local/guardrails --direct
+
+EXIT
+0
+
+OUTPUT
+ Impact: task-2/participant/proposal-workspace -> task-3/local/guardrails
+ SOURCE task-2/participant/proposal-workspace → TARGET task-3/local/guardrails
+ IMPACT · 2 EDITS · 0 ADDITIONS · 0 REMOVALS · 2 CHANGES
+
+ PLAN
+ Mem matched the verified Source against the Target and planned only the exact target Memory changes shown below. Nothing has been applied.
+
+ PLANNED CHANGES
+ ›  1. [CHANGE] task-3/local/guardrails Memory [93126130-2269-405e-add8-08bce81be204]
+       EDIT · PLANNED · The target already contains the general punctuation and legal-suffix rule; the sources add supporte…
+    2. [CHANGE] task-3/local/guardrails Memory [51968038-de20-46fd-b46f-b328583b49c7]
+       EDIT · PLANNED · The sources refine the existing numeral rule and add a concrete example without changing unrelated…
+
+ APPLICATION
+  (none)
+
+SUMMARY · 2 edits, 0 additions, 0 removals
+SCOPE · SOURCE SELECTED GRAPH ONLY · TARGET SELECTED GRAPH ONLY
+
+EXACT PLANNED CHANGE DETAILS
+
+EDIT task-3/local/guardrails Memory [93126130-2269-405e-add8-08bce81be204]
+  OWNER
+    Context task-3/local/guardrails [10c1e5b1-4d4b-566c-bf14-c385523c344e]
+  MEMORY UID
+    93126130-2269-405e-add8-08bce81be204
+  BEFORE
+    When constructing a ticker from a company name, remove punctuation and spaces from the base name; also remove the stated legal-entity suffix where applicable.
+  AFTER
+    When constructing a ticker from a company name, remove punctuation and spaces from the base name; also remove the stated legal-entity suffix where applicable. For example, North-Star, Inc. becomes NORTHSTAR. If a legal suffix immediately precedes terminal Class A or Class B, remove the legal suffix and append .A or .B to the derived base ticker; for example, Acme Corp. Class B becomes ACME.B, where the dot is generated share-class syntax.
+  REASON
+    The target already contains the general punctuation and legal-suffix rule; the sources add supported examples and the related share-class transformation.
+  SOURCE REFERENCES
+    1. Context task-2/participant/proposal-workspace [b839b146-7576-5ec4-93a5-a98f64eba1ec]
+    Memory [1e0e89ee-d774-4d1a-bdcb-201985d7c563]
+    Content SHA-256: 42c3d5b7bbea46568c5851dc289933813f3cfbb625b96959114758dac827042a
+    
+    2. Context task-2/participant/proposal-workspace [b839b146-7576-5ec4-93a5-a98f64eba1ec]
+    Memory [054745a5-f426-467d-a41c-3425dcf78043]
+    Content SHA-256: d67baa82867e6e652588b56342888b2a9049ffa65957f60ab14e6c87216d8a8a
+    
+    3. Context task-2/participant/proposal-workspace [b839b146-7576-5ec4-93a5-a98f64eba1ec]
+    Memory [7ed418b9-5ef2-4f4e-9982-079c034b2b14]
+    Content SHA-256: 59b658711b42d6594784c16b01837aa33225fb038e8ff4c1a7418eebe26bdcb8
+
+EDIT task-3/local/guardrails Memory [51968038-de20-46fd-b46f-b328583b49c7]
+  OWNER
+    Context task-3/local/guardrails [10c1e5b1-4d4b-566c-bf14-c385523c344e]
+  MEMORY UID
+    51968038-de20-46fd-b46f-b328583b49c7
+  BEFORE
+    Punctuation removal does not remove digits: preserve digits, including leading zeroes, in their original positions while removing spaces and punctuation.
+  AFTER
+    Punctuation removal does not remove digits: preserve digits 0 through 9, including leading zeroes, in their original positions while removing spaces and punctuation. For example, Route 66, LLC becomes ROUTE66 after removing the comma, space, and LLC suffix while preserving 66.
+  REASON
+    The sources refine the existing numeral rule and add a concrete example without changing unrelated facts.
+  SOURCE REFERENCES
+    1. Context task-2/participant/proposal-workspace [b839b146-7576-5ec4-93a5-a98f64eba1ec]
+    Memory [28120a2d-dc34-491e-bf33-77c9164b7daa]
+    Content SHA-256: 7607933f3785f2f9976468c31e1e7810f9116f7d89e50659fd4d6588d10a73df
+    
+    2. Context task-2/participant/proposal-workspace [b839b146-7576-5ec4-93a5-a98f64eba1ec]
+    Memory [ace52daf-a352-4495-a839-50fd396627c2]
+    Content SHA-256: 2bf2e9939fff7c9d9e36ba956795847740d2a2198d7647230b4247274963fe21
+
+No changes applied.

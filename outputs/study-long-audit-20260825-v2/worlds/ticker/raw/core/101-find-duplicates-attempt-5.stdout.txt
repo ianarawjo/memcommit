@@ -1,0 +1,151 @@
+Find Duplicates · task-3 · 50 Contexts checked · 455 direct items checked · 0 exact groups · 0 proposed absorptions
+
+CONTEXT 1/50 · task-3
+  No exact duplicate direct items.
+
+CONTEXT 2/50 · task-3/description
+  No exact duplicate direct items.
+
+CONTEXT 3/50 · task-3/local
+  No exact duplicate direct items.
+
+CONTEXT 4/50 · task-3/local/guardrails
+  No exact duplicate direct items.
+
+CONTEXT 5/50 · task-3/local/guardrails/approval-and-delivery
+  No exact duplicate direct items.
+
+CONTEXT 6/50 · task-3/local/guardrails/audit-and-recovery
+  No exact duplicate direct items.
+
+CONTEXT 7/50 · task-3/local/guardrails/channel-and-format
+  No exact duplicate direct items.
+
+CONTEXT 8/50 · task-3/local/guardrails/downstream-use
+  No exact duplicate direct items.
+
+CONTEXT 9/50 · task-3/local/guardrails/evidence-and-uncertainty
+  No exact duplicate direct items.
+
+CONTEXT 10/50 · task-3/local/guardrails/minimization-and-redaction
+  No exact duplicate direct items.
+
+CONTEXT 11/50 · task-3/local/guardrails/privacy-and-others
+  No exact duplicate direct items.
+
+CONTEXT 12/50 · task-3/local/guardrails/purpose-and-scope
+  No exact duplicate direct items.
+
+CONTEXT 13/50 · task-3/local/guardrails/recipient-and-authority
+  No exact duplicate direct items.
+
+CONTEXT 14/50 · task-3/local/guardrails/retention-and-revocation
+  No exact duplicate direct items.
+
+CONTEXT 15/50 · task-3/local/personal-memory
+  No exact duplicate direct items.
+
+CONTEXT 16/50 · task-3/local/personal-memory/2024
+  No exact duplicate direct items.
+
+CONTEXT 17/50 · task-3/local/personal-memory/2024/01
+  No exact duplicate direct items.
+
+CONTEXT 18/50 · task-3/local/personal-memory/2024/02
+  No exact duplicate direct items.
+
+CONTEXT 19/50 · task-3/local/personal-memory/2024/03
+  No exact duplicate direct items.
+
+CONTEXT 20/50 · task-3/local/personal-memory/2024/04
+  No exact duplicate direct items.
+
+CONTEXT 21/50 · task-3/local/personal-memory/2024/05
+  No exact duplicate direct items.
+
+CONTEXT 22/50 · task-3/local/personal-memory/2024/06
+  No exact duplicate direct items.
+
+CONTEXT 23/50 · task-3/local/personal-memory/2024/07
+  No exact duplicate direct items.
+
+CONTEXT 24/50 · task-3/local/personal-memory/2024/08
+  No exact duplicate direct items.
+
+CONTEXT 25/50 · task-3/local/personal-memory/2024/09
+  No exact duplicate direct items.
+
+CONTEXT 26/50 · task-3/local/personal-memory/2024/10
+  No exact duplicate direct items.
+
+CONTEXT 27/50 · task-3/local/personal-memory/2024/11
+  No exact duplicate direct items.
+
+CONTEXT 28/50 · task-3/local/personal-memory/2024/12
+  No exact duplicate direct items.
+
+CONTEXT 29/50 · task-3/local/personal-memory/2025
+  No exact duplicate direct items.
+
+CONTEXT 30/50 · task-3/local/personal-memory/2025/01
+  No exact duplicate direct items.
+
+CONTEXT 31/50 · task-3/local/personal-memory/2025/02
+  No exact duplicate direct items.
+
+CONTEXT 32/50 · task-3/local/personal-memory/2025/03
+  No exact duplicate direct items.
+
+CONTEXT 33/50 · task-3/local/personal-memory/2025/04
+  No exact duplicate direct items.
+
+CONTEXT 34/50 · task-3/local/personal-memory/2025/05
+  No exact duplicate direct items.
+
+CONTEXT 35/50 · task-3/local/personal-memory/2025/06
+  No exact duplicate direct items.
+
+CONTEXT 36/50 · task-3/local/personal-memory/2025/07
+  No exact duplicate direct items.
+
+CONTEXT 37/50 · task-3/local/personal-memory/2025/08
+  No exact duplicate direct items.
+
+CONTEXT 38/50 · task-3/local/personal-memory/2025/09
+  No exact duplicate direct items.
+
+CONTEXT 39/50 · task-3/local/personal-memory/2025/10
+  No exact duplicate direct items.
+
+CONTEXT 40/50 · task-3/local/personal-memory/2025/11
+  No exact duplicate direct items.
+
+CONTEXT 41/50 · task-3/local/personal-memory/2025/12
+  No exact duplicate direct items.
+
+CONTEXT 42/50 · task-3/local/personal-memory/2026
+  No exact duplicate direct items.
+
+CONTEXT 43/50 · task-3/local/personal-memory/2026/01
+  No exact duplicate direct items.
+
+CONTEXT 44/50 · task-3/local/personal-memory/2026/02
+  No exact duplicate direct items.
+
+CONTEXT 45/50 · task-3/local/personal-memory/2026/03
+  No exact duplicate direct items.
+
+CONTEXT 46/50 · task-3/local/personal-memory/2026/04
+  No exact duplicate direct items.
+
+CONTEXT 47/50 · task-3/local/personal-memory/2026/05
+  No exact duplicate direct items.
+
+CONTEXT 48/50 · task-3/local/personal-memory/2026/06
+  No exact duplicate direct items.
+
+CONTEXT 49/50 · task-3/remote/government/healthcare-agent/info-request/transmission-guidance
+  No exact duplicate direct items.
+
+CONTEXT 50/50 · task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance
+  No exact duplicate direct items.

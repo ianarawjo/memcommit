@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple query 'Which mappings are established, provisional, or conflicting?' --recursive --context practice
+
+EXIT
+0
+
+OUTPUT
+The mapping a → apple is established by three current Memories in the practice context. [1] [2] [3]
+
+The mapping b → banana is provisional because it appears only as a current reference in the practice context, rather than as a current Memory there. [4] The complete current corpus does not establish any conflicting mappings.
+
+References
+[1] a is apple. — f1c940a1, practice, m1
+[2] a maps to apple; — 9828aed4, practice, m2
+[3] a maps to apple; — 84695557, practice, m18
+[4] b is banana. — b6e1778f, practice, m5

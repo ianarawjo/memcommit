@@ -1,0 +1,2 @@
+No semantic evaluation campaigns yet.
+Run: mem eval semantic run ambiguity

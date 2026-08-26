@@ -1,0 +1,28 @@
+{
+  "sequence": 28,
+  "count_before": 272,
+  "count_after": 273,
+  "delta": 1,
+  "new_attempt_uids": [
+    "2f1e4bce-1321-4c60-b354-c2c3fd8c04fd"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "2f1e4bce-1321-4c60-b354-c2c3fd8c04fd",
+      "operation": "init",
+      "command": "mem init audit/ticker/admin-v2-scratch/tree/leaf --parents",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:12:55.565049+00:00",
+      "completed_at": "2026-08-25T18:12:55.593792+00:00",
+      "elapsed_seconds": 0.028595625000889413,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

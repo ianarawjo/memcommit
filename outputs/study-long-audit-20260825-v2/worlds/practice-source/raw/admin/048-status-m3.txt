@@ -1,0 +1,39 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source status --recursive
+
+STDIN
+<none>
+
+EXIT
+0
+
+WALL_SECONDS
+1.399621
+
+POST_CALL_IDENTITY_HOST_ASSERTION
+{"profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/practice-source/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+STDOUT
+On context: task-1
+
+Recursive scope · Contexts 17  |  Memories 376  |  Query Views 1  |  Embedded Contexts 12  |  Grants 2
+  task-1 [OWNED] · CURRENT · Direct inventory empty
+  task-1/campus-wiki [READ GRANT · PERMISSIONS CREATE + READ + EMBED + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · READ ONLY · 99a7586d r1] · Query Views 1  |  Embedded Contexts 6
+  task-1/campus-wiki/building-access [READ GRANT · PERMISSIONS CREATE + READ + EMBED + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · READ ONLY · 99a7586d r1] · Memories 50
+  task-1/campus-wiki/event-relocations [READ GRANT · PERMISSIONS CREATE + READ + EMBED + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · READ ONLY · 99a7586d r1] · Memories 50
+  task-1/campus-wiki/temporary-parking [READ GRANT · PERMISSIONS CREATE + READ + EMBED + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · READ ONLY · 99a7586d r1] · Memories 50
+  task-1/campus-wiki/shop-updates [READ GRANT · PERMISSIONS CREATE + READ + EMBED + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · READ ONLY · 99a7586d r1] · Memories 50
+  task-1/campus-wiki/facility-updates [READ GRANT · PERMISSIONS CREATE + READ + EMBED + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · READ ONLY · 99a7586d r1] · Memories 50
+  task-1/campus-wiki/route-changes [READ GRANT · PERMISSIONS CREATE + READ + EMBED + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · READ ONLY · 99a7586d r1] · Memories 50
+  task-1/description [OWNED] · Memories 1
+  task-1/participant [OWNED] · Direct inventory empty
+  task-1/participant/construction-updates [OWNED] · Embedded Contexts 6  |  Grants 2
+  task-1/participant/construction-updates/building-access [OWNED] · Memories 11
+  task-1/participant/construction-updates/event-relocations [OWNED] · Memories 10
+  task-1/participant/construction-updates/temporary-parking [OWNED] · Memories 15
+  task-1/participant/construction-updates/shop-updates [OWNED] · Memories 13
+  task-1/participant/construction-updates/facility-updates [OWNED] · Memories 17
+  task-1/participant/construction-updates/route-changes [OWNED] · Memories 9
+
+
+STDERR

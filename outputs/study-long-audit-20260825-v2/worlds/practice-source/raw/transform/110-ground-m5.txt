@@ -1,0 +1,30 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source ground practice-source-v2-transform --snapshot
+
+EXIT
+0
+
+WALL_SECONDS
+1.354113
+
+STDOUT
+Created Ground workspace 'practice-source-v2-transform' as 6 physical Contexts.
+GROUND WORKSPACE · practice-source-v2-transform
+STATUS · OPEN · REVISION 0
+
+CONTEXTS
+  practice-source-v2-transform · 1 direct item · ROOT
+  practice-source-v2-transform/goals · 0 direct items
+  practice-source-v2-transform/rules · 0 direct items
+  practice-source-v2-transform/examples · 0 direct items
+  practice-source-v2-transform/contexts · 0 direct items
+  practice-source-v2-transform/relations · 0 direct items
+
+CONTENTS
+  (empty)
+
+Ground workspace Contexts and Memories are physical Store records.
+Global current Context: unchanged.
+
+
+STDERR

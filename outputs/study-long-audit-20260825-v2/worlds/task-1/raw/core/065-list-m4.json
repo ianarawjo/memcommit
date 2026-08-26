@@ -1,0 +1,11 @@
+{
+  "sequence": 65,
+  "operation": "list",
+  "attempt": 4,
+  "command": "python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 list task-1/campus-wiki/temporary-parking --direct",
+  "exit": 0,
+  "wall_seconds": 1.417789,
+  "pre_target_digest": "45cba3348e0ca6f720dd08cf265ebc6ce0634a7b8618dc8c97ded75bd883b8b4",
+  "post_target_digest": "36085ce311d10c4e01e513f0a546818e72c919b73712c0e779b23c7694c758f2",
+  "raw_output": "raw/core/065-list-m4.txt"
+}

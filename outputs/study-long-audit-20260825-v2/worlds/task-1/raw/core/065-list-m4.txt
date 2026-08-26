@@ -1,0 +1,103 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 list task-1/campus-wiki/temporary-parking --direct
+
+EXIT
+0
+
+WALL_SECONDS
+1.417789
+
+STDOUT
+Context: task-1/campus-wiki/temporary-parking
+  Access: READ GRANT · PERMISSIONS CREATE + READ + EMBED + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · READ ONLY · FROM sixworld-v2-template-granted-memory · GRANT 99a7586d · REVISION 1
+  Permissions: CREATE + READ + EMBED + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS
+  Analysis: RATIONALE SUBTREE + TRACE BLOCKED
+  Source boundary: DERIVE allowed · COMBINE allowed · EXPORT allowed
+  Target/artifact boundary: ACCEPT_DERIVED allowed · SAVE_BOUND_ANALYSIS allowed · SAVE_ANALYSIS allowed
+  50 memories
+  0 subcontexts
+
+  [memory 5d690022] Outdoor Parking Lot A to the left of the Main Building is connected to the Main
+                    Building underground parking garage by an inclined access road.
+  [memory 6960c0ca] General vehicles may enter and park in the Main Building underground parking
+                    garage during operating hours.
+  [memory 67d07765] The pedestrian entrance to the underground parking garage is open to general
+                    pedestrians during operating hours.
+  [memory 489960d6] The interior stairs leading down from the Main Building lobby to the underground
+                    parking garage are available during operating hours.
+  [memory df455ec8] Outdoor Parking Lot C uses an access road separate from the Main Building
+                    underground parking garage.
+  [memory 6a37c02f] Outdoor Parking Lot C is outside the Main Building construction zone.
+  [memory a81363fe] The Outdoor Parking Lot A–Main Building–Central Library route is normally one of
+                    the shortest routes to the library after parking.
+  [memory ccf54508] Do not generalize the closure of one parking area into a campus-wide parking
+                    ban.
+  [memory 1a4e603c] Check separately for available alternative parking areas.
+  [memory 3bd9a7e3] First-time visiting drivers often expect there to be general parking spaces in
+                    the parking lot closest to the Main Building.
+  [memory 879b70b3] Visitors who need mobility assistance expect a safe pickup and drop-off point
+                    near the accessible entrance.
+  [memory c89147c1] Visitors with luggage expect to be able to load and unload briefly near the Main
+                    Building entrance.
+  [memory c9b6827a] Staff often expect that their access authorization also allows them to use the
+                    parking lot adjacent to the Main Building.
+  [memory 07101ab9] Staff who need mobility assistance give priority to pickup and drop-off points
+                    near an accessible entrance.
+  [memory 39b76444] Staff transporting equipment prefer a loading and unloading point close to the
+                    destination space.
+  [memory 9514e9f2] The parking information agent can explain posted open statuses.
+  [memory 9acc9ad2] The parking information agent can explain posted connecting routes.
+  [memory 6a38e1b0] The parking information agent cannot check real-time space availability.
+  [memory 7063d138] The parking information agent cannot guarantee when on-site controls will be
+                    lifted.
+  [memory efbe330f] Delivery drivers and external maintenance providers sometimes expect to be able
+                    to load and unload briefly at the edge of Outdoor Parking Lot A.
+  [memory c0ac84d9] Outdoor Parking Lot C accepts visitor vehicles during posted operating hours.
+  [memory 96092024] Instructions for registering visitor vehicles are posted on the sign at the
+                    parking area entrance.
+  [memory 7b323c8d] A valid parking permit is required to use accessible parking areas.
+  [memory 8180f5e5] The accessible parking area in Outdoor Parking Lot C is near the walkway toward
+                    the Student Centre.
+  [memory b7f4ae20] The pickup and drop-off zone in front of the Main Building's main entrance is
+                    not a long-term parking space.
+  [memory 27246135] The maximum use time for short-term loading and unloading spaces is indicated on
+                    on-site signs.
+  [memory dc40ae37] Motorcycles park in the motorcycle areas marked on the campus map.
+  [memory 077234a0] Bicycles are parked at designated bicycle racks, not in vehicle parking spaces.
+  [memory c578f6a4] Outdoor Parking Lot C has electric vehicle charging spaces.
+  [memory 38ce79ed] Electric vehicle charging spaces are for vehicles that are charging.
+  [memory 7471f5bc] Visitor parking fees are displayed on the parking registration screen.
+  [memory 340389ed] The parking information agent cannot infer unposted discounted fees.
+  [memory f617356c] Parking operating hours on public holidays may differ from weekday operating
+                    hours.
+  [memory 35576f85] Parts of outdoor parking lots may be temporarily restricted during heavy snow or
+                    icy conditions.
+  [memory 3fc6abeb] On days with large public events, parking demand near the event venue increases.
+  [memory 308c9814] Drivers who need mobility assistance expect a step-free accessible route from
+                    the parking space to the destination.
+  [memory 8061fc97] First-time visiting drivers sometimes confuse Outdoor Parking Lot A with Outdoor
+                    Parking Lot C.
+  [memory 7d5bdc29] The parking information agent cannot check in real time whether on-site control
+                    signs have been installed and determines availability using only posted
+                    parking-space statuses.
+  [memory a77dadf9] The West Gate stop is on the walkway outside Outdoor Parking Lot C.
+  [memory 012add6d] The campus shuttle stops at the shuttle stop in front of the Student Centre.
+  [memory 6ca42597] Campus shuttle operating hours vary between academic terms and recess periods.
+  [memory f1283ab9] The parking information agent can explain parking lot access roads shown on the
+                    public map.
+  [memory db986c20] The parking information agent cannot register a visitor vehicle on the visitor's
+                    behalf.
+  [memory 1a0b250f] The parking information agent cannot waive parking fees.
+  [memory f201604e] Check official parking notices for weather-related parking restrictions.
+  [memory b5466afb] Do not generalize the full status of one parking lot to another parking lot.
+  [memory 38b6565e] Valid parking authorization does not guarantee the availability of a specific
+                    parking space.
+  [memory 11d0062b] An accessible pickup and drop-off zone is marked in front of the Main Building's
+                    main entrance.
+  [memory a299c675] The dedicated car-sharing spaces in Outdoor Parking Lot C are identified by
+                    signs.
+  [memory a671229f] Report vehicles blocking passageways or accessible parking areas to the parking
+                    management office.
+
+
+STDERR

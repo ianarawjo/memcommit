@@ -1,0 +1,34 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source revert f056775b --context practice/description --keep
+
+EXIT
+0
+
+WALL_SECONDS
+1.488986
+
+STDOUT
+Reverted Context: practice/description
+Restored state recorded by: manual checkpoint
+Action detail: v2 transform round 2 safety
+Affected Context: practice/description
+Affected content: 9 Memories added, 2 Memory refs added, 2 Embedded contexts added, 23 Memories removed
+  - [memory 206dcf8c] "Match the intervention to the request: for “How does this read?” or review-only requests, assess and report issues before editing—checking sentence order and paragraph division—and report verification problems rather than silently rewritin…"
+  - [memory d77dc74f] "When polishing or changing a specific expression, make the smallest necessary wording change while preserving the draft’s overall structure, citation-needed markers, and author-selected technical or project-specific terminology; for materi…"
+  - [memory b602fbfb] "When reducing a passage, preserve every required point, remove redundant material, state repeated content once, and—when a shorter fixed limit applies—target roughly a 20–30% cut from redundant or unnecessary material without making claims…"
+  - [memory 248ac36c] "Use connectors that truthfully represent the relation between ideas: when the next idea is related but does not broaden scope, do not use “More broadly”; use “In relation to this” or another accurate connector, and do not invent a claim me…"
+  - [memory 031e91e1] "For any title about interaction with AI agent memory, preserve the intended terms “interaction,” “management,” and “AI agent memory”; do not shorten the last term to “agent memory.”"
+  - [memory 45fccde1] "By default, capitalize document titles in sentence case, while always retaining “for” when it is intended wording; an explicitly named style guide may override only the capitalization default."
+  - [memory a0a3ed87] "By default, format titles of works consistently in italics throughout a document rather than mixing quotation marks and italics; an explicitly named style guide may override only this work-title format."
+  - [memory 23a8fa5a] "Before correcting content that appears wrong, or adding or reusing citations and references, review the complete original paper, book, guide, or other source—not merely an abstract or short snippet—and verify both that the source exists an…"
+  - [memory af9ebb14] "Do not invent quotations or evidence, or overstate an author’s contribution or a paper’s status."
+  - [memory dd85d58b] "Atomize the source-verification practice as: “Trigger: before correcting apparently wrong content or adding or reusing citations or references. Narrow exception: none stated. Protected object: the exact claim and its supporting source. Com…"
+  - [memory 5c043436] "Atomize the title-capitalization practice as: “Trigger: when capitalizing a document title. Narrow exception: an explicitly named style guide may override only the capitalization default. Protected object: the intended wording, including ‘…"
+  - [memory b051932e] "When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division."
+  ... 24 more affected direct items not shown
+Restored checkpoint: [f056775b] (2026-08-25 13:15)
+Undo command: mem undo
+Exact recovery checkpoint: mem revert 758313fe --discard-newer
+
+
+STDERR

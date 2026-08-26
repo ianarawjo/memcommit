@@ -1,0 +1,28 @@
+{
+  "sequence": 105,
+  "count_before": 349,
+  "count_after": 350,
+  "delta": 1,
+  "new_attempt_uids": [
+    "3cab6bc2-0c6c-49d9-afd7-a7876ff0788e"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "3cab6bc2-0c6c-49d9-afd7-a7876ff0788e",
+      "operation": "switch",
+      "command": "mem switch practice",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:17:33.789133+00:00",
+      "completed_at": "2026-08-25T18:17:33.805361+00:00",
+      "elapsed_seconds": 0.016055333995609544,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

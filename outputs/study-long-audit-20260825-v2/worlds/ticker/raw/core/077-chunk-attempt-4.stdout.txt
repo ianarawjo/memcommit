@@ -1,0 +1,7 @@
+
+Proposed split of [dec2a215] in Context 'task-1' → 2 chunks (method=paragraphs, max_chars=90)
+────────────────────────────────────────────────────────
+   1  Share-class example: Acme Corp. Class B becomes ACME.B after
+   2  Class B to the .B suffix. The dot is generated share-class s
+────────────────────────────────────────────────────────
+Done — 2 memories added in 'task-1'.

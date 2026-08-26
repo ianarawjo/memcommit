@@ -1,0 +1,107 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 ls task-1/campus-wiki/event-relocations --direct
+
+EXIT
+0
+
+WALL_SECONDS
+1.461330
+
+STDOUT
+Context: task-1/campus-wiki/event-relocations
+  Access: READ GRANT · PERMISSIONS CREATE + READ + EMBED + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · READ ONLY · FROM sixworld-v2-template-granted-memory · GRANT 99a7586d · REVISION 1
+  Permissions: CREATE + READ + EMBED + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS
+  Analysis: RATIONALE SUBTREE + TRACE BLOCKED
+  Source boundary: DERIVE allowed · COMBINE allowed · EXPORT allowed
+  Target/artifact boundary: ACCEPT_DERIVED allowed · SAVE_BOUND_ANALYSIS allowed · SAVE_ANALYSIS allowed
+  50 memories
+  0 subcontexts
+
+  [memory a0700edb] The meeting space on the first floor of the Main Building can be reserved for
+                    external events.
+  [memory 63986020] The meeting space on the first floor of the Main Building can be reserved for
+                    campus meetings.
+  [memory a2ec4e87] The exhibition and event hall on the tenth floor of the Main Building remains
+                    open for exhibition viewing during recess.
+  [memory 11e4782c] The exhibition and event hall on the tenth floor of the Main Building continues
+                    to host reserved events during recess.
+  [memory ec3a4511] The auditorium in the separate building east of the Main Building does not share
+                    equipment with the Main Building's event facilities.
+  [memory a224b6db] The auditorium in the separate building east of the Main Building does not share
+                    an entrance with the Main Building's event facilities.
+  [memory 50369ec7] Present only spaces confirmed to be operating as alternative event venues.
+  [memory a3c819d4] Do not present a space whose available schedule has not been checked as though
+                    it were a confirmed reservation.
+  [memory 2a0f0a0e] External visitors who have previously been to an event venue in the Main
+                    Building tend to look for the same entrance and floor they used on their
+                    previous visit when they visit again.
+  [memory ed4e7c60] The event information agent can compare published event spaces.
+  [memory 0170aa1a] The event information agent can compare published operating hours.
+  [memory 1929991c] The event information agent cannot create reservations.
+  [memory c7b42a0e] The event information agent cannot guarantee remaining seat availability.
+  [memory a1b88b90] Some seminar rooms on the fifth floor of the Main Building are also used for
+                    regularly scheduled classes.
+  [memory c4fe128d] Some seminar rooms on the sixth floor of the Main Building are also used for
+                    regularly scheduled classes.
+  [memory b79a722a] Check class schedules before presenting any seminar rooms on the fifth and sixth
+                    floors of the Main Building as alternative event rooms.
+  [memory 4bc2268d] External event operators expect the loading entrance and route to the stage to
+                    be clearly confirmed by the day before the event.
+  [memory d8cc31a3] The names and capacities of reservable campus spaces are published in the public
+                    space directory.
+  [memory 087bb085] Submit event space reservation requests through the campus space reservation
+                    portal.
+  [memory bf506b28] Event organizers must confirm that the capacity is appropriate for the expected
+                    number of attendees.
+  [memory 5015ee36] Events that require accessible seating can indicate that need in the reservation
+                    request.
+  [memory bc10fe3c] Campus event reservations by external organizations require a campus sponsoring
+                    department.
+  [memory a2b87746] Student organization event reservations must be requested through a registered
+                    organization account.
+  [memory f995af31] A space reservation is confirmed after an approval confirmation is issued.
+  [memory cc720c59] Space use for recurring events must be approved again each semester.
+  [memory a72cb1ad] The reservation time includes the time needed for event setup and teardown.
+  [memory c70f4d03] After the event ends, return moved furniture to the space's default arrangement.
+  [memory 55540a25] Check the usage rules for each space to determine whether food may be brought
+                    in.
+  [memory 9e496450] Request event audio and video support separately from the space reservation.
+  [memory 819beea8] Install temporary event signs so they do not obstruct passageways or emergency
+                    exits.
+  [memory a4c8e1a2] The event information agent can compare the capacities of spaces in the public
+                    directory.
+  [memory 7795aa61] The event information agent cannot access private participant lists.
+  [memory fdae8ad0] The event information agent cannot guarantee when a reservation under review
+                    will be approved.
+  [memory 232cd8db] Check both the official event schedule and facilities notices to confirm whether
+                    a space is operating that day.
+  [memory 3329f2cc] Do not present a temporarily held space as a confirmed reserved space.
+  [memory f986e70e] Visitors attending external events often expect that they can enter the building
+                    any time before the event begins.
+  [memory 13211336] Event operators bringing equipment expect the loading entrance and route to the
+                    stage to be clearly stated in the reservation confirmation.
+  [memory 22f9c5bf] Attendees who need event accessibility support may easily miss the advance
+                    contact requirement because they expect the necessary support to be prepared
+                    without a separate request.
+  [memory e9c632bf] The small seminar rooms in the Main Building have lower capacities than the
+                    auditorium in the separate building.
+  [memory 8ec61da7] Exhibition viewing hours on the tenth floor of the Main Building are published
+                    separately from the usage hours for reserved events.
+  [memory 5fa014b2] The meeting space on the first floor of the Main Building has a flexible area
+                    without fixed seating.
+  [memory bb2aa827] The auditorium in the separate building has an event information desk separate
+                    from the Main Building.
+  [memory cc2a4dc4] External event vendors expect the campus sponsoring department to confirm the
+                    loading time and route.
+  [memory 5bc6cebc] Canceled public events are marked as canceled on the official event schedule.
+  [memory a32a3a9f] Spaces that can be reserved on weekdays may not operate on public holidays.
+  [memory ff9fa75e] Emergency safety measures take priority over approved space reservations.
+  [memory 83b95f40] If space names appear identical, check the building name and floor together.
+  [memory d68f7446] Turn in items found at an event venue to the information desk in that building.
+  [memory 4510b985] Event organizers expect the permitted scope of photography to be clearly
+                    communicated to attendees in advance.
+  [memory 2fa16a36] Distinguish between public event information and private participant information
+                    when providing guidance.
+
+
+STDERR

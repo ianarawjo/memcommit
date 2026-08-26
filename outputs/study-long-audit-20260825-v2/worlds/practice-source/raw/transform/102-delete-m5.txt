@@ -1,0 +1,14 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source delete 89ff1887 --context practice/description
+
+EXIT
+0
+
+WALL_SECONDS
+1.294059
+
+STDOUT
+Removed [89ff1887] memcommit is a research prototype that provides command-line and terminal user interfaces (CLI/TUI) for managing agent memory and supporting collaboration among people and agents. Through memcommit's operations and structural concepts—including Memories, Contexts, Profiles, Grants, and Sessions—you can manage agent memories as they are collected, organized, and propagated among people and agents. In this study, you will use memcommit in three different situations, each involving a different context, goal, and kind of memory.
+
+
+STDERR

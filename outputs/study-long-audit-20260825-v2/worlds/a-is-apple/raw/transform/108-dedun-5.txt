@@ -1,0 +1,10 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple dedun practice/source --direct
+
+EXIT
+0
+
+OUTPUT
+Dedun 'practice/source': absorbed 2 redundant direct item(s); kept 2 original UID(s).
+DUN COMPOSITION · 2 evidence links = 0 DUP / EXACT links + 2 SEMANTIC DUN links
+Checkpoint [f4a88ec3] · review: mem review dedun --receipt f4a88ec3-d368-410f-a190-d9b1d72ea73e · recovery: mem undo

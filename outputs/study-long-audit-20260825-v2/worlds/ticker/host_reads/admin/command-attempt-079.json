@@ -1,0 +1,28 @@
+{
+  "sequence": 79,
+  "count_before": 323,
+  "count_after": 324,
+  "delta": 1,
+  "new_attempt_uids": [
+    "15921f51-a6a4-421f-8f65-f963fc9426a1"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "15921f51-a6a4-421f-8f65-f963fc9426a1",
+      "operation": "checkout",
+      "command": "mem checkout -b audit/ticker/admin-v2-scratch/co4-tree --recursive",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:16:52.126379+00:00",
+      "completed_at": "2026-08-25T18:16:52.178132+00:00",
+      "elapsed_seconds": 0.05155245799687691,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

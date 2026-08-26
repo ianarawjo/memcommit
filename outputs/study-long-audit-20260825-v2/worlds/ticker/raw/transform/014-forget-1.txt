@@ -1,0 +1,12 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker forget 'remove only temporary rules not directly supported by the ticker Source' --context task-3/local --plain
+
+EXIT
+2
+
+OUTPUT
+Usage: run_isolated_mem.py forget [OPTIONS] [INFO]
+Try 'run_isolated_mem.py forget -h' for help.
+╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ No such option: --plain                                                      │
+╰──────────────────────────────────────────────────────────────────────────────╯

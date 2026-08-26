@@ -1,0 +1,23 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source elaborate --rule 'Do not infer a general prose style from examples; emit only constraints explicitly grounded in source text.' --to practice/description --number 2 --plain --strict
+
+EXIT
+0
+
+WALL_SECONDS
+21.787415
+
+STDOUT
+ELABORATE APPLIED · practice/description
+MODE · RULES_TO_CASES · VERIFICATION · UNVERIFIED · QUALITY · STRICT
+SOURCE · INLINE · TARGET · practice/description
+EFFECTS · ADD 2 MEMORIES
+
+  [memory f19fde10] Given the source instruction “Keep the heading exactly as supplied,” retain the heading unchanged; do not add capitalization, tone, or formatting constraints that the source does not state.
+  [memory 3119aa54] Given examples that happen to use short sentences alongside the sole source instruction “Preserve every technical term,” require preservation of every technical term but impose no general short-sentence style.
+
+REVIEW · mem review elaborate --receipt 6c016310-8aba-4679-a3cc-7976deda2760
+UNDO · mem undo
+
+
+STDERR

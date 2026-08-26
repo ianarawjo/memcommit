@@ -1,0 +1,19 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source check-conformance practice/description --against 'Each result must retain complete source scope and must not perform the requested edit.'
+
+EXIT
+0
+
+WALL_SECONDS
+9.121852
+
+STDOUT
+CONFORMANCE · 0/5 EXAMPLES CONFORM · 0/1 RULES MET · [EXAMPLES practice/description] · [RULES TEXT Each result must retain complete source scope and must not perform the requested edit.] · 4 EXAMPLES N/A
+! VIOLATES · [EXAMPLE m000004] When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division. · [RULE r1] Each result must retain complete source scope and must not perform the requested edit. · WHY · The result retains editing directions but omits the source note’s full trigger, exceptions, safeguards, or provenance needed to establish complete scope.
+! VIOLATES · [EXAMPLE m000005] If I later ask for polishing, preserve the overall strucutre and citation-needed markers, and change only wording that causes a problem. · [RULE r1] Each result must retain complete source scope and must not perform the requested edit. · WHY · The result retains editing directions but omits the source note’s full trigger, exceptions, safeguards, or provenance needed to establish complete scope.
+! VIOLATES · [EXAMPLE m000006] If a passage is supposed to make four points, keep all four while removing parts that are too redundent and stating repeated content only once. · [RULE r1] Each result must retain complete source scope and must not perform the requested edit. · WHY · The result retains editing directions but omits the source note’s full trigger, exceptions, safeguards, or provenance needed to establish complete scope.
+! VIOLATES · [EXAMPLE m000007] DEFAULT CANDIDATE: use sentence case for document titles by default, subject only to an explicitly named style guide capitalization override; preserve the intended word for. · [RULE r1] Each result must retain complete source scope and must not perform the requested edit. · WHY · The result ends with the incomplete object “word for,” so it does not retain complete source scope.
+! VIOLATES · [EXAMPLE m000008] Use consistent italics for work titles by default, subject only to an explicitly named style guide work-title-format override. · [RULE r1] Each result must retain complete source scope and must not perform the requested edit. · WHY · The result retains a formatting constraint but lacks source provenance and any companion scope needed for independent review.
+
+
+STDERR

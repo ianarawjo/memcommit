@@ -1,0 +1,9 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 trace 337e9f61-d31c-448b-8c80-e2891688bff7 --context task-2/participant/proposal-workspace --verbose --limit 10
+EXIT: 0
+DURATION_SECONDS: 1.411
+
+TRACE · task-2/participant/proposal-workspace
+MEMORY · 337e9f61-d31c-448b-8c80-e2891688bff7
+LINEAGE · 1 events · 1 components
+ATTENTION · 1 limits
+DETAILS · mem trace 337e9f61-d31c-448b-8c80-e2891688bff7 --context task-2/participant/proposal-workspace --plain

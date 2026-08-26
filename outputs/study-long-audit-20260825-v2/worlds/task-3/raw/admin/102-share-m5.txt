@@ -1,0 +1,20 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 share task-3/local/admin-v2-scratch --to admin-v2-missing-endpoint --direct
+
+STDIN
+<none>
+
+EXIT
+1
+
+WALL_SECONDS
+1.345091
+
+POST_CALL_IDENTITY_HOST_ASSERTION
+{"profile_name": "sixworld-v2-template", "profile_uid": "8d6d6360-c3eb-40f9-a490-5c7b2a242bfd", "resolved_store": "/Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/task-3/profile-control/stores/8d6d6360-c3eb-40f9-a490-5c7b2a242bfd"}
+
+STDOUT
+
+
+STDERR
+Error: Share endpoint 'admin-v2-missing-endpoint' does not exist.

@@ -1,0 +1,28 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 revert 8ac07379 --context task-1/participant --keep
+
+EXIT
+0
+
+OUTPUT
+Reverted Context: task-1/participant
+Restored state recorded by: manual checkpoint
+Action detail: task-1 transform round 3 scratch recovery
+Affected Context: task-1/participant
+Affected content: 4 Memories added, 3 Memory refs added, 2 Embedded contexts added, 4 direct items added, 21 Memories removed
+  - [memory 28e52f8b] "The existing accessible route is unavailable while it is being reconstructed; throughout the construction period, the accessible alternative bypasses it and runs from the temporary passage next to the main entrance to the first-floor lobby."
+  - [memory f180290f] "Students authorized to enter after 5:00 p.m. must use a physical NFC student ID card rather than the app."
+  - [memory 47c9625c] "During the construction period, staff and construction/facilities personnel must use only the designated staff entrance, not the third-floor rear entrance."
+  - [memory 449c3e32] "Before publishing any accessible-route alternative, require a current authoritative source to verify the route’s entry point, destination, applicable period, and intended users; omit the alternative if any of those elements cannot be verif…"
+  - [memory 313234c4] "Before publishing any access-hour change, require a current authoritative source to verify the affected entrance or access point, the previous and changed hours, the effective period, and any eligibility or credential conditions; omit the …"
+  - [memory a70351e0] "Limit the explanation to verified accessible-route alternatives and verified access-hour changes, clearly labeling each item by category and effective period; exclude closures, construction details, staff-routing instructions, credential p…"
+  - [memory 168aec62] "Modify campus-wiki/building-access: During the construction period, the third-floor rear entrance cannot be used for general passage."
+  - [memory 051c1958] "Modify campus-wiki/building-access: During the construction period, the end time for general access through the main entrance is shortened from 10:00 p.m. to 5:00 p.m."
+  - [memory d8f1e158] "Modify campus-wiki/building-access: During the construction period, the existing accessible route cannot be used because it is being reconstructed."
+  - [memory ee1b72ab] "Add campus-wiki/building-access: The temporary accessible route next to the main entrance can be used throughout the construction period."
+  - [memory dc5970d1] "Modify campus-wiki/building-access: Instruct students authorized to enter after 5:00 p.m. to use a physical NFC student ID card rather than the app."
+  - [memory 3d7e76a7] "Modify campus-wiki/building-access: During the construction period, instruct staff and construction/facilities personnel to use only the designated staff entrance instead of the third-floor rear entrance."
+  ... 22 more affected direct items not shown
+Restored checkpoint: [8ac07379] (2026-08-25 13:39)
+Undo command: mem undo
+Exact recovery checkpoint: mem revert 32ed300b --discard-newer

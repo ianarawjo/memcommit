@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple distill --from practice/source --to practice --goal 'Distill source-grounded preferred mappings while retaining conflicts as conflicts.'
+
+EXIT
+0
+
+OUTPUT
+DISTILL APPLIED · practice/source → practice
+EFFECTS · ADD 3 RULES
+
+  [memory ec34724d] Map “b” to “banana.”
+  [memory 79959824] Map “b” to “blueberry.”
+  [memory 470fd7d4] Treat the copied mapping as provisional while keeping “blueberry” visible.
+
+REVIEW · mem review distill --receipt 4be9dca9-5103-482c-95c9-5d503c078247
+UNDO · mem undo

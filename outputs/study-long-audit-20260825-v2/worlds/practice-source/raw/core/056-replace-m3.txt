@@ -1,0 +1,15 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source replace CANDIDATE 'ATOMIC CANDIDATE' --context practice
+
+EXIT
+0
+
+WALL_SECONDS
+1.344910
+
+STDOUT
+Replaced 3 occurrences in 3 Memories in 'practice'.
+Undo can restore this command.
+
+
+STDERR

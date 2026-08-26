@@ -1,0 +1,18 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple elaborate --rule 'a is apple; examples must preserve this exact supported mapping.' --to practice
+
+EXIT
+0
+
+OUTPUT
+ELABORATE APPLIED · practice
+MODE · RULES_TO_CASES · VERIFICATION · UNVERIFIED · QUALITY · BEST_EFFORT
+SOURCE · INLINE · TARGET · practice
+EFFECTS · ADD 3 MEMORIES
+
+  [memory a2306093] a is apple.
+  [memory 34db165e] Even while other letter mappings remain unresolved, a is apple.
+  [memory 6ef232b3] Do not substitute another fruit for the supported value: a is apple.
+
+REVIEW · mem review elaborate --receipt f009b242-3bcc-42ea-84b8-89a2ab13d751
+UNDO · mem undo

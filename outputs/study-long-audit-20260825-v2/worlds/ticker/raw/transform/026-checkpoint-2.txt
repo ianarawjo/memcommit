@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker checkpoint --context task-3/local/guardrails 'ticker transform round 2 pre-destructive recovery' --direct
+
+EXIT
+0
+
+OUTPUT
+[a9a9ae56] 2026-08-25 13:24:25  Context 'task-3/local/guardrails'  'ticker transform round 2 pre-destructive recovery'

@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple embed practice/source --into practice
+
+EXIT
+1
+
+OUTPUT
+Error: 'practice/source' has the same Context identity as already embedded 'practice/source' in 'practice'.

@@ -1,0 +1,2 @@
+task-2/participant/proposal-workspace
+[memory ace52daf] Numeral example: Route 66, LLC becomes ROUTE66 after removing the comma, space, and LLC suffix while preserving 66.

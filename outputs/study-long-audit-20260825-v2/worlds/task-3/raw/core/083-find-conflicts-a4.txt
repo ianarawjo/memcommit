@@ -1,0 +1,7 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 find-conflicts task-3/local/guardrails/privacy-and-others
+
+STDOUT
+Find Conflicts · task-3/local/guardrails/privacy-and-others · 0/7 direct memories involved · 0/21 pairs flagged
+
+STDERR

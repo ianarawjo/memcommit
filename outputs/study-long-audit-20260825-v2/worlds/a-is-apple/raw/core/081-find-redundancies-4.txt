@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple find-redundancies practice --direct
+
+EXIT
+0
+
+OUTPUT
+Find Redundancies · practice · 10 direct memories checked · 1 group · 2 proposed absorptions
+
+  DUN GROUP  1/1 · 3 Memories · COMPLETE DUN
+    CLEANUP MAP · READY FOR REVIEW
+    SURVIVOR  [memory f1c940a1]  a is apple.
+    ABSORB    [memory 9828aed4]  a maps to apple;
+    ABSORB    [memory 84695557]  a maps to apple;
+    EVIDENCE 1 · SEMANTIC EQUIVALENT · Both complete Memories express the same mapping of “a” to apple, with no differing scope or conditions.
+    EVIDENCE 2 · EXACT · Stored content is identical.

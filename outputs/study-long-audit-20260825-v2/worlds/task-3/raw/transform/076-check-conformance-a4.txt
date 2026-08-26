@@ -1,0 +1,8 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 check-conformance task-3/local/personal-memory/2024/03 --rule task-3/local/guardrails/approval-and-delivery
+
+EXIT
+0
+
+OUTPUT
+CONFORMANCE · 1/1 EXAMPLES CONFORM · 1/1 RULES MET · [EXAMPLES task-3/local/personal-memory/2024/03] · [RULES task-3/local/guardrails/approval-and-delivery] · 9 EXAMPLES N/A · 8 RULES N/A

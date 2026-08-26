@@ -1,0 +1,31 @@
+{
+  "sequence": 49,
+  "count_before": 293,
+  "count_after": 294,
+  "delta": 1,
+  "new_attempt_uids": [
+    "600cedd5-05c1-40b2-94f9-43aac74dfa17"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "600cedd5-05c1-40b2-94f9-43aac74dfa17",
+      "operation": "status",
+      "command": "mem status --recursive",
+      "status": "FAILED",
+      "started_at": "2026-08-25T18:15:55.742683+00:00",
+      "completed_at": "2026-08-25T18:15:55.851127+00:00",
+      "elapsed_seconds": 0.10829479098902084,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": {
+        "kind": "Exit",
+        "exit_code": 1
+      }
+    }
+  ]
+}

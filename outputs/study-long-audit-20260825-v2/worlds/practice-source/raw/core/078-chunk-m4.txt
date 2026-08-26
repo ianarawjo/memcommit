@@ -1,0 +1,20 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source chunk practice/description:435deab1 --method sentences
+
+EXIT
+0
+
+WALL_SECONDS
+1.329953
+
+STDOUT
+
+Proposed split of [435deab1] in Context 'practice/description' → 2 chunks (method=sentences)
+────────────────────────────────────────────────────────
+   1  DEFAULT CANDIDATE: use sentence case for document titles by 
+   2  Use consistent italics for work titles by default, subject o
+────────────────────────────────────────────────────────
+Done — 2 memories added in 'practice/description'.
+
+
+STDERR

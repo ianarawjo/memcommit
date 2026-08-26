@@ -1,0 +1,27 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source find-ambiguities practice/description
+
+EXIT
+0
+
+WALL_SECONDS
+11.658112
+
+STDOUT
+Find Ambiguities · practice/description · 2/9 direct memories flagged
+
+  AMBIGUITY 1/2
+  [6bd4bd30] If a passage is supposed to make four points, keep all four while removing parts that are too redundent and stating repeated content only once.
+  Reading 1: Remove redundant material and consolidate repeated content, but retain each of the four distinct intended points.
+  Reading 2: Retain four point-shaped items even if some substantially repeat one another, while shortening redundancy within them.
+  Reason: The phrases “keep all four” and “stating repeated content only once” create a tension when two of the supposed points overlap. The dominant reading protects four distinct underlying ideas rather than four separate textual items, but it remains possible that the requested output must visibly preserve four points; clarification would make the permissible consolidation more precise.
+  Question: Must the revised passage still contain four separately identifiable points?
+
+  UNDERSPECIFIED 2/2
+  [5e5f3d04] DEFAULT CANDIDATE: use sentence case for document titles by default, subject only to an explicitly named style guide capitalization override; preserve the intended word for.
+  Reading: Use sentence case for document titles unless an explicitly named style guide overrides capitalization, and preserve a particular intended word form.
+  Reason: The expression “the intended word for” is incomplete and does not identify the protected word form. The capitalization default is usable, but the explicit preservation operation cannot be performed or reliably verified without knowing what word form must remain unchanged.
+  Question: Which word form must be preserved?
+
+
+STDERR

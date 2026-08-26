@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple translate practice:f1c940a1 --to German
+
+EXIT
+0
+
+OUTPUT
+
+Translation view: 'practice' → German
+  1 translated Memory
+────────────────────────────────────────────────────────────────
+[f1c940a1] German · PROVIDER · UNREVIEWED
+  a ist Apfel.
+────────────────────────────────────────────────────────────────
+Saved translation view.
+No Context or Memory changes; source Memory UIDs remain the anchors.

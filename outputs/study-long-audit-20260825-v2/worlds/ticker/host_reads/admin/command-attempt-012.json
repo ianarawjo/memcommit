@@ -1,0 +1,31 @@
+{
+  "sequence": 12,
+  "count_before": 256,
+  "count_after": 257,
+  "delta": 1,
+  "new_attempt_uids": [
+    "e090cc47-4550-4aaf-996e-04be7d5c3795"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "e090cc47-4550-4aaf-996e-04be7d5c3795",
+      "operation": "import",
+      "command": "mem import context participant/construction-updates/shop-updates --from-profile task-1 --as audit/ticker/admin-v2-scratch/import-direct --direct",
+      "status": "FAILED",
+      "started_at": "2026-08-25T18:12:23.076963+00:00",
+      "completed_at": "2026-08-25T18:12:23.125047+00:00",
+      "elapsed_seconds": 0.04792708301101811,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": {
+        "kind": "Exit",
+        "exit_code": 1
+      }
+    }
+  ]
+}

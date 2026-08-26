@@ -1,0 +1,31 @@
+{
+  "sequence": 27,
+  "count_before": 271,
+  "count_after": 272,
+  "delta": 1,
+  "new_attempt_uids": [
+    "0eb77763-ae82-435b-b922-2d7b827c70c9"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "0eb77763-ae82-435b-b922-2d7b827c70c9",
+      "operation": "import",
+      "command": "mem import context participant/construction-updates --from-profile task-1 --as audit/ticker/admin-v2-scratch/import-tree --recursive",
+      "status": "FAILED",
+      "started_at": "2026-08-25T18:12:54.044997+00:00",
+      "completed_at": "2026-08-25T18:12:54.091903+00:00",
+      "elapsed_seconds": 0.04675079199660104,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": {
+        "kind": "Exit",
+        "exit_code": 1
+      }
+    }
+  ]
+}

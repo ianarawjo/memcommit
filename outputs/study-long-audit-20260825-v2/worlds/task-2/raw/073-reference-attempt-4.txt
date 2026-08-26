@@ -1,0 +1,5 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 reference task-2/participant:93582936 --into task-2/description
+EXIT: 0
+DURATION_SECONDS: 1.284
+
+Referenced snapshot [93582936] from 'task-2/participant' as [978a830f] in 'task-2/description'.

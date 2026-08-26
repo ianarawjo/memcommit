@@ -1,0 +1,16 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 translate task-1/participant/construction-updates/facility-updates:99c29cea --to Korean
+
+EXIT
+0
+
+OUTPUT
+
+Translation view: 'task-1/participant/construction-updates/facility-updates' → Korean
+  1 translated Memory
+────────────────────────────────────────────────────────────────
+[99c29cea] Korean · PROVIDER · UNREVIEWED
+  campus-wiki/facility-updates에 추가: 본관은 여름 방학 동안 대규모 시설 개선 공사를 진행합니다.
+────────────────────────────────────────────────────────────────
+Saved translation view.
+No Context or Memory changes; source Memory UIDs remain the anchors.

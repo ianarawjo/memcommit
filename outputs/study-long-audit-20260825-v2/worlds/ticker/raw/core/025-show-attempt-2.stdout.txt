@@ -1,0 +1,1 @@
+[Memory task-2/participant/proposal-workspace:1e0e89ee-d774-4d1a-bdcb-201985d7c563] Punctuation example: North-Star, Inc. becomes NORTHSTAR after removing the comma, hyphen, space, and Inc. suffix. The output contains no punctuation.

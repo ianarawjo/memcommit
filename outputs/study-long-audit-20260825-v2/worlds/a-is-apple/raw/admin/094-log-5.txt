@@ -1,0 +1,208 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py a-is-apple log --actions --limit 100
+
+EXIT
+0
+
+OUTPUT
+Study actions · recent first
+  [f6a10809/4] 2026-08-25 18:05:27 +1.526s  COMMAND_FINISHED
+      status=COMPLETED
+  [f6a10809/3] 2026-08-25 18:05:26 +0.521s  KEY
+      count=1 · focus=BufferControl · key=escape
+  [f6a10809/2] 2026-08-25 18:05:26 +0.000s  COMMAND_ENTERED
+      command=mem init-study
+  [f6a10809/1] 2026-08-25 18:05:26 +0.000s  COMMAND_STARTED
+      operation=init-study · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52
+  [2b597d88/4] 2026-08-25 18:05:24 +1.540s  COMMAND_FINISHED
+      status=COMPLETED
+  [2b597d88/3] 2026-08-25 18:05:23 +0.524s  KEY
+      count=1 · focus=BufferControl · key=escape
+  [2b597d88/2] 2026-08-25 18:05:23 +0.000s  COMMAND_ENTERED
+      command=mem init
+  [2b597d88/1] 2026-08-25 18:05:23 +0.000s  COMMAND_STARTED
+      operation=init · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52
+  [57c517a4/4] 2026-08-25 18:05:21 +0.531s  COMMAND_FINISHED
+      status=COMPLETED
+  [57c517a4/3] 2026-08-25 18:05:21 +0.524s  KEY
+      count=1 · focus=FormattedTextControl · key=escape
+  [57c517a4/2] 2026-08-25 18:05:20 +0.000s  COMMAND_ENTERED
+      command=mem import
+  [57c517a4/1] 2026-08-25 18:05:20 +0.000s  COMMAND_STARTED
+      operation=import · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52
+  [dd9d9674/4] 2026-08-25 18:05:19 +0.015s  COMMAND_FINISHED
+      exit_code=1 · failure_kind=Exit · status=FAILED
+  [dd9d9674/3] 2026-08-25 18:05:19 +0.001s  HELP_LOOKUP_SUBMITTED
+      request=Generate an LLM-based answer from readable Context knowledge or an authorized concealed query-only view.
+  [dd9d9674/2] 2026-08-25 18:05:19 +0.000s  COMMAND_ENTERED
+      command=mem help 'Generate an LLM-based answer from readable Context knowledge or an authorized concealed query-only view.'
+  [dd9d9674/1] 2026-08-25 18:05:19 +0.000s  COMMAND_STARTED
+      operation=help · stdin_tty=False · stdout_tty=False
+  [f632a76f/3] 2026-08-25 18:05:18 +0.001s  COMMAND_FINISHED
+      status=COMPLETED
+  [f632a76f/2] 2026-08-25 18:05:18 +0.000s  COMMAND_ENTERED
+      command=mem eval semantic status --ledger-dir /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/a-is-apple/admin-eval-ledger
+  [f632a76f/1] 2026-08-25 18:05:18 +0.000s  COMMAND_STARTED
+      operation=eval · stdin_tty=False · stdout_tty=False
+  [56b55a8c/3] 2026-08-25 18:05:17 +0.001s  COMMAND_FINISHED
+      exit_code=2 · failure_kind=MissingParameter · status=FAILED
+  [56b55a8c/2] 2026-08-25 18:05:17 +0.000s  COMMAND_ENTERED
+      command=mem config set provider
+  [56b55a8c/1] 2026-08-25 18:05:17 +0.000s  COMMAND_STARTED
+      operation=config · stdin_tty=False · stdout_tty=False
+  [0e4e015e/3] 2026-08-25 18:05:15 +0.097s  COMMAND_FINISHED
+      status=COMPLETED
+  [0e4e015e/2] 2026-08-25 18:05:15 +0.000s  COMMAND_ENTERED
+      command=mem status
+  [0e4e015e/1] 2026-08-25 18:05:15 +0.000s  COMMAND_STARTED
+      operation=status · stdin_tty=False · stdout_tty=False
+  [0c88c0d5/3] 2026-08-25 18:05:14 +0.022s  COMMAND_FINISHED
+      exit_code=1 · failure_kind=Exit · status=FAILED
+  [0c88c0d5/2] 2026-08-25 18:05:14 +0.000s  COMMAND_ENTERED
+      command=mem redo
+  [0c88c0d5/1] 2026-08-25 18:05:14 +0.000s  COMMAND_STARTED
+      operation=redo · stdin_tty=False · stdout_tty=False
+  [16419cb5/3] 2026-08-25 18:05:13 +0.022s  COMMAND_FINISHED
+      exit_code=1 · failure_kind=Exit · status=FAILED
+  [16419cb5/2] 2026-08-25 18:05:13 +0.000s  COMMAND_ENTERED
+      command=mem undo
+  [16419cb5/1] 2026-08-25 18:05:13 +0.000s  COMMAND_STARTED
+      operation=undo · stdin_tty=False · stdout_tty=False
+  [267a9925/3] 2026-08-25 18:05:11 +0.008s  COMMAND_FINISHED
+      status=COMPLETED
+  [267a9925/2] 2026-08-25 18:05:11 +0.000s  COMMAND_ENTERED
+      command=mem unlock audit/a-is-apple/admin-v2-scratch/co4-tree
+  [267a9925/1] 2026-08-25 18:05:11 +0.000s  COMMAND_STARTED
+      operation=unlock · stdin_tty=False · stdout_tty=False
+  [3a5dd643/3] 2026-08-25 18:05:10 +0.022s  COMMAND_FINISHED
+      exit_code=1 · failure_kind=Exit · status=FAILED
+  [3a5dd643/2] 2026-08-25 18:05:10 +0.000s  COMMAND_ENTERED
+      command=mem undo
+  [3a5dd643/1] 2026-08-25 18:05:10 +0.000s  COMMAND_STARTED
+      operation=undo · stdin_tty=False · stdout_tty=False
+  [4a544959/3] 2026-08-25 18:05:09 +0.561s  COMMAND_FINISHED
+      exit_code=1 · failure_kind=Exit · status=FAILED
+  [4a544959/2] 2026-08-25 18:05:08 +0.000s  COMMAND_ENTERED
+      command=mem rename audit/a-is-apple/admin-v2-scratch/co4-tree audit/a-is-apple/admin-v2-scratch/renamed-4 --force
+  [4a544959/1] 2026-08-25 18:05:08 +0.000s  COMMAND_STARTED
+      operation=rename · stdin_tty=False · stdout_tty=False
+  [0358409d/3] 2026-08-25 18:05:07 +0.009s  COMMAND_FINISHED
+      status=COMPLETED
+  [0358409d/2] 2026-08-25 18:05:07 +0.000s  COMMAND_ENTERED
+      command=mem lock audit/a-is-apple/admin-v2-scratch/co4-tree
+  [0358409d/1] 2026-08-25 18:05:07 +0.000s  COMMAND_STARTED
+      operation=lock · stdin_tty=False · stdout_tty=False
+  [05232bdd/3] 2026-08-25 18:05:06 +0.009s  COMMAND_FINISHED
+      status=COMPLETED
+  [05232bdd/2] 2026-08-25 18:05:06 +0.000s  COMMAND_ENTERED
+      command=mem switch audit/a-is-apple/admin-v2-scratch/co4-tree/source
+  [05232bdd/1] 2026-08-25 18:05:06 +0.000s  COMMAND_STARTED
+      operation=switch · stdin_tty=False · stdout_tty=False
+  [68ba4c19/3] 2026-08-25 18:05:05 +0.130s  COMMAND_FINISHED
+      status=COMPLETED
+  [68ba4c19/2] 2026-08-25 18:05:05 +0.000s  COMMAND_ENTERED
+      command=mem checkout -b audit/a-is-apple/admin-v2-scratch/co4-tree --recursive
+  [68ba4c19/1] 2026-08-25 18:05:05 +0.000s  COMMAND_STARTED
+      operation=checkout · stdin_tty=False · stdout_tty=False
+  [6ec12f88/3] 2026-08-25 18:05:03 +0.013s  COMMAND_FINISHED
+      exit_code=1 · failure_kind=Exit · status=FAILED
+  [6ec12f88/2] 2026-08-25 18:05:03 +0.000s  COMMAND_ENTERED
+      command=mem branch audit/a-is-apple/admin-v2-scratch --from practice --direct
+  [6ec12f88/1] 2026-08-25 18:05:03 +0.000s  COMMAND_STARTED
+      operation=branch · stdin_tty=False · stdout_tty=False
+  [f9ee72c7/3] 2026-08-25 18:05:02 +0.001s  COMMAND_FINISHED
+      status=COMPLETED
+  [f9ee72c7/2] 2026-08-25 18:05:02 +0.000s  COMMAND_ENTERED
+      command=mem shell-init zsh
+  [f9ee72c7/1] 2026-08-25 18:05:02 +0.000s  COMMAND_STARTED
+      operation=shell-init · stdin_tty=False · stdout_tty=False
+  [da6b921b/3] 2026-08-25 18:05:01 +0.001s  COMMAND_FINISHED
+      exit_code=1 · failure_kind=Exit · status=FAILED
+  [da6b921b/2] 2026-08-25 18:05:01 +0.000s  COMMAND_ENTERED
+      command=mem share practice --to task-3/government/healthcare-agent --direct --recursive
+  [da6b921b/1] 2026-08-25 18:05:01 +0.000s  COMMAND_STARTED
+      operation=share · stdin_tty=False · stdout_tty=False
+  [79026429/3] 2026-08-25 18:04:59 +0.007s  COMMAND_FINISHED
+      status=COMPLETED
+  [79026429/2] 2026-08-25 18:04:59 +0.000s  COMMAND_ENTERED
+      command=mem pwd
+  [79026429/1] 2026-08-25 18:04:59 +0.000s  COMMAND_STARTED
+      operation=pwd · stdin_tty=False · stdout_tty=False
+  [48cfa854/3] 2026-08-25 18:04:58 +0.007s  COMMAND_FINISHED
+      exit_code=1 · failure_kind=Exit · status=FAILED
+  [48cfa854/2] 2026-08-25 18:04:58 +0.000s  COMMAND_ENTERED
+      command=mem provider use codex_chatgpt --operation query
+  [48cfa854/1] 2026-08-25 18:04:58 +0.000s  COMMAND_STARTED
+      operation=provider · stdin_tty=False · stdout_tty=False
+  [c6a8b506/3] 2026-08-25 18:04:57 +0.049s  COMMAND_FINISHED
+      status=COMPLETED
+  [c6a8b506/2] 2026-08-25 18:04:57 +0.000s  COMMAND_ENTERED
+      command=mem profile use sixworld-v2-template
+  [c6a8b506/1] 2026-08-25 18:04:57 +0.000s  COMMAND_STARTED
+      operation=profile · stdin_tty=False · stdout_tty=False
+  [c6cfc986/3] 2026-08-25 18:04:56 +0.023s  COMMAND_FINISHED
+      status=COMPLETED
+  [c6cfc986/2] 2026-08-25 18:04:56 +0.000s  COMMAND_ENTERED
+      command=mem log --operations --limit 50
+  [c6cfc986/1] 2026-08-25 18:04:56 +0.000s  COMMAND_STARTED
+      operation=log · stdin_tty=False · stdout_tty=False
+  [b794cc0a/3] 2026-08-25 18:04:54 +0.001s  COMMAND_FINISHED
+      exit_code=2 · failure_kind=BadParameter · status=FAILED
+  [b794cc0a/2] 2026-08-25 18:04:54 +0.000s  COMMAND_ENTERED
+      command=mem init-study admin-v2-workers-zero --prewarm-workers 0
+  [b794cc0a/1] 2026-08-25 18:04:54 +0.000s  COMMAND_STARTED
+      operation=init-study · stdin_tty=False · stdout_tty=False
+  [985a628e/3] 2026-08-25 18:04:53 +0.013s  COMMAND_FINISHED
+      exit_code=1 · failure_kind=Exit · status=FAILED
+  [985a628e/2] 2026-08-25 18:04:53 +0.000s  COMMAND_ENTERED
+      command=mem init 11111111-1111-4111-8111-111111111111
+  [985a628e/1] 2026-08-25 18:04:53 +0.000s  COMMAND_STARTED
+      operation=init · stdin_tty=False · stdout_tty=False
+  [4d83161f/3] 2026-08-25 18:04:52 +0.026s  COMMAND_FINISHED
+      exit_code=1 · failure_kind=Exit · status=FAILED
+  [4d83161f/2] 2026-08-25 18:04:52 +0.000s  COMMAND_ENTERED
+      command=mem import memory 1cb2aa88 --from-profile task-1 --context campus-wiki/building-access --into audit/a-is-apple/admin-v2-scratch
+  [4d83161f/1] 2026-08-25 18:04:52 +0.000s  COMMAND_STARTED
+      operation=import · stdin_tty=False · stdout_tty=False
+  [d037ff39/5] 2026-08-25 18:02:34 +0.321s  KEY
+      count=1 · focus=FormattedTextControl · key=c-m
+  [d037ff39/4] 2026-08-25 18:02:34 +0.321s  KEY
+      count=1 · focus=FormattedTextControl · key=c-j
+  [d037ff39/3] 2026-08-25 18:02:34 +0.320s  KEY
+      count=1 · focus=FormattedTextControl · key=down
+  [d037ff39/2] 2026-08-25 18:02:34 +0.000s  COMMAND_ENTERED
+      command=mem help --emit-selection
+  [d037ff39/1] 2026-08-25 18:02:34 +0.000s  COMMAND_STARTED
+      operation=help · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52
+  [48ad0f8c/3] 2026-08-25 18:02:33 +0.001s  COMMAND_FINISHED
+      status=COMPLETED
+  [48ad0f8c/2] 2026-08-25 18:02:33 +0.000s  COMMAND_ENTERED
+      command=mem eval semantic task2-status --all --ledger-dir /Users/KimMunyeong/.codex/audit-stores/memcommit-six-world-v2-20260825/worlds/a-is-apple/admin-eval-ledger
+  [48ad0f8c/1] 2026-08-25 18:02:33 +0.000s  COMMAND_STARTED
+      operation=eval · stdin_tty=False · stdout_tty=False
+  [7fe64964/3] 2026-08-25 18:02:31 +0.001s  COMMAND_FINISHED
+      status=COMPLETED
+  [7fe64964/2] 2026-08-25 18:02:31 +0.000s  COMMAND_ENTERED
+      command=mem config set provider codex_chatgpt
+  [7fe64964/1] 2026-08-25 18:02:31 +0.000s  COMMAND_STARTED
+      operation=config · stdin_tty=False · stdout_tty=False
+  [0a6c8440/3] 2026-08-25 18:02:30 +0.001s  COMMAND_FINISHED
+      exit_code=2 · failure_kind=Exit · status=FAILED
+  [0a6c8440/2] 2026-08-25 18:02:30 +0.000s  COMMAND_ENTERED
+      command=mem status --direct --recursive
+  [0a6c8440/1] 2026-08-25 18:02:30 +0.000s  COMMAND_STARTED
+      operation=status · stdin_tty=False · stdout_tty=False
+  [c68d680b/3] 2026-08-25 18:02:29 +0.022s  COMMAND_FINISHED
+      exit_code=1 · failure_kind=Exit · status=FAILED
+  [c68d680b/2] 2026-08-25 18:02:29 +0.000s  COMMAND_ENTERED
+      command=mem redo
+  [c68d680b/1] 2026-08-25 18:02:29 +0.000s  COMMAND_STARTED
+      operation=redo · stdin_tty=False · stdout_tty=False
+  [457fd8da/3] 2026-08-25 18:02:28 +0.000s  COMMAND_FINISHED
+      status=COMPLETED
+  [457fd8da/2] 2026-08-25 18:02:28 +0.000s  COMMAND_ENTERED
+      command=mem shell-init zsh
+  [457fd8da/1] 2026-08-25 18:02:28 +0.000s  COMMAND_STARTED
+      operation=shell-init · stdin_tty=False · stdout_tty=False
+  [23c72df1/4] 2026-08-25 18:02:26 +0.556s  COMMAND_FINISHED
+      status=COMPLETED

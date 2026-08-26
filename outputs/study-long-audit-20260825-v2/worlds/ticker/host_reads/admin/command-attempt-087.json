@@ -1,0 +1,31 @@
+{
+  "sequence": 87,
+  "count_before": 331,
+  "count_after": 332,
+  "delta": 1,
+  "new_attempt_uids": [
+    "f058bfca-763a-477d-b2ff-bb488b937154"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "f058bfca-763a-477d-b2ff-bb488b937154",
+      "operation": "branch",
+      "command": "mem branch audit/ticker/admin-v2-scratch/b5 --from audit/ticker/admin-v2-missing-source --direct",
+      "status": "FAILED",
+      "started_at": "2026-08-25T18:17:04.000242+00:00",
+      "completed_at": "2026-08-25T18:17:04.021221+00:00",
+      "elapsed_seconds": 0.020821832993533462,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": {
+        "kind": "Exit",
+        "exit_code": 1
+      }
+    }
+  ]
+}

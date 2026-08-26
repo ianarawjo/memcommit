@@ -1,0 +1,17 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py practice-source summarize practice/description
+
+EXIT
+0
+
+WALL_SECONDS
+6.370657
+
+STDOUT
+SUMMARY · practice/description
+STATUS · DIRECT
+
+memcommit is a CLI/TUI research prototype for organizing and sharing agent memory. The practice exercise requires separating editing notes into independently reviewable constraints without editing, adding instructions, or altering meaning. “How does this read?” requests opinion and structural review first; later polishing must preserve structure and citation-needed markers, changing only problematic wording.
+
+
+STDERR

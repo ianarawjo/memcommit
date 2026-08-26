@@ -1,0 +1,21 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 review forget --receipt 5924f622-561f-40dd-828e-24184ab7c50f --snapshot
+
+EXIT
+0
+
+OUTPUT
+MEM REVIEW · FORGET
+Completed operation evidence. This Review is read-only and cannot change or apply the recorded result.
+
+STATUS · APPLIED · RECEIPT 5924f622-561f-40dd-828e-24184ab7c50f
+CONTEXT · task-1/participant
+COMPLETED · 2026-08-25T13:41:46.798169
+OUTCOME · Forgot (remove temporary access claims that omit): removed 2
+
+1. REMOVE · [988a73cc]
+   BEFORE · During the construction period, general passage through the third-floor rear entrance is unavailable, and people likely to rely on that route—especially Central Library visitors, habitual users, and external tour leaders—should be warned proactively to prevent arrival at the closed entrance and route-searching or backtracking.
+   WHY · This is a temporary closure claim that provides no verified accessible alternative or exception.
+2. REMOVE · [94fad7b0]
+   BEFORE · During the construction period, general access through the main entrance ends at 5:00 p.m. rather than 10:00 p.m.; access guidance may prioritize communicating this reduced closing time together with the rear-entrance closure.
+   WHY · This is a temporary access-hours claim that does not provide a verified accessible alternative or exception.

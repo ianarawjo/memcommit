@@ -1,0 +1,5 @@
+COMMAND: python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-2 find-ambiguities task-2
+EXIT: 0
+DURATION_SECONDS: 5.538
+
+Find Ambiguities · task-2 · 0/7 direct memories flagged

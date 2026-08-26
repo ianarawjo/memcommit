@@ -1,0 +1,13 @@
+mem update ┬ Update a Target Context from a Source Context, resolving required execution decisions
+           │ before atomic Apply.
+           └ WHEN · Updating an existing Context using newly verified Memories.
+
+mem merge ┬ Add Source-only items to a selected Target, leave exact matches unchanged, and choose
+          │ Source or Target for stored-item conflicts.
+          └ WHEN · Appending Source-only items or bringing a copied or branched Context into a
+                   selected Target Context without semantic synthesis.
+
+mem meld ┬ Semantically incorporate an incoming Context into an authoritative baseline, or derive a
+         │ separate Result from two equal peers.
+         └ WHEN · Combining two bodies of work when overlap, conflicts, and newly synthesized
+                  content must be reviewed semantically.

@@ -1,0 +1,17 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-3 elaborate --from task-3/local/guardrails/minimization-and-redaction --to task-3/local/guardrails/audit-and-recovery --as rules --number 2 --plain
+
+EXIT
+0
+
+OUTPUT
+ELABORATE APPLIED · task-3/local/guardrails/audit-and-recovery
+MODE · RULES_TO_CASES · VERIFICATION · UNVERIFIED · QUALITY · BEST_EFFORT
+SOURCE · task-3/local/guardrails/minimization-and-redaction · TARGET · task-3/local/guardrails/audit-and-recovery
+EFFECTS · ADD 2 MEMORIES
+
+  [memory 1fdf08b3] For a benefits vendor investigating whether a payment was processed, share only the relevant status excerpt: “Payment status: pending verification.” Remove the member name, account number, email address, and street address; label those field types as redacted without inserting substitute values. Before release, compare the excerpt with the source to confirm that “pending verification” has not been generalized into “ineligible” or “not applicable,” and tell the vendor that omitted eligibility information is unverified and must not be interpreted as the opposite fact or as not applicable.
+  [memory 98ffe01a] Before sending a recipient organization three separately de-identified incident fragments—an uncommon job title, a precise incident date, and a small office location—review them as one combined disclosure. If their combination could single out the employee, withhold the precise date and location rather than inventing broader replacement values, share only the incident category needed for the review, list “incident date” and “office location” as redacted field types, and state that the omissions mean “not verified or not shared,” not “no incident occurred” or “not applicable.” Confirm against the source that the remaining incident category still conveys the essential meaning.
+
+REVIEW · mem review elaborate --receipt e6fcda73-8a75-44dd-a3f6-2b271bccd9c9
+UNDO · mem undo

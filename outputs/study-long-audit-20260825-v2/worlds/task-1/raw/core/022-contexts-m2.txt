@@ -1,0 +1,125 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 contexts
+
+EXIT
+0
+
+WALL_SECONDS
+1.388490
+
+STDOUT
+*        practice
+         practice/description
+         practice/source
+         task-1
+         task-1/description
+         task-1/participant
+         task-1/participant/construction-updates
+         task-1/participant/construction-updates/building-access
+         task-1/participant/construction-updates/event-relocations
+         task-1/participant/construction-updates/facility-updates
+         task-1/participant/construction-updates/route-changes
+         task-1/participant/construction-updates/shop-updates
+         task-1/participant/construction-updates/temporary-parking
+  GRANT  task-1/campus-wiki  READ + QUERY + EDIT + DELETE + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-1/campus-wiki/building-access  READ + QUERY + EDIT + DELETE + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-1/campus-wiki/construction-details  QUERY · FROM sixworld-v2-template-granted-memory
+  GRANT  task-1/campus-wiki/event-relocations  READ + QUERY + EDIT + DELETE + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-1/campus-wiki/facility-updates  READ + QUERY + EDIT + DELETE + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-1/campus-wiki/route-changes  READ + QUERY + EDIT + DELETE + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-1/campus-wiki/shop-updates  READ + QUERY + EDIT + DELETE + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-1/campus-wiki/temporary-parking  READ + QUERY + EDIT + DELETE + EXPORT · FROM sixworld-v2-template-granted-memory
+         task-2
+         task-2/description
+         task-2/participant
+         task-2/participant/proposal-workspace
+  GRANT  task-2/advisor1  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-2/advisor1/budget  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-2/advisor1/claim-evidence  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-2/advisor1/compensation  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-2/advisor1/emphasis  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-2/advisor1/ethics  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-2/advisor1/evaluation  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-2/advisor1/expression  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-2/advisor1/feasibility  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-2/advisor1/methods  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-2/advisor1/reproducibility  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-2/advisor1/review  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-2/advisor1/safety  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-2/advisor1/scope  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-2/advisor1/structure  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-2/advisor1/style  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-2/advisor1/terminology  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-2/advisor2  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-2/advisor2/budget  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-2/advisor2/claim-evidence  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-2/advisor2/compensation  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-2/advisor2/emphasis  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-2/advisor2/ethics  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-2/advisor2/evaluation  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-2/advisor2/expression  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-2/advisor2/feasibility  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-2/advisor2/methods  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-2/advisor2/reproducibility  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-2/advisor2/review  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-2/advisor2/safety  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-2/advisor2/scope  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-2/advisor2/structure  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-2/advisor2/style  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-2/advisor2/terminology  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-2/proposal-submission-guidelines  QUERY · FROM sixworld-v2-template-granted-memory
+         task-3
+         task-3/description
+         task-3/local
+         task-3/local/guardrails
+         task-3/local/guardrails/approval-and-delivery
+         task-3/local/guardrails/audit-and-recovery
+         task-3/local/guardrails/channel-and-format
+         task-3/local/guardrails/downstream-use
+         task-3/local/guardrails/evidence-and-uncertainty
+         task-3/local/guardrails/minimization-and-redaction
+         task-3/local/guardrails/privacy-and-others
+         task-3/local/guardrails/purpose-and-scope
+         task-3/local/guardrails/recipient-and-authority
+         task-3/local/guardrails/retention-and-revocation
+         task-3/local/personal-memory
+         task-3/local/personal-memory/2024
+         task-3/local/personal-memory/2024/01
+         task-3/local/personal-memory/2024/02
+         task-3/local/personal-memory/2024/03
+         task-3/local/personal-memory/2024/04
+         task-3/local/personal-memory/2024/05
+         task-3/local/personal-memory/2024/06
+         task-3/local/personal-memory/2024/07
+         task-3/local/personal-memory/2024/08
+         task-3/local/personal-memory/2024/09
+         task-3/local/personal-memory/2024/10
+         task-3/local/personal-memory/2024/11
+         task-3/local/personal-memory/2024/12
+         task-3/local/personal-memory/2025
+         task-3/local/personal-memory/2025/01
+         task-3/local/personal-memory/2025/02
+         task-3/local/personal-memory/2025/03
+         task-3/local/personal-memory/2025/04
+         task-3/local/personal-memory/2025/05
+         task-3/local/personal-memory/2025/06
+         task-3/local/personal-memory/2025/07
+         task-3/local/personal-memory/2025/08
+         task-3/local/personal-memory/2025/09
+         task-3/local/personal-memory/2025/10
+         task-3/local/personal-memory/2025/11
+         task-3/local/personal-memory/2025/12
+         task-3/local/personal-memory/2026
+         task-3/local/personal-memory/2026/01
+         task-3/local/personal-memory/2026/02
+         task-3/local/personal-memory/2026/03
+         task-3/local/personal-memory/2026/04
+         task-3/local/personal-memory/2026/05
+         task-3/local/personal-memory/2026/06
+  GRANT  task-3/government/healthcare-agent  SHARE · FROM sixworld-v2-template-granted-memory
+  GRANT  task-3/remote/government/healthcare-agent/info-request/questions-and-answers  QUERY · FROM sixworld-v2-template-granted-memory
+  GRANT  task-3/remote/government/healthcare-agent/info-request/transmission-guidance  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+  GRANT  task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance  READ + EXPORT · FROM sixworld-v2-template-granted-memory
+
+
+STDERR

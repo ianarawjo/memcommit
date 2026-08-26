@@ -1,0 +1,24 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker review audit --session c813bd23 --snapshot
+
+EXIT
+0
+
+OUTPUT
+MEM AUDIT
+ SAVED · 3/3 CHECKS · READ-ONLY REPORT
+ SESSION [c813bd23] · CREATED 2026-08-25T17:33:45+00:00
+ SUMMARY · All quality finders completed over the same saved direct Context snapshot. Each section retains its own Memory, pair, group, or absorption unit.
+ CHECKS · REDUNDANCIES · FINISHED · 6 MEMORIES CHECKED · 0 GROUPS · 0 PROPOSED ABSORPTIONS / AMBIGUITIES · FINISHED · 0/6 MEMORIES FLAGGED / CONFLICTS · FINISHED · 0/6 MEMORIES INVOLVED · 0/15 PAIRS FLAGGED
+ SOURCE · task-3/local · 6 direct Memories as captured when this Audit ran. Descendants and embedded Contexts were not analyzed.
+ SNAPSHOT · [f41126fd] Punctuation rule and example: strip punctuation before constructing a ticker. North-Star, Inc. becomes NORTHSTAR after removing the comma, hyphen, space, and Inc. suffix. / [7c87d868] Numeral rule: preserve digits 0 through 9, including leading zeroes, in original positions while removing spaces and punctuation. / [9f5ffc96] Numeral example: Route 66, LLC becomes ROUTE66 after removing the comma, space, and LLC suffix while preserving 66. / [ef097645] Share-class rule: if a legal suffix immediately precedes terminal Class A or Class B, remove the suffix and append dot-A (.A) or dot-B (.B) to the derived base ticker. / [c2901978] becomes NORTHSTAR after removing the comma, hyphen, space, and Inc. / [eddf277f] Share-class example: Acme Corp. Class B becomes ACME.B after removing Corp. and mapping Class B to the .B suffix. The dot is generated share-class syntax.
+ REDUNDANCIES · 6 MEMORIES CHECKED · 0 GROUPS · 0 PROPOSED ABSORPTIONS · [SOURCE task-3/local]
+ No redundancy evidence in this analysis.
+ AMBIGUITIES · 0/6 MEMORIES FLAGGED · [SOURCE task-3/local]
+ No ambiguity findings in this analysis.
+ CONFLICTS · 0/6 MEMORIES INVOLVED · 0/15 PAIRS FLAGGED · [SOURCE task-3/local]
+ No conflict findings in this analysis.
+ PROVENANCE
+ REDUNDANCIES · duplicates-v1-draft · codex_chatgpt:gpt-5.6-sol · reasoning none / AMBIGUITIES · ambiguity-v1-draft · codex_chatgpt:gpt-5.6-sol · reasoning none / CONFLICTS · conflict-v2-draft · codex_chatgpt:gpt-5.6-sol · reasoning none
+ BOUNDARY
+ This saved Audit is a model-assisted finding record, not proof that the Source is free of quality problems. Saved historical review notes do not alter the snapshot, Context, or Memories. This Viewer cannot select a reading, write a response, rerun a finder, or apply a Memory change.

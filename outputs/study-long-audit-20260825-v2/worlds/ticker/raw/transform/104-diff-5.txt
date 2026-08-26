@@ -1,0 +1,15 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py ticker diff 3a357315 --context task-3/local/guardrails --raw
+
+EXIT
+0
+
+OUTPUT
+UNIT        CHECKPOINT · THIS CHECKPOINT VS PREVIOUS
+CHECKPOINT  3a357315-4814-411c-954a-e00ce4fd5989
+CONTEXT     task-3/local/guardrails
+ACTION      checkpoint
+DESCRIPTION ticker transform round 5 pre-destructive recovery
+RESULT      15 DIRECT ITEMS
+SUMMARY     15 kept · 0 added · 0 edited · 0 removed
+

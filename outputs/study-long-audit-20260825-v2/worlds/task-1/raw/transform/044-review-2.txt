@@ -1,0 +1,43 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 review distill --receipt 39751e51-8617-4a29-84bb-d077ecf7a774 --snapshot
+
+EXIT
+0
+
+OUTPUT
+MEM REVIEW · DISTILL
+Completed operation evidence. This Review is read-only and cannot change or apply the recorded result.
+
+STATUS · APPLIED · RECEIPT 39751e51-8617-4a29-84bb-d077ecf7a774
+CONTEXT · task-1/participant/construction-updates
+COMPLETED · 2026-08-25T13:30:28.541513
+OUTCOME · Added 7 distilled Rules from 'task-1/participant/construction-updates/event-relocations' to 'task-1/participant/construction-updates'
+
+SOURCE · task-1/participant/construction-updates/event-relocations
+TARGET · task-1/participant/construction-updates
+
+SOURCE OVERVIEW
+Construction-period event relocation guidance separates closure and reservation constraints from designated alternative venues, while also covering comparison, booking-channel, visitor-wayfinding, and equipment-loading implications.
+
+APPLIED RULES · 7
+1. During the construction period, treat affected Main Building event facilities as unavailable: viewing in the tenth-floor exhibition and event hall is suspended, and no new reservations may be accepted for Main Building event venues.
+   WHY · This is the governing availability constraint for the affected facilities; it combines distinct manifestations of construction closure without conflating them with relocation options.
+   SUPPORT · 3fcfa405-cf3d-500e-810b-28ddc81fefca, 1754ab18-13ca-5e07-a40c-eb12e45dcd1e, 2072f1b9-de5d-4317-a809-22350d811571, aa7e32b3-ea56-41da-a284-9a94d193e431
+2. Use designated non–Main Building spaces as alternatives during construction: direct users to either the detached east building auditorium or the Engineering Building third-floor multipurpose room; the auditorium is explicitly converted for Main Building events.
+   WHY · This independently defines the alternative-venue family and keeps it separate from reservation prohibitions.
+   SUPPORT · 686d630d-defe-5aa1-a28d-470b3ebb9059, 967fc4ad-d6e6-5f2c-b3e0-973f163f9a9a, 9d4a1560-5a6d-5c3f-8414-a56f1acc7f18
+3. The event guidance agent may omit closed Main Building venues from comparisons and compare only designated alternative spaces during construction.
+   WHY · This operational rule defines which venues are valid comparison candidates after relocation.
+   SUPPORT · 2587dbb3-dc02-5e13-b1de-9d704c7a706a
+4. The event guidance agent cannot create or restore Main Building venue reservations during construction; for each alternative space, it may provide only that space's reservation channel.
+   WHY · This preserves the distinct reservation-action boundary, including both forbidden booking actions and the permitted assistance outcome.
+   SUPPORT · eee1213e-3582-5c9a-bde8-78af7b216df0
+5. Relocation guidance must account for external visitors who may rely on a previous Main Building entrance and floor and therefore miss directions to the alternative venue.
+   WHY · This is a supported wayfinding-risk criterion for judging whether relocation guidance adequately reaches returning visitors.
+   SUPPORT · b867c632-6a7e-55c8-8371-91b3f0e1bb89
+6. For events relocated from the Main Building to the detached east building auditorium, use the auditorium's separate loading entrance as the equipment loading point during construction.
+   WHY · This establishes the relocated equipment-access procedure independently of attendee venue guidance.
+   SUPPORT · 9ab36f33-97ce-5790-8b2e-d0ab195039ef
+7. Equipment-access guidance must account for external operators who may continue using the old Main Building loading procedure or delay checking the alternative venue's access rules.
+   WHY · This is a supported diagnostic criterion for recognizing failures in communicating the changed loading procedure.
+   SUPPORT · 8bf7a20c-ced2-51ad-8847-1fbb946ea3a5

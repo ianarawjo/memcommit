@@ -1,0 +1,28 @@
+{
+  "sequence": 37,
+  "count_before": 281,
+  "count_after": 282,
+  "delta": 1,
+  "new_attempt_uids": [
+    "3bf074c6-c4a9-4c71-935a-1dd69d5cc277"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "3bf074c6-c4a9-4c71-935a-1dd69d5cc277",
+      "operation": "undo",
+      "command": "mem undo --keep",
+      "status": "COMPLETED",
+      "started_at": "2026-08-25T18:13:09.318014+00:00",
+      "completed_at": "2026-08-25T18:13:09.414259+00:00",
+      "elapsed_seconds": 0.09609262499725446,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": null
+    }
+  ]
+}

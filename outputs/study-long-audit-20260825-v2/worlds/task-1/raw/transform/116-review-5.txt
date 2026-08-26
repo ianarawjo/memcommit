@@ -1,0 +1,37 @@
+COMMAND
+python /Users/KimMunyeong/Github/memcommit/outputs/study-long-audit-20260825-v2/run_world_mem.py task-1 review distill --receipt b4962151-951e-46e3-878b-8a1eb8a8dedb --snapshot
+
+EXIT
+0
+
+OUTPUT
+MEM REVIEW · DISTILL
+Completed operation evidence. This Review is read-only and cannot change or apply the recorded result.
+
+STATUS · APPLIED · RECEIPT b4962151-951e-46e3-878b-8a1eb8a8dedb
+CONTEXT · task-1/participant
+COMPLETED · 2026-08-25T13:54:11.748067
+OUTCOME · Added 5 distilled Rules from 'task-1/participant/construction-updates/shop-updates' to 'task-1/participant'
+
+SOURCE · task-1/participant/construction-updates/shop-updates
+TARGET · task-1/participant
+
+SOURCE OVERVIEW
+Construction-period shop and amenity guidance must identify closed Main Building facilities and give only the supported alternatives, access limits, hours, and gaps in service.
+
+APPLIED RULES · 5
+1. During the construction period, treat the first-floor Main Building ATM, 24-hour unattended store, Campus Store, and cafe as closed or non-operational, and exclude them from amenity recommendations.
+   WHY · These facilities are explicitly unavailable, and the guidance agent is permitted to omit them from recommendations.
+   SUPPORT · 37113bd0-5194-521b-9d9e-48903d819520, 741db845-9a4e-5281-825c-e046801b8be5, 9e0d0ca2-362c-5498-9560-a217d74eaaab, 048d155c-f81b-5293-b493-44fbce424662, e7b747cf-a1d2-571a-af5b-e1d3514434f1
+2. For ATM use during the construction period, direct users from the Main Building ATM to the ATM on the first floor of the West Complex; the changed route does not pass through the Main Building construction zone.
+   WHY · The Source supplies a specific replacement location and route constraint for ATM users.
+   SUPPORT · b49d48fb-d2d9-55b8-bc87-b8e0066541f8, b8300d7e-381c-5bce-81e7-fbb8a00eac9d
+3. For users of the Main Building's closed 24-hour unattended store, identify the Campus Store in the Engineering Building as the alternative only from 7:00 a.m. to 11:00 p.m.; after 11:00 p.m., state that no alternative on-campus store is available.
+   WHY · The alternative store, its exact operating window, and the nighttime service gap are explicitly specified.
+   SUPPORT · 3094e271-3bb6-57cf-ae78-c67eeac30d94, c88880dc-ebfa-5847-89d2-692cd22406d5, 9c623c17-1942-52a6-bf3d-ebc25d6ad078
+4. During the Main Building cafe closure, identify the coffee machine inside the first-floor Innovation Hub as an alternative only for staff.
+   WHY · The stated cafe alternative has both a precise location and a staff-only eligibility restriction.
+   SUPPORT · 80d1e21d-3839-5515-b235-e1c1282599e5
+5. Recommend only the posted alternative facilities, preserving their stated locations, service hours, eligibility limits, and periods with no alternative rather than inferring additional options.
+   WHY · This governs reliable construction-period guidance across the supported closure-and-alternative subfamilies without inventing facilities or availability.
+   SUPPORT · b49d48fb-d2d9-55b8-bc87-b8e0066541f8, 3094e271-3bb6-57cf-ae78-c67eeac30d94, c88880dc-ebfa-5847-89d2-692cd22406d5, 9c623c17-1942-52a6-bf3d-ebc25d6ad078, 80d1e21d-3839-5515-b235-e1c1282599e5, e7b747cf-a1d2-571a-af5b-e1d3514434f1, b8300d7e-381c-5bce-81e7-fbb8a00eac9d

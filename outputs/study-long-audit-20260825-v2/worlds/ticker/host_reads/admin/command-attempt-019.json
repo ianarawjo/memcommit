@@ -1,0 +1,31 @@
+{
+  "sequence": 19,
+  "count_before": 263,
+  "count_after": 264,
+  "delta": 1,
+  "new_attempt_uids": [
+    "9acd7d91-ffc1-4a76-80c2-b5fb9c7cd647"
+  ],
+  "records": [
+    {
+      "version": 3,
+      "uid": "9acd7d91-ffc1-4a76-80c2-b5fb9c7cd647",
+      "operation": "share",
+      "command": "mem share",
+      "status": "FAILED",
+      "started_at": "2026-08-25T18:12:34.526518+00:00",
+      "completed_at": "2026-08-25T18:12:34.534616+00:00",
+      "elapsed_seconds": 0.007931790998554789,
+      "terminal": {
+        "stdin_tty": true,
+        "stdout_tty": false
+      },
+      "details": {},
+      "outcome": null,
+      "failure": {
+        "kind": "Exit",
+        "exit_code": 1
+      }
+    }
+  ]
+}
