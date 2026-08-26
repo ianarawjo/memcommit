@@ -41,7 +41,7 @@ from memcommit.operations.query.ordinary_application import OrdinaryQueryRequest
 from memcommit.operations.query.ordinary_runtime import execute_ordinary_query
 from memcommit.operations.query.reference_application import QueryReferenceRequest
 from memcommit.operations.query.reference_runtime import execute_query_reference
-from memcommit.ordinary_query_answer import OrdinaryQueryCorpusTooLarge
+from memcommit.operations.query.answer import OrdinaryQueryCorpusTooLarge
 from memcommit.profile_config import (
     ProfileConfigError,
     load_profile_registry,

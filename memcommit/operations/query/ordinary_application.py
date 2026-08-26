@@ -11,7 +11,7 @@ from memcommit.operations.search.scope_evidence import (
     compact_reference_content,
     visible_result_evidence,
 )
-from memcommit.ordinary_query_answer import (
+from memcommit.operations.query.answer import (
     build_ordinary_query_reference_document,
     complete_ordinary_query_answer,
     prepare_ordinary_query_answer,

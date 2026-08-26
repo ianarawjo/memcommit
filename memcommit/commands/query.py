@@ -51,7 +51,7 @@ from memcommit.context_targeting.presets import (
 )
 from memcommit.derived_policy import authorize_combination
 from memcommit.operations.search.answer_dialogue import FindAnswerCorpusTooLarge
-from memcommit.ordinary_query_answer import OrdinaryQueryCorpusTooLarge
+from memcommit.operations.query.answer import OrdinaryQueryCorpusTooLarge
 from memcommit.profile_config import ProfileConfigError, load_profile_registry
 from memcommit.profiles import ProfileError
 from memcommit.query_provider import QueryProviderError
