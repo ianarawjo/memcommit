@@ -57,7 +57,7 @@ from memcommit.read_report_recents import (
     read_report_recents,
     revalidate_read_report_recent,
 )
-from memcommit.summarize import SummarizeError, SummarizeProvider
+from memcommit.operations.summarize.model import SummarizeError, SummarizeProvider
 from memcommit.operations.summarize.application import SummarizeRequest, SummarizeResult
 from memcommit.operations.summarize.runtime import run_summarize_with_store
 

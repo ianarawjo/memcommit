@@ -47,7 +47,7 @@ from memcommit.store import (
     context_record_digest,
     ground_session_record_digest,
 )
-from memcommit.summarize import SummaryFrame, collect_summary_scope
+from memcommit.operations.summarize.model import SummaryFrame, collect_summary_scope
 from memcommit.operations.summarize.application import (
     FrozenSummarySource,
     SummarizeRequest,

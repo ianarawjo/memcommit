@@ -26,7 +26,7 @@ from memcommit.operations.summarize.application import (
     SummarizeRequest,
     SummarySourcePort,
 )
-from memcommit.summarize import SummaryFrame
+from memcommit.operations.summarize.model import SummaryFrame
 
 
 @dataclass(frozen=True)

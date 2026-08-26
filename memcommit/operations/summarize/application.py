@@ -6,7 +6,7 @@ from contextlib import AbstractContextManager
 from dataclasses import dataclass, field
 from typing import Protocol
 
-from memcommit.summarize import (
+from memcommit.operations.summarize.model import (
     SummarizeError,
     SummarizeProvider,
     SummaryFrame,

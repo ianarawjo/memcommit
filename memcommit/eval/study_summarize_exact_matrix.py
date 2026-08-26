@@ -48,7 +48,7 @@ from memcommit.study_prewarm.summarize import (
     build_summarize_prewarm_artifact,
     summarize_prewarm_key,
 )
-from memcommit.summarize import SummaryFrame, summarize_frame
+from memcommit.operations.summarize.model import SummaryFrame, summarize_frame
 from memcommit.operations.summarize.application import SummarizeRequest
 from memcommit.operations.summarize.runtime import MemoryStoreSummarySourcePort
 

@@ -32,7 +32,7 @@ from memcommit.operations.distill.goal_fit import (
     DistillGoalFitRule,
     audit_distill_goal_fit,
 )
-from memcommit.summarize import SummaryFrame
+from memcommit.operations.summarize.model import SummaryFrame
 
 
 DISTILL_OPERATION = "distill_context"

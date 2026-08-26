@@ -66,7 +66,7 @@ from memcommit.profiles import ProfileError
 from memcommit.query_provider import QueryProviderError, connect_semantic_provider
 from memcommit.operations.add.semantic_runtime import resolve_semantic_add_endpoints
 from memcommit.store import MemoryStore
-from memcommit.summarize import SummaryFrame
+from memcommit.operations.summarize.model import SummaryFrame
 
 
 def _summary_frame_memory_rows(frame: SummaryFrame) -> tuple[ContextMemoryRow, ...]:
