@@ -40,7 +40,7 @@ from memcommit.history_display import (
     project_history_display_rows,
 )
 from memcommit.history import HistoryError, build_history
-from memcommit.history_search import (
+from memcommit.operations.log.search import (
     HistorySearchError,
     HistorySearchResult,
     search_history,

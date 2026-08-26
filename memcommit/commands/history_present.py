@@ -6,7 +6,7 @@ from collections.abc import Mapping, Sequence
 from typing import Any
 
 from memcommit.commands.history_picker import HistoryPickerEntry
-from memcommit.history_search import (
+from memcommit.operations.log.search import (
     HistorySearchResult,
     history_result_recovery_label,
 )

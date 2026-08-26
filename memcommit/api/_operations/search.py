@@ -24,7 +24,7 @@ from memcommit.operations.search.application import (
 )
 from memcommit.operations.search.runtime import execute_find_search
 from memcommit.history import HistoryError
-from memcommit.history_search import HistorySearchError
+from memcommit.operations.log.search import HistorySearchError
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
 from memcommit.operations.search.model import FindError
