@@ -17,6 +17,9 @@ the implementation that owns it without first knowing the repository history.
 - Existing root import paths remain available through module-identity aliases.
 - Internal implementation imports point at canonical owner modules after each
   relocation batch.
+- New package initializers remain dependency-neutral. Public convenience
+  exports may load lazily when eager loading would make a foundational module
+  depend on a higher-level adapter merely because both now share a package.
 - One source implementation has exactly one canonical path.
 - Public Context, Store, in-memory Ops, CLI, bootstrap, and documented Context
   locator boundaries remain at the package root in this pass.
@@ -56,6 +59,10 @@ baseline. Each relocation batch must collect successfully, keep focused tests
 passing, and introduce no new behavioral failure. Static ownership tests and
 generated callable catalogs may change because their subject is the path
 layout itself; those records are updated only after the canonical moves settle.
+The layout check also imports every relocated module in a fresh interpreter in
+both legacy-first and canonical-first order. This prevents an earlier test
+import from masking a package-initialization cycle and verifies that each
+compatibility path resolves to the exact canonical module object.
 
 ## Non-goals
 

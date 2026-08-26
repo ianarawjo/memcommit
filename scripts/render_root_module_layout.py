@@ -9,6 +9,7 @@ import json
 from pathlib import Path
 import re
 import subprocess
+import sys
 import tarfile
 
 
@@ -421,6 +422,45 @@ def verify_current_layout() -> None:
     )
 
 
+def verify_isolated_imports() -> None:
+    """Check both import orders without an earlier module masking a cycle."""
+
+    failures = []
+    for stem, target in sorted((OPERATION_TARGETS | CONCEPT_TARGETS).items()):
+        legacy = f"memcommit.{stem}"
+        for order in ("canonical-first", "legacy-first"):
+            first, second = (
+                (target, legacy) if order == "canonical-first" else (legacy, target)
+            )
+            code = (
+                "from importlib import import_module; "
+                f"first=import_module({first!r}); second=import_module({second!r}); "
+                "assert first is second"
+            )
+            try:
+                result = subprocess.run(
+                    [sys.executable, "-c", code],
+                    cwd=REPOSITORY,
+                    capture_output=True,
+                    text=True,
+                    timeout=30,
+                )
+            except subprocess.TimeoutExpired:
+                failures.append(f"{order} import timed out: {legacy} -> {target}")
+                continue
+            if result.returncode:
+                detail = result.stderr.strip() or result.stdout.strip()
+                failures.append(
+                    f"{order} import failed: {legacy} -> {target}\n{detail}"
+                )
+    if failures:
+        raise SystemExit("\n".join(failures))
+    print(
+        "isolated compatibility imports are canonical in both orders: "
+        f"{len(OPERATION_TARGETS) + len(CONCEPT_TARGETS)} modules"
+    )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--check", action="store_true")
@@ -436,6 +476,7 @@ def main() -> int:
         if OUTPUT_MARKDOWN.read_text(encoding="utf-8") != rendered_markdown:
             raise SystemExit("root module relocation Markdown is stale")
         verify_current_layout()
+        verify_isolated_imports()
         print("root module relocation plan is current")
         return 0
     OUTPUT_JSON.write_text(rendered_json, encoding="utf-8")
