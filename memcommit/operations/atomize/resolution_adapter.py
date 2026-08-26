@@ -10,7 +10,7 @@ from memcommit.operations.atomize.workbench import (
     atomize_workbench_issue_projection,
     project_atomize_workbench_findings,
 )
-from memcommit.resolution_workbench import (
+from memcommit.resolution.workbench import (
     ResolutionDetailBlock,
     ResolutionContextLocation,
     ResolutionIssueEvidence,

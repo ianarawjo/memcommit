@@ -38,7 +38,7 @@ from memcommit.interfaces.tui.core.theme import (
     SEMANTIC_VIEWER_STYLE,
     focused_control_style,
 )
-from memcommit.resolution_workbench import (
+from memcommit.resolution.workbench import (
     ResolutionItem,
     ResolutionWorkbenchAction,
     ResolutionWorkbenchView,

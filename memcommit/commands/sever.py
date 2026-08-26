@@ -46,7 +46,7 @@ from memcommit.infrastructure.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )
-from memcommit.resolution_workbench import ResolutionNavigation
+from memcommit.resolution.workbench import ResolutionNavigation
 from memcommit.operations.sever.model import (
     SeverError,
     SeverSelection,

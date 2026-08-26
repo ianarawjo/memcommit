@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from memcommit.operations.forget.review import ForgetReview
 from memcommit.reviewing.memory_diff import MemoryChange
-from memcommit.resolution_workbench import (
+from memcommit.resolution.workbench import (
     ResolutionDetailBlock,
     ResolutionContextLocation,
     ResolutionIssueEvidence,

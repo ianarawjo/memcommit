@@ -27,7 +27,7 @@ from memcommit.operations.meld.model import (
     meld_canonical_digest,
 )
 from memcommit.application.interactive_command_review import meld_turn_command_review
-from memcommit.resolution_workbench import ResolutionNavigation
+from memcommit.resolution.workbench import ResolutionNavigation
 
 
 @dataclass(frozen=True)

@@ -8,7 +8,7 @@ mutating an individual operation directly in the terminal.
 
 from __future__ import annotations
 
-from memcommit.resolution_workbench import (
+from memcommit.resolution.workbench import (
     ResolutionDetailBlock,
     ResolutionContextLocation,
     ResolutionItem,

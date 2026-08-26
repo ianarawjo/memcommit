@@ -44,7 +44,7 @@ from memcommit.reviewing.quality.workbench import (
     quality_find_report_view,
     quality_find_resolution_view,
 )
-from memcommit.resolution_workbench import (
+from memcommit.resolution.workbench import (
     ResolutionContextLocation,
     ResolutionMetric,
     ResolutionOverviewSection,

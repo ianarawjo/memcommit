@@ -28,7 +28,7 @@ from memcommit.reviewing.quality.report import (
     QualityFindingReportItem,
     QualityFindingSource,
 )
-from memcommit.resolution_workbench import (
+from memcommit.resolution.workbench import (
     ResolutionContextLocation,
     ResolutionIssueEvidence,
     ResolutionIssuePresentation,

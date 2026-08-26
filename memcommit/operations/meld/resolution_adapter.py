@@ -8,7 +8,7 @@ surface enough exact, UID-addressed data to render the current revision.
 from __future__ import annotations
 
 from memcommit.operations.meld.model import MeldProposal, MeldSession, meld_accounting
-from memcommit.resolution_workbench import (
+from memcommit.resolution.workbench import (
     ResolutionDetailBlock,
     ResolutionContextLocation,
     ResolutionIssueClaim,

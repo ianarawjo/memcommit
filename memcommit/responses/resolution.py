@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.resolution_workbench import ResolutionItem, ResolutionWorkbenchView
+from memcommit.resolution.workbench import ResolutionItem, ResolutionWorkbenchView
 from memcommit.responses.model import ResponseChoice, ResponseDraft, ResponseTarget
 
 

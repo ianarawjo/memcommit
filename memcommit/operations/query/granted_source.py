@@ -10,7 +10,7 @@ import re
 import uuid
 
 from memcommit.context import Context, Memory
-from memcommit.flow_placeholder import (
+from memcommit.interfaces.presentation.flow_placeholder import (
     FlowPlaceholderError,
     render_flow_circular_placeholder,
 )

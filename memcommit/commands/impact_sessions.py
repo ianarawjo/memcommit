@@ -14,7 +14,7 @@ from memcommit.interfaces.tui.workbenches.impact import ImpactController
 from memcommit.reviewing.memory_diff import update_operation_change
 from memcommit.operations.meld.model import MeldSession
 from memcommit.operations.meld.resolution_adapter import MeldResolutionWorkbenchAdapter
-from memcommit.resolution_workbench import ResolutionWorkbenchView
+from memcommit.resolution.workbench import ResolutionWorkbenchView
 from memcommit.operations.sever.model import SeverSession
 from memcommit.operations.sever.resolution_adapter import (
     SeverResolutionWorkbenchAdapter,

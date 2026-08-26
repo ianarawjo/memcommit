@@ -6,7 +6,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 
 from memcommit.reviewing.memory_diff import MemoryChange
-from memcommit.resolution_workbench import ResolutionWorkbenchView
+from memcommit.resolution.workbench import ResolutionWorkbenchView
 
 
 @dataclass(frozen=True)

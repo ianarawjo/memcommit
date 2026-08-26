@@ -19,7 +19,7 @@ from memcommit.interfaces.tui.operations.forget.resolution import (
 from memcommit.interfaces.tui.workbenches.resolution import (
     run_resolution_workbench_shell,
 )
-from memcommit.resolution_workbench import ResolutionNavigation
+from memcommit.resolution.workbench import ResolutionNavigation
 
 
 def run_forget_review_workbench(
