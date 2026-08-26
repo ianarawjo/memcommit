@@ -38,7 +38,7 @@ from memcommit.context_history import (
     build_context_trace,
     current_context_trace,
 )
-from memcommit.context_rationale import synthesize_context_rationale
+from memcommit.operations.rationale.context import synthesize_context_rationale
 from memcommit.context_targeting.model import ContextTarget
 from memcommit.context_targeting.report_items import (
     ReadableMemoryTargetNotFoundError,
@@ -52,12 +52,12 @@ from memcommit.reference_provenance import (
     MemoryReferenceTraceReport,
     build_reference_trace,
 )
-from memcommit.rationale import (
+from memcommit.operations.rationale.model import (
     RationaleError,
     RationaleReport,
     build_rationale,
 )
-from memcommit.rationale_rules import (
+from memcommit.operations.rationale.rules import (
     DEFAULT_RATIONALE_PROVENANCE_LIMIT,
     MAX_RATIONALE_PROVENANCE_LIMIT,
     RationaleLimitUnit,
@@ -65,12 +65,12 @@ from memcommit.rationale_rules import (
     RationaleRulesError,
     validate_rationale_limit,
 )
-from memcommit.rationale_semantic import (
+from memcommit.operations.rationale.semantic import (
     RationaleNarrativeProjection,
     RationaleSynthesisError,
     synthesize_rationale_provenance,
 )
-from memcommit.rationale_scope import (
+from memcommit.operations.rationale.scope import (
     freeze_rationale_profile_catalog,
     load_rationale_scope,
     rationale_candidates,

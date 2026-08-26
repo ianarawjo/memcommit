@@ -12,7 +12,7 @@ from collections.abc import Sequence
 from memcommit.commands.compare_sessions import iter_saved_comparisons
 from memcommit.commands.meld_sessions import list_meld_session_catalog
 from memcommit.context import Context
-from memcommit.rationale_cache import list_rationale_inferences
+from memcommit.operations.rationale.cache import list_rationale_inferences
 from memcommit.operations.search.model import SearchArtifact
 from memcommit.store import MemoryStore
 

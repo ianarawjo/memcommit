@@ -69,9 +69,9 @@ from memcommit.query_provider import (
 from memcommit.profile_config import ProfileConfigError
 from memcommit.provenance import ProvenanceError
 from memcommit.profiles import ProfileError, authority_grant_snapshot_lock
-from memcommit.rationale import RationaleError, build_rationale
-from memcommit.rationale_semantic import synthesize_rationale_provenance
-from memcommit.rationale_scope import (
+from memcommit.operations.rationale.model import RationaleError, build_rationale
+from memcommit.operations.rationale.semantic import synthesize_rationale_provenance
+from memcommit.operations.rationale.scope import (
     load_rationale_scope,
     rationale_trace,
     resolve_rationale_target,
