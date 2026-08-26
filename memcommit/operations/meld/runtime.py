@@ -36,7 +36,7 @@ from memcommit.operations.compare.ledger.granted_store import (
     recursive_comparison_projection,
 )
 from memcommit.operations.update.granted_application import _remove_checkpoint
-from memcommit.derived_policy import (
+from memcommit.authority.derived_policy import (
     analysis_retention,
     authorize_analysis_save,
     authorize_combination,

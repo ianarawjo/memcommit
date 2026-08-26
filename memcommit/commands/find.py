@@ -50,7 +50,7 @@ from memcommit.context_targeting.presets import (
     resolve_context_traversal,
     resolve_scope_preset,
 )
-from memcommit.derived_policy import authorize_combination
+from memcommit.authority.derived_policy import authorize_combination
 from memcommit.interfaces.console.text import (
     display_escape_text,
     safe_terminal_text,

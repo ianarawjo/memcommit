@@ -49,7 +49,7 @@ from memcommit.context_targeting.presets import (
     resolve_context_traversal,
     resolve_scope_preset,
 )
-from memcommit.derived_policy import authorize_combination
+from memcommit.authority.derived_policy import authorize_combination
 from memcommit.operations.search.answer_dialogue import FindAnswerCorpusTooLarge
 from memcommit.operations.query.answer import OrdinaryQueryCorpusTooLarge
 from memcommit.profile_config import ProfileConfigError, load_profile_registry

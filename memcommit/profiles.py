@@ -53,7 +53,7 @@ from memcommit.profile_config import (
     validate_grant_resource_name,
     validate_profile_name,
 )
-from memcommit.storage_permissions import (
+from memcommit.authority.storage_permissions import (
     ensure_private_directory,
     open_private_exclusive,
 )

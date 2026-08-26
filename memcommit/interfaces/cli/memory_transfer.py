@@ -30,7 +30,7 @@ from memcommit.interfaces.tui.operations.memory_transfer import (
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
 from memcommit.store import ConcurrentContextUpdateError, MemoryStore
-from memcommit.write_protection import WriteProtectionError
+from memcommit.authority.write_protection import WriteProtectionError
 
 
 def _selected_locators(

@@ -29,7 +29,7 @@ from memcommit.authority.access import (
 from memcommit.context import Context
 from memcommit.operations.compare.ledger.evidence import project_comparison_context
 from memcommit.context_targeting.loading import load_context_scope
-from memcommit.derived_policy import (
+from memcommit.authority.derived_policy import (
     AnalysisRetention,
     analysis_retention,
     authorize_analysis_save,

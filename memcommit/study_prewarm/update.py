@@ -19,7 +19,7 @@ from memcommit.infrastructure.providers.policy import (
 )
 from memcommit.context import Context
 from memcommit.context_targeting.loading import load_context_scope
-from memcommit.derived_policy import authorize_derived_transfer
+from memcommit.authority.derived_policy import authorize_derived_transfer
 from memcommit.profile_config import (
     ProfileEntry,
     ProfileRegistry,

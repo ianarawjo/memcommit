@@ -48,11 +48,11 @@ from memcommit.context_targeting.context_catalog import (
     ContextCatalogScan,
 )
 from memcommit.profile_config import resolve_active_store_dir
-from memcommit.storage_permissions import (
+from memcommit.authority.storage_permissions import (
     ensure_private_directory,
     open_private_exclusive,
 )
-from memcommit.write_protection import (
+from memcommit.authority.write_protection import (
     WriteProtectionError,
     WriteProtectionRegistry,
     WriteProtectionRegistryError,

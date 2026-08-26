@@ -51,7 +51,7 @@ from memcommit.context_targeting.presets import (
     resolve_descendant_scopes,
     resolve_scope_preset,
 )
-from memcommit.derived_policy import authorize_derived_transfer
+from memcommit.authority.derived_policy import authorize_derived_transfer
 from memcommit.operations.update.granted_source_application import (
     apply_granted_source_staged_update,
 )

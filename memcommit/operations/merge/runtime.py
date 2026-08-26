@@ -20,7 +20,7 @@ from memcommit.context import (
 from memcommit.context_targeting.model import ContextScope
 from memcommit.context_targeting.resolution import expand_lexical_context_names
 from memcommit.context_targeting.catalog import freeze_granted_context_navigation
-from memcommit.derived_policy import authorize_derived_transfer
+from memcommit.authority.derived_policy import authorize_derived_transfer
 from memcommit.operations.merge.application import (
     FrozenMergePlan,
     MergeAddition,
@@ -55,7 +55,7 @@ from memcommit.retained_history.memory_lineage import (
     resolve_lineage_target_uids,
 )
 from memcommit.store import MemoryStore, context_record_digest
-from memcommit.write_protection import WriteProtectionError
+from memcommit.authority.write_protection import WriteProtectionError
 
 
 def _memory_only_source(source: Context) -> Context:

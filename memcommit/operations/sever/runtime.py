@@ -20,7 +20,7 @@ from memcommit.context import AutoCheckpoint, Context, Memory, MemoryRef, QueryC
 from memcommit.context_targeting.naming import validate_portable_context_name
 from memcommit.context_targeting.model import ContextScope
 from memcommit.context_targeting.resolution import expand_lexical_context_names
-from memcommit.derived_policy import (
+from memcommit.authority.derived_policy import (
     authorize_analysis_save,
     authorize_combination,
     authorize_derived_transfer,

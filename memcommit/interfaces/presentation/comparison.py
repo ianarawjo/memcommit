@@ -10,7 +10,7 @@ from memcommit.operations.compare.ledger.model import (
     ComparisonError,
     ComparisonRelation,
 )
-from memcommit.derived_policy import AnalysisRetention
+from memcommit.authority.derived_policy import AnalysisRetention
 from memcommit.interfaces.console.text import display_escape_text
 from memcommit.interfaces.tui.core.text_layout import (
     elide_terminal_text,

@@ -69,7 +69,7 @@ from memcommit.context_targeting.tui.selector import (
     ContextSelectorControl,
     ContextSelectorView,
 )
-from memcommit.derived_policy import authorize_combination
+from memcommit.authority.derived_policy import authorize_combination
 from memcommit.reviewing.quality.workbench import (
     QualityFindKind,
     QualityFindReport,

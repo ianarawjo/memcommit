@@ -35,7 +35,7 @@ from memcommit.context_targeting.resolution import (
 from memcommit.context_targeting.readable_catalog import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.derived_policy import authorize_combination
+from memcommit.authority.derived_policy import authorize_combination
 from memcommit.operations.fit.ground_report import (
     FIT_RULESET_VERSION,
     FIT_SCHEMA_VERSION,

@@ -25,7 +25,7 @@ from memcommit.operations.compare.ledger.evidence import (
     project_comparison_context,
 )
 from memcommit.context_targeting.loading import load_context_scope
-from memcommit.derived_policy import AnalysisRetention, authorize_analysis_save
+from memcommit.authority.derived_policy import AnalysisRetention, authorize_analysis_save
 from memcommit.store import MemoryStore, _write_json_atomic
 from memcommit.operations.update.model import GrantedUpdateTarget
 

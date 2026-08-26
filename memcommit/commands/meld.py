@@ -42,7 +42,7 @@ from memcommit.commands.command_wait import (
     run_command_wait,
 )
 from memcommit.commands.meld_setup import choose_meld_setup
-from memcommit.derived_policy import (
+from memcommit.authority.derived_policy import (
     analysis_retention,
     authorize_analysis_save,
     authorize_combination,

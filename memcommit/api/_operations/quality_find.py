@@ -20,7 +20,7 @@ from memcommit.api.errors import (
 from memcommit.api.quality_find import QualityFindContextResult, QualityFindResult
 from memcommit.authority.access import GrantedReadStore, resolve_context_access
 from memcommit.context_locator import resolve_context_locator
-from memcommit.derived_policy import authorize_combination
+from memcommit.authority.derived_policy import authorize_combination
 from memcommit.reviewing.direct_item_duplicates import find_exact_duplicate_groups
 from memcommit.reviewing.quality.findings import ConflictReport, FindingsError
 from memcommit.profile_config import (

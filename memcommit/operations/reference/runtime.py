@@ -23,7 +23,7 @@ from memcommit.retained_history.context_snapshot import (
 from memcommit.context_locator import resolve_context_locator
 from memcommit.context_targeting.model import ContextScope
 from memcommit.context_targeting.resolution import expand_lexical_context_names
-from memcommit.derived_policy import (
+from memcommit.authority.derived_policy import (
     authorize_analysis_save,
     authorize_derived_transfer,
 )

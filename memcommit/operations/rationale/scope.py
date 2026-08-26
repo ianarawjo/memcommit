@@ -14,7 +14,7 @@ from memcommit.context_targeting.readable_catalog import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.context import Context, Memory
-from memcommit.derived_policy import authorize_combination
+from memcommit.authority.derived_policy import authorize_combination
 from memcommit.retained_history.provenance import (
     MemoryState,
     TraceCandidate,

@@ -10,7 +10,7 @@ from memcommit.authority.access import ContextAccess, GrantedReadStore
 from memcommit.context_targeting.model import ContextScope
 from memcommit.context_targeting.readable_catalog import ReadableContextCatalog
 from memcommit.context_targeting.resolution import expand_lexical_context_names
-from memcommit.derived_policy import authorize_combination
+from memcommit.authority.derived_policy import authorize_combination
 from memcommit.reviewing.direct_item_duplicates import ExactDuplicateGroup
 from memcommit.reviewing.quality.findings import DuplicateReport, FindingsProvider
 from memcommit.profile_config import ProfileRegistry
