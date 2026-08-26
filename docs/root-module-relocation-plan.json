@@ -24,25 +24,25 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.add.application",
       "canonical_target_path": "memcommit/operations/add/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.add_application",
       "path": "memcommit/add_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.add.runtime",
       "canonical_target_path": "memcommit/operations/add/runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.add_runtime",
       "path": "memcommit/add_runtime.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -90,168 +90,168 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.atomize.domain",
       "canonical_target_path": "memcommit/operations/atomize/domain.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.atomize",
       "path": "memcommit/atomize.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.atomize.analysis_application",
       "canonical_target_path": "memcommit/operations/atomize/analysis_application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.atomize_analysis_application",
       "path": "memcommit/atomize_analysis_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.atomize.analysis_runtime",
       "canonical_target_path": "memcommit/operations/atomize/analysis_runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.atomize_analysis_runtime",
       "path": "memcommit/atomize_analysis_runtime.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.atomize.application",
       "canonical_target_path": "memcommit/operations/atomize/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.atomize_application",
       "path": "memcommit/atomize_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.atomize.grounding",
       "canonical_target_path": "memcommit/operations/atomize/grounding.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.atomize_grounding",
       "path": "memcommit/atomize_grounding.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.atomize.grounding_application",
       "canonical_target_path": "memcommit/operations/atomize/grounding_application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.atomize_grounding_application",
       "path": "memcommit/atomize_grounding_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.atomize.grounding_provider",
       "canonical_target_path": "memcommit/operations/atomize/grounding_provider.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.atomize_grounding_provider",
       "path": "memcommit/atomize_grounding_provider.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.atomize.grounding_runtime",
       "canonical_target_path": "memcommit/operations/atomize/grounding_runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.atomize_grounding_runtime",
       "path": "memcommit/atomize_grounding_runtime.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
-      "canonical_target": null,
-      "canonical_target_path": null,
+      "action": "centralize-alias",
+      "canonical_target": "memcommit.operations.atomize.grounding_meld_adapter",
+      "canonical_target_path": "memcommit/operations/atomize/grounding_meld_adapter.py",
       "inbound_package_importers": 0,
       "lines": 10,
       "module": "memcommit.atomize_meld_adapter",
       "path": "memcommit/atomize_meld_adapter.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.atomize.normal_form",
       "canonical_target_path": "memcommit/operations/atomize/normal_form.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.atomize_normal_form",
       "path": "memcommit/atomize_normal_form.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.atomize.resolution_adapter",
       "canonical_target_path": "memcommit/operations/atomize/resolution_adapter.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.atomize_resolution_adapter",
       "path": "memcommit/atomize_resolution_adapter.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.atomize.result_adapter",
       "canonical_target_path": "memcommit/operations/atomize/result_adapter.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.atomize_result_adapter",
       "path": "memcommit/atomize_result_adapter.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.atomize.runtime",
       "canonical_target_path": "memcommit/operations/atomize/runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.atomize_runtime",
       "path": "memcommit/atomize_runtime.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.atomize.workbench",
       "canonical_target_path": "memcommit/operations/atomize/workbench.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.atomize_workbench",
       "path": "memcommit/atomize_workbench.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
-      "canonical_target": null,
-      "canonical_target_path": null,
+      "action": "centralize-alias",
+      "canonical_target": "memcommit.operations.atomize.workflow",
+      "canonical_target_path": "memcommit/operations/atomize/workflow.py",
       "inbound_package_importers": 0,
       "lines": 97,
       "module": "memcommit.atomize_workflow",
       "path": "memcommit/atomize_workflow.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -299,14 +299,14 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.chunk.domain",
       "canonical_target_path": "memcommit/operations/chunk/domain.py",
       "inbound_package_importers": 1,
       "lines": 8,
       "module": "memcommit.chunking",
       "path": "memcommit/chunking.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -431,25 +431,25 @@
       "role": "operation-implementation"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.compare.summary",
       "canonical_target_path": "memcommit/operations/compare/summary.py",
       "inbound_package_importers": 1,
       "lines": 8,
       "module": "memcommit.comparison_summary",
       "path": "memcommit/comparison_summary.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.compare.summary_application",
       "canonical_target_path": "memcommit/operations/compare/summary_application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.comparison_summary_application",
       "path": "memcommit/comparison_summary_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -464,25 +464,25 @@
       "role": "operation-implementation"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.compare.summary_provider",
       "canonical_target_path": "memcommit/operations/compare/summary_provider.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.comparison_summary_provider",
       "path": "memcommit/comparison_summary_provider.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.compare.summary_rules",
       "canonical_target_path": "memcommit/operations/compare/summary_rules.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.comparison_summary_rules",
       "path": "memcommit/comparison_summary_rules.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -563,25 +563,25 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "retain",
-      "canonical_target": "memcommit.operations.context_init",
-      "canonical_target_path": "memcommit/operations/context_init.py",
+      "action": "centralize-alias",
+      "canonical_target": "memcommit.operations.context_init.application",
+      "canonical_target_path": "memcommit/operations/context_init/application.py",
       "inbound_package_importers": 0,
       "lines": 11,
       "module": "memcommit.context_init_application",
       "path": "memcommit/context_init_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
-      "canonical_target": "memcommit.operations.context_init",
-      "canonical_target_path": "memcommit/operations/context_init.py",
+      "action": "centralize-alias",
+      "canonical_target": "memcommit.operations.context_init.runtime",
+      "canonical_target_path": "memcommit/operations/context_init/runtime.py",
       "inbound_package_importers": 0,
       "lines": 10,
       "module": "memcommit.context_init_runtime",
       "path": "memcommit/context_init_runtime.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -629,14 +629,14 @@
       "role": "operation-implementation"
     },
     {
-      "action": "retain",
-      "canonical_target": "memcommit.context_targeting.loading",
-      "canonical_target_path": "memcommit/context_targeting/loading.py",
+      "action": "centralize-alias",
+      "canonical_target": "memcommit.compatibility.context_scope",
+      "canonical_target_path": "memcommit/compatibility/context_scope.py",
       "inbound_package_importers": 0,
       "lines": 11,
       "module": "memcommit.context_scope",
       "path": "memcommit/context_scope.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -651,14 +651,14 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "retain",
-      "canonical_target": "memcommit.operations.pwd",
-      "canonical_target_path": "memcommit/operations/pwd.py",
+      "action": "centralize-alias",
+      "canonical_target": "memcommit.operations.pwd.application",
+      "canonical_target_path": "memcommit/operations/pwd/application.py",
       "inbound_package_importers": 0,
       "lines": 11,
       "module": "memcommit.current_context_application",
       "path": "memcommit/current_context_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -673,14 +673,14 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "retain",
-      "canonical_target": "memcommit.operations.pwd",
-      "canonical_target_path": "memcommit/operations/pwd.py",
+      "action": "centralize-alias",
+      "canonical_target": "memcommit.operations.pwd.runtime",
+      "canonical_target_path": "memcommit/operations/pwd/runtime.py",
       "inbound_package_importers": 0,
       "lines": 10,
       "module": "memcommit.current_context_runtime",
       "path": "memcommit/current_context_runtime.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -695,14 +695,14 @@
       "role": "operation-implementation"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.dedup.application",
       "canonical_target_path": "memcommit/operations/dedup/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.dedup_application",
       "path": "memcommit/dedup_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -717,36 +717,36 @@
       "role": "operation-implementation"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.dedup.runtime",
       "canonical_target_path": "memcommit/operations/dedup/runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.dedup_runtime",
       "path": "memcommit/dedup_runtime.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
-      "canonical_target": "memcommit.operations.delete",
-      "canonical_target_path": "memcommit/operations/delete.py",
+      "action": "centralize-alias",
+      "canonical_target": "memcommit.operations.delete.application",
+      "canonical_target_path": "memcommit/operations/delete/application.py",
       "inbound_package_importers": 0,
       "lines": 11,
       "module": "memcommit.delete_application",
       "path": "memcommit/delete_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
-      "canonical_target": "memcommit.operations.delete",
-      "canonical_target_path": "memcommit/operations/delete.py",
+      "action": "centralize-alias",
+      "canonical_target": "memcommit.operations.delete.runtime",
+      "canonical_target_path": "memcommit/operations/delete/runtime.py",
       "inbound_package_importers": 0,
       "lines": 10,
       "module": "memcommit.delete_runtime",
       "path": "memcommit/delete_runtime.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -783,14 +783,14 @@
       "role": "operation-implementation"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.distill.application",
       "canonical_target_path": "memcommit/operations/distill/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.distill_application",
       "path": "memcommit/distill_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -827,14 +827,14 @@
       "role": "operation-implementation"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.distill.runtime",
       "canonical_target_path": "memcommit/operations/distill/runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.distill_runtime",
       "path": "memcommit/distill_runtime.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -849,25 +849,25 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "retain",
-      "canonical_target": "memcommit.operations.edit",
-      "canonical_target_path": "memcommit/operations/edit.py",
+      "action": "centralize-alias",
+      "canonical_target": "memcommit.operations.edit.application",
+      "canonical_target_path": "memcommit/operations/edit/application.py",
       "inbound_package_importers": 0,
       "lines": 11,
       "module": "memcommit.edit_application",
       "path": "memcommit/edit_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
-      "canonical_target": "memcommit.operations.edit",
-      "canonical_target_path": "memcommit/operations/edit.py",
+      "action": "centralize-alias",
+      "canonical_target": "memcommit.operations.edit.runtime",
+      "canonical_target_path": "memcommit/operations/edit/runtime.py",
       "inbound_package_importers": 0,
       "lines": 10,
       "module": "memcommit.edit_runtime",
       "path": "memcommit/edit_runtime.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -882,25 +882,25 @@
       "role": "operation-implementation"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.elaborate.add_runtime",
       "canonical_target_path": "memcommit/operations/elaborate/add_runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.elaborate_add_runtime",
       "path": "memcommit/elaborate_add_runtime.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.elaborate.application",
       "canonical_target_path": "memcommit/operations/elaborate/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.elaborate_application",
       "path": "memcommit/elaborate_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -915,14 +915,14 @@
       "role": "operation-implementation"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.elaborate.runtime",
       "canonical_target_path": "memcommit/operations/elaborate/runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.elaborate_runtime",
       "path": "memcommit/elaborate_runtime.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -937,25 +937,25 @@
       "role": "operation-implementation"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.embed.application",
       "canonical_target_path": "memcommit/operations/embed/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.embed_application",
       "path": "memcommit/embed_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.embed.runtime",
       "canonical_target_path": "memcommit/operations/embed/runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.embed_runtime",
       "path": "memcommit/embed_runtime.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -970,25 +970,25 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.exact_dedup.application",
       "canonical_target_path": "memcommit/operations/exact_dedup/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.exact_dedup",
       "path": "memcommit/exact_dedup.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.exact_dedup.application",
       "canonical_target_path": "memcommit/operations/exact_dedup/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.exact_dedup_application",
       "path": "memcommit/exact_dedup_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -1014,47 +1014,47 @@
       "role": "operation-implementation"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.search.application",
       "canonical_target_path": "memcommit/operations/search/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.find_application",
       "path": "memcommit/find_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
-      "canonical_target": null,
-      "canonical_target_path": null,
+      "action": "centralize-alias",
+      "canonical_target": "memcommit.operations.search.materialization_application",
+      "canonical_target_path": "memcommit/operations/search/materialization_application.py",
       "inbound_package_importers": 0,
       "lines": 10,
       "module": "memcommit.find_materialization_application",
       "path": "memcommit/find_materialization_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.search.materialization_runtime",
       "canonical_target_path": "memcommit/operations/search/materialization_runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.find_materialization_runtime",
       "path": "memcommit/find_materialization_runtime.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.search.runtime",
       "canonical_target_path": "memcommit/operations/search/runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.find_runtime",
       "path": "memcommit/find_runtime.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -1091,69 +1091,69 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.fit.ground_report",
       "canonical_target_path": "memcommit/operations/fit/ground_report.py",
       "inbound_package_importers": 1,
       "lines": 8,
       "module": "memcommit.fit",
       "path": "memcommit/fit.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.fit.application",
       "canonical_target_path": "memcommit/operations/fit/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.fit_application",
       "path": "memcommit/fit_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.fit.coherence",
       "canonical_target_path": "memcommit/operations/fit/coherence.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.fit_coherence",
       "path": "memcommit/fit_coherence.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.fit.judgment",
       "canonical_target_path": "memcommit/operations/fit/judgment.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.fit_judgment",
       "path": "memcommit/fit_judgment.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.fit.runtime",
       "canonical_target_path": "memcommit/operations/fit/runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.fit_runtime",
       "path": "memcommit/fit_runtime.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.fit.store",
       "canonical_target_path": "memcommit/operations/fit/store.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.fit_store",
       "path": "memcommit/fit_store.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -1168,14 +1168,14 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.forget.application",
       "canonical_target_path": "memcommit/operations/forget/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.forget_application",
       "path": "memcommit/forget_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -1190,14 +1190,14 @@
       "role": "operation-implementation"
     },
     {
-      "action": "retain",
-      "canonical_target": "memcommit.interfaces.tui.operations.forget.resolution",
-      "canonical_target_path": "memcommit/interfaces/tui/operations/forget/resolution.py",
+      "action": "centralize-alias",
+      "canonical_target": "memcommit.compatibility.forget_resolution_adapter",
+      "canonical_target_path": "memcommit/compatibility/forget_resolution_adapter.py",
       "inbound_package_importers": 1,
       "lines": 8,
       "module": "memcommit.forget_resolution_adapter",
       "path": "memcommit/forget_resolution_adapter.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -1212,14 +1212,14 @@
       "role": "operation-implementation"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.forget.runtime",
       "canonical_target_path": "memcommit/operations/forget/runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.forget_runtime",
       "path": "memcommit/forget_runtime.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -1267,25 +1267,25 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.query.granted_application",
       "canonical_target_path": "memcommit/operations/query/granted_application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.granted_query_application",
       "path": "memcommit/granted_query_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.query.granted_runtime",
       "canonical_target_path": "memcommit/operations/query/granted_runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.granted_query_runtime",
       "path": "memcommit/granted_query_runtime.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -1465,25 +1465,25 @@
       "role": "operation-implementation"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.help.application",
       "canonical_target_path": "memcommit/operations/help/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.help_application",
       "path": "memcommit/help_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.help.lookup_application",
       "canonical_target_path": "memcommit/operations/help/lookup_application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.help_lookup_application",
       "path": "memcommit/help_lookup_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -1520,14 +1520,14 @@
       "role": "operation-implementation"
     },
     {
-      "action": "retain",
-      "canonical_target": "memcommit.interfaces.tui.workbenches",
-      "canonical_target_path": "memcommit/interfaces/tui/workbenches.py",
+      "action": "centralize-alias",
+      "canonical_target": "memcommit.interfaces.tui.workbenches.impact",
+      "canonical_target_path": "memcommit/interfaces/tui/workbenches/impact.py",
       "inbound_package_importers": 0,
       "lines": 11,
       "module": "memcommit.impact_controller",
       "path": "memcommit/impact_controller.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -1553,25 +1553,25 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.find.literal_application",
       "canonical_target_path": "memcommit/operations/find/literal_application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.literal_find_application",
       "path": "memcommit/literal_find_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.find.literal_runtime",
       "canonical_target_path": "memcommit/operations/find/literal_runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.literal_find_runtime",
       "path": "memcommit/literal_find_runtime.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -1586,36 +1586,36 @@
       "role": "operation-implementation"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.meld.application",
       "canonical_target_path": "memcommit/operations/meld/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.meld_application",
       "path": "memcommit/meld_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.meld.application_flow",
       "canonical_target_path": "memcommit/operations/meld/application_flow.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.meld_application_flow",
       "path": "memcommit/meld_application_flow.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.meld.assessment_application",
       "canonical_target_path": "memcommit/operations/meld/assessment_application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.meld_assessment_application",
       "path": "memcommit/meld_assessment_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -1652,14 +1652,14 @@
       "role": "operation-implementation"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.meld.resolution_application",
       "canonical_target_path": "memcommit/operations/meld/resolution_application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.meld_resolution_application",
       "path": "memcommit/meld_resolution_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -1674,47 +1674,47 @@
       "role": "operation-implementation"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.meld.restart_application",
       "canonical_target_path": "memcommit/operations/meld/restart_application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.meld_restart_application",
       "path": "memcommit/meld_restart_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.meld.runtime",
       "canonical_target_path": "memcommit/operations/meld/runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.meld_runtime",
       "path": "memcommit/meld_runtime.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.meld.session_application",
       "canonical_target_path": "memcommit/operations/meld/session_application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.meld_session_application",
       "path": "memcommit/meld_session_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.meld.start_application",
       "canonical_target_path": "memcommit/operations/meld/start_application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.meld_start_application",
       "path": "memcommit/meld_start_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -1740,36 +1740,36 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "retain",
-      "canonical_target": "memcommit.operations.memory_transfer",
-      "canonical_target_path": "memcommit/operations/memory_transfer.py",
+      "action": "centralize-alias",
+      "canonical_target": "memcommit.operations.memory_transfer.application",
+      "canonical_target_path": "memcommit/operations/memory_transfer/application.py",
       "inbound_package_importers": 0,
       "lines": 11,
       "module": "memcommit.memory_transfer_application",
       "path": "memcommit/memory_transfer_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
-      "canonical_target": "memcommit.operations.memory_transfer",
-      "canonical_target_path": "memcommit/operations/memory_transfer.py",
+      "action": "centralize-alias",
+      "canonical_target": "memcommit.operations.memory_transfer.runtime",
+      "canonical_target_path": "memcommit/operations/memory_transfer/runtime.py",
       "inbound_package_importers": 0,
       "lines": 10,
       "module": "memcommit.memory_transfer_runtime",
       "path": "memcommit/memory_transfer_runtime.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
-      "canonical_target": "memcommit.operations.merge",
-      "canonical_target_path": "memcommit/operations/merge.py",
+      "action": "centralize-alias",
+      "canonical_target": "memcommit.operations.merge.application",
+      "canonical_target_path": "memcommit/operations/merge/application.py",
       "inbound_package_importers": 0,
       "lines": 11,
       "module": "memcommit.merge_application",
       "path": "memcommit/merge_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -1784,14 +1784,14 @@
       "role": "operation-implementation"
     },
     {
-      "action": "retain",
-      "canonical_target": "memcommit.operations.merge",
-      "canonical_target_path": "memcommit/operations/merge.py",
+      "action": "centralize-alias",
+      "canonical_target": "memcommit.operations.merge.runtime",
+      "canonical_target_path": "memcommit/operations/merge/runtime.py",
       "inbound_package_importers": 0,
       "lines": 10,
       "module": "memcommit.merge_runtime",
       "path": "memcommit/merge_runtime.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -1960,14 +1960,14 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.query.ordinary_application",
       "canonical_target_path": "memcommit/operations/query/ordinary_application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.query_application",
       "path": "memcommit/query_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -1982,36 +1982,36 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.query.reference_application",
       "canonical_target_path": "memcommit/operations/query/reference_application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.query_reference_application",
       "path": "memcommit/query_reference_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.query.reference_runtime",
       "canonical_target_path": "memcommit/operations/query/reference_runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.query_reference_runtime",
       "path": "memcommit/query_reference_runtime.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.query.ordinary_runtime",
       "canonical_target_path": "memcommit/operations/query/ordinary_runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.query_runtime",
       "path": "memcommit/query_runtime.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -2103,14 +2103,14 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.reference.application",
       "canonical_target_path": "memcommit/operations/reference/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.reference_application",
       "path": "memcommit/reference_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -2125,36 +2125,36 @@
       "role": "operation-implementation"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.reference.runtime",
       "canonical_target_path": "memcommit/operations/reference/runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.reference_runtime",
       "path": "memcommit/reference_runtime.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
-      "canonical_target": "memcommit.operations.replace",
-      "canonical_target_path": "memcommit/operations/replace.py",
+      "action": "centralize-alias",
+      "canonical_target": "memcommit.operations.replace.application",
+      "canonical_target_path": "memcommit/operations/replace/application.py",
       "inbound_package_importers": 0,
       "lines": 11,
       "module": "memcommit.replace_application",
       "path": "memcommit/replace_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
-      "canonical_target": "memcommit.operations.replace",
-      "canonical_target_path": "memcommit/operations/replace.py",
+      "action": "centralize-alias",
+      "canonical_target": "memcommit.operations.replace.runtime",
+      "canonical_target_path": "memcommit/operations/replace/runtime.py",
       "inbound_package_importers": 0,
       "lines": 10,
       "module": "memcommit.replace_runtime",
       "path": "memcommit/replace_runtime.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -2169,14 +2169,14 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.resolve.application",
       "canonical_target_path": "memcommit/operations/resolve/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.resolve_application",
       "path": "memcommit/resolve_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -2191,14 +2191,14 @@
       "role": "operation-implementation"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.resolve.runtime",
       "canonical_target_path": "memcommit/operations/resolve/runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.resolve_runtime",
       "path": "memcommit/resolve_runtime.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -2257,14 +2257,14 @@
       "role": "operation-implementation"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.reviewing.report",
       "canonical_target_path": "memcommit/reviewing/report.py",
       "inbound_package_importers": 3,
       "lines": 8,
       "module": "memcommit.review_report",
       "path": "memcommit/review_report.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -2378,69 +2378,69 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.sever.model",
       "canonical_target_path": "memcommit/operations/sever/model.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.sever",
       "path": "memcommit/sever.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.sever.application",
       "canonical_target_path": "memcommit/operations/sever/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.sever_application",
       "path": "memcommit/sever_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.sever.provider",
       "canonical_target_path": "memcommit/operations/sever/provider.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.sever_provider",
       "path": "memcommit/sever_provider.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.sever.resolution_adapter",
       "canonical_target_path": "memcommit/operations/sever/resolution_adapter.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.sever_resolution_adapter",
       "path": "memcommit/sever_resolution_adapter.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.sever.runtime",
       "canonical_target_path": "memcommit/operations/sever/runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.sever_runtime",
       "path": "memcommit/sever_runtime.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.sever.session_store",
       "canonical_target_path": "memcommit/operations/sever/session_store.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.sever_store",
       "path": "memcommit/sever_store.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -2455,47 +2455,47 @@
       "role": "operation-implementation"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.show.application",
       "canonical_target_path": "memcommit/operations/show/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.show_application",
       "path": "memcommit/show_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.show.runtime",
       "canonical_target_path": "memcommit/operations/show/runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.show_runtime",
       "path": "memcommit/show_runtime.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
-      "canonical_target": "memcommit.operations.status",
-      "canonical_target_path": "memcommit/operations/status.py",
+      "action": "centralize-alias",
+      "canonical_target": "memcommit.operations.status.application",
+      "canonical_target_path": "memcommit/operations/status/application.py",
       "inbound_package_importers": 0,
       "lines": 11,
       "module": "memcommit.status_application",
       "path": "memcommit/status_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
-      "canonical_target": "memcommit.operations.status",
-      "canonical_target_path": "memcommit/operations/status.py",
+      "action": "centralize-alias",
+      "canonical_target": "memcommit.operations.status.runtime",
+      "canonical_target_path": "memcommit/operations/status/runtime.py",
       "inbound_package_importers": 0,
       "lines": 10,
       "module": "memcommit.status_runtime",
       "path": "memcommit/status_runtime.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -2554,47 +2554,47 @@
       "role": "operation-implementation"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.summarize.application",
       "canonical_target_path": "memcommit/operations/summarize/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.summarize_application",
       "path": "memcommit/summarize_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.summarize.runtime",
       "canonical_target_path": "memcommit/operations/summarize/runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.summarize_runtime",
       "path": "memcommit/summarize_runtime.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
-      "canonical_target": "memcommit.operations.switch",
-      "canonical_target_path": "memcommit/operations/switch.py",
+      "action": "centralize-alias",
+      "canonical_target": "memcommit.operations.switch.application",
+      "canonical_target_path": "memcommit/operations/switch/application.py",
       "inbound_package_importers": 0,
       "lines": 11,
       "module": "memcommit.switch_application",
       "path": "memcommit/switch_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
-      "canonical_target": "memcommit.operations.switch",
-      "canonical_target_path": "memcommit/operations/switch.py",
+      "action": "centralize-alias",
+      "canonical_target": "memcommit.operations.switch.runtime",
+      "canonical_target_path": "memcommit/operations/switch/runtime.py",
       "inbound_package_importers": 0,
       "lines": 11,
       "module": "memcommit.switch_runtime",
       "path": "memcommit/switch_runtime.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -2609,36 +2609,36 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.translate.runtime",
       "canonical_target_path": "memcommit/operations/translate/runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.translate",
       "path": "memcommit/translate.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.translate.view",
       "canonical_target_path": "memcommit/operations/translate/view.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.translation_view",
       "path": "memcommit/translation_view.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.translate.view_store",
       "canonical_target_path": "memcommit/operations/translate/view_store.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.translation_view_store",
       "path": "memcommit/translation_view_store.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -2675,14 +2675,14 @@
       "role": "operation-implementation"
     },
     {
-      "action": "retain",
+      "action": "centralize-alias",
       "canonical_target": "memcommit.operations.update.application",
       "canonical_target_path": "memcommit/operations/update/application.py",
       "inbound_package_importers": 1,
       "lines": 8,
       "module": "memcommit.update_application",
       "path": "memcommit/update_application.py",
-      "reason": "preserve an established import path",
+      "reason": "preserve the old import through one compatibility registry",
       "role": "compatibility-facade"
     },
     {
@@ -2741,7 +2741,7 @@
       "role": "shared-concept-implementation"
     }
   ],
-  "purpose": "Freeze the path-only classification used to make the flat memcommit package navigable without deciding operation behavior.",
+  "purpose": "Freeze the ownership classification used to remove flat physical facades without changing operation behavior or historical imports.",
   "root_module_count": 249,
   "schema_version": 1,
   "summary": {

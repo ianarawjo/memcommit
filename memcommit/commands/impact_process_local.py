@@ -42,7 +42,7 @@ from memcommit.operations.forget.application import (
     ForgetAnalysisResult,
     run_forget_analysis,
 )
-from memcommit.forget_resolution_adapter import (
+from memcommit.interfaces.tui.operations.forget.resolution import (
     ForgetResolutionWorkbenchAdapter,
     forget_memory_changes,
 )

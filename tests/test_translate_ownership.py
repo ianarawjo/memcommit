@@ -11,6 +11,10 @@ import sys
 
 import pytest
 
+from tests.legacy_submodule_assertions import (
+    assert_legacy_root_submodule_is_centralized,
+)
+
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 MODULE_PAIRS = (
@@ -66,13 +70,7 @@ assert sys.modules[{canonical_name!r}] is canonical
     ),
 )
 def test_translate_legacy_facades_define_no_behavior(relative_path: str) -> None:
-    path = REPOSITORY_ROOT / relative_path
-    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
-
-    assert not any(
-        isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
-        for node in ast.walk(tree)
-    )
+    assert_legacy_root_submodule_is_centralized(relative_path)
 
 
 def test_translate_operation_package_import_is_lazy() -> None:
@@ -129,8 +127,8 @@ def test_production_translate_consumers_use_operation_owners() -> None:
         "memcommit/operations/translate/catalog_application.py",
         "memcommit/operations/translate/materialization.py",
         "memcommit/ops.py",
-        "memcommit/profiles.py",
-        "memcommit/provenance.py",
+        "memcommit/operations/profile/model.py",
+        "memcommit/retained_history/provenance.py",
         "memcommit/store.py",
     )
     legacy_imports = (

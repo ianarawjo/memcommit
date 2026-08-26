@@ -11,6 +11,10 @@ import sys
 
 import pytest
 
+from tests.legacy_submodule_assertions import (
+    assert_legacy_root_submodule_is_centralized,
+)
+
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 MODULE_PAIRS = (
@@ -95,13 +99,7 @@ def test_literal_find_legacy_paths_expose_the_canonical_contract() -> None:
 def test_literal_find_legacy_facades_define_no_behavior(
     relative_path: str,
 ) -> None:
-    path = REPOSITORY_ROOT / relative_path
-    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
-
-    assert not any(
-        isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
-        for node in ast.walk(tree)
-    )
+    assert_legacy_root_submodule_is_centralized(relative_path)
 
 
 def test_find_operation_package_import_keeps_literal_slice_lazy() -> None:
@@ -149,7 +147,7 @@ def test_production_literal_find_consumers_use_the_operation_owner() -> None:
         "memcommit/interfaces/tui/operations/find/model.py",
         "memcommit/interfaces/tui/operations/find/screen.py",
         "memcommit/operations/find/literal_runtime.py",
-        "memcommit/replace_application.py",
+        "memcommit/operations/replace/application.py",
     )
 
     for relative_path in relative_paths:

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from memcommit._architecture_catalog import (
+from memcommit.architecture.catalog import (
     build_catalog,
     render_callable_jsonl,
     render_operation_markdown,
@@ -67,7 +67,10 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
     snapshot = _snapshot()
     by_operation = {record.operation: record for record in snapshot.operations}
 
-    assert "memcommit.current_context_application" in by_operation["pwd"].application_modules
+    assert (
+        "memcommit.operations.pwd.application"
+        in by_operation["pwd"].application_modules
+    )
     assert (
         "memcommit.operations.summarize.application"
         in by_operation["summarize"].application_modules

@@ -19,7 +19,7 @@ or nested callables.
 
 ## Selected contract
 
-[`memcommit._architecture_catalog`](../memcommit/_architecture_catalog.py)
+[`memcommit.architecture.catalog`](../memcommit/architecture/catalog.py)
 parses every Python source file below `memcommit/` with the standard-library
 AST and imports no MemCommit runtime module. The generated JSON Lines catalog
 records, for every function, async function, class, and lambda:

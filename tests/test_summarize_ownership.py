@@ -11,6 +11,10 @@ import sys
 
 import pytest
 
+from tests.legacy_submodule_assertions import (
+    assert_legacy_root_submodule_is_centralized,
+)
+
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 MODULE_PAIRS = (
@@ -91,13 +95,7 @@ def test_summarize_legacy_paths_expose_the_canonical_contract() -> None:
     ("memcommit/summarize_application.py", "memcommit/summarize_runtime.py"),
 )
 def test_summarize_legacy_facades_define_no_behavior(relative_path: str) -> None:
-    path = REPOSITORY_ROOT / relative_path
-    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
-
-    assert not any(
-        isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
-        for node in ast.walk(tree)
-    )
+    assert_legacy_root_submodule_is_centralized(relative_path)
 
 
 def test_summarize_package_import_is_lazy() -> None:
@@ -139,10 +137,10 @@ def test_production_summarize_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "memcommit/bootstrap.py",
         "memcommit/commands/summarize.py",
-        "memcommit/distill_application.py",
-        "memcommit/distill_runtime.py",
+        "memcommit/operations/distill/application.py",
+        "memcommit/operations/distill/runtime.py",
         "memcommit/eval/study_summarize_exact_matrix.py",
-        "memcommit/ground_distill.py",
+        "memcommit/operations/ground/distill.py",
         "memcommit/interfaces/summarize.py",
         "memcommit/interfaces/cli/summarize.py",
         "memcommit/interfaces/tui/operations/summarize/adapter.py",

@@ -11,6 +11,10 @@ import sys
 
 import pytest
 
+from tests.legacy_submodule_assertions import (
+    assert_legacy_root_submodule_is_centralized,
+)
+
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 MODULE_PAIRS = (
@@ -99,13 +103,7 @@ def test_grounding_legacy_paths_expose_the_canonical_contract() -> None:
     ),
 )
 def test_grounding_legacy_facades_define_no_behavior(relative_path: str) -> None:
-    path = REPOSITORY_ROOT / relative_path
-    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
-
-    assert not any(
-        isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
-        for node in ast.walk(tree)
-    )
+    assert_legacy_root_submodule_is_centralized(relative_path)
 
 
 def test_atomize_package_import_keeps_grounding_lazy() -> None:

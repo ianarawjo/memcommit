@@ -10,6 +10,10 @@ import sys
 
 import pytest
 
+from tests.legacy_submodule_assertions import (
+    assert_legacy_root_submodule_is_centralized,
+)
+
 
 REPOSITORY_ROOT = Path(__file__).parents[1]
 SWITCH_MODULES = (
@@ -75,13 +79,7 @@ def test_switch_module_identity_is_independent_of_import_order(
     ("memcommit/switch_application.py", "memcommit/switch_runtime.py"),
 )
 def test_legacy_switch_facades_define_no_behavior(relative_path: str) -> None:
-    path = REPOSITORY_ROOT / relative_path
-    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
-
-    assert not any(
-        isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
-        for node in ast.walk(tree)
-    )
+    assert_legacy_root_submodule_is_centralized(relative_path)
 
 
 def test_switch_package_import_does_not_eagerly_load_implementation_modules() -> None:

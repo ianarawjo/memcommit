@@ -11,6 +11,10 @@ import sys
 
 import pytest
 
+from tests.legacy_submodule_assertions import (
+    assert_legacy_root_submodule_is_centralized,
+)
+
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 MODULE_PAIRS = (
@@ -79,14 +83,7 @@ def test_atomize_support_legacy_facades_define_no_behavior(
     legacy_name: str,
     _canonical_name: str,
 ) -> None:
-    relative_path = Path(*legacy_name.split(".")).with_suffix(".py")
-    path = REPOSITORY_ROOT / relative_path
-    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
-
-    assert not any(
-        isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
-        for node in ast.walk(tree)
-    )
+    assert_legacy_root_submodule_is_centralized(legacy_name, _canonical_name)
 
 
 def test_atomize_package_keeps_support_modules_lazy() -> None:
@@ -183,7 +180,7 @@ def test_atomize_production_consumers_use_canonical_support_modules() -> None:
     relative_paths = (
         "memcommit/api/_operations/atomize.py",
         "memcommit/api/_operations/atomize_grounding.py",
-        "memcommit/atomize_workflow.py",
+        "memcommit/operations/atomize/workflow.py",
         "memcommit/commands/atomize.py",
         "memcommit/commands/atomize_grounding.py",
         "memcommit/commands/atomize_sessions.py",
@@ -200,9 +197,9 @@ def test_atomize_production_consumers_use_canonical_support_modules() -> None:
         "memcommit/operations/atomize/grounding_runtime.py",
         "memcommit/operations/atomize/runtime.py",
         "memcommit/ops.py",
-        "memcommit/provenance.py",
-        "memcommit/review.py",
-        "memcommit/review_report_adapters.py",
+        "memcommit/retained_history/provenance.py",
+        "memcommit/operations/review/model.py",
+        "memcommit/operations/review/report_adapters.py",
         "memcommit/store.py",
         "memcommit/study_prewarm/atomize.py",
     )

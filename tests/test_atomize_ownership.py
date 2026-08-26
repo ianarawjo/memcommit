@@ -11,6 +11,10 @@ import sys
 
 import pytest
 
+from tests.legacy_submodule_assertions import (
+    assert_legacy_root_submodule_is_centralized,
+)
+
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 MODULE_PAIRS = (
@@ -94,13 +98,7 @@ def test_atomize_legacy_paths_expose_the_canonical_contract() -> None:
     ("memcommit/atomize_application.py", "memcommit/atomize_runtime.py"),
 )
 def test_atomize_legacy_facades_define_no_behavior(relative_path: str) -> None:
-    path = REPOSITORY_ROOT / relative_path
-    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
-
-    assert not any(
-        isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
-        for node in ast.walk(tree)
-    )
+    assert_legacy_root_submodule_is_centralized(relative_path)
 
 
 def test_atomize_package_import_is_lazy() -> None:
@@ -131,7 +129,6 @@ def test_pre_relocation_atomize_snapshot_global_loads_through_alias() -> None:
 
 def test_primary_atomize_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "memcommit/atomize_analysis_runtime.py",
         "memcommit/api/atomize.py",
         "memcommit/api/_operations/atomize.py",
         "memcommit/commands/atomize.py",

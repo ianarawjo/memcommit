@@ -143,7 +143,7 @@ def test_forget_application_has_no_command_or_terminal_dependency() -> None:
     relative_paths = (
         "operations/forget/application.py",
         "operations/forget/runtime.py",
-        "forget_provider.py",
+        "operations/forget/provider.py",
     )
     for relative_path in relative_paths:
         path = Path(__file__).parents[1] / "memcommit" / relative_path

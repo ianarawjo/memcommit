@@ -9,6 +9,10 @@ import pickle
 import subprocess
 import sys
 
+from tests.legacy_submodule_assertions import (
+    assert_legacy_root_submodule_is_centralized,
+)
+
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 LEGACY_NAME = "memcommit.update_application"
@@ -60,13 +64,7 @@ def test_update_legacy_path_exposes_the_canonical_contract() -> None:
 
 
 def test_update_legacy_facade_defines_no_behavior() -> None:
-    path = REPOSITORY_ROOT / "memcommit/update_application.py"
-    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
-
-    assert not any(
-        isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
-        for node in ast.walk(tree)
-    )
+    assert_legacy_root_submodule_is_centralized(LEGACY_NAME, CANONICAL_NAME)
 
 
 def test_update_package_import_is_lazy() -> None:
@@ -97,8 +95,8 @@ def test_pre_relocation_update_result_global_loads_through_alias() -> None:
 def test_production_update_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "memcommit/store.py",
-        "memcommit/granted_update_application.py",
-        "memcommit/granted_source_update_application.py",
+        "memcommit/operations/update/granted_application.py",
+        "memcommit/operations/update/granted_source_application.py",
     )
 
     for relative_path in relative_paths:

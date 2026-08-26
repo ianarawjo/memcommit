@@ -12,6 +12,10 @@ import sys
 
 import pytest
 
+from tests.legacy_submodule_assertions import (
+    assert_legacy_root_submodule_is_centralized,
+)
+
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 LEGACY_AND_CANONICAL_PATHS = (
@@ -100,13 +104,7 @@ def test_replace_legacy_paths_expose_the_canonical_objects() -> None:
 def test_replace_legacy_facades_contain_no_implementation(
     relative_path: str,
 ) -> None:
-    source_path = REPOSITORY_ROOT / relative_path
-    tree = ast.parse(source_path.read_text(encoding="utf-8"), filename=str(source_path))
-
-    assert not any(
-        isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
-        for node in ast.walk(tree)
-    )
+    assert_legacy_root_submodule_is_centralized(relative_path)
 
 
 def test_replace_package_import_does_not_eagerly_load_implementation_modules() -> None:

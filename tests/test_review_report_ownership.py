@@ -9,6 +9,10 @@ import pickle
 import subprocess
 import sys
 
+from tests.legacy_submodule_assertions import (
+    assert_legacy_root_submodule_is_centralized,
+)
+
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 LEGACY_MODULE = "memcommit.review_report"
@@ -52,12 +56,9 @@ def test_review_report_legacy_path_exposes_the_canonical_contract() -> None:
 
 
 def test_review_report_legacy_facade_defines_no_behavior() -> None:
-    path = REPOSITORY_ROOT / "memcommit" / "review_report.py"
-    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
-
-    assert not any(
-        isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
-        for node in ast.walk(tree)
+    assert_legacy_root_submodule_is_centralized(
+        LEGACY_MODULE,
+        CANONICAL_MODULE,
     )
 
 

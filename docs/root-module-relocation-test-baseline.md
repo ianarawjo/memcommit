@@ -58,3 +58,32 @@ The effective comparison is therefore: no new behavioral failures, one
 path-generated baseline failure resolved, and 13 pre-existing functional or
 interaction-contract problems left deliberately outside this path-only pass
 (11 immediate failures and 2 non-completing TUI tests).
+
+## Physical facade consolidation follow-up
+
+On 2026-08-26 the 242 compatibility paths were consolidated into one generated
+alias catalog and one lazy finder so the package root could contain only its
+seven real implementation boundaries.
+
+- The complete suite with the same 14 baseline nodes deselected reached the end
+  in 400.30 seconds: 6039 passed, 2 obsolete physical-path assertions failed,
+  1 skipped, and 14 deselected.
+- The two assertions inspected the removed root `forget_provider.py` and Query
+  facade files. After being pointed at the canonical provider and centralized
+  alias ledger, their focused slice completed with 14 passed. No production
+  code changed after the exhaustive run.
+- The 12 non-blocking baseline nodes were rerun after consolidation: the
+  regenerated callable-catalog node passed and the same other 11 nodes failed.
+  The two known Meld TUI non-completions remain outside this physical-layout
+  pass.
+- All 242 historical imports resolve to the exact canonical module object in
+  fresh legacy-first and canonical-first interpreters while retaining the
+  canonical module specification. The package root contains exactly seven
+  Python files and no physical compatibility facade.
+- The ownership suite completed with 533 passed and 1 skipped. The generated
+  callable catalog now records 11105 callables across 944 physical modules and
+  66 operations, and the operation evidence registry remains consistent.
+
+The follow-up therefore introduces no new behavioral failure. It changes the
+physical navigation surface and the implementation of compatibility lookup,
+not the retained 13 functional or interaction-contract problems.

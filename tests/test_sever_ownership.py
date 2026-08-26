@@ -11,6 +11,10 @@ import sys
 
 import pytest
 
+from tests.legacy_submodule_assertions import (
+    assert_legacy_root_submodule_is_centralized,
+)
+
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 MODULE_PAIRS = (
@@ -144,13 +148,7 @@ def test_sever_legacy_paths_expose_the_canonical_contract() -> None:
     ),
 )
 def test_sever_legacy_facades_define_no_behavior(relative_path: str) -> None:
-    path = REPOSITORY_ROOT / relative_path
-    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
-
-    assert not any(
-        isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
-        for node in ast.walk(tree)
-    )
+    assert_legacy_root_submodule_is_centralized(relative_path)
 
 
 def test_sever_package_import_is_lazy() -> None:
@@ -206,7 +204,7 @@ def test_production_sever_consumers_use_the_operation_owner() -> None:
         "memcommit/study_prewarm/sever.py",
         "memcommit/operations/sever/session_store.py",
         "memcommit/operations/sever/runtime.py",
-        "memcommit/review_report_adapters.py",
+        "memcommit/operations/review/report_adapters.py",
         "memcommit/store.py",
     )
     legacy_imports = (

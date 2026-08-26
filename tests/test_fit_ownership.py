@@ -11,6 +11,10 @@ import sys
 
 import pytest
 
+from tests.legacy_submodule_assertions import (
+    assert_legacy_root_submodule_is_centralized,
+)
+
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 MODULE_PAIRS = (
@@ -133,13 +137,7 @@ def test_fit_legacy_paths_expose_the_canonical_contract() -> None:
     ),
 )
 def test_fit_legacy_facades_define_no_behavior(relative_path: str) -> None:
-    path = REPOSITORY_ROOT / relative_path
-    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
-
-    assert not any(
-        isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
-        for node in ast.walk(tree)
-    )
+    assert_legacy_root_submodule_is_centralized(relative_path)
 
 
 def test_fit_package_import_is_lazy() -> None:
@@ -208,13 +206,13 @@ def test_production_fit_consumers_use_the_operation_owner() -> None:
         "memcommit/commands/ground_named_shell.py",
         "memcommit/commands/impact_process_local.py",
         "memcommit/commands/resolve.py",
-        "memcommit/elaborate.py",
+        "memcommit/operations/elaborate/model.py",
         "memcommit/eval/fit_calibration.py",
-        "memcommit/ground_workspace_fit.py",
+        "memcommit/operations/ground/workspace_fit.py",
         "memcommit/operations/fit/application.py",
         "memcommit/operations/fit/runtime.py",
         "memcommit/operations/resolve/application.py",
-        "memcommit/resolve_semantic.py",
+        "memcommit/operations/resolve/semantic.py",
     )
     legacy_imports = (
         "from memcommit.fit import",

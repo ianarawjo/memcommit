@@ -11,6 +11,10 @@ import sys
 
 import pytest
 
+from tests.legacy_submodule_assertions import (
+    assert_legacy_root_submodule_is_centralized,
+)
+
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 MODULE_PAIRS = (
@@ -65,13 +69,7 @@ assert sys.modules[{canonical_name!r}] is canonical
     ),
 )
 def test_legacy_facades_define_no_behavior(relative_path: str) -> None:
-    path = REPOSITORY_ROOT / relative_path
-    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
-
-    assert not any(
-        isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
-        for node in ast.walk(tree)
-    )
+    assert_legacy_root_submodule_is_centralized(relative_path)
 
 
 @pytest.mark.parametrize("operation", ("distill", "elaborate"))
@@ -133,8 +131,8 @@ def test_production_consumers_use_operation_owners() -> None:
         "memcommit/commands/distill.py",
         "memcommit/commands/elaborate.py",
         "memcommit/commands/impact_process_local.py",
-        "memcommit/ground_distill.py",
-        "memcommit/ground_elaborate.py",
+        "memcommit/operations/ground/distill.py",
+        "memcommit/operations/ground/elaborate.py",
         "memcommit/interfaces/cli/distill.py",
         "memcommit/interfaces/cli/elaborate.py",
         "memcommit/operations/distill/runtime.py",

@@ -311,7 +311,7 @@ def main() -> None:
     _capture_recursive()
     _capture_cancel()
     _capture_plan_cancel()
-    if (ROOT / "memcommit/granted_query_application.py").exists():
+    if (ROOT / "memcommit/operations/query/granted_application.py").exists():
         _capture_help()
     elif not (OUT / "10-merge-help-detail.png").exists():
         raise RuntimeError("Existing Help evidence is unavailable")

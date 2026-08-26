@@ -11,6 +11,10 @@ import sys
 
 import pytest
 
+from tests.legacy_submodule_assertions import (
+    assert_legacy_root_submodule_is_centralized,
+)
+
 
 _MODULE_PAIRS = (
     ("memcommit.query_application", "memcommit.operations.query.ordinary_application"),
@@ -77,21 +81,10 @@ def test_compatibility_modules_are_their_owner(compat_name, owner_name):
 
 
 def test_root_query_compatibility_modules_are_implementation_free():
-    root = Path(__file__).parents[1] / "memcommit"
-    paths = (
-        root / "query_application.py",
-        root / "query_runtime.py",
-        root / "granted_query_application.py",
-        root / "granted_query_runtime.py",
-        root / "query_reference_application.py",
-        root / "query_reference_runtime.py",
-    )
-
-    for path in paths:
-        tree = ast.parse(path.read_text(encoding="utf-8"))
-        assert not any(
-            isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
-            for node in ast.walk(tree)
+    for legacy_name, canonical_name in _MODULE_PAIRS:
+        assert_legacy_root_submodule_is_centralized(
+            legacy_name,
+            canonical_name,
         )
 
 

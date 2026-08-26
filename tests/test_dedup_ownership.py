@@ -11,6 +11,10 @@ import sys
 
 import pytest
 
+from tests.legacy_submodule_assertions import (
+    assert_legacy_root_submodule_is_centralized,
+)
+
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 MODULE_PAIRS = (
@@ -85,13 +89,7 @@ def test_dedup_legacy_paths_expose_the_canonical_contract() -> None:
     ("memcommit/dedup_application.py", "memcommit/dedup_runtime.py"),
 )
 def test_dedup_legacy_facades_define_no_behavior(relative_path: str) -> None:
-    path = REPOSITORY_ROOT / relative_path
-    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
-
-    assert not any(
-        isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
-        for node in ast.walk(tree)
-    )
+    assert_legacy_root_submodule_is_centralized(relative_path)
 
 
 def test_dedup_package_import_is_lazy() -> None:
@@ -120,15 +118,15 @@ def test_pre_relocation_dedup_request_global_loads_through_alias() -> None:
 
 def test_production_dedup_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "memcommit/atomize_normal_form.py",
+        "memcommit/operations/atomize/normal_form.py",
         "memcommit/api/dedup.py",
         "memcommit/api/_operations/dedup.py",
         "memcommit/commands/consolidate.py",
         "memcommit/commands/duplicate_dedup_handoff.py",
         "memcommit/commands/find_duplicates.py",
         "memcommit/commands/quality_find_workbench.py",
-        "memcommit/dedup_planning.py",
-        "memcommit/dedun_scope.py",
+        "memcommit/operations/dedup/planning.py",
+        "memcommit/operations/dedun/scope.py",
         "memcommit/interfaces/cli/dedup.py",
         "memcommit/interfaces/tui/operations/dedup/screen.py",
         "memcommit/operations/dedup/runtime.py",

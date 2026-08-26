@@ -8,6 +8,10 @@ from pathlib import Path
 import subprocess
 import sys
 
+from tests.legacy_submodule_assertions import (
+    assert_legacy_root_submodule_is_centralized,
+)
+
 
 LEGACY_AND_CANONICAL_PATHS = (
     (
@@ -69,19 +73,5 @@ def test_context_init_module_aliases_are_identity_stable_in_either_import_order(
 
 
 def test_context_init_legacy_facades_contain_no_implementation():
-    repository = Path(__file__).parents[1]
-
-    for relative_path in (
-        "memcommit/context_init_application.py",
-        "memcommit/context_init_runtime.py",
-    ):
-        source = (repository / relative_path).read_text(encoding="utf-8")
-        declarations = (
-            ast.FunctionDef,
-            ast.AsyncFunctionDef,
-            ast.ClassDef,
-        )
-
-        assert not any(
-            isinstance(node, declarations) for node in ast.walk(ast.parse(source))
-        )
+    for legacy_name, canonical_name in LEGACY_AND_CANONICAL_PATHS:
+        assert_legacy_root_submodule_is_centralized(legacy_name, canonical_name)

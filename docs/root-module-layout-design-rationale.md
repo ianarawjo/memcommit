@@ -45,12 +45,31 @@ while the JSON preserves exact paths for mechanical checks.
 
 ## Compatibility boundary
 
-Relocated modules leave a root file that imports the canonical module and
-places that exact module object in sys.modules under the historical name. This
-preserves object identity and keeps legacy monkeypatch paths attached to the
-implementation. It does not promise that module names are permanently public;
-removing those aliases is a separate compatibility decision after repository
-reading establishes which paths have real consumers.
+Physical root facades defeated the navigation goal even after their
+implementations moved: a file browser still presented 242 historical names as
+peers of the seven real root boundaries. The facades are therefore consolidated
+into the exact generated map in
+`memcommit.compatibility._legacy_alias_map` and one process-local finder in
+`memcommit.compatibility.legacy_submodules`.
+
+The finder recognizes only the frozen historical names. It imports a target on
+first use, returns the exact canonical module object, and restores the
+canonical import metadata that Python temporarily projects while resolving an
+alias. This preserves legacy imports, monkeypatch identity, reload behavior,
+and serialized global lookup without eagerly importing 242 implementations or
+leaving 242 physical files at the package root.
+
+A package `__getattr__` was insufficient because it does not implement
+`import memcommit.legacy_submodule`. Eagerly populating `sys.modules` would
+restore that syntax but would assemble the entire application whenever the
+root package loaded. Deleting compatibility outright would be simpler but
+would unnecessarily break historical imports and saved global references in a
+pass whose stated boundary is physical layout rather than behavior.
+
+The alias catalog does not promise that every historical name is permanently
+public. Removing individual aliases remains a later compatibility decision,
+but that decision now has one visible ledger rather than hundreds of scattered
+files.
 
 ## Verification
 
@@ -59,14 +78,16 @@ baseline. Each relocation batch must collect successfully, keep focused tests
 passing, and introduce no new behavioral failure. Static ownership tests and
 generated callable catalogs may change because their subject is the path
 layout itself; those records are updated only after the canonical moves settle.
-The layout check also imports every relocated module in a fresh interpreter in
-both legacy-first and canonical-first order. This prevents an earlier test
-import from masking a package-initialization cycle and verifies that each
-compatibility path resolves to the exact canonical module object.
+The layout check requires exactly seven root Python files, rejects every
+physical compatibility facade and internal legacy import, and imports all 242
+historical names in fresh interpreters in both legacy-first and canonical-first
+order. It verifies exact module identity and canonical `__spec__` ownership so
+an earlier test import cannot mask a package-initialization cycle or metadata
+regression.
 
 ## Non-goals
 
 This pass does not rename callables, split large modules, consolidate duplicate
-policies, decide whether compatibility aliases can be deleted, or resolve the
-known functional failures. Those require semantic reading after the package
-layout makes the relevant code traceable.
+policies, remove historical names from the centralized compatibility catalog,
+or resolve the known functional failures. Those require semantic reading after
+the package layout makes the relevant code traceable.
