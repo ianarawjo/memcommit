@@ -20,7 +20,7 @@ from memcommit.elaborate import (
     ElaborateTargetContext,
     ElaborateTargetContextItem,
 )
-from memcommit.semantic_add_runtime import FrozenSemanticAddTarget
+from memcommit.operations.add.semantic_runtime import FrozenSemanticAddTarget
 from memcommit.store import MemoryStore, context_record_digest
 from memcommit.update import GrantedUpdateTarget
 

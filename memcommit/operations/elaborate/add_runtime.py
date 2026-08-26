@@ -28,7 +28,7 @@ from memcommit.elaborate_target_context import (
     authorized_frozen_elaborate_target,
     freeze_elaborate_target_context,
 )
-from memcommit.semantic_add_runtime import (
+from memcommit.operations.add.semantic_runtime import (
     FrozenSemanticAddTarget,
     SemanticAddReceipt,
     append_semantic_memories,

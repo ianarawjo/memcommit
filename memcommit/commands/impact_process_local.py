@@ -71,7 +71,7 @@ from memcommit.operations.resolve.application import (
 )
 from memcommit.operations.resolve.runtime import MemoryStoreResolvePort
 from memcommit.resolve_semantic import ProviderResolveSemanticPort
-from memcommit.semantic_add_runtime import (
+from memcommit.operations.add.semantic_runtime import (
     resolve_semantic_add_endpoints,
     resolve_semantic_add_target,
 )

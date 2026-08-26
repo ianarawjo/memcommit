@@ -64,7 +64,7 @@ from memcommit.interfaces.tui.operations.distill import DistillTuiSetup
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
 from memcommit.query_provider import QueryProviderError, connect_semantic_provider
-from memcommit.semantic_add_runtime import resolve_semantic_add_endpoints
+from memcommit.operations.add.semantic_runtime import resolve_semantic_add_endpoints
 from memcommit.store import MemoryStore
 from memcommit.summarize import SummaryFrame
 

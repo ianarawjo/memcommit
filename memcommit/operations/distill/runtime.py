@@ -31,7 +31,7 @@ from memcommit.distill_config import (
 )
 from memcommit.goal_focus import FrozenGoalFocus
 from memcommit.goal_focus_runtime import revalidate_goal_focus
-from memcommit.semantic_add_runtime import (
+from memcommit.operations.add.semantic_runtime import (
     FrozenSemanticAddTarget,
     SemanticAddReceipt,
     append_semantic_memories,
