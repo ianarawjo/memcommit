@@ -35,7 +35,7 @@ from memcommit.semantic_disclosure import (
     require_semantic_disclosure_authority,
 )
 from memcommit.store import context_record_digest
-from memcommit.update import ContextFingerprint, GrantedUpdateTarget
+from memcommit.operations.update.model import ContextFingerprint, GrantedUpdateTarget
 
 
 MELD_SCHEMA_VERSION = 3

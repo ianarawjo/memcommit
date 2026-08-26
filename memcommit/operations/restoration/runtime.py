@@ -7,7 +7,7 @@ from memcommit.command_history import (
     CommandRestoreResult,
     RestoreDirection,
 )
-from memcommit.granted_update_application import restore_granted_update
+from memcommit.operations.update.granted_application import restore_granted_update
 from memcommit.store import MemoryStore
 
 

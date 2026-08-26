@@ -52,10 +52,10 @@ from memcommit.context_targeting.presets import (
     resolve_scope_preset,
 )
 from memcommit.derived_policy import authorize_derived_transfer
-from memcommit.granted_source_update_application import (
+from memcommit.operations.update.granted_source_application import (
     apply_granted_source_staged_update,
 )
-from memcommit.granted_update_application import apply_granted_staged_update
+from memcommit.operations.update.granted_application import apply_granted_staged_update
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
 from memcommit.query_provider import (
@@ -64,7 +64,7 @@ from memcommit.query_provider import (
 )
 from memcommit.store import MemoryStore
 from memcommit.study_prewarm.registry import StudyPrewarmRegistryError
-from memcommit.update import (
+from memcommit.operations.update.model import (
     GrantedUpdateTarget,
     UpdateError,
     UpdateSession,
@@ -76,8 +76,8 @@ from memcommit.update import (
     session_matches,
     update_session_record_digest,
 )
-from memcommit.update_application_flow import UpdateApplicationFlowPort
-from memcommit.update_endpoints import (
+from memcommit.operations.update.application_flow import UpdateApplicationFlowPort
+from memcommit.operations.update.endpoints import (
     choose_update_endpoint_operands,
     resolve_update_endpoints,
 )

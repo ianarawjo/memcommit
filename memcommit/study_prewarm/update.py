@@ -46,7 +46,7 @@ from memcommit.study_prewarm.quality import (
 from memcommit.study_prewarm.scope_equivalence import (
     ordered_scope_evidence_relation,
 )
-from memcommit.update import (
+from memcommit.operations.update.model import (
     UPDATE_PROVIDER_CONTRACT_VERSION,
     UPDATE_SCHEMA_VERSION,
     GrantedUpdateTarget,

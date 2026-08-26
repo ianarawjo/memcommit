@@ -4,7 +4,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
-from memcommit.update import (
+from memcommit.operations.update.model import (
     AddOperation,
     EditOperation,
     RemoveOperation,

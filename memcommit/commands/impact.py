@@ -107,8 +107,8 @@ from memcommit.operations.review.model import (
 from memcommit.store import MemoryStore
 from memcommit.uid_locator import UidLocatorError, resolve_exact_or_unique_uid
 from memcommit.study_prewarm.registry import StudyPrewarmRegistryError
-from memcommit.update import UpdateError, plan_update, session_matches
-from memcommit.update_endpoints import (
+from memcommit.operations.update.model import UpdateError, plan_update, session_matches
+from memcommit.operations.update.endpoints import (
     choose_update_endpoint_operands,
     resolve_update_endpoints,
 )

@@ -44,7 +44,7 @@ from memcommit.interfaces.console.text import (
 from memcommit.profile_config import AuthorityGrant, ProfileConfigError
 from memcommit.profiles import ProfileError
 from memcommit.store import MemoryStore
-from memcommit.update import GrantedUpdateTarget
+from memcommit.operations.update.model import GrantedUpdateTarget
 from memcommit.study_operation_policy import analysis_boundary_label
 from memcommit.source_projection.model import (
     SourceDisplayFacts,

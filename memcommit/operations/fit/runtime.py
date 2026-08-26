@@ -88,7 +88,7 @@ from memcommit.store import (
     context_record_digest,
     ground_session_record_digest,
 )
-from memcommit.update import GrantedUpdateTarget
+from memcommit.operations.update.model import GrantedUpdateTarget
 
 
 class FitProviderFactory(Protocol):

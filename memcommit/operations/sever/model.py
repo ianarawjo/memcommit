@@ -8,7 +8,7 @@ import uuid
 from dataclasses import dataclass, replace
 from typing import Literal
 
-from memcommit.update import GrantedUpdateTarget
+from memcommit.operations.update.model import GrantedUpdateTarget
 
 
 SEVER_SCHEMA_VERSION = 3

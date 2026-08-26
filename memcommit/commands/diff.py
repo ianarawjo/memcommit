@@ -13,7 +13,7 @@ from memcommit.interfaces.console.theme import (
     semantic_color_rgb,
 )
 from memcommit.store import MemoryStore
-from memcommit.granted_update_application import inspect_granted_update
+from memcommit.operations.update.granted_application import inspect_granted_update
 from memcommit.memory_diff import (
     MemoryChange,
     memory_diff_lines,
@@ -29,7 +29,7 @@ from memcommit.context_targeting.checkpoint import (
 )
 from memcommit.context_targeting.model import CheckpointTarget
 from memcommit.uid_locator import resolve_exact_or_unique_uid
-from memcommit.update import (
+from memcommit.operations.update.model import (
     AddOperation,
     EditOperation,
     RemoveOperation,

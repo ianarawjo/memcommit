@@ -23,7 +23,7 @@ from memcommit.interfaces.tui.components.operation_launcher.session import (
 )
 from memcommit.operations.sever.session_store import SeverSessionStore
 from memcommit.store import MemoryStore
-from memcommit.update_receipt_store import UpdateReceiptStore
+from memcommit.operations.update.receipt_store import UpdateReceiptStore
 
 
 IMPACT_SESSION_KINDS = ("atomize", "meld", "sever", "update")

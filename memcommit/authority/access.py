@@ -32,7 +32,7 @@ from memcommit.source_projection.model import (
     SourceState,
     context_access_facts,
 )
-from memcommit.update import GrantedUpdateTarget, granted_target_digest
+from memcommit.operations.update.model import GrantedUpdateTarget, granted_target_digest
 
 
 @dataclass(frozen=True)

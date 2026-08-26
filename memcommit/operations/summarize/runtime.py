@@ -36,7 +36,7 @@ from memcommit.operations.summarize.application import (
     run_summarize,
 )
 from memcommit.study_prewarm.summarize import find_declared_summarize_prewarm
-from memcommit.update import GrantedUpdateTarget
+from memcommit.operations.update.model import GrantedUpdateTarget
 
 
 class SummaryProviderFactory(Protocol):

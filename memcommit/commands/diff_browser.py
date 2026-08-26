@@ -49,7 +49,7 @@ from memcommit.store import (
     checkpoint_history_digest,
     context_record_digest,
 )
-from memcommit.update import UpdateSession
+from memcommit.operations.update.model import UpdateSession
 
 
 @dataclass(frozen=True)

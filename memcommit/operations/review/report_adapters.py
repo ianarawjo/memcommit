@@ -16,8 +16,8 @@ from memcommit.operations.sever.model import SeverSession
 from memcommit.operations.sever.resolution_adapter import (
     SeverResolutionWorkbenchAdapter,
 )
-from memcommit.update import UpdateSession
-from memcommit.update_resolution_adapter import UpdateResolutionWorkbenchAdapter
+from memcommit.operations.update.model import UpdateSession
+from memcommit.operations.update.resolution_adapter import UpdateResolutionWorkbenchAdapter
 
 
 def compare_review_report(analysis: ComparisonAnalysis) -> ReviewReportController:
