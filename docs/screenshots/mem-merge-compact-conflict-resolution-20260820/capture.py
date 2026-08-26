@@ -419,10 +419,10 @@ def main() -> None:
 
 if __name__ == "__main__":
     if sys.argv[1:] == ["--child-long"]:
-        sys.path.insert(0, str(ROOT))
+        sys.path.insert(0, str(ROOT / "src"))
         _run_long_child()
     elif sys.argv[1:] == ["--child-zero-delta"]:
-        sys.path.insert(0, str(ROOT))
+        sys.path.insert(0, str(ROOT / "src"))
         _run_zero_delta_child()
     else:
         main()

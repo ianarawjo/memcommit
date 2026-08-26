@@ -23,7 +23,7 @@ QUALITY_MARKER = "QUALITY FIND PAYLOAD:\n"
 _SGR_PATTERN = re.compile(r"\x1b\[[0-9;]*m")
 
 if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+    sys.path.insert(0, str(ROOT / "src"))
 
 _SUPPORT_PATH = (
     ROOT / "docs/screenshots/quality-conflict-resolve-handoff-20260816/capture.py"
@@ -568,7 +568,7 @@ def main() -> None:
     # foregrounds instead of requiring a TUI-only background sequence.
     assert "\x1b[32m" in raw
     assert "\x1b[33m" in raw
-    sys.path.insert(0, str(ROOT))
+    sys.path.insert(0, str(ROOT / "src"))
     from memcommit.interfaces.console.theme import (
         SemanticColorRole,
         semantic_color_rgb,
@@ -610,7 +610,7 @@ def main() -> None:
 
 if __name__ == "__main__":
     if len(sys.argv) == 3 and sys.argv[1] == "--child":
-        sys.path.insert(0, str(ROOT))
+        sys.path.insert(0, str(ROOT / "src"))
         if sys.argv[2] == "dedun":
             _run_dedun_child(no_change=False)
         elif sys.argv[2] == "no-change":

@@ -68,7 +68,7 @@ def _environment(home: Path) -> dict[str, str]:
             "TERM": "xterm-256color",
             "COLORTERM": "truecolor",
             "PROMPT_TOOLKIT_COLOR_DEPTH": "DEPTH_24_BIT",
-            "PYTHONPATH": os.pathsep.join((str(ROOT), *sorted(SUPPORT_PATHS))),
+            "PYTHONPATH": os.pathsep.join((str(ROOT / "src"), *sorted(SUPPORT_PATHS))),
         }
     )
     return environment
@@ -231,7 +231,7 @@ class _CompositeProvider:
 
 def _fixture(home: Path) -> None:
     os.environ["HOME"] = str(home)
-    sys.path.insert(0, str(ROOT))
+    sys.path.insert(0, str(ROOT / "src"))
 
     import memcommit.config as config_module
     import memcommit.ops as ops
@@ -326,7 +326,7 @@ def _fixture(home: Path) -> None:
 
 def _verify(home: Path) -> None:
     os.environ["HOME"] = str(home)
-    sys.path.insert(0, str(ROOT))
+    sys.path.insert(0, str(ROOT / "src"))
 
     from memcommit.commands.atomize.sessions import atomize_session_entries
     from memcommit.store import MemoryStore

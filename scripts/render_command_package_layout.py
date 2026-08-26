@@ -11,11 +11,11 @@ import sys
 
 
 REPOSITORY = Path(__file__).resolve().parents[1]
-COMMANDS = REPOSITORY / "memcommit" / "commands"
+COMMANDS = REPOSITORY / "src" / "memcommit" / "commands"
 OUTPUT_JSON = REPOSITORY / "docs" / "command-package-layout-plan.json"
 OUTPUT_MARKDOWN = REPOSITORY / "docs" / "command-package-layout-plan.md"
 LEGACY_ALIAS_MODULE = (
-    REPOSITORY / "memcommit" / "compatibility" / "_legacy_command_alias_map.py"
+    REPOSITORY / "src" / "memcommit" / "compatibility" / "_legacy_command_alias_map.py"
 )
 BASELINE_COMMIT = "f8c54a56"
 
@@ -186,7 +186,7 @@ SHARED_MODULES = {
 
 
 def _target_path(module: str) -> Path:
-    return REPOSITORY / (module.replace(".", "/") + ".py")
+    return REPOSITORY / "src" / (module.replace(".", "/") + ".py")
 
 
 def _baseline_modules() -> set[str]:
@@ -370,7 +370,7 @@ def verify_layout(plan: dict[str, object]) -> None:
             if not package_init.is_file():
                 failures.append(f"missing command package boundary: {package_init}")
     aliases = _legacy_support_aliases(plan)
-    for path in (REPOSITORY / "memcommit").rglob("*.py"):
+    for path in (REPOSITORY / "src" / "memcommit").rglob("*.py"):
         try:
             tree = ast.parse(path.read_text(encoding="utf-8"))
         except SyntaxError as error:

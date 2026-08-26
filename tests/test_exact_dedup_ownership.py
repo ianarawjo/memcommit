@@ -70,7 +70,7 @@ def test_exact_dedup_legacy_paths_expose_the_canonical_contract() -> None:
 
 @pytest.mark.parametrize(
     "relative_path",
-    ("memcommit/exact_dedup.py", "memcommit/exact_dedup_application.py"),
+    ("src/memcommit/exact_dedup.py", "src/memcommit/exact_dedup_application.py"),
 )
 def test_exact_dedup_legacy_facades_define_no_behavior(relative_path: str) -> None:
     assert_legacy_root_submodule_is_centralized(relative_path)
@@ -101,11 +101,11 @@ def test_pre_relocation_exact_dedup_receipt_global_loads_through_alias() -> None
 
 def test_production_exact_dedup_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "memcommit/api/_operations/exact_dedup.py",
-        "memcommit/api/_operations/exact_duplicates.py",
-        "memcommit/commands/dedup/command.py",
-        "memcommit/commands/find_exact_duplicates/command.py",
-        "memcommit/ops.py",
+        "src/memcommit/api/_operations/exact_dedup.py",
+        "src/memcommit/api/_operations/exact_duplicates.py",
+        "src/memcommit/commands/dedup/command.py",
+        "src/memcommit/commands/find_exact_duplicates/command.py",
+        "src/memcommit/ops.py",
     )
 
     for relative_path in relative_paths:
@@ -116,13 +116,13 @@ def test_production_exact_dedup_consumers_use_the_operation_owner() -> None:
 
 def test_exact_dedup_and_semantic_dedun_remain_separate_owners() -> None:
     exact = (
-        REPOSITORY_ROOT / "memcommit/operations/exact_dedup/application.py"
+        REPOSITORY_ROOT / "src/memcommit/operations/exact_dedup/application.py"
     ).read_text(encoding="utf-8")
     semantic = "\n".join(
         (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         for relative_path in (
-            "memcommit/operations/dedup/application.py",
-            "memcommit/operations/dedup/runtime.py",
+            "src/memcommit/operations/dedup/application.py",
+            "src/memcommit/operations/dedup/runtime.py",
         )
     )
 

@@ -15,7 +15,7 @@ import pexpect
 ROOT = Path(__file__).resolve().parents[3]
 OUT = Path(__file__).resolve().parent
 SUPPORT = ROOT / "docs/screenshots/distill-elaborate-shared-app-20260815"
-sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(SUPPORT))
 
 from capture_support import StreamRecorder, snapshot  # noqa: E402
@@ -156,7 +156,7 @@ def _environment() -> dict[str, str]:
             "TERM": "xterm-256color",
             "COLORTERM": "truecolor",
             "PYTHONPATH": os.pathsep.join(
-                (str(ROOT), environment.get("PYTHONPATH", ""))
+                (str(ROOT / "src"), environment.get("PYTHONPATH", ""))
             ),
             "MEMCOMMIT_TEST_DISABLE_ATTEMPT_LOG": "1",
         }

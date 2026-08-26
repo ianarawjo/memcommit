@@ -37,7 +37,7 @@ def _environment() -> dict[str, str]:
         {
             "TERM": "xterm-256color",
             "COLORTERM": "truecolor",
-            "PYTHONPATH": str(ROOT),
+            "PYTHONPATH": str(ROOT / "src"),
             "MEMCOMMIT_TEST_DISABLE_ATTEMPT_LOG": "1",
         }
     )

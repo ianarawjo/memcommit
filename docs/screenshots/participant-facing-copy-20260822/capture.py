@@ -18,7 +18,7 @@ COLUMNS = 180
 ROWS = 52
 
 if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+    sys.path.insert(0, str(ROOT / "src"))
 
 _BASE_PATH = ROOT / "docs/screenshots/ordinary-query-one-shot-20260813/capture.py"
 _SPEC = importlib.util.spec_from_file_location("participant_copy_capture_base", _BASE_PATH)

@@ -23,7 +23,7 @@ def _snapshot():
 
 def test_callable_catalog_covers_every_source_module_and_declaration() -> None:
     snapshot = _snapshot()
-    source_paths = tuple(sorted((REPOSITORY / "memcommit").rglob("*.py")))
+    source_paths = tuple(sorted((REPOSITORY / "src" / "memcommit").rglob("*.py")))
     identifiers = [record.identifier for record in snapshot.callables]
 
     assert len(snapshot.source_modules) == len(source_paths)

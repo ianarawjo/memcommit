@@ -80,7 +80,7 @@ def test_describe_rejects_nonexact_operation_names(operation_name):
 def test_application_boundary_has_no_store_provider_or_terminal_dependency():
     path = (
         Path(__file__).parents[1]
-        / "memcommit"
+        / "src" / "memcommit"
         / "operations"
         / "help"
         / "application.py"

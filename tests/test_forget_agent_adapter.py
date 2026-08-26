@@ -321,7 +321,7 @@ def test_schema_is_fresh_and_declares_process_local_review_contract() -> None:
 def test_agent_adapter_depends_only_on_public_api_and_shared_contract() -> None:
     path = (
         Path(__file__).parents[1]
-        / "memcommit"
+        / "src" / "memcommit"
         / "interfaces"
         / "agent"
         / "forget.py"

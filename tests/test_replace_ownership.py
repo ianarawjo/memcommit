@@ -97,8 +97,8 @@ def test_replace_legacy_paths_expose_the_canonical_objects() -> None:
 @pytest.mark.parametrize(
     "relative_path",
     (
-        "memcommit/replace_application.py",
-        "memcommit/replace_runtime.py",
+        "src/memcommit/replace_application.py",
+        "src/memcommit/replace_runtime.py",
     ),
 )
 def test_replace_legacy_facades_contain_no_implementation(

@@ -64,9 +64,9 @@ assert sys.modules[{canonical_name!r}] is canonical
 @pytest.mark.parametrize(
     "relative_path",
     (
-        "memcommit/translate.py",
-        "memcommit/translation_view.py",
-        "memcommit/translation_view_store.py",
+        "src/memcommit/translate.py",
+        "src/memcommit/translation_view.py",
+        "src/memcommit/translation_view_store.py",
     ),
 )
 def test_translate_legacy_facades_define_no_behavior(relative_path: str) -> None:
@@ -118,18 +118,18 @@ def test_pre_relocation_translate_globals_load_through_aliases() -> None:
 
 def test_production_translate_consumers_use_operation_owners() -> None:
     relative_paths = (
-        "memcommit/commands/translate/command.py",
-        "memcommit/eval/study_bundle.py",
-        "memcommit/operations/query/granted_source.py",
-        "memcommit/operations/translate/view.py",
-        "memcommit/operations/translate/view_store.py",
-        "memcommit/operations/translate/application.py",
-        "memcommit/operations/translate/catalog_application.py",
-        "memcommit/operations/translate/materialization.py",
-        "memcommit/ops.py",
-        "memcommit/operations/profile/model.py",
-        "memcommit/retained_history/provenance.py",
-        "memcommit/store.py",
+        "src/memcommit/commands/translate/command.py",
+        "src/memcommit/eval/study_bundle.py",
+        "src/memcommit/operations/query/granted_source.py",
+        "src/memcommit/operations/translate/view.py",
+        "src/memcommit/operations/translate/view_store.py",
+        "src/memcommit/operations/translate/application.py",
+        "src/memcommit/operations/translate/catalog_application.py",
+        "src/memcommit/operations/translate/materialization.py",
+        "src/memcommit/ops.py",
+        "src/memcommit/operations/profile/model.py",
+        "src/memcommit/retained_history/provenance.py",
+        "src/memcommit/store.py",
     )
     legacy_imports = (
         "from memcommit.translate import",
@@ -144,24 +144,24 @@ def test_production_translate_consumers_use_operation_owners() -> None:
 
 def test_translate_owners_keep_the_existing_dependency_direction() -> None:
     runtime_source = (
-        REPOSITORY_ROOT / "memcommit/operations/translate/runtime.py"
+        REPOSITORY_ROOT / "src/memcommit/operations/translate/runtime.py"
     ).read_text(encoding="utf-8")
     view_source = (
-        REPOSITORY_ROOT / "memcommit/operations/translate/view.py"
+        REPOSITORY_ROOT / "src/memcommit/operations/translate/view.py"
     ).read_text(encoding="utf-8")
     store_source = (
-        REPOSITORY_ROOT / "memcommit/operations/translate/view_store.py"
+        REPOSITORY_ROOT / "src/memcommit/operations/translate/view_store.py"
     ).read_text(encoding="utf-8")
     application_source = (
-        REPOSITORY_ROOT / "memcommit/operations/translate/application.py"
+        REPOSITORY_ROOT / "src/memcommit/operations/translate/application.py"
     ).read_text(encoding="utf-8")
     catalog_application_source = (
         REPOSITORY_ROOT
-        / "memcommit/operations/translate/catalog_application.py"
+        / "src/memcommit/operations/translate/catalog_application.py"
     ).read_text(encoding="utf-8")
     materialization_source = (
         REPOSITORY_ROOT
-        / "memcommit/operations/translate/materialization.py"
+        / "src/memcommit/operations/translate/materialization.py"
     ).read_text(encoding="utf-8")
 
     assert "memcommit.operations.translate.view" not in runtime_source
@@ -181,7 +181,7 @@ def test_translate_owners_keep_the_existing_dependency_direction() -> None:
 
 
 def test_translate_command_is_only_an_io_and_presentation_adapter() -> None:
-    path = REPOSITORY_ROOT / "memcommit/commands/translate/command.py"
+    path = REPOSITORY_ROOT / "src/memcommit/commands/translate/command.py"
     source = path.read_text(encoding="utf-8")
     tree = ast.parse(source, filename=str(path))
     imports = {

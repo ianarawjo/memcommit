@@ -13,11 +13,11 @@ import tarfile
 
 
 REPOSITORY = Path(__file__).resolve().parents[1]
-PACKAGE = REPOSITORY / "memcommit"
+PACKAGE = REPOSITORY / "src" / "memcommit"
 OUTPUT_JSON = REPOSITORY / "docs" / "root-module-relocation-plan.json"
 OUTPUT_MARKDOWN = REPOSITORY / "docs" / "root-module-relocation-plan.md"
 LEGACY_ALIAS_MODULE = (
-    REPOSITORY / "memcommit" / "compatibility" / "_legacy_alias_map.py"
+    REPOSITORY / "src" / "memcommit" / "compatibility" / "_legacy_alias_map.py"
 )
 BASELINE_COMMIT = "885e62c0"
 
@@ -470,7 +470,7 @@ def verify_current_layout(plan: dict[str, object]) -> None:
     for legacy, target in sorted(aliases.items()):
         stem = legacy.removeprefix("memcommit.")
         root_path = PACKAGE / f"{stem}.py"
-        target_path = REPOSITORY / _module_target_path(target)
+        target_path = REPOSITORY / "src" / _module_target_path(target)
         target_package = target_path.with_suffix("") / "__init__.py"
         if not target_path.is_file() and not target_package.is_file():
             failures.append(f"missing canonical target: {target_path}")

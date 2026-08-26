@@ -574,9 +574,9 @@ The implementation is covered by tests for:
 
 Implementation:
 
-- [`memcommit/commands/list_memories/command.py`](../memcommit/commands/list_memories/command.py)
-- [`memcommit/infrastructure/clipboard.py`](../memcommit/infrastructure/clipboard.py)
-- [`memcommit/store.py`](../memcommit/store.py)
+- [`memcommit/commands/list_memories/command.py`](../src/memcommit/commands/list_memories/command.py)
+- [`memcommit/infrastructure/clipboard.py`](../src/memcommit/infrastructure/clipboard.py)
+- [`memcommit/store.py`](../src/memcommit/store.py)
 - [`tests/test_commands.py`](../tests/test_commands.py)
 - [`tests/test_list_clipboard.py`](../tests/test_list_clipboard.py)
 - [`Root Context design rationale`](root-context-design-rationale.md)

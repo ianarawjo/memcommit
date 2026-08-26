@@ -176,7 +176,7 @@ def _verify_color_capable_help(executable: str) -> None:
 
 
 def main() -> None:
-    sys.path.insert(0, str(ROOT))
+    sys.path.insert(0, str(ROOT / "src"))
     from memcommit.interfaces.tui.operations.help.study_copy_guard import (
         active_profile_is_study,
     )

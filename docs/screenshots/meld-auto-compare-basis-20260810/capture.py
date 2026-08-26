@@ -27,7 +27,7 @@ TARGET = "task-2/participant/proposal-workspace2"
 CURRENT = "task-3/local/personal-memory"
 
 if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+    sys.path.insert(0, str(ROOT / "src"))
 
 
 class _Recorder:

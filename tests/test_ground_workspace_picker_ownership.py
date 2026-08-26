@@ -57,7 +57,7 @@ def test_legacy_picker_exports_the_canonical_objects() -> None:
 
 
 def test_legacy_picker_facade_defines_no_behavior() -> None:
-    facade_path = REPOSITORY_ROOT / "memcommit/commands/ground/workspace_picker.py"
+    facade_path = REPOSITORY_ROOT / "src/memcommit/commands/ground/workspace_picker.py"
     tree = ast.parse(facade_path.read_text(encoding="utf-8"))
 
     assert not any(
@@ -79,7 +79,7 @@ def test_legacy_picker_facade_defines_no_behavior() -> None:
 
 
 def test_ground_command_imports_the_interface_owner() -> None:
-    command_path = REPOSITORY_ROOT / "memcommit/commands/ground/command.py"
+    command_path = REPOSITORY_ROOT / "src/memcommit/commands/ground/command.py"
     tree = ast.parse(command_path.read_text(encoding="utf-8"))
     imported_modules = {
         node.module

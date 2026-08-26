@@ -8,10 +8,10 @@ from pathlib import Path
 
 REPOSITORY = Path(__file__).parents[1]
 INTERFACE_MODULES = (
-    REPOSITORY / "memcommit/interfaces/tui/operations/atomize/adapter.py",
-    REPOSITORY / "memcommit/interfaces/tui/operations/atomize/screen.py",
-    REPOSITORY / "memcommit/interfaces/tui/workbenches/result/shell.py",
-    REPOSITORY / "memcommit/interfaces/tui/workbenches/review/model.py",
+    REPOSITORY / "src/memcommit/interfaces/tui/operations/atomize/adapter.py",
+    REPOSITORY / "src/memcommit/interfaces/tui/operations/atomize/screen.py",
+    REPOSITORY / "src/memcommit/interfaces/tui/workbenches/result/shell.py",
+    REPOSITORY / "src/memcommit/interfaces/tui/workbenches/review/model.py",
 )
 
 
@@ -59,7 +59,7 @@ def test_atomize_legacy_shell_paths_are_identity_preserving_facades() -> None:
 
 def test_atomize_command_delegates_terminal_presentation_to_interfaces() -> None:
     source = (
-        REPOSITORY / "memcommit/commands/atomize/command.py"
+        REPOSITORY / "src/memcommit/commands/atomize/command.py"
     ).read_text(encoding="utf-8")
 
     assert "memcommit.interfaces.tui.operations.atomize.adapter" in source
@@ -87,4 +87,4 @@ def test_result_projection_has_no_orphan_live_shell() -> None:
     source = INTERFACE_MODULES[2].read_text(encoding="utf-8")
 
     assert "def run_result_workbench_shell" not in source
-    assert not (REPOSITORY / "memcommit/commands/result_workbench_shell.py").exists()
+    assert not (REPOSITORY / "src/memcommit/commands/result_workbench_shell.py").exists()

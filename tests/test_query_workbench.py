@@ -64,7 +64,7 @@ def test_blank_query_workbench_does_not_connect_before_submission():
 def test_query_scope_uses_transient_browse_without_todo_or_transcripts():
     source = (
         Path(__file__).parents[1]
-        / "memcommit/interfaces/tui/operations/query/screen.py"
+        / "src/memcommit/interfaces/tui/operations/query/screen.py"
     ).read_text(encoding="utf-8")
     assert "CompactReadableScopeControl" in source
     assert "SAVED TRANSCRIPTS" not in source

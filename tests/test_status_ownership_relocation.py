@@ -68,7 +68,7 @@ def test_status_module_identity_is_independent_of_import_order(
 
 @pytest.mark.parametrize(
     "relative_path",
-    ("memcommit/status_application.py", "memcommit/status_runtime.py"),
+    ("src/memcommit/status_application.py", "src/memcommit/status_runtime.py"),
 )
 def test_legacy_status_facades_define_no_behavior(relative_path: str) -> None:
     assert_legacy_root_submodule_is_centralized(relative_path)

@@ -12,7 +12,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[3]
 OUT = ROOT / "docs/screenshots/mem-help-wording-audit-20260814"
 SOURCE_ROOT = Path(os.environ.get("MEMCOMMIT_CAPTURE_SOURCE_ROOT", ROOT)).resolve()
-sys.path.insert(0, str(SOURCE_ROOT))
+sys.path.insert(0, str(SOURCE_ROOT / "src"))
 
 _BASE_PATH = ROOT / "docs/screenshots/mem-help-command-naming-20260813/capture.py"
 _SPEC = importlib.util.spec_from_file_location("mem_help_capture_base", _BASE_PATH)

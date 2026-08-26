@@ -169,7 +169,9 @@ def test_atomize_support_imports_follow_the_canonical_dependency_direction() -> 
     legacy_names = tuple(legacy_name for legacy_name, _canonical in MODULE_PAIRS)
 
     for relative_path in canonical_paths:
-        source = (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
+        source = (REPOSITORY_ROOT / "src" / relative_path).read_text(
+            encoding="utf-8"
+        )
         assert "memcommit.commands" not in source
         assert "memcommit.interfaces" not in source
         for legacy_name in legacy_names:
@@ -178,30 +180,30 @@ def test_atomize_support_imports_follow_the_canonical_dependency_direction() -> 
 
 def test_atomize_production_consumers_use_canonical_support_modules() -> None:
     relative_paths = (
-        "memcommit/api/_operations/atomize.py",
-        "memcommit/api/_operations/atomize_grounding.py",
-        "memcommit/operations/atomize/workflow.py",
-        "memcommit/commands/atomize/command.py",
-        "memcommit/commands/atomize/grounding.py",
-        "memcommit/commands/atomize/sessions.py",
-        "memcommit/commands/impact/command.py",
-        "memcommit/commands/review/command.py",
-        "memcommit/interfaces/cli/atomize.py",
-        "memcommit/interfaces/cli/atomize_grounding.py",
-        "memcommit/interfaces/tui/operations/atomize/adapter.py",
-        "memcommit/interfaces/tui/operations/atomize/screen.py",
-        "memcommit/operations/atomize/analysis_application.py",
-        "memcommit/operations/atomize/analysis_runtime.py",
-        "memcommit/operations/atomize/application.py",
-        "memcommit/operations/atomize/grounding_application.py",
-        "memcommit/operations/atomize/grounding_runtime.py",
-        "memcommit/operations/atomize/runtime.py",
-        "memcommit/ops.py",
-        "memcommit/retained_history/provenance.py",
-        "memcommit/operations/review/model.py",
-        "memcommit/operations/review/report_adapters.py",
-        "memcommit/store.py",
-        "memcommit/study_prewarm/atomize.py",
+        "src/memcommit/api/_operations/atomize.py",
+        "src/memcommit/api/_operations/atomize_grounding.py",
+        "src/memcommit/operations/atomize/workflow.py",
+        "src/memcommit/commands/atomize/command.py",
+        "src/memcommit/commands/atomize/grounding.py",
+        "src/memcommit/commands/atomize/sessions.py",
+        "src/memcommit/commands/impact/command.py",
+        "src/memcommit/commands/review/command.py",
+        "src/memcommit/interfaces/cli/atomize.py",
+        "src/memcommit/interfaces/cli/atomize_grounding.py",
+        "src/memcommit/interfaces/tui/operations/atomize/adapter.py",
+        "src/memcommit/interfaces/tui/operations/atomize/screen.py",
+        "src/memcommit/operations/atomize/analysis_application.py",
+        "src/memcommit/operations/atomize/analysis_runtime.py",
+        "src/memcommit/operations/atomize/application.py",
+        "src/memcommit/operations/atomize/grounding_application.py",
+        "src/memcommit/operations/atomize/grounding_runtime.py",
+        "src/memcommit/operations/atomize/runtime.py",
+        "src/memcommit/ops.py",
+        "src/memcommit/retained_history/provenance.py",
+        "src/memcommit/operations/review/model.py",
+        "src/memcommit/operations/review/report_adapters.py",
+        "src/memcommit/store.py",
+        "src/memcommit/study_prewarm/atomize.py",
     )
     legacy_names = tuple(legacy_name for legacy_name, _canonical in MODULE_PAIRS)
 
@@ -213,8 +215,8 @@ def test_atomize_production_consumers_use_canonical_support_modules() -> None:
 
 def test_atomize_view_adapters_remain_read_only_projections() -> None:
     for relative_path in (
-        "memcommit/operations/atomize/result_adapter.py",
-        "memcommit/operations/atomize/resolution_adapter.py",
+        "src/memcommit/operations/atomize/result_adapter.py",
+        "src/memcommit/operations/atomize/resolution_adapter.py",
     ):
         source = (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         assert "MemoryStore" not in source

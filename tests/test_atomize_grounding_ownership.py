@@ -98,8 +98,8 @@ def test_grounding_legacy_paths_expose_the_canonical_contract() -> None:
 @pytest.mark.parametrize(
     "relative_path",
     (
-        "memcommit/atomize_grounding_application.py",
-        "memcommit/atomize_grounding_runtime.py",
+        "src/memcommit/atomize_grounding_application.py",
+        "src/memcommit/atomize_grounding_runtime.py",
     ),
 )
 def test_grounding_legacy_facades_define_no_behavior(relative_path: str) -> None:
@@ -136,10 +136,10 @@ def test_pre_relocation_grounding_request_global_loads_through_alias() -> None:
 
 def test_migrated_grounding_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "memcommit/api/_operations/atomize_grounding.py",
-        "memcommit/commands/atomize/command.py",
-        "memcommit/commands/atomize/grounding.py",
-        "memcommit/operations/atomize/grounding_runtime.py",
+        "src/memcommit/api/_operations/atomize_grounding.py",
+        "src/memcommit/commands/atomize/command.py",
+        "src/memcommit/commands/atomize/grounding.py",
+        "src/memcommit/operations/atomize/grounding_runtime.py",
     )
 
     for relative_path in relative_paths:
@@ -152,8 +152,8 @@ def test_primary_analysis_and_grounding_keep_separate_contracts() -> None:
     grounding = "\n".join(
         (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         for relative_path in (
-            "memcommit/operations/atomize/grounding_application.py",
-            "memcommit/operations/atomize/grounding_runtime.py",
+            "src/memcommit/operations/atomize/grounding_application.py",
+            "src/memcommit/operations/atomize/grounding_runtime.py",
         )
     )
 

@@ -11,7 +11,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[3]
 OUT = ROOT / "docs/screenshots/mem-help-update-meld-boundary-20260820"
-sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(ROOT / "src"))
 HELP_CATEGORY_GROUPS = importlib.import_module(
     "memcommit.commands.help_inventory.command"
 ).HELP_CATEGORY_GROUPS

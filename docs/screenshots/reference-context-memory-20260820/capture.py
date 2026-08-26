@@ -298,7 +298,7 @@ def main() -> None:
 
 if __name__ == "__main__":
     if len(sys.argv) == 3 and sys.argv[1] == "--child":
-        sys.path.insert(0, str(ROOT))
+        sys.path.insert(0, str(ROOT / "src"))
         _run_child(sys.argv[2])
     else:
         main()

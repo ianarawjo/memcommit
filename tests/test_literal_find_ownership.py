@@ -92,8 +92,8 @@ def test_literal_find_legacy_paths_expose_the_canonical_contract() -> None:
 @pytest.mark.parametrize(
     "relative_path",
     (
-        "memcommit/literal_find_application.py",
-        "memcommit/literal_find_runtime.py",
+        "src/memcommit/literal_find_application.py",
+        "src/memcommit/literal_find_runtime.py",
     ),
 )
 def test_literal_find_legacy_facades_define_no_behavior(
@@ -139,15 +139,15 @@ def test_pre_relocation_literal_find_globals_load_through_aliases() -> None:
 
 def test_production_literal_find_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "memcommit/api/_operations/find.py",
-        "memcommit/commands/literal_find/command.py",
-        "memcommit/interfaces/literal_find.py",
-        "memcommit/interfaces/cli/find.py",
-        "memcommit/interfaces/tui/operations/find/compact.py",
-        "memcommit/interfaces/tui/operations/find/model.py",
-        "memcommit/interfaces/tui/operations/find/screen.py",
-        "memcommit/operations/find/literal_runtime.py",
-        "memcommit/operations/replace/application.py",
+        "src/memcommit/api/_operations/find.py",
+        "src/memcommit/commands/literal_find/command.py",
+        "src/memcommit/interfaces/literal_find.py",
+        "src/memcommit/interfaces/cli/find.py",
+        "src/memcommit/interfaces/tui/operations/find/compact.py",
+        "src/memcommit/interfaces/tui/operations/find/model.py",
+        "src/memcommit/interfaces/tui/operations/find/screen.py",
+        "src/memcommit/operations/find/literal_runtime.py",
+        "src/memcommit/operations/replace/application.py",
     )
 
     for relative_path in relative_paths:
@@ -158,10 +158,10 @@ def test_production_literal_find_consumers_use_the_operation_owner() -> None:
 
 def test_literal_find_does_not_absorb_semantic_search_or_interfaces() -> None:
     application_source = (
-        REPOSITORY_ROOT / "memcommit/operations/find/literal_application.py"
+        REPOSITORY_ROOT / "src/memcommit/operations/find/literal_application.py"
     ).read_text(encoding="utf-8")
     runtime_source = (
-        REPOSITORY_ROOT / "memcommit/operations/find/literal_runtime.py"
+        REPOSITORY_ROOT / "src/memcommit/operations/find/literal_runtime.py"
     ).read_text(encoding="utf-8")
     combined = application_source + runtime_source
 

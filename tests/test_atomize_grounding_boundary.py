@@ -41,15 +41,15 @@ def _imports(path: Path) -> set[str]:
 
 def test_grounding_application_and_runtime_do_not_import_commands() -> None:
     for relative in (
-        "memcommit/operations/atomize/grounding_application.py",
-        "memcommit/operations/atomize/grounding_runtime.py",
+        "src/memcommit/operations/atomize/grounding_application.py",
+        "src/memcommit/operations/atomize/grounding_runtime.py",
     ):
         imports = _imports(ROOT / relative)
         assert not any(name.startswith("memcommit.commands") for name in imports)
 
 
 def test_command_grounding_module_is_a_compatibility_facade() -> None:
-    source = (ROOT / "memcommit/commands/atomize/grounding.py").read_text(
+    source = (ROOT / "src/memcommit/commands/atomize/grounding.py").read_text(
         encoding="utf-8"
     )
     assert len(source.splitlines()) < 150

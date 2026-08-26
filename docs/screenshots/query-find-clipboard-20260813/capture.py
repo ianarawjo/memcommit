@@ -336,7 +336,7 @@ def main() -> None:
 
 if __name__ == "__main__":
     if len(sys.argv) == 3 and sys.argv[1] == "--child":
-        sys.path.insert(0, str(ROOT))
+        sys.path.insert(0, str(ROOT / "src"))
         if sys.argv[2] == "query":
             _run_query_child()
         elif sys.argv[2] == "query-failure":

@@ -38,7 +38,7 @@ HELPERS = _helpers()
 
 def _environment() -> dict[str, str]:
     environment = HELPERS._environment()
-    environment["PYTHONPATH"] = str(ROOT)
+    environment["PYTHONPATH"] = str(ROOT / "src")
     environment["MEMCOMMIT_TEST_DISABLE_ATTEMPT_LOG"] = "1"
     return environment
 

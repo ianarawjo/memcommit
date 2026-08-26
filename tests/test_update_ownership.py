@@ -94,9 +94,9 @@ def test_pre_relocation_update_result_global_loads_through_alias() -> None:
 
 def test_production_update_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "memcommit/store.py",
-        "memcommit/operations/update/granted_application.py",
-        "memcommit/operations/update/granted_source_application.py",
+        "src/memcommit/store.py",
+        "src/memcommit/operations/update/granted_application.py",
+        "src/memcommit/operations/update/granted_source_application.py",
     )
 
     for relative_path in relative_paths:
@@ -105,4 +105,4 @@ def test_production_update_consumers_use_the_operation_owner() -> None:
 
 
 def test_update_does_not_invent_an_operation_runtime() -> None:
-    assert not (REPOSITORY_ROOT / "memcommit/operations/update/runtime.py").exists()
+    assert not (REPOSITORY_ROOT / "src/memcommit/operations/update/runtime.py").exists()

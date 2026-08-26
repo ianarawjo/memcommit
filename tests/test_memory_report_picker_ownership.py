@@ -55,7 +55,7 @@ def test_memory_picker_legacy_path_is_the_canonical_module_object() -> None:
 
 
 def test_memory_picker_legacy_facade_defines_no_behavior() -> None:
-    source_path = REPOSITORY_ROOT / "memcommit/commands/shared/memory_picker.py"
+    source_path = REPOSITORY_ROOT / "src/memcommit/commands/shared/memory_picker.py"
     tree = ast.parse(source_path.read_text(encoding="utf-8"), filename=str(source_path))
 
     assert not any(

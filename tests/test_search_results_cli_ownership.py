@@ -66,7 +66,7 @@ def test_search_result_presenter_legacy_path_is_the_canonical_module() -> None:
 
 
 def test_search_result_presenter_legacy_facade_defines_no_behavior() -> None:
-    source_path = REPOSITORY_ROOT / "memcommit/commands/find/result_present.py"
+    source_path = REPOSITORY_ROOT / "src/memcommit/commands/find/result_present.py"
     tree = ast.parse(source_path.read_text(encoding="utf-8"), filename=str(source_path))
 
     assert not any(

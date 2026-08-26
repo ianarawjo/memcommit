@@ -4,7 +4,7 @@ from pathlib import Path
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-PACKAGE_ROOT = REPOSITORY_ROOT / "memcommit"
+PACKAGE_ROOT = REPOSITORY_ROOT / "src" / "memcommit"
 
 
 def _production_source() -> str:

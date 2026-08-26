@@ -158,7 +158,7 @@ def test_pre_relocation_query_globals_load_through_aliases(
 
 
 def test_internal_query_adapters_bypass_root_compatibility_modules():
-    root = Path(__file__).parents[1] / "memcommit"
+    root = Path(__file__).parents[1] / "src" / "memcommit"
     compatibility_modules = {
         "memcommit.query_application",
         "memcommit.query_runtime",
@@ -193,7 +193,7 @@ def test_internal_query_adapters_bypass_root_compatibility_modules():
 
 
 def test_command_owned_query_execution_facade_is_retired():
-    root = Path(__file__).parents[1] / "memcommit"
+    root = Path(__file__).parents[1] / "src" / "memcommit"
 
     assert not (root / "commands" / "query_execution.py").exists()
     violations: list[Path] = []

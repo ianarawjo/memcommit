@@ -353,7 +353,7 @@ def test_public_input_and_context_failures_are_typed_before_provider(tmp_path):
 
 
 def test_public_api_modules_have_no_command_or_terminal_dependency():
-    root = Path(__file__).parents[1] / "memcommit" / "api"
+    root = Path(__file__).parents[1] / "src" / "memcommit" / "api"
     imported: list[str] = []
     for path in root.glob("*.py"):
         tree = ast.parse(path.read_text(encoding="utf-8"))

@@ -218,9 +218,9 @@ def test_granted_query_application_and_runtime_have_no_interface_dependency():
         return tuple(values)
 
     application_imports = imports(
-        root / "memcommit/operations/query/granted_application.py"
+        root / "src/memcommit/operations/query/granted_application.py"
     )
-    runtime_imports = imports(root / "memcommit/operations/query/granted_runtime.py")
+    runtime_imports = imports(root / "src/memcommit/operations/query/granted_runtime.py")
     forbidden = ("typer", "prompt_toolkit", "memcommit.commands")
 
     assert not any(name.startswith(forbidden) for name in application_imports)
@@ -232,9 +232,9 @@ def test_granted_query_application_and_runtime_have_no_interface_dependency():
 
 def test_production_adapters_import_granted_query_from_operation_owners():
     root = Path(__file__).parents[1]
-    command = (root / "memcommit/commands/query/command.py").read_text(encoding="utf-8")
+    command = (root / "src/memcommit/commands/query/command.py").read_text(encoding="utf-8")
     workbench_model = (
-        root / "memcommit/interfaces/tui/operations/query/model.py"
+        root / "src/memcommit/interfaces/tui/operations/query/model.py"
     ).read_text(encoding="utf-8")
 
     assert "from memcommit.operations.query.granted_application import (" in command

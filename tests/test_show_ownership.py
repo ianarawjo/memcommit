@@ -75,7 +75,7 @@ def test_show_legacy_paths_expose_the_canonical_contract() -> None:
 
 @pytest.mark.parametrize(
     "relative_path",
-    ("memcommit/show_application.py", "memcommit/show_runtime.py"),
+    ("src/memcommit/show_application.py", "src/memcommit/show_runtime.py"),
 )
 def test_show_legacy_facades_define_no_behavior(relative_path: str) -> None:
     assert_legacy_root_submodule_is_centralized(relative_path)
@@ -116,10 +116,10 @@ def test_pre_relocation_show_globals_load_through_aliases() -> None:
 
 def test_production_show_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "memcommit/api/_operations/show.py",
-        "memcommit/commands/show/command.py",
-        "memcommit/interfaces/cli/show.py",
-        "memcommit/operations/show/runtime.py",
+        "src/memcommit/api/_operations/show.py",
+        "src/memcommit/commands/show/command.py",
+        "src/memcommit/interfaces/cli/show.py",
+        "src/memcommit/operations/show/runtime.py",
     )
 
     for relative_path in relative_paths:
@@ -130,10 +130,10 @@ def test_production_show_consumers_use_the_operation_owner() -> None:
 
 def test_show_owner_retains_read_only_effect_boundary() -> None:
     application_source = (
-        REPOSITORY_ROOT / "memcommit/operations/show/application.py"
+        REPOSITORY_ROOT / "src/memcommit/operations/show/application.py"
     ).read_text(encoding="utf-8")
     runtime_source = (
-        REPOSITORY_ROOT / "memcommit/operations/show/runtime.py"
+        REPOSITORY_ROOT / "src/memcommit/operations/show/runtime.py"
     ).read_text(encoding="utf-8")
     combined = application_source + runtime_source
 

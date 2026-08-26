@@ -94,9 +94,9 @@ def test_pre_relocation_review_report_globals_load_through_alias() -> None:
 
 def test_production_review_report_consumers_use_the_shared_owner() -> None:
     relative_paths = (
-        "memcommit/retained_history/applied_review.py",
-        "memcommit/commands/review/report.py",
-        "memcommit/operations/review/report_adapters.py",
+        "src/memcommit/retained_history/applied_review.py",
+        "src/memcommit/commands/review/report.py",
+        "src/memcommit/operations/review/report_adapters.py",
     )
 
     for relative_path in relative_paths:
@@ -107,7 +107,7 @@ def test_production_review_report_consumers_use_the_shared_owner() -> None:
 
 def test_shared_review_report_does_not_own_operation_adapters() -> None:
     source = (
-        REPOSITORY_ROOT / "memcommit" / "reviewing" / "report.py"
+        REPOSITORY_ROOT / "src" / "memcommit" / "reviewing" / "report.py"
     ).read_text(encoding="utf-8")
 
     assert "memcommit.commands" not in source

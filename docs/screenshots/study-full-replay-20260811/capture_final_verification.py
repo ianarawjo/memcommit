@@ -31,7 +31,7 @@ def _metric_files() -> tuple[Path, ...]:
 
 
 def main() -> None:
-    sys.path.insert(0, str(ROOT))
+    sys.path.insert(0, str(ROOT / "src"))
     from memcommit.context_targeting.loading import load_context_scope
     from memcommit.profile_config import load_profile_registry
     from memcommit.sever_store import SeverSessionStore

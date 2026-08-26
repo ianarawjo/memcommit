@@ -307,7 +307,7 @@ def test_manual_tool_definition_rejects_nested_nontext_schema_keys():
 
 def test_projection_has_no_sdk_terminal_or_runtime_dependency():
     path = (
-        Path(__file__).parents[1] / "memcommit" / "interfaces" / "mcp" / "projection.py"
+        Path(__file__).parents[1] / "src" / "memcommit" / "interfaces" / "mcp" / "projection.py"
     )
     tree = ast.parse(path.read_text(encoding="utf-8"))
     imported: list[str] = []

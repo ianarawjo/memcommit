@@ -90,7 +90,7 @@ def test_reference_legacy_paths_expose_the_canonical_contract() -> None:
 
 @pytest.mark.parametrize(
     "relative_path",
-    ("memcommit/reference_application.py", "memcommit/reference_runtime.py"),
+    ("src/memcommit/reference_application.py", "src/memcommit/reference_runtime.py"),
 )
 def test_reference_legacy_facades_define_no_behavior(relative_path: str) -> None:
     assert_legacy_root_submodule_is_centralized(relative_path)
@@ -126,11 +126,11 @@ def test_pre_relocation_reference_request_global_loads_through_alias() -> None:
 
 def test_production_reference_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "memcommit/api/_operations/reference.py",
-        "memcommit/interfaces/cli/reference.py",
-        "memcommit/interfaces/tui/operations/reference/adapter.py",
-        "memcommit/interfaces/tui/operations/reference/screen.py",
-        "memcommit/operations/reference/runtime.py",
+        "src/memcommit/api/_operations/reference.py",
+        "src/memcommit/interfaces/cli/reference.py",
+        "src/memcommit/interfaces/tui/operations/reference/adapter.py",
+        "src/memcommit/interfaces/tui/operations/reference/screen.py",
+        "src/memcommit/operations/reference/runtime.py",
     )
 
     for relative_path in relative_paths:
@@ -143,11 +143,11 @@ def test_production_reference_consumers_use_the_operation_owner() -> None:
 def test_query_reference_remains_owned_by_the_query_operation() -> None:
     application = (
         REPOSITORY_ROOT
-        / "memcommit/operations/query/reference_application.py"
+        / "src/memcommit/operations/query/reference_application.py"
     ).read_text(encoding="utf-8")
     runtime = (
         REPOSITORY_ROOT
-        / "memcommit/operations/query/reference_runtime.py"
+        / "src/memcommit/operations/query/reference_runtime.py"
     ).read_text(encoding="utf-8")
 
     assert "memcommit.operations.reference" not in application

@@ -21,7 +21,11 @@ dependencies = [
 mem = "memcommit.cli:app"
 mem-mcp = "memcommit.interfaces.mcp.server:main"
 
+[tool.setuptools]
+package-dir = {"" = "src"}
+
 [tool.setuptools.packages.find]
+where = ["src"]
 include = ["memcommit*"]
 
 [tool.setuptools.package-data]

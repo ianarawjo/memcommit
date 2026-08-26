@@ -50,7 +50,7 @@ def _environment(home: Path) -> dict[str, str]:
     assert HELPERS is not None
     environment = HELPERS._environment()
     environment["HOME"] = str(home)
-    environment["PYTHONPATH"] = str(ROOT)
+    environment["PYTHONPATH"] = str(ROOT / "src")
     environment["MEMCOMMIT_TEST_DISABLE_ATTEMPT_LOG"] = "1"
     return environment
 

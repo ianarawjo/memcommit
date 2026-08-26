@@ -76,7 +76,7 @@ def test_switch_module_identity_is_independent_of_import_order(
 
 @pytest.mark.parametrize(
     "relative_path",
-    ("memcommit/switch_application.py", "memcommit/switch_runtime.py"),
+    ("src/memcommit/switch_application.py", "src/memcommit/switch_runtime.py"),
 )
 def test_legacy_switch_facades_define_no_behavior(relative_path: str) -> None:
     assert_legacy_root_submodule_is_centralized(relative_path)

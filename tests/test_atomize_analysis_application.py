@@ -229,8 +229,8 @@ def test_analysis_application_and_runtime_import_no_terminal_adapters():
     root = Path(__file__).resolve().parents[1]
     forbidden = ("typer", "prompt_toolkit", "memcommit.commands")
     for relative in (
-        "memcommit/operations/atomize/analysis_application.py",
-        "memcommit/operations/atomize/analysis_runtime.py",
+        "src/memcommit/operations/atomize/analysis_application.py",
+        "src/memcommit/operations/atomize/analysis_runtime.py",
     ):
         tree = ast.parse((root / relative).read_text(encoding="utf-8"))
         imports = []

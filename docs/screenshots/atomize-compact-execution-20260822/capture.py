@@ -22,7 +22,7 @@ COLUMNS = 180
 ROWS = 52
 
 if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+    sys.path.insert(0, str(ROOT / "src"))
 
 spec = importlib.util.spec_from_file_location("memcommit_compact_capture", BASE_CAPTURE)
 if spec is None or spec.loader is None:

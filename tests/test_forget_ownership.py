@@ -97,7 +97,7 @@ def test_forget_legacy_paths_expose_the_canonical_contract() -> None:
 
 @pytest.mark.parametrize(
     "relative_path",
-    ("memcommit/forget_application.py", "memcommit/forget_runtime.py"),
+    ("src/memcommit/forget_application.py", "src/memcommit/forget_runtime.py"),
 )
 def test_forget_legacy_facades_define_no_behavior(relative_path: str) -> None:
     assert_legacy_root_submodule_is_centralized(relative_path)
@@ -131,12 +131,12 @@ def test_pre_relocation_forget_request_global_loads_through_alias() -> None:
 
 def test_production_forget_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "memcommit/api/forget.py",
-        "memcommit/api/_operations/forget.py",
-        "memcommit/commands/forget/command.py",
-        "memcommit/commands/impact/process_local.py",
-        "memcommit/interfaces/tui/operations/forget/workbench.py",
-        "memcommit/operations/forget/runtime.py",
+        "src/memcommit/api/forget.py",
+        "src/memcommit/api/_operations/forget.py",
+        "src/memcommit/commands/forget/command.py",
+        "src/memcommit/commands/impact/process_local.py",
+        "src/memcommit/interfaces/tui/operations/forget/workbench.py",
+        "src/memcommit/operations/forget/runtime.py",
     )
 
     for relative_path in relative_paths:

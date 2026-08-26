@@ -256,7 +256,7 @@ def test_negative_duplicate_boundary_cannot_be_rendered_as_redundancy() -> None:
 def test_compact_finding_browser_never_enters_the_alternate_screen() -> None:
     path = (
         Path(__file__).parents[1]
-        / "memcommit/interfaces/tui/workbenches/findings/screen.py"
+        / "src/memcommit/interfaces/tui/workbenches/findings/screen.py"
     )
     module = ast.parse(path.read_text(encoding="utf-8"))
     application_calls = [

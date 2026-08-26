@@ -84,7 +84,7 @@ def test_add_legacy_paths_expose_the_canonical_contract() -> None:
 
 @pytest.mark.parametrize(
     "relative_path",
-    ("memcommit/add_application.py", "memcommit/add_runtime.py"),
+    ("src/memcommit/add_application.py", "src/memcommit/add_runtime.py"),
 )
 def test_add_legacy_facades_define_no_behavior(relative_path: str) -> None:
     assert_legacy_root_submodule_is_centralized(relative_path)
@@ -116,11 +116,11 @@ def test_pre_relocation_add_request_global_loads_through_alias() -> None:
 
 def test_production_add_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "memcommit/api/_operations/add.py",
-        "memcommit/commands/add/command.py",
-        "memcommit/interfaces/cli/add.py",
-        "memcommit/interfaces/tui/operations/add/screen.py",
-        "memcommit/operations/add/runtime.py",
+        "src/memcommit/api/_operations/add.py",
+        "src/memcommit/commands/add/command.py",
+        "src/memcommit/interfaces/cli/add.py",
+        "src/memcommit/interfaces/tui/operations/add/screen.py",
+        "src/memcommit/operations/add/runtime.py",
     )
 
     for relative_path in relative_paths:
@@ -132,8 +132,8 @@ def test_production_add_consumers_use_the_operation_owner() -> None:
 
 def test_exact_add_does_not_absorb_semantic_materialization_helpers() -> None:
     for relative_path in (
-        "memcommit/operations/add/application.py",
-        "memcommit/operations/add/runtime.py",
+        "src/memcommit/operations/add/application.py",
+        "src/memcommit/operations/add/runtime.py",
     ):
         source = (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         assert "memcommit.semantic_add_runtime" not in source

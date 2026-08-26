@@ -19,7 +19,7 @@ OUT = Path(__file__).resolve().parent
 COLS = 180
 ROWS = 52
 
-sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(ROOT / "src"))
 
 
 def _load_capture_helpers():
@@ -47,7 +47,7 @@ HELPERS = _load_capture_helpers()
 def _environment(home: Path) -> dict[str, str]:
     environment = HELPERS._environment()
     environment["HOME"] = str(home)
-    environment["PYTHONPATH"] = str(ROOT)
+    environment["PYTHONPATH"] = str(ROOT / "src")
     environment["MEMCOMMIT_TEST_DISABLE_ATTEMPT_LOG"] = "1"
     environment.pop("NO_COLOR", None)
     environment["TERM"] = "xterm-256color"

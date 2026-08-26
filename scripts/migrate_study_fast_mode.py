@@ -9,7 +9,7 @@ from pathlib import Path
 
 
 REPOSITORY = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPOSITORY))
+sys.path.insert(0, str(REPOSITORY / "src"))
 
 from memcommit.infrastructure.providers.policy import (  # noqa: E402
     LEGACY_STUDY_PROVIDER_POLICY_VERSION,

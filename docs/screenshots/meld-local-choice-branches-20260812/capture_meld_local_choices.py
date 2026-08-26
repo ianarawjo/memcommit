@@ -16,7 +16,7 @@ import pexpect
 ROOT = Path(__file__).resolve().parents[3]
 OUT = Path(__file__).resolve().parent
 HELPERS = ROOT / "docs/screenshots/study-full-replay-20260811"
-sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(HELPERS))
 
 import capture_init_study as capture  # noqa: E402
@@ -27,7 +27,7 @@ capture.OUT = OUT
 
 def _environment() -> dict[str, str]:
     environment = capture._environment()
-    environment["PYTHONPATH"] = str(ROOT)
+    environment["PYTHONPATH"] = str(ROOT / "src")
     return environment
 
 

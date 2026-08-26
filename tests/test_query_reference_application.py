@@ -202,10 +202,10 @@ def test_query_reference_modules_have_no_interface_or_concrete_provider_dependen
         return tuple(values)
 
     application_imports = imports(
-        root / "memcommit/operations/query/reference_application.py"
+        root / "src/memcommit/operations/query/reference_application.py"
     )
     runtime_imports = imports(
-        root / "memcommit/operations/query/reference_runtime.py"
+        root / "src/memcommit/operations/query/reference_runtime.py"
     )
     forbidden = ("typer", "prompt_toolkit", "memcommit.commands")
 
@@ -218,7 +218,7 @@ def test_query_reference_modules_have_no_interface_or_concrete_provider_dependen
 
 def test_query_command_uses_reference_application_without_legacy_executor():
     command = (
-        Path(__file__).parents[1] / "memcommit/commands/query/command.py"
+        Path(__file__).parents[1] / "src/memcommit/commands/query/command.py"
     ).read_text(encoding="utf-8")
 
     assert "from memcommit.operations.query.reference_application import" in command

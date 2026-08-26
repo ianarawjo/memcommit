@@ -80,7 +80,7 @@ def test_merge_legacy_paths_expose_canonical_objects() -> None:
 
 @pytest.mark.parametrize(
     "relative_path",
-    ("memcommit/merge_application.py", "memcommit/merge_runtime.py"),
+    ("src/memcommit/merge_application.py", "src/memcommit/merge_runtime.py"),
 )
 def test_merge_legacy_facades_define_no_behavior(relative_path: str) -> None:
     assert_legacy_root_submodule_is_centralized(relative_path)

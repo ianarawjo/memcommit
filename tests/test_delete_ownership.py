@@ -103,8 +103,8 @@ def test_delete_legacy_paths_expose_the_canonical_objects() -> None:
 @pytest.mark.parametrize(
     "relative_path",
     (
-        "memcommit/delete_application.py",
-        "memcommit/delete_runtime.py",
+        "src/memcommit/delete_application.py",
+        "src/memcommit/delete_runtime.py",
     ),
 )
 def test_delete_legacy_facades_contain_no_implementation(

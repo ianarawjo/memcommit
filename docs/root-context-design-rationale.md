@@ -368,7 +368,7 @@ The implementation is tested for:
 
 Related implementation and tests:
 
-- [`memcommit/store.py`](../memcommit/store.py)
-- [`memcommit/commands/list_memories/command.py`](../memcommit/commands/list_memories/command.py)
+- [`memcommit/store.py`](../src/memcommit/store.py)
+- [`memcommit/commands/list_memories/command.py`](../src/memcommit/commands/list_memories/command.py)
 - [`tests/test_context_namespaces.py`](../tests/test_context_namespaces.py)
 - [`mem ls design rationale`](mem-ls-design-rationale.md)

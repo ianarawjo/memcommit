@@ -42,7 +42,7 @@ def _environment() -> dict[str, str]:
             "PROMPT_TOOLKIT_COLOR_DEPTH": "DEPTH_24_BIT",
             "PROMPT_TOOLKIT_NO_CPR": "1",
             "MEMCOMMIT_TEST_DISABLE_ATTEMPT_LOG": "1",
-            "PYTHONPATH": str(ROOT),
+            "PYTHONPATH": str(ROOT / "src"),
         }
     )
     return environment
@@ -50,7 +50,7 @@ def _environment() -> dict[str, str]:
 
 def _fixture() -> dict[str, object]:
     return json.loads(
-        (ROOT / "memcommit/eval/fixtures/distill_elaborate.json").read_text(
+        (ROOT / "src/memcommit/eval/fixtures/distill_elaborate.json").read_text(
             encoding="utf-8"
         )
     )

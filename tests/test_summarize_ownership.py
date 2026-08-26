@@ -92,7 +92,7 @@ def test_summarize_legacy_paths_expose_the_canonical_contract() -> None:
 
 @pytest.mark.parametrize(
     "relative_path",
-    ("memcommit/summarize_application.py", "memcommit/summarize_runtime.py"),
+    ("src/memcommit/summarize_application.py", "src/memcommit/summarize_runtime.py"),
 )
 def test_summarize_legacy_facades_define_no_behavior(relative_path: str) -> None:
     assert_legacy_root_submodule_is_centralized(relative_path)
@@ -135,18 +135,18 @@ def test_pre_relocation_summarize_globals_load_through_aliases() -> None:
 
 def test_production_summarize_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "memcommit/bootstrap.py",
-        "memcommit/commands/summarize/command.py",
-        "memcommit/operations/distill/application.py",
-        "memcommit/operations/distill/runtime.py",
-        "memcommit/eval/study_summarize_exact_matrix.py",
-        "memcommit/operations/ground/distill.py",
-        "memcommit/interfaces/summarize.py",
-        "memcommit/interfaces/cli/summarize.py",
-        "memcommit/interfaces/tui/operations/summarize/adapter.py",
-        "memcommit/interfaces/tui/operations/summarize/model.py",
-        "memcommit/interfaces/tui/operations/summarize/screen.py",
-        "memcommit/operations/summarize/runtime.py",
+        "src/memcommit/bootstrap.py",
+        "src/memcommit/commands/summarize/command.py",
+        "src/memcommit/operations/distill/application.py",
+        "src/memcommit/operations/distill/runtime.py",
+        "src/memcommit/eval/study_summarize_exact_matrix.py",
+        "src/memcommit/operations/ground/distill.py",
+        "src/memcommit/interfaces/summarize.py",
+        "src/memcommit/interfaces/cli/summarize.py",
+        "src/memcommit/interfaces/tui/operations/summarize/adapter.py",
+        "src/memcommit/interfaces/tui/operations/summarize/model.py",
+        "src/memcommit/interfaces/tui/operations/summarize/screen.py",
+        "src/memcommit/operations/summarize/runtime.py",
     )
 
     for relative_path in relative_paths:

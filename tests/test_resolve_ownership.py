@@ -84,7 +84,7 @@ def test_resolve_legacy_paths_expose_the_canonical_contract() -> None:
 
 @pytest.mark.parametrize(
     "relative_path",
-    ("memcommit/resolve_application.py", "memcommit/resolve_runtime.py"),
+    ("src/memcommit/resolve_application.py", "src/memcommit/resolve_runtime.py"),
 )
 def test_resolve_legacy_facades_define_no_behavior(relative_path: str) -> None:
     assert_legacy_root_submodule_is_centralized(relative_path)
@@ -125,18 +125,18 @@ def test_pre_relocation_resolve_globals_load_through_aliases() -> None:
 
 def test_production_resolve_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "memcommit/api/resolve.py",
-        "memcommit/api/_operations/resolve.py",
-        "memcommit/commands/resolve/command.py",
-        "memcommit/commands/find_conflicts/resolve_handoff.py",
-        "memcommit/commands/find_conflicts/command.py",
-        "memcommit/commands/impact/process_local.py",
-        "memcommit/interfaces/cli/resolve.py",
-        "memcommit/interfaces/tui/operations/resolve/screen.py",
-        "memcommit/reviewing/quality/handoff.py",
-        "memcommit/operations/resolve/semantic.py",
-        "memcommit/operations/resolve/targeting.py",
-        "memcommit/operations/resolve/runtime.py",
+        "src/memcommit/api/resolve.py",
+        "src/memcommit/api/_operations/resolve.py",
+        "src/memcommit/commands/resolve/command.py",
+        "src/memcommit/commands/find_conflicts/resolve_handoff.py",
+        "src/memcommit/commands/find_conflicts/command.py",
+        "src/memcommit/commands/impact/process_local.py",
+        "src/memcommit/interfaces/cli/resolve.py",
+        "src/memcommit/interfaces/tui/operations/resolve/screen.py",
+        "src/memcommit/reviewing/quality/handoff.py",
+        "src/memcommit/operations/resolve/semantic.py",
+        "src/memcommit/operations/resolve/targeting.py",
+        "src/memcommit/operations/resolve/runtime.py",
     )
 
     for relative_path in relative_paths:

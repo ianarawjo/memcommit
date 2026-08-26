@@ -98,8 +98,8 @@ def test_atomize_analysis_legacy_paths_expose_the_canonical_contract() -> None:
 @pytest.mark.parametrize(
     "relative_path",
     (
-        "memcommit/atomize_analysis_application.py",
-        "memcommit/atomize_analysis_runtime.py",
+        "src/memcommit/atomize_analysis_application.py",
+        "src/memcommit/atomize_analysis_runtime.py",
     ),
 )
 def test_atomize_analysis_legacy_facades_define_no_behavior(
@@ -138,11 +138,11 @@ def test_pre_relocation_atomize_analysis_request_loads_through_alias() -> None:
 
 def test_migrated_atomize_analysis_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "memcommit/operations/atomize/workflow.py",
-        "memcommit/api/_operations/atomize.py",
-        "memcommit/commands/atomize/command.py",
-        "memcommit/commands/impact/command.py",
-        "memcommit/operations/atomize/analysis_runtime.py",
+        "src/memcommit/operations/atomize/workflow.py",
+        "src/memcommit/api/_operations/atomize.py",
+        "src/memcommit/commands/atomize/command.py",
+        "src/memcommit/commands/impact/command.py",
+        "src/memcommit/operations/atomize/analysis_runtime.py",
     )
 
     for relative_path in relative_paths:
@@ -155,8 +155,8 @@ def test_analysis_does_not_absorb_grounding_application_or_runtime() -> None:
     analysis = "\n".join(
         (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         for relative_path in (
-            "memcommit/operations/atomize/analysis_application.py",
-            "memcommit/operations/atomize/analysis_runtime.py",
+            "src/memcommit/operations/atomize/analysis_application.py",
+            "src/memcommit/operations/atomize/analysis_runtime.py",
         )
     )
 

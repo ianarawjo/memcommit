@@ -105,7 +105,7 @@ def test_branch_application_rejects_a_receipt_outside_the_plan() -> None:
 
 
 def test_branch_application_has_no_cli_tui_or_store_dependency() -> None:
-    path = REPOSITORY_ROOT / "memcommit/operations/branch/application.py"
+    path = REPOSITORY_ROOT / "src/memcommit/operations/branch/application.py"
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
     imports = {
         node.module
@@ -129,7 +129,7 @@ def test_branch_application_has_no_cli_tui_or_store_dependency() -> None:
 
 
 def test_branch_command_delegates_materialization_to_the_operation_runtime() -> None:
-    path = REPOSITORY_ROOT / "memcommit/commands/branch/command.py"
+    path = REPOSITORY_ROOT / "src/memcommit/commands/branch/command.py"
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
     imports = {
         node.module

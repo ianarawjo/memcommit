@@ -161,7 +161,7 @@ def test_replace_tui_projects_descendants_as_exact_checked_execution_set() -> No
 def test_replace_tui_uses_primary_screen_and_erases_when_done() -> None:
     path = (
         Path(__file__).parents[1]
-        / "memcommit/interfaces/tui/operations/replace/screen.py"
+        / "src/memcommit/interfaces/tui/operations/replace/screen.py"
     )
     module = ast.parse(path.read_text(encoding="utf-8"))
     application_calls = [

@@ -470,7 +470,7 @@ def main() -> None:
 
 if __name__ == "__main__":
     if len(sys.argv) == 4 and sys.argv[1] == "--child":
-        sys.path.insert(0, str(ROOT))
+        sys.path.insert(0, str(ROOT / "src"))
         child_kind = sys.argv[2]
         child_root = Path(sys.argv[3])
         if child_kind == "distill-review":

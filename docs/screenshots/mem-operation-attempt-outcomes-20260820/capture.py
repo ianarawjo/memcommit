@@ -75,7 +75,7 @@ def _environment(
         {
             "TERM": "xterm-256color",
             "COLORTERM": "truecolor",
-            "PYTHONPATH": str(ROOT),
+            "PYTHONPATH": str(ROOT / "src"),
             "PATH": str(wrapper_dir) + os.pathsep + environment["PATH"],
             "MEMCOMMIT_CAPTURE_STORE": str(store_dir),
             "MEMCOMMIT_CAPTURE_PROFILES": str(profile_dir),

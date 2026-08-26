@@ -12,7 +12,7 @@ import pytest
 
 
 ROOT = Path(__file__).parents[1]
-PACKAGE = ROOT / "memcommit"
+PACKAGE = ROOT / "src" / "memcommit"
 LEGACY_MODULE = "memcommit.commands.impact.registry"
 OWNER_MODULE = "memcommit.interfaces.cli.impact_registry"
 

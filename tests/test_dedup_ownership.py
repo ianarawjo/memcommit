@@ -86,7 +86,7 @@ def test_dedup_legacy_paths_expose_the_canonical_contract() -> None:
 
 @pytest.mark.parametrize(
     "relative_path",
-    ("memcommit/dedup_application.py", "memcommit/dedup_runtime.py"),
+    ("src/memcommit/dedup_application.py", "src/memcommit/dedup_runtime.py"),
 )
 def test_dedup_legacy_facades_define_no_behavior(relative_path: str) -> None:
     assert_legacy_root_submodule_is_centralized(relative_path)
@@ -118,18 +118,18 @@ def test_pre_relocation_dedup_request_global_loads_through_alias() -> None:
 
 def test_production_dedup_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "memcommit/operations/atomize/normal_form.py",
-        "memcommit/api/dedup.py",
-        "memcommit/api/_operations/dedup.py",
-        "memcommit/commands/consolidate/command.py",
-        "memcommit/commands/find_duplicates/dedup_handoff.py",
-        "memcommit/commands/find_duplicates/command.py",
-        "memcommit/commands/shared/quality_find_workbench.py",
-        "memcommit/operations/dedup/planning.py",
-        "memcommit/operations/dedun/scope.py",
-        "memcommit/interfaces/cli/dedup.py",
-        "memcommit/interfaces/tui/operations/dedup/screen.py",
-        "memcommit/operations/dedup/runtime.py",
+        "src/memcommit/operations/atomize/normal_form.py",
+        "src/memcommit/api/dedup.py",
+        "src/memcommit/api/_operations/dedup.py",
+        "src/memcommit/commands/consolidate/command.py",
+        "src/memcommit/commands/find_duplicates/dedup_handoff.py",
+        "src/memcommit/commands/find_duplicates/command.py",
+        "src/memcommit/commands/shared/quality_find_workbench.py",
+        "src/memcommit/operations/dedup/planning.py",
+        "src/memcommit/operations/dedun/scope.py",
+        "src/memcommit/interfaces/cli/dedup.py",
+        "src/memcommit/interfaces/tui/operations/dedup/screen.py",
+        "src/memcommit/operations/dedup/runtime.py",
     )
 
     for relative_path in relative_paths:
@@ -140,16 +140,16 @@ def test_production_dedup_consumers_use_the_operation_owner() -> None:
 
 def test_exact_dedup_and_dedun_scope_remain_separate_owners() -> None:
     application = (
-        REPOSITORY_ROOT / "memcommit/operations/dedup/application.py"
+        REPOSITORY_ROOT / "src/memcommit/operations/dedup/application.py"
     ).read_text(encoding="utf-8")
     runtime = (
-        REPOSITORY_ROOT / "memcommit/operations/dedup/runtime.py"
+        REPOSITORY_ROOT / "src/memcommit/operations/dedup/runtime.py"
     ).read_text(encoding="utf-8")
     exact = (
-        REPOSITORY_ROOT / "memcommit/operations/exact_dedup/application.py"
+        REPOSITORY_ROOT / "src/memcommit/operations/exact_dedup/application.py"
     ).read_text(encoding="utf-8")
     dedun_scope = (
-        REPOSITORY_ROOT / "memcommit/operations/dedun/scope.py"
+        REPOSITORY_ROOT / "src/memcommit/operations/dedun/scope.py"
     ).read_text(encoding="utf-8")
 
     assert "memcommit.dedun_scope" not in application + runtime

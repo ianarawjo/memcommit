@@ -20,7 +20,7 @@ from memcommit.meld import meld_canonical_digest
 from memcommit.operations.meld.restart_application import MeldRestartRequest
 
 
-PACKAGE_ROOT = Path(__file__).resolve().parents[1] / "memcommit"
+PACKAGE_ROOT = Path(__file__).resolve().parents[1] / "src" / "memcommit"
 
 
 @pytest.mark.parametrize(

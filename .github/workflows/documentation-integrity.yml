@@ -16,5 +16,5 @@ jobs:
         run: python scripts/verify_operation_evidence.py --check
       - name: Run ledger regressions
         run: |
-          python -m pip install pytest
+          python -m pip install -e ".[dev]"
           python -m pytest -q tests/test_operation_evidence.py

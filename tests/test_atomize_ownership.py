@@ -95,7 +95,7 @@ def test_atomize_legacy_paths_expose_the_canonical_contract() -> None:
 
 @pytest.mark.parametrize(
     "relative_path",
-    ("memcommit/atomize_application.py", "memcommit/atomize_runtime.py"),
+    ("src/memcommit/atomize_application.py", "src/memcommit/atomize_runtime.py"),
 )
 def test_atomize_legacy_facades_define_no_behavior(relative_path: str) -> None:
     assert_legacy_root_submodule_is_centralized(relative_path)
@@ -129,10 +129,10 @@ def test_pre_relocation_atomize_snapshot_global_loads_through_alias() -> None:
 
 def test_primary_atomize_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "memcommit/api/atomize.py",
-        "memcommit/api/_operations/atomize.py",
-        "memcommit/commands/atomize/command.py",
-        "memcommit/operations/atomize/runtime.py",
+        "src/memcommit/api/atomize.py",
+        "src/memcommit/api/_operations/atomize.py",
+        "src/memcommit/commands/atomize/command.py",
+        "src/memcommit/operations/atomize/runtime.py",
     )
 
     for relative_path in relative_paths:
@@ -145,17 +145,17 @@ def test_analysis_and_grounding_remain_separate_atomize_slices() -> None:
     primary = "\n".join(
         (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         for relative_path in (
-            "memcommit/operations/atomize/application.py",
-            "memcommit/operations/atomize/runtime.py",
+            "src/memcommit/operations/atomize/application.py",
+            "src/memcommit/operations/atomize/runtime.py",
         )
     )
     analysis_application = (
         REPOSITORY_ROOT
-        / "memcommit/operations/atomize/analysis_application.py"
+        / "src/memcommit/operations/atomize/analysis_application.py"
     ).read_text(encoding="utf-8")
     grounding_application = (
         REPOSITORY_ROOT
-        / "memcommit/operations/atomize/grounding_application.py"
+        / "src/memcommit/operations/atomize/grounding_application.py"
     ).read_text(encoding="utf-8")
 
     assert "memcommit.atomize_analysis_application" not in primary

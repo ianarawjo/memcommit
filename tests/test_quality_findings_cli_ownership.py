@@ -11,7 +11,7 @@ import pytest
 
 
 ROOT = Path(__file__).parents[1]
-PACKAGE = ROOT / "memcommit"
+PACKAGE = ROOT / "src" / "memcommit"
 LEGACY_MODULE = "memcommit.commands.shared.findings_render"
 OWNER_MODULE = "memcommit.interfaces.cli.quality_findings"
 

@@ -71,10 +71,10 @@ assert sys.modules[{canonical_name!r}] is canonical
 @pytest.mark.parametrize(
     "relative_path",
     (
-        "memcommit/comparison_summary.py",
-        "memcommit/comparison_summary_rules.py",
-        "memcommit/comparison_summary_provider.py",
-        "memcommit/comparison_summary_application.py",
+        "src/memcommit/comparison_summary.py",
+        "src/memcommit/comparison_summary_rules.py",
+        "src/memcommit/comparison_summary_provider.py",
+        "src/memcommit/comparison_summary_application.py",
     ),
 )
 def test_summary_legacy_facades_define_no_behavior(relative_path: str) -> None:
@@ -115,10 +115,10 @@ def test_pre_relocation_summary_global_loads_through_alias() -> None:
 
 def test_production_summary_consumers_use_operation_owner() -> None:
     relative_paths = (
-        "memcommit/commands/compare/command.py",
-        "memcommit/operations/compare/summary.py",
-        "memcommit/operations/compare/summary_provider.py",
-        "memcommit/operations/compare/summary_application.py",
+        "src/memcommit/commands/compare/command.py",
+        "src/memcommit/operations/compare/summary.py",
+        "src/memcommit/operations/compare/summary_provider.py",
+        "src/memcommit/operations/compare/summary_application.py",
     )
     legacy_imports = (
         "from memcommit.comparison_summary import",
@@ -137,7 +137,7 @@ def test_summary_owner_does_not_absorb_deep_compare_or_presentation() -> None:
     package_source = "\n".join(
         path.read_text(encoding="utf-8")
         for path in sorted(
-            (REPOSITORY_ROOT / "memcommit/operations/compare").glob("*.py")
+            (REPOSITORY_ROOT / "src/memcommit/operations/compare").glob("*.py")
         )
     )
 

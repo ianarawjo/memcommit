@@ -37,7 +37,7 @@ def _environment() -> dict[str, str]:
         {
             "TERM": "xterm-256color",
             "COLORTERM": "truecolor",
-            "PYTHONPATH": str(ROOT),
+            "PYTHONPATH": str(ROOT / "src"),
         }
     )
     return environment

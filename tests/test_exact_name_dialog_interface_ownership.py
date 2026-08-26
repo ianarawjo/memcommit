@@ -45,7 +45,7 @@ assert sys.modules[{CANONICAL_MODULE!r}] is canonical
 
 
 def test_legacy_exact_name_dialog_defines_no_behavior() -> None:
-    source_path = REPOSITORY_ROOT / "memcommit/commands/shared/exact_name_dialog.py"
+    source_path = REPOSITORY_ROOT / "src/memcommit/commands/shared/exact_name_dialog.py"
     tree = ast.parse(source_path.read_text(encoding="utf-8"))
 
     definitions = [

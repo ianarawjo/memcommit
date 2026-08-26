@@ -59,7 +59,7 @@ CASES = (
 )
 
 if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+    sys.path.insert(0, str(ROOT / "src"))
 
 
 def _clear() -> None:

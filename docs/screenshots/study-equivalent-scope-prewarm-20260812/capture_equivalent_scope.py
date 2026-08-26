@@ -161,7 +161,7 @@ def _read_only(
 
 
 def _copy_active_store(destination: Path) -> None:
-    sys.path.insert(0, str(ROOT))
+    sys.path.insert(0, str(ROOT / "src"))
     from memcommit.store import MemoryStore
 
     source = MemoryStore(create=False).store_dir

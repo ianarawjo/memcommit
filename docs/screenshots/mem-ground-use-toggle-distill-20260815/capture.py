@@ -24,7 +24,7 @@ ROWS = 52
 COLUMNS = 180
 
 if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+    sys.path.insert(0, str(ROOT / "src"))
 
 
 class _PayloadProvider:
@@ -200,7 +200,7 @@ def _environment(home: Path) -> dict[str, str]:
             "HOME": str(home),
             # A temporary HOME isolates the default Store but would otherwise
             # hide the invoking interpreter's user-site capture dependencies.
-            "PYTHONPATH": os.pathsep.join((str(ROOT), *sys.path)),
+            "PYTHONPATH": os.pathsep.join((str(ROOT / "src"), *sys.path)),
             "TERM": "xterm-256color",
             "COLORTERM": "truecolor",
             "PROMPT_TOOLKIT_COLOR_DEPTH": "DEPTH_24_BIT",

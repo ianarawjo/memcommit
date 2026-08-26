@@ -6,9 +6,43 @@ import os
 from pathlib import Path
 import subprocess
 import sys
+import tomllib
 
 
 REPOSITORY = Path(__file__).parents[1]
+
+
+def test_repository_requires_an_installed_src_layout():
+    metadata = tomllib.loads(
+        (REPOSITORY / "pyproject.toml").read_text(encoding="utf-8")
+    )
+
+    assert not (REPOSITORY / "memcommit").exists()
+    assert (REPOSITORY / "src" / "memcommit" / "__init__.py").is_file()
+    assert metadata["tool"]["setuptools"]["package-dir"] == {"": "src"}
+    assert metadata["tool"]["setuptools"]["packages"]["find"]["where"] == [
+        "src"
+    ]
+
+    environment = os.environ.copy()
+    environment.pop("PYTHONPATH", None)
+    uninstalled = subprocess.run(
+        [
+            sys.executable,
+            "-S",
+            "-c",
+            (
+                "import importlib.util; "
+                "assert importlib.util.find_spec('memcommit') is None"
+            ),
+        ],
+        cwd=REPOSITORY,
+        env=environment,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert uninstalled.returncode == 0, uninstalled.stderr
 
 
 def _run_fresh(source: str, *, environment: dict[str, str] | None = None):

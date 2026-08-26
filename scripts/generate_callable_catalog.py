@@ -9,7 +9,7 @@ import sys
 
 
 REPOSITORY = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPOSITORY))
+sys.path.insert(0, str(REPOSITORY / "src"))
 
 from memcommit._architecture_catalog import (  # noqa: E402
     build_catalog,

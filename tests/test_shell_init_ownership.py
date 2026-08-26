@@ -51,7 +51,7 @@ assert sys.modules[{OWNER_MODULE!r}] is canonical
 def test_legacy_shell_init_facade_defines_no_behavior() -> None:
     path = (
         REPOSITORY_ROOT
-        / "memcommit"
+        / "src" / "memcommit"
         / "commands"
         / "shell_init"
         / "command.py"
@@ -65,7 +65,7 @@ def test_legacy_shell_init_facade_defines_no_behavior() -> None:
 
 
 def test_cli_registers_the_interface_owned_shell_init_command() -> None:
-    path = REPOSITORY_ROOT / "memcommit" / "cli.py"
+    path = REPOSITORY_ROOT / "src" / "memcommit" / "cli.py"
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
     interface_imports = {
         alias.name

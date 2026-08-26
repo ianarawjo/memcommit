@@ -58,7 +58,7 @@ def test_review_shell_is_exported_by_the_component_package() -> None:
 
 
 def test_legacy_review_shell_facade_defines_no_behavior() -> None:
-    path = REPOSITORY_ROOT / "memcommit/commands/shared/exact_command_review_shell.py"
+    path = REPOSITORY_ROOT / "src/memcommit/commands/shared/exact_command_review_shell.py"
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
 
     assert not any(

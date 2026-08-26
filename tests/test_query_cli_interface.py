@@ -36,7 +36,7 @@ from memcommit.operations.query.reference_application import (
 
 
 ROOT = Path(__file__).parents[1]
-PACKAGE = ROOT / "memcommit"
+PACKAGE = ROOT / "src" / "memcommit"
 runner = CliRunner(mix_stderr=False)
 
 

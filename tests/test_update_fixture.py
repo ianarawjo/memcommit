@@ -19,7 +19,7 @@ from memcommit.operations.update.application import prepare_update_application
 
 FIXTURE_PATH = (
     Path(__file__).resolve().parents[1]
-    / "memcommit"
+    / "src" / "memcommit"
     / "eval"
     / "fixtures"
     / "update.json"

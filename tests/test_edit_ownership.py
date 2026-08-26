@@ -84,8 +84,8 @@ def test_edit_legacy_paths_expose_the_canonical_objects() -> None:
 @pytest.mark.parametrize(
     "relative_path",
     (
-        "memcommit/edit_application.py",
-        "memcommit/edit_runtime.py",
+        "src/memcommit/edit_application.py",
+        "src/memcommit/edit_runtime.py",
     ),
 )
 def test_edit_legacy_facades_contain_no_implementation(relative_path: str) -> None:

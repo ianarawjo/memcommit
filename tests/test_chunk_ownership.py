@@ -25,7 +25,7 @@ assert sys.modules["memcommit.chunking"] is canonical
 
 
 def test_ops_chunk_is_a_thin_operation_compatibility_adapter() -> None:
-    path = REPOSITORY_ROOT / "memcommit/ops.py"
+    path = REPOSITORY_ROOT / "src/memcommit/ops.py"
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
     definitions = [
         node
@@ -41,7 +41,7 @@ def test_ops_chunk_is_a_thin_operation_compatibility_adapter() -> None:
 
 
 def test_chunk_command_uses_only_operation_owned_chunk_behavior() -> None:
-    path = REPOSITORY_ROOT / "memcommit/commands/chunk/command.py"
+    path = REPOSITORY_ROOT / "src/memcommit/commands/chunk/command.py"
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
     imports = {
         node.module
@@ -71,8 +71,8 @@ assert not [
 
 def test_chunk_domain_and_application_have_no_terminal_dependency() -> None:
     for relative_path in (
-        "memcommit/operations/chunk/domain.py",
-        "memcommit/operations/chunk/application.py",
+        "src/memcommit/operations/chunk/domain.py",
+        "src/memcommit/operations/chunk/application.py",
     ):
         source = (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         assert "import typer" not in source

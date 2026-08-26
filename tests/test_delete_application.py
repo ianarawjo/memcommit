@@ -230,8 +230,8 @@ def test_agent_and_mcp_split_delete_by_effect_and_require_exact_plan(tmp_path):
 @pytest.mark.parametrize(
     "path",
     (
-        "memcommit/operations/delete/application.py",
-        "memcommit/operations/delete/runtime.py",
+        "src/memcommit/operations/delete/application.py",
+        "src/memcommit/operations/delete/runtime.py",
     ),
 )
 def test_delete_boundary_has_no_terminal_dependencies(path):

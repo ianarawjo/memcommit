@@ -412,7 +412,7 @@ def test_public_error_taxonomy_is_stable_and_sensitive_details_are_bounded(
 
 
 def test_agent_adapter_depends_only_on_public_api_and_durable_reference_type():
-    path = Path(__file__).parents[1] / "memcommit" / "interfaces" / "agent" / "query.py"
+    path = Path(__file__).parents[1] / "src" / "memcommit" / "interfaces" / "agent" / "query.py"
     tree = ast.parse(path.read_text(encoding="utf-8"))
     imported: list[str] = []
     for node in ast.walk(tree):

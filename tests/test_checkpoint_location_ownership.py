@@ -53,7 +53,7 @@ def test_legacy_path_is_the_canonical_module_object():
 def test_legacy_facade_contains_no_implementation_definitions():
     facade_path = (
         Path(__file__).resolve().parents[1]
-        / "memcommit"
+        / "src" / "memcommit"
         / "commands"
         / "shared"
         / "history_location_picker.py"

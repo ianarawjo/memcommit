@@ -1,6 +1,6 @@
 # Python build artifact boundary design rationale
 
-Last verified: 2026-08-15.
+Last verified: 2026-08-26.
 
 ## Problem
 
@@ -9,7 +9,7 @@ The repository tracked 164 paths under `build/`, including a complete copied
 incremental wheel build instead of recopying a source file whose timestamp does
 not appear newer. A wheel built from commit `b8cae0bd` consequently contained
 the stale copied `context.py`; its digest matched `build/lib`, not the canonical
-`memcommit/context.py`, and `mem-mcp` failed during import.
+`src/memcommit/context.py`, and `mem-mcp` failed during import.
 
 This is not only unused duplication. It makes artifact content depend on old
 local build history, so a successful source checkout and its wheel can execute
@@ -17,7 +17,7 @@ different Python modules.
 
 ## Chosen boundary
 
-`memcommit/` is the sole canonical Python package input. Root `build/` and
+`src/memcommit/` is the sole canonical Python package input. Root `build/` and
 `dist/` directories and `*.egg-info/` metadata are derived products and must
 not be tracked. The existing `build/` working directory is left physically in
 place during this change so unrelated local generated output is not destroyed;

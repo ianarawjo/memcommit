@@ -60,7 +60,11 @@ def test_legacy_dialog_facade_defines_no_behavior(
     legacy_name: str,
     _canonical_name: str,
 ) -> None:
-    source_path = REPOSITORY_ROOT.joinpath(*legacy_name.split(".")).with_suffix(".py")
+    source_path = (
+        REPOSITORY_ROOT.joinpath("src", *legacy_name.split(".")).with_suffix(
+            ".py"
+        )
+    )
     tree = ast.parse(source_path.read_text(encoding="utf-8"))
 
     definitions = [

@@ -146,7 +146,7 @@ def test_forget_application_has_no_command_or_terminal_dependency() -> None:
         "operations/forget/provider.py",
     )
     for relative_path in relative_paths:
-        path = Path(__file__).parents[1] / "memcommit" / relative_path
+        path = Path(__file__).parents[1] / "src" / "memcommit" / relative_path
         tree = ast.parse(path.read_text(encoding="utf-8"))
         imports = {
             node.module
@@ -164,7 +164,7 @@ def test_forget_tui_modules_own_the_legacy_component_identities() -> None:
         LegacyForgetResolutionWorkbenchAdapter
         is ForgetResolutionWorkbenchAdapter
     )
-    root = Path(__file__).parents[1] / "memcommit" / "interfaces" / "tui"
+    root = Path(__file__).parents[1] / "src" / "memcommit" / "interfaces" / "tui"
     for name in ("setup.py", "resolution.py", "workbench.py"):
         path = root / "operations" / "forget" / name
         tree = ast.parse(path.read_text(encoding="utf-8"))

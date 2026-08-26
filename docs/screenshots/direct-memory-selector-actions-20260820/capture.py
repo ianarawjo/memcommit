@@ -17,7 +17,7 @@ import pexpect
 
 ROOT = Path("/Users/KimMunyeong/Github/memcommit")
 OUT = ROOT / "docs/screenshots/direct-memory-selector-actions-20260820"
-sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(ROOT / "src"))
 COLUMNS = 180
 ROWS = 52
 UP = "\x1b[A"
@@ -325,7 +325,7 @@ def main() -> None:
 
 if __name__ == "__main__":
     if len(sys.argv) == 3 and sys.argv[1] == "--child":
-        sys.path.insert(0, str(ROOT))
+        sys.path.insert(0, str(ROOT / "src"))
         _run_child(sys.argv[2])
     else:
         main()

@@ -563,8 +563,8 @@ def test_atomize_application_and_runtime_do_not_import_terminal_adapters():
     root = Path(__file__).resolve().parents[1]
     forbidden = ("typer", "prompt_toolkit", "memcommit.commands")
     for relative in (
-        "memcommit/operations/atomize/application.py",
-        "memcommit/operations/atomize/runtime.py",
+        "src/memcommit/operations/atomize/application.py",
+        "src/memcommit/operations/atomize/runtime.py",
     ):
         tree = ast.parse((root / relative).read_text(encoding="utf-8"))
         imports = []

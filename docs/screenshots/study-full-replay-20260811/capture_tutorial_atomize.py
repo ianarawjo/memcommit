@@ -62,7 +62,7 @@ def _verify_latest_atomize_attempt() -> None:
 
 
 def main() -> None:
-    sys.path.insert(0, str(ROOT))
+    sys.path.insert(0, str(ROOT / "src"))
     from memcommit.profile_config import load_profile_registry
     from memcommit.store import MemoryStore
     from memcommit.study_prewarm.atomize import is_installed_atomize_prewarm

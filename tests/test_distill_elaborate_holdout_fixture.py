@@ -12,7 +12,7 @@ from memcommit.distill_elaborate_reference import (
 
 HOLDOUT_PATH = (
     Path(__file__).parents[1]
-    / "memcommit"
+    / "src" / "memcommit"
     / "eval"
     / "fixtures"
     / "distill_elaborate_holdout.json"

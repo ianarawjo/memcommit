@@ -17,7 +17,8 @@ materializes the ordinary session without a provider call.
 
 Capture environment:
 
-- real `mem` executable with this checkout first on `PYTHONPATH`;
+- real `mem` executable with this checkout's `src` directory first on
+  `PYTHONPATH`;
 - verified `180 × 52` PTY;
 - `TERM=xterm-256color`, `COLORTERM=truecolor`, and 24-bit prompt-toolkit color;
 - `NO_COLOR` removed;

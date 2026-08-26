@@ -105,7 +105,7 @@ def _environment() -> dict[str, str]:
         {
             "TERM": "xterm-256color",
             "COLORTERM": "truecolor",
-            "PYTHONPATH": str(ROOT),
+            "PYTHONPATH": str(ROOT / "src"),
             "MEMCOMMIT_TEST_DISABLE_ATTEMPT_LOG": "1",
         }
     )
@@ -182,7 +182,7 @@ def main() -> None:
 
 if __name__ == "__main__":
     if len(sys.argv) == 3 and sys.argv[1] == "--child":
-        sys.path.insert(0, str(ROOT))
+        sys.path.insert(0, str(ROOT / "src"))
         _run_child(sys.argv[2])
     else:
         main()

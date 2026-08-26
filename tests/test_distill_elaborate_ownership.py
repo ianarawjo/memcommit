@@ -61,11 +61,11 @@ assert sys.modules[{canonical_name!r}] is canonical
 @pytest.mark.parametrize(
     "relative_path",
     (
-        "memcommit/distill_application.py",
-        "memcommit/distill_runtime.py",
-        "memcommit/elaborate_application.py",
-        "memcommit/elaborate_runtime.py",
-        "memcommit/elaborate_add_runtime.py",
+        "src/memcommit/distill_application.py",
+        "src/memcommit/distill_runtime.py",
+        "src/memcommit/elaborate_application.py",
+        "src/memcommit/elaborate_runtime.py",
+        "src/memcommit/elaborate_add_runtime.py",
     ),
 )
 def test_legacy_facades_define_no_behavior(relative_path: str) -> None:
@@ -126,18 +126,18 @@ def test_pre_relocation_globals_load_through_aliases() -> None:
 
 def test_production_consumers_use_operation_owners() -> None:
     relative_paths = (
-        "memcommit/api/_operations/distill.py",
-        "memcommit/api/_operations/elaborate.py",
-        "memcommit/commands/distill/command.py",
-        "memcommit/commands/elaborate/command.py",
-        "memcommit/commands/impact/process_local.py",
-        "memcommit/operations/ground/distill.py",
-        "memcommit/operations/ground/elaborate.py",
-        "memcommit/interfaces/cli/distill.py",
-        "memcommit/interfaces/cli/elaborate.py",
-        "memcommit/operations/distill/runtime.py",
-        "memcommit/operations/elaborate/runtime.py",
-        "memcommit/operations/elaborate/add_runtime.py",
+        "src/memcommit/api/_operations/distill.py",
+        "src/memcommit/api/_operations/elaborate.py",
+        "src/memcommit/commands/distill/command.py",
+        "src/memcommit/commands/elaborate/command.py",
+        "src/memcommit/commands/impact/process_local.py",
+        "src/memcommit/operations/ground/distill.py",
+        "src/memcommit/operations/ground/elaborate.py",
+        "src/memcommit/interfaces/cli/distill.py",
+        "src/memcommit/interfaces/cli/elaborate.py",
+        "src/memcommit/operations/distill/runtime.py",
+        "src/memcommit/operations/elaborate/runtime.py",
+        "src/memcommit/operations/elaborate/add_runtime.py",
     )
     legacy_imports = (
         "from memcommit.distill_application import",
@@ -156,18 +156,18 @@ def test_distill_and_elaborate_keep_distinct_execution_contracts() -> None:
     distill_source = "\n".join(
         (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         for relative_path in (
-            "memcommit/operations/distill/application.py",
-            "memcommit/operations/distill/runtime.py",
+            "src/memcommit/operations/distill/application.py",
+            "src/memcommit/operations/distill/runtime.py",
         )
     )
     elaborate_application = (
-        REPOSITORY_ROOT / "memcommit/operations/elaborate/application.py"
+        REPOSITORY_ROOT / "src/memcommit/operations/elaborate/application.py"
     ).read_text(encoding="utf-8")
     elaborate_runtime = (
-        REPOSITORY_ROOT / "memcommit/operations/elaborate/runtime.py"
+        REPOSITORY_ROOT / "src/memcommit/operations/elaborate/runtime.py"
     ).read_text(encoding="utf-8")
     elaborate_add_runtime = (
-        REPOSITORY_ROOT / "memcommit/operations/elaborate/add_runtime.py"
+        REPOSITORY_ROOT / "src/memcommit/operations/elaborate/add_runtime.py"
     ).read_text(encoding="utf-8")
 
     assert "memcommit.operations.elaborate" not in distill_source
@@ -187,7 +187,7 @@ def test_operation_owners_do_not_depend_on_command_or_interface_adapters() -> No
         path.read_text(encoding="utf-8")
         for package in ("distill", "elaborate")
         for path in sorted(
-            (REPOSITORY_ROOT / "memcommit/operations" / package).glob("*.py")
+            (REPOSITORY_ROOT / "src/memcommit/operations" / package).glob("*.py")
         )
     )
 

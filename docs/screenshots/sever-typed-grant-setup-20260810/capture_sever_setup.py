@@ -15,7 +15,7 @@ import pyte
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path("/Users/KimMunyeong/Github/memcommit")
-sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(ROOT / "src"))
 
 OUT = ROOT / "docs/screenshots/sever-typed-grant-setup-20260810"
 COLS = 180

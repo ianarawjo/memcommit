@@ -70,7 +70,7 @@ def _verify_latest_compare_attempt() -> None:
 
 
 def main() -> None:
-    sys.path.insert(0, str(ROOT))
+    sys.path.insert(0, str(ROOT / "src"))
     from memcommit.profile_config import load_profile_registry
 
     if load_profile_registry().active.name != PROFILE_NAME:

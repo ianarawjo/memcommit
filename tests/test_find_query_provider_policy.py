@@ -82,7 +82,7 @@ def test_query_accepts_one_frozen_public_configuration(monkeypatch):
 
 
 def test_find_and_query_commands_import_the_shared_policy_owner():
-    commands = Path(__file__).parents[1] / "memcommit" / "commands"
+    commands = Path(__file__).parents[1] / "src" / "memcommit" / "commands"
     find_source = (commands / "find" / "command.py").read_text(encoding="utf-8")
     query_source = (commands / "query" / "command.py").read_text(encoding="utf-8")
 

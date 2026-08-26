@@ -6,7 +6,7 @@ import ast
 from pathlib import Path
 
 
-INTERFACES_ROOT = Path(__file__).parents[1] / "memcommit" / "interfaces"
+INTERFACES_ROOT = Path(__file__).parents[1] / "src" / "memcommit" / "interfaces"
 
 
 def _command_imports(path: Path) -> tuple[str, ...]:

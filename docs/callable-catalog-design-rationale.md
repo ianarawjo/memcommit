@@ -1,6 +1,6 @@
 # Mechanical callable catalog
 
-Last reviewed: 2026-08-16.
+Last reviewed: 2026-08-26.
 
 ## Problem
 
@@ -19,8 +19,8 @@ or nested callables.
 
 ## Selected contract
 
-[`memcommit.architecture.catalog`](../memcommit/architecture/catalog.py)
-parses every Python source file below `memcommit/` with the standard-library
+[`memcommit.architecture.catalog`](../src/memcommit/architecture/catalog.py)
+parses every Python source file below `src/memcommit/` with the standard-library
 AST and imports no MemCommit runtime module. The generated JSON Lines catalog
 records, for every function, async function, class, and lambda:
 

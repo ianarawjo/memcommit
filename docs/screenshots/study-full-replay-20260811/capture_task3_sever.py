@@ -121,7 +121,7 @@ def _verify_approved_sever_attempt() -> None:
 
 
 def main() -> None:
-    sys.path.insert(0, str(ROOT))
+    sys.path.insert(0, str(ROOT / "src"))
     from memcommit.profile_config import load_profile_registry
     from memcommit.sever_store import SeverSessionStore
 

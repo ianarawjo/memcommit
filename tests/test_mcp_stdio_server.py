@@ -165,7 +165,7 @@ def test_mcp_entrypoint_and_v2_sdk_remain_an_optional_distribution_surface():
 
 
 def test_server_source_is_a_thin_transport_adapter():
-    path = Path(__file__).parents[1] / "memcommit" / "interfaces" / "mcp" / "server.py"
+    path = Path(__file__).parents[1] / "src" / "memcommit" / "interfaces" / "mcp" / "server.py"
     tree = ast.parse(path.read_text(encoding="utf-8"))
     imported: list[str] = []
     for node in ast.walk(tree):

@@ -94,8 +94,8 @@ def test_copy_and_move_share_the_canonical_application_and_runtime() -> None:
 @pytest.mark.parametrize(
     "relative_path",
     (
-        "memcommit/memory_transfer_application.py",
-        "memcommit/memory_transfer_runtime.py",
+        "src/memcommit/memory_transfer_application.py",
+        "src/memcommit/memory_transfer_runtime.py",
     ),
 )
 def test_memory_transfer_legacy_facades_define_no_behavior(
@@ -133,7 +133,7 @@ def test_pre_relocation_copy_request_global_loads_through_legacy_alias() -> None
 
 
 def test_branch_remains_a_separate_context_creation_operation() -> None:
-    path = REPOSITORY_ROOT / "memcommit/commands/branch/command.py"
+    path = REPOSITORY_ROOT / "src/memcommit/commands/branch/command.py"
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
     imports = {
         node.module

@@ -87,7 +87,7 @@ def _module_name(package_root: Path, path: Path) -> tuple[str, bool]:
 
 
 def _source_modules(repository: Path) -> tuple[_SourceModule, ...]:
-    package_root = repository / "memcommit"
+    package_root = repository / "src" / "memcommit"
     modules: list[_SourceModule] = []
     for path in sorted(package_root.rglob("*.py")):
         source = path.read_text(encoding="utf-8")
@@ -488,7 +488,7 @@ def _callables(modules: tuple[_SourceModule, ...]) -> tuple[CallableRecord, ...]
 
 
 def _help_operations(repository: Path) -> tuple[str, ...]:
-    path = repository / "memcommit" / "help_catalog" / "catalog.py"
+    path = repository / "src" / "memcommit" / "help_catalog" / "catalog.py"
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
     names = {
         node.args[0].value
@@ -585,7 +585,7 @@ def _cli_entries(
 
 
 def _client_methods(repository: Path) -> dict[str, set[str]]:
-    path = repository / "memcommit" / "api" / "client.py"
+    path = repository / "src" / "memcommit" / "api" / "client.py"
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
     found: dict[str, set[str]] = defaultdict(set)
     for node in tree.body:

@@ -24,7 +24,7 @@ PROJECTED_REFERENCE = "task-2/advisor1/style"
 PROJECTED_COMPARED = "task-2/advisor2/style"
 
 if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+    sys.path.insert(0, str(ROOT / "src"))
 
 
 class _Recorder:

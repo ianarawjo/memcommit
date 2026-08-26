@@ -159,7 +159,7 @@ def _environment() -> dict[str, str]:
             # to the inline application layout under test.
             "PROMPT_TOOLKIT_NO_CPR": "1",
             "MEMCOMMIT_TEST_DISABLE_ATTEMPT_LOG": "1",
-            "PYTHONPATH": str(ROOT),
+            "PYTHONPATH": str(ROOT / "src"),
         }
     )
     return environment

@@ -66,7 +66,7 @@ def _environment(capture_root: Path) -> dict[str, str]:
         {
             "TERM": "xterm-256color",
             "COLORTERM": "truecolor",
-            "PYTHONPATH": str(ROOT),
+            "PYTHONPATH": str(ROOT / "src"),
             "MEMCOMMIT_CAPTURE_ROOT": str(capture_root),
             "MEMCOMMIT_TEST_DISABLE_ATTEMPT_LOG": "1",
         }

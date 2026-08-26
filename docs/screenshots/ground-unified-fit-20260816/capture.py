@@ -20,7 +20,7 @@ ROWS = 52
 COLUMNS = 180
 
 if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+    sys.path.insert(0, str(ROOT / "src"))
 
 
 def _load_module(name: str, path: Path):

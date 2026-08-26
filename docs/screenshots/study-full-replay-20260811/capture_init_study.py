@@ -62,7 +62,7 @@ def _environment() -> dict[str, str]:
             "TERM": "xterm-256color",
             "COLORTERM": "truecolor",
             "PROMPT_TOOLKIT_COLOR_DEPTH": "DEPTH_24_BIT",
-            "PYTHONPATH": str(ROOT),
+            "PYTHONPATH": str(ROOT / "src"),
         }
     )
     return environment
@@ -200,7 +200,7 @@ def _capture_read_only(
 
 
 def main() -> None:
-    sys.path.insert(0, str(ROOT))
+    sys.path.insert(0, str(ROOT / "src"))
     from memcommit.profile_config import load_profile_registry
 
     OUT.mkdir(parents=True, exist_ok=True)

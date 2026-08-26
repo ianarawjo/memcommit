@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[3]
 OUT = Path(__file__).resolve().parent
 COLUMNS = 180
 ROWS = 52
-sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(ROOT / "src"))
 
 _BASE_PATH = (
     ROOT / "docs/screenshots/context-endpoint-memory-preview-20260810/capture.py"
@@ -42,7 +42,7 @@ def _environment(home: Path) -> dict[str, str]:
             "HOME": str(home),
             "TERM": "xterm-256color",
             "COLORTERM": "truecolor",
-            "PYTHONPATH": os.pathsep.join((str(ROOT), *dependency_paths)),
+            "PYTHONPATH": os.pathsep.join((str(ROOT / "src"), *dependency_paths)),
             "MEMCOMMIT_TEST_DISABLE_ATTEMPT_LOG": "1",
             "PROMPT_TOOLKIT_NO_CPR": "1",
         }

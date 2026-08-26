@@ -44,7 +44,7 @@ HELPERS = _load_capture_helpers()
 
 def _capture_environment() -> dict[str, str]:
     environment = HELPERS._environment()
-    environment["PYTHONPATH"] = str(ROOT)
+    environment["PYTHONPATH"] = str(ROOT / "src")
     return environment
 
 

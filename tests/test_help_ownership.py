@@ -62,7 +62,7 @@ assert sys.modules[{canonical_name!r}] is canonical
 
 @pytest.mark.parametrize(
     "relative_path",
-    ("memcommit/help_application.py", "memcommit/help_lookup_application.py"),
+    ("src/memcommit/help_application.py", "src/memcommit/help_lookup_application.py"),
 )
 def test_help_legacy_facades_define_no_behavior(relative_path: str) -> None:
     assert_legacy_root_submodule_is_centralized(relative_path)
@@ -101,10 +101,10 @@ def test_pre_relocation_help_globals_load_through_aliases() -> None:
 
 def test_production_help_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "memcommit/api/_operations/help.py",
-        "memcommit/interfaces/agent/help.py",
-        "memcommit/interfaces/tui/operations/help/inventory.py",
-        "memcommit/operations/help/lookup_application.py",
+        "src/memcommit/api/_operations/help.py",
+        "src/memcommit/interfaces/agent/help.py",
+        "src/memcommit/interfaces/tui/operations/help/inventory.py",
+        "src/memcommit/operations/help/lookup_application.py",
     )
     legacy_imports = (
         "from memcommit.help_application import",
@@ -118,10 +118,10 @@ def test_production_help_consumers_use_the_operation_owner() -> None:
 
 def test_help_owner_preserves_catalog_and_injected_provider_boundaries() -> None:
     application_source = (
-        REPOSITORY_ROOT / "memcommit/operations/help/application.py"
+        REPOSITORY_ROOT / "src/memcommit/operations/help/application.py"
     ).read_text(encoding="utf-8")
     lookup_source = (
-        REPOSITORY_ROOT / "memcommit/operations/help/lookup_application.py"
+        REPOSITORY_ROOT / "src/memcommit/operations/help/lookup_application.py"
     ).read_text(encoding="utf-8")
     combined = application_source + lookup_source
 

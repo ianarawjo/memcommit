@@ -212,8 +212,8 @@ def test_tui_adapter_returns_request_without_selecting_state() -> None:
 def test_switch_application_and_runtime_do_not_import_terminal_adapters() -> None:
     forbidden = ("typer", "prompt_toolkit", "memcommit.commands")
     for relative in (
-        "memcommit/operations/switch/application.py",
-        "memcommit/operations/switch/runtime.py",
+        "src/memcommit/operations/switch/application.py",
+        "src/memcommit/operations/switch/runtime.py",
     ):
         imports = _imports(ROOT / relative)
         assert not any(
@@ -224,7 +224,7 @@ def test_switch_application_and_runtime_do_not_import_terminal_adapters() -> Non
 
 
 def test_context_picker_compatibility_module_is_behavior_free() -> None:
-    path = ROOT / "memcommit" / "commands" / "shared" / "context_picker.py"
+    path = ROOT / "src" / "memcommit" / "commands" / "shared" / "context_picker.py"
     tree = ast.parse(path.read_text())
     assert not any(
         isinstance(node, (ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef))
@@ -232,7 +232,7 @@ def test_context_picker_compatibility_module_is_behavior_free() -> None:
     )
     production_importers = [
         source
-        for source in (ROOT / "memcommit").rglob("*.py")
+        for source in (ROOT / "src" / "memcommit").rglob("*.py")
         if source != path
         and source.name != "_legacy_command_alias_map.py"
         and "memcommit.commands.shared.context_picker" in source.read_text()
@@ -241,7 +241,7 @@ def test_context_picker_compatibility_module_is_behavior_free() -> None:
 
 
 def test_switch_tui_operation_does_not_import_command_adapters() -> None:
-    operation = ROOT / "memcommit" / "interfaces" / "tui" / "operations" / "switch"
+    operation = ROOT / "src" / "memcommit" / "interfaces" / "tui" / "operations" / "switch"
     offenders = [
         source
         for source in operation.rglob("*.py")

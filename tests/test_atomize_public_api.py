@@ -726,7 +726,7 @@ def test_invalid_provider_output_is_execution_not_transport_failure(
 def test_atomize_adapter_does_not_reach_back_into_client_facade():
     root = Path(__file__).resolve().parents[1]
     tree = ast.parse(
-        (root / "memcommit/api/_operations/atomize.py").read_text(
+        (root / "src/memcommit/api/_operations/atomize.py").read_text(
             encoding="utf-8"
         )
     )

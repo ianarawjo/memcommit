@@ -16,7 +16,7 @@ BUNDLED_SITE_PACKAGES = Path(
 )
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(BUNDLED_SITE_PACKAGES))
-sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(ROOT / "src"))
 
 from reportlab.lib import colors  # noqa: E402
 from reportlab.lib.pagesizes import landscape, letter  # noqa: E402

@@ -88,7 +88,7 @@ def _environment() -> dict[str, str]:
             "PROMPT_TOOLKIT_COLOR_DEPTH": "DEPTH_24_BIT",
             "PROMPT_TOOLKIT_NO_CPR": "1",
             "MEMCOMMIT_TEST_DISABLE_ATTEMPT_LOG": "1",
-            "PYTHONPATH": str(ROOT),
+            "PYTHONPATH": str(ROOT / "src"),
         }
     )
     return environment
@@ -175,7 +175,7 @@ def main() -> None:
 if __name__ == "__main__":
     if len(sys.argv) == 2 and sys.argv[1] == "--child":
         if str(ROOT) not in sys.path:
-            sys.path.insert(0, str(ROOT))
+            sys.path.insert(0, str(ROOT / "src"))
         _run_child()
     else:
         main()

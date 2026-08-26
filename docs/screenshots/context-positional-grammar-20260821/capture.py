@@ -424,7 +424,7 @@ def main() -> None:
     parser.add_argument("--child")
     arguments = parser.parse_args()
     if arguments.child:
-        sys.path.insert(0, str(ROOT))
+        sys.path.insert(0, str(ROOT / "src"))
         _run_child(arguments.child)
     else:
         _capture()

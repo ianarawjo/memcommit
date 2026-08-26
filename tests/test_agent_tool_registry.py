@@ -432,7 +432,7 @@ def test_custom_handler_failures_are_redacted_and_nonretryable(handler):
 
 def test_registry_depends_only_on_public_client_and_agent_adapters():
     path = (
-        Path(__file__).parents[1] / "memcommit" / "interfaces" / "agent" / "registry.py"
+        Path(__file__).parents[1] / "src" / "memcommit" / "interfaces" / "agent" / "registry.py"
     )
     tree = ast.parse(path.read_text(encoding="utf-8"))
     imported: list[str] = []

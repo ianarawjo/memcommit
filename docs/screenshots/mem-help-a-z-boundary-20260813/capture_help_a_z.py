@@ -59,7 +59,7 @@ def _environment(home: Path) -> dict[str, str]:
             "HOME": str(home),
             "TERM": "xterm-256color",
             "COLORTERM": "truecolor",
-            "PYTHONPATH": str(ROOT),
+            "PYTHONPATH": str(ROOT / "src"),
         }
     )
     return environment

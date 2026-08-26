@@ -86,7 +86,7 @@ def test_embed_legacy_paths_expose_the_canonical_contract() -> None:
 
 @pytest.mark.parametrize(
     "relative_path",
-    ("memcommit/embed_application.py", "memcommit/embed_runtime.py"),
+    ("src/memcommit/embed_application.py", "src/memcommit/embed_runtime.py"),
 )
 def test_embed_legacy_facades_define_no_behavior(relative_path: str) -> None:
     assert_legacy_root_submodule_is_centralized(relative_path)
@@ -118,11 +118,11 @@ def test_pre_relocation_embed_request_global_loads_through_alias() -> None:
 
 def test_production_embed_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "memcommit/api/_operations/embed.py",
-        "memcommit/interfaces/cli/embed.py",
-        "memcommit/interfaces/tui/operations/embed/adapter.py",
-        "memcommit/interfaces/tui/operations/embed/screen.py",
-        "memcommit/operations/embed/runtime.py",
+        "src/memcommit/api/_operations/embed.py",
+        "src/memcommit/interfaces/cli/embed.py",
+        "src/memcommit/interfaces/tui/operations/embed/adapter.py",
+        "src/memcommit/interfaces/tui/operations/embed/screen.py",
+        "src/memcommit/operations/embed/runtime.py",
     )
 
     for relative_path in relative_paths:
@@ -134,10 +134,10 @@ def test_production_embed_consumers_use_the_operation_owner() -> None:
 
 def test_reference_and_embed_remain_separate_operation_packages() -> None:
     for relative_path in (
-        "memcommit/operations/reference/application.py",
-        "memcommit/operations/reference/runtime.py",
-        "memcommit/operations/embed/application.py",
-        "memcommit/operations/embed/runtime.py",
+        "src/memcommit/operations/reference/application.py",
+        "src/memcommit/operations/reference/runtime.py",
+        "src/memcommit/operations/embed/application.py",
+        "src/memcommit/operations/embed/runtime.py",
     ):
         source = (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         if "/reference/" in relative_path:

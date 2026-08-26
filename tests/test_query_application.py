@@ -296,10 +296,10 @@ def test_runtime_executes_exact_scope_without_output_or_source_mutation(
 def test_ordinary_query_application_and_runtime_have_no_interface_dependency():
     root = Path(__file__).parents[1]
     application = ast.parse(
-        (root / "memcommit/operations/query/ordinary_application.py").read_text()
+        (root / "src/memcommit/operations/query/ordinary_application.py").read_text()
     )
     runtime = ast.parse(
-        (root / "memcommit/operations/query/ordinary_runtime.py").read_text()
+        (root / "src/memcommit/operations/query/ordinary_runtime.py").read_text()
     )
 
     def imports(tree):
@@ -321,9 +321,9 @@ def test_ordinary_query_application_and_runtime_have_no_interface_dependency():
 
 def test_production_adapters_import_ordinary_query_from_new_owner():
     root = Path(__file__).parents[1]
-    command = (root / "memcommit/commands/query/command.py").read_text()
+    command = (root / "src/memcommit/commands/query/command.py").read_text()
     workbench_model = (
-        root / "memcommit/interfaces/tui/operations/query/model.py"
+        root / "src/memcommit/interfaces/tui/operations/query/model.py"
     ).read_text()
 
     assert (

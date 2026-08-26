@@ -139,12 +139,12 @@ def test_sever_legacy_paths_expose_the_canonical_contract() -> None:
 @pytest.mark.parametrize(
     "relative_path",
     (
-        "memcommit/sever.py",
-        "memcommit/sever_provider.py",
-        "memcommit/sever_store.py",
-        "memcommit/sever_resolution_adapter.py",
-        "memcommit/sever_application.py",
-        "memcommit/sever_runtime.py",
+        "src/memcommit/sever.py",
+        "src/memcommit/sever_provider.py",
+        "src/memcommit/sever_store.py",
+        "src/memcommit/sever_resolution_adapter.py",
+        "src/memcommit/sever_application.py",
+        "src/memcommit/sever_runtime.py",
     ),
 )
 def test_sever_legacy_facades_define_no_behavior(relative_path: str) -> None:
@@ -191,21 +191,21 @@ def test_pre_relocation_sever_session_global_loads_through_alias() -> None:
 
 def test_production_sever_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "memcommit/commands/impact/command.py",
-        "memcommit/commands/impact/catalog.py",
-        "memcommit/commands/impact/sessions.py",
-        "memcommit/commands/review/command.py",
-        "memcommit/commands/review/sessions.py",
-        "memcommit/commands/sever/command.py",
-        "memcommit/commands/sever/sessions.py",
-        "memcommit/operations/sever/application.py",
-        "memcommit/operations/sever/provider.py",
-        "memcommit/operations/sever/resolution_adapter.py",
-        "memcommit/study_prewarm/sever.py",
-        "memcommit/operations/sever/session_store.py",
-        "memcommit/operations/sever/runtime.py",
-        "memcommit/operations/review/report_adapters.py",
-        "memcommit/store.py",
+        "src/memcommit/commands/impact/command.py",
+        "src/memcommit/commands/impact/catalog.py",
+        "src/memcommit/commands/impact/sessions.py",
+        "src/memcommit/commands/review/command.py",
+        "src/memcommit/commands/review/sessions.py",
+        "src/memcommit/commands/sever/command.py",
+        "src/memcommit/commands/sever/sessions.py",
+        "src/memcommit/operations/sever/application.py",
+        "src/memcommit/operations/sever/provider.py",
+        "src/memcommit/operations/sever/resolution_adapter.py",
+        "src/memcommit/study_prewarm/sever.py",
+        "src/memcommit/operations/sever/session_store.py",
+        "src/memcommit/operations/sever/runtime.py",
+        "src/memcommit/operations/review/report_adapters.py",
+        "src/memcommit/store.py",
     )
     legacy_imports = (
         "from memcommit.sever import",

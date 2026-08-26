@@ -1,6 +1,6 @@
 # Package import and operation assembly boundary
 
-Last reviewed: 2026-08-15.
+Last reviewed: 2026-08-26.
 
 ## Motivation
 
@@ -54,6 +54,21 @@ operation adapters
   -> application/runtime use cases
   -> optional Ground integration imports the operation, never the reverse
 ```
+
+The canonical checkout now places that package below `src/memcommit`. The
+distribution name, import name, public exports, and `mem`/`mem-mcp` entry
+points remain `memcommit`; only the repository source location changed. A
+repository root is deliberately not an import root, so development and CI
+must install the project—normally with an editable install—before running the
+test suite. This makes the installation boundary the ordinary local path
+instead of relying only on a later release smoke test.
+
+Source-backed screenshot reproduction is a deliberate exception: those
+scripts put the checkout's exact `src` directory on `PYTHONPATH` so an ordered
+historical capture can exercise the intended worktree. That is reproducibility
+scaffolding, not distribution evidence. Installed-wheel checks continue to run
+outside the checkout because an editable installation can still conceal wheel
+contents or package-data omissions.
 
 `memcommit.__init__` and `memcommit.api.__init__` retain `__all__`, object
 identity, and documented import spellings through module-level lazy attribute
@@ -149,6 +164,10 @@ entrypoint migration described above.
   preserve unnecessary failure coupling and make the application boundary
   weaker for embedding hosts. A complete distribution and selective assembly
   are compatible goals.
+- **Keep the flat checkout and rely only on installed-wheel CI.** That can be
+  correct, but it lets ordinary local `pytest` runs import the adjacent source
+  package without exercising project installation. The `src` layout makes the
+  safer boundary the default while retaining the independent wheel gate.
 
 ## Verification gate
 
@@ -167,3 +186,22 @@ returned the typed unknown-tool failure. A second installed-process check
 proved the same lazy import graph from `site-packages`. This closes the first
 public-slice import gate; the Typer console registry remains a separately
 recorded migration rather than a hidden exception to this result.
+
+The 2026-08-26 source-layout migration added a checked `package-dir`/discovery
+contract and moved all 1,035 tracked package files below `src/memcommit`.
+Only the static catalog's repository scan and two repository-backed Study
+fixture locators required production-code path changes; import spellings and
+entry points did not change. The package/import, generated-catalog, fixture,
+and ownership regression set passed 571 tests, and the MCP projection set
+passed 16 tests. All migrated capture and support scripts also passed Python
+compilation and their generated-layout checks.
+
+A wheel built from a clean temporary source copy contained exactly the same
+1,010 Python modules as `src/memcommit`, retained the declared assets and eval
+fixtures, and contained no `src`, test, or documentation tree. Installing that
+wheel into a separate environment outside the checkout loaded `memcommit` from
+`site-packages`; `mem --help`, one Store write/read round trip, and packaged
+font lookup succeeded. A wheel built in the existing dirty checkout reproduced
+the already documented stale-root-`build/` hazard, so clean-source wheel
+construction remains a required release boundary rather than being weakened
+by the `src` migration.

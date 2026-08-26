@@ -9,7 +9,7 @@ import pytest
 
 
 ROOT = Path(__file__).parents[1]
-PACKAGE = ROOT / "memcommit"
+PACKAGE = ROOT / "src" / "memcommit"
 
 
 def _imports(path: Path) -> tuple[str, ...]:

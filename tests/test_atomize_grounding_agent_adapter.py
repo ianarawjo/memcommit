@@ -277,7 +277,7 @@ def test_default_registry_projects_and_calls_grounding_through_mcp(
 def test_adapter_imports_only_public_api_and_shared_agent_contract():
     path = (
         Path(__file__).parents[1]
-        / "memcommit"
+        / "src" / "memcommit"
         / "interfaces"
         / "agent"
         / "atomize_grounding.py"

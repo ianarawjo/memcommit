@@ -68,10 +68,10 @@ assert sys.modules[{canonical_name!r}] is canonical
 @pytest.mark.parametrize(
     "relative_path",
     (
-        "memcommit/find_application.py",
-        "memcommit/find_runtime.py",
-        "memcommit/find_materialization_application.py",
-        "memcommit/find_materialization_runtime.py",
+        "src/memcommit/find_application.py",
+        "src/memcommit/find_runtime.py",
+        "src/memcommit/find_materialization_application.py",
+        "src/memcommit/find_materialization_runtime.py",
     ),
 )
 def test_search_legacy_facades_define_no_behavior(relative_path: str) -> None:
@@ -140,13 +140,13 @@ def test_pre_relocation_search_globals_load_through_aliases() -> None:
 
 def test_production_search_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "memcommit/api/_operations/search.py",
-        "memcommit/commands/find/command.py",
-        "memcommit/commands/find/materialization.py",
-        "memcommit/commands/find/search_workbench.py",
-        "memcommit/operations/search/runtime.py",
-        "memcommit/operations/search/materialization_application.py",
-        "memcommit/operations/search/materialization_runtime.py",
+        "src/memcommit/api/_operations/search.py",
+        "src/memcommit/commands/find/command.py",
+        "src/memcommit/commands/find/materialization.py",
+        "src/memcommit/commands/find/search_workbench.py",
+        "src/memcommit/operations/search/runtime.py",
+        "src/memcommit/operations/search/materialization_application.py",
+        "src/memcommit/operations/search/materialization_runtime.py",
     )
     legacy_imports = (
         "from memcommit.find_application import",
@@ -162,19 +162,19 @@ def test_production_search_consumers_use_the_operation_owner() -> None:
 
 def test_search_analysis_and_materialization_remain_separate_use_cases() -> None:
     application_source = (
-        REPOSITORY_ROOT / "memcommit/operations/search/application.py"
+        REPOSITORY_ROOT / "src/memcommit/operations/search/application.py"
     ).read_text(encoding="utf-8")
     materialization_source = (
         REPOSITORY_ROOT
-        / "memcommit/operations/search/materialization_application.py"
+        / "src/memcommit/operations/search/materialization_application.py"
     ).read_text(encoding="utf-8")
     package_source = "\n".join(
         (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         for relative_path in (
-            "memcommit/operations/search/application.py",
-            "memcommit/operations/search/runtime.py",
-            "memcommit/operations/search/materialization_application.py",
-            "memcommit/operations/search/materialization_runtime.py",
+            "src/memcommit/operations/search/application.py",
+            "src/memcommit/operations/search/runtime.py",
+            "src/memcommit/operations/search/materialization_application.py",
+            "src/memcommit/operations/search/materialization_runtime.py",
         )
     )
 
