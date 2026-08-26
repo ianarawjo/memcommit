@@ -17,7 +17,6 @@ from memcommit.api.errors import (
 from memcommit.api.query import (
     GrantedQueryResult,
     OrdinaryQueryResult,
-    QueryCatalogEntry,
     QueryCitation,
     ReferenceQueryResult,
 )
@@ -202,14 +201,13 @@ def query_ordinary(
 def query_granted(
     runtime: ClientRuntime,
     public_name: str,
-    question: str | None = None,
+    question: str,
     *,
     language: str = "en",
-    memory_handle: str | None = None,
     federate_descendants: bool = True,
     on_stage: StageObserver | None = None,
 ) -> GrantedQueryResult:
-    """Browse or answer one active-Profile QUERY grant."""
+    """Answer one question through an active-Profile QUERY grant."""
 
     store = runtime.store
     try:
@@ -247,7 +245,6 @@ def query_granted(
             ),
             question=question,
             language=language,
-            memory_handle=memory_handle,
             federate_descendants=federate_descendants,
         )
     except (QueryAuthorityError, QueryContextError):
@@ -281,17 +278,7 @@ def query_granted(
     except (RuntimeError, TypeError, ValueError) as error:
         raise_public(QueryExecutionError, error)
 
-    if response.answer is None:
-        return GrantedQueryResult(
-            mode="CATALOG",
-            public_name=public_name,
-            catalog=tuple(
-                QueryCatalogEntry(entry.handle, entry.placeholder_lines)
-                for entry in response.catalog
-            ),
-        )
     return GrantedQueryResult(
-        mode="ANSWER",
         public_name=public_name,
         answer=response.answer,
     )

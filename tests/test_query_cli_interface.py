@@ -17,14 +17,12 @@ from memcommit.interfaces.cli.query import (
     render_granted_query_response,
     render_ordinary_query_response,
     render_query_reference_response,
-    split_query_memory_selector,
 )
 from memcommit.operations.query.granted_application import (
     GrantedQueryRequest,
     GrantedQueryResponse,
     GrantedQueryTarget,
 )
-from memcommit.operations.query.granted_source import AuthorityQueryCatalogEntry
 from memcommit.operations.query.ordinary_application import (
     OrdinaryQueryRequest,
     OrdinaryQueryResponse,
@@ -63,18 +61,6 @@ def test_query_help_exposes_profile_wide_all_alias():
     assert "active Profile" in result.output
 
 
-def test_query_memory_selector_split_is_interface_owned_and_exact():
-    assert split_query_memory_selector("shared/view") == ("shared/view", None)
-    assert split_query_memory_selector("shared/view#q-0123456789ab") == (
-        "shared/view",
-        "q-0123456789ab",
-    )
-    assert split_query_memory_selector("shared/view#q-not-a-handle") == (
-        "shared/view#q-not-a-handle",
-        None,
-    )
-
-
 def test_query_plain_renderers_preserve_typed_answer_modes(capsys):
     ordinary_request = OrdinaryQueryRequest("What?", ("source",))
     render_ordinary_query_response(
@@ -94,9 +80,16 @@ def test_query_plain_renderers_preserve_typed_answer_modes(capsys):
     render_query_reference_response(
         QueryReferenceResponse(reference_request, "answer\x1btext")
     )
+    granted_request = GrantedQueryRequest(
+        GrantedQueryTarget("grant", "shared/view", "anchor"),
+        "What?",
+    )
+    render_granted_query_response(
+        GrantedQueryResponse(granted_request, "granted\x1banswer")
+    )
 
     assert capsys.readouterr().out == (
-        "SUMMARY\n  (no grounded answer found)\nanswer�text\n"
+        "SUMMARY\n  (no grounded answer found)\nanswer�text\ngranted�answer\n"
     )
 
 
@@ -130,27 +123,6 @@ def test_grounded_query_plain_renderer_uses_self_contained_reference_rows(capsys
     )
 
 
-def test_granted_query_plain_renderer_keeps_catalog_opaque(capsys):
-    target = GrantedQueryTarget("grant", "shared/view", "anchor")
-    response = GrantedQueryResponse(
-        GrantedQueryRequest(target, None),
-        catalog=(
-            AuthorityQueryCatalogEntry(
-                "q-0123456789ab",
-                ("◯ ◯◯", "◯◯"),
-            ),
-        ),
-    )
-
-    render_granted_query_response(response)
-
-    output = capsys.readouterr().out
-    assert "Query view Memories: shared/view" in output
-    assert "[q-0123456789ab]" in output
-    assert "◯ ◯◯" in output
-    assert "source text is not present" in output
-
-
 def test_query_command_uses_cli_and_terminal_interfaces_without_local_presenters():
     path = PACKAGE / "commands" / "query" / "command.py"
     source = path.read_text(encoding="utf-8")
@@ -167,12 +139,11 @@ def test_query_command_uses_cli_and_terminal_interfaces_without_local_presenters
         in source
     )
     assert "_interactive_terminal" not in local_functions
-    assert "_split_query_memory_selector" not in local_functions
-    assert "_render_query_catalog" not in local_functions
     assert local_functions == {
         "_open_query_workbench",
         "_query_granted_target",
         "_query_ordinary_context",
+        "_resolve_positional_query_target",
         "cmd",
     }
 

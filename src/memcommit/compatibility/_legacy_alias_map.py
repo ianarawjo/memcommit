@@ -104,7 +104,6 @@ LEGACY_SUBMODULE_ALIASES = {
     'memcommit.fit_judgment': 'memcommit.operations.fit.judgment',
     'memcommit.fit_runtime': 'memcommit.operations.fit.runtime',
     'memcommit.fit_store': 'memcommit.operations.fit.store',
-    'memcommit.flow_placeholder': 'memcommit.interfaces.presentation.flow_placeholder',
     'memcommit.forget_application': 'memcommit.operations.forget.application',
     'memcommit.forget_provider': 'memcommit.operations.forget.provider',
     'memcommit.forget_resolution_adapter': 'memcommit.compatibility.forget_resolution_adapter',

@@ -1269,14 +1269,13 @@ class MemCommitClient:
     def query_granted(
         self,
         public_name: str,
-        question: str | None = None,
+        question: str,
         *,
         language: str = "en",
-        memory_handle: str | None = None,
         federate_descendants: bool = True,
         on_stage: StageObserver | None = None,
     ) -> GrantedQueryResult:
-        """Browse or answer one active-Profile QUERY grant without persistence."""
+        """Answer through one active-Profile QUERY grant without persistence."""
 
         from memcommit.api._operations.query import query_granted
 
@@ -1285,7 +1284,6 @@ class MemCommitClient:
             public_name,
             question,
             language=language,
-            memory_handle=memory_handle,
             federate_descendants=federate_descendants,
             on_stage=on_stage,
         )

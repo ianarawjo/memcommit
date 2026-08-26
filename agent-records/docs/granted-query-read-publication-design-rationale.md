@@ -1,6 +1,6 @@
 # Granted Query one-shot read boundary
 
-Last verified: 2026-08-22.
+Last verified: 2026-08-26.
 
 ## Decision
 
@@ -34,10 +34,10 @@ revalidate grant + Source binding
 release process-local response
 ```
 
-`GrantedQueryRequest` freezes grant UID, public name, attachment name,
-catalog-or-answer mode, language, optional opaque Memory handle, and
-federation policy. `GrantedQueryResponse` contains either the authorized opaque
-catalog or the answer. There is no unpublished turn, publication token,
+`GrantedQueryRequest` freezes grant UID, public name, attachment name, a
+required nonblank question, language, and federation policy.
+`GrantedQueryResponse` contains one answer. There is no per-Memory catalog,
+handle selector, unpublished turn, publication token,
 publication receipt, record digest, session name, or Store write port.
 
 ## Responsibility matrix
@@ -47,7 +47,7 @@ publication receipt, record digest, session name, or Store write port.
 | Public input | `GrantedQueryRequest` | One immutable public target and one-shot query intent |
 | Pre-provider authority | runtime prepare adapter | Requires current `QUERY` before provider construction |
 | Provider disclosure | runtime read adapter | Concealed Source opens only after provider construction succeeds |
-| Catalog | granted Source adapter | Opaque handles/placeholders are reloaded across an authority check and never persisted |
+| Source frame | granted Source adapter | Complete authorized View content opens only after provider construction and never returns to the caller |
 | Federation | runtime routing adapter | Provider sees public descendant names only; only selected authorized bindings open |
 | Answer | runtime read adapter | Root and selected descendant bindings revalidate before response release |
 | Retention | none | Query creates no transcript, publication plan, receipt, or search artifact |
@@ -58,7 +58,7 @@ publication receipt, record digest, session name, or Store write port.
 | --- | ---: | ---: | ---: | ---: |
 | Missing QUERY authority | No | No | No | No |
 | Provider construction failure | Attempted | No | No | No |
-| Catalog browse | Yes | After authentication | Catalog only | No |
+| Missing question | No | No | No | No |
 | Grant or Source changes during inference | Yes | Yes | No | No |
 | Successful one-shot answer | Yes | Yes | Yes | No |
 
@@ -94,7 +94,7 @@ records are ignored and not automatically deleted.
 
 `tests/test_granted_query_application.py` covers application ordering,
 provider stages, zero storage, and revocation during a turn.
-`tests/test_granted_query_sources.py` covers catalog opacity, handle isolation,
+`tests/test_granted_query_sources.py` covers complete-View scoping,
 federation, translation, Source drift, and the absence of Query-session
 storage. Public API and agent tests assert one-shot response schemas with no
 session receipt or publication error.

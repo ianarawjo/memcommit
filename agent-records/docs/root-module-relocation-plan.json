@@ -1157,15 +1157,15 @@
       "role": "compatibility-facade"
     },
     {
-      "action": "relocate",
-      "canonical_target": "memcommit.interfaces.presentation.flow_placeholder",
-      "canonical_target_path": "memcommit/interfaces/presentation/flow_placeholder.py",
+      "action": "retire",
+      "canonical_target": null,
+      "canonical_target_path": null,
       "inbound_package_importers": 1,
       "lines": 138,
       "module": "memcommit.flow_placeholder",
       "path": "memcommit/flow_placeholder.py",
-      "reason": "implementation belongs to a reusable named concept",
-      "role": "shared-concept-implementation"
+      "reason": "retired with the per-Memory Query catalog and its presentation assets",
+      "role": "retired-prototype"
     },
     {
       "action": "centralize-alias",
@@ -2747,7 +2747,8 @@
   "summary": {
     "compatibility-facade": 103,
     "operation-implementation": 74,
+    "retired-prototype": 1,
     "root-boundary": 7,
-    "shared-concept-implementation": 65
+    "shared-concept-implementation": 64
   }
 }

@@ -1,6 +1,6 @@
 ---
 name: memcommit-query
-description: Use the registered memcommit_query tool to browse or answer ordinary readable Contexts, authority-granted query-only views, and exact legacy QueryContextRef Sources. Use when a user asks an agent to query MemCommit memory, inspect an opaque granted catalog, or ask about a catalog handle. Requires the host to expose version 2 of the tool; do not use for mutation, persistence, or invented route metadata.
+description: Use the registered memcommit_query tool to answer questions over ordinary readable Contexts, authority-granted query-only views, and exact legacy QueryContextRef Sources. Use when a user asks an agent to query MemCommit memory through one of those explicit routes. Requires the host to expose version 3 of the tool; do not use for mutation, persistence, or invented route metadata.
 ---
 
 # MemCommit Query
@@ -14,14 +14,13 @@ Invoke `memcommit_query` directly. Do not reconstruct the operation with
   `context_names`, or omit them only when the host's frozen current Context is
   intentionally the target. Set descendant and embedded reach explicitly when
   the user specifies scope.
-- Use `granted` for a public query-only view. Omit `question` to browse its
-  opaque catalog. When asking about one returned handle, pass that exact
-  `memory_handle`. Every granted answer is process-local.
+- Use `granted` for a question over one public query-only view. Always supply
+  `question`. Every granted answer is process-local.
 - Use `reference` only when exact `uid`, `name`, `target_source_uid`, and
   `provider` metadata came from an existing `QueryContextRef`. Never guess or
   synthesize any of these fields.
 
-Always send `version: 2`. Never silently change one route into another after an
+Always send `version: 3`. Never silently change one route into another after an
 error.
 
 ## Interpret the response
@@ -30,9 +29,7 @@ error.
   returned evidence.
 - For ordinary Query, retain citation numbers and distinguish
   `grounded: false` from a supported answer.
-- For granted `CATALOG`, describe only returned handles and placeholders; do
-  not infer concealed content.
-- Never imply that an answer or catalog was saved by MemCommit.
+- Never imply that an answer was saved by MemCommit.
 
 ## Handle failures
 

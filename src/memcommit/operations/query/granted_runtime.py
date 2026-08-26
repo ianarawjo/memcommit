@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections.abc import Callable, Sequence
+from collections.abc import Sequence
 from dataclasses import dataclass
 import json
 
@@ -18,11 +18,9 @@ from memcommit.operations.query.granted_application import (
     run_granted_query_read,
 )
 from memcommit.operations.query.granted_source import (
-    AuthorityQueryCatalogEntry,
     AuthorityQuerySource,
     GrantedQuerySourceBinding,
     freeze_granted_query_source_binding,
-    load_authority_query_catalog,
     load_authority_query_source,
 )
 from memcommit.operations.profile.config import (
@@ -35,9 +33,6 @@ from memcommit.operations.profile.model import (
     resolve_granted_context_view,
 )
 from memcommit.store import MemoryStore
-
-
-CatalogLoader = Callable[..., tuple[AuthorityQueryCatalogEntry, ...]]
 
 
 @dataclass(frozen=True)
@@ -260,14 +255,8 @@ def resolve_granted_query_target(
 class MemoryStoreGrantedQueryReadPort(GrantedQueryReadPort):
     """Read and revalidate concealed grant material without persistence."""
 
-    def __init__(
-        self,
-        store: MemoryStore,
-        *,
-        load_catalog: CatalogLoader = load_authority_query_catalog,
-    ) -> None:
+    def __init__(self, store: MemoryStore) -> None:
         self._store = store
-        self._load_catalog = load_catalog
 
     def prepare(self, request: GrantedQueryRequest) -> PreparedGrantedQuery:
         registry = load_profile_registry()
@@ -298,31 +287,10 @@ class MemoryStoreGrantedQueryReadPort(GrantedQueryReadPort):
         if view.grant.uid != token.expected_grant.uid:
             raise ValueError("The selected query-only View binding changed.")
 
-        if request.question is None:
-            catalog = self._load_catalog(view, language=request.language)
-            _observe(observer, "REVALIDATING")
-            with authority_grant_snapshot_lock() as current_registry:
-                current_view = resolve_granted_context_view(
-                    request.target.public_name,
-                    attachment_name=request.target.attachment_name,
-                    required_permission="QUERY",
-                    registry=current_registry,
-                )
-                current_catalog = self._load_catalog(
-                    current_view,
-                    language=request.language,
-                )
-                if current_catalog != catalog:
-                    raise ValueError(
-                        "The granted query catalog changed while it was being opened."
-                    )
-            return GrantedQueryResponse(request, catalog=catalog)
-
         _observe(observer, "PREPARING_SOURCES")
         source = load_authority_query_source(
             view,
             language=request.language,
-            memory_handle=request.memory_handle,
         )
         binding = freeze_granted_query_source_binding(
             view,
@@ -332,7 +300,7 @@ class MemoryStoreGrantedQueryReadPort(GrantedQueryReadPort):
         federated_sources: list[
             tuple[str, AuthorityQuerySource, GrantedQuerySourceBinding]
         ] = []
-        if request.federate_descendants and request.memory_handle is None:
+        if request.federate_descendants:
             registry = token.registry
             descendant_candidates = tuple(
                 sorted(
@@ -431,7 +399,6 @@ class MemoryStoreGrantedQueryReadPort(GrantedQueryReadPort):
         current_source = load_authority_query_source(
             current_view,
             language=request.language,
-            memory_handle=request.memory_handle,
         )
         if (
             freeze_granted_query_source_binding(
@@ -474,13 +441,12 @@ def execute_granted_query_read(
     store: MemoryStore,
     provider_factory: GrantedQueryProviderFactory,
     observer: GrantedQueryObserver | None = None,
-    load_catalog: CatalogLoader = load_authority_query_catalog,
 ) -> GrantedQueryResponse:
     """Execute one granted read without publishing durable Query state."""
 
     return run_granted_query_read(
         request,
-        read_port=MemoryStoreGrantedQueryReadPort(store, load_catalog=load_catalog),
+        read_port=MemoryStoreGrantedQueryReadPort(store),
         provider_factory=provider_factory,
         observer=observer,
     )
@@ -492,7 +458,6 @@ def execute_granted_query_request(
     store: MemoryStore,
     provider_factory: GrantedQueryProviderFactory,
     observer: GrantedQueryObserver | None = None,
-    load_catalog: CatalogLoader = load_authority_query_catalog,
 ) -> GrantedQueryResponse:
     """Compatibility name for the one-shot granted Query composition."""
 
@@ -501,12 +466,10 @@ def execute_granted_query_request(
         store=store,
         provider_factory=provider_factory,
         observer=observer,
-        load_catalog=load_catalog,
     )
 
 
 __all__ = [
-    "CatalogLoader",
     "MemoryStoreGrantedQueryReadPort",
     "execute_granted_query_read",
     "execute_granted_query_request",

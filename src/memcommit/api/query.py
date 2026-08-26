@@ -61,21 +61,11 @@ class OrdinaryQueryResult:
 
 
 @dataclass(frozen=True)
-class QueryCatalogEntry:
-    """Opaque public shape for one queryable granted Memory."""
-
-    handle: str
-    placeholder_lines: tuple[str, ...]
-
-
-@dataclass(frozen=True)
 class GrantedQueryResult:
-    """One process-local granted catalog or answer."""
+    """One process-local granted Query answer."""
 
-    mode: Literal["CATALOG", "ANSWER"]
     public_name: str
-    answer: str | None = None
-    catalog: tuple[QueryCatalogEntry, ...] = ()
+    answer: str
 
 
 @dataclass(frozen=True)
@@ -89,7 +79,6 @@ class ReferenceQueryResult:
 __all__ = [
     "GrantedQueryResult",
     "OrdinaryQueryResult",
-    "QueryCatalogEntry",
     "QueryCitation",
     "QueryProviderConfig",
     "ReferenceQueryResult",

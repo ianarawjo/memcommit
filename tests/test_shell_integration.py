@@ -110,7 +110,7 @@ def test_emit_selection_requires_a_terminal():
         'mem add "[memory]"',
         "mem checkpoint",
         'mem checkpoint "[message]"',
-        'mem query [query_view]#[memory_handle] "[question]"',
+        'mem query [query_view] "[question]"',
     ),
 )
 def test_generated_wrapper_prefills_and_delegates(tmp_path, selected_command):

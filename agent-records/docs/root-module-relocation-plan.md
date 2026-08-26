@@ -9,8 +9,9 @@ were directly under memcommit at baseline commit 885e62c0.
 | --- | ---: |
 | compatibility-facade | 103 |
 | operation-implementation | 74 |
+| retired-prototype | 1 |
 | root-boundary | 7 |
-| shared-concept-implementation | 65 |
+| shared-concept-implementation | 64 |
 
 ## Modules
 
@@ -121,7 +122,7 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.fit_judgment | compatibility-facade | centralize-alias | memcommit.operations.fit.judgment | 0 |
 | memcommit.fit_runtime | compatibility-facade | centralize-alias | memcommit.operations.fit.runtime | 0 |
 | memcommit.fit_store | compatibility-facade | centralize-alias | memcommit.operations.fit.store | 0 |
-| memcommit.flow_placeholder | shared-concept-implementation | relocate | memcommit.interfaces.presentation.flow_placeholder | 1 |
+| memcommit.flow_placeholder | retired-prototype | retire | none (retired) | 1 |
 | memcommit.forget_application | compatibility-facade | centralize-alias | memcommit.operations.forget.application | 0 |
 | memcommit.forget_provider | operation-implementation | relocate | memcommit.operations.forget.provider | 2 |
 | memcommit.forget_resolution_adapter | compatibility-facade | centralize-alias | memcommit.compatibility.forget_resolution_adapter | 1 |

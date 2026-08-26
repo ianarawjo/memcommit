@@ -1,6 +1,6 @@
 # Query one-shot retention rationale
 
-Last verified: 2026-08-24.
+Last verified: 2026-08-26.
 
 ## Decision
 
@@ -46,8 +46,8 @@ Profile import continues to exclude the directory.
   the provider is running.
 - Relevant-descendant federation receives public names only and opens only the
   authorized subset selected for that one request.
-- Opaque Memory handles and Flow Circular placeholders remain process-local
-  projections and are never written to the grantee Store.
+- Granted Query addresses a public Context-level View and sends its complete
+  authorized Source frame; it exposes no per-Memory catalog or selector.
 - Search artifacts contain retained workflow evidence from operations that
   actually own durable review state; Query answers are not indexed.
 

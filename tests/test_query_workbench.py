@@ -27,7 +27,6 @@ from memcommit.operations.query.granted_application import (
     GrantedQueryResponse,
     GrantedQueryTarget,
 )
-from memcommit.operations.query.granted_source import AuthorityQueryCatalogEntry
 from memcommit.operations.query.ordinary_application import (
     OrdinaryQueryRequest,
     OrdinaryQueryResponse,
@@ -187,7 +186,7 @@ def test_query_workbench_switches_to_typed_query_view_scope():
     ]
 
 
-def test_query_view_can_open_opaque_catalog_without_a_question():
+def test_query_view_rejects_blank_question_without_running():
     target = GrantedQueryTarget(
         grant_uid="grant-one",
         public_name="construction-details",
@@ -197,15 +196,7 @@ def test_query_view_can_open_opaque_catalog_without_a_question():
 
     def granted(request: GrantedQueryRequest) -> GrantedQueryResponse:
         requests.append(request)
-        return GrantedQueryResponse(
-            request,
-            catalog=(
-                AuthorityQueryCatalogEntry(
-                    handle="q-123456789abc",
-                    placeholder_lines=("Flow Circular",),
-                ),
-            ),
-        )
+        return GrantedQueryResponse(request, "Unexpected answer.")
 
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("\t\t\x1b[C/\r\x03")
@@ -221,26 +212,51 @@ def test_query_view_can_open_opaque_catalog_without_a_question():
             require_tty=False,
         )
 
-    assert requests == [GrantedQueryRequest(target=target, question=None)]
-    assert isinstance(result.response, GrantedQueryResponse)
-    assert result.response.catalog[0].handle == "q-123456789abc"
+    assert requests == []
+    assert result.response is None
 
 
-def test_typed_granted_response_rejects_mixed_answer_and_catalog():
+def test_typed_granted_contract_requires_question_and_answer():
     target = GrantedQueryTarget("grant-one", "construction-details", "task")
-    request = GrantedQueryRequest(target=target, question="What changed?")
 
-    with pytest.raises(ValueError, match="cannot also expose a catalog"):
-        GrantedQueryResponse(
-            request,
-            answer="Grounded answer.",
-            catalog=(
-                AuthorityQueryCatalogEntry(
-                    handle="q-123456789abc",
-                    placeholder_lines=("Flow Circular",),
-                ),
-            ),
+    with pytest.raises(ValueError, match="nonblank Query question"):
+        GrantedQueryRequest(target=target, question="")
+    request = GrantedQueryRequest(target=target, question="What changed?")
+    with pytest.raises(ValueError, match="empty answer"):
+        GrantedQueryResponse(request, answer="")
+
+
+def test_query_workbench_can_start_on_one_typed_query_view():
+    target = GrantedQueryTarget("grant-one", "construction-details", "task")
+    requests: list[GrantedQueryRequest] = []
+
+    def granted(request: GrantedQueryRequest) -> GrantedQueryResponse:
+        requests.append(request)
+        return GrantedQueryResponse(request, "Authorized answer.")
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("What changed?\r\x03")
+        run_query_workbench(
+            ("task",),
+            current_context="task",
+            initial_context="task",
+            query_targets=(target,),
+            run_ordinary=_unexpected,
+            run_granted=granted,
+            initial_query_target=target,
+            initial_federate_descendants=False,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
         )
+
+    assert requests == [
+        GrantedQueryRequest(
+            target=target,
+            question="What changed?",
+            federate_descendants=False,
+        )
+    ]
 
 
 def test_query_answer_focus_and_clipboard_preserve_typed_references():

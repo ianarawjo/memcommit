@@ -4,15 +4,14 @@ from __future__ import annotations
 
 import hashlib
 import json
-import re
 import uuid
 
 import pytest
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
+import memcommit.commands.query.command as query_command
 from memcommit.cli import app
-from memcommit.flow_placeholder import render_flow_circular_placeholder
 from memcommit.profile_config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
@@ -340,6 +339,164 @@ def test_explicit_read_grant_remains_the_ordinary_query_source(
     assert local_distraction not in result.output
 
 
+def test_single_positional_readable_context_opens_preselected_workbench(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    coffee = ops.init("coffee")
+    practice = ops.init("practice")
+    store.save(coffee)
+    store.save(practice)
+    store.set_current(coffee.name)
+    observed: list[dict[str, object]] = []
+    monkeypatch.setattr(query_command, "is_interactive_terminal", lambda: True)
+    monkeypatch.setattr(
+        query_command,
+        "_open_query_workbench",
+        lambda _store, **kwargs: observed.append(kwargs),
+    )
+
+    result = runner.invoke(app, ["query", "practice"])
+
+    assert result.exit_code == 0, result.output
+    assert observed == [
+        {
+            "context_name": "practice",
+            "language": "en",
+            "traversal": None,
+        }
+    ]
+
+
+def test_single_positional_query_view_opens_preselected_workbench(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    _authority_store, _source_context, _source_memory, grant = _authority_grant(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+    observed: list[dict[str, object]] = []
+    monkeypatch.setattr(query_command, "is_interactive_terminal", lambda: True)
+    monkeypatch.setattr(
+        query_command,
+        "_open_query_workbench",
+        lambda _store, **kwargs: observed.append(kwargs),
+    )
+
+    result = runner.invoke(app, ["query", grant.public_name])
+
+    assert result.exit_code == 0, result.output
+    assert len(observed) == 1
+    assert observed[0]["context_name"] is None
+    assert observed[0]["language"] == "en"
+    assert observed[0]["traversal"] is None
+    target = observed[0]["query_target"]
+    assert target.grant_uid == grant.uid
+    assert target.public_name == grant.public_name
+
+
+def test_positional_target_scope_flag_initializes_workbench_reach(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    coffee = ops.init("coffee")
+    practice = ops.init("practice")
+    store.save(coffee)
+    store.save(practice)
+    store.set_current(coffee.name)
+    observed: list[dict[str, object]] = []
+    monkeypatch.setattr(query_command, "is_interactive_terminal", lambda: True)
+    monkeypatch.setattr(
+        query_command,
+        "_open_query_workbench",
+        lambda _store, **kwargs: observed.append(kwargs),
+    )
+
+    result = runner.invoke(app, ["query", "practice", "-d"])
+
+    assert result.exit_code == 0, result.output
+    traversal = observed[0]["traversal"]
+    assert traversal.include_descendants is False
+    assert traversal.follow_embeds is False
+
+
+def test_positional_target_rejects_read_query_name_ambiguity(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    _authority_store, _source_context, _source_memory, grant = _authority_grant(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+    store = MemoryStore()
+    local = ops.init(grant.public_name)
+    store.save(local)
+    monkeypatch.setattr(
+        query_command,
+        "connect_codex_chatgpt_provider",
+        lambda: (_ for _ in ()).throw(
+            AssertionError("an ambiguous target must not reach a provider")
+        ),
+    )
+
+    result = runner.invoke(app, ["query", grant.public_name, "What changed?"])
+
+    assert result.exit_code == 1
+    assert "both a readable Context and a query-only View" in result.stderr
+    assert "--context/-c" in result.stderr
+
+
+def test_unmatched_single_positional_value_falls_back_to_current_question(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    coffee = ops.init("coffee")
+    ops.add(coffee, "Coffee practice is scheduled for Friday.")
+    store.save(coffee)
+    store.set_current(coffee.name)
+    calls = []
+    monkeypatch.setattr(
+        query_command,
+        "connect_codex_chatgpt_provider",
+        lambda: _OrdinaryAnswerProvider(calls),
+    )
+
+    result = runner.invoke(app, ["query", "practice"])
+
+    assert result.exit_code == 0, result.output
+    assert calls == [(("coffee", "Coffee practice is scheduled for Friday."),)]
+
+
+def test_relative_positional_target_failure_never_falls_back_to_a_question(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    coffee = ops.init("coffee")
+    store.save(coffee)
+    store.set_current(coffee.name)
+    monkeypatch.setattr(
+        query_command,
+        "connect_codex_chatgpt_provider",
+        lambda: (_ for _ in ()).throw(
+            AssertionError("an explicit missing locator must not reach the provider")
+        ),
+    )
+
+    result = runner.invoke(app, ["query", "./missing"])
+
+    assert result.exit_code == 1
+    assert "coffee/missing" in result.stderr
+
+
 def test_repeated_read_grants_freeze_exactly_the_named_ordinary_sources(
     isolated_store,
     tmp_path,
@@ -528,12 +685,12 @@ def test_legacy_explicit_attachment_form_keeps_the_same_granted_target(
     assert calls == [("construction-details", SECRET, "When can it open?")]
 
 
-def test_granted_query_catalog_contains_only_opaque_memory_shapes(
+def test_granted_query_without_question_requires_an_interactive_terminal(
     isolated_store,
     tmp_path,
     monkeypatch,
 ):
-    _store, _context, source_memory, _grant = _authority_grant(
+    _store, _context, _source_memory, _grant = _authority_grant(
         isolated_store,
         tmp_path,
         monkeypatch,
@@ -541,7 +698,7 @@ def test_granted_query_catalog_contains_only_opaque_memory_shapes(
 
     class Provider:
         def query(self, *_args):
-            raise AssertionError("catalog mode must not query the provider")
+            raise AssertionError("a missing question must not query the provider")
 
     monkeypatch.setattr(
         "memcommit.commands.query.command.connect_query_provider",
@@ -549,16 +706,12 @@ def test_granted_query_catalog_contains_only_opaque_memory_shapes(
     )
     result = runner.invoke(app, ["query", "construction-details"])
 
-    assert result.exit_code == 0, result.output
-    assert "Query view Memories: construction-details" in result.output
-    assert "[q-" in result.output
-    for expected_shape in render_flow_circular_placeholder(SECRET):
-        assert expected_shape in result.output
+    assert result.exit_code == 1
+    assert "QUESTION is required outside a terminal" in result.stderr
     assert SECRET not in result.output
-    assert source_memory.uid not in result.output
 
 
-def test_opaque_memory_handle_queries_only_the_selected_memory(
+def test_granted_query_always_queries_the_complete_view(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -583,16 +736,19 @@ def test_opaque_memory_handle_queries_only_the_selected_memory(
         "memcommit.commands.query.command.connect_query_provider",
         lambda _provider: Provider(),
     )
-    catalog = runner.invoke(app, ["query", "construction-details"])
-    handles = re.findall(r"\[(q-[0-9a-f]{12})\]", catalog.output)
     result = runner.invoke(
         app,
-        ["query", f"construction-details#{handles[1]}", "Which entrance?"],
+        ["query", "construction-details", "Which entrance?"],
     )
 
     assert result.exit_code == 0, result.output
-    assert calls == [(f"construction-details#{handles[1]}", second, "Which entrance?")]
-    assert SECRET not in calls[0][1]
+    assert calls == [
+        (
+            "construction-details",
+            SECRET + "\n\n" + second,
+            "Which entrance?",
+        )
+    ]
 
 
 def test_parent_query_federates_only_provider_selected_descendants(

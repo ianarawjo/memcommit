@@ -126,8 +126,8 @@ but it is not a substitute for the runtime work below.
 
 - [ ] 7. Refresh examples and participant-facing documentation.
   - Replace the obsolete single-Profile/no-grant `init-study` description.
-  - Add the parent federated-query example while retaining exact-child and
-    `#HANDLE` examples.
+  - Add the parent federated-query example while retaining an exact-child
+    Query View example.
   - Update Task 1 permission tables to
     `READ+CREATE+UPDATE+DELETE+QUERY` for the wiki and
     `QUERY` for `construction-details`.

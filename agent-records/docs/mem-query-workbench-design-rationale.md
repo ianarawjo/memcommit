@@ -1,6 +1,6 @@
 # Interactive Query workbench design rationale
 
-Last verified: 2026-08-22.
+Last verified: 2026-08-26.
 
 ## Problem
 
@@ -49,9 +49,10 @@ independent range choice.
 Opening the workbench, moving focus, typing a Source name, or browsing does not
 connect a provider. Enter in Question constructs either an
 `OrdinaryQueryRequest` or `GrantedQueryRequest`, then runs it through the
-shared background-turn lifecycle. A blank ordinary question is rejected
-before provider construction; a blank Query View question retains the safe
-opaque-catalog mode.
+shared background-turn lifecycle. A blank question in either Source mode is
+rejected before provider construction. A positional readable Context or
+QUERY-only View can open the same workbench with that typed target selected;
+explicit `-d` or `-r` initializes its visible reach control.
 
 Normal vertical order is Source type, exact Source, Browse, range, optional
 embed policy, Question, then Answer. While a catalog is open it is the sole
@@ -67,7 +68,7 @@ terminal wrapping and does not persist a memcommit artifact.
 
 ## Persistence and authority invariants
 
-- Workbench selection, draft, answer, catalog projection, and focus are
+- Workbench selection, draft, answer, authorized Source catalog, and focus are
   process-local.
 - Query has no durable publication stage and no success action after Answer;
   therefore a To Do frame would be false workflow chrome.
@@ -107,8 +108,9 @@ application module imports prompt-toolkit or command code.
 ## Verification
 
 `tests/test_query_workbench.py` covers no-connect entry, transient ordinary
-Browse, typed Query View routing, one-shot request freezing, absence of Saved
-Transcripts/To Do, opaque catalog mode, and typed Reference copy projection.
+Browse, typed Query View routing and preselection, blank-question rejection,
+one-shot request freezing, absence of Saved Transcripts/To Do, and typed
+Reference copy projection.
 The ordered real-color 180×52 evidence under
 `agent-records/docs/screenshots/query-compact-one-shot-20260822/` records ordinary entry,
 Browse, question, provider progress, answer, Reference focus, final no-write

@@ -52,7 +52,7 @@ from memcommit.profiles import (
     resolve_granted_context_view,
     study_profile_groups,
 )
-from memcommit.operations.query.granted_source import load_authority_query_catalog
+from memcommit.operations.query.granted_source import load_authority_query_source
 from memcommit.store import MemoryStore
 from memcommit.source_projection.presentation import source_display_text
 from memcommit.study_action_log import StudyActionLedger
@@ -575,16 +575,18 @@ def test_init_study_selects_the_initialized_complete_profile(
         attachment_name="task-1/participant/construction-updates",
         required_permission="QUERY",
     )
-    query_catalog = load_authority_query_catalog(query_view, language="en")
-    assert len(query_catalog) == 78
-    assert all(entry.placeholder_lines for entry in query_catalog)
+    query_source = load_authority_query_source(query_view, language="en")
+    assert query_source.name == "task-1/campus-wiki/construction-details"
+    assert query_source.content
 
     wiki_query_view = resolve_granted_context_view(
         "task-1/campus-wiki",
         attachment_name="task-1/participant/construction-updates",
         required_permission="QUERY",
     )
-    assert len(load_authority_query_catalog(wiki_query_view, language="en")) == 300
+    wiki_query_source = load_authority_query_source(wiki_query_view, language="en")
+    assert wiki_query_source.name == "task-1/campus-wiki"
+    assert wiki_query_source.content
     with pytest.raises(ProfileError, match="does not allow share access"):
         resolve_granted_context_view(
             "task-1/campus-wiki",
@@ -644,7 +646,9 @@ def test_init_study_selects_the_initialized_complete_profile(
         attachment_name="task-2/participant/proposal-workspace",
         required_permission="QUERY",
     )
-    assert len(load_authority_query_catalog(task_two_query, language="en")) == 75
+    task_two_source = load_authority_query_source(task_two_query, language="en")
+    assert task_two_source.name == "task-2/proposal-submission-guidelines"
+    assert task_two_source.content
 
     virtual_names, annotations = _granted_picker_views()
     assert "task-1/campus-wiki" in virtual_names

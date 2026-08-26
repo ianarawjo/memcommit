@@ -10,10 +10,6 @@ import re
 import uuid
 
 from memcommit.context import Context, Memory
-from memcommit.interfaces.presentation.flow_placeholder import (
-    FlowPlaceholderError,
-    render_flow_circular_placeholder,
-)
 from memcommit.operations.profile.config import GrantContextBinding, load_profile_registry
 from memcommit.operations.profile.model import GrantedContextView
 from memcommit.store import MemoryStore
@@ -80,14 +76,6 @@ class AuthorityQuerySource:
 
 
 @dataclass(frozen=True)
-class AuthorityQueryCatalogEntry:
-    """Opaque, display-only identity and shape for one queryable Memory."""
-
-    handle: str
-    placeholder_lines: tuple[str, ...]
-
-
-@dataclass(frozen=True)
 class GrantedQuerySourceBinding:
     """Frozen Grant and Source identity used for post-provider revalidation."""
 
@@ -145,7 +133,6 @@ class _AuthorityQueryMemory:
     context_name: str
     memory_uid: str
     content: str
-    handle: str
 
 
 def _strict_json_object(
@@ -248,11 +235,6 @@ def _authority_query_bindings(
     )
 
 
-def _authority_query_handle(grant_uid: str, memory_uid: str) -> str:
-    digest = hashlib.sha256(f"{grant_uid}\0{memory_uid}".encode("utf-8")).hexdigest()
-    return "q-" + digest[:12]
-
-
 def _load_authority_query_memories(
     view: GrantedContextView,
     *,
@@ -267,7 +249,6 @@ def _load_authority_query_memories(
         raise GrantedQuerySourceError("Granted authority Context scope is empty.")
 
     loaded: list[_AuthorityQueryMemory] = []
-    handles: set[str] = set()
     for binding in bindings:
         try:
             context = authority_store.load_direct(binding.name)
@@ -300,19 +281,12 @@ def _load_authority_query_memories(
         else:
             selected = ()
         for memory, content in zip(memories, selected, strict=True):
-            handle = _authority_query_handle(view.grant.uid, memory.uid)
-            if handle in handles:
-                raise GrantedQuerySourceError(
-                    "Granted authority query Memory handle collision."
-                )
-            handles.add(handle)
             loaded.append(
                 _AuthorityQueryMemory(
                     context_uid=context.uid,
                     context_name=context.name,
                     memory_uid=memory.uid,
                     content=content,
-                    handle=handle,
                 )
             )
     if not loaded:
@@ -320,45 +294,15 @@ def _load_authority_query_memories(
     return tuple(loaded)
 
 
-def load_authority_query_catalog(
-    view: GrantedContextView,
-    *,
-    language: str,
-) -> tuple[AuthorityQueryCatalogEntry, ...]:
-    """Return only opaque handles and generated shapes for a QUERY view."""
-
-    try:
-        return tuple(
-            AuthorityQueryCatalogEntry(
-                handle=memory.handle,
-                placeholder_lines=render_flow_circular_placeholder(memory.content),
-            )
-            for memory in _load_authority_query_memories(view, language=language)
-        )
-    except FlowPlaceholderError as error:
-        raise GrantedQuerySourceError(str(error)) from error
-
-
 def load_authority_query_source(
     view: GrantedContextView,
     *,
     language: str,
-    memory_handle: str | None = None,
 ) -> AuthorityQuerySource:
-    """Serialize all granted Memories or one Memory selected by opaque handle."""
+    """Serialize the complete authorized Memory frame for one QUERY View."""
 
     canonical_language = _language(language)
-    memories = _load_authority_query_memories(view, language=canonical_language)
-    if memory_handle is not None:
-        selected = tuple(
-            memory for memory in memories if memory.handle == memory_handle
-        )
-        if not selected:
-            raise GrantedQuerySourceError(
-                f"Query Memory handle {memory_handle!r} does not exist in this view."
-            )
-    else:
-        selected = memories
+    selected = _load_authority_query_memories(view, language=canonical_language)
 
     digest_contexts: list[dict[str, object]] = []
     for memory in selected:
@@ -377,11 +321,7 @@ def load_authority_query_source(
         {"language": canonical_language, "contexts": digest_contexts}
     )
     return AuthorityQuerySource(
-        name=(
-            view.requested_name
-            if memory_handle is None
-            else f"{view.requested_name}#{memory_handle}"
-        ),
+        name=view.requested_name,
         content="\n\n".join(memory.content for memory in selected),
         digest=digest,
     )
@@ -414,11 +354,9 @@ def freeze_granted_query_source_binding(
 
 
 __all__ = [
-    "AuthorityQueryCatalogEntry",
     "AuthorityQuerySource",
     "GrantedQuerySourceBinding",
     "GrantedQuerySourceError",
     "freeze_granted_query_source_binding",
-    "load_authority_query_catalog",
     "load_authority_query_source",
 ]

@@ -8,6 +8,7 @@ import memcommit.ops as ops
 from memcommit.commands.shared.command_progress import CommandProgress
 from memcommit.commands.shared.context_operand import ContextOperandSnapshot
 from memcommit.authority.access import (
+    ContextAccess,
     context_access_display_facts,
     resolve_context_access,
 )
@@ -40,9 +41,9 @@ from memcommit.interfaces.cli.query import (
     render_granted_query_response,
     render_ordinary_query_response,
     render_query_reference_response,
-    split_query_memory_selector,
 )
 from memcommit.context import QueryContextRef
+from memcommit.context_locator import is_relative_context_locator
 from memcommit.context_targeting.presets import (
     ContextScopePreset,
     ContextTraversal,
@@ -61,7 +62,6 @@ from memcommit.operations.query.reference_application import QueryReferenceReque
 from memcommit.operations.query.reference_runtime import execute_query_reference
 from memcommit.operations.query.granted_source import (
     GrantedQuerySourceError,
-    load_authority_query_catalog,
 )
 from memcommit.store import MemoryStore
 from memcommit.operations.search.model import FindError
@@ -141,12 +141,18 @@ def _open_query_workbench(
     store: MemoryStore,
     *,
     context_name: str | None,
+    query_target: GrantedQueryTarget | None = None,
     language: str,
+    traversal: ContextTraversal | None = None,
 ) -> None:
     """Open one blank Query over frozen readable and public QUERY catalogs."""
 
     context_snapshot = ContextOperandSnapshot.capture(store)
-    selected_name = context_snapshot.resolve_or_current(context_name)
+    selected_name = (
+        query_target.attachment_name
+        if query_target is not None
+        else context_snapshot.resolve_or_current(context_name)
+    )
     access = resolve_context_access(
         store,
         selected_name,
@@ -180,18 +186,36 @@ def _open_query_workbench(
             provider_factory=connect_codex_chatgpt_provider,
         )
 
+    query_targets = freeze_granted_query_targets(store)
+    if query_target is not None:
+        # A granted operand may select a descendant route under a base Grant.
+        # Replace that Grant's catalog row so the exact public route remains
+        # visible and selected without fabricating a second Grant identity.
+        query_targets = tuple(
+            query_target if item.grant_uid == query_target.grant_uid else item
+            for item in query_targets
+        )
+        if all(item.grant_uid != query_target.grant_uid for item in query_targets):
+            query_targets = (*query_targets, query_target)
+    initial_descendants = (
+        traversal.include_descendants if traversal is not None else True
+    )
+    initial_embeds = traversal.follow_embeds if traversal is not None else True
     run_query_workbench(
         names,
         current_context=displayed_current,
         initial_context=access.display_name,
-        query_targets=freeze_granted_query_targets(store),
+        query_targets=query_targets,
         run_ordinary=run_ordinary,
         run_granted=lambda request: execute_granted_query_request(
             request,
             store=store,
             provider_factory=lambda: connect_query_provider("codex_chatgpt"),
-            load_catalog=load_authority_query_catalog,
         ),
+        initial_query_target=query_target,
+        initial_include_descendants=initial_descendants,
+        initial_follow_embeds=initial_embeds,
+        initial_federate_descendants=initial_descendants,
         annotations=annotations,
         initial_language=language,
         help_binder=bind_session_help,
@@ -202,54 +226,39 @@ def _query_granted_target(
     store: MemoryStore,
     *,
     target: GrantedQueryTarget,
-    question: str | None,
+    question: str,
     language: str,
-    memory_handle: str | None,
     federate_descendants: bool,
 ) -> None:
     """Execute and render one already resolved public QUERY target."""
 
-    progress = (
-        CommandProgress(
-            "QUERY",
-            "connecting provider",
-            total=3,
-        )
-        if question is not None
-        else None
+    progress = CommandProgress(
+        "QUERY",
+        "connecting provider",
+        total=3,
     )
     try:
-        if progress is not None:
-            progress.start()
+        progress.start()
         response = execute_granted_query_request(
             GrantedQueryRequest(
                 target=target,
                 question=question,
                 language=language,
-                memory_handle=memory_handle,
                 federate_descendants=federate_descendants,
             ),
             store=store,
             provider_factory=lambda: connect_query_provider("codex_chatgpt"),
-            observer=(
-                (
-                    lambda stage: progress.update(
-                        {
-                            "PREPARING_SOURCES": "preparing authorized sources",
-                            "ANSWERING": "answering query",
-                        }[stage],
-                        step={"PREPARING_SOURCES": 2, "ANSWERING": 3}[stage],
-                    )
-                    if stage in {"PREPARING_SOURCES", "ANSWERING"}
-                    else None
-                )
-                if progress is not None
-                else None
-            ),
-            load_catalog=load_authority_query_catalog,
+            observer=lambda stage: progress.update(
+                {
+                    "PREPARING_SOURCES": "preparing authorized sources",
+                    "ANSWERING": "answering query",
+                }[stage],
+                step={"PREPARING_SOURCES": 2, "ANSWERING": 3}[stage],
+            )
+            if stage in {"PREPARING_SOURCES", "ANSWERING"}
+            else None,
         )
-        if progress is not None:
-            progress.close()
+        progress.close()
         render_granted_query_response(response)
     except (
         FileNotFoundError,
@@ -260,8 +269,7 @@ def _query_granted_target(
         GrantedQuerySourceError,
         ValueError,
     ) as error:
-        if progress is not None:
-            progress.close()
+        progress.close()
         typer.secho(
             f"Query error: {display_escape_text(str(error))}",
             fg=typer.colors.RED,
@@ -270,14 +278,56 @@ def _query_granted_target(
         raise typer.Exit(1)
 
 
+def _resolve_positional_query_target(
+    store: MemoryStore,
+    selector: str,
+    *,
+    snapshot: ContextOperandSnapshot,
+) -> ContextAccess | GrantedQueryTarget | None:
+    """Resolve one accessible target before allowing question fallback.
+
+    Only a genuinely absent bare name may fall back to an ordinary question.
+    Relative locators and authority failures are explicit target intent and
+    must remain visible errors instead of silently changing operation meaning.
+    """
+
+    canonical = snapshot.resolve(selector)
+    ordinary: ContextAccess | None = None
+    ordinary_error: FileNotFoundError | ProfileError | None = None
+    try:
+        ordinary = resolve_context_access(
+            store,
+            canonical,
+            current_name=snapshot.current_name,
+            required_permission="READ",
+        )
+    except (FileNotFoundError, ProfileError) as error:
+        ordinary_error = error
+
+    granted = resolve_granted_query_target(store, selector)
+    if ordinary is not None and granted is not None:
+        raise ValueError(
+            f"Query target {selector!r} is available as both a readable Context "
+            "and a query-only View; use --context/-c for the readable Context."
+        )
+    if ordinary is not None:
+        return ordinary
+    if granted is not None:
+        return granted
+    if isinstance(ordinary_error, ProfileError) or is_relative_context_locator(selector):
+        assert ordinary_error is not None
+        raise ordinary_error
+    return None
+
+
 def cmd(
     selector: Annotated[
         Optional[str],
         typer.Argument(
             help=(
-                "Question for the selected ordinary Context, or a query-only "
-                "Context name, optional #HANDLE, or legacy reference UID/prefix; "
-                "omit in a terminal to open the interactive Query workbench"
+                "Existing readable Context or query-only View; when no accessible "
+                "target matches and QUESTION is omitted, ask SELECTOR of the "
+                "current Context"
             )
         ),
     ] = None,
@@ -285,8 +335,8 @@ def cmd(
         Optional[str],
         typer.Argument(
             help=(
-                "Question for a query-only view; omit it to ask SELECTOR as "
-                "a question of ordinary data or browse a recognized opaque view"
+                "Question for the selected Context or query-only View; omit it "
+                "in a terminal to open that target in the Query workbench"
             )
         ),
     ] = None,
@@ -298,8 +348,7 @@ def cmd(
             show_default=False,
             help=(
                 "Readable Context root to answer from; repeat for multiple "
-                "ordinary roots. One exact QUERY-only public name may also "
-                "identify the answer Source"
+                "ordinary roots"
             ),
         ),
     ] = None,
@@ -352,6 +401,12 @@ def cmd(
     scope_flags_supplied = (
         all_contexts
         or direct
+        or recursive
+        or include_descendants is not None
+        or follow_embeds is not None
+    )
+    traversal_flags_supplied = (
+        direct
         or recursive
         or include_descendants is not None
         or follow_embeds is not None
@@ -486,11 +541,6 @@ def cmd(
             )
             raise typer.Exit(1)
         return
-    candidate_route_selector, candidate_memory_handle = split_query_memory_selector(
-        selector
-    )
-    route_selector = selector
-    memory_handle = None
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
         resolved_context_names = tuple(
@@ -498,60 +548,109 @@ def cmd(
         )
         if question is not None and not question.strip():
             raise ValueError("Question must be non-empty.")
-        # A public QUERY name is already a complete operation target. Resolve
-        # it from public Grant metadata before consulting the unrelated current
-        # Context. With --context, READ wins so a readable grant keeps ordinary
-        # Query semantics; a QUERY-only public name is the one-question alias.
-        direct_granted_target = (
-            resolve_granted_query_target(store, candidate_route_selector)
-            if not resolved_context_names
-            else None
-        )
-        if direct_granted_target is not None:
-            _query_granted_target(
-                store,
-                target=direct_granted_target,
-                question=question,
-                language=language,
-                memory_handle=candidate_memory_handle,
-                federate_descendants=traversal.include_descendants,
-            )
-            return
-        if question is None and len(resolved_context_names) == 1:
-            try:
-                resolve_context_access(
-                    store,
-                    resolved_context_names[0],
-                    current_name=context_snapshot.current_name,
-                    required_permission="READ",
-                )
-            except (FileNotFoundError, ProfileError) as read_error:
-                explicit_granted_target = resolve_granted_query_target(
-                    store,
-                    resolved_context_names[0],
-                )
-                if explicit_granted_target is None:
-                    raise read_error
-                _query_granted_target(
-                    store,
-                    target=explicit_granted_target,
-                    question=selector,
-                    language=language,
-                    memory_handle=None,
-                    federate_descendants=traversal.include_descendants,
-                )
-                return
-        if question is None:
+        if resolved_context_names and question is None:
+            if len(resolved_context_names) == 1:
+                try:
+                    resolve_context_access(
+                        store,
+                        resolved_context_names[0],
+                        current_name=context_snapshot.current_name,
+                        required_permission="READ",
+                    )
+                except (FileNotFoundError, ProfileError) as read_error:
+                    granted_target = resolve_granted_query_target(
+                        store,
+                        resolved_context_names[0],
+                    )
+                    if granted_target is None:
+                        raise read_error
+                    _query_granted_target(
+                        store,
+                        target=granted_target,
+                        question=selector,
+                        language=language,
+                        federate_descendants=traversal.include_descendants,
+                    )
+                    return
             if language != "en":
                 raise ValueError("--language applies only to a query-only view.")
             _query_ordinary_context(
                 store,
-                context_names=(resolved_context_names or (None,)),
+                context_names=resolved_context_names,
                 current_name=context_snapshot.current_name,
                 question=selector,
                 traversal=traversal,
             )
             return
+
+        if not resolved_context_names:
+            positional_target = _resolve_positional_query_target(
+                store,
+                selector,
+                snapshot=context_snapshot,
+            )
+            if isinstance(positional_target, ContextAccess):
+                if question is None:
+                    if not is_interactive_terminal():
+                        raise ValueError(
+                            "QUESTION is required outside a terminal for a selected "
+                            "Context. In a terminal, omit it to open the Query "
+                            "workbench."
+                        )
+                    _open_query_workbench(
+                        store,
+                        context_name=positional_target.display_name,
+                        language=language,
+                        traversal=(traversal if traversal_flags_supplied else None),
+                    )
+                else:
+                    if language != "en":
+                        raise ValueError(
+                            "--language applies only to a query-only view."
+                        )
+                    _query_ordinary_context(
+                        store,
+                        context_names=(positional_target.display_name,),
+                        current_name=context_snapshot.current_name,
+                        question=question,
+                        traversal=traversal,
+                    )
+                return
+            if isinstance(positional_target, GrantedQueryTarget):
+                if question is None:
+                    if not is_interactive_terminal():
+                        raise ValueError(
+                            "QUESTION is required outside a terminal for a selected "
+                            "Query View. In a terminal, omit it to open the Query "
+                            "workbench."
+                        )
+                    _open_query_workbench(
+                        store,
+                        context_name=None,
+                        query_target=positional_target,
+                        language=language,
+                        traversal=(traversal if traversal_flags_supplied else None),
+                    )
+                else:
+                    _query_granted_target(
+                        store,
+                        target=positional_target,
+                        question=question,
+                        language=language,
+                        federate_descendants=traversal.include_descendants,
+                    )
+                return
+            if question is None:
+                if language != "en":
+                    raise ValueError("--language applies only to a query-only view.")
+                _query_ordinary_context(
+                    store,
+                    context_names=(None,),
+                    current_name=context_snapshot.current_name,
+                    question=selector,
+                    traversal=traversal,
+                )
+                return
     except (
         FileNotFoundError,
         FindAnswerCorpusTooLarge,
@@ -632,14 +731,7 @@ def cmd(
         resolution_error = error
 
     if isinstance(item, QueryContextRef):
-        if question is None:
-            typer.secho(
-                "Error: legacy query-only references require a QUESTION; "
-                "opaque Memory browsing is available for authority grants.",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
+        assert question is not None
         progress = CommandProgress(
             "QUERY",
             "connecting provider",
@@ -682,6 +774,7 @@ def cmd(
     # Grant routing metadata is public control-plane state. Inspecting it does
     # not open authority content and avoids authenticating for an ordinary
     # item or a selector that has no query-view route at all.
+    route_selector = selector
     try:
         registry = load_profile_registry()
         matching_grants = [
@@ -698,8 +791,6 @@ def cmd(
         if matching_grants:
             routed_grants = matching_grants
         else:
-            route_selector = candidate_route_selector
-            memory_handle = candidate_memory_handle
             routed_grants = [
                 grant
                 for grant in registry.grants
@@ -745,6 +836,7 @@ def cmd(
         )
         raise typer.Exit(1)
 
+    assert question is not None
     _query_granted_target(
         store,
         target=GrantedQueryTarget(
@@ -754,6 +846,5 @@ def cmd(
         ),
         question=question,
         language=language,
-        memory_handle=memory_handle,
         federate_descendants=traversal.include_descendants,
     )

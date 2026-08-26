@@ -1,6 +1,6 @@
 # Query public Python API design rationale
 
-Last verified: 2026-08-22.
+Last verified: 2026-08-26.
 
 ## Public surface
 
@@ -36,8 +36,9 @@ the CLI answer text and typed citations. It creates no cache, receipt, or
 durable mutation.
 
 Granted Query remains active-Profile scoped because its Grant lock and
-concealed Source resolution use that process boundary. It returns only a
-revalidated opaque catalog or answer. There is no publication token, session
+concealed Source resolution use that process boundary. A nonblank question is
+required and it returns one revalidated answer. There is no per-Memory catalog
+or selector, publication token, session
 receipt, or partial-success publication failure. Concealed Source content and
 freshness tokens never cross the facade.
 
@@ -48,7 +49,7 @@ concealed Source, and returns one answer without persistence.
 ## Stable result and error projection
 
 - `OrdinaryQueryResult` includes `QueryCitation` values.
-- `GrantedQueryResult` is either `CATALOG` or `ANSWER`.
+- `GrantedQueryResult` contains the public View name and answer.
 - `ReferenceQueryResult` contains the public Source name and answer.
 
 Public callers catch `MemCommitError` / `QueryError` categories for input,
@@ -72,6 +73,6 @@ dataclasses remain free to evolve independently from the public result types.
 
 Tests cover identical root/API exports, no-write client construction, typed
 ordinary citations, one current-locator snapshot, provider-before-Source
-reference ordering, granted catalog/answer projection without a receipt,
+reference ordering, granted answer projection without a receipt,
 explicit-root grant isolation, stable public error mapping, and dependency
 direction away from commands and terminal frameworks.

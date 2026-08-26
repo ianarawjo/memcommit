@@ -5,9 +5,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal, Protocol
 
-from memcommit.operations.query.granted_source import AuthorityQueryCatalogEntry
-
-
 GrantedQueryStage = Literal[
     "AUTHORITY_FROZEN",
     "CONNECTING_PROVIDER",
@@ -38,49 +35,33 @@ class GrantedQueryRequest:
     """One exact process-local query-only read."""
 
     target: GrantedQueryTarget
-    question: str | None
+    question: str
     language: str = "en"
-    memory_handle: str | None = None
     federate_descendants: bool = True
 
     def __post_init__(self) -> None:
         if not isinstance(self.target, GrantedQueryTarget):
             raise ValueError("Granted Query requires a typed target.")
-        if self.question is not None and (
-            not isinstance(self.question, str) or not self.question.strip()
-        ):
-            raise ValueError("Query question must be nonblank when supplied.")
+        if not isinstance(self.question, str) or not self.question.strip():
+            raise ValueError("Enter a nonblank Query question.")
         if not isinstance(self.language, str) or not self.language:
             raise ValueError("Query language must be nonblank.")
-        if self.memory_handle is not None and not self.memory_handle:
-            raise ValueError("Query Memory handle must be nonblank.")
         if not isinstance(self.federate_descendants, bool):
             raise ValueError("Query federation choice must be a boolean.")
 
 
 @dataclass(frozen=True)
 class GrantedQueryResponse:
-    """One authorized opaque catalog or process-local answer."""
+    """One authorized process-local answer."""
 
     request: GrantedQueryRequest
-    answer: str | None = None
-    catalog: tuple[AuthorityQueryCatalogEntry, ...] = ()
+    answer: str
 
     def __post_init__(self) -> None:
         if not isinstance(self.request, GrantedQueryRequest):
             raise ValueError("Granted Query response requires its frozen request.")
-        if (self.answer is None) == (self.request.question is not None):
-            raise ValueError("Granted Query answer does not match its request mode.")
-        if self.answer is not None and (
-            not isinstance(self.answer, str) or not self.answer.strip()
-        ):
+        if not isinstance(self.answer, str) or not self.answer.strip():
             raise ValueError("Granted Query returned an empty answer.")
-        if not isinstance(self.catalog, tuple) or any(
-            not isinstance(entry, AuthorityQueryCatalogEntry) for entry in self.catalog
-        ):
-            raise ValueError("Granted Query catalog must contain typed entries.")
-        if self.answer is not None and self.catalog:
-            raise ValueError("A Query answer cannot also expose a catalog.")
 
 
 @dataclass(frozen=True)

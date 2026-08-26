@@ -50,9 +50,8 @@ command mem help --emit-selection
 - a successful selection emits exactly one audited editable command template;
 - the wrapper rejects output outside the bounded template character set and
   uses zsh's `print -z` builtin to place that text, plus a trailing space, in
-  the next edit buffer. That set includes `#` because the query-view Memory
-  selector is written `[query_view]#[memory_handle]`; it does not admit
-  command substitution, redirection, control operators, or newlines.
+  the next edit buffer. The set does not admit `#`, command substitution,
+  redirection, control operators, or newlines.
 
 No selected command callback runs during this exchange.
 

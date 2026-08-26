@@ -473,24 +473,55 @@ def test_query_missing_language_error_does_not_disclose_entry_key(
     assert concealed_key not in result.stderr
 
 
-def test_query_rejects_an_ordinary_context_item(isolated_store, monkeypatch):
+def test_query_positional_context_item_runs_ordinary_query(
+    isolated_store,
+    monkeypatch,
+):
     store = MemoryStore()
     child = ops.init("ordinary")
+    content = "The ordinary Context is the selected Query Source."
+    ops.add(child, content)
     parent = ops.init("parent")
     ops.embed(child, parent)
     store.save(child)
     store.save(parent)
     store.set_current("parent")
+    calls = []
+
+    class OrdinaryProvider:
+        def complete(self, prompt, *, operation, output_schema):
+            assert operation == "ordinary query"
+            payload = json.loads(prompt.split("ORDINARY QUERY PAYLOAD:\n", 1)[1])
+            corpus = payload["complete_frozen_corpus"]
+            calls.append(
+                tuple((item["context"], item["content"]) for item in corpus)
+            )
+            return json.dumps(
+                {
+                    "outcome_kind": "ANSWER",
+                    "blocks": [
+                        {
+                            "role": "SUPPORTED_CLAIM",
+                            "text": "The selected ordinary Context answers it.",
+                            "source_aliases": [item["alias"] for item in corpus],
+                        }
+                    ],
+                }
+            )
 
     monkeypatch.setattr(
         "memcommit.commands.query.command.connect_query_provider",
         lambda provider: pytest.fail("provider should not be connected"),
     )
+    monkeypatch.setattr(
+        "memcommit.commands.query.command.connect_codex_chatgpt_provider",
+        OrdinaryProvider,
+    )
 
     result = runner.invoke(app, ["query", "ordinary", "Question?"])
 
-    assert result.exit_code == 1
-    assert "not a query-only Context" in result.stderr
+    assert result.exit_code == 0, result.output
+    assert calls == [(("ordinary", content),)]
 
 
 def test_branch_merge_remove_and_revert_keep_only_the_pointer(isolated_store):

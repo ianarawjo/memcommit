@@ -36,6 +36,8 @@ Every baseline root module has one role:
 - operation-implementation: code named for and consumed by one operation
   family;
 - shared-concept-implementation: reusable code with a narrower named owner;
+- retired-prototype: a frozen baseline name whose canonical implementation and
+  compatibility alias were deliberately removed with the feature;
 - root-boundary: one of the deliberately retained public or composition
   boundaries.
 
@@ -67,9 +69,12 @@ would unnecessarily break historical imports and saved global references in a
 pass whose stated boundary is physical layout rather than behavior.
 
 The alias catalog does not promise that every historical name is permanently
-public. Removing individual aliases remains a later compatibility decision,
-but that decision now has one visible ledger rather than hundreds of scattered
-files.
+public. On 2026-08-26 `memcommit.flow_placeholder` became the first retired
+baseline entry when the per-Memory Query catalog, canonical renderer, font
+assets, and runtime dependency were removed together. The frozen plan keeps
+that name and reason visible but deliberately omits it from the generated alias
+map. This makes retirement an explicit compatibility decision rather than a
+missing target or an untracked deletion.
 
 ## Verification
 
@@ -79,15 +84,16 @@ passing, and introduce no new behavioral failure. Static ownership tests and
 generated callable catalogs may change because their subject is the path
 layout itself; those records are updated only after the canonical moves settle.
 The layout check requires exactly seven root Python files, rejects every
-physical compatibility facade and internal legacy import, and imports all 242
-historical names in fresh interpreters in both legacy-first and canonical-first
-order. It verifies exact module identity and canonical `__spec__` ownership so
-an earlier test import cannot mask a package-initialization cycle or metadata
-regression.
+physical compatibility facade and internal legacy import, and imports every
+non-retired historical name (currently 241) in fresh interpreters in both
+legacy-first and canonical-first order. It verifies exact module identity and
+canonical `__spec__` ownership so an earlier test import cannot mask a
+package-initialization cycle or metadata regression.
 
 ## Non-goals
 
-This pass does not rename callables, split large modules, consolidate duplicate
-policies, remove historical names from the centralized compatibility catalog,
-or resolve the known functional failures. Those require semantic reading after
-the package layout makes the relevant code traceable.
+The original physical-layout pass did not rename callables, split large
+modules, consolidate duplicate policies, remove historical names, or resolve
+known functional failures. A later feature-removal change may retire one
+historical name only when it records that state in the frozen plan and removes
+the canonical implementation in the same change.

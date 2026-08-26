@@ -91,11 +91,8 @@ control had previously selected federation.
   revoked source prevents publication.
 - `find`, `ls`, and ordinary Context switching remain unchanged and cannot use
   federation to reveal query-only content.
-- Catalog browsing without a question remains exact to the requested view.
-- A `#HANDLE` request remains exact to that one opaque Memory.
-- Saved sessions remain exact to one grant. Federation is disabled whenever
-  `--session` is present, so a transcript cannot silently acquire additional
-  authority bindings.
+- A granted request always includes a nonblank question and the complete
+  authorized root View frame; there is no per-Memory catalog or selector.
 
 ## Alternatives and limitation
 

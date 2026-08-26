@@ -26,7 +26,8 @@ ROOT_BOUNDARIES = {
 
 def test_package_root_contains_only_real_implementation_boundaries() -> None:
     assert {path.name for path in PACKAGE_ROOT.glob("*.py")} == ROOT_BOUNDARIES
-    assert len(LEGACY_SUBMODULE_ALIASES) == 242
+    assert len(LEGACY_SUBMODULE_ALIASES) == 241
+    assert "memcommit.flow_placeholder" not in LEGACY_SUBMODULE_ALIASES
     for legacy_name in LEGACY_SUBMODULE_ALIASES:
         relative_path = Path(*legacy_name.split(".")).with_suffix(".py")
         assert not (REPOSITORY_ROOT / relative_path).exists()

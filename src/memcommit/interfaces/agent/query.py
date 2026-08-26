@@ -31,7 +31,7 @@ from memcommit.interfaces.agent.contract import (
 )
 
 
-QUERY_AGENT_CONTRACT_VERSION = 2
+QUERY_AGENT_CONTRACT_VERSION = 3
 QUERY_AGENT_TOOL_NAME = "memcommit_query"
 QUERY_AGENT_ERROR_MESSAGE_LIMIT = AGENT_ERROR_MESSAGE_LIMIT
 QueryAgentKind = Literal["ordinary", "granted", "reference"]
@@ -41,13 +41,6 @@ def _boolean(value: object, *, field: str) -> bool:
     if not isinstance(value, bool):
         raise _AgentRequestError(f"{field} must be a boolean.")
     return value
-
-
-def _optional_text(
-    payload: Mapping[str, object],
-    field: str,
-) -> str | None:
-    return _text(payload.get(field), field=field, optional=True)
 
 
 def _ordinary_arguments(payload: Mapping[str, object]) -> dict[str, object]:
@@ -84,22 +77,14 @@ def _ordinary_arguments(payload: Mapping[str, object]) -> dict[str, object]:
 def _granted_arguments(payload: Mapping[str, object]) -> dict[str, object]:
     _exact_fields(
         payload,
-        required={"version", "kind", "public_name"},
-        optional=frozenset(
-            {
-                "question",
-                "language",
-                "memory_handle",
-                "federate_descendants",
-            }
-        ),
+        required={"version", "kind", "public_name", "question"},
+        optional=frozenset({"language", "federate_descendants"}),
         label="granted Query request",
     )
     return {
         "public_name": _text(payload["public_name"], field="public_name"),
-        "question": _optional_text(payload, "question"),
+        "question": _text(payload["question"], field="question"),
         "language": _text(payload.get("language", "en"), field="language"),
-        "memory_handle": _optional_text(payload, "memory_handle"),
         "federate_descendants": _boolean(
             payload.get("federate_descendants", True),
             field="federate_descendants",
@@ -181,16 +166,8 @@ def _ordinary_result(result: OrdinaryQueryResult) -> JsonObject:
 
 def _granted_result(result: GrantedQueryResult) -> JsonObject:
     return {
-        "mode": result.mode,
         "public_name": result.public_name,
         "answer": result.answer,
-        "catalog": [
-            {
-                "handle": entry.handle,
-                "placeholder_lines": list(entry.placeholder_lines),
-            }
-            for entry in result.catalog
-        ],
     }
 
 
@@ -386,14 +363,13 @@ def query_agent_tool_schema() -> JsonObject:
             {
                 "type": "object",
                 "additionalProperties": False,
-                "required": ["version", "kind", "public_name"],
+                "required": ["version", "kind", "public_name", "question"],
                 "properties": {
                     **base,
                     "kind": {"type": "string", "const": "granted"},
                     "public_name": text(),
-                    "question": {"type": ["string", "null"], "minLength": 1},
+                    "question": text(),
                     "language": {"type": "string", "minLength": 1, "default": "en"},
-                    "memory_handle": {"type": ["string", "null"], "minLength": 1},
                     "federate_descendants": {"type": "boolean", "default": True},
                 },
             },

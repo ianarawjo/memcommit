@@ -23,27 +23,12 @@ from memcommit.interfaces.tui.operations.query.model import (
 QUERY_VIEW_LABEL = source_object_label(SourceForm.QUERY_VIEW).upper()
 
 
-def _render_granted_catalog(response: GrantedQueryResponse) -> str:
-    lines = [
-        f"{QUERY_VIEW_LABEL} MEMORIES · {response.request.target.public_name}",
-        f"  {len(response.catalog)} queryable "
-        f"Memor{'y' if len(response.catalog) == 1 else 'ies'}",
-    ]
-    for entry in response.catalog:
-        lines.extend(("", f"  [{entry.handle}]"))
-        lines.extend(f"    {line}" for line in entry.placeholder_lines)
-    lines.extend(("", "Source text is not present in this catalog view."))
-    return "\n".join(lines)
-
-
 def render_query_answer(response: QueryWorkbenchResponse | None) -> str:
     if response is None:
         return "QUERY ANSWER\n  Enter a question for the selected Source and Scope."
     if isinstance(response, OrdinaryQueryResponse):
         return response.answer
-    if response.answer is not None:
-        return response.answer
-    return _render_granted_catalog(response)
+    return response.answer
 
 
 def query_answer_reference_document(

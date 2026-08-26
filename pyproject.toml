@@ -14,7 +14,6 @@ dependencies = [
   "typer>=0.12,<0.13",
   "rich>=13.0",
   "prompt-toolkit>=3.0.52,<4",
-  "Pillow>=10.0",
 ]
 
 [project.scripts]
@@ -29,7 +28,6 @@ where = ["src"]
 include = ["memcommit*"]
 
 [tool.setuptools.package-data]
-"memcommit" = ["assets/*.ttf", "assets/*-OFL.txt"]
 "memcommit.eval" = ["fixtures/*.json"]
 
 [project.optional-dependencies]

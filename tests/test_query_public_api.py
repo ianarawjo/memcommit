@@ -276,7 +276,7 @@ def test_granted_query_high_level_success_is_process_local(
         on_stage=stages.append,
     )
 
-    assert result.mode == "ANSWER"
+    assert result.public_name == "construction-details"
     assert result.answer == "After 18:00."
     assert stages == [
         "AUTHORITY_FROZEN",

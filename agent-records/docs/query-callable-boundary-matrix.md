@@ -1,6 +1,6 @@
 # Query callable boundary matrix
 
-Last verified: 2026-08-23.
+Last verified: 2026-08-26.
 
 ## Scope
 
@@ -17,7 +17,7 @@ public-interface boundaries. Query has no durability boundary.
 | `operations.query.ordinary_runtime:MemoryStoreOrdinaryQuerySourcePort.freeze` | infrastructure | request -> frozen candidate frame | exact authorized Context reads; Query Views excluded | ordinary runtime tests | `VERIFIED` |
 | `operations.query.ordinary_runtime:execute_ordinary_query` | Store facade | request + injected dependencies -> response | delegates one-shot meaning; no terminal or persistence dependency | CLI/TUI/public API | `VERIFIED` |
 | `operations.query.granted_source:freeze_granted_query_source_binding` | infrastructure | public route -> frozen binding | provider-authenticated concealed Source load with digest and exact access identity | granted Source tests | `VERIFIED` |
-| `operations.query.granted_source:load_authority_query_catalog` | infrastructure | public route -> opaque catalog | opens no source text to the caller; handle/placeholders only | granted Source tests | `VERIFIED` |
+| `operations.query.granted_source:load_authority_query_source` | infrastructure | authorized View -> complete concealed Source frame | opens only inside the provider-authenticated runtime and returns no Source through public adapters | granted Source tests | `VERIFIED` |
 | `operations.query.granted_application:run_granted_query_read` | application | request -> response | QUERY freezes before provider construction; response withheld until Grant and Sources revalidate | granted application tests | `VERIFIED` |
 | `operations.query.granted_runtime:freeze_granted_query_targets` | infrastructure | Store -> public target tuple | reads Grant control-plane metadata only | Query TUI tests | `VERIFIED` |
 | `operations.query.granted_runtime:resolve_granted_query_target` | infrastructure | Store + public name -> exact target or none | resolves independently of current Context from Grant metadata and exact local attachment identity; opens no concealed Source | canonical CLI route tests | `VERIFIED` |
@@ -26,16 +26,16 @@ public-interface boundaries. Query has no durability boundary.
 | `operations.query.reference_application:run_query_reference` | application | request -> response | provider construction before Source port; no durable effect | reference boundary tests | `VERIFIED` |
 | `operations.query.reference_runtime:execute_query_reference` | Store facade | request + Store/provider -> response | exact UID/name/language concealed Source read | CLI/public API tests | `VERIFIED` |
 | `api.client:MemCommitClient.query_ordinary` | public Python | question + Context scope -> result | one-shot typed answer/citations; no write | public API tests | `VERIFIED` |
-| `api.client:MemCommitClient.query_granted` | public Python | public route + question -> result | active-Profile authority read; opaque catalog or answer only | public API tests | `VERIFIED` |
+| `api.client:MemCommitClient.query_granted` | public Python | public route + required question -> result | active-Profile authority read; answer only | public API tests | `VERIFIED` |
 | `api.client:MemCommitClient.query_reference` | public Python | reference + question -> result | provider-before-Source one-shot read | public API tests | `VERIFIED` |
-| `interfaces.agent.query:QueryAgentAdapter.invoke` | agent adapter | version-2 tagged JSON -> JSON-safe result/error | exact route mapping; no route guessing or transcript result | agent tests | `VERIFIED` |
-| `interfaces.agent.query:query_agent_tool_schema` | schema projection | none -> fresh version-2 schema | grants no authority and carries no Source data | agent tests | `VERIFIED` |
+| `interfaces.agent.query:QueryAgentAdapter.invoke` | agent adapter | version-3 tagged JSON -> JSON-safe result/error | exact route mapping; no route guessing, catalog, or transcript result | agent tests | `VERIFIED` |
+| `interfaces.agent.query:query_agent_tool_schema` | schema projection | none -> fresh version-3 schema | grants no authority and carries no Source data | agent tests | `VERIFIED` |
 | `interfaces.cli.query:render_ordinary_query_response` | CLI | response -> stdout | terminal-safe typed answer projection | CLI tests | `VERIFIED` |
-| `interfaces.cli.query:render_granted_query_response` | CLI | response -> stdout | opaque catalog or terminal-safe answer only | CLI tests | `VERIFIED` |
+| `interfaces.cli.query:render_granted_query_response` | CLI | response -> stdout | terminal-safe answer only | CLI tests | `VERIFIED` |
 | `interfaces.tui.operations.query:run_query_workbench` | TUI | frozen catalogs + runners -> result | process-local state, one provider turn after Enter, optional plain clipboard | workbench tests and 180×52 trace | `VERIFIED` |
 | `interfaces.tui.operations.query:project_query_answer_clipboard` | TUI projection | typed answer + focus -> text | no effect until injected writer; never reparses terminal output | clipboard tests | `VERIFIED` |
 | `commands.query:_open_query_workbench` | CLI composition | Store + public options -> workbench | freezes ordinary and Query View catalogs; injects runners and Help | Query command tests | `VERIFIED IN PLACE` |
-| `commands.query:cmd` | CLI composition | argv/TTY -> explicit route | freezes public Source identity before legacy attachment lookup; repeated ordinary roots retain exact names and QUERY-only `--context` cannot fall through to local data | CF-01 route regressions and Query CLI tests | `VERIFIED IN PLACE` |
+| `commands.query:cmd` | CLI composition | argv/TTY -> explicit route or narrow question fallback | accessible ordinary/QUERY targets resolve before an unmatched single bare value can become a current-Context question; repeated roots and QUERY-only `--context` retain exact authority | CF-01 route regressions and Query CLI tests | `VERIFIED IN PLACE` |
 
 ## Operation summary
 
@@ -56,6 +56,7 @@ ordinary request target.
 
 There is no overloaded public Python router, streaming API, asynchronous
 cancellation, network host, or cross-Profile granted authority service. The
-command retains historical positional routing only at its composition root.
+command retains target-first positional routing and its narrow unmatched
+single-value question fallback only at its composition root.
 Legacy `query-sessions/` records are outside every callable above: current
 Query code neither loads nor migrates them.

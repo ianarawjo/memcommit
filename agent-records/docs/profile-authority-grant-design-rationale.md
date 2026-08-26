@@ -42,7 +42,7 @@ Permissions are independent capabilities:
 | `CREATE` | add a direct Memory; requires `READ` |
 | `UPDATE` | edit a direct Memory; `EDIT` is a CLI input alias; requires `READ` |
 | `DELETE` | remove a direct item; requires `READ` |
-| `QUERY` | browse opaque Memory shapes/handles and ask a provider without reading source text |
+| `QUERY` | ask a provider over an authorized Context-level View without receiving source text |
 | `SHARE` | deliver one exactly reviewed ordinary Context or lexical subtree snapshot as a receiver-owned consent unit; grants no receiver read access |
 
 These permissions currently govern direct items inside existing Contexts.
@@ -71,10 +71,10 @@ A narrower public grant overrides a broader one by longest path. This is
 required for Task 1: `campus-wiki` is readable and editable, while
 `campus-wiki/construction-details` is query-only. Recursive listing filters
 the narrower tree from the broader `READ` projection and renders only its
-query link. `mem query VIEW` then exposes generated shapes and opaque handles,
-not ordinary Memory content; `mem query VIEW#HANDLE QUESTION` scopes inference
-to one such Memory. It never falls back to the parent's permission when the
-narrower grant denies the requested operation.
+query link. `mem query VIEW` opens the Query workbench with that public View
+selected, while `mem query VIEW QUESTION` asks over its complete authorized
+frame without exposing ordinary Memory content. It never falls back to the
+parent's permission when the narrower grant denies the requested operation.
 
 Every operation validates the attachment Context and authority Context UIDs.
 A mutation re-resolves the grant immediately before saving and requires the

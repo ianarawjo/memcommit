@@ -12,7 +12,6 @@ from memcommit.api import (
     GrantedQueryResult,
     MemCommitClient,
     OrdinaryQueryResult,
-    QueryCatalogEntry,
     QueryCitation,
     QueryAuthorityError,
     QueryConfigurationError,
@@ -123,54 +122,19 @@ def test_ordinary_route_calls_only_the_public_client_and_serializes_citations(
     json.dumps(response)
 
 
-@pytest.mark.parametrize(
-    ("result", "expected"),
-    [
-        (
-            GrantedQueryResult(
-                mode="CATALOG",
-                public_name="construction",
-                catalog=(QueryCatalogEntry("M1", ("Memory · opaque",)),),
-            ),
-            {
-                "mode": "CATALOG",
-                "public_name": "construction",
-                "answer": None,
-                "catalog": [
-                    {
-                        "handle": "M1",
-                        "placeholder_lines": ["Memory · opaque"],
-                    }
-                ],
-            },
-        ),
-        (
-            GrantedQueryResult(
-                mode="ANSWER",
-                public_name="construction",
-                answer="After 18:00.",
-            ),
-            {
-                "mode": "ANSWER",
-                "public_name": "construction",
-                "answer": "After 18:00.",
-                "catalog": [],
-            },
-        ),
-    ],
-)
-def test_granted_route_preserves_catalog_or_answer_meaning(
+def test_granted_route_requires_a_question_and_serializes_one_answer(
     tmp_path,
     monkeypatch,
-    result,
-    expected,
 ):
     client = _client(tmp_path)
     calls: list[dict[str, object]] = []
 
     def query_granted(**kwargs):
         calls.append(kwargs)
-        return result
+        return GrantedQueryResult(
+            public_name="construction",
+            answer="After 18:00.",
+        )
 
     monkeypatch.setattr(client, "query_granted", query_granted)
     response = QueryAgentAdapter(client).invoke(
@@ -180,7 +144,6 @@ def test_granted_route_preserves_catalog_or_answer_meaning(
             "public_name": "construction",
             "question": "When does it open?",
             "language": "en",
-            "memory_handle": "M1",
             "federate_descendants": False,
         }
     )
@@ -190,7 +153,6 @@ def test_granted_route_preserves_catalog_or_answer_meaning(
             "public_name": "construction",
             "question": "When does it open?",
             "language": "en",
-            "memory_handle": "M1",
             "federate_descendants": False,
         }
     ]
@@ -198,7 +160,10 @@ def test_granted_route_preserves_catalog_or_answer_meaning(
         "version": QUERY_AGENT_CONTRACT_VERSION,
         "ok": True,
         "kind": "granted",
-        "result": expected,
+        "result": {
+            "public_name": "construction",
+            "answer": "After 18:00.",
+        },
     }
     json.dumps(response)
 
@@ -255,10 +220,10 @@ def test_reference_route_reconstructs_only_public_routing_metadata(
     ("payload", "message"),
     [
         ({"version": 1, "kind": "ordinary", "question": "Q"}, "version"),
-        ({"version": 2, "kind": "unknown"}, "kind"),
+        ({"version": QUERY_AGENT_CONTRACT_VERSION, "kind": "unknown"}, "kind"),
         (
             {
-                "version": 2,
+                "version": QUERY_AGENT_CONTRACT_VERSION,
                 "kind": "ordinary",
                 "question": "Q",
                 "surprise": True,
@@ -267,7 +232,7 @@ def test_reference_route_reconstructs_only_public_routing_metadata(
         ),
         (
             {
-                "version": 2,
+                "version": QUERY_AGENT_CONTRACT_VERSION,
                 "kind": "ordinary",
                 "question": "Q",
                 "context_names": [],
@@ -444,7 +409,7 @@ def test_companion_skill_preserves_route_and_failure_boundaries():
     assert "name: memcommit-query" in skill
     assert "Use when a user asks an agent" in skill
     assert "Invoke `memcommit_query` directly." in skill
-    assert "Always send `version: 2`." in skill
+    assert "Always send `version: 3`." in skill
     assert all(
         f"Use `{kind}`" in skill for kind in ("ordinary", "granted", "reference")
     )

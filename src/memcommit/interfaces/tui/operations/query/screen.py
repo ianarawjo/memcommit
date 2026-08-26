@@ -97,6 +97,10 @@ def run_query_workbench(
     query_targets: Sequence[GrantedQueryTarget],
     run_ordinary: OrdinaryQueryRunner,
     run_granted: GrantedQueryRunner,
+    initial_query_target: GrantedQueryTarget | None = None,
+    initial_include_descendants: bool = True,
+    initial_follow_embeds: bool = True,
+    initial_federate_descendants: bool = True,
     annotations: Mapping[str, SourceDisplayValue] | None = None,
     initial_language: str = "en",
     app_input: Input | None = None,
@@ -115,13 +119,27 @@ def run_query_workbench(
     targets = tuple(query_targets)
     if len({target.grant_uid for target in targets}) != len(targets):
         raise ValueError("Query-only target identities must be distinct.")
+    if initial_query_target is not None and initial_query_target not in targets:
+        raise ValueError("The initial Query View is outside the authorized catalog.")
+    if any(
+        not isinstance(value, bool)
+        for value in (
+            initial_include_descendants,
+            initial_follow_embeds,
+            initial_federate_descendants,
+        )
+    ):
+        raise ValueError("Initial Query scope choices must be booleans.")
     if not isinstance(initial_language, str) or not initial_language:
         raise ValueError("Query language must be nonblank.")
 
     source_options = [HorizontalChoiceOption("ORDINARY", "VISIBLE CONTEXTS")]
     if targets:
         source_options.append(HorizontalChoiceOption("GRANTED", QUERY_VIEW_LABEL))
-    source_choice = HorizontalChoiceState(tuple(source_options), "ORDINARY")
+    source_choice = HorizontalChoiceState(
+        tuple(source_options),
+        "GRANTED" if initial_query_target is not None else "ORDINARY",
+    )
     response: QueryWorkbenchResponse | None = None
     answer_focus = QueryAnswerFocus()
     status = {"value": "ENTER A QUESTION"}
@@ -145,8 +163,8 @@ def run_query_workbench(
         context_names,
         current_name=current_context,
         initial_targets=(initial_context,),
-        include_descendants=True,
-        follow_embeds=True,
+        include_descendants=initial_include_descendants,
+        follow_embeds=initial_follow_embeds,
         annotations=annotations,
         input_name="query-readable-scope-context",
         on_change=clear_answer,
@@ -156,8 +174,8 @@ def run_query_workbench(
     query_view_scope = (
         CompactQueryViewScopeControl(
             targets,
-            initial_target=targets[0],
-            federate_descendants=True,
+            initial_target=initial_query_target or targets[0],
+            federate_descendants=initial_federate_descendants,
             on_change=clear_answer,
             on_status=update_status,
             locked=lambda: background_turn.busy,
@@ -425,7 +443,7 @@ def run_query_workbench(
                 assert query_view_scope is not None
                 request = GrantedQueryRequest(
                     target=query_view_scope.selected_target(),
-                    question=question_area.text.strip() or None,
+                    question=question_area.text.strip(),
                     language=initial_language,
                     federate_descendants=query_view_scope.federate_descendants,
                 )

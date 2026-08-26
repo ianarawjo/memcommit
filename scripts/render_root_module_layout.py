@@ -37,6 +37,16 @@ ROOT_BOUNDARIES = {
 }
 
 
+# A retired prototype remains in the frozen baseline inventory, but no longer
+# receives a compatibility alias once both its behavior and canonical owner
+# have been deliberately removed.
+RETIRED_ROOT_MODULES = {
+    "flow_placeholder": (
+        "retired with the per-Memory Query catalog and its presentation assets"
+    ),
+}
+
+
 COMPATIBILITY_TARGET_OVERRIDES = {
     # This historical forwarding implementation moves with the physical
     # facade cleanup rather than remaining executable at the package root.
@@ -154,7 +164,6 @@ CONCEPT_TARGETS = {
     "duplicate_pipeline": "memcommit.semantic.classification.duplicates",
     "exact_command_review": "memcommit.application.exact_command_review",
     "findings": "memcommit.reviewing.quality.findings",
-    "flow_placeholder": "memcommit.interfaces.presentation.flow_placeholder",
     "goal_focus": "memcommit.semantic.goal_focus",
     "goal_focus_runtime": "memcommit.semantic.goal_focus_runtime",
     "granted_provenance": "memcommit.retained_history.granted_provenance",
@@ -315,6 +324,11 @@ def build_plan() -> dict[str, object]:
             target = module
             action = "retain"
             reason = ROOT_BOUNDARIES[stem]
+        elif stem in RETIRED_ROOT_MODULES:
+            role = "retired-prototype"
+            target = None
+            action = "retire"
+            reason = RETIRED_ROOT_MODULES[stem]
         elif _is_compatibility(source):
             role = "compatibility-facade"
             target = _compatibility_target(source, stem=stem)
@@ -417,7 +431,11 @@ def render_markdown(plan: dict[str, object]) -> str:
                 module=entry["module"],
                 role=entry["role"],
                 action=entry["action"],
-                target=entry["canonical_target"] or "multiple canonical modules",
+                target=(
+                    "none (retired)"
+                    if entry["role"] == "retired-prototype"
+                    else entry["canonical_target"] or "multiple canonical modules"
+                ),
                 importers=entry["inbound_package_importers"],
             )
         )
@@ -431,14 +449,17 @@ def render_legacy_alias_module(plan: dict[str, object]) -> str:
     aliases = []
     for entry in modules:
         assert isinstance(entry, dict)
-        if entry["role"] == "root-boundary":
+        if entry["role"] in {"root-boundary", "retired-prototype"}:
             continue
         target = entry["canonical_target"]
         if not isinstance(target, str) or not target:
             raise RuntimeError(f"Legacy alias target is missing: {entry['module']}")
         aliases.append((str(entry["module"]), target))
-    if len(aliases) != 242:
-        raise RuntimeError(f"Expected 242 legacy aliases, found {len(aliases)}")
+    expected_aliases = 249 - len(ROOT_BOUNDARIES) - len(RETIRED_ROOT_MODULES)
+    if len(aliases) != expected_aliases:
+        raise RuntimeError(
+            f"Expected {expected_aliases} legacy aliases, found {len(aliases)}"
+        )
     lines = [
         '"""Generated legacy root-submodule aliases; do not edit directly."""',
         "",
@@ -459,7 +480,7 @@ def _plan_aliases(plan: dict[str, object]) -> dict[str, str]:
     aliases = {}
     for entry in modules:
         assert isinstance(entry, dict)
-        if entry["role"] == "root-boundary":
+        if entry["role"] in {"root-boundary", "retired-prototype"}:
             continue
         target = entry["canonical_target"]
         if not isinstance(target, str) or not target:

@@ -88,6 +88,20 @@ The follow-up therefore introduces no new behavioral failure. It changes the
 physical navigation surface and the implementation of compatibility lookup,
 not the retained 13 functional or interaction-contract problems.
 
+## Query placeholder retirement follow-up
+
+On 2026-08-26 the per-Memory Query catalog and its Flow Circular placeholder
+were retired as one semantic feature removal. The frozen 249-module inventory
+now classifies `memcommit.flow_placeholder` as a retired prototype rather than
+pretending its removed canonical target remains importable. The generated
+compatibility map therefore contains 241 active aliases; the other seven
+baseline entries remain root boundaries and the retired name remains visible
+with its reason in the relocation plan. This is an intentional compatibility
+break limited to a private prototype surface, not a relocation regression.
+The package-wide regression run completed with 5852 passed, 1 skipped, and the
+same 13 recorded baseline nodes deselected. Focused Query and compatibility
+slices completed with 140 and 59 passing tests respectively.
+
 ## Command package layout follow-up
 
 On 2026-08-26 the 153 non-package modules under `memcommit.commands` were
