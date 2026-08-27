@@ -8,7 +8,7 @@ from memcommit.adapters.interfaces.console.theme import (
     semantic_color_rgb,
     semantic_judgment_role,
 )
-from memcommit.adapters.interfaces.fit import (
+from memcommit.adapters.console.commands.fit.presentation import (
     FitReceiptLine,
     fit_receipt_lines,
     proposition_fit_receipt_lines,

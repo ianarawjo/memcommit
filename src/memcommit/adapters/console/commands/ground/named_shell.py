@@ -80,7 +80,7 @@ from memcommit.application.operations.ground.model import (
 )
 from memcommit.application.operations.fit.ground_report import FitJudgment, FitReport
 from memcommit.application.operations.fit.store import GroundFitReceipt
-from memcommit.adapters.interfaces.fit import fit_fraction, fit_mark
+from memcommit.adapters.console.commands.fit.presentation import fit_fraction, fit_mark
 from memcommit.application.operations.fit.application import FitResult
 from memcommit.application.operations.ground.turn_dialogue import (
     GroundTurnDraft,

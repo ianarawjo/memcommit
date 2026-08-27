@@ -23,12 +23,12 @@ from memcommit.application.operations.fit.runtime import (
     run_proposition_fit,
     run_stored_source_fit,
 )
-from memcommit.adapters.interfaces.cli.fit import (
+from memcommit.adapters.console.commands.fit.render import (
     render_fit_plain,
     render_proposition_fit_plain,
 )
 from memcommit.adapters.interfaces.console.text import display_escape_text
-from memcommit.adapters.interfaces.fit import fit_result_text
+from memcommit.adapters.console.commands.fit.presentation import fit_result_text
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.providers.subscription import QueryProviderError, connect_semantic_provider
