@@ -21,7 +21,7 @@ from memcommit.selective_curation import (
     build_provider_frame,
     plan_curation_execution,
 )
-from memcommit.semantic_execution import (
+from memcommit.application.semantic_execution import (
     ExecutionMode,
     ExecutionStrategy,
     SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT,

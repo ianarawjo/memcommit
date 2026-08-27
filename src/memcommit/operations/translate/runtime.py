@@ -10,7 +10,7 @@ import uuid
 
 from memcommit.context import Context, Memory
 from memcommit.infrastructure.providers.subscription import CodexChatGPTProvider
-from memcommit.semantic_execution import (
+from memcommit.application.semantic_execution import (
     BudgetLimits,
     BudgetVector,
     ExecutionMode,

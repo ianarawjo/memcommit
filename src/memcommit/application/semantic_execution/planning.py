@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.semantic_execution.model import (
+from memcommit.application.semantic_execution.model import (
     BudgetVector,
     ExecutionMode,
     ExecutionPlan,

@@ -30,7 +30,7 @@ from memcommit.semantic.changes import (
     parse_proposals,
 )
 from memcommit.semantic.utils import build_messages, extract_json
-from memcommit.semantic_execution import ExecutionMode
+from memcommit.application.semantic_execution import ExecutionMode
 
 
 FORGET_SYSTEM_PROMPT = """\

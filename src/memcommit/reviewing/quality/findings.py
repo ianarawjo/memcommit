@@ -20,7 +20,7 @@ from memcommit.reviewing.direct_item_duplicates import (
     ExactDuplicateGroup,
     find_exact_duplicate_groups,
 )
-from memcommit.semantic_execution import (
+from memcommit.application.semantic_execution import (
     BudgetLimits,
     BudgetVector,
     ExecutionMode,

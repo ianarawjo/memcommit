@@ -16,7 +16,7 @@ from memcommit.operations.compare.summary_rules import (
     comparison_summary_ruleset_prompt_payload,
     measure_comparison_summary_words,
 )
-from memcommit.semantic_execution import (
+from memcommit.application.semantic_execution import (
     BudgetLimits,
     ExecutionMode,
     ExecutionStrategy,

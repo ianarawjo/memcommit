@@ -1,4 +1,4 @@
-"""Exact block exposure and host-owned relation-component mechanics."""
+"""Application-owned block exposure and relation-component mechanics."""
 
 from __future__ import annotations
 

@@ -17,7 +17,7 @@ from memcommit.operations.rationale.rules import (
     rationale_ruleset_prompt_payload,
     validate_rationale_limit,
 )
-from memcommit.semantic_execution import (
+from memcommit.application.semantic_execution import (
     BudgetLimits,
     ExecutionMode,
     ExecutionStrategy,

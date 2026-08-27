@@ -35,7 +35,7 @@ arbitrary prompt is retrieval, an exhaustive relation ledger, a directional
 mutation plan, a holistic summary, or selective curation. Automatic splitting
 inside the provider adapter would therefore change operation meaning.
 
-`memcommit.semantic_execution` sits above the provider and below operation
+`memcommit.application.semantic_execution` sits above the provider and below operation
 adapters. It owns only operation-neutral mechanics:
 
 - a vector budget;
@@ -48,6 +48,25 @@ adapters. It owns only operation-neutral mechanics:
 
 Operations still own candidate construction, authority, disclosure, provider
 prompts and schemas, semantic reconciliation, durable state, and application.
+
+### Physical application ownership
+
+On 2026-08-27 the package implementation moved mechanically from
+`memcommit.semantic_execution` to
+`memcommit.application.semantic_execution`. Semantic execution chooses and
+orchestrates how an already-defined operation may use bounded provider work;
+it is therefore an application capability rather than a provider transport or
+a Memory/Context domain rule. The move changes no budget, strategy, batching,
+coverage, progress, provider, or reconciliation behavior. Production and test
+imports use the application-owned path.
+
+The former package and all seven former child-module paths remain exact lazy
+aliases through the centralized compatibility finder. Legacy-first and
+canonical-first imports return the same canonical module objects, preserving
+class identity and serialized global lookup without leaving a second physical
+implementation. This compatibility boundary is intentionally limited to the
+package relocation; it does not classify or relocate the broader
+`memcommit.semantic` namespace.
 
 The shared coverage layer also supplies the narrow provider-I/O contract used
 by relation operations: an exact-count source-assignment array, a frozen alias

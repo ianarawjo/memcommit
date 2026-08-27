@@ -14,7 +14,7 @@ from memcommit.retained_history.reconstruction import (
     MemoryTransition,
     MemoryVersion,
 )
-from memcommit.semantic_execution import (
+from memcommit.application.semantic_execution import (
     BudgetLimits,
     ExecutionMode,
     ExecutionStrategy,

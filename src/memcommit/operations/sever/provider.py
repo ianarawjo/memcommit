@@ -22,7 +22,7 @@ from memcommit.semantic.selective_curation import (
     decode_curation_response,
     plan_curation_execution,
 )
-from memcommit.semantic_execution import ExecutionMode
+from memcommit.application.semantic_execution import ExecutionMode
 
 
 SEVER_PAYLOAD_MARKER = "SEVER PAYLOAD:\n"

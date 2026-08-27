@@ -22,9 +22,29 @@ LEGACY_SUBMODULE_ALIASES = MappingProxyType(_GENERATED_LEGACY_SUBMODULE_ALIASES)
 LEGACY_COMMAND_SUBMODULE_ALIASES = MappingProxyType(
     _GENERATED_LEGACY_COMMAND_SUBMODULE_ALIASES
 )
+LEGACY_PACKAGE_SUBMODULE_ALIASES = MappingProxyType(
+    {
+        "memcommit.semantic_execution": "memcommit.application.semantic_execution",
+        **{
+            f"memcommit.semantic_execution.{module}": (
+                f"memcommit.application.semantic_execution.{module}"
+            )
+            for module in (
+                "budgeting",
+                "coverage",
+                "execution",
+                "model",
+                "partitioning",
+                "planning",
+                "relations",
+            )
+        },
+    }
+)
 _ALL_LEGACY_SUBMODULE_ALIASES = {
     **LEGACY_SUBMODULE_ALIASES,
     **LEGACY_COMMAND_SUBMODULE_ALIASES,
+    **LEGACY_PACKAGE_SUBMODULE_ALIASES,
 }
 
 
@@ -96,6 +116,7 @@ def install_legacy_submodule_aliases() -> None:
 
 __all__ = [
     "LEGACY_COMMAND_SUBMODULE_ALIASES",
+    "LEGACY_PACKAGE_SUBMODULE_ALIASES",
     "LEGACY_SUBMODULE_ALIASES",
     "install_legacy_submodule_aliases",
 ]

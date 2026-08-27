@@ -1,4 +1,4 @@
-"""Host-owned exact input coverage for staged semantic execution."""
+"""Application-owned exact input coverage for staged semantic execution."""
 
 from __future__ import annotations
 

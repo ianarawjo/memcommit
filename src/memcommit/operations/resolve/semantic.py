@@ -33,7 +33,7 @@ from memcommit.operations.resolve.rules import (
     resolve_ruleset_item_count,
     resolve_ruleset_prompt_payload,
 )
-from memcommit.semantic_execution import (
+from memcommit.application.semantic_execution import (
     BudgetLimits,
     ExecutionMode,
     ExecutionStrategy,

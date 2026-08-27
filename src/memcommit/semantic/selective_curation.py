@@ -11,7 +11,7 @@ import json
 from dataclasses import dataclass
 from typing import Literal, Mapping
 
-from memcommit.semantic_execution import (
+from memcommit.application.semantic_execution import (
     BudgetLimits,
     ExecutionPlan,
     ExecutionStrategy,

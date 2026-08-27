@@ -13,7 +13,7 @@ from memcommit.operations.search.answer_references import (
     FindAnswerSentence,
 )
 from memcommit.infrastructure.providers.subscription import QueryProviderError
-from memcommit.semantic_execution import (
+from memcommit.application.semantic_execution import (
     BudgetLimits,
     BudgetVector,
     ExecutionMode,

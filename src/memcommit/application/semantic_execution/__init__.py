@@ -1,17 +1,17 @@
 """Operation-aware planning for bounded semantic provider work."""
 
-from memcommit.semantic_execution.budgeting import json_budget
-from memcommit.semantic_execution.coverage import (
+from memcommit.application.semantic_execution.budgeting import json_budget
+from memcommit.application.semantic_execution.coverage import (
     CoverageError,
     InputCoverageLedger,
     decode_exact_source_assignments,
     exact_source_assignment_schema,
 )
-from memcommit.semantic_execution.execution import (
+from memcommit.application.semantic_execution.execution import (
     ExecutionProgress,
     run_partitioned,
 )
-from memcommit.semantic_execution.model import (
+from memcommit.application.semantic_execution.model import (
     BudgetLimits,
     BudgetVector,
     ExecutionMode,
@@ -20,12 +20,12 @@ from memcommit.semantic_execution.model import (
     SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT,
     SemanticExecutionPolicy,
 )
-from memcommit.semantic_execution.partitioning import (
+from memcommit.application.semantic_execution.partitioning import (
     PartitionError,
     pack_grouped_items,
 )
-from memcommit.semantic_execution.planning import plan_semantic_execution
-from memcommit.semantic_execution.relations import (
+from memcommit.application.semantic_execution.planning import plan_semantic_execution
+from memcommit.application.semantic_execution.relations import (
     RelationBlock,
     RelationScheduleError,
     build_relation_block_matrix,

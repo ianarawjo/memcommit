@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 
-from memcommit.semantic_execution.model import BudgetVector
+from memcommit.application.semantic_execution.model import BudgetVector
 
 
 def _json_chars(value: object) -> int:

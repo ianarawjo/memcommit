@@ -1,4 +1,4 @@
-"""Operation-neutral values for semantic execution planning."""
+"""Application values for operation-neutral semantic execution planning."""
 
 from __future__ import annotations
 

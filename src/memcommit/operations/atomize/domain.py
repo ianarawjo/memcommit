@@ -27,7 +27,7 @@ from memcommit.reviewing.result_workbench import (
     RESULT_REPORT_SECTION_TARGET_MIN_WORDS,
 )
 from memcommit.operations.review.model import direct_context_digest
-from memcommit.semantic_execution import (
+from memcommit.application.semantic_execution import (
     BudgetLimits,
     BudgetVector,
     ExecutionMode,

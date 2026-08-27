@@ -12,6 +12,20 @@
   project entry point with `python -m memcommit.cli ...` and clearly identify
   that fallback.
 
+## Completing Codex worktree changes
+
+- When implementation work occurs in a linked Codex worktree, completion
+  includes applying or merging the task-scoped change into the primary
+  checkout shown by `git worktree list` before reporting the task complete,
+  unless the user explicitly requests a worktree-only result.
+- Apply only the current task's focused diff to a dirty primary checkout.
+  Preserve unrelated primary and worktree changes, and do not use a bulk merge
+  or cherry-pick that would carry unrelated work across the boundary.
+- Re-run the task's relevant verification in the primary checkout after the
+  focused change is applied. If an overlap cannot be resolved without risking
+  unrelated work, report the concrete conflict instead of describing the
+  worktree-only implementation as complete.
+
 ## Preserving design intent
 
 This repository is a research prototype, and its implementation history may be
@@ -187,9 +201,19 @@ material inside an agent record is not such approval.
 
 ## Shared semantic execution planning
 
+- Treat `memcommit.application.semantic_execution` as the sole physical and
+  canonical owner of shared semantic budgeting, planning, partitioning,
+  coverage, execution, and relation scheduling. New production code and tests
+  must import that application path directly; do not recreate Python source
+  under `memcommit.semantic_execution`.
+- Preserve `memcommit.semantic_execution` and its historical child-module
+  imports only through the centralized lazy compatibility finder. A relocation
+  is incomplete if an old physical package, an internal legacy import, a
+  duplicate class definition, or non-identical legacy/canonical module objects
+  remain.
 - Treat `provider.complete()` as one bounded provider-call primitive, never as
   a generic place to split an arbitrary prompt. Plan aggregate semantic work
-  through `memcommit.semantic_execution`, where character, item, schema,
+  through `memcommit.application.semantic_execution`, where character, item, schema,
   expected-output, and relation-edge budgets remain independent axes.
 - Every semantic operation must declare its staged meaning with an
   `ExecutionStrategy`. Use group-preserving `TOP_K_RERANK` for retrieval,

@@ -43,7 +43,7 @@ from memcommit.operations.atomize.workbench import (
     project_atomize_workbench_findings,
 )
 from memcommit.context import Context, Memory
-from memcommit.semantic_execution import (
+from memcommit.application.semantic_execution import (
     BudgetLimits,
     ExecutionMode,
     ExecutionStrategy,

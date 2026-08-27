@@ -8,7 +8,7 @@ import memcommit.ops as ops
 import pytest
 from memcommit.context import Memory
 from memcommit.search import SearchCandidate, rank_candidates
-from memcommit.semantic_execution import SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
+from memcommit.application.semantic_execution import SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
 from memcommit.operations.translate.runtime import plan_translation
 
 

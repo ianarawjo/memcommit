@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Callable, Iterable
 from typing import TypeVar
 
-from memcommit.semantic_execution.model import BudgetLimits, BudgetVector
+from memcommit.application.semantic_execution.model import BudgetLimits, BudgetVector
 
 
 T = TypeVar("T")

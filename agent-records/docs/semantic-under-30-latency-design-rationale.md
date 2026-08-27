@@ -436,7 +436,7 @@ rather than an item-disposition vector.
 - Existing production semantic behavior remains unchanged while this is an
   experiment design.
 - `provider.complete()` remains one bounded provider-call primitive. Planning
-  and reconciliation belong under `memcommit.semantic_execution`.
+  and reconciliation belong under `memcommit.application.semantic_execution`.
 - No over-budget frame may be silently truncated.
 - No failed or incomplete batch may publish a partial result.
 - Frozen inputs must be exposed according to the declared strategy, and the

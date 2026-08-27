@@ -6,7 +6,7 @@ from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from typing import TypeVar
 
-from memcommit.semantic_execution.coverage import InputCoverageLedger
+from memcommit.application.semantic_execution.coverage import InputCoverageLedger
 
 
 T = TypeVar("T")

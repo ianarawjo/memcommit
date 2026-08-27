@@ -26,7 +26,7 @@ from memcommit.semantic.generative_reduction_reference import (
     distill_elaborate_reference_payload,
     render_distill_elaborate_reference_examples,
 )
-from memcommit.semantic_execution import (
+from memcommit.application.semantic_execution import (
     BudgetLimits,
     ExecutionMode,
     ExecutionStrategy,

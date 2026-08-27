@@ -6,7 +6,7 @@ from dataclasses import dataclass
 import json
 from typing import Literal, Protocol
 
-from memcommit.semantic_execution import (
+from memcommit.application.semantic_execution import (
     BudgetLimits,
     ExecutionMode,
     ExecutionStrategy,

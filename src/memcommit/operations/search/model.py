@@ -8,7 +8,7 @@ from dataclasses import dataclass, replace
 from typing import Literal, Protocol
 
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
-from memcommit.semantic_execution import (
+from memcommit.application.semantic_execution import (
     BudgetLimits,
     BudgetVector,
     ExecutionMode,

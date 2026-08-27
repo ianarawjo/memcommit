@@ -192,7 +192,7 @@ than Memory, but a later Profile-removal cleanup may delete it under the same
 registry transaction boundary.
 
 This layer does not choose execution strategy, prompt size, schema, retry, or
-batching. Those remain operation contracts under `memcommit.semantic_execution`.
+batching. Those remain operation contracts under `memcommit.application.semantic_execution`.
 Adding a new independently configurable semantic route therefore also requires
 registering its exact policy key; merely adding a CLI command or a new
 completion label must not widen Profile configuration.
