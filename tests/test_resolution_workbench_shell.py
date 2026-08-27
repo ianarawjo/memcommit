@@ -8,7 +8,9 @@ from prompt_toolkit.layout import to_container
 from prompt_toolkit.output import DummyOutput
 from memcommit.application.exact_command_review import ExactCommandReview
 
-import memcommit.adapters.interfaces.tui.workbenches.resolution.session_shell as resolution_shell_module
+import memcommit.adapters.interfaces.tui.workbenches.resolution.session_shell as resolution_shell_package
+import memcommit.adapters.interfaces.tui.workbenches.resolution.session_shell.presentation as resolution_presentation_module
+import memcommit.adapters.interfaces.tui.workbenches.resolution.session_shell.runtime as resolution_runtime_module
 from memcommit.adapters.console.commands.shared.semantic_detail_renderer import (
     semantic_detail_block_fragments,
 )
@@ -51,6 +53,17 @@ from memcommit.application.resolution.workbench import (
 from memcommit.application.reviewing.session_navigation import SessionWorkbenchNavigation
 from memcommit.adapters.console.responses.model import ResponseDraft
 from memcommit.application.reviewing.result_workbench import ResultRef
+
+
+def test_session_shell_package_preserves_public_owner_identity():
+    assert (
+        resolution_shell_package.render_resolution_workbench_snapshot
+        is resolution_presentation_module.render_resolution_workbench_snapshot
+    )
+    assert (
+        resolution_shell_package.run_resolution_workbench_shell
+        is resolution_runtime_module.run_resolution_workbench_shell
+    )
 
 
 def _item(
@@ -122,7 +135,7 @@ def test_resolution_viewer_y_and_Y_share_focused_and_complete_copy_contract(
         copied.append((text, success_message))
         return type("Receipt", (), {"message": "COPIED"})()
 
-    monkeypatch.setattr(resolution_shell_module, "copy_plain_text", fake_copy)
+    monkeypatch.setattr(resolution_runtime_module, "copy_plain_text", fake_copy)
 
     action = _run(_view(_item("issue-1")), "yYq")
 
@@ -1010,8 +1023,8 @@ def test_split_responses_composes_the_shared_input_as_a_separate_inner_box(
 ):
     built_inputs = []
     frames = []
-    original_builder = resolution_shell_module.build_framed_multiline_input
-    original_frame = resolution_shell_module.Frame
+    original_builder = resolution_runtime_module.build_framed_multiline_input
+    original_frame = resolution_runtime_module.Frame
 
     def recording_builder(*args, **kwargs):
         component = original_builder(*args, **kwargs)
@@ -1024,11 +1037,11 @@ def test_split_responses_composes_the_shared_input_as_a_separate_inner_box(
         return frame
 
     monkeypatch.setattr(
-        resolution_shell_module,
+        resolution_runtime_module,
         "build_framed_multiline_input",
         recording_builder,
     )
-    monkeypatch.setattr(resolution_shell_module, "Frame", recording_frame)
+    monkeypatch.setattr(resolution_runtime_module, "Frame", recording_frame)
 
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("q")
@@ -1083,7 +1096,7 @@ def test_atomize_detail_down_uses_semantic_memory_stops_with_acceleration(
             pass
 
     monkeypatch.setattr(
-        resolution_shell_module,
+        resolution_runtime_module,
         "NavigationAccelerator",
         TwoSectionAccelerator,
     )
@@ -1892,7 +1905,7 @@ def test_split_horizontal_noop_explains_the_real_stacked_path(
     kind: str,
     expected: str,
 ) -> None:
-    message = resolution_shell_module._stacked_horizontal_key_message(kind)
+    message = resolution_presentation_module._stacked_horizontal_key_message(kind)
 
     assert message.startswith(expected)
 
@@ -2354,14 +2367,14 @@ def test_final_review_hides_viewer_title_and_focuses_top_summary(monkeypatch):
         accept_mode="AS_IS",
     )
     frames = []
-    original_frame = resolution_shell_module.Frame
+    original_frame = resolution_runtime_module.Frame
 
     def recording_frame(*args, **kwargs):
         frame = original_frame(*args, **kwargs)
         frames.append(frame)
         return frame
 
-    monkeypatch.setattr(resolution_shell_module, "Frame", recording_frame)
+    monkeypatch.setattr(resolution_runtime_module, "Frame", recording_frame)
     navigation = SessionWorkbenchNavigation()
 
     with create_pipe_input() as pipe_input:
@@ -2408,14 +2421,14 @@ def test_final_review_tab_order_visits_viewer_items_todo_without_closing_review(
         accept_mode="AS_IS",
     )
     frames = []
-    original_frame = resolution_shell_module.Frame
+    original_frame = resolution_runtime_module.Frame
 
     def recording_frame(*args, **kwargs):
         frame = original_frame(*args, **kwargs)
         frames.append(frame)
         return frame
 
-    monkeypatch.setattr(resolution_shell_module, "Frame", recording_frame)
+    monkeypatch.setattr(resolution_runtime_module, "Frame", recording_frame)
     navigation = SessionWorkbenchNavigation()
 
     with create_pipe_input() as pipe_input:
@@ -2450,14 +2463,14 @@ def test_final_review_down_crosses_from_action_to_items_without_closing_review(
         accept_mode="AS_IS",
     )
     frames = []
-    original_frame = resolution_shell_module.Frame
+    original_frame = resolution_runtime_module.Frame
 
     def recording_frame(*args, **kwargs):
         frame = original_frame(*args, **kwargs)
         frames.append(frame)
         return frame
 
-    monkeypatch.setattr(resolution_shell_module, "Frame", recording_frame)
+    monkeypatch.setattr(resolution_runtime_module, "Frame", recording_frame)
     navigation = SessionWorkbenchNavigation()
 
     with create_pipe_input() as pipe_input:
