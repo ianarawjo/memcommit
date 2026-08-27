@@ -1,12 +1,12 @@
 {
-  "callable_count": 10463,
+  "callable_count": 10457,
   "callable_kinds": {
     "async-function": 13,
     "class": 1752,
-    "function": 8094,
+    "function": 8088,
     "lambda": 604
   },
-  "module_count": 995,
+  "module_count": 992,
   "operation_count": 66,
   "operation_curated_states": {
     "CLOSED": 37,
@@ -14,14 +14,14 @@
     "UNREVIEWED": 27
   },
   "operation_observed_shapes": {
-    "BOUNDED_INTERNAL": 22,
+    "BOUNDED_INTERNAL": 23,
     "COMMAND_ONLY": 17,
-    "MULTI_ADAPTER": 16,
+    "MULTI_ADAPTER": 15,
     "PARTIAL_SURFACE": 11
   },
   "visibility": {
     "local": 2102,
-    "private": 3297,
-    "public": 5064
+    "private": 3295,
+    "public": 5060
   }
 }
