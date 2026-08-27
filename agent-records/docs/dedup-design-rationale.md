@@ -65,7 +65,7 @@ with one operation UID, so `mem undo` restores the command as one unit.
 ## Operation ownership
 
 The reviewed provider-free implementation now has one canonical home at
-`memcommit.operations.exact_dedup.application`. The historical
+`memcommit.application.operations.exact_dedup.application`. The historical
 `memcommit.exact_dedup` implementation path and the
 `memcommit.exact_dedup_application` public surface are module-identity aliases,
 so import order, monkeypatch targets, and serialized globals continue to reach
@@ -82,7 +82,7 @@ semantic Dedun and quality-finding routes also consume it.
 ## Semantic redundancy finder and Dedun
 
 The historically named `dedup_application` and `dedup_runtime` modules now
-have their canonical implementation home under `memcommit.operations.dedup`.
+have their canonical implementation home under `memcommit.application.operations.dedup`.
 Their former flat paths are module-identity compatibility aliases, while new
 production consumers import the operation package. This is a location-only
 change for the reviewed redundancy contracts shared with Dedun and composite

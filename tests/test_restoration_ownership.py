@@ -7,8 +7,8 @@ from pathlib import Path
 import subprocess
 import sys
 
-from memcommit.operations.redo import runtime as redo_runtime
-from memcommit.operations.undo import runtime as undo_runtime
+from memcommit.application.operations.redo import runtime as redo_runtime
+from memcommit.application.operations.undo import runtime as undo_runtime
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
@@ -41,15 +41,15 @@ def test_commands_do_not_own_restoration_route_selection() -> None:
             for node in ast.walk(tree)
             if isinstance(node, ast.ImportFrom) and node.module is not None
         }
-        assert f"memcommit.operations.{operation}.runtime" in imports
+        assert f"memcommit.application.operations.{operation}.runtime" in imports
         assert "memcommit.granted_update_application" not in imports
 
 
 def test_restoration_modules_have_no_terminal_dependency() -> None:
     for relative_path in (
-        "src/memcommit/operations/restoration/runtime.py",
-        "src/memcommit/operations/undo/runtime.py",
-        "src/memcommit/operations/redo/runtime.py",
+        "src/memcommit/application/operations/restoration/runtime.py",
+        "src/memcommit/application/operations/undo/runtime.py",
+        "src/memcommit/application/operations/redo/runtime.py",
     ):
         source = (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         assert "import typer" not in source
@@ -60,12 +60,12 @@ def test_operation_packages_import_lazily() -> None:
     for package in ("restoration", "undo", "redo"):
         program = f"""
 import sys
-import memcommit.operations.{package}
+import memcommit.application.operations.{package}
 
 assert not [
     name
     for name in sys.modules
-    if name.startswith("memcommit.operations.{package}.")
+    if name.startswith("memcommit.application.operations.{package}.")
 ]
 """
         subprocess.run(

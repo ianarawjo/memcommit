@@ -17,14 +17,14 @@ from tests.legacy_submodule_assertions import (
 
 REPOSITORY_ROOT = Path(__file__).parents[1]
 STATUS_MODULES = (
-    ("memcommit.status_application", "memcommit.operations.status.application"),
-    ("memcommit.status_runtime", "memcommit.operations.status.runtime"),
+    ("memcommit.status_application", "memcommit.application.operations.status.application"),
+    ("memcommit.status_runtime", "memcommit.application.operations.status.runtime"),
 )
 
 
 def test_legacy_status_application_path_is_the_canonical_module() -> None:
     legacy = importlib.import_module("memcommit.status_application")
-    canonical = importlib.import_module("memcommit.operations.status.application")
+    canonical = importlib.import_module("memcommit.application.operations.status.application")
 
     assert legacy is canonical
     assert legacy.StatusRequest is canonical.StatusRequest
@@ -33,7 +33,7 @@ def test_legacy_status_application_path_is_the_canonical_module() -> None:
 
 def test_legacy_status_runtime_path_is_the_canonical_module() -> None:
     legacy = importlib.import_module("memcommit.status_runtime")
-    canonical = importlib.import_module("memcommit.operations.status.runtime")
+    canonical = importlib.import_module("memcommit.application.operations.status.runtime")
 
     assert legacy is canonical
     assert legacy.MemoryStoreStatusSource is canonical.MemoryStoreStatusSource

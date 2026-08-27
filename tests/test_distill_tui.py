@@ -9,7 +9,7 @@ from memcommit.context import Context, Memory
 from memcommit.context_targeting.tui.picker import ContextMemoryRow
 from memcommit.distill import DistillAnalysis, DistilledRule
 from memcommit.distill_goal_fit import DistillGoalFit
-from memcommit.operations.distill.application import (
+from memcommit.application.operations.distill.application import (
     DistillRequest,
     DistillResult,
 )
@@ -20,7 +20,7 @@ from memcommit.interfaces.tui.operations.distill import (
     run_distill_tui,
 )
 from memcommit.summarize import collect_summary_scope
-from memcommit.operations.summarize.application import FrozenSummarySource
+from memcommit.application.operations.summarize.application import FrozenSummarySource
 
 
 def _result(*, descendants: bool = False) -> DistillResult:

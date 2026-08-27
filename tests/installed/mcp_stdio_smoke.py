@@ -14,8 +14,8 @@ from mcp.client.session import ClientSession
 from mcp.client.stdio import StdioServerParameters, stdio_client
 
 import memcommit
-import memcommit.ops as ops
-from memcommit.api import MemCommitClient
+import memcommit.application.ops as ops
+from memcommit.adapters.python_api import MemCommitClient
 from memcommit.atomize_grounding import (
     AtomizeGroundingAnchor,
     AtomizeGroundingBindings,

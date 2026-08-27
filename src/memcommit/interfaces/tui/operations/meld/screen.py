@@ -21,7 +21,7 @@ from memcommit.interfaces.tui.core.text_layout import (
     elide_terminal_text,
     single_line_terminal_text,
 )
-from memcommit.operations.meld.model import (
+from memcommit.application.operations.meld.model import (
     MELD_INLINE_MEMORY_SCHEMA_VERSION,
     MeldSession,
     meld_canonical_digest,
@@ -139,11 +139,11 @@ def run_meld_shell(
         ResolutionGlobalStrategy,
         run_resolution_workbench_shell,
     )
-    from memcommit.operations.meld.resolution_adapter import (
+    from memcommit.application.operations.meld.resolution_adapter import (
         MeldResolutionWorkbenchAdapter,
     )
     from memcommit.interfaces.tui.workbenches.impact import ImpactController
-    from memcommit.operations.review.report_adapters import meld_review_report
+    from memcommit.application.operations.review.report_adapters import meld_review_report
 
     snapshot_hint = (
         "Run the same 'mem meld' command outside a TTY to render its saved snapshot."

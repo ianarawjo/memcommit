@@ -7,18 +7,20 @@ import json
 
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.adapters.console.entrypoint import app
 from memcommit.context import AutoCheckpoint
-from memcommit.provenance import build_trace
+from memcommit.retained_history.memory_history_reconstruction.memory_history_construction import (
+    reconstruct_memory_history,
+)
 from memcommit.store import MemoryStore
-from memcommit.operations.translate.view import (
+from memcommit.application.operations.translate.view import (
     TRANSLATION_ORIGIN_IMPORTED,
     TRANSLATION_ORIGIN_MANUAL,
     TRANSLATION_REVIEW_UNREVIEWED,
     TRANSLATION_REVIEW_VERIFIED,
 )
-from memcommit.operations.translate.view_store import load_translation_catalog
+from memcommit.application.operations.translate.view_store import load_translation_catalog
 
 
 runner = CliRunner(mix_stderr=False)
@@ -417,7 +419,7 @@ def test_long_semantic_target_remains_recorded_in_materialized_trace(
     result_uid = next(
         uid for uid in loaded.ordered_uids() if uid != memory.uid
     )
-    trace = build_trace(store, loaded, result_uid)
+    trace = reconstruct_memory_history(store, loaded, result_uid)
     translated = [event for event in trace.events if event.kind == "TRANSLATED"]
     assert len(translated) == 1
     assert translated[0].evidence == "RECORDED"

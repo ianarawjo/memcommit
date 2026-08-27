@@ -8,9 +8,9 @@ import uuid
 import pytest
 
 import memcommit
-import memcommit.api._operations.add as add_operation
-import memcommit.ops as ops
-from memcommit.api import (
+import memcommit.adapters.python_api._operations.add as add_operation
+import memcommit.application.ops as ops
+from memcommit.adapters.python_api import (
     AddAuthorityError,
     AddConflictError,
     AddContextError,

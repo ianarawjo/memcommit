@@ -5,7 +5,7 @@ from dataclasses import dataclass
 import pytest
 from typer.testing import CliRunner
 
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.context_targeting.memory_focus import (
     MemoryFocusError,
     is_memory_uid_prefix,

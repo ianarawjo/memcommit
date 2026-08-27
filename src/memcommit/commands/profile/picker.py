@@ -46,7 +46,7 @@ from memcommit.interfaces.tui.core.theme import MEMCOMMIT_TUI_STYLE
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )
-from memcommit.operations.profile.config import ProfileConfigError, validate_profile_name
+from memcommit.application.operations.profile.config import ProfileConfigError, validate_profile_name
 
 
 @dataclass(frozen=True)

@@ -9,7 +9,7 @@ import sys
 
 import pytest
 
-from memcommit.operations.contexts.application import ContextCatalogEntry
+from memcommit.application.operations.contexts.application import ContextCatalogEntry
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
@@ -43,16 +43,16 @@ def test_contexts_command_imports_the_operation_runtime() -> None:
         for node in ast.walk(tree)
         if isinstance(node, ast.ImportFrom) and node.module is not None
     }
-    assert "memcommit.operations.contexts.application" in imports
-    assert "memcommit.operations.contexts.runtime" in imports
+    assert "memcommit.application.operations.contexts.application" in imports
+    assert "memcommit.application.operations.contexts.runtime" in imports
     assert "memcommit.context_targeting.catalog" not in imports
     assert "memcommit.context_targeting.resolution" not in imports
 
 
 def test_contexts_operation_has_no_terminal_dependency() -> None:
     for relative_path in (
-        "src/memcommit/operations/contexts/application.py",
-        "src/memcommit/operations/contexts/runtime.py",
+        "src/memcommit/application/operations/contexts/application.py",
+        "src/memcommit/application/operations/contexts/runtime.py",
     ):
         source = (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         assert "import typer" not in source
@@ -62,12 +62,12 @@ def test_contexts_operation_has_no_terminal_dependency() -> None:
 def test_contexts_operation_package_import_is_lazy() -> None:
     program = """
 import sys
-import memcommit.operations.contexts
+import memcommit.application.operations.contexts
 
 assert not [
     name
     for name in sys.modules
-    if name.startswith("memcommit.operations.contexts.")
+    if name.startswith("memcommit.application.operations.contexts.")
 ]
 """
     subprocess.run([sys.executable, "-c", program], cwd=REPOSITORY_ROOT, check=True)

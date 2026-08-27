@@ -27,7 +27,7 @@ from memcommit.context_targeting.tui.tree import (
     context_ancestors,
 )
 from memcommit.context_targeting.tui.tree import ContextTreeRow
-from memcommit.selection.tui import tree_choice_marker, tree_choice_styles
+from memcommit.interfaces.console.selection.tui import tree_choice_marker, tree_choice_styles
 from memcommit.source_projection.model import SourceDisplayFacts, SourceState
 from memcommit.source_projection.presentation import (
     SourceDisplayValue,

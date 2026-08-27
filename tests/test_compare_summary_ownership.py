@@ -18,18 +18,18 @@ from tests.legacy_submodule_assertions import (
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 MODULE_PAIRS = (
-    ("memcommit.comparison_summary", "memcommit.operations.compare.summary"),
+    ("memcommit.comparison_summary", "memcommit.application.operations.compare.summary"),
     (
         "memcommit.comparison_summary_rules",
-        "memcommit.operations.compare.summary_rules",
+        "memcommit.application.operations.compare.summary_rules",
     ),
     (
         "memcommit.comparison_summary_provider",
-        "memcommit.operations.compare.summary_provider",
+        "memcommit.application.operations.compare.summary_provider",
     ),
     (
         "memcommit.comparison_summary_application",
-        "memcommit.operations.compare.summary_application",
+        "memcommit.application.operations.compare.summary_application",
     ),
 )
 
@@ -84,12 +84,12 @@ def test_summary_legacy_facades_define_no_behavior(relative_path: str) -> None:
 def test_compare_operation_package_import_is_lazy() -> None:
     program = """
 import sys
-import memcommit.operations.compare
+import memcommit.application.operations.compare
 
 assert not [
     name
     for name in sys.modules
-    if name.startswith("memcommit.operations.compare.")
+    if name.startswith("memcommit.application.operations.compare.")
 ]
 assert "memcommit.comparison" not in sys.modules
 assert "memcommit.comparison_store" not in sys.modules
@@ -103,22 +103,22 @@ assert "memcommit.comparison_store" not in sys.modules
 
 
 def test_pre_relocation_summary_global_loads_through_alias() -> None:
-    canonical = importlib.import_module("memcommit.operations.compare.summary")
+    canonical = importlib.import_module("memcommit.application.operations.compare.summary")
 
     restored = pickle.loads(
         b"cmemcommit.comparison_summary\nComparisonSummary\n."
     )
 
     assert restored is canonical.ComparisonSummary
-    assert restored.__module__ == "memcommit.operations.compare.summary"
+    assert restored.__module__ == "memcommit.application.operations.compare.summary"
 
 
 def test_production_summary_consumers_use_operation_owner() -> None:
     relative_paths = (
         "src/memcommit/commands/compare/command.py",
-        "src/memcommit/operations/compare/summary.py",
-        "src/memcommit/operations/compare/summary_provider.py",
-        "src/memcommit/operations/compare/summary_application.py",
+        "src/memcommit/application/operations/compare/summary.py",
+        "src/memcommit/application/operations/compare/summary_provider.py",
+        "src/memcommit/application/operations/compare/summary_application.py",
     )
     legacy_imports = (
         "from memcommit.comparison_summary import",
@@ -137,7 +137,7 @@ def test_summary_owner_does_not_absorb_deep_compare_or_presentation() -> None:
     package_source = "\n".join(
         path.read_text(encoding="utf-8")
         for path in sorted(
-            (REPOSITORY_ROOT / "src/memcommit/operations/compare").glob("*.py")
+            (REPOSITORY_ROOT / "src/memcommit/application/operations/compare").glob("*.py")
         )
     )
 

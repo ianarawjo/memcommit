@@ -23,7 +23,7 @@ from memcommit.interfaces.tui.core.theme import (
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )
-from memcommit.operations.profile.config import ProfileConfigError, validate_profile_name
+from memcommit.application.operations.profile.config import ProfileConfigError, validate_profile_name
 
 
 STUDY_NAME_STYLE = merge_styles(

@@ -5,8 +5,8 @@ from __future__ import annotations
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Context, MemoryRef
 from memcommit.replace_application import ReplaceRequest, ReplaceStalePlanError
 from memcommit.replace_runtime import execute_replace_plan, plan_replace_with_store

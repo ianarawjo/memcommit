@@ -6,8 +6,8 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.adapters.console.entrypoint import app
 from memcommit.interfaces.tui.components.direct_item_placement import (
     DirectItemGap,
     DirectItemGapState,

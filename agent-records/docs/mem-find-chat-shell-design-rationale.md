@@ -206,9 +206,10 @@ alias locally. Here it is used as an injectively escaped command/effect receipt,
 not as a second approval gate: `mem show` is proven read-only, uses an explicit
 owner Context, does not change the current Context, and was explicitly
 requested in the submitted turn. The runner accepts only the exact
-`mem show ITEM --context CONTEXT` shape, invokes `python -m memcommit.cli`
-without a shell, captures actual output, and rejects failure, timeout, or empty
-stdout. Results and checkpoints remain unchanged.
+`mem show ITEM --context CONTEXT` shape, invokes
+`python -m memcommit.adapters.console.entrypoint` without a shell, captures
+actual output, and rejects failure, timeout, or empty stdout. Results and
+checkpoints remain unchanged.
 
 This mirrors Ground's authority boundary while retaining operation-specific
 semantics: the provider returns a typed intent, the host owns UID resolution

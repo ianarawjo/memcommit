@@ -20,11 +20,11 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 MODULE_PAIRS = (
     (
         "memcommit.memory_transfer_application",
-        "memcommit.operations.memory_transfer.application",
+        "memcommit.application.operations.memory_transfer.application",
     ),
     (
         "memcommit.memory_transfer_runtime",
-        "memcommit.operations.memory_transfer.runtime",
+        "memcommit.application.operations.memory_transfer.runtime",
     ),
 )
 
@@ -66,11 +66,11 @@ def test_copy_and_move_share_the_canonical_application_and_runtime() -> None:
         "memcommit.memory_transfer_application"
     )
     canonical_application = importlib.import_module(
-        "memcommit.operations.memory_transfer.application"
+        "memcommit.application.operations.memory_transfer.application"
     )
     legacy_runtime = importlib.import_module("memcommit.memory_transfer_runtime")
     canonical_runtime = importlib.import_module(
-        "memcommit.operations.memory_transfer.runtime"
+        "memcommit.application.operations.memory_transfer.runtime"
     )
 
     assert legacy_application is canonical_application
@@ -107,10 +107,10 @@ def test_memory_transfer_legacy_facades_define_no_behavior(
 def test_memory_transfer_package_import_is_lazy() -> None:
     source = """
 import sys
-import memcommit.operations.memory_transfer
+import memcommit.application.operations.memory_transfer
 
-assert "memcommit.operations.memory_transfer.application" not in sys.modules
-assert "memcommit.operations.memory_transfer.runtime" not in sys.modules
+assert "memcommit.application.operations.memory_transfer.application" not in sys.modules
+assert "memcommit.application.operations.memory_transfer.runtime" not in sys.modules
 """
 
     subprocess.run(
@@ -122,7 +122,7 @@ assert "memcommit.operations.memory_transfer.runtime" not in sys.modules
 
 def test_pre_relocation_copy_request_global_loads_through_legacy_alias() -> None:
     canonical = importlib.import_module(
-        "memcommit.operations.memory_transfer.application"
+        "memcommit.application.operations.memory_transfer.application"
     )
 
     restored = pickle.loads(
@@ -148,7 +148,7 @@ def test_branch_remains_a_separate_context_creation_operation() -> None:
     )
 
     assert not any(
-        module == "memcommit.operations.memory_transfer"
-        or module.startswith("memcommit.operations.memory_transfer.")
+        module == "memcommit.application.operations.memory_transfer"
+        or module.startswith("memcommit.application.operations.memory_transfer.")
         for module in imports
     )

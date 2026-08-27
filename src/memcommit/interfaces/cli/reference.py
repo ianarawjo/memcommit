@@ -22,7 +22,7 @@ from memcommit.context_targeting.resolution import (
 from memcommit.interfaces.console.text import display_escape_text, safe_terminal_text
 from memcommit.interfaces.console.terminal import is_interactive_terminal
 from memcommit.interfaces.tui.operations.reference import choose_reference_setup
-from memcommit.operations.reference.application import (
+from memcommit.application.operations.reference.application import (
     ContextReferenceRequest,
     ContextReferenceResult,
     FrozenContextReferencePlan,
@@ -32,7 +32,7 @@ from memcommit.operations.reference.application import (
     run_context_reference,
     run_reference,
 )
-from memcommit.operations.reference.runtime import MemoryStoreReferencePort
+from memcommit.application.operations.reference.runtime import MemoryStoreReferencePort
 from memcommit.persistence.store import MemoryStore
 
 

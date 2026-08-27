@@ -42,7 +42,7 @@ from memcommit.interfaces.tui.core.theme import (
     SEMANTIC_VIEWER_STYLE,
 )
 from memcommit.interfaces.tui.operations.replace.model import ReplaceTuiSetup
-from memcommit.operations.replace.application import ReplaceApplyResult, ReplaceRequest
+from memcommit.application.operations.replace.application import ReplaceApplyResult, ReplaceRequest
 
 
 ReplaceRunner = Callable[[ReplaceRequest], ReplaceApplyResult]

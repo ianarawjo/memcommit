@@ -1,8 +1,8 @@
-"""Unit tests for memcommit.ops — pure in-memory operations, no disk I/O."""
+"""Unit tests for memcommit.application.ops — pure in-memory operations, no disk I/O."""
 
 import pytest
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 from memcommit.context import Context, Memory, MemoryRef
 
 

@@ -4,11 +4,11 @@ from __future__ import annotations
 
 import json
 
-import memcommit.ops as ops
-from memcommit.api import MemCommitClient
+import memcommit.application.ops as ops
+from memcommit.adapters.python_api import MemCommitClient
 from memcommit.distill import DISTILL_PAYLOAD_MARKER
 from memcommit.elaborate import ELABORATE_PAYLOAD_MARKER
-from memcommit.operations.fit.judgment import FIT_JUDGMENT_PAYLOAD_MARKER
+from memcommit.application.operations.fit.judgment import FIT_JUDGMENT_PAYLOAD_MARKER
 from memcommit.interfaces.agent import (
     DISTILL_AGENT_TOOL_NAME,
     ELABORATE_AGENT_CONTRACT_VERSION,

@@ -9,9 +9,9 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 import uuid
 
-from memcommit.operations.compare.ledger.execution import load_comparison_context
-from memcommit.authority.access import GrantedReadStore, resolve_context_access
-from memcommit.operations.compare.ledger.model import (
+from memcommit.application.operations.compare.ledger.execution import load_comparison_context
+from memcommit.application.authority.access import GrantedReadStore, resolve_context_access
+from memcommit.application.operations.compare.ledger.model import (
     COMPARISON_RULESET_VERSION,
     ComparisonAnalysis,
     ComparisonInput,
@@ -21,19 +21,19 @@ from memcommit.operations.compare.ledger.model import (
     ComparisonReports,
     comparison_canonical_digest,
 )
-from memcommit.operations.compare.ledger.provider import COMPARISON_PROVIDER_CONTRACT_VERSION
+from memcommit.application.operations.compare.ledger.provider import COMPARISON_PROVIDER_CONTRACT_VERSION
 from memcommit.infrastructure.config import Config
 from memcommit.infrastructure.providers.policy import (
     resolve_operation_provider_policy,
 )
 from memcommit.context import Context
 from memcommit.context_targeting.loading import load_context_scope
-from memcommit.authority.derived_policy import (
+from memcommit.application.authority.derived_policy import (
     analysis_retention,
     authorize_analysis_save,
     authorize_combination,
 )
-from memcommit.operations.profile.config import ProfileEntry, ProfileRegistry, study_run_identity
+from memcommit.application.operations.profile.config import ProfileEntry, ProfileRegistry, study_run_identity
 from memcommit.persistence.store import MemoryStore, _write_json_atomic, context_record_digest
 from memcommit.study_prewarm.installations import (
     INSTALLATIONS_DIRECTORY_NAME,
@@ -59,7 +59,7 @@ from memcommit.study_prewarm.scope_equivalence import (
 )
 
 if TYPE_CHECKING:
-    from memcommit.authority.access import ContextAccess
+    from memcommit.application.authority.access import ContextAccess
 
 
 COMPARE_ARTIFACT_KIND = "STUDY_COMPARE_EXACT_PREWARM"

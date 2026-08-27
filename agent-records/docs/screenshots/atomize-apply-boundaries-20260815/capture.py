@@ -141,7 +141,7 @@ class _Provider:
 
 
 def _initialize(store):
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
 
     if store.context_exists("atomize/apply-boundary"):
         return

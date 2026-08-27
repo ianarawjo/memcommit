@@ -5,9 +5,9 @@ from click import Group, Option
 from typer.main import get_command
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 import memcommit.commands.query.command as query_command
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.context_targeting.presets import (
     ContextScopePreset,
     ContextTraversal,
@@ -15,7 +15,7 @@ from memcommit.context_targeting.presets import (
     resolve_descendant_scopes,
     resolve_scope_preset,
 )
-from memcommit.operations.query.ordinary_application import OrdinaryQueryResponse
+from memcommit.application.operations.query.ordinary_application import OrdinaryQueryResponse
 from memcommit.profiles import ProfileError
 from memcommit.store import MemoryStore
 

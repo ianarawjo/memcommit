@@ -17,10 +17,11 @@ import click
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
+import memcommit.application.operations.init_study.publication as init_study_publication_module
 import memcommit.profiles as profiles_module
 import memcommit.study_prewarm.prepare as prewarm_prepare_module
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.switch.command import _granted_picker_state, _granted_picker_views
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.eval.study_bundle import build_all_study_bundles
@@ -52,7 +53,7 @@ from memcommit.profiles import (
     resolve_granted_context_view,
     study_profile_groups,
 )
-from memcommit.operations.query.granted_source import load_authority_query_source
+from memcommit.application.operations.query.granted_source import load_authority_query_source
 from memcommit.store import MemoryStore
 from memcommit.source_projection.presentation import source_display_text
 from memcommit.study_action_log import StudyActionLedger
@@ -88,7 +89,7 @@ def _subprocess_mem(home: Path, *args: str) -> subprocess.CompletedProcess[str]:
     environment = os.environ.copy()
     environment["HOME"] = str(home)
     return subprocess.run(
-        [sys.executable, "-m", "memcommit.cli", *args],
+        [sys.executable, "-m", "memcommit.adapters.console.entrypoint", *args],
         cwd=Path(__file__).resolve().parents[1],
         env=environment,
         text=True,
@@ -1773,14 +1774,14 @@ def test_init_study_preserves_a_store_after_visible_registry_replacement(
     bundles = tmp_path / "bundles"
     build_all_study_bundles(bundles)
     _bootstrap_study_baseline(bundles)
-    real_write_registry = profiles_module._write_registry
+    real_write_registry = init_study_publication_module._write_registry
 
     def fail_after_visible_replace(updated):
         real_write_registry(updated)
         raise OSError("simulated directory fsync failure")
 
     monkeypatch.setattr(
-        profiles_module,
+        init_study_publication_module,
         "_write_registry",
         fail_after_visible_replace,
     )

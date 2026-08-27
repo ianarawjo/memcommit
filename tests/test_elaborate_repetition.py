@@ -9,15 +9,15 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.commands.elaborate.command as elaborate_command
-import memcommit.ops as ops
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.adapters.console.entrypoint import app
 from memcommit.elaborate import (
     ELABORATE_OPERATION,
     ELABORATE_PAYLOAD_MARKER,
     ElaborateError,
 )
-from memcommit.operations.elaborate.application import ElaborateRequest
-from memcommit.operations.elaborate.runtime import execute_elaborate
+from memcommit.application.operations.elaborate.application import ElaborateRequest
+from memcommit.application.operations.elaborate.runtime import execute_elaborate
 from memcommit.store import MemoryStore
 from tests.elaborate_validation_support import (
     passing_elaborate_validation_response,

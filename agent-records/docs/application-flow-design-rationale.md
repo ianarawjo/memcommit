@@ -6,9 +6,9 @@
 `PREPARED → REVIEWED/CANCELLED → APPLIED`. Update consumes it through
 `memcommit.update_application_flow.UpdateApplicationFlowPort`; Sever is the
 second consumer through
-`memcommit.operations.sever.application.SeverSessionApplicationFlowPort`;
+`memcommit.application.operations.sever.application.SeverSessionApplicationFlowPort`;
 Meld is the third consumer through
-`memcommit.operations.meld.application_flow.MeldApplicationFlowPort`.
+`memcommit.application.operations.meld.application_flow.MeldApplicationFlowPort`.
 
 These vertical slices establish that the phase contract can serve target
 mutation, require-new result creation, and multi-owner reconciliation. They

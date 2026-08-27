@@ -3,10 +3,10 @@
 from __future__ import annotations
 
 import memcommit.commands.literal_find.command as literal_find_command
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 from typer.testing import CliRunner
 
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.store import MemoryStore
 
 

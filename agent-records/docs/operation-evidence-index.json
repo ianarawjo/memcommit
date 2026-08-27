@@ -171,6 +171,7 @@
       "agent-records/docs/context-name-portability-design-rationale.md"
     ],
     "init-study": [
+      "agent-records/docs/init-study-application-boundary-design-rationale.md",
       "agent-records/docs/init-study-prewarm-regeneration-design-rationale.md",
       "agent-records/docs/init-study-scenario-versioning-design-rationale.md"
     ],

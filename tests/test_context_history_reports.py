@@ -6,7 +6,7 @@ import json
 
 from typer.testing import CliRunner
 
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Memory
 from memcommit.store import MemoryStore
 

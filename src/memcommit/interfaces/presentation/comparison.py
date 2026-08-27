@@ -5,12 +5,12 @@ from __future__ import annotations
 from collections import Counter
 import shlex
 
-from memcommit.operations.compare.ledger.model import (
+from memcommit.application.operations.compare.ledger.model import (
     ComparisonAnalysis,
     ComparisonError,
     ComparisonRelation,
 )
-from memcommit.authority.derived_policy import AnalysisRetention
+from memcommit.application.authority.derived_policy import AnalysisRetention
 from memcommit.interfaces.console.text import display_escape_text
 from memcommit.interfaces.tui.core.text_layout import (
     elide_terminal_text,

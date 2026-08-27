@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-from memcommit.api import (
+from memcommit.adapters.python_api import (
     AddAuthorityError,
     AddConflictError,
     AddContextError,
@@ -248,14 +248,14 @@ def test_agent_adapter_depends_only_on_public_api_and_shared_agent_contract():
         "memcommit.add_application",
         "memcommit.add_runtime",
         "memcommit.commands",
-        "memcommit.operations",
+        "memcommit.application.operations",
         "memcommit.infrastructure",
         "memcommit.store",
         "typer",
         "prompt_toolkit",
     )
     assert not any(name.startswith(forbidden) for name in imported)
-    assert "memcommit.api" in imported
+    assert "memcommit.adapters.python_api" in imported
     assert "memcommit.interfaces.agent.contract" in imported
 
 

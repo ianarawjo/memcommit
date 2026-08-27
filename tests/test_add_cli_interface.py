@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.adapters.console.entrypoint import app
 from memcommit.interfaces.tui.operations.help.inventory import COMMAND_FORMS
 from memcommit.store import MemoryStore
 

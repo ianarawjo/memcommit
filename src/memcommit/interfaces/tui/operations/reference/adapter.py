@@ -7,13 +7,13 @@ from prompt_toolkit.output import Output
 
 from memcommit.context_targeting.catalog import freeze_granted_context_navigation
 from memcommit.context_targeting.tui.picker import context_memory_rows
-from memcommit.operations.reference.application import (
+from memcommit.application.operations.reference.application import (
     FrozenContextReferencePlan,
     FrozenReferencePlan,
     prepare_context_reference,
     prepare_reference,
 )
-from memcommit.operations.reference.runtime import MemoryStoreReferencePort
+from memcommit.application.operations.reference.runtime import MemoryStoreReferencePort
 from memcommit.interfaces.tui.operations.reference.model import ReferenceTuiSetup
 from memcommit.interfaces.tui.operations.reference.screen import run_reference_tui
 from memcommit.source_projection.presentation import (

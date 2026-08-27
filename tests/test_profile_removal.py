@@ -9,9 +9,9 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 import memcommit.commands.profile.command as profile_command
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.profile.picker import ProfilePickerAction
 from memcommit.context import Memory
 from memcommit.profile_config import (

@@ -8,7 +8,7 @@ import json
 import click
 from typer.testing import CliRunner
 
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.log import command as log_command
 from memcommit.context import Memory
 from memcommit.interfaces.console.theme import (

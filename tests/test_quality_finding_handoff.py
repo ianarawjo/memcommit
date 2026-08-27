@@ -6,7 +6,7 @@ import json
 
 import pytest
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 from memcommit.findings import (
     AmbiguityFinding,
     AmbiguityReport,
@@ -27,7 +27,7 @@ from memcommit.quality_finding_handoff import (
     quality_finding_handoff,
     quality_finding_handoffs,
 )
-from memcommit.operations.resolve.application import ResolveError
+from memcommit.application.operations.resolve.application import ResolveError
 from memcommit.review import direct_context_digest
 
 

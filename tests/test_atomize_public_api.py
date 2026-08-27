@@ -12,7 +12,7 @@ import sys
 
 import pytest
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 from memcommit import (
     AtomizeAnalysisResult,
     AtomizeConflictError,
@@ -26,8 +26,8 @@ from memcommit import (
     MemCommitClient,
 )
 from memcommit.atomize import create_atomize_analysis, impact_atomize
-from memcommit.operations.atomize.runtime import capture_atomize_session_snapshot
-from memcommit.api.errors import AtomizeExecutionError
+from memcommit.application.operations.atomize.runtime import capture_atomize_session_snapshot
+from memcommit.adapters.python_api.errors import AtomizeExecutionError
 from memcommit.context import Memory
 from memcommit.store import MemoryStore
 from memcommit.study_prewarm.atomize import AtomizePrewarmMatch
@@ -156,11 +156,11 @@ def _client_and_context(
 
 
 def test_root_exports_structural_atomize_contract():
-    assert AtomizeAnalysisResult.__module__ == "memcommit.api.atomize"
-    assert AtomizeReviewUpdateResult.__module__ == "memcommit.api.atomize"
-    assert AtomizeReviewedApplyResult.__module__ == "memcommit.api.atomize"
-    assert AtomizeSaveAsApplyResult.__module__ == "memcommit.api.atomize"
-    assert AtomizeStructuralApplyResult.__module__ == "memcommit.api.atomize"
+    assert AtomizeAnalysisResult.__module__ == "memcommit.adapters.python_api.atomize"
+    assert AtomizeReviewUpdateResult.__module__ == "memcommit.adapters.python_api.atomize"
+    assert AtomizeReviewedApplyResult.__module__ == "memcommit.adapters.python_api.atomize"
+    assert AtomizeSaveAsApplyResult.__module__ == "memcommit.adapters.python_api.atomize"
+    assert AtomizeStructuralApplyResult.__module__ == "memcommit.adapters.python_api.atomize"
     assert issubclass(AtomizeConflictError, Exception)
 
 
@@ -212,7 +212,7 @@ def test_exact_hidden_prewarm_is_materialized_without_provider(
         output_context_name=context.name,
     )
     monkeypatch.setattr(
-        "memcommit.operations.atomize.analysis_runtime.find_declared_atomize_prewarm",
+        "memcommit.application.operations.atomize.analysis_runtime.find_declared_atomize_prewarm",
         lambda *, store, context: match,
     )
     client = MemCommitClient(
@@ -234,7 +234,7 @@ def test_refresh_dominates_prepared_preference_and_calls_provider(
 ):
     client, _store, context, _memory, provider = _client_and_context()
     monkeypatch.setattr(
-        "memcommit.operations.atomize.analysis_runtime.find_declared_atomize_prewarm",
+        "memcommit.application.operations.atomize.analysis_runtime.find_declared_atomize_prewarm",
         lambda **_kwargs: pytest.fail("refresh looked up a prepared analysis"),
     )
 
@@ -726,7 +726,7 @@ def test_invalid_provider_output_is_execution_not_transport_failure(
 def test_atomize_adapter_does_not_reach_back_into_client_facade():
     root = Path(__file__).resolve().parents[1]
     tree = ast.parse(
-        (root / "src/memcommit/api/_operations/atomize.py").read_text(
+        (root / "src/memcommit/adapters/python_api/_operations/atomize.py").read_text(
             encoding="utf-8"
         )
     )
@@ -736,7 +736,7 @@ def test_atomize_adapter_does_not_reach_back_into_client_facade():
             imports.extend(alias.name for alias in node.names)
         elif isinstance(node, ast.ImportFrom) and node.module is not None:
             imports.append(node.module)
-    assert "memcommit.api.client" not in imports
+    assert "memcommit.adapters.python_api.client" not in imports
 
 
 def test_public_client_keeps_structural_atomize_assembly_lazy(tmp_path):
@@ -750,20 +750,20 @@ def test_public_client_keeps_structural_atomize_assembly_lazy(tmp_path):
                 (
                     "import os, sys",
                     "from pathlib import Path",
-                    "from memcommit.api import AtomizeInputError, MemCommitClient",
-                    "assert 'memcommit.api._operations.atomize' not in sys.modules",
-                    "assert 'memcommit.operations.atomize.analysis_runtime' not in sys.modules",
+                    "from memcommit.adapters.python_api import AtomizeInputError, MemCommitClient",
+                    "assert 'memcommit.adapters.python_api._operations.atomize' not in sys.modules",
+                    "assert 'memcommit.application.operations.atomize.analysis_runtime' not in sys.modules",
                     "client = MemCommitClient(root=Path(os.environ['MEMCOMMIT_ATOMIZE_IMPORT_ROOT']), create=True)",
-                    "assert 'memcommit.api._operations.atomize' not in sys.modules",
+                    "assert 'memcommit.adapters.python_api._operations.atomize' not in sys.modules",
                     "try:",
                     "    client.open_atomize_analysis('')",
                     "except AtomizeInputError:",
                     "    pass",
                     "else:",
                     "    raise AssertionError('invalid Atomize input succeeded')",
-                    "assert 'memcommit.api._operations.atomize' in sys.modules",
-                    "assert 'memcommit.operations.atomize.analysis_runtime' in sys.modules",
-                    "assert 'memcommit.api._operations.atomize_grounding' not in sys.modules",
+                    "assert 'memcommit.adapters.python_api._operations.atomize' in sys.modules",
+                    "assert 'memcommit.application.operations.atomize.analysis_runtime' in sys.modules",
+                    "assert 'memcommit.adapters.python_api._operations.atomize_grounding' not in sys.modules",
                 )
             ),
         ],

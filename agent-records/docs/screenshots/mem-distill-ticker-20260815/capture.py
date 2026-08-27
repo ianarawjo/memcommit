@@ -75,7 +75,7 @@ def _memory(text: str) -> str:
 
 
 def _prepare_store(root: Path):
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
     from memcommit.store import MemoryStore
 
     store = MemoryStore(root=root)

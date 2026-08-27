@@ -10,9 +10,9 @@ import uuid
 import pytest
 
 import memcommit
-import memcommit.api._operations.atomize_grounding as grounding_operation
-import memcommit.ops as ops
-from memcommit.api import (
+import memcommit.adapters.python_api._operations.atomize_grounding as grounding_operation
+import memcommit.application.ops as ops
+from memcommit.adapters.python_api import (
     AtomizeGroundingContextError,
     AtomizeGroundingInputError,
     AtomizeGroundingProviderFailure,
@@ -203,16 +203,16 @@ def test_public_client_import_keeps_grounding_assembly_lazy(tmp_path) -> None:
             "\n".join(
                 (
                     "import sys",
-                    "from memcommit.api import MemCommitClient",
-                    "assert 'memcommit.api._operations.atomize_grounding' not in sys.modules",
-                    "assert 'memcommit.operations.atomize.grounding_runtime' not in sys.modules",
+                    "from memcommit.adapters.python_api import MemCommitClient",
+                    "assert 'memcommit.adapters.python_api._operations.atomize_grounding' not in sys.modules",
+                    "assert 'memcommit.application.operations.atomize.grounding_runtime' not in sys.modules",
                     "client = MemCommitClient(root=r'%s', create=True)" % (tmp_path / "store"),
                     "try:",
                     "    client.start_atomize_grounding('', 'comment')",
                     "except Exception:",
                     "    pass",
-                    "assert 'memcommit.api._operations.atomize_grounding' in sys.modules",
-                    "assert 'memcommit.operations.atomize.grounding_runtime' in sys.modules",
+                    "assert 'memcommit.adapters.python_api._operations.atomize_grounding' in sys.modules",
+                    "assert 'memcommit.application.operations.atomize.grounding_runtime' in sys.modules",
                 )
             ),
         ],

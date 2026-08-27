@@ -9,7 +9,7 @@ from pathlib import Path
 import sys
 from typing import Any
 
-from memcommit.api import (
+from memcommit.adapters.python_api import (
     MemCommitClient,
     MemCommitError,
     QueryProviderConfig,

@@ -8,25 +8,25 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.operations.atomize.domain import (
+from memcommit.application.operations.atomize.domain import (
     AtomizeAnalysisSession,
     AtomizeImpactError,
     atomize_analysis_matches_context,
 )
-from memcommit.operations.atomize.analysis_application import AtomizeAnalysisOpenRequest
-from memcommit.operations.atomize.analysis_runtime import execute_atomize_analysis_open
-from memcommit.operations.atomize.application import (
+from memcommit.application.operations.atomize.analysis_application import AtomizeAnalysisOpenRequest
+from memcommit.application.operations.atomize.analysis_runtime import execute_atomize_analysis_open
+from memcommit.application.operations.atomize.application import (
     AtomizeOutputPlanRequest,
     AtomizePersistedApplyRequest,
     AtomizeSaveAsRequest,
 )
-from memcommit.operations.atomize.runtime import (
+from memcommit.application.operations.atomize.runtime import (
     capture_atomize_session_snapshot,
     execute_atomize_output_plan_update,
     execute_atomize_save_as,
     execute_atomize_session_apply,
 )
-from memcommit.operations.atomize.grounding_application import (
+from memcommit.application.operations.atomize.grounding_application import (
     AtomizeGroundingApplicationError,
     GroundingAcceptRequest,
     GroundingKeepRequest,
@@ -37,11 +37,11 @@ from memcommit.operations.atomize.grounding_application import (
     run_atomize_grounding_reply,
     run_atomize_grounding_start,
 )
-from memcommit.operations.atomize.grounding_runtime import (
+from memcommit.application.operations.atomize.grounding_runtime import (
     MemoryStoreAtomizeGroundingPort,
     assert_current_grounding_bindings,
 )
-from memcommit.operations.atomize.workbench import (
+from memcommit.application.operations.atomize.workbench import (
     AtomizeWorkbenchError,
     atomize_workbench_declared_frames,
     atomize_workbench_response_digest,
@@ -85,7 +85,7 @@ from memcommit.context_targeting.model import (
 from memcommit.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
 )
-from memcommit.operations.review.model import (
+from memcommit.application.operations.review.model import (
     atomize_review_declared_frames,
     atomize_review_matches_analysis,
     review_response_digest,

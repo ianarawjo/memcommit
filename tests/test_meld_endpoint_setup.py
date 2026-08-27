@@ -6,7 +6,7 @@ import pytest
 
 import memcommit.commands.meld.command as meld_command
 import memcommit.commands.meld.setup as meld_setup_command
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 from memcommit.interfaces.tui.components.endpoint_setup import EndpointSetupMemory
 from memcommit.interfaces.tui.operations.meld import (
     MeldEndpointSelection,

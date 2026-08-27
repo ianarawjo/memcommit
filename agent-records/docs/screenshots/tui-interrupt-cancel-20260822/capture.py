@@ -59,7 +59,7 @@ def _store_snapshot(root: Path) -> tuple[int, str]:
 
 
 def _create_store():
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
     from memcommit.store import MemoryStore
 
     store = MemoryStore()

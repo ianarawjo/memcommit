@@ -6,8 +6,8 @@ import json
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.adapters.console.entrypoint import app
 from memcommit.context import (
     AutoCheckpoint,
     Context,
@@ -15,10 +15,12 @@ from memcommit.context import (
     MemoryRef,
     QueryContextRef,
 )
-from memcommit.provenance import build_trace
+from memcommit.retained_history.memory_history_reconstruction.memory_history_construction import (
+    reconstruct_memory_history,
+)
 from memcommit.query_provider import QueryProviderError
 from memcommit.store import ConcurrentContextUpdateError, MemoryStore
-from memcommit.operations.translate.runtime import (
+from memcommit.application.operations.translate.runtime import (
     TRANSLATE_CORPUS_CHAR_LIMIT,
     TRANSLATION_TARGET_CHAR_LIMIT,
     TranslateError,
@@ -628,7 +630,7 @@ def test_cli_save_as_creates_derived_context_with_recorded_translation_lineage(
         for record in checkpoint["args"]["translations"]
     ] == translated_uids
 
-    trace = build_trace(store, loaded, translated_uids[0])
+    trace = reconstruct_memory_history(store, loaded, translated_uids[0])
     translated_events = [
         event for event in trace.events if event.kind == "TRANSLATED"
     ]
@@ -1025,7 +1027,7 @@ def test_cli_does_not_publish_destination_if_source_changes_before_creation(
         return result
 
     monkeypatch.setattr(
-        "memcommit.operations.translate.materialization.derive_translation_context",
+        "memcommit.application.operations.translate.materialization.derive_translation_context",
         derive_then_save_concurrently,
     )
     result = runner.invoke(
@@ -1293,7 +1295,7 @@ def test_trace_rejects_forged_translation_mapping_and_falls_back_to_snapshot(
     )
 
     result_uid = applied.translations[0].result.uid
-    trace = build_trace(store, store.load_direct(ctx.name), result_uid)
+    trace = reconstruct_memory_history(store, store.load_direct(ctx.name), result_uid)
 
     assert not any(event.kind == "TRANSLATED" for event in trace.events)
     assert any(event.kind == "CREATED" for event in trace.events)
@@ -1341,7 +1343,7 @@ def test_trace_rejects_forged_derived_baseline_digest(
     )
 
     result_uid = derived.translations[0].result.uid
-    trace = build_trace(
+    trace = reconstruct_memory_history(
         store,
         store.load_direct(derived.context.name),
         result_uid,
@@ -1411,7 +1413,7 @@ def test_trace_rejects_pointer_reordering_hidden_in_derived_translation(
         ),
     )
 
-    trace = build_trace(
+    trace = reconstruct_memory_history(
         store,
         store.load_direct(derived.context.name),
         translated_uids[0],
@@ -1445,7 +1447,7 @@ def test_trace_rejects_forged_full_context_digest(
     )
 
     result_uid = applied.translations[0].result.uid
-    trace = build_trace(store, store.load_direct(ctx.name), result_uid)
+    trace = reconstruct_memory_history(store, store.load_direct(ctx.name), result_uid)
 
     assert not any(event.kind == "TRANSLATED" for event in trace.events)
     assert any(
@@ -1485,7 +1487,7 @@ def test_trace_rejects_pointer_change_hidden_inside_translation_checkpoint(
     )
 
     result_uid = applied.translations[0].result.uid
-    trace = build_trace(store, store.load_direct(ctx.name), result_uid)
+    trace = reconstruct_memory_history(store, store.load_direct(ctx.name), result_uid)
 
     assert not any(event.kind == "TRANSLATED" for event in trace.events)
     assert any(

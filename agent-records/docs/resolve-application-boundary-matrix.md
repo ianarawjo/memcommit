@@ -46,7 +46,7 @@ it does not become a second source for exact strings.
 ## Package ownership
 
 The canonical terminal-independent owners now live together under
-`memcommit.operations.resolve`. `application.py` owns requests, frozen frames,
+`memcommit.application.operations.resolve`. `application.py` owns requests, frozen frames,
 semantic outcomes, exact-plan validation, and Apply orchestration;
 `runtime.py` owns Store, Grant, freshness, checkpoint, and atomic mutation
 adapters. API, CLI, quality-finding handoff, Impact, targeting, semantic, and

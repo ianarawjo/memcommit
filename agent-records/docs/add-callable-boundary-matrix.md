@@ -42,7 +42,7 @@ Python facade and agent projection point inward without importing either
 terminal adapter. MCP remains a projection of the frozen agent registry, and
 the Skill remains host guidance rather than an Add implementation or callable.
 
-The canonical implementation owner is `memcommit.operations.add`: its
+The canonical implementation owner is `memcommit.application.operations.add`: its
 `application` module owns the terminal-independent request, validation, port,
 and receipt contracts, while its `runtime` module owns the Store and Grant
 adapter. The historical `memcommit.add_application` and

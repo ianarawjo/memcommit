@@ -6,19 +6,19 @@ from dataclasses import dataclass
 from typing import Iterable
 
 from memcommit.context import Context
-from memcommit.operations.meld.model import MeldError, MeldSession
-from memcommit.operations.meld.provider import (
+from memcommit.application.operations.meld.model import MeldError, MeldSession
+from memcommit.application.operations.meld.provider import (
     MELD_RESOLUTION_REQUEST_CONTRACT_VERSION,
     assess_meld_turn,
     meld_turn_request_digest,
 )
-from memcommit.operations.meld.resolution_cache import (
+from memcommit.application.operations.meld.resolution_cache import (
     MeldResolutionBranch,
     MeldResolutionCacheError,
     configured_meld_cache_identity,
     meld_resolution_cache_key,
 )
-from memcommit.operations.profile.config import (
+from memcommit.application.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,
     study_run_identity,

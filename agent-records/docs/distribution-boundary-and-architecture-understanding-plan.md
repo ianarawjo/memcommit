@@ -144,17 +144,29 @@ memcommit/
     memory.py
     authority.py
     cache_policy.py
-  operations/
-    query/
-      ordinary_application.py
-      ordinary_runtime.py
-      granted_application.py
-      granted_runtime.py
-      reference_application.py
-      reference_runtime.py
-    atomize/
-    update/
-    meld/
+  application/
+    authority/
+      access.py
+      derived_policy.py
+      study_operation_policy.py
+      storage_permissions.py
+      write_protection.py
+    operations/
+      query/
+        ordinary_application.py
+        ordinary_runtime.py
+        granted_application.py
+        granted_runtime.py
+        reference_application.py
+        reference_runtime.py
+      atomize/
+      update/
+      meld/
+  adapters/
+    python_api/
+      client.py
+      errors.py
+      _operations/
   infrastructure/
     persistence/
     providers/
@@ -258,12 +270,11 @@ Adapter isolation has these dependency rules:
 - the composition root is the only module allowed to select concrete siblings
   and wire them together.
 
-The current console-script target `memcommit.cli:app` remains a compatibility
-boundary during migration. Do not change packaging and interactive routing in
-the same first step. The existing module may temporarily expose the assembled
-Typer application while construction moves behind a factory; a later isolated
-distribution change may point the console script at an explicit entry-point
-function after clean-wheel parity is proven.
+The console-script target is now the explicit adapter owner
+`memcommit.adapters.console.entrypoint:app`. This path-only relocation keeps the
+assembled Typer application intact and deliberately provides no
+`memcommit.cli` compatibility facade. Moving individual command adapters or
+construction behind factories remains a later, separately verified step.
 
 ### First console-composition slice: Summarize
 
@@ -605,7 +616,8 @@ second safe slice demonstrates the same meaning and failure boundary.
 
 ## Known starting evidence
 
-- The project already declares `mem = "memcommit.cli:app"`, which is the
+- The project declares
+  `mem = "memcommit.adapters.console.entrypoint:app"`, which is the
   correct console-script shape for `uv tool install`.
 - A wheel can currently be built, but a clean `uvx --from <wheel> mem --help`
   run fails because manually enumerated setuptools packages omit newer concept

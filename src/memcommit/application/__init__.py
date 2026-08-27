@@ -1,1 +1,1 @@
-"""Operation-neutral execution and exact-command review contracts."""
+"""Shared application contracts and operation-owned vertical packages."""

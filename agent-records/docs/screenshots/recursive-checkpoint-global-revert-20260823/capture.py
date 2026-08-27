@@ -73,7 +73,7 @@ def _configure_store(store_dir: Path) -> None:
 
 
 def _save_add(store, context, content: str) -> None:
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
     from memcommit.context import AutoCheckpoint
 
     ops.add(context, content)
@@ -88,7 +88,7 @@ def _save_add(store, context, content: str) -> None:
 
 
 def _prepare_store(store_dir: Path) -> None:
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
     from memcommit.context import AutoCheckpoint
     from memcommit.store import MemoryStore
 

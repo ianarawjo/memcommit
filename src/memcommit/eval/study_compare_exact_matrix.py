@@ -20,20 +20,20 @@ import sys
 import threading
 import time
 
-from memcommit.authority.access import resolve_context_access
+from memcommit.application.authority.access import resolve_context_access
 from memcommit.commands.compare.execution import load_comparison_context
 from memcommit.commands.shared.readable_context_catalog import (
     ReadableContextCatalog,
     freeze_profile_readable_context_catalog,
 )
-from memcommit.operations.compare.ledger.model import (
+from memcommit.application.operations.compare.ledger.model import (
     COMPARISON_RULESET_VERSION,
     SUPPORTED_COMPARISON_RULESET_VERSIONS,
     ComparisonAnalysis,
     ComparisonInput,
 )
-from memcommit.operations.compare.ledger.evidence import ComparisonEvidenceError
-from memcommit.operations.compare.ledger.provider import (
+from memcommit.application.operations.compare.ledger.evidence import ComparisonEvidenceError
+from memcommit.application.operations.compare.ledger.provider import (
     COMPARISON_PROVIDER_CONTRACT_VERSION,
     SUPPORTED_COMPARISON_PROVIDER_CONTRACT_VERSIONS,
     analyze_comparison,
@@ -49,7 +49,7 @@ from memcommit.eval.study_compare_graph_prewarm import (
 from memcommit.infrastructure.providers.policy import (
     resolve_codex_evaluation_policy,
 )
-from memcommit.operations.profile.config import (
+from memcommit.application.operations.profile.config import (
     ProfileRegistry,
     load_profile_registry,
     profile_store_dir,

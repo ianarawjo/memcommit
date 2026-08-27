@@ -9,9 +9,9 @@ import uuid
 
 import pytest
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 from memcommit.context import AutoCheckpoint, Context, Memory
-from memcommit.operations.forget.application import (
+from memcommit.application.operations.forget.application import (
     ForgetAnalysisRequest,
     ForgetApplicationError,
     ForgetApplyReceipt,
@@ -24,7 +24,7 @@ from memcommit.operations.forget.application import (
     run_forget_revision,
     run_forget_selection,
 )
-from memcommit.operations.forget.runtime import (
+from memcommit.application.operations.forget.runtime import (
     MemoryStoreForgetSourcePort,
     execute_forget_analysis,
 )
@@ -141,9 +141,9 @@ def _analysis(
 
 def test_forget_application_has_no_command_or_terminal_dependency() -> None:
     relative_paths = (
-        "operations/forget/application.py",
-        "operations/forget/runtime.py",
-        "operations/forget/provider.py",
+        "application/operations/forget/application.py",
+        "application/operations/forget/runtime.py",
+        "application/operations/forget/provider.py",
     )
     for relative_path in relative_paths:
         path = Path(__file__).parents[1] / "src" / "memcommit" / relative_path

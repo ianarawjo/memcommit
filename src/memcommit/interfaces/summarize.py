@@ -1,6 +1,6 @@
 """Presentation-neutral projection helpers for Summarize adapters."""
 
-from memcommit.operations.summarize.application import SummarizeResult
+from memcommit.application.operations.summarize.application import SummarizeResult
 
 
 def summarize_scope_label(result: SummarizeResult) -> str:

@@ -41,12 +41,12 @@ from memcommit.context_targeting.context_catalog import (
     ContextCatalogDiagnosticCode,
     ContextCatalogScan,
 )
-from memcommit.operations.profile.config import resolve_active_store_dir
-from memcommit.authority.storage_permissions import (
+from memcommit.application.operations.profile.config import resolve_active_store_dir
+from memcommit.application.authority.storage_permissions import (
     ensure_private_directory,
     open_private_exclusive,
 )
-from memcommit.authority.write_protection import (
+from memcommit.application.authority.write_protection import (
     WriteProtectionError,
     WriteProtectionRegistry,
     WriteProtectionRegistryError,
@@ -1648,8 +1648,8 @@ class RecordRestoreCheckpointStoreMixin:
     def _restore_atomize_context_creation_command_locked(self, unit, direction: str):
         """Undo/Redo one final Atomize Save As output and its Source receipt."""
 
-        from memcommit.operations.atomize.domain import AtomizeAnalysisSession
-        from memcommit.operations.atomize.workbench import atomize_workbench_record_digest
+        from memcommit.application.operations.atomize.domain import AtomizeAnalysisSession
+        from memcommit.application.operations.atomize.workbench import atomize_workbench_record_digest
         from memcommit.retained_history.command_history import (
             CommandRestoreResult,
             command_restore_metadata,
@@ -2097,11 +2097,11 @@ class RecordRestoreCheckpointStoreMixin:
             CommandRestoreResult,
             command_restore_metadata,
         )
-        from memcommit.operations.sever.model import (
+        from memcommit.application.operations.sever.model import (
             SeverApplication,
             sever_record_digest,
         )
-        from memcommit.operations.sever.session_store import SeverSessionStore
+        from memcommit.application.operations.sever.session_store import SeverSessionStore
 
         if (
             unit.command != "sever"
@@ -2399,8 +2399,8 @@ class RecordRestoreCheckpointStoreMixin:
             or record.get("output") != change.context_name
         ):
             raise ValueError("Self-save Sever checkpoint has no valid session receipt.")
-        from memcommit.operations.sever.model import SeverApplication
-        from memcommit.operations.sever.session_store import SeverSessionStore
+        from memcommit.application.operations.sever.model import SeverApplication
+        from memcommit.application.operations.sever.session_store import SeverSessionStore
 
         sessions = SeverSessionStore(self)
         session = sessions.load(session_uid)
@@ -2450,11 +2450,11 @@ class RecordRestoreCheckpointStoreMixin:
                     raise ConcurrentContextUpdateError(
                         "The active Update receipt changed during restoration."
                     )
-                from memcommit.operations.update.model import UpdateSession
+                from memcommit.application.operations.update.model import UpdateSession
 
                 self._save_update_session(path, UpdateSession.from_dict(value))
             return
-        from memcommit.operations.sever.session_store import SeverSessionStore
+        from memcommit.application.operations.sever.session_store import SeverSessionStore
 
         sever_sessions = SeverSessionStore(self)
         if path.parent == sever_sessions.directory:
@@ -2557,7 +2557,7 @@ class RecordRestoreCheckpointStoreMixin:
             or session.target.context_name != target_name
         ):
             raise ValueError("Meld session does not match the restored command.")
-        from memcommit.operations.meld.model import (
+        from memcommit.application.operations.meld.model import (
             MELD_OWNER_AWARE_SCHEMA_VERSION,
             MeldCheckpointReceipt,
         )
@@ -2708,7 +2708,7 @@ class RecordRestoreCheckpointStoreMixin:
         direction: str,
     ) -> tuple[Path, dict[str, object], dict[str, object]] | None:
         """Prepare the active local Update receipt coupled to its checkpoints."""
-        from memcommit.operations.update.model import operation_digest
+        from memcommit.application.operations.update.model import operation_digest
 
         session = self.load_staged_update()
         if session is None:

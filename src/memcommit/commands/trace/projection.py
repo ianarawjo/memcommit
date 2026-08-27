@@ -28,11 +28,15 @@ from memcommit.interfaces.tui.core.theme import (
     semantic_action_style,
 )
 from memcommit.interfaces.tui.viewers.read_only import run_read_only_viewer
-from memcommit.retained_history.provenance import (
+from memcommit.retained_history.memory_history_reconstruction.retained_record_verification import (
     MemoryState,
-    TraceContextTransition,
-    TraceEvent,
-    TraceReport,
+    MemoryHistoryContextTransition,
+)
+from memcommit.retained_history.memory_history_reconstruction.memory_history_event_derivation import (
+    MemoryHistoryEvent,
+)
+from memcommit.retained_history.memory_history_reconstruction.memory_history_construction import (
+    MemoryHistory,
 )
 
 
@@ -49,7 +53,7 @@ class TraceOperationRow:
     """One retained command boundary touching a selected lineage."""
 
     identity: str
-    events: tuple[TraceEvent, ...]
+    events: tuple[MemoryHistoryEvent, ...]
     before: tuple[MemoryState, ...]
     after: tuple[MemoryState, ...]
 
@@ -58,7 +62,7 @@ def short_uid(uid: str, verbose: bool) -> str:
     return uid if verbose else uid[:8]
 
 
-def _operation_key(event: TraceEvent, index: int) -> tuple[str, str]:
+def _operation_key(event: MemoryHistoryEvent, index: int) -> tuple[str, str]:
     if event.command_operation is not None:
         return ("command", event.command_operation.uid)
     if event.operation_id is not None:
@@ -69,7 +73,7 @@ def _operation_key(event: TraceEvent, index: int) -> tuple[str, str]:
 
 
 def _ordered_states(
-    events: tuple[TraceEvent, ...],
+    events: tuple[MemoryHistoryEvent, ...],
     attribute: str,
     component_uids: frozenset[str],
 ) -> tuple[MemoryState, ...]:
@@ -86,10 +90,10 @@ def _ordered_states(
     return tuple(sorted(by_uid.values(), key=lambda state: state.position))
 
 
-def trace_operation_rows(report: TraceReport) -> tuple[TraceOperationRow, ...]:
+def trace_operation_rows(report: MemoryHistory) -> tuple[TraceOperationRow, ...]:
     """Group chronological events into newest-first command rows."""
 
-    grouped: list[tuple[str, list[TraceEvent]]] = []
+    grouped: list[tuple[str, list[MemoryHistoryEvent]]] = []
     index_by_key: dict[tuple[str, str], int] = {}
     identities: set[str] = set()
     for index, event in enumerate(report.events):
@@ -420,7 +424,7 @@ def _unique_text(values: Iterable[str | None]) -> tuple[str, ...]:
 
 def _unique_context_transitions(
     row: TraceOperationRow,
-) -> tuple[TraceContextTransition, ...]:
+) -> tuple[MemoryHistoryContextTransition, ...]:
     return tuple(
         dict.fromkeys(
             event.context_transition
@@ -781,7 +785,7 @@ def _extend_operation(
 
 def _extend_analyses(
     fragments: StyleAndTextTuples,
-    report: TraceReport,
+    report: MemoryHistory,
     *,
     verbose: bool,
 ) -> None:
@@ -890,7 +894,7 @@ def _extend_analyses(
 
 
 def trace_document_fragments(
-    report: TraceReport,
+    report: MemoryHistory,
     *,
     verbose: bool = False,
     limit: int | None = DEFAULT_TRACE_OPERATION_LIMIT,
@@ -953,7 +957,7 @@ def trace_document_fragments(
 
 
 def format_compact_trace_report(
-    report: TraceReport,
+    report: MemoryHistory,
     *,
     verbose: bool = False,
     limit: int | None = DEFAULT_TRACE_OPERATION_LIMIT,
@@ -967,7 +971,7 @@ def format_compact_trace_report(
 
 
 def open_trace_viewer(
-    report: TraceReport,
+    report: MemoryHistory,
     *,
     verbose: bool = False,
     limit: int | None = DEFAULT_TRACE_OPERATION_LIMIT,
@@ -997,7 +1001,7 @@ def open_trace_viewer(
 
 
 def open_trace_history(
-    report: TraceReport,
+    report: MemoryHistory,
     *,
     context_name: str | None = None,
     verbose: bool = False,

@@ -41,13 +41,13 @@ def _file_snapshot(root: Path) -> dict[str, bytes]:
 
 
 def _run_child() -> None:
-    import memcommit.ops as ops
-    from memcommit.authority.access import ContextAccess
+    import memcommit.application.ops as ops
+    from memcommit.application.authority.access import ContextAccess
     from memcommit.context_targeting.readable_catalog import (
         freeze_readable_context_catalog,
     )
     from memcommit.interfaces.tui.operations.query import run_query_workbench
-    from memcommit.operations.query.ordinary_runtime import execute_ordinary_query
+    from memcommit.application.operations.query.ordinary_runtime import execute_ordinary_query
     from memcommit.store import MemoryStore
 
     with tempfile.TemporaryDirectory(prefix="mem-query-compact-") as raw_root:
@@ -147,7 +147,7 @@ def _run_child() -> None:
 
 def _run_query_view_child() -> None:
     from memcommit.interfaces.tui.operations.query import run_query_workbench
-    from memcommit.operations.query.granted_application import GrantedQueryTarget
+    from memcommit.application.operations.query.granted_application import GrantedQueryTarget
 
     ordinary_calls = []
     granted_calls = []

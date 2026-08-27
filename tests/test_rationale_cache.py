@@ -8,10 +8,10 @@ import uuid
 
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 import memcommit.rationale as rationale_module
 import memcommit.store as store_module
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.context import AutoCheckpoint, Memory
 from memcommit.rationale_cache import (
     CachedRationaleInference,

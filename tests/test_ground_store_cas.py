@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import multiprocessing
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 from memcommit.ground import (
     GroundSession,
     GroundTargetSpec,

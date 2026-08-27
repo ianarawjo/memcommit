@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 import uuid
 
-from memcommit.api import ForgetProviderFailure, MemCommitClient
+from memcommit.adapters.python_api import ForgetProviderFailure, MemCommitClient
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.interfaces.agent.forget import (
     FORGET_AGENT_TOOL_NAME,
@@ -334,11 +334,11 @@ def test_agent_adapter_depends_only_on_public_api_and_shared_contract() -> None:
         elif isinstance(node, ast.ImportFrom) and node.module:
             imported.append(node.module)
 
-    assert "memcommit.api" in imported
+    assert "memcommit.adapters.python_api" in imported
     assert "memcommit.interfaces.agent.contract" in imported
     forbidden = (
         "memcommit.commands",
-        "memcommit.operations",
+        "memcommit.application.operations",
         "memcommit.infrastructure",
         "memcommit.store",
         "memcommit.forget_application",

@@ -6,7 +6,7 @@ import inspect
 
 from typer.testing import CliRunner
 
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.contexts import command as contexts
 from memcommit.commands.list_memories import command as list_memories
 

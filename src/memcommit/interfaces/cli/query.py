@@ -8,9 +8,9 @@ from memcommit.interfaces.console.text import (
     display_escape_text,
     safe_terminal_text,
 )
-from memcommit.operations.query.granted_application import GrantedQueryResponse
-from memcommit.operations.query.ordinary_application import OrdinaryQueryResponse
-from memcommit.operations.query.reference_application import QueryReferenceResponse
+from memcommit.application.operations.query.granted_application import GrantedQueryResponse
+from memcommit.application.operations.query.ordinary_application import OrdinaryQueryResponse
+from memcommit.application.operations.query.reference_application import QueryReferenceResponse
 
 
 def render_ordinary_query_response(response: OrdinaryQueryResponse) -> None:

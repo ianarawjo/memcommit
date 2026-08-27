@@ -10,13 +10,13 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
-from memcommit.api import (
+import memcommit.application.ops as ops
+from memcommit.adapters.python_api import (
     MemCommitClient,
     ReferenceAuthorityError,
     ReferenceContextError,
 )
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Memory, MemoryRef
 from memcommit.interfaces.agent.reference import ReferenceAgentAdapter
 from memcommit.profile_config import (

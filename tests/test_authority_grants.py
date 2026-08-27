@@ -8,13 +8,13 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 import memcommit.commands.find.command as find_command
 import memcommit.commands.query.command as query_command
 import memcommit.commands.rationale.command as rationale_command
-from memcommit.api import MemCommitClient, ShowContextResult
-from memcommit.cli import app
-from memcommit.authority.access import resolve_context_access
+from memcommit.adapters.python_api import MemCommitClient, ShowContextResult
+from memcommit.adapters.console.entrypoint import app
+from memcommit.application.authority.access import resolve_context_access
 from memcommit.commands.shared.memory_picker import MemoryReportTargetSelection
 from memcommit.commands.shared.readable_context_catalog import (
     freeze_profile_readable_context_catalog,
@@ -31,8 +31,8 @@ from memcommit.profile_config import (
 )
 from memcommit.profiles import create_authority_grant, update_authority_grant
 from memcommit.store import MemoryStore
-from memcommit.operations.summarize.application import SummarizeRequest
-from memcommit.operations.summarize.runtime import execute_summarize
+from memcommit.application.operations.summarize.application import SummarizeRequest
+from memcommit.application.operations.summarize.runtime import execute_summarize
 
 
 runner = CliRunner(mix_stderr=False)

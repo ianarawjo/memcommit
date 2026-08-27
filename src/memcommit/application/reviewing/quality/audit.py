@@ -18,7 +18,7 @@ from datetime import datetime, timezone
 from typing import Callable, Literal
 
 from memcommit.context import Context, Memory
-from memcommit.operations.conformance.model import ConformanceReport
+from memcommit.application.operations.conformance.model import ConformanceReport
 from memcommit.application.reviewing.quality.findings import (
     AmbiguityFinding,
     AmbiguityReport,
@@ -51,7 +51,7 @@ from memcommit.resolution.workbench import (
     ResolutionWorkbenchView,
     resolution_overview_text,
 )
-from memcommit.operations.review.model import REVIEW_RESPONSE_CHAR_LIMIT, direct_context_digest
+from memcommit.application.operations.review.model import REVIEW_RESPONSE_CHAR_LIMIT, direct_context_digest
 
 
 QUALITY_AUDIT_SCHEMA_VERSION = 3

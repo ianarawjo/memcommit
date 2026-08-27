@@ -57,7 +57,7 @@ def _environment(home: Path) -> dict[str, str]:
 
 def _prepare(home: Path) -> None:
     os.environ["HOME"] = str(home)
-    from memcommit import ops
+    from memcommit.application import ops
     from memcommit.store import MemoryStore
 
     store = MemoryStore(root=home / ".mem")

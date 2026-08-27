@@ -5,8 +5,8 @@ from collections.abc import Callable
 
 import pytest
 
-import memcommit.ops as ops
-from memcommit.operations.meld.runtime import meld_checkpoint_record
+import memcommit.application.ops as ops
+from memcommit.application.operations.meld.runtime import meld_checkpoint_record
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.meld import (
     MeldChangeSet,
@@ -14,7 +14,9 @@ from memcommit.meld import (
     MeldProposal,
     MeldSession,
 )
-from memcommit.provenance import build_trace
+from memcommit.retained_history.memory_history_reconstruction.memory_history_construction import (
+    reconstruct_memory_history,
+)
 from memcommit.store import MemoryStore
 
 
@@ -169,7 +171,7 @@ def test_directional_meld_trace_records_edit_and_add_evidence(
     store = MemoryStore()
     current, edited, added = _applied_directional_meld(store)
 
-    edited_trace = build_trace(store, current, edited.uid)
+    edited_trace = reconstruct_memory_history(store, current, edited.uid)
     edit_event = next(
         event
         for event in edited_trace.events
@@ -187,7 +189,7 @@ def test_directional_meld_trace_records_edit_and_add_evidence(
         edit_event.declared_frame or ""
     )
 
-    added_trace = build_trace(store, current, added.uid)
+    added_trace = reconstruct_memory_history(store, current, added.uid)
     add_event = next(
         event
         for event in added_trace.events
@@ -235,7 +237,7 @@ def test_directional_meld_trace_rejects_untrusted_v2_evidence(
         mutate_post_image=mutate_post_image,
     )
 
-    trace = build_trace(store, current, edited.uid)
+    trace = reconstruct_memory_history(store, current, edited.uid)
     event = next(
         item for item in trace.events if item.command == "meld"
     )
@@ -292,7 +294,7 @@ def test_directional_zero_change_receipt_accepts_an_unchanged_post_image(
         ),
     )
     current = store.load_direct(baseline.name)
-    trace = build_trace(store, current, retained.uid)
+    trace = reconstruct_memory_history(store, current, retained.uid)
 
     assert not any(event.command == "meld" for event in trace.events)
     assert not any(

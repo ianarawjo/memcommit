@@ -8,8 +8,8 @@ import click
 import typer
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.forget import command as forget_command
 from memcommit.context import AutoCheckpoint
 from memcommit.interfaces.cli import forget as forget_cli

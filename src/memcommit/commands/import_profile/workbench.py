@@ -28,21 +28,21 @@ from memcommit.context_targeting.tui.name_editor import (
     ContextNameView,
     choose_context_name,
 )
-from memcommit.operations.profile.config import (
+from memcommit.application.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,
     load_profile_registry,
     profile_store_dir,
     validate_profile_name,
 )
-from memcommit.operations.profile.model import ProfileError
-from memcommit.operations.resource_import.model import (
+from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.resource_import.model import (
     ContextImportPlan,
     MemoryImportPlan,
     plan_context_import,
     plan_memory_import,
 )
-from memcommit.selection import SelectionOption
+from memcommit.interfaces.console.selection import SelectionOption
 from memcommit.persistence.store import MemoryStore
 
 

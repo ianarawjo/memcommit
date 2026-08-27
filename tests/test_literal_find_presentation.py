@@ -8,7 +8,7 @@ from memcommit.interfaces.cli.find import (
     project_literal_find_match,
     render_literal_find_result,
 )
-from memcommit.operations.find.literal_application import (
+from memcommit.application.operations.find.literal_application import (
     FrozenLiteralFindSource,
     LiteralFindRequest,
     LiteralFindSourceItem,

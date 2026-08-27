@@ -6,7 +6,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.authority.access import resolve_context_access
+from memcommit.application.authority.access import resolve_context_access
 from memcommit.infrastructure.command_ledger.attempts import annotate_read_report_attempt
 from memcommit.commands.shared.context_operand import (
     ContextOperandSnapshot,
@@ -21,14 +21,14 @@ from memcommit.context_targeting.presets import (
     ContextScopePreset,
     resolve_scope_preset,
 )
-from memcommit.operations.exact_dedup.application import (
+from memcommit.application.operations.exact_dedup.application import (
     ExactDuplicateContextReport,
     find_exact_duplicate_scope,
 )
 from memcommit.interfaces.console.identity import collision_safe_uid_prefixes
 from memcommit.interfaces.console.text import display_escape_text
-from memcommit.operations.profile.config import ProfileConfigError
-from memcommit.operations.profile.model import ProfileError
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.application.reviewing.read_report import ReadReportTarget
 from memcommit.persistence.store import MemoryStore
 

@@ -5,7 +5,7 @@ from prompt_toolkit.output import DummyOutput
 import pytest
 
 import memcommit.commands.audit.command as audit_command
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 from memcommit.interfaces.tui.operations.audit import (
     audit_endpoint_setup_spec,
     choose_audit_setup,

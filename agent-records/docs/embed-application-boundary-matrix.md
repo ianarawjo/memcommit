@@ -16,15 +16,15 @@ change instead.
 
 | Concern | Owner | Invariant |
 | --- | --- | --- |
-| Context/Memory request, frozen plan, exact gap, durable result | `memcommit.operations.embed.application` | Tagged typed values contain no Typer, prompt-toolkit, Store, or provider dependency. |
-| Relative locator snapshot, authority binding, direct loads, validation, CAS, source lock, checkpoint | `memcommit.operations.embed.runtime` | Local or granted Source and local Into resolve from one current-Context snapshot; Grant and Source reauthorization stays held through all-or-nothing local publication. |
+| Context/Memory request, frozen plan, exact gap, durable result | `memcommit.application.operations.embed.application` | Tagged typed values contain no Typer, prompt-toolkit, Store, or provider dependency. |
+| Relative locator snapshot, authority binding, direct loads, validation, CAS, source lock, checkpoint | `memcommit.application.operations.embed.runtime` | Local or granted Source and local Into resolve from one current-Context snapshot; Grant and Source reauthorization stays held through all-or-nothing local publication. |
 | Argument grammar and plain success/error rendering | `memcommit.interfaces.cli.embed` | `CONTEXT:UID` explicitly names one local or READ+EMBED-granted Memory owner; a bare UID/prefix searches ordinary-local direct owners only. With no ITEM, `--from` names a Context Source; with a Memory ITEM, it remains an explicit local-or-public owner qualifier. `--to` is a compatibility alias for canonical `--into`; supplying both is rejected before loading or mutation instead of allowing last-option-wins behavior. Omitted `--into`/`--to` binds the command-start current Context and is copied into the typed request before planning. |
 | Link-type, Source, target/gap, and exact-command review | `memcommit.interfaces.tui.operations.embed` | Context mode reuses the readable Context selector; Memory mode composes the readable direct-Memory picker; the Into catalog remains ordinary-local, both modes return a frozen plan without saving a Store themselves, and the shared editor fixes `mem embed` outside its writable argument buffer. |
-| Stable Python projection | `memcommit.api._operations.embed`, `memcommit.api.client` | `embed_memory` and `embed_context` expose different DTOs and never parse terminal text; only an active-Profile client may consult Grants, while an explicitly rooted client remains local-only. |
+| Stable Python projection | `memcommit.adapters.python_api._operations.embed`, `memcommit.adapters.python_api.client` | `embed_memory` and `embed_context` expose different DTOs and never parse terminal text; only an active-Profile client may consult Grants, while an explicitly rooted client remains local-only. |
 | Agent and MCP projection | `memcommit.interfaces.agent.embed`, registry projection | The versioned `memory`/`context` tag prevents operand-shape inference; MCP mechanically projects the same frozen tool contract. |
-| Live relationship mutation | `memcommit.ops` | Domain validation and in-memory insertion stay reusable below the runtime; Memory and Context links remain distinct durable types. |
+| Live relationship mutation | `memcommit.application.ops` | Domain validation and in-memory insertion stay reusable below the runtime; Memory and Context links remain distinct durable types. |
 
-The focused `memcommit.operations.embed` package is the canonical owner of the
+The focused `memcommit.application.operations.embed` package is the canonical owner of the
 live Context and Memory relationship use case. Production API, CLI, and TUI
 adapters import its application and runtime modules directly. The former flat
 `memcommit.embed_application` and `memcommit.embed_runtime` paths remain
@@ -33,7 +33,7 @@ legacy import order, monkeypatch targets, and serialized Python globals.
 
 Context and Memory Embed stay together because both authorize and publish a
 revocable live relationship at one frozen direct-item gap. Immutable Memory
-and Context snapshots remain owned by `memcommit.operations.reference`; the
+and Context snapshots remain owned by `memcommit.application.operations.reference`; the
 shared Source vocabulary and placement presentation do not merge their
 authority, durability, or checkpoint meaning.
 

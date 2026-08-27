@@ -6,8 +6,8 @@ import os
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.meld.command import _session_command
 from memcommit.commands.meld.sessions import (
     MeldSessionCatalogError,

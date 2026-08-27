@@ -15,7 +15,7 @@ than asking Python or agent adapters to reconstruct command-owned policy.
 ## Support-module ownership
 
 The semantic records and pure projections that make those application slices
-possible now live beside them under `memcommit.operations.atomize`.  The
+possible now live beside them under `memcommit.application.operations.atomize`.  The
 canonical modules are `domain`, `workbench`, `grounding`,
 `grounding_provider`, `grounding_meld_adapter`, `normal_form`,
 `result_adapter`, and `resolution_adapter`.  This keeps the complete Atomize
@@ -85,9 +85,9 @@ render compact command receipt (effect counts + typed unresolved-judgment
 count + receipt/checkpoint identities + `mem review atomize` handoff)
 ```
 
-`memcommit.operations.atomize.application` owns provider-free response/Output
+`memcommit.application.operations.atomize.application` owns provider-free response/Output
 edits and both application lifecycles, and imports no terminal adapter or
-Store. `memcommit.operations.atomize.runtime` owns the Store session
+Store. `memcommit.application.operations.atomize.runtime` owns the Store session
 repository, strict graph preflight, checkpoint reconstruction,
 materialization, and compensation. The
 Context/checkpoint and workbench receipt remain separate
@@ -96,10 +96,10 @@ outcome: it re-reads late success, compensates an uncommitted new checkpoint,
 and recovers an exact previously interrupted checkpoint without replaying the
 transformation.
 
-`memcommit.operations.atomize.analysis_application` owns the open
+`memcommit.application.operations.atomize.analysis_application` owns the open
 request/result, origin contract, and result validation without importing
 Store, commands, Typer, or prompt-toolkit.
-`memcommit.operations.atomize.analysis_runtime` owns saved-pair lookup,
+`memcommit.application.operations.atomize.analysis_runtime` owns saved-pair lookup,
 hidden-prewarm lookup, lazy provider connection, Context freshness recheck,
 pair publication, exact reanalysis pair-CAS, and synchronous restoration path.
 The legacy `atomize_workflow` module is now a compatibility facade over that
@@ -224,16 +224,16 @@ AtomizeSessionSnapshot(analysis, workbench, opaque revision)
 
 Suggested ownership:
 
-- `memcommit.operations.atomize.application`: implemented typed requests/results,
+- `memcommit.application.operations.atomize.application`: implemented typed requests/results,
   lifecycle ordering, idempotence, audit projection, and port protocols; no
   Typer, prompt-toolkit, Store paths, or Study fixture imports.
-- `memcommit.operations.atomize.runtime`: local Context capture, strict graph preflight,
+- `memcommit.application.operations.atomize.runtime`: local Context capture, strict graph preflight,
   session repository, Context materialization, compensation, and
   interrupted-Apply recovery.
-- `memcommit.operations.atomize.analysis_application`: implemented typed
+- `memcommit.application.operations.atomize.analysis_application`: implemented typed
   analysis-open request/result, exact origin validation, and
   terminal-independent port.
-- `memcommit.operations.atomize.analysis_runtime`: saved-pair and
+- `memcommit.application.operations.atomize.analysis_runtime`: saved-pair and
   hidden-prewarm lookup, lazy provider analysis, freshness recheck, and pair
   publication/restoration.
 - `memcommit.commands.atomize.command`: CLI/TUI composition, progress and receipts,
@@ -255,7 +255,7 @@ checkpoint, compensation, or receipt behavior.
 The flat `memcommit.atomize_analysis_application` and
 `memcommit.atomize_analysis_runtime` paths are also identity-preserving
 compatibility aliases for their sibling canonical modules under
-`memcommit.operations.atomize`. The Analysis relocation retains the complete
+`memcommit.application.operations.atomize`. The Analysis relocation retains the complete
 current runtime, including displaced-session archival and rollback, without
 changing provider/cache selection, refresh meaning, pair publication, session
 schema, semantic budgets, or reconciliation.

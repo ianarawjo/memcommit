@@ -8,10 +8,10 @@ import json
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 import memcommit.commands.update.command as update_command
 import memcommit.commands.update.render as update_render
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.shared.endpoint_setup_flows import UpdateSetupReceipt
 from memcommit.interfaces.tui.components.operation_launcher.session import (
     SessionOpenReceipt,
@@ -26,7 +26,9 @@ from memcommit.context import (
 from memcommit.context_targeting.loading import load_context_scope
 from memcommit.goal_focus import inline_goal_focus
 from memcommit.goal_focus_runtime import freeze_goal_focus_operand
-from memcommit.provenance import build_trace
+from memcommit.retained_history.memory_history_reconstruction.memory_history_construction import (
+    reconstruct_memory_history,
+)
 from memcommit.resolution_workbench import ResolutionWorkbenchAction
 from memcommit.store import ConcurrentContextUpdateError, MemoryStore
 from memcommit.update_receipt_store import UpdateReceiptStore
@@ -2295,7 +2297,7 @@ def test_multi_context_update_is_one_atomic_undo_and_redo_unit(
         .content.startswith("The Main Building south entrance is open")
     )
 
-    trace = build_trace(
+    trace = reconstruct_memory_history(
         store,
         store.load_direct(TASK1_TARGET_CHILD),
         target_memory.uid,

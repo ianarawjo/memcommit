@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 
 from memcommit.conformance import CONTEXT_CONFORMANCE_OPERATION
-from memcommit.operations.fit.judgment import (
+from memcommit.application.operations.fit.judgment import (
     FIT_JUDGMENT_OPERATION,
     FIT_JUDGMENT_PAYLOAD_MARKER,
 )

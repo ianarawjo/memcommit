@@ -6,12 +6,12 @@ from typing import Annotated, Optional
 
 import typer
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 from memcommit.commands.shared.context_operand import (
     ContextOperandSnapshot,
     choose_context_operand,
 )
-from memcommit.authority.access import GrantedReadStore, resolve_context_access
+from memcommit.application.authority.access import GrantedReadStore, resolve_context_access
 from memcommit.interfaces.cli.quality_findings import (
     render_heading,
     render_memory,
@@ -40,8 +40,8 @@ from memcommit.infrastructure.providers.subscription import (
     connect_codex_chatgpt_provider,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.operations.profile.config import ProfileConfigError
-from memcommit.operations.profile.model import ProfileError
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.application.reviewing.quality.workbench import QualityFindSourceFrame
 
 

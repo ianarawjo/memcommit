@@ -7,7 +7,8 @@ populated from the project's declared dependencies rather than from the active
 Conda environment. CLI modules directly import Click for command-context,
 parameter-source, styling, and output-capability behavior, so relying on Click
 to arrive transitively left a valid-looking tool installation unable to import
-`memcommit.cli`.
+the console entry point, now owned by
+`memcommit.adapters.console.entrypoint`.
 
 ## Supported contract
 

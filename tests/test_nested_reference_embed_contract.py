@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import pytest
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 from memcommit.context import Context, GrantedMemorySource, Memory, MemoryRef
 from memcommit.context_snapshot import ContextSnapshotRef
 from memcommit.embed_application import EmbedRequest, MemoryEmbedRequest

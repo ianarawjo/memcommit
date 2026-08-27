@@ -7,7 +7,7 @@ from pathlib import Path
 
 from typer.testing import CliRunner
 
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Context, Memory, MemoryRef
 from memcommit.profile_config import load_profile_registry, profile_store_dir
 from memcommit.store import MemoryStore

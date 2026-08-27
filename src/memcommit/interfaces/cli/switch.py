@@ -5,7 +5,7 @@ from __future__ import annotations
 import typer
 
 from memcommit.interfaces.console.text import display_escape_text
-from memcommit.operations.switch.application import SwitchContextResult
+from memcommit.application.operations.switch.application import SwitchContextResult
 
 
 def render_switch_context(result: SwitchContextResult) -> None:

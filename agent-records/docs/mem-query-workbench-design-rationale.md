@@ -102,7 +102,7 @@ terminal wrapping and does not persist a memcommit artifact.
 The screen, projection adapter, model, and Query View scope control live under
 `memcommit.interfaces.tui.operations.query`. Ordinary compact selection stays
 owned by `memcommit.context_targeting.tui.compact_scope`. Terminal-independent
-requests and execution live in `memcommit.operations.query`; no operation
+requests and execution live in `memcommit.application.operations.query`; no operation
 application module imports prompt-toolkit or command code.
 
 ## Verification

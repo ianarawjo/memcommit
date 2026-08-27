@@ -6,7 +6,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from memcommit.operations.help.application import describe_operation
+from memcommit.application.operations.help.application import describe_operation
 from memcommit.profile_config import ProfileEntry, virtual_authoring_registry
 from memcommit.interfaces.tui.operations.help import study_copy_guard as guard
 

@@ -10,8 +10,8 @@ from typer.testing import CliRunner
 
 import memcommit.commands.impact.command as impact_command
 import memcommit.commands.update.command as update_command
-import memcommit.ops as ops
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.help_inventory.command import COMMAND_FORMS
 from memcommit.commands.impact.registry import IMPACT_ROUTES, ImpactLifecycle
 from memcommit.commands.impact.sessions import (

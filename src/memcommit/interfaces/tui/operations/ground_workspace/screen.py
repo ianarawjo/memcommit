@@ -18,7 +18,7 @@ from memcommit.context_targeting.tui.selector import (
     ContextSelectorControl,
     ContextSelectorView,
 )
-from memcommit.operations.ground.workspace_model import GroundWorkspace
+from memcommit.application.operations.ground.workspace_model import GroundWorkspace
 from memcommit.interfaces.console.terminal import require_interactive_terminal
 from memcommit.interfaces.console.text import safe_terminal_text
 from memcommit.interfaces.tui.components.focus import (

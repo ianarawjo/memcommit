@@ -7,7 +7,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.authority.access import resolve_context_access
+from memcommit.application.authority.access import resolve_context_access
 from memcommit.infrastructure.command_ledger.attempts import annotate_memory_report_attempt
 from memcommit.commands.shared.context_operand import ContextOperandSnapshot
 from memcommit.commands.shared.memory_history import (
@@ -53,22 +53,24 @@ from memcommit.context_targeting.report_items import (
     resolve_local_memory_report_target,
     resolve_readable_memory_target,
 )
-from memcommit.retained_history.provenance import (
-    ProvenanceError,
-    TraceReport,
-    collect_trace_candidates,
+from memcommit.retained_history.memory_history_reconstruction.retained_record_verification import (
+    MemoryHistoryReconstructionError,
 )
-from memcommit.operations.reference.provenance import (
+from memcommit.retained_history.memory_history_reconstruction.memory_history_construction import (
+    MemoryHistory,
+    collect_memory_history_candidates,
+)
+from memcommit.application.operations.reference.provenance import (
     MemoryReferenceTraceReport,
     build_reference_trace,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.operations.profile.config import ProfileConfigError
-from memcommit.operations.profile.model import ProfileError
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
 
 
 def render_trace(
-    report: TraceReport,
+    report: MemoryHistory,
     *,
     verbose: bool = False,
     limit: int | None = DEFAULT_TRACE_OPERATION_LIMIT,
@@ -99,7 +101,7 @@ def _present_context_trace(
         return
     if tui:
         if not interactive_report_terminal():
-            raise ProvenanceError("--tui requires an interactive terminal.")
+            raise MemoryHistoryReconstructionError("--tui requires an interactive terminal.")
         open_context_trace_viewer(report, verbose=verbose, limit=limit)
         return
     typer.echo(
@@ -111,7 +113,7 @@ def _present_context_trace(
     )
 
 
-def render_trace_receipt(report: TraceReport) -> None:
+def render_trace_receipt(report: MemoryHistory) -> None:
     """Return a bounded lineage result; the document remains explicitly reachable."""
 
     typer.echo(
@@ -350,7 +352,7 @@ def cmd(
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
         if selector is None and as_json:
-            raise ProvenanceError("JSON output requires an explicit item UID.")
+            raise MemoryHistoryReconstructionError("JSON output requires an explicit item UID.")
         explicit_context = context_name is not None
         if selector is not None and not explicit_context:
             explicit_target = resolve_explicit_context_history_target(
@@ -385,12 +387,12 @@ def cmd(
                 context_name = launch.context_name
                 selector = launch.memory_uid
             elif not isinstance(launch, MemoryReportSelectAction):
-                raise ProvenanceError("Trace launcher returned an invalid action.")
+                raise MemoryHistoryReconstructionError("Trace launcher returned an invalid action.")
 
         if selector is None:
             name = context_snapshot.resolve_or_current(context_name)
             if not name:
-                raise ProvenanceError(
+                raise MemoryHistoryReconstructionError(
                     "No current context. Pass --context or run 'mem init <name>' first."
                 )
             # The current or explicit Context is already the useful default.
@@ -415,7 +417,7 @@ def cmd(
                     change_count=candidate.change_count,
                 )
                 for context in history_scope
-                for candidate in collect_trace_candidates(
+                for candidate in collect_memory_history_candidates(
                     store,
                     context.context,
                 )
@@ -440,7 +442,7 @@ def cmd(
             selector,
             explicit_context=context_name,
         )
-        report: TraceReport | MemoryReferenceTraceReport | GrantedMemoryTraceReport
+        report: MemoryHistory | MemoryReferenceTraceReport | GrantedMemoryTraceReport
         granted_access = None
         if owner_locator is not None:
             access = resolve_context_access(
@@ -539,7 +541,7 @@ def cmd(
         OSError,
         RuntimeError,
         ValueError,
-        ProvenanceError,
+        MemoryHistoryReconstructionError,
         ProfileConfigError,
         ProfileError,
         PermissionError,
@@ -568,7 +570,7 @@ def cmd(
                 err=True,
             )
             raise typer.Exit(2)
-        if not isinstance(report, TraceReport):
+        if not isinstance(report, MemoryHistory):
             typer.secho(
                 "Trace error: --tui currently supports direct local Memory "
                 "lineage; use --plain for a reference or granted Memory.",

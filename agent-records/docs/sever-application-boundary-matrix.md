@@ -78,28 +78,28 @@ SeverPersistedApplyResult
 
 ## Dependency direction
 
-`memcommit.operations.sever.model` owns the durable review vocabulary, exact
+`memcommit.application.operations.sever.model` owns the durable review vocabulary, exact
 JSON validation, record digests, and Source/Criteria frame bindings.
-`memcommit.operations.sever.provider` owns the operation-specific whole-frame
+`memcommit.application.operations.sever.provider` owns the operation-specific whole-frame
 prompt and strict selective-curation decoder. Keeping these contracts separate
 from `application` makes the application flow depend on validated Sever values
 without making generic semantic execution or provider connection responsible
 for Sever's decision meaning.
 
-`memcommit.operations.sever.session_store` owns only the private session file
+`memcommit.application.operations.sever.session_store` owns only the private session file
 layout, locking, and digest CAS. Result materialization remains in
-`memcommit.operations.sever.runtime`, because a private review receipt and an
+`memcommit.application.operations.sever.runtime`, because a private review receipt and an
 ordinary Context mutation have different recovery and authority boundaries.
-`memcommit.operations.sever.resolution_adapter` is the pure projection from a
+`memcommit.application.operations.sever.resolution_adapter` is the pure projection from a
 validated session into shared Resolution values; keyboard, focus, rendering,
 and terminal lifecycle remain under the interfaces and command layers.
 
-`memcommit.operations.sever.application` therefore depends only on the
+`memcommit.application.operations.sever.application` therefore depends only on the
 operation-owned model and provider-decoder contracts. It does not import
-terminal or command modules. `memcommit.operations.sever.runtime` implements
+terminal or command modules. `memcommit.application.operations.sever.runtime` implements
 Store, Grant, cache, provider-attempt, destination-validation, private-session,
 and checkpoint ports. Grant mechanics temporarily remain under
-`memcommit.authority.access`; that transitional dependency is confined to the
+`memcommit.application.authority.access`; that transitional dependency is confined to the
 runtime adapter, as it is for the Summarize slice.
 
 The former flat `memcommit.sever`, `memcommit.sever_provider`,

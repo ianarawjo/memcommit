@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import typer
 
-from memcommit.operations.context_init.application import ContextInitResult
+from memcommit.application.operations.context_init.application import ContextInitResult
 from memcommit.interfaces.console.text import display_escape_text
 
 

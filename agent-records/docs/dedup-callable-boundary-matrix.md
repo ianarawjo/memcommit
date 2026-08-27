@@ -14,7 +14,7 @@ separately under Find Duplicates, Find Redundancies, and Dedun.
 
 Both routes converge on the pure role-aware detector in
 `memcommit.direct_item_duplicates` and the Apply boundary in
-`memcommit.operations.exact_dedup.application`. The former
+`memcommit.application.operations.exact_dedup.application`. The former
 `memcommit.exact_dedup` and `memcommit.exact_dedup_application` paths are
 identity-preserving compatibility aliases for that terminal-independent
 grouping and Apply owner. Recursive reach enumerates lexical names only,
@@ -49,7 +49,7 @@ second application implementations.
 
 ## Ownership relocation boundary
 
-`memcommit.operations.exact_dedup.application` is the canonical owner of the
+`memcommit.application.operations.exact_dedup.application` is the canonical owner of the
 provider-free exact discovery, scope, receipt, and Apply implementation shared
 by exact Dedup and read-only Find Duplicates. The flat
 `memcommit.exact_dedup` and `memcommit.exact_dedup_application` paths remain
@@ -59,8 +59,8 @@ the operation package directly. Keeping this reviewed implementation together
 is intentional for this ownership-only relocation; introducing a new port or
 runtime split would change more than its implementation home.
 
-`memcommit.operations.dedup.application` and
-`memcommit.operations.dedup.runtime` are the canonical owners of the
+`memcommit.application.operations.dedup.application` and
+`memcommit.application.operations.dedup.runtime` are the canonical owners of the
 historically named reviewed-redundancy contracts that Dedun and composite
 operations consume. The flat `memcommit.dedup_application` and
 `memcommit.dedup_runtime` paths remain identity-preserving compatibility

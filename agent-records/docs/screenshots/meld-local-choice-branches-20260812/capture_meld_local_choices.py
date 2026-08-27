@@ -63,7 +63,7 @@ def _spawn_child(store_root: Path, mode: str) -> tuple[pexpect.spawn, object]:
 
 
 def _create_fixture(store_root: Path):
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
     from memcommit.comparison import ComparisonInput
     from memcommit.comparison_provider import analyze_comparison
     from memcommit.meld import MeldSession

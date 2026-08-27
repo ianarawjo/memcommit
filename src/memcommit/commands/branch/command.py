@@ -12,8 +12,8 @@ from memcommit.context_targeting.presets import (
 )
 from memcommit.context_targeting.tui.name_editor import suggest_fresh_context_name
 from memcommit.interfaces.console.text import display_escape_text
-from memcommit.operations.branch.application import BranchRequest
-from memcommit.operations.branch.runtime import (
+from memcommit.application.operations.branch.application import BranchRequest
+from memcommit.application.operations.branch.runtime import (
     execute_branch,
     prepare_branch,
 )

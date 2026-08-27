@@ -8,16 +8,16 @@ import typer
 
 from memcommit.commands.shared.command_progress import CommandProgress
 from memcommit.context_targeting.resolution import parse_direct_memory_locator
-from memcommit.operations.fit.ground_report import FitError, FitReport
-from memcommit.operations.fit.application import (
+from memcommit.application.operations.fit.ground_report import FitError, FitReport
+from memcommit.application.operations.fit.application import (
     FitMemorySourceRequest,
     FitPropositionsRequest,
     FitRequest,
     FitResult,
     FitStoredSourcesRequest,
 )
-from memcommit.operations.fit.judgment import FitJudgmentError, FitProposition
-from memcommit.operations.fit.runtime import (
+from memcommit.application.operations.fit.judgment import FitJudgmentError, FitProposition
+from memcommit.application.operations.fit.runtime import (
     FitSourceError,
     run_fit_with_store,
     run_proposition_fit,
@@ -29,8 +29,8 @@ from memcommit.interfaces.cli.fit import (
 )
 from memcommit.interfaces.console.text import display_escape_text
 from memcommit.interfaces.fit import fit_result_text
-from memcommit.operations.profile.config import ProfileConfigError
-from memcommit.operations.profile.model import ProfileError
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.infrastructure.providers.subscription import QueryProviderError, connect_semantic_provider
 from memcommit.persistence.store import MemoryStore
 

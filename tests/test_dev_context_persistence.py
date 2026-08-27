@@ -8,9 +8,9 @@ from pathlib import Path
 from typer.testing import CliRunner
 
 import memcommit.config as config_module
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 import memcommit.semantic.llm as llm_module
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Context, Memory, QueryContextRef
 from memcommit.store import MemoryStore
 

@@ -10,7 +10,7 @@ import typer
 from memcommit.application.review_policy import (
     ownership_aware_application_review,
 )
-from memcommit.authority.access import (
+from memcommit.application.authority.access import (
     GrantedReadStore,
     resolve_context_access,
 )
@@ -47,13 +47,13 @@ from memcommit.infrastructure.providers.subscription import (
     connect_codex_chatgpt_provider,
 )
 from memcommit.resolution.workbench import ResolutionNavigation
-from memcommit.operations.sever.model import (
+from memcommit.application.operations.sever.model import (
     SeverError,
     SeverSelection,
     SeverSession,
 )
 from memcommit.application.interactive_command_review import sever_turn_command_review
-from memcommit.operations.sever.application import (
+from memcommit.application.operations.sever.application import (
     SeverAnalysisProgress,
     SeverAnalysisRequest,
     SeverAnalysisResult,
@@ -64,12 +64,12 @@ from memcommit.operations.sever.application import (
     SeverPersistedApplyRequest,
     SeverSessionSnapshot,
 )
-from memcommit.operations.sever.provider import SeverProviderError
-from memcommit.operations.sever.resolution_adapter import (
+from memcommit.application.operations.sever.provider import SeverProviderError
+from memcommit.application.operations.sever.resolution_adapter import (
     SeverResolutionWorkbenchAdapter,
     sever_memory_changes,
 )
-from memcommit.operations.sever.runtime import (
+from memcommit.application.operations.sever.runtime import (
     capture_sever_binding,
     execute_sever_analysis,
     execute_sever_apply,
@@ -79,7 +79,7 @@ from memcommit.operations.sever.runtime import (
     execute_sever_session_open,
     execute_sever_session_start,
 )
-from memcommit.operations.sever.session_store import SeverSessionStore
+from memcommit.application.operations.sever.session_store import SeverSessionStore
 from memcommit.persistence.store import MemoryStore
 
 
@@ -422,7 +422,7 @@ def _run_workbench(
         run_resolution_workbench_shell,
     )
     from memcommit.interfaces.tui.workbenches.impact import ImpactController
-    from memcommit.operations.review.report_adapters import sever_review_report
+    from memcommit.application.operations.review.report_adapters import sever_review_report
 
     snapshot = execute_sever_session_open(session.uid, store=store)
     if snapshot.session != session:

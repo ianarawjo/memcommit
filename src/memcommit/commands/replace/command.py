@@ -25,10 +25,10 @@ from memcommit.interfaces.tui.operations.replace import (
     ReplaceTuiSetup,
     run_replace_tui,
 )
-from memcommit.operations.profile.config import ProfileConfigError
-from memcommit.operations.profile.model import ProfileError
-from memcommit.operations.replace.application import ReplaceError, ReplaceRequest
-from memcommit.operations.replace.runtime import execute_replace_with_store
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.replace.application import ReplaceError, ReplaceRequest
+from memcommit.application.operations.replace.runtime import execute_replace_with_store
 from memcommit.persistence.store import MemoryStore
 
 

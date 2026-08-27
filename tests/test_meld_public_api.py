@@ -6,15 +6,15 @@ from types import SimpleNamespace
 
 import pytest
 
-import memcommit.api._operations.meld as meld_operation
-from memcommit.api import (
+import memcommit.adapters.python_api._operations.meld as meld_operation
+from memcommit.adapters.python_api import (
     MeldConflictError,
     MeldContextError,
     MeldSessionResult,
     MeldStorageError,
     MemCommitClient,
 )
-from memcommit.operations.meld.session_application import MeldSessionSnapshot
+from memcommit.application.operations.meld.session_application import MeldSessionSnapshot
 
 
 def _review_session():

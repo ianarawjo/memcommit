@@ -12,7 +12,7 @@ rendering all lived in `commands/init/command.py`.
 
 This extraction moves the use case behind one typed application request and
 result while preserving that Store transaction. Its implementation is now
-owned by `memcommit.operations.context_init`; the former top-level application
+owned by `memcommit.application.operations.context_init`; the former top-level application
 and runtime paths remain true module aliases for compatibility. This ownership
 relocation changes no request, result, validation, checkpoint, transaction,
 output, or interaction behavior. A later shared naming update

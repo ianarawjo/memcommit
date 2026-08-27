@@ -25,7 +25,7 @@ from memcommit.interfaces.tui.operations.context_init import (
     ContextInitTuiSetup,
     run_context_init_tui,
 )
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 from memcommit.store import ConcurrentContextUpdateError, MemoryStore
 
 

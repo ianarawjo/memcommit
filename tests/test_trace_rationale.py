@@ -9,12 +9,14 @@ import shutil
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.add import command as add_command
 from memcommit.context import AutoCheckpoint, Memory
 from memcommit.findings import AmbiguityFinding, AmbiguityReport
-from memcommit.provenance import build_trace
+from memcommit.retained_history.memory_history_reconstruction.memory_history_construction import (
+    reconstruct_memory_history,
+)
 from memcommit.rationale import build_rationale
 from memcommit.rationale_semantic import rationale_provenance_payload
 from memcommit.review import create_ambiguity_review
@@ -113,7 +115,7 @@ def test_trace_records_unchanged_memory_route_for_branch_entry_points(
         item for item in target.iter_items() if isinstance(item, Memory)
     )
     assert target_memory.uid != memory.uid
-    report = build_trace(store, target, target_memory.uid)
+    report = reconstruct_memory_history(store, target, target_memory.uid)
     assert [event.kind for event in report.events] == ["CREATED", "BRANCHED"]
     assert report.warnings == ()
     branch_event = report.events[-1]
@@ -186,7 +188,7 @@ def test_merge_lineage_connects_source_and_fresh_target_trace_both_directions(
         (source, source_memory.uid),
         (target, target_memory.uid),
     ):
-        report = build_trace(store, owner, selected_uid)
+        report = reconstruct_memory_history(store, owner, selected_uid)
         assert [event.kind for event in report.events] == [
             "CREATED",
             "EDITED",
@@ -251,8 +253,8 @@ def test_trace_does_not_connect_a_tampered_merge_lineage_receipt(
         encoding="utf-8",
     )
 
-    source_report = build_trace(store, source, source_memory.uid)
-    target_report = build_trace(store, target, target_memory.uid)
+    source_report = reconstruct_memory_history(store, source, source_memory.uid)
+    target_report = reconstruct_memory_history(store, target, target_memory.uid)
 
     assert not any(event.kind == "MERGED_IN" for event in source_report.events)
     assert not any(
@@ -285,7 +287,7 @@ def test_merge_trace_preserves_keep_target_and_take_source_dispositions(
 
     assert kept.exit_code == 0, kept.output
     assert taken.exit_code == 0, taken.output
-    report = build_trace(store, store.load_direct(main.name), main_memory.uid)
+    report = reconstruct_memory_history(store, store.load_direct(main.name), main_memory.uid)
     dispositions = [
         event.reason_codes[-1] for event in report.events if event.kind == "MERGED_IN"
     ]
@@ -329,7 +331,7 @@ def test_trace_keeps_one_legacy_warning_when_no_branch_receipt_exists(
     for path in source_checkpoints.glob("*.json"):
         shutil.copy2(path, target_checkpoints / path.name)
 
-    report = build_trace(store, store.load_direct(target.name), memory.uid)
+    report = reconstruct_memory_history(store, store.load_direct(target.name), memory.uid)
 
     assert [event.kind for event in report.events] == ["CREATED"]
     assert len(report.warnings) == 1
@@ -362,7 +364,7 @@ def test_trace_retains_each_recorded_context_route_across_nested_branches(
     )
     assert len({source_memory.uid, middle_memory.uid, target_memory.uid}) == 3
 
-    report = build_trace(store, store.load_direct("nested/2"), target_memory.uid)
+    report = reconstruct_memory_history(store, store.load_direct("nested/2"), target_memory.uid)
 
     assert report.warnings == ()
     routes = [
@@ -394,7 +396,7 @@ def test_trace_does_not_trust_invalid_branch_creation_metadata(
     branch_entry["args"]["branch_tree"]["operation_uid"] = "forged"
     monkeypatch.setattr(store, "list_checkpoints", lambda _name: retained)
 
-    report = build_trace(store, store.load_direct("invalid/target"), memory.uid)
+    report = reconstruct_memory_history(store, store.load_direct("invalid/target"), memory.uid)
 
     assert not any(event.kind == "BRANCHED" for event in report.events)
     assert any("invalid Branch creation metadata" in item for item in report.warnings)
@@ -520,7 +522,7 @@ def test_explicit_lineage_tracks_identical_fresh_child_then_current_edit(
         ),
     )
 
-    report = build_trace(store, store.load_direct("atomized"), child.uid[:8])
+    report = reconstruct_memory_history(store, store.load_direct("atomized"), child.uid[:8])
 
     assert report.component_uids == tuple(sorted((source.uid, child.uid)))
     assert unrelated.uid not in report.component_uids
@@ -596,11 +598,11 @@ def test_tampered_explicit_lineage_falls_back_to_snapshot_differences(
         ),
     )
 
-    keep_report = build_trace(store, ctx, keep.uid)
-    preserve_report = build_trace(store, ctx, preserve.uid)
-    split_report = build_trace(store, ctx, split.uid)
-    absorbed_report = build_trace(store, ctx, absorbed.uid)
-    child_report = build_trace(store, ctx, unexpected_child.uid)
+    keep_report = reconstruct_memory_history(store, ctx, keep.uid)
+    preserve_report = reconstruct_memory_history(store, ctx, preserve.uid)
+    split_report = reconstruct_memory_history(store, ctx, split.uid)
+    absorbed_report = reconstruct_memory_history(store, ctx, absorbed.uid)
+    child_report = reconstruct_memory_history(store, ctx, unexpected_child.uid)
 
     assert "ATOMIZE_KEEP" not in {event.kind for event in keep_report.events}
     assert any(event.kind == "EDITED" for event in keep_report.events)
@@ -693,7 +695,7 @@ def test_tampered_v2_review_evidence_keeps_lineage_but_drops_evidence(
         ),
     )
 
-    report = build_trace(store, ctx, child.uid)
+    report = reconstruct_memory_history(store, ctx, child.uid)
     split = next(event for event in report.events if event.kind == "SPLIT")
 
     assert split.evidence == "RECORDED"
@@ -738,7 +740,7 @@ def test_trace_does_not_claim_uncheckpointed_current_state_as_origin(
     memory = ops.add(ctx, "Only the current file retains this.")
     store.save(ctx)
 
-    report = build_trace(store, store.load_direct(ctx.name), memory.uid)
+    report = reconstruct_memory_history(store, store.load_direct(ctx.name), memory.uid)
 
     assert report.originals == ()
     assert [event.kind for event in report.events] == ["HISTORY_GAP"]
@@ -768,7 +770,7 @@ def test_trace_reconstructs_pure_canonical_reorder(isolated_store):
         ),
     )
 
-    report = build_trace(store, store.load_direct(ctx.name), first.uid)
+    report = reconstruct_memory_history(store, store.load_direct(ctx.name), first.uid)
 
     assert [event.kind for event in report.events] == [
         "CREATED",
@@ -803,8 +805,8 @@ def test_rationale_proposal_source_matches_context_and_memory_identity(
     )
     store.save_impact_plan(session)
 
-    intended_trace = build_trace(store, intended_source, shared_uid)
-    unrelated_trace = build_trace(store, unrelated_context, shared_uid)
+    intended_trace = reconstruct_memory_history(store, intended_source, shared_uid)
+    unrelated_trace = reconstruct_memory_history(store, unrelated_context, shared_uid)
     intended_report = build_rationale(
         store,
         intended_source,
@@ -906,7 +908,7 @@ def test_trace_degrades_corrupt_add_source_or_uid_order_to_reconstructed(
     corrupt_hash = json.loads(json.dumps(original))
     corrupt_hash["args"]["source"]["sha256"] = "0" * 64
     checkpoint_path.write_text(json.dumps(corrupt_hash))
-    hash_report = build_trace(store, ctx, memories[0].uid)
+    hash_report = reconstruct_memory_history(store, ctx, memories[0].uid)
 
     created = next(event for event in hash_report.events if event.kind == "CREATED")
     assert created.evidence == "RECONSTRUCTED"
@@ -917,7 +919,7 @@ def test_trace_degrades_corrupt_add_source_or_uid_order_to_reconstructed(
     wrong_order = json.loads(json.dumps(original))
     wrong_order["args"]["memory_uids"].reverse()
     checkpoint_path.write_text(json.dumps(wrong_order))
-    order_report = build_trace(store, ctx, memories[0].uid)
+    order_report = reconstruct_memory_history(store, ctx, memories[0].uid)
 
     created = next(event for event in order_report.events if event.kind == "CREATED")
     assert created.evidence == "RECONSTRUCTED"

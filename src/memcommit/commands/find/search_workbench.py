@@ -78,9 +78,9 @@ from memcommit.context_targeting.tui.name_editor import (
     ContextNameControl,
     suggest_fresh_context_name,
 )
-from memcommit.selection import FlatMultiSelectionState, SelectionOption
-from memcommit.selection.tui.multiple import render_vertical_multi_choice_rows
-from memcommit.operations.search.application import (
+from memcommit.interfaces.console.selection import FlatMultiSelectionState, SelectionOption
+from memcommit.interfaces.console.selection.tui.multiple import render_vertical_multi_choice_rows
+from memcommit.application.operations.search.application import (
     FindSearchRequest,
     FindSearchResponse,
     FindSearchResult,

@@ -99,7 +99,7 @@ def _configure_store(root: Path):
 
 
 def _prepare_source(root: Path):
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
 
     store = _configure_store(root)
     source = ops.init("capture/cases")

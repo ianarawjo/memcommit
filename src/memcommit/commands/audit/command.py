@@ -19,7 +19,7 @@ from memcommit.commands.shared.context_operand import (
     ContextOperandSnapshot,
     choose_context_operand,
 )
-from memcommit.authority.access import (
+from memcommit.application.authority.access import (
     GrantedReadStore,
     context_access_display_facts,
     resolve_context_access,
@@ -45,12 +45,12 @@ from memcommit.interfaces.tui.operations.audit import (
 )
 from memcommit.interfaces.tui.viewers.semantic import run_semantic_viewer
 from memcommit.context import Context
-from memcommit.operations.conformance.model import ConformanceError, check_context_conformance
-from memcommit.operations.conformance.runtime import freeze_context_conformance
-from memcommit.authority.derived_policy import authorize_analysis_save
+from memcommit.application.operations.conformance.model import ConformanceError, check_context_conformance
+from memcommit.application.operations.conformance.runtime import freeze_context_conformance
+from memcommit.application.authority.derived_policy import authorize_analysis_save
 from memcommit.application.reviewing.quality.findings import FindingsError, FindingsProvider
-from memcommit.operations.profile.config import ProfileConfigError
-from memcommit.operations.profile.model import ProfileError
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.application.reviewing.quality.audit import (
     QualityAuditError,
     QualityAuditKind,

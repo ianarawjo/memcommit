@@ -9,7 +9,7 @@ import sys
 
 import pytest
 
-from memcommit.operations.branch.application import (
+from memcommit.application.operations.branch.application import (
     BranchError,
     BranchRequest,
     BranchResult,
@@ -105,7 +105,7 @@ def test_branch_application_rejects_a_receipt_outside_the_plan() -> None:
 
 
 def test_branch_application_has_no_cli_tui_or_store_dependency() -> None:
-    path = REPOSITORY_ROOT / "src/memcommit/operations/branch/application.py"
+    path = REPOSITORY_ROOT / "src/memcommit/application/operations/branch/application.py"
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
     imports = {
         node.module
@@ -143,9 +143,9 @@ def test_branch_command_delegates_materialization_to_the_operation_runtime() -> 
         for alias in node.names
     )
 
-    assert "memcommit.operations.branch.application" in imports
-    assert "memcommit.operations.branch.runtime" in imports
-    assert "memcommit.ops" not in imports
+    assert "memcommit.application.operations.branch.application" in imports
+    assert "memcommit.application.operations.branch.runtime" in imports
+    assert "memcommit.application.ops" not in imports
     assert "memcommit.memory_lineage" not in imports
     assert not {
         "ContextBranchBinding",
@@ -161,10 +161,10 @@ def test_branch_command_delegates_materialization_to_the_operation_runtime() -> 
 def test_branch_package_import_is_lazy() -> None:
     program = """
 import sys
-import memcommit.operations.branch
+import memcommit.application.operations.branch
 
-assert "memcommit.operations.branch.application" not in sys.modules
-assert "memcommit.operations.branch.runtime" not in sys.modules
+assert "memcommit.application.operations.branch.application" not in sys.modules
+assert "memcommit.application.operations.branch.runtime" not in sys.modules
 """
 
     subprocess.run(

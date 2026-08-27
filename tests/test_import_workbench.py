@@ -6,7 +6,7 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.shared.context_reach_dialog import choose_context_reach
 from memcommit.commands.shared.exact_command_review import ExactCommandReview
 from memcommit.commands.shared.exact_command_review_shell import approve_exact_command
@@ -15,7 +15,7 @@ from memcommit.commands.shared.flat_selection_dialog import choose_flat_option
 from memcommit.commands.import_profile.workbench import freeze_import_source_catalog
 from memcommit.commands.shared.tui_primitives import ExactNameFieldView
 from memcommit.profile_config import ProfileEntry, ProfileRegistry
-from memcommit.selection import SelectionOption
+from memcommit.interfaces.console.selection import SelectionOption
 
 
 runner = CliRunner(mix_stderr=False)

@@ -26,8 +26,8 @@ it. `--to` is accepted as a compatibility alias for `--into`, while generated
 commands and receipts keep `--into` as the canonical spelling.
 
 The implementation now enters through
-`memcommit.operations.embed.application`, with
-`memcommit.operations.embed.runtime` owning Store loading, concurrency checks,
+`memcommit.application.operations.embed.application`, with
+`memcommit.application.operations.embed.runtime` owning Store loading, concurrency checks,
 checkpoint creation, and persistence. The previous flat module paths are
 module-identity compatibility aliases. The plain command adapter is
 `memcommit.interfaces.cli.embed`; the interactive adapter is the

@@ -6,7 +6,7 @@ import json
 
 from typer.testing import CliRunner
 
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Memory, MemoryRef
 from memcommit.rationale_rules import (
     RationaleLimitUnit,
@@ -181,7 +181,7 @@ def test_snapshot_reference_rationale_never_opens_live_target_provenance(
 def test_duplicate_bare_report_uid_lists_every_typed_owner(isolated_store):
     shared_uid = "aaaaaaaa-0000-4000-8000-000000000000"
     store = MemoryStore()
-    from memcommit import ops
+    from memcommit.application import ops
 
     first = ops.init("first")
     first.add(Memory(uid=shared_uid, content="first copy"))

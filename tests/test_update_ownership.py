@@ -16,7 +16,7 @@ from tests.legacy_submodule_assertions import (
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 LEGACY_NAME = "memcommit.update_application"
-CANONICAL_NAME = "memcommit.operations.update.application"
+CANONICAL_NAME = "memcommit.application.operations.update.application"
 
 
 def test_update_module_identity_when_legacy_path_is_imported_first() -> None:
@@ -70,9 +70,9 @@ def test_update_legacy_facade_defines_no_behavior() -> None:
 def test_update_package_import_is_lazy() -> None:
     program = """
 import sys
-import memcommit.operations.update
+import memcommit.application.operations.update
 
-assert "memcommit.operations.update.application" not in sys.modules
+assert "memcommit.application.operations.update.application" not in sys.modules
 """
 
     subprocess.run(
@@ -97,8 +97,8 @@ def test_production_update_consumers_use_the_operation_owner() -> None:
         "src/memcommit/persistence/store/operation_state.py",
         "src/memcommit/persistence/store/context_memory.py",
         "src/memcommit/persistence/store/record_restore_checkpoint.py",
-        "src/memcommit/operations/update/granted_application.py",
-        "src/memcommit/operations/update/granted_source_application.py",
+        "src/memcommit/application/operations/update/granted_application.py",
+        "src/memcommit/application/operations/update/granted_source_application.py",
     )
 
     for relative_path in relative_paths:
@@ -107,4 +107,4 @@ def test_production_update_consumers_use_the_operation_owner() -> None:
 
 
 def test_update_does_not_invent_an_operation_runtime() -> None:
-    assert not (REPOSITORY_ROOT / "src/memcommit/operations/update/runtime.py").exists()
+    assert not (REPOSITORY_ROOT / "src/memcommit/application/operations/update/runtime.py").exists()

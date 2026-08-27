@@ -29,10 +29,8 @@ BASELINE_COMMIT = "885e62c0"
 ROOT_BOUNDARIES = {
     "__init__": "public package surface",
     "bootstrap": "application composition root",
-    "cli": "console entry point",
     "context": "public core Context and Memory model",
     "context_locator": "documented canonical existing-Context resolver",
-    "ops": "public in-memory operation API",
 }
 
 
@@ -46,10 +44,29 @@ RETIRED_ROOT_MODULES = {
 }
 
 
+# These baseline modules were relocated, but their historical import names are
+# intentionally no longer supported. Their behavior remains available only
+# through the canonical owner named in the relocation plan.
+REMOVED_LEGACY_ALIASES = {
+    "cli": (
+        "the console entry point now has one explicit adapter owner and the "
+        "former root import is intentionally unsupported"
+    ),
+    "ops": (
+        "the in-memory operation API now has one explicit application owner "
+        "and the former root import is intentionally unsupported"
+    ),
+    "provenance": (
+        "the monolith was replaced by the explicit Memory-history "
+        "reconstruction package"
+    ),
+}
+
+
 COMPATIBILITY_TARGET_OVERRIDES = {
     # This historical forwarding implementation moves with the physical
     # facade cleanup rather than remaining executable at the package root.
-    "atomize_workflow": "memcommit.operations.atomize.workflow",
+    "atomize_workflow": "memcommit.application.operations.atomize.workflow",
     # These two narrow re-export surfaces remain explicit compatibility
     # modules instead of broadening to every name in their source modules.
     "context_scope": "memcommit.compatibility.context_scope",
@@ -67,80 +84,80 @@ MODULE_TARGET_PATH_OVERRIDES = {
 
 
 OPERATION_TARGETS = {
-    "comparison": "memcommit.operations.compare.ledger.model",
-    "comparison_evidence": "memcommit.operations.compare.ledger.evidence",
-    "comparison_execution": "memcommit.operations.compare.ledger.execution",
+    "comparison": "memcommit.application.operations.compare.ledger.model",
+    "comparison_evidence": "memcommit.application.operations.compare.ledger.evidence",
+    "comparison_execution": "memcommit.application.operations.compare.ledger.execution",
     "comparison_present": "memcommit.interfaces.presentation.comparison",
-    "comparison_provider": "memcommit.operations.compare.ledger.provider",
-    "comparison_session_application": "memcommit.operations.compare.ledger.session_application",
-    "comparison_store": "memcommit.operations.compare.ledger.store",
+    "comparison_provider": "memcommit.application.operations.compare.ledger.provider",
+    "comparison_session_application": "memcommit.application.operations.compare.ledger.session_application",
+    "comparison_store": "memcommit.application.operations.compare.ledger.store",
     "comparison_summary_present": "memcommit.interfaces.cli.comparison_summary",
-    "conformance": "memcommit.operations.conformance.model",
-    "conformance_runtime": "memcommit.operations.conformance.runtime",
-    "dedun_scope": "memcommit.operations.dedun.scope",
-    "dedup_planning": "memcommit.operations.dedup.planning",
-    "distill": "memcommit.operations.distill.model",
-    "distill_config": "memcommit.operations.distill.config",
-    "distill_goal_fit": "memcommit.operations.distill.goal_fit",
-    "elaborate": "memcommit.operations.elaborate.model",
-    "elaborate_config": "memcommit.operations.elaborate.config",
-    "elaborate_target_context": "memcommit.operations.elaborate.target_context",
-    "find_answer_dialogue": "memcommit.operations.search.answer_dialogue",
-    "find_answer_references": "memcommit.operations.search.answer_references",
-    "find_scope_evidence": "memcommit.operations.search.scope_evidence",
-    "find_turn_dialogue": "memcommit.operations.search.turn_dialogue",
-    "forget_provider": "memcommit.operations.forget.provider",
-    "forget_review": "memcommit.operations.forget.review",
-    "granted_comparison_store": "memcommit.operations.compare.ledger.granted_store",
-    "granted_source_update_application": "memcommit.operations.update.granted_source_application",
-    "granted_update_application": "memcommit.operations.update.granted_application",
-    "ground": "memcommit.operations.ground.model",
-    "ground_context_catalog": "memcommit.operations.ground.context_catalog",
-    "ground_dialogue": "memcommit.operations.ground.dialogue",
-    "ground_distill": "memcommit.operations.ground.distill",
-    "ground_elaborate": "memcommit.operations.ground.elaborate",
-    "ground_turn_dialogue": "memcommit.operations.ground.turn_dialogue",
-    "ground_workspace": "memcommit.operations.ground.workspace_model",
-    "ground_workspace_application": "memcommit.operations.ground.workspace_application",
-    "ground_workspace_draft": "memcommit.operations.ground.workspace_draft",
-    "ground_workspace_draft_store": "memcommit.operations.ground.workspace_draft_store",
-    "ground_workspace_fit": "memcommit.operations.ground.workspace_fit",
-    "ground_workspace_history": "memcommit.operations.ground.workspace_history",
-    "ground_workspace_projection": "memcommit.operations.ground.workspace_projection",
-    "ground_workspace_runtime": "memcommit.operations.ground.workspace_runtime",
-    "history_search": "memcommit.operations.log.search",
-    "meld": "memcommit.operations.meld.model",
-    "meld_choice_branches": "memcommit.operations.meld.choice_branches",
-    "meld_provider": "memcommit.operations.meld.provider",
-    "meld_resolution_adapter": "memcommit.operations.meld.resolution_adapter",
-    "meld_resolution_cache": "memcommit.operations.meld.resolution_cache",
-    "merge_planning": "memcommit.operations.merge.planning",
-    "merge_tree": "memcommit.operations.merge.tree",
-    "merge_tree_persistence": "memcommit.operations.merge.tree_persistence",
-    "ordinary_query_answer": "memcommit.operations.query.answer",
-    "context_rationale": "memcommit.operations.rationale.context",
-    "rationale": "memcommit.operations.rationale.model",
-    "rationale_cache": "memcommit.operations.rationale.cache",
-    "rationale_rules": "memcommit.operations.rationale.rules",
-    "rationale_scope": "memcommit.operations.rationale.scope",
-    "rationale_semantic": "memcommit.operations.rationale.semantic",
-    "reference_provenance": "memcommit.operations.reference.provenance",
-    "resolve_rules": "memcommit.operations.resolve.rules",
-    "resolve_semantic": "memcommit.operations.resolve.semantic",
-    "resolve_targeting": "memcommit.operations.resolve.targeting",
-    "resource_import": "memcommit.operations.resource_import.model",
-    "review": "memcommit.operations.review.model",
-    "review_report_adapters": "memcommit.operations.review.report_adapters",
-    "search": "memcommit.operations.search.model",
-    "search_artifacts": "memcommit.operations.search.artifacts",
-    "semantic_add_runtime": "memcommit.operations.add.semantic_runtime",
-    "share": "memcommit.operations.share.model",
-    "summarize": "memcommit.operations.summarize.model",
-    "update": "memcommit.operations.update.model",
-    "update_application_flow": "memcommit.operations.update.application_flow",
-    "update_endpoints": "memcommit.operations.update.endpoints",
-    "update_receipt_store": "memcommit.operations.update.receipt_store",
-    "update_resolution_adapter": "memcommit.operations.update.resolution_adapter",
+    "conformance": "memcommit.application.operations.conformance.model",
+    "conformance_runtime": "memcommit.application.operations.conformance.runtime",
+    "dedun_scope": "memcommit.application.operations.dedun.scope",
+    "dedup_planning": "memcommit.application.operations.dedup.planning",
+    "distill": "memcommit.application.operations.distill.model",
+    "distill_config": "memcommit.application.operations.distill.config",
+    "distill_goal_fit": "memcommit.application.operations.distill.goal_fit",
+    "elaborate": "memcommit.application.operations.elaborate.model",
+    "elaborate_config": "memcommit.application.operations.elaborate.config",
+    "elaborate_target_context": "memcommit.application.operations.elaborate.target_context",
+    "find_answer_dialogue": "memcommit.application.operations.search.answer_dialogue",
+    "find_answer_references": "memcommit.application.operations.search.answer_references",
+    "find_scope_evidence": "memcommit.application.operations.search.scope_evidence",
+    "find_turn_dialogue": "memcommit.application.operations.search.turn_dialogue",
+    "forget_provider": "memcommit.application.operations.forget.provider",
+    "forget_review": "memcommit.application.operations.forget.review",
+    "granted_comparison_store": "memcommit.application.operations.compare.ledger.granted_store",
+    "granted_source_update_application": "memcommit.application.operations.update.granted_source_application",
+    "granted_update_application": "memcommit.application.operations.update.granted_application",
+    "ground": "memcommit.application.operations.ground.model",
+    "ground_context_catalog": "memcommit.application.operations.ground.context_catalog",
+    "ground_dialogue": "memcommit.application.operations.ground.dialogue",
+    "ground_distill": "memcommit.application.operations.ground.distill",
+    "ground_elaborate": "memcommit.application.operations.ground.elaborate",
+    "ground_turn_dialogue": "memcommit.application.operations.ground.turn_dialogue",
+    "ground_workspace": "memcommit.application.operations.ground.workspace_model",
+    "ground_workspace_application": "memcommit.application.operations.ground.workspace_application",
+    "ground_workspace_draft": "memcommit.application.operations.ground.workspace_draft",
+    "ground_workspace_draft_store": "memcommit.application.operations.ground.workspace_draft_store",
+    "ground_workspace_fit": "memcommit.application.operations.ground.workspace_fit",
+    "ground_workspace_history": "memcommit.application.operations.ground.workspace_history",
+    "ground_workspace_projection": "memcommit.application.operations.ground.workspace_projection",
+    "ground_workspace_runtime": "memcommit.application.operations.ground.workspace_runtime",
+    "history_search": "memcommit.application.operations.log.search",
+    "meld": "memcommit.application.operations.meld.model",
+    "meld_choice_branches": "memcommit.application.operations.meld.choice_branches",
+    "meld_provider": "memcommit.application.operations.meld.provider",
+    "meld_resolution_adapter": "memcommit.application.operations.meld.resolution_adapter",
+    "meld_resolution_cache": "memcommit.application.operations.meld.resolution_cache",
+    "merge_planning": "memcommit.application.operations.merge.planning",
+    "merge_tree": "memcommit.application.operations.merge.tree",
+    "merge_tree_persistence": "memcommit.application.operations.merge.tree_persistence",
+    "ordinary_query_answer": "memcommit.application.operations.query.answer",
+    "context_rationale": "memcommit.application.operations.rationale.context",
+    "rationale": "memcommit.application.operations.rationale.model",
+    "rationale_cache": "memcommit.application.operations.rationale.cache",
+    "rationale_rules": "memcommit.application.operations.rationale.rules",
+    "rationale_scope": "memcommit.application.operations.rationale.scope",
+    "rationale_semantic": "memcommit.application.operations.rationale.semantic",
+    "reference_provenance": "memcommit.application.operations.reference.provenance",
+    "resolve_rules": "memcommit.application.operations.resolve.rules",
+    "resolve_semantic": "memcommit.application.operations.resolve.semantic",
+    "resolve_targeting": "memcommit.application.operations.resolve.targeting",
+    "resource_import": "memcommit.application.operations.resource_import.model",
+    "review": "memcommit.application.operations.review.model",
+    "review_report_adapters": "memcommit.application.operations.review.report_adapters",
+    "search": "memcommit.application.operations.search.model",
+    "search_artifacts": "memcommit.application.operations.search.artifacts",
+    "semantic_add_runtime": "memcommit.application.operations.add.semantic_runtime",
+    "share": "memcommit.application.operations.share.model",
+    "summarize": "memcommit.application.operations.summarize.model",
+    "update": "memcommit.application.operations.update.model",
+    "update_application_flow": "memcommit.application.operations.update.application_flow",
+    "update_endpoints": "memcommit.application.operations.update.endpoints",
+    "update_receipt_store": "memcommit.application.operations.update.receipt_store",
+    "update_resolution_adapter": "memcommit.application.operations.update.resolution_adapter",
 }
 
 
@@ -153,6 +170,7 @@ CONCEPT_TARGETS = {
     "checkpoint_catalog": "memcommit.retained_history.checkpoint_catalog",
     "checkpoint_frames": "memcommit.retained_history.checkpoint_frames",
     "checkpoint_migration": "memcommit.retained_history.checkpoint_migration",
+    "cli": "memcommit.adapters.console.entrypoint",
     "clipboard": "memcommit.infrastructure.clipboard",
     "command_attempts": "memcommit.infrastructure.command_ledger.attempts",
     "command_history": "memcommit.retained_history.command_history",
@@ -164,7 +182,7 @@ CONCEPT_TARGETS = {
     "context_naming": "memcommit.context_targeting.naming",
     "context_snapshot": "memcommit.retained_history.context_snapshot",
     "current_context_navigation": "memcommit.context_targeting.navigation",
-    "derived_policy": "memcommit.authority.derived_policy",
+    "derived_policy": "memcommit.application.authority.derived_policy",
     "direct_item_duplicates": "memcommit.application.reviewing.direct_item_duplicates",
     "distill_elaborate_reference": "memcommit.semantic.generative_reduction_reference",
     "duplicate_pipeline": "memcommit.semantic.classification.duplicates",
@@ -180,10 +198,11 @@ CONCEPT_TARGETS = {
     "memory_diff": "memcommit.application.reviewing.memory_diff",
     "memory_lineage": "memcommit.retained_history.memory_lineage",
     "name_suggestions": "memcommit.context_targeting.name_suggestions",
+    "ops": "memcommit.application.ops",
     "operation_gate_pipeline": "memcommit.semantic.classification.gates",
-    "profile_config": "memcommit.operations.profile.config",
-    "profiles": "memcommit.operations.profile.model",
-    "provenance": "memcommit.retained_history.provenance",
+    "profile_config": "memcommit.application.operations.profile.config",
+    "profiles": "memcommit.application.operations.profile.model",
+    "provenance": "memcommit.retained_history.memory_history_reconstruction",
     "provider_types": "memcommit.infrastructure.providers.types",
     "quality_audit": "memcommit.application.reviewing.quality.audit",
     "quality_audit_store": "memcommit.application.reviewing.quality.audit_store",
@@ -202,14 +221,14 @@ CONCEPT_TARGETS = {
     "semantic_provider": "memcommit.infrastructure.providers.semantic",
     "semantic_redundancy_evidence": "memcommit.semantic.redundancy_evidence",
     "session_workbench_navigation": "memcommit.application.reviewing.session_navigation",
-    "storage_permissions": "memcommit.authority.storage_permissions",
+    "storage_permissions": "memcommit.application.authority.storage_permissions",
     "study_action_log": "memcommit.infrastructure.command_ledger.study_actions",
-    "study_operation_policy": "memcommit.authority.study_operation_policy",
+    "study_operation_policy": "memcommit.application.authority.study_operation_policy",
     "store": "memcommit.persistence.store",
     "temporal_history": "memcommit.retained_history.temporal",
     "uid_locator": "memcommit.context_targeting.uid_locator",
     "understanding": "memcommit.semantic.understanding",
-    "write_protection": "memcommit.authority.write_protection",
+    "write_protection": "memcommit.application.authority.write_protection",
 }
 
 
@@ -220,10 +239,22 @@ def _module_target_path(module: str) -> str:
     )
 
 
+def _current_target(module: str | None) -> str | None:
+    """Map frozen operation owners to their current canonical package."""
+
+    if module == "memcommit.operations":
+        return "memcommit.application.operations"
+    if module is not None and module.startswith("memcommit.operations."):
+        return "memcommit.application.operations." + module.removeprefix(
+            "memcommit.operations."
+        )
+    return module
+
+
 def _compatibility_target(source: str, *, stem: str) -> str | None:
     override = COMPATIBILITY_TARGET_OVERRIDES.get(stem)
     if override is not None:
-        return override
+        return _current_target(override)
     tree = ast.parse(source)
     bindings: dict[str, str] = {}
     for node in tree.body:
@@ -258,7 +289,7 @@ def _compatibility_target(source: str, *, stem: str) -> str | None:
             and node.targets[0].value.attr == "modules"
             and isinstance(node.value, ast.Name)
         ):
-            return bindings.get(node.value.id)
+            return _current_target(bindings.get(node.value.id))
     return None
 
 
@@ -347,6 +378,13 @@ def build_plan() -> dict[str, object]:
         else:
             unclassified.append(path.name)
             continue
+        if stem in REMOVED_LEGACY_ALIASES:
+            if action != "relocate":
+                raise RuntimeError(
+                    f"Removed legacy alias {stem!r} is not a relocated module"
+                )
+            action = "relocate-without-alias"
+            reason = f"{reason}; {REMOVED_LEGACY_ALIASES[stem]}"
         entries.append(
             {
                 "path": relative_path,
@@ -386,7 +424,7 @@ def build_plan() -> dict[str, object]:
     targets = [
         entry["canonical_target"]
         for entry in entries
-        if entry["action"] == "relocate"
+        if entry["action"] in {"relocate", "relocate-without-alias"}
     ]
     if len(targets) != len(set(targets)):
         raise RuntimeError("Relocation targets must be unique")
@@ -459,13 +497,21 @@ def render_legacy_alias_module(plan: dict[str, object]) -> str:
     aliases = []
     for entry in modules:
         assert isinstance(entry, dict)
-        if entry["role"] in {"root-boundary", "retired-prototype"}:
+        if (
+            entry["role"] in {"root-boundary", "retired-prototype"}
+            or entry["action"] == "relocate-without-alias"
+        ):
             continue
         target = entry["canonical_target"]
         if not isinstance(target, str) or not target:
             raise RuntimeError(f"Legacy alias target is missing: {entry['module']}")
         aliases.append((str(entry["module"]), target))
-    expected_aliases = 249 - len(ROOT_BOUNDARIES) - len(RETIRED_ROOT_MODULES)
+    expected_aliases = (
+        249
+        - len(ROOT_BOUNDARIES)
+        - len(RETIRED_ROOT_MODULES)
+        - len(REMOVED_LEGACY_ALIASES)
+    )
     if len(aliases) != expected_aliases:
         raise RuntimeError(
             f"Expected {expected_aliases} legacy aliases, found {len(aliases)}"
@@ -490,7 +536,10 @@ def _plan_aliases(plan: dict[str, object]) -> dict[str, str]:
     aliases = {}
     for entry in modules:
         assert isinstance(entry, dict)
-        if entry["role"] in {"root-boundary", "retired-prototype"}:
+        if (
+            entry["role"] in {"root-boundary", "retired-prototype"}
+            or entry["action"] == "relocate-without-alias"
+        ):
             continue
         target = entry["canonical_target"]
         if not isinstance(target, str) or not target:

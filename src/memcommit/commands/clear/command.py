@@ -4,10 +4,10 @@ import typer
 
 from memcommit.commands.shared.context_operand import ContextOperandSnapshot
 from memcommit.interfaces.console.text import display_escape_text
-from memcommit.operations.clear.application import ClearRequest
-from memcommit.operations.clear.runtime import execute_clear
-from memcommit.operations.profile.config import ProfileConfigError
-from memcommit.operations.profile.model import ProfileError
+from memcommit.application.operations.clear.application import ClearRequest
+from memcommit.application.operations.clear.runtime import execute_clear
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import MemoryStore
 
 

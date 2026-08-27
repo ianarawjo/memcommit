@@ -27,7 +27,7 @@ from memcommit.application.semantic_execution import (
     SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT,
 )
 from memcommit.summarize import SUMMARIZE_EXECUTION_POLICY
-from memcommit.operations.translate.runtime import TRANSLATE_EXECUTION_POLICY
+from memcommit.application.operations.translate.runtime import TRANSLATE_EXECUTION_POLICY
 from memcommit.update import UPDATE_EXECUTION_POLICY
 
 

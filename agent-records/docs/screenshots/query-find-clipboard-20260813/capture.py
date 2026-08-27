@@ -74,7 +74,7 @@ def _print_clipboard_writes(label: str, writes: list[str]) -> None:
 
 def _run_query_child(*, fail: bool = False) -> None:
     from memcommit.clipboard import ClipboardError
-    from memcommit.operations.query.ordinary_application import OrdinaryQueryResponse
+    from memcommit.application.operations.query.ordinary_application import OrdinaryQueryResponse
     from memcommit.interfaces.tui.operations.query import run_query_workbench
 
     writes: list[str] = []

@@ -6,13 +6,13 @@ from types import SimpleNamespace
 
 import pytest
 
-import memcommit.operations.meld.assessment_application as assessment_application
-import memcommit.operations.meld.session_application as session_application
-from memcommit.operations.meld.assessment_application import (
+import memcommit.application.operations.meld.assessment_application as assessment_application
+import memcommit.application.operations.meld.session_application as session_application
+from memcommit.application.operations.meld.assessment_application import (
     FrozenMeldAssessment,
     run_meld_assessment,
 )
-from memcommit.operations.meld.session_application import (
+from memcommit.application.operations.meld.session_application import (
     MeldSessionSnapshot,
     MeldSessionVersionError,
     MeldTurnRequest,

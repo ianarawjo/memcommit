@@ -20,11 +20,11 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 MODULE_PAIRS = (
     (
         "memcommit.atomize_analysis_application",
-        "memcommit.operations.atomize.analysis_application",
+        "memcommit.application.operations.atomize.analysis_application",
     ),
     (
         "memcommit.atomize_analysis_runtime",
-        "memcommit.operations.atomize.analysis_runtime",
+        "memcommit.application.operations.atomize.analysis_runtime",
     ),
 )
 
@@ -68,11 +68,11 @@ def test_atomize_analysis_legacy_paths_expose_the_canonical_contract() -> None:
         "memcommit.atomize_analysis_application"
     )
     canonical_application = importlib.import_module(
-        "memcommit.operations.atomize.analysis_application"
+        "memcommit.application.operations.atomize.analysis_application"
     )
     legacy_runtime = importlib.import_module("memcommit.atomize_analysis_runtime")
     canonical_runtime = importlib.import_module(
-        "memcommit.operations.atomize.analysis_runtime"
+        "memcommit.application.operations.atomize.analysis_runtime"
     )
 
     assert legacy_application is canonical_application
@@ -111,10 +111,10 @@ def test_atomize_analysis_legacy_facades_define_no_behavior(
 def test_existing_atomize_package_keeps_analysis_import_lazy() -> None:
     program = """
 import sys
-import memcommit.operations.atomize
+import memcommit.application.operations.atomize
 
-assert "memcommit.operations.atomize.analysis_application" not in sys.modules
-assert "memcommit.operations.atomize.analysis_runtime" not in sys.modules
+assert "memcommit.application.operations.atomize.analysis_application" not in sys.modules
+assert "memcommit.application.operations.atomize.analysis_runtime" not in sys.modules
 """
 
     subprocess.run(
@@ -126,7 +126,7 @@ assert "memcommit.operations.atomize.analysis_runtime" not in sys.modules
 
 def test_pre_relocation_atomize_analysis_request_loads_through_alias() -> None:
     canonical = importlib.import_module(
-        "memcommit.operations.atomize.analysis_application"
+        "memcommit.application.operations.atomize.analysis_application"
     )
 
     restored = pickle.loads(
@@ -138,11 +138,11 @@ def test_pre_relocation_atomize_analysis_request_loads_through_alias() -> None:
 
 def test_migrated_atomize_analysis_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "src/memcommit/operations/atomize/workflow.py",
-        "src/memcommit/api/_operations/atomize.py",
+        "src/memcommit/application/operations/atomize/workflow.py",
+        "src/memcommit/adapters/python_api/_operations/atomize.py",
         "src/memcommit/commands/atomize/command.py",
         "src/memcommit/commands/impact/command.py",
-        "src/memcommit/operations/atomize/analysis_runtime.py",
+        "src/memcommit/application/operations/atomize/analysis_runtime.py",
     )
 
     for relative_path in relative_paths:
@@ -155,8 +155,8 @@ def test_analysis_does_not_absorb_grounding_application_or_runtime() -> None:
     analysis = "\n".join(
         (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         for relative_path in (
-            "src/memcommit/operations/atomize/analysis_application.py",
-            "src/memcommit/operations/atomize/analysis_runtime.py",
+            "src/memcommit/application/operations/atomize/analysis_application.py",
+            "src/memcommit/application/operations/atomize/analysis_runtime.py",
         )
     )
 

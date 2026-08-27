@@ -18,10 +18,10 @@ from tests.legacy_submodule_assertions import (
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 MODULE_PAIRS = (
-    ("memcommit.help_application", "memcommit.operations.help.application"),
+    ("memcommit.help_application", "memcommit.application.operations.help.application"),
     (
         "memcommit.help_lookup_application",
-        "memcommit.operations.help.lookup_application",
+        "memcommit.application.operations.help.lookup_application",
     ),
 )
 
@@ -71,10 +71,10 @@ def test_help_legacy_facades_define_no_behavior(relative_path: str) -> None:
 def test_help_operation_package_import_is_lazy() -> None:
     program = """
 import sys
-import memcommit.operations.help
+import memcommit.application.operations.help
 
-assert "memcommit.operations.help.application" not in sys.modules
-assert "memcommit.operations.help.lookup_application" not in sys.modules
+assert "memcommit.application.operations.help.application" not in sys.modules
+assert "memcommit.application.operations.help.lookup_application" not in sys.modules
 """
 
     subprocess.run(
@@ -85,8 +85,8 @@ assert "memcommit.operations.help.lookup_application" not in sys.modules
 
 
 def test_pre_relocation_help_globals_load_through_aliases() -> None:
-    application = importlib.import_module("memcommit.operations.help.application")
-    lookup = importlib.import_module("memcommit.operations.help.lookup_application")
+    application = importlib.import_module("memcommit.application.operations.help.application")
+    lookup = importlib.import_module("memcommit.application.operations.help.lookup_application")
 
     restored_error = pickle.loads(
         b"cmemcommit.help_application\nHelpApplicationInputError\n."
@@ -101,10 +101,10 @@ def test_pre_relocation_help_globals_load_through_aliases() -> None:
 
 def test_production_help_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "src/memcommit/api/_operations/help.py",
+        "src/memcommit/adapters/python_api/_operations/help.py",
         "src/memcommit/interfaces/agent/help.py",
         "src/memcommit/interfaces/tui/operations/help/inventory.py",
-        "src/memcommit/operations/help/lookup_application.py",
+        "src/memcommit/application/operations/help/lookup_application.py",
     )
     legacy_imports = (
         "from memcommit.help_application import",
@@ -118,10 +118,10 @@ def test_production_help_consumers_use_the_operation_owner() -> None:
 
 def test_help_owner_preserves_catalog_and_injected_provider_boundaries() -> None:
     application_source = (
-        REPOSITORY_ROOT / "src/memcommit/operations/help/application.py"
+        REPOSITORY_ROOT / "src/memcommit/application/operations/help/application.py"
     ).read_text(encoding="utf-8")
     lookup_source = (
-        REPOSITORY_ROOT / "src/memcommit/operations/help/lookup_application.py"
+        REPOSITORY_ROOT / "src/memcommit/application/operations/help/lookup_application.py"
     ).read_text(encoding="utf-8")
     combined = application_source + lookup_source
 
@@ -132,7 +132,7 @@ def test_help_owner_preserves_catalog_and_injected_provider_boundaries() -> None
     assert "provider.complete" not in application_source
     assert "provider.complete" in lookup_source
     assert "connect_help_provider" not in lookup_source
-    assert "memcommit.operations.help.application" in lookup_source
+    assert "memcommit.application.operations.help.application" in lookup_source
 
 
 def test_selected_public_help_loads_only_exact_catalog_application(
@@ -141,15 +141,15 @@ def test_selected_public_help_loads_only_exact_catalog_application(
     program = f"""
 import sys
 from pathlib import Path
-from memcommit.api import MemCommitClient
+from memcommit.adapters.python_api import MemCommitClient
 
 root = Path({str(tmp_path / 'missing-store')!r})
 result = MemCommitClient(root=root).describe_operation('compare')
 assert result.name == 'compare'
 assert not root.exists()
-assert 'memcommit.api._operations.help' in sys.modules
-assert 'memcommit.operations.help.application' in sys.modules
-assert 'memcommit.operations.help.lookup_application' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.help' in sys.modules
+assert 'memcommit.application.operations.help.application' in sys.modules
+assert 'memcommit.application.operations.help.lookup_application' not in sys.modules
 assert 'memcommit.help_application' not in sys.modules
 assert 'memcommit.help_lookup_application' not in sys.modules
 """

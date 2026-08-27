@@ -39,10 +39,10 @@ from memcommit.interfaces.tui.components.horizontal_choice import (
     render_horizontal_choice,
 )
 from memcommit.interfaces.tui.core.theme import focused_control_style
-from memcommit.operations.query.granted_application import GrantedQueryTarget
-from memcommit.selection.model import SelectionOption
-from memcommit.selection.state import FlatSelectionState
-from memcommit.selection.tui import render_vertical_choice_rows
+from memcommit.application.operations.query.granted_application import GrantedQueryTarget
+from memcommit.interfaces.console.selection.model import SelectionOption
+from memcommit.interfaces.console.selection.state import FlatSelectionState
+from memcommit.interfaces.console.selection.tui import render_vertical_choice_rows
 
 
 ScopeChanged = Callable[[str], None]

@@ -43,7 +43,7 @@ from memcommit.context_targeting.tui.picker import (
     render_context_options,
     render_context_roots,
 )
-from memcommit.authority.access import (
+from memcommit.application.authority.access import (
     context_access_display_facts,
     resolve_context_access,
 )
@@ -76,8 +76,8 @@ from memcommit.context_targeting.tui.tree import (
     build_context_tree,
 )
 from memcommit.context_targeting.catalog import freeze_granted_context_navigation
-from memcommit.operations.profile.config import ProfileConfigError
-from memcommit.operations.profile.model import ProfileError
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.source_projection.model import SourceDisplayFacts, SourceState
 from memcommit.source_projection.presentation import (
     SourceDisplayValue,

@@ -5,8 +5,8 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
-from memcommit import ops
-from memcommit.cli import app
+from memcommit.application import ops
+from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.add import command as add
 from memcommit.commands.shared import paste_input
 from memcommit.commands.shared.paste_input import PasteCancelled, capture_paste

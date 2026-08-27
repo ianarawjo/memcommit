@@ -9,17 +9,17 @@ from pathlib import Path
 
 import pytest
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 from memcommit.context import Context, Memory
 from memcommit.summarize import SummarizeError, collect_summary_frame
-import memcommit.operations.summarize.application as summarize_application
-from memcommit.operations.summarize.application import (
+import memcommit.application.operations.summarize.application as summarize_application
+from memcommit.application.operations.summarize.application import (
     FrozenSummarySource,
     SummarizeRequest,
     run_summarize,
 )
-from memcommit.operations.summarize.runtime import execute_summarize
-import memcommit.operations.summarize.runtime as summarize_runtime
+from memcommit.application.operations.summarize.runtime import execute_summarize
+import memcommit.application.operations.summarize.runtime as summarize_runtime
 from memcommit.store import MemoryStore
 from memcommit.understanding import UnderstandingSummary
 

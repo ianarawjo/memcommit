@@ -42,7 +42,7 @@ def _environment() -> dict[str, str]:
 
 
 def _prepare_compare_store(root: Path):
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
     from memcommit.store import MemoryStore
 
     store = MemoryStore(root=root)

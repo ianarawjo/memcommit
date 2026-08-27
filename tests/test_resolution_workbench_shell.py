@@ -49,7 +49,7 @@ from memcommit.resolution_workbench import (
     ResolutionWorkbenchView,
 )
 from memcommit.session_workbench_navigation import SessionWorkbenchNavigation
-from memcommit.responses.model import ResponseDraft
+from memcommit.interfaces.console.responses.model import ResponseDraft
 from memcommit.result_workbench import ResultRef
 
 

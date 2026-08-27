@@ -5,16 +5,16 @@ from __future__ import annotations
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
-import memcommit.operations.reference.runtime as reference_runtime
-from memcommit.cli import app
+import memcommit.application.ops as ops
+import memcommit.application.operations.reference.runtime as reference_runtime
+from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Context, Memory, MemoryRef
 from memcommit.context_snapshot import ContextSnapshotRef
-from memcommit.operations.reference.application import (
+from memcommit.application.operations.reference.application import (
     ContextReferenceRequest,
     ReferenceError,
 )
-from memcommit.operations.reference.runtime import (
+from memcommit.application.operations.reference.runtime import (
     MemoryStoreReferencePort,
     execute_context_reference,
 )

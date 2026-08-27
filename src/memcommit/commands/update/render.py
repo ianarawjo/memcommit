@@ -17,14 +17,14 @@ from memcommit.commands.shared.resolution_workbench_shell import (
     render_resolution_workbench_snapshot,
     run_resolution_workbench_shell,
 )
-from memcommit.operations.update.model import (
+from memcommit.application.operations.update.model import (
     UpdateSession,
     count_operations,
     required_grant_permissions,
     update_session_record_digest,
 )
 from memcommit.application.interactive_command_review import update_turn_command_review
-from memcommit.operations.update.resolution_adapter import (
+from memcommit.application.operations.update.resolution_adapter import (
     UpdateResolutionWorkbenchAdapter,
 )
 

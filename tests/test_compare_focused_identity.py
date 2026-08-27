@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 from memcommit.comparison import (
     ComparisonInput,
     comparison_analysis_matches_input,

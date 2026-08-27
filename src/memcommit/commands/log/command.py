@@ -40,7 +40,7 @@ from memcommit.retained_history.display import (
     project_history_display_rows,
 )
 from memcommit.retained_history.reconstruction import HistoryError, build_history
-from memcommit.operations.log.search import (
+from memcommit.application.operations.log.search import (
     HistorySearchError,
     HistorySearchResult,
     search_history,
@@ -49,10 +49,12 @@ from memcommit.infrastructure.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )
-from memcommit.retained_history.provenance import ProvenanceError
-from memcommit.operations.profile.config import ProfileConfigError
-from memcommit.operations.profile.config import load_profile_registry
-from memcommit.operations.profile.model import ProfileError
+from memcommit.retained_history.memory_history_reconstruction.retained_record_verification import (
+    MemoryHistoryReconstructionError,
+)
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.config import load_profile_registry
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import MemoryStore
 from memcommit.infrastructure.command_ledger.study_actions import (
     StudyActionError,
@@ -490,7 +492,7 @@ def cmd(
             OSError,
             RuntimeError,
             ValueError,
-            ProvenanceError,
+            MemoryHistoryReconstructionError,
             ProfileConfigError,
             ProfileError,
             PermissionError,

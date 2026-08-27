@@ -12,7 +12,7 @@ presence of any Grant in the session and not the ownership of the Source.
 
 ## Operation ownership
 
-`memcommit.operations.update.application` is the canonical owner of the
+`memcommit.application.operations.update.application` is the canonical owner of the
 deterministic, non-persisting plan application contract. The Store and the
 local-, granted-Target-, and granted-Source application paths consume that
 contract but retain their own freshness, authority, multi-owner transaction,

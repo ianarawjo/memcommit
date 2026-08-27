@@ -111,7 +111,7 @@ def _configure_store(root: Path) -> None:
 
 
 def _prepare_store(root: Path):
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
     from memcommit.store import MemoryStore
 
     _configure_store(root)

@@ -6,19 +6,19 @@ import uuid
 from typer.testing import CliRunner
 
 import memcommit.config as config_module
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 import memcommit.profiles as profiles_module
 import memcommit.semantic_prompt_policy as semantic_prompt_policy_module
 import memcommit.study_prewarm.atomize as atomize_prewarm_module
 import memcommit.study_prewarm.prepare as prewarm_prepare_module
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.atomize import create_atomize_analysis, impact_atomize
 from memcommit.commands.compare.execution import load_comparison_context
 from memcommit.commands.compare.execution import ensure_comparison_analysis
 from memcommit.commands.atomize.sessions import atomize_session_entries
 from memcommit.commands.compare.sessions import comparison_session_entries
 from memcommit.atomize_workflow import open_or_create_atomize_workbench
-from memcommit.authority.access import resolve_context_access
+from memcommit.application.authority.access import resolve_context_access
 from memcommit.comparison import (
     ComparisonAnalysis,
     ComparisonInput,

@@ -55,7 +55,7 @@ def _configure_isolated_store(store_root: Path) -> None:
 
 
 def _initialize() -> tuple[str, str]:
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
     from memcommit.store import MemoryStore
 
     store = MemoryStore()
@@ -311,7 +311,7 @@ def main() -> None:
     _capture_recursive()
     _capture_cancel()
     _capture_plan_cancel()
-    if (ROOT / "src/memcommit/operations/query/granted_application.py").exists():
+    if (ROOT / "src/memcommit/application/operations/query/granted_application.py").exists():
         _capture_help()
     elif not (OUT / "10-merge-help-detail.png").exists():
         raise RuntimeError("Existing Help evidence is unavailable")

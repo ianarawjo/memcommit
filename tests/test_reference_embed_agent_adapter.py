@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 
-from memcommit.api import (
+from memcommit.adapters.python_api import (
     ContextReferenceResult,
     EmbeddedContextResult,
     EmbeddedMemoryResult,

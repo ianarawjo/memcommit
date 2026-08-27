@@ -3,10 +3,10 @@ from __future__ import annotations
 import json
 
 import memcommit.atomize as atomize_module
-import memcommit.operations.atomize.analysis_runtime as atomize_runtime_module
-import memcommit.operations.compare.summary_provider as comparison_summary_module
+import memcommit.application.operations.atomize.analysis_runtime as atomize_runtime_module
+import memcommit.application.operations.compare.summary_provider as comparison_summary_module
 import memcommit.findings as findings_module
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 import memcommit.ordinary_query_answer as ordinary_query_module
 from memcommit.atomize import (
     ATOMIZE_ANALYSIS_SCHEMA_VERSION,
@@ -16,7 +16,7 @@ from memcommit.atomize import (
 )
 from memcommit.atomize_workflow import open_or_create_atomize_workbench
 from memcommit.comparison import ComparisonInput
-from memcommit.operations.compare.summary_rules import (
+from memcommit.application.operations.compare.summary_rules import (
     comparison_summary_ruleset_prompt_payload,
 )
 from memcommit.distill_elaborate_reference import (

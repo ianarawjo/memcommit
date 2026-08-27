@@ -6,12 +6,12 @@ import uuid
 
 import pytest
 
-import memcommit.ops as ops
-from memcommit.api import MemCommitClient
-from memcommit.authority.access import resolve_context_access
+import memcommit.application.ops as ops
+from memcommit.adapters.python_api import MemCommitClient
+from memcommit.application.authority.access import resolve_context_access
 from memcommit.command_history import build_command_stacks
 from memcommit.context import MemoryRef
-from memcommit.operations.exact_dedup.application import (
+from memcommit.application.operations.exact_dedup.application import (
     ExactDedupError,
     apply_exact_dedup_scope,
 )

@@ -15,8 +15,8 @@ from typer.main import get_command
 from typer.testing import CliRunner
 
 import memcommit.commands.help_inventory.command as help_inventory
-import memcommit.ops as ops
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.branch.dialog import BranchCreationReceipt
 from memcommit.commands.help_inventory.command import CommandEntry, run_help_selector
 from memcommit.store import MemoryStore
@@ -2476,7 +2476,7 @@ class TestLog:
     def test_no_checkpoints_message_on_fresh_context(self, isolated_store):
         # Bypass the CLI to create a context with no checkpoints.
         from memcommit.store import MemoryStore
-        import memcommit.ops as ops
+        import memcommit.application.ops as ops
 
         store = MemoryStore()
         ctx = ops.init("bare")

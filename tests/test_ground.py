@@ -10,10 +10,10 @@ from pathlib import Path
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 import memcommit.store as store_module
 import memcommit.commands.ground.command as ground_command
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.ground.command import (
     render_ground_focus,
     render_ground_snapshot,
@@ -1057,7 +1057,7 @@ def test_approved_ground_command_uses_argv_without_a_shell(monkeypatch):
     assert args == [
         ground_command.sys.executable,
         "-m",
-        "memcommit.cli",
+        "memcommit.adapters.console.entrypoint",
         "ground",
         "safe-ground",
         "--goal",

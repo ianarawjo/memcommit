@@ -8,8 +8,8 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.commands.fit.command as fit_command
-from memcommit.cli import app
-from memcommit.operations.fit.judgment import (
+from memcommit.adapters.console.entrypoint import app
+from memcommit.application.operations.fit.judgment import (
     FIT_JUDGMENT_PAYLOAD_MARKER,
     FitJudgmentError,
     FitProposition,
@@ -17,8 +17,8 @@ from memcommit.operations.fit.judgment import (
     judge_fit,
     prepare_fit_judgments,
 )
-from memcommit.operations.fit.application import FitPropositionsRequest
-from memcommit.operations.fit.runtime import run_proposition_fit
+from memcommit.application.operations.fit.application import FitPropositionsRequest
+from memcommit.application.operations.fit.runtime import run_proposition_fit
 
 
 class FitProvider:

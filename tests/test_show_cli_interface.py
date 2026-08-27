@@ -5,7 +5,7 @@ from click.testing import CliRunner
 
 from memcommit.interfaces.cli.show import render_show
 from memcommit.interfaces.console.theme import memory_object_color_rgb
-from memcommit.operations.show.application import (
+from memcommit.application.operations.show.application import (
     ShowContextSnapshot,
     ShowMemory,
     ShowMemoryReference,

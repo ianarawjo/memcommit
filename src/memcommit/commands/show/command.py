@@ -12,10 +12,10 @@ from memcommit.context_targeting.presets import (
 )
 from memcommit.interfaces.cli.show import render_show
 from memcommit.interfaces.console.text import display_escape_text
-from memcommit.operations.profile.config import ProfileConfigError
-from memcommit.operations.profile.model import ProfileError
-from memcommit.operations.show.application import ShowDirectItemScopeError, ShowError
-from memcommit.operations.show.runtime import execute_show_cli_operand
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.show.application import ShowDirectItemScopeError, ShowError
+from memcommit.application.operations.show.runtime import execute_show_cli_operand
 from memcommit.persistence.store import MemoryStore
 
 

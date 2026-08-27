@@ -64,9 +64,9 @@ from memcommit.interfaces.tui.workbenches.resolution.model import (
 from memcommit.interfaces.tui.workbenches.resolution.inline_shell import (
     run_inline_resolution_workbench,
 )
-from memcommit.selection.model import SelectionOption
-from memcommit.selection.state import FlatSelectionState
-from memcommit.selection.tui import render_vertical_choice_rows
+from memcommit.interfaces.console.selection.model import SelectionOption
+from memcommit.interfaces.console.selection.state import FlatSelectionState
+from memcommit.interfaces.console.selection.tui import render_vertical_choice_rows
 from memcommit.application.reviewing.session_navigation import SessionWorkbenchNavigation
 
 

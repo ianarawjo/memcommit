@@ -605,8 +605,8 @@ focused Chat receipt approves that exact frozen proposal; `A` remains a
 compatibility alias throughout the modal review. `E` returns it for
 refinement, while `Q`, Escape, Ctrl-C, provider failure, malformed output, or
 name collision leave state unchanged. The approved argv is dispatched through
-the ordinary `memcommit.cli` entry point as an argument vector, never through
-a shell, and its actual output is reported after the TUI closes.
+the ordinary `memcommit.adapters.console.entrypoint` as an argument vector,
+never through a shell, and its actual output is reported after the TUI closes.
 
 The original blank-entry slice ended after creating or cancelling one initial
 Ground. The continuing vertical slice now enters the named-Ground TUI

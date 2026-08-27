@@ -57,7 +57,7 @@ from memcommit.context_targeting.tui.name_draft import (
 )
 from memcommit.context_targeting.tui.selection import ContextSelectionState
 from memcommit.context_targeting.tui.tree import ContextTreeState, build_context_tree
-from memcommit.selection.tui import tree_choice_marker, tree_choice_styles
+from memcommit.interfaces.console.selection.tui import tree_choice_marker, tree_choice_styles
 
 
 def suggest_fresh_context_name(

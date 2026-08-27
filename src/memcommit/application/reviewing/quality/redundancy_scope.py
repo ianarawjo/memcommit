@@ -5,15 +5,15 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 
-import memcommit.ops as ops
-from memcommit.authority.access import ContextAccess, GrantedReadStore
+import memcommit.application.ops as ops
+from memcommit.application.authority.access import ContextAccess, GrantedReadStore
 from memcommit.context_targeting.model import ContextScope
 from memcommit.context_targeting.readable_catalog import ReadableContextCatalog
 from memcommit.context_targeting.resolution import expand_lexical_context_names
-from memcommit.authority.derived_policy import authorize_combination
+from memcommit.application.authority.derived_policy import authorize_combination
 from memcommit.application.reviewing.direct_item_duplicates import ExactDuplicateGroup
 from memcommit.application.reviewing.quality.findings import DuplicateReport, FindingsProvider
-from memcommit.operations.profile.config import ProfileRegistry
+from memcommit.application.operations.profile.config import ProfileRegistry
 from memcommit.application.reviewing.quality.workbench import (
     QualityFindSourceFrame,
     create_quality_find_workbench,

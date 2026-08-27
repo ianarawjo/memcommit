@@ -4,12 +4,12 @@ from __future__ import annotations
 
 import json
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 import pytest
 from memcommit.context import Memory
 from memcommit.search import SearchCandidate, rank_candidates
 from memcommit.application.semantic_execution import SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
-from memcommit.operations.translate.runtime import plan_translation
+from memcommit.application.operations.translate.runtime import plan_translation
 
 
 def _large_text(marker: str) -> str:

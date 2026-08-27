@@ -7,8 +7,8 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.commands.compare.command as compare_command
-import memcommit.ops as ops
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Memory
 from memcommit.infrastructure.providers.policy import ResolvedProviderPolicy
 from memcommit.profile_config import (

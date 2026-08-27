@@ -4,11 +4,13 @@ from __future__ import annotations
 
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 from memcommit.command_history import CommandHistoryError
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.history import build_history
-from memcommit.provenance import build_trace
+from memcommit.retained_history.memory_history_reconstruction.memory_history_construction import (
+    reconstruct_memory_history,
+)
 from memcommit.store import MemoryStore
 
 
@@ -275,7 +277,7 @@ def test_empty_stale_granted_receipt_does_not_mask_local_undo(
     )()
     monkeypatch.setattr(MemoryStore, "load_staged_update", lambda _store: staged)
     monkeypatch.setattr(
-        "memcommit.operations.restoration.runtime.restore_granted_update",
+        "memcommit.application.operations.restoration.runtime.restore_granted_update",
         lambda *_args: (_ for _ in ()).throw(
             CommandHistoryError(
                 "There is no recorded Context command to undo."
@@ -303,7 +305,7 @@ def test_empty_stale_granted_receipt_does_not_mask_local_redo(
     )()
     monkeypatch.setattr(MemoryStore, "load_staged_update", lambda _store: staged)
     monkeypatch.setattr(
-        "memcommit.operations.restoration.runtime.restore_granted_update",
+        "memcommit.application.operations.restoration.runtime.restore_granted_update",
         lambda *_args: (_ for _ in ()).throw(
             CommandHistoryError(
                 "There is no recorded Context command to redo."
@@ -340,7 +342,7 @@ def test_history_and_trace_keep_command_undo_and_redo_operation_boundaries(
 
     context = store.load_direct("notes")
     memory = next(iter(context.memories.values()))
-    report = build_trace(store, context, memory.uid)
+    report = reconstruct_memory_history(store, context, memory.uid)
     restoration_events = [
         event for event in report.events if event.command in {"undo", "redo"}
     ]

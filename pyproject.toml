@@ -17,7 +17,7 @@ dependencies = [
 ]
 
 [project.scripts]
-mem = "memcommit.cli:app"
+mem = "memcommit.adapters.console.entrypoint:app"
 mem-mcp = "memcommit.interfaces.mcp.server:main"
 
 [tool.setuptools]

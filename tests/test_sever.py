@@ -9,8 +9,8 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.sever import command as sever_command
 from memcommit.interfaces.tui.components.operation_launcher.session import (
     SessionNewReceipt,
@@ -33,18 +33,18 @@ from memcommit.resolution_workbench import (
     ResolutionNavigation,
     ResolutionWorkbenchAction,
 )
-from memcommit.operations.sever.model import (
+from memcommit.application.operations.sever.model import (
     SEVER_SCHEMA_VERSION,
     SeverApplication,
     SeverSession,
     sever_record_digest,
 )
-from memcommit.operations.sever.provider import SEVER_PAYLOAD_MARKER
-from memcommit.operations.sever.resolution_adapter import (
+from memcommit.application.operations.sever.provider import SEVER_PAYLOAD_MARKER
+from memcommit.application.operations.sever.resolution_adapter import (
     SeverResolutionWorkbenchAdapter,
     sever_memory_changes,
 )
-from memcommit.operations.sever.session_store import SeverSessionStore
+from memcommit.application.operations.sever.session_store import SeverSessionStore
 from memcommit.store import MemoryStore
 
 

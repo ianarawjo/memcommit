@@ -14,7 +14,7 @@ from memcommit.interfaces.console.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )
-from memcommit.operations.memory_transfer.application import (
+from memcommit.application.operations.memory_transfer.application import (
     CopyMemoriesRequest,
     CopyMemoriesResult,
     MemoryTransferError,
@@ -23,14 +23,14 @@ from memcommit.operations.memory_transfer.application import (
     run_copy,
     run_move,
 )
-from memcommit.operations.memory_transfer.runtime import MemoryStoreMemoryTransferPort
+from memcommit.application.operations.memory_transfer.runtime import MemoryStoreMemoryTransferPort
 from memcommit.interfaces.tui.operations.memory_transfer import (
     choose_memory_transfer_setup,
 )
-from memcommit.operations.profile.config import ProfileConfigError
-from memcommit.operations.profile.model import ProfileError
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
-from memcommit.authority.write_protection import WriteProtectionError
+from memcommit.application.authority.write_protection import WriteProtectionError
 
 
 def _selected_locators(

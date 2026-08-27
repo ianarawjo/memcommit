@@ -20,11 +20,11 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 MODULE_PAIRS = (
     (
         "memcommit.forget_application",
-        "memcommit.operations.forget.application",
+        "memcommit.application.operations.forget.application",
     ),
     (
         "memcommit.forget_runtime",
-        "memcommit.operations.forget.runtime",
+        "memcommit.application.operations.forget.runtime",
     ),
 )
 
@@ -66,10 +66,10 @@ assert sys.modules[{canonical_name!r}] is canonical
 def test_forget_legacy_paths_expose_the_canonical_contract() -> None:
     legacy_application = importlib.import_module("memcommit.forget_application")
     canonical_application = importlib.import_module(
-        "memcommit.operations.forget.application"
+        "memcommit.application.operations.forget.application"
     )
     legacy_runtime = importlib.import_module("memcommit.forget_runtime")
-    canonical_runtime = importlib.import_module("memcommit.operations.forget.runtime")
+    canonical_runtime = importlib.import_module("memcommit.application.operations.forget.runtime")
 
     assert legacy_application is canonical_application
     assert (
@@ -106,10 +106,10 @@ def test_forget_legacy_facades_define_no_behavior(relative_path: str) -> None:
 def test_forget_package_import_is_lazy() -> None:
     program = """
 import sys
-import memcommit.operations.forget
+import memcommit.application.operations.forget
 
-assert "memcommit.operations.forget.application" not in sys.modules
-assert "memcommit.operations.forget.runtime" not in sys.modules
+assert "memcommit.application.operations.forget.application" not in sys.modules
+assert "memcommit.application.operations.forget.runtime" not in sys.modules
 """
 
     subprocess.run(
@@ -120,7 +120,7 @@ assert "memcommit.operations.forget.runtime" not in sys.modules
 
 
 def test_pre_relocation_forget_request_global_loads_through_alias() -> None:
-    canonical = importlib.import_module("memcommit.operations.forget.application")
+    canonical = importlib.import_module("memcommit.application.operations.forget.application")
 
     restored = pickle.loads(
         b"cmemcommit.forget_application\nForgetAnalysisRequest\n."
@@ -131,12 +131,12 @@ def test_pre_relocation_forget_request_global_loads_through_alias() -> None:
 
 def test_production_forget_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "src/memcommit/api/forget.py",
-        "src/memcommit/api/_operations/forget.py",
+        "src/memcommit/adapters/python_api/forget.py",
+        "src/memcommit/adapters/python_api/_operations/forget.py",
         "src/memcommit/commands/forget/command.py",
         "src/memcommit/commands/impact/process_local.py",
         "src/memcommit/interfaces/tui/operations/forget/workbench.py",
-        "src/memcommit/operations/forget/runtime.py",
+        "src/memcommit/application/operations/forget/runtime.py",
     )
 
     for relative_path in relative_paths:

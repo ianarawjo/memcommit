@@ -4,7 +4,7 @@ from contextlib import contextmanager
 import json
 
 import memcommit.config as config_module
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 import memcommit.study_prewarm.summarize as summarize_prewarm_module
 from memcommit.config import Config
 from memcommit.context import Context, Memory
@@ -15,8 +15,8 @@ from memcommit.study_prewarm.summarize import (
     build_summarize_prewarm_artifact,
 )
 from memcommit.summarize import collect_summary_frame
-from memcommit.operations.summarize.application import SummarizeRequest
-from memcommit.operations.summarize.runtime import run_summarize_with_store
+from memcommit.application.operations.summarize.application import SummarizeRequest
+from memcommit.application.operations.summarize.runtime import run_summarize_with_store
 from memcommit.understanding import UnderstandingSummary
 
 

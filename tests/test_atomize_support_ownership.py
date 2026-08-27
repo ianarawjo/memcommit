@@ -18,28 +18,28 @@ from tests.legacy_submodule_assertions import (
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 MODULE_PAIRS = (
-    ("memcommit.atomize", "memcommit.operations.atomize.domain"),
-    ("memcommit.atomize_workbench", "memcommit.operations.atomize.workbench"),
-    ("memcommit.atomize_grounding", "memcommit.operations.atomize.grounding"),
+    ("memcommit.atomize", "memcommit.application.operations.atomize.domain"),
+    ("memcommit.atomize_workbench", "memcommit.application.operations.atomize.workbench"),
+    ("memcommit.atomize_grounding", "memcommit.application.operations.atomize.grounding"),
     (
         "memcommit.atomize_grounding_provider",
-        "memcommit.operations.atomize.grounding_provider",
+        "memcommit.application.operations.atomize.grounding_provider",
     ),
     (
         "memcommit.atomize_meld_adapter",
-        "memcommit.operations.atomize.grounding_meld_adapter",
+        "memcommit.application.operations.atomize.grounding_meld_adapter",
     ),
     (
         "memcommit.atomize_normal_form",
-        "memcommit.operations.atomize.normal_form",
+        "memcommit.application.operations.atomize.normal_form",
     ),
     (
         "memcommit.atomize_result_adapter",
-        "memcommit.operations.atomize.result_adapter",
+        "memcommit.application.operations.atomize.result_adapter",
     ),
     (
         "memcommit.atomize_resolution_adapter",
-        "memcommit.operations.atomize.resolution_adapter",
+        "memcommit.application.operations.atomize.resolution_adapter",
     ),
 )
 
@@ -90,7 +90,7 @@ def test_atomize_package_keeps_support_modules_lazy() -> None:
     canonical_names = tuple(canonical for _legacy, canonical in MODULE_PAIRS)
     program = f"""
 import sys
-import memcommit.operations.atomize
+import memcommit.application.operations.atomize
 
 for name in {canonical_names!r}:
     assert name not in sys.modules
@@ -108,42 +108,42 @@ for name in {canonical_names!r}:
     (
         (
             "memcommit.atomize",
-            "memcommit.operations.atomize.domain",
+            "memcommit.application.operations.atomize.domain",
             "AtomizeAnalysisSession",
         ),
         (
             "memcommit.atomize_workbench",
-            "memcommit.operations.atomize.workbench",
+            "memcommit.application.operations.atomize.workbench",
             "AtomizeWorkbenchSession",
         ),
         (
             "memcommit.atomize_grounding",
-            "memcommit.operations.atomize.grounding",
+            "memcommit.application.operations.atomize.grounding",
             "AtomizeGroundingSession",
         ),
         (
             "memcommit.atomize_grounding_provider",
-            "memcommit.operations.atomize.grounding_provider",
+            "memcommit.application.operations.atomize.grounding_provider",
             "AtomizeGroundingProviderError",
         ),
         (
             "memcommit.atomize_meld_adapter",
-            "memcommit.operations.atomize.grounding_meld_adapter",
+            "memcommit.application.operations.atomize.grounding_meld_adapter",
             "AtomizeMeldView",
         ),
         (
             "memcommit.atomize_normal_form",
-            "memcommit.operations.atomize.normal_form",
+            "memcommit.application.operations.atomize.normal_form",
             "AtomizeNormalFormProjection",
         ),
         (
             "memcommit.atomize_result_adapter",
-            "memcommit.operations.atomize.result_adapter",
+            "memcommit.application.operations.atomize.result_adapter",
             "AtomizeResultWorkbenchAdapter",
         ),
         (
             "memcommit.atomize_resolution_adapter",
-            "memcommit.operations.atomize.resolution_adapter",
+            "memcommit.application.operations.atomize.resolution_adapter",
             "AtomizeResolutionWorkbenchAdapter",
         ),
     ),
@@ -180,9 +180,9 @@ def test_atomize_support_imports_follow_the_canonical_dependency_direction() -> 
 
 def test_atomize_production_consumers_use_canonical_support_modules() -> None:
     relative_paths = (
-        "src/memcommit/api/_operations/atomize.py",
-        "src/memcommit/api/_operations/atomize_grounding.py",
-        "src/memcommit/operations/atomize/workflow.py",
+        "src/memcommit/adapters/python_api/_operations/atomize.py",
+        "src/memcommit/adapters/python_api/_operations/atomize_grounding.py",
+        "src/memcommit/application/operations/atomize/workflow.py",
         "src/memcommit/commands/atomize/command.py",
         "src/memcommit/commands/atomize/grounding.py",
         "src/memcommit/commands/atomize/sessions.py",
@@ -192,16 +192,18 @@ def test_atomize_production_consumers_use_canonical_support_modules() -> None:
         "src/memcommit/interfaces/cli/atomize_grounding.py",
         "src/memcommit/interfaces/tui/operations/atomize/adapter.py",
         "src/memcommit/interfaces/tui/operations/atomize/screen.py",
-        "src/memcommit/operations/atomize/analysis_application.py",
-        "src/memcommit/operations/atomize/analysis_runtime.py",
-        "src/memcommit/operations/atomize/application.py",
-        "src/memcommit/operations/atomize/grounding_application.py",
-        "src/memcommit/operations/atomize/grounding_runtime.py",
-        "src/memcommit/operations/atomize/runtime.py",
-        "src/memcommit/ops.py",
-        "src/memcommit/retained_history/provenance.py",
-        "src/memcommit/operations/review/model.py",
-        "src/memcommit/operations/review/report_adapters.py",
+        "src/memcommit/application/operations/atomize/analysis_application.py",
+        "src/memcommit/application/operations/atomize/analysis_runtime.py",
+        "src/memcommit/application/operations/atomize/application.py",
+        "src/memcommit/application/operations/atomize/grounding_application.py",
+        "src/memcommit/application/operations/atomize/grounding_runtime.py",
+        "src/memcommit/application/operations/atomize/runtime.py",
+        "src/memcommit/application/ops.py",
+        "src/memcommit/retained_history/memory_history_reconstruction/retained_record_verification.py",
+        "src/memcommit/retained_history/memory_history_reconstruction/memory_history_event_derivation.py",
+        "src/memcommit/retained_history/memory_history_reconstruction/memory_history_construction.py",
+        "src/memcommit/application/operations/review/model.py",
+        "src/memcommit/application/operations/review/report_adapters.py",
         "src/memcommit/persistence/store/operation_state.py",
         "src/memcommit/persistence/store/context_memory.py",
         "src/memcommit/persistence/store/record_restore_checkpoint.py",
@@ -217,8 +219,8 @@ def test_atomize_production_consumers_use_canonical_support_modules() -> None:
 
 def test_atomize_view_adapters_remain_read_only_projections() -> None:
     for relative_path in (
-        "src/memcommit/operations/atomize/result_adapter.py",
-        "src/memcommit/operations/atomize/resolution_adapter.py",
+        "src/memcommit/application/operations/atomize/result_adapter.py",
+        "src/memcommit/application/operations/atomize/resolution_adapter.py",
     ):
         source = (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         assert "MemoryStore" not in source

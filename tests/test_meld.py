@@ -14,10 +14,10 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 import memcommit.config as config_module
 import memcommit.commands.meld.command as meld_command
-from memcommit.api import MemCommitClient
+from memcommit.adapters.python_api import MemCommitClient
 from memcommit.commands.shared.endpoint_setup_flows import MeldSetupReceipt
 from memcommit.atomize_grounding import (
     AtomizeGroundingAnchor,
@@ -28,7 +28,7 @@ from memcommit.atomize_grounding import (
 from memcommit.atomize_meld_adapter import (
     project_atomize_grounding_as_meld,
 )
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.comparison import (
     ComparisonInput,
     comparison_canonical_digest,
@@ -81,13 +81,15 @@ from memcommit.meld_provider import (
     meld_turn_request_digest,
     meld_output_schema,
 )
-from memcommit.operations.meld.runtime import prepare_meld_start
+from memcommit.application.operations.meld.runtime import prepare_meld_start
 from memcommit.meld_start_application import MeldStartRequest
 from memcommit.update import GrantedUpdateTarget
 from memcommit.meld_choice_branches import MeldChoiceBranchSet
-from memcommit.responses.model import ResponseDraft
+from memcommit.interfaces.console.responses.model import ResponseDraft
 from memcommit.meld_resolution_adapter import MeldResolutionWorkbenchAdapter
-from memcommit.provenance import build_trace
+from memcommit.retained_history.memory_history_reconstruction.memory_history_construction import (
+    reconstruct_memory_history,
+)
 from memcommit.profile_config import (
     ProfileEntry,
     ProfileRegistry,
@@ -1138,7 +1140,7 @@ def test_inline_memory_meld_preserves_punctuation_without_creating_source_contex
     assert len(provider.payloads) == 1
     current = store.load_direct(baseline.name)
     assert [memory.content for memory in current.iter_items()] == [content]
-    trace = build_trace(store, current, next(iter(current.memories)))
+    trace = reconstruct_memory_history(store, current, next(iter(current.memories)))
     meld_event = next(
         event for event in trace.events if event.reason_codes[:1] == ("MELD",)
     )
@@ -2349,7 +2351,7 @@ def test_context_meld_one_shot_reply_resume_and_provider_free_apply(
     )
     assert store._context_file(left.name).read_bytes() == left_before
     assert store._context_file(right.name).read_bytes() == right_before
-    trace = build_trace(store, current, next(iter(current.memories)))
+    trace = reconstruct_memory_history(store, current, next(iter(current.memories)))
     meld_event = next(event for event in trace.events if event.kind == "MELDED")
     assert meld_event.evidence == "RECORDED"
     assert meld_event.reason_codes[:1] == ("MELD",)

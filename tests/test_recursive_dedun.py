@@ -8,9 +8,9 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
-from memcommit.authority.access import resolve_context_access
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.application.authority.access import resolve_context_access
+from memcommit.adapters.console.entrypoint import app
 from memcommit.command_history import build_command_stacks
 from memcommit.context import MemoryRef
 from memcommit.dedun_scope import (
@@ -18,8 +18,8 @@ from memcommit.dedun_scope import (
     freeze_recursive_dedun_scope,
     prepare_recursive_dedun_scope,
 )
-from memcommit.operations.dedup.application import DedupConflictError
-from memcommit.operations.dedup.runtime import MemoryStoreDedupPort
+from memcommit.application.operations.dedup.application import DedupConflictError
+from memcommit.application.operations.dedup.runtime import MemoryStoreDedupPort
 from memcommit.findings import DuplicateReport, FindingsError
 from memcommit.redundancy_scope import analyze_independent_redundancy_scope
 from memcommit.store import MemoryStore

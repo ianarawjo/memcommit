@@ -12,7 +12,7 @@ try:  # Typer 0.27+ vendors Click; older supported releases do not.
 except ImportError:  # pragma: no cover - compatibility with older Typer
     import click
 
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 
 
 def _registered_command_paths() -> Iterator[tuple[str, ...]]:

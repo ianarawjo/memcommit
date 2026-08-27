@@ -6,8 +6,8 @@ import typer
 from typer.testing import CliRunner
 
 import memcommit.commands.merge.command as merge_command
-import memcommit.ops as ops
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Memory
 from memcommit.interfaces.tui.operations.merge import merge_endpoint_setup_spec
 from memcommit.interfaces.tui.operations.merge.model import MergeTuiSetup

@@ -9,10 +9,10 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 import memcommit.commands.review.command as review_command
 import memcommit.commands.review.resolution_shell as review_resolution_shell
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.interfaces.cli.review import (
     render_review_snapshot,
 )

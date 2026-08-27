@@ -11,13 +11,13 @@ from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 import memcommit.clipboard as clipboard
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 import memcommit.commands.meld.command as meld_command
 import memcommit.commands.meld.setup as meld_setup_command
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.comparison_provider import COMPARISON_PAYLOAD_MARKER
 from memcommit.comparison_store import comparison_analysis_path
-from memcommit.authority.access import (
+from memcommit.application.authority.access import (
     freeze_granted_context_binding,
     resolve_context_access,
     revalidate_granted_context_binding,
@@ -52,8 +52,8 @@ from memcommit.profiles import (
     delete_authority_grant,
 )
 from memcommit.store import MemoryStore
-from memcommit.operations.summarize.application import SummarizeRequest
-from memcommit.operations.summarize.runtime import execute_summarize
+from memcommit.application.operations.summarize.application import SummarizeRequest
+from memcommit.application.operations.summarize.runtime import execute_summarize
 from memcommit.semantic.changes import RemoveChange
 from memcommit.source_projection.model import SourceAccess
 from memcommit.source_projection.presentation import source_display_text

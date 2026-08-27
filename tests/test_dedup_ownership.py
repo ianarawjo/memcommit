@@ -20,11 +20,11 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 MODULE_PAIRS = (
     (
         "memcommit.dedup_application",
-        "memcommit.operations.dedup.application",
+        "memcommit.application.operations.dedup.application",
     ),
     (
         "memcommit.dedup_runtime",
-        "memcommit.operations.dedup.runtime",
+        "memcommit.application.operations.dedup.runtime",
     ),
 )
 
@@ -66,11 +66,11 @@ assert sys.modules[{canonical_name!r}] is canonical
 def test_dedup_legacy_paths_expose_the_canonical_contract() -> None:
     legacy_application = importlib.import_module("memcommit.dedup_application")
     canonical_application = importlib.import_module(
-        "memcommit.operations.dedup.application"
+        "memcommit.application.operations.dedup.application"
     )
     legacy_runtime = importlib.import_module("memcommit.dedup_runtime")
     canonical_runtime = importlib.import_module(
-        "memcommit.operations.dedup.runtime"
+        "memcommit.application.operations.dedup.runtime"
     )
 
     assert legacy_application is canonical_application
@@ -95,10 +95,10 @@ def test_dedup_legacy_facades_define_no_behavior(relative_path: str) -> None:
 def test_dedup_package_import_is_lazy() -> None:
     program = """
 import sys
-import memcommit.operations.dedup
+import memcommit.application.operations.dedup
 
-assert "memcommit.operations.dedup.application" not in sys.modules
-assert "memcommit.operations.dedup.runtime" not in sys.modules
+assert "memcommit.application.operations.dedup.application" not in sys.modules
+assert "memcommit.application.operations.dedup.runtime" not in sys.modules
 """
 
     subprocess.run(
@@ -109,7 +109,7 @@ assert "memcommit.operations.dedup.runtime" not in sys.modules
 
 
 def test_pre_relocation_dedup_request_global_loads_through_alias() -> None:
-    canonical = importlib.import_module("memcommit.operations.dedup.application")
+    canonical = importlib.import_module("memcommit.application.operations.dedup.application")
 
     restored = pickle.loads(b"cmemcommit.dedup_application\nDedupRequest\n.")
 
@@ -118,18 +118,18 @@ def test_pre_relocation_dedup_request_global_loads_through_alias() -> None:
 
 def test_production_dedup_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "src/memcommit/operations/atomize/normal_form.py",
-        "src/memcommit/api/dedup.py",
-        "src/memcommit/api/_operations/dedup.py",
+        "src/memcommit/application/operations/atomize/normal_form.py",
+        "src/memcommit/adapters/python_api/dedup.py",
+        "src/memcommit/adapters/python_api/_operations/dedup.py",
         "src/memcommit/commands/consolidate/command.py",
         "src/memcommit/commands/find_duplicates/dedup_handoff.py",
         "src/memcommit/commands/find_duplicates/command.py",
         "src/memcommit/commands/shared/quality_find_workbench.py",
-        "src/memcommit/operations/dedup/planning.py",
-        "src/memcommit/operations/dedun/scope.py",
+        "src/memcommit/application/operations/dedup/planning.py",
+        "src/memcommit/application/operations/dedun/scope.py",
         "src/memcommit/interfaces/cli/dedup.py",
         "src/memcommit/interfaces/tui/operations/dedup/screen.py",
-        "src/memcommit/operations/dedup/runtime.py",
+        "src/memcommit/application/operations/dedup/runtime.py",
     )
 
     for relative_path in relative_paths:
@@ -140,18 +140,18 @@ def test_production_dedup_consumers_use_the_operation_owner() -> None:
 
 def test_exact_dedup_and_dedun_scope_remain_separate_owners() -> None:
     application = (
-        REPOSITORY_ROOT / "src/memcommit/operations/dedup/application.py"
+        REPOSITORY_ROOT / "src/memcommit/application/operations/dedup/application.py"
     ).read_text(encoding="utf-8")
     runtime = (
-        REPOSITORY_ROOT / "src/memcommit/operations/dedup/runtime.py"
+        REPOSITORY_ROOT / "src/memcommit/application/operations/dedup/runtime.py"
     ).read_text(encoding="utf-8")
     exact = (
-        REPOSITORY_ROOT / "src/memcommit/operations/exact_dedup/application.py"
+        REPOSITORY_ROOT / "src/memcommit/application/operations/exact_dedup/application.py"
     ).read_text(encoding="utf-8")
     dedun_scope = (
-        REPOSITORY_ROOT / "src/memcommit/operations/dedun/scope.py"
+        REPOSITORY_ROOT / "src/memcommit/application/operations/dedun/scope.py"
     ).read_text(encoding="utf-8")
 
     assert "memcommit.dedun_scope" not in application + runtime
-    assert "memcommit.operations.dedup" not in exact
-    assert "memcommit.operations.dedup" in dedun_scope
+    assert "memcommit.application.operations.dedup" not in exact
+    assert "memcommit.application.operations.dedup" in dedun_scope

@@ -6,27 +6,27 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.operations.compare.ledger.model import (
+from memcommit.application.operations.compare.ledger.model import (
     ComparisonAnalysis,
     ComparisonError,
     ComparisonInput,
 )
-from memcommit.operations.compare.summary import (
+from memcommit.application.operations.compare.summary import (
     ComparisonSummary,
     ComparisonSummaryError,
 )
-from memcommit.operations.compare.summary_application import run_comparison_summary
+from memcommit.application.operations.compare.summary_application import run_comparison_summary
 from memcommit.interfaces.cli.comparison_summary import render_comparison_summary
-from memcommit.operations.compare.summary_provider import COMPARISON_SUMMARY_OPERATION
+from memcommit.application.operations.compare.summary_provider import COMPARISON_SUMMARY_OPERATION
 from memcommit.interfaces.presentation.comparison import (
     render_comparison,
     render_comparison_receipt,
 )
-from memcommit.operations.compare.ledger.provider import (
+from memcommit.application.operations.compare.ledger.provider import (
     ComparisonProviderError,
     analyze_comparison,
 )
-from memcommit.operations.compare.ledger.store import (
+from memcommit.application.operations.compare.ledger.store import (
     ConcurrentComparisonUpdateError,
 )
 from memcommit.commands.compare.execution import (
@@ -35,7 +35,7 @@ from memcommit.commands.compare.execution import (
     ensure_comparison_analysis,
     load_comparison_context,
 )
-from memcommit.authority.derived_policy import AnalysisRetention
+from memcommit.application.authority.derived_policy import AnalysisRetention
 from memcommit.commands.compare.sessions import (
     choose_comparison_session,
     load_saved_comparison,
@@ -66,14 +66,16 @@ from memcommit.infrastructure.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )
-from memcommit.operations.profile.config import ProfileConfigError
-from memcommit.retained_history.provenance import ProvenanceError
-from memcommit.operations.profile.model import ProfileError, authority_grant_snapshot_lock
-from memcommit.operations.rationale.model import RationaleError, build_rationale
-from memcommit.operations.rationale.semantic import synthesize_rationale_provenance
-from memcommit.operations.rationale.scope import (
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.retained_history.memory_history_reconstruction.retained_record_verification import (
+    MemoryHistoryReconstructionError,
+)
+from memcommit.application.operations.profile.model import ProfileError, authority_grant_snapshot_lock
+from memcommit.application.operations.rationale.model import RationaleError, build_rationale
+from memcommit.application.operations.rationale.semantic import synthesize_rationale_provenance
+from memcommit.application.operations.rationale.scope import (
     load_rationale_scope,
-    rationale_trace,
+    rationale_memory_history,
     resolve_rationale_target,
 )
 from memcommit.persistence.store import MemoryStore
@@ -202,7 +204,7 @@ def _render_selected_rationale(
         current_name=store.current_context_name(),
     )
     target = resolve_rationale_target(scope, memory_uid)
-    trace = rationale_trace(scope, target)
+    trace = rationale_memory_history(scope, target)
     report = build_rationale(
         scope.access.store,
         target.owner,
@@ -737,7 +739,7 @@ def cmd(
         ConcurrentComparisonUpdateError,
         FileNotFoundError,
         OSError,
-        ProvenanceError,
+        MemoryHistoryReconstructionError,
         ProfileConfigError,
         ProfileProviderRoutesError,
         ProfileError,

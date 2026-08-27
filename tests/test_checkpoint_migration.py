@@ -6,7 +6,7 @@ import json
 
 import pytest
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 from memcommit.checkpoint_migration import (
     apply_rename_history_repair,
     plan_rename_history_repair,

@@ -20,11 +20,11 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 MODULE_PAIRS = (
     (
         "memcommit.add_application",
-        "memcommit.operations.add.application",
+        "memcommit.application.operations.add.application",
     ),
     (
         "memcommit.add_runtime",
-        "memcommit.operations.add.runtime",
+        "memcommit.application.operations.add.runtime",
     ),
 )
 
@@ -66,10 +66,10 @@ assert sys.modules[{canonical_name!r}] is canonical
 def test_add_legacy_paths_expose_the_canonical_contract() -> None:
     legacy_application = importlib.import_module("memcommit.add_application")
     canonical_application = importlib.import_module(
-        "memcommit.operations.add.application"
+        "memcommit.application.operations.add.application"
     )
     legacy_runtime = importlib.import_module("memcommit.add_runtime")
-    canonical_runtime = importlib.import_module("memcommit.operations.add.runtime")
+    canonical_runtime = importlib.import_module("memcommit.application.operations.add.runtime")
 
     assert legacy_application is canonical_application
     assert legacy_application.AddRequest is canonical_application.AddRequest
@@ -93,10 +93,10 @@ def test_add_legacy_facades_define_no_behavior(relative_path: str) -> None:
 def test_add_package_import_is_lazy() -> None:
     program = """
 import sys
-import memcommit.operations.add
+import memcommit.application.operations.add
 
-assert "memcommit.operations.add.application" not in sys.modules
-assert "memcommit.operations.add.runtime" not in sys.modules
+assert "memcommit.application.operations.add.application" not in sys.modules
+assert "memcommit.application.operations.add.runtime" not in sys.modules
 """
 
     subprocess.run(
@@ -107,7 +107,7 @@ assert "memcommit.operations.add.runtime" not in sys.modules
 
 
 def test_pre_relocation_add_request_global_loads_through_alias() -> None:
-    canonical = importlib.import_module("memcommit.operations.add.application")
+    canonical = importlib.import_module("memcommit.application.operations.add.application")
 
     restored = pickle.loads(b"cmemcommit.add_application\nAddRequest\n.")
 
@@ -116,11 +116,11 @@ def test_pre_relocation_add_request_global_loads_through_alias() -> None:
 
 def test_production_add_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "src/memcommit/api/_operations/add.py",
+        "src/memcommit/adapters/python_api/_operations/add.py",
         "src/memcommit/commands/add/command.py",
         "src/memcommit/interfaces/cli/add.py",
         "src/memcommit/interfaces/tui/operations/add/screen.py",
-        "src/memcommit/operations/add/runtime.py",
+        "src/memcommit/application/operations/add/runtime.py",
     )
 
     for relative_path in relative_paths:
@@ -132,10 +132,10 @@ def test_production_add_consumers_use_the_operation_owner() -> None:
 
 def test_exact_add_does_not_absorb_semantic_materialization_helpers() -> None:
     for relative_path in (
-        "src/memcommit/operations/add/application.py",
-        "src/memcommit/operations/add/runtime.py",
+        "src/memcommit/application/operations/add/application.py",
+        "src/memcommit/application/operations/add/runtime.py",
     ):
         source = (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         assert "memcommit.semantic_add_runtime" not in source
         assert "memcommit.elaborate_add_runtime" not in source
-        assert "memcommit.operations.elaborate.add_runtime" not in source
+        assert "memcommit.application.operations.elaborate.add_runtime" not in source

@@ -231,7 +231,7 @@ def _stale_turn() -> None:
 
     with tempfile.TemporaryDirectory(prefix="stale-update-command-") as directory:
         _configure_store(Path(directory) / ".mem")
-        import memcommit.ops as ops
+        import memcommit.application.ops as ops
         from memcommit.cli import app
         from memcommit.store import MemoryStore
         from memcommit.update import plan_update, update_session_record_digest

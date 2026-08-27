@@ -20,11 +20,11 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 MODULE_PAIRS = (
     (
         "memcommit.summarize_application",
-        "memcommit.operations.summarize.application",
+        "memcommit.application.operations.summarize.application",
     ),
     (
         "memcommit.summarize_runtime",
-        "memcommit.operations.summarize.runtime",
+        "memcommit.application.operations.summarize.runtime",
     ),
 )
 
@@ -66,11 +66,11 @@ assert sys.modules[{canonical_name!r}] is canonical
 def test_summarize_legacy_paths_expose_the_canonical_contract() -> None:
     legacy_application = importlib.import_module("memcommit.summarize_application")
     canonical_application = importlib.import_module(
-        "memcommit.operations.summarize.application"
+        "memcommit.application.operations.summarize.application"
     )
     legacy_runtime = importlib.import_module("memcommit.summarize_runtime")
     canonical_runtime = importlib.import_module(
-        "memcommit.operations.summarize.runtime"
+        "memcommit.application.operations.summarize.runtime"
     )
 
     assert legacy_application is canonical_application
@@ -101,10 +101,10 @@ def test_summarize_legacy_facades_define_no_behavior(relative_path: str) -> None
 def test_summarize_package_import_is_lazy() -> None:
     program = """
 import sys
-import memcommit.operations.summarize
+import memcommit.application.operations.summarize
 
-assert "memcommit.operations.summarize.application" not in sys.modules
-assert "memcommit.operations.summarize.runtime" not in sys.modules
+assert "memcommit.application.operations.summarize.application" not in sys.modules
+assert "memcommit.application.operations.summarize.runtime" not in sys.modules
 """
 
     subprocess.run(
@@ -116,10 +116,10 @@ assert "memcommit.operations.summarize.runtime" not in sys.modules
 
 def test_pre_relocation_summarize_globals_load_through_aliases() -> None:
     canonical_application = importlib.import_module(
-        "memcommit.operations.summarize.application"
+        "memcommit.application.operations.summarize.application"
     )
     canonical_runtime = importlib.import_module(
-        "memcommit.operations.summarize.runtime"
+        "memcommit.application.operations.summarize.runtime"
     )
 
     restored_request = pickle.loads(
@@ -137,16 +137,16 @@ def test_production_summarize_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "src/memcommit/bootstrap.py",
         "src/memcommit/commands/summarize/command.py",
-        "src/memcommit/operations/distill/application.py",
-        "src/memcommit/operations/distill/runtime.py",
+        "src/memcommit/application/operations/distill/application.py",
+        "src/memcommit/application/operations/distill/runtime.py",
         "src/memcommit/eval/study_summarize_exact_matrix.py",
-        "src/memcommit/operations/ground/distill.py",
+        "src/memcommit/application/operations/ground/distill.py",
         "src/memcommit/interfaces/summarize.py",
         "src/memcommit/interfaces/cli/summarize.py",
         "src/memcommit/interfaces/tui/operations/summarize/adapter.py",
         "src/memcommit/interfaces/tui/operations/summarize/model.py",
         "src/memcommit/interfaces/tui/operations/summarize/screen.py",
-        "src/memcommit/operations/summarize/runtime.py",
+        "src/memcommit/application/operations/summarize/runtime.py",
     )
 
     for relative_path in relative_paths:

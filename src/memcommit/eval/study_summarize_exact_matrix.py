@@ -19,7 +19,7 @@ import sys
 import threading
 import time
 
-from memcommit.authority.access import resolve_context_access
+from memcommit.application.authority.access import resolve_context_access
 from memcommit.context_targeting.readable_catalog import (
     freeze_profile_readable_context_catalog,
 )
@@ -27,7 +27,7 @@ from memcommit.infrastructure.config import Config
 from memcommit.infrastructure.providers.policy import (
     resolve_codex_evaluation_policy,
 )
-from memcommit.operations.profile.config import (
+from memcommit.application.operations.profile.config import (
     load_profile_registry,
     profile_store_dir,
     study_run_identity,
@@ -48,9 +48,9 @@ from memcommit.study_prewarm.summarize import (
     build_summarize_prewarm_artifact,
     summarize_prewarm_key,
 )
-from memcommit.operations.summarize.model import SummaryFrame, summarize_frame
-from memcommit.operations.summarize.application import SummarizeRequest
-from memcommit.operations.summarize.runtime import MemoryStoreSummarySourcePort
+from memcommit.application.operations.summarize.model import SummaryFrame, summarize_frame
+from memcommit.application.operations.summarize.application import SummarizeRequest
+from memcommit.application.operations.summarize.runtime import MemoryStoreSummarySourcePort
 
 
 KIND = "STUDY_SUMMARIZE_EXACT_MATRIX"

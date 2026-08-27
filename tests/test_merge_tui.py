@@ -10,9 +10,9 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 import memcommit.interfaces.tui.operations.merge.adapter as merge_tui_adapter
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Memory
 from memcommit.interfaces.tui.operations.merge import (
     MergeTuiSetup,
@@ -50,8 +50,8 @@ from memcommit.merge_application import (
     run_merge,
 )
 from memcommit.merge_runtime import MemoryStoreMergePort
-from memcommit.selection.model import SelectionOption
-from memcommit.selection.state import FlatSelectionState
+from memcommit.interfaces.console.selection.model import SelectionOption
+from memcommit.interfaces.console.selection.state import FlatSelectionState
 from memcommit.store import MemoryStore
 
 

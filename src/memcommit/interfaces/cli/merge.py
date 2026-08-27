@@ -9,7 +9,7 @@ from memcommit.interfaces.console.merge import (
     merge_plan_summary_lines,
 )
 from memcommit.interfaces.console.text import display_escape_text
-from memcommit.operations.merge.application import (
+from memcommit.application.operations.merge.application import (
     FrozenMergePlan,
     MergeDecision,
     MergeError,
@@ -17,7 +17,7 @@ from memcommit.operations.merge.application import (
     MergeResult,
     merge_resolution_case,
 )
-from memcommit.operations.merge.runtime import merge_summary
+from memcommit.application.operations.merge.runtime import merge_summary
 
 
 def render_merge_plain(result: MergeResult) -> None:

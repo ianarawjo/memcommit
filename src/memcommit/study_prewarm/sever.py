@@ -8,25 +8,25 @@ import json
 from pathlib import Path
 import uuid
 
-from memcommit.authority.access import ContextAccess, resolve_context_access
+from memcommit.application.authority.access import ContextAccess, resolve_context_access
 from memcommit.infrastructure.config import Config
 from memcommit.infrastructure.providers.policy import (
     resolve_operation_provider_policy,
 )
 from memcommit.context import Context
 from memcommit.context_targeting.naming import validate_portable_context_name
-from memcommit.authority.derived_policy import (
+from memcommit.application.authority.derived_policy import (
     authorize_analysis_save,
     authorize_combination,
     authorize_derived_transfer,
 )
-from memcommit.operations.profile.config import ProfileEntry, ProfileRegistry, study_run_identity
-from memcommit.operations.sever.model import (
+from memcommit.application.operations.profile.config import ProfileEntry, ProfileRegistry, study_run_identity
+from memcommit.application.operations.sever.model import (
     SEVER_SCHEMA_VERSION,
     SeverContextBinding,
     SeverSession,
 )
-from memcommit.operations.sever.provider import SEVER_PROVIDER_CONTRACT_VERSION
+from memcommit.application.operations.sever.provider import SEVER_PROVIDER_CONTRACT_VERSION
 from memcommit.persistence.store import (
     MemoryStore,
     _write_json_atomic,
@@ -406,7 +406,7 @@ def _capture_prepared_basis(
     # Import lazily because the production runtime consults this module for an
     # exact lookup after freezing ordinary inputs. The application boundary,
     # rather than the CLI command, owns the shared frame-capture contract.
-    from memcommit.operations.sever.runtime import capture_sever_binding
+    from memcommit.application.operations.sever.runtime import capture_sever_binding
 
     source = capture_sever_binding(
         source_access,
@@ -487,7 +487,7 @@ def install_declared_sever_prewarms(
 def _local_output_access(store: MemoryStore, name: str):
     # Kept local to avoid broadening the public Context locator contract for a
     # require-new output name.
-    from memcommit.authority.access import ContextAccess
+    from memcommit.application.authority.access import ContextAccess
 
     validate_portable_context_name(name)
     if store.context_exists(name):

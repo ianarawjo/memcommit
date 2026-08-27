@@ -9,7 +9,7 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.atomize as atomize_module
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 from memcommit.atomize import (
     AtomizeAnalysisSession,
     AtomizeImpactError,
@@ -17,7 +17,7 @@ from memcommit.atomize import (
     impact_atomize,
     sentence_like_segment_count,
 )
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.atomize.sessions import (
     atomize_session_entries,
     revalidate_saved_atomize_analysis,
@@ -1561,7 +1561,7 @@ def test_atomize_save_as_retry_completes_receipt_without_duplicate_checkpoint(
     isolated_store,
     monkeypatch,
 ):
-    from memcommit.operations.atomize.runtime import (
+    from memcommit.application.operations.atomize.runtime import (
         MemoryStoreAtomizeSessionRepository,
     )
 

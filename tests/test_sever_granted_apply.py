@@ -7,7 +7,7 @@ import uuid
 
 import pytest
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 from memcommit.profile_config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
@@ -21,20 +21,20 @@ from memcommit.profiles import (
     delete_authority_grant,
     update_authority_grant,
 )
-from memcommit.operations.sever.model import SeverCandidate, SeverSession
-from memcommit.operations.sever.application import (
+from memcommit.application.operations.sever.model import SeverCandidate, SeverSession
+from memcommit.application.operations.sever.application import (
     SeverAnalysisRequest,
     SeverAnalysisResult,
     SeverApplicationError,
     SeverPersistedApplyRequest,
 )
-from memcommit.operations.sever.runtime import (
+from memcommit.application.operations.sever.runtime import (
     MemoryStoreSeverInputPort,
     MemoryStoreSeverOutputPort,
     execute_sever_session_apply,
     execute_sever_session_start,
 )
-from memcommit.operations.sever.session_store import SeverSessionStore
+from memcommit.application.operations.sever.session_store import SeverSessionStore
 from memcommit.store import MemoryStore
 
 

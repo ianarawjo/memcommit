@@ -14,15 +14,17 @@ the implementation that owns it without first knowing the repository history.
 ## Invariants
 
 - Function and class bodies do not change as part of relocation.
-- Existing root import paths remain available through module-identity aliases.
+- Existing root import paths remain available through module-identity aliases
+  unless a later ownership decision explicitly removes that historical path.
 - Internal implementation imports point at canonical owner modules after each
   relocation batch.
 - New package initializers remain dependency-neutral. Public convenience
   exports may load lazily when eager loading would make a foundational module
   depend on a higher-level adapter merely because both now share a package.
 - One source implementation has exactly one canonical path.
-- Public Context, Store, in-memory Ops, CLI, bootstrap, and documented Context
-  locator boundaries remain at the package root in this pass.
+- Public Context, bootstrap, and the documented Context locator remain at the
+  package root. Store belongs to persistence, while the in-memory operation API
+  belongs to application orchestration.
 - Existing behavioral failures are not silently converted into new contracts.
   Baseline failures remain a comparison set during path-only work.
 - Operation evidence state remains authored only in the existing evidence
@@ -49,7 +51,7 @@ while the JSON preserves exact paths for mechanical checks.
 
 Physical root facades defeated the navigation goal even after their
 implementations moved: a file browser still presented 242 historical names as
-peers of the six real root boundaries. The facades are therefore consolidated
+peers of the original seven real root boundaries. The facades are therefore consolidated
 into the exact generated map in
 `memcommit.compatibility._legacy_alias_map` and one process-local finder in
 `memcommit.compatibility.legacy_submodules`.
@@ -76,6 +78,23 @@ that name and reason visible but deliberately omits it from the generated alias
 map. This makes retirement an explicit compatibility decision rather than a
 missing target or an untracked deletion.
 
+On 2026-08-27 the executable Typer registry moved from the package root to
+`memcommit.adapters.console.entrypoint`. The `memcommit.cli` import was removed
+without an alias because the console now has one explicit adapter owner and no
+compatibility intent was retained for the former internal module path. The
+installed `mem` script and internal subprocess launchers use the canonical
+entry point directly; this relocation does not move any registered command or
+change command behavior.
+
+On 2026-08-27 the mixed in-memory operation API moved intact from
+`memcommit.ops` to `memcommit.application.ops`. The module still contains
+structural Context rules, operation wrappers, and the legacy Integrate
+implementation; placing the unchanged mixture under application is an
+intentional staging boundary that avoids making a core package depend upward
+on application operations. The `memcommit.ops` path and root-package `ops`
+re-export were removed without compatibility aliases. Separating the
+structural rules and Integrate implementation remains later work.
+
 On 2026-08-27 the existing `memcommit.reviewing` package moved intact to
 `memcommit.application.reviewing`. Its dominant responsibility is coordinating
 quality analysis, review state, and operation handoff, so application is the
@@ -91,12 +110,14 @@ baseline. Each relocation batch must collect successfully, keep focused tests
 passing, and introduce no new behavioral failure. Static ownership tests and
 generated callable catalogs may change because their subject is the path
 layout itself; those records are updated only after the canonical moves settle.
-The layout check requires exactly six root Python files, rejects every
+The layout check requires exactly four root Python files, rejects every
 physical compatibility facade and internal legacy import, and imports every
-non-retired historical name (currently 242) in fresh interpreters in both
-legacy-first and canonical-first order. It verifies exact module identity and
-canonical `__spec__` ownership so an earlier test import cannot mask a
-package-initialization cycle or metadata regression.
+retained compatibility alias (currently 241) in fresh
+interpreters in both legacy-first and canonical-first order. It separately
+rejects the removed `memcommit.cli`, `memcommit.ops`, and
+`memcommit.provenance` paths, and
+verifies exact module identity and canonical `__spec__` ownership so an earlier
+test import cannot mask a package-initialization cycle or metadata regression.
 
 ## Non-goals
 

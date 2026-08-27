@@ -74,7 +74,7 @@ def run_forget_eval(
     Run all forget eval cases, each repeated `runs` times.
     Returns a summary dict with per-case and aggregate results.
     """
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
 
     fixture_path = FIXTURES_DIR / "forget.json"
     with open(fixture_path) as f:
@@ -166,7 +166,7 @@ def run_integrate_eval(
     Run all integrate eval cases, each repeated `runs` times.
     Returns a summary dict with per-case and aggregate results.
     """
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
 
     fixture_path = FIXTURES_DIR / "integrate.json"
     with open(fixture_path) as f:

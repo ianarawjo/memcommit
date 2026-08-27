@@ -6,7 +6,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.authority.access import (
+from memcommit.application.authority.access import (
     context_access_display_facts,
     resolve_context_access,
 )
@@ -28,19 +28,19 @@ from memcommit.context_targeting.tui.picker import (
 )
 from memcommit.semantic.goal_focus_runtime import freeze_goal_focus_operand
 from memcommit.context_targeting.naming import validate_portable_context_name
-from memcommit.operations.distill.model import DistillError
-from memcommit.operations.distill.application import (
+from memcommit.application.operations.distill.model import DistillError
+from memcommit.application.operations.distill.application import (
     DistillApplyRequest,
     DistillRequest,
     DistillResult,
 )
-from memcommit.operations.distill.runtime import (
+from memcommit.application.operations.distill.runtime import (
     apply_prepared_distill_add,
     execute_distill,
     execute_distill_apply,
     prepare_distill_add,
 )
-from memcommit.operations.ground.distill import (
+from memcommit.application.operations.ground.distill import (
     FrozenGroundDistill,
     FrozenGroundWorkspaceDistill,
     GroundDistillResult,
@@ -61,12 +61,12 @@ from memcommit.interfaces.console import (
 )
 from memcommit.interfaces.console.text import display_escape_text
 from memcommit.interfaces.tui.operations.distill import DistillTuiSetup
-from memcommit.operations.profile.config import ProfileConfigError
-from memcommit.operations.profile.model import ProfileError
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.infrastructure.providers.subscription import QueryProviderError, connect_semantic_provider
-from memcommit.operations.add.semantic_runtime import resolve_semantic_add_endpoints
+from memcommit.application.operations.add.semantic_runtime import resolve_semantic_add_endpoints
 from memcommit.persistence.store import MemoryStore
-from memcommit.operations.summarize.model import SummaryFrame
+from memcommit.application.operations.summarize.model import SummaryFrame
 
 
 def _summary_frame_memory_rows(frame: SummaryFrame) -> tuple[ContextMemoryRow, ...]:

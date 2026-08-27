@@ -9,18 +9,18 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.commands.fit.command as fit_command
-import memcommit.ops as ops
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Context, Memory
-from memcommit.operations.fit.application import (
+from memcommit.application.operations.fit.application import (
     FitMemorySourceRequest,
     FitStoredSourcesRequest,
 )
-from memcommit.operations.fit.judgment import (
+from memcommit.application.operations.fit.judgment import (
     FIT_JUDGMENT_PAYLOAD_MARKER,
     FitProposition,
 )
-from memcommit.operations.fit.runtime import FitSourceError, run_stored_source_fit
+from memcommit.application.operations.fit.runtime import FitSourceError, run_stored_source_fit
 from memcommit.profile_config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,

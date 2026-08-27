@@ -6,7 +6,7 @@ import copy
 from collections.abc import Sequence
 from dataclasses import dataclass
 
-from memcommit.authority.access import (
+from memcommit.application.authority.access import (
     ContextAccess,
     GrantedReadStore,
     resolve_context_access,
@@ -20,13 +20,13 @@ from memcommit.context_targeting.catalog import (
 )
 from memcommit.context_targeting.model import ContextScope
 from memcommit.context_targeting.resolution import expand_lexical_context_names
-from memcommit.operations.profile.config import (
+from memcommit.application.operations.profile.config import (
     AuthorityGrant,
     ProfileRegistry,
     load_profile_registry,
     profile_store_dir,
 )
-from memcommit.operations.profile.model import ProfileError
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.source_projection.presentation import SourceDisplayValue
 from memcommit.persistence.store import MemoryStore
 

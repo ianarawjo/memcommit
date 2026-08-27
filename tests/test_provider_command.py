@@ -9,7 +9,7 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.config as config_module
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.infrastructure.providers.policy import (
     STUDY_PROVIDER_POLICY_DIGEST,
     STUDY_PROVIDER_POLICY_VERSION,

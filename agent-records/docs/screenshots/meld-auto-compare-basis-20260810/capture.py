@@ -144,7 +144,7 @@ class _DelayedCompareProvider:
 def _run_child(store_root: Path) -> None:
     _set_store_root(store_root)
 
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
     from memcommit.cli import app
     from memcommit.commands import meld as meld_command
     from memcommit.comparison_store import load_comparison_analysis

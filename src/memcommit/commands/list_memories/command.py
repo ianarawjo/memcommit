@@ -23,7 +23,7 @@ from memcommit.context_targeting.presets import (
     ContextScopePreset,
     resolve_scope_preset,
 )
-from memcommit.authority.access import (
+from memcommit.application.authority.access import (
     ContextAccess,
     GrantedReadStore,
     attached_grants,
@@ -41,11 +41,11 @@ from memcommit.interfaces.console.identity import collision_safe_uid_prefixes
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )
-from memcommit.operations.profile.config import AuthorityGrant, ProfileConfigError
-from memcommit.operations.profile.model import ProfileError
+from memcommit.application.operations.profile.config import AuthorityGrant, ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import MemoryStore
-from memcommit.operations.update.model import GrantedUpdateTarget
-from memcommit.authority.study_operation_policy import analysis_boundary_label
+from memcommit.application.operations.update.model import GrantedUpdateTarget
+from memcommit.application.authority.study_operation_policy import analysis_boundary_label
 from memcommit.source_projection.model import (
     SourceDisplayFacts,
     SourceForm,

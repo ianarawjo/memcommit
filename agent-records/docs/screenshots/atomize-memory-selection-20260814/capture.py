@@ -54,7 +54,7 @@ class _StreamRecorder(io.StringIO):
 
 
 def _prepare_store(root: Path, *, empty: bool):
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
     from memcommit.store import MemoryStore
 
     store = MemoryStore(root=root)

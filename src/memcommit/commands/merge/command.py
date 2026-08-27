@@ -21,7 +21,7 @@ from memcommit.interfaces.tui.operations.merge import (
     run_merge_conflict_review,
     run_merge_plan_review,
 )
-from memcommit.operations.merge.application import (
+from memcommit.application.operations.merge.application import (
     MergeDecision,
     MergeError,
     MergeReach,
@@ -29,9 +29,9 @@ from memcommit.operations.merge.application import (
     prepare_merge,
     run_merge,
 )
-from memcommit.operations.merge.runtime import MemoryStoreMergePort
-from memcommit.operations.profile.config import ProfileConfigError
-from memcommit.operations.profile.model import ProfileError
+from memcommit.application.operations.merge.runtime import MemoryStoreMergePort
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import MemoryStore
 
 

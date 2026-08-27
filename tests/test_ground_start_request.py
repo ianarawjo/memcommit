@@ -5,8 +5,8 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.commands.ground.command as ground_command
-from memcommit import ops
-from memcommit.cli import app
+from memcommit.application import ops
+from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.ground.shell import GroundShellResult
 from memcommit.ground_dialogue import (
     GroundDialogueError,

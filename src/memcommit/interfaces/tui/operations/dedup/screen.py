@@ -7,7 +7,7 @@ from collections.abc import Callable
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.operations.dedup.application import (
+from memcommit.application.operations.dedup.application import (
     DedupComponent,
     DedupReceipt,
     DedupSelection,

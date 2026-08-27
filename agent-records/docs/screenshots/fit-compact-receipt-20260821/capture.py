@@ -237,7 +237,7 @@ def _run_ground_projection_child(*, current: bool) -> None:
 
 
 def _prepare_overlap_store(root: Path):
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
     from memcommit.store import MemoryStore, context_record_digest
 
     store = MemoryStore(root=root)
@@ -281,7 +281,7 @@ def _run_overlap_child(store_root: Path) -> None:
 
 def _run_three_operands_child(store_root: Path) -> None:
     import memcommit.commands.fit.command as fit_command
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
     from memcommit.fit_store import FitStore
     from memcommit.store import MemoryStore
 

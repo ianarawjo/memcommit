@@ -57,7 +57,7 @@ def _fixture() -> dict[str, object]:
 
 
 def _prepare_store(root: Path, operation: str):
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
     import memcommit.store as store_module
     from memcommit.store import MemoryStore
 

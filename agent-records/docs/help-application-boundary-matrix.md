@@ -15,7 +15,7 @@ checkpoint, or Undo lifecycle.
 ## Implementation ownership
 
 The canonical terminal-independent Help implementation lives under
-`memcommit.operations.help`. `application.py` owns exact, provider-free catalog
+`memcommit.application.operations.help`. `application.py` owns exact, provider-free catalog
 listing and detail lookup. `lookup_application.py` owns the frozen whole-catalog
 semantic selection plan and validates the provider's exact three-name result;
 provider connection remains outside the package in the terminal adapter.
@@ -25,7 +25,7 @@ The historical `memcommit.help_application` and
 `memcommit.help_lookup_application` paths remain behavior-free module-identity
 aliases. They preserve existing imports, monkeypatch targets, and serialized
 globals without creating parallel implementations. Importing
-`memcommit.operations.help` alone remains lazy.
+`memcommit.application.operations.help` alone remains lazy.
 
 This relocation changes physical ownership only. It does not change catalog
 copy, exact-name validation, natural-language prompt or result cardinality,
@@ -55,7 +55,7 @@ the existing behavior-focused screenshots remain current.
    one exact operation-local detail ID; neither performs fuzzy, alias, case, or
    whitespace normalization.
 3. Stable summary, flow, execution, effect, range, use-when, maturity, and typed
-   detail meaning originates in `help_catalog`; adapters do not author
+   detail meaning originates in `operation_catalog`; adapters do not author
    substitute operation descriptions. Composite tools may own one reviewed
    composite use-when value. A Help maturity tag describes product scope and
    is not a route-classification state from the operation evidence ledger.

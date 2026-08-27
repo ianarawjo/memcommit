@@ -6,8 +6,8 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.adapters.console.entrypoint import app
 from memcommit.context import AutoCheckpoint, QueryContextRef
 from memcommit.query_provider import QueryProviderError
 from memcommit.store import MemoryStore

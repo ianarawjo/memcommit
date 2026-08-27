@@ -18,10 +18,10 @@ adapter without importing `memcommit.commands`.
 
 The Grounding slice is now divided into four responsibilities:
 
-- `memcommit.operations.atomize.grounding_application` owns typed Start, Reply,
+- `memcommit.application.operations.atomize.grounding_application` owns typed Start, Reply,
   Keep, and Accept requests, the port contract, application receipts, and
   result checks.
-- `memcommit.operations.atomize.grounding_runtime` adapts that contract to
+- `memcommit.application.operations.atomize.grounding_runtime` adapts that contract to
   `MemoryStore`, the semantic provider, CAS-style freshness checks, Context
   mutation, checkpoint recovery, and durable dialogue receipts.
 - `memcommit.interfaces.cli.atomize_grounding` renders a saved dialogue without

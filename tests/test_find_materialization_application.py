@@ -9,30 +9,30 @@ import uuid
 
 import pytest
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 import memcommit.commands.find.command as find_command
-import memcommit.operations.search.materialization_application as materialization_application
-import memcommit.operations.search.materialization_runtime as materialization_runtime
+import memcommit.application.operations.search.materialization_application as materialization_application
+import memcommit.application.operations.search.materialization_runtime as materialization_runtime
 import memcommit.store as store_module
-from memcommit.authority.access import resolve_context_access
+from memcommit.application.authority.access import resolve_context_access
 from memcommit.commands.shared.readable_context_catalog import (
     freeze_readable_context_catalog,
 )
 from memcommit.commands.find.search_workbench import FindSearchWorkbenchResult
 from memcommit.context import Memory, MemoryRef
-from memcommit.operations.search.application import (
+from memcommit.application.operations.search.application import (
     FindSearchRequest,
     FindSearchResponse,
     FindSearchResult,
 )
-from memcommit.operations.search.materialization_application import (
+from memcommit.application.operations.search.materialization_application import (
     FindMaterializationError,
     FindMaterializationRequest,
     FindMaterializationResult,
     FrozenFindMaterialization,
     run_find_materialization,
 )
-from memcommit.operations.search.materialization_runtime import (
+from memcommit.application.operations.search.materialization_runtime import (
     MemoryStoreFindMaterializationPort,
     execute_find_materialization,
 )

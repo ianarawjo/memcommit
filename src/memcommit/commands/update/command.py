@@ -12,7 +12,7 @@ from memcommit.commands.shared.command_wait import (
     run_command_wait,
 )
 from memcommit.commands.update.setup import choose_update_setup
-from memcommit.authority.access import (
+from memcommit.application.authority.access import (
     GrantedReadStore,
     freeze_granted_context_binding,
     resolve_context_access,
@@ -51,20 +51,20 @@ from memcommit.context_targeting.presets import (
     resolve_descendant_scopes,
     resolve_scope_preset,
 )
-from memcommit.authority.derived_policy import authorize_derived_transfer
-from memcommit.operations.update.granted_source_application import (
+from memcommit.application.authority.derived_policy import authorize_derived_transfer
+from memcommit.application.operations.update.granted_source_application import (
     apply_granted_source_staged_update,
 )
-from memcommit.operations.update.granted_application import apply_granted_staged_update
-from memcommit.operations.profile.config import ProfileConfigError
-from memcommit.operations.profile.model import ProfileError
+from memcommit.application.operations.update.granted_application import apply_granted_staged_update
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.infrastructure.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )
 from memcommit.persistence.store import MemoryStore
 from memcommit.study_prewarm.registry import StudyPrewarmRegistryError
-from memcommit.operations.update.model import (
+from memcommit.application.operations.update.model import (
     GrantedUpdateTarget,
     UpdateError,
     UpdateSession,
@@ -76,8 +76,8 @@ from memcommit.operations.update.model import (
     session_matches,
     update_session_record_digest,
 )
-from memcommit.operations.update.application_flow import UpdateApplicationFlowPort
-from memcommit.operations.update.endpoints import (
+from memcommit.application.operations.update.application_flow import UpdateApplicationFlowPort
+from memcommit.application.operations.update.endpoints import (
     choose_update_endpoint_operands,
     resolve_update_endpoints,
 )

@@ -37,7 +37,7 @@ def _configure(store_root: Path) -> None:
 
 
 def _initialize_context() -> None:
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
     from memcommit.store import MemoryStore
 
     store = MemoryStore()
@@ -55,7 +55,7 @@ def _initialize_context() -> None:
 
 
 def _initialize_memory() -> None:
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
     from memcommit.store import MemoryStore
 
     store = MemoryStore()
@@ -68,7 +68,7 @@ def _initialize_memory() -> None:
 
 
 def _initialize_rejection() -> None:
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
     from memcommit.store import MemoryStore
 
     store = MemoryStore()

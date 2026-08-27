@@ -7,7 +7,7 @@ from memcommit.context import (
     QueryContextRef,
 )
 from memcommit.history import build_history
-from memcommit import ops
+from memcommit.application import ops
 from memcommit.store import MemoryStore
 
 

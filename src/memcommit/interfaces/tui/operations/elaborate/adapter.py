@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from memcommit.operations.elaborate.model import ElaborateMode
-from memcommit.operations.elaborate.application import ElaborateResult
+from memcommit.application.operations.elaborate.model import ElaborateMode
+from memcommit.application.operations.elaborate.application import ElaborateResult
 from memcommit.interfaces.cli.elaborate import elaborate_result_text
 from memcommit.interfaces.console.text import safe_terminal_text
 from memcommit.interfaces.tui.operations.elaborate.model import (

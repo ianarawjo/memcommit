@@ -32,14 +32,14 @@ from memcommit.context_targeting.presets import (
     resolve_scope_preset,
 )
 from memcommit.context_targeting.naming import is_portable_context_name
-from memcommit.operations.profile.config import (
+from memcommit.application.operations.profile.config import (
     AuthorityGrant,
     ProfileConfigError,
     ProfileRegistry,
     load_profile_registry,
     profile_store_dir,
 )
-from memcommit.operations.profile.model import (
+from memcommit.application.operations.profile.model import (
     ProfileError,
     STUDY_BASELINE_PROFILE_NAME,
     archive_legacy_study,

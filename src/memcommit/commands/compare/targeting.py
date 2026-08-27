@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.authority.access import (
+from memcommit.application.authority.access import (
     ContextAccess,
     GrantedReadStore,
     resolve_context_access,
@@ -18,7 +18,7 @@ from memcommit.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
     parse_direct_memory_locator,
 )
-from memcommit.operations.profile.config import ProfileRegistry
+from memcommit.application.operations.profile.config import ProfileRegistry
 from memcommit.persistence.store import MemoryStore
 
 

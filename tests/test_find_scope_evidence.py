@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import pytest
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 from memcommit.context import QueryContextRef
 from memcommit.context_catalog import ContextCatalogScan
 from memcommit.find_scope_evidence import (

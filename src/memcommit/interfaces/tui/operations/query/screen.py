@@ -59,12 +59,12 @@ from memcommit.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
 )
-from memcommit.operations.query.granted_application import (
+from memcommit.application.operations.query.granted_application import (
     GrantedQueryRequest,
     GrantedQueryResponse,
     GrantedQueryTarget,
 )
-from memcommit.operations.query.ordinary_application import (
+from memcommit.application.operations.query.ordinary_application import (
     OrdinaryQueryRequest,
     OrdinaryQueryResponse,
 )

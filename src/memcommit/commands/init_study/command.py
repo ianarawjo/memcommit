@@ -16,18 +16,17 @@ from memcommit.infrastructure.providers.policy import (
     STUDY_PROVIDER_POLICY_VERSION,
 )
 from memcommit.commands.init_study.name_dialog import choose_study_profile_name
-from memcommit.operations.profile.config import (
+from memcommit.application.operations.profile.config import (
     ProfileConfigError,
     load_profile_registry,
     study_run_identity,
 )
-from memcommit.operations.profile.model import (
-    ProfileError,
-    STUDY_BASELINE_PROFILE_NAME,
+from memcommit.application.operations.init_study.application import (
     generate_study_profile_name,
     init_coffee_study_profile,
     init_study_profile,
 )
+from memcommit.application.operations.profile.model import ProfileError, STUDY_BASELINE_PROFILE_NAME
 from memcommit.study_scenarios import COFFEE_V1_SCENARIO_ID
 from memcommit.infrastructure.command_ledger.study_actions import (
     StudyActionError,

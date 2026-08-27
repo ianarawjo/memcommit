@@ -21,7 +21,7 @@ catalog subset but does not generate substitute Help prose.
 
 ## Contract
 
-`memcommit.operations.help.application` owns four read-only application actions:
+`memcommit.application.operations.help.application` owns four read-only application actions:
 
 - `list_operation_help()` returns one immutable alphabetized snapshot of all
   public operations;
@@ -43,12 +43,12 @@ routes, and closed verdict examples. Typed prose details cover limitations and
 access boundaries without turning every caveat into an unclassified note.
 Each detail has a stable operation-local ID, discovery role, and use situation;
 an optional one-line discovery summary is required when an agent needs the
-detail before choosing a tool. The application boundary imports only
-`help_catalog`. It does not initialize or inspect a Store, resolve a Profile,
+detail before choosing a tool. The application boundary imports only the
+`operation_catalog`. It does not initialize or inspect a Store, resolve a Profile,
 connect a provider, read authority, use a cache, create a session, or publish a
 receipt.
 
-`memcommit.operations.help.lookup_application` owns that bounded semantic
+`memcommit.application.operations.help.lookup_application` owns that bounded semantic
 selection. It freezes the complete public catalog, treats the request and
 catalog as untrusted provider data, and accepts only an ordered array of
 exactly three distinct operation names. Each candidate exposes the model to
@@ -147,8 +147,9 @@ effect, range, use-when, or detailed comparison meaning. A generic free-form
 boundary from syntax, warning, rationale, or implementation commentary.
 Structured comparisons and typed prose details instead preserve the decision
 shape and boundary kind across interfaces. Per-operation modules under
-`help_catalog/details/` keep growing content reviewable without turning the
-main operation catalog into a long mixed-purpose file; one explicit registry
+`application/operations/operation_catalog/details/` keep growing content
+reviewable without turning the main operation catalog into a long mixed-purpose
+file; one explicit registry
 checks ownership and duplicate IDs. MCP and Skills project only what their
 discovery contracts need; neither is a second semantic source.
 

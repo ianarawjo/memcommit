@@ -5,9 +5,9 @@ import json
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 import memcommit.store as store_module
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.context import AutoCheckpoint, Context
 from memcommit.store import MemoryStore
 

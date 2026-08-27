@@ -7,8 +7,8 @@ from datetime import datetime, timezone
 import re
 
 from memcommit.interfaces.tui.components.operation_launcher.session import SessionPickerEntry
-from memcommit.operations.sever.model import SeverSession, sever_record_digest
-from memcommit.operations.sever.session_store import SeverSessionStore
+from memcommit.application.operations.sever.model import SeverSession, sever_record_digest
+from memcommit.application.operations.sever.session_store import SeverSessionStore
 
 
 _ATOMIC_TEMP_NAME = re.compile(

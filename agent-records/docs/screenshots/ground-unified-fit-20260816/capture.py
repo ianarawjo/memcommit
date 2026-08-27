@@ -117,7 +117,7 @@ def _use_store_root(root: Path) -> None:
 
 
 def _prepare_store(root: Path):
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
     from memcommit.ground import (
         GroundTargetSpec,
         bind_ground_workbench,

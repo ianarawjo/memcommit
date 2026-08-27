@@ -9,7 +9,7 @@ import sys
 from typing import Sequence
 
 from memcommit.infrastructure.config import Config
-from memcommit.operations.profile.config import (
+from memcommit.application.operations.profile.config import (
     load_profile_registry,
     profile_store_dir,
     study_run_identity,

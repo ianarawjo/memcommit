@@ -9,7 +9,7 @@ import sys
 
 import pytest
 
-from memcommit.operations.clear.application import ClearRequest, ClearResult
+from memcommit.application.operations.clear.application import ClearRequest, ClearResult
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
@@ -39,17 +39,17 @@ def test_clear_command_delegates_behavior_to_operation_runtime() -> None:
         for node in ast.walk(tree)
         if isinstance(node, ast.ImportFrom) and node.module is not None
     }
-    assert "memcommit.operations.clear.application" in imports
-    assert "memcommit.operations.clear.runtime" in imports
-    assert "memcommit.authority.access" not in imports
+    assert "memcommit.application.operations.clear.application" in imports
+    assert "memcommit.application.operations.clear.runtime" in imports
+    assert "memcommit.application.authority.access" not in imports
     assert "memcommit.context_targeting.readable_catalog" not in imports
     assert "memcommit.context_targeting.resolution" not in imports
 
 
 def test_clear_operation_has_no_terminal_dependency() -> None:
     for relative_path in (
-        "src/memcommit/operations/clear/application.py",
-        "src/memcommit/operations/clear/runtime.py",
+        "src/memcommit/application/operations/clear/application.py",
+        "src/memcommit/application/operations/clear/runtime.py",
     ):
         source = (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         assert "import typer" not in source
@@ -59,12 +59,12 @@ def test_clear_operation_has_no_terminal_dependency() -> None:
 def test_clear_operation_package_import_is_lazy() -> None:
     program = """
 import sys
-import memcommit.operations.clear
+import memcommit.application.operations.clear
 
 assert not [
     name
     for name in sys.modules
-    if name.startswith("memcommit.operations.clear.")
+    if name.startswith("memcommit.application.operations.clear.")
 ]
 """
     subprocess.run([sys.executable, "-c", program], cwd=REPOSITORY_ROOT, check=True)

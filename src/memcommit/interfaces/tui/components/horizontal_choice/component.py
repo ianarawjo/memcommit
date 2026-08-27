@@ -9,9 +9,9 @@ from prompt_toolkit.formatted_text.base import StyleAndTextTuples
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )
-from memcommit.selection.model import SelectionOption
-from memcommit.selection.state import FlatSelectionState
-from memcommit.selection.tui import (
+from memcommit.interfaces.console.selection.model import SelectionOption
+from memcommit.interfaces.console.selection.state import FlatSelectionState
+from memcommit.interfaces.console.selection.tui import (
     choice_marker,
     choice_visual_state,
     render_choice_card_rows,

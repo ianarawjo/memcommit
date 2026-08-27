@@ -6,8 +6,8 @@ import json
 
 import pytest
 
-import memcommit.ops as ops
-from memcommit.api import MemCommitClient, SearchResult, SemanticInputError
+import memcommit.application.ops as ops
+from memcommit.adapters.python_api import MemCommitClient, SearchResult, SemanticInputError
 from memcommit.store import MemoryStore
 
 
@@ -87,7 +87,7 @@ def test_explicit_root_search_does_not_inherit_profile_grants(tmp_path, monkeypa
         raise AssertionError("Explicit-root Search consulted global Profiles")
 
     monkeypatch.setattr(
-        "memcommit.api._support.readable.load_profile_registry",
+        "memcommit.adapters.python_api._support.readable.load_profile_registry",
         forbidden,
     )
 

@@ -5,7 +5,7 @@ from __future__ import annotations
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.authority.access import (
+from memcommit.application.authority.access import (
     ContextAccess,
     GrantedReadStore,
     resolve_context_access,
@@ -13,20 +13,20 @@ from memcommit.authority.access import (
 from memcommit.context import Context
 from memcommit.context_targeting.catalog import freeze_granted_context_navigation
 from memcommit.context_targeting.tui.picker import context_memory_rows
-from memcommit.operations.memory_transfer.application import (
+from memcommit.application.operations.memory_transfer.application import (
     FrozenCopyMemoriesPlan,
     FrozenMoveMemoriesPlan,
     prepare_copy,
     prepare_move,
 )
-from memcommit.operations.memory_transfer.runtime import MemoryStoreMemoryTransferPort
+from memcommit.application.operations.memory_transfer.runtime import MemoryStoreMemoryTransferPort
 from memcommit.interfaces.tui.operations.memory_transfer.model import (
     MemoryTransferTuiSetup,
 )
 from memcommit.interfaces.tui.operations.memory_transfer.screen import (
     run_memory_transfer_tui,
 )
-from memcommit.operations.profile.model import ProfileError
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.source_projection.presentation import (
     SourceDisplayToken,
     SourceDisplayValue,

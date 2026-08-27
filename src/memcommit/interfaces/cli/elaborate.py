@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import typer
 
-from memcommit.operations.elaborate.model import ElaborateMode
-from memcommit.operations.elaborate.application import ElaborateResult
+from memcommit.application.operations.elaborate.model import ElaborateMode
+from memcommit.application.operations.elaborate.application import ElaborateResult
 from memcommit.interfaces.console.content_row import render_numbered_content_row
 from memcommit.interfaces.console.text import safe_terminal_text
 

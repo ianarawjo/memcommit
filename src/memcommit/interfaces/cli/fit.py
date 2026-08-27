@@ -13,7 +13,7 @@ from memcommit.interfaces.fit import (
     fit_receipt_lines,
     proposition_fit_receipt_lines,
 )
-from memcommit.operations.fit.application import FitPropositionsResult, FitResult
+from memcommit.application.operations.fit.application import FitPropositionsResult, FitResult
 
 
 def _render_receipt_line(

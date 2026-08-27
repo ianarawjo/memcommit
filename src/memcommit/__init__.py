@@ -20,13 +20,12 @@ from memcommit.context import (
     QueryContextRef,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit import ops
 
 
 # Preserve the documented root imports without assembling the complete public
 # client whenever an unrelated ``memcommit.*`` submodule is imported.
 _LAZY_API_EXPORTS = {
-    name: ("memcommit.api", name)
+    name: ("memcommit.adapters.python_api", name)
     for name in (
         "AddAuthorityError",
         "AddConflictError",
@@ -185,5 +184,4 @@ __all__ = [
     "QueryProviderFailure",
     "QueryStorageError",
     "ReferenceQueryResult",
-    "ops",
 ]

@@ -5,9 +5,9 @@ Last reviewed: 2026-08-25.
 ## Implementation ownership
 
 Distill and Elaborate now keep their executable use cases under distinct
-operation owners: `memcommit.operations.distill` owns Distill analysis,
+operation owners: `memcommit.application.operations.distill` owns Distill analysis,
 Source/Target freezing, provider composition, and atomic Rule publication,
-while `memcommit.operations.elaborate` owns Elaborate generation plus its
+while `memcommit.application.operations.elaborate` owns Elaborate generation plus its
 Context-backed atomic Add preparation. Elaborate's provider-only runtime stays
 separate from `add_runtime`, so proposal-only public adapters do not acquire a
 storage dependency merely because the standalone CLI can publish. The former

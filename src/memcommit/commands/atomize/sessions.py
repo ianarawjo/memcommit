@@ -8,7 +8,7 @@ import re
 import sys
 import uuid
 
-from memcommit.operations.atomize.domain import (
+from memcommit.application.operations.atomize.domain import (
     ATOMIZE_RULESET_VERSION,
     AtomizeAnalysisSession,
     atomize_analysis_matches_context,

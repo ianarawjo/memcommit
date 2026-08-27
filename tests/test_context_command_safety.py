@@ -5,9 +5,9 @@ from __future__ import annotations
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 import memcommit.store as store_module
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.branch.dialog import BranchCreationReceipt
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.store import MemoryStore
@@ -69,7 +69,7 @@ def test_embed_rejects_source_renamed_after_load(isolated_store, monkeypatch):
         original_embed(child, parent, **kwargs)
 
     monkeypatch.setattr(
-        "memcommit.operations.embed.runtime.ops.embed",
+        "memcommit.application.operations.embed.runtime.ops.embed",
         rename_then_embed,
     )
 
@@ -129,7 +129,7 @@ def test_reference_rejects_source_renamed_after_load(
         return original_reference(item, candidate, target)
 
     monkeypatch.setattr(
-        "memcommit.operations.reference.runtime.ops.reference_memory",
+        "memcommit.application.operations.reference.runtime.ops.reference_memory",
         rename_then_reference,
     )
 
@@ -162,7 +162,7 @@ def test_branch_does_not_overwrite_concurrent_destination(
         return result
 
     monkeypatch.setattr(
-        "memcommit.operations.branch.runtime.ops.branch",
+        "memcommit.application.operations.branch.runtime.ops.branch",
         create_competitor,
     )
 
@@ -195,7 +195,7 @@ def test_branch_preserves_concurrent_current_selection(
         return result
 
     monkeypatch.setattr(
-        "memcommit.operations.branch.runtime.ops.branch",
+        "memcommit.application.operations.branch.runtime.ops.branch",
         switch_then_branch,
     )
 
@@ -314,7 +314,7 @@ def test_branch_rejects_history_changed_after_snapshot(
         return result
 
     monkeypatch.setattr(
-        "memcommit.operations.branch.runtime.ops.branch",
+        "memcommit.application.operations.branch.runtime.ops.branch",
         checkpoint_then_branch,
     )
 

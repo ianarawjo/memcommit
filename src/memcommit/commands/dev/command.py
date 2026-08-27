@@ -54,7 +54,7 @@ def dev_query_source_install(
     This hidden command simulates query-only access. The source remains
     readable to the local OS user and is not a production security boundary.
     """
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()
@@ -151,7 +151,7 @@ def dev_fake(
     from memcommit.infrastructure.config import Config
     from memcommit.semantic.llm import LLMClient, LLMError
     from memcommit.persistence.store import MemoryStore
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
 
     config = Config()
     try:

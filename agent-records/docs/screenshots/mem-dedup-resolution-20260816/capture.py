@@ -162,7 +162,7 @@ def _run_child(kind: str) -> None:
     import click
 
     import memcommit.commands.find_duplicates.command as find_command
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
     from memcommit.cli import app
     from memcommit.store import MemoryStore
 

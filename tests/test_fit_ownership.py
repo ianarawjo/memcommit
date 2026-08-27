@@ -20,27 +20,27 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 MODULE_PAIRS = (
     (
         "memcommit.fit",
-        "memcommit.operations.fit.ground_report",
+        "memcommit.application.operations.fit.ground_report",
     ),
     (
         "memcommit.fit_judgment",
-        "memcommit.operations.fit.judgment",
+        "memcommit.application.operations.fit.judgment",
     ),
     (
         "memcommit.fit_coherence",
-        "memcommit.operations.fit.coherence",
+        "memcommit.application.operations.fit.coherence",
     ),
     (
         "memcommit.fit_store",
-        "memcommit.operations.fit.store",
+        "memcommit.application.operations.fit.store",
     ),
     (
         "memcommit.fit_application",
-        "memcommit.operations.fit.application",
+        "memcommit.application.operations.fit.application",
     ),
     (
         "memcommit.fit_runtime",
-        "memcommit.operations.fit.runtime",
+        "memcommit.application.operations.fit.runtime",
     ),
 )
 
@@ -82,22 +82,22 @@ assert sys.modules[{canonical_name!r}] is canonical
 def test_fit_legacy_paths_expose_the_canonical_contract() -> None:
     legacy_report = importlib.import_module("memcommit.fit")
     canonical_report = importlib.import_module(
-        "memcommit.operations.fit.ground_report"
+        "memcommit.application.operations.fit.ground_report"
     )
     legacy_judgment = importlib.import_module("memcommit.fit_judgment")
-    canonical_judgment = importlib.import_module("memcommit.operations.fit.judgment")
+    canonical_judgment = importlib.import_module("memcommit.application.operations.fit.judgment")
     legacy_coherence = importlib.import_module("memcommit.fit_coherence")
     canonical_coherence = importlib.import_module(
-        "memcommit.operations.fit.coherence"
+        "memcommit.application.operations.fit.coherence"
     )
     legacy_store = importlib.import_module("memcommit.fit_store")
-    canonical_store = importlib.import_module("memcommit.operations.fit.store")
+    canonical_store = importlib.import_module("memcommit.application.operations.fit.store")
     legacy_application = importlib.import_module("memcommit.fit_application")
     canonical_application = importlib.import_module(
-        "memcommit.operations.fit.application"
+        "memcommit.application.operations.fit.application"
     )
     legacy_runtime = importlib.import_module("memcommit.fit_runtime")
-    canonical_runtime = importlib.import_module("memcommit.operations.fit.runtime")
+    canonical_runtime = importlib.import_module("memcommit.application.operations.fit.runtime")
 
     assert legacy_report is canonical_report
     assert legacy_report.FitReport is canonical_report.FitReport
@@ -143,14 +143,14 @@ def test_fit_legacy_facades_define_no_behavior(relative_path: str) -> None:
 def test_fit_package_import_is_lazy() -> None:
     program = """
 import sys
-import memcommit.operations.fit
+import memcommit.application.operations.fit
 
-assert "memcommit.operations.fit.application" not in sys.modules
-assert "memcommit.operations.fit.runtime" not in sys.modules
-assert "memcommit.operations.fit.ground_report" not in sys.modules
-assert "memcommit.operations.fit.judgment" not in sys.modules
-assert "memcommit.operations.fit.coherence" not in sys.modules
-assert "memcommit.operations.fit.store" not in sys.modules
+assert "memcommit.application.operations.fit.application" not in sys.modules
+assert "memcommit.application.operations.fit.runtime" not in sys.modules
+assert "memcommit.application.operations.fit.ground_report" not in sys.modules
+assert "memcommit.application.operations.fit.judgment" not in sys.modules
+assert "memcommit.application.operations.fit.coherence" not in sys.modules
+assert "memcommit.application.operations.fit.store" not in sys.modules
 """
 
     subprocess.run(
@@ -163,21 +163,21 @@ assert "memcommit.operations.fit.store" not in sys.modules
 @pytest.mark.parametrize(
     "legacy_module,canonical_module,global_name",
     (
-        ("memcommit.fit", "memcommit.operations.fit.ground_report", "FitReport"),
+        ("memcommit.fit", "memcommit.application.operations.fit.ground_report", "FitReport"),
         (
             "memcommit.fit_judgment",
-            "memcommit.operations.fit.judgment",
+            "memcommit.application.operations.fit.judgment",
             "FitProposition",
         ),
         (
             "memcommit.fit_coherence",
-            "memcommit.operations.fit.coherence",
+            "memcommit.application.operations.fit.coherence",
             "FitCoherenceReport",
         ),
-        ("memcommit.fit_store", "memcommit.operations.fit.store", "FitStore"),
+        ("memcommit.fit_store", "memcommit.application.operations.fit.store", "FitStore"),
         (
             "memcommit.fit_application",
-            "memcommit.operations.fit.application",
+            "memcommit.application.operations.fit.application",
             "FitPropositionsRequest",
         ),
     ),
@@ -196,8 +196,8 @@ def test_pre_relocation_fit_global_loads_through_alias(
 
 def test_production_fit_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "src/memcommit/api/_operations/fit.py",
-        "src/memcommit/api/_operations/resolve.py",
+        "src/memcommit/adapters/python_api/_operations/fit.py",
+        "src/memcommit/adapters/python_api/_operations/resolve.py",
         "src/memcommit/interfaces/cli/fit.py",
         "src/memcommit/interfaces/fit.py",
         "src/memcommit/commands/fit/command.py",
@@ -206,12 +206,12 @@ def test_production_fit_consumers_use_the_operation_owner() -> None:
         "src/memcommit/commands/ground/named_shell.py",
         "src/memcommit/commands/impact/process_local.py",
         "src/memcommit/commands/resolve/command.py",
-        "src/memcommit/operations/elaborate/model.py",
-        "src/memcommit/operations/ground/workspace_fit.py",
-        "src/memcommit/operations/fit/application.py",
-        "src/memcommit/operations/fit/runtime.py",
-        "src/memcommit/operations/resolve/application.py",
-        "src/memcommit/operations/resolve/semantic.py",
+        "src/memcommit/application/operations/elaborate/model.py",
+        "src/memcommit/application/operations/ground/workspace_fit.py",
+        "src/memcommit/application/operations/fit/application.py",
+        "src/memcommit/application/operations/fit/runtime.py",
+        "src/memcommit/application/operations/resolve/application.py",
+        "src/memcommit/application/operations/resolve/semantic.py",
     )
     legacy_imports = (
         "from memcommit.fit import",

@@ -13,7 +13,7 @@ import json
 import uuid
 
 from memcommit.context import Context, Memory
-from memcommit.operations.translate.view import (
+from memcommit.application.operations.translate.view import (
     TRANSLATION_ORIGIN_IMPORTED,
     TranslationCatalog,
 )

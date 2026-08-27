@@ -4,15 +4,17 @@ from __future__ import annotations
 
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.shared.memory_report_recents import (
     MemoryReportRecentSelection,
     MemoryReportSelectAction,
 )
 from memcommit.commands.shared.memory_picker import MemoryReportTargetSelection
 from memcommit.context import Memory, MemoryRef, QueryContextRef
-from memcommit.provenance import collect_trace_candidates
+from memcommit.retained_history.memory_history_reconstruction.memory_history_construction import (
+    collect_memory_history_candidates,
+)
 from memcommit.store import MemoryStore
 
 
@@ -55,7 +57,7 @@ def test_candidate_catalog_lists_current_then_historical_once(isolated_store):
     assert invoke("edit", kept.uid, "kept revision").exit_code == 0
     assert invoke("remove", removed.uid).exit_code == 0
 
-    candidates = collect_trace_candidates(
+    candidates = collect_memory_history_candidates(
         store,
         store.load_current_direct(),
     )
@@ -653,7 +655,7 @@ def test_candidate_catalog_never_opens_refs_or_query_only_sources(
     monkeypatch.setattr(MemoryStore, "_load_direct_memory", forbidden)
     monkeypatch.setattr(MemoryStore, "load_query_source", forbidden)
 
-    candidates = collect_trace_candidates(store, store.load_direct("privacy"))
+    candidates = collect_memory_history_candidates(store, store.load_direct("privacy"))
 
     assert [(item.uid, item.content) for item in candidates] == [
         (ordinary.uid, ordinary.content)

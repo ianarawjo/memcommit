@@ -2,27 +2,27 @@ from typing import Annotated, Optional
 
 import typer
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 from memcommit.infrastructure.command_ledger.attempts import annotate_command_outcome
-from memcommit.authority.access import (
+from memcommit.application.authority.access import (
     authorized_context_mutation,
     grant_checkpoint_args,
     resolve_context_access,
 )
 from memcommit.context import AutoCheckpoint
-from memcommit.operations.edit.application import (
+from memcommit.application.operations.edit.application import (
     EditRequest,
     EditResult,
     FrozenEditPlan,
     run_edit,
 )
-from memcommit.operations.edit.runtime import MemoryStoreEditPort
+from memcommit.application.operations.edit.runtime import MemoryStoreEditPort
 from memcommit.interfaces.cli.batch_input import parse_edit_lines, read_text_input
 from memcommit.interfaces.console.terminal import is_interactive_terminal
 from memcommit.interfaces.console.text import safe_terminal_text
 from memcommit.interfaces.tui.operations.edit import choose_edit_setup
-from memcommit.operations.profile.config import ProfileConfigError
-from memcommit.operations.profile.model import ProfileError
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import MemoryStore
 
 

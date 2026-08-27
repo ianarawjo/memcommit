@@ -18,8 +18,8 @@ from tests.legacy_submodule_assertions import (
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 MODULE_PAIRS = (
-    ("memcommit.show_application", "memcommit.operations.show.application"),
-    ("memcommit.show_runtime", "memcommit.operations.show.runtime"),
+    ("memcommit.show_application", "memcommit.application.operations.show.application"),
+    ("memcommit.show_runtime", "memcommit.application.operations.show.runtime"),
 )
 
 
@@ -60,10 +60,10 @@ assert sys.modules[{canonical_name!r}] is canonical
 def test_show_legacy_paths_expose_the_canonical_contract() -> None:
     legacy_application = importlib.import_module("memcommit.show_application")
     canonical_application = importlib.import_module(
-        "memcommit.operations.show.application"
+        "memcommit.application.operations.show.application"
     )
     legacy_runtime = importlib.import_module("memcommit.show_runtime")
-    canonical_runtime = importlib.import_module("memcommit.operations.show.runtime")
+    canonical_runtime = importlib.import_module("memcommit.application.operations.show.runtime")
 
     assert legacy_application is canonical_application
     assert legacy_application.ShowRequest is canonical_application.ShowRequest
@@ -84,10 +84,10 @@ def test_show_legacy_facades_define_no_behavior(relative_path: str) -> None:
 def test_show_operation_package_import_is_lazy() -> None:
     program = """
 import sys
-import memcommit.operations.show
+import memcommit.application.operations.show
 
-assert "memcommit.operations.show.application" not in sys.modules
-assert "memcommit.operations.show.runtime" not in sys.modules
+assert "memcommit.application.operations.show.application" not in sys.modules
+assert "memcommit.application.operations.show.runtime" not in sys.modules
 """
 
     subprocess.run(
@@ -99,9 +99,9 @@ assert "memcommit.operations.show.runtime" not in sys.modules
 
 def test_pre_relocation_show_globals_load_through_aliases() -> None:
     canonical_application = importlib.import_module(
-        "memcommit.operations.show.application"
+        "memcommit.application.operations.show.application"
     )
-    canonical_runtime = importlib.import_module("memcommit.operations.show.runtime")
+    canonical_runtime = importlib.import_module("memcommit.application.operations.show.runtime")
 
     restored_request = pickle.loads(
         b"cmemcommit.show_application\nShowRequest\n."
@@ -116,10 +116,10 @@ def test_pre_relocation_show_globals_load_through_aliases() -> None:
 
 def test_production_show_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "src/memcommit/api/_operations/show.py",
+        "src/memcommit/adapters/python_api/_operations/show.py",
         "src/memcommit/commands/show/command.py",
         "src/memcommit/interfaces/cli/show.py",
-        "src/memcommit/operations/show/runtime.py",
+        "src/memcommit/application/operations/show/runtime.py",
     )
 
     for relative_path in relative_paths:
@@ -130,10 +130,10 @@ def test_production_show_consumers_use_the_operation_owner() -> None:
 
 def test_show_owner_retains_read_only_effect_boundary() -> None:
     application_source = (
-        REPOSITORY_ROOT / "src/memcommit/operations/show/application.py"
+        REPOSITORY_ROOT / "src/memcommit/application/operations/show/application.py"
     ).read_text(encoding="utf-8")
     runtime_source = (
-        REPOSITORY_ROOT / "src/memcommit/operations/show/runtime.py"
+        REPOSITORY_ROOT / "src/memcommit/application/operations/show/runtime.py"
     ).read_text(encoding="utf-8")
     combined = application_source + runtime_source
 

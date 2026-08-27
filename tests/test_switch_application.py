@@ -212,8 +212,8 @@ def test_tui_adapter_returns_request_without_selecting_state() -> None:
 def test_switch_application_and_runtime_do_not_import_terminal_adapters() -> None:
     forbidden = ("typer", "prompt_toolkit", "memcommit.commands")
     for relative in (
-        "src/memcommit/operations/switch/application.py",
-        "src/memcommit/operations/switch/runtime.py",
+        "src/memcommit/application/operations/switch/application.py",
+        "src/memcommit/application/operations/switch/runtime.py",
     ):
         imports = _imports(ROOT / relative)
         assert not any(

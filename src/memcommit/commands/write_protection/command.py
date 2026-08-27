@@ -6,7 +6,7 @@ from typing import Annotated, Any, Optional
 
 import typer
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 from memcommit.interfaces.cli.command_group import CanonicalCommandGroup
 from memcommit.commands.shared.context_operand import ContextOperandSnapshot
 from memcommit.context_targeting.loading import (

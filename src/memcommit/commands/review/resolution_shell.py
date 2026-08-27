@@ -21,7 +21,7 @@ from memcommit.resolution.workbench import (
     ResolutionOption,
     ResolutionWorkbenchView,
 )
-from memcommit.operations.review.model import (
+from memcommit.application.operations.review.model import (
     REVIEW_RESPONSE_CHAR_LIMIT,
     ReviewError,
     ReviewSession,

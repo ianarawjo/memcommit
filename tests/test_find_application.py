@@ -10,13 +10,13 @@ import uuid
 import pytest
 
 from memcommit.context import Context, Memory, QueryContextRef
-import memcommit.operations.search.application as find_application
-from memcommit.operations.search.application import (
+import memcommit.application.operations.search.application as find_application
+from memcommit.application.operations.search.application import (
     FindSearchRequest,
     FrozenFindCurrentSource,
     run_find_search,
 )
-from memcommit.operations.search.runtime import execute_find_search
+from memcommit.application.operations.search.runtime import execute_find_search
 from memcommit.search import SearchCandidate
 from memcommit.store import MemoryStore
 
@@ -260,4 +260,4 @@ def test_find_application_has_no_command_typer_or_tui_imports():
         or name.startswith("memcommit.commands")
     )
     assert forbidden == ()
-    assert FindSearchRequest.__module__ == "memcommit.operations.search.application"
+    assert FindSearchRequest.__module__ == "memcommit.application.operations.search.application"

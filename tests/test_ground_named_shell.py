@@ -35,13 +35,13 @@ from memcommit.ground_turn_dialogue import (
     GroundTurnDraft,
     GroundTurnDraftBatch,
 )
-from memcommit.operations.fit.ground_report import (
+from memcommit.application.operations.fit.ground_report import (
     FitExample,
     FitJudgment,
     FitReport,
     FitRule,
 )
-from memcommit.operations.fit.store import GroundFitReceipt
+from memcommit.application.operations.fit.store import GroundFitReceipt
 
 
 class SizedDummyOutput(DummyOutput):

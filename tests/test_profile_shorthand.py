@@ -6,8 +6,8 @@ import shutil
 
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.adapters.console.entrypoint import app
 from memcommit.profile_config import load_profile_registry, profile_registry_file
 from memcommit.store import MemoryStore
 

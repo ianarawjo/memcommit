@@ -7,7 +7,7 @@ import typer
 from memcommit.interfaces.console.text import display_escape_text, safe_terminal_text
 from memcommit.source_projection.model import SourceAccess
 from memcommit.source_projection.presentation import source_display_text
-from memcommit.operations.status.application import StatusContextResult, StatusResult
+from memcommit.application.operations.status.application import StatusContextResult, StatusResult
 
 
 _COUNT_LABELS = (

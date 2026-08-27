@@ -31,7 +31,7 @@ base.CAPTURE_DIR = CAPTURE_DIR
 
 
 def _create_profile():
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
     from memcommit.profile_config import (
         AUTHORING_PROFILE_NAME,
         AUTHORING_PROFILE_UID,

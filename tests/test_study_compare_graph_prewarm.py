@@ -2,7 +2,7 @@ import json
 from types import SimpleNamespace
 import uuid
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 import memcommit.eval.study_compare_graph_prewarm as graph_prewarm
 from memcommit.comparison import (
     ComparisonAnalysis,

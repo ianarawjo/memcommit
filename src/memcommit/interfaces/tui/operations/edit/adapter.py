@@ -5,13 +5,13 @@ from __future__ import annotations
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-import memcommit.ops as ops
-from memcommit.authority.access import context_access_display_facts
+import memcommit.application.ops as ops
+from memcommit.application.authority.access import context_access_display_facts
 from memcommit.context_targeting.catalog import freeze_granted_context_navigation
 from memcommit.context_targeting.model import DirectMemoryTarget
 from memcommit.context_targeting.tui.picker import context_memory_rows
-from memcommit.operations.edit.application import FrozenEditPlan, prepare_edit
-from memcommit.operations.edit.runtime import MemoryStoreEditPort
+from memcommit.application.operations.edit.application import FrozenEditPlan, prepare_edit
+from memcommit.application.operations.edit.runtime import MemoryStoreEditPort
 from memcommit.interfaces.tui.operations.edit.model import EditTuiSetup
 from memcommit.interfaces.tui.operations.edit.screen import run_edit_tui
 

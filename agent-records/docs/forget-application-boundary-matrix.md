@@ -50,7 +50,7 @@ run_forget_apply
 ## Package ownership
 
 The canonical terminal-independent owners now live together under
-`memcommit.operations.forget`: `application.py` owns the typed request,
+`memcommit.application.operations.forget`: `application.py` owns the typed request,
 frozen Source, process-local review lifecycle, and Apply contract, while
 `runtime.py` owns Store, Grant, provider-connection, checkpoint, and mutation
 adapters. API, CLI, Impact, and Forget workbench consumers import those
@@ -121,8 +121,8 @@ dialogue as a portable token.
 - Forget has no prepared-result cache. This extraction does not introduce one
   or treat another operation's cache proof as applicable.
 - The compatibility modules contain no behavior. New production code imports
-  `memcommit.operations.forget.application` or
-  `memcommit.operations.forget.runtime` directly.
+  `memcommit.application.operations.forget.application` or
+  `memcommit.application.operations.forget.runtime` directly.
 
 ## Verification evidence
 

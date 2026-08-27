@@ -50,7 +50,7 @@ def _configure_isolated_store(store_root: Path) -> None:
 
 
 def _initialize(kind: str) -> str:
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
     from memcommit.context import Memory
     from memcommit.store import MemoryStore
 

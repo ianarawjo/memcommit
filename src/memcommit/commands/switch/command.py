@@ -3,9 +3,9 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.context_targeting.tui.picker import choose_context, context_memory_rows
-from memcommit.operations.profile.config import ProfileConfigError
-from memcommit.operations.profile.model import ProfileError
-from memcommit.authority.access import (
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.authority.access import (
     GrantedReadStore,
     resolve_context_access,
 )
@@ -23,12 +23,12 @@ from memcommit.persistence.store import MemoryStore
 from memcommit.source_projection.presentation import (
     SourceDisplayValue,
 )
-from memcommit.operations.switch.application import (
+from memcommit.application.operations.switch.application import (
     SwitchContextError,
     SwitchContextRequest,
     resolve_switch_context_name,
 )
-from memcommit.operations.switch.runtime import execute_switch_context, prepare_switch
+from memcommit.application.operations.switch.runtime import execute_switch_context, prepare_switch
 
 
 _GrantedPickerState = GrantedContextNavigation

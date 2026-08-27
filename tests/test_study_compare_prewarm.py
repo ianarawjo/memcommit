@@ -1,8 +1,8 @@
 import json
 import uuid
 
-import memcommit.ops as ops
-from memcommit.authority.access import ContextAccess
+import memcommit.application.ops as ops
+from memcommit.application.authority.access import ContextAccess
 from memcommit.comparison import (
     ComparisonAnalysis,
     ComparisonInput,

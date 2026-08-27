@@ -9,8 +9,8 @@ Context content or changing the current pointer.
 
 | Concern | Owner | Boundary |
 | --- | --- | --- |
-| Row and catalog result types | `memcommit.operations.contexts.application` | Terminal-free immutable values |
-| Store/Profile snapshot and Grant projection | `memcommit.operations.contexts.runtime` | Read-only local-plus-Grant catalog |
+| Row and catalog result types | `memcommit.application.operations.contexts.application` | Terminal-free immutable values |
+| Store/Profile snapshot and Grant projection | `memcommit.application.operations.contexts.runtime` | Read-only local-plus-Grant catalog |
 | ANSI styling and text output | `memcommit.commands.contexts.command` | Typer presentation only |
 
 ## Invariants

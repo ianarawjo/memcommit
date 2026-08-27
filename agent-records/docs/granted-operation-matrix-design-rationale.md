@@ -3,7 +3,7 @@
 ## Ownership boundary
 
 Grant access resolution, frozen binding, authorization locking, and bounded
-READ projection are owned by `memcommit.authority.access`.  They are shared
+READ projection are owned by `memcommit.application.authority.access`.  They are shared
 application infrastructure, not CLI behavior: command, runtime, evaluation,
 and study adapters import that owner directly.  The former
 `memcommit.commands.granted_context` module was removed rather than retained

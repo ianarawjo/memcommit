@@ -37,7 +37,7 @@ def _mem(home: Path, *args: str) -> subprocess.CompletedProcess[str]:
     environment["HOME"] = str(home)
     environment["MEMCOMMIT_TEST_DISABLE_ATTEMPT_LOG"] = "1"
     return subprocess.run(
-        [sys.executable, "-m", "memcommit.cli", *args],
+        [sys.executable, "-m", "memcommit.adapters.console.entrypoint", *args],
         cwd=ROOT,
         env=environment,
         text=True,

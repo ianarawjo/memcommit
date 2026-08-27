@@ -23,14 +23,14 @@ from memcommit.infrastructure.providers.policy import (
     study_provider_config,
     validate_provider_route,
 )
-from memcommit.operations.profile.config import (
+from memcommit.application.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,
     load_profile_registry,
     profile_control_dir,
     study_run_identity,
 )
-from memcommit.authority.storage_permissions import ensure_private_directory
+from memcommit.application.authority.storage_permissions import ensure_private_directory
 
 
 PROFILE_PROVIDER_ROUTES_SCHEMA_VERSION = 1

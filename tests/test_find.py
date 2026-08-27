@@ -7,8 +7,8 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.find.command import (
     FIND_OUTSIDE_CANCELLATION,
     FIND_OUTSIDE_CONFIRMATION,
@@ -21,7 +21,7 @@ from memcommit.commands.find.command import (
     _show_result_proposal,
     _supplement_namespace_branch_coverage,
 )
-from memcommit.authority.access import resolve_context_access
+from memcommit.application.authority.access import resolve_context_access
 from memcommit.commands.shared.readable_context_catalog import (
     freeze_readable_context_catalog,
 )

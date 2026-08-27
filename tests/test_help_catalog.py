@@ -3,21 +3,26 @@
 import click
 from typer.main import get_command
 
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.help_inventory.command import (
     HELP_CATEGORY_DESCRIPTIONS,
     HELP_CATEGORY_GROUPS,
     _help_group_fragments,
     command_entries,
 )
-from memcommit.help_catalog import (
+from memcommit.application.operations.operation_catalog import (
     OPERATION_HELP_BY_NAME,
     ExecutionKind,
-    compose_operation_help,
     operation_help,
 )
-from memcommit.help_catalog.best_for import BEST_FOR_BY_OPERATION
-from memcommit.help_catalog.details import ALL_OPERATION_DETAILS, DETAILS_BY_OPERATION
+from memcommit.application.operations.help.composer import compose_operation_help
+from memcommit.application.operations.operation_catalog.best_for import (
+    BEST_FOR_BY_OPERATION,
+)
+from memcommit.application.operations.operation_catalog.details import (
+    ALL_OPERATION_DETAILS,
+    DETAILS_BY_OPERATION,
+)
 from memcommit.interfaces.tui.core.text_layout import terminal_cell_width
 from memcommit.interfaces.tui.operations.help.localization import HELP_LANGUAGES
 

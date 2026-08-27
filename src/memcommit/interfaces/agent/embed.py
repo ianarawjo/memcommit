@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import Literal
 
-from memcommit.api import (
+from memcommit.adapters.python_api import (
     EmbeddedContextResult,
     EmbeddedMemoryResult,
     EmbedAuthorityError,

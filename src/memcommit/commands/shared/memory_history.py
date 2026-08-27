@@ -4,11 +4,14 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.authority.access import resolve_context_access
+from memcommit.application.authority.access import resolve_context_access
 from memcommit.context import Context
-from memcommit.retained_history.provenance import TraceReport, build_trace
+from memcommit.retained_history.memory_history_reconstruction.memory_history_construction import (
+    MemoryHistory,
+    reconstruct_memory_history,
+)
 from memcommit.persistence.store import MemoryStore
-from memcommit.authority.study_operation_policy import require_trace_access
+from memcommit.application.authority.study_operation_policy import require_trace_access
 
 
 @dataclass(frozen=True)
@@ -87,7 +90,7 @@ def build_memory_history(
     store: MemoryStore,
     target: RetainedHistoryContext,
     selector: str,
-) -> TraceReport:
+) -> MemoryHistory:
     """Project one exact current-or-historical Memory lineage."""
 
-    return build_trace(store, target.context, selector)
+    return reconstruct_memory_history(store, target.context, selector)

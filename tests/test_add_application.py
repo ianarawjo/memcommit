@@ -7,9 +7,9 @@ from pathlib import Path
 
 import pytest
 
-import memcommit.ops as ops
-import memcommit.operations.add.application as add_application
-from memcommit.operations.add.application import (
+import memcommit.application.ops as ops
+import memcommit.application.operations.add.application as add_application
+from memcommit.application.operations.add.application import (
     AddedMemory,
     AddError,
     AddRequest,
@@ -18,7 +18,7 @@ from memcommit.operations.add.application import (
     FrozenAddTarget,
     run_add,
 )
-from memcommit.operations.add.runtime import MemoryStoreAddTargetPort, execute_add
+from memcommit.application.operations.add.runtime import MemoryStoreAddTargetPort, execute_add
 from memcommit.store import ConcurrentContextUpdateError, MemoryStore
 
 

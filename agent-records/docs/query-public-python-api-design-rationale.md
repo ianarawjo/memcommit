@@ -4,7 +4,7 @@ Last verified: 2026-08-26.
 
 ## Public surface
 
-`memcommit.api.MemCommitClient`, its result/configuration/error types, and the
+`memcommit.adapters.python_api.MemCommitClient`, its result/configuration/error types, and the
 same root-package exports provide three explicit one-shot methods:
 
 ```python

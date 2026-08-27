@@ -230,7 +230,7 @@ ordinary/granted Profile catalog and neutral picker. Static orientation and
 listing commands depend on their own renderers:
 
 ```text
-memcommit.cli
+memcommit.adapters.console.entrypoint
 ├── mem contexts -> commands.contexts.cmd
 │   ├── MemoryStore.list_context_names()
 │   ├── MemoryStore.current_context_name()

@@ -8,15 +8,15 @@ from types import SimpleNamespace
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.adapters.console.entrypoint import app
 from memcommit.context import (
     AutoCheckpoint,
     Context,
 )
 from memcommit.store import MemoryStore
-from memcommit.operations.translate.runtime import plan_translation
-from memcommit.operations.translate.view import (
+from memcommit.application.operations.translate.runtime import plan_translation
+from memcommit.application.operations.translate.view import (
     TRANSLATION_ORIGIN_MANUAL,
     TRANSLATION_REVIEW_UNREVIEWED,
     TRANSLATION_REVIEW_VERIFIED,
@@ -26,7 +26,7 @@ from memcommit.operations.translate.view import (
     translation_catalog_record_digest,
     translation_view_record_digest,
 )
-from memcommit.operations.translate.view_store import (
+from memcommit.application.operations.translate.view_store import (
     ConcurrentTranslationViewUpdateError,
     load_translation_catalog,
     load_translation_catalog_for_context,

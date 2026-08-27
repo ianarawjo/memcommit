@@ -10,7 +10,7 @@ scope. Apply accepts only that exact plan, revalidates every scanned Context
 and the local namespace, and publishes all changed Contexts as one Undo/Redo
 command unit or publishes nothing.
 
-The implementation is owned by `memcommit.operations.replace`. The former
+The implementation is owned by `memcommit.application.operations.replace`. The former
 top-level application and runtime paths remain true module aliases rather than
 copied re-export namespaces. That preserves type identity, import-order and
 monkeypatch behavior, and pre-relocation pickle lookup while moving ownership;
@@ -31,14 +31,14 @@ agent/MCP kind=plan/apply ----------/        plan handle --> apply_replace
 
 | Boundary | Owner | Invariant |
 | --- | --- | --- |
-| Request | `memcommit.operations.replace.application.ReplaceRequest` | Nonempty literal or explicit regex pattern, literal replacement text (including empty), distinct local roots, and explicit lexical, embedded, and case policies |
+| Request | `memcommit.application.operations.replace.application.ReplaceRequest` | Nonempty literal or explicit regex pattern, literal replacement text (including empty), distinct local roots, and explicit lexical, embedded, and case policies |
 | Existing Context locators | CLI/public composition adapters | Current is captured once; every relative operand resolves against that snapshot; targets must be ordinary local Contexts rather than Grants or query-only views |
-| Frozen scope | `memcommit.operations.replace.runtime.MemoryStoreReplacePort.freeze` | Every selected lexical/embedded owner is loaded directly; every ordinary Memory is frozen; references are never treated as writable owners |
-| Plan | `memcommit.operations.replace.application.plan_replace` | Every non-overlapping span has exact start/end/text and one before/after Memory value; regex selects spans but never interprets replacement backreferences |
-| Internal execution identity | `memcommit.operations.replace.application.FrozenReplacePlan.plan_digest` | Digest covers exact request values, all scanned Context identities/digests/counts, matches, spans, and before/after text; human CLI/TUI routes keep it internal while the process-local token binds one Store adapter and operation UID |
-| Freshness | `memcommit.operations.replace.runtime` Apply | Every scanned Context, including a no-match Context, and the complete local Context-name catalog must remain unchanged |
+| Frozen scope | `memcommit.application.operations.replace.runtime.MemoryStoreReplacePort.freeze` | Every selected lexical/embedded owner is loaded directly; every ordinary Memory is frozen; references are never treated as writable owners |
+| Plan | `memcommit.application.operations.replace.application.plan_replace` | Every non-overlapping span has exact start/end/text and one before/after Memory value; regex selects spans but never interprets replacement backreferences |
+| Internal execution identity | `memcommit.application.operations.replace.application.FrozenReplacePlan.plan_digest` | Digest covers exact request values, all scanned Context identities/digests/counts, matches, spans, and before/after text; human CLI/TUI routes keep it internal while the process-local token binds one Store adapter and operation UID |
+| Freshness | `memcommit.application.operations.replace.runtime` Apply | Every scanned Context, including a no-match Context, and the complete local Context-name catalog must remain unchanged |
 | Publication | `MemoryStore.save_context_command_batch` | Source bindings and catalog are revalidated under the write boundary; all changed Contexts and checkpoints publish atomically or none do |
-| No-op | `memcommit.operations.replace.application` / `runtime` | No match or identical before/after still revalidates the complete scope and returns an explicit no-op receipt without a checkpoint |
+| No-op | `memcommit.application.operations.replace.application` / `runtime` | No match or identical before/after still revalidates the complete scope and returns an explicit no-op receipt without a checkpoint |
 | Recovery | command history | Per-Context checkpoints share one operation UID, so one Undo or Redo restores the complete multi-Context command unit |
 | CLI | `memcommit.commands.replace.command` | A complete request executes immediately in any terminal; `--plain` changes only receipt styling and does not suppress mutation |
 | TUI | `interfaces.tui.operations.replace` | The primary-screen compact form edits pattern, replacement, local target set, lexical/embedded reach, mode, and case; Enter on Replace With executes directly, closes the form, and prints one concise receipt without Review or To Do |

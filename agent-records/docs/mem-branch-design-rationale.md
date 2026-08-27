@@ -43,7 +43,7 @@ still exists in the typed draft.
 
 ## Operation ownership
 
-Branch is now owned by the focused `memcommit.operations.branch` package.
+Branch is now owned by the focused `memcommit.application.operations.branch` package.
 `application.py` owns the terminal-independent `BranchRequest`, the exact or
 lexical-subtree Source-to-target name plan, the publication port, and receipt
 validation. The request deliberately carries the local Context catalog frozen

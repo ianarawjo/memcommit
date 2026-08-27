@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import json
 
-import memcommit.ops as ops
-from memcommit.api import MemCommitClient
+import memcommit.application.ops as ops
+from memcommit.adapters.python_api import MemCommitClient
 from memcommit.interfaces.agent.search import (
     SEARCH_AGENT_TOOL_NAME,
     SearchAgentAdapter,

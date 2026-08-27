@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from dataclasses import replace
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 from memcommit.commands.update.checkpoint_history import (
     update_checkpoint_detail_renderer,
     update_checkpoint_entry,

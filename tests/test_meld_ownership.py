@@ -20,67 +20,67 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 MODULE_PAIRS = (
     (
         "memcommit.meld_application",
-        "memcommit.operations.meld.application",
+        "memcommit.application.operations.meld.application",
     ),
     (
         "memcommit.meld_runtime",
-        "memcommit.operations.meld.runtime",
+        "memcommit.application.operations.meld.runtime",
     ),
     (
         "memcommit.meld_application_flow",
-        "memcommit.operations.meld.application_flow",
+        "memcommit.application.operations.meld.application_flow",
     ),
     (
         "memcommit.meld_session_application",
-        "memcommit.operations.meld.session_application",
+        "memcommit.application.operations.meld.session_application",
     ),
     (
         "memcommit.meld_start_application",
-        "memcommit.operations.meld.start_application",
+        "memcommit.application.operations.meld.start_application",
     ),
     (
         "memcommit.meld_restart_application",
-        "memcommit.operations.meld.restart_application",
+        "memcommit.application.operations.meld.restart_application",
     ),
     (
         "memcommit.meld_assessment_application",
-        "memcommit.operations.meld.assessment_application",
+        "memcommit.application.operations.meld.assessment_application",
     ),
     (
         "memcommit.meld_resolution_application",
-        "memcommit.operations.meld.resolution_application",
+        "memcommit.application.operations.meld.resolution_application",
     ),
 )
 
 COMPATIBILITY_GLOBALS = (
     (
         "memcommit.meld_application_flow",
-        "memcommit.operations.meld.application_flow",
+        "memcommit.application.operations.meld.application_flow",
         "MeldApplicationFlowPort",
     ),
     (
         "memcommit.meld_session_application",
-        "memcommit.operations.meld.session_application",
+        "memcommit.application.operations.meld.session_application",
         "MeldSessionSnapshot",
     ),
     (
         "memcommit.meld_start_application",
-        "memcommit.operations.meld.start_application",
+        "memcommit.application.operations.meld.start_application",
         "MeldStartRequest",
     ),
     (
         "memcommit.meld_restart_application",
-        "memcommit.operations.meld.restart_application",
+        "memcommit.application.operations.meld.restart_application",
         "MeldRestartRequest",
     ),
     (
         "memcommit.meld_assessment_application",
-        "memcommit.operations.meld.assessment_application",
+        "memcommit.application.operations.meld.assessment_application",
         "FrozenMeldAssessment",
     ),
     (
         "memcommit.meld_resolution_application",
-        "memcommit.operations.meld.resolution_application",
+        "memcommit.application.operations.meld.resolution_application",
         "MeldResolutionTurnRequest",
     ),
 )
@@ -123,10 +123,10 @@ assert sys.modules[{canonical_name!r}] is canonical
 def test_meld_legacy_paths_expose_the_canonical_contract() -> None:
     legacy_application = importlib.import_module("memcommit.meld_application")
     canonical_application = importlib.import_module(
-        "memcommit.operations.meld.application"
+        "memcommit.application.operations.meld.application"
     )
     legacy_runtime = importlib.import_module("memcommit.meld_runtime")
-    canonical_runtime = importlib.import_module("memcommit.operations.meld.runtime")
+    canonical_runtime = importlib.import_module("memcommit.application.operations.meld.runtime")
 
     assert legacy_application is canonical_application
     assert legacy_application.MeldApplyRequest is canonical_application.MeldApplyRequest
@@ -153,16 +153,16 @@ def test_meld_legacy_facades_define_no_behavior(relative_path: str) -> None:
 def test_meld_package_import_is_lazy() -> None:
     program = """
 import sys
-import memcommit.operations.meld
+import memcommit.application.operations.meld
 
-assert "memcommit.operations.meld.application" not in sys.modules
-assert "memcommit.operations.meld.runtime" not in sys.modules
-assert "memcommit.operations.meld.application_flow" not in sys.modules
-assert "memcommit.operations.meld.session_application" not in sys.modules
-assert "memcommit.operations.meld.start_application" not in sys.modules
-assert "memcommit.operations.meld.restart_application" not in sys.modules
-assert "memcommit.operations.meld.assessment_application" not in sys.modules
-assert "memcommit.operations.meld.resolution_application" not in sys.modules
+assert "memcommit.application.operations.meld.application" not in sys.modules
+assert "memcommit.application.operations.meld.runtime" not in sys.modules
+assert "memcommit.application.operations.meld.application_flow" not in sys.modules
+assert "memcommit.application.operations.meld.session_application" not in sys.modules
+assert "memcommit.application.operations.meld.start_application" not in sys.modules
+assert "memcommit.application.operations.meld.restart_application" not in sys.modules
+assert "memcommit.application.operations.meld.assessment_application" not in sys.modules
+assert "memcommit.application.operations.meld.resolution_application" not in sys.modules
 """
 
     subprocess.run(
@@ -174,9 +174,9 @@ assert "memcommit.operations.meld.resolution_application" not in sys.modules
 
 def test_pre_relocation_meld_globals_load_through_aliases() -> None:
     canonical_application = importlib.import_module(
-        "memcommit.operations.meld.application"
+        "memcommit.application.operations.meld.application"
     )
-    canonical_runtime = importlib.import_module("memcommit.operations.meld.runtime")
+    canonical_runtime = importlib.import_module("memcommit.application.operations.meld.runtime")
 
     restored_request = pickle.loads(
         b"cmemcommit.meld_application\nMeldApplyRequest\n."
@@ -208,11 +208,11 @@ def test_pre_relocation_meld_subapplication_globals_load_through_aliases(
 
 def test_production_meld_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "src/memcommit/api/_operations/meld.py",
+        "src/memcommit/adapters/python_api/_operations/meld.py",
         "src/memcommit/commands/meld/command.py",
-        "src/memcommit/operations/meld/restart_application.py",
-        "src/memcommit/operations/meld/resolution_application.py",
-        "src/memcommit/operations/meld/runtime.py",
+        "src/memcommit/application/operations/meld/restart_application.py",
+        "src/memcommit/application/operations/meld/resolution_application.py",
+        "src/memcommit/application/operations/meld/runtime.py",
     )
 
     legacy_modules = tuple(

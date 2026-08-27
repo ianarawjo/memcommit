@@ -7,7 +7,7 @@ from prompt_toolkit.output import DummyOutput
 import pytest
 
 import memcommit.commands.compare.setup as compare_setup_command
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 from memcommit.interfaces.tui.components.endpoint_setup import EndpointSetupMemory
 from memcommit.interfaces.tui.operations.compare import (
     CompareEndpointSelection,

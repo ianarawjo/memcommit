@@ -8,7 +8,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.authority.access import resolve_context_access
+from memcommit.application.authority.access import resolve_context_access
 from memcommit.infrastructure.command_ledger.attempts import annotate_memory_report_attempt
 from memcommit.commands.shared.command_progress import progressing_provider_factory
 from memcommit.commands.shared.context_operand import ContextOperandSnapshot
@@ -38,7 +38,7 @@ from memcommit.retained_history.context_history import (
     build_context_trace,
     current_context_trace,
 )
-from memcommit.operations.rationale.context import synthesize_context_rationale
+from memcommit.application.operations.rationale.context import synthesize_context_rationale
 from memcommit.context_targeting.model import ContextTarget
 from memcommit.context_targeting.report_items import (
     ReadableMemoryTargetNotFoundError,
@@ -47,17 +47,19 @@ from memcommit.context_targeting.report_items import (
     resolve_local_memory_report_target,
     resolve_readable_memory_target,
 )
-from memcommit.retained_history.provenance import ProvenanceError
-from memcommit.operations.reference.provenance import (
+from memcommit.retained_history.memory_history_reconstruction.retained_record_verification import (
+    MemoryHistoryReconstructionError,
+)
+from memcommit.application.operations.reference.provenance import (
     MemoryReferenceTraceReport,
     build_reference_trace,
 )
-from memcommit.operations.rationale.model import (
+from memcommit.application.operations.rationale.model import (
     RationaleError,
     RationaleReport,
     build_rationale,
 )
-from memcommit.operations.rationale.rules import (
+from memcommit.application.operations.rationale.rules import (
     DEFAULT_RATIONALE_PROVENANCE_LIMIT,
     MAX_RATIONALE_PROVENANCE_LIMIT,
     RationaleLimitUnit,
@@ -65,21 +67,21 @@ from memcommit.operations.rationale.rules import (
     RationaleRulesError,
     validate_rationale_limit,
 )
-from memcommit.operations.rationale.semantic import (
+from memcommit.application.operations.rationale.semantic import (
     RationaleNarrativeProjection,
     RationaleSynthesisError,
     synthesize_rationale_provenance,
 )
-from memcommit.operations.rationale.scope import (
+from memcommit.application.operations.rationale.scope import (
     freeze_rationale_profile_catalog,
     load_rationale_scope,
     rationale_candidates,
     rationale_scope_from_catalog,
-    rationale_trace,
+    rationale_memory_history,
     resolve_rationale_target,
 )
-from memcommit.operations.profile.config import ProfileConfigError
-from memcommit.operations.profile.model import ProfileError
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.infrastructure.providers.subscription import QueryProviderError, connect_semantic_provider
 from memcommit.persistence.store import MemoryStore
 
@@ -619,7 +621,7 @@ def cmd(
                 include_descendants=include_descendants,
             )
         target = resolve_rationale_target(scope, selector)
-        trace = rationale_trace(scope, target)
+        trace = rationale_memory_history(scope, target)
         granted_trace = (
             build_granted_memory_trace(
                 target.access,
@@ -660,7 +662,7 @@ def cmd(
         OSError,
         RuntimeError,
         ValueError,
-        ProvenanceError,
+        MemoryHistoryReconstructionError,
         RationaleError,
         RationaleRulesError,
         RationaleSynthesisError,

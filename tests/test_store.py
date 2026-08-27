@@ -5,7 +5,7 @@ import uuid
 
 import pytest
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 import memcommit.store as store_module
 from memcommit.store import (
     ConcurrentContextUpdateError,

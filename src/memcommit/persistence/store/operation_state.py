@@ -47,12 +47,12 @@ from memcommit.context_targeting.context_catalog import (
     ContextCatalogDiagnosticCode,
     ContextCatalogScan,
 )
-from memcommit.operations.profile.config import resolve_active_store_dir
-from memcommit.authority.storage_permissions import (
+from memcommit.application.operations.profile.config import resolve_active_store_dir
+from memcommit.application.authority.storage_permissions import (
     ensure_private_directory,
     open_private_exclusive,
 )
-from memcommit.authority.write_protection import (
+from memcommit.application.authority.write_protection import (
     WriteProtectionError,
     WriteProtectionRegistry,
     WriteProtectionRegistryError,
@@ -187,7 +187,7 @@ def context_record_digest(value: Context | dict[str, object]) -> str:
 
 def ground_session_record_digest(value: object) -> str:
     """Hash one complete validated Ground record canonically."""
-    from memcommit.operations.ground.model import GroundSession
+    from memcommit.application.operations.ground.model import GroundSession
 
     record = (
         value.to_dict()
@@ -1545,7 +1545,7 @@ class OperationStateStoreMixin:
         contract_name: str,
     ) -> Iterator[None]:
         """Serialize cooperative saves of one portable named Ground."""
-        from memcommit.operations.ground.model import validate_ground_contract_name
+        from memcommit.application.operations.ground.model import validate_ground_contract_name
 
         canonical = validate_ground_contract_name(contract_name)
         if self.ground_sessions_dir.is_symlink():
@@ -1710,7 +1710,7 @@ class OperationStateStoreMixin:
     @staticmethod
     def _load_update_session(path: Path):
         """Load and validate one cached semantic update session."""
-        from memcommit.operations.update.model import UpdateSession
+        from memcommit.application.operations.update.model import UpdateSession
 
         if not path.exists():
             return None
@@ -1729,7 +1729,7 @@ class OperationStateStoreMixin:
     @staticmethod
     def _save_update_session(path: Path, session) -> None:
         """Atomically persist one validated semantic update session."""
-        from memcommit.operations.update.model import UpdateSession
+        from memcommit.application.operations.update.model import UpdateSession
 
         if not isinstance(session, UpdateSession):
             raise TypeError("Expected an UpdateSession.")
@@ -1772,7 +1772,7 @@ class OperationStateStoreMixin:
                     raise ConcurrentContextUpdateError(
                         "The active update record changed before it could be saved."
                     )
-            from memcommit.operations.update.receipt_store import UpdateReceiptStore
+            from memcommit.application.operations.update.receipt_store import UpdateReceiptStore
 
             receipts = UpdateReceiptStore(self)
             if current is not None and current.status in {"applied", "undone"}:
@@ -1786,7 +1786,7 @@ class OperationStateStoreMixin:
 
     def _save_active_terminal_update(self, session, *, receipts=None) -> None:
         """Publish the active terminal session and immutable receipt as a pair."""
-        from memcommit.operations.update.receipt_store import UpdateReceiptStore
+        from memcommit.application.operations.update.receipt_store import UpdateReceiptStore
 
         receipts = receipts or UpdateReceiptStore(self)
         previous = self._load_update_session(self.staged_update_file)
@@ -1826,7 +1826,7 @@ class OperationStateStoreMixin:
         with remote publication; this prototype provides exception atomicity,
         not crash atomicity, across several Context files.
         """
-        from memcommit.operations.update.model import (
+        from memcommit.application.operations.update.model import (
             UpdateApplicationReceipt,
             UpdateCheckpointReceipt,
             UpdateError,
@@ -1837,7 +1837,7 @@ class OperationStateStoreMixin:
             operation_digest,
             session_matches,
         )
-        from memcommit.operations.update.application import prepare_update_application
+        from memcommit.application.operations.update.application import prepare_update_application
         from memcommit.context_targeting.loading import load_context_scope
         from memcommit.semantic.goal_focus import GoalFocusError
         from memcommit.semantic.goal_focus_runtime import revalidate_goal_focus
@@ -2087,7 +2087,7 @@ class OperationStateStoreMixin:
     @staticmethod
     def _load_review_session(path: Path):
         """Load and strictly validate the active semantic review."""
-        from memcommit.operations.review.model import ReviewError, ReviewSession
+        from memcommit.application.operations.review.model import ReviewError, ReviewSession
 
         if not path.exists():
             return None
@@ -2129,7 +2129,7 @@ class OperationStateStoreMixin:
     def load_review_session_source(self, session_uid: str) -> Context:
         """Load the immutable direct-Context frame bound to one Review UID."""
 
-        from memcommit.operations.review.model import direct_context_digest
+        from memcommit.application.operations.review.model import direct_context_digest
 
         session = self.load_review_session_by_uid(session_uid)
         path = self._review_session_source_path(session_uid)
@@ -2160,7 +2160,7 @@ class OperationStateStoreMixin:
     def _retain_review_session_source(self, session) -> bool:
         """Persist the initial source frame once when it is still available."""
 
-        from memcommit.operations.review.model import direct_context_digest
+        from memcommit.application.operations.review.model import direct_context_digest
 
         path = self._review_session_source_path(session.uid)
         if path.exists() or path.is_symlink():
@@ -2234,7 +2234,7 @@ class OperationStateStoreMixin:
     @_profile_write_guarded
     def save_review_session(self, session) -> None:
         """Atomically save one validated semantic review session."""
-        from memcommit.operations.review.model import ReviewError, ReviewSession
+        from memcommit.application.operations.review.model import ReviewError, ReviewSession
 
         if not isinstance(session, ReviewSession):
             raise TypeError("Expected a ReviewSession.")
@@ -2300,7 +2300,7 @@ class OperationStateStoreMixin:
 
     def _ground_session_path(self, contract_name: str) -> Path:
         """Resolve one portable contract ID without creating active state."""
-        from memcommit.operations.ground.model import validate_ground_contract_name
+        from memcommit.application.operations.ground.model import validate_ground_contract_name
 
         canonical = validate_ground_contract_name(contract_name)
         if self.ground_sessions_dir.is_symlink():
@@ -2311,7 +2311,7 @@ class OperationStateStoreMixin:
 
     def load_ground_session(self, contract_name: str):
         """Return one named grounding session, or None when it does not exist."""
-        from memcommit.operations.ground.model import GroundError, GroundSession
+        from memcommit.application.operations.ground.model import GroundError, GroundSession
 
         path = self._ground_session_path(contract_name)
         if not path.exists():
@@ -2357,7 +2357,7 @@ class OperationStateStoreMixin:
         additionally lock and verify every bound Context frame before taking
         the Ground lock; ordinary setup saves keep that stricter check off.
         """
-        from memcommit.operations.ground.model import GroundError, GroundSession
+        from memcommit.application.operations.ground.model import GroundError, GroundSession
 
         if not isinstance(session, GroundSession):
             raise TypeError("Expected a GroundSession.")
@@ -2466,7 +2466,7 @@ class OperationStateStoreMixin:
 
     def _verify_ground_frames_locked(self, session) -> None:
         """Require every bound frame to match while its Context lock is held."""
-        from memcommit.operations.ground.model import context_frame_digest
+        from memcommit.application.operations.ground.model import context_frame_digest
 
         for frame in session.frames:
             try:
@@ -2506,8 +2506,8 @@ class OperationStateStoreMixin:
 
     def load_meld_choice_branches(self, session):
         """Restore sparse local choices for the exact current assessment."""
-        from memcommit.operations.meld.model import MeldSession
-        from memcommit.operations.meld.choice_branches import (
+        from memcommit.application.operations.meld.model import MeldSession
+        from memcommit.application.operations.meld.choice_branches import (
             MeldChoiceBranchError,
             MeldChoiceBranchSet,
         )
@@ -2543,8 +2543,8 @@ class OperationStateStoreMixin:
 
     def save_meld_choice_branches(self, session, branches) -> None:
         """Persist only staged choices; no provider outcome is written here."""
-        from memcommit.operations.meld.model import MeldSession, meld_canonical_digest
-        from memcommit.operations.meld.choice_branches import (
+        from memcommit.application.operations.meld.model import MeldSession, meld_canonical_digest
+        from memcommit.application.operations.meld.choice_branches import (
             MeldChoiceBranchError,
             MeldChoiceBranchSet,
         )
@@ -2601,7 +2601,7 @@ class OperationStateStoreMixin:
 
     def load_meld_resolution_branch(self, key: str):
         """Return one exact validated follow-up branch, if it is saved."""
-        from memcommit.operations.meld.resolution_cache import (
+        from memcommit.application.operations.meld.resolution_cache import (
             MeldResolutionBranch,
             MeldResolutionCacheError,
         )
@@ -2632,7 +2632,7 @@ class OperationStateStoreMixin:
 
     def save_meld_resolution_branch(self, branch) -> None:
         """Publish one immutable exact branch without replacing a peer result."""
-        from memcommit.operations.meld.resolution_cache import (
+        from memcommit.application.operations.meld.resolution_cache import (
             MeldResolutionBranch,
             MeldResolutionCacheError,
         )
@@ -2738,7 +2738,7 @@ class OperationStateStoreMixin:
     ):
         """Load one immutable displaced terminal Meld session."""
 
-        from memcommit.operations.meld.model import MeldError, MeldSession
+        from memcommit.application.operations.meld.model import MeldError, MeldSession
 
         path = self._meld_session_history_path(target_context_uid, session_uid)
         if not path.exists():
@@ -2795,7 +2795,7 @@ class OperationStateStoreMixin:
 
     def load_meld_session(self, target_context_uid: str):
         """Return the saved meld for one target Context, if present."""
-        from memcommit.operations.meld.model import MeldError, MeldSession
+        from memcommit.application.operations.meld.model import MeldError, MeldSession
 
         path = self._meld_session_path(target_context_uid)
         if not path.exists():
@@ -2828,7 +2828,7 @@ class OperationStateStoreMixin:
         expected_session_digest: str | None = None,
     ) -> None:
         """Persist one meld session with target-scoped optimistic concurrency."""
-        from memcommit.operations.meld.model import (
+        from memcommit.application.operations.meld.model import (
             MeldError,
             MeldSession,
             meld_canonical_digest,
@@ -2899,7 +2899,7 @@ class OperationStateStoreMixin:
         locks, and the exact new Context is rolled back before either lock is
         released if the session cannot be written.
         """
-        from memcommit.operations.meld.model import MeldError, MeldSession
+        from memcommit.application.operations.meld.model import MeldError, MeldSession
 
         if not isinstance(session, MeldSession):
             raise TypeError("Expected a MeldSession.")
@@ -2990,7 +2990,7 @@ class OperationStateStoreMixin:
 
     def load_atomize_analysis(self, context_uid: str):
         """Return one Context's latest saved atomize preview, or None."""
-        from memcommit.operations.atomize.domain import (
+        from memcommit.application.operations.atomize.domain import (
             AtomizeAnalysisSession,
             AtomizeImpactError,
         )
@@ -3024,7 +3024,7 @@ class OperationStateStoreMixin:
     def save_atomize_analysis(self, session) -> None:
         """Atomically persist a validated, non-applying atomize preview."""
 
-        from memcommit.operations.atomize.domain import AtomizeAnalysisSession
+        from memcommit.application.operations.atomize.domain import AtomizeAnalysisSession
 
         if not isinstance(session, AtomizeAnalysisSession):
             raise TypeError("Expected an AtomizeAnalysisSession.")
@@ -3035,7 +3035,7 @@ class OperationStateStoreMixin:
     def _save_atomize_analysis_locked(self, session) -> None:
         """Persist one analysis while its Context-scoped CAS lock is held."""
 
-        from memcommit.operations.atomize.domain import (
+        from memcommit.application.operations.atomize.domain import (
             AtomizeAnalysisSession,
             AtomizeImpactError,
         )
@@ -3089,8 +3089,8 @@ class OperationStateStoreMixin:
 
     def load_atomize_workbench(self, analysis):
         """Load mutable state only against one exact saved analysis."""
-        from memcommit.operations.atomize.domain import AtomizeAnalysisSession
-        from memcommit.operations.atomize.workbench import (
+        from memcommit.application.operations.atomize.domain import AtomizeAnalysisSession
+        from memcommit.application.operations.atomize.workbench import (
             AtomizeWorkbenchError,
             AtomizeWorkbenchSession,
             atomize_workbench_issue_projection,
@@ -3144,7 +3144,7 @@ class OperationStateStoreMixin:
     @_profile_write_guarded
     def save_atomize_workbench(self, session) -> None:
         """Atomically persist one Context-bound mutable workbench."""
-        from memcommit.operations.atomize.workbench import AtomizeWorkbenchSession
+        from memcommit.application.operations.atomize.workbench import AtomizeWorkbenchSession
 
         if not isinstance(session, AtomizeWorkbenchSession):
             raise TypeError("Expected an AtomizeWorkbenchSession.")
@@ -3153,7 +3153,7 @@ class OperationStateStoreMixin:
 
     def _save_atomize_workbench_locked(self, session) -> None:
         """Persist one workbench while its Context-scoped CAS lock is held."""
-        from memcommit.operations.atomize.workbench import (
+        from memcommit.application.operations.atomize.workbench import (
             AtomizeWorkbenchError,
             AtomizeWorkbenchSession,
             atomize_workbench_issue_projection,
@@ -3222,11 +3222,11 @@ class OperationStateStoreMixin:
     def archive_atomize_session(self, analysis, workbench) -> bool:
         """Retain one displaced analysis/workbench pair under its analysis UID."""
 
-        from memcommit.operations.atomize.domain import (
+        from memcommit.application.operations.atomize.domain import (
             AtomizeAnalysisSession,
             AtomizeImpactError,
         )
-        from memcommit.operations.atomize.workbench import (
+        from memcommit.application.operations.atomize.workbench import (
             AtomizeWorkbenchError,
             AtomizeWorkbenchSession,
             atomize_workbench_issue_projection,
@@ -3322,11 +3322,11 @@ class OperationStateStoreMixin:
     ):
         """Load one immutable displaced Atomize pair and its exact path."""
 
-        from memcommit.operations.atomize.domain import (
+        from memcommit.application.operations.atomize.domain import (
             AtomizeAnalysisSession,
             AtomizeImpactError,
         )
-        from memcommit.operations.atomize.workbench import (
+        from memcommit.application.operations.atomize.workbench import (
             AtomizeWorkbenchError,
             AtomizeWorkbenchSession,
             atomize_workbench_issue_projection,
@@ -3471,7 +3471,7 @@ class OperationStateStoreMixin:
 
     def load_atomize_grounding_session(self, context_uid: str):
         """Return one Context's latest atomize grounding dialogue, if any."""
-        from memcommit.operations.atomize.grounding import (
+        from memcommit.application.operations.atomize.grounding import (
             AtomizeGroundingError,
             AtomizeGroundingSession,
         )
@@ -3504,7 +3504,7 @@ class OperationStateStoreMixin:
     @_profile_write_guarded
     def save_atomize_grounding_session(self, session) -> None:
         """Atomically persist one strict Context-bound grounding dialogue."""
-        from memcommit.operations.atomize.grounding import (
+        from memcommit.application.operations.atomize.grounding import (
             AtomizeGroundingError,
             AtomizeGroundingSession,
         )
@@ -3563,7 +3563,7 @@ class OperationStateStoreMixin:
         context_uid: str,
     ) -> list:
         """Load immutable terminal dialogues for one exact Context."""
-        from memcommit.operations.atomize.grounding import (
+        from memcommit.application.operations.atomize.grounding import (
             AtomizeGroundingError,
             AtomizeGroundingSession,
         )

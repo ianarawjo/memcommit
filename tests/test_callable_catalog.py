@@ -10,7 +10,7 @@ from memcommit.architecture.catalog import (
     render_operation_markdown,
     render_summary_json,
 )
-from memcommit.help_catalog import OPERATION_HELP_BY_NAME
+from memcommit.application.operations.operation_catalog import OPERATION_HELP_BY_NAME
 
 
 REPOSITORY = Path(__file__).parents[1]
@@ -42,14 +42,14 @@ def test_callable_catalog_covers_every_source_module_and_declaration() -> None:
 def test_catalog_records_private_nested_and_inbound_call_evidence() -> None:
     snapshot = _snapshot()
     by_identifier = {record.identifier: record for record in snapshot.callables}
-    operation_builder = by_identifier["memcommit.help_catalog.catalog:_operation"]
+    operation_builder = by_identifier["memcommit.application.operations.operation_catalog.catalog:_operation"]
 
     assert operation_builder.visibility == "private"
     assert operation_builder.export_status == "not-exported"
     assert len(operation_builder.inbound_references) == len(OPERATION_HELP_BY_NAME)
     assert {
         reference.caller for reference in operation_builder.inbound_references
-    } == {"memcommit.help_catalog.catalog:<module>"}
+    } == {"memcommit.application.operations.operation_catalog.catalog:<module>"}
     assert any(record.visibility == "local" for record in snapshot.callables)
 
 
@@ -59,7 +59,9 @@ def test_operation_routes_cover_every_help_operation_and_cli_entry() -> None:
 
     assert set(by_operation) == set(OPERATION_HELP_BY_NAME)
     assert all(record.cli_entry != "MISSING" for record in snapshot.operations)
-    assert by_operation["checkout"].cli_entry == "memcommit.cli:_checkout"
+    assert by_operation["checkout"].cli_entry == (
+        "memcommit.adapters.console.entrypoint:_checkout"
+    )
     assert by_operation["embed"].cli_entry == "memcommit.interfaces.cli.embed:cmd"
 
 
@@ -68,11 +70,11 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
     by_operation = {record.operation: record for record in snapshot.operations}
 
     assert (
-        "memcommit.operations.pwd.application"
+        "memcommit.application.operations.pwd.application"
         in by_operation["pwd"].application_modules
     )
     assert (
-        "memcommit.operations.summarize.application"
+        "memcommit.application.operations.summarize.application"
         in by_operation["summarize"].application_modules
     )
     assert "memcommit.interfaces.tui.operations.summarize.screen" in by_operation["summarize"].tui_modules
@@ -84,11 +86,11 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
     ):
         route = by_operation[operation]
         assert (
-            "memcommit.operations.memory_transfer.application"
+            "memcommit.application.operations.memory_transfer.application"
             in route.application_modules
         )
         assert (
-            "memcommit.operations.memory_transfer.runtime"
+            "memcommit.application.operations.memory_transfer.runtime"
             in route.application_modules
         )
         assert (
@@ -110,92 +112,92 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
     assert by_operation["help"].curated_state == "CLOSED"
     assert by_operation["switch"].curated_state == "CLOSED"
     assert (
-        "memcommit.operations.atomize.domain"
+        "memcommit.application.operations.atomize.domain"
         in by_operation["atomize"].application_modules
     )
     assert (
-        "memcommit.operations.compare.summary_application"
+        "memcommit.application.operations.compare.summary_application"
         in by_operation["compare"].application_modules
     )
     for operation in ("dedup", "find-duplicates"):
         assert (
-            "memcommit.operations.exact_dedup.application"
+            "memcommit.application.operations.exact_dedup.application"
             in by_operation[operation].application_modules
         )
     assert (
-        "memcommit.operations.fit.judgment"
+        "memcommit.application.operations.fit.judgment"
         in by_operation["fit"].application_modules
     )
     assert (
-        "memcommit.operations.help.lookup_application"
+        "memcommit.application.operations.help.lookup_application"
         in by_operation["help"].application_modules
     )
     assert (
-        "memcommit.operations.meld.session_application"
+        "memcommit.application.operations.meld.session_application"
         in by_operation["meld"].application_modules
     )
     assert (
-        "memcommit.operations.query.reference_application"
+        "memcommit.application.operations.query.reference_application"
         in by_operation["query"].application_modules
     )
     assert (
-        "memcommit.operations.sever.model"
+        "memcommit.application.operations.sever.model"
         in by_operation["sever"].application_modules
     )
     assert (
-        "memcommit.operations.translate.runtime"
+        "memcommit.application.operations.translate.runtime"
         in by_operation["translate"].application_modules
     )
     assert (
-        "memcommit.operations.translate.application"
+        "memcommit.application.operations.translate.application"
         in by_operation["translate"].application_modules
     )
     assert (
-        "memcommit.operations.translate.catalog_application"
+        "memcommit.application.operations.translate.catalog_application"
         in by_operation["translate"].application_modules
     )
     assert (
-        "memcommit.operations.translate.materialization"
+        "memcommit.application.operations.translate.materialization"
         in by_operation["translate"].application_modules
     )
     assert (
-        "memcommit.operations.chunk.application"
+        "memcommit.application.operations.chunk.application"
         in by_operation["chunk"].application_modules
     )
     assert (
-        "memcommit.operations.clear.runtime"
+        "memcommit.application.operations.clear.runtime"
         in by_operation["clear"].application_modules
     )
     assert (
-        "memcommit.operations.contexts.runtime"
+        "memcommit.application.operations.contexts.runtime"
         in by_operation["contexts"].application_modules
     )
     assert (
-        "memcommit.operations.undo.runtime"
+        "memcommit.application.operations.undo.runtime"
         in by_operation["undo"].application_modules
     )
     assert (
-        "memcommit.operations.redo.runtime"
+        "memcommit.application.operations.redo.runtime"
         in by_operation["redo"].application_modules
     )
     assert (
-        "memcommit.operations.distill.application"
+        "memcommit.application.operations.distill.application"
         in by_operation["distill"].application_modules
     )
     assert (
-        "memcommit.operations.distill.runtime"
+        "memcommit.application.operations.distill.runtime"
         in by_operation["distill"].application_modules
     )
     assert (
-        "memcommit.operations.elaborate.application"
+        "memcommit.application.operations.elaborate.application"
         in by_operation["elaborate"].application_modules
     )
     assert (
-        "memcommit.operations.elaborate.add_runtime"
+        "memcommit.application.operations.elaborate.add_runtime"
         in by_operation["elaborate"].application_modules
     )
     assert (
-        "memcommit.operations.show.application"
+        "memcommit.application.operations.show.application"
         in by_operation["show"].application_modules
     )
     assert "show" in by_operation["show"].public_methods

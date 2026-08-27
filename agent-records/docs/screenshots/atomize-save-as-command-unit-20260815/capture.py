@@ -113,7 +113,7 @@ class _Provider:
 
 
 def _review(store) -> None:
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
     from memcommit.atomize_workflow import open_or_create_atomize_workbench
 
     if not store.context_exists("atomize/source"):

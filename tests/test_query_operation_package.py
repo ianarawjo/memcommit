@@ -17,20 +17,20 @@ from tests.legacy_submodule_assertions import (
 
 
 _MODULE_PAIRS = (
-    ("memcommit.query_application", "memcommit.operations.query.ordinary_application"),
-    ("memcommit.query_runtime", "memcommit.operations.query.ordinary_runtime"),
+    ("memcommit.query_application", "memcommit.application.operations.query.ordinary_application"),
+    ("memcommit.query_runtime", "memcommit.application.operations.query.ordinary_runtime"),
     (
         "memcommit.granted_query_application",
-        "memcommit.operations.query.granted_application",
+        "memcommit.application.operations.query.granted_application",
     ),
-    ("memcommit.granted_query_runtime", "memcommit.operations.query.granted_runtime"),
+    ("memcommit.granted_query_runtime", "memcommit.application.operations.query.granted_runtime"),
     (
         "memcommit.query_reference_application",
-        "memcommit.operations.query.reference_application",
+        "memcommit.application.operations.query.reference_application",
     ),
     (
         "memcommit.query_reference_runtime",
-        "memcommit.operations.query.reference_runtime",
+        "memcommit.application.operations.query.reference_runtime",
     ),
 )
 
@@ -91,15 +91,15 @@ def test_root_query_compatibility_modules_are_implementation_free():
 def test_query_operation_package_import_is_lazy():
     program = """
 import sys
-import memcommit.operations.query
+import memcommit.application.operations.query
 
 blocked = (
-    "memcommit.operations.query.ordinary_application",
-    "memcommit.operations.query.ordinary_runtime",
-    "memcommit.operations.query.granted_application",
-    "memcommit.operations.query.granted_runtime",
-    "memcommit.operations.query.reference_application",
-    "memcommit.operations.query.reference_runtime",
+    "memcommit.application.operations.query.ordinary_application",
+    "memcommit.application.operations.query.ordinary_runtime",
+    "memcommit.application.operations.query.granted_application",
+    "memcommit.application.operations.query.granted_runtime",
+    "memcommit.application.operations.query.reference_application",
+    "memcommit.application.operations.query.reference_runtime",
 )
 assert not any(name in sys.modules for name in blocked)
 """
@@ -116,32 +116,32 @@ assert not any(name in sys.modules for name in blocked)
     (
         (
             "memcommit.query_application",
-            "memcommit.operations.query.ordinary_application",
+            "memcommit.application.operations.query.ordinary_application",
             "OrdinaryQueryRequest",
         ),
         (
             "memcommit.query_runtime",
-            "memcommit.operations.query.ordinary_runtime",
+            "memcommit.application.operations.query.ordinary_runtime",
             "MemoryStoreOrdinaryQuerySourcePort",
         ),
         (
             "memcommit.granted_query_application",
-            "memcommit.operations.query.granted_application",
+            "memcommit.application.operations.query.granted_application",
             "GrantedQueryRequest",
         ),
         (
             "memcommit.granted_query_runtime",
-            "memcommit.operations.query.granted_runtime",
+            "memcommit.application.operations.query.granted_runtime",
             "MemoryStoreGrantedQueryReadPort",
         ),
         (
             "memcommit.query_reference_application",
-            "memcommit.operations.query.reference_application",
+            "memcommit.application.operations.query.reference_application",
             "QueryReferenceRequest",
         ),
         (
             "memcommit.query_reference_runtime",
-            "memcommit.operations.query.reference_runtime",
+            "memcommit.application.operations.query.reference_runtime",
             "MemoryStoreQueryReferenceSourcePort",
         ),
     ),

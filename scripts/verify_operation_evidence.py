@@ -33,7 +33,15 @@ class EvidenceError(ValueError):
 def _help_operation_names(repository: Path) -> tuple[str, ...]:
     """Read canonical operation names without importing application code."""
 
-    path = repository / "src" / "memcommit" / "help_catalog" / "catalog.py"
+    path = (
+        repository
+        / "src"
+        / "memcommit"
+        / "application"
+        / "operations"
+        / "operation_catalog"
+        / "catalog.py"
+    )
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
     names = {
         node.args[0].value

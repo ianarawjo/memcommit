@@ -9,12 +9,12 @@ from typing import TYPE_CHECKING
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.operations.atomize.domain import AtomizeAnalysisSession
-from memcommit.operations.atomize.resolution_adapter import (
+from memcommit.application.operations.atomize.domain import AtomizeAnalysisSession
+from memcommit.application.operations.atomize.resolution_adapter import (
     AtomizeResolutionWorkbenchAdapter,
 )
-from memcommit.operations.atomize.result_adapter import AtomizeResultWorkbenchAdapter
-from memcommit.operations.atomize.workbench import (
+from memcommit.application.operations.atomize.result_adapter import AtomizeResultWorkbenchAdapter
+from memcommit.application.operations.atomize.workbench import (
     ATOMIZE_WORKBENCH_RESPONSE_CHAR_LIMIT,
     AtomizeWorkbenchFinding,
     AtomizeWorkbenchSession,
@@ -44,7 +44,7 @@ from memcommit.resolution.workbench import (
 from memcommit.application.reviewing.result_workbench import (
     ResultWorkbenchView,
 )
-from memcommit.selection.tui import choice_marker
+from memcommit.interfaces.console.selection.tui import choice_marker
 
 if TYPE_CHECKING:
     from memcommit.interfaces.tui.workbenches.resolution import ResolutionDestination

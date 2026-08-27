@@ -6,7 +6,7 @@ from collections import OrderedDict
 from collections.abc import Mapping
 from typing import Literal
 
-from memcommit.api import (
+from memcommit.adapters.python_api import (
     ForgetApplyResult,
     ForgetAuthorityError,
     ForgetConflictError,

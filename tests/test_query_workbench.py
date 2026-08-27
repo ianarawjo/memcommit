@@ -22,12 +22,12 @@ from memcommit.interfaces.tui.operations.query import (
     render_query_answer_fragments,
     run_query_workbench,
 )
-from memcommit.operations.query.granted_application import (
+from memcommit.application.operations.query.granted_application import (
     GrantedQueryRequest,
     GrantedQueryResponse,
     GrantedQueryTarget,
 )
-from memcommit.operations.query.ordinary_application import (
+from memcommit.application.operations.query.ordinary_application import (
     OrdinaryQueryRequest,
     OrdinaryQueryResponse,
 )

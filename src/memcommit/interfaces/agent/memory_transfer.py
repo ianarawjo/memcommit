@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 
-from memcommit.api import (
+from memcommit.adapters.python_api import (
     MemCommitClient,
     MemoryTransferAuthorityError,
     MemoryTransferConflictError,

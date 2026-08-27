@@ -10,7 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal
 
-from memcommit.authority.access import ContextAccess, resolve_context_access
+from memcommit.application.authority.access import ContextAccess, resolve_context_access
 from memcommit.context import Context, Memory
 from memcommit.context_locator import resolve_context_locator
 from memcommit.context_targeting.readable_catalog import (
@@ -18,9 +18,11 @@ from memcommit.context_targeting.readable_catalog import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.context_targeting.resolution import parse_direct_memory_locator
-from memcommit.operations.profile.config import ProfileRegistry
-from memcommit.retained_history.provenance import collect_trace_candidates
-from memcommit.operations.reference.provenance import collect_reference_candidates
+from memcommit.application.operations.profile.config import ProfileRegistry
+from memcommit.retained_history.memory_history_reconstruction.memory_history_construction import (
+    collect_memory_history_candidates,
+)
+from memcommit.application.operations.reference.provenance import collect_reference_candidates
 from memcommit.persistence.store import MemoryStore
 
 
@@ -79,7 +81,7 @@ def _context_targets(
             kind="MEMORY",
             status=candidate.status,
         )
-        for candidate in collect_trace_candidates(store, context)
+        for candidate in collect_memory_history_candidates(store, context)
     )
     references = tuple(
         ResolvedMemoryReportTarget(

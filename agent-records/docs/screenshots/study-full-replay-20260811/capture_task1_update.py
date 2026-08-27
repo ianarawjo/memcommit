@@ -66,7 +66,7 @@ def _provider_event_count() -> int:
 
 
 def _load_inputs():
-    from memcommit.authority.access import (
+    from memcommit.application.authority.access import (
         GrantedReadStore,
         freeze_granted_context_binding,
         resolve_context_access,

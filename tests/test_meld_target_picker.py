@@ -8,7 +8,7 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 import pytest
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 from memcommit.commands.meld.command import start_reviewed_symmetric_meld
 from memcommit.commands.meld.target_picker import (
     choose_meld_target,
@@ -23,8 +23,8 @@ from memcommit.comparison_provider import (
 )
 from memcommit.comparison_store import save_comparison_analysis
 from memcommit.meld import meld_canonical_digest
-from memcommit.operations.meld.restart_application import MeldRestartRequest
-from memcommit.operations.meld.runtime import execute_meld_restart
+from memcommit.application.operations.meld.restart_application import MeldRestartRequest
+from memcommit.application.operations.meld.runtime import execute_meld_restart
 
 
 class _ComparisonProvider:

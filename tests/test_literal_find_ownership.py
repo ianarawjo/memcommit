@@ -20,11 +20,11 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 MODULE_PAIRS = (
     (
         "memcommit.literal_find_application",
-        "memcommit.operations.find.literal_application",
+        "memcommit.application.operations.find.literal_application",
     ),
     (
         "memcommit.literal_find_runtime",
-        "memcommit.operations.find.literal_runtime",
+        "memcommit.application.operations.find.literal_runtime",
     ),
 )
 
@@ -68,11 +68,11 @@ def test_literal_find_legacy_paths_expose_the_canonical_contract() -> None:
         "memcommit.literal_find_application"
     )
     canonical_application = importlib.import_module(
-        "memcommit.operations.find.literal_application"
+        "memcommit.application.operations.find.literal_application"
     )
     legacy_runtime = importlib.import_module("memcommit.literal_find_runtime")
     canonical_runtime = importlib.import_module(
-        "memcommit.operations.find.literal_runtime"
+        "memcommit.application.operations.find.literal_runtime"
     )
 
     assert legacy_application is canonical_application
@@ -105,10 +105,10 @@ def test_literal_find_legacy_facades_define_no_behavior(
 def test_find_operation_package_import_keeps_literal_slice_lazy() -> None:
     program = """
 import sys
-import memcommit.operations.find
+import memcommit.application.operations.find
 
-assert "memcommit.operations.find.literal_application" not in sys.modules
-assert "memcommit.operations.find.literal_runtime" not in sys.modules
+assert "memcommit.application.operations.find.literal_application" not in sys.modules
+assert "memcommit.application.operations.find.literal_runtime" not in sys.modules
 """
 
     subprocess.run(
@@ -120,10 +120,10 @@ assert "memcommit.operations.find.literal_runtime" not in sys.modules
 
 def test_pre_relocation_literal_find_globals_load_through_aliases() -> None:
     canonical_application = importlib.import_module(
-        "memcommit.operations.find.literal_application"
+        "memcommit.application.operations.find.literal_application"
     )
     canonical_runtime = importlib.import_module(
-        "memcommit.operations.find.literal_runtime"
+        "memcommit.application.operations.find.literal_runtime"
     )
 
     restored_request = pickle.loads(
@@ -139,15 +139,15 @@ def test_pre_relocation_literal_find_globals_load_through_aliases() -> None:
 
 def test_production_literal_find_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "src/memcommit/api/_operations/find.py",
+        "src/memcommit/adapters/python_api/_operations/find.py",
         "src/memcommit/commands/literal_find/command.py",
         "src/memcommit/interfaces/literal_find.py",
         "src/memcommit/interfaces/cli/find.py",
         "src/memcommit/interfaces/tui/operations/find/compact.py",
         "src/memcommit/interfaces/tui/operations/find/model.py",
         "src/memcommit/interfaces/tui/operations/find/screen.py",
-        "src/memcommit/operations/find/literal_runtime.py",
-        "src/memcommit/operations/replace/application.py",
+        "src/memcommit/application/operations/find/literal_runtime.py",
+        "src/memcommit/application/operations/replace/application.py",
     )
 
     for relative_path in relative_paths:
@@ -158,15 +158,15 @@ def test_production_literal_find_consumers_use_the_operation_owner() -> None:
 
 def test_literal_find_does_not_absorb_semantic_search_or_interfaces() -> None:
     application_source = (
-        REPOSITORY_ROOT / "src/memcommit/operations/find/literal_application.py"
+        REPOSITORY_ROOT / "src/memcommit/application/operations/find/literal_application.py"
     ).read_text(encoding="utf-8")
     runtime_source = (
-        REPOSITORY_ROOT / "src/memcommit/operations/find/literal_runtime.py"
+        REPOSITORY_ROOT / "src/memcommit/application/operations/find/literal_runtime.py"
     ).read_text(encoding="utf-8")
     combined = application_source + runtime_source
 
-    assert "memcommit.operations.search.application" not in combined
-    assert "memcommit.operations.search.runtime" not in combined
+    assert "memcommit.application.operations.search.application" not in combined
+    assert "memcommit.application.operations.search.runtime" not in combined
     assert "memcommit.commands" not in combined
     assert "memcommit.interfaces" not in combined
     assert "provider.complete" not in combined
@@ -178,7 +178,7 @@ def test_selected_public_find_loads_canonical_modules_without_aliases(
     program = f"""
 import sys
 from pathlib import Path
-from memcommit.api import FindContextError, MemCommitClient
+from memcommit.adapters.python_api import FindContextError, MemCommitClient
 
 client = MemCommitClient(root=Path({str(tmp_path / 'store')!r}), create=True)
 try:
@@ -188,9 +188,9 @@ except FindContextError:
 else:
     raise AssertionError('Find without a current Context unexpectedly succeeded')
 
-assert 'memcommit.api._operations.find' in sys.modules
-assert 'memcommit.operations.find.literal_application' in sys.modules
-assert 'memcommit.operations.find.literal_runtime' in sys.modules
+assert 'memcommit.adapters.python_api._operations.find' in sys.modules
+assert 'memcommit.application.operations.find.literal_application' in sys.modules
+assert 'memcommit.application.operations.find.literal_runtime' in sys.modules
 assert 'memcommit.literal_find_application' not in sys.modules
 assert 'memcommit.literal_find_runtime' not in sys.modules
 """

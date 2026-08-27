@@ -7,8 +7,8 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.shared.quality_find_workbench import (
     QualityFindSetupReceipt,
     choose_quality_find_setup,
@@ -30,7 +30,7 @@ from memcommit.quality_find_workbench import (
     quality_find_resolution_view,
 )
 from memcommit.read_report import ReadReportRecent, ReadReportTarget
-from memcommit.responses.resolution import response_target_from_item
+from memcommit.interfaces.console.responses.resolution import response_target_from_item
 from memcommit.store import MemoryStore
 
 

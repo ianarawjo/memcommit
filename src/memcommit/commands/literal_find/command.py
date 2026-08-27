@@ -6,7 +6,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.authority.access import (
+from memcommit.application.authority.access import (
     context_access_display_facts,
     resolve_context_access,
 )
@@ -36,14 +36,14 @@ from memcommit.interfaces.tui.operations.find import (
     run_compact_literal_find_result,
     run_literal_find_tui,
 )
-from memcommit.operations.find.literal_application import (
+from memcommit.application.operations.find.literal_application import (
     LiteralFindError,
     LiteralFindRequest,
     LiteralFindResult,
 )
-from memcommit.operations.find.literal_runtime import execute_literal_find
-from memcommit.operations.profile.config import ProfileConfigError
-from memcommit.operations.profile.model import ProfileError
+from memcommit.application.operations.find.literal_runtime import execute_literal_find
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import MemoryStore
 
 

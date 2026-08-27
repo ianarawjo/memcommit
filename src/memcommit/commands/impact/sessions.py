@@ -12,16 +12,16 @@ from memcommit.commands.shared.resolution_workbench_shell import (
 )
 from memcommit.interfaces.tui.workbenches.impact import ImpactController
 from memcommit.application.reviewing.memory_diff import update_operation_change
-from memcommit.operations.meld.model import MeldSession
-from memcommit.operations.meld.resolution_adapter import MeldResolutionWorkbenchAdapter
+from memcommit.application.operations.meld.model import MeldSession
+from memcommit.application.operations.meld.resolution_adapter import MeldResolutionWorkbenchAdapter
 from memcommit.resolution.workbench import ResolutionWorkbenchView
-from memcommit.operations.sever.model import SeverSession
-from memcommit.operations.sever.resolution_adapter import (
+from memcommit.application.operations.sever.model import SeverSession
+from memcommit.application.operations.sever.resolution_adapter import (
     SeverResolutionWorkbenchAdapter,
     sever_memory_changes,
 )
-from memcommit.operations.update.model import UpdateSession
-from memcommit.operations.update.resolution_adapter import UpdateResolutionWorkbenchAdapter
+from memcommit.application.operations.update.model import UpdateSession
+from memcommit.application.operations.update.resolution_adapter import UpdateResolutionWorkbenchAdapter
 
 
 @dataclass(frozen=True)

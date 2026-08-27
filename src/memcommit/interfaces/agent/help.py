@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Literal
 
-from memcommit.api import (
+from memcommit.adapters.python_api import (
     HelpComparisonResult,
     HelpDetailReferenceResult,
     HelpDetailResult,
@@ -13,7 +13,7 @@ from memcommit.api import (
     MemCommitClient,
     OperationHelpResult,
 )
-from memcommit.operations.help.application import (
+from memcommit.application.operations.help.application import (
     list_operation_details,
     list_operation_help,
 )

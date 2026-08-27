@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from memcommit.operations.show.application import (
+from memcommit.application.operations.show.application import (
     ShowContextSnapshot,
     ShowEmbeddedContext,
     ShowInputError,

@@ -8,8 +8,8 @@ from pathlib import Path
 
 import pytest
 
-import memcommit.ops as ops
-from memcommit.api import MemCommitClient
+import memcommit.application.ops as ops
+from memcommit.adapters.python_api import MemCommitClient
 from memcommit.interfaces.agent import (
     ADD_AGENT_TOOL_NAME,
     APPLY_CONTEXT_DELETE_AGENT_TOOL_NAME,
@@ -444,7 +444,7 @@ def test_registry_depends_only_on_public_client_and_agent_adapters():
 
     forbidden = (
         "memcommit.commands",
-        "memcommit.operations",
+        "memcommit.application.operations",
         "memcommit.infrastructure",
         "memcommit.store",
         "typer",
@@ -452,7 +452,7 @@ def test_registry_depends_only_on_public_client_and_agent_adapters():
         "mcp",
     )
     assert not any(name.startswith(forbidden) for name in imported)
-    assert "memcommit.api" in imported
+    assert "memcommit.adapters.python_api" in imported
     assert "memcommit.interfaces.agent.add" in imported
     assert "memcommit.interfaces.agent.atomize" in imported
     assert "memcommit.interfaces.agent.atomize_grounding" in imported

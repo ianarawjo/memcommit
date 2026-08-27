@@ -6,7 +6,7 @@ from collections.abc import Mapping
 from dataclasses import dataclass
 import json
 
-from memcommit.api import HelpDetailReferenceResult
+from memcommit.adapters.python_api import HelpDetailReferenceResult
 from memcommit.interfaces.agent import (
     AgentToolDefinition,
     AgentToolEffect,

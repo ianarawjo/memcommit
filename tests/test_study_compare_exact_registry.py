@@ -8,15 +8,15 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.config as config_module
-import memcommit.api._operations.compare as compare_operation
-import memcommit.operations.meld.runtime as meld_runtime
-import memcommit.ops as ops
+import memcommit.adapters.python_api._operations.compare as compare_operation
+import memcommit.application.operations.meld.runtime as meld_runtime
+import memcommit.application.ops as ops
 import memcommit.store as store_module
-from memcommit.cli import app
-from memcommit.api import MemCommitClient
+from memcommit.adapters.console.entrypoint import app
+from memcommit.adapters.python_api import MemCommitClient
 from memcommit.commands.compare.command import render_comparison
 from memcommit.commands.compare.execution import ensure_comparison_analysis
-from memcommit.authority.access import ContextAccess
+from memcommit.application.authority.access import ContextAccess
 from memcommit.comparison import (
     ComparisonAnalysis,
     ComparisonInput,
@@ -29,7 +29,7 @@ from memcommit.config import Config
 from memcommit.context import Context, Memory
 from memcommit.context_targeting.loading import load_context_scope
 from memcommit.granted_comparison_store import recursive_comparison_projection
-from memcommit.operations.meld.start_application import MeldStartRequest
+from memcommit.application.operations.meld.start_application import MeldStartRequest
 from memcommit.profile_config import (
     ProfileEntry,
     ProfileRegistry,

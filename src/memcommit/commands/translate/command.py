@@ -13,20 +13,20 @@ from memcommit.commands.shared.command_progress import progressing_provider_fact
 from memcommit.commands.shared.context_operand import ContextOperandSnapshot
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.interfaces.console.text import safe_terminal_text
-from memcommit.operations.translate.application import (
+from memcommit.application.operations.translate.application import (
     PreparedTranslation,
     TranslateRequest,
     prepare_translation,
 )
-from memcommit.operations.translate.catalog_application import (
+from memcommit.application.operations.translate.catalog_application import (
     TRANSLATION_IMPORT_SIZE_LIMIT,
 )
-from memcommit.operations.translate.materialization import (
+from memcommit.application.operations.translate.materialization import (
     TranslationMaterializationResult,
     apply_translation_materialization,
 )
-from memcommit.operations.translate.runtime import TranslateError, TranslationPlan
-from memcommit.operations.translate.view import (
+from memcommit.application.operations.translate.runtime import TranslateError, TranslationPlan
+from memcommit.application.operations.translate.view import (
     TranslationCatalog,
     TranslationViewError,
 )

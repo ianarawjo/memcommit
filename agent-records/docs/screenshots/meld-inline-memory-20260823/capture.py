@@ -121,7 +121,7 @@ class _UnresolvedInlineProvider:
 
 
 def _initialize_store(store_root: Path):
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
     from memcommit.store import MemoryStore
 
     store = MemoryStore(root=store_root)

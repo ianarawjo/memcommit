@@ -6,12 +6,12 @@ from typing import Annotated, Optional
 
 import typer
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 from memcommit.commands.shared.context_operand import (
     ContextOperandSnapshot,
     choose_context_operand,
 )
-from memcommit.authority.access import resolve_context_access
+from memcommit.application.authority.access import resolve_context_access
 from memcommit.interfaces.cli.quality_findings import (
     render_cleanup_member,
     render_heading,
@@ -35,17 +35,17 @@ from memcommit.infrastructure.providers.subscription import (
     connect_codex_chatgpt_provider,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.operations.profile.config import ProfileConfigError
-from memcommit.operations.profile.model import ProfileError
-from memcommit.operations.dedup.application import (
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.dedup.application import (
     DEDUP_ELIGIBLE_RELATIONS,
     DedupRequest,
     apply_dedup,
     prepare_dedup,
     recommended_dedup_selections,
 )
-from memcommit.operations.dedup.runtime import MemoryStoreDedupPort
-from memcommit.operations.dedun.scope import (
+from memcommit.application.operations.dedup.runtime import MemoryStoreDedupPort
+from memcommit.application.operations.dedun.scope import (
     DedunScopeReceipt,
     apply_recursive_dedun_scope,
     freeze_recursive_dedun_scope,

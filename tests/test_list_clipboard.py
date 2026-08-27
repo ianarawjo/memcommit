@@ -14,7 +14,7 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.clipboard as clipboard
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.clipboard import ClipboardError, ClipboardPayload
 from memcommit.context import Context, Memory, QueryContextRef
 from memcommit.context_snapshot import ContextSnapshotRef, context_snapshot_digest

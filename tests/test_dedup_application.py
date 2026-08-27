@@ -12,9 +12,9 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
-from memcommit.api import DedunPlanResult, MemCommitClient
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.adapters.python_api import DedunPlanResult, MemCommitClient
+from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.shared.quality_find_workbench import (
     run_quality_find_resolution_workbench,
 )
@@ -24,7 +24,7 @@ from memcommit.context_snapshot import (
     ContextSnapshotRef,
     context_snapshot_digest,
 )
-from memcommit.operations.dedup.application import (
+from memcommit.application.operations.dedup.application import (
     DedupAuthorityError,
     DedupConflictError,
     DedupError,
@@ -34,7 +34,7 @@ from memcommit.operations.dedup.application import (
     prepare_dedup,
     recommended_dedup_selections,
 )
-from memcommit.operations.dedup.runtime import MemoryStoreDedupPort
+from memcommit.application.operations.dedup.runtime import MemoryStoreDedupPort
 from memcommit.direct_item_duplicates import find_exact_duplicate_groups
 from memcommit.findings import DuplicateFinding, DuplicateReport
 from memcommit.interfaces.agent import (

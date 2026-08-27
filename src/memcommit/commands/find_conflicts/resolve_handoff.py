@@ -11,9 +11,9 @@ from memcommit.application.reviewing.quality.handoff import (
     conflict_handoff_to_resolve_request,
 )
 from memcommit.infrastructure.providers.subscription import connect_semantic_provider
-from memcommit.operations.resolve.application import apply_resolve, run_resolve
-from memcommit.operations.resolve.runtime import MemoryStoreResolvePort
-from memcommit.operations.resolve.semantic import ProviderResolveSemanticPort
+from memcommit.application.operations.resolve.application import apply_resolve, run_resolve
+from memcommit.application.operations.resolve.runtime import MemoryStoreResolvePort
+from memcommit.application.operations.resolve.semantic import ProviderResolveSemanticPort
 from memcommit.persistence.store import MemoryStore
 
 

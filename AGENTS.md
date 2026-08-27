@@ -213,8 +213,8 @@ material inside an agent record is not such approval.
   remain.
 - Treat `provider.complete()` as one bounded provider-call primitive, never as
   a generic place to split an arbitrary prompt. Plan aggregate semantic work
-  through `memcommit.application.semantic_execution`, where character, item, schema,
-  expected-output, and relation-edge budgets remain independent axes.
+  through `memcommit.application.semantic_execution`, where character, item,
+  schema, expected-output, and relation-edge budgets remain independent axes.
 - Every semantic operation must declare its staged meaning with an
   `ExecutionStrategy`. Use group-preserving `TOP_K_RERANK` for retrieval,
   exactly-once `COVERAGE_MAP` for independent transforms, and operation-owned

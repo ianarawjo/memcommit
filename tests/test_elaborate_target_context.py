@@ -7,12 +7,12 @@ import uuid
 
 import pytest
 
-import memcommit.ops as ops
-from memcommit.authority.access import granted_context_link, resolve_context_access
+import memcommit.application.ops as ops
+from memcommit.application.authority.access import granted_context_link, resolve_context_access
 from memcommit.context import Context, QueryContextRef
 from memcommit.conformance import CONTEXT_CONFORMANCE_OPERATION
 from memcommit.elaborate import ELABORATE_PAYLOAD_MARKER, ElaborateError
-from memcommit.operations.elaborate.add_runtime import (
+from memcommit.application.operations.elaborate.add_runtime import (
     apply_prepared_elaborate_add,
     freeze_elaborate_context_source,
     prepare_elaborate_add,

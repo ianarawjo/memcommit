@@ -7,10 +7,10 @@ from dataclasses import replace
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Memory, MemoryRef
-from memcommit.operations.embed.application import (
+from memcommit.application.operations.embed.application import (
     EmbedError,
     EmbedPlacement,
     FrozenMemoryEmbedPlan,
@@ -18,7 +18,7 @@ from memcommit.operations.embed.application import (
     MemoryEmbedResult,
     run_memory_embed,
 )
-from memcommit.operations.embed.runtime import MemoryStoreEmbedPort
+from memcommit.application.operations.embed.runtime import MemoryStoreEmbedPort
 from memcommit.interfaces.tui.operations.embed import choose_embed_setup
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput

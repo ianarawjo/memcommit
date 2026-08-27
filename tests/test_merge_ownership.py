@@ -20,11 +20,11 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 MODULE_PAIRS = (
     (
         "memcommit.merge_application",
-        "memcommit.operations.merge.application",
+        "memcommit.application.operations.merge.application",
     ),
     (
         "memcommit.merge_runtime",
-        "memcommit.operations.merge.runtime",
+        "memcommit.application.operations.merge.runtime",
     ),
 )
 
@@ -64,10 +64,10 @@ assert sys.modules[{canonical_name!r}] is canonical
 def test_merge_legacy_paths_expose_canonical_objects() -> None:
     legacy_application = importlib.import_module("memcommit.merge_application")
     canonical_application = importlib.import_module(
-        "memcommit.operations.merge.application"
+        "memcommit.application.operations.merge.application"
     )
     legacy_runtime = importlib.import_module("memcommit.merge_runtime")
-    canonical_runtime = importlib.import_module("memcommit.operations.merge.runtime")
+    canonical_runtime = importlib.import_module("memcommit.application.operations.merge.runtime")
 
     assert legacy_application is canonical_application
     assert legacy_application.MergeRequest is canonical_application.MergeRequest
@@ -89,10 +89,10 @@ def test_merge_legacy_facades_define_no_behavior(relative_path: str) -> None:
 def test_merge_package_import_is_lazy() -> None:
     source = """
 import sys
-import memcommit.operations.merge
+import memcommit.application.operations.merge
 
-assert "memcommit.operations.merge.application" not in sys.modules
-assert "memcommit.operations.merge.runtime" not in sys.modules
+assert "memcommit.application.operations.merge.application" not in sys.modules
+assert "memcommit.application.operations.merge.runtime" not in sys.modules
 """
 
     subprocess.run(
@@ -103,7 +103,7 @@ assert "memcommit.operations.merge.runtime" not in sys.modules
 
 
 def test_pre_relocation_merge_global_loads_through_legacy_alias() -> None:
-    canonical = importlib.import_module("memcommit.operations.merge.application")
+    canonical = importlib.import_module("memcommit.application.operations.merge.application")
 
     restored = pickle.loads(b"cmemcommit.merge_application\nMergeRequest\n.")
 

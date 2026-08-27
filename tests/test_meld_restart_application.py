@@ -6,7 +6,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from memcommit.operations.meld.restart_application import (
+from memcommit.application.operations.meld.restart_application import (
     MeldRestartError,
     MeldRestartRequest,
     MeldRestartResult,

@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-from memcommit.authority.access import resolve_context_access
+from memcommit.application.authority.access import resolve_context_access
 from memcommit.context_targeting.readable_catalog import (
     freeze_profile_context_navigation,
 )
 from memcommit.interfaces.tui.operations.merge.model import MergeTuiSetup
-from memcommit.operations.merge.runtime import MemoryStoreMergePort
+from memcommit.application.operations.merge.runtime import MemoryStoreMergePort
 
 
 def build_merge_tui_setup(

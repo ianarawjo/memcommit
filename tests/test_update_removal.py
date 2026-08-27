@@ -7,12 +7,12 @@ import json
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Context, MemoryRef, QueryContextRef
 from memcommit.store import MemoryStore
 from memcommit.update import RemoveOperation, UpdateError, UpdateSession, plan_update
-from memcommit.operations.update.application import (
+from memcommit.application.operations.update.application import (
     UpdateApplicationError,
     prepare_update_application,
 )

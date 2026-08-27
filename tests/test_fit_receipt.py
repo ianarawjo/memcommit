@@ -8,24 +8,24 @@ from types import SimpleNamespace
 import click
 from click.testing import CliRunner
 
-from memcommit.operations.fit.ground_report import (
+from memcommit.application.operations.fit.ground_report import (
     FitExample,
     FitJudgment,
     FitReport,
     FitRule,
 )
-from memcommit.operations.fit.judgment import (
+from memcommit.application.operations.fit.judgment import (
     FitAnalysis,
     FitAssessment,
     FitProposition,
     FitQuestion,
 )
-from memcommit.operations.fit.application import (
+from memcommit.application.operations.fit.application import (
     FitInputOrigin,
     FitPropositionsResult,
     FitResult,
 )
-from memcommit.operations.fit.coherence import (
+from memcommit.application.operations.fit.coherence import (
     FitCoherenceFinding,
     FitCoherenceSubject,
     FitContextFrame,

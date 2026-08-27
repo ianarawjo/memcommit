@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-from memcommit.api import (
+from memcommit.adapters.python_api import (
     GrantedQueryResult,
     MemCommitClient,
     OrdinaryQueryResult,
@@ -388,7 +388,7 @@ def test_agent_adapter_depends_only_on_public_api_and_durable_reference_type():
 
     forbidden = (
         "memcommit.commands",
-        "memcommit.operations",
+        "memcommit.application.operations",
         "memcommit.infrastructure",
         "memcommit.store",
         "typer",

@@ -2,7 +2,7 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 import pytest
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 import memcommit.commands.shared.endpoint_setup_flows as endpoint_setup_flows
 import memcommit.commands.meld.setup as meld_setup_command
 from memcommit.commands.compare.setup import choose_compare_setup

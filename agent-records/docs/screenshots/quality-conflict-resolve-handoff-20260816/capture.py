@@ -234,7 +234,7 @@ def _run_child(kind: str) -> None:
 
     import memcommit.commands.find_conflicts.resolve_handoff as handoff_command
     import memcommit.commands.find_conflicts.command as find_command
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
     from memcommit.cli import app
 
     with tempfile.TemporaryDirectory(prefix="quality-handoff-capture-") as directory:

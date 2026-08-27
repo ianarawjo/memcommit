@@ -1,7 +1,7 @@
 # Immediate Context clear design rationale
 
 Clear's request/result contract and all authority, subtree-freeze, checkpoint,
-and durable mutation behavior are owned by `memcommit.operations.clear`.
+and durable mutation behavior are owned by `memcommit.application.operations.clear`.
 `memcommit.commands.clear.command` now retains only argument syntax, one current-name
 snapshot, and terminal presentation. The focused boundary and preserved
 compatibility are recorded in `clear-application-boundary-matrix.md`.

@@ -4,8 +4,8 @@ import json
 
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.find.command import (
     _collect_find_frame_candidates,
     _load_find_frame_roots,

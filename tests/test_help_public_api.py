@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from memcommit.api import HelpInputError, MemCommitClient
+from memcommit.adapters.python_api import HelpInputError, MemCommitClient
 
 
 def test_client_lists_operations_without_store_or_provider_access(tmp_path):

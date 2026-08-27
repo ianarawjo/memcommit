@@ -10,17 +10,17 @@ from memcommit.bootstrap import build_elaborate_console_runner
 from memcommit.infrastructure.clipboard import write_system_clipboard
 from memcommit.commands.shared.command_progress import CommandProgress
 from memcommit.commands.shared.context_operand import ContextOperandSnapshot
-from memcommit.operations.elaborate.model import ElaborateError, ElaborateMode
-from memcommit.operations.elaborate.application import ElaborateRequest, ElaborateResult
+from memcommit.application.operations.elaborate.model import ElaborateError, ElaborateMode
+from memcommit.application.operations.elaborate.application import ElaborateRequest, ElaborateResult
 from memcommit.semantic.goal_focus_runtime import freeze_goal_focus_operand
-from memcommit.operations.elaborate.add_runtime import (
+from memcommit.application.operations.elaborate.add_runtime import (
     FrozenElaborateSource,
     PreparedElaborateAdd,
     apply_prepared_elaborate_add,
     freeze_elaborate_context_source,
     prepare_elaborate_add,
 )
-from memcommit.operations.ground.elaborate import (
+from memcommit.application.operations.ground.elaborate import (
     FrozenGroundElaborate,
     GroundElaborateResult,
     apply_ground_elaborate_result,
@@ -35,10 +35,10 @@ from memcommit.interfaces.console import (
     resolve_console_mode,
 )
 from memcommit.interfaces.console.text import display_escape_text
-from memcommit.operations.profile.config import ProfileConfigError
-from memcommit.operations.profile.model import ProfileError
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.infrastructure.providers.subscription import QueryProviderError, connect_semantic_provider
-from memcommit.operations.add.semantic_runtime import (
+from memcommit.application.operations.add.semantic_runtime import (
     resolve_semantic_add_endpoints,
     resolve_semantic_add_target,
 )

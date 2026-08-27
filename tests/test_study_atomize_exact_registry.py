@@ -10,12 +10,12 @@ from typer.testing import CliRunner
 
 import memcommit.config as config_module
 import memcommit.atomize as atomize_module
-import memcommit.operations.atomize.analysis_runtime as atomize_analysis_runtime_module
-import memcommit.ops as ops
+import memcommit.application.operations.atomize.analysis_runtime as atomize_analysis_runtime_module
+import memcommit.application.ops as ops
 import memcommit.study_prewarm.atomize as atomize_prewarm_module
 from memcommit.atomize import create_atomize_analysis, impact_atomize
 from memcommit.atomize_workflow import open_or_create_atomize_workbench
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.config import Config
 from memcommit.context import Memory
 from memcommit.profile_config import (

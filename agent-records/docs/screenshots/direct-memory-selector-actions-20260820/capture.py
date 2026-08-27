@@ -49,7 +49,7 @@ def _configure_isolated_store(store_root: Path) -> None:
 
 
 def _initialize_reference() -> None:
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
     from memcommit.store import MemoryStore
 
     store = MemoryStore()
@@ -62,7 +62,7 @@ def _initialize_reference() -> None:
 
 
 def _initialize_edit() -> None:
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
     from memcommit.store import MemoryStore
 
     store = MemoryStore()

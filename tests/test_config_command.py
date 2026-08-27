@@ -8,7 +8,7 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.config as config_module
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 
 
 runner = CliRunner(mix_stderr=False)

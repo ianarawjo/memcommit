@@ -52,20 +52,20 @@ from memcommit.interfaces.tui.components.horizontal_choice import (
     HorizontalChoiceState,
     render_horizontal_choice,
 )
-from memcommit.help_catalog import (
+from memcommit.application.operations.operation_catalog import (
     OperationComparisonDetail,
     OperationHelp,
     OperationTextDetail,
-    compose_operation_help,
 )
-from memcommit.operations.help.application import list_operation_help
-from memcommit.operations.help.lookup_application import (
+from memcommit.application.operations.help.application import list_operation_help
+from memcommit.application.operations.help.composer import compose_operation_help
+from memcommit.application.operations.help.lookup_application import (
     HelpLookupError,
     execute_help_lookup,
     prepare_help_lookup,
 )
 from memcommit.infrastructure.providers.find_query import connect_help_provider
-from memcommit.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.infrastructure.providers.subscription import QueryProviderError
 from memcommit.interfaces.tui.operations.help.localization import (
     HELP_LANGUAGES,

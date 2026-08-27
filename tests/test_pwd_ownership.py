@@ -16,18 +16,18 @@ from tests.legacy_submodule_assertions import (
 LEGACY_AND_CANONICAL_PATHS = (
     (
         "memcommit.current_context_application",
-        "memcommit.operations.pwd.application",
+        "memcommit.application.operations.pwd.application",
     ),
     (
         "memcommit.current_context_runtime",
-        "memcommit.operations.pwd.runtime",
+        "memcommit.application.operations.pwd.runtime",
     ),
 )
 
 
 def test_legacy_application_path_aliases_the_operation_owned_module():
     legacy = importlib.import_module("memcommit.current_context_application")
-    canonical = importlib.import_module("memcommit.operations.pwd.application")
+    canonical = importlib.import_module("memcommit.application.operations.pwd.application")
 
     assert legacy is canonical
     assert legacy.get_current_context is canonical.get_current_context
@@ -38,7 +38,7 @@ def test_legacy_application_path_aliases_the_operation_owned_module():
 
 def test_legacy_runtime_path_aliases_the_operation_owned_module():
     legacy = importlib.import_module("memcommit.current_context_runtime")
-    canonical = importlib.import_module("memcommit.operations.pwd.runtime")
+    canonical = importlib.import_module("memcommit.application.operations.pwd.runtime")
 
     assert legacy is canonical
     assert legacy.read_current_context is canonical.read_current_context

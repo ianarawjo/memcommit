@@ -8,8 +8,8 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Memory, MemoryRef
 from memcommit.memory_transfer_application import (
     CopyMemoriesRequest,

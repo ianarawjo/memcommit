@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 from memcommit.goal_focus import GoalFocusError
 from memcommit.goal_focus_runtime import (
     freeze_goal_focus_context,

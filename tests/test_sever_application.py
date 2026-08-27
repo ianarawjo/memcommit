@@ -10,16 +10,16 @@ from pathlib import Path
 import pytest
 
 import memcommit.commands.sever.command as sever_command
-import memcommit.ops as ops
-from memcommit.operations.sever.model import (
+import memcommit.application.ops as ops
+from memcommit.application.operations.sever.model import (
     SeverApplication,
     SeverCandidate,
     SeverContextBinding,
     SeverMemory,
     SeverSession,
 )
-import memcommit.operations.sever.application as sever_application
-from memcommit.operations.sever.application import (
+import memcommit.application.operations.sever.application as sever_application
+from memcommit.application.operations.sever.application import (
     FrozenSeverInputs,
     SeverAnalysisProgress,
     SeverAnalysisRequest,
@@ -40,9 +40,9 @@ from memcommit.operations.sever.application import (
     run_sever_session_open,
     run_sever_session_start,
 )
-from memcommit.operations.sever.provider import SEVER_PAYLOAD_MARKER
-import memcommit.operations.sever.runtime as sever_runtime
-from memcommit.operations.sever.runtime import (
+from memcommit.application.operations.sever.provider import SEVER_PAYLOAD_MARKER
+import memcommit.application.operations.sever.runtime as sever_runtime
+from memcommit.application.operations.sever.runtime import (
     execute_sever_analysis,
     execute_sever_apply,
     execute_sever_session_apply,
@@ -51,7 +51,7 @@ from memcommit.operations.sever.runtime import (
     execute_sever_session_open,
     execute_sever_session_start,
 )
-from memcommit.operations.sever.session_store import SeverSessionStore
+from memcommit.application.operations.sever.session_store import SeverSessionStore
 from memcommit.store import ConcurrentContextUpdateError, MemoryStore
 
 

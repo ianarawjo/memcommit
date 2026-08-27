@@ -65,7 +65,14 @@ def test_legacy_shell_init_facade_defines_no_behavior() -> None:
 
 
 def test_cli_registers_the_interface_owned_shell_init_command() -> None:
-    path = REPOSITORY_ROOT / "src" / "memcommit" / "cli.py"
+    path = (
+        REPOSITORY_ROOT
+        / "src"
+        / "memcommit"
+        / "adapters"
+        / "console"
+        / "entrypoint.py"
+    )
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
     interface_imports = {
         alias.name
@@ -84,7 +91,7 @@ def test_cli_registers_the_interface_owned_shell_init_command() -> None:
     assert "shell_init" in interface_imports
     assert "shell_init" not in command_imports
 
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
     from memcommit.interfaces.cli import shell_init
 
     registration = next(

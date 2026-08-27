@@ -55,7 +55,7 @@ hierarchy edge. UID de-duplication prevents a Context reached lexically and by
 embed from entering the provider frame twice.
 
 The Store-backed adapter temporarily imports the operation-neutral access
-implementation from `memcommit.authority.access`. That module does not
+implementation from `memcommit.application.authority.access`. That module does not
 import Typer or prompt-toolkit, but its package location is still a known
 reverse dependency. Moving it is deferred until a second vertical slice proves
 the same owner and lifecycle; this slice must not copy or partially migrate the
@@ -64,7 +64,7 @@ shared Grant rules.
 ## Package ownership
 
 The canonical terminal-independent owners now live under
-`memcommit.operations.summarize`. `application.py` owns the typed request,
+`memcommit.application.operations.summarize`. `application.py` owns the typed request,
 frozen Source, provider-session protocol, freshness check, and read-only
 result. `runtime.py` owns Store and Grant projection, exact Study lookup,
 configured-provider composition, and the production execution adapters.
@@ -74,7 +74,7 @@ consumers import those operation-owned modules directly.
 The historical `memcommit.summarize_application` and
 `memcommit.summarize_runtime` paths remain behavior-free module-identity
 aliases for import-order, monkeypatch, and serialized-global compatibility.
-Importing `memcommit.operations.summarize` alone remains lazy. New production
+Importing `memcommit.application.operations.summarize` alone remains lazy. New production
 code uses the canonical package paths; compatibility aliases do not become a
 second implementation owner.
 
@@ -128,7 +128,7 @@ mem summarize argv
 
 | Callable | Current owner | Intended layer | Inputs/result | External effects | Authority/disclosure | Cache/receipt | Config/secrets | Callers | Evidence | Migration state |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `memcommit.operations.summarize.application:run_summarize` | Summarize operation application module | Application | `SummarizeRequest` + ports -> `SummarizeResult` | Through injected ports only | Source port freezes READ-authorized evidence before exact lookup or provider session | Optional exact prepared lookup; no durable local result | Receives injected lookup/session; reads no config or secret directly | CLI now; future Python/agent adapters | `tests/test_summarize_application.py` | `VERIFIED` internal boundary |
+| `memcommit.application.operations.summarize.application:run_summarize` | Summarize operation application module | Application | `SummarizeRequest` + ports -> `SummarizeResult` | Through injected ports only | Source port freezes READ-authorized evidence before exact lookup or provider session | Optional exact prepared lookup; no durable local result | Receives injected lookup/session; reads no config or secret directly | CLI now; future Python/agent adapters | `tests/test_summarize_application.py` | `VERIFIED` internal boundary |
 | `SummarizeRequest` / `SummarizeResult` | Summarize application module | Application contract | Typed request and read-only typed result | None | Carries locator/reach in and public source facts out; no Grant or credential object | Exposes digest/count, not a durable receipt | None | Application and adapters | Direct application tests | `CHARACTERIZED`, internal |
 | `SummarySourcePort.freeze` | Protocol in application module; `MemoryStoreSummarySourcePort` implementation | Application port / infrastructure adapter | Request -> frozen `SummaryFrame` + opaque token | Context/Profile/Grant reads in production implementation | Resolves locator and READ before Memory content can reach provider; a recursive local root uses one catalog containing local and READ-granted public names | None | No provider secret | `run_summarize` | CLI, direct production, recursive/direct, mixed local/granted, and granted-projection tests | `VERIFIED` production adapter; shared Grant location deferred |
 | `SummarySourcePort.revalidate` | Protocol in application module; `MemoryStoreSummarySourcePort` implementation | Application port / infrastructure adapter | Frozen source -> current frame | Context/Profile/Grant reads | Revalidates every selected granted public-name binding, the selected Context identities, and source digest before result publication | None | None | `run_summarize` | local source-change, mixed-scope Grant revocation, and Grant-revision tests | `VERIFIED` production adapter; shared Grant location deferred |

@@ -41,7 +41,7 @@ only from `agent-records/docs/operation-evidence-index.json`.
 | `impact` | `UNREVIEWED` | [`context-locator-design-rationale.md`](../context-locator-design-rationale.md) | — |
 | `import` | `UNREVIEWED` | — | — |
 | `init` | `CLOSED` | [`context-init-application-boundary-matrix.md`](../context-init-application-boundary-matrix.md)<br>[`context-name-portability-design-rationale.md`](../context-name-portability-design-rationale.md) | Ordinary Context initialization has one typed terminal-free transaction and independent exact-name CLI/TUI presenters; Study initialization remains a separate operation. |
-| `init-study` | `UNREVIEWED` | [`init-study-prewarm-regeneration-design-rationale.md`](../init-study-prewarm-regeneration-design-rationale.md)<br>[`init-study-scenario-versioning-design-rationale.md`](../init-study-scenario-versioning-design-rationale.md) | — |
+| `init-study` | `UNREVIEWED` | [`init-study-application-boundary-design-rationale.md`](../init-study-application-boundary-design-rationale.md)<br>[`init-study-prewarm-regeneration-design-rationale.md`](../init-study-prewarm-regeneration-design-rationale.md)<br>[`init-study-scenario-versioning-design-rationale.md`](../init-study-scenario-versioning-design-rationale.md) | — |
 | `list` | `UNREVIEWED` | [`context-listing-design-rationale.md`](../context-listing-design-rationale.md)<br>[`mem-ls-design-rationale.md`](../mem-ls-design-rationale.md) | — |
 | `lock` | `UNREVIEWED` | [`mem-write-protection-design-rationale.md`](../mem-write-protection-design-rationale.md) | — |
 | `log` | `UNREVIEWED` | [`command-attempt-ledger-design-rationale.md`](../command-attempt-ledger-design-rationale.md)<br>[`mem-history-search-design-rationale.md`](../mem-history-search-design-rationale.md) | — |

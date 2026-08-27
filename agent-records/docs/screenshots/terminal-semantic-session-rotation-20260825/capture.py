@@ -43,7 +43,7 @@ def _store_digest(root: Path) -> str:
 
 
 def _prepare_atomize_store(root: Path):
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
     from memcommit.atomize_workflow import open_or_create_atomize_workbench
     from memcommit.store import MemoryStore
     from tests.test_atomize_workbench import AggregateProvider
@@ -74,7 +74,7 @@ def _prepare_atomize_store(root: Path):
 
 
 def _prepare_meld_store(root: Path):
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
     from memcommit.meld import MeldSession, meld_canonical_digest
     from memcommit.store import MemoryStore
 
@@ -120,7 +120,7 @@ def _ambiguity_report(context, memory, *, suffix: str):
 
 
 def _prepare_review_store(root: Path):
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
     from memcommit.review import create_ambiguity_review
     from memcommit.store import MemoryStore
 

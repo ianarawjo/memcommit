@@ -15,9 +15,9 @@ from memcommit.context_targeting.presets import (
     ContextScopePreset,
     resolve_scope_preset,
 )
-from memcommit.operations.profile.config import ProfileConfigError
-from memcommit.operations.profile.model import ProfileError, import_baseline_profile
-from memcommit.operations.resource_import.model import (
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError, import_baseline_profile
+from memcommit.application.operations.resource_import.model import (
     import_context_from_profile,
     import_memory_from_profile,
     import_profile_from_profile,

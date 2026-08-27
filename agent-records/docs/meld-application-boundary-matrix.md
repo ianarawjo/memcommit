@@ -20,7 +20,7 @@ independent source of provider, cache, session, or Apply behavior.
 ## Package ownership
 
 The canonical terminal-independent owners now live together under
-`memcommit.operations.meld`. `application.py` owns the exact reviewed Apply
+`memcommit.application.operations.meld`. `application.py` owns the exact reviewed Apply
 request, route classification, port, result, and receipt validation;
 `application_flow.py` owns the compatibility adapter to the shared phase flow;
 `session_application.py` owns saved snapshots, pending turns, preservation,
@@ -38,7 +38,7 @@ directly.
 The historical flat `memcommit.meld_*_application`,
 `memcommit.meld_application_flow`, and `memcommit.meld_runtime` paths remain
 behavior-free module-identity aliases for import-order, monkeypatch, and
-serialized-global compatibility. Importing `memcommit.operations.meld` alone
+serialized-global compatibility. Importing `memcommit.application.operations.meld` alone
 remains lazy. New production consumers use the canonical paths; compatibility
 aliases are not alternate implementation owners.
 

@@ -26,8 +26,8 @@ from memcommit.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
 )
-from memcommit.selection import FlatSelectionState, SelectionOption
-from memcommit.selection.tui import render_vertical_choice_rows
+from memcommit.interfaces.console.selection import FlatSelectionState, SelectionOption
+from memcommit.interfaces.console.selection.tui import render_vertical_choice_rows
 
 
 def choose_flat_option(

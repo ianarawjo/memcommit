@@ -14,7 +14,7 @@ from memcommit.interfaces.tui.operations.summarize import (
     project_summarize_result,
     run_summarize_tui,
 )
-from memcommit.operations.summarize.application import (
+from memcommit.application.operations.summarize.application import (
     SummarizeRequest,
     SummarizeResult,
 )

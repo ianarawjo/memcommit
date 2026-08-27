@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-import memcommit.ops as ops
-from memcommit.api import FindInputError, FindResult, MemCommitClient
+import memcommit.application.ops as ops
+from memcommit.adapters.python_api import FindInputError, FindResult, MemCommitClient
 from memcommit.store import MemoryStore
 
 

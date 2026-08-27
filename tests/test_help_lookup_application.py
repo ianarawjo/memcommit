@@ -6,8 +6,8 @@ import json
 
 import pytest
 
-from memcommit.operations.help.application import describe_operation
-from memcommit.operations.help.lookup_application import (
+from memcommit.application.operations.help.application import describe_operation
+from memcommit.application.operations.help.lookup_application import (
     HELP_LOOKUP_EXECUTION_POLICY,
     HELP_LOOKUP_REQUEST_LIMIT,
     HelpLookupError,

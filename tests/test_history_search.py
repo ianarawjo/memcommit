@@ -10,7 +10,7 @@ from memcommit.history_search import (
     HistorySearchError,
     search_history,
 )
-from memcommit import ops
+from memcommit.application import ops
 from memcommit.store import MemoryStore
 
 

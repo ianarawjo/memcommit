@@ -95,7 +95,7 @@ def test_production_review_report_consumers_use_the_shared_owner() -> None:
     relative_paths = (
         "src/memcommit/retained_history/applied_review.py",
         "src/memcommit/commands/review/report.py",
-        "src/memcommit/operations/review/report_adapters.py",
+        "src/memcommit/application/operations/review/report_adapters.py",
     )
 
     for relative_path in relative_paths:

@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from copy import deepcopy
 
-from memcommit.api import (
+from memcommit.adapters.python_api import (
     MemCommitClient,
     SemanticAuthorityError,
     SemanticContextError,

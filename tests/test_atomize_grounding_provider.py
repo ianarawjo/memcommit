@@ -8,7 +8,7 @@ import uuid
 
 import pytest
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 from memcommit.atomize import (
     ATOMIZE_RULESET_VERSION,
     AtomizeAnalysisItem,

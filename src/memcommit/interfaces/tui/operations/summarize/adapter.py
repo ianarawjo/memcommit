@@ -16,7 +16,7 @@ from memcommit.interfaces.tui.viewers.semantic import (
     SemanticViewerDocument,
     SemanticViewerSection,
 )
-from memcommit.operations.summarize.application import SummarizeResult
+from memcommit.application.operations.summarize.application import SummarizeResult
 
 
 def _clipboard_scope_label(result: SummarizeResult) -> str:

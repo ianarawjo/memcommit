@@ -22,7 +22,7 @@ if str(REPOSITORY_ROOT) not in sys.path:
 def _demo_child() -> None:
     """Run the product Audit wait/review path with deterministic provider replies."""
 
-    from memcommit import ops
+    from memcommit.application import ops
     from memcommit.commands.audit.command import (
         _run_quality_audit_checks,
         run_quality_audit_review,

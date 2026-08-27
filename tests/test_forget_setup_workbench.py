@@ -4,9 +4,9 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
-import memcommit.operations.forget.runtime as forget_runtime
-from memcommit.cli import app
+import memcommit.application.ops as ops
+import memcommit.application.operations.forget.runtime as forget_runtime
+from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.forget import command as forget_command
 from memcommit.commands.forget.setup_workbench import (
     ForgetSetupReceipt,

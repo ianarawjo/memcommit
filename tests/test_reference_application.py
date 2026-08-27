@@ -7,17 +7,17 @@ from dataclasses import replace
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Memory, MemoryRef
-from memcommit.operations.reference.application import (
+from memcommit.application.operations.reference.application import (
     FrozenReferencePlan,
     ReferenceError,
     ReferenceRequest,
     ReferenceResult,
     run_reference,
 )
-from memcommit.operations.reference.runtime import MemoryStoreReferencePort
+from memcommit.application.operations.reference.runtime import MemoryStoreReferencePort
 from memcommit.store import MemoryStore
 
 

@@ -15,7 +15,7 @@ from memcommit.commands.shared.context_operand import ContextOperandSnapshot
 from memcommit.interfaces.tui.components.operation_launcher.location import (
     operation_launcher_orientation,
 )
-from memcommit.authority.access import (
+from memcommit.application.authority.access import (
     context_access_display_facts,
     resolve_context_access,
 )
@@ -45,8 +45,8 @@ from memcommit.interfaces.tui.operations.summarize import (
     SummarizeTuiSetup,
     project_summarize_clipboard,
 )
-from memcommit.operations.profile.config import ProfileConfigError
-from memcommit.operations.profile.model import ProfileError
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.infrastructure.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
@@ -57,9 +57,9 @@ from memcommit.application.reviewing.read_report_recents import (
     read_report_recents,
     revalidate_read_report_recent,
 )
-from memcommit.operations.summarize.model import SummarizeError, SummarizeProvider
-from memcommit.operations.summarize.application import SummarizeRequest, SummarizeResult
-from memcommit.operations.summarize.runtime import run_summarize_with_store
+from memcommit.application.operations.summarize.model import SummarizeError, SummarizeProvider
+from memcommit.application.operations.summarize.application import SummarizeRequest, SummarizeResult
+from memcommit.application.operations.summarize.runtime import run_summarize_with_store
 
 
 @contextmanager

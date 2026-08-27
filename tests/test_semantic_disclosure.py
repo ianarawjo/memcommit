@@ -6,19 +6,19 @@ import uuid
 
 import pytest
 
-import memcommit.operations.summarize.runtime as summarize_runtime
+import memcommit.application.operations.summarize.runtime as summarize_runtime
 from memcommit.context import Context, GrantedContextLink, Memory
-from memcommit.authority.access import ContextAccess
+from memcommit.application.authority.access import ContextAccess
 from memcommit.context_targeting.search import load_readable_search_roots
-from memcommit.operations.search.application import FindSearchRequest
-from memcommit.operations.search.runtime import execute_find_search
+from memcommit.application.operations.search.application import FindSearchRequest
+from memcommit.application.operations.search.runtime import execute_find_search
 from memcommit.meld import MeldError, MeldFrame
 from memcommit.semantic_disclosure import (
     SemanticDisclosureError,
     require_semantic_disclosure_authority,
 )
-from memcommit.operations.sever.application import SeverApplicationError
-from memcommit.operations.sever.runtime import capture_sever_binding
+from memcommit.application.operations.sever.application import SeverApplicationError
+from memcommit.application.operations.sever.runtime import capture_sever_binding
 from memcommit.summarize import SummarizeError, collect_summary_scope
 
 

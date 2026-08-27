@@ -15,9 +15,9 @@ import typer
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
-from memcommit.operations.atomize.application import atomize_application_audit
-from memcommit.operations.atomize.runtime import (
+import memcommit.application.ops as ops
+from memcommit.application.operations.atomize.application import atomize_application_audit
+from memcommit.application.operations.atomize.runtime import (
     MemoryStoreAtomizeSessionRepository,
     MemoryStoreAtomizeOutputPort,
     capture_atomize_session_snapshot,
@@ -25,7 +25,9 @@ from memcommit.operations.atomize.runtime import (
 from memcommit.atomize_workflow import open_or_create_atomize_workbench
 from memcommit.commands.atomize.command import cmd as atomize_command
 from memcommit.context import AutoCheckpoint, Memory
-from memcommit.provenance import build_trace
+from memcommit.retained_history.memory_history_reconstruction.memory_history_construction import (
+    reconstruct_memory_history,
+)
 from memcommit.store import MemoryStore
 
 
@@ -324,7 +326,7 @@ def test_save_as_publishes_one_final_checkpoint_and_restores_one_lifecycle(
     checkpoint_uid = checkpoints[0]["uid"]
     assert store.load_direct(source.name).to_dict() == source_record
     assert store.current_context_name() == output.name
-    trace = build_trace(store, output, memory.uid)
+    trace = reconstruct_memory_history(store, output, memory.uid)
     assert [event.kind for event in trace.events] == [
         "CREATED",
         "ATOMIZE_KEEP",
@@ -413,7 +415,7 @@ def test_save_as_trace_uses_recorded_nonpublished_source_frame_for_split(
         "The library closes at five.",
         "Security remains on site.",
     ]
-    trace = build_trace(store, output, children[0].uid)
+    trace = reconstruct_memory_history(store, output, children[0].uid)
     assert trace.component_uids == tuple(
         sorted((original.uid, children[0].uid, children[1].uid))
     )
@@ -563,8 +565,8 @@ def test_atomize_application_and_runtime_do_not_import_terminal_adapters():
     root = Path(__file__).resolve().parents[1]
     forbidden = ("typer", "prompt_toolkit", "memcommit.commands")
     for relative in (
-        "src/memcommit/operations/atomize/application.py",
-        "src/memcommit/operations/atomize/runtime.py",
+        "src/memcommit/application/operations/atomize/application.py",
+        "src/memcommit/application/operations/atomize/runtime.py",
     ):
         tree = ast.parse((root / relative).read_text(encoding="utf-8"))
         imports = []

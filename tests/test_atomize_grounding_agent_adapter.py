@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-from memcommit.api import (
+from memcommit.adapters.python_api import (
     AtomizeGroundingApplyResult,
     AtomizeGroundingProviderFailure,
     AtomizeGroundingProposalResult,
@@ -289,7 +289,7 @@ def test_adapter_imports_only_public_api_and_shared_agent_contract():
         if isinstance(node, ast.ImportFrom) and node.module
     ]
 
-    assert "memcommit.api" in imported
+    assert "memcommit.adapters.python_api" in imported
     assert "memcommit.interfaces.agent.contract" in imported
     assert not any(
         name.startswith(
@@ -297,8 +297,8 @@ def test_adapter_imports_only_public_api_and_shared_agent_contract():
                 "memcommit.commands",
                 "memcommit.atomize_grounding_application",
                 "memcommit.atomize_grounding_runtime",
-                "memcommit.operations.atomize.grounding_application",
-                "memcommit.operations.atomize.grounding_runtime",
+                "memcommit.application.operations.atomize.grounding_application",
+                "memcommit.application.operations.atomize.grounding_runtime",
                 "memcommit.store",
                 "memcommit.interfaces.mcp",
             )

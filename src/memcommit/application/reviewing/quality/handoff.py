@@ -28,12 +28,12 @@ from memcommit.application.reviewing.quality.workbench import (
     QualityFindWorkbenchError,
     QualityFindWorkbenchSession,
 )
-from memcommit.operations.resolve.application import (
+from memcommit.application.operations.resolve.application import (
     ResolveFitTarget,
     ResolveRequest,
     ResolveSourcePrecondition,
 )
-from memcommit.operations.review.model import REVIEW_RESPONSE_CHAR_LIMIT
+from memcommit.application.operations.review.model import REVIEW_RESPONSE_CHAR_LIMIT
 
 
 QUALITY_FINDING_HANDOFF_CONTRACT_VERSION = "quality-finding-handoff-v1"

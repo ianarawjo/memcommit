@@ -16,7 +16,7 @@ changing a measured Study operation.
 
 ## Typed operation contract
 
-The canonical implementation owner is `memcommit.operations.add`, split into
+The canonical implementation owner is `memcommit.application.operations.add`, split into
 terminal-independent `application` and Store/Grant-backed `runtime` modules.
 The former flat `memcommit.add_application` and `memcommit.add_runtime` paths
 remain module-identity aliases for import-order, monkeypatch, and serialized-

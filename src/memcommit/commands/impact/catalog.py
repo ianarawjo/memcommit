@@ -21,9 +21,9 @@ from memcommit.interfaces.tui.components.operation_launcher.session import (
     SessionPickerEntry,
     choose_session,
 )
-from memcommit.operations.sever.session_store import SeverSessionStore
+from memcommit.application.operations.sever.session_store import SeverSessionStore
 from memcommit.persistence.store import MemoryStore
-from memcommit.operations.update.receipt_store import UpdateReceiptStore
+from memcommit.application.operations.update.receipt_store import UpdateReceiptStore
 
 
 IMPACT_SESSION_KINDS = ("atomize", "meld", "sever", "update")

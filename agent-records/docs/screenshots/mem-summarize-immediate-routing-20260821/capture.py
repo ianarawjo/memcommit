@@ -63,7 +63,7 @@ def _store_bytes(store_dir: Path) -> tuple[tuple[str, bytes], ...]:
 
 
 def _run_child(kind: str) -> None:
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
     from memcommit.cli import app
     from memcommit.store import MemoryStore
 

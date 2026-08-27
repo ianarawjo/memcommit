@@ -8,7 +8,7 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.commands.shared.context_operand import ContextOperandSnapshot
-from memcommit.authority.access import (
+from memcommit.application.authority.access import (
     ContextAccess,
     context_access_display_facts,
     resolve_context_access,
@@ -28,11 +28,11 @@ from memcommit.commands.find.chat_shell import (
 from memcommit.commands.find.search_workbench import (
     run_find_search_workbench,
 )
-from memcommit.operations.search.materialization_application import (
+from memcommit.application.operations.search.materialization_application import (
     FindMaterializationError,
     FindMaterializationRequest,
 )
-from memcommit.operations.search.materialization_runtime import (
+from memcommit.application.operations.search.materialization_runtime import (
     execute_find_materialization,
 )
 from memcommit.commands.shared.command_progress import CommandProgress
@@ -50,36 +50,36 @@ from memcommit.context_targeting.presets import (
     resolve_context_traversal,
     resolve_scope_preset,
 )
-from memcommit.authority.derived_policy import authorize_combination
+from memcommit.application.authority.derived_policy import authorize_combination
 from memcommit.interfaces.console.text import (
     display_escape_text,
     safe_terminal_text,
 )
 from memcommit.commands.find.result_present import group_search_items
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
-from memcommit.operations.search.answer_dialogue import (
+from memcommit.application.operations.search.answer_dialogue import (
     FindAnswerCorpusTooLarge,
     FindAnswerProvider,
     FindOutsideStatus,
     synthesize_find_answer,
 )
-from memcommit.operations.search.answer_references import (
+from memcommit.application.operations.search.answer_references import (
     render_find_answer_references,
 )
-from memcommit.operations.search.application import (
+from memcommit.application.operations.search.application import (
     FindSearchRequest,
     FindSearchResponse,
     FindSearchStage,
 )
-from memcommit.operations.search.runtime import execute_find_search
-from memcommit.operations.search.scope_evidence import (
+from memcommit.application.operations.search.runtime import execute_find_search
+from memcommit.application.operations.search.scope_evidence import (
     collect_outside_context_evidence,
     compact_artifact_references,
     context_remainder_evidence,
     frame_context_uids,
     visible_result_evidence,
 )
-from memcommit.operations.search.turn_dialogue import (
+from memcommit.application.operations.search.turn_dialogue import (
     FindTurnAction,
     FindTurnAnswer,
     FindTurnAsk,
@@ -90,7 +90,7 @@ from memcommit.infrastructure.providers.find_query import (
     connect_find_provider as connect_codex_chatgpt_provider,
 )
 from memcommit.infrastructure.providers.subscription import QueryProviderError
-from memcommit.operations.search.model import (
+from memcommit.application.operations.search.model import (
     FindError,
     SearchArtifact,
     SearchCandidate,
@@ -107,8 +107,8 @@ from memcommit.source_projection.presentation import (
     source_object_label,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.operations.profile.config import ProfileConfigError
-from memcommit.operations.profile.model import ProfileError
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
 
 
 FIND_OUTSIDE_CONFIRMATION = "confirm other contexts"
@@ -843,7 +843,7 @@ def _run_read_only_find_command(
     ):
         raise FindError("Find refused a non-show follow-up command.")
     return subprocess.run(
-        [sys.executable, "-m", "memcommit.cli", *argv[1:]],
+        [sys.executable, "-m", "memcommit.adapters.console.entrypoint", *argv[1:]],
         capture_output=True,
         text=True,
         encoding="utf-8",

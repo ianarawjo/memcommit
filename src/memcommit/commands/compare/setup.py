@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.authority.access import (
+from memcommit.application.authority.access import (
     ContextAccess,
     context_access_display_facts,
 )

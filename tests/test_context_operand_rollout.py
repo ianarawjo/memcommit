@@ -7,8 +7,8 @@ from prompt_toolkit.output import DummyOutput
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.impact import command as impact_command
 from memcommit.commands.review import command as review_command
 from memcommit.commands.compare.command import display_escape_text as compare_escape
@@ -78,7 +78,7 @@ def test_read_and_analysis_commands_share_relative_context_operand_boundary(
         lambda: object(),
     )
     monkeypatch.setattr(
-        "memcommit.operations.search.application.rank_candidates",
+        "memcommit.application.operations.search.application.rank_candidates",
         lambda *_args, **_kwargs: [],
     )
 

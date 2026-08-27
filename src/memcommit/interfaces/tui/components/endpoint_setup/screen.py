@@ -72,8 +72,8 @@ from memcommit.interfaces.tui.components.exact_name import (
     ExactNameFieldControl,
     ExactNameFieldView,
 )
-from memcommit.selection import FlatSelectionState, SelectionOption
-from memcommit.selection.tui import render_vertical_choice_rows
+from memcommit.interfaces.console.selection import FlatSelectionState, SelectionOption
+from memcommit.interfaces.console.selection.tui import render_vertical_choice_rows
 
 
 DraftValidator = Callable[[EndpointSetupDraft], str | None]

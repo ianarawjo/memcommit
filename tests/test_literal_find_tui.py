@@ -10,7 +10,7 @@ from memcommit.interfaces.tui.operations.find import (
     LiteralFindTuiSetup,
     run_literal_find_tui,
 )
-from memcommit.operations.find.literal_application import (
+from memcommit.application.operations.find.literal_application import (
     FrozenLiteralFindSource,
     LiteralFindRequest,
     LiteralFindSourceItem,

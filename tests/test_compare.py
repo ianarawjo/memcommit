@@ -13,10 +13,10 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 import memcommit.commands.compare.command as compare_command
 import memcommit.commands.compare.sessions as compare_sessions_module
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.comparison import ComparisonInput, comparison_canonical_digest
 from memcommit.comparison_provider import (
     COMPARISON_PAYLOAD_MARKER,

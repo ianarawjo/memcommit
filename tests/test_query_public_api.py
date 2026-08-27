@@ -10,8 +10,8 @@ import uuid
 import pytest
 
 import memcommit
-import memcommit.ops as ops
-from memcommit.api import (
+import memcommit.application.ops as ops
+from memcommit.adapters.python_api import (
     MemCommitClient,
     OrdinaryQueryResult,
     QueryAuthorityError,
@@ -353,7 +353,13 @@ def test_public_input_and_context_failures_are_typed_before_provider(tmp_path):
 
 
 def test_public_api_modules_have_no_command_or_terminal_dependency():
-    root = Path(__file__).parents[1] / "src" / "memcommit" / "api"
+    root = (
+        Path(__file__).parents[1]
+        / "src"
+        / "memcommit"
+        / "adapters"
+        / "python_api"
+    )
     imported: list[str] = []
     for path in root.glob("*.py"):
         tree = ast.parse(path.read_text(encoding="utf-8"))

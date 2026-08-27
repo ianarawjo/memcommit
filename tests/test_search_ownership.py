@@ -18,15 +18,15 @@ from tests.legacy_submodule_assertions import (
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 MODULE_PAIRS = (
-    ("memcommit.find_application", "memcommit.operations.search.application"),
-    ("memcommit.find_runtime", "memcommit.operations.search.runtime"),
+    ("memcommit.find_application", "memcommit.application.operations.search.application"),
+    ("memcommit.find_runtime", "memcommit.application.operations.search.runtime"),
     (
         "memcommit.find_materialization_application",
-        "memcommit.operations.search.materialization_application",
+        "memcommit.application.operations.search.materialization_application",
     ),
     (
         "memcommit.find_materialization_runtime",
-        "memcommit.operations.search.materialization_runtime",
+        "memcommit.application.operations.search.materialization_runtime",
     ),
 )
 
@@ -81,15 +81,15 @@ def test_search_legacy_facades_define_no_behavior(relative_path: str) -> None:
 def test_search_operation_package_import_is_lazy_and_separate_from_literal_find() -> None:
     program = """
 import sys
-import memcommit.operations.search
+import memcommit.application.operations.search
 
 blocked = (
-    "memcommit.operations.search.application",
-    "memcommit.operations.search.runtime",
-    "memcommit.operations.search.materialization_application",
-    "memcommit.operations.search.materialization_runtime",
-    "memcommit.operations.find.literal_application",
-    "memcommit.operations.find.literal_runtime",
+    "memcommit.application.operations.search.application",
+    "memcommit.application.operations.search.runtime",
+    "memcommit.application.operations.search.materialization_application",
+    "memcommit.application.operations.search.materialization_runtime",
+    "memcommit.application.operations.find.literal_application",
+    "memcommit.application.operations.find.literal_runtime",
 )
 assert not [name for name in blocked if name in sys.modules]
 """
@@ -102,13 +102,13 @@ assert not [name for name in blocked if name in sys.modules]
 
 
 def test_pre_relocation_search_globals_load_through_aliases() -> None:
-    application = importlib.import_module("memcommit.operations.search.application")
-    runtime = importlib.import_module("memcommit.operations.search.runtime")
+    application = importlib.import_module("memcommit.application.operations.search.application")
+    runtime = importlib.import_module("memcommit.application.operations.search.runtime")
     materialization_application = importlib.import_module(
-        "memcommit.operations.search.materialization_application"
+        "memcommit.application.operations.search.materialization_application"
     )
     materialization_runtime = importlib.import_module(
-        "memcommit.operations.search.materialization_runtime"
+        "memcommit.application.operations.search.materialization_runtime"
     )
 
     restored_request = pickle.loads(
@@ -140,13 +140,13 @@ def test_pre_relocation_search_globals_load_through_aliases() -> None:
 
 def test_production_search_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "src/memcommit/api/_operations/search.py",
+        "src/memcommit/adapters/python_api/_operations/search.py",
         "src/memcommit/commands/find/command.py",
         "src/memcommit/commands/find/materialization.py",
         "src/memcommit/commands/find/search_workbench.py",
-        "src/memcommit/operations/search/runtime.py",
-        "src/memcommit/operations/search/materialization_application.py",
-        "src/memcommit/operations/search/materialization_runtime.py",
+        "src/memcommit/application/operations/search/runtime.py",
+        "src/memcommit/application/operations/search/materialization_application.py",
+        "src/memcommit/application/operations/search/materialization_runtime.py",
     )
     legacy_imports = (
         "from memcommit.find_application import",
@@ -162,24 +162,24 @@ def test_production_search_consumers_use_the_operation_owner() -> None:
 
 def test_search_analysis_and_materialization_remain_separate_use_cases() -> None:
     application_source = (
-        REPOSITORY_ROOT / "src/memcommit/operations/search/application.py"
+        REPOSITORY_ROOT / "src/memcommit/application/operations/search/application.py"
     ).read_text(encoding="utf-8")
     materialization_source = (
         REPOSITORY_ROOT
-        / "src/memcommit/operations/search/materialization_application.py"
+        / "src/memcommit/application/operations/search/materialization_application.py"
     ).read_text(encoding="utf-8")
     package_source = "\n".join(
         (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         for relative_path in (
-            "src/memcommit/operations/search/application.py",
-            "src/memcommit/operations/search/runtime.py",
-            "src/memcommit/operations/search/materialization_application.py",
-            "src/memcommit/operations/search/materialization_runtime.py",
+            "src/memcommit/application/operations/search/application.py",
+            "src/memcommit/application/operations/search/runtime.py",
+            "src/memcommit/application/operations/search/materialization_application.py",
+            "src/memcommit/application/operations/search/materialization_runtime.py",
         )
     )
 
     assert "materialization" not in application_source.lower()
-    assert "memcommit.operations.search.application" in materialization_source
+    assert "memcommit.application.operations.search.application" in materialization_source
     assert "memcommit.commands" not in package_source
     assert "memcommit.interfaces" not in package_source
 
@@ -190,7 +190,7 @@ def test_selected_public_search_loads_analysis_without_materialization(
     program = f"""
 import sys
 from pathlib import Path
-from memcommit.api import MemCommitClient, SemanticContextError
+from memcommit.adapters.python_api import MemCommitClient, SemanticContextError
 
 client = MemCommitClient(root=Path({str(tmp_path / 'store')!r}), create=True)
 try:
@@ -200,11 +200,11 @@ except SemanticContextError:
 else:
     raise AssertionError('Search without a current Context unexpectedly succeeded')
 
-assert 'memcommit.api._operations.search' in sys.modules
-assert 'memcommit.operations.search.application' in sys.modules
-assert 'memcommit.operations.search.runtime' in sys.modules
-assert 'memcommit.operations.search.materialization_application' not in sys.modules
-assert 'memcommit.operations.search.materialization_runtime' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.search' in sys.modules
+assert 'memcommit.application.operations.search.application' in sys.modules
+assert 'memcommit.application.operations.search.runtime' in sys.modules
+assert 'memcommit.application.operations.search.materialization_application' not in sys.modules
+assert 'memcommit.application.operations.search.materialization_runtime' not in sys.modules
 assert 'memcommit.find_application' not in sys.modules
 assert 'memcommit.find_runtime' not in sys.modules
 """

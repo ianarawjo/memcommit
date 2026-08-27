@@ -35,7 +35,7 @@ _BASE.ROWS = ROWS
 
 
 def _initialize() -> tuple[str, str, str]:
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
     from memcommit.profile_config import (
         AUTHORING_PROFILE_NAME,
         AUTHORING_PROFILE_UID,

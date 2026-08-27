@@ -7,10 +7,10 @@ import json
 import pytest
 from typer.testing import CliRunner
 
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.find.command import _run_find_search_request
 from memcommit.commands.find.search_workbench import FindSearchRequest
-from memcommit.authority.access import resolve_context_access
+from memcommit.application.authority.access import resolve_context_access
 from memcommit.commands.shared.readable_context_catalog import (
     freeze_readable_context_catalog,
 )

@@ -199,7 +199,7 @@ def _run_child(kind: str) -> None:
             already_fit=kind == "already-fit"
         )
         if kind == "stale":
-            import memcommit.ops as ops
+            import memcommit.application.ops as ops
             from memcommit.resolve_runtime import MemoryStoreResolvePort
 
             original_apply = MemoryStoreResolvePort.apply

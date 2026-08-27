@@ -6,7 +6,7 @@ import typer
 from memcommit.infrastructure.command_ledger.attempts import annotate_command_outcome
 from memcommit.commands.shared.command_wait import run_command_wait
 from memcommit.commands.shared.context_operand import ContextOperandSnapshot
-from memcommit.authority.access import (
+from memcommit.application.authority.access import (
     context_access_display_facts,
     resolve_context_access,
 )
@@ -19,7 +19,7 @@ from memcommit.interfaces.console.text import (
     safe_terminal_text,
 )
 from memcommit.context import Context
-from memcommit.operations.forget.application import (
+from memcommit.application.operations.forget.application import (
     ForgetAnalysisRequest,
     ForgetApplyRequest,
     ForgetSessionSnapshot,
@@ -29,7 +29,7 @@ from memcommit.operations.forget.application import (
     run_forget_analysis,
     run_forget_apply,
 )
-from memcommit.operations.forget.runtime import (
+from memcommit.application.operations.forget.runtime import (
     MemoryStoreForgetSourcePort,
     connect_forget_provider,
 )
@@ -37,8 +37,8 @@ from memcommit.interfaces.tui.operations.forget import (
     choose_forget_setup,
     run_forget_review_workbench,
 )
-from memcommit.operations.profile.config import ProfileConfigError
-from memcommit.operations.profile.model import ProfileError
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.infrastructure.providers.types import SemanticProvider
 from memcommit.infrastructure.providers.subscription import QueryProviderError
 from memcommit.semantic.changes import ProposedChange

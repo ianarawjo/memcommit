@@ -5,8 +5,8 @@ import json
 
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.adapters.console.entrypoint import app
 from memcommit.command_attempts import (
     CommandAttempt,
     CommandAttemptLedger,

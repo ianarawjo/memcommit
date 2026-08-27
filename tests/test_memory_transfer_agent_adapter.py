@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-import memcommit.ops as ops
-from memcommit.api import MemCommitClient
+import memcommit.application.ops as ops
+from memcommit.adapters.python_api import MemCommitClient
 from memcommit.interfaces.agent import (
     COPY_MEMORIES_AGENT_TOOL_NAME,
     MOVE_MEMORIES_AGENT_TOOL_NAME,

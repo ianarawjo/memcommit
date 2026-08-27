@@ -49,7 +49,7 @@ from memcommit.interfaces.tui.components.focus import (
     bind_surface_navigation,
 )
 from memcommit.application.reviewing.session_navigation import SessionWorkbenchNavigation
-from memcommit.operations.share.model import SharePreview
+from memcommit.application.operations.share.model import SharePreview
 
 
 ShareViewerAction = Literal["send", "browse_endpoint", "close"]

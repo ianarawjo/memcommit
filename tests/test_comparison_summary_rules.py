@@ -6,11 +6,11 @@ import json
 
 import pytest
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 from memcommit.comparison import ComparisonInput
-from memcommit.operations.compare.summary import ComparisonSummaryError
-from memcommit.operations.compare.summary_provider import summarize_comparison
-from memcommit.operations.compare.summary_rules import (
+from memcommit.application.operations.compare.summary import ComparisonSummaryError
+from memcommit.application.operations.compare.summary_provider import summarize_comparison
+from memcommit.application.operations.compare.summary_rules import (
     COMPARISON_SUMMARY_RULESET_VERSION,
     COMPARISON_SUMMARY_WORD_LIMIT,
     comparison_summary_ruleset,

@@ -8,9 +8,9 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
-from memcommit.authority.access import GrantedReadStore, resolve_context_access
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.application.authority.access import GrantedReadStore, resolve_context_access
+from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Context, Memory
 from memcommit.context_snapshot import ContextSnapshotRef
 from memcommit.embed_runtime import MemoryStoreEmbedPort

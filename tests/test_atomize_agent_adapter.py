@@ -8,8 +8,8 @@ from pathlib import Path
 
 import pytest
 
-import memcommit.ops as ops
-from memcommit.api import (
+import memcommit.application.ops as ops
+from memcommit.adapters.python_api import (
     AtomizeAnalysisResult,
     AtomizeAppliedItemResult,
     AtomizeChildResult,
@@ -685,7 +685,7 @@ def test_adapter_imports_only_public_api_and_shared_agent_contract():
         if isinstance(node, ast.ImportFrom) and node.module
     ]
 
-    assert "memcommit.api" in imported
+    assert "memcommit.adapters.python_api" in imported
     assert "memcommit.interfaces.agent.contract" in imported
     assert not any(
         name.startswith(
@@ -693,7 +693,7 @@ def test_adapter_imports_only_public_api_and_shared_agent_contract():
                 "memcommit.commands",
                 "memcommit.atomize_runtime",
                 "memcommit.atomize_application",
-                "memcommit.operations.atomize",
+                "memcommit.application.operations.atomize",
                 "memcommit.store",
                 "memcommit.interfaces.mcp",
             )

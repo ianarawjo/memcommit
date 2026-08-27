@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-import memcommit.ops as ops
-from memcommit.api import (
+import memcommit.application.ops as ops
+from memcommit.adapters.python_api import (
     MemCommitClient,
     ShowContextError,
     ShowContextResult,
@@ -95,7 +95,7 @@ def test_explicit_root_never_consults_global_profile_grants(tmp_path, monkeypatc
         raise AssertionError("Explicit-root Show consulted global Profiles")
 
     monkeypatch.setattr(
-        "memcommit.api._operations.show.load_profile_registry",
+        "memcommit.adapters.python_api._operations.show.load_profile_registry",
         forbidden,
     )
 

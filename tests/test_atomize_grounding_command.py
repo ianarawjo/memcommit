@@ -10,7 +10,7 @@ from pathlib import Path
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 import memcommit.store as store_module
 from memcommit.atomize import (
     ATOMIZE_RULESET_VERSION,
@@ -25,9 +25,11 @@ from memcommit.atomize_grounding_provider import (
     ATOMIZE_GROUNDING_PAYLOAD_MARKER,
 )
 from memcommit.atomize_workbench import create_atomize_workbench
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.context import AutoCheckpoint, Memory, MemoryRef
-from memcommit.provenance import build_trace
+from memcommit.retained_history.memory_history_reconstruction.memory_history_construction import (
+    reconstruct_memory_history,
+)
 from memcommit.rationale import build_rationale
 from memcommit.review import direct_context_digest
 from memcommit.store import MemoryStore
@@ -535,7 +537,7 @@ def test_cli_grounding_dialogue_resumes_then_applies_once_with_provenance(
     assert "no duplicate checkpoint" in repeated.output
     assert len(store.list_checkpoints(ctx.name)) == checkpoints_before + 1
 
-    trace = build_trace(store, updated, student.uid)
+    trace = reconstruct_memory_history(store, updated, student.uid)
     grounded_event = next(
         event
         for event in trace.events
@@ -637,7 +639,7 @@ def test_grounding_carries_selected_reading_and_free_text_into_provider(
     applied = runner.invoke(app, ["atomize", "--accept-grounding"])
     assert applied.exit_code == 0, applied.output
     updated = store.load_direct(ctx.name)
-    trace = build_trace(store, updated, _student.uid)
+    trace = reconstruct_memory_history(store, updated, _student.uid)
     event = next(
         item
         for item in trace.events
@@ -665,7 +667,7 @@ def test_grounding_carries_selected_reading_and_free_text_into_provider(
     tampered = json.loads(checkpoint_path.read_text(encoding="utf-8"))
     tampered["args"]["grounding"]["turns"][0]["revision"] = "EXTEND"
     checkpoint_path.write_text(json.dumps(tampered), encoding="utf-8")
-    reconstructed = build_trace(store, updated, _student.uid)
+    reconstructed = reconstruct_memory_history(store, updated, _student.uid)
     reconstructed_event = next(
         item
         for item in reconstructed.events
@@ -680,7 +682,7 @@ def test_grounding_carries_selected_reading_and_free_text_into_provider(
     tampered["args"]["grounding"]["turns"][0]["revision"] = "INITIAL"
     tampered["args"]["grounding"]["schema_version"] = True
     checkpoint_path.write_text(json.dumps(tampered), encoding="utf-8")
-    boolean_version = build_trace(store, updated, _student.uid)
+    boolean_version = reconstruct_memory_history(store, updated, _student.uid)
     boolean_version_event = next(
         item
         for item in boolean_version.events

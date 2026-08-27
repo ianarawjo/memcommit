@@ -6,9 +6,9 @@ from pathlib import Path
 
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 import memcommit.profiles as profiles_module
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Memory
 from memcommit.profile_config import (
     load_profile_registry,

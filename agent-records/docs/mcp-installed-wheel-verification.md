@@ -51,7 +51,7 @@ execution through its provider-free empty-Source route; its provider-backed
 and changed-Apply paths remain covered in-process.
 
 From a second process whose working directory was outside the checkout,
-`import memcommit` did not load `memcommit.api`; resolving the real public
+`import memcommit` did not load `memcommit.adapters.python_api`; resolving the real public
 client loaded no Add, Fit, Distill, Elaborate, Forget, Ground, Meld, or Query
 application implementation. The resolved root/API client objects retained
 identity and the module origin remained under `site-packages`.

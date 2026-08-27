@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import json
 
-import memcommit.ops as ops
-from memcommit.api import (
+import memcommit.application.ops as ops
+from memcommit.adapters.python_api import (
     DistillApplyResult,
     DistillProposal,
     ElaborateProposal,
@@ -18,7 +18,7 @@ from memcommit.api import (
 )
 from memcommit.distill import DISTILL_PAYLOAD_MARKER
 from memcommit.elaborate import ELABORATE_PAYLOAD_MARKER
-from memcommit.operations.fit.judgment import FIT_JUDGMENT_PAYLOAD_MARKER
+from memcommit.application.operations.fit.judgment import FIT_JUDGMENT_PAYLOAD_MARKER
 from memcommit.store import MemoryStore
 from tests.elaborate_validation_support import (
     passing_elaborate_validation_response,

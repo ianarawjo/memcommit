@@ -7,7 +7,7 @@ from pathlib import Path
 
 from typer.testing import CliRunner
 
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.find_answer_references import (
     FindAnswerEvidence,
     FindAnswerSentence,
@@ -18,16 +18,16 @@ from memcommit.interfaces.cli.query import (
     render_ordinary_query_response,
     render_query_reference_response,
 )
-from memcommit.operations.query.granted_application import (
+from memcommit.application.operations.query.granted_application import (
     GrantedQueryRequest,
     GrantedQueryResponse,
     GrantedQueryTarget,
 )
-from memcommit.operations.query.ordinary_application import (
+from memcommit.application.operations.query.ordinary_application import (
     OrdinaryQueryRequest,
     OrdinaryQueryResponse,
 )
-from memcommit.operations.query.reference_application import (
+from memcommit.application.operations.query.reference_application import (
     QueryReferenceRequest,
     QueryReferenceResponse,
 )

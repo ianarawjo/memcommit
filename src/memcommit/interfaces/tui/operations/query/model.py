@@ -6,11 +6,11 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Literal, TypeAlias
 
-from memcommit.operations.query.granted_application import (
+from memcommit.application.operations.query.granted_application import (
     GrantedQueryRequest,
     GrantedQueryResponse,
 )
-from memcommit.operations.query.ordinary_application import (
+from memcommit.application.operations.query.ordinary_application import (
     OrdinaryQueryRequest,
     OrdinaryQueryResponse,
 )

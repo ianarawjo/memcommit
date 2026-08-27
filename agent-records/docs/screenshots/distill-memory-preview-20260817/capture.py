@@ -32,7 +32,7 @@ def _configure_store(root: Path):
 
 
 def _prepare_store(root: Path):
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
 
     store = _configure_store(root)
     cases = ops.init("capture/cases")

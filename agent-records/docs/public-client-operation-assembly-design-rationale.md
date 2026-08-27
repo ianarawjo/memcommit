@@ -128,8 +128,8 @@ source frame, Distill and Elaborate core/CLI/TUI behavior, Add, every Query
 route, the complete Meld and Atomize Grounding public lifecycles, structural
 Atomize open and exact-version Apply, all eight agent adapters, MCP projection,
 and fresh-process import isolation. Ruff passed for
-every Python file changed by this rollout, the package compiled, and
-`python -m memcommit.cli --help` loaded the Fit, Distill, and Elaborate commands.
+every Python file changed by this rollout, the package compiled, and the
+canonical console entry point loaded the Fit, Distill, and Elaborate commands.
 
 An isolated `uv build` wheel was installed with the `mcp` extra under Python
 3.13. From that `site-packages` origin, constructing the client loaded no

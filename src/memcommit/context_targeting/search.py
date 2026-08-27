@@ -8,12 +8,12 @@ from typing import TYPE_CHECKING, Protocol
 from memcommit.context import Context
 from memcommit.context_targeting.model import ContextScope
 from memcommit.context_targeting.resolution import expand_lexical_context_names
-from memcommit.operations.search.model import (
+from memcommit.application.operations.search.model import (
     SearchCandidate,
     append_artifact_candidates,
     collect_candidates_from_roots,
 )
-from memcommit.operations.search.artifacts import collect_search_artifacts
+from memcommit.application.operations.search.artifacts import collect_search_artifacts
 
 if TYPE_CHECKING:
     from memcommit.persistence.store import MemoryStore

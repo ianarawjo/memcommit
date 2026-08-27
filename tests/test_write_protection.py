@@ -7,8 +7,8 @@ import json
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.adapters.console.entrypoint import app
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.ground import create_ground_session
 from memcommit.store import MemoryStore, context_record_digest

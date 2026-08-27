@@ -12,7 +12,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
-from memcommit.operations.meld.model import MeldSession, meld_canonical_digest
+from memcommit.application.operations.meld.model import MeldSession, meld_canonical_digest
 from memcommit.persistence.store import MemoryStore
 
 

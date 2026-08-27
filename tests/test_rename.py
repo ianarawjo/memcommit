@@ -14,10 +14,10 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 import memcommit.store as store_module
 from memcommit.command_history import build_command_stacks
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.context import (
     AutoCheckpoint,
     Context,
@@ -31,9 +31,9 @@ from memcommit.ground import (
     create_ground_session,
 )
 from memcommit.store import ConcurrentContextUpdateError, MemoryStore
-from memcommit.operations.translate.runtime import plan_translation
-from memcommit.operations.translate.view import TranslationCatalog, TranslationView
-from memcommit.operations.translate.view_store import (
+from memcommit.application.operations.translate.runtime import plan_translation
+from memcommit.application.operations.translate.view import TranslationCatalog, TranslationView
+from memcommit.application.operations.translate.view_store import (
     load_translation_catalog,
     save_translation_catalog,
 )

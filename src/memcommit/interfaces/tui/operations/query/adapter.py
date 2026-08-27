@@ -4,14 +4,14 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.operations.search.answer_references import (
+from memcommit.application.operations.search.answer_references import (
     FindAnswerReferenceDocument,
     render_numbered_find_answer_reference,
 )
 from memcommit.interfaces.console.text import safe_terminal_text
 from memcommit.interfaces.tui.core.theme import focused_control_style
-from memcommit.operations.query.granted_application import GrantedQueryResponse
-from memcommit.operations.query.ordinary_application import OrdinaryQueryResponse
+from memcommit.application.operations.query.granted_application import GrantedQueryResponse
+from memcommit.application.operations.query.ordinary_application import OrdinaryQueryResponse
 from memcommit.source_projection.model import SourceForm
 from memcommit.source_projection.presentation import source_object_label
 from memcommit.interfaces.tui.operations.query.model import (

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from memcommit.interfaces.console.text import safe_terminal_text
-from memcommit.operations.replace.application import FrozenReplacePlan, ReplaceApplyResult
+from memcommit.application.operations.replace.application import FrozenReplacePlan, ReplaceApplyResult
 
 
 def render_replace_plan(plan: FrozenReplacePlan) -> str:

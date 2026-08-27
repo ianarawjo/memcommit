@@ -8,10 +8,10 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.config as config_module
-import memcommit.ops as ops
-from memcommit.authority.access import resolve_context_access
+import memcommit.application.ops as ops
+from memcommit.application.authority.access import resolve_context_access
 from memcommit.commands.sever.command import _capture_binding, _start
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.config import Config
 from memcommit.context import Memory
 from memcommit.profile_config import (
@@ -19,12 +19,12 @@ from memcommit.profile_config import (
     ProfileRegistry,
     STUDY_RUN_PARTICIPANT_SOURCE_KIND,
 )
-from memcommit.operations.sever.model import (
+from memcommit.application.operations.sever.model import (
     SeverCandidate,
     SeverSession,
     sever_frame_digest,
 )
-from memcommit.operations.sever.session_store import SeverSessionStore
+from memcommit.application.operations.sever.session_store import SeverSessionStore
 from memcommit.store import MemoryStore
 from memcommit.study_prewarm.registry import (
     StudyPrewarmRegistryError,

@@ -20,11 +20,11 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 MODULE_PAIRS = (
     (
         "memcommit.reference_application",
-        "memcommit.operations.reference.application",
+        "memcommit.application.operations.reference.application",
     ),
     (
         "memcommit.reference_runtime",
-        "memcommit.operations.reference.runtime",
+        "memcommit.application.operations.reference.runtime",
     ),
 )
 
@@ -66,11 +66,11 @@ assert sys.modules[{canonical_name!r}] is canonical
 def test_reference_legacy_paths_expose_the_canonical_contract() -> None:
     legacy_application = importlib.import_module("memcommit.reference_application")
     canonical_application = importlib.import_module(
-        "memcommit.operations.reference.application"
+        "memcommit.application.operations.reference.application"
     )
     legacy_runtime = importlib.import_module("memcommit.reference_runtime")
     canonical_runtime = importlib.import_module(
-        "memcommit.operations.reference.runtime"
+        "memcommit.application.operations.reference.runtime"
     )
 
     assert legacy_application is canonical_application
@@ -99,10 +99,10 @@ def test_reference_legacy_facades_define_no_behavior(relative_path: str) -> None
 def test_reference_package_import_is_lazy() -> None:
     program = """
 import sys
-import memcommit.operations.reference
+import memcommit.application.operations.reference
 
-assert "memcommit.operations.reference.application" not in sys.modules
-assert "memcommit.operations.reference.runtime" not in sys.modules
+assert "memcommit.application.operations.reference.application" not in sys.modules
+assert "memcommit.application.operations.reference.runtime" not in sys.modules
 """
 
     subprocess.run(
@@ -114,7 +114,7 @@ assert "memcommit.operations.reference.runtime" not in sys.modules
 
 def test_pre_relocation_reference_request_global_loads_through_alias() -> None:
     canonical = importlib.import_module(
-        "memcommit.operations.reference.application"
+        "memcommit.application.operations.reference.application"
     )
 
     restored = pickle.loads(
@@ -126,11 +126,11 @@ def test_pre_relocation_reference_request_global_loads_through_alias() -> None:
 
 def test_production_reference_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "src/memcommit/api/_operations/reference.py",
+        "src/memcommit/adapters/python_api/_operations/reference.py",
         "src/memcommit/interfaces/cli/reference.py",
         "src/memcommit/interfaces/tui/operations/reference/adapter.py",
         "src/memcommit/interfaces/tui/operations/reference/screen.py",
-        "src/memcommit/operations/reference/runtime.py",
+        "src/memcommit/application/operations/reference/runtime.py",
     )
 
     for relative_path in relative_paths:
@@ -143,12 +143,12 @@ def test_production_reference_consumers_use_the_operation_owner() -> None:
 def test_query_reference_remains_owned_by_the_query_operation() -> None:
     application = (
         REPOSITORY_ROOT
-        / "src/memcommit/operations/query/reference_application.py"
+        / "src/memcommit/application/operations/query/reference_application.py"
     ).read_text(encoding="utf-8")
     runtime = (
         REPOSITORY_ROOT
-        / "src/memcommit/operations/query/reference_runtime.py"
+        / "src/memcommit/application/operations/query/reference_runtime.py"
     ).read_text(encoding="utf-8")
 
-    assert "memcommit.operations.reference" not in application
-    assert "memcommit.operations.reference" not in runtime
+    assert "memcommit.application.operations.reference" not in application
+    assert "memcommit.application.operations.reference" not in runtime

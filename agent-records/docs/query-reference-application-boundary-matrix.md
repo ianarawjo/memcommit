@@ -19,9 +19,9 @@ operation.
 
 ## Decision
 
-`memcommit.operations.query.reference_application` owns the typed request,
+`memcommit.application.operations.query.reference_application` owns the typed request,
 frozen Source, provider/source ports, exact response, stage observer, and
-use-case ordering. `memcommit.operations.query.reference_runtime` adapts
+use-case ordering. `memcommit.application.operations.query.reference_runtime` adapts
 `MemoryStore.load_query_source` to that contract. The command resolves the
 `QueryContextRef`, constructs the request, projects stages into the existing
 progress display, renders safe errors, and prints the returned answer.

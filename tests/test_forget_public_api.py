@@ -7,7 +7,7 @@ import uuid
 
 import pytest
 
-from memcommit.api import (
+from memcommit.adapters.python_api import (
     ForgetApplyResult,
     ForgetConflictError,
     ForgetInputError,

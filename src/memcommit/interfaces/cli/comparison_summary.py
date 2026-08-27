@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.operations.compare.summary import ComparisonSummary
+from memcommit.application.operations.compare.summary import ComparisonSummary
 from memcommit.interfaces.console.text import display_escape_text
 
 

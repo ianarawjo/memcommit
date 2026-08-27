@@ -12,8 +12,8 @@ the same typed application and Store runtime.
 
 | Route or concern | Owner | Verified invariant |
 | --- | --- | --- |
-| Request, frozen plan, placement, receipt | `memcommit.operations.memory_transfer.application` | Nonempty unique Source set, typed local-or-granted Source bindings, exact Target binding, store-wide fresh output UID uniqueness, typed durable receipt |
-| Locator, authority, and Store execution | `memcommit.operations.memory_transfer.runtime` | One command-start current snapshot, exact direct Source binding, Grant and authority-Source revalidation when applicable, Target CAS, write protection, exception-atomic publication |
+| Request, frozen plan, placement, receipt | `memcommit.application.operations.memory_transfer.application` | Nonempty unique Source set, typed local-or-granted Source bindings, exact Target binding, store-wide fresh output UID uniqueness, typed durable receipt |
+| Locator, authority, and Store execution | `memcommit.application.operations.memory_transfer.runtime` | One command-start current snapshot, exact direct Source binding, Grant and authority-Source revalidation when applicable, Target CAS, write protection, exception-atomic publication |
 | CLI | `memcommit.interfaces.cli.memory_transfer` | Positional or repeatable batch, `--from`, `--into/--to`, `--before/--after`, terminal-safe typed rendering; a granted Memory requires an explicit public owner and the removed `--preserve-uids` spelling is rejected |
 | TUI | `memcommit.interfaces.tui.operations.memory_transfer` | Copy's Source catalog admits local and retained-Copy-authorized granted Memories while its Target catalog remains local; shared MULTIPLE checks, Embed-style `INTO + POSITION`, compact editable exact command, and frozen-plan handoff perform no direct publication |
 | Public Python | `MemCommitClient.copy_memories` | Sequence validation and operation-specific public errors over the same application/runtime; active-Profile clients may use explicit Grants while explicitly rooted clients remain local-only |

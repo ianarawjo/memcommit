@@ -6,7 +6,7 @@ import uuid
 import pytest
 
 import memcommit.comparison as comparison_module
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 import memcommit.study_prewarm.compare as compare_prewarm_module
 import memcommit.study_prewarm.update as update_prewarm_module
 import memcommit.update as update_module

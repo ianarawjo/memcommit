@@ -23,11 +23,11 @@ from memcommit.resolution.workbench import (
     ResolutionWorkbenchAction,
     ResolutionWorkbenchView,
 )
-from memcommit.responses.resolution import (
+from memcommit.interfaces.console.responses.resolution import (
     response_draft_from_item,
     response_target_from_item,
 )
-from memcommit.responses.tui import response_snapshot_lines
+from memcommit.interfaces.console.responses.tui import response_snapshot_lines
 from memcommit.application.reviewing.report import (
     ReviewReport,
     ReviewReportController,

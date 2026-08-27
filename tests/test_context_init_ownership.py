@@ -16,11 +16,11 @@ from tests.legacy_submodule_assertions import (
 LEGACY_AND_CANONICAL_PATHS = (
     (
         "memcommit.context_init_application",
-        "memcommit.operations.context_init.application",
+        "memcommit.application.operations.context_init.application",
     ),
     (
         "memcommit.context_init_runtime",
-        "memcommit.operations.context_init.runtime",
+        "memcommit.application.operations.context_init.runtime",
     ),
 )
 
@@ -28,7 +28,7 @@ LEGACY_AND_CANONICAL_PATHS = (
 def test_legacy_application_path_aliases_the_operation_owned_module():
     legacy = importlib.import_module("memcommit.context_init_application")
     canonical = importlib.import_module(
-        "memcommit.operations.context_init.application"
+        "memcommit.application.operations.context_init.application"
     )
 
     assert legacy is canonical
@@ -41,7 +41,7 @@ def test_legacy_application_path_aliases_the_operation_owned_module():
 
 def test_legacy_runtime_path_aliases_the_operation_owned_module():
     legacy = importlib.import_module("memcommit.context_init_runtime")
-    canonical = importlib.import_module("memcommit.operations.context_init.runtime")
+    canonical = importlib.import_module("memcommit.application.operations.context_init.runtime")
 
     assert legacy is canonical
     assert legacy.ContextInitSnapshot is canonical.ContextInitSnapshot

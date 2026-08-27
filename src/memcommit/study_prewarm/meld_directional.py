@@ -13,25 +13,25 @@ from datetime import datetime, timezone
 import json
 from pathlib import Path
 
-from memcommit.authority.access import (
+from memcommit.application.authority.access import (
     GrantedReadStore,
     freeze_granted_context_binding,
     resolve_context_access,
 )
-from memcommit.operations.compare.ledger.model import COMPARISON_RULESET_VERSION, ComparisonInput
+from memcommit.application.operations.compare.ledger.model import COMPARISON_RULESET_VERSION, ComparisonInput
 from memcommit.infrastructure.config import Config
 from memcommit.infrastructure.providers.policy import (
     resolve_operation_provider_policy,
 )
 from memcommit.context import Context
 from memcommit.context_targeting.loading import load_context_scope
-from memcommit.authority.derived_policy import (
+from memcommit.application.authority.derived_policy import (
     analysis_retention,
     authorize_analysis_save,
     authorize_combination,
     authorize_derived_transfer,
 )
-from memcommit.operations.meld.model import (
+from memcommit.application.operations.meld.model import (
     MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION,
     MeldError,
     MeldFrame,
@@ -39,9 +39,9 @@ from memcommit.operations.meld.model import (
     MeldSession,
     directional_comparison_basis_assessment,
 )
-from memcommit.operations.meld.provider import MELD_DIRECTIONAL_PROVIDER_CONTRACT_VERSION
-from memcommit.operations.compare.ledger.granted_store import recursive_comparison_projection
-from memcommit.operations.profile.config import (
+from memcommit.application.operations.meld.provider import MELD_DIRECTIONAL_PROVIDER_CONTRACT_VERSION
+from memcommit.application.operations.compare.ledger.granted_store import recursive_comparison_projection
+from memcommit.application.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,
     load_profile_registry,

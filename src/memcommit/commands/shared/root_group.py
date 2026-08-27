@@ -13,7 +13,7 @@ except ImportError:  # pragma: no cover - compatibility with older Typer
 from memcommit.interfaces.cli.command_group import CanonicalCommandGroup
 
 from memcommit.interfaces.console.errors import render_cli_error
-from memcommit.authority.write_protection import (
+from memcommit.application.authority.write_protection import (
     WriteProtectionError,
     WriteProtectionRegistryError,
 )
@@ -69,7 +69,7 @@ class MemCommandGroup(CanonicalCommandGroup):
             )
         try:
             if active_attempt is not None:
-                from memcommit.operations.profile.config import (
+                from memcommit.application.operations.profile.config import (
                     load_profile_registry,
                     profile_store_dir,
                 )

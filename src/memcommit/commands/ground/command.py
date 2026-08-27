@@ -49,7 +49,7 @@ from memcommit.interfaces.tui.operations.ground_workspace import (
     run_ground_workspace_tui,
 )
 from memcommit.context import Context, Memory
-from memcommit.operations.ground.model import (
+from memcommit.application.operations.ground.model import (
     GROUND_PROPOSITION_SCHEMA_VERSION,
     GROUND_TEXT_LIMIT,
     GroundError,
@@ -77,39 +77,39 @@ from memcommit.operations.ground.model import (
     validate_ground_contract_name,
     validate_ground_goal,
 )
-from memcommit.operations.ground.dialogue import (
+from memcommit.application.operations.ground.dialogue import (
     GROUND_DIALOGUE_NAME_LIMIT,
     GROUND_DIALOGUE_USER_TEXT_LIMIT,
     GroundDialogueError,
     GroundDialogueProposal,
     interpret_ground_dialogue,
 )
-from memcommit.operations.ground.context_catalog import (
+from memcommit.application.operations.ground.context_catalog import (
     discover_ground_context_locators,
     select_ground_context_locators,
 )
-from memcommit.operations.ground.workspace_model import (
+from memcommit.application.operations.ground.workspace_model import (
     GroundWorkspaceError,
     ground_workspace_context_names,
 )
-from memcommit.operations.ground.workspace_draft import (
+from memcommit.application.operations.ground.workspace_draft import (
     GroundWorkspaceDraft,
     GroundWorkspaceDraftError,
     GroundWorkspaceMemoryDraft,
     GroundWorkspaceRuleDraft,
     ground_workspace_draft_digest,
 )
-from memcommit.operations.ground.workspace_draft_store import GroundWorkspaceDraftStore
-from memcommit.operations.ground.workspace_application import (
+from memcommit.application.operations.ground.workspace_draft_store import GroundWorkspaceDraftStore
+from memcommit.application.operations.ground.workspace_application import (
     AddGroundWorkspaceMemoryRequest,
     CreateGroundWorkspaceRequest,
     ReplaceGroundWorkspaceMemoryRequest,
 )
-from memcommit.operations.ground.workspace_history import (
+from memcommit.application.operations.ground.workspace_history import (
     GroundWorkspaceHistoryError,
     undo_ground_workspace_command,
 )
-from memcommit.operations.ground.workspace_runtime import (
+from memcommit.application.operations.ground.workspace_runtime import (
     execute_ground_workspace_creation,
     execute_ground_workspace_memory_add,
     execute_ground_workspace_memory_replace,
@@ -121,7 +121,7 @@ from memcommit.semantic.goal_focus_runtime import (
     freeze_goal_focus_operand,
     revalidate_goal_focus,
 )
-from memcommit.operations.ground.turn_dialogue import (
+from memcommit.application.operations.ground.turn_dialogue import (
     GroundBlockedTarget,
     GroundTurnAction,
     GroundTurnDraft,
@@ -129,8 +129,8 @@ from memcommit.operations.ground.turn_dialogue import (
     ground_turn_aliases,
     interpret_ground_turn,
 )
-from memcommit.operations.fit.runtime import execute_and_save_ground_fit
-from memcommit.operations.fit.store import FitStore
+from memcommit.application.operations.fit.runtime import execute_and_save_ground_fit
+from memcommit.application.operations.fit.store import FitStore
 from memcommit.infrastructure.providers.subscription import connect_codex_chatgpt_provider
 from memcommit.context_targeting.naming import validate_portable_context_name
 from memcommit.persistence.store import (
@@ -424,7 +424,7 @@ def _run_approved_ground_command(
     if len(argv) < 2 or argv[:2] != ("mem", "ground"):
         raise GroundError("The approved command is not a Ground command.")
     return subprocess.run(
-        [sys.executable, "-m", "memcommit.cli", *argv[1:]],
+        [sys.executable, "-m", "memcommit.adapters.console.entrypoint", *argv[1:]],
         capture_output=True,
         text=True,
         encoding="utf-8",

@@ -7,7 +7,7 @@ import pytest
 from typer.main import get_command
 from typer.testing import CliRunner
 
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.command_attempts import CommandAttemptLedger
 from memcommit.interfaces.cli.command_group import (
     CanonicalCommandGroup,

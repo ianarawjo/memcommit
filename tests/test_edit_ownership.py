@@ -19,11 +19,11 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 LEGACY_AND_CANONICAL_PATHS = (
     (
         "memcommit.edit_application",
-        "memcommit.operations.edit.application",
+        "memcommit.application.operations.edit.application",
     ),
     (
         "memcommit.edit_runtime",
-        "memcommit.operations.edit.runtime",
+        "memcommit.application.operations.edit.runtime",
     ),
 )
 
@@ -68,10 +68,10 @@ assert sys.modules[{canonical_name!r}] is canonical
 def test_edit_legacy_paths_expose_the_canonical_objects() -> None:
     legacy_application = importlib.import_module("memcommit.edit_application")
     canonical_application = importlib.import_module(
-        "memcommit.operations.edit.application"
+        "memcommit.application.operations.edit.application"
     )
     legacy_runtime = importlib.import_module("memcommit.edit_runtime")
-    canonical_runtime = importlib.import_module("memcommit.operations.edit.runtime")
+    canonical_runtime = importlib.import_module("memcommit.application.operations.edit.runtime")
 
     assert legacy_application is canonical_application
     assert legacy_application.EditRequest is canonical_application.EditRequest

@@ -22,7 +22,7 @@ from memcommit.context_targeting.tui.tree import (
     build_context_tree,
     context_subtree_names,
 )
-from memcommit.selection.tui import tree_choice_marker, tree_choice_styles
+from memcommit.interfaces.console.selection.tui import tree_choice_marker, tree_choice_styles
 from memcommit.source_projection.presentation import SourceDisplayValue
 
 

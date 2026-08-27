@@ -17,7 +17,7 @@ from tests.legacy_submodule_assertions import (
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-CANONICAL_MODULE = "memcommit.operations.exact_dedup.application"
+CANONICAL_MODULE = "memcommit.application.operations.exact_dedup.application"
 LEGACY_MODULES = (
     "memcommit.exact_dedup",
     "memcommit.exact_dedup_application",
@@ -79,9 +79,9 @@ def test_exact_dedup_legacy_facades_define_no_behavior(relative_path: str) -> No
 def test_exact_dedup_package_import_is_lazy() -> None:
     program = """
 import sys
-import memcommit.operations.exact_dedup
+import memcommit.application.operations.exact_dedup
 
-assert "memcommit.operations.exact_dedup.application" not in sys.modules
+assert "memcommit.application.operations.exact_dedup.application" not in sys.modules
 """
 
     subprocess.run(
@@ -101,11 +101,11 @@ def test_pre_relocation_exact_dedup_receipt_global_loads_through_alias() -> None
 
 def test_production_exact_dedup_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "src/memcommit/api/_operations/exact_dedup.py",
-        "src/memcommit/api/_operations/exact_duplicates.py",
+        "src/memcommit/adapters/python_api/_operations/exact_dedup.py",
+        "src/memcommit/adapters/python_api/_operations/exact_duplicates.py",
         "src/memcommit/commands/dedup/command.py",
         "src/memcommit/commands/find_exact_duplicates/command.py",
-        "src/memcommit/ops.py",
+        "src/memcommit/application/ops.py",
     )
 
     for relative_path in relative_paths:
@@ -116,13 +116,13 @@ def test_production_exact_dedup_consumers_use_the_operation_owner() -> None:
 
 def test_exact_dedup_and_semantic_dedun_remain_separate_owners() -> None:
     exact = (
-        REPOSITORY_ROOT / "src/memcommit/operations/exact_dedup/application.py"
+        REPOSITORY_ROOT / "src/memcommit/application/operations/exact_dedup/application.py"
     ).read_text(encoding="utf-8")
     semantic = "\n".join(
         (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         for relative_path in (
-            "src/memcommit/operations/dedup/application.py",
-            "src/memcommit/operations/dedup/runtime.py",
+            "src/memcommit/application/operations/dedup/application.py",
+            "src/memcommit/application/operations/dedup/runtime.py",
         )
     )
 
@@ -132,11 +132,11 @@ def test_exact_dedup_and_semantic_dedun_remain_separate_owners() -> None:
         if isinstance(node, ast.ImportFrom) and node.module is not None
     }
 
-    assert "memcommit.operations.dedup" not in exact
-    assert "memcommit.operations.exact_dedup" not in semantic
+    assert "memcommit.application.operations.dedup" not in exact
+    assert "memcommit.application.operations.exact_dedup" not in semantic
     assert not {
         "memcommit.findings",
         "memcommit.semantic_provider",
-        "memcommit.operations.dedup.application",
-        "memcommit.operations.dedup.runtime",
+        "memcommit.application.operations.dedup.application",
+        "memcommit.application.operations.dedup.runtime",
     } & exact_imports

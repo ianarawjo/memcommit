@@ -12,7 +12,7 @@ from memcommit.checkpoint_catalog import (
     CheckpointCatalogError,
     resolve_checkpoint_unit,
 )
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.shared.history_picker import revert_exact_command_review
 from memcommit.store import MemoryStore, context_record_digest
 

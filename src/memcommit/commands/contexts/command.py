@@ -4,10 +4,10 @@ from memcommit.interfaces.console.text import (
     display_escape_text,
 )
 from memcommit.interfaces.console.theme import SOURCE_CAPABILITY_RGB
-from memcommit.operations.contexts.application import ContextCatalogEntry
-from memcommit.operations.contexts.runtime import load_contexts_catalog
-from memcommit.operations.profile.config import ProfileConfigError
-from memcommit.operations.profile.model import ProfileError
+from memcommit.application.operations.contexts.application import ContextCatalogEntry
+from memcommit.application.operations.contexts.runtime import load_contexts_catalog
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import MemoryStore
 
 

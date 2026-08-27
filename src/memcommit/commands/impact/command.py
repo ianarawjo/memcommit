@@ -11,19 +11,19 @@ import typer
 
 from memcommit.commands.shared.command_group import CanonicalCommandGroup
 
-from memcommit.operations.atomize.domain import (
+from memcommit.application.operations.atomize.domain import (
     AtomizeFrameOrigin,
     AtomizeImpactError,
     atomize_analysis_matches_context,
 )
-from memcommit.operations.atomize.analysis_application import (
+from memcommit.application.operations.atomize.analysis_application import (
     AtomizeAnalysisApplicationError,
     AtomizeAnalysisOpenRequest,
 )
-from memcommit.operations.atomize.analysis_runtime import (
+from memcommit.application.operations.atomize.analysis_runtime import (
     execute_atomize_analysis_open,
 )
-from memcommit.operations.atomize.workbench import (
+from memcommit.application.operations.atomize.workbench import (
     AtomizeWorkbenchError,
     atomize_workbench_declared_frames,
     atomize_workbench_response_digest,
@@ -40,7 +40,7 @@ from memcommit.commands.shared.context_operand import (
     ContextOperandSnapshot,
     choose_context_operand,
 )
-from memcommit.authority.access import (
+from memcommit.application.authority.access import (
     GrantedReadStore,
     freeze_granted_context_binding,
     resolve_context_access,
@@ -88,17 +88,17 @@ from memcommit.context_targeting.presets import (
     resolve_descendant_scopes,
     resolve_scope_preset,
 )
-from memcommit.authority.derived_policy import authorize_derived_transfer
+from memcommit.application.authority.derived_policy import authorize_derived_transfer
 from memcommit.infrastructure.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )
-from memcommit.operations.profile.config import ProfileConfigError
-from memcommit.operations.profile.model import (
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import (
     ProfileError,
     authority_grant_snapshot_lock,
 )
-from memcommit.operations.review.model import (
+from memcommit.application.operations.review.model import (
     ReviewError,
     atomize_review_declared_frames,
     atomize_review_matches_analysis,
@@ -107,8 +107,8 @@ from memcommit.operations.review.model import (
 from memcommit.persistence.store import MemoryStore
 from memcommit.context_targeting.uid_locator import UidLocatorError, resolve_exact_or_unique_uid
 from memcommit.study_prewarm.registry import StudyPrewarmRegistryError
-from memcommit.operations.update.model import UpdateError, plan_update, session_matches
-from memcommit.operations.update.endpoints import (
+from memcommit.application.operations.update.model import UpdateError, plan_update, session_matches
+from memcommit.application.operations.update.endpoints import (
     choose_update_endpoint_operands,
     resolve_update_endpoints,
 )
@@ -286,7 +286,7 @@ def _saved_update_impact(
     session_uid: str | None,
 ) -> None:
     from memcommit.commands.impact.sessions import update_impact_presentation
-    from memcommit.operations.update.receipt_store import UpdateReceiptStore
+    from memcommit.application.operations.update.receipt_store import UpdateReceiptStore
 
     current = store.load_staged_update() or store.load_impact_plan()
     receipts = UpdateReceiptStore(store)
@@ -425,7 +425,7 @@ def _saved_sever_impact(
         list_sever_session_catalog,
         reload_selected_sever_session,
     )
-    from memcommit.operations.sever.session_store import SeverSessionStore
+    from memcommit.application.operations.sever.session_store import SeverSessionStore
 
     sessions = SeverSessionStore(store)
     catalog = list_sever_session_catalog(sessions)

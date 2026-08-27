@@ -192,7 +192,7 @@ class _ResolveProvider:
 
 
 def _prepare(kind: str):
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
     from memcommit.store import MemoryStore, context_record_digest
 
     store = MemoryStore()

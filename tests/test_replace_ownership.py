@@ -21,11 +21,11 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 LEGACY_AND_CANONICAL_PATHS = (
     (
         "memcommit.replace_application",
-        "memcommit.operations.replace.application",
+        "memcommit.application.operations.replace.application",
     ),
     (
         "memcommit.replace_runtime",
-        "memcommit.operations.replace.runtime",
+        "memcommit.application.operations.replace.runtime",
     ),
 )
 
@@ -78,11 +78,11 @@ assert sys.modules[{canonical_name!r}] is canonical
 def test_replace_legacy_paths_expose_the_canonical_objects() -> None:
     legacy_application = importlib.import_module("memcommit.replace_application")
     canonical_application = importlib.import_module(
-        "memcommit.operations.replace.application"
+        "memcommit.application.operations.replace.application"
     )
     legacy_runtime = importlib.import_module("memcommit.replace_runtime")
     canonical_runtime = importlib.import_module(
-        "memcommit.operations.replace.runtime"
+        "memcommit.application.operations.replace.runtime"
     )
 
     assert legacy_application is canonical_application
@@ -110,10 +110,10 @@ def test_replace_legacy_facades_contain_no_implementation(
 def test_replace_package_import_does_not_eagerly_load_implementation_modules() -> None:
     source = """
 import sys
-import memcommit.operations.replace
+import memcommit.application.operations.replace
 
-assert "memcommit.operations.replace.application" not in sys.modules
-assert "memcommit.operations.replace.runtime" not in sys.modules
+assert "memcommit.application.operations.replace.application" not in sys.modules
+assert "memcommit.application.operations.replace.runtime" not in sys.modules
 """
 
     subprocess.run(
@@ -124,10 +124,10 @@ assert "memcommit.operations.replace.runtime" not in sys.modules
 
 
 def test_pre_relocation_replace_request_pickle_loads_through_legacy_alias() -> None:
-    canonical = importlib.import_module("memcommit.operations.replace.application")
+    canonical = importlib.import_module("memcommit.application.operations.replace.application")
 
     restored = pickle.loads(base64.b64decode(_LEGACY_REPLACE_REQUEST_PICKLE))
 
     assert restored.__class__ is canonical.ReplaceRequest
     assert restored == canonical.ReplaceRequest("needle", "thread", ("alpha",))
-    assert restored.__class__.__module__ == "memcommit.operations.replace.application"
+    assert restored.__class__.__module__ == "memcommit.application.operations.replace.application"

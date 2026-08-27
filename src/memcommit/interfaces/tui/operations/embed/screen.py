@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Callable, Sequence
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 from prompt_toolkit.application import Application, get_app
 from prompt_toolkit.filters import Condition
 from prompt_toolkit.input import Input
@@ -72,7 +72,7 @@ from memcommit.interfaces.tui.core.theme import (
     SEMANTIC_VIEWER_STYLE,
 )
 from memcommit.context import Context
-from memcommit.operations.embed.application import (
+from memcommit.application.operations.embed.application import (
     EmbedPlacement,
     EmbedRequest,
     FrozenEmbedPlan,

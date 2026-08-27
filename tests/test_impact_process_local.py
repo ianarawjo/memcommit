@@ -9,8 +9,8 @@ import typer
 from typer.testing import CliRunner
 
 import memcommit.commands.impact.process_local as process_local_command
-import memcommit.ops as ops
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.impact.process_local import (
     distill_impact_presentation,
     forget_impact_presentation,
@@ -25,15 +25,15 @@ from memcommit.distill import (
     DistillAnalysis,
     DistilledRule,
 )
-from memcommit.operations.distill.application import DistillResult
+from memcommit.application.operations.distill.application import DistillResult
 from memcommit.distill_goal_fit import DistillGoalFit
-from memcommit.operations.fit.judgment import FitAssessment
-from memcommit.operations.forget.application import (
+from memcommit.application.operations.fit.judgment import FitAssessment
+from memcommit.application.operations.forget.application import (
     ForgetAnalysisRequest,
     FrozenForgetSource,
     run_forget_analysis,
 )
-from memcommit.operations.resolve.application import (
+from memcommit.application.operations.resolve.application import (
     FrozenResolveFrame,
     ResolveAnalysis,
     ResolveCandidate,
@@ -44,7 +44,7 @@ from memcommit.operations.resolve.application import (
     ResolveRequest,
 )
 from memcommit.summarize import collect_summary_frame
-from memcommit.operations.summarize.application import FrozenSummarySource
+from memcommit.application.operations.summarize.application import FrozenSummarySource
 from memcommit.store import MemoryStore, context_record_digest
 from tests.distill_goal_fit_support import passing_distill_goal_fit_response
 

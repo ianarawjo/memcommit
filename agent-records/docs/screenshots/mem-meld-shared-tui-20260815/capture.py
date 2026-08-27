@@ -30,7 +30,7 @@ _BASE.ROWS = ROWS
 
 
 def _prepare_store(root: Path):
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
     from memcommit.store import MemoryStore
 
     store = MemoryStore(root=root)
@@ -106,7 +106,7 @@ def _run_setup_child(store_root: Path, *, directional: bool) -> None:
 
 
 def _run_session_child(store_root: Path) -> None:
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
     from memcommit.comparison import ComparisonInput
     from memcommit.comparison_provider import analyze_comparison
     from memcommit.interfaces.tui.operations.meld.screen import run_meld_shell

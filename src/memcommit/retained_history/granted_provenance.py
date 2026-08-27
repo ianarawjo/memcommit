@@ -4,9 +4,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.authority.access import ContextAccess
+from memcommit.application.authority.access import ContextAccess
 from memcommit.context import Context, Memory
-from memcommit.retained_history.provenance import MemoryState, ProvenanceError
+from memcommit.retained_history.memory_history_reconstruction.retained_record_verification import (
+    MemoryHistoryReconstructionError,
+    MemoryState,
+)
 
 
 @dataclass(frozen=True)
@@ -68,12 +71,12 @@ def build_granted_memory_trace(
     if exact:
         matches = exact
     if not matches:
-        raise ProvenanceError(
+        raise MemoryHistoryReconstructionError(
             f"No current readable Memory with uid starting with {selector!r} "
             f"exists in granted Context {(display_name or access.display_name)!r}."
         )
     if len(matches) != 1:
-        raise ProvenanceError(
+        raise MemoryHistoryReconstructionError(
             f"Ambiguous prefix {selector!r} matches {len(matches)} granted "
             "Memories: " + ", ".join(memory.uid[:8] for memory in matches)
         )

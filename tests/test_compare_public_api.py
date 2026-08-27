@@ -8,8 +8,8 @@ import uuid
 
 import pytest
 
-import memcommit.ops as ops
-from memcommit.api import (
+import memcommit.application.ops as ops
+from memcommit.adapters.python_api import (
     CompareConflictError,
     ComparisonResult,
     MemCommitClient,

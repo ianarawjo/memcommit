@@ -14,7 +14,7 @@ from memcommit.context_targeting.tui.picker import (
 )
 from memcommit.context_targeting.loading import DirectItemAmbiguityError
 from memcommit.context_targeting.model import DirectItemTarget
-from memcommit.operations.delete.application import (
+from memcommit.application.operations.delete.application import (
     DeleteError,
     DeleteStalePlanError,
     DirectItemDeleteRequest,
@@ -23,7 +23,7 @@ from memcommit.operations.delete.application import (
     apply_context_delete,
     run_direct_item_delete,
 )
-from memcommit.operations.delete.runtime import MemoryStoreDeletePort
+from memcommit.application.operations.delete.runtime import MemoryStoreDeletePort
 from memcommit.interfaces.cli.delete import (
     context_delete_warning,
     removed_item_description,
@@ -36,8 +36,8 @@ from memcommit.interfaces.tui.operations.delete import (
     choose_delete_target,
     delete_picker_rows,
 )
-from memcommit.operations.profile.config import ProfileConfigError
-from memcommit.operations.profile.model import ProfileError
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import MemoryStore
 
 

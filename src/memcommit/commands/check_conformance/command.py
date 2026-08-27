@@ -8,14 +8,14 @@ import typer
 
 from memcommit.commands.shared.command_progress import CommandProgress
 from memcommit.commands.shared.context_operand import ContextOperandSnapshot
-from memcommit.operations.conformance.model import ConformanceError, ConformanceReport
-from memcommit.operations.conformance.runtime import (
+from memcommit.application.operations.conformance.model import ConformanceError, ConformanceReport
+from memcommit.application.operations.conformance.runtime import (
     execute_context_conformance_with_rules_operand,
     execute_ground_conformance,
 )
 from memcommit.interfaces.console.text import display_escape_text, safe_terminal_text
-from memcommit.operations.profile.config import ProfileConfigError
-from memcommit.operations.profile.model import ProfileError
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.infrastructure.providers.subscription import QueryProviderError, connect_semantic_provider
 from memcommit.persistence.store import MemoryStore
 

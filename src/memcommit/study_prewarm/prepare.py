@@ -7,13 +7,13 @@ from dataclasses import dataclass
 from pathlib import Path
 import re
 
-from memcommit.authority.access import resolve_context_access
-from memcommit.operations.compare.ledger.model import (
+from memcommit.application.authority.access import resolve_context_access
+from memcommit.application.operations.compare.ledger.model import (
     COMPARISON_RULESET_VERSION,
     SUPPORTED_COMPARISON_RULESET_VERSIONS,
     ComparisonAnalysis,
 )
-from memcommit.operations.compare.ledger.provider import (
+from memcommit.application.operations.compare.ledger.provider import (
     COMPARISON_PROVIDER_CONTRACT_VERSION,
     SUPPORTED_COMPARISON_PROVIDER_CONTRACT_VERSIONS,
 )
@@ -30,7 +30,7 @@ from memcommit.eval.study_compare_graph_prewarm import TaskGraphPlan
 from memcommit.infrastructure.providers.policy import (
     resolve_operation_provider_policy,
 )
-from memcommit.operations.profile.config import (
+from memcommit.application.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,
     profile_control_dir,
@@ -243,7 +243,7 @@ def inspect_study_prewarm_compatibility(
 
 
 def _current_update_schema_version() -> int:
-    from memcommit.operations.update.model import UPDATE_SCHEMA_VERSION
+    from memcommit.application.operations.update.model import UPDATE_SCHEMA_VERSION
 
     return UPDATE_SCHEMA_VERSION
 

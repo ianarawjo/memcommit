@@ -12,7 +12,7 @@ every migrated operation.
 
 ## Decision
 
-Query is the first operation grouped under `memcommit.operations`:
+Query is the first operation grouped under `memcommit.application.operations`:
 
 ```text
 memcommit/operations/query/

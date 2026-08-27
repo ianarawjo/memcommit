@@ -182,8 +182,8 @@ The exact command and effects remain in Chat, so reducing empty Action
 rows does not reduce the reviewed information or approval boundary.
 
 Each approval applies exactly one normal CLI argv through
-`python -m memcommit.cli`; it never invokes a shell and never writes Ground
-JSON directly. After success, the controller reloads the named Ground and
+`python -m memcommit.adapters.console.entrypoint`; it never invokes a shell and
+never writes Ground JSON directly. After success, the controller reloads the named Ground and
 updates all affected component panes. Proposal and semantic acceptance are
 deliberately different commands. Pressing `Enter` on a focused reviewed Rule
 proposal permits

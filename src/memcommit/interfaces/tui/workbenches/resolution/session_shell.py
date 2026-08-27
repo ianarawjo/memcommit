@@ -112,17 +112,17 @@ from memcommit.resolution.workbench import (
     ResolutionMemoryRow,
     ResolutionWorkbenchView,
 )
-from memcommit.responses.model import ResponseDraft, ResponseTarget
-from memcommit.responses.resolution import (
+from memcommit.interfaces.console.responses.model import ResponseDraft, ResponseTarget
+from memcommit.interfaces.console.responses.resolution import (
     response_draft_from_item,
     response_target_from_item,
 )
 from memcommit.infrastructure.command_ledger.study_actions import record_study_action
-from memcommit.responses.state import ResponseFrameState
-from memcommit.responses.tui import response_frame_fragments
-from memcommit.selection.model import SelectionOption
-from memcommit.selection.state import FlatSelectionState
-from memcommit.selection.tui import render_vertical_choice_cards
+from memcommit.interfaces.console.responses.state import ResponseFrameState
+from memcommit.interfaces.console.responses.tui import response_frame_fragments
+from memcommit.interfaces.console.selection.model import SelectionOption
+from memcommit.interfaces.console.selection.state import FlatSelectionState
+from memcommit.interfaces.console.selection.tui import render_vertical_choice_cards
 from memcommit.application.reviewing.session_navigation import (
     SessionWorkbenchNavigation,
     WorkbenchSection,

@@ -6,8 +6,8 @@ import sys
 
 import typer
 
-from memcommit.operations.atomize.domain import AtomizeAnalysisSession
-from memcommit.operations.atomize.workbench import AtomizeWorkbenchSession
+from memcommit.application.operations.atomize.domain import AtomizeAnalysisSession
+from memcommit.application.operations.atomize.workbench import AtomizeWorkbenchSession
 from memcommit.interfaces.tui.operations.atomize.screen import (
     render_atomize_workbench_snapshot,
     run_atomize_workbench_shell,

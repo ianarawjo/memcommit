@@ -3,7 +3,7 @@
 from click import Group, Option
 from typer.main import get_command
 
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.interactive_command import (
     InteractiveCommandBinding,
     InteractiveCommandRebuildTrigger,

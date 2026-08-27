@@ -211,8 +211,8 @@ Memory.
 ## Callable and presentation boundaries
 
 CLI, public Python, agent, and MCP routes enter the same
-`memcommit.operations.memory_transfer.application` contract and
-`memcommit.operations.memory_transfer.runtime.MemoryStoreMemoryTransferPort`.
+`memcommit.application.operations.memory_transfer.application` contract and
+`memcommit.application.operations.memory_transfer.runtime.MemoryStoreMemoryTransferPort`.
 The application returns typed placements, UID mappings, plan digests, link
 counts, and per-Context checkpoints. Machine routes do not parse terminal
 output and report that no semantic provider was used.

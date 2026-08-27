@@ -46,7 +46,7 @@ imports the application owner directly.
 ## Package ownership
 
 The canonical semantic Search vertical now lives under
-`memcommit.operations.search`. `application.py` and `runtime.py` own the
+`memcommit.application.operations.search`. `application.py` and `runtime.py` own the
 provider-backed read-only analysis request, frozen readable Source, ranking,
 and current-result execution. `materialization_application.py` and
 `materialization_runtime.py` own the separately reviewed COPY/REFERENCE
@@ -59,10 +59,10 @@ The historical `memcommit.find_application`, `memcommit.find_runtime`,
 `memcommit.find_materialization_runtime` paths remain behavior-free
 module-identity aliases. Old imports, monkeypatch targets, and serialized
 globals resolve to the canonical modules, while importing
-`memcommit.operations.search` alone remains lazy.
+`memcommit.application.operations.search` alone remains lazy.
 
 This package is intentionally separate from provider-free Literal Find under
-`memcommit.operations.find`. The relocation changes no readable authority,
+`memcommit.application.operations.find`. The relocation changes no readable authority,
 provider disclosure, ranking, current-only result, selection, materialization,
 checkpoint, rollback, or public projection behavior. The current-only Search
 work and its removal of implicit temporal routing remain in the same canonical

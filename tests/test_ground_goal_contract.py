@@ -4,7 +4,7 @@ from __future__ import annotations
 import pytest
 from typer.testing import CliRunner
 
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.ground import (
     GROUND_GOAL_WORD_LIMIT,
     GroundError,

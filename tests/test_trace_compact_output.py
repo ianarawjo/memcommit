@@ -6,7 +6,7 @@ import json
 
 from typer.testing import CliRunner
 
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.trace import command as trace_command
 from memcommit.commands.trace import projection as trace_projection
 from memcommit.commands.trace.projection import (
@@ -17,12 +17,16 @@ from memcommit.interfaces.tui.components.plain_text_clipboard import (
     plain_text_from_fragments,
 )
 from memcommit.context_targeting.report_items import ResolvedMemoryReportTarget
-from memcommit.provenance import (
+from memcommit.retained_history.memory_history_reconstruction.retained_record_verification import (
+    MemoryHistoryCommandContext,
+    MemoryHistoryContextTransition,
     MemoryState,
-    TraceCommandContext,
-    TraceContextTransition,
-    TraceEvent,
-    TraceReport,
+)
+from memcommit.retained_history.memory_history_reconstruction.memory_history_event_derivation import (
+    MemoryHistoryEvent,
+)
+from memcommit.retained_history.memory_history_reconstruction.memory_history_construction import (
+    MemoryHistory,
 )
 
 
@@ -50,8 +54,8 @@ def _event(
     before: tuple[MemoryState, ...] = (),
     after: tuple[MemoryState, ...] = (),
     operation_id: str | None = None,
-) -> TraceEvent:
-    return TraceEvent(
+) -> MemoryHistoryEvent:
+    return MemoryHistoryEvent(
         kind=kind,  # type: ignore[arg-type]
         evidence="RECORDED",
         timestamp=timestamp,
@@ -68,10 +72,10 @@ def _report(
     *,
     originals: tuple[MemoryState, ...],
     current: tuple[MemoryState, ...],
-    events: tuple[TraceEvent, ...],
+    events: tuple[MemoryHistoryEvent, ...],
     component_uids: tuple[str, ...] = (SELECTED_UID,),
-) -> TraceReport:
-    return TraceReport(
+) -> MemoryHistory:
+    return MemoryHistory(
         context_uid=CONTEXT_UID,
         context_name="test/compact",
         selected_uid=SELECTED_UID,
@@ -198,7 +202,7 @@ def test_trace_projects_one_formatted_vertical_document_without_items_surface(
 
 def test_branch_route_renders_context_movement_without_a_fake_content_edit(capsys):
     unchanged = _state(SELECTED_UID, "a is apple")
-    branch = TraceEvent(
+    branch = MemoryHistoryEvent(
         kind="BRANCHED",
         evidence="RECORDED",
         timestamp="2026-08-21T09:30:00Z",
@@ -208,12 +212,12 @@ def test_branch_route_renders_context_movement_without_a_fake_content_edit(capsy
         before=(unchanged,),
         after=(unchanged,),
         operation_id="branch:dddddddd-dddd-4ddd-8ddd-dddddddddddd",
-        context_transition=TraceContextTransition(
-            source=TraceCommandContext(uid="source-context", name="practice/1"),
-            target=TraceCommandContext(uid=CONTEXT_UID, name="practice/2"),
+        context_transition=MemoryHistoryContextTransition(
+            source=MemoryHistoryCommandContext(uid="source-context", name="practice/1"),
+            target=MemoryHistoryCommandContext(uid=CONTEXT_UID, name="practice/2"),
         ),
     )
-    report = TraceReport(
+    report = MemoryHistory(
         context_uid=CONTEXT_UID,
         context_name="practice/2",
         selected_uid=SELECTED_UID,

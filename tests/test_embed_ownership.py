@@ -20,11 +20,11 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 MODULE_PAIRS = (
     (
         "memcommit.embed_application",
-        "memcommit.operations.embed.application",
+        "memcommit.application.operations.embed.application",
     ),
     (
         "memcommit.embed_runtime",
-        "memcommit.operations.embed.runtime",
+        "memcommit.application.operations.embed.runtime",
     ),
 )
 
@@ -66,10 +66,10 @@ assert sys.modules[{canonical_name!r}] is canonical
 def test_embed_legacy_paths_expose_the_canonical_contract() -> None:
     legacy_application = importlib.import_module("memcommit.embed_application")
     canonical_application = importlib.import_module(
-        "memcommit.operations.embed.application"
+        "memcommit.application.operations.embed.application"
     )
     legacy_runtime = importlib.import_module("memcommit.embed_runtime")
-    canonical_runtime = importlib.import_module("memcommit.operations.embed.runtime")
+    canonical_runtime = importlib.import_module("memcommit.application.operations.embed.runtime")
 
     assert legacy_application is canonical_application
     assert legacy_application.EmbedRequest is canonical_application.EmbedRequest
@@ -95,10 +95,10 @@ def test_embed_legacy_facades_define_no_behavior(relative_path: str) -> None:
 def test_embed_package_import_is_lazy() -> None:
     program = """
 import sys
-import memcommit.operations.embed
+import memcommit.application.operations.embed
 
-assert "memcommit.operations.embed.application" not in sys.modules
-assert "memcommit.operations.embed.runtime" not in sys.modules
+assert "memcommit.application.operations.embed.application" not in sys.modules
+assert "memcommit.application.operations.embed.runtime" not in sys.modules
 """
 
     subprocess.run(
@@ -109,7 +109,7 @@ assert "memcommit.operations.embed.runtime" not in sys.modules
 
 
 def test_pre_relocation_embed_request_global_loads_through_alias() -> None:
-    canonical = importlib.import_module("memcommit.operations.embed.application")
+    canonical = importlib.import_module("memcommit.application.operations.embed.application")
 
     restored = pickle.loads(b"cmemcommit.embed_application\nEmbedRequest\n.")
 
@@ -118,11 +118,11 @@ def test_pre_relocation_embed_request_global_loads_through_alias() -> None:
 
 def test_production_embed_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "src/memcommit/api/_operations/embed.py",
+        "src/memcommit/adapters/python_api/_operations/embed.py",
         "src/memcommit/interfaces/cli/embed.py",
         "src/memcommit/interfaces/tui/operations/embed/adapter.py",
         "src/memcommit/interfaces/tui/operations/embed/screen.py",
-        "src/memcommit/operations/embed/runtime.py",
+        "src/memcommit/application/operations/embed/runtime.py",
     )
 
     for relative_path in relative_paths:
@@ -134,13 +134,13 @@ def test_production_embed_consumers_use_the_operation_owner() -> None:
 
 def test_reference_and_embed_remain_separate_operation_packages() -> None:
     for relative_path in (
-        "src/memcommit/operations/reference/application.py",
-        "src/memcommit/operations/reference/runtime.py",
-        "src/memcommit/operations/embed/application.py",
-        "src/memcommit/operations/embed/runtime.py",
+        "src/memcommit/application/operations/reference/application.py",
+        "src/memcommit/application/operations/reference/runtime.py",
+        "src/memcommit/application/operations/embed/application.py",
+        "src/memcommit/application/operations/embed/runtime.py",
     ):
         source = (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         if "/reference/" in relative_path:
-            assert "memcommit.operations.embed" not in source
+            assert "memcommit.application.operations.embed" not in source
         else:
-            assert "memcommit.operations.reference" not in source
+            assert "memcommit.application.operations.reference" not in source

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.api import (
+from memcommit.adapters.python_api import (
     DeleteAuthorityError,
     DeleteConflictError,
     DeleteContextError,

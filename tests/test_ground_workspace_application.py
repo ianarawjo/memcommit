@@ -42,8 +42,8 @@ from memcommit.interfaces.tui.operations.ground_workspace import (
     run_ground_workspace_location_tui,
     run_ground_workspace_tui,
 )
-import memcommit.ops as ops
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.adapters.console.entrypoint import app
 from memcommit.store import MemoryStore
 
 

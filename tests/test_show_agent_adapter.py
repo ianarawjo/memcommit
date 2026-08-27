@@ -6,8 +6,8 @@ import json
 
 import pytest
 
-import memcommit.ops as ops
-from memcommit.api import MemCommitClient
+import memcommit.application.ops as ops
+from memcommit.adapters.python_api import MemCommitClient
 from memcommit.interfaces.agent.show import (
     SHOW_AGENT_TOOL_NAME,
     ShowAgentAdapter,

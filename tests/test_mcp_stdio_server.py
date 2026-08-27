@@ -11,7 +11,7 @@ import tomllib
 import anyio
 import pytest
 
-from memcommit.api import HelpDetailReferenceResult
+from memcommit.adapters.python_api import HelpDetailReferenceResult
 from memcommit.interfaces.agent import AgentToolBinding, AgentToolRegistry
 from memcommit.interfaces.mcp import McpRegistryProjection
 from memcommit.interfaces.mcp.server import (
@@ -176,7 +176,7 @@ def test_server_source_is_a_thin_transport_adapter():
 
     forbidden = (
         "memcommit.commands",
-        "memcommit.operations",
+        "memcommit.application.operations",
         "memcommit.infrastructure",
         "memcommit.store",
         "prompt_toolkit",

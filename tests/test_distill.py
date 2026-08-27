@@ -9,10 +9,10 @@ from pathlib import Path
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 import memcommit.commands.distill.command as distill_command
-import memcommit.operations.distill.application as distill_application
-from memcommit.cli import app
+import memcommit.application.operations.distill.application as distill_application
+from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.help_inventory.command import COMMAND_FORMS
 from memcommit.context import Context, Memory
 from memcommit.distill import (
@@ -26,9 +26,9 @@ from memcommit.distill_goal_fit import (
     DISTILL_GOAL_FIT_OPERATION,
     DISTILL_GOAL_FIT_PAYLOAD_MARKER,
 )
-from memcommit.operations.distill.application import DistillApplyRequest, DistillRequest
+from memcommit.application.operations.distill.application import DistillApplyRequest, DistillRequest
 from memcommit.distill_config import DistillSemanticConfig
-from memcommit.operations.distill.runtime import execute_distill, execute_distill_apply
+from memcommit.application.operations.distill.runtime import execute_distill, execute_distill_apply
 from memcommit.ground import (
     GroundTargetSpec,
     bind_ground_workbench,

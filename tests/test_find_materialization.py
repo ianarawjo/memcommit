@@ -2,7 +2,7 @@
 
 import pytest
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 from memcommit.commands.find.materialization import (
     FindMaterializationError,
     materialize_find_results,
@@ -12,13 +12,13 @@ from memcommit.commands.find.search_workbench import (
     FindSearchResponse,
     FindSearchResult,
 )
-from memcommit.authority.access import resolve_context_access
+from memcommit.application.authority.access import resolve_context_access
 from memcommit.commands.shared.readable_context_catalog import (
     freeze_readable_context_catalog,
 )
 from memcommit.context import Memory, MemoryRef
-from memcommit.selection import FlatMultiSelectionState, SelectionOption
-from memcommit.selection.tui.multiple import render_vertical_multi_choice_rows
+from memcommit.interfaces.console.selection import FlatMultiSelectionState, SelectionOption
+from memcommit.interfaces.console.selection.tui.multiple import render_vertical_multi_choice_rows
 from memcommit.store import MemoryStore, context_record_digest
 
 

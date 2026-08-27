@@ -24,7 +24,7 @@ without emulating CLI flags or importing command code.
   existing single-checkpoint transaction.
 
 Each method delegates lazily to
-`memcommit.api._operations.atomize_grounding`. Importing `memcommit` or
+`memcommit.adapters.python_api._operations.atomize_grounding`. Importing `memcommit` or
 `MemCommitClient` does not load the Grounding runtime, provider decoder, or
 Store transaction adapter.
 

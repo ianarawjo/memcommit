@@ -7,7 +7,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.authority.access import (
+from memcommit.application.authority.access import (
     context_access_display_facts,
     resolve_context_access,
 )
@@ -26,18 +26,18 @@ from memcommit.context_targeting.presets import (
     resolve_context_traversal,
     resolve_scope_preset,
 )
-from memcommit.operations.distill.model import DistillError
-from memcommit.operations.distill.application import DistillRequest, DistillResult
-from memcommit.operations.distill.runtime import execute_distill, prepare_distill_add
-from memcommit.operations.elaborate.model import ElaborateError, ElaborateMode
-from memcommit.operations.elaborate.add_runtime import (
+from memcommit.application.operations.distill.model import DistillError
+from memcommit.application.operations.distill.application import DistillRequest, DistillResult
+from memcommit.application.operations.distill.runtime import execute_distill, prepare_distill_add
+from memcommit.application.operations.elaborate.model import ElaborateError, ElaborateMode
+from memcommit.application.operations.elaborate.add_runtime import (
     freeze_elaborate_context_source,
     prepare_elaborate_add,
 )
-from memcommit.operations.elaborate.application import ElaborateRequest, ElaborateResult
-from memcommit.operations.fit.judgment import FitJudgmentError
+from memcommit.application.operations.elaborate.application import ElaborateRequest, ElaborateResult
+from memcommit.application.operations.fit.judgment import FitJudgmentError
 from memcommit.semantic.goal_focus_runtime import freeze_goal_focus_operand
-from memcommit.operations.forget.application import (
+from memcommit.application.operations.forget.application import (
     ForgetAnalysisRequest,
     ForgetAnalysisResult,
     run_forget_analysis,
@@ -46,7 +46,7 @@ from memcommit.interfaces.tui.operations.forget.resolution import (
     ForgetResolutionWorkbenchAdapter,
     forget_memory_changes,
 )
-from memcommit.operations.forget.runtime import (
+from memcommit.application.operations.forget.runtime import (
     MemoryStoreForgetSourcePort,
     connect_forget_provider,
 )
@@ -54,24 +54,24 @@ from memcommit.interfaces.tui.workbenches.impact import ImpactController
 from memcommit.interfaces.console.text import display_escape_text
 from memcommit.interfaces.tui.operations.forget import choose_forget_setup
 from memcommit.application.reviewing.memory_diff import MemoryChange
-from memcommit.operations.profile.config import ProfileConfigError
-from memcommit.operations.profile.model import ProfileError
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.application.reviewing.quality.handoff import (
     QualityFindingHandoffError,
     conflict_handoff_to_resolve_request,
     quality_finding_handoff_from_json,
 )
 from memcommit.infrastructure.providers.subscription import QueryProviderError, connect_semantic_provider
-from memcommit.operations.resolve.application import (
+from memcommit.application.operations.resolve.application import (
     ResolveAnalysis,
     ResolveCandidate,
     ResolveError,
     ResolveRequest,
     run_resolve,
 )
-from memcommit.operations.resolve.runtime import MemoryStoreResolvePort
-from memcommit.operations.resolve.semantic import ProviderResolveSemanticPort
-from memcommit.operations.add.semantic_runtime import (
+from memcommit.application.operations.resolve.runtime import MemoryStoreResolvePort
+from memcommit.application.operations.resolve.semantic import ProviderResolveSemanticPort
+from memcommit.application.operations.add.semantic_runtime import (
     resolve_semantic_add_endpoints,
     resolve_semantic_add_target,
 )

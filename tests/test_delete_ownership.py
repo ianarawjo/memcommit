@@ -21,11 +21,11 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 LEGACY_AND_CANONICAL_PATHS = (
     (
         "memcommit.delete_application",
-        "memcommit.operations.delete.application",
+        "memcommit.application.operations.delete.application",
     ),
     (
         "memcommit.delete_runtime",
-        "memcommit.operations.delete.runtime",
+        "memcommit.application.operations.delete.runtime",
     ),
 )
 
@@ -76,10 +76,10 @@ assert sys.modules[{canonical_name!r}] is canonical
 def test_delete_legacy_paths_expose_the_canonical_objects() -> None:
     legacy_application = importlib.import_module("memcommit.delete_application")
     canonical_application = importlib.import_module(
-        "memcommit.operations.delete.application"
+        "memcommit.application.operations.delete.application"
     )
     legacy_runtime = importlib.import_module("memcommit.delete_runtime")
-    canonical_runtime = importlib.import_module("memcommit.operations.delete.runtime")
+    canonical_runtime = importlib.import_module("memcommit.application.operations.delete.runtime")
 
     assert legacy_application is canonical_application
     assert (
@@ -116,10 +116,10 @@ def test_delete_legacy_facades_contain_no_implementation(
 def test_delete_package_import_does_not_eagerly_load_implementation_modules() -> None:
     source = """
 import sys
-import memcommit.operations.delete
+import memcommit.application.operations.delete
 
-assert "memcommit.operations.delete.application" not in sys.modules
-assert "memcommit.operations.delete.runtime" not in sys.modules
+assert "memcommit.application.operations.delete.application" not in sys.modules
+assert "memcommit.application.operations.delete.runtime" not in sys.modules
 """
 
     subprocess.run(
@@ -130,10 +130,10 @@ assert "memcommit.operations.delete.runtime" not in sys.modules
 
 
 def test_pre_relocation_delete_request_pickle_loads_through_legacy_alias() -> None:
-    canonical = importlib.import_module("memcommit.operations.delete.application")
+    canonical = importlib.import_module("memcommit.application.operations.delete.application")
 
     restored = pickle.loads(base64.b64decode(_LEGACY_DELETE_REQUEST_PICKLE))
 
     assert restored.__class__ is canonical.DirectItemDeleteRequest
     assert restored == canonical.DirectItemDeleteRequest("memory-1", "owner")
-    assert restored.__class__.__module__ == "memcommit.operations.delete.application"
+    assert restored.__class__.__module__ == "memcommit.application.operations.delete.application"

@@ -7,7 +7,7 @@ from dataclasses import dataclass
 import json
 from types import MappingProxyType
 
-from memcommit.api import HelpDetailReferenceResult, MemCommitClient
+from memcommit.adapters.python_api import HelpDetailReferenceResult, MemCommitClient
 from memcommit.interfaces.agent.add import (
     ADD_AGENT_TOOL_NAME,
     AddAgentAdapter,

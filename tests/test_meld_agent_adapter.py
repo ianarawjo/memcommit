@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from memcommit.api import MeldProviderFailure, MeldSessionResult, MemCommitClient
+from memcommit.adapters.python_api import MeldProviderFailure, MeldSessionResult, MemCommitClient
 from memcommit.interfaces.agent.meld import (
     MELD_AGENT_TOOL_NAME,
     MeldAgentAdapter,

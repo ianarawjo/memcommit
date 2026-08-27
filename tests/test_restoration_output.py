@@ -9,7 +9,7 @@ import pytest
 from click.testing import CliRunner as ClickCliRunner
 from typer.testing import CliRunner
 
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.command_history import CommandContextChange, ContextCommandUnit
 from memcommit.commands.shared.restoration_present import (
     _render_impact,

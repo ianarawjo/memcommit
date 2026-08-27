@@ -6,14 +6,14 @@ import click
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 from memcommit.applied_checkpoint_review import (
     applied_checkpoint_review_controller,
     list_applied_checkpoint_reviews,
     select_applied_checkpoint_review,
 )
 from memcommit.context import AutoCheckpoint
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.review.report import run_review_report_shell
 from memcommit.interfaces.console.theme import (
     SemanticColorRole,

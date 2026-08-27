@@ -12,9 +12,9 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 import memcommit.profiles as profiles_module
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.profile_config import (
     ProfileEntry,
     ProfileRegistry,
@@ -53,7 +53,7 @@ def _subprocess_mem(home: Path, *args: str) -> subprocess.CompletedProcess[str]:
     environment = os.environ.copy()
     environment["HOME"] = str(home)
     return subprocess.run(
-        [sys.executable, "-m", "memcommit.cli", *args],
+        [sys.executable, "-m", "memcommit.adapters.console.entrypoint", *args],
         cwd=Path(__file__).resolve().parents[1],
         env=environment,
         text=True,

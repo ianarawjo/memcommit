@@ -9,7 +9,7 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
 from memcommit.commands.init_study.name_dialog import choose_study_profile_name
-from memcommit.profiles import generate_study_profile_name
+from memcommit.application.operations.init_study.application import generate_study_profile_name
 
 
 def test_default_name_cursor_starts_at_end_for_immediate_editing() -> None:

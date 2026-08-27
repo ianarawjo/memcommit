@@ -53,7 +53,9 @@ def test_merge_application_does_not_import_an_interface_adapter():
         "prompt_toolkit",
         "typer",
     )
-    imports = _imports(PACKAGE / "operations" / "merge" / "application.py")
+    imports = _imports(
+        PACKAGE / "application" / "operations" / "merge" / "application.py"
+    )
 
     assert not any(
         module == prefix or module.startswith(f"{prefix}.")
@@ -66,13 +68,17 @@ def test_meld_resolution_application_does_not_import_runtime_or_interfaces():
     forbidden = (
         "memcommit.commands",
         "memcommit.interfaces",
-        "memcommit.operations.meld.runtime",
+        "memcommit.application.operations.meld.runtime",
         "memcommit.store",
         "prompt_toolkit",
         "typer",
     )
     imports = _imports(
-        PACKAGE / "operations" / "meld" / "resolution_application.py"
+        PACKAGE
+        / "application"
+        / "operations"
+        / "meld"
+        / "resolution_application.py"
     )
 
     assert not any(
@@ -84,12 +90,14 @@ def test_meld_resolution_application_does_not_import_runtime_or_interfaces():
 
 def test_meld_interfaces_enter_the_operation_owned_resolution_boundary():
     command_imports = _imports(PACKAGE / "commands" / "meld" / "command.py")
-    public_imports = _imports(PACKAGE / "api" / "_operations" / "meld.py")
+    public_imports = _imports(
+        PACKAGE / "adapters" / "python_api" / "_operations" / "meld.py"
+    )
     agent_imports = _imports(PACKAGE / "interfaces" / "agent" / "meld.py")
 
-    assert "memcommit.operations.meld.resolution_application" in command_imports
-    assert "memcommit.operations.meld.resolution_application" in public_imports
-    assert "memcommit.api" in agent_imports
+    assert "memcommit.application.operations.meld.resolution_application" in command_imports
+    assert "memcommit.application.operations.meld.resolution_application" in public_imports
+    assert "memcommit.adapters.python_api" in agent_imports
 
 
 def test_merge_cli_and_tui_depend_on_the_typed_application_contract():
@@ -98,8 +106,8 @@ def test_merge_cli_and_tui_depend_on_the_typed_application_contract():
         PACKAGE / "interfaces" / "tui" / "operations" / "merge" / "resolution.py"
     )
 
-    assert "memcommit.operations.merge.application" in cli_imports
-    assert "memcommit.operations.merge.application" in tui_imports
+    assert "memcommit.application.operations.merge.application" in cli_imports
+    assert "memcommit.application.operations.merge.application" in tui_imports
     assert not any(module.startswith("memcommit.commands") for module in tui_imports)
 
 
@@ -107,17 +115,17 @@ def test_merge_cli_and_tui_depend_on_the_typed_application_contract():
     ("application_name", "tui_path", "cli_path", "public_path", "agent_path"),
     (
         (
-            "memcommit.operations.dedup.application",
+            "memcommit.application.operations.dedup.application",
             PACKAGE / "interfaces" / "tui" / "operations" / "dedup" / "screen.py",
             PACKAGE / "interfaces" / "cli" / "dedup.py",
-            PACKAGE / "api" / "_operations" / "dedup.py",
+            PACKAGE / "adapters" / "python_api" / "_operations" / "dedup.py",
             PACKAGE / "interfaces" / "agent" / "dedup.py",
         ),
         (
-            "memcommit.operations.resolve.application",
+            "memcommit.application.operations.resolve.application",
             PACKAGE / "interfaces" / "tui" / "operations" / "resolve" / "screen.py",
             PACKAGE / "interfaces" / "cli" / "resolve.py",
-            PACKAGE / "api" / "_operations" / "resolve.py",
+            PACKAGE / "adapters" / "python_api" / "_operations" / "resolve.py",
             PACKAGE / "interfaces" / "agent" / "resolve.py",
         ),
     ),
@@ -155,7 +163,7 @@ def test_deterministic_resolution_adapters_keep_one_application_owner(
     assert application_name in public_imports
     assert not any(module.startswith("memcommit.commands") for module in tui_imports)
     assert not any(module.startswith("memcommit.commands") for module in public_imports)
-    assert "memcommit.api" in agent_imports
+    assert "memcommit.adapters.python_api" in agent_imports
     assert application_name not in agent_imports
     assert not any(
         module.startswith("memcommit.commands")

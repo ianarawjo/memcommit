@@ -64,7 +64,7 @@ def _pause(label: str) -> None:
 
 
 def _run_child(store_root: Path) -> None:
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
     import memcommit.store as store_module
     from memcommit.store import MemoryStore
 

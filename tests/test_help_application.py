@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from memcommit.operations.help.application import (
+from memcommit.application.operations.help.application import (
     HelpApplicationInputError,
     describe_operation,
     describe_operation_detail,
@@ -81,6 +81,7 @@ def test_application_boundary_has_no_store_provider_or_terminal_dependency():
     path = (
         Path(__file__).parents[1]
         / "src" / "memcommit"
+        / "application"
         / "operations"
         / "help"
         / "application.py"

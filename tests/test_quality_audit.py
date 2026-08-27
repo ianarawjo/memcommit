@@ -11,9 +11,9 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 import memcommit.commands.audit.command as audit_command
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.audit.command import (
     _run_quality_audit_checks,
     run_quality_audit_review,

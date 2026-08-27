@@ -8,8 +8,8 @@ from typer.testing import CliRunner
 
 import memcommit.commands.ground.command as ground_command
 import memcommit.commands.shared.operation_launcher_location as launcher_location_module
-import memcommit.ops as ops
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.ground.session_picker import (
     ground_session_picker_location,
     list_ground_session_catalog,

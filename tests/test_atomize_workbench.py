@@ -12,7 +12,7 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 import memcommit.commands.atomize.command as atomize_command
 import memcommit.commands.atomize.sessions as atomize_sessions_module
 from memcommit.atomize import (
@@ -36,7 +36,7 @@ from memcommit.atomize_workflow import (
     _connect_aggregate_atomize_provider,
     open_or_create_atomize_workbench,
 )
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.atomize.command import _materialize_reviewed_workbench
 from memcommit.interfaces.tui.operations.atomize.screen import (
     _finding_map,

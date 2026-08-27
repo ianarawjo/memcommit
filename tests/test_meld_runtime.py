@@ -9,15 +9,15 @@ from types import SimpleNamespace
 import pytest
 
 import memcommit.comparison_execution as comparison_execution
-import memcommit.operations.meld.assessment_application as meld_assessment_application
-import memcommit.operations.meld.restart_application as meld_restart_application
-import memcommit.operations.meld.runtime as meld_runtime
-import memcommit.operations.meld.session_application as meld_session_application
-import memcommit.operations.meld.start_application as meld_start_application
-from memcommit.authority.access import ContextAccess
+import memcommit.application.operations.meld.assessment_application as meld_assessment_application
+import memcommit.application.operations.meld.restart_application as meld_restart_application
+import memcommit.application.operations.meld.runtime as meld_runtime
+import memcommit.application.operations.meld.session_application as meld_session_application
+import memcommit.application.operations.meld.start_application as meld_start_application
+from memcommit.application.authority.access import ContextAccess
 from memcommit.context import Context, Memory
 from memcommit.meld import meld_canonical_digest
-from memcommit.operations.meld.restart_application import MeldRestartRequest
+from memcommit.application.operations.meld.restart_application import MeldRestartRequest
 
 
 PACKAGE_ROOT = Path(__file__).resolve().parents[1] / "src" / "memcommit"
@@ -100,7 +100,7 @@ def test_meld_command_calls_the_operation_owned_apply_service_directly():
 
 
 def test_python_client_uses_the_operation_owned_meld_resolution_boundary():
-    client_path = PACKAGE_ROOT / "api" / "client.py"
+    client_path = PACKAGE_ROOT / "adapters" / "python_api" / "client.py"
     operation_path = client_path.with_name("_operations") / "meld.py"
     source = client_path.read_text(encoding="utf-8")
     if operation_path.exists():

@@ -76,7 +76,7 @@ from memcommit.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     focused_control_style,
 )
-from memcommit.selection.tui import choice_marker, choice_visual_state
+from memcommit.interfaces.console.selection.tui import choice_marker, choice_visual_state
 from memcommit.source_projection.presentation import source_display_text
 
 

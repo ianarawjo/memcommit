@@ -8,8 +8,8 @@ from pathlib import Path
 
 import pytest
 
-import memcommit.ops as ops
-from memcommit.api import (
+import memcommit.application.ops as ops
+from memcommit.adapters.python_api import (
     DeleteInputError,
     MemCommitClient,
 )
@@ -230,8 +230,8 @@ def test_agent_and_mcp_split_delete_by_effect_and_require_exact_plan(tmp_path):
 @pytest.mark.parametrize(
     "path",
     (
-        "src/memcommit/operations/delete/application.py",
-        "src/memcommit/operations/delete/runtime.py",
+        "src/memcommit/application/operations/delete/application.py",
+        "src/memcommit/application/operations/delete/runtime.py",
     ),
 )
 def test_delete_boundary_has_no_terminal_dependencies(path):

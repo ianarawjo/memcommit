@@ -2,7 +2,7 @@
 
 ## Implementation ownership
 
-`memcommit.operations.translate` is the canonical implementation owner for
+`memcommit.application.operations.translate` is the canonical implementation owner for
 Translate. Its `application` module owns typed request validation, Source
 targeting, saved-view reuse/refresh, provider-call timing, curation, and mode
 orchestration; `catalog_application` owns import/export and catalog mutation

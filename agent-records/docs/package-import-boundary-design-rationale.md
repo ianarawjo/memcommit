@@ -70,7 +70,7 @@ scaffolding, not distribution evidence. Installed-wheel checks continue to run
 outside the checkout because an editable installation can still conceal wheel
 contents or package-data omissions.
 
-`memcommit.__init__` and `memcommit.api.__init__` retain `__all__`, object
+`memcommit.__init__` and `memcommit.adapters.python_api.__init__` retain `__all__`, object
 identity, and documented import spellings through module-level lazy attribute
 resolution. A first access caches the real object in that module. No proxy
 class or duplicate implementation crosses the public boundary.
@@ -108,7 +108,7 @@ isolation.
    Ground adapter.
 5. Ground adapters may depend on the operation application. The operation
    application and standalone runtime must not depend on a Ground adapter.
-6. Existing root and `memcommit.api` export spellings, `__all__`, and resolved
+6. Existing root and `memcommit.adapters.python_api` export spellings, `__all__`, and resolved
    object identity remain compatible. Import isolation must not be achieved
    with public proxy types.
 7. Import failure or deliberate unavailability of one optional operation

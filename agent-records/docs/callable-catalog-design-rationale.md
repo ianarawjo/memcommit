@@ -37,7 +37,8 @@ sorted and contains no timestamp or absolute host path, so identical source
 produces byte-identical output.
 
 The same scan generates an operation route catalog from the canonical Help
-operations and the Typer registrations in `memcommit.cli`. It reports observed
+operations and the Typer registrations in
+`memcommit.adapters.console.entrypoint`. It reports observed
 application/runtime modules, operation-owned TUI modules, public-client
 methods, agent modules, and boundary-matrix files. Special CLI spellings such
 as `checkout`, `import`, `list`, `pwd`, and lock/unlock use declared discovery

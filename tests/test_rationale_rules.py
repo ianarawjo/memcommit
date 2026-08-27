@@ -8,15 +8,19 @@ import json
 import pytest
 from typer.testing import CliRunner
 
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Memory
-from memcommit import ops
-from memcommit.provenance import (
+from memcommit.application import ops
+from memcommit.retained_history.memory_history_reconstruction.retained_record_verification import (
+    MemoryHistoryCommandContext,
+    MemoryHistoryContextTransition,
     MemoryState,
-    TraceCommandContext,
-    TraceContextTransition,
-    TraceEvent,
-    TraceReport,
+)
+from memcommit.retained_history.memory_history_reconstruction.memory_history_event_derivation import (
+    MemoryHistoryEvent,
+)
+from memcommit.retained_history.memory_history_reconstruction.memory_history_construction import (
+    MemoryHistory,
 )
 from memcommit.rationale_rules import (
     RATIONALE_RULESET_VERSION,
@@ -56,21 +60,21 @@ def _state(raw: dict[str, object]) -> MemoryState:
     )
 
 
-def _case_trace(case: dict[str, object]) -> TraceReport:
+def _case_trace(case: dict[str, object]) -> MemoryHistory:
     input_value = case["input"]
     assert isinstance(input_value, dict)
     raw_events = input_value["events"]
     assert isinstance(raw_events, list)
-    events: list[TraceEvent] = []
+    events: list[MemoryHistoryEvent] = []
     for raw_event in raw_events:
         route = raw_event.get("context_transition")
         transition = (
-            TraceContextTransition(
-                source=TraceCommandContext(
+            MemoryHistoryContextTransition(
+                source=MemoryHistoryCommandContext(
                     uid="source-context",
                     name=str(route["source"]),
                 ),
-                target=TraceCommandContext(
+                target=MemoryHistoryCommandContext(
                     uid="target-context",
                     name=str(route["target"]),
                 ),
@@ -79,7 +83,7 @@ def _case_trace(case: dict[str, object]) -> TraceReport:
             else None
         )
         events.append(
-            TraceEvent(
+            MemoryHistoryEvent(
                 kind=raw_event["kind"],
                 evidence="RECORDED",
                 timestamp=None,
@@ -107,7 +111,7 @@ def _case_trace(case: dict[str, object]) -> TraceReport:
             }
         )
     )
-    return TraceReport(
+    return MemoryHistory(
         context_uid="context",
         context_name=str(input_value["context_name"]),
         selected_uid=selected,
@@ -455,7 +459,7 @@ def test_hidden_history_returns_without_connecting_a_provider():
 
 def test_unrecorded_gap_returns_empty_without_connecting_a_provider():
     state = MemoryState(uid="selected-memory", content="Current only.", position=0)
-    trace = TraceReport(
+    trace = MemoryHistory(
         context_uid="context",
         context_name="unrecorded",
         selected_uid=state.uid,
@@ -463,7 +467,7 @@ def test_unrecorded_gap_returns_empty_without_connecting_a_provider():
         originals=(),
         current=(state,),
         events=(
-            TraceEvent(
+            MemoryHistoryEvent(
                 kind="HISTORY_GAP",
                 evidence="UNRECORDED",
                 timestamp=None,
@@ -498,7 +502,7 @@ def test_mixed_gap_sends_only_the_latest_retained_boundary():
         position=retained_selected.position,
     )
     warning = "The current Context contains an unrecorded edit."
-    gap = TraceEvent(
+    gap = MemoryHistoryEvent(
         kind="HISTORY_GAP",
         evidence="UNRECORDED",
         timestamp=None,

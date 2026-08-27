@@ -29,14 +29,14 @@ from memcommit.eval.study_fixtures import (
     load_study_fixture,
     pair_fixture_translations,
 )
-from memcommit.operations.profile.config import GRANT_PERMISSIONS
+from memcommit.application.operations.profile.config import GRANT_PERMISSIONS
 from memcommit.persistence.store import MemoryStore
-from memcommit.operations.translate.view import (
+from memcommit.application.operations.translate.view import (
     TRANSLATION_ORIGIN_IMPORTED,
     TRANSLATION_REVIEW_UNREVIEWED,
     TranslationCatalog,
 )
-from memcommit.operations.translate.view_store import save_translation_catalog
+from memcommit.application.operations.translate.view_store import save_translation_catalog
 
 
 _BUNDLE_NAMESPACE = uuid.UUID("50b72d54-cfbe-4f89-8f7f-1e6c785d8552")

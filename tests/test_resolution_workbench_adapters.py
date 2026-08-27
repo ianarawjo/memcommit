@@ -31,7 +31,7 @@ from memcommit.meld_resolution_adapter import (
     MeldResolutionWorkbenchAdapter,
 )
 from memcommit.resolution_workbench import ResolutionNavigation
-from memcommit.responses.resolution import (
+from memcommit.interfaces.console.responses.resolution import (
     response_draft_from_item,
     response_target_from_item,
 )

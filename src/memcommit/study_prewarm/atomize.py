@@ -8,7 +8,7 @@ import hashlib
 import json
 from pathlib import Path
 
-from memcommit.operations.atomize.domain import (
+from memcommit.application.operations.atomize.domain import (
     ATOMIZE_PROVIDER_CONTRACT_VERSION,
     ATOMIZE_RULESET_VERSION,
     AtomizeAnalysisSession,
@@ -19,8 +19,8 @@ from memcommit.infrastructure.providers.policy import (
     resolve_operation_provider_policy,
 )
 from memcommit.context import Context, Memory
-from memcommit.operations.profile.config import ProfileEntry, ProfileRegistry, study_run_identity
-from memcommit.operations.profile.model import (
+from memcommit.application.operations.profile.config import ProfileEntry, ProfileRegistry, study_run_identity
+from memcommit.application.operations.profile.model import (
     _LEGACY_PRE_SPLIT_STUDY_PRACTICE_DESCRIPTION_CONTENT,
     _LEGACY_STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT,
     _LEGACY_STUDY_PRACTICE_DESCRIPTION_SITUATION_CONTENT,
@@ -31,7 +31,7 @@ from memcommit.operations.profile.model import (
     _STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT,
     _STUDY_PRACTICE_DESCRIPTION_TASK_UID,
 )
-from memcommit.operations.review.model import direct_context_digest
+from memcommit.application.operations.review.model import direct_context_digest
 from memcommit.semantic.prompt_policy import (
     GENERAL_PROMPT_POLICY_ID,
     STUDY_PROMPT_POLICY_ID,

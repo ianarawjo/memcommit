@@ -52,9 +52,9 @@ from memcommit.interfaces.tui.workbenches.resolution.model import (
     ResolutionOutcome,
     ResolutionWorkbenchSpec,
 )
-from memcommit.selection.model import SelectionOption
-from memcommit.selection.state import FlatSelectionState
-from memcommit.selection.tui import choice_marker, choice_visual_state
+from memcommit.interfaces.console.selection.model import SelectionOption
+from memcommit.interfaces.console.selection.state import FlatSelectionState
+from memcommit.interfaces.console.selection.tui import choice_marker, choice_visual_state
 
 
 T = TypeVar("T")

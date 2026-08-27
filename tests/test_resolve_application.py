@@ -10,10 +10,10 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 import memcommit.commands.resolve.command as resolve_command
-from memcommit.cli import app
-from memcommit.api import (
+from memcommit.adapters.console.entrypoint import app
+from memcommit.adapters.python_api import (
     MemCommitClient,
     ResolveAnalysisResult,
     ResolveApplyResult,
@@ -41,7 +41,7 @@ from memcommit.interfaces.tui.operations.resolve import (
     resolve_candidate_exact_review,
     run_resolve_tui,
 )
-from memcommit.operations.resolve.application import (
+from memcommit.application.operations.resolve.application import (
     ResolveConflictError,
     ResolveError,
     ResolveRequest,
@@ -49,7 +49,7 @@ from memcommit.operations.resolve.application import (
     apply_resolve,
     run_resolve,
 )
-from memcommit.operations.resolve.runtime import MemoryStoreResolvePort
+from memcommit.application.operations.resolve.runtime import MemoryStoreResolvePort
 from memcommit.resolve_rules import resolve_ruleset_prompt_payload
 from memcommit.resolve_semantic import ProviderResolveSemanticPort
 from memcommit.review import direct_context_digest

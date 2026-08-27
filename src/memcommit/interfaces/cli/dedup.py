@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import typer
 
-from memcommit.operations.dedup.application import DedupReceipt, FrozenDedupPlan
+from memcommit.application.operations.dedup.application import DedupReceipt, FrozenDedupPlan
 from memcommit.interfaces.console.text import display_escape_text
 from memcommit.interfaces.console.theme import (
     SemanticColorRole,

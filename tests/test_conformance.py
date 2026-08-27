@@ -6,7 +6,7 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 from memcommit.conformance import (
     CASE_CONFORMANCE_OPERATION,
     CONTEXT_CONFORMANCE_OPERATION,
@@ -19,7 +19,7 @@ from memcommit.conformance import (
 )
 from memcommit.conformance_runtime import freeze_context_conformance
 from memcommit.conformance_runtime import freeze_ground_conformance
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 import memcommit.commands.check_conformance.command as check_conformance_command
 import memcommit.commands.audit.command as audit_command
 from memcommit.ground import (

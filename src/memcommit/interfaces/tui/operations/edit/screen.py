@@ -18,7 +18,7 @@ from memcommit.context_targeting.tui.direct_memory_selector import (
     DirectMemorySelectorView,
 )
 from memcommit.context_targeting.tui.picker import ContextMemoryRow
-from memcommit.operations.edit.application import (
+from memcommit.application.operations.edit.application import (
     EditRequest,
     FrozenEditPlan,
     edit_target_selector,

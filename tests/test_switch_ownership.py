@@ -19,18 +19,18 @@ REPOSITORY_ROOT = Path(__file__).parents[1]
 SWITCH_MODULES = (
     (
         "memcommit.switch_application",
-        "memcommit.operations.switch.application",
+        "memcommit.application.operations.switch.application",
     ),
     (
         "memcommit.switch_runtime",
-        "memcommit.operations.switch.runtime",
+        "memcommit.application.operations.switch.runtime",
     ),
 )
 
 
 def test_legacy_switch_application_path_is_the_canonical_module() -> None:
     legacy = importlib.import_module("memcommit.switch_application")
-    canonical = importlib.import_module("memcommit.operations.switch.application")
+    canonical = importlib.import_module("memcommit.application.operations.switch.application")
 
     assert legacy is canonical
     assert legacy.SwitchContextRequest is canonical.SwitchContextRequest
@@ -40,7 +40,7 @@ def test_legacy_switch_application_path_is_the_canonical_module() -> None:
 
 def test_legacy_switch_runtime_path_is_the_canonical_module() -> None:
     legacy = importlib.import_module("memcommit.switch_runtime")
-    canonical = importlib.import_module("memcommit.operations.switch.runtime")
+    canonical = importlib.import_module("memcommit.application.operations.switch.runtime")
 
     assert legacy is canonical
     assert legacy.SwitchSetupSnapshot is canonical.SwitchSetupSnapshot
@@ -85,9 +85,9 @@ def test_legacy_switch_facades_define_no_behavior(relative_path: str) -> None:
 def test_switch_package_import_does_not_eagerly_load_implementation_modules() -> None:
     program = (
         "import sys\n"
-        "import memcommit.operations.switch\n"
-        "assert 'memcommit.operations.switch.application' not in sys.modules\n"
-        "assert 'memcommit.operations.switch.runtime' not in sys.modules\n"
+        "import memcommit.application.operations.switch\n"
+        "assert 'memcommit.application.operations.switch.application' not in sys.modules\n"
+        "assert 'memcommit.application.operations.switch.runtime' not in sys.modules\n"
     )
 
     subprocess.run(

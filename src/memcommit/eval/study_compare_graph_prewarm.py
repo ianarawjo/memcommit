@@ -32,16 +32,16 @@ import time
 from typing import Protocol
 import uuid
 
-from memcommit.operations.compare.ledger.execution import (
+from memcommit.application.operations.compare.ledger.execution import (
     load_comparison_context,
     recursive_comparison_projection,
 )
-from memcommit.authority.access import resolve_context_access
+from memcommit.application.authority.access import resolve_context_access
 from memcommit.commands.shared.readable_context_catalog import (
     ReadableContextCatalog,
     freeze_profile_readable_context_catalog,
 )
-from memcommit.operations.compare.ledger.model import (
+from memcommit.application.operations.compare.ledger.model import (
     COMPARISON_RULESET_VERSION,
     ComparisonAnalysis,
     ComparisonInput,
@@ -57,9 +57,9 @@ from memcommit.study_prewarm.compare_compact import (
     COMPACT_PROMPT_VERSION,
     run_compact_compare,
 )
-from memcommit.operations.compare.ledger.provider import analyze_comparison
-from memcommit.operations.profile.config import load_profile_registry
-from memcommit.operations.profile.model import _study_practice_contexts
+from memcommit.application.operations.compare.ledger.provider import analyze_comparison
+from memcommit.application.operations.profile.config import load_profile_registry
+from memcommit.application.operations.profile.model import _study_practice_contexts
 from memcommit.infrastructure.providers.types import (
     CODEX_CHATGPT_PROVIDER,
     CODEX_REASONING_EFFORTS,

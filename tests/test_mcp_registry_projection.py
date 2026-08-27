@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-from memcommit.api import MemCommitClient
+from memcommit.adapters.python_api import MemCommitClient
 from memcommit.interfaces.agent import (
     ADD_AGENT_TOOL_NAME,
     APPLY_CONTEXT_DELETE_AGENT_TOOL_NAME,
@@ -320,7 +320,7 @@ def test_projection_has_no_sdk_terminal_or_runtime_dependency():
     forbidden = (
         "mcp",
         "memcommit.commands",
-        "memcommit.operations",
+        "memcommit.application.operations",
         "memcommit.infrastructure",
         "memcommit.store",
         "typer",

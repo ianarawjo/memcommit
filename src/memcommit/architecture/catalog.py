@@ -488,7 +488,15 @@ def _callables(modules: tuple[_SourceModule, ...]) -> tuple[CallableRecord, ...]
 
 
 def _help_operations(repository: Path) -> tuple[str, ...]:
-    path = repository / "src" / "memcommit" / "help_catalog" / "catalog.py"
+    path = (
+        repository
+        / "src"
+        / "memcommit"
+        / "application"
+        / "operations"
+        / "operation_catalog"
+        / "catalog.py"
+    )
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
     names = {
         node.args[0].value
@@ -538,7 +546,11 @@ def _cli_entries(
     repository: Path,
     modules: tuple[_SourceModule, ...],
 ) -> dict[str, str]:
-    source = next(module for module in modules if module.name == "memcommit.cli")
+    source = next(
+        module
+        for module in modules
+        if module.name == "memcommit.adapters.console.entrypoint"
+    )
     module_names = {module.name for module in modules}
     entries: dict[str, str] = {}
     for node in source.tree.body:
@@ -580,12 +592,21 @@ def _cli_entries(
                     and isinstance(decorator.args[0].value, str)
                 ):
                     continue
-                entries[decorator.args[0].value] = f"memcommit.cli:{node.name}"
+                entries[decorator.args[0].value] = (
+                    f"memcommit.adapters.console.entrypoint:{node.name}"
+                )
     return entries
 
 
 def _client_methods(repository: Path) -> dict[str, set[str]]:
-    path = repository / "src" / "memcommit" / "api" / "client.py"
+    path = (
+        repository
+        / "src"
+        / "memcommit"
+        / "adapters"
+        / "python_api"
+        / "client.py"
+    )
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
     found: dict[str, set[str]] = defaultdict(set)
     for node in tree.body:
@@ -597,7 +618,7 @@ def _client_methods(repository: Path) -> dict[str, set[str]]:
             for child in ast.walk(method):
                 if not isinstance(child, ast.ImportFrom) or not child.module:
                     continue
-                prefix = "memcommit.api._operations."
+                prefix = "memcommit.adapters.python_api._operations."
                 if child.module.startswith(prefix):
                     found[child.module.removeprefix(prefix)].add(method.name)
     return found
@@ -649,8 +670,8 @@ def _module_owner_matches(module: str, tokens: tuple[str, ...]) -> bool:
 
 def _operation_package_matches(module: str, tokens: tuple[str, ...]) -> bool:
     return any(
-        module == f"memcommit.operations.{token}"
-        or module.startswith(f"memcommit.operations.{token}.")
+        module == f"memcommit.application.operations.{token}"
+        or module.startswith(f"memcommit.application.operations.{token}.")
         for token in tokens
     )
 
@@ -787,7 +808,7 @@ def _operation_routes(
                     or "runtime" in module.split(".")[-1]
                     or _operation_package_matches(module, tokens)
                 )
-                and not module.startswith("memcommit.api.")
+                and not module.startswith("memcommit.adapters.python_api.")
                 and not module.startswith("memcommit.interfaces.")
             )
         )

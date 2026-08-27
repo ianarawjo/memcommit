@@ -4,12 +4,14 @@ from __future__ import annotations
 
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 import memcommit.store as store_module
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.branch.dialog import BranchCreationReceipt
 from memcommit.context import AutoCheckpoint, Context, Memory, MemoryRef
-from memcommit.provenance import build_trace
+from memcommit.retained_history.memory_history_reconstruction.memory_history_construction import (
+    reconstruct_memory_history,
+)
 from memcommit.store import MemoryStore
 
 
@@ -106,7 +108,7 @@ def test_explicit_subtree_branch_clones_hierarchy_and_internal_pointers(
     branch_child_history = store.list_checkpoints("experiment/child")
     assert branch_child_history[0]["command"] == "branch"
     assert branch_child_history[1:] == child_history
-    child_trace = build_trace(store, branch_child, branch_child_memory.uid)
+    child_trace = reconstruct_memory_history(store, branch_child, branch_child_memory.uid)
     assert child_trace.warnings == ()
     branch_event = next(
         event for event in child_trace.events if event.kind == "BRANCHED"
@@ -315,7 +317,7 @@ def test_subtree_branch_rejects_new_descendant_after_snapshot(
         return result
 
     monkeypatch.setattr(
-        "memcommit.operations.branch.runtime.ops.branch_subtree",
+        "memcommit.application.operations.branch.runtime.ops.branch_subtree",
         add_descendant_then_branch,
     )
 
@@ -350,7 +352,7 @@ def test_subtree_branch_rejects_changed_descendant_history(
         return result
 
     monkeypatch.setattr(
-        "memcommit.operations.branch.runtime.ops.branch_subtree",
+        "memcommit.application.operations.branch.runtime.ops.branch_subtree",
         checkpoint_child_then_branch,
     )
 

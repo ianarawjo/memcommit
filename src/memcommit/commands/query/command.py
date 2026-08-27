@@ -4,19 +4,19 @@ from typing import Annotated, Optional
 
 import typer
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 from memcommit.commands.shared.command_progress import CommandProgress
 from memcommit.commands.shared.context_operand import ContextOperandSnapshot
-from memcommit.authority.access import (
+from memcommit.application.authority.access import (
     ContextAccess,
     context_access_display_facts,
     resolve_context_access,
 )
-from memcommit.operations.query.granted_application import (
+from memcommit.application.operations.query.granted_application import (
     GrantedQueryRequest,
     GrantedQueryTarget,
 )
-from memcommit.operations.query.granted_runtime import (
+from memcommit.application.operations.query.granted_runtime import (
     execute_granted_query_request,
     freeze_granted_query_targets,
     resolve_granted_query_target,
@@ -50,21 +50,21 @@ from memcommit.context_targeting.presets import (
     resolve_context_traversal,
     resolve_scope_preset,
 )
-from memcommit.authority.derived_policy import authorize_combination
-from memcommit.operations.search.answer_dialogue import FindAnswerCorpusTooLarge
-from memcommit.operations.query.answer import OrdinaryQueryCorpusTooLarge
-from memcommit.operations.profile.config import ProfileConfigError, load_profile_registry
-from memcommit.operations.profile.model import ProfileError
+from memcommit.application.authority.derived_policy import authorize_combination
+from memcommit.application.operations.search.answer_dialogue import FindAnswerCorpusTooLarge
+from memcommit.application.operations.query.answer import OrdinaryQueryCorpusTooLarge
+from memcommit.application.operations.profile.config import ProfileConfigError, load_profile_registry
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.infrastructure.providers.subscription import QueryProviderError
-from memcommit.operations.query.ordinary_application import OrdinaryQueryRequest
-from memcommit.operations.query.ordinary_runtime import execute_ordinary_query
-from memcommit.operations.query.reference_application import QueryReferenceRequest
-from memcommit.operations.query.reference_runtime import execute_query_reference
-from memcommit.operations.query.granted_source import (
+from memcommit.application.operations.query.ordinary_application import OrdinaryQueryRequest
+from memcommit.application.operations.query.ordinary_runtime import execute_ordinary_query
+from memcommit.application.operations.query.reference_application import QueryReferenceRequest
+from memcommit.application.operations.query.reference_runtime import execute_query_reference
+from memcommit.application.operations.query.granted_source import (
     GrantedQuerySourceError,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.operations.search.model import FindError
+from memcommit.application.operations.search.model import FindError
 
 
 def _query_ordinary_context(

@@ -9,8 +9,8 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.current_context_application as current_context_application
-import memcommit.ops as ops
-from memcommit.cli import app
+import memcommit.application.ops as ops
+from memcommit.adapters.console.entrypoint import app
 from memcommit.current_context_application import (
     CurrentContextError,
     NoCurrentContextError,

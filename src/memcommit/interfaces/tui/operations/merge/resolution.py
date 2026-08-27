@@ -31,7 +31,7 @@ from memcommit.interfaces.tui.workbenches.resolution import (
     run_resolution_workbench,
 )
 from memcommit.application.reviewing.memory_diff import MemoryChange, memory_diff_lines
-from memcommit.operations.merge.application import (
+from memcommit.application.operations.merge.application import (
     FrozenMergePlan,
     MergeConflict,
     MergeDecision,

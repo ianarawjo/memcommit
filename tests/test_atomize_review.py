@@ -6,7 +6,7 @@ import json
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 from memcommit.atomize import (
     AtomizeAnalysisSession,
     AtomizeFrameOrigin,
@@ -20,7 +20,7 @@ from memcommit.atomize_workbench import (
     atomize_workbench_issue_projection,
     project_atomize_workbench_findings,
 )
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 from memcommit.context import AutoCheckpoint, Memory
 from memcommit.store import MemoryStore
 

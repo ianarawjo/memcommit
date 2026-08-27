@@ -12,7 +12,7 @@ from memcommit.interfaces.tui.components.direct_item_placement.model import (
     DirectItemGapState,
     DirectItemPreview,
 )
-from memcommit.selection.tui import tree_choice_marker, tree_choice_styles
+from memcommit.interfaces.console.selection.tui import tree_choice_marker, tree_choice_styles
 from memcommit.source_projection.presentation import (
     source_annotation_tokens,
     source_object_label,

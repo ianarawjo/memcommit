@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from memcommit.responses.model import ResponseChoice, ResponseDraft, ResponseTarget
-from memcommit.responses.state import ResponseFrameState
-from memcommit.responses.tui import response_frame_fragments
+from memcommit.interfaces.console.responses.model import ResponseChoice, ResponseDraft, ResponseTarget
+from memcommit.interfaces.console.responses.state import ResponseFrameState
+from memcommit.interfaces.console.responses.tui import response_frame_fragments
 
 
 def _target() -> ResponseTarget:

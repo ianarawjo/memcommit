@@ -16,8 +16,11 @@ from memcommit.commands.shared.memory_picker import (
     choose_memory_report_target,
 )
 import memcommit.context_targeting.tui.picker as context_picker
-import memcommit.ops as ops
-from memcommit.provenance import TraceCandidate, collect_trace_candidates
+import memcommit.application.ops as ops
+from memcommit.retained_history.memory_history_reconstruction.memory_history_construction import (
+    MemoryHistoryCandidate,
+    collect_memory_history_candidates,
+)
 from memcommit.store import MemoryStore
 from memcommit.interfaces.console.theme import ERROR_HEX
 from memcommit.interfaces.tui.core.theme import (
@@ -32,8 +35,8 @@ def candidate(
     content: str | None = None,
     status: str = "CURRENT",
     change_count: int | None = None,
-) -> TraceCandidate:
-    return TraceCandidate(
+) -> MemoryHistoryCandidate:
+    return MemoryHistoryCandidate(
         uid=f"00000000-0000-4000-8000-{suffix:012d}",
         content=content if content is not None else f"Memory {suffix}",
         position=suffix,
@@ -416,7 +419,7 @@ def test_unrecorded_current_gap_has_zero_recorded_changes(isolated_store):
     memory = ops.add(context, "Only the current file retains this.")
     store.save(context)
 
-    candidates = collect_trace_candidates(
+    candidates = collect_memory_history_candidates(
         store,
         store.load_direct(context.name),
     )

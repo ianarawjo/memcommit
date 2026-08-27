@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from memcommit.api import (
+from memcommit.adapters.python_api import (
     CompareConflictError,
     ComparisonFrameResult,
     ComparisonResult,

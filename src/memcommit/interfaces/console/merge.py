@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from memcommit.interfaces.console.text import display_escape_text
-from memcommit.operations.merge.application import (
+from memcommit.application.operations.merge.application import (
     FrozenMergePlan,
     MergeConflict,
     MergeItemSnapshot,

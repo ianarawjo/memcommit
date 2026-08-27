@@ -61,11 +61,11 @@ def test_root_import_does_not_assemble_public_client_or_api():
         """
 import sys
 import memcommit
-assert 'memcommit.api' not in sys.modules
-assert 'memcommit.api.client' not in sys.modules
+assert 'memcommit.adapters.python_api' not in sys.modules
+assert 'memcommit.adapters.python_api.client' not in sys.modules
 assert memcommit.MemoryStore.__module__ == 'memcommit.persistence.store'
 assert 'MemCommitClient' in dir(memcommit)
-assert 'memcommit.api' not in sys.modules
+assert 'memcommit.adapters.python_api' not in sys.modules
 """
     )
 
@@ -76,22 +76,22 @@ def test_public_client_import_does_not_assemble_operation_implementations():
     completed = _run_fresh(
         """
 import sys
-from memcommit.api import MemCommitClient
+from memcommit.adapters.python_api import MemCommitClient
 blocked = (
-    'memcommit.api._operations.add',
-    'memcommit.api._operations.compare',
-    'memcommit.api._operations.distill',
-    'memcommit.api._operations.elaborate',
-    'memcommit.api._operations.embed',
-    'memcommit.api._operations.fit',
-    'memcommit.api._operations.help',
-    'memcommit.api._operations.forget',
-    'memcommit.api._operations.ground_distill',
-    'memcommit.api._operations.ground_elaborate',
-    'memcommit.api._operations.meld',
-    'memcommit.api._operations.query',
-    'memcommit.api._operations.reference',
-    'memcommit.api._operations.show',
+    'memcommit.adapters.python_api._operations.add',
+    'memcommit.adapters.python_api._operations.compare',
+    'memcommit.adapters.python_api._operations.distill',
+    'memcommit.adapters.python_api._operations.elaborate',
+    'memcommit.adapters.python_api._operations.embed',
+    'memcommit.adapters.python_api._operations.fit',
+    'memcommit.adapters.python_api._operations.help',
+    'memcommit.adapters.python_api._operations.forget',
+    'memcommit.adapters.python_api._operations.ground_distill',
+    'memcommit.adapters.python_api._operations.ground_elaborate',
+    'memcommit.adapters.python_api._operations.meld',
+    'memcommit.adapters.python_api._operations.query',
+    'memcommit.adapters.python_api._operations.reference',
+    'memcommit.adapters.python_api._operations.show',
     'memcommit.add_application',
     'memcommit.add_runtime',
     'memcommit.atomize_application',
@@ -163,94 +163,94 @@ blocked = (
     'memcommit.translation_view_store',
     'memcommit.literal_find_application',
     'memcommit.literal_find_runtime',
-    'memcommit.operations.add.application',
-    'memcommit.operations.add.runtime',
-    'memcommit.operations.atomize.application',
-    'memcommit.operations.atomize.analysis_application',
-    'memcommit.operations.atomize.analysis_runtime',
-    'memcommit.operations.atomize.grounding_application',
-    'memcommit.operations.atomize.grounding_runtime',
-    'memcommit.operations.atomize.runtime',
-    'memcommit.operations.atomize.domain',
-    'memcommit.operations.atomize.grounding',
-    'memcommit.operations.atomize.grounding_meld_adapter',
-    'memcommit.operations.atomize.grounding_provider',
-    'memcommit.operations.atomize.normal_form',
-    'memcommit.operations.atomize.resolution_adapter',
-    'memcommit.operations.atomize.result_adapter',
-    'memcommit.operations.atomize.workbench',
-    'memcommit.operations.chunk.application',
-    'memcommit.operations.chunk.domain',
-    'memcommit.operations.chunk.runtime',
-    'memcommit.operations.clear.application',
-    'memcommit.operations.clear.runtime',
-    'memcommit.operations.compare.summary',
-    'memcommit.operations.compare.summary_application',
-    'memcommit.operations.compare.summary_provider',
-    'memcommit.operations.compare.summary_rules',
-    'memcommit.operations.dedup.application',
-    'memcommit.operations.dedup.runtime',
-    'memcommit.operations.exact_dedup.application',
-    'memcommit.operations.distill.application',
-    'memcommit.operations.distill.runtime',
-    'memcommit.operations.elaborate.application',
-    'memcommit.operations.elaborate.runtime',
-    'memcommit.operations.elaborate.add_runtime',
-    'memcommit.operations.contexts.application',
-    'memcommit.operations.contexts.runtime',
-    'memcommit.operations.query.ordinary_application',
-    'memcommit.operations.embed.application',
-    'memcommit.operations.embed.runtime',
-    'memcommit.operations.fit.application',
-    'memcommit.operations.fit.runtime',
-    'memcommit.operations.fit.coherence',
-    'memcommit.operations.fit.ground_report',
-    'memcommit.operations.fit.store',
-    'memcommit.operations.forget.application',
-    'memcommit.operations.forget.runtime',
-    'memcommit.operations.find.literal_application',
-    'memcommit.operations.find.literal_runtime',
-    'memcommit.operations.meld.application',
-    'memcommit.operations.meld.runtime',
-    'memcommit.operations.meld.application_flow',
-    'memcommit.operations.meld.assessment_application',
-    'memcommit.operations.meld.resolution_application',
-    'memcommit.operations.meld.restart_application',
-    'memcommit.operations.meld.session_application',
-    'memcommit.operations.meld.start_application',
-    'memcommit.operations.help.application',
-    'memcommit.operations.help.lookup_application',
-    'memcommit.operations.query.granted_application',
-    'memcommit.operations.query.granted_runtime',
-    'memcommit.operations.query.ordinary_runtime',
-    'memcommit.operations.query.reference_application',
-    'memcommit.operations.query.reference_runtime',
-    'memcommit.operations.redo.runtime',
-    'memcommit.operations.reference.application',
-    'memcommit.operations.restoration.runtime',
-    'memcommit.operations.reference.runtime',
-    'memcommit.operations.sever.application',
-    'memcommit.operations.sever.runtime',
-    'memcommit.operations.sever.model',
-    'memcommit.operations.sever.provider',
-    'memcommit.operations.sever.resolution_adapter',
-    'memcommit.operations.sever.session_store',
-    'memcommit.operations.show.application',
-    'memcommit.operations.show.runtime',
-    'memcommit.operations.search.application',
-    'memcommit.operations.search.runtime',
-    'memcommit.operations.search.materialization_application',
-    'memcommit.operations.search.materialization_runtime',
-    'memcommit.operations.summarize.application',
-    'memcommit.operations.summarize.runtime',
-    'memcommit.operations.update.application',
-    'memcommit.operations.undo.runtime',
-    'memcommit.operations.translate.runtime',
-    'memcommit.operations.translate.application',
-    'memcommit.operations.translate.catalog_application',
-    'memcommit.operations.translate.materialization',
-    'memcommit.operations.translate.view',
-    'memcommit.operations.translate.view_store',
+    'memcommit.application.operations.add.application',
+    'memcommit.application.operations.add.runtime',
+    'memcommit.application.operations.atomize.application',
+    'memcommit.application.operations.atomize.analysis_application',
+    'memcommit.application.operations.atomize.analysis_runtime',
+    'memcommit.application.operations.atomize.grounding_application',
+    'memcommit.application.operations.atomize.grounding_runtime',
+    'memcommit.application.operations.atomize.runtime',
+    'memcommit.application.operations.atomize.domain',
+    'memcommit.application.operations.atomize.grounding',
+    'memcommit.application.operations.atomize.grounding_meld_adapter',
+    'memcommit.application.operations.atomize.grounding_provider',
+    'memcommit.application.operations.atomize.normal_form',
+    'memcommit.application.operations.atomize.resolution_adapter',
+    'memcommit.application.operations.atomize.result_adapter',
+    'memcommit.application.operations.atomize.workbench',
+    'memcommit.application.operations.chunk.application',
+    'memcommit.application.operations.chunk.domain',
+    'memcommit.application.operations.chunk.runtime',
+    'memcommit.application.operations.clear.application',
+    'memcommit.application.operations.clear.runtime',
+    'memcommit.application.operations.compare.summary',
+    'memcommit.application.operations.compare.summary_application',
+    'memcommit.application.operations.compare.summary_provider',
+    'memcommit.application.operations.compare.summary_rules',
+    'memcommit.application.operations.dedup.application',
+    'memcommit.application.operations.dedup.runtime',
+    'memcommit.application.operations.exact_dedup.application',
+    'memcommit.application.operations.distill.application',
+    'memcommit.application.operations.distill.runtime',
+    'memcommit.application.operations.elaborate.application',
+    'memcommit.application.operations.elaborate.runtime',
+    'memcommit.application.operations.elaborate.add_runtime',
+    'memcommit.application.operations.contexts.application',
+    'memcommit.application.operations.contexts.runtime',
+    'memcommit.application.operations.query.ordinary_application',
+    'memcommit.application.operations.embed.application',
+    'memcommit.application.operations.embed.runtime',
+    'memcommit.application.operations.fit.application',
+    'memcommit.application.operations.fit.runtime',
+    'memcommit.application.operations.fit.coherence',
+    'memcommit.application.operations.fit.ground_report',
+    'memcommit.application.operations.fit.store',
+    'memcommit.application.operations.forget.application',
+    'memcommit.application.operations.forget.runtime',
+    'memcommit.application.operations.find.literal_application',
+    'memcommit.application.operations.find.literal_runtime',
+    'memcommit.application.operations.meld.application',
+    'memcommit.application.operations.meld.runtime',
+    'memcommit.application.operations.meld.application_flow',
+    'memcommit.application.operations.meld.assessment_application',
+    'memcommit.application.operations.meld.resolution_application',
+    'memcommit.application.operations.meld.restart_application',
+    'memcommit.application.operations.meld.session_application',
+    'memcommit.application.operations.meld.start_application',
+    'memcommit.application.operations.help.application',
+    'memcommit.application.operations.help.lookup_application',
+    'memcommit.application.operations.query.granted_application',
+    'memcommit.application.operations.query.granted_runtime',
+    'memcommit.application.operations.query.ordinary_runtime',
+    'memcommit.application.operations.query.reference_application',
+    'memcommit.application.operations.query.reference_runtime',
+    'memcommit.application.operations.redo.runtime',
+    'memcommit.application.operations.reference.application',
+    'memcommit.application.operations.restoration.runtime',
+    'memcommit.application.operations.reference.runtime',
+    'memcommit.application.operations.sever.application',
+    'memcommit.application.operations.sever.runtime',
+    'memcommit.application.operations.sever.model',
+    'memcommit.application.operations.sever.provider',
+    'memcommit.application.operations.sever.resolution_adapter',
+    'memcommit.application.operations.sever.session_store',
+    'memcommit.application.operations.show.application',
+    'memcommit.application.operations.show.runtime',
+    'memcommit.application.operations.search.application',
+    'memcommit.application.operations.search.runtime',
+    'memcommit.application.operations.search.materialization_application',
+    'memcommit.application.operations.search.materialization_runtime',
+    'memcommit.application.operations.summarize.application',
+    'memcommit.application.operations.summarize.runtime',
+    'memcommit.application.operations.update.application',
+    'memcommit.application.operations.undo.runtime',
+    'memcommit.application.operations.translate.runtime',
+    'memcommit.application.operations.translate.application',
+    'memcommit.application.operations.translate.catalog_application',
+    'memcommit.application.operations.translate.materialization',
+    'memcommit.application.operations.translate.view',
+    'memcommit.application.operations.translate.view_store',
     'memcommit.application.reviewing.report',
     'memcommit.reference_application',
     'memcommit.sever_application',
@@ -275,23 +275,23 @@ def test_private_operation_adapters_do_not_import_the_client_facade():
 import importlib
 import sys
 for name in (
-    'memcommit.api._operations.add',
-    'memcommit.api._operations.compare',
-    'memcommit.api._operations.distill',
-    'memcommit.api._operations.elaborate',
-    'memcommit.api._operations.embed',
-    'memcommit.api._operations.fit',
-    'memcommit.api._operations.help',
-    'memcommit.api._operations.forget',
-    'memcommit.api._operations.ground_distill',
-    'memcommit.api._operations.ground_elaborate',
-    'memcommit.api._operations.meld',
-    'memcommit.api._operations.query',
-    'memcommit.api._operations.reference',
-    'memcommit.api._operations.show',
+    'memcommit.adapters.python_api._operations.add',
+    'memcommit.adapters.python_api._operations.compare',
+    'memcommit.adapters.python_api._operations.distill',
+    'memcommit.adapters.python_api._operations.elaborate',
+    'memcommit.adapters.python_api._operations.embed',
+    'memcommit.adapters.python_api._operations.fit',
+    'memcommit.adapters.python_api._operations.help',
+    'memcommit.adapters.python_api._operations.forget',
+    'memcommit.adapters.python_api._operations.ground_distill',
+    'memcommit.adapters.python_api._operations.ground_elaborate',
+    'memcommit.adapters.python_api._operations.meld',
+    'memcommit.adapters.python_api._operations.query',
+    'memcommit.adapters.python_api._operations.reference',
+    'memcommit.adapters.python_api._operations.show',
 ):
     importlib.import_module(name)
-assert 'memcommit.api.client' not in sys.modules
+assert 'memcommit.adapters.python_api.client' not in sys.modules
 """
     )
 
@@ -306,8 +306,8 @@ def test_selected_show_loads_only_its_read_operation_assembly(tmp_path):
 import os
 from pathlib import Path
 import sys
-import memcommit.ops as ops
-from memcommit.api import MemCommitClient
+import memcommit.application.ops as ops
+from memcommit.adapters.python_api import MemCommitClient
 from memcommit.store import MemoryStore
 
 root = Path(os.environ['MEMCOMMIT_IMPORT_TEST_ROOT'])
@@ -318,16 +318,16 @@ store.save(context)
 store.set_current(context.name)
 result = MemCommitClient(root=root).show()
 assert result.name == context.name
-assert 'memcommit.api._operations.show' in sys.modules
-assert 'memcommit.operations.show.application' in sys.modules
-assert 'memcommit.operations.show.runtime' in sys.modules
+assert 'memcommit.adapters.python_api._operations.show' in sys.modules
+assert 'memcommit.application.operations.show.application' in sys.modules
+assert 'memcommit.application.operations.show.runtime' in sys.modules
 assert 'memcommit.show_application' not in sys.modules
 assert 'memcommit.show_runtime' not in sys.modules
-assert 'memcommit.api._operations.add' not in sys.modules
-assert 'memcommit.api._operations.query' not in sys.modules
-assert 'memcommit.api._operations.compare' not in sys.modules
-assert 'memcommit.api._operations.meld' not in sys.modules
-assert 'memcommit.operations.query.ordinary_application' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.add' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.query' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.compare' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.meld' not in sys.modules
+assert 'memcommit.application.operations.query.ordinary_application' not in sys.modules
 """,
         environment=environment,
     )
@@ -343,27 +343,27 @@ def test_selected_help_loads_only_catalog_discovery_and_never_the_store(tmp_path
 import os
 from pathlib import Path
 import sys
-from memcommit.api import MemCommitClient
+from memcommit.adapters.python_api import MemCommitClient
 
 root = Path(os.environ['MEMCOMMIT_IMPORT_TEST_ROOT'])
 client = MemCommitClient(root=root)
 result = client.describe_operation('compare')
 assert result.name == 'compare'
 assert not root.exists()
-assert 'memcommit.api._operations.help' in sys.modules
-assert 'memcommit.operations.help.application' in sys.modules
-assert 'memcommit.operations.help.lookup_application' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.help' in sys.modules
+assert 'memcommit.application.operations.help.application' in sys.modules
+assert 'memcommit.application.operations.help.lookup_application' not in sys.modules
 assert 'memcommit.help_application' not in sys.modules
 assert 'memcommit.help_lookup_application' not in sys.modules
-assert 'memcommit.api._operations.add' not in sys.modules
-assert 'memcommit.api._operations.query' not in sys.modules
-assert 'memcommit.api._operations.compare' not in sys.modules
-assert 'memcommit.api._operations.meld' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.add' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.query' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.compare' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.meld' not in sys.modules
 assert 'memcommit.comparison_execution' not in sys.modules
 assert 'memcommit.meld_application' not in sys.modules
 assert 'memcommit.meld_runtime' not in sys.modules
-assert 'memcommit.operations.meld.application' not in sys.modules
-assert 'memcommit.operations.meld.runtime' not in sys.modules
+assert 'memcommit.application.operations.meld.application' not in sys.modules
+assert 'memcommit.application.operations.meld.runtime' not in sys.modules
 """,
         environment=environment,
     )
@@ -389,15 +389,15 @@ for name in (
     'memcommit.atomize',
     'memcommit.update',
     'memcommit.distill',
-    'memcommit.operations.distill.application',
-    'memcommit.operations.distill.runtime',
+    'memcommit.application.operations.distill.application',
+    'memcommit.application.operations.distill.runtime',
     'memcommit.elaborate',
-    'memcommit.operations.elaborate.application',
-    'memcommit.operations.elaborate.runtime',
-    'memcommit.operations.elaborate.add_runtime',
+    'memcommit.application.operations.elaborate.application',
+    'memcommit.application.operations.elaborate.runtime',
+    'memcommit.application.operations.elaborate.add_runtime',
 ):
     importlib.import_module(name)
-from memcommit.api import MemCommitClient
+from memcommit.adapters.python_api import MemCommitClient
 assert MemCommitClient.__name__ == 'MemCommitClient'
 """
     )
@@ -413,7 +413,7 @@ def test_selected_add_loads_only_its_operation_assembly(tmp_path):
 import os
 from pathlib import Path
 import sys
-from memcommit.api import AddInputError, MemCommitClient
+from memcommit.adapters.python_api import AddInputError, MemCommitClient
 client = MemCommitClient(
     root=Path(os.environ['MEMCOMMIT_IMPORT_TEST_ROOT']),
     create=True,
@@ -424,22 +424,22 @@ except AddInputError:
     pass
 else:
     raise AssertionError('invalid Add input unexpectedly succeeded')
-assert 'memcommit.api._operations.add' in sys.modules
-assert 'memcommit.operations.add.application' in sys.modules
-assert 'memcommit.operations.add.runtime' in sys.modules
+assert 'memcommit.adapters.python_api._operations.add' in sys.modules
+assert 'memcommit.application.operations.add.application' in sys.modules
+assert 'memcommit.application.operations.add.runtime' in sys.modules
 assert 'memcommit.add_application' not in sys.modules
 assert 'memcommit.add_runtime' not in sys.modules
-assert 'memcommit.api._operations.query' not in sys.modules
-assert 'memcommit.api._operations.meld' not in sys.modules
-assert 'memcommit.api._operations.compare' not in sys.modules
-assert 'memcommit.api._operations.fit' not in sys.modules
-assert 'memcommit.api._operations.distill' not in sys.modules
-assert 'memcommit.api._operations.elaborate' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.query' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.meld' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.compare' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.fit' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.distill' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.elaborate' not in sys.modules
 assert 'memcommit.meld_application' not in sys.modules
 assert 'memcommit.meld_runtime' not in sys.modules
-assert 'memcommit.operations.meld.application' not in sys.modules
-assert 'memcommit.operations.meld.runtime' not in sys.modules
-assert 'memcommit.operations.query.ordinary_application' not in sys.modules
+assert 'memcommit.application.operations.meld.application' not in sys.modules
+assert 'memcommit.application.operations.meld.runtime' not in sys.modules
+assert 'memcommit.application.operations.query.ordinary_application' not in sys.modules
 assert 'memcommit.ground_distill' not in sys.modules
 """,
         environment=environment,
@@ -456,7 +456,7 @@ def test_selected_query_loads_only_its_operation_assembly(tmp_path):
 import os
 from pathlib import Path
 import sys
-from memcommit.api import MemCommitClient, QueryInputError
+from memcommit.adapters.python_api import MemCommitClient, QueryInputError
 
 client = MemCommitClient(
     root=Path(os.environ['MEMCOMMIT_IMPORT_TEST_ROOT']),
@@ -468,22 +468,22 @@ except QueryInputError:
     pass
 else:
     raise AssertionError('invalid Query target set unexpectedly succeeded')
-assert 'memcommit.api._operations.query' in sys.modules
-assert 'memcommit.operations.query.ordinary_application' in sys.modules
-assert 'memcommit.api._operations.add' not in sys.modules
-assert 'memcommit.operations.add.application' not in sys.modules
-assert 'memcommit.operations.add.runtime' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.query' in sys.modules
+assert 'memcommit.application.operations.query.ordinary_application' in sys.modules
+assert 'memcommit.adapters.python_api._operations.add' not in sys.modules
+assert 'memcommit.application.operations.add.application' not in sys.modules
+assert 'memcommit.application.operations.add.runtime' not in sys.modules
 assert 'memcommit.add_application' not in sys.modules
 assert 'memcommit.add_runtime' not in sys.modules
-assert 'memcommit.api._operations.meld' not in sys.modules
-assert 'memcommit.api._operations.compare' not in sys.modules
-assert 'memcommit.api._operations.fit' not in sys.modules
-assert 'memcommit.api._operations.distill' not in sys.modules
-assert 'memcommit.api._operations.elaborate' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.meld' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.compare' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.fit' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.distill' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.elaborate' not in sys.modules
 assert 'memcommit.meld_application' not in sys.modules
 assert 'memcommit.meld_runtime' not in sys.modules
-assert 'memcommit.operations.meld.application' not in sys.modules
-assert 'memcommit.operations.meld.runtime' not in sys.modules
+assert 'memcommit.application.operations.meld.application' not in sys.modules
+assert 'memcommit.application.operations.meld.runtime' not in sys.modules
 """,
         environment=environment,
     )
@@ -499,7 +499,7 @@ def test_selected_meld_loads_only_its_operation_assembly(tmp_path):
 import os
 from pathlib import Path
 import sys
-from memcommit.api import MeldContextError, MemCommitClient
+from memcommit.adapters.python_api import MeldContextError, MemCommitClient
 
 client = MemCommitClient(
     root=Path(os.environ['MEMCOMMIT_IMPORT_TEST_ROOT']),
@@ -511,18 +511,18 @@ except MeldContextError:
     pass
 else:
     raise AssertionError('missing Meld target unexpectedly opened')
-assert 'memcommit.api._operations.meld' in sys.modules
-assert 'memcommit.operations.meld.application' in sys.modules
-assert 'memcommit.operations.meld.runtime' in sys.modules
+assert 'memcommit.adapters.python_api._operations.meld' in sys.modules
+assert 'memcommit.application.operations.meld.application' in sys.modules
+assert 'memcommit.application.operations.meld.runtime' in sys.modules
 assert 'memcommit.meld_application' not in sys.modules
 assert 'memcommit.meld_runtime' not in sys.modules
-assert 'memcommit.api._operations.add' not in sys.modules
-assert 'memcommit.operations.add.application' not in sys.modules
-assert 'memcommit.operations.add.runtime' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.add' not in sys.modules
+assert 'memcommit.application.operations.add.application' not in sys.modules
+assert 'memcommit.application.operations.add.runtime' not in sys.modules
 assert 'memcommit.add_application' not in sys.modules
 assert 'memcommit.add_runtime' not in sys.modules
-assert 'memcommit.api._operations.query' not in sys.modules
-assert 'memcommit.operations.query.ordinary_application' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.query' not in sys.modules
+assert 'memcommit.application.operations.query.ordinary_application' not in sys.modules
 """,
         environment=environment,
     )
@@ -538,7 +538,7 @@ def test_selected_compare_loads_only_its_operation_assembly(tmp_path):
 import os
 from pathlib import Path
 import sys
-from memcommit.api import CompareContextError, MemCommitClient
+from memcommit.adapters.python_api import CompareContextError, MemCommitClient
 
 client = MemCommitClient(
     root=Path(os.environ['MEMCOMMIT_IMPORT_TEST_ROOT']),
@@ -550,20 +550,20 @@ except CompareContextError:
     pass
 else:
     raise AssertionError('missing Compare analysis unexpectedly opened')
-assert 'memcommit.api._operations.compare' in sys.modules
-assert 'memcommit.operations.compare.ledger.execution' in sys.modules
-assert 'memcommit.api._operations.add' not in sys.modules
-assert 'memcommit.operations.add.application' not in sys.modules
-assert 'memcommit.operations.add.runtime' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.compare' in sys.modules
+assert 'memcommit.application.operations.compare.ledger.execution' in sys.modules
+assert 'memcommit.adapters.python_api._operations.add' not in sys.modules
+assert 'memcommit.application.operations.add.application' not in sys.modules
+assert 'memcommit.application.operations.add.runtime' not in sys.modules
 assert 'memcommit.add_application' not in sys.modules
 assert 'memcommit.add_runtime' not in sys.modules
-assert 'memcommit.api._operations.query' not in sys.modules
-assert 'memcommit.operations.query.ordinary_application' not in sys.modules
-assert 'memcommit.api._operations.meld' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.query' not in sys.modules
+assert 'memcommit.application.operations.query.ordinary_application' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.meld' not in sys.modules
 assert 'memcommit.meld_application' not in sys.modules
 assert 'memcommit.meld_runtime' not in sys.modules
-assert 'memcommit.operations.meld.application' not in sys.modules
-assert 'memcommit.operations.meld.runtime' not in sys.modules
+assert 'memcommit.application.operations.meld.application' not in sys.modules
+assert 'memcommit.application.operations.meld.runtime' not in sys.modules
 """,
         environment=environment,
     )
@@ -579,7 +579,7 @@ def test_selected_forget_loads_only_its_operation_assembly(tmp_path):
 import os
 from pathlib import Path
 import sys
-from memcommit.api import ForgetContextError, MemCommitClient
+from memcommit.adapters.python_api import ForgetContextError, MemCommitClient
 
 client = MemCommitClient(
     root=Path(os.environ['MEMCOMMIT_IMPORT_TEST_ROOT']),
@@ -591,24 +591,24 @@ except ForgetContextError:
     pass
 else:
     raise AssertionError('missing Forget Source unexpectedly analyzed')
-assert 'memcommit.api._operations.forget' in sys.modules
-assert 'memcommit.operations.forget.application' in sys.modules
-assert 'memcommit.operations.forget.runtime' in sys.modules
+assert 'memcommit.adapters.python_api._operations.forget' in sys.modules
+assert 'memcommit.application.operations.forget.application' in sys.modules
+assert 'memcommit.application.operations.forget.runtime' in sys.modules
 assert 'memcommit.forget_application' not in sys.modules
 assert 'memcommit.forget_runtime' not in sys.modules
-assert 'memcommit.api._operations.add' not in sys.modules
-assert 'memcommit.operations.add.application' not in sys.modules
-assert 'memcommit.operations.add.runtime' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.add' not in sys.modules
+assert 'memcommit.application.operations.add.application' not in sys.modules
+assert 'memcommit.application.operations.add.runtime' not in sys.modules
 assert 'memcommit.add_application' not in sys.modules
 assert 'memcommit.add_runtime' not in sys.modules
-assert 'memcommit.api._operations.query' not in sys.modules
-assert 'memcommit.operations.query.ordinary_application' not in sys.modules
-assert 'memcommit.api._operations.meld' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.query' not in sys.modules
+assert 'memcommit.application.operations.query.ordinary_application' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.meld' not in sys.modules
 assert 'memcommit.meld_application' not in sys.modules
 assert 'memcommit.meld_runtime' not in sys.modules
-assert 'memcommit.operations.meld.application' not in sys.modules
-assert 'memcommit.operations.meld.runtime' not in sys.modules
-assert 'memcommit.api._operations.update' not in sys.modules
+assert 'memcommit.application.operations.meld.application' not in sys.modules
+assert 'memcommit.application.operations.meld.runtime' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.update' not in sys.modules
 assert 'memcommit.update_planning_application' not in sys.modules
 """,
         environment=environment,
@@ -625,7 +625,7 @@ def test_selected_fit_loads_no_context_or_ground_operation(tmp_path):
 import os
 from pathlib import Path
 import sys
-from memcommit.api import MemCommitClient, SemanticInputError
+from memcommit.adapters.python_api import MemCommitClient, SemanticInputError
 
 client = MemCommitClient(
     root=Path(os.environ['MEMCOMMIT_IMPORT_TEST_ROOT']),
@@ -637,23 +637,23 @@ except SemanticInputError:
     pass
 else:
     raise AssertionError('empty Fit unexpectedly succeeded')
-assert 'memcommit.api._operations.fit' in sys.modules
-assert 'memcommit.operations.fit.application' in sys.modules
-assert 'memcommit.operations.fit.runtime' in sys.modules
-assert 'memcommit.operations.fit.coherence' in sys.modules
-assert 'memcommit.operations.fit.ground_report' in sys.modules
-assert 'memcommit.operations.fit.judgment' in sys.modules
-assert 'memcommit.operations.fit.store' in sys.modules
+assert 'memcommit.adapters.python_api._operations.fit' in sys.modules
+assert 'memcommit.application.operations.fit.application' in sys.modules
+assert 'memcommit.application.operations.fit.runtime' in sys.modules
+assert 'memcommit.application.operations.fit.coherence' in sys.modules
+assert 'memcommit.application.operations.fit.ground_report' in sys.modules
+assert 'memcommit.application.operations.fit.judgment' in sys.modules
+assert 'memcommit.application.operations.fit.store' in sys.modules
 assert 'memcommit.fit_application' not in sys.modules
 assert 'memcommit.fit_runtime' not in sys.modules
 assert 'memcommit.fit' not in sys.modules
 assert 'memcommit.fit_coherence' not in sys.modules
 assert 'memcommit.fit_judgment' not in sys.modules
 assert 'memcommit.fit_store' not in sys.modules
-assert 'memcommit.api._operations.distill' not in sys.modules
-assert 'memcommit.api._operations.elaborate' not in sys.modules
-assert 'memcommit.api._operations.ground_distill' not in sys.modules
-assert 'memcommit.api._operations.ground_elaborate' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.distill' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.elaborate' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.ground_distill' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.ground_elaborate' not in sys.modules
 assert 'memcommit.ground_distill' not in sys.modules
 assert 'memcommit.ground_elaborate' not in sys.modules
 """,
@@ -672,7 +672,7 @@ import json
 import os
 from pathlib import Path
 import sys
-from memcommit.api import MemCommitClient
+from memcommit.adapters.python_api import MemCommitClient
 
 class Provider:
     def complete(self, prompt, *, operation, output_schema=None):
@@ -692,25 +692,25 @@ client = MemCommitClient(
 )
 result = client.elaborate(goal='Confirm before acting.', number=1)
 assert result.rules[0].content == 'Confirm the option before acting.'
-assert 'memcommit.api._operations.elaborate' in sys.modules
-assert 'memcommit.operations.elaborate.application' in sys.modules
-assert 'memcommit.operations.elaborate.runtime' in sys.modules
-assert 'memcommit.operations.elaborate.add_runtime' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.elaborate' in sys.modules
+assert 'memcommit.application.operations.elaborate.application' in sys.modules
+assert 'memcommit.application.operations.elaborate.runtime' in sys.modules
+assert 'memcommit.application.operations.elaborate.add_runtime' not in sys.modules
 assert 'memcommit.elaborate_application' not in sys.modules
 assert 'memcommit.elaborate_runtime' not in sys.modules
 assert 'memcommit.elaborate_add_runtime' not in sys.modules
-assert 'memcommit.api._operations.ground_elaborate' not in sys.modules
-assert 'memcommit.api._operations.ground_distill' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.ground_elaborate' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.ground_distill' not in sys.modules
 assert 'memcommit.ground_elaborate' not in sys.modules
 assert 'memcommit.ground_distill' not in sys.modules
 assert 'memcommit.distill_application' not in sys.modules
 assert 'memcommit.distill_runtime' not in sys.modules
-assert 'memcommit.operations.distill.application' not in sys.modules
-assert 'memcommit.operations.distill.runtime' not in sys.modules
+assert 'memcommit.application.operations.distill.application' not in sys.modules
+assert 'memcommit.application.operations.distill.runtime' not in sys.modules
 assert 'memcommit.meld_application' not in sys.modules
 assert 'memcommit.meld_runtime' not in sys.modules
-assert 'memcommit.operations.meld.application' not in sys.modules
-assert 'memcommit.operations.meld.runtime' not in sys.modules
+assert 'memcommit.application.operations.meld.application' not in sys.modules
+assert 'memcommit.application.operations.meld.runtime' not in sys.modules
 """,
         environment=environment,
     )
@@ -722,7 +722,7 @@ def test_root_and_api_lazy_exports_preserve_real_object_identity():
     completed = _run_fresh(
         """
 import memcommit
-import memcommit.api as api
+import memcommit.adapters.python_api as api
 assert memcommit.MemCommitClient is api.MemCommitClient
 assert set(memcommit.__all__) <= set(dir(memcommit))
 assert set(api.__all__) <= set(dir(api))

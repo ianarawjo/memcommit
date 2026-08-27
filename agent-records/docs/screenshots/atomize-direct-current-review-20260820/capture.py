@@ -123,7 +123,7 @@ class _Provider:
 
 
 def _initialize(store) -> None:
-    import memcommit.ops as ops
+    import memcommit.application.ops as ops
 
     if store.context_exists("atomize/direct-current"):
         return

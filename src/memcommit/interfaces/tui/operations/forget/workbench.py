@@ -5,12 +5,12 @@ from __future__ import annotations
 from memcommit.application.review_policy import (
     ownership_aware_application_review,
 )
-from memcommit.operations.forget.application import (
+from memcommit.application.operations.forget.application import (
     ForgetSelectionRequest,
     ForgetSessionSnapshot,
     run_forget_selection,
 )
-from memcommit.operations.forget.review import ForgetSelection
+from memcommit.application.operations.forget.review import ForgetSelection
 from memcommit.interfaces.tui.workbenches.impact import ImpactController
 from memcommit.interfaces.tui.operations.forget.resolution import (
     ForgetResolutionWorkbenchAdapter,

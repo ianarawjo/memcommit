@@ -6,13 +6,13 @@ from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
 from memcommit.context_targeting.tui.picker import context_memory_rows
-from memcommit.operations.embed.application import (
+from memcommit.application.operations.embed.application import (
     FrozenEmbedPlan,
     FrozenMemoryEmbedPlan,
 )
-from memcommit.authority.access import resolve_context_access
+from memcommit.application.authority.access import resolve_context_access
 from memcommit.context_targeting.catalog import freeze_granted_context_navigation
-from memcommit.operations.embed.runtime import MemoryStoreEmbedPort
+from memcommit.application.operations.embed.runtime import MemoryStoreEmbedPort
 from memcommit.interfaces.tui.operations.embed.model import EmbedTuiSetup
 from memcommit.interfaces.tui.operations.embed.screen import run_embed_tui
 from memcommit.source_projection.presentation import (

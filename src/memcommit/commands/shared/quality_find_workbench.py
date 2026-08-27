@@ -22,7 +22,7 @@ from memcommit.infrastructure.command_ledger.attempts import annotate_read_repor
 from memcommit.interfaces.tui.components.operation_launcher.location import (
     operation_launcher_orientation,
 )
-from memcommit.authority.access import (
+from memcommit.application.authority.access import (
     context_access_display_facts,
     resolve_context_access,
 )
@@ -69,7 +69,7 @@ from memcommit.context_targeting.tui.selector import (
     ContextSelectorControl,
     ContextSelectorView,
 )
-from memcommit.authority.derived_policy import authorize_combination
+from memcommit.application.authority.derived_policy import authorize_combination
 from memcommit.application.reviewing.quality.workbench import (
     QualityFindKind,
     QualityFindReport,
@@ -84,7 +84,7 @@ from memcommit.application.reviewing.quality.handoff import (
     quality_finding_handoff,
     quality_finding_handoffs,
 )
-from memcommit.operations.dedup.application import DEDUP_ELIGIBLE_RELATIONS
+from memcommit.application.operations.dedup.application import DEDUP_ELIGIBLE_RELATIONS
 from memcommit.source_projection.presentation import SourceDisplayValue
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.reviewing.read_report import (

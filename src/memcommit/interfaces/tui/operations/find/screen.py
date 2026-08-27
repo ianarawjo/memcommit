@@ -50,7 +50,7 @@ from memcommit.interfaces.tui.operations.find.model import (
     LiteralFindTuiOutcome,
     LiteralFindTuiSetup,
 )
-from memcommit.operations.find.literal_application import (
+from memcommit.application.operations.find.literal_application import (
     LiteralFindRequest,
     LiteralFindResult,
 )

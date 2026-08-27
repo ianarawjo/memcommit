@@ -27,7 +27,7 @@ from memcommit.resolution.workbench import (
     ResolutionWorkbenchAction,
     ResolutionWorkbenchView,
 )
-from memcommit.operations.resolve.application import (
+from memcommit.application.operations.resolve.application import (
     ResolveAnalysis,
     ResolveCandidate,
     ResolveReceipt,

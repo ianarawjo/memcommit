@@ -10,13 +10,13 @@ import uuid
 import pytest
 
 from memcommit.context import Context, Memory
-import memcommit.operations.query.ordinary_application as query_application
-from memcommit.operations.query.ordinary_application import (
+import memcommit.application.operations.query.ordinary_application as query_application
+from memcommit.application.operations.query.ordinary_application import (
     FrozenOrdinaryQuerySource,
     OrdinaryQueryRequest,
     run_ordinary_query,
 )
-from memcommit.operations.query.ordinary_runtime import execute_ordinary_query
+from memcommit.application.operations.query.ordinary_runtime import execute_ordinary_query
 from memcommit.search import SearchCandidate
 from memcommit.store import MemoryStore
 
@@ -296,10 +296,10 @@ def test_runtime_executes_exact_scope_without_output_or_source_mutation(
 def test_ordinary_query_application_and_runtime_have_no_interface_dependency():
     root = Path(__file__).parents[1]
     application = ast.parse(
-        (root / "src/memcommit/operations/query/ordinary_application.py").read_text()
+        (root / "src/memcommit/application/operations/query/ordinary_application.py").read_text()
     )
     runtime = ast.parse(
-        (root / "src/memcommit/operations/query/ordinary_runtime.py").read_text()
+        (root / "src/memcommit/application/operations/query/ordinary_runtime.py").read_text()
     )
 
     def imports(tree):
@@ -327,14 +327,14 @@ def test_production_adapters_import_ordinary_query_from_new_owner():
     ).read_text()
 
     assert (
-        "from memcommit.operations.query.ordinary_application import "
+        "from memcommit.application.operations.query.ordinary_application import "
         "OrdinaryQueryRequest" in command
     )
     assert (
-        "from memcommit.operations.query.ordinary_runtime import "
+        "from memcommit.application.operations.query.ordinary_runtime import "
         "execute_ordinary_query" in command
     )
     assert (
-        "from memcommit.operations.query.ordinary_application import ("
+        "from memcommit.application.operations.query.ordinary_application import ("
         in workbench_model
     )

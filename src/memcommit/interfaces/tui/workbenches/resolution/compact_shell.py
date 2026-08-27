@@ -43,8 +43,8 @@ from memcommit.resolution.workbench import (
     ResolutionWorkbenchAction,
     ResolutionWorkbenchView,
 )
-from memcommit.selection import FlatSelectionState, SelectionOption
-from memcommit.selection.tui import render_vertical_choice_rows
+from memcommit.interfaces.console.selection import FlatSelectionState, SelectionOption
+from memcommit.interfaces.console.selection.tui import render_vertical_choice_rows
 
 
 def _recommended(option_uid: str, label: str) -> bool:

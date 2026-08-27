@@ -7,7 +7,7 @@ from memcommit.retained_history.command_history import CommandHistoryError
 from memcommit.commands.shared.restoration_present import (
     render_command_restore_receipt,
 )
-from memcommit.operations.redo.runtime import execute_redo
+from memcommit.application.operations.redo.runtime import execute_redo
 from memcommit.persistence.store import MemoryStore
 
 

@@ -70,7 +70,7 @@ from memcommit.context_targeting.tui.reach import (
     render_context_reach,
 )
 from memcommit.context_targeting.model import DirectMemoryTarget
-from memcommit.selection.tui import tree_choice_marker
+from memcommit.interfaces.console.selection.tui import tree_choice_marker
 from memcommit.source_projection.model import (
     SourceDisplayFacts,
     SourceForm,

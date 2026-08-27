@@ -2,23 +2,23 @@ from __future__ import annotations
 
 import json
 
-import memcommit.ops as ops
+import memcommit.application.ops as ops
 from memcommit.commands.impact.process_local import (
     distill_impact_presentation,
     elaborate_impact_presentation,
 )
 from memcommit.commands.impact.sessions import render_impact_session_snapshot
 from memcommit.distill import DISTILL_OPERATION, DISTILL_PAYLOAD_MARKER
-from memcommit.operations.distill.application import DistillRequest
-from memcommit.operations.distill.runtime import execute_distill
+from memcommit.application.operations.distill.application import DistillRequest
+from memcommit.application.operations.distill.runtime import execute_distill
 from memcommit.elaborate import (
     ELABORATE_OPERATION,
     ELABORATE_PAYLOAD_MARKER,
     ElaborateTargetContext,
     ElaborateTargetContextItem,
 )
-from memcommit.operations.elaborate.application import ElaborateRequest
-from memcommit.operations.elaborate.runtime import execute_elaborate
+from memcommit.application.operations.elaborate.application import ElaborateRequest
+from memcommit.application.operations.elaborate.runtime import execute_elaborate
 from memcommit.interfaces.cli.distill import distill_result_text
 from memcommit.interfaces.cli.elaborate import elaborate_result_text
 from memcommit.interfaces.tui.operations.distill import project_distill_clipboard

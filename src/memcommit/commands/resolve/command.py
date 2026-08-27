@@ -9,7 +9,7 @@ import typer
 from memcommit.infrastructure.clipboard import write_system_clipboard
 from memcommit.commands.shared.command_progress import CommandProgress
 from memcommit.commands.shared.context_operand import ContextOperandSnapshot
-from memcommit.operations.fit.judgment import FitJudgmentError
+from memcommit.application.operations.fit.judgment import FitJudgmentError
 from memcommit.interfaces.cli.resolve import (
     render_resolve_plain,
     render_resolve_receipt,
@@ -22,18 +22,18 @@ from memcommit.interfaces.console import (
 )
 from memcommit.interfaces.console.text import display_escape_text
 from memcommit.interfaces.tui.operations.resolve import run_resolve_tui
-from memcommit.operations.profile.config import ProfileConfigError
-from memcommit.operations.profile.model import ProfileError
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.infrastructure.providers.subscription import QueryProviderError, connect_semantic_provider
-from memcommit.operations.resolve.application import (
+from memcommit.application.operations.resolve.application import (
     ResolveError,
     ResolveRequest,
     apply_resolve,
     run_resolve,
 )
-from memcommit.operations.resolve.runtime import MemoryStoreResolvePort
-from memcommit.operations.resolve.semantic import ProviderResolveSemanticPort
-from memcommit.operations.resolve.targeting import normalize_resolve_cli_targets
+from memcommit.application.operations.resolve.runtime import MemoryStoreResolvePort
+from memcommit.application.operations.resolve.semantic import ProviderResolveSemanticPort
+from memcommit.application.operations.resolve.targeting import normalize_resolve_cli_targets
 from memcommit.application.reviewing.quality.handoff import (
     QualityFindingHandoffError,
     conflict_handoff_to_resolve_request,

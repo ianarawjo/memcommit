@@ -7,7 +7,7 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.infrastructure.clipboard import write_system_clipboard
-from memcommit.operations.dedup.application import (
+from memcommit.application.operations.dedup.application import (
     DedupConflictError,
     DedupError,
     DedupRequest,
@@ -15,7 +15,7 @@ from memcommit.operations.dedup.application import (
     apply_dedup,
     prepare_dedup,
 )
-from memcommit.operations.dedup.runtime import MemoryStoreDedupPort
+from memcommit.application.operations.dedup.runtime import MemoryStoreDedupPort
 from memcommit.interfaces.cli.dedup import (
     render_dedup_plan_plain,
     render_dedup_receipt,
@@ -28,8 +28,8 @@ from memcommit.interfaces.console import (
 )
 from memcommit.interfaces.console.text import display_escape_text
 from memcommit.interfaces.tui.operations.dedup import run_dedup_tui
-from memcommit.operations.profile.config import ProfileConfigError
-from memcommit.operations.profile.model import ProfileError
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.application.reviewing.quality.handoff import (
     QualityFindingHandoffError,
 )
