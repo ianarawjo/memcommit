@@ -56,7 +56,7 @@ class _UnresolvedInlineProvider:
     """Return one greeting-specific required choice for the TUI branch."""
 
     def complete(self, prompt, *, operation, output_schema=None):
-        from memcommit.meld_provider import MELD_PAYLOAD_MARKER
+        from memcommit.application.operations.meld.provider import MELD_PAYLOAD_MARKER
 
         assert operation == "meld_contexts"
         payload = json.loads(prompt.split(MELD_PAYLOAD_MARKER, 1)[1])
@@ -122,7 +122,7 @@ class _UnresolvedInlineProvider:
 
 def _initialize_store(store_root: Path):
     import memcommit.application.ops as ops
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root)
     if store.context_exists(BASELINE_NAME):
@@ -206,9 +206,9 @@ def _run_tty_start_child(store_root: Path) -> None:
 
 def _run_prepare_exact_child(store_root: Path) -> None:
     from memcommit.commands.meld.command import render_meld_session
-    from memcommit.meld import INLINE_MELD_CONTEXT_NAME
-    from memcommit.meld_runtime import execute_meld_start, prepare_meld_start
-    from memcommit.meld_start_application import MeldStartRequest
+    from memcommit.application.operations.meld.model import INLINE_MELD_CONTEXT_NAME
+    from memcommit.application.operations.meld.runtime import execute_meld_start, prepare_meld_start
+    from memcommit.application.operations.meld.start_application import MeldStartRequest
 
     store, baseline = _initialize_store(store_root)
     provider = _SlowInlineProvider()
@@ -260,7 +260,7 @@ def _forbidden_provider(counter: dict[str, int]):
 
 
 def _run_exact_accept_child(store_root: Path) -> None:
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root, create=False)
     counter = {"calls": 0}
@@ -282,7 +282,7 @@ def _run_exact_accept_child(store_root: Path) -> None:
 
 
 def _run_verify_child(store_root: Path) -> None:
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root, create=False)
     print(f"$ mem context {BASELINE_NAME} · read-only reload")
@@ -292,8 +292,8 @@ def _run_verify_child(store_root: Path) -> None:
 
 def _run_unresolved_review_child(store_root: Path) -> None:
     from memcommit.adapters.interfaces.tui.operations.meld.screen import run_meld_shell
-    from memcommit.meld import MeldSession
-    from memcommit.meld_provider import assess_meld_turn
+    from memcommit.application.operations.meld.model import MeldSession
+    from memcommit.application.operations.meld.provider import assess_meld_turn
 
     store, baseline = _initialize_store(store_root)
     session = MeldSession.create_directional_from_memory(CONTENT, baseline)

@@ -7,7 +7,7 @@ import uuid
 
 import pytest
 
-from memcommit.comparison import ComparisonError, ComparisonFrame, ComparisonInput
+from memcommit.application.operations.compare.ledger.model import ComparisonError, ComparisonFrame, ComparisonInput
 from memcommit.context import (
     Context,
     GrantedContextLink,

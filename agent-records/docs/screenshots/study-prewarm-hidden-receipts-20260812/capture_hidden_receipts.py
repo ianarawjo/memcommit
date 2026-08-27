@@ -230,17 +230,17 @@ def _fixture(home: Path) -> None:
     os.environ["HOME"] = str(home)
     sys.path.insert(0, str(ROOT / "src"))
 
-    import memcommit.config as config_module
+    import memcommit.configuration.config as config_module
     import memcommit.application.ops as ops
-    from memcommit.atomize import create_atomize_analysis, impact_atomize
+    from memcommit.application.operations.atomize.domain import create_atomize_analysis, impact_atomize
     from memcommit.commands.atomize.sessions import atomize_session_entries
-    from memcommit.config import Config
-    from memcommit.profile_config import (
+    from memcommit.configuration.config import Config
+    from memcommit.application.operations.profile.config import (
         ProfileEntry,
         ProfileRegistry,
         STUDY_RUN_PARTICIPANT_SOURCE_KIND,
     )
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
     from memcommit.study_scenarios.legacy.prewarm.atomize import (
         build_atomize_prewarm_artifact,
         install_declared_atomize_prewarms,
@@ -326,7 +326,7 @@ def _verify(home: Path) -> None:
     sys.path.insert(0, str(ROOT / "src"))
 
     from memcommit.commands.atomize.sessions import atomize_session_entries
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
     from memcommit.study_scenarios.legacy.prewarm.installations import (
         INSTALLATIONS_DIRECTORY_NAME,
     )

@@ -31,7 +31,7 @@ _BASE.ROWS = ROWS
 
 
 def _isolate_store(root: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     store_dir = root / ".mem"
     assignments = {
@@ -54,7 +54,7 @@ def _isolate_store(root: Path) -> None:
 
 
 def _record_recent(store, target, started_at: str) -> None:
-    from memcommit.command_attempts import CommandAttempt, CommandAttemptLedger
+    from memcommit.persistence.command_ledger.attempts import CommandAttempt, CommandAttemptLedger
 
     uid = (
         "11111111-1111-4111-8111-111111111111"
@@ -86,10 +86,10 @@ def _context_state(store, name: str) -> tuple[bytes, tuple[str, ...]]:
 
 def _run_child(kind: str) -> None:
     import memcommit.application.ops as ops
-    from memcommit.cli import app
-    from memcommit.findings import DuplicateReport
-    from memcommit.read_report import ReadReportTarget
-    from memcommit.store import MemoryStore
+    from memcommit.adapters.console.entrypoint import app
+    from memcommit.application.reviewing.quality.findings import DuplicateReport
+    from memcommit.application.reviewing.read_report import ReadReportTarget
+    from memcommit.persistence.store import MemoryStore
 
     fixture_root = OUT / f".fixture-{kind}"
     if fixture_root.exists():

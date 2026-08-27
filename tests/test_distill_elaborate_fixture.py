@@ -6,23 +6,23 @@ import json
 from pathlib import Path
 import re
 
-import memcommit.distill as distill_module
-import memcommit.elaborate as elaborate_module
+import memcommit.application.operations.distill.model as distill_module
+import memcommit.application.operations.elaborate.model as elaborate_module
 from memcommit.context import Context, Memory
-from memcommit.distill import DISTILL_PAYLOAD_MARKER, analyze_distill
-from memcommit.distill_elaborate_reference import (
+from memcommit.application.operations.distill.model import DISTILL_PAYLOAD_MARKER, analyze_distill
+from memcommit.application.semantic.generative_reduction_reference import (
     REFERENCE_EXAMPLES_MARKER,
     REFERENCE_FAMILY_IDS,
     load_distill_elaborate_reference_families,
 )
-from memcommit.elaborate import ELABORATE_PAYLOAD_MARKER
+from memcommit.application.operations.elaborate.model import ELABORATE_PAYLOAD_MARKER
 from memcommit.application.operations.elaborate.application import ElaborateRequest
 from memcommit.application.operations.elaborate.runtime import execute_elaborate
-from memcommit.semantic_prompt_policy import GENERAL_SEMANTIC_PROMPT_POLICY
+from memcommit.application.semantic.prompt_policy import GENERAL_SEMANTIC_PROMPT_POLICY
 from tests.elaborate_validation_support import (
     passing_elaborate_validation_response,
 )
-from memcommit.summarize import collect_summary_frame
+from memcommit.application.operations.summarize.model import collect_summary_frame
 
 
 FIXTURE_PATH = (

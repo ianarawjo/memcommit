@@ -2,15 +2,6 @@
 
 from importlib import import_module
 
-from memcommit.compatibility.legacy_submodules import (
-    install_legacy_submodule_aliases,
-)
-
-
-# Historical flat submodules remain importable without occupying the package
-# root as hundreds of physical facade files.
-install_legacy_submodule_aliases()
-
 from memcommit.context import (
     Checkpoint,
     Context,

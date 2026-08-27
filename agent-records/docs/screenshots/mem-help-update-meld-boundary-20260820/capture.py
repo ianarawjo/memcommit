@@ -34,7 +34,7 @@ def _close(child: object) -> None:
 
 def _spawn_public_verification() -> tuple[object, object]:
     code = (
-        "from memcommit.help_application import describe_operation_detail; "
+        "from memcommit.application.operations.help.application import describe_operation_detail; "
         "[(print(name, detail.kind.value), print(detail.body)) "
         "for name in ('update', 'meld') "
         "for detail in (describe_operation_detail(name, 'update-vs-meld'),)]"

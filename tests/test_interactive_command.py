@@ -4,14 +4,14 @@ from click import Group, Option
 from typer.main import get_command
 
 from memcommit.adapters.console.entrypoint import app
-from memcommit.interactive_command import (
+from memcommit.application.interactive_command import (
     InteractiveCommandBinding,
     InteractiveCommandRebuildTrigger,
     InteractiveCommandRole,
     interactive_command_surface,
     validate_interactive_command_surfaces,
 )
-from memcommit.interactive_command_review import (
+from memcommit.application.interactive_command_review import (
     meld_start_command_review,
     meld_turn_command_review,
     sever_start_command_review,

@@ -11,10 +11,10 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
-import memcommit.ground_workspace_application as ground_workspace_application
+import memcommit.application.operations.ground.workspace_application as ground_workspace_application
 from memcommit.context import Memory
-from memcommit.command_history import build_command_stacks
-from memcommit.ground_workspace import (
+from memcommit.application.retained_history.command_history import build_command_stacks
+from memcommit.application.operations.ground.workspace_model import (
     GROUND_WORKSPACE_LANES,
     GroundWorkspaceError,
     GroundWorkspaceManifest,
@@ -22,20 +22,20 @@ from memcommit.ground_workspace import (
     ground_workspace_context_names,
     load_ground_workspace_records,
 )
-from memcommit.ground_workspace_application import CreateGroundWorkspaceRequest
-from memcommit.ground_workspace_runtime import (
+from memcommit.application.operations.ground.workspace_application import CreateGroundWorkspaceRequest
+from memcommit.application.operations.ground.workspace_runtime import (
     execute_ground_workspace_memory_add,
     execute_ground_workspace_creation,
     ground_workspace_exists,
     list_ground_workspace_names,
     load_ground_workspace,
 )
-from memcommit.ground_workspace_history import (
+from memcommit.application.operations.ground.workspace_history import (
     GroundWorkspaceHistoryError,
     build_ground_workspace_command_stack,
     undo_ground_workspace_command,
 )
-from memcommit.ground_workspace_application import AddGroundWorkspaceMemoryRequest
+from memcommit.application.operations.ground.workspace_application import AddGroundWorkspaceMemoryRequest
 from memcommit.adapters.interfaces.tui.operations.ground_workspace import (
     GroundWorkspaceLocationSetup,
     GroundWorkspaceTuiResult,
@@ -44,7 +44,7 @@ from memcommit.adapters.interfaces.tui.operations.ground_workspace import (
 )
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner()

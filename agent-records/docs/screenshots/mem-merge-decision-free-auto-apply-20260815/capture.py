@@ -28,7 +28,7 @@ _BASE.ROWS = ROWS
 
 
 def _configure_isolated_store(store_root: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     values = {
         "STORE_DIR": store_root,
@@ -52,7 +52,7 @@ def _configure_isolated_store(store_root: Path) -> None:
 def _initialize(kind: str) -> str:
     import memcommit.application.ops as ops
     from memcommit.context import Memory
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()
     uid = "00000000-0000-0000-0000-000000000001"
@@ -70,7 +70,7 @@ def _initialize(kind: str) -> str:
 
 
 def _state(label: str, uid: str) -> None:
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()
     target = store.load_direct("target")
@@ -92,7 +92,7 @@ def _run_child(kind: str) -> None:
         _configure_isolated_store(Path(directory) / ".mem")
         uid = _initialize(kind)
         if kind == "failure":
-            from memcommit.merge_runtime import MemoryStoreMergePort
+            from memcommit.application.operations.merge.runtime import MemoryStoreMergePort
 
             def fail_before_persistence(*_args):
                 raise OSError("injected auto-apply failure before persistence")

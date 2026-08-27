@@ -12,7 +12,7 @@ sys.path.insert(0, str(repository_root))
 
 import memcommit.application.ops as ops  # noqa: E402
 from memcommit.context import Memory  # noqa: E402
-from memcommit.store import MemoryStore  # noqa: E402
+from memcommit.persistence.store import MemoryStore  # noqa: E402
 
 
 capture_store = os.environ.get("MEMCOMMIT_CAPTURE_STORE")

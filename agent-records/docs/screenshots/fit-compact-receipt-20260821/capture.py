@@ -43,7 +43,7 @@ class _Provider:
         self.verdict = verdict
 
     def complete(self, prompt, *, operation, output_schema=None):
-        from memcommit.fit_judgment import FIT_JUDGMENT_PAYLOAD_MARKER
+        from memcommit.application.operations.fit.judgment import FIT_JUDGMENT_PAYLOAD_MARKER
 
         type(self).calls += 1
         assert operation == "fit_propositions"
@@ -85,14 +85,14 @@ class _Provider:
 
 
 def _use_store_root(root: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     store_module.STORE_DIR = root
 
 
 def _ground_result(*, current: bool):
-    from memcommit.fit import FitExample, FitJudgment, FitReport, FitRule
-    from memcommit.fit_application import FitResult
+    from memcommit.application.operations.fit.ground_report import FitExample, FitJudgment, FitReport, FitRule
+    from memcommit.application.operations.fit.application import FitResult
 
     rule_uid = "11111111-1111-1111-1111-111111111111"
     fit_uid = "22222222-2222-2222-2222-222222222222"
@@ -238,7 +238,7 @@ def _run_ground_projection_child(*, current: bool) -> None:
 
 def _prepare_overlap_store(root: Path):
     import memcommit.application.ops as ops
-    from memcommit.store import MemoryStore, context_record_digest
+    from memcommit.persistence.store import MemoryStore, context_record_digest
 
     store = MemoryStore(root=root)
     current = ops.init("fit/current")
@@ -250,8 +250,8 @@ def _prepare_overlap_store(root: Path):
 
 def _run_overlap_child(store_root: Path) -> None:
     import memcommit.commands.fit.command as fit_command
-    from memcommit.fit_store import FitStore
-    from memcommit.store import context_record_digest
+    from memcommit.application.operations.fit.store import FitStore
+    from memcommit.persistence.store import context_record_digest
 
     _Provider.calls = 0
     _use_store_root(store_root)
@@ -282,8 +282,8 @@ def _run_overlap_child(store_root: Path) -> None:
 def _run_three_operands_child(store_root: Path) -> None:
     import memcommit.commands.fit.command as fit_command
     import memcommit.application.ops as ops
-    from memcommit.fit_store import FitStore
-    from memcommit.store import MemoryStore
+    from memcommit.application.operations.fit.store import FitStore
+    from memcommit.persistence.store import MemoryStore
 
     _Provider.calls = 0
     _use_store_root(store_root)

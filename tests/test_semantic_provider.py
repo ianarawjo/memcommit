@@ -6,13 +6,13 @@ import json
 
 import pytest
 
-from memcommit.provider_types import (
+from memcommit.providers.types import (
     CODEX_CHATGPT_PROVIDER,
     OLLAMA_PROVIDER,
     OPENROUTER_PROVIDER,
 )
-from memcommit.query_provider import QueryProviderError
-from memcommit.semantic_provider import (
+from memcommit.providers.subscription import QueryProviderError
+from memcommit.providers.semantic import (
     OllamaProvider,
     OpenRouterProvider,
     connect_operation_provider,
@@ -259,7 +259,7 @@ def test_connect_codex_provider_uses_the_reported_semantic_timeout(monkeypatch):
             return None
 
     monkeypatch.setattr(
-        "memcommit.semantic_provider.CodexChatGPTProvider.connect",
+        "memcommit.providers.semantic.CodexChatGPTProvider.connect",
         lambda **kwargs: captured.update(kwargs) or object(),
     )
 
@@ -272,7 +272,7 @@ def test_study_connection_forwards_the_pinned_fast_tier(monkeypatch):
     captured = {}
 
     monkeypatch.setattr(
-        "memcommit.semantic_provider.CodexChatGPTProvider.connect",
+        "memcommit.providers.semantic.CodexChatGPTProvider.connect",
         lambda **kwargs: captured.update(kwargs) or object(),
     )
 

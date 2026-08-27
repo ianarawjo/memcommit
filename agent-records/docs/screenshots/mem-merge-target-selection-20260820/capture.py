@@ -32,7 +32,7 @@ _BASE.ROWS = ROWS
 
 
 def _configure_isolated_store(store_root: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     values = {
         "STORE_DIR": store_root,
@@ -55,7 +55,7 @@ def _configure_isolated_store(store_root: Path) -> None:
 
 def _initialize() -> None:
     import memcommit.application.ops as ops
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()
     source = ops.init("source")
@@ -68,7 +68,7 @@ def _initialize() -> None:
 
 def _verification(kind: str) -> str:
     from memcommit.context import Memory
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()
 

@@ -201,7 +201,7 @@ def _capture_read_only(
 
 def main() -> None:
     sys.path.insert(0, str(ROOT / "src"))
-    from memcommit.profile_config import load_profile_registry
+    from memcommit.application.operations.profile.config import load_profile_registry
 
     OUT.mkdir(parents=True, exist_ok=True)
     registry = load_profile_registry()

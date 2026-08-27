@@ -33,9 +33,9 @@ def _metric_files() -> tuple[Path, ...]:
 def main() -> None:
     sys.path.insert(0, str(ROOT / "src"))
     from memcommit.core.context_targeting.loading import load_context_scope
-    from memcommit.profile_config import load_profile_registry
-    from memcommit.sever_store import SeverSessionStore
-    from memcommit.store import MemoryStore
+    from memcommit.application.operations.profile.config import load_profile_registry
+    from memcommit.application.operations.sever.session_store import SeverSessionStore
+    from memcommit.persistence.store import MemoryStore
 
     registry = load_profile_registry()
     if registry.active.name != PROFILE_NAME:

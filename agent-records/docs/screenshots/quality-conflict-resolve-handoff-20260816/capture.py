@@ -37,7 +37,7 @@ VERIFY_MARKER = "VERIFY PAYLOAD:\n"
 
 
 def _configure_isolated_store(store_root: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     values = {
         "STORE_DIR": store_root,
@@ -60,7 +60,7 @@ def _configure_isolated_store(store_root: Path) -> None:
 
 def _initialize() -> None:
     from memcommit.context import Context, Memory
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     context = Context(
         uid="10000000-0000-4000-8000-000000000010",
@@ -208,7 +208,7 @@ class _Provider:
 
 def _verification(kind: str, provider: _Provider) -> str:
     from memcommit.context import Memory
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()
     context = store.load_direct("quality/capture")
@@ -235,7 +235,7 @@ def _run_child(kind: str) -> None:
     import memcommit.commands.find_conflicts.resolve_handoff as handoff_command
     import memcommit.commands.find_conflicts.command as find_command
     import memcommit.application.ops as ops
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
 
     with tempfile.TemporaryDirectory(prefix="quality-handoff-capture-") as directory:
         _configure_isolated_store(Path(directory) / ".mem")

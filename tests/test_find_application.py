@@ -17,8 +17,8 @@ from memcommit.application.operations.search.application import (
     run_find_search,
 )
 from memcommit.application.operations.search.runtime import execute_find_search
-from memcommit.search import SearchCandidate
-from memcommit.store import MemoryStore
+from memcommit.application.operations.search.model import SearchCandidate
+from memcommit.persistence.store import MemoryStore
 
 
 class _CurrentSource:

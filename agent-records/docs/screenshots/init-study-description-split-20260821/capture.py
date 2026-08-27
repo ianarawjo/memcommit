@@ -36,8 +36,8 @@ _BASE.ROWS = ROWS
 def _configure_isolated_profile_root(root: Path) -> None:
     """Redirect the complete Profile/store boundary without changing HOME."""
 
-    import memcommit.config as config_module
-    import memcommit.profile_config as profile_config
+    import memcommit.configuration.config as config_module
+    import memcommit.application.operations.profile.config as profile_config
 
     authoring = root / "authoring"
     control = root / "profile-control"
@@ -53,7 +53,7 @@ def _run_child(arguments: list[str]) -> None:
     print(f"CAPTURE PTY · {columns}x{rows}")
     print("\x1b[38;2;138;173;244m$\x1b[0m mem " + shlex.join(arguments))
 
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
 
     sys.argv = ["mem", *arguments]
     app()

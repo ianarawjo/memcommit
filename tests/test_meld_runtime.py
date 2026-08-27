@@ -8,7 +8,7 @@ from types import SimpleNamespace
 
 import pytest
 
-import memcommit.comparison_execution as comparison_execution
+import memcommit.application.operations.compare.ledger.execution as comparison_execution
 import memcommit.application.operations.meld.assessment_application as meld_assessment_application
 import memcommit.application.operations.meld.restart_application as meld_restart_application
 import memcommit.application.operations.meld.runtime as meld_runtime
@@ -16,7 +16,7 @@ import memcommit.application.operations.meld.session_application as meld_session
 import memcommit.application.operations.meld.start_application as meld_start_application
 from memcommit.application.authority.access import ContextAccess
 from memcommit.context import Context, Memory
-from memcommit.meld import meld_canonical_digest
+from memcommit.application.operations.meld.model import meld_canonical_digest
 from memcommit.application.operations.meld.restart_application import MeldRestartRequest
 
 

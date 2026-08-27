@@ -7,16 +7,16 @@ from pathlib import Path
 from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
-import memcommit.profiles as profiles_module
+import memcommit.application.operations.profile.model as profiles_module
 from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Memory
-from memcommit.profile_config import (
+from memcommit.application.operations.profile.config import (
     load_profile_registry,
     profile_store_dir,
     study_run_identity,
 )
-from memcommit.profiles import resolve_share_endpoint
-from memcommit.store import MemoryStore
+from memcommit.application.operations.profile.model import resolve_share_endpoint
+from memcommit.persistence.store import MemoryStore
 from memcommit.study_scenarios.coffee import (
     COFFEE_BASELINE_UID,
     COFFEE_DIGEST,

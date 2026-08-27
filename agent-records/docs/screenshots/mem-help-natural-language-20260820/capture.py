@@ -145,7 +145,7 @@ def _capture_thinking_path(executable: str) -> None:
 
 
 def _capture_study_copy_block(executable: str) -> None:
-    from memcommit.help_application import describe_operation
+    from memcommit.application.operations.help.application import describe_operation
 
     request = describe_operation("query").summary
     child, recorder = _spawn_lookup(executable, request)

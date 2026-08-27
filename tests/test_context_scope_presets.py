@@ -16,8 +16,8 @@ from memcommit.core.context_targeting.presets import (
     resolve_scope_preset,
 )
 from memcommit.application.operations.query.ordinary_application import OrdinaryQueryResponse
-from memcommit.profiles import ProfileError
-from memcommit.store import MemoryStore
+from memcommit.application.operations.profile.model import ProfileError
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner()

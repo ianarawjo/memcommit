@@ -10,7 +10,7 @@ import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.shared.context_picker import ContextMemorySelection
 from memcommit.context import Context, Memory
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner(mix_stderr=False)

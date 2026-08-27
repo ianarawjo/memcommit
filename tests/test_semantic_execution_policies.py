@@ -2,18 +2,18 @@
 
 from __future__ import annotations
 
-from memcommit.atomize import _atomize_execution_policy
-from memcommit.atomize_grounding_provider import (
+from memcommit.application.operations.atomize.domain import _atomize_execution_policy
+from memcommit.application.operations.atomize.grounding_provider import (
     ATOMIZE_GROUNDING_EXECUTION_POLICY,
 )
-from memcommit.comparison_provider import COMPARISON_EXECUTION_POLICY
-from memcommit.find_answer_dialogue import _find_answer_execution_policy
-from memcommit.findings import _findings_execution_policy
-from memcommit.history_search import HISTORY_SEARCH_EXECUTION_POLICY
-from memcommit.meld_provider import MELD_EXECUTION_POLICY
-from memcommit.rationale import RATIONALE_EXECUTION_POLICY
-from memcommit.search import FIND_EXECUTION_POLICY
-from memcommit.selective_curation import (
+from memcommit.application.operations.compare.ledger.provider import COMPARISON_EXECUTION_POLICY
+from memcommit.application.operations.search.answer_dialogue import _find_answer_execution_policy
+from memcommit.application.reviewing.quality.findings import _findings_execution_policy
+from memcommit.application.operations.log.search import HISTORY_SEARCH_EXECUTION_POLICY
+from memcommit.application.operations.meld.provider import MELD_EXECUTION_POLICY
+from memcommit.application.operations.rationale.model import RATIONALE_EXECUTION_POLICY
+from memcommit.application.operations.search.model import FIND_EXECUTION_POLICY
+from memcommit.application.semantic.selective_curation import (
     CurationBatch,
     CurationItem,
     CriterionFrame,
@@ -26,9 +26,9 @@ from memcommit.application.semantic_execution import (
     ExecutionStrategy,
     SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT,
 )
-from memcommit.summarize import SUMMARIZE_EXECUTION_POLICY
+from memcommit.application.operations.summarize.model import SUMMARIZE_EXECUTION_POLICY
 from memcommit.application.operations.translate.runtime import TRANSLATE_EXECUTION_POLICY
-from memcommit.update import UPDATE_EXECUTION_POLICY
+from memcommit.application.operations.update.model import UPDATE_EXECUTION_POLICY
 
 
 def test_only_implemented_find_and_translate_policies_advertise_staging():

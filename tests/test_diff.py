@@ -9,8 +9,8 @@ from typer.testing import CliRunner
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Context
-from memcommit.store import MemoryStore
-from memcommit.update import plan_update
+from memcommit.persistence.store import MemoryStore
+from memcommit.application.operations.update.model import plan_update
 
 
 runner = CliRunner(mix_stderr=False)

@@ -7,7 +7,7 @@ from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
-from memcommit.clipboard import ClipboardError
+from memcommit.adapters.console.clipboard import ClipboardError
 from memcommit.commands.shared.context_picker import (
     ContextPickerActionReceipt,
     ContextMemorySelection,
@@ -37,7 +37,7 @@ from memcommit.core.context_targeting.tui.picker import (
     render_context_memory_detail,
 )
 from memcommit.source_projection.model import SourceForm, SourceReach, SourceState
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner()

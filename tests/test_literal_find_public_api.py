@@ -6,7 +6,7 @@ import pytest
 
 import memcommit.application.ops as ops
 from memcommit.adapters.python_api import FindInputError, FindResult, MemCommitClient
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def _store(root):

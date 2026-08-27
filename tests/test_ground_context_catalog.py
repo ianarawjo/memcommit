@@ -6,12 +6,12 @@ import builtins
 import pytest
 
 from memcommit.application import ops
-from memcommit.ground_context_catalog import (
+from memcommit.application.operations.ground.context_catalog import (
     GroundContextLocator,
     discover_ground_context_locators,
     select_ground_context_locators,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def test_locator_discovery_never_opens_context_records(

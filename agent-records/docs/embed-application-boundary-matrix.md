@@ -28,8 +28,9 @@ The focused `memcommit.application.operations.embed` package is the canonical ow
 live Context and Memory relationship use case. Production API, CLI, and TUI
 adapters import its application and runtime modules directly. The former flat
 `memcommit.embed_application` and `memcommit.embed_runtime` paths remain
-module-identity aliases rather than parallel implementations, preserving
-legacy import order, monkeypatch targets, and serialized Python globals.
+only in the historical record and are no longer importable. Internal imports,
+monkeypatches, and serialized Python globals must name the canonical operation
+modules; the durable Embed schema remains unchanged.
 
 Context and Memory Embed stay together because both authorize and publish a
 revocable live relationship at one frozen direct-item gap. Immutable Memory

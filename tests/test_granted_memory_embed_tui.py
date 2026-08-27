@@ -10,12 +10,12 @@ from prompt_toolkit.output import DummyOutput
 
 import memcommit.application.ops as ops
 from memcommit.context import MemoryRef
-from memcommit.embed_application import (
+from memcommit.application.operations.embed.application import (
     FrozenMemoryEmbedPlan,
     MemoryEmbedRequest,
     run_memory_embed,
 )
-from memcommit.embed_runtime import MemoryStoreEmbedPort
+from memcommit.application.operations.embed.runtime import MemoryStoreEmbedPort
 from memcommit.adapters.interfaces.tui.components.direct_item_placement import DirectItemGap
 from memcommit.adapters.interfaces.tui.operations.embed import (
     build_embed_tui_setup,
@@ -23,7 +23,7 @@ from memcommit.adapters.interfaces.tui.operations.embed import (
     memory_embed_exact_command_review,
     parse_embed_command_argv,
 )
-from memcommit.profile_config import (
+from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
@@ -31,9 +31,9 @@ from memcommit.profile_config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.profiles import create_authority_grant, update_authority_grant
+from memcommit.application.operations.profile.model import create_authority_grant, update_authority_grant
 from memcommit.source_projection.presentation import source_display_text
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def _fixture(isolated_store, tmp_path, monkeypatch):

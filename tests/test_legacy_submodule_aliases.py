@@ -1,14 +1,10 @@
-"""Physical-root and import contracts for centralized legacy submodules."""
+"""Contracts for intentionally removed historical Python import paths."""
 
 from __future__ import annotations
 
 import subprocess
 import sys
 from pathlib import Path
-
-from memcommit.compatibility.legacy_submodules import (
-    LEGACY_SUBMODULE_ALIASES,
-)
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
@@ -19,26 +15,23 @@ ROOT_BOUNDARIES = {
     "context.py",
     "context_locator.py",
 }
+
+
 def test_package_root_contains_only_real_implementation_boundaries() -> None:
     assert {path.name for path in PACKAGE_ROOT.glob("*.py")} == ROOT_BOUNDARIES
-    assert len(LEGACY_SUBMODULE_ALIASES) == 240
-    assert "memcommit.flow_placeholder" not in LEGACY_SUBMODULE_ALIASES
-    assert "memcommit.cli" not in LEGACY_SUBMODULE_ALIASES
-    assert "memcommit.ops" not in LEGACY_SUBMODULE_ALIASES
-    assert "memcommit.provenance" not in LEGACY_SUBMODULE_ALIASES
-    assert LEGACY_SUBMODULE_ALIASES["memcommit.store"] == (
-        "memcommit.persistence.store"
-    )
-    for legacy_name in LEGACY_SUBMODULE_ALIASES:
-        relative_path = Path(*legacy_name.split(".")).with_suffix(".py")
-        assert not (REPOSITORY_ROOT / relative_path).exists()
+    assert not (PACKAGE_ROOT / "compatibility").exists()
 
 
-def test_removed_legacy_imports_are_not_supported() -> None:
+def test_representative_historical_imports_are_unavailable() -> None:
     program = """
 from importlib import import_module
 
-for module in ("memcommit.cli", "memcommit.ops", "memcommit.provenance"):
+removed = (
+    "memcommit.store",
+    "memcommit.atomize_analysis_runtime",
+    "memcommit.semantic_execution",
+)
+for module in removed:
     try:
         import_module(module)
     except ModuleNotFoundError:
@@ -53,50 +46,23 @@ for module in ("memcommit.cli", "memcommit.ops", "memcommit.provenance"):
     )
 
 
-def test_store_legacy_import_resolves_to_the_persistence_owner() -> None:
+def test_canonical_owners_remain_importable_without_a_runtime_finder() -> None:
     program = """
 from importlib import import_module
-
-legacy = import_module("memcommit.store")
-canonical = import_module("memcommit.persistence.store")
-assert legacy is canonical
-assert legacy.__name__ == "memcommit.persistence.store"
-assert legacy.__spec__.name == "memcommit.persistence.store"
-"""
-    subprocess.run(
-        [sys.executable, "-c", program],
-        cwd=REPOSITORY_ROOT,
-        check=True,
-    )
-
-
-def test_legacy_finder_is_idempotent_and_preserves_canonical_metadata() -> None:
-    program = """
-import importlib
 import sys
-import memcommit
-from memcommit.compatibility.legacy_submodules import (
-    install_legacy_submodule_aliases,
-)
 
-install_legacy_submodule_aliases()
-install_legacy_submodule_aliases()
-finders = [
-    finder
+owners = (
+    "memcommit.persistence.store",
+    "memcommit.application.operations.atomize.analysis_runtime",
+    "memcommit.application.semantic_execution",
+)
+for module in owners:
+    import_module(module)
+
+assert not any(
+    getattr(finder, "marker", None) == "memcommit-legacy-submodule-aliases-v1"
     for finder in sys.meta_path
-    if getattr(finder, "marker", None)
-    == "memcommit-legacy-submodule-aliases-v1"
-]
-assert len(finders) == 1
-
-legacy = importlib.import_module("memcommit.atomize_analysis_runtime")
-canonical = importlib.import_module(
-    "memcommit.application.operations.atomize.analysis_runtime"
 )
-assert legacy is canonical
-assert legacy.__name__ == "memcommit.application.operations.atomize.analysis_runtime"
-assert legacy.__spec__.name == "memcommit.application.operations.atomize.analysis_runtime"
-assert memcommit.atomize_analysis_runtime is canonical
 """
     subprocess.run(
         [sys.executable, "-c", program],

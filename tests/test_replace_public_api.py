@@ -11,7 +11,7 @@ from memcommit.adapters.python_api import (
     ReplaceContextError,
     ReplaceInputError,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def _client(tmp_path, *contents: str):

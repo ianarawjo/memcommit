@@ -24,14 +24,14 @@ from memcommit.commands.ground.named_shell import (
     render_named_ground_rules_pane,
     run_named_ground_shell,
 )
-from memcommit.ground import (
+from memcommit.application.operations.ground.model import (
     GROUND_PROPOSITION_SCHEMA_VERSION,
     GROUND_SCHEMA_VERSION,
     GroundFrame,
     GroundItem,
     create_ground_session,
 )
-from memcommit.ground_turn_dialogue import (
+from memcommit.application.operations.ground.turn_dialogue import (
     GroundTurnDraft,
     GroundTurnDraftBatch,
 )

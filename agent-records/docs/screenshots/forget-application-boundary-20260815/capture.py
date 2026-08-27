@@ -157,7 +157,7 @@ def _run_forget_command(store, provider, *, granted: bool = False) -> None:
 
 
 def _child_local(store_root: Path) -> None:
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root)
     _create_source(store, "forget/local")
@@ -165,7 +165,7 @@ def _child_local(store_root: Path) -> None:
 
 
 def _child_verify(store_root: Path) -> None:
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root, create=False)
     context = store.load_direct("forget/local")
@@ -177,7 +177,7 @@ def _child_verify(store_root: Path) -> None:
 
 def _child_restore(store_root: Path, action: str) -> None:
     from memcommit.commands.shared.restoration_present import render_command_restore_receipt
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root, create=False)
     result = store.restore_recent_context_command(action)
@@ -187,7 +187,7 @@ def _child_restore(store_root: Path, action: str) -> None:
 
 
 def _child_granted_review(store_root: Path) -> None:
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root)
     _create_source(store, "forget/granted")
@@ -197,7 +197,7 @@ def _child_granted_review(store_root: Path) -> None:
 
 
 def _child_granted_noop(store_root: Path) -> None:
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root)
     _create_source(store, "forget/noop")
@@ -211,7 +211,7 @@ def _child_stale(store_root: Path) -> None:
     import typer
 
     from memcommit.context import AutoCheckpoint, Memory
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root)
     source = _create_source(store, "forget/stale")

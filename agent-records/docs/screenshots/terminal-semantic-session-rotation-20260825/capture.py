@@ -44,8 +44,8 @@ def _store_digest(root: Path) -> str:
 
 def _prepare_atomize_store(root: Path):
     import memcommit.application.ops as ops
-    from memcommit.atomize_workflow import open_or_create_atomize_workbench
-    from memcommit.store import MemoryStore
+    from memcommit.application.operations.atomize.workflow import open_or_create_atomize_workbench
+    from memcommit.persistence.store import MemoryStore
     from tests.test_atomize_workbench import AggregateProvider
 
     store = MemoryStore(root=root)
@@ -75,8 +75,8 @@ def _prepare_atomize_store(root: Path):
 
 def _prepare_meld_store(root: Path):
     import memcommit.application.ops as ops
-    from memcommit.meld import MeldSession, meld_canonical_digest
-    from memcommit.store import MemoryStore
+    from memcommit.application.operations.meld.model import MeldSession, meld_canonical_digest
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=root)
     incoming = ops.init("capture/meld-incoming")
@@ -99,7 +99,7 @@ def _prepare_meld_store(root: Path):
 
 
 def _ambiguity_report(context, memory, *, suffix: str):
-    from memcommit.findings import AmbiguityFinding, AmbiguityReport
+    from memcommit.application.reviewing.quality.findings import AmbiguityFinding, AmbiguityReport
 
     return AmbiguityReport(
         memory_count=len(context.memories),
@@ -121,8 +121,8 @@ def _ambiguity_report(context, memory, *, suffix: str):
 
 def _prepare_review_store(root: Path):
     import memcommit.application.ops as ops
-    from memcommit.review import create_ambiguity_review
-    from memcommit.store import MemoryStore
+    from memcommit.application.operations.review.model import create_ambiguity_review
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=root)
     context = ops.init("capture/review-policy")
@@ -171,7 +171,7 @@ def _patch_command_stores(store) -> None:
 
 def _run_cli(argv: list[str]) -> None:
     import click
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
 
     try:
         app(args=argv, prog_name="mem", standalone_mode=False)

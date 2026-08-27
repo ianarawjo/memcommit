@@ -7,14 +7,14 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.config as config_module
+import memcommit.configuration.config as config_module
 import memcommit.application.ops as ops
 from memcommit.application.authority.access import resolve_context_access
 from memcommit.commands.sever.command import _capture_binding, _start
 from memcommit.adapters.console.entrypoint import app
-from memcommit.config import Config
+from memcommit.configuration.config import Config
 from memcommit.context import Memory
-from memcommit.profile_config import (
+from memcommit.application.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,
     STUDY_RUN_PARTICIPANT_SOURCE_KIND,
@@ -25,7 +25,7 @@ from memcommit.application.operations.sever.model import (
     sever_frame_digest,
 )
 from memcommit.application.operations.sever.session_store import SeverSessionStore
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.study_scenarios.legacy.prewarm.registry import (
     StudyPrewarmRegistryError,
     publish_artifact,

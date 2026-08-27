@@ -8,23 +8,23 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
-from memcommit.clipboard import ClipboardError
+from memcommit.adapters.console.clipboard import ClipboardError
 import memcommit.commands.summarize.command as summarize_command
 from memcommit.commands.help_inventory.command import COMMAND_FORMS
 from memcommit.adapters.console.entrypoint import app
-from memcommit.comparison import ComparisonInput
-from memcommit.comparison_provider import analyze_comparison
+from memcommit.application.operations.compare.ledger.model import ComparisonInput
+from memcommit.application.operations.compare.ledger.provider import analyze_comparison
 from memcommit.context import Memory
 from memcommit.adapters.interfaces.tui.operations.summarize import SummarizeTuiOutcome
-from memcommit.read_report import ReadReportRecent, ReadReportTarget
-from memcommit.summarize import (
+from memcommit.application.reviewing.read_report import ReadReportRecent, ReadReportTarget
+from memcommit.application.operations.summarize.model import (
     SUMMARIZE_OPERATION,
     SummarizeError,
     collect_summary_scope,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.summarize.application import SummarizeResult
-from memcommit.understanding import (
+from memcommit.application.semantic.understanding import (
     UnderstandingSummary,
     parse_source_linked_understanding,
 )

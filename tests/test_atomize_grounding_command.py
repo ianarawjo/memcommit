@@ -11,8 +11,8 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
-import memcommit.store as store_module
-from memcommit.atomize import (
+import memcommit.persistence.store as store_module
+from memcommit.application.operations.atomize.domain import (
     ATOMIZE_RULESET_VERSION,
     AtomizeAnalysisItem,
     AtomizeAnalysisSession,
@@ -21,18 +21,18 @@ from memcommit.atomize import (
     AtomizeQualityIssue,
     AtomizeReading,
 )
-from memcommit.atomize_grounding_provider import (
+from memcommit.application.operations.atomize.grounding_provider import (
     ATOMIZE_GROUNDING_PAYLOAD_MARKER,
 )
-from memcommit.atomize_workbench import create_atomize_workbench
+from memcommit.application.operations.atomize.workbench import create_atomize_workbench
 from memcommit.adapters.console.entrypoint import app
 from memcommit.context import AutoCheckpoint, Memory, MemoryRef
 from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
     reconstruct_memory_history,
 )
-from memcommit.rationale import build_rationale
-from memcommit.review import direct_context_digest
-from memcommit.store import MemoryStore
+from memcommit.application.operations.rationale.model import build_rationale
+from memcommit.application.operations.review.model import direct_context_digest
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner()
@@ -937,7 +937,7 @@ def test_accept_retry_recovers_when_terminal_archive_precedes_latest_receipt(
     ).exit_code == 0
     checkpoint_count = len(store.list_checkpoints(ctx.name))
     latest_path = store._atomize_grounding_session_path(ctx.uid)
-    from memcommit import store as store_module
+    import memcommit.persistence.store as store_module
 
     original_write = store_module._write_json_atomic
     failed_latest_receipt = False
@@ -954,7 +954,7 @@ def test_accept_retry_recovers_when_terminal_archive_precedes_latest_receipt(
         return original_write(path, data)
 
     monkeypatch.setattr(
-        "memcommit.store._write_json_atomic",
+        "memcommit.persistence.store._write_json_atomic",
         fail_latest_receipt_once,
     )
     failed = runner.invoke(app, ["atomize", "--accept-grounding"])
@@ -971,7 +971,7 @@ def test_accept_retry_recovers_when_terminal_archive_precedes_latest_receipt(
     assert history[0].state == "APPLIED"
 
     monkeypatch.setattr(
-        "memcommit.store._write_json_atomic",
+        "memcommit.persistence.store._write_json_atomic",
         original_write,
     )
     recovered = runner.invoke(app, ["atomize", "--accept-grounding"])

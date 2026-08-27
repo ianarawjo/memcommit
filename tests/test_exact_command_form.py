@@ -1,6 +1,6 @@
 """Editable proposed-command form and identifier display contracts."""
 
-from memcommit.exact_command_review import ExactCommandReview
+from memcommit.application.exact_command_review import ExactCommandReview
 from memcommit.adapters.interfaces.tui.components.exact_command_review import (
     EditableExactCommandControl,
     ExactCommandDraft,

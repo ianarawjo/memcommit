@@ -4,15 +4,15 @@ import os
 
 import pytest
 
-from memcommit.ground_workspace_draft import (
+from memcommit.application.operations.ground.workspace_draft import (
     GroundWorkspaceDraft,
     GroundWorkspaceDraftError,
     GroundWorkspaceMemoryDraft,
     GroundWorkspaceRuleDraft,
     ground_workspace_draft_digest,
 )
-from memcommit.ground_workspace_draft_store import GroundWorkspaceDraftStore
-from memcommit.store import ConcurrentContextUpdateError, MemoryStore
+from memcommit.application.operations.ground.workspace_draft_store import GroundWorkspaceDraftStore
+from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 
 
 def _draft(name: str = "projects/ticker-ground") -> GroundWorkspaceDraft:

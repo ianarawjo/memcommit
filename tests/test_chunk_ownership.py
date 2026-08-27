@@ -11,19 +11,6 @@ import sys
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_chunk_domain_legacy_path_is_the_canonical_module() -> None:
-    program = """
-import importlib
-import sys
-
-legacy = importlib.import_module("memcommit.chunking")
-canonical = importlib.import_module("memcommit.application.operations.chunk.domain")
-assert legacy is canonical
-assert sys.modules["memcommit.chunking"] is canonical
-"""
-    subprocess.run([sys.executable, "-c", program], cwd=REPOSITORY_ROOT, check=True)
-
-
 def test_ops_chunk_is_a_thin_operation_compatibility_adapter() -> None:
     path = REPOSITORY_ROOT / "src/memcommit/application/ops.py"
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))

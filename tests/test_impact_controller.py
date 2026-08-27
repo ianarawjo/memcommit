@@ -12,9 +12,9 @@ from memcommit.commands.shared.resolution_workbench_shell import (
     resolution_report_fragments,
     run_resolution_workbench_shell,
 )
-from memcommit.impact_controller import ImpactController
-from memcommit.memory_diff import MemoryChange
-from memcommit.resolution_workbench import (
+from memcommit.adapters.interfaces.tui.workbenches.impact import ImpactController
+from memcommit.application.reviewing.memory_diff import MemoryChange
+from memcommit.application.resolution.workbench import (
     ResolutionResult,
     ResolutionWorkbenchView,
 )

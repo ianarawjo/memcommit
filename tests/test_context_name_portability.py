@@ -15,12 +15,12 @@ import memcommit.commands.profile.command as profile_command
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.context import AutoCheckpoint, Context
-from memcommit.context_naming import (
+from memcommit.core.context_targeting.naming import (
     is_portable_context_name,
     validate_portable_context_name,
 )
-from memcommit.profiles import create_authority_grant
-from memcommit.store import MemoryStore, validate_context_name
+from memcommit.application.operations.profile.model import create_authority_grant
+from memcommit.persistence.store import MemoryStore, validate_context_name
 
 
 runner = CliRunner(mix_stderr=False)

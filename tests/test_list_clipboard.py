@@ -13,16 +13,16 @@ import click
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.clipboard as clipboard
+import memcommit.adapters.console.clipboard as clipboard
 from memcommit.adapters.console.entrypoint import app
-from memcommit.clipboard import ClipboardError, ClipboardPayload
+from memcommit.adapters.console.clipboard import ClipboardError, ClipboardPayload
 from memcommit.context import Context, Memory, QueryContextRef
-from memcommit.context_snapshot import ContextSnapshotRef, context_snapshot_digest
+from memcommit.application.retained_history.context_snapshot import ContextSnapshotRef, context_snapshot_digest
 from memcommit.adapters.interfaces.console.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner(mix_stderr=False)

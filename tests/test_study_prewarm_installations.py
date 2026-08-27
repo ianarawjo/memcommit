@@ -6,12 +6,12 @@ import uuid
 import pytest
 
 import memcommit.study_scenarios.legacy.prewarm.installations as installations_module
-from memcommit.profile_config import (
+from memcommit.application.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,
     STUDY_RUN_PARTICIPANT_SOURCE_KIND,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.study_scenarios.legacy.prewarm.installations import (
     declared_artifact_available,
     declared_installation_matches,

@@ -4,7 +4,7 @@ from dataclasses import replace
 
 import pytest
 
-from memcommit.resolution_workbench import (
+from memcommit.application.resolution.workbench import (
     ResolutionContextLocation,
     ResolutionItem,
     ResolutionNavigation,

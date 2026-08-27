@@ -17,7 +17,7 @@ from memcommit.adapters.python_api import (
 from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Memory
 from memcommit.adapters.interfaces.agent.memory_transfer import MemoryTransferAgentAdapter
-from memcommit.memory_transfer_application import (
+from memcommit.application.operations.memory_transfer.application import (
     CopyMemoriesRequest,
     MemoryTransferAuthorityError,
     MemoryTransferError,
@@ -26,8 +26,8 @@ from memcommit.memory_transfer_application import (
     run_copy,
     run_move,
 )
-from memcommit.memory_transfer_runtime import MemoryStoreMemoryTransferPort
-from memcommit.profile_config import (
+from memcommit.application.operations.memory_transfer.runtime import MemoryStoreMemoryTransferPort
+from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
@@ -36,14 +36,14 @@ from memcommit.profile_config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.profiles import (
+from memcommit.application.operations.profile.model import (
     ProfileError,
     create_authority_grant,
     create_profile,
     delete_authority_grant,
     update_authority_grant,
 )
-from memcommit.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import MemoryStore, context_record_digest
 
 
 _COPY_PERMISSIONS = ("READ", "DERIVE", "EXPORT", "SAVE_ANALYSIS")

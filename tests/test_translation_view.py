@@ -14,7 +14,7 @@ from memcommit.context import (
     AutoCheckpoint,
     Context,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.translate.runtime import plan_translation
 from memcommit.application.operations.translate.view import (
     TRANSLATION_ORIGIN_MANUAL,
@@ -169,7 +169,7 @@ def test_default_view_does_not_allocate_a_translation_operation_uid(
         )
 
     monkeypatch.setattr(
-        "memcommit.translate.uuid",
+        "memcommit.application.operations.translate.runtime.uuid",
         SimpleNamespace(uuid4=forbidden_operation_uid),
     )
 

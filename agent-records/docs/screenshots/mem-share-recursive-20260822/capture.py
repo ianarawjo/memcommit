@@ -34,7 +34,7 @@ if str(ROOT) not in sys.path:
 
 def _prepare_topology(home: Path):
     from memcommit.context import Context, Memory
-    from memcommit.profile_config import (
+    from memcommit.application.operations.profile.config import (
         AUTHORING_PROFILE_NAME,
         AUTHORING_PROFILE_UID,
         GRANT_RESOURCE_CONTEXT_TREE,
@@ -45,7 +45,7 @@ def _prepare_topology(home: Path):
         profile_registry_file,
         profile_store_dir,
     )
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     os.environ["HOME"] = str(home)
     sender = ProfileEntry(uid=str(uuid.uuid4()), name="share-sender", kind="MANAGED")
@@ -136,12 +136,12 @@ def _run_child(home: Path, kind: str) -> None:
 
     from memcommit.commands.share.command import cmd
     from memcommit.context import Context
-    from memcommit.profile_config import (
+    from memcommit.application.operations.profile.config import (
         ProfileRegistry,
         load_profile_registry,
         profile_registry_file,
     )
-    from memcommit.share import ShareError, deliver_prepared_share, prepare_share
+    from memcommit.application.operations.share.model import ShareError, deliver_prepared_share, prepare_share
 
     sender_store, receiver_store, root = _prepare_topology(home)
     columns, rows = os.get_terminal_size()

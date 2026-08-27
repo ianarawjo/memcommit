@@ -13,15 +13,15 @@ import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.add import command as add_command
 from memcommit.context import AutoCheckpoint, Memory
-from memcommit.findings import AmbiguityFinding, AmbiguityReport
+from memcommit.application.reviewing.quality.findings import AmbiguityFinding, AmbiguityReport
 from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
     reconstruct_memory_history,
 )
-from memcommit.rationale import build_rationale
-from memcommit.rationale_semantic import rationale_provenance_payload
-from memcommit.review import create_ambiguity_review
-from memcommit.store import MemoryStore
-from memcommit.update import plan_update
+from memcommit.application.operations.rationale.model import build_rationale
+from memcommit.application.operations.rationale.semantic import rationale_provenance_payload
+from memcommit.application.operations.review.model import create_ambiguity_review
+from memcommit.persistence.store import MemoryStore
+from memcommit.application.operations.update.model import plan_update
 
 
 runner = CliRunner()

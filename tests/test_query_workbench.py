@@ -10,7 +10,7 @@ from prompt_toolkit.output import DummyOutput
 import typer
 
 import memcommit.commands.query.command as query_command
-from memcommit.find_answer_references import (
+from memcommit.application.operations.search.answer_references import (
     FindAnswerEvidence,
     FindAnswerSentence,
     build_find_answer_reference_document,

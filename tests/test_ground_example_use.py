@@ -7,7 +7,7 @@ from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Context, Memory
-from memcommit.ground import (
+from memcommit.application.operations.ground.model import (
     GroundError,
     GroundTargetSpec,
     bind_ground_workbench,
@@ -16,7 +16,7 @@ from memcommit.ground import (
     propose_ground_rule,
     set_ground_example_use,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner()

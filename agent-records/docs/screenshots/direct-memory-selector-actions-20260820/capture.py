@@ -50,7 +50,7 @@ def _configure_isolated_store(store_root: Path) -> None:
 
 def _initialize_reference() -> None:
     import memcommit.application.ops as ops
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()
     source = ops.init("source")
@@ -63,7 +63,7 @@ def _initialize_reference() -> None:
 
 def _initialize_edit() -> None:
     import memcommit.application.ops as ops
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()
     context = ops.init("notes")
@@ -73,9 +73,9 @@ def _initialize_edit() -> None:
 
 
 def _run_child(kind: str) -> None:
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
     from memcommit.context import Memory, MemoryRef
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     with tempfile.TemporaryDirectory(
         prefix="mem-direct-selector-capture-"

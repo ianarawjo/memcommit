@@ -11,9 +11,9 @@ import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.impact.catalog import impact_session_entries
 from memcommit.commands.review.sessions import review_session_entries
-from memcommit.store import MemoryStore
-from memcommit.update import plan_update
-from memcommit.update_receipt_store import UpdateReceiptStore
+from memcommit.persistence.store import MemoryStore
+from memcommit.application.operations.update.model import plan_update
+from memcommit.application.operations.update.receipt_store import UpdateReceiptStore
 
 
 runner = CliRunner(mix_stderr=False)

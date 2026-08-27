@@ -12,15 +12,15 @@ import memcommit.application.ops as ops
 from memcommit.application.authority.access import resolve_context_access
 from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Context, Memory
-from memcommit.merge_application import (
+from memcommit.application.operations.merge.application import (
     MergeDecision,
     MergeReach,
     MergeRequest,
     prepare_merge,
     run_merge,
 )
-from memcommit.merge_runtime import MemoryStoreMergePort, execute_merge
-from memcommit.profile_config import (
+from memcommit.application.operations.merge.runtime import MemoryStoreMergePort, execute_merge
+from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
@@ -28,8 +28,8 @@ from memcommit.profile_config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.profiles import ProfileError, create_authority_grant
-from memcommit.store import MemoryStore
+from memcommit.application.operations.profile.model import ProfileError, create_authority_grant
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner(mix_stderr=False)

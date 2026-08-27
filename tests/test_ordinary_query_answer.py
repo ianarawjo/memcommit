@@ -15,15 +15,15 @@ from memcommit.application.operations.query.ordinary_runtime import execute_ordi
 from memcommit.commands.shared.readable_context_catalog import (
     freeze_readable_context_catalog,
 )
-from memcommit.find_answer_references import FindAnswerEvidence
-from memcommit.ordinary_query_answer import (
+from memcommit.application.operations.search.answer_references import FindAnswerEvidence
+from memcommit.application.operations.query.answer import (
     OrdinaryQueryAnswerError,
     OrdinaryQueryCorpusTooLarge,
     build_ordinary_query_reference_document,
     complete_ordinary_query_answer,
     prepare_ordinary_query_answer,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def _evidence() -> tuple[FindAnswerEvidence, ...]:

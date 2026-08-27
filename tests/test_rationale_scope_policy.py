@@ -9,9 +9,9 @@ from typer.testing import CliRunner
 from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.switch.command import _local_picker_annotations
 from memcommit.context import Memory
-from memcommit.profile_config import ProfileEntry, ProfileRegistry
-from memcommit.store import MemoryStore
-from memcommit.study_operation_policy import operation_policy
+from memcommit.application.operations.profile.config import ProfileEntry, ProfileRegistry
+from memcommit.persistence.store import MemoryStore
+from memcommit.application.authority.study_operation_policy import operation_policy
 
 
 runner = CliRunner()

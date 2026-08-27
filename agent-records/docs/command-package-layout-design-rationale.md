@@ -62,12 +62,11 @@ intended CLI object. For example, `memcommit.commands.add.cmd` and
 implementation-owning `.command` module directly.
 
 The 89 former flat support-module paths cannot be represented by both a file
-and the new package tree. They are therefore recorded in one generated lazy
-alias catalog, `memcommit.compatibility._legacy_command_alias_map`, and resolved
-by the existing exact compatibility finder. Each historical support import
-returns the canonical relocated module object without restoring a flat file or
-eagerly importing all commands. The catalog preserves old imports; it does not
-make arbitrary command-module helper attributes a public API.
+and the new package tree. They were initially served by a generated lazy alias
+catalog, but that compatibility had no external consumer or continuing intent
+and was removed on 2026-08-27. Repository-owned callers now import the
+entry-owned or shared canonical module directly; importing a former flat
+support path intentionally raises `ModuleNotFoundError`.
 
 The Python entry package names intentionally retain the pre-existing module
 stems in this path-only pass. Historical mismatches between a Python module
@@ -79,9 +78,10 @@ move.
 
 The layout check requires `commands/__init__.py` to be the only Python file at
 the command root, verifies every classified canonical target and entry package,
-rejects internal imports through the 89 historical support names, and imports
-each alias in isolated interpreters in both orders. Package tests also verify
-that all 64 `__init__.py` files expose only their declared CLI surface.
+rejects internal imports through the 89 historical support names, and proves
+in an isolated interpreter that none of those names is restored. Package tests
+also verify that all 64 `__init__.py` files expose only their declared CLI
+surface.
 
 ## Alternatives rejected
 

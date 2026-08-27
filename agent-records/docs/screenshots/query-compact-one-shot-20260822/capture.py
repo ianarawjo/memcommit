@@ -48,7 +48,7 @@ def _run_child() -> None:
     )
     from memcommit.adapters.interfaces.tui.operations.query import run_query_workbench
     from memcommit.application.operations.query.ordinary_runtime import execute_ordinary_query
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     with tempfile.TemporaryDirectory(prefix="mem-query-compact-") as raw_root:
         fixture_root = Path(raw_root)

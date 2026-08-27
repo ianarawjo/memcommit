@@ -14,7 +14,7 @@ from memcommit.application.authority.access import resolve_context_access
 from memcommit.commands.shared.readable_context_catalog import (
     freeze_readable_context_catalog,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner()

@@ -9,7 +9,7 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
 from memcommit.adapters.interfaces.tui.operations.replace import ReplaceTuiSetup, run_replace_tui
-from memcommit.replace_application import (
+from memcommit.application.operations.replace.application import (
     FrozenReplaceContext,
     FrozenReplacePlan,
     FrozenReplaceSource,

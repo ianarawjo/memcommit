@@ -152,7 +152,7 @@ def _initialize(store):
 
 
 def _review(store):
-    from memcommit.atomize_workflow import open_or_create_atomize_workbench
+    from memcommit.application.operations.atomize.workflow import open_or_create_atomize_workbench
 
     _initialize(store)
     context = store.load_direct("atomize/apply-boundary")
@@ -198,7 +198,7 @@ def _child_review(store_root: Path) -> None:
     from memcommit.adapters.interfaces.tui.operations.atomize.screen import (
         run_atomize_workbench_shell,
     )
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root)
     opened = _review(store)
@@ -216,7 +216,7 @@ def _child_review(store_root: Path) -> None:
 
 
 def _child_apply(store_root: Path) -> None:
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root, create=False)
     _invoke_save(store)
@@ -235,7 +235,7 @@ def _child_verify(store_root: Path) -> None:
     from memcommit.adapters.interfaces.tui.operations.atomize.screen import (
         render_atomize_workbench_snapshot,
     )
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root, create=False)
     context = store.load_direct("atomize/apply-boundary")
@@ -253,7 +253,7 @@ def _child_verify(store_root: Path) -> None:
 
 
 def _child_compensation(store_root: Path) -> None:
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root)
     opened = _review(store)
@@ -279,7 +279,7 @@ def _child_compensation(store_root: Path) -> None:
 
 
 def _child_late_success(store_root: Path) -> None:
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root)
     opened = _review(store)
@@ -303,12 +303,12 @@ def _child_late_success(store_root: Path) -> None:
 
 
 def _child_recovery(store_root: Path) -> None:
-    from memcommit.atomize_application import atomize_application_audit
-    from memcommit.atomize_runtime import (
+    from memcommit.application.operations.atomize.application import atomize_application_audit
+    from memcommit.application.operations.atomize.runtime import (
         MemoryStoreAtomizeOutputPort,
         capture_atomize_session_snapshot,
     )
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root)
     opened = _review(store)
@@ -337,7 +337,7 @@ def _child_recovery(store_root: Path) -> None:
 
 
 def _child_race(store_root: Path) -> None:
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root)
     opened = _review(store)

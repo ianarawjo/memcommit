@@ -5,13 +5,13 @@ from __future__ import annotations
 from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
-from memcommit.command_history import CommandHistoryError
+from memcommit.application.retained_history.command_history import CommandHistoryError
 from memcommit.adapters.console.entrypoint import app
-from memcommit.history import build_history
+from memcommit.application.retained_history.reconstruction import build_history
 from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
     reconstruct_memory_history,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner()

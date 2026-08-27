@@ -48,15 +48,15 @@ def _spawn() -> tuple[pexpect.spawn, io.StringIO]:
 set -eu
 printf 'LIVE PTY · '
 stty size
-before="$(python -c 'from memcommit.store import MemoryStore; print(MemoryStore().current_context_name() or "<none>")')"
+before="$(python -c 'from memcommit.persistence.store import MemoryStore; print(MemoryStore().current_context_name() or "<none>")')"
 printf 'DIRECT LIST · EXACT TARGET · MEMORY VISIBLE\n'
 mem list task-1/description
-after_direct="$(python -c 'from memcommit.store import MemoryStore; print(MemoryStore().current_context_name() or "<none>")')"
+after_direct="$(python -c 'from memcommit.persistence.store import MemoryStore; print(MemoryStore().current_context_name() or "<none>")')"
 test "$before" = "$after_direct"
 printf 'DIRECT READ-ONLY VERIFIED · CURRENT CONTEXT UNCHANGED\n'
 printf 'RECURSIVE LIST · EXACT TARGET · ALL OCCURRENCES EXPANDED\n'
 mem list -R task-1/participant/construction-updates
-after_recursive="$(python -c 'from memcommit.store import MemoryStore; print(MemoryStore().current_context_name() or "<none>")')"
+after_recursive="$(python -c 'from memcommit.persistence.store import MemoryStore; print(MemoryStore().current_context_name() or "<none>")')"
 test "$before" = "$after_recursive"
 printf 'RECURSIVE READ-ONLY VERIFIED · CURRENT CONTEXT UNCHANGED\n'
 mem list task-1/description | head -n 6

@@ -38,7 +38,7 @@ def _write_isolated_mem_wrapper(directory: Path) -> Path:
 import os
 from pathlib import Path
 
-import memcommit.profile_config as profile_config
+import memcommit.application.operations.profile.config as profile_config
 
 capture_store = Path(os.environ["MEMCOMMIT_CAPTURE_STORE"])
 capture_profiles = Path(os.environ["MEMCOMMIT_CAPTURE_PROFILES"])
@@ -48,11 +48,11 @@ profile_config.profile_stores_dir = lambda: capture_profiles / "stores"
 profile_config.profile_registry_file = lambda: capture_profiles / "registry.json"
 profile_config.profile_registry_lock_file = lambda: capture_profiles / "registry.lock"
 
-import memcommit.store as store_module
+import memcommit.persistence.store as store_module
 
 store_module.STORE_DIR = capture_store
 
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 
 app()
 """,

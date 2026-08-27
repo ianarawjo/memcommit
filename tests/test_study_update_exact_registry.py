@@ -6,19 +6,19 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.config as config_module
+import memcommit.configuration.config as config_module
 import memcommit.application.ops as ops
 from memcommit.commands.update import command as update_command
 from memcommit.adapters.console.entrypoint import app
-from memcommit.config import Config
+from memcommit.configuration.config import Config
 from memcommit.context import Context, Memory
 from memcommit.core.context_targeting.loading import load_context_scope
-from memcommit.profile_config import (
+from memcommit.application.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,
     STUDY_RUN_PARTICIPANT_SOURCE_KIND,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.study_scenarios.legacy.prewarm.registry import (
     StudyPrewarmRegistryError,
     publish_artifact,
@@ -32,7 +32,7 @@ from memcommit.study_scenarios.legacy.prewarm.update import (
     is_installed_update_prewarm,
     record_equivalent_update_prewarm,
 )
-from memcommit.update import AddOperation, UpdateSession, collect_update_inputs
+from memcommit.application.operations.update.model import AddOperation, UpdateSession, collect_update_inputs
 
 
 runner = CliRunner()

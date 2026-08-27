@@ -60,7 +60,7 @@ def _store_snapshot(root: Path) -> tuple[int, str]:
 
 def _create_store():
     import memcommit.application.ops as ops
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()
     alpha = ops.init("alpha")
@@ -77,7 +77,7 @@ def _create_store():
 
 
 def _child(directory: Path, *, mode: str) -> None:
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
 
     home = directory / "home"
     home.mkdir()

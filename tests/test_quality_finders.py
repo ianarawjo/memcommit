@@ -13,7 +13,7 @@ from typer.testing import CliRunner
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Memory, MemoryRef, QueryContextRef
-from memcommit.findings import (
+from memcommit.application.reviewing.quality.findings import (
     FindingsError,
     collect_direct_memories,
     enumerate_pairs,
@@ -26,8 +26,8 @@ from memcommit.adapters.interfaces.console.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )
-from memcommit.profiles import ProfileError
-from memcommit.store import MemoryStore
+from memcommit.application.operations.profile.model import ProfileError
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner()
@@ -178,7 +178,7 @@ def test_find_duplicates_scans_representatives_without_pair_targets(
         }
 
     monkeypatch.setattr(
-        "memcommit.findings.enumerate_pairs",
+        "memcommit.application.reviewing.quality.findings.enumerate_pairs",
         lambda candidates: pytest.fail(
             "duplicate discovery must not enumerate pair targets"
         ),
@@ -1359,7 +1359,7 @@ def test_duplicate_scan_does_not_allocate_pair_records(monkeypatch):
     for index in range(4):
         ops.add(ctx, str(index))
     monkeypatch.setattr(
-        "memcommit.findings.MemoryPair",
+        "memcommit.application.reviewing.quality.findings.MemoryPair",
         lambda *args, **kwargs: pytest.fail(
             "duplicate discovery allocated a pair record"
         ),

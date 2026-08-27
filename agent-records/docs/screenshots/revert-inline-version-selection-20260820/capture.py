@@ -31,7 +31,7 @@ CPR_RESPONSE = "\x1b[1;1R"
 
 
 def _configure_store(store_dir: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     store_module.STORE_DIR = store_dir
 
@@ -39,7 +39,7 @@ def _configure_store(store_dir: Path) -> None:
 def _prepare_revert_store(store_dir: Path) -> tuple[str, str]:
     import memcommit.application.ops as ops
     from memcommit.context import AutoCheckpoint
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_dir)
     context = ops.init("revert/versions")
@@ -83,7 +83,7 @@ def _prepare_revert_store(store_dir: Path) -> tuple[str, str]:
 
 def _prepare_merge_store(store_dir: Path) -> None:
     import memcommit.application.ops as ops
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_dir)
     source = ops.init("merge/source")
@@ -114,7 +114,7 @@ def _run_merge(store_dir: Path) -> None:
 def _verify_revert(store_dir: Path, first_uid: str, second_uid: str) -> None:
     _configure_store(store_dir)
     from memcommit.context import Memory
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(create=False)
     context = store.load_direct("revert/versions")
@@ -134,7 +134,7 @@ def _verify_revert(store_dir: Path, first_uid: str, second_uid: str) -> None:
 def _verify_merge(store_dir: Path) -> None:
     _configure_store(store_dir)
     from memcommit.context import Memory
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(create=False)
     print("READ-ONLY MERGE REJECTION VERIFICATION")

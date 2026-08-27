@@ -23,7 +23,7 @@ import memcommit.persistence.store as store_module
 
 
 CACHE_SCHEMA_VERSION = 3
-INFERENCE_CONTRACT = "memcommit.rationale.context-inference.v5"
+INFERENCE_CONTRACT = "memcommit.application.operations.rationale.model.context-inference.v5"
 PROVIDER_CONTRACT = "memcommit.query-provider.rationale-inference.v5"
 
 _EXPLANATION_CHAR_LIMIT = 480

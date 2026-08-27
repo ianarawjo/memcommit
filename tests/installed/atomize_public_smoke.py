@@ -9,7 +9,7 @@ from pathlib import Path
 import memcommit
 import memcommit.application.ops as ops
 from memcommit import MemCommitClient
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 _PAYLOAD_MARKER = "ATOMIZE IMPACT PAYLOAD:\n"

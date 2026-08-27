@@ -11,7 +11,7 @@ from types import SimpleNamespace
 import pytest
 
 import memcommit.application.evaluation.semantic_campaign as campaign_module
-from memcommit.ambiguity_pipeline import AmbiguityPipelineError
+from memcommit.application.semantic.classification.ambiguity import AmbiguityPipelineError
 from memcommit.application.evaluation.semantic_campaign import (
     DEFAULT_AMBIGUITY_FIXTURE,
     DEFAULT_AMBIGUITY_HOLDOUT_FIXTURE,
@@ -24,8 +24,8 @@ from memcommit.application.evaluation.semantic_campaign import (
     run_ambiguity_campaign,
     run_duplicate_campaign,
 )
-from memcommit.provider_types import CompletionRun, ProviderIdentity
-from memcommit.query_provider import QueryProviderError
+from memcommit.providers.types import CompletionRun, ProviderIdentity
+from memcommit.providers.subscription import QueryProviderError
 
 
 class FakeClock:

@@ -6,7 +6,7 @@ import json
 import pytest
 
 from memcommit.application import ops
-from memcommit.ground import (
+from memcommit.application.operations.ground.model import (
     GROUND_PROPOSITION_SCHEMA_VERSION,
     GroundTargetSpec,
     bind_ground_workbench,
@@ -15,7 +15,7 @@ from memcommit.ground import (
     propose_ground_rule,
     upgrade_ground_to_propositions,
 )
-from memcommit.ground_turn_dialogue import (
+from memcommit.application.operations.ground.turn_dialogue import (
     GROUND_TURN_OPERATION,
     GroundTurnAction,
     GroundTurnAsk,

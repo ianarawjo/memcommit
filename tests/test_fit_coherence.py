@@ -11,7 +11,7 @@ from memcommit.application.operations.fit.coherence import (
     freeze_ground_coherence,
     prepare_ground_coherence,
 )
-from memcommit.ground import (
+from memcommit.application.operations.ground.model import (
     GroundTargetSpec,
     bind_ground_workbench,
     create_ground_session,

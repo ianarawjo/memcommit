@@ -10,7 +10,7 @@ from memcommit.adapters.interfaces.tui.operations.audit import (
     audit_endpoint_setup_spec,
     choose_audit_setup,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def test_audit_setup_spec_freezes_one_direct_readable_source() -> None:

@@ -11,7 +11,7 @@ from memcommit.adapters.interfaces.agent.search import (
     SearchAgentAdapter,
     search_agent_tool_schema,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 class _Provider:

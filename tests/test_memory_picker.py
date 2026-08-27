@@ -21,7 +21,7 @@ from memcommit.application.retained_history.memory_history_reconstruction.memory
     MemoryHistoryCandidate,
     collect_memory_history_candidates,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.adapters.interfaces.console.theme import ERROR_HEX
 from memcommit.adapters.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,

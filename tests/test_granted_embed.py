@@ -12,10 +12,10 @@ import memcommit.application.ops as ops
 from memcommit.application.authority.access import GrantedReadStore, resolve_context_access
 from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Context, Memory
-from memcommit.context_snapshot import ContextSnapshotRef
-from memcommit.embed_runtime import MemoryStoreEmbedPort
+from memcommit.application.retained_history.context_snapshot import ContextSnapshotRef
+from memcommit.application.operations.embed.runtime import MemoryStoreEmbedPort
 from memcommit.adapters.interfaces.tui.operations.embed import build_embed_tui_setup
-from memcommit.profile_config import (
+from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileConfigError,
@@ -26,16 +26,16 @@ from memcommit.profile_config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.profiles import (
+from memcommit.application.operations.profile.model import (
     ProfileError,
     create_authority_grant,
     delete_authority_grant,
     update_authority_grant,
 )
-from memcommit.reference_application import ContextReferenceRequest
-from memcommit.reference_runtime import execute_context_reference
+from memcommit.application.operations.reference.application import ContextReferenceRequest
+from memcommit.application.operations.reference.runtime import execute_context_reference
 from memcommit.source_projection.presentation import source_display_text
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner(mix_stderr=False)

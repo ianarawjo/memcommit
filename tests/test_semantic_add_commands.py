@@ -12,13 +12,13 @@ import memcommit.commands.elaborate.command as elaborate_command
 import memcommit.commands.impact.process_local as impact_process_local
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.distill import DISTILL_OPERATION, DISTILL_PAYLOAD_MARKER
-from memcommit.distill_goal_fit import (
+from memcommit.application.operations.distill.model import DISTILL_OPERATION, DISTILL_PAYLOAD_MARKER
+from memcommit.application.operations.distill.goal_fit import (
     DISTILL_GOAL_FIT_OPERATION,
     DISTILL_GOAL_FIT_PAYLOAD_MARKER,
 )
-from memcommit.elaborate import ELABORATE_OPERATION, ELABORATE_PAYLOAD_MARKER
-from memcommit.store import MemoryStore, context_record_digest
+from memcommit.application.operations.elaborate.model import ELABORATE_OPERATION, ELABORATE_PAYLOAD_MARKER
+from memcommit.persistence.store import MemoryStore, context_record_digest
 from tests.distill_goal_fit_support import passing_distill_goal_fit_response
 from tests.elaborate_validation_support import (
     passing_elaborate_validation_response,

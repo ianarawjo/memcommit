@@ -5,7 +5,7 @@ import json
 
 import pytest
 
-from memcommit.duplicate_pipeline import (
+from memcommit.application.semantic.classification.duplicates import (
     DUPLICATE_PIPELINE_V1,
     DuplicatePipelineError,
     classify_duplicate_case,

@@ -18,7 +18,7 @@ from memcommit.application.operations.reference.application import (
     run_reference,
 )
 from memcommit.application.operations.reference.runtime import MemoryStoreReferencePort
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner(mix_stderr=False)

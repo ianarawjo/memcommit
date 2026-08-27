@@ -5,12 +5,12 @@ import uuid
 
 import pytest
 
-import memcommit.comparison as comparison_module
+import memcommit.application.operations.compare.ledger.model as comparison_module
 import memcommit.application.ops as ops
 import memcommit.study_scenarios.legacy.prewarm.compare as compare_prewarm_module
 import memcommit.study_scenarios.legacy.prewarm.update as update_prewarm_module
-import memcommit.update as update_module
-from memcommit.comparison import (
+import memcommit.application.operations.update.model as update_module
+from memcommit.application.operations.compare.ledger.model import (
     ComparisonAnalysis,
     ComparisonInput,
     ComparisonMember,
@@ -27,7 +27,7 @@ from memcommit.study_scenarios.legacy.prewarm.registry import (
     publish_artifact,
     replace_operation_artifacts,
 )
-from memcommit.update import AddOperation, UpdateSession, collect_update_inputs
+from memcommit.application.operations.update.model import AddOperation, UpdateSession, collect_update_inputs
 
 
 def _analysis(reference, compared) -> ComparisonAnalysis:

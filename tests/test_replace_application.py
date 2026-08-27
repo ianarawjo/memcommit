@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from memcommit.replace_application import (
+from memcommit.application.operations.replace.application import (
     FrozenReplaceContext,
     FrozenReplaceSource,
     ReplaceApplyResult,

@@ -54,7 +54,7 @@ def _run_blank_child() -> None:
 
 def _run_named_child() -> None:
     from memcommit.commands.ground.named_shell import run_named_ground_shell
-    from memcommit.ground import create_ground_session
+    from memcommit.application.operations.ground.model import create_ground_session
     from tests.test_ground_named_shell import proposal
 
     session = create_ground_session(
@@ -85,7 +85,7 @@ def _run_named_child() -> None:
 
 def _run_import_child() -> None:
     from memcommit.commands.shared.exact_command_review_shell import approve_exact_command
-    from memcommit.exact_command_review import ExactCommandReview
+    from memcommit.application.exact_command_review import ExactCommandReview
 
     approved = approve_exact_command(
         ExactCommandReview(

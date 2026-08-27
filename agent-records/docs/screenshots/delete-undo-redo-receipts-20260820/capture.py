@@ -159,7 +159,7 @@ def _verify(captures: dict[str, bytes], store_root: Path) -> None:
 
     if str(REPOSITORY_ROOT) not in sys.path:
         sys.path.insert(0, str(REPOSITORY_ROOT))
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root, create=False)
     if store.current_context_name() != "practice/2":

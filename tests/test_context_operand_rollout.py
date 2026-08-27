@@ -28,8 +28,8 @@ from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
 )
 from memcommit.context import AutoCheckpoint
-from memcommit.findings import AmbiguityReport, ConflictReport, DuplicateReport
-from memcommit.store import MemoryStore
+from memcommit.application.reviewing.quality.findings import AmbiguityReport, ConflictReport, DuplicateReport
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner(mix_stderr=False)

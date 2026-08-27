@@ -11,18 +11,18 @@ from typer.testing import CliRunner
 import memcommit.application.ops as ops
 from memcommit.application.authority.access import resolve_context_access
 from memcommit.adapters.console.entrypoint import app
-from memcommit.command_history import build_command_stacks
+from memcommit.application.retained_history.command_history import build_command_stacks
 from memcommit.context import MemoryRef
-from memcommit.dedun_scope import (
+from memcommit.application.operations.dedun.scope import (
     apply_recursive_dedun_scope,
     freeze_recursive_dedun_scope,
     prepare_recursive_dedun_scope,
 )
 from memcommit.application.operations.dedup.application import DedupConflictError
 from memcommit.application.operations.dedup.runtime import MemoryStoreDedupPort
-from memcommit.findings import DuplicateReport, FindingsError
-from memcommit.redundancy_scope import analyze_independent_redundancy_scope
-from memcommit.store import MemoryStore
+from memcommit.application.reviewing.quality.findings import DuplicateReport, FindingsError
+from memcommit.application.reviewing.quality.redundancy_scope import analyze_independent_redundancy_scope
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner(mix_stderr=False)

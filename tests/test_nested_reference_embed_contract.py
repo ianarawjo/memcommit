@@ -12,16 +12,16 @@ import pytest
 
 import memcommit.application.ops as ops
 from memcommit.context import Context, GrantedMemorySource, Memory, MemoryRef
-from memcommit.context_snapshot import ContextSnapshotRef
-from memcommit.embed_application import EmbedRequest, MemoryEmbedRequest
-from memcommit.embed_runtime import MemoryStoreEmbedPort, execute_embed
-from memcommit.reference_application import ContextReferenceRequest, ReferenceRequest
-from memcommit.reference_runtime import (
+from memcommit.application.retained_history.context_snapshot import ContextSnapshotRef
+from memcommit.application.operations.embed.application import EmbedRequest, MemoryEmbedRequest
+from memcommit.application.operations.embed.runtime import MemoryStoreEmbedPort, execute_embed
+from memcommit.application.operations.reference.application import ContextReferenceRequest, ReferenceRequest
+from memcommit.application.operations.reference.runtime import (
     MemoryStoreReferencePort,
     execute_context_reference,
     execute_reference,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def _visible_contents(context: Context) -> set[str]:

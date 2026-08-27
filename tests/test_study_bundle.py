@@ -8,7 +8,7 @@ import json
 import pytest
 
 import memcommit.study_scenarios.legacy.bundle as bundle_module
-import memcommit.store as store_module
+import memcommit.persistence.store as store_module
 from memcommit.context import Context, Memory
 from memcommit.study_scenarios.legacy.bundle import (
     StudyBundleError,
@@ -16,7 +16,7 @@ from memcommit.study_scenarios.legacy.bundle import (
     build_all_study_bundles,
     build_study_bundle,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.translate.view_store import (
     load_translation_catalog,
 )

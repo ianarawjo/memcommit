@@ -33,7 +33,7 @@ _BASE.ROWS = ROWS
 
 
 def _configure_store(store_root: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     paths = {
         "STORE_DIR": store_root,
@@ -57,7 +57,7 @@ def _configure_store(store_root: Path) -> None:
 class _CompareProvider:
     def complete(self, prompt, *, operation, output_schema=None):
         assert operation == "compare_contexts"
-        from memcommit.comparison_provider import COMPARISON_PAYLOAD_MARKER
+        from memcommit.application.operations.compare.ledger.provider import COMPARISON_PAYLOAD_MARKER
 
         payload = json.loads(prompt.split(COMPARISON_PAYLOAD_MARKER, 1)[1])
         reference_id = payload["frames"][0]["memories"][0]["memory_id"]
@@ -112,7 +112,7 @@ class _SeverProvider:
     def complete(self, prompt, *, operation, output_schema=None):
         type(self).calls += 1
         assert operation == "sever_context"
-        from memcommit.sever_provider import SEVER_PAYLOAD_MARKER
+        from memcommit.application.operations.sever.provider import SEVER_PAYLOAD_MARKER
 
         payload = json.loads(prompt.split(SEVER_PAYLOAD_MARKER, 1)[1])
         source_id = payload["source"]["memories"][0]["memory_id"]
@@ -139,7 +139,7 @@ class _SeverProvider:
 
 
 def _invoke(argv: list[str]) -> int:
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
 
     print("$ mem " + " ".join(argv), flush=True)
     try:
@@ -166,7 +166,7 @@ def _run_help(operation: str) -> None:
 
 def _run_merge() -> None:
     from memcommit.context import Memory
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()
     shared_uid = "00000000-0000-4000-8000-000000000001"
@@ -199,8 +199,8 @@ def _run_merge() -> None:
 
 def _run_compare() -> None:
     from memcommit.commands import compare as compare_command
-    from memcommit.comparison_store import comparison_analyses_dir
-    from memcommit.store import MemoryStore
+    from memcommit.application.operations.compare.ledger.store import comparison_analyses_dir
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()
     reference = _context(
@@ -231,7 +231,7 @@ def _run_compare() -> None:
 
 def _run_sever(*, mode: Literal["SELF_DEFAULT", "OTHER_SAVE"]) -> None:
     from memcommit.commands import sever as sever_command
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()
     _context(store, "capture/sever", "Namespace marker.")

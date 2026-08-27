@@ -42,7 +42,7 @@ from memcommit.adapters.interfaces.agent import (
     AgentToolRegistry,
     build_default_agent_tool_registry,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 class _RegistryQueryProvider:

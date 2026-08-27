@@ -2,70 +2,12 @@
 
 from __future__ import annotations
 
-import ast
-import importlib
 from pathlib import Path
-import pickle
 import subprocess
 import sys
 
-import pytest
-
-from tests.legacy_submodule_assertions import (
-    assert_legacy_root_submodule_is_centralized,
-)
-
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-MODULE_PAIRS = (
-    ("memcommit.help_application", "memcommit.application.operations.help.application"),
-    (
-        "memcommit.help_lookup_application",
-        "memcommit.application.operations.help.lookup_application",
-    ),
-)
-
-
-@pytest.mark.parametrize("legacy_name,canonical_name", MODULE_PAIRS)
-@pytest.mark.parametrize("legacy_first", (True, False), ids=("old-first", "new-first"))
-def test_help_module_identity_is_independent_of_import_order(
-    legacy_name: str,
-    canonical_name: str,
-    legacy_first: bool,
-) -> None:
-    first_name, second_name = (
-        (legacy_name, canonical_name)
-        if legacy_first
-        else (canonical_name, legacy_name)
-    )
-    program = f"""
-import importlib
-import sys
-
-first = importlib.import_module({first_name!r})
-second = importlib.import_module({second_name!r})
-legacy = importlib.import_module({legacy_name!r})
-canonical = importlib.import_module({canonical_name!r})
-
-assert first is second
-assert legacy is canonical
-assert sys.modules[{legacy_name!r}] is canonical
-assert sys.modules[{canonical_name!r}] is canonical
-"""
-
-    subprocess.run(
-        [sys.executable, "-c", program],
-        cwd=REPOSITORY_ROOT,
-        check=True,
-    )
-
-
-@pytest.mark.parametrize(
-    "relative_path",
-    ("src/memcommit/help_application.py", "src/memcommit/help_lookup_application.py"),
-)
-def test_help_legacy_facades_define_no_behavior(relative_path: str) -> None:
-    assert_legacy_root_submodule_is_centralized(relative_path)
 
 
 def test_help_operation_package_import_is_lazy() -> None:
@@ -82,21 +24,6 @@ assert "memcommit.application.operations.help.lookup_application" not in sys.mod
         cwd=REPOSITORY_ROOT,
         check=True,
     )
-
-
-def test_pre_relocation_help_globals_load_through_aliases() -> None:
-    application = importlib.import_module("memcommit.application.operations.help.application")
-    lookup = importlib.import_module("memcommit.application.operations.help.lookup_application")
-
-    restored_error = pickle.loads(
-        b"cmemcommit.help_application\nHelpApplicationInputError\n."
-    )
-    restored_plan = pickle.loads(
-        b"cmemcommit.help_lookup_application\nHelpLookupPlan\n."
-    )
-
-    assert restored_error is application.HelpApplicationInputError
-    assert restored_plan is lookup.HelpLookupPlan
 
 
 def test_production_help_consumers_use_the_operation_owner() -> None:

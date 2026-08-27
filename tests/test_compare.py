@@ -17,14 +17,14 @@ import memcommit.application.ops as ops
 import memcommit.commands.compare.command as compare_command
 import memcommit.commands.compare.sessions as compare_sessions_module
 from memcommit.adapters.console.entrypoint import app
-from memcommit.comparison import ComparisonInput, comparison_canonical_digest
-from memcommit.comparison_provider import (
+from memcommit.application.operations.compare.ledger.model import ComparisonInput, comparison_canonical_digest
+from memcommit.application.operations.compare.ledger.provider import (
     COMPARISON_PAYLOAD_MARKER,
     ComparisonProviderError,
     analyze_comparison,
     comparison_output_schema,
 )
-from memcommit.comparison_store import (
+from memcommit.application.operations.compare.ledger.store import (
     ConcurrentComparisonUpdateError,
     comparison_analysis_path,
     comparison_paths_for_context,
@@ -43,10 +43,10 @@ from memcommit.adapters.interfaces.tui.components.operation_launcher.session imp
     SessionNewReceipt,
     SessionOpenReceipt,
 )
-from memcommit.store import MemoryStore
-from memcommit.query_provider import CodexChatGPTProvider
-from memcommit.reference_application import ContextReferenceRequest
-from memcommit.reference_runtime import execute_context_reference
+from memcommit.persistence.store import MemoryStore
+from memcommit.providers.subscription import CodexChatGPTProvider
+from memcommit.application.operations.reference.application import ContextReferenceRequest
+from memcommit.application.operations.reference.runtime import execute_context_reference
 
 
 runner = CliRunner()
@@ -1644,7 +1644,7 @@ def test_concurrent_source_deletes_treat_already_removed_pair_as_clean(
         return paths
 
     monkeypatch.setattr(
-        "memcommit.comparison_store.comparison_paths_for_context",
+        "memcommit.application.operations.compare.ledger.store.comparison_paths_for_context",
         synchronized_preflight,
     )
     with ThreadPoolExecutor(max_workers=2) as executor:

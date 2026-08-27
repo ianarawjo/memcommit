@@ -12,7 +12,7 @@ touch the real ~/.mem directory.
 from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 runner = CliRunner(mix_stderr=False)
 

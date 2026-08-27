@@ -19,7 +19,7 @@ from memcommit.commands.shared.readable_context_catalog import (
 from memcommit.context import Memory, MemoryRef
 from memcommit.adapters.interfaces.console.selection import FlatMultiSelectionState, SelectionOption
 from memcommit.adapters.interfaces.console.selection.tui.multiple import render_vertical_multi_choice_rows
-from memcommit.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import MemoryStore, context_record_digest
 
 
 def _catalog(store: MemoryStore, context_name: str):

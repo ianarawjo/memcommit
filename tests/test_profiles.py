@@ -18,7 +18,7 @@ from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
 import memcommit.application.operations.init_study.publication as init_study_publication_module
-import memcommit.profiles as profiles_module
+import memcommit.application.operations.profile.model as profiles_module
 from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.switch.command import (
     _granted_picker_state,
@@ -36,7 +36,7 @@ from memcommit.adapters.interfaces.console.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )
-from memcommit.profile_config import (
+from memcommit.application.operations.profile.config import (
     GRANT_RESOURCE_CONTEXT_TREE,
     AuthorityGrant,
     GrantContextBinding,
@@ -48,7 +48,7 @@ from memcommit.profile_config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.profiles import (
+from memcommit.application.operations.profile.model import (
     ProfileError,
     create_authority_grant,
     resolve_granted_context_view,
@@ -57,9 +57,9 @@ from memcommit.profiles import (
 from memcommit.application.operations.query.granted_source import (
     load_authority_query_source,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.source_projection.presentation import source_display_text
-from memcommit.study_action_log import StudyActionLedger
+from memcommit.persistence.command_ledger.study_actions import StudyActionLedger
 
 
 runner = CliRunner(mix_stderr=False)

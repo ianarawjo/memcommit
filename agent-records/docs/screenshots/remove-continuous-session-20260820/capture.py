@@ -39,7 +39,7 @@ SUPPORT = _load_capture_support()
 
 
 def _configure_store(root: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     store_module.STORE_DIR = root
 
@@ -47,7 +47,7 @@ def _configure_store(root: Path) -> None:
 def _seed_store():
     import memcommit.application.ops as ops
     from memcommit.context import Memory
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()
     context = ops.init("curation/inbox")
@@ -63,7 +63,7 @@ def _seed_store():
 
 
 def _child(store_root: Path) -> None:
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
 
     _configure_store(store_root)
     os.environ["MEMCOMMIT_TEST_DISABLE_ATTEMPT_LOG"] = "1"
@@ -272,7 +272,7 @@ def _verify(screens: dict[str, str], raw: bytes, store_root: Path) -> None:
 
     if str(REPOSITORY_ROOT) not in sys.path:
         sys.path.insert(0, str(REPOSITORY_ROOT))
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root, create=False)
     remaining = store.load_direct("curation/inbox")

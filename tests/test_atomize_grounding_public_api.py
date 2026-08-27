@@ -19,12 +19,12 @@ from memcommit.adapters.python_api import (
     AtomizeGroundingSessionResult,
     MemCommitClient,
 )
-from memcommit.atomize_grounding import (
+from memcommit.application.operations.atomize.grounding import (
     AtomizeGroundingAnchor,
     AtomizeGroundingBindings,
     AtomizeGroundingSession,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 REPOSITORY = Path(__file__).parents[1]

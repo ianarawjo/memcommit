@@ -11,7 +11,7 @@ from typer.testing import CliRunner
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Memory, MemoryRef
-from memcommit.memory_transfer_application import (
+from memcommit.application.operations.memory_transfer.application import (
     CopyMemoriesRequest,
     MemoryTransferError,
     MemoryTransferStalePlanError,
@@ -19,8 +19,8 @@ from memcommit.memory_transfer_application import (
     run_copy,
     run_move,
 )
-from memcommit.memory_transfer_runtime import MemoryStoreMemoryTransferPort
-from memcommit.store import MemoryStore
+from memcommit.application.operations.memory_transfer.runtime import MemoryStoreMemoryTransferPort
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner(mix_stderr=False)
@@ -138,7 +138,7 @@ def test_fresh_copy_uid_is_new_across_the_complete_local_store(
             return original_uuid4()
 
     monkeypatch.setattr(
-        "memcommit.memory_transfer_runtime.uuid.uuid4",
+        "memcommit.application.operations.memory_transfer.runtime.uuid.uuid4",
         controlled_uuid4,
     )
 

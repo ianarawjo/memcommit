@@ -18,7 +18,7 @@ from memcommit.context import Context, Memory
 
 
 GROUND_WORKSPACE_SCHEMA_VERSION = 1
-GROUND_WORKSPACE_MANIFEST_KIND = "memcommit.ground-workspace"
+GROUND_WORKSPACE_MANIFEST_KIND = "memcommit.application.operations.ground.model-workspace"
 GroundWorkspaceStatus = Literal["OPEN", "GROUNDED", "DEFERRED"]
 GroundWorkspaceLane = Literal[
     "goals",

@@ -5,13 +5,13 @@ from __future__ import annotations
 import pytest
 
 import memcommit.application.ops as ops
-from memcommit.goal_focus import GoalFocusError
-from memcommit.goal_focus_runtime import (
+from memcommit.application.semantic.goal_focus import GoalFocusError
+from memcommit.application.semantic.goal_focus_runtime import (
     freeze_goal_focus_context,
     freeze_goal_focus_operand,
     revalidate_goal_focus,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def test_goal_operand_freezes_context_memory_and_inline_with_one_contract(

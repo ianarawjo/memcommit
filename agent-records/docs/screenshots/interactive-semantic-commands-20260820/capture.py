@@ -104,7 +104,7 @@ def _sever_start() -> None:
 
 
 def _update_view(*, accept_only: bool = False):
-    from memcommit.resolution_workbench import (
+    from memcommit.application.resolution.workbench import (
         ResolutionItem,
         ResolutionWorkbenchView,
     )
@@ -148,7 +148,7 @@ def _update_view(*, accept_only: bool = False):
 
 
 def _turn() -> None:
-    from memcommit.interactive_command_review import update_turn_command_review
+    from memcommit.application.interactive_command_review import update_turn_command_review
     from memcommit.adapters.interfaces.tui.workbenches.resolution.session_shell import (
         ResolutionGlobalStrategy,
         run_resolution_workbench_shell,
@@ -206,7 +206,7 @@ def _apply_review() -> None:
 
 
 def _configure_store(root: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     for name, value in {
         "STORE_DIR": root,
@@ -232,9 +232,9 @@ def _stale_turn() -> None:
     with tempfile.TemporaryDirectory(prefix="stale-update-command-") as directory:
         _configure_store(Path(directory) / ".mem")
         import memcommit.application.ops as ops
-        from memcommit.cli import app
-        from memcommit.store import MemoryStore
-        from memcommit.update import plan_update, update_session_record_digest
+        from memcommit.adapters.console.entrypoint import app
+        from memcommit.persistence.store import MemoryStore
+        from memcommit.application.operations.update.model import plan_update, update_session_record_digest
         from tests.test_update import PlanProvider, _one_edit_response
 
         store = MemoryStore()

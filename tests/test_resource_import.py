@@ -9,8 +9,8 @@ from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Context, Memory, MemoryRef
-from memcommit.profile_config import load_profile_registry, profile_store_dir
-from memcommit.store import MemoryStore
+from memcommit.application.operations.profile.config import load_profile_registry, profile_store_dir
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner(mix_stderr=False)

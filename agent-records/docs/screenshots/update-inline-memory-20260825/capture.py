@@ -68,7 +68,7 @@ class _InlineUpdateProvider:
 
 def _initialize_store(store_root: Path):
     import memcommit.application.ops as ops
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root)
     if not store.context_exists(TARGET_NAME):
@@ -95,7 +95,7 @@ def _patch_update_command(store, provider_factory) -> None:
 def _run_update_cli(args: list[str]) -> int:
     import click
 
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
 
     try:
         result = app(prog_name="mem", args=["update", *args], standalone_mode=False)
@@ -145,7 +145,7 @@ def _forbidden_provider(counter: dict[str, int]):
 
 
 def _run_repeat_child(store_root: Path) -> None:
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root, create=False)
     counter = {"calls": 0}

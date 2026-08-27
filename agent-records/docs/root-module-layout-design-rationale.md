@@ -14,8 +14,8 @@ the implementation that owns it without first knowing the repository history.
 ## Invariants
 
 - Function and class bodies do not change as part of relocation.
-- Existing root import paths remain available through module-identity aliases
-  unless a later ownership decision explicitly removes that historical path.
+- Historical root import paths are intentionally unavailable; implementation,
+  tests, tools, and capture scripts import the canonical owner directly.
 - Internal implementation imports point at canonical owner modules after each
   relocation batch.
 - New package initializers remain dependency-neutral. Public convenience
@@ -34,12 +34,13 @@ the implementation that owns it without first knowing the repository history.
 
 Every baseline root module has one role:
 
-- compatibility-facade: an already migrated historical import path;
+- historical-compatibility-facade: a forwarding path retained in the frozen
+  baseline inventory but removed from the executable package;
 - operation-implementation: code named for and consumed by one operation
   family;
 - shared-concept-implementation: reusable code with a narrower named owner;
 - retired-prototype: a frozen baseline name whose canonical implementation and
-  compatibility alias were deliberately removed with the feature;
+  compatibility path were deliberately removed with the feature;
 - root-boundary: one of the deliberately retained public or composition
   boundaries.
 
@@ -50,33 +51,25 @@ while the JSON preserves exact paths for mechanical checks.
 ## Compatibility boundary
 
 Physical root facades defeated the navigation goal even after their
-implementations moved: a file browser still presented 242 historical names as
-peers of the original seven real root boundaries. The facades are therefore consolidated
-into the exact generated map in
-`memcommit.compatibility._legacy_alias_map` and one process-local finder in
-`memcommit.compatibility.legacy_submodules`.
+implementations moved. The first relocation pass therefore centralized the
+historical paths in generated maps and one process-local import finder. On
+2026-08-27 that compatibility decision was explicitly withdrawn because no
+external Python-path consumer or continuing compatibility intent remained.
+The finder, generated maps, and forwarding package were removed together, and
+repository-owned imports were migrated to canonical owners.
 
-The finder recognizes only the frozen historical names. It imports a target on
-first use, returns the exact canonical module object, and restores the
-canonical import metadata that Python temporarily projects while resolving an
-alias. This preserves legacy imports, monkeypatch identity, reload behavior,
-and serialized global lookup without eagerly importing 242 implementations or
-leaving 242 physical files at the package root.
+This deliberately breaks imports and Python serialized globals that name the
+removed modules. It does not remove CLI commands, change command options, or
+reinterpret durable memcommit data schemas. Retaining a package `__getattr__`,
+eager `sys.modules` entries, or thin forwarding files was rejected because
+each would keep an unsupported second module vocabulary alive and allow new
+internal dependencies to drift back to historical names.
 
-A package `__getattr__` was insufficient because it does not implement
-`import memcommit.legacy_submodule`. Eagerly populating `sys.modules` would
-restore that syntax but would assemble the entire application whenever the
-root package loaded. Deleting compatibility outright would be simpler but
-would unnecessarily break historical imports and saved global references in a
-pass whose stated boundary is physical layout rather than behavior.
-
-The alias catalog does not promise that every historical name is permanently
-public. On 2026-08-26 `memcommit.flow_placeholder` became the first retired
-baseline entry when the per-Memory Query catalog, canonical renderer, font
-assets, and runtime dependency were removed together. The frozen plan keeps
-that name and reason visible but deliberately omits it from the generated alias
-map. This makes retirement an explicit compatibility decision rather than a
-missing target or an untracked deletion.
+On 2026-08-26 `memcommit.flow_placeholder` became the first retired baseline
+entry when the per-Memory Query catalog, canonical renderer, font assets, and
+runtime dependency were removed together. The frozen plan keeps that name and
+reason visible but assigns no canonical target, making retirement explicit
+rather than a missing target or an untracked deletion.
 
 On 2026-08-27 the executable Typer registry moved from the package root to
 `memcommit.adapters.console.entrypoint`. The `memcommit.cli` import was removed
@@ -149,18 +142,13 @@ passing, and introduce no new behavioral failure. Static ownership tests and
 generated callable catalogs may change because their subject is the path
 layout itself; those records are updated only after the canonical moves settle.
 The layout check requires exactly four root Python files, rejects every
-physical compatibility facade and internal legacy import, and imports every
-retained compatibility alias (currently 241) in fresh
-interpreters in both legacy-first and canonical-first order. It separately
-rejects the removed `memcommit.cli`, `memcommit.ops`, and
-`memcommit.provenance` paths, and
-verifies exact module identity and canonical `__spec__` ownership so an earlier
-test import cannot mask a package-initialization cycle or metadata regression.
+physical compatibility facade and internal historical import, verifies every
+canonical target, and proves in a fresh interpreter that no removed root or
+semantic-execution package path is restored by a runtime hook.
 
 ## Non-goals
 
-The original physical-layout pass did not rename callables, split large
-modules, consolidate duplicate policies, remove historical names, or resolve
-known functional failures. A later feature-removal change may retire one
-historical name only when it records that state in the frozen plan and removes
-the canonical implementation in the same change.
+This change does not rename callables, split large modules, consolidate
+duplicate policies, remove canonical implementations, or resolve known
+functional failures. Historical Python paths are removed as a class; operation
+behavior and durable compatibility remain separate decisions.

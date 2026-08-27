@@ -12,14 +12,14 @@ from memcommit.application.authority.access import ContextAccess
 from memcommit.core.context_targeting.search import load_readable_search_roots
 from memcommit.application.operations.search.application import FindSearchRequest
 from memcommit.application.operations.search.runtime import execute_find_search
-from memcommit.meld import MeldError, MeldFrame
-from memcommit.semantic_disclosure import (
+from memcommit.application.operations.meld.model import MeldError, MeldFrame
+from memcommit.application.semantic.disclosure import (
     SemanticDisclosureError,
     require_semantic_disclosure_authority,
 )
 from memcommit.application.operations.sever.application import SeverApplicationError
 from memcommit.application.operations.sever.runtime import capture_sever_binding
-from memcommit.summarize import SummarizeError, collect_summary_scope
+from memcommit.application.operations.summarize.model import SummarizeError, collect_summary_scope
 
 
 def _uid() -> str:

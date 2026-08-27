@@ -72,8 +72,8 @@ application does not call the public facade.
 
 The implementation is owned by `memcommit.application.operations.delete.application` and
 `memcommit.application.operations.delete.runtime`. The former top-level module paths are
-true module aliases, so legacy imports and monkeypatches resolve to those same
-implementation modules rather than to copied re-exports.
+intentionally unavailable after the repository-wide historical Python import
+cleanup; internal callers and monkeypatch targets use these canonical owners.
 
 This slice does not make Context deletion checkpoint-restorable, group a picker
 session or variadic argv batch into one atomic Undo unit, permit

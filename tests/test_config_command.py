@@ -7,7 +7,7 @@ import json
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.config as config_module
+import memcommit.configuration.config as config_module
 from memcommit.adapters.console.entrypoint import app
 
 

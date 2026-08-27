@@ -180,7 +180,7 @@ def _invoke(store, argv: list[str]) -> None:
 
 
 def _child_apply(store_root: Path) -> None:
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root)
     _initialize(store)
@@ -199,7 +199,7 @@ def _child_apply(store_root: Path) -> None:
 
 
 def _child_review(store_root: Path) -> None:
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root, create=False)
     _invoke(store, ["review", "atomize"])
@@ -211,7 +211,7 @@ def _child_review(store_root: Path) -> None:
 
 
 def _child_verify(store_root: Path) -> None:
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root, create=False)
     _invoke(store, ["review", "atomize", "--snapshot"])

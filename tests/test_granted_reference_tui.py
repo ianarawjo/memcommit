@@ -15,7 +15,7 @@ from memcommit.adapters.interfaces.tui.operations.reference import (
     build_reference_tui_setup,
     choose_reference_setup,
 )
-from memcommit.profile_config import (
+from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
@@ -23,11 +23,11 @@ from memcommit.profile_config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.profiles import create_authority_grant, update_authority_grant
-from memcommit.reference_application import FrozenReferencePlan, ReferenceRequest
-from memcommit.reference_runtime import MemoryStoreReferencePort
+from memcommit.application.operations.profile.model import create_authority_grant, update_authority_grant
+from memcommit.application.operations.reference.application import FrozenReferencePlan, ReferenceRequest
+from memcommit.application.operations.reference.runtime import MemoryStoreReferencePort
 from memcommit.source_projection.presentation import source_display_text
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 _REQUIRED = ("READ", "DERIVE", "EXPORT", "SAVE_ANALYSIS")

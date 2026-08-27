@@ -21,7 +21,7 @@ from memcommit.application.operations.query.granted_runtime import (
     execute_granted_query_read,
     execute_granted_query_request,
 )
-from memcommit.profile_config import (
+from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
@@ -29,12 +29,12 @@ from memcommit.profile_config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.profiles import (
+from memcommit.application.operations.profile.model import (
     ProfileError,
     create_authority_grant,
     delete_authority_grant,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 SECRET = "The north utility tunnel opens only after 18:00."

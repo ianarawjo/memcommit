@@ -8,16 +8,16 @@ import uuid
 
 import pytest
 
-import memcommit.context_init_application as context_init_application
-from memcommit.context_init_application import (
+import memcommit.application.operations.context_init.application as context_init_application
+from memcommit.application.operations.context_init.application import (
     ContextInitError,
     ContextInitRequest,
     CreatedContext,
     plan_context_init,
     run_context_init,
 )
-import memcommit.context_init_runtime as context_init_runtime
-from memcommit.context_init_runtime import (
+import memcommit.application.operations.context_init.runtime as context_init_runtime
+from memcommit.application.operations.context_init.runtime import (
     execute_context_init,
     prepare_context_init,
 )
@@ -26,7 +26,7 @@ from memcommit.adapters.interfaces.tui.operations.context_init import (
     run_context_init_tui,
 )
 import memcommit.application.ops as ops
-from memcommit.store import ConcurrentContextUpdateError, MemoryStore
+from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 
 
 def _created(name: str, seed: int) -> CreatedContext:

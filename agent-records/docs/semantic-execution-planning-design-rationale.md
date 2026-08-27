@@ -60,13 +60,11 @@ a Memory/Context domain rule. The move changes no budget, strategy, batching,
 coverage, progress, provider, or reconciliation behavior. Production and test
 imports use the application-owned path.
 
-The former package and all seven former child-module paths remain exact lazy
-aliases through the centralized compatibility finder. Legacy-first and
-canonical-first imports return the same canonical module objects, preserving
-class identity and serialized global lookup without leaving a second physical
-implementation. This compatibility boundary is intentionally limited to the
-package relocation; it does not classify or relocate the broader
-`memcommit.semantic` namespace.
+The former package and all seven former child-module paths were initially lazy
+aliases, but that Python-path compatibility was explicitly removed on
+2026-08-27. Repository-owned callers use the application path, and serialized
+Python globals naming the former package are no longer supported. This does
+not classify or relocate the broader `memcommit.semantic` namespace.
 
 The shared coverage layer also supplies the narrow provider-I/O contract used
 by relation operations: an exact-count source-assignment array, a frozen alias

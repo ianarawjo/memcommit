@@ -66,14 +66,14 @@ def _save_fixture(store, *, name: str, content: str) -> None:
 
 def _prepare(home: Path) -> tuple[str, Path]:
     os.environ["HOME"] = str(home)
-    from memcommit.profile_config import (
+    from memcommit.application.operations.profile.config import (
         ProfileEntry,
         ProfileRegistry,
         profile_store_dir,
         virtual_authoring_registry,
     )
-    from memcommit.profiles import _write_registry
-    from memcommit.store import MemoryStore
+    from memcommit.application.operations.profile.model import _write_registry
+    from memcommit.persistence.store import MemoryStore
 
     authoring = virtual_authoring_registry().active
     _save_fixture(
@@ -115,7 +115,7 @@ def _prepare(home: Path) -> tuple[str, Path]:
 def _spawn(home: Path, *args: str):
     command = (
         f"stty rows {ROWS} cols {COLS}; stty size; "
-        f"exec {shlex.join([sys.executable, '-m', 'memcommit.cli', *args])}"
+        f"exec {shlex.join([sys.executable, '-m', 'memcommit.adapters.console.entrypoint', *args])}"
     )
     recorder = HELPERS._Recorder()
     child = pexpect.spawn(
@@ -215,7 +215,7 @@ def _capture_profile_flow(home: Path, uid: str, store_root: Path) -> None:
     child.send("q")
     _finish(child, recorder)
 
-    from memcommit.profile_config import load_profile_registry, profile_store_dir
+    from memcommit.application.operations.profile.config import load_profile_registry, profile_store_dir
 
     registry = load_profile_registry()
     renamed = registry.by_name("capture-renamed")
@@ -236,7 +236,7 @@ def _capture_combined_help(home: Path) -> None:
     import click
     from typer.main import get_command
 
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
     from memcommit.commands.help_inventory.command import (
         _ordered_help_entries,
         command_entries,
@@ -288,7 +288,7 @@ def main() -> None:
         _capture_combined_help(home)
 
         direct = subprocess.run(
-            [sys.executable, "-m", "memcommit.cli", "rename", "capture-sibling", "sibling-renamed"],
+            [sys.executable, "-m", "memcommit.adapters.console.entrypoint", "rename", "capture-sibling", "sibling-renamed"],
             cwd=ROOT,
             env=_environment(home),
             text=True,

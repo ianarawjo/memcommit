@@ -23,8 +23,8 @@ from memcommit.commands.share.viewer import (
     share_memories_text,
 )
 from memcommit.context import AutoCheckpoint, Context, Memory
-from memcommit.session_workbench_navigation import SessionWorkbenchNavigation
-from memcommit.profile_config import (
+from memcommit.application.reviewing.session_navigation import SessionWorkbenchNavigation
+from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     GRANT_RESOURCE_CONTEXT_TREE,
@@ -36,8 +36,8 @@ from memcommit.profile_config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.store import MemoryStore, context_record_digest
-from memcommit.share import (
+from memcommit.persistence.store import MemoryStore, context_record_digest
+from memcommit.application.operations.share.model import (
     ShareError,
     deliver_prepared_share,
     list_share_sources,

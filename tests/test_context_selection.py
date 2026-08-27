@@ -7,7 +7,6 @@ from memcommit.core.context_targeting.resolution import (
     expand_lexical_context_names,
     order_context_names_by_hierarchy,
 )
-from memcommit.core.context_targeting.loading import load_context_scope
 from memcommit.core.context_targeting.tui.reach import (
     ContextReachState,
     ContextReachViewState,
@@ -26,12 +25,6 @@ from memcommit.core.context_targeting.tui.tree import (
     context_subtree_names,
     visible_context_rows,
 )
-
-
-def test_legacy_context_scope_module_is_a_thin_compatibility_facade():
-    from memcommit.context_scope import load_context_scope as legacy_loader
-
-    assert legacy_loader is load_context_scope
 
 
 def test_lexical_scope_expansion_deduplicates_overlapping_targets():

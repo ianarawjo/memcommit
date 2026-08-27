@@ -7,8 +7,8 @@ from pathlib import Path
 import subprocess
 import sys
 
-import memcommit.store as store_module
-from memcommit.store import MemoryStore
+import memcommit.persistence.store as store_module
+from memcommit.persistence.store import MemoryStore
 
 
 def test_explicit_root_never_resolves_the_active_profile(tmp_path, monkeypatch):

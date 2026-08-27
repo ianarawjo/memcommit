@@ -14,7 +14,7 @@ from memcommit.adapters.interfaces.agent.forget import (
     ForgetAgentAdapter,
     forget_agent_tool_schema,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 class _ForgetProvider:

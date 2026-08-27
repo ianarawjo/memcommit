@@ -15,14 +15,14 @@ from memcommit.adapters.interfaces.tui.components.direct_item_placement import (
     direct_item_placement_rows,
     render_direct_item_tree_fragments,
 )
-from memcommit.embed_application import (
+from memcommit.application.operations.embed.application import (
     EmbedPlacement,
     EmbedRequest,
     FrozenMemoryEmbedPlan,
     MemoryEmbedRequest,
     run_embed,
 )
-from memcommit.embed_runtime import MemoryStoreEmbedPort
+from memcommit.application.operations.embed.runtime import MemoryStoreEmbedPort
 from memcommit.adapters.interfaces.cli import embed as embed_command
 from memcommit.adapters.interfaces.tui.operations.embed import (
     choose_embed_setup,
@@ -32,7 +32,7 @@ from memcommit.adapters.interfaces.tui.operations.embed import (
 from memcommit.context import Context, Memory
 from memcommit.core.context_targeting.tui.tree import ContextTreeRow
 from memcommit.source_projection.model import SourceForm, SourceReach
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner(mix_stderr=False)

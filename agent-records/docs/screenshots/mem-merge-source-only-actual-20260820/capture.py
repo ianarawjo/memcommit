@@ -41,7 +41,7 @@ def _run_child() -> None:
     from memcommit.commands.merge.command import cmd as merge_command
     from memcommit.commands.show.command import cmd as show_command
     from memcommit.context import Memory
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     with tempfile.TemporaryDirectory(prefix="mem-merge-actual-capture-") as directory:
         _CAPTURE._configure_isolated_store(Path(directory) / ".mem")

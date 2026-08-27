@@ -14,12 +14,12 @@ from memcommit.adapters.python_api import (
     ComparisonResult,
     MemCommitClient,
 )
-from memcommit.comparison_provider import COMPARISON_PAYLOAD_MARKER
-from memcommit.comparison_store import (
+from memcommit.application.operations.compare.ledger.provider import COMPARISON_PAYLOAD_MARKER
+from memcommit.application.operations.compare.ledger.store import (
     load_comparison_analysis,
     save_comparison_analysis,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 class _CompareProvider:

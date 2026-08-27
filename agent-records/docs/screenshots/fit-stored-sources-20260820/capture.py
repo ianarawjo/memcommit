@@ -42,7 +42,7 @@ class _Provider:
         self.delay = delay
 
     def complete(self, prompt, *, operation, output_schema=None):
-        from memcommit.fit_judgment import FIT_JUDGMENT_PAYLOAD_MARKER
+        from memcommit.application.operations.fit.judgment import FIT_JUDGMENT_PAYLOAD_MARKER
 
         type(self).calls += 1
         assert operation == "fit_propositions"
@@ -76,14 +76,14 @@ class _Provider:
 
 
 def _use_store_root(root: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     store_module.STORE_DIR = root
 
 
 def _prepare_store(root: Path):
     import memcommit.application.ops as ops
-    from memcommit.store import MemoryStore, context_record_digest
+    from memcommit.persistence.store import MemoryStore, context_record_digest
 
     store = MemoryStore(root=root)
     current = ops.init("fit/current")
@@ -102,8 +102,8 @@ def _prepare_store(root: Path):
 
 def _print_verification(store, current, policies, digests) -> None:
     from memcommit.commands import show as show_command
-    from memcommit.fit_store import FitStore
-    from memcommit.store import context_record_digest
+    from memcommit.application.operations.fit.store import FitStore
+    from memcommit.persistence.store import context_record_digest
 
     print("VIEWER CLOSED · READ-ONLY VERIFICATION")
     print("$ mem show --context fit/current")
@@ -152,8 +152,8 @@ def _run_viewer_child(store_root: Path) -> None:
 def _run_overlap_child(store_root: Path) -> None:
     import click
     import memcommit.commands.fit.command as fit_command
-    from memcommit.fit_store import FitStore
-    from memcommit.store import context_record_digest
+    from memcommit.application.operations.fit.store import FitStore
+    from memcommit.persistence.store import context_record_digest
 
     _Provider.calls = 0
     _use_store_root(store_root)

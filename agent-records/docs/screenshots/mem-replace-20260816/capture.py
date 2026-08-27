@@ -79,7 +79,7 @@ def _run_child(kind: str) -> None:
 
     import memcommit.commands.replace.command as replace_command
     from memcommit.context import Context
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     with tempfile.TemporaryDirectory(prefix="memcommit-replace-capture-") as directory:
         store = MemoryStore(root=Path(directory) / ".mem")

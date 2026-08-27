@@ -14,7 +14,7 @@ from memcommit.application.operations.query.reference_application import (
     run_query_reference,
 )
 from memcommit.application.operations.query.reference_runtime import execute_query_reference
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def _request(**overrides) -> QueryReferenceRequest:

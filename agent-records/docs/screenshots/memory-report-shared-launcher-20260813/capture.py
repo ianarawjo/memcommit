@@ -34,7 +34,7 @@ _BASE.ROWS = ROWS
 
 
 def _isolate_store(root: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     store_dir = root / ".mem"
     assignments = {
@@ -59,7 +59,7 @@ def _isolate_store(root: Path) -> None:
 def _prepare_fixture() -> str:
     from memcommit.commands import add, delete, edit, init, switch
     from memcommit.context import Memory
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     # Invoke the same command functions directly so this focused capture does
     # not depend on unrelated CLI-module imports elsewhere in the prototype.

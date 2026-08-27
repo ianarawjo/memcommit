@@ -1580,7 +1580,7 @@ def _comparison_meld_assessment(
             issue_uid = str(
                 uuid.uuid5(
                     uuid.UUID(relation.uid),
-                    "memcommit.meld.materialization-review.v1",
+                    "memcommit.application.operations.meld.model.materialization-review.v1",
                 )
             )
             scoped = relation.kind == "SCOPED"

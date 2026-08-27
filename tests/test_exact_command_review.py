@@ -3,7 +3,7 @@
 from memcommit.commands.shared.exact_command_review import (
     ExactCommandReview as LegacyCommandReview,
 )
-from memcommit.exact_command_review import ExactCommandReview
+from memcommit.application.exact_command_review import ExactCommandReview
 from memcommit.adapters.interfaces.tui.components.exact_command_review import (
     ExactCommandReview as TuiCommandReview,
     render_exact_command_review,

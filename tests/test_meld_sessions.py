@@ -15,8 +15,8 @@ from memcommit.commands.meld.sessions import (
     reload_selected_meld_session,
 )
 from memcommit.adapters.interfaces.tui.components.operation_launcher.session import SessionNewReceipt, SessionOpenReceipt
-from memcommit.meld import MeldSession
-from memcommit.store import MemoryStore
+from memcommit.application.operations.meld.model import MeldSession
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner()

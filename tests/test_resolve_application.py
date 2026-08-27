@@ -27,7 +27,7 @@ from memcommit.adapters.interfaces.agent import (
     build_default_agent_tool_registry,
 )
 from memcommit.adapters.interfaces.cli.resolve import render_resolve_plain
-from memcommit.profile_config import (
+from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
@@ -35,7 +35,7 @@ from memcommit.profile_config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.profiles import create_authority_grant, update_authority_grant
+from memcommit.application.operations.profile.model import create_authority_grant, update_authority_grant
 from memcommit.adapters.interfaces.tui.operations.resolve import (
     project_resolve_analysis,
     resolve_candidate_exact_review,
@@ -50,10 +50,10 @@ from memcommit.application.operations.resolve.application import (
     run_resolve,
 )
 from memcommit.application.operations.resolve.runtime import MemoryStoreResolvePort
-from memcommit.resolve_rules import resolve_ruleset_prompt_payload
-from memcommit.resolve_semantic import ProviderResolveSemanticPort
-from memcommit.review import direct_context_digest
-from memcommit.store import MemoryStore
+from memcommit.application.operations.resolve.rules import resolve_ruleset_prompt_payload
+from memcommit.application.operations.resolve.semantic import ProviderResolveSemanticPort
+from memcommit.application.operations.review.model import direct_context_digest
+from memcommit.persistence.store import MemoryStore
 
 
 FIT_MARKER = "FIT PROPOSITION PAYLOAD:\n"

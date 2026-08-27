@@ -25,7 +25,7 @@ DOWN = "\x1b[B"
 
 
 def _configure_store(root: Path):
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     store_module.STORE_DIR = root
     return store_module.MemoryStore(root=root)
@@ -47,7 +47,7 @@ def _prepare_store(root: Path):
 
 
 def _run_child(root: Path) -> None:
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
     from memcommit.commands import distill as command
 
     store, cases, other = _prepare_store(root)

@@ -24,15 +24,15 @@ from memcommit.context import (
     QueryContextRef,
 )
 from memcommit.core.context_targeting.loading import load_context_scope
-from memcommit.goal_focus import inline_goal_focus
-from memcommit.goal_focus_runtime import freeze_goal_focus_operand
+from memcommit.application.semantic.goal_focus import inline_goal_focus
+from memcommit.application.semantic.goal_focus_runtime import freeze_goal_focus_operand
 from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
     reconstruct_memory_history,
 )
-from memcommit.resolution_workbench import ResolutionWorkbenchAction
-from memcommit.store import ConcurrentContextUpdateError, MemoryStore
-from memcommit.update_receipt_store import UpdateReceiptStore
-from memcommit.update import (
+from memcommit.application.resolution.workbench import ResolutionWorkbenchAction
+from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
+from memcommit.application.operations.update.receipt_store import UpdateReceiptStore
+from memcommit.application.operations.update.model import (
     UPDATE_INLINE_MEMORY_SCHEMA_VERSION,
     UPDATE_GOAL_FOCUS_SCHEMA_VERSION,
     AddOperation,

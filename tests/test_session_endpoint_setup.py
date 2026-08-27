@@ -31,7 +31,7 @@ from memcommit.commands.shared.context_picker import ContextMemoryRow, context_m
 from memcommit.core.context_targeting.tui.reach import ContextReachState
 from memcommit.core.context_targeting.tui.selection import ContextSelectionState
 from memcommit.core.context_targeting.tui.tree import ContextTreeState, build_context_tree
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def test_horizontal_choice_clamps_and_renders_active_value():

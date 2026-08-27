@@ -17,8 +17,8 @@ from memcommit.application.operations.query.ordinary_application import (
     run_ordinary_query,
 )
 from memcommit.application.operations.query.ordinary_runtime import execute_ordinary_query
-from memcommit.search import SearchCandidate
-from memcommit.store import MemoryStore
+from memcommit.application.operations.search.model import SearchCandidate
+from memcommit.persistence.store import MemoryStore
 
 
 def _candidate(content: str = "One authorized answer fact.") -> SearchCandidate:

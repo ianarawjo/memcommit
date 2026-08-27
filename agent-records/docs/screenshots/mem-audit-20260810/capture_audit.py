@@ -179,7 +179,7 @@ def _spawn(environment: dict[str, str], *arguments: str):
 
     return pexpect.spawn(
         sys.executable,
-        ["-m", "memcommit.cli", *arguments],
+        ["-m", "memcommit.adapters.console.entrypoint", *arguments],
         cwd=str(REPOSITORY_ROOT),
         env=environment,
         dimensions=(ROWS, COLUMNS),
@@ -189,8 +189,8 @@ def _spawn(environment: dict[str, str], *arguments: str):
 
 
 def _new_audit_uid(before: set[str]) -> str:
-    from memcommit.quality_audit_store import QualityAuditStore
-    from memcommit.store import MemoryStore
+    from memcommit.application.reviewing.quality.audit_store import QualityAuditStore
+    from memcommit.persistence.store import MemoryStore
 
     sessions = [
         session
@@ -205,9 +205,9 @@ def _new_audit_uid(before: set[str]) -> str:
 
 
 def main() -> None:
-    from memcommit.quality_audit import quality_audit_resolution_view
-    from memcommit.quality_audit_store import QualityAuditStore
-    from memcommit.store import MemoryStore
+    from memcommit.application.reviewing.quality.audit import quality_audit_resolution_view
+    from memcommit.application.reviewing.quality.audit_store import QualityAuditStore
+    from memcommit.persistence.store import MemoryStore
 
     environment = dict(os.environ)
     environment.pop("NO_COLOR", None)

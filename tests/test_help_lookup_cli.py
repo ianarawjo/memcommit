@@ -11,7 +11,7 @@ from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.shared.command_progress import CommandProgress
 from memcommit.application.operations.help.application import describe_operation
 from memcommit.adapters.interfaces.tui.operations.help import inventory
-from memcommit.query_provider import QueryProviderError
+from memcommit.providers.subscription import QueryProviderError
 
 
 runner = CliRunner(mix_stderr=False)

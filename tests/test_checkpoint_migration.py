@@ -7,13 +7,13 @@ import json
 import pytest
 
 import memcommit.application.ops as ops
-from memcommit.checkpoint_migration import (
+from memcommit.application.retained_history.checkpoint_migration import (
     apply_rename_history_repair,
     plan_rename_history_repair,
 )
-from memcommit.command_history import CommandHistoryError, build_command_stacks
+from memcommit.application.retained_history.command_history import CommandHistoryError, build_command_stacks
 from memcommit.context import AutoCheckpoint
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def _legacy_renamed_history(store: MemoryStore):

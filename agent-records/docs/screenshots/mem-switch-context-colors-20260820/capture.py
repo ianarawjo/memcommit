@@ -55,7 +55,7 @@ def _store_snapshot(root: Path) -> tuple[int, str]:
 
 def _create_profile():
     import memcommit.application.ops as ops
-    from memcommit.profile_config import (
+    from memcommit.application.operations.profile.config import (
         AUTHORING_PROFILE_NAME,
         AUTHORING_PROFILE_UID,
         ProfileEntry,
@@ -63,8 +63,8 @@ def _create_profile():
         profile_registry_file,
         profile_store_dir,
     )
-    from memcommit.profiles import create_authority_grant
-    from memcommit.store import MemoryStore
+    from memcommit.application.operations.profile.model import create_authority_grant
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()
     workspace = ops.init("workspace")
@@ -123,7 +123,7 @@ def _child(directory: Path) -> None:
     SUPPORT._configure_store(home / ".mem")
     os.environ["MEMCOMMIT_TEST_DISABLE_ATTEMPT_LOG"] = "1"
 
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
 
     columns, rows = os.get_terminal_size()
     if (columns, rows) != (COLUMNS, ROWS):

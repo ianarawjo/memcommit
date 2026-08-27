@@ -32,7 +32,7 @@ from memcommit.adapters.interfaces.tui.workbenches.resolution.inline_shell impor
     render_inline_resolution_item,
     run_inline_resolution_workbench,
 )
-from memcommit.merge_application import (
+from memcommit.application.operations.merge.application import (
     FrozenMergePlan,
     MergeAddition,
     MergeConflict,
@@ -49,10 +49,10 @@ from memcommit.merge_application import (
     prepare_merge,
     run_merge,
 )
-from memcommit.merge_runtime import MemoryStoreMergePort
+from memcommit.application.operations.merge.runtime import MemoryStoreMergePort
 from memcommit.adapters.interfaces.console.selection.model import SelectionOption
 from memcommit.adapters.interfaces.console.selection.state import FlatSelectionState
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner(mix_stderr=False)

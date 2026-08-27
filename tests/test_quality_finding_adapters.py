@@ -17,7 +17,7 @@ from memcommit.adapters.interfaces.agent.resolve import (
     RESOLVE_AGENT_CONTRACT_VERSION,
     ResolveAgentAdapter,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 QUALITY_MARKER = "QUALITY FIND PAYLOAD:\n"

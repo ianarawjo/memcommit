@@ -7,7 +7,7 @@ import uuid
 
 import pytest
 
-from memcommit.atomize_grounding import (
+from memcommit.application.operations.atomize.grounding import (
     ATOMIZE_GROUNDING_SCHEMA_VERSION,
     AtomizeGroundingAnchor,
     AtomizeGroundingAssessment,
@@ -504,6 +504,6 @@ def test_assessment_rejects_unknown_cross_references_and_add_old_digest():
     proposal = copy.deepcopy(data["proposals"][0])
     proposal["operation"] = "ADD"
     with pytest.raises(AtomizeGroundingError, match="cannot expect"):
-        from memcommit.atomize_grounding import AtomizeGroundingProposal
+        from memcommit.application.operations.atomize.grounding import AtomizeGroundingProposal
 
         AtomizeGroundingProposal.from_dict(proposal)

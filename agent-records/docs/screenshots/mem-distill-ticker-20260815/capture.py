@@ -76,7 +76,7 @@ def _memory(text: str) -> str:
 
 def _prepare_store(root: Path):
     import memcommit.application.ops as ops
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=root)
     source = ops.init(SOURCE_NAME)
@@ -203,9 +203,9 @@ def _write_evidence(result, receipt, *, unchanged: bool) -> None:
 
 def _run_child(store_root: Path) -> None:
     from memcommit.commands.distill.command import render_distill
-    from memcommit.distill_application import DistillApplyRequest, DistillRequest
-    from memcommit.distill_runtime import execute_distill, execute_distill_apply
-    from memcommit.query_provider import CodexChatGPTProvider
+    from memcommit.application.operations.distill.application import DistillApplyRequest, DistillRequest
+    from memcommit.application.operations.distill.runtime import execute_distill, execute_distill_apply
+    from memcommit.providers.subscription import CodexChatGPTProvider
 
     store, source = _prepare_store(store_root)
     before = source.to_dict()

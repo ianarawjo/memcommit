@@ -7,8 +7,8 @@ import json
 import pytest
 
 from memcommit.context import Context, Memory
-from memcommit.distill import DISTILL_PAYLOAD_MARKER, DistillError
-from memcommit.ground import (
+from memcommit.application.operations.distill.model import DISTILL_PAYLOAD_MARKER, DistillError
+from memcommit.application.operations.ground.model import (
     GroundTargetSpec,
     bind_ground_workbench,
     create_ground_session,
@@ -16,8 +16,8 @@ from memcommit.ground import (
     propose_ground_rule,
     set_ground_example_use,
 )
-from memcommit.ground_distill import execute_ground_distill, freeze_ground_distill
-from memcommit.store import MemoryStore
+from memcommit.application.operations.ground.distill import execute_ground_distill, freeze_ground_distill
+from memcommit.persistence.store import MemoryStore
 from tests.distill_goal_fit_support import passing_distill_goal_fit_response
 
 

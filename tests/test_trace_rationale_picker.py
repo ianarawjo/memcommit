@@ -15,7 +15,7 @@ from memcommit.context import Memory, MemoryRef, QueryContextRef
 from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
     collect_memory_history_candidates,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner()

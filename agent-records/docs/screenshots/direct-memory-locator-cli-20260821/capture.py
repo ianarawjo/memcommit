@@ -58,7 +58,7 @@ def _prepare_store(home: Path, *, ambiguous: bool) -> None:
     script = textwrap.dedent(
         f"""
         from memcommit.context import Context, Memory
-        from memcommit.store import MemoryStore
+        from memcommit.persistence.store import MemoryStore
 
         store = MemoryStore()
         if {ambiguous!r}:
@@ -185,7 +185,7 @@ def main() -> None:
             """
             run("embed", "ca562047")
             from memcommit.context import MemoryRef
-            from memcommit.store import MemoryStore
+            from memcommit.persistence.store import MemoryStore
             store = MemoryStore(create=False)
             target = store.load_direct("practice/4")
             item = next(iter(target.iter_items()))
@@ -201,7 +201,7 @@ def main() -> None:
             """
             run("reference", "dbdb4436")
             from memcommit.context import MemoryRef
-            from memcommit.store import MemoryStore
+            from memcommit.persistence.store import MemoryStore
             store = MemoryStore(create=False)
             target = store.load_direct("practice/4")
             matches = [
@@ -235,7 +235,7 @@ def main() -> None:
             """
             run("list")
             from memcommit.context import MemoryRef
-            from memcommit.store import MemoryStore
+            from memcommit.persistence.store import MemoryStore
             store = MemoryStore(create=False)
             target = store.load_direct("practice/4")
             items = tuple(target.iter_items())
@@ -254,7 +254,7 @@ def main() -> None:
             home,
             "07-duplicate-uid-blocked-with-all-owners",
             """
-            from memcommit.store import MemoryStore, context_record_digest
+            from memcommit.persistence.store import MemoryStore, context_record_digest
             store = MemoryStore(create=False)
             before = context_record_digest(store.load_direct("practice/4"))
             checkpoints_before = len(store.list_checkpoints("practice/4"))

@@ -32,7 +32,7 @@ _BASE.ROWS = ROWS
 
 
 def _isolate_store(root: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     store_dir = root / ".mem"
     assignments = {
@@ -64,8 +64,8 @@ def _store_bytes(store_dir: Path) -> tuple[tuple[str, bytes], ...]:
 
 def _run_child(kind: str) -> None:
     import memcommit.application.ops as ops
-    from memcommit.cli import app
-    from memcommit.store import MemoryStore
+    from memcommit.adapters.console.entrypoint import app
+    from memcommit.persistence.store import MemoryStore
 
     with tempfile.TemporaryDirectory(prefix="mem-summarize-routing-") as temporary:
         root = Path(temporary)

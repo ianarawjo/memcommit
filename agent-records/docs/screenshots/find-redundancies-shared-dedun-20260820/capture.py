@@ -38,7 +38,7 @@ QUALITY_MARKER = "QUALITY FIND PAYLOAD:\n"
 
 def _initialize() -> None:
     from memcommit.context import Context, Memory
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     context = Context(
         uid="10000000-0000-4000-8000-000000000110",
@@ -90,7 +90,7 @@ class _Provider:
 
 def _verification(label: str, provider: _Provider) -> str:
     from memcommit.context import Memory
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()
     context = store.load_direct("quality/redundancy-capture")
@@ -107,7 +107,7 @@ def _run_child(command: str) -> None:
     import click
 
     import memcommit.commands.find_duplicates.command as find_command
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
 
     with tempfile.TemporaryDirectory(prefix="find-redundancies-capture-") as directory:
         _SUPPORT._configure_isolated_store(Path(directory) / ".mem")

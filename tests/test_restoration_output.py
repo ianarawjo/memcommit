@@ -10,7 +10,7 @@ from click.testing import CliRunner as ClickCliRunner
 from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
-from memcommit.command_history import CommandContextChange, ContextCommandUnit
+from memcommit.application.retained_history.command_history import CommandContextChange, ContextCommandUnit
 from memcommit.commands.shared.restoration_present import (
     _render_impact,
     _restored_command,
@@ -26,7 +26,7 @@ from memcommit.source_projection.presentation import (
     source_object_label,
     source_relationship_label,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner()

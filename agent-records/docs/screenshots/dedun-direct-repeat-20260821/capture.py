@@ -30,7 +30,7 @@ _BASE.ROWS = ROWS
 
 
 def _configure_isolated_store(store_root: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     values = {
         "STORE_DIR": store_root,
@@ -53,7 +53,7 @@ def _configure_isolated_store(store_root: Path) -> None:
 
 def _initialize() -> None:
     from memcommit.context import Context, Memory
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     context = Context(
         uid="10000000-0000-4000-8000-000000000310",
@@ -80,10 +80,10 @@ def _run_child() -> None:
     import click
 
     import memcommit.commands.find_duplicates.command as find_command
-    from memcommit.cli import app
-    from memcommit.findings import DuplicateFinding, DuplicateReport
-    from memcommit.read_report_recents import read_report_recents
-    from memcommit.store import MemoryStore
+    from memcommit.adapters.console.entrypoint import app
+    from memcommit.application.reviewing.quality.findings import DuplicateFinding, DuplicateReport
+    from memcommit.application.reviewing.read_report_recents import read_report_recents
+    from memcommit.persistence.store import MemoryStore
 
     with tempfile.TemporaryDirectory(prefix="dedun-direct-repeat-") as directory:
         _configure_isolated_store(Path(directory) / ".mem")

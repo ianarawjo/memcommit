@@ -10,7 +10,7 @@ from memcommit.commands.find.chat_shell import (
     FindChatResult,
     FindChatState,
 )
-from memcommit.find_turn_dialogue import (
+from memcommit.application.operations.search.turn_dialogue import (
     FIND_TURN_OPERATION,
     FindTurnAction,
     FindTurnAnswer,

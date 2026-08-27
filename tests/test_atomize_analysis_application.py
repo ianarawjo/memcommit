@@ -9,7 +9,7 @@ from pathlib import Path
 import pytest
 
 import memcommit.application.ops as ops
-from memcommit.atomize import (
+from memcommit.application.operations.atomize.domain import (
     AtomizeImpactError,
     create_atomize_analysis,
     impact_atomize,
@@ -21,7 +21,7 @@ from memcommit.application.operations.atomize.analysis_runtime import (
     execute_atomize_analysis_open,
 )
 from memcommit.context import Memory
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.study_scenarios.legacy.prewarm.atomize import AtomizePrewarmMatch
 
 

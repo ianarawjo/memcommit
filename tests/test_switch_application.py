@@ -12,7 +12,7 @@ from memcommit.adapters.interfaces.tui.operations.switch import (
     SwitchTuiSetup,
     run_switch_tui,
 )
-from memcommit.switch_application import (
+from memcommit.application.operations.switch.application import (
     SwitchContextError,
     SwitchContextRequest,
     SwitchContextTarget,

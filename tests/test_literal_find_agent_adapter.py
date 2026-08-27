@@ -11,7 +11,7 @@ from memcommit.adapters.interfaces.agent.find import (
     FindAgentAdapter,
     find_agent_tool_schema,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def _adapter(root):

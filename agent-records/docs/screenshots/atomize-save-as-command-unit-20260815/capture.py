@@ -114,7 +114,7 @@ class _Provider:
 
 def _review(store) -> None:
     import memcommit.application.ops as ops
-    from memcommit.atomize_workflow import open_or_create_atomize_workbench
+    from memcommit.application.operations.atomize.workflow import open_or_create_atomize_workbench
 
     if not store.context_exists("atomize/source"):
         source = ops.init("atomize/source")
@@ -187,7 +187,7 @@ def _status(store, label: str) -> None:
 
 
 def _child_apply(store_root: Path) -> None:
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root)
     _review(store)
@@ -196,8 +196,8 @@ def _child_apply(store_root: Path) -> None:
 
 
 def _child_verify(store_root: Path) -> None:
-    from memcommit.provenance import build_trace
-    from memcommit.store import MemoryStore
+    from memcommit.application.retained_history.memory_history_reconstruction import build_trace
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root, create=False)
     source = store.load_direct("atomize/source")
@@ -216,7 +216,7 @@ def _child_verify(store_root: Path) -> None:
 
 
 def _child_undo(store_root: Path) -> None:
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root, create=False)
     _invoke_restore(store, "undo")
@@ -224,7 +224,7 @@ def _child_undo(store_root: Path) -> None:
 
 
 def _child_redo(store_root: Path) -> None:
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root, create=False)
     _invoke_restore(store, "redo")
@@ -232,9 +232,9 @@ def _child_redo(store_root: Path) -> None:
 
 
 def _child_prepublication_failure(store_root: Path) -> None:
-    from memcommit.atomize import AtomizeImpactError
-    import memcommit.atomize_runtime as runtime
-    from memcommit.store import MemoryStore
+    from memcommit.application.operations.atomize.domain import AtomizeImpactError
+    import memcommit.application.operations.atomize.runtime as runtime
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root)
     _review(store)
@@ -251,8 +251,8 @@ def _child_prepublication_failure(store_root: Path) -> None:
 
 
 def _child_retry(store_root: Path) -> None:
-    import memcommit.atomize_runtime as runtime
-    from memcommit.store import MemoryStore
+    import memcommit.application.operations.atomize.runtime as runtime
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root)
     _review(store)

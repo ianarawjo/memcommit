@@ -39,7 +39,7 @@ class _Recorder:
 
 
 def _run_child(*, projection: bool) -> None:
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
 
     argv = [
         "compare",

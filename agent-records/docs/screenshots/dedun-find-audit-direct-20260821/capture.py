@@ -48,7 +48,7 @@ def _initialize(
     audit_preview: bool = False,
 ) -> None:
     from memcommit.context import Context, Memory
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     context = Context(
         uid=(
@@ -91,7 +91,7 @@ def _initialize(
 
 def _initialize_exact_duplicates(context_name: str) -> None:
     from memcommit.context import Context, Memory
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     context = Context(
         uid="10000000-0000-4000-8000-000000000330",
@@ -125,7 +125,7 @@ class _Provider:
         delay: float = 0.8,
         audit_findings: bool = False,
     ) -> None:
-        from memcommit.provider_types import ProviderIdentity
+        from memcommit.providers.types import ProviderIdentity
 
         self.identity = ProviderIdentity(
             provider="capture",
@@ -138,7 +138,7 @@ class _Provider:
         self.operations: list[str] = []
 
     def complete(self, prompt: str, *, operation: str, output_schema=None) -> str:
-        from memcommit.provider_types import CompletionRun
+        from memcommit.providers.types import CompletionRun
 
         assert output_schema is not None
         self.operations.append(operation)
@@ -212,7 +212,7 @@ class _Provider:
 def _run_app(args: list[str]) -> int:
     import click
 
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
 
     try:
         returned = app(args=args, prog_name="mem", standalone_mode=False)
@@ -223,7 +223,7 @@ def _run_app(args: list[str]) -> int:
 
 def _verification(context_name: str, provider: _Provider) -> str:
     from memcommit.context import Memory
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()
     context = store.load_direct(context_name)
@@ -254,7 +254,7 @@ def _show_verification(context_name: str, provider: _Provider, label: str) -> No
 
 def _run_dedun_child(*, no_change: bool) -> None:
     import memcommit.commands.find_duplicates.command as find_command
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     context_name = "quality/no-change" if no_change else "quality/direct-dedun"
     with tempfile.TemporaryDirectory(prefix="direct-dedun-capture-") as directory:
@@ -318,8 +318,8 @@ def _run_find_exact_child() -> None:
 
 def _run_audit_child() -> None:
     import memcommit.commands.audit.command as audit_command
-    from memcommit.quality_audit_store import QualityAuditStore
-    from memcommit.store import MemoryStore
+    from memcommit.application.reviewing.quality.audit_store import QualityAuditStore
+    from memcommit.persistence.store import MemoryStore
 
     context_name = "quality/direct-audit"
     with tempfile.TemporaryDirectory(prefix="direct-audit-capture-") as directory:

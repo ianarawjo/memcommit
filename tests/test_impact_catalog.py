@@ -11,7 +11,7 @@ from memcommit.adapters.interfaces.tui.components.operation_launcher.session imp
     SessionOpenReceipt,
     SessionPickerEntry,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def _entry(

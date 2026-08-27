@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from memcommit.query_provider import (
+from memcommit.providers.subscription import (
     CodexChatGPTProvider,
     QueryProviderError,
     connect_query_provider,

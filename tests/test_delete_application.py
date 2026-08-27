@@ -14,7 +14,7 @@ from memcommit.adapters.python_api import (
     MemCommitClient,
 )
 from memcommit.context import AutoCheckpoint
-from memcommit.delete_application import (
+from memcommit.application.operations.delete.application import (
     ContextDeleteRequest,
     DeleteStalePlanError,
     DirectItemDeleteRequest,
@@ -22,7 +22,7 @@ from memcommit.delete_application import (
     prepare_context_delete,
     run_direct_item_delete,
 )
-from memcommit.delete_runtime import MemoryStoreDeletePort
+from memcommit.application.operations.delete.runtime import MemoryStoreDeletePort
 from memcommit.adapters.interfaces.agent import (
     APPLY_CONTEXT_DELETE_AGENT_TOOL_NAME,
     PLAN_CONTEXT_DELETE_AGENT_TOOL_NAME,
@@ -30,7 +30,7 @@ from memcommit.adapters.interfaces.agent import (
     build_default_agent_tool_registry,
 )
 from memcommit.adapters.interfaces.mcp import McpRegistryProjection
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def _store(tmp_path: Path) -> MemoryStore:

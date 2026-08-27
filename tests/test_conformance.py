@@ -7,7 +7,7 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
-from memcommit.conformance import (
+from memcommit.application.operations.conformance.model import (
     CASE_CONFORMANCE_OPERATION,
     CONTEXT_CONFORMANCE_OPERATION,
     ConformanceError,
@@ -17,28 +17,28 @@ from memcommit.conformance import (
     check_case_conformance,
     check_context_conformance,
 )
-from memcommit.conformance_runtime import freeze_context_conformance
-from memcommit.conformance_runtime import freeze_ground_conformance
+from memcommit.application.operations.conformance.runtime import freeze_context_conformance
+from memcommit.application.operations.conformance.runtime import freeze_ground_conformance
 from memcommit.adapters.console.entrypoint import app
 import memcommit.commands.check_conformance.command as check_conformance_command
 import memcommit.commands.audit.command as audit_command
-from memcommit.ground import (
+from memcommit.application.operations.ground.model import (
     GroundTargetSpec,
     bind_ground_workbench,
     create_ground_session,
     propose_ground_case,
     propose_ground_rule,
 )
-from memcommit.provider_types import ProviderIdentity
-from memcommit.store import MemoryStore
+from memcommit.providers.types import ProviderIdentity
+from memcommit.persistence.store import MemoryStore
 from memcommit.commands.audit.command import _run_quality_audit_checks
-from memcommit.quality_audit import (
+from memcommit.application.reviewing.quality.audit import (
     QUALITY_AUDIT_LEGACY_SCHEMA_VERSION,
     QualityAuditSession,
     quality_audit_resolution_view,
 )
-from memcommit.quality_audit_store import QualityAuditStore
-from memcommit.store import context_record_digest
+from memcommit.application.reviewing.quality.audit_store import QualityAuditStore
+from memcommit.persistence.store import context_record_digest
 
 
 def _uid() -> str:

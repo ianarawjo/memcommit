@@ -28,7 +28,7 @@ from memcommit.application.operations.forget.runtime import (
     MemoryStoreForgetSourcePort,
     execute_forget_analysis,
 )
-from memcommit.forget_resolution_adapter import (
+from memcommit.adapters.interfaces.tui.operations.forget.resolution import (
     ForgetResolutionWorkbenchAdapter as LegacyForgetResolutionWorkbenchAdapter,
 )
 from memcommit.commands.forget.setup_workbench import (
@@ -39,7 +39,7 @@ from memcommit.adapters.interfaces.tui.operations.forget.resolution import (
 )
 from memcommit.adapters.interfaces.tui.operations.forget.setup import ForgetSetupReceipt
 from memcommit.application.semantic.changes import ProposedChange
-from memcommit.store import ConcurrentContextUpdateError, MemoryStore
+from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 
 
 def _context(name: str = "forget/source") -> Context:

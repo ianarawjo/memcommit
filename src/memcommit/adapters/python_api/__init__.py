@@ -400,7 +400,7 @@ _LAZY_EXPORTS = {
         for name in ("QualityFindContextResult", "QualityFindResult")
     },
     **{
-        name: ("memcommit.quality_finding_handoff", name)
+        name: ("memcommit.application.reviewing.quality.handoff", name)
         for name in (
             "QualityFindingHandoff",
             "QualityFindingReviewDraft",

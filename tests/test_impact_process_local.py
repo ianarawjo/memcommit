@@ -19,14 +19,14 @@ from memcommit.commands.impact.process_local import (
 from memcommit.commands.impact.registry import IMPACT_ROUTES
 from memcommit.commands.impact.sessions import render_impact_session_snapshot
 from memcommit.context import Context, Memory
-from memcommit.distill import (
+from memcommit.application.operations.distill.model import (
     DISTILL_OPERATION,
     DISTILL_PAYLOAD_MARKER,
     DistillAnalysis,
     DistilledRule,
 )
 from memcommit.application.operations.distill.application import DistillResult
-from memcommit.distill_goal_fit import DistillGoalFit
+from memcommit.application.operations.distill.goal_fit import DistillGoalFit
 from memcommit.application.operations.fit.judgment import FitAssessment
 from memcommit.application.operations.forget.application import (
     ForgetAnalysisRequest,
@@ -43,9 +43,9 @@ from memcommit.application.operations.resolve.application import (
     ResolveIssue,
     ResolveRequest,
 )
-from memcommit.summarize import collect_summary_frame
+from memcommit.application.operations.summarize.model import collect_summary_frame
 from memcommit.application.operations.summarize.application import FrozenSummarySource
-from memcommit.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import MemoryStore, context_record_digest
 from tests.distill_goal_fit_support import passing_distill_goal_fit_response
 
 

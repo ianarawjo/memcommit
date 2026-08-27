@@ -8,7 +8,7 @@ from pathlib import Path
 from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
-from memcommit.find_answer_references import (
+from memcommit.application.operations.search.answer_references import (
     FindAnswerEvidence,
     FindAnswerSentence,
     build_find_answer_reference_document,

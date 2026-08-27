@@ -24,7 +24,7 @@ from memcommit.commands.shared.quality_find_workbench import (
     choose_quality_find_setup,
 )
 from memcommit.commands.review.sessions import review_session_entries
-from memcommit.findings import (
+from memcommit.application.reviewing.quality.findings import (
     AmbiguityFinding,
     AmbiguityReport,
     ConflictFinding,
@@ -32,7 +32,7 @@ from memcommit.findings import (
     DuplicateFinding,
     DuplicateReport,
 )
-from memcommit.provider_types import CompletionRun, ProviderIdentity
+from memcommit.providers.types import CompletionRun, ProviderIdentity
 from memcommit.adapters.interfaces.tui.operations.audit import (
     quality_audit_review_document,
     render_quality_audit_review_snapshot,
@@ -44,7 +44,7 @@ from memcommit.adapters.interfaces.console.theme import (
 )
 from memcommit.adapters.interfaces.tui.core.theme import semantic_role_style
 from memcommit.adapters.interfaces.tui.viewers.semantic import semantic_document_plain_text
-from memcommit.quality_audit import (
+from memcommit.application.reviewing.quality.audit import (
     QUALITY_AUDIT_PREVIOUS_SCHEMA_VERSION,
     QUALITY_AUDIT_RULESETS,
     QUALITY_AUDIT_SCHEMA_VERSION,
@@ -56,8 +56,8 @@ from memcommit.quality_audit import (
     quality_audit_resolution_view,
     run_quality_audit,
 )
-from memcommit.quality_audit_store import QualityAuditStore
-from memcommit.store import ConcurrentContextUpdateError, MemoryStore
+from memcommit.application.reviewing.quality.audit_store import QualityAuditStore
+from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 
 
 runner = CliRunner()

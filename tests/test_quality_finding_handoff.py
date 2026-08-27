@@ -7,7 +7,7 @@ import json
 import pytest
 
 import memcommit.application.ops as ops
-from memcommit.findings import (
+from memcommit.application.reviewing.quality.findings import (
     AmbiguityFinding,
     AmbiguityReport,
     ConflictFinding,
@@ -15,11 +15,11 @@ from memcommit.findings import (
     DuplicateFinding,
     DuplicateReport,
 )
-from memcommit.quality_find_workbench import (
+from memcommit.application.reviewing.quality.workbench import (
     QualityFindSourceFrame,
     create_quality_find_workbench,
 )
-from memcommit.quality_finding_handoff import (
+from memcommit.application.reviewing.quality.handoff import (
     QualityFindingHandoffError,
     conflict_handoff_to_resolve_request,
     quality_finding_handoff_from_json,
@@ -28,7 +28,7 @@ from memcommit.quality_finding_handoff import (
     quality_finding_handoffs,
 )
 from memcommit.application.operations.resolve.application import ResolveError
-from memcommit.review import direct_context_digest
+from memcommit.application.operations.review.model import direct_context_digest
 
 
 def _context():

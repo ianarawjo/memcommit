@@ -2,42 +2,42 @@ from __future__ import annotations
 
 import json
 
-import memcommit.atomize as atomize_module
+import memcommit.application.operations.atomize.domain as atomize_module
 import memcommit.application.operations.atomize.analysis_runtime as atomize_runtime_module
 import memcommit.application.operations.compare.summary_provider as comparison_summary_module
-import memcommit.findings as findings_module
+import memcommit.application.reviewing.quality.findings as findings_module
 import memcommit.application.ops as ops
-import memcommit.ordinary_query_answer as ordinary_query_module
-from memcommit.atomize import (
+import memcommit.application.operations.query.answer as ordinary_query_module
+from memcommit.application.operations.atomize.domain import (
     ATOMIZE_ANALYSIS_SCHEMA_VERSION,
     _payload as atomize_payload,
     _prompt as atomize_prompt,
     collect_atomize_candidates,
 )
-from memcommit.atomize_workflow import open_or_create_atomize_workbench
-from memcommit.comparison import ComparisonInput
+from memcommit.application.operations.atomize.workflow import open_or_create_atomize_workbench
+from memcommit.application.operations.compare.ledger.model import ComparisonInput
 from memcommit.application.operations.compare.summary_rules import (
     comparison_summary_ruleset_prompt_payload,
 )
-from memcommit.distill_elaborate_reference import (
+from memcommit.application.semantic.generative_reduction_reference import (
     distill_elaborate_reference_payload,
     render_distill_elaborate_reference_examples,
 )
-from memcommit.find_answer_references import FindAnswerEvidence
-from memcommit.profile_config import (
+from memcommit.application.operations.search.answer_references import FindAnswerEvidence
+from memcommit.application.operations.profile.config import (
     STUDY_RUN_AUTHORITY_SOURCE_KIND,
     STUDY_RUN_PARTICIPANT_SOURCE_KIND,
     ProfileEntry,
     ProfileRegistry,
 )
-from memcommit.semantic_prompt_policy import (
+from memcommit.application.semantic.prompt_policy import (
     GENERAL_PROMPT_POLICY_ID,
     GENERAL_SEMANTIC_PROMPT_POLICY,
     STUDY_PROMPT_POLICY_ID,
     STUDY_SEMANTIC_PROMPT_POLICY,
     resolve_semantic_prompt_policy,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def _registry(profile: ProfileEntry) -> ProfileRegistry:

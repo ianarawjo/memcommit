@@ -11,7 +11,7 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
-import memcommit.store as store_module
+import memcommit.persistence.store as store_module
 import memcommit.commands.ground.command as ground_command
 from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.ground.command import (
@@ -20,7 +20,7 @@ from memcommit.commands.ground.command import (
     render_ground_start,
 )
 from memcommit.commands.ground.shell import GroundShellResult
-from memcommit.ground import (
+from memcommit.application.operations.ground.model import (
     GROUND_PROPOSITION_SCHEMA_VERSION,
     GroundError,
     GroundItem,
@@ -43,16 +43,16 @@ from memcommit.ground import (
     target_requirement_status,
     upgrade_ground_to_propositions,
 )
-from memcommit.ground_dialogue import (
+from memcommit.application.operations.ground.dialogue import (
     GroundDialogueError,
     GroundDialogueProposal,
 )
-from memcommit.ground_turn_dialogue import (
+from memcommit.application.operations.ground.turn_dialogue import (
     GroundTurnAction,
     GroundTurnDraft,
     GroundTurnDraftBatch,
 )
-from memcommit.store import MemoryStore, ground_session_record_digest
+from memcommit.persistence.store import MemoryStore, ground_session_record_digest
 
 
 runner = CliRunner()

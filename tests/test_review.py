@@ -23,17 +23,17 @@ from memcommit.commands.review.resolution_shell import (
     run_review_resolution_shell,
 )
 from memcommit.context import Memory
-from memcommit.findings import (
+from memcommit.application.reviewing.quality.findings import (
     AmbiguityFinding,
     AmbiguityReport,
 )
-from memcommit.review import (
+from memcommit.application.operations.review.model import (
     ReviewError,
     ReviewSession,
     create_ambiguity_review,
     review_matches_context,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner()

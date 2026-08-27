@@ -15,7 +15,7 @@ from memcommit.commands.shared.quality_find_workbench import (
     run_interactive_quality_find,
     run_quality_find_resolution_workbench,
 )
-from memcommit.findings import (
+from memcommit.application.reviewing.quality.findings import (
     AmbiguityFinding,
     AmbiguityReport,
     ConflictFinding,
@@ -23,15 +23,15 @@ from memcommit.findings import (
     DuplicateFinding,
     DuplicateReport,
 )
-from memcommit.quality_find_workbench import (
+from memcommit.application.reviewing.quality.workbench import (
     QualityFindSourceFrame,
     QualityFindWorkbenchError,
     create_quality_find_workbench,
     quality_find_resolution_view,
 )
-from memcommit.read_report import ReadReportRecent, ReadReportTarget
+from memcommit.application.reviewing.read_report import ReadReportRecent, ReadReportTarget
 from memcommit.adapters.interfaces.console.responses.resolution import response_target_from_item
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner()

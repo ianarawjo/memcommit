@@ -55,13 +55,11 @@ from its canonical CLI and TUI adapters. A global horizontal application/runtime
 tree was rejected because it would scatter each operation across distant
 packages rather than make one reviewed slice inspectable in one place.
 
-The former top-level application and runtime paths remain true module-identity
-aliases instead of copied re-export tables. Importing in either order therefore
-returns the same implementation globals, and historical imports, monkeypatches,
-and serialized Python globals resolve through the canonical owner. Immediate
-removal of the old paths was rejected because the Python import surface is not
-versioned and downstream use is not fully inventoried. The package initializer
-stays lazy so importing `memcommit.application.operations.merge` alone does not eagerly load
+The former top-level application and runtime paths were initially retained as
+module-identity aliases, then removed on 2026-08-27 after the compatibility
+intent was withdrawn. Imports, monkeypatches, and serialized Python globals
+must now name the canonical owner. The package initializer stays lazy so
+importing `memcommit.application.operations.merge` alone does not eagerly load
 application or Store composition.
 
 This is an ownership-only relocation. It changes no direct/descendant meaning,

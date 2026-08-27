@@ -15,7 +15,7 @@ from typer.testing import CliRunner
 import memcommit.application.ops as ops
 import memcommit.commands.atomize.command as atomize_command
 import memcommit.commands.atomize.sessions as atomize_sessions_module
-from memcommit.atomize import (
+from memcommit.application.operations.atomize.domain import (
     ATOMIZE_LEGACY_RULESET_VERSION,
     AtomizeAnalysisSession,
     AtomizeImpactError,
@@ -24,14 +24,14 @@ from memcommit.atomize import (
     create_atomize_analysis,
     impact_atomize,
 )
-from memcommit.atomize_resolution_adapter import AtomizeResolutionWorkbenchAdapter
-from memcommit.atomize_workbench import (
+from memcommit.application.operations.atomize.resolution_adapter import AtomizeResolutionWorkbenchAdapter
+from memcommit.application.operations.atomize.workbench import (
     atomize_workbench_declared_frames,
     atomize_workbench_response_digest,
     create_atomize_workbench,
     project_atomize_workbench_findings,
 )
-from memcommit.atomize_workflow import (
+from memcommit.application.operations.atomize.workflow import (
     ATOMIZE_AGGREGATE_TIMEOUT_SECONDS,
     _connect_aggregate_atomize_provider,
     open_or_create_atomize_workbench,
@@ -58,9 +58,9 @@ from memcommit.adapters.interfaces.tui.components.operation_launcher.session imp
     SessionOpenReceipt,
     SessionPickerLocation,
 )
-from memcommit.query_provider import CodexChatGPTProvider
-from memcommit.resolution_workbench import ResolutionWorkbenchAction
-from memcommit.store import MemoryStore
+from memcommit.providers.subscription import CodexChatGPTProvider
+from memcommit.application.resolution.workbench import ResolutionWorkbenchAction
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner()

@@ -32,7 +32,7 @@ base.CAPTURE_DIR = CAPTURE_DIR
 
 def _create_profile(home: Path):
     import memcommit.application.ops as ops
-    from memcommit.profile_config import (
+    from memcommit.application.operations.profile.config import (
         AUTHORING_PROFILE_NAME,
         AUTHORING_PROFILE_UID,
         ProfileEntry,
@@ -40,8 +40,8 @@ def _create_profile(home: Path):
         profile_registry_file,
         profile_store_dir,
     )
-    from memcommit.profiles import create_authority_grant
-    from memcommit.store import MemoryStore
+    from memcommit.application.operations.profile.model import create_authority_grant
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()
     guide = ops.init("guide")
@@ -92,7 +92,7 @@ def _child(directory: Path) -> None:
     base._configure_store(home / ".mem")
     os.environ["MEMCOMMIT_TEST_DISABLE_ATTEMPT_LOG"] = "1"
 
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
     from memcommit.context import Memory
 
     columns, rows = os.get_terminal_size()

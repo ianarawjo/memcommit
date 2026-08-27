@@ -14,7 +14,7 @@ from memcommit.application.operations.atomize.grounding_application import (
     GroundingKeepRequest,
     run_atomize_grounding_keep,
 )
-from memcommit.atomize_grounding import (
+from memcommit.application.operations.atomize.grounding import (
     AtomizeGroundingAnchor,
     AtomizeGroundingBindings,
     AtomizeGroundingSession,
@@ -22,7 +22,7 @@ from memcommit.atomize_grounding import (
 from memcommit.application.operations.atomize.grounding_runtime import (
     MemoryStoreAtomizeGroundingPort,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 ROOT = Path(__file__).resolve().parents[1]

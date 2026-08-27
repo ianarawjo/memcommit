@@ -51,9 +51,9 @@ printf 'LIVE PTY · '
 stty size
 printf 'PRE-BROWSE PROFILE/CURRENT\n'
 mem profile current
-before="$(python -c 'from memcommit.store import MemoryStore; print(MemoryStore().current_context_name() or "<none>")')"
+before="$(python -c 'from memcommit.persistence.store import MemoryStore; print(MemoryStore().current_context_name() or "<none>")')"
 {command}
-after="$(python -c 'from memcommit.store import MemoryStore; print(MemoryStore().current_context_name() or "<none>")')"
+after="$(python -c 'from memcommit.persistence.store import MemoryStore; print(MemoryStore().current_context_name() or "<none>")')"
 printf 'POST-BROWSE PROFILE/CURRENT\n'
 mem profile current
 test "$before" = "$after"

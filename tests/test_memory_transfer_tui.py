@@ -20,7 +20,7 @@ from memcommit.adapters.interfaces.tui.operations.memory_transfer import (
     memory_transfer_exact_command_review,
     parse_memory_transfer_command_argv,
 )
-from memcommit.profile_config import (
+from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
@@ -28,16 +28,16 @@ from memcommit.profile_config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.profiles import create_authority_grant
+from memcommit.application.operations.profile.model import create_authority_grant
 from memcommit.source_projection.presentation import source_display_text
-from memcommit.memory_transfer_application import (
+from memcommit.application.operations.memory_transfer.application import (
     CopyMemoriesRequest,
     MoveMemoriesRequest,
     run_copy,
     run_move,
 )
-from memcommit.memory_transfer_runtime import MemoryStoreMemoryTransferPort
-from memcommit.store import MemoryStore
+from memcommit.application.operations.memory_transfer.runtime import MemoryStoreMemoryTransferPort
+from memcommit.persistence.store import MemoryStore
 from memcommit.adapters.interfaces.cli import memory_transfer as transfer_command
 
 

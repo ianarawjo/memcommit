@@ -10,8 +10,8 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.keys import Keys
 import pytest
 
-from memcommit.profile_config import ProfileEntry, study_run_identity
-from memcommit.study_action_log import (
+from memcommit.application.operations.profile.config import ProfileEntry, study_run_identity
+from memcommit.persistence.command_ledger.study_actions import (
     StudyActionError,
     StudyActionLedger,
     StudyRecordingInput,

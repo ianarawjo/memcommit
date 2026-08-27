@@ -13,7 +13,7 @@ from memcommit.commands.forget.setup_workbench import (
     choose_forget_setup,
 )
 from memcommit.application.semantic.changes import RemoveChange
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner()

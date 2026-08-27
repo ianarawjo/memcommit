@@ -33,7 +33,7 @@ CPR_RESPONSE = "\x1b[1;1R"
 
 
 def _configure_store(store_dir: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     store_module.STORE_DIR = store_dir
 
@@ -43,8 +43,8 @@ def _prepare_store(store_dir: Path) -> tuple[str, str, str, int]:
     os.environ["MEMCOMMIT_TEST_DISABLE_ATTEMPT_LOG"] = "1"
     from typer.testing import CliRunner
 
-    from memcommit.cli import app
-    from memcommit.store import MemoryStore
+    from memcommit.adapters.console.entrypoint import app
+    from memcommit.persistence.store import MemoryStore
 
     runner = CliRunner()
 
@@ -104,11 +104,11 @@ def _verify(
     expected_checkpoint_count: int,
 ) -> None:
     _configure_store(store_dir)
-    from memcommit.history_display import (
+    from memcommit.application.retained_history.display import (
         checkpoint_command_identity,
         checkpoint_inherited_from,
     )
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(create=False)
     context = store.load_direct("practice/2")

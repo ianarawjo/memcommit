@@ -5,16 +5,16 @@ from __future__ import annotations
 import pytest
 
 from memcommit.context import Memory
-from memcommit.profile_config import load_profile_registry, profile_store_dir
-from memcommit.profiles import ProfileError
-from memcommit.resource_import import (
+from memcommit.application.operations.profile.config import load_profile_registry, profile_store_dir
+from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.resource_import.model import (
     import_context_from_profile,
     import_memory_from_profile,
     import_profile_from_profile,
     plan_context_import,
     plan_memory_import,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from tests.test_resource_import import _prepare_profiles
 
 

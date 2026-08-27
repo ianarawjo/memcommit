@@ -13,9 +13,9 @@ from typer.testing import CliRunner
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Context
-from memcommit.embed_application import EmbedRequest
-from memcommit.embed_runtime import MemoryStoreEmbedPort
-from memcommit.profile_config import (
+from memcommit.application.operations.embed.application import EmbedRequest
+from memcommit.application.operations.embed.runtime import MemoryStoreEmbedPort
+from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
@@ -23,8 +23,8 @@ from memcommit.profile_config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.profiles import create_authority_grant
-from memcommit.store import ConcurrentContextUpdateError, MemoryStore
+from memcommit.application.operations.profile.model import create_authority_grant
+from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 
 
 runner = CliRunner(mix_stderr=False)

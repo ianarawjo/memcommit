@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-from memcommit.ambiguity_pipeline import (
+from memcommit.application.semantic.classification.ambiguity import (
     AMBIGUITY_PIPELINE_V1,
     AMBIGUITY_PIPELINE_V2,
     AMBIGUITY_PIPELINE_V3,

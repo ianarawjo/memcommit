@@ -11,7 +11,7 @@ from memcommit.commands.shared.context_operand import choose_context_operand
 from memcommit.core.context_targeting.operands import choose_endpoint_operand
 from memcommit.core.context_targeting.model import ExistingContextOperand, InlineTextOperand
 from memcommit.core.context_targeting.operands import classify_context_or_inline_text_operand
-from memcommit.update_endpoints import choose_update_endpoint_operands
+from memcommit.application.operations.update.endpoints import choose_update_endpoint_operands
 
 
 def test_unary_context_operand_defaults_to_current_and_rejects_duplicates():

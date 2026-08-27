@@ -14,9 +14,9 @@ from memcommit.application.evaluation.operation_gate_campaign import (
     run_operation_gate_campaign,
 )
 from memcommit.application.evaluation.semantic_campaign import SemanticCampaignError
-from memcommit.provider_types import ProviderIdentity
-from memcommit.operation_gate_pipeline import classify_operation_gate
-from memcommit.operation_gate_pipeline import OperationGateError
+from memcommit.providers.types import ProviderIdentity
+from memcommit.application.semantic.classification.gates import classify_operation_gate
+from memcommit.application.semantic.classification.gates import OperationGateError
 
 
 class FakeProvider:

@@ -10,29 +10,29 @@ import pytest
 import memcommit.application.ops as ops
 from memcommit.application.authority.access import granted_context_link, resolve_context_access
 from memcommit.context import Context, QueryContextRef
-from memcommit.conformance import CONTEXT_CONFORMANCE_OPERATION
-from memcommit.elaborate import ELABORATE_PAYLOAD_MARKER, ElaborateError
+from memcommit.application.operations.conformance.model import CONTEXT_CONFORMANCE_OPERATION
+from memcommit.application.operations.elaborate.model import ELABORATE_PAYLOAD_MARKER, ElaborateError
 from memcommit.application.operations.elaborate.add_runtime import (
     apply_prepared_elaborate_add,
     freeze_elaborate_context_source,
     prepare_elaborate_add,
 )
-from memcommit.ground_elaborate import (
+from memcommit.application.operations.ground.elaborate import (
     execute_ground_elaborate,
     freeze_ground_elaborate,
 )
-from memcommit.ground_workspace_application import (
+from memcommit.application.operations.ground.workspace_application import (
     AddGroundWorkspaceMemoryRequest,
     CreateGroundWorkspaceRequest,
 )
-from memcommit.ground_workspace_runtime import (
+from memcommit.application.operations.ground.workspace_runtime import (
     execute_ground_workspace_creation,
     execute_ground_workspace_memory_add,
 )
 from memcommit.adapters.interfaces.cli.elaborate import elaborate_result_text
 from memcommit.adapters.interfaces.tui.operations.elaborate import project_elaborate_result
-from memcommit.fit_judgment import FIT_JUDGMENT_OPERATION
-from memcommit.profile_config import (
+from memcommit.application.operations.fit.judgment import FIT_JUDGMENT_OPERATION
+from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
@@ -40,8 +40,8 @@ from memcommit.profile_config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.profiles import create_authority_grant, update_authority_grant
-from memcommit.store import MemoryStore, context_record_digest
+from memcommit.application.operations.profile.model import create_authority_grant, update_authority_grant
+from memcommit.persistence.store import MemoryStore, context_record_digest
 from tests.elaborate_validation_support import (
     passing_elaborate_validation_response,
 )

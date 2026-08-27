@@ -20,9 +20,6 @@ OUTPUT_JSON = (
 OUTPUT_MARKDOWN = (
     REPOSITORY / "agent-records" / "docs" / "root-module-relocation-plan.md"
 )
-LEGACY_ALIAS_MODULE = (
-    REPOSITORY / "src" / "memcommit" / "compatibility" / "_legacy_alias_map.py"
-)
 BASELINE_COMMIT = "885e62c0"
 
 
@@ -31,6 +28,25 @@ ROOT_BOUNDARIES = {
     "bootstrap": "application composition root",
     "context": "public core Context and Memory model",
     "context_locator": "documented canonical existing-Context resolver",
+}
+
+
+HISTORICAL_PACKAGE_TARGETS = {
+    "memcommit.semantic_execution": "memcommit.application.semantic_execution",
+    **{
+        f"memcommit.semantic_execution.{module}": (
+            f"memcommit.application.semantic_execution.{module}"
+        )
+        for module in (
+            "budgeting",
+            "coverage",
+            "execution",
+            "model",
+            "partitioning",
+            "planning",
+            "relations",
+        )
+    },
 }
 
 
@@ -44,38 +60,13 @@ RETIRED_ROOT_MODULES = {
 }
 
 
-# These baseline modules were relocated, but their historical import names are
-# intentionally no longer supported. Their behavior remains available only
-# through the canonical owner named in the relocation plan.
-REMOVED_LEGACY_ALIASES = {
-    "_architecture_catalog": (
-        "the source inventory is repository tooling rather than distributed "
-        "MemCommit runtime behavior"
-    ),
-    "cli": (
-        "the console entry point now has one explicit adapter owner and the "
-        "former root import is intentionally unsupported"
-    ),
-    "ops": (
-        "the in-memory operation API now has one explicit application owner "
-        "and the former root import is intentionally unsupported"
-    ),
-    "provenance": (
-        "the monolith was replaced by the explicit Memory-history "
-        "reconstruction package"
-    ),
-}
-
-
 COMPATIBILITY_TARGET_OVERRIDES = {
     # This historical forwarding implementation moves with the physical
     # facade cleanup rather than remaining executable at the package root.
     "atomize_workflow": "memcommit.application.operations.atomize.workflow",
-    # These two narrow re-export surfaces remain explicit compatibility
-    # modules instead of broadening to every name in their source modules.
-    "context_scope": "memcommit.compatibility.context_scope",
+    "context_scope": "memcommit.core.context_targeting.loading",
     "forget_resolution_adapter": (
-        "memcommit.compatibility.forget_resolution_adapter"
+        "memcommit.adapters.interfaces.tui.operations.forget.resolution"
     ),
     # The baseline facade still names the pre-staging interface package; keep
     # its historical key while advancing only the canonical implementation.
@@ -248,6 +239,13 @@ def _module_target_path(module: str) -> str:
     )
 
 
+def _canonical_source_path(module: str) -> Path:
+    relative = Path(_module_target_path(module))
+    if module.startswith("scripts."):
+        return REPOSITORY / relative
+    return REPOSITORY / "src" / relative
+
+
 def _current_target(module: str | None) -> str | None:
     """Map frozen operation owners to their current canonical package."""
 
@@ -362,12 +360,12 @@ def build_plan() -> dict[str, object]:
         if stem in OPERATION_TARGETS:
             role = "operation-implementation"
             target = OPERATION_TARGETS[stem]
-            action = "relocate"
+            action = "relocate-without-alias"
             reason = "implementation is named for and consumed by one operation family"
         elif stem in CONCEPT_TARGETS:
             role = "shared-concept-implementation"
             target = CONCEPT_TARGETS[stem]
-            action = "relocate"
+            action = "relocate-without-alias"
             reason = "implementation belongs to a reusable named concept"
         elif stem in ROOT_BOUNDARIES:
             role = "root-boundary"
@@ -380,20 +378,13 @@ def build_plan() -> dict[str, object]:
             action = "retire"
             reason = RETIRED_ROOT_MODULES[stem]
         elif _is_compatibility(source):
-            role = "compatibility-facade"
+            role = "historical-compatibility-facade"
             target = _compatibility_target(source, stem=stem)
-            action = "centralize-alias"
-            reason = "preserve the old import through one compatibility registry"
+            action = "remove"
+            reason = "historical forwarding imports are intentionally unsupported"
         else:
             unclassified.append(path.name)
             continue
-        if stem in REMOVED_LEGACY_ALIASES:
-            if action != "relocate":
-                raise RuntimeError(
-                    f"Removed legacy alias {stem!r} is not a relocated module"
-                )
-            action = "relocate-without-alias"
-            reason = f"{reason}; {REMOVED_LEGACY_ALIASES[stem]}"
         entries.append(
             {
                 "path": relative_path,
@@ -420,7 +411,7 @@ def build_plan() -> dict[str, object]:
     missing_compatibility_targets = [
         entry["module"]
         for entry in entries
-        if entry["role"] == "compatibility-facade"
+        if entry["role"] == "historical-compatibility-facade"
         and entry["canonical_target"] is None
     ]
     if missing_compatibility_targets:
@@ -433,7 +424,7 @@ def build_plan() -> dict[str, object]:
     targets = [
         entry["canonical_target"]
         for entry in entries
-        if entry["action"] in {"relocate", "relocate-without-alias"}
+        if entry["action"] == "relocate-without-alias"
     ]
     if len(targets) != len(set(targets)):
         raise RuntimeError("Relocation targets must be unique")
@@ -445,7 +436,8 @@ def build_plan() -> dict[str, object]:
         "schema_version": 1,
         "purpose": (
             "Freeze the ownership classification used to remove flat physical "
-            "facades without changing operation behavior or historical imports."
+            "facades without changing operation behavior and without preserving "
+            "historical imports."
         ),
         "baseline_commit": BASELINE_COMMIT,
         "root_module_count": len(entries),
@@ -500,75 +492,35 @@ def render_markdown(plan: dict[str, object]) -> str:
     return "\n".join(lines)
 
 
-def render_legacy_alias_module(plan: dict[str, object]) -> str:
+def _removed_modules(plan: dict[str, object]) -> dict[str, str]:
     modules = plan["modules"]
     assert isinstance(modules, list)
-    aliases = []
+    removed = dict(HISTORICAL_PACKAGE_TARGETS)
     for entry in modules:
         assert isinstance(entry, dict)
-        if (
-            entry["role"] in {"root-boundary", "retired-prototype"}
-            or entry["action"] == "relocate-without-alias"
-        ):
+        if entry["role"] in {"root-boundary", "retired-prototype"}:
             continue
         target = entry["canonical_target"]
         if not isinstance(target, str) or not target:
-            raise RuntimeError(f"Legacy alias target is missing: {entry['module']}")
-        aliases.append((str(entry["module"]), target))
-    expected_aliases = (
-        249
-        - len(ROOT_BOUNDARIES)
-        - len(RETIRED_ROOT_MODULES)
-        - len(REMOVED_LEGACY_ALIASES)
-    )
-    if len(aliases) != expected_aliases:
-        raise RuntimeError(
-            f"Expected {expected_aliases} legacy aliases, found {len(aliases)}"
-        )
-    lines = [
-        '"""Generated legacy root-submodule aliases; do not edit directly."""',
-        "",
-        "from __future__ import annotations",
-        "",
-        "",
-        "LEGACY_SUBMODULE_ALIASES = {",
-    ]
-    for legacy, canonical in sorted(aliases):
-        lines.append(f"    {legacy!r}: {canonical!r},")
-    lines.extend(["}", ""])
-    return "\n".join(lines)
-
-
-def _plan_aliases(plan: dict[str, object]) -> dict[str, str]:
-    modules = plan["modules"]
-    assert isinstance(modules, list)
-    aliases = {}
-    for entry in modules:
-        assert isinstance(entry, dict)
-        if (
-            entry["role"] in {"root-boundary", "retired-prototype"}
-            or entry["action"] == "relocate-without-alias"
-        ):
-            continue
-        target = entry["canonical_target"]
-        if not isinstance(target, str) or not target:
-            raise RuntimeError(f"Legacy alias target is missing: {entry['module']}")
-        aliases[str(entry["module"])] = target
-    return aliases
+            raise RuntimeError(f"Relocation target is missing: {entry['module']}")
+        removed[str(entry["module"])] = target
+    return removed
 
 
 def verify_current_layout(plan: dict[str, object]) -> None:
-    aliases = _plan_aliases(plan)
+    removed = _removed_modules(plan)
     failures = []
-    for legacy, target in sorted(aliases.items()):
+    for legacy, target in sorted(removed.items()):
         stem = legacy.removeprefix("memcommit.")
-        root_path = PACKAGE / f"{stem}.py"
-        target_path = REPOSITORY / "src" / _module_target_path(target)
+        legacy_path = PACKAGE / Path(*stem.split("."))
+        legacy_file = legacy_path.with_suffix(".py")
+        legacy_package = legacy_path / "__init__.py"
+        target_path = _canonical_source_path(target)
         target_package = target_path.with_suffix("") / "__init__.py"
         if not target_path.is_file() and not target_package.is_file():
             failures.append(f"missing canonical target: {target_path}")
-        if root_path.exists():
-            failures.append(f"physical compatibility facade remains: {root_path}")
+        if legacy_file.exists() or legacy_package.exists():
+            failures.append(f"physical compatibility facade remains: {legacy_path}")
 
     for path in PACKAGE.rglob("*.py"):
         if path.parent == PACKAGE:
@@ -581,7 +533,7 @@ def verify_current_layout(plan: dict[str, object]) -> None:
             elif isinstance(node, ast.Import):
                 modules.extend(alias.name for alias in node.names)
             for module in modules:
-                if module in aliases:
+                if module in removed:
                     failures.append(
                         f"internal legacy import: {path}:{node.lineno}:{module}"
                     )
@@ -595,50 +547,41 @@ def verify_current_layout(plan: dict[str, object]) -> None:
     if failures:
         raise SystemExit("\n".join(failures))
     print(
-        "root module layout is physical-owner only: "
-        f"{len(aliases)} centralized aliases, "
+        "root module layout is canonical-only: "
+        f"{len(removed)} removed historical imports, "
         f"{len(ROOT_BOUNDARIES)} root implementations"
     )
 
 
-def verify_isolated_imports(plan: dict[str, object]) -> None:
-    """Check both import orders without an earlier module masking a cycle."""
+def verify_removed_imports(plan: dict[str, object]) -> None:
+    """Prove that no historical root import is restored by runtime hooks."""
 
-    aliases = _plan_aliases(plan)
-    failures = []
-    for legacy, target in sorted(aliases.items()):
-        for order in ("canonical-first", "legacy-first"):
-            first, second = (
-                (target, legacy) if order == "canonical-first" else (legacy, target)
-            )
-            code = (
-                "from importlib import import_module; "
-                f"first=import_module({first!r}); second=import_module({second!r}); "
-                "assert first is second; "
-                f"assert first.__spec__.name == {target!r}"
-            )
-            try:
-                result = subprocess.run(
-                    [sys.executable, "-c", code],
-                    cwd=REPOSITORY,
-                    capture_output=True,
-                    text=True,
-                    timeout=30,
-                )
-            except subprocess.TimeoutExpired:
-                failures.append(f"{order} import timed out: {legacy} -> {target}")
-                continue
-            if result.returncode:
-                detail = result.stderr.strip() or result.stdout.strip()
-                failures.append(
-                    f"{order} import failed: {legacy} -> {target}\n{detail}"
-                )
-    if failures:
-        raise SystemExit("\n".join(failures))
-    print(
-        "isolated compatibility imports are canonical in both orders: "
-        f"{len(aliases)} modules"
+    removed = sorted(_removed_modules(plan))
+    code = "\n".join(
+        [
+            "from importlib import import_module",
+            f"modules = {removed!r}",
+            "unexpected = []",
+            "for module in modules:",
+            "    try:",
+            "        import_module(module)",
+            "    except ModuleNotFoundError:",
+            "        pass",
+            "    else:",
+            "        unexpected.append(module)",
+            "assert not unexpected, unexpected",
+        ]
     )
+    result = subprocess.run(
+        [sys.executable, "-c", code],
+        cwd=REPOSITORY,
+        capture_output=True,
+        text=True,
+        timeout=30,
+    )
+    if result.returncode:
+        raise SystemExit(result.stderr.strip() or result.stdout.strip())
+    print(f"historical root imports are unavailable: {len(removed)} modules")
 
 
 def main() -> int:
@@ -648,28 +591,19 @@ def main() -> int:
     plan = build_plan()
     rendered_json = json.dumps(plan, indent=2, sort_keys=True) + "\n"
     rendered_markdown = render_markdown(plan)
-    rendered_aliases = render_legacy_alias_module(plan)
     if args.check:
-        if (
-            not OUTPUT_JSON.exists()
-            or not OUTPUT_MARKDOWN.exists()
-            or not LEGACY_ALIAS_MODULE.exists()
-        ):
+        if not OUTPUT_JSON.exists() or not OUTPUT_MARKDOWN.exists():
             raise SystemExit("root module relocation plan is missing")
         if OUTPUT_JSON.read_text(encoding="utf-8") != rendered_json:
             raise SystemExit("root module relocation JSON is stale")
         if OUTPUT_MARKDOWN.read_text(encoding="utf-8") != rendered_markdown:
             raise SystemExit("root module relocation Markdown is stale")
-        if LEGACY_ALIAS_MODULE.read_text(encoding="utf-8") != rendered_aliases:
-            raise SystemExit("legacy submodule alias map is stale")
         verify_current_layout(plan)
-        verify_isolated_imports(plan)
+        verify_removed_imports(plan)
         print("root module relocation plan is current")
         return 0
     OUTPUT_JSON.write_text(rendered_json, encoding="utf-8")
     OUTPUT_MARKDOWN.write_text(rendered_markdown, encoding="utf-8")
-    LEGACY_ALIAS_MODULE.parent.mkdir(parents=True, exist_ok=True)
-    LEGACY_ALIAS_MODULE.write_text(rendered_aliases, encoding="utf-8")
     print(f"wrote {len(plan['modules'])} root module records")
     return 0
 

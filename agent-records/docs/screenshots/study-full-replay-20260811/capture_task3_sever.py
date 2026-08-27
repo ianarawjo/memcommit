@@ -35,9 +35,9 @@ ARGV = (
 
 
 def _study_ledger():
-    from memcommit.profile_config import load_profile_registry
-    from memcommit.store import MemoryStore
-    from memcommit.study_action_log import StudyActionLedger
+    from memcommit.application.operations.profile.config import load_profile_registry
+    from memcommit.persistence.store import MemoryStore
+    from memcommit.persistence.command_ledger.study_actions import StudyActionLedger
 
     profile = load_profile_registry().active
     store = MemoryStore(create=False)
@@ -53,7 +53,7 @@ def _provider_event_count() -> int:
 def _bindings():
     from memcommit.application.authority.access import resolve_context_access
     from memcommit.commands.sever.command import _capture_binding
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(create=False)
     current = store.current_context_name()
@@ -122,8 +122,8 @@ def _verify_approved_sever_attempt() -> None:
 
 def main() -> None:
     sys.path.insert(0, str(ROOT / "src"))
-    from memcommit.profile_config import load_profile_registry
-    from memcommit.sever_store import SeverSessionStore
+    from memcommit.application.operations.profile.config import load_profile_registry
+    from memcommit.application.operations.sever.session_store import SeverSessionStore
 
     if load_profile_registry().active.name != PROFILE_NAME:
         raise RuntimeError(f"Expected active replay Profile {PROFILE_NAME!r}.")

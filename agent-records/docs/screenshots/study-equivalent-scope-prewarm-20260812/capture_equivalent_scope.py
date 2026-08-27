@@ -38,7 +38,7 @@ def _launcher(store_root: Path, *, fail_live: str | None = None) -> str:
     fail = repr(fail_live)
     return f"""
 from pathlib import Path
-import memcommit.store as store_module
+import memcommit.persistence.store as store_module
 root = Path({root})
 store_module.STORE_DIR = root
 store_module.CONTEXTS_DIR = root / 'contexts'
@@ -64,7 +64,7 @@ elif fail_live == 'update':
     def stopped(*args, **kwargs):
         raise RuntimeError('capture provider stopper: live Update planning required')
     command._plan_update_with_wait = stopped
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 app()
 """
 
@@ -162,7 +162,7 @@ def _read_only(
 
 def _copy_active_store(destination: Path) -> None:
     sys.path.insert(0, str(ROOT / "src"))
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     source = MemoryStore(create=False).store_dir
     shutil.copytree(source, destination)
@@ -182,7 +182,7 @@ def _clear_copied_meld_sessions(store_root: Path) -> None:
 
 def _add_wrapper_memory(store_root: Path) -> None:
     from memcommit.context import Memory
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root, create=False)
     parent = store.load_direct(TASK1_PARENT)

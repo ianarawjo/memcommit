@@ -31,8 +31,8 @@ _BASE.ROWS = ROWS
 
 def _prepare_store(root: Path, *, collision: bool):
     import memcommit.application.ops as ops
-    import memcommit.store as store_module
-    from memcommit.store import MemoryStore
+    import memcommit.persistence.store as store_module
+    from memcommit.persistence.store import MemoryStore
 
     store_module.STORE_DIR = root
     store = MemoryStore()
@@ -58,7 +58,7 @@ def _prepare_store(root: Path, *, collision: bool):
 
 
 def _run_success_child(store_root: Path) -> None:
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
 
     store = _prepare_store(store_root, collision=False)
     source_before = store._context_file("practice/task-1").read_bytes()
@@ -95,7 +95,7 @@ def _run_success_child(store_root: Path) -> None:
 
 
 def _run_collision_child(store_root: Path) -> None:
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
 
     store = _prepare_store(store_root, collision=True)
     before = store._context_file("capture/existing").read_bytes()

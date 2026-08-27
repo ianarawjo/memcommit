@@ -26,10 +26,10 @@ from memcommit.commands.shared.resolution_workbench_shell import (
     session_review_action_view,
     session_todo_view,
 )
-from memcommit.impact_controller import ImpactController
+from memcommit.adapters.interfaces.tui.workbenches.impact import ImpactController
 from memcommit.context import QueryContextRef
-from memcommit.query_provider import QueryProviderError
-from memcommit.resolution_workbench import (
+from memcommit.providers.subscription import QueryProviderError
+from memcommit.application.resolution.workbench import (
     ResolutionNavigation,
     ResolutionWorkbenchAction,
 )
@@ -45,7 +45,7 @@ from memcommit.application.operations.sever.resolution_adapter import (
     sever_memory_changes,
 )
 from memcommit.application.operations.sever.session_store import SeverSessionStore
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner(mix_stderr=False)

@@ -8,7 +8,7 @@ import pytest
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-from memcommit.command_attempts import (
+from memcommit.persistence.command_ledger.attempts import (
     CommandAttemptError,
     CommandAttemptLedger,
     annotate_read_report_attempt,
@@ -19,12 +19,12 @@ from memcommit.adapters.interfaces.tui.workbenches.read_report import (
     ReadReportSelectTarget,
     choose_read_report_recent,
 )
-from memcommit.read_report import ReadReportError, ReadReportTarget
-from memcommit.read_report_recents import (
+from memcommit.application.reviewing.read_report import ReadReportError, ReadReportTarget
+from memcommit.application.reviewing.read_report_recents import (
     read_report_recents,
     revalidate_read_report_recent,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def _record(store: MemoryStore, target: ReadReportTarget, started_at: str) -> str:

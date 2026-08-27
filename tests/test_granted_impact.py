@@ -10,13 +10,13 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
-import memcommit.clipboard as clipboard
+import memcommit.adapters.console.clipboard as clipboard
 import memcommit.application.ops as ops
 import memcommit.commands.meld.command as meld_command
 import memcommit.commands.meld.setup as meld_setup_command
 from memcommit.adapters.console.entrypoint import app
-from memcommit.comparison_provider import COMPARISON_PAYLOAD_MARKER
-from memcommit.comparison_store import comparison_analysis_path
+from memcommit.application.operations.compare.ledger.provider import COMPARISON_PAYLOAD_MARKER
+from memcommit.application.operations.compare.ledger.store import comparison_analysis_path
 from memcommit.application.authority.access import (
     freeze_granted_context_binding,
     resolve_context_access,
@@ -31,13 +31,13 @@ from memcommit.commands.shared.endpoint_setup_flows import (
 from memcommit.commands.meld.setup import MeldSetupReceipt
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.core.context_targeting.readable_catalog import ReadableContextCatalog
-from memcommit.derived_policy import analysis_retention, authorize_analysis_save
-from memcommit.granted_comparison_store import (
+from memcommit.application.authority.derived_policy import analysis_retention, authorize_analysis_save
+from memcommit.application.operations.compare.ledger.granted_store import (
     granted_comparison_analysis_path,
     load_granted_comparison_artifact,
 )
-from memcommit.meld_provider import MELD_PAYLOAD_MARKER
-from memcommit.profile_config import (
+from memcommit.application.operations.meld.provider import MELD_PAYLOAD_MARKER
+from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
@@ -46,12 +46,12 @@ from memcommit.profile_config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.profiles import (
+from memcommit.application.operations.profile.model import (
     ProfileError,
     create_authority_grant,
     delete_authority_grant,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.summarize.application import SummarizeRequest
 from memcommit.application.operations.summarize.runtime import execute_summarize
 from memcommit.application.semantic.changes import RemoveChange

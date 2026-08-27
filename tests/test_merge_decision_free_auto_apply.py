@@ -11,7 +11,7 @@ from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Memory
 from memcommit.adapters.interfaces.tui.operations.merge import merge_endpoint_setup_spec
 from memcommit.adapters.interfaces.tui.operations.merge.model import MergeTuiSetup
-from memcommit.merge_application import (
+from memcommit.application.operations.merge.application import (
     FrozenMergePlan,
     MergeAddition,
     MergeContextResult,
@@ -20,8 +20,8 @@ from memcommit.merge_application import (
     MergeRequest,
     MergeResult,
 )
-from memcommit.merge_runtime import execute_merge
-from memcommit.store import MemoryStore
+from memcommit.application.operations.merge.runtime import execute_merge
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner(mix_stderr=False)

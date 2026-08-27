@@ -20,7 +20,7 @@ from memcommit.core.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
     parse_direct_memory_locator,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def test_direct_memory_locator_parser_separates_type_detection_from_owner_syntax():

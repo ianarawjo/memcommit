@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import pytest
 
-from memcommit.find_answer_references import (
+from memcommit.application.operations.search.answer_references import (
     FindAnswerEvidence,
     FindAnswerReferenceError,
     FindAnswerSentence,

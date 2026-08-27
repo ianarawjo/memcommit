@@ -14,38 +14,27 @@ import fcntl
 import hashlib
 import json
 import os
-import shutil
 import unicodedata
 import uuid
 from dataclasses import dataclass
 from datetime import datetime
 from functools import wraps
 from pathlib import Path
-from typing import Any, Callable, Iterable, Iterator, Literal, Optional
+from typing import Callable, Iterable, Iterator, Optional
 
 from memcommit.application.retained_history.checkpoint_frames import map_restorable_checkpoint_frames
-from memcommit.context import AutoCheckpoint, Checkpoint, Context, Memory, MemoryRef
+from memcommit.context import AutoCheckpoint, Context, Memory, MemoryRef
 from memcommit.core.context_targeting.naming import (
     RESERVED_CONTEXT_SEGMENTS,
-    validate_portable_context_name,
 )
 from memcommit.core.context_targeting.navigation import (
     ContextNavigationDirection,
     apply_context_navigation,
     context_navigation_target,
     record_current_context_transition,
-    rewrite_context_navigation_names,
 )
 from memcommit.application.retained_history.context_lifecycle import (
     ContextLifecycleEvent,
-    PREVIOUS_CHECKPOINT_NONE,
-    PREVIOUS_CHECKPOINT_RECORDED,
-    PREVIOUS_CHECKPOINT_UNREADABLE,
-)
-from memcommit.core.context_targeting.context_catalog import (
-    ContextCatalogDiagnostic,
-    ContextCatalogDiagnosticCode,
-    ContextCatalogScan,
 )
 from memcommit.application.operations.profile.config import resolve_active_store_dir
 from memcommit.application.authority.storage_permissions import (
@@ -57,13 +46,6 @@ from memcommit.application.authority.write_protection import (
     WriteProtectionRegistry,
     WriteProtectionRegistryError,
     WriteProtectionState,
-)
-from memcommit.application.retained_history.memory_lineage import (
-    MemoryLineageEdge,
-    checkpoint_memory_lineage_edges,
-    memory_content_sha256,
-    memory_lineage_record,
-    remap_restoration_snapshot,
 )
 
 

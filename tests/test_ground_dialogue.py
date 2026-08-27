@@ -5,8 +5,8 @@ import json
 
 import pytest
 
-from memcommit.ground import GROUND_TEXT_LIMIT
-from memcommit.ground_dialogue import (
+from memcommit.application.operations.ground.model import GROUND_TEXT_LIMIT
+from memcommit.application.operations.ground.dialogue import (
     GROUND_DIALOGUE_OPERATION,
     GROUND_DIALOGUE_QUESTION_LIMIT,
     GROUND_DIALOGUE_RESPONSE_CHAR_LIMIT,
@@ -21,7 +21,7 @@ from memcommit.ground_dialogue import (
     GroundDialogueRuleDraft,
     interpret_ground_dialogue,
 )
-from memcommit.query_provider import QueryProviderError
+from memcommit.providers.subscription import QueryProviderError
 
 
 class FakeProvider:

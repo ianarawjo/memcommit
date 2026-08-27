@@ -38,7 +38,7 @@ def _fixture_uid(index: int) -> str:
 
 
 def _large_diff_session():
-    from memcommit.update import (
+    from memcommit.application.operations.update.model import (
         AddOperation,
         ContextFingerprint,
         EditOperation,
@@ -105,7 +105,7 @@ def _large_diff_session():
 
 
 def _configure_store(store_dir: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     store_module.STORE_DIR = store_dir
 
@@ -113,7 +113,7 @@ def _configure_store(store_dir: Path) -> None:
 def _run_fixture_command(*arguments: str) -> None:
     from typer.testing import CliRunner
 
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
 
     result = CliRunner().invoke(app, list(arguments))
     if result.exit_code != 0:
@@ -126,7 +126,7 @@ def _run_fixture_command(*arguments: str) -> None:
 def _prepare_store(store_dir: Path) -> tuple[int, int, str]:
     _configure_store(store_dir)
     os.environ["MEMCOMMIT_TEST_DISABLE_ATTEMPT_LOG"] = "1"
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     _run_fixture_command("init", CURRENT)
     _run_fixture_command("add", "The east entrance closes at 18:00.")
@@ -165,7 +165,7 @@ def _store_digest(store_dir: Path) -> str:
 def _run_diff(store_dir: Path, context_name: str | None) -> None:
     _configure_store(store_dir)
     from memcommit.commands.diff.command import cmd
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(create=False)
     before_current = store.current_context_name()
@@ -205,7 +205,7 @@ def _verify(
     fixture_digest: str,
 ) -> None:
     _configure_store(store_dir)
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(create=False)
     print("READ-ONLY DIFF VERIFICATION")

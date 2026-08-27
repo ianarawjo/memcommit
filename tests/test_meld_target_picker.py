@@ -14,15 +14,15 @@ from memcommit.commands.meld.target_picker import (
     choose_meld_target,
     eligible_meld_targets,
 )
-from memcommit.store import MemoryStore
-from memcommit.store import ConcurrentContextUpdateError
-from memcommit.comparison import ComparisonInput
-from memcommit.comparison_provider import (
+from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ConcurrentContextUpdateError
+from memcommit.application.operations.compare.ledger.model import ComparisonInput
+from memcommit.application.operations.compare.ledger.provider import (
     COMPARISON_PAYLOAD_MARKER,
     analyze_comparison,
 )
-from memcommit.comparison_store import save_comparison_analysis
-from memcommit.meld import meld_canonical_digest
+from memcommit.application.operations.compare.ledger.store import save_comparison_analysis
+from memcommit.application.operations.meld.model import meld_canonical_digest
 from memcommit.application.operations.meld.restart_application import MeldRestartRequest
 from memcommit.application.operations.meld.runtime import execute_meld_restart
 

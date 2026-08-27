@@ -9,7 +9,7 @@ from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.profile_config import load_profile_registry, profile_store_dir
+from memcommit.application.operations.profile.config import load_profile_registry, profile_store_dir
 
 
 runner = CliRunner(mix_stderr=False)

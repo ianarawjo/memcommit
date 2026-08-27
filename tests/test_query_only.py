@@ -9,8 +9,8 @@ from typer.testing import CliRunner
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.context import AutoCheckpoint, QueryContextRef
-from memcommit.query_provider import QueryProviderError
-from memcommit.store import MemoryStore
+from memcommit.providers.subscription import QueryProviderError
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner(mix_stderr=False)

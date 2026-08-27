@@ -32,7 +32,7 @@ class CaptureProvider:
         self.calls += 1
         assert output_schema is not None
         if operation == "distill_context":
-            from memcommit.distill import DISTILL_PAYLOAD_MARKER
+            from memcommit.application.operations.distill.model import DISTILL_PAYLOAD_MARKER
 
             payload = json.loads(prompt.split(DISTILL_PAYLOAD_MARKER, 1)[1])
             aliases = [item["memory_id"] for item in payload["source"]["memories"]]
@@ -53,7 +53,7 @@ class CaptureProvider:
                     "outside_memory_ids": aliases[2:],
                 }
             )
-        from memcommit.elaborate import ELABORATE_PAYLOAD_MARKER
+        from memcommit.application.operations.elaborate.model import ELABORATE_PAYLOAD_MARKER
 
         payload = json.loads(prompt.split(ELABORATE_PAYLOAD_MARKER, 1)[1])
         if payload["mode"] == "GOAL_TO_RULES":
@@ -92,7 +92,7 @@ class CaptureProvider:
 
 
 def _configure_store(root: Path):
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     store_module.STORE_DIR = root
     return store_module.MemoryStore(root=root)
@@ -115,7 +115,7 @@ def _source_bytes(store, source) -> bytes:
 
 
 def _run_distill_review(root: Path, *, cancel: bool) -> None:
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
     from memcommit.commands import distill as command
 
     store, source = _prepare_source(root)
@@ -160,7 +160,7 @@ def _run_distill_review(root: Path, *, cancel: bool) -> None:
 
 
 def _run_distill_apply(root: Path) -> None:
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
     from memcommit.commands import distill as command
 
     store, source = _prepare_source(root)
@@ -202,7 +202,7 @@ def _run_distill_apply(root: Path) -> None:
 
 def _prepare_ground_distill(root: Path):
     from memcommit.context import Context, Memory
-    from memcommit.ground import (
+    from memcommit.application.operations.ground.model import (
         GroundTargetSpec,
         bind_ground_workbench,
         create_ground_session,
@@ -254,9 +254,9 @@ def _prepare_ground_distill(root: Path):
 
 
 def _run_ground_distill(root: Path) -> None:
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
     from memcommit.commands import distill as command
-    from memcommit.store import ground_session_record_digest
+    from memcommit.persistence.store import ground_session_record_digest
 
     store, session, contexts = _prepare_ground_distill(root)
     before_ground = ground_session_record_digest(session)
@@ -288,7 +288,7 @@ def _run_ground_distill(root: Path) -> None:
 
 
 def _run_elaborate(root: Path, *, rules: bool) -> None:
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
     from memcommit.commands import elaborate as command
 
     store, source = _prepare_source(root)

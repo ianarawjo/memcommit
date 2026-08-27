@@ -18,7 +18,7 @@ from memcommit.application.operations.summarize.application import (
     SummarizeRequest,
     SummarizeResult,
 )
-from memcommit.understanding import UnderstandingSummary
+from memcommit.application.semantic.understanding import UnderstandingSummary
 
 
 def _result() -> SummarizeResult:

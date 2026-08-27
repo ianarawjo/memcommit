@@ -15,45 +15,45 @@ import memcommit.application.operations.distill.application as distill_applicati
 from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.help_inventory.command import COMMAND_FORMS
 from memcommit.context import Context, Memory
-from memcommit.distill import (
+from memcommit.application.operations.distill.model import (
     DISTILL_OPERATION,
     DISTILL_PAYLOAD_MARKER,
     DistillError,
     analyze_distill,
     distill_execution_policy,
 )
-from memcommit.distill_goal_fit import (
+from memcommit.application.operations.distill.goal_fit import (
     DISTILL_GOAL_FIT_OPERATION,
     DISTILL_GOAL_FIT_PAYLOAD_MARKER,
 )
 from memcommit.application.operations.distill.application import DistillApplyRequest, DistillRequest
-from memcommit.distill_config import DistillSemanticConfig
+from memcommit.application.operations.distill.config import DistillSemanticConfig
 from memcommit.application.operations.distill.runtime import execute_distill, execute_distill_apply
-from memcommit.ground import (
+from memcommit.application.operations.ground.model import (
     GroundTargetSpec,
     bind_ground_workbench,
     create_ground_session,
 )
-from memcommit.ground_distill import (
+from memcommit.application.operations.ground.distill import (
     apply_ground_distill_result,
     execute_ground_distill,
     freeze_ground_distill,
 )
-from memcommit.ground_workspace_application import (
+from memcommit.application.operations.ground.workspace_application import (
     AddGroundWorkspaceMemoryRequest,
     CreateGroundWorkspaceRequest,
 )
-from memcommit.ground_workspace_runtime import (
+from memcommit.application.operations.ground.workspace_runtime import (
     execute_ground_workspace_creation,
     execute_ground_workspace_memory_add,
     load_ground_workspace,
 )
-from memcommit.ground_workspace_history import (
+from memcommit.application.operations.ground.workspace_history import (
     build_ground_workspace_command_stack,
     undo_ground_workspace_command,
 )
-from memcommit.store import MemoryStore
-from memcommit.summarize import collect_summary_frame
+from memcommit.persistence.store import MemoryStore
+from memcommit.application.operations.summarize.model import collect_summary_frame
 
 
 runner = CliRunner()

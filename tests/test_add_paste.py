@@ -11,7 +11,7 @@ from memcommit.commands.add import command as add
 from memcommit.commands.shared import paste_input
 from memcommit.commands.shared.paste_input import PasteCancelled, capture_paste
 from memcommit.context import Memory
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 runner = CliRunner()
 

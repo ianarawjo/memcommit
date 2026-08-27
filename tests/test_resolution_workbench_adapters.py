@@ -6,7 +6,7 @@ import hashlib
 import uuid
 from dataclasses import replace
 
-from memcommit.atomize import (
+from memcommit.application.operations.atomize.domain import (
     ATOMIZE_RULESET_VERSION,
     AtomizeAnalysisItem,
     AtomizeAnalysisSession,
@@ -16,26 +16,26 @@ from memcommit.atomize import (
     AtomizeQualityIssue,
     AtomizeReading,
 )
-from memcommit.atomize_resolution_adapter import (
+from memcommit.application.operations.atomize.resolution_adapter import (
     AtomizeResolutionWorkbenchAdapter,
 )
-from memcommit.atomize_workbench import create_atomize_workbench
+from memcommit.application.operations.atomize.workbench import create_atomize_workbench
 from memcommit.context import Context, Memory
 from memcommit.commands.shared.resolution_workbench_shell import (
     resolution_viewer_fragments,
     session_review_action_view,
     session_todo_view,
 )
-from memcommit.meld import MeldAssessment, MeldSession
-from memcommit.meld_resolution_adapter import (
+from memcommit.application.operations.meld.model import MeldAssessment, MeldSession
+from memcommit.application.operations.meld.resolution_adapter import (
     MeldResolutionWorkbenchAdapter,
 )
-from memcommit.resolution_workbench import ResolutionNavigation
+from memcommit.application.resolution.workbench import ResolutionNavigation
 from memcommit.adapters.interfaces.console.responses.resolution import (
     response_draft_from_item,
     response_target_from_item,
 )
-from memcommit.update import (
+from memcommit.application.operations.update.model import (
     AddOperation,
     ContextFingerprint,
     EditOperation,
@@ -43,7 +43,7 @@ from memcommit.update import (
     SourceReference,
     UpdateSession,
 )
-from memcommit.update_resolution_adapter import (
+from memcommit.application.operations.update.resolution_adapter import (
     UpdateResolutionWorkbenchAdapter,
 )
 

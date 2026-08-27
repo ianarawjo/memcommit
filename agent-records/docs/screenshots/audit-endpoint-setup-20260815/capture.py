@@ -29,7 +29,7 @@ _BASE.ROWS = ROWS
 
 def _prepare_store(root: Path):
     import memcommit.application.ops as ops
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=root)
     current = ops.init("audit/current")

@@ -7,7 +7,7 @@ import json
 import pytest
 
 import memcommit.application.ops as ops
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def test_context_storage_root_symlink_fails_closed_for_all_record_paths(

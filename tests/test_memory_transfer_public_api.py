@@ -12,7 +12,7 @@ from memcommit.adapters.python_api import (
     MemoryTransferInputError,
     MoveMemoriesReceipt,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def _fixture(root):

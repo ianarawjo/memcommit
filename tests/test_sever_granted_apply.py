@@ -8,7 +8,7 @@ import uuid
 import pytest
 
 import memcommit.application.ops as ops
-from memcommit.profile_config import (
+from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
@@ -16,7 +16,7 @@ from memcommit.profile_config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.profiles import (
+from memcommit.application.operations.profile.model import (
     create_authority_grant,
     delete_authority_grant,
     update_authority_grant,
@@ -35,7 +35,7 @@ from memcommit.application.operations.sever.runtime import (
     execute_sever_session_start,
 )
 from memcommit.application.operations.sever.session_store import SeverSessionStore
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 GRANT_PERMISSIONS = (

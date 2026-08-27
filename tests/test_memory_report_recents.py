@@ -6,7 +6,7 @@ from dataclasses import replace
 
 import pytest
 
-from memcommit.command_attempts import (
+from memcommit.persistence.command_ledger.attempts import (
     CommandAttemptError,
     CommandAttemptLedger,
     annotate_memory_report_attempt,
@@ -20,8 +20,8 @@ from memcommit.commands.shared.memory_report_recents import (
     choose_memory_report_recent,
     memory_report_recents,
 )
-from memcommit.read_report import ReadReportTarget
-from memcommit.store import MemoryStore
+from memcommit.application.reviewing.read_report import ReadReportTarget
+from memcommit.persistence.store import MemoryStore
 
 
 def _record_report(

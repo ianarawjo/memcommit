@@ -15,17 +15,17 @@ from memcommit.commands.shared.resolution_workbench_shell import (
     session_todo_view,
 )
 from memcommit.context import Context, Memory
-from memcommit.forget_resolution_adapter import (
+from memcommit.adapters.interfaces.tui.operations.forget.resolution import (
     ForgetResolutionWorkbenchAdapter,
     forget_memory_changes,
 )
-from memcommit.forget_review import ForgetReview
-from memcommit.impact_controller import ImpactController
-from memcommit.provider_types import ProviderIdentity
-from memcommit.resolution_workbench import ResolutionNavigation, ResolutionWorkbenchAction
-from memcommit.selective_curation import CurationAnalysis, CurationDecision
+from memcommit.application.operations.forget.review import ForgetReview
+from memcommit.adapters.interfaces.tui.workbenches.impact import ImpactController
+from memcommit.providers.types import ProviderIdentity
+from memcommit.application.resolution.workbench import ResolutionNavigation, ResolutionWorkbenchAction
+from memcommit.application.semantic.selective_curation import CurationAnalysis, CurationDecision
 from memcommit.application.semantic.changes import EditChange, RemoveChange
-from memcommit.session_workbench_navigation import SessionWorkbenchNavigation
+from memcommit.application.reviewing.session_navigation import SessionWorkbenchNavigation
 
 
 class BatchForgetLLM:

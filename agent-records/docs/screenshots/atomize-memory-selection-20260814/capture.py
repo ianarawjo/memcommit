@@ -55,7 +55,7 @@ class _StreamRecorder(io.StringIO):
 
 def _prepare_store(root: Path, *, empty: bool):
     import memcommit.application.ops as ops
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=root)
     context = ops.init("study/source" if not empty else "study/empty")

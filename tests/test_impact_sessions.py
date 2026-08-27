@@ -21,8 +21,8 @@ from memcommit.commands.impact.sessions import (
 from memcommit.adapters.interfaces.tui.components.operation_launcher.session import (
     SessionOpenReceipt,
 )
-from memcommit.store import MemoryStore
-from memcommit.update import plan_update
+from memcommit.persistence.store import MemoryStore
+from memcommit.application.operations.update.model import plan_update
 
 
 runner = CliRunner(mix_stderr=False)

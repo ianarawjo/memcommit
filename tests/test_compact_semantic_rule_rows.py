@@ -8,10 +8,10 @@ from memcommit.commands.impact.process_local import (
     elaborate_impact_presentation,
 )
 from memcommit.commands.impact.sessions import render_impact_session_snapshot
-from memcommit.distill import DISTILL_OPERATION, DISTILL_PAYLOAD_MARKER
+from memcommit.application.operations.distill.model import DISTILL_OPERATION, DISTILL_PAYLOAD_MARKER
 from memcommit.application.operations.distill.application import DistillRequest
 from memcommit.application.operations.distill.runtime import execute_distill
-from memcommit.elaborate import (
+from memcommit.application.operations.elaborate.model import (
     ELABORATE_OPERATION,
     ELABORATE_PAYLOAD_MARKER,
     ElaborateTargetContext,
@@ -23,7 +23,7 @@ from memcommit.adapters.interfaces.cli.distill import distill_result_text
 from memcommit.adapters.interfaces.cli.elaborate import elaborate_result_text
 from memcommit.adapters.interfaces.tui.operations.distill import project_distill_clipboard
 from memcommit.adapters.interfaces.tui.operations.elaborate import project_elaborate_clipboard
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from tests.elaborate_validation_support import (
     passing_elaborate_validation_response,
 )

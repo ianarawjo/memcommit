@@ -56,7 +56,7 @@ class _Recorder(io.StringIO):
 
 
 def _configure_store(store_dir: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     store_module.STORE_DIR = store_dir
     store_module.CONTEXTS_DIR = store_dir / "contexts"
@@ -76,7 +76,7 @@ def _configure_store(store_dir: Path) -> None:
 def _prepare_store(store_dir: Path) -> tuple[str, ...]:
     import memcommit.application.ops as ops
     from memcommit.context import AutoCheckpoint
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_dir)
     participant = ops.init("task-1/participant")
@@ -131,7 +131,7 @@ def _run_revert(store_dir: Path) -> None:
 def _run_verification(store_dir: Path, original_uids: tuple[str, ...]) -> None:
     _configure_store(store_dir)
     from memcommit.context import Memory
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(create=False)
     target = store.load_direct("task-1/recovery")

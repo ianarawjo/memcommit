@@ -15,8 +15,8 @@ from memcommit.adapters.interfaces.tui.components.operation_launcher.session imp
     SessionOpenReceipt,
     SessionPickerEntry,
 )
-from memcommit.review import ReviewSession, direct_context_digest
-from memcommit.store import MemoryStore
+from memcommit.application.operations.review.model import ReviewSession, direct_context_digest
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner()
@@ -242,7 +242,7 @@ def test_applied_sever_selection_still_opens_read_only_review(
 ):
     import memcommit.commands.sever.command as sever_command
     import memcommit.commands.sever.sessions as sever_sessions
-    import memcommit.review_report_adapters as adapters
+    import memcommit.application.operations.review.report_adapters as adapters
 
     session_uid = str(uuid.uuid4())
     picker_entry = _entry(
@@ -302,7 +302,7 @@ def test_applied_meld_selection_still_opens_read_only_review(
 ):
     import memcommit.commands.meld.command as meld_command
     import memcommit.commands.meld.sessions as meld_sessions
-    import memcommit.review_report_adapters as adapters
+    import memcommit.application.operations.review.report_adapters as adapters
 
     session_uid = str(uuid.uuid4())
     catalog_entry = SimpleNamespace(

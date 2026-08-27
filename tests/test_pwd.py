@@ -8,16 +8,16 @@ from pathlib import Path
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.current_context_application as current_context_application
+import memcommit.application.operations.pwd.application as current_context_application
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.current_context_application import (
+from memcommit.application.operations.pwd.application import (
     CurrentContextError,
     NoCurrentContextError,
     get_current_context,
 )
-from memcommit.current_context_runtime import read_current_context
-from memcommit.store import MemoryStore
+from memcommit.application.operations.pwd.runtime import read_current_context
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner(mix_stderr=False)

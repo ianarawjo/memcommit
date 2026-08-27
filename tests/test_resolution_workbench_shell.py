@@ -6,7 +6,7 @@ import pytest
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.layout import to_container
 from prompt_toolkit.output import DummyOutput
-from memcommit.exact_command_review import ExactCommandReview
+from memcommit.application.exact_command_review import ExactCommandReview
 
 import memcommit.adapters.interfaces.tui.workbenches.resolution.session_shell as resolution_shell_module
 from memcommit.commands.shared.semantic_detail_renderer import (
@@ -32,9 +32,9 @@ from memcommit.commands.shared.resolution_workbench_shell import (
     session_review_action_view,
     session_todo_view,
 )
-from memcommit.impact_controller import ImpactController
-from memcommit.memory_diff import MemoryChange
-from memcommit.resolution_workbench import (
+from memcommit.adapters.interfaces.tui.workbenches.impact import ImpactController
+from memcommit.application.reviewing.memory_diff import MemoryChange
+from memcommit.application.resolution.workbench import (
     ResolutionContextLocation,
     ResolutionDetailBlock,
     ResolutionIssueEvidence,
@@ -48,9 +48,9 @@ from memcommit.resolution_workbench import (
     ResolutionResult,
     ResolutionWorkbenchView,
 )
-from memcommit.session_workbench_navigation import SessionWorkbenchNavigation
+from memcommit.application.reviewing.session_navigation import SessionWorkbenchNavigation
 from memcommit.adapters.interfaces.console.responses.model import ResponseDraft
-from memcommit.result_workbench import ResultRef
+from memcommit.application.reviewing.result_workbench import ResultRef
 
 
 def _item(

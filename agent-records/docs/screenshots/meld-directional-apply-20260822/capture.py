@@ -53,7 +53,7 @@ class _SlowDirectionalProvider:
 
 def _initialize_store(store_root: Path):
     import memcommit.application.ops as ops
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root)
     if store.context_exists(INCOMING_NAME):
@@ -161,8 +161,8 @@ def _run_setup_apply_child(store_root: Path) -> None:
 
 def _run_prepare_exact_child(store_root: Path) -> None:
     from memcommit.commands.meld.command import render_meld_session
-    from memcommit.meld_runtime import execute_meld_start, prepare_meld_start
-    from memcommit.meld_start_application import MeldStartRequest
+    from memcommit.application.operations.meld.runtime import execute_meld_start, prepare_meld_start
+    from memcommit.application.operations.meld.start_application import MeldStartRequest
 
     store, _incoming, baseline = _initialize_store(store_root)
     provider = _SlowDirectionalProvider()
@@ -206,7 +206,7 @@ def _forbidden_provider(counter: dict[str, int]):
 
 
 def _run_exact_accept_child(store_root: Path, *, repeated: bool) -> None:
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root, create=False)
     counter = {"calls": 0}
@@ -229,7 +229,7 @@ def _run_exact_accept_child(store_root: Path, *, repeated: bool) -> None:
 
 def _run_restore_child(store_root: Path, direction: str) -> None:
     from memcommit.commands.shared.restoration_present import render_command_restore_receipt
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root, create=False)
     print(f"$ mem {direction}")
@@ -246,7 +246,7 @@ def _run_restore_child(store_root: Path, direction: str) -> None:
 
 
 def _run_verify_child(store_root: Path) -> None:
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root, create=False)
     print("$ mem context test/update/to · read-only reload")

@@ -10,8 +10,8 @@ from typer.testing import CliRunner
 import memcommit.application.ops as ops
 import memcommit.commands.update.command as update_command
 from memcommit.adapters.console.entrypoint import app
-from memcommit.store import MemoryStore
-from memcommit.update import UpdateError, UpdateSession, plan_update, session_matches
+from memcommit.persistence.store import MemoryStore
+from memcommit.application.operations.update.model import UpdateError, UpdateSession, plan_update, session_matches
 
 
 class _Provider:

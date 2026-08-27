@@ -65,14 +65,14 @@ def _new_context(*, name: str, content: str):
 
 def _setup(home: Path, *, active_participant: bool) -> None:
     os.environ["HOME"] = str(home)
-    from memcommit.profile_config import (
+    from memcommit.application.operations.profile.config import (
         ProfileEntry,
         ProfileRegistry,
         profile_store_dir,
         virtual_authoring_registry,
     )
-    from memcommit.profiles import _write_registry, create_authority_grant
-    from memcommit.store import MemoryStore
+    from memcommit.application.operations.profile.model import _write_registry, create_authority_grant
+    from memcommit.persistence.store import MemoryStore
 
     authoring = virtual_authoring_registry().active
 
@@ -171,7 +171,7 @@ def _spawn(home: Path, *args: str, slow_delete: bool = False):
     argv = (
         [sys.executable, str(__file__), "--slow-cli", str(home), *args]
         if slow_delete
-        else [sys.executable, "-m", "memcommit.cli", *args]
+        else [sys.executable, "-m", "memcommit.adapters.console.entrypoint", *args]
     )
     command = (
         f"stty rows {ROWS} cols {COLS}; stty size; "
@@ -383,7 +383,7 @@ def _capture_active_blocks(home: Path) -> None:
 
 def _run_direct_cli(home: Path, *args: str) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
-        [sys.executable, "-m", "memcommit.cli", *args],
+        [sys.executable, "-m", "memcommit.adapters.console.entrypoint", *args],
         cwd=ROOT,
         env=_environment(home),
         check=False,
@@ -397,7 +397,7 @@ def _run_slow_cli(home: Path, args: list[str]) -> None:
 
     os.environ["HOME"] = str(home)
     from memcommit.commands import profile as profile_command
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
 
     original_profile = profile_command.remove_profile
     original_study = profile_command.remove_study

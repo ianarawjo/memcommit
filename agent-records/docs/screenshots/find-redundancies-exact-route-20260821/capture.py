@@ -33,7 +33,7 @@ _BASE.ROWS = ROWS
 
 
 def _configure_isolated_store(store_root: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     values = {
         "STORE_DIR": store_root,
@@ -56,7 +56,7 @@ def _configure_isolated_store(store_root: Path) -> None:
 
 def _initialize() -> None:
     from memcommit.context import Context, Memory
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     context = Context(
         uid="10000000-0000-4000-8000-000000000210",
@@ -86,7 +86,7 @@ class _ForbiddenProvider:
 
 def _verification() -> str:
     from memcommit.context import Memory
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()
     context = store.load_direct("quality/exact-route")
@@ -110,7 +110,7 @@ def _invoke(app, args: list[str]) -> int:
 
 def _run_child() -> None:
     import memcommit.commands.find_duplicates.command as find_command
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
 
     with tempfile.TemporaryDirectory(
         prefix="find-redundancies-direct-route-"

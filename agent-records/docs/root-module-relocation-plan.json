@@ -20,33 +20,33 @@
       "lines": 938,
       "module": "memcommit._architecture_catalog",
       "path": "memcommit/_architecture_catalog.py",
-      "reason": "implementation belongs to a reusable named concept; the source inventory is repository tooling rather than distributed MemCommit runtime behavior",
+      "reason": "implementation belongs to a reusable named concept",
       "role": "shared-concept-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.add.application",
       "canonical_target_path": "memcommit/application/operations/add/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.add_application",
       "path": "memcommit/add_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.add.runtime",
       "canonical_target_path": "memcommit/application/operations/add/runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.add_runtime",
       "path": "memcommit/add_runtime.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.semantic.classification.ambiguity",
       "canonical_target_path": "memcommit/application/semantic/classification/ambiguity.py",
       "inbound_package_importers": 1,
@@ -57,7 +57,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.flow",
       "canonical_target_path": "memcommit/application/flow.py",
       "inbound_package_importers": 2,
@@ -68,7 +68,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.review_policy",
       "canonical_target_path": "memcommit/application/review_policy.py",
       "inbound_package_importers": 7,
@@ -79,7 +79,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.retained_history.applied_review",
       "canonical_target_path": "memcommit/application/retained_history/applied_review.py",
       "inbound_package_importers": 2,
@@ -90,169 +90,169 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.atomize.domain",
       "canonical_target_path": "memcommit/application/operations/atomize/domain.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.atomize",
       "path": "memcommit/atomize.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.atomize.analysis_application",
       "canonical_target_path": "memcommit/application/operations/atomize/analysis_application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.atomize_analysis_application",
       "path": "memcommit/atomize_analysis_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.atomize.analysis_runtime",
       "canonical_target_path": "memcommit/application/operations/atomize/analysis_runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.atomize_analysis_runtime",
       "path": "memcommit/atomize_analysis_runtime.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.atomize.application",
       "canonical_target_path": "memcommit/application/operations/atomize/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.atomize_application",
       "path": "memcommit/atomize_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.atomize.grounding",
       "canonical_target_path": "memcommit/application/operations/atomize/grounding.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.atomize_grounding",
       "path": "memcommit/atomize_grounding.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.atomize.grounding_application",
       "canonical_target_path": "memcommit/application/operations/atomize/grounding_application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.atomize_grounding_application",
       "path": "memcommit/atomize_grounding_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.atomize.grounding_provider",
       "canonical_target_path": "memcommit/application/operations/atomize/grounding_provider.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.atomize_grounding_provider",
       "path": "memcommit/atomize_grounding_provider.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.atomize.grounding_runtime",
       "canonical_target_path": "memcommit/application/operations/atomize/grounding_runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.atomize_grounding_runtime",
       "path": "memcommit/atomize_grounding_runtime.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.atomize.grounding_meld_adapter",
       "canonical_target_path": "memcommit/application/operations/atomize/grounding_meld_adapter.py",
       "inbound_package_importers": 0,
       "lines": 10,
       "module": "memcommit.atomize_meld_adapter",
       "path": "memcommit/atomize_meld_adapter.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.atomize.normal_form",
       "canonical_target_path": "memcommit/application/operations/atomize/normal_form.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.atomize_normal_form",
       "path": "memcommit/atomize_normal_form.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.atomize.resolution_adapter",
       "canonical_target_path": "memcommit/application/operations/atomize/resolution_adapter.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.atomize_resolution_adapter",
       "path": "memcommit/atomize_resolution_adapter.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.atomize.result_adapter",
       "canonical_target_path": "memcommit/application/operations/atomize/result_adapter.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.atomize_result_adapter",
       "path": "memcommit/atomize_result_adapter.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.atomize.runtime",
       "canonical_target_path": "memcommit/application/operations/atomize/runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.atomize_runtime",
       "path": "memcommit/atomize_runtime.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.atomize.workbench",
       "canonical_target_path": "memcommit/application/operations/atomize/workbench.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.atomize_workbench",
       "path": "memcommit/atomize_workbench.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.atomize.workflow",
       "canonical_target_path": "memcommit/application/operations/atomize/workflow.py",
       "inbound_package_importers": 0,
       "lines": 97,
       "module": "memcommit.atomize_workflow",
       "path": "memcommit/atomize_workflow.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
       "action": "retain",
@@ -266,7 +266,7 @@
       "role": "root-boundary"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.retained_history.checkpoint_catalog",
       "canonical_target_path": "memcommit/application/retained_history/checkpoint_catalog.py",
       "inbound_package_importers": 3,
@@ -277,7 +277,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.retained_history.checkpoint_frames",
       "canonical_target_path": "memcommit/application/retained_history/checkpoint_frames.py",
       "inbound_package_importers": 1,
@@ -288,7 +288,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.retained_history.checkpoint_migration",
       "canonical_target_path": "memcommit/application/retained_history/checkpoint_migration.py",
       "inbound_package_importers": 0,
@@ -299,15 +299,15 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.chunk.domain",
       "canonical_target_path": "memcommit/application/operations/chunk/domain.py",
       "inbound_package_importers": 1,
       "lines": 8,
       "module": "memcommit.chunking",
       "path": "memcommit/chunking.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
       "action": "relocate-without-alias",
@@ -317,11 +317,11 @@
       "lines": 498,
       "module": "memcommit.cli",
       "path": "memcommit/cli.py",
-      "reason": "implementation belongs to a reusable named concept; the console entry point now has one explicit adapter owner and the former root import is intentionally unsupported",
+      "reason": "implementation belongs to a reusable named concept",
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.adapters.console.clipboard",
       "canonical_target_path": "memcommit/adapters/console/clipboard.py",
       "inbound_package_importers": 11,
@@ -332,7 +332,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.persistence.command_ledger.attempts",
       "canonical_target_path": "memcommit/persistence/command_ledger/attempts.py",
       "inbound_package_importers": 16,
@@ -343,7 +343,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.retained_history.command_history",
       "canonical_target_path": "memcommit/application/retained_history/command_history.py",
       "inbound_package_importers": 11,
@@ -354,7 +354,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.compare.ledger.model",
       "canonical_target_path": "memcommit/application/operations/compare/ledger/model.py",
       "inbound_package_importers": 33,
@@ -365,7 +365,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.compare.ledger.evidence",
       "canonical_target_path": "memcommit/application/operations/compare/ledger/evidence.py",
       "inbound_package_importers": 5,
@@ -376,7 +376,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.compare.ledger.execution",
       "canonical_target_path": "memcommit/application/operations/compare/ledger/execution.py",
       "inbound_package_importers": 9,
@@ -387,7 +387,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.adapters.interfaces.presentation.comparison",
       "canonical_target_path": "memcommit/adapters/interfaces/presentation/comparison.py",
       "inbound_package_importers": 5,
@@ -398,7 +398,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.compare.ledger.provider",
       "canonical_target_path": "memcommit/application/operations/compare/ledger/provider.py",
       "inbound_package_importers": 11,
@@ -409,7 +409,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.compare.ledger.session_application",
       "canonical_target_path": "memcommit/application/operations/compare/ledger/session_application.py",
       "inbound_package_importers": 2,
@@ -420,7 +420,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.compare.ledger.store",
       "canonical_target_path": "memcommit/application/operations/compare/ledger/store.py",
       "inbound_package_importers": 10,
@@ -431,29 +431,29 @@
       "role": "operation-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.compare.summary",
       "canonical_target_path": "memcommit/application/operations/compare/summary.py",
       "inbound_package_importers": 1,
       "lines": 8,
       "module": "memcommit.comparison_summary",
       "path": "memcommit/comparison_summary.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.compare.summary_application",
       "canonical_target_path": "memcommit/application/operations/compare/summary_application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.comparison_summary_application",
       "path": "memcommit/comparison_summary_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.adapters.interfaces.cli.comparison_summary",
       "canonical_target_path": "memcommit/adapters/interfaces/cli/comparison_summary.py",
       "inbound_package_importers": 1,
@@ -464,29 +464,29 @@
       "role": "operation-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.compare.summary_provider",
       "canonical_target_path": "memcommit/application/operations/compare/summary_provider.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.comparison_summary_provider",
       "path": "memcommit/comparison_summary_provider.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.compare.summary_rules",
       "canonical_target_path": "memcommit/application/operations/compare/summary_rules.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.comparison_summary_rules",
       "path": "memcommit/comparison_summary_rules.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.configuration.config",
       "canonical_target_path": "memcommit/configuration/config.py",
       "inbound_package_importers": 24,
@@ -497,7 +497,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.conformance.model",
       "canonical_target_path": "memcommit/application/operations/conformance/model.py",
       "inbound_package_importers": 6,
@@ -508,7 +508,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.conformance.runtime",
       "canonical_target_path": "memcommit/application/operations/conformance/runtime.py",
       "inbound_package_importers": 2,
@@ -519,7 +519,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.adapters.interfaces.cli.invocation",
       "canonical_target_path": "memcommit/adapters/interfaces/cli/invocation.py",
       "inbound_package_importers": 0,
@@ -541,7 +541,7 @@
       "role": "root-boundary"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.core.context_targeting.context_catalog",
       "canonical_target_path": "memcommit/core/context_targeting/context_catalog.py",
       "inbound_package_importers": 1,
@@ -552,7 +552,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.retained_history.context_history",
       "canonical_target_path": "memcommit/application/retained_history/context_history.py",
       "inbound_package_importers": 4,
@@ -563,29 +563,29 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.context_init.application",
       "canonical_target_path": "memcommit/application/operations/context_init/application.py",
       "inbound_package_importers": 0,
       "lines": 11,
       "module": "memcommit.context_init_application",
       "path": "memcommit/context_init_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.context_init.runtime",
       "canonical_target_path": "memcommit/application/operations/context_init/runtime.py",
       "inbound_package_importers": 0,
       "lines": 10,
       "module": "memcommit.context_init_runtime",
       "path": "memcommit/context_init_runtime.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.retained_history.context_lifecycle",
       "canonical_target_path": "memcommit/application/retained_history/context_lifecycle.py",
       "inbound_package_importers": 1,
@@ -607,7 +607,7 @@
       "role": "root-boundary"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.core.context_targeting.naming",
       "canonical_target_path": "memcommit/core/context_targeting/naming.py",
       "inbound_package_importers": 26,
@@ -618,7 +618,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.rationale.context",
       "canonical_target_path": "memcommit/application/operations/rationale/context.py",
       "inbound_package_importers": 1,
@@ -629,18 +629,18 @@
       "role": "operation-implementation"
     },
     {
-      "action": "centralize-alias",
-      "canonical_target": "memcommit.compatibility.context_scope",
-      "canonical_target_path": "memcommit/compatibility/context_scope.py",
+      "action": "remove",
+      "canonical_target": "memcommit.core.context_targeting.loading",
+      "canonical_target_path": "memcommit/core/context_targeting/loading.py",
       "inbound_package_importers": 0,
       "lines": 11,
       "module": "memcommit.context_scope",
       "path": "memcommit/context_scope.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.retained_history.context_snapshot",
       "canonical_target_path": "memcommit/application/retained_history/context_snapshot.py",
       "inbound_package_importers": 12,
@@ -651,18 +651,18 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.pwd.application",
       "canonical_target_path": "memcommit/application/operations/pwd/application.py",
       "inbound_package_importers": 0,
       "lines": 11,
       "module": "memcommit.current_context_application",
       "path": "memcommit/current_context_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.core.context_targeting.navigation",
       "canonical_target_path": "memcommit/core/context_targeting/navigation.py",
       "inbound_package_importers": 3,
@@ -673,18 +673,18 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.pwd.runtime",
       "canonical_target_path": "memcommit/application/operations/pwd/runtime.py",
       "inbound_package_importers": 0,
       "lines": 10,
       "module": "memcommit.current_context_runtime",
       "path": "memcommit/current_context_runtime.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.dedun.scope",
       "canonical_target_path": "memcommit/application/operations/dedun/scope.py",
       "inbound_package_importers": 1,
@@ -695,18 +695,18 @@
       "role": "operation-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.dedup.application",
       "canonical_target_path": "memcommit/application/operations/dedup/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.dedup_application",
       "path": "memcommit/dedup_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.dedup.planning",
       "canonical_target_path": "memcommit/application/operations/dedup/planning.py",
       "inbound_package_importers": 2,
@@ -717,40 +717,40 @@
       "role": "operation-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.dedup.runtime",
       "canonical_target_path": "memcommit/application/operations/dedup/runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.dedup_runtime",
       "path": "memcommit/dedup_runtime.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.delete.application",
       "canonical_target_path": "memcommit/application/operations/delete/application.py",
       "inbound_package_importers": 0,
       "lines": 11,
       "module": "memcommit.delete_application",
       "path": "memcommit/delete_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.delete.runtime",
       "canonical_target_path": "memcommit/application/operations/delete/runtime.py",
       "inbound_package_importers": 0,
       "lines": 10,
       "module": "memcommit.delete_runtime",
       "path": "memcommit/delete_runtime.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.authority.derived_policy",
       "canonical_target_path": "memcommit/application/authority/derived_policy.py",
       "inbound_package_importers": 26,
@@ -761,7 +761,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.reviewing.direct_item_duplicates",
       "canonical_target_path": "memcommit/application/reviewing/direct_item_duplicates.py",
       "inbound_package_importers": 8,
@@ -772,7 +772,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.distill.model",
       "canonical_target_path": "memcommit/application/operations/distill/model.py",
       "inbound_package_importers": 8,
@@ -783,18 +783,18 @@
       "role": "operation-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.distill.application",
       "canonical_target_path": "memcommit/application/operations/distill/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.distill_application",
       "path": "memcommit/distill_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.distill.config",
       "canonical_target_path": "memcommit/application/operations/distill/config.py",
       "inbound_package_importers": 3,
@@ -805,7 +805,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.semantic.generative_reduction_reference",
       "canonical_target_path": "memcommit/application/semantic/generative_reduction_reference.py",
       "inbound_package_importers": 2,
@@ -816,7 +816,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.distill.goal_fit",
       "canonical_target_path": "memcommit/application/operations/distill/goal_fit.py",
       "inbound_package_importers": 1,
@@ -827,18 +827,18 @@
       "role": "operation-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.distill.runtime",
       "canonical_target_path": "memcommit/application/operations/distill/runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.distill_runtime",
       "path": "memcommit/distill_runtime.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.semantic.classification.duplicates",
       "canonical_target_path": "memcommit/application/semantic/classification/duplicates.py",
       "inbound_package_importers": 1,
@@ -849,29 +849,29 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.edit.application",
       "canonical_target_path": "memcommit/application/operations/edit/application.py",
       "inbound_package_importers": 0,
       "lines": 11,
       "module": "memcommit.edit_application",
       "path": "memcommit/edit_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.edit.runtime",
       "canonical_target_path": "memcommit/application/operations/edit/runtime.py",
       "inbound_package_importers": 0,
       "lines": 10,
       "module": "memcommit.edit_runtime",
       "path": "memcommit/edit_runtime.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.elaborate.model",
       "canonical_target_path": "memcommit/application/operations/elaborate/model.py",
       "inbound_package_importers": 11,
@@ -882,29 +882,29 @@
       "role": "operation-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.elaborate.add_runtime",
       "canonical_target_path": "memcommit/application/operations/elaborate/add_runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.elaborate_add_runtime",
       "path": "memcommit/elaborate_add_runtime.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.elaborate.application",
       "canonical_target_path": "memcommit/application/operations/elaborate/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.elaborate_application",
       "path": "memcommit/elaborate_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.elaborate.config",
       "canonical_target_path": "memcommit/application/operations/elaborate/config.py",
       "inbound_package_importers": 3,
@@ -915,18 +915,18 @@
       "role": "operation-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.elaborate.runtime",
       "canonical_target_path": "memcommit/application/operations/elaborate/runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.elaborate_runtime",
       "path": "memcommit/elaborate_runtime.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.elaborate.target_context",
       "canonical_target_path": "memcommit/application/operations/elaborate/target_context.py",
       "inbound_package_importers": 2,
@@ -937,29 +937,29 @@
       "role": "operation-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.embed.application",
       "canonical_target_path": "memcommit/application/operations/embed/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.embed_application",
       "path": "memcommit/embed_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.embed.runtime",
       "canonical_target_path": "memcommit/application/operations/embed/runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.embed_runtime",
       "path": "memcommit/embed_runtime.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.exact_command_review",
       "canonical_target_path": "memcommit/application/exact_command_review.py",
       "inbound_package_importers": 14,
@@ -970,29 +970,29 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.exact_dedup.application",
       "canonical_target_path": "memcommit/application/operations/exact_dedup/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.exact_dedup",
       "path": "memcommit/exact_dedup.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.exact_dedup.application",
       "canonical_target_path": "memcommit/application/operations/exact_dedup/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.exact_dedup_application",
       "path": "memcommit/exact_dedup_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.search.answer_dialogue",
       "canonical_target_path": "memcommit/application/operations/search/answer_dialogue.py",
       "inbound_package_importers": 3,
@@ -1003,7 +1003,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.search.answer_references",
       "canonical_target_path": "memcommit/application/operations/search/answer_references.py",
       "inbound_package_importers": 6,
@@ -1014,51 +1014,51 @@
       "role": "operation-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.search.application",
       "canonical_target_path": "memcommit/application/operations/search/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.find_application",
       "path": "memcommit/find_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.search.materialization_application",
       "canonical_target_path": "memcommit/application/operations/search/materialization_application.py",
       "inbound_package_importers": 0,
       "lines": 10,
       "module": "memcommit.find_materialization_application",
       "path": "memcommit/find_materialization_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.search.materialization_runtime",
       "canonical_target_path": "memcommit/application/operations/search/materialization_runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.find_materialization_runtime",
       "path": "memcommit/find_materialization_runtime.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.search.runtime",
       "canonical_target_path": "memcommit/application/operations/search/runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.find_runtime",
       "path": "memcommit/find_runtime.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.search.scope_evidence",
       "canonical_target_path": "memcommit/application/operations/search/scope_evidence.py",
       "inbound_package_importers": 2,
@@ -1069,7 +1069,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.search.turn_dialogue",
       "canonical_target_path": "memcommit/application/operations/search/turn_dialogue.py",
       "inbound_package_importers": 1,
@@ -1080,7 +1080,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.reviewing.quality.findings",
       "canonical_target_path": "memcommit/application/reviewing/quality/findings.py",
       "inbound_package_importers": 15,
@@ -1091,70 +1091,70 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.fit.ground_report",
       "canonical_target_path": "memcommit/application/operations/fit/ground_report.py",
       "inbound_package_importers": 1,
       "lines": 8,
       "module": "memcommit.fit",
       "path": "memcommit/fit.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.fit.application",
       "canonical_target_path": "memcommit/application/operations/fit/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.fit_application",
       "path": "memcommit/fit_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.fit.coherence",
       "canonical_target_path": "memcommit/application/operations/fit/coherence.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.fit_coherence",
       "path": "memcommit/fit_coherence.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.fit.judgment",
       "canonical_target_path": "memcommit/application/operations/fit/judgment.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.fit_judgment",
       "path": "memcommit/fit_judgment.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.fit.runtime",
       "canonical_target_path": "memcommit/application/operations/fit/runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.fit_runtime",
       "path": "memcommit/fit_runtime.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.fit.store",
       "canonical_target_path": "memcommit/application/operations/fit/store.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.fit_store",
       "path": "memcommit/fit_store.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
       "action": "retire",
@@ -1168,18 +1168,18 @@
       "role": "retired-prototype"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.forget.application",
       "canonical_target_path": "memcommit/application/operations/forget/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.forget_application",
       "path": "memcommit/forget_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.forget.provider",
       "canonical_target_path": "memcommit/application/operations/forget/provider.py",
       "inbound_package_importers": 2,
@@ -1190,18 +1190,18 @@
       "role": "operation-implementation"
     },
     {
-      "action": "centralize-alias",
-      "canonical_target": "memcommit.compatibility.forget_resolution_adapter",
-      "canonical_target_path": "memcommit/compatibility/forget_resolution_adapter.py",
+      "action": "remove",
+      "canonical_target": "memcommit.adapters.interfaces.tui.operations.forget.resolution",
+      "canonical_target_path": "memcommit/adapters/interfaces/tui/operations/forget/resolution.py",
       "inbound_package_importers": 1,
       "lines": 8,
       "module": "memcommit.forget_resolution_adapter",
       "path": "memcommit/forget_resolution_adapter.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.forget.review",
       "canonical_target_path": "memcommit/application/operations/forget/review.py",
       "inbound_package_importers": 4,
@@ -1212,18 +1212,18 @@
       "role": "operation-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.forget.runtime",
       "canonical_target_path": "memcommit/application/operations/forget/runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.forget_runtime",
       "path": "memcommit/forget_runtime.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.semantic.goal_focus",
       "canonical_target_path": "memcommit/application/semantic/goal_focus.py",
       "inbound_package_importers": 18,
@@ -1234,7 +1234,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.semantic.goal_focus_runtime",
       "canonical_target_path": "memcommit/application/semantic/goal_focus_runtime.py",
       "inbound_package_importers": 11,
@@ -1245,7 +1245,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.compare.ledger.granted_store",
       "canonical_target_path": "memcommit/application/operations/compare/ledger/granted_store.py",
       "inbound_package_importers": 8,
@@ -1256,7 +1256,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.retained_history.granted_provenance",
       "canonical_target_path": "memcommit/application/retained_history/granted_provenance.py",
       "inbound_package_importers": 2,
@@ -1267,29 +1267,29 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.query.granted_application",
       "canonical_target_path": "memcommit/application/operations/query/granted_application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.granted_query_application",
       "path": "memcommit/granted_query_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.query.granted_runtime",
       "canonical_target_path": "memcommit/application/operations/query/granted_runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.granted_query_runtime",
       "path": "memcommit/granted_query_runtime.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.update.granted_source_application",
       "canonical_target_path": "memcommit/application/operations/update/granted_source_application.py",
       "inbound_package_importers": 1,
@@ -1300,7 +1300,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.update.granted_application",
       "canonical_target_path": "memcommit/application/operations/update/granted_application.py",
       "inbound_package_importers": 5,
@@ -1311,7 +1311,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.ground.model",
       "canonical_target_path": "memcommit/application/operations/ground/model.py",
       "inbound_package_importers": 26,
@@ -1322,7 +1322,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.ground.context_catalog",
       "canonical_target_path": "memcommit/application/operations/ground/context_catalog.py",
       "inbound_package_importers": 1,
@@ -1333,7 +1333,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.ground.dialogue",
       "canonical_target_path": "memcommit/application/operations/ground/dialogue.py",
       "inbound_package_importers": 1,
@@ -1344,7 +1344,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.ground.distill",
       "canonical_target_path": "memcommit/application/operations/ground/distill.py",
       "inbound_package_importers": 2,
@@ -1355,7 +1355,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.ground.elaborate",
       "canonical_target_path": "memcommit/application/operations/ground/elaborate.py",
       "inbound_package_importers": 2,
@@ -1366,7 +1366,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.ground.turn_dialogue",
       "canonical_target_path": "memcommit/application/operations/ground/turn_dialogue.py",
       "inbound_package_importers": 2,
@@ -1377,7 +1377,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.ground.workspace_model",
       "canonical_target_path": "memcommit/application/operations/ground/workspace_model.py",
       "inbound_package_importers": 13,
@@ -1388,7 +1388,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.ground.workspace_application",
       "canonical_target_path": "memcommit/application/operations/ground/workspace_application.py",
       "inbound_package_importers": 4,
@@ -1399,7 +1399,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.ground.workspace_draft",
       "canonical_target_path": "memcommit/application/operations/ground/workspace_draft.py",
       "inbound_package_importers": 3,
@@ -1410,7 +1410,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.ground.workspace_draft_store",
       "canonical_target_path": "memcommit/application/operations/ground/workspace_draft_store.py",
       "inbound_package_importers": 2,
@@ -1421,7 +1421,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.ground.workspace_fit",
       "canonical_target_path": "memcommit/application/operations/ground/workspace_fit.py",
       "inbound_package_importers": 2,
@@ -1432,7 +1432,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.ground.workspace_history",
       "canonical_target_path": "memcommit/application/operations/ground/workspace_history.py",
       "inbound_package_importers": 1,
@@ -1443,7 +1443,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.ground.workspace_projection",
       "canonical_target_path": "memcommit/application/operations/ground/workspace_projection.py",
       "inbound_package_importers": 3,
@@ -1454,7 +1454,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.ground.workspace_runtime",
       "canonical_target_path": "memcommit/application/operations/ground/workspace_runtime.py",
       "inbound_package_importers": 8,
@@ -1465,29 +1465,29 @@
       "role": "operation-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.help.application",
       "canonical_target_path": "memcommit/application/operations/help/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.help_application",
       "path": "memcommit/help_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.help.lookup_application",
       "canonical_target_path": "memcommit/application/operations/help/lookup_application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.help_lookup_application",
       "path": "memcommit/help_lookup_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.retained_history.reconstruction",
       "canonical_target_path": "memcommit/application/retained_history/reconstruction.py",
       "inbound_package_importers": 12,
@@ -1498,7 +1498,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.retained_history.display",
       "canonical_target_path": "memcommit/application/retained_history/display.py",
       "inbound_package_importers": 3,
@@ -1509,7 +1509,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.log.search",
       "canonical_target_path": "memcommit/application/operations/log/search.py",
       "inbound_package_importers": 4,
@@ -1520,18 +1520,18 @@
       "role": "operation-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.adapters.interfaces.tui.workbenches.impact",
       "canonical_target_path": "memcommit/adapters/interfaces/tui/workbenches/impact.py",
       "inbound_package_importers": 0,
       "lines": 11,
       "module": "memcommit.impact_controller",
       "path": "memcommit/impact_controller.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.interactive_command",
       "canonical_target_path": "memcommit/application/interactive_command.py",
       "inbound_package_importers": 6,
@@ -1542,7 +1542,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.interactive_command_review",
       "canonical_target_path": "memcommit/application/interactive_command_review.py",
       "inbound_package_importers": 6,
@@ -1553,29 +1553,29 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.find.literal_application",
       "canonical_target_path": "memcommit/application/operations/find/literal_application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.literal_find_application",
       "path": "memcommit/literal_find_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.find.literal_runtime",
       "canonical_target_path": "memcommit/application/operations/find/literal_runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.literal_find_runtime",
       "path": "memcommit/literal_find_runtime.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.meld.model",
       "canonical_target_path": "memcommit/application/operations/meld/model.py",
       "inbound_package_importers": 24,
@@ -1586,40 +1586,40 @@
       "role": "operation-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.meld.application",
       "canonical_target_path": "memcommit/application/operations/meld/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.meld_application",
       "path": "memcommit/meld_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.meld.application_flow",
       "canonical_target_path": "memcommit/application/operations/meld/application_flow.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.meld_application_flow",
       "path": "memcommit/meld_application_flow.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.meld.assessment_application",
       "canonical_target_path": "memcommit/application/operations/meld/assessment_application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.meld_assessment_application",
       "path": "memcommit/meld_assessment_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.meld.choice_branches",
       "canonical_target_path": "memcommit/application/operations/meld/choice_branches.py",
       "inbound_package_importers": 1,
@@ -1630,7 +1630,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.meld.provider",
       "canonical_target_path": "memcommit/application/operations/meld/provider.py",
       "inbound_package_importers": 7,
@@ -1641,7 +1641,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.meld.resolution_adapter",
       "canonical_target_path": "memcommit/application/operations/meld/resolution_adapter.py",
       "inbound_package_importers": 3,
@@ -1652,18 +1652,18 @@
       "role": "operation-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.meld.resolution_application",
       "canonical_target_path": "memcommit/application/operations/meld/resolution_application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.meld_resolution_application",
       "path": "memcommit/meld_resolution_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.meld.resolution_cache",
       "canonical_target_path": "memcommit/application/operations/meld/resolution_cache.py",
       "inbound_package_importers": 3,
@@ -1674,51 +1674,51 @@
       "role": "operation-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.meld.restart_application",
       "canonical_target_path": "memcommit/application/operations/meld/restart_application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.meld_restart_application",
       "path": "memcommit/meld_restart_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.meld.runtime",
       "canonical_target_path": "memcommit/application/operations/meld/runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.meld_runtime",
       "path": "memcommit/meld_runtime.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.meld.session_application",
       "canonical_target_path": "memcommit/application/operations/meld/session_application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.meld_session_application",
       "path": "memcommit/meld_session_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.meld.start_application",
       "canonical_target_path": "memcommit/application/operations/meld/start_application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.meld_start_application",
       "path": "memcommit/meld_start_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.reviewing.memory_diff",
       "canonical_target_path": "memcommit/application/reviewing/memory_diff.py",
       "inbound_package_importers": 12,
@@ -1729,7 +1729,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.retained_history.memory_lineage",
       "canonical_target_path": "memcommit/application/retained_history/memory_lineage.py",
       "inbound_package_importers": 4,
@@ -1740,40 +1740,40 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.memory_transfer.application",
       "canonical_target_path": "memcommit/application/operations/memory_transfer/application.py",
       "inbound_package_importers": 0,
       "lines": 11,
       "module": "memcommit.memory_transfer_application",
       "path": "memcommit/memory_transfer_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.memory_transfer.runtime",
       "canonical_target_path": "memcommit/application/operations/memory_transfer/runtime.py",
       "inbound_package_importers": 0,
       "lines": 10,
       "module": "memcommit.memory_transfer_runtime",
       "path": "memcommit/memory_transfer_runtime.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.merge.application",
       "canonical_target_path": "memcommit/application/operations/merge/application.py",
       "inbound_package_importers": 0,
       "lines": 11,
       "module": "memcommit.merge_application",
       "path": "memcommit/merge_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.merge.planning",
       "canonical_target_path": "memcommit/application/operations/merge/planning.py",
       "inbound_package_importers": 1,
@@ -1784,18 +1784,18 @@
       "role": "operation-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.merge.runtime",
       "canonical_target_path": "memcommit/application/operations/merge/runtime.py",
       "inbound_package_importers": 0,
       "lines": 10,
       "module": "memcommit.merge_runtime",
       "path": "memcommit/merge_runtime.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.merge.tree",
       "canonical_target_path": "memcommit/application/operations/merge/tree.py",
       "inbound_package_importers": 1,
@@ -1806,7 +1806,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.merge.tree_persistence",
       "canonical_target_path": "memcommit/application/operations/merge/tree_persistence.py",
       "inbound_package_importers": 1,
@@ -1817,7 +1817,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.core.context_targeting.name_suggestions",
       "canonical_target_path": "memcommit/core/context_targeting/name_suggestions.py",
       "inbound_package_importers": 3,
@@ -1828,7 +1828,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.semantic.classification.gates",
       "canonical_target_path": "memcommit/application/semantic/classification/gates.py",
       "inbound_package_importers": 1,
@@ -1846,11 +1846,11 @@
       "lines": 1210,
       "module": "memcommit.ops",
       "path": "memcommit/ops.py",
-      "reason": "implementation belongs to a reusable named concept; the in-memory operation API now has one explicit application owner and the former root import is intentionally unsupported",
+      "reason": "implementation belongs to a reusable named concept",
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.query.answer",
       "canonical_target_path": "memcommit/application/operations/query/answer.py",
       "inbound_package_importers": 3,
@@ -1861,7 +1861,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.profile.config",
       "canonical_target_path": "memcommit/application/operations/profile/config.py",
       "inbound_package_importers": 116,
@@ -1872,7 +1872,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.profile.model",
       "canonical_target_path": "memcommit/application/operations/profile/model.py",
       "inbound_package_importers": 87,
@@ -1890,11 +1890,11 @@
       "lines": 4343,
       "module": "memcommit.provenance",
       "path": "memcommit/provenance.py",
-      "reason": "implementation belongs to a reusable named concept; the monolith was replaced by the explicit Memory-history reconstruction package",
+      "reason": "implementation belongs to a reusable named concept",
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.providers.types",
       "canonical_target_path": "memcommit/providers/types.py",
       "inbound_package_importers": 45,
@@ -1905,7 +1905,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.reviewing.quality.audit",
       "canonical_target_path": "memcommit/application/reviewing/quality/audit.py",
       "inbound_package_importers": 6,
@@ -1916,7 +1916,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.reviewing.quality.audit_store",
       "canonical_target_path": "memcommit/application/reviewing/quality/audit_store.py",
       "inbound_package_importers": 4,
@@ -1927,7 +1927,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.reviewing.quality.report",
       "canonical_target_path": "memcommit/application/reviewing/quality/report.py",
       "inbound_package_importers": 6,
@@ -1938,7 +1938,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.reviewing.quality.workbench",
       "canonical_target_path": "memcommit/application/reviewing/quality/workbench.py",
       "inbound_package_importers": 11,
@@ -1949,7 +1949,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.reviewing.quality.handoff",
       "canonical_target_path": "memcommit/application/reviewing/quality/handoff.py",
       "inbound_package_importers": 21,
@@ -1960,18 +1960,18 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.query.ordinary_application",
       "canonical_target_path": "memcommit/application/operations/query/ordinary_application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.query_application",
       "path": "memcommit/query_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.providers.subscription",
       "canonical_target_path": "memcommit/providers/subscription.py",
       "inbound_package_importers": 63,
@@ -1982,40 +1982,40 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.query.reference_application",
       "canonical_target_path": "memcommit/application/operations/query/reference_application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.query_reference_application",
       "path": "memcommit/query_reference_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.query.reference_runtime",
       "canonical_target_path": "memcommit/application/operations/query/reference_runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.query_reference_runtime",
       "path": "memcommit/query_reference_runtime.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.query.ordinary_runtime",
       "canonical_target_path": "memcommit/application/operations/query/ordinary_runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.query_runtime",
       "path": "memcommit/query_runtime.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.rationale.model",
       "canonical_target_path": "memcommit/application/operations/rationale/model.py",
       "inbound_package_importers": 8,
@@ -2026,7 +2026,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.rationale.cache",
       "canonical_target_path": "memcommit/application/operations/rationale/cache.py",
       "inbound_package_importers": 3,
@@ -2037,7 +2037,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.rationale.rules",
       "canonical_target_path": "memcommit/application/operations/rationale/rules.py",
       "inbound_package_importers": 3,
@@ -2048,7 +2048,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.rationale.scope",
       "canonical_target_path": "memcommit/application/operations/rationale/scope.py",
       "inbound_package_importers": 2,
@@ -2059,7 +2059,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.rationale.semantic",
       "canonical_target_path": "memcommit/application/operations/rationale/semantic.py",
       "inbound_package_importers": 3,
@@ -2070,7 +2070,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.reviewing.read_report",
       "canonical_target_path": "memcommit/application/reviewing/read_report.py",
       "inbound_package_importers": 7,
@@ -2081,7 +2081,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.reviewing.read_report_recents",
       "canonical_target_path": "memcommit/application/reviewing/read_report_recents.py",
       "inbound_package_importers": 3,
@@ -2092,7 +2092,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.reviewing.quality.redundancy_scope",
       "canonical_target_path": "memcommit/application/reviewing/quality/redundancy_scope.py",
       "inbound_package_importers": 3,
@@ -2103,18 +2103,18 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.reference.application",
       "canonical_target_path": "memcommit/application/operations/reference/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.reference_application",
       "path": "memcommit/reference_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.reference.provenance",
       "canonical_target_path": "memcommit/application/operations/reference/provenance.py",
       "inbound_package_importers": 3,
@@ -2125,40 +2125,40 @@
       "role": "operation-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.reference.runtime",
       "canonical_target_path": "memcommit/application/operations/reference/runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.reference_runtime",
       "path": "memcommit/reference_runtime.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.replace.application",
       "canonical_target_path": "memcommit/application/operations/replace/application.py",
       "inbound_package_importers": 0,
       "lines": 11,
       "module": "memcommit.replace_application",
       "path": "memcommit/replace_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.replace.runtime",
       "canonical_target_path": "memcommit/application/operations/replace/runtime.py",
       "inbound_package_importers": 0,
       "lines": 10,
       "module": "memcommit.replace_runtime",
       "path": "memcommit/replace_runtime.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.resolution.workbench",
       "canonical_target_path": "memcommit/application/resolution/workbench.py",
       "inbound_package_importers": 25,
@@ -2169,18 +2169,18 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.resolve.application",
       "canonical_target_path": "memcommit/application/operations/resolve/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.resolve_application",
       "path": "memcommit/resolve_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.resolve.rules",
       "canonical_target_path": "memcommit/application/operations/resolve/rules.py",
       "inbound_package_importers": 2,
@@ -2191,18 +2191,18 @@
       "role": "operation-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.resolve.runtime",
       "canonical_target_path": "memcommit/application/operations/resolve/runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.resolve_runtime",
       "path": "memcommit/resolve_runtime.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.resolve.semantic",
       "canonical_target_path": "memcommit/application/operations/resolve/semantic.py",
       "inbound_package_importers": 4,
@@ -2213,7 +2213,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.resolve.targeting",
       "canonical_target_path": "memcommit/application/operations/resolve/targeting.py",
       "inbound_package_importers": 1,
@@ -2224,7 +2224,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.resource_import.model",
       "canonical_target_path": "memcommit/application/operations/resource_import/model.py",
       "inbound_package_importers": 2,
@@ -2235,7 +2235,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.reviewing.result_workbench",
       "canonical_target_path": "memcommit/application/reviewing/result_workbench.py",
       "inbound_package_importers": 13,
@@ -2246,7 +2246,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.review.model",
       "canonical_target_path": "memcommit/application/operations/review/model.py",
       "inbound_package_importers": 21,
@@ -2257,18 +2257,18 @@
       "role": "operation-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.reviewing.report",
       "canonical_target_path": "memcommit/application/reviewing/report.py",
       "inbound_package_importers": 3,
       "lines": 8,
       "module": "memcommit.review_report",
       "path": "memcommit/review_report.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.review.report_adapters",
       "canonical_target_path": "memcommit/application/operations/review/report_adapters.py",
       "inbound_package_importers": 3,
@@ -2279,7 +2279,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.search.model",
       "canonical_target_path": "memcommit/application/operations/search/model.py",
       "inbound_package_importers": 11,
@@ -2290,7 +2290,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.search.artifacts",
       "canonical_target_path": "memcommit/application/operations/search/artifacts.py",
       "inbound_package_importers": 1,
@@ -2301,7 +2301,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.semantic.selective_curation",
       "canonical_target_path": "memcommit/application/semantic/selective_curation.py",
       "inbound_package_importers": 5,
@@ -2312,7 +2312,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.add.semantic_runtime",
       "canonical_target_path": "memcommit/application/operations/add/semantic_runtime.py",
       "inbound_package_importers": 8,
@@ -2323,7 +2323,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.semantic.disclosure",
       "canonical_target_path": "memcommit/application/semantic/disclosure.py",
       "inbound_package_importers": 6,
@@ -2334,7 +2334,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.semantic.prompt_policy",
       "canonical_target_path": "memcommit/application/semantic/prompt_policy.py",
       "inbound_package_importers": 10,
@@ -2345,7 +2345,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.providers.semantic",
       "canonical_target_path": "memcommit/providers/semantic.py",
       "inbound_package_importers": 7,
@@ -2356,7 +2356,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.semantic.redundancy_evidence",
       "canonical_target_path": "memcommit/application/semantic/redundancy_evidence.py",
       "inbound_package_importers": 5,
@@ -2367,7 +2367,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.reviewing.session_navigation",
       "canonical_target_path": "memcommit/application/reviewing/session_navigation.py",
       "inbound_package_importers": 11,
@@ -2378,73 +2378,73 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.sever.model",
       "canonical_target_path": "memcommit/application/operations/sever/model.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.sever",
       "path": "memcommit/sever.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.sever.application",
       "canonical_target_path": "memcommit/application/operations/sever/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.sever_application",
       "path": "memcommit/sever_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.sever.provider",
       "canonical_target_path": "memcommit/application/operations/sever/provider.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.sever_provider",
       "path": "memcommit/sever_provider.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.sever.resolution_adapter",
       "canonical_target_path": "memcommit/application/operations/sever/resolution_adapter.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.sever_resolution_adapter",
       "path": "memcommit/sever_resolution_adapter.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.sever.runtime",
       "canonical_target_path": "memcommit/application/operations/sever/runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.sever_runtime",
       "path": "memcommit/sever_runtime.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.sever.session_store",
       "canonical_target_path": "memcommit/application/operations/sever/session_store.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.sever_store",
       "path": "memcommit/sever_store.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.share.model",
       "canonical_target_path": "memcommit/application/operations/share/model.py",
       "inbound_package_importers": 3,
@@ -2455,51 +2455,51 @@
       "role": "operation-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.show.application",
       "canonical_target_path": "memcommit/application/operations/show/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.show_application",
       "path": "memcommit/show_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.show.runtime",
       "canonical_target_path": "memcommit/application/operations/show/runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.show_runtime",
       "path": "memcommit/show_runtime.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.status.application",
       "canonical_target_path": "memcommit/application/operations/status/application.py",
       "inbound_package_importers": 0,
       "lines": 11,
       "module": "memcommit.status_application",
       "path": "memcommit/status_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.status.runtime",
       "canonical_target_path": "memcommit/application/operations/status/runtime.py",
       "inbound_package_importers": 0,
       "lines": 10,
       "module": "memcommit.status_runtime",
       "path": "memcommit/status_runtime.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.authority.storage_permissions",
       "canonical_target_path": "memcommit/application/authority/storage_permissions.py",
       "inbound_package_importers": 4,
@@ -2510,7 +2510,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.persistence.store",
       "canonical_target_path": "memcommit/persistence/store/__init__.py",
       "inbound_package_importers": 217,
@@ -2521,7 +2521,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.persistence.command_ledger.study_actions",
       "canonical_target_path": "memcommit/persistence/command_ledger/study_actions.py",
       "inbound_package_importers": 11,
@@ -2532,7 +2532,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.authority.study_operation_policy",
       "canonical_target_path": "memcommit/application/authority/study_operation_policy.py",
       "inbound_package_importers": 2,
@@ -2543,7 +2543,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.summarize.model",
       "canonical_target_path": "memcommit/application/operations/summarize/model.py",
       "inbound_package_importers": 9,
@@ -2554,51 +2554,51 @@
       "role": "operation-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.summarize.application",
       "canonical_target_path": "memcommit/application/operations/summarize/application.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.summarize_application",
       "path": "memcommit/summarize_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.summarize.runtime",
       "canonical_target_path": "memcommit/application/operations/summarize/runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.summarize_runtime",
       "path": "memcommit/summarize_runtime.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.switch.application",
       "canonical_target_path": "memcommit/application/operations/switch/application.py",
       "inbound_package_importers": 0,
       "lines": 11,
       "module": "memcommit.switch_application",
       "path": "memcommit/switch_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.switch.runtime",
       "canonical_target_path": "memcommit/application/operations/switch/runtime.py",
       "inbound_package_importers": 0,
       "lines": 11,
       "module": "memcommit.switch_runtime",
       "path": "memcommit/switch_runtime.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.retained_history.temporal",
       "canonical_target_path": "memcommit/application/retained_history/temporal.py",
       "inbound_package_importers": 2,
@@ -2609,40 +2609,40 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.translate.runtime",
       "canonical_target_path": "memcommit/application/operations/translate/runtime.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.translate",
       "path": "memcommit/translate.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.translate.view",
       "canonical_target_path": "memcommit/application/operations/translate/view.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.translation_view",
       "path": "memcommit/translation_view.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.translate.view_store",
       "canonical_target_path": "memcommit/application/operations/translate/view_store.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.translation_view_store",
       "path": "memcommit/translation_view_store.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.core.context_targeting.uid_locator",
       "canonical_target_path": "memcommit/core/context_targeting/uid_locator.py",
       "inbound_package_importers": 6,
@@ -2653,7 +2653,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.semantic.understanding",
       "canonical_target_path": "memcommit/application/semantic/understanding.py",
       "inbound_package_importers": 10,
@@ -2664,7 +2664,7 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.update.model",
       "canonical_target_path": "memcommit/application/operations/update/model.py",
       "inbound_package_importers": 33,
@@ -2675,18 +2675,18 @@
       "role": "operation-implementation"
     },
     {
-      "action": "centralize-alias",
+      "action": "remove",
       "canonical_target": "memcommit.application.operations.update.application",
       "canonical_target_path": "memcommit/application/operations/update/application.py",
       "inbound_package_importers": 1,
       "lines": 8,
       "module": "memcommit.update_application",
       "path": "memcommit/update_application.py",
-      "reason": "preserve the old import through one compatibility registry",
-      "role": "compatibility-facade"
+      "reason": "historical forwarding imports are intentionally unsupported",
+      "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.update.application_flow",
       "canonical_target_path": "memcommit/application/operations/update/application_flow.py",
       "inbound_package_importers": 1,
@@ -2697,7 +2697,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.update.endpoints",
       "canonical_target_path": "memcommit/application/operations/update/endpoints.py",
       "inbound_package_importers": 2,
@@ -2708,7 +2708,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.update.receipt_store",
       "canonical_target_path": "memcommit/application/operations/update/receipt_store.py",
       "inbound_package_importers": 5,
@@ -2719,7 +2719,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.operations.update.resolution_adapter",
       "canonical_target_path": "memcommit/application/operations/update/resolution_adapter.py",
       "inbound_package_importers": 3,
@@ -2730,7 +2730,7 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate",
+      "action": "relocate-without-alias",
       "canonical_target": "memcommit.application.authority.write_protection",
       "canonical_target_path": "memcommit/application/authority/write_protection.py",
       "inbound_package_importers": 7,
@@ -2741,11 +2741,11 @@
       "role": "shared-concept-implementation"
     }
   ],
-  "purpose": "Freeze the ownership classification used to remove flat physical facades without changing operation behavior or historical imports.",
+  "purpose": "Freeze the ownership classification used to remove flat physical facades without changing operation behavior and without preserving historical imports.",
   "root_module_count": 249,
   "schema_version": 1,
   "summary": {
-    "compatibility-facade": 103,
+    "historical-compatibility-facade": 103,
     "operation-implementation": 74,
     "retired-prototype": 1,
     "root-boundary": 4,

@@ -8,7 +8,7 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
 from memcommit.core.context_targeting.tui.picker import ContextMemoryRow
-from memcommit.edit_application import EditRequest, FrozenEditPlan
+from memcommit.application.operations.edit.application import EditRequest, FrozenEditPlan
 from memcommit.adapters.interfaces.tui.components.exact_command_review import (
     format_exact_command,
 )
@@ -24,7 +24,7 @@ from memcommit.adapters.interfaces.tui.operations.reference import (
     ReferenceTuiSetup,
     run_reference_tui,
 )
-from memcommit.reference_application import (
+from memcommit.application.operations.reference.application import (
     ContextReferenceRequest,
     FrozenContextReferencePlan,
     FrozenReferencePlan,

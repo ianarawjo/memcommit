@@ -6,7 +6,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from memcommit.meld import MELD_OWNER_AWARE_SCHEMA_VERSION
+from memcommit.application.operations.meld.model import MELD_OWNER_AWARE_SCHEMA_VERSION
 from memcommit.application.operations.meld.application import (
     MeldApplicationError,
     MeldApplyReceipt,

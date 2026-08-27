@@ -13,7 +13,7 @@ import memcommit.application.ops as ops
 import memcommit.commands.find.command as find_command
 import memcommit.application.operations.search.materialization_application as materialization_application
 import memcommit.application.operations.search.materialization_runtime as materialization_runtime
-import memcommit.store as store_module
+import memcommit.persistence.store as store_module
 from memcommit.application.authority.access import resolve_context_access
 from memcommit.commands.shared.readable_context_catalog import (
     freeze_readable_context_catalog,
@@ -36,7 +36,7 @@ from memcommit.application.operations.search.materialization_runtime import (
     MemoryStoreFindMaterializationPort,
     execute_find_materialization,
 )
-from memcommit.profile_config import (
+from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
@@ -44,8 +44,8 @@ from memcommit.profile_config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.profiles import create_authority_grant
-from memcommit.store import (
+from memcommit.application.operations.profile.model import create_authority_grant
+from memcommit.persistence.store import (
     ConcurrentContextUpdateError,
     MemoryStore,
     context_record_digest,

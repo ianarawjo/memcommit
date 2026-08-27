@@ -28,7 +28,7 @@ _BASE.ROWS = ROWS
 
 
 def _run_tui_child() -> None:
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
 
     print("PTY", os.get_terminal_size().columns, os.get_terminal_size().lines)
     app(
@@ -43,7 +43,7 @@ def _run_tui_child() -> None:
 
 
 def _run_plain_child() -> None:
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
 
     print("PTY", os.get_terminal_size().columns, os.get_terminal_size().lines)
     app(

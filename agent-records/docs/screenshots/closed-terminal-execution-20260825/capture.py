@@ -75,7 +75,7 @@ def _run_typer_command(name: str, command, args: list[str]) -> None:
 
 def _initialize_meld_store(root: Path):
     import memcommit.application.ops as ops
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=root)
     study = ops.init("capture/coffee-advice/study")
@@ -120,7 +120,7 @@ def _run_meld_child(store_root: Path) -> None:
 
 def _initialize_update_store(root: Path):
     import memcommit.application.ops as ops
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=root)
     source = ops.init("capture/update/new-guidance")

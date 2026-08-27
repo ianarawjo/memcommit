@@ -11,7 +11,7 @@ from typer.testing import CliRunner
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
-from memcommit.merge_application import (
+from memcommit.application.operations.merge.application import (
     MergeConflictKind,
     MergeDecision,
     MergeError,
@@ -22,8 +22,8 @@ from memcommit.merge_application import (
     resolve_merge_conflicts,
 )
 from memcommit.adapters.interfaces.tui.operations.merge import merge_resolution_spec
-from memcommit.merge_runtime import MemoryStoreMergePort, execute_merge
-from memcommit.store import MemoryStore, context_record_digest
+from memcommit.application.operations.merge.runtime import MemoryStoreMergePort, execute_merge
+from memcommit.persistence.store import MemoryStore, context_record_digest
 
 
 runner = CliRunner(mix_stderr=False)

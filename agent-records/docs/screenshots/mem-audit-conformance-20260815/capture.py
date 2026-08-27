@@ -27,15 +27,15 @@ def _demo_child() -> None:
         _run_quality_audit_checks,
         run_quality_audit_review,
     )
-    from memcommit.conformance import CONTEXT_CONFORMANCE_OPERATION
-    from memcommit.provider_types import ProviderIdentity
-    from memcommit.quality_audit import quality_audit_resolution_view
-    from memcommit.quality_audit_store import QualityAuditStore
+    from memcommit.application.operations.conformance.model import CONTEXT_CONFORMANCE_OPERATION
+    from memcommit.providers.types import ProviderIdentity
+    from memcommit.application.reviewing.quality.audit import quality_audit_resolution_view
+    from memcommit.application.reviewing.quality.audit_store import QualityAuditStore
     from memcommit.commands.shared.resolution_workbench_shell import (
         render_resolution_workbench_snapshot,
     )
-    from memcommit.review import direct_context_digest
-    from memcommit.store import MemoryStore
+    from memcommit.application.operations.review.model import direct_context_digest
+    from memcommit.persistence.store import MemoryStore
 
     terminal_size = os.get_terminal_size(sys.stdout.fileno())
     if (terminal_size.lines, terminal_size.columns) != (ROWS, COLUMNS):

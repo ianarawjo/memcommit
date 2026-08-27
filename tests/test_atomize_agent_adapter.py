@@ -31,7 +31,7 @@ from memcommit.adapters.interfaces.agent.atomize import (
 )
 from memcommit.adapters.interfaces.agent.registry import build_default_agent_tool_registry
 from memcommit.adapters.interfaces.mcp import McpRegistryProjection
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 _PAYLOAD_MARKER = "ATOMIZE IMPACT PAYLOAD:\n"

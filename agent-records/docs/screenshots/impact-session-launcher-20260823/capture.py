@@ -32,7 +32,7 @@ _BASE.ROWS = ROWS
 
 
 def _configure_store(store_root: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     paths = {
         "STORE_DIR": store_root,
@@ -123,10 +123,10 @@ def _context(store, name: str, content: str):
 
 
 def _prepare_store(store_root: Path):
-    from memcommit.atomize_analysis_application import AtomizeAnalysisOpenRequest
-    from memcommit.atomize_analysis_runtime import execute_atomize_analysis_open
-    from memcommit.store import MemoryStore
-    from memcommit.update import plan_update
+    from memcommit.application.operations.atomize.analysis_application import AtomizeAnalysisOpenRequest
+    from memcommit.application.operations.atomize.analysis_runtime import execute_atomize_analysis_open
+    from memcommit.persistence.store import MemoryStore
+    from memcommit.application.operations.update.model import plan_update
 
     store = MemoryStore(root=store_root)
     atomize_context = _context(
@@ -156,7 +156,7 @@ def _prepare_store(store_root: Path):
 
 
 def _invoke(argv: list[str]) -> int:
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
 
     print("$ mem " + " ".join(argv), flush=True)
     try:

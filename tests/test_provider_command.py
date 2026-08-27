@@ -8,21 +8,21 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.config as config_module
+import memcommit.configuration.config as config_module
 from memcommit.adapters.console.entrypoint import app
 from memcommit.providers.policy import (
     STUDY_PROVIDER_POLICY_DIGEST,
     STUDY_PROVIDER_POLICY_VERSION,
     ResolvedProviderPolicy,
 )
-from memcommit.profile_config import (
+from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
     ProfileRegistry,
     profile_registry_file,
 )
-from memcommit.provider_types import ProviderIdentity
+from memcommit.providers.types import ProviderIdentity
 
 
 runner = CliRunner(mix_stderr=False)

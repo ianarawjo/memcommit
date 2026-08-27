@@ -31,14 +31,14 @@ _BASE.ROWS = ROWS
 
 
 def _configure_store(root: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     store_module.STORE_DIR = root
 
 
 def _prepare_store(root: Path):
     import memcommit.application.ops as ops
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     _configure_store(root)
     store = MemoryStore()
@@ -92,8 +92,8 @@ class _Provider:
 
 def _run_child(root: Path) -> None:
     import memcommit.commands.compare.command as compare_command
-    from memcommit.cli import app
-    from memcommit.comparison_store import comparison_analysis_path
+    from memcommit.adapters.console.entrypoint import app
+    from memcommit.application.operations.compare.ledger.store import comparison_analysis_path
     from memcommit.providers.policy import ResolvedProviderPolicy
 
     store, reference, peer = _prepare_store(root)

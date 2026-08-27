@@ -23,15 +23,15 @@ from memcommit.core.context_targeting.catalog import (
     grant_navigation_annotation,
 )
 from memcommit.commands.help_inventory.command import CommandEntry
-from memcommit.profile_config import ProfileEntry
-from memcommit.store import MemoryStore
+from memcommit.application.operations.profile.config import ProfileEntry
+from memcommit.persistence.store import MemoryStore
 from memcommit.source_projection.model import (
     SourceAccess,
     SourceDisplayFacts,
     SourceState,
 )
 from memcommit.source_projection.presentation import source_display_text
-from memcommit.study_action_log import (
+from memcommit.persistence.command_ledger.study_actions import (
     StudyActionLedger,
     begin_study_action_recording,
     finish_study_action_recording,

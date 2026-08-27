@@ -8,7 +8,7 @@ import uuid
 
 import pytest
 
-from memcommit.atomize_workbench import (
+from memcommit.application.operations.atomize.workbench import (
     ATOMIZE_WORKBENCH_SCHEMA_VERSION,
     AtomizeWorkbenchError,
     AtomizeWorkbenchIssue,

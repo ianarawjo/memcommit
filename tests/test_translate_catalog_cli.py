@@ -13,7 +13,7 @@ from memcommit.context import AutoCheckpoint
 from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
     reconstruct_memory_history,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.translate.view import (
     TRANSLATION_ORIGIN_IMPORTED,
     TRANSLATION_ORIGIN_MANUAL,

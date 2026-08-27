@@ -18,8 +18,8 @@ from memcommit.context import (
 from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
     reconstruct_memory_history,
 )
-from memcommit.query_provider import QueryProviderError
-from memcommit.store import ConcurrentContextUpdateError, MemoryStore
+from memcommit.providers.subscription import QueryProviderError
+from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 from memcommit.application.operations.translate.runtime import (
     TRANSLATE_CORPUS_CHAR_LIMIT,
     TRANSLATION_TARGET_CHAR_LIMIT,

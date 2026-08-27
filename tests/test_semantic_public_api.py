@@ -16,10 +16,10 @@ from memcommit.adapters.python_api import (
     SemanticInputError,
     SemanticProviderFailure,
 )
-from memcommit.distill import DISTILL_PAYLOAD_MARKER
-from memcommit.elaborate import ELABORATE_PAYLOAD_MARKER
+from memcommit.application.operations.distill.model import DISTILL_PAYLOAD_MARKER
+from memcommit.application.operations.elaborate.model import ELABORATE_PAYLOAD_MARKER
 from memcommit.application.operations.fit.judgment import FIT_JUDGMENT_PAYLOAD_MARKER
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from tests.elaborate_validation_support import (
     passing_elaborate_validation_response,
 )

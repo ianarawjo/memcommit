@@ -8,7 +8,7 @@ import pytest
 import memcommit.application.ops as ops
 from memcommit.application.operations.meld.runtime import meld_checkpoint_record
 from memcommit.context import AutoCheckpoint, Context, Memory
-from memcommit.meld import (
+from memcommit.application.operations.meld.model import (
     MeldChangeSet,
     MeldMember,
     MeldProposal,
@@ -17,7 +17,7 @@ from memcommit.meld import (
 from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
     reconstruct_memory_history,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def _proposal(

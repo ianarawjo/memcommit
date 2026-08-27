@@ -15,8 +15,8 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
-import memcommit.store as store_module
-from memcommit.command_history import build_command_stacks
+import memcommit.persistence.store as store_module
+from memcommit.application.retained_history.command_history import build_command_stacks
 from memcommit.adapters.console.entrypoint import app
 from memcommit.context import (
     AutoCheckpoint,
@@ -24,13 +24,13 @@ from memcommit.context import (
     MemoryRef,
     QueryContextRef,
 )
-from memcommit.ground import (
+from memcommit.application.operations.ground.model import (
     GroundTargetSpec,
     bind_ground_workbench,
     context_frame_digest,
     create_ground_session,
 )
-from memcommit.store import ConcurrentContextUpdateError, MemoryStore
+from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 from memcommit.application.operations.translate.runtime import plan_translation
 from memcommit.application.operations.translate.view import TranslationCatalog, TranslationView
 from memcommit.application.operations.translate.view_store import (

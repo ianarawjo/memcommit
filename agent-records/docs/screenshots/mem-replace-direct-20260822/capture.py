@@ -96,8 +96,8 @@ def _run_child(kind: str) -> None:
 
     import memcommit.commands.replace.command as replace_command
     from memcommit.context import Context
-    from memcommit.replace_runtime import execute_replace_plan, plan_replace_with_store
-    from memcommit.store import MemoryStore
+    from memcommit.application.operations.replace.runtime import execute_replace_plan, plan_replace_with_store
+    from memcommit.persistence.store import MemoryStore
 
     with tempfile.TemporaryDirectory(
         prefix="memcommit-replace-direct-capture-"

@@ -48,14 +48,14 @@ class _DelayedFitProvider:
 
 def _prepare_store(root: Path):
     import memcommit.application.ops as ops
-    from memcommit.ground import (
+    from memcommit.application.operations.ground.model import (
         GroundTargetSpec,
         bind_ground_workbench,
         create_ground_session,
         propose_ground_case,
         propose_ground_rule,
     )
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=root)
     raw = ops.init("ticker/raw")
@@ -106,10 +106,10 @@ def _prepare_store(root: Path):
 
 def _run_child(store_root: Path, *, stale: bool) -> None:
     from memcommit.commands.ground.named_shell import run_named_ground_shell
-    from memcommit.fit_runtime import execute_and_save_ground_fit
-    from memcommit.fit_store import FitStore
-    from memcommit.ground import propose_ground_rule
-    from memcommit.store import ground_session_record_digest
+    from memcommit.application.operations.fit.runtime import execute_and_save_ground_fit
+    from memcommit.application.operations.fit.store import FitStore
+    from memcommit.application.operations.ground.model import propose_ground_rule
+    from memcommit.persistence.store import ground_session_record_digest
 
     store, session, contexts = _prepare_store(store_root)
 

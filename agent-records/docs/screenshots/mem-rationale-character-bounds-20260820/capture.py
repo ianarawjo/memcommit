@@ -74,8 +74,8 @@ def _run_child(scenario: str) -> None:
     import json
 
     from memcommit.commands import rationale
-    from memcommit.rationale_rules import RationaleLimitUnit
-    from memcommit.store import MemoryStore
+    from memcommit.application.operations.rationale.rules import RationaleLimitUnit
+    from memcommit.persistence.store import MemoryStore
 
     with tempfile.TemporaryDirectory(prefix=f"memcommit-rationale-{scenario}-") as temp:
         _COMPACT._isolate_store(Path(temp))

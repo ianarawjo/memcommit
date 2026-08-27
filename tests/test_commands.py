@@ -19,7 +19,7 @@ import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.branch.dialog import BranchCreationReceipt
 from memcommit.commands.help_inventory.command import CommandEntry, run_help_selector
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 runner = CliRunner(mix_stderr=False)
 
@@ -2466,7 +2466,7 @@ class TestLog:
 
     def test_no_checkpoints_message_on_fresh_context(self, isolated_store):
         # Bypass the CLI to create a context with no checkpoints.
-        from memcommit.store import MemoryStore
+        from memcommit.persistence.store import MemoryStore
         import memcommit.application.ops as ops
 
         store = MemoryStore()

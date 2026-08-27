@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from memcommit.distill_elaborate_reference import (
+from memcommit.application.semantic.generative_reduction_reference import (
     render_distill_elaborate_reference_examples,
 )
 

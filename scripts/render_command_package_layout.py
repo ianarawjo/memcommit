@@ -18,9 +18,6 @@ OUTPUT_JSON = (
 OUTPUT_MARKDOWN = (
     REPOSITORY / "agent-records" / "docs" / "command-package-layout-plan.md"
 )
-LEGACY_ALIAS_MODULE = (
-    REPOSITORY / "src" / "memcommit" / "compatibility" / "_legacy_command_alias_map.py"
-)
 BASELINE_COMMIT = "f8c54a56"
 
 
@@ -300,32 +297,6 @@ def render_markdown(plan: dict[str, object]) -> str:
     return "\n".join(lines)
 
 
-def render_alias_module(plan: dict[str, object]) -> str:
-    modules = plan["modules"]
-    assert isinstance(modules, list)
-    aliases = {
-        str(entry["legacy_module"]): str(entry["canonical_module"])
-        for entry in modules
-        if isinstance(entry, dict) and entry["role"] != "command-entry"
-    }
-    if len(aliases) != 89:
-        raise RuntimeError(
-            f"expected 89 command compatibility aliases, found {len(aliases)}"
-        )
-    lines = [
-        '"""Generated legacy flat-command aliases; do not edit directly."""',
-        "",
-        "from __future__ import annotations",
-        "",
-        "",
-        "LEGACY_COMMAND_SUBMODULE_ALIASES = {",
-    ]
-    for legacy, canonical in sorted(aliases.items()):
-        lines.append(f"    {legacy!r}: {canonical!r},")
-    lines.extend(["}", ""])
-    return "\n".join(lines)
-
-
 def render_entry_init(stem: str, exports: tuple[str, ...]) -> str:
     rendered_exports = ", ".join(json.dumps(name) for name in exports)
     return "\n".join(
@@ -345,7 +316,7 @@ def render_entry_init(stem: str, exports: tuple[str, ...]) -> str:
     )
 
 
-def _legacy_support_aliases(plan: dict[str, object]) -> dict[str, str]:
+def _removed_support_modules(plan: dict[str, object]) -> dict[str, str]:
     modules = plan["modules"]
     assert isinstance(modules, list)
     return {
@@ -373,7 +344,7 @@ def verify_layout(plan: dict[str, object]) -> None:
             package_init = target.parent / "__init__.py"
             if not package_init.is_file():
                 failures.append(f"missing command package boundary: {package_init}")
-    aliases = _legacy_support_aliases(plan)
+    removed = _removed_support_modules(plan)
     for path in (REPOSITORY / "src" / "memcommit").rglob("*.py"):
         try:
             tree = ast.parse(path.read_text(encoding="utf-8"))
@@ -387,7 +358,7 @@ def verify_layout(plan: dict[str, object]) -> None:
             elif isinstance(node, ast.Import):
                 imported.extend(alias.name for alias in node.names)
             for module in imported:
-                if module in aliases:
+                if module in removed:
                     failures.append(
                         f"internal legacy command import: {path}:{node.lineno}:{module}"
                     )
@@ -395,40 +366,40 @@ def verify_layout(plan: dict[str, object]) -> None:
         raise SystemExit("\n".join(failures))
     print(
         "command package layout is canonical: "
-        f"{len(ENTRY_EXPORTS)} entry packages, {len(aliases)} centralized aliases, "
+        f"{len(ENTRY_EXPORTS)} entry packages, {len(removed)} removed support paths, "
         f"{len(SHARED_MODULES)} shared mechanisms"
     )
 
 
-def verify_isolated_alias_imports(plan: dict[str, object]) -> None:
-    failures: list[str] = []
-    for legacy, canonical in sorted(_legacy_support_aliases(plan).items()):
-        for order in ("canonical-first", "legacy-first"):
-            first, second = (
-                (canonical, legacy)
-                if order == "canonical-first"
-                else (legacy, canonical)
-            )
-            code = (
-                "from importlib import import_module; "
-                f"first=import_module({first!r}); second=import_module({second!r}); "
-                "assert first is second; "
-                f"assert first.__spec__.name != {legacy!r}"
-            )
-            result = subprocess.run(
-                [sys.executable, "-c", code],
-                cwd=REPOSITORY,
-                capture_output=True,
-                text=True,
-            )
-            if result.returncode:
-                failures.append(
-                    f"{legacy} ({order}) failed: "
-                    f"{result.stderr.strip() or result.stdout.strip()}"
-                )
-    if failures:
-        raise SystemExit("\n".join(failures))
-    print("isolated flat-command aliases are canonical in both orders: 89 modules")
+def verify_removed_imports(plan: dict[str, object]) -> None:
+    """Prove that runtime hooks do not restore flat support imports."""
+
+    removed = sorted(_removed_support_modules(plan))
+    code = "\n".join(
+        [
+            "from importlib import import_module",
+            f"modules = {removed!r}",
+            "unexpected = []",
+            "for module in modules:",
+            "    try:",
+            "        import_module(module)",
+            "    except ModuleNotFoundError:",
+            "        pass",
+            "    else:",
+            "        unexpected.append(module)",
+            "assert not unexpected, unexpected",
+        ]
+    )
+    result = subprocess.run(
+        [sys.executable, "-c", code],
+        cwd=REPOSITORY,
+        capture_output=True,
+        text=True,
+        timeout=30,
+    )
+    if result.returncode:
+        raise SystemExit(result.stderr.strip() or result.stdout.strip())
+    print(f"historical flat-command imports are unavailable: {len(removed)} modules")
 
 
 def main() -> int:
@@ -438,12 +409,10 @@ def main() -> int:
     plan = build_plan()
     rendered_json = json.dumps(plan, indent=2, sort_keys=True) + "\n"
     rendered_markdown = render_markdown(plan)
-    rendered_aliases = render_alias_module(plan)
     if args.check:
         expected = (
             (OUTPUT_JSON, rendered_json),
             (OUTPUT_MARKDOWN, rendered_markdown),
-            (LEGACY_ALIAS_MODULE, rendered_aliases),
         )
         for path, rendered in expected:
             if not path.is_file() or path.read_text(encoding="utf-8") != rendered:
@@ -455,12 +424,11 @@ def main() -> int:
             ):
                 raise SystemExit(f"stale command package boundary: {package_init}")
         verify_layout(plan)
-        verify_isolated_alias_imports(plan)
+        verify_removed_imports(plan)
         print("command package layout plan is current")
         return 0
     OUTPUT_JSON.write_text(rendered_json, encoding="utf-8")
     OUTPUT_MARKDOWN.write_text(rendered_markdown, encoding="utf-8")
-    LEGACY_ALIAS_MODULE.write_text(rendered_aliases, encoding="utf-8")
     for stem, exports in ENTRY_EXPORTS.items():
         (COMMANDS / stem / "__init__.py").write_text(
             render_entry_init(stem, exports),

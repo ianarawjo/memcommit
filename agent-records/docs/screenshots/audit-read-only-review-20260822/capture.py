@@ -29,7 +29,7 @@ _BASE.ROWS = ROWS
 
 def _session(*, empty: bool):
     from memcommit.context import Context, Memory
-    from memcommit.findings import (
+    from memcommit.application.reviewing.quality.findings import (
         AmbiguityFinding,
         AmbiguityReport,
         ConflictFinding,
@@ -37,8 +37,8 @@ def _session(*, empty: bool):
         DuplicateFinding,
         DuplicateReport,
     )
-    from memcommit.provider_types import ProviderIdentity
-    from memcommit.quality_audit import (
+    from memcommit.providers.types import ProviderIdentity
+    from memcommit.application.reviewing.quality.audit import (
         QUALITY_AUDIT_RULESETS,
         QualityAuditCheck,
         QualityAuditProvenance,
@@ -176,8 +176,8 @@ def _session(*, empty: bool):
 
 def _run_child(kind: str, store_root: Path) -> None:
     from memcommit.commands.audit.command import run_quality_audit_review
-    from memcommit.quality_audit import quality_audit_record_digest
-    from memcommit.store import MemoryStore
+    from memcommit.application.reviewing.quality.audit import quality_audit_record_digest
+    from memcommit.persistence.store import MemoryStore
 
     session = _session(empty=kind == "empty")
     before = quality_audit_record_digest(session)

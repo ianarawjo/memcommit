@@ -34,7 +34,7 @@ CPR_RESPONSE = "\x1b[1;1R"
 
 
 def _configure_store(store_dir: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     store_module.STORE_DIR = store_dir
 
@@ -43,7 +43,7 @@ def _prepare_store(store_dir: Path) -> tuple[str, ...]:
     _configure_store(store_dir)
     import memcommit.application.ops as ops
     from memcommit.context import AutoCheckpoint
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_dir)
     context = ops.init(CONTEXT)
@@ -80,7 +80,7 @@ def _prepare_store(store_dir: Path) -> tuple[str, ...]:
 def _run_revert(store_dir: Path) -> None:
     _configure_store(store_dir)
     from memcommit.commands.revert.command import cmd
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(create=False)
     print("LIVE COLOR PTY", *reversed(os.get_terminal_size()))
@@ -96,7 +96,7 @@ def _verify(
 ) -> None:
     _configure_store(store_dir)
     from memcommit.context import Memory
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(create=False)
     context = store.load_direct(CONTEXT)

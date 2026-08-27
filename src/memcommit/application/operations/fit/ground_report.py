@@ -1,7 +1,7 @@
 """Operation-owned Ground Fit report plus the public general-Fit exports.
 
 The foundational YES/MAY/NO proposition judge lives in the operation-owned
-``judgment`` module and is re-exported here for the historical ``memcommit.fit``
+``judgment`` module and is re-exported here for the historical ``memcommit.application.operations.fit.ground_report``
 contract. The versioned Ground report keeps its historical per-Example
 judgments and adds an exhaustive Context, vertical, and peer coherence frame
 without making Ground the definition of Fit.

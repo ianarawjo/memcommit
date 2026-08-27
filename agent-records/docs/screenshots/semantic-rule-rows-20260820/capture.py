@@ -52,7 +52,7 @@ def _environment() -> dict[str, str]:
 
 
 def _configure_store(root: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     store_module.STORE_DIR = root
 
@@ -113,7 +113,7 @@ class _ElaborateProvider:
 
 def _prepare(root: Path, operation: str):
     import memcommit.application.ops as ops
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     _configure_store(root)
     store = MemoryStore()
@@ -136,8 +136,8 @@ def _prepare(root: Path, operation: str):
 
 
 def _child(operation: str, root: Path) -> None:
-    from memcommit.cli import app
-    from memcommit.store import context_record_digest
+    from memcommit.adapters.console.entrypoint import app
+    from memcommit.persistence.store import context_record_digest
 
     store, source, target = _prepare(root, operation)
     import memcommit.commands.impact.process_local as impact_command

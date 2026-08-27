@@ -16,9 +16,9 @@ import memcommit.commands.elaborate.command as elaborate_command
 import memcommit.application.operations.elaborate.application as elaborate_application
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.conformance import CONTEXT_CONFORMANCE_OPERATION
+from memcommit.application.operations.conformance.model import CONTEXT_CONFORMANCE_OPERATION
 from memcommit.context import Context, Memory
-from memcommit.elaborate import (
+from memcommit.application.operations.elaborate.model import (
     ELABORATE_OPERATION,
     ELABORATE_PAYLOAD_MARKER,
     ElaborateError,
@@ -26,33 +26,33 @@ from memcommit.elaborate import (
     ElaborateQualityPolicy,
 )
 from memcommit.application.operations.elaborate.application import ElaborateRequest
-from memcommit.elaborate_config import ElaborateSemanticConfig
+from memcommit.application.operations.elaborate.config import ElaborateSemanticConfig
 from memcommit.application.operations.elaborate.runtime import execute_elaborate
 from memcommit.application.operations.fit.judgment import (
     FIT_JUDGMENT_OPERATION,
     FIT_JUDGMENT_PAYLOAD_MARKER,
 )
-from memcommit.ground import (
+from memcommit.application.operations.ground.model import (
     GroundTargetSpec,
     bind_ground_workbench,
     create_ground_session,
     propose_ground_rule,
 )
-from memcommit.ground_elaborate import (
+from memcommit.application.operations.ground.elaborate import (
     apply_ground_elaborate_result,
     execute_ground_elaborate,
     freeze_ground_elaborate,
 )
-from memcommit.ground_workspace_application import (
+from memcommit.application.operations.ground.workspace_application import (
     AddGroundWorkspaceMemoryRequest,
     CreateGroundWorkspaceRequest,
 )
-from memcommit.ground_workspace_runtime import (
+from memcommit.application.operations.ground.workspace_runtime import (
     execute_ground_workspace_creation,
     execute_ground_workspace_memory_add,
     load_ground_workspace,
 )
-from memcommit.ground_workspace_history import (
+from memcommit.application.operations.ground.workspace_history import (
     build_ground_workspace_command_stack,
     undo_ground_workspace_command,
 )
@@ -61,7 +61,7 @@ from memcommit.adapters.interfaces.tui.operations.elaborate import (
     project_elaborate_result,
     run_elaborate_tui,
 )
-from memcommit.store import MemoryStore, ground_session_record_digest
+from memcommit.persistence.store import MemoryStore, ground_session_record_digest
 from tests.elaborate_validation_support import (
     passing_elaborate_validation_response,
 )

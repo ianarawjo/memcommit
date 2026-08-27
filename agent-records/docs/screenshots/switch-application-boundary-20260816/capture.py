@@ -54,8 +54,8 @@ def _store_snapshot(root: Path) -> tuple[int, str]:
 
 
 def _setup_store():
-    from memcommit.cli import app
-    from memcommit.store import MemoryStore
+    from memcommit.adapters.console.entrypoint import app
+    from memcommit.persistence.store import MemoryStore
 
     app(prog_name="mem", args=["init", "alpha"], standalone_mode=False)
     app(

@@ -50,9 +50,9 @@ def _require_visible(recorder, *expected: str) -> None:
 
 
 def _study_ledger():
-    from memcommit.profile_config import load_profile_registry
-    from memcommit.store import MemoryStore
-    from memcommit.study_action_log import StudyActionLedger
+    from memcommit.application.operations.profile.config import load_profile_registry
+    from memcommit.persistence.store import MemoryStore
+    from memcommit.persistence.command_ledger.study_actions import StudyActionLedger
 
     profile = load_profile_registry().active
     store = MemoryStore(create=False)
@@ -70,8 +70,8 @@ def _load_inputs():
         resolve_context_access,
     )
     from memcommit.core.context_targeting.loading import load_context_scope
-    from memcommit.store import MemoryStore
-    from memcommit.update import collect_update_inputs
+    from memcommit.persistence.store import MemoryStore
+    from memcommit.application.operations.update.model import collect_update_inputs
 
     store = MemoryStore(create=False)
     current = store.current_context_name()
@@ -151,11 +151,9 @@ def _verify_latest_update_attempt() -> None:
 
 def main() -> None:
     sys.path.insert(0, str(ROOT / "src"))
-    from memcommit.profile_config import load_profile_registry
-    from memcommit.study_scenarios.legacy.prewarm.update import (
-        is_installed_update_prewarm,
-    )
-    from memcommit.update import applied_session_matches, session_matches
+    from memcommit.application.operations.profile.config import load_profile_registry
+    from memcommit.study_scenarios.legacy.prewarm.update import is_installed_update_prewarm
+    from memcommit.application.operations.update.model import applied_session_matches, session_matches
 
     if load_profile_registry().active.name != PROFILE_NAME:
         raise RuntimeError(f"Expected active replay Profile {PROFILE_NAME!r}.")

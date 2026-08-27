@@ -25,13 +25,13 @@ from memcommit import (
     AtomizeStructuralApplyResult,
     MemCommitClient,
 )
-from memcommit.atomize import create_atomize_analysis, impact_atomize
+from memcommit.application.operations.atomize.domain import create_atomize_analysis, impact_atomize
 from memcommit.application.operations.atomize.runtime import (
     capture_atomize_session_snapshot,
 )
 from memcommit.adapters.python_api.errors import AtomizeExecutionError
 from memcommit.context import Memory
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.study_scenarios.legacy.prewarm.atomize import AtomizePrewarmMatch
 
 

@@ -6,9 +6,9 @@ from memcommit.context import (
     MemoryRef,
     QueryContextRef,
 )
-from memcommit.history import build_history
+from memcommit.application.retained_history.reconstruction import build_history
 from memcommit.application import ops
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def _save_step(store, ctx, command, description):

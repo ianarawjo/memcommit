@@ -28,7 +28,7 @@ from memcommit.commands.shared.history_picker import (
 from memcommit.adapters.interfaces.tui.components.exact_command_review import (
     format_exact_command,
 )
-from memcommit.session_workbench_navigation import SessionWorkbenchNavigation
+from memcommit.application.reviewing.session_navigation import SessionWorkbenchNavigation
 
 
 def entry(

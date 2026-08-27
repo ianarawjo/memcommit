@@ -1,5 +1,9 @@
 # Root module relocation test baseline
 
+> Historical snapshot: the alias behavior recorded below describes the first
+> relocation pass and was superseded by the 2026-08-27 historical Python
+> import removal. See `legacy-python-import-removal-design-rationale.md`.
+
 ## Frozen baseline
 
 The integrated source state preserved at commit `885e62c0` produced:

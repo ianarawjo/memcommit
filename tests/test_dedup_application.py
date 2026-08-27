@@ -19,7 +19,7 @@ from memcommit.commands.shared.quality_find_workbench import (
     run_quality_find_resolution_workbench,
 )
 from memcommit.context import Context, MemoryRef, QueryContextRef
-from memcommit.context_snapshot import (
+from memcommit.application.retained_history.context_snapshot import (
     CONTEXT_SNAPSHOT_SCHEMA_VERSION,
     ContextSnapshotRef,
     context_snapshot_digest,
@@ -35,8 +35,8 @@ from memcommit.application.operations.dedup.application import (
     recommended_dedup_selections,
 )
 from memcommit.application.operations.dedup.runtime import MemoryStoreDedupPort
-from memcommit.direct_item_duplicates import find_exact_duplicate_groups
-from memcommit.findings import DuplicateFinding, DuplicateReport
+from memcommit.application.reviewing.direct_item_duplicates import find_exact_duplicate_groups
+from memcommit.application.reviewing.quality.findings import DuplicateFinding, DuplicateReport
 from memcommit.adapters.interfaces.agent import (
     DEDUP_AGENT_TOOL_NAME,
     build_default_agent_tool_registry,
@@ -51,20 +51,20 @@ from memcommit.adapters.interfaces.tui.operations.dedup import (
     run_dedup_tui,
 )
 from memcommit.adapters.interfaces.tui.workbenches.resolution import ResolutionOutcome
-from memcommit.quality_find_workbench import create_quality_find_workbench
-from memcommit.quality_finding_handoff import (
+from memcommit.application.reviewing.quality.workbench import create_quality_find_workbench
+from memcommit.application.reviewing.quality.handoff import (
     QualityFindingHandoff,
     QualityFindingHandoffError,
     QualityFindingReviewDraft,
     QualityFindingSource,
     quality_finding_handoffs,
 )
-from memcommit.semantic_redundancy_evidence import (
+from memcommit.application.semantic.redundancy_evidence import (
     redundancy_evidence_dict,
     redundancy_evidence_from_dict,
     redundancy_evidence_json,
 )
-from memcommit.profile_config import (
+from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
@@ -72,9 +72,9 @@ from memcommit.profile_config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.profiles import create_authority_grant, update_authority_grant
-from memcommit.review import direct_context_digest
-from memcommit.store import MemoryStore
+from memcommit.application.operations.profile.model import create_authority_grant, update_authority_grant
+from memcommit.application.operations.review.model import direct_context_digest
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner(mix_stderr=False)

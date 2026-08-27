@@ -5,15 +5,15 @@ import pytest
 
 import memcommit.application.ops as ops
 from memcommit.context import QueryContextRef
-from memcommit.context_catalog import ContextCatalogScan
-from memcommit.find_scope_evidence import (
+from memcommit.core.context_targeting.context_catalog import ContextCatalogScan
+from memcommit.application.operations.search.scope_evidence import (
     candidate_logical_identity,
     collect_outside_context_evidence,
     context_remainder_evidence,
     frame_context_uids,
 )
-from memcommit.search import collect_candidates
-from memcommit.store import MemoryStore
+from memcommit.application.operations.search.model import collect_candidates
+from memcommit.persistence.store import MemoryStore
 
 
 def test_visible_reference_excludes_its_direct_target_from_remainder():

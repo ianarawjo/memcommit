@@ -5,48 +5,13 @@ from __future__ import annotations
 import ast
 import hashlib
 from pathlib import Path
-import subprocess
-import sys
 
-import pytest
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 LEGACY_MODULE = "memcommit.commands.shared.exact_name_dialog"
 CANONICAL_MODULE = "memcommit.adapters.interfaces.tui.components.exact_name_dialog"
 LEGACY_SOURCE_SHA256 = "b3875ebf6bdc72cf5f6b9070cb853eb51ce080fc1b5f068af167747d42bf10e1"
-
-
-@pytest.mark.parametrize("legacy_first", (True, False), ids=("old-first", "new-first"))
-def test_exact_name_dialog_module_identity_is_import_order_independent(
-    legacy_first: bool,
-) -> None:
-    first_name, second_name = (
-        (LEGACY_MODULE, CANONICAL_MODULE)
-        if legacy_first
-        else (CANONICAL_MODULE, LEGACY_MODULE)
-    )
-    source = f"""
-import importlib
-import sys
-
-first = importlib.import_module({first_name!r})
-second = importlib.import_module({second_name!r})
-legacy = importlib.import_module({LEGACY_MODULE!r})
-canonical = importlib.import_module({CANONICAL_MODULE!r})
-
-assert first is second
-assert legacy is canonical
-assert legacy.choose_exact_name is canonical.choose_exact_name
-assert sys.modules[{LEGACY_MODULE!r}] is canonical
-assert sys.modules[{CANONICAL_MODULE!r}] is canonical
-"""
-
-    subprocess.run(
-        [sys.executable, "-c", source],
-        cwd=REPOSITORY_ROOT,
-        check=True,
-    )
 
 
 def test_legacy_exact_name_dialog_is_an_import_only_module_alias() -> None:

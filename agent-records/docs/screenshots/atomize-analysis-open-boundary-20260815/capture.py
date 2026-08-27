@@ -164,7 +164,7 @@ def _invoke_impact(store, provider_factory, *, refresh: bool = False) -> int:
 
 
 def _child_provider(store_root: Path) -> None:
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root)
     _initialize(store)
@@ -179,7 +179,7 @@ def _child_provider(store_root: Path) -> None:
 
 
 def _child_saved(store_root: Path) -> None:
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root, create=False)
     before = store.load_atomize_analysis(store.load_direct("atomize/open-boundary").uid)
@@ -192,9 +192,9 @@ def _child_saved(store_root: Path) -> None:
 
 
 def _child_prepared(store_root: Path) -> None:
-    import memcommit.atomize_analysis_runtime as runtime
-    from memcommit.atomize import create_atomize_analysis, impact_atomize
-    from memcommit.store import MemoryStore
+    import memcommit.application.operations.atomize.analysis_runtime as runtime
+    from memcommit.application.operations.atomize.domain import create_atomize_analysis, impact_atomize
+    from memcommit.persistence.store import MemoryStore
     from memcommit.study_scenarios.legacy.prewarm.atomize import AtomizePrewarmMatch
 
     store = MemoryStore(root=store_root)
@@ -230,7 +230,7 @@ def _child_prepared(store_root: Path) -> None:
 
 
 def _child_refresh(store_root: Path) -> None:
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root, create=False)
     context = store.load_direct("atomize/open-boundary")
@@ -245,10 +245,10 @@ def _child_refresh(store_root: Path) -> None:
 
 
 def _child_stale(store_root: Path) -> None:
-    from memcommit.atomize_analysis_application import AtomizeAnalysisOpenRequest
-    from memcommit.atomize_analysis_runtime import execute_atomize_analysis_open
+    from memcommit.application.operations.atomize.analysis_application import AtomizeAnalysisOpenRequest
+    from memcommit.application.operations.atomize.analysis_runtime import execute_atomize_analysis_open
     from memcommit.context import Memory
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root)
     _initialize(store)
@@ -276,9 +276,9 @@ def _child_stale(store_root: Path) -> None:
 
 
 def _child_publication_failure(store_root: Path) -> None:
-    from memcommit.atomize_analysis_application import AtomizeAnalysisOpenRequest
-    from memcommit.atomize_analysis_runtime import execute_atomize_analysis_open
-    from memcommit.store import MemoryStore
+    from memcommit.application.operations.atomize.analysis_application import AtomizeAnalysisOpenRequest
+    from memcommit.application.operations.atomize.analysis_runtime import execute_atomize_analysis_open
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root)
     _initialize(store)

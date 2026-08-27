@@ -6,9 +6,9 @@ import ast
 from pathlib import Path
 
 import memcommit.application.ops as ops
-import memcommit.status_application as status_application
+import memcommit.application.operations.status.application as status_application
 from memcommit.source_projection.model import SourceDisplayFacts
-from memcommit.status_application import (
+from memcommit.application.operations.status.application import (
     FrozenStatusContext,
     FrozenStatusFrame,
     StatusCheckpoint,
@@ -16,8 +16,8 @@ from memcommit.status_application import (
     StatusRequest,
     inspect_status,
 )
-from memcommit.status_runtime import execute_status
-from memcommit.store import MemoryStore
+from memcommit.application.operations.status.runtime import execute_status
+from memcommit.persistence.store import MemoryStore
 
 
 class _StaticStatusSource:

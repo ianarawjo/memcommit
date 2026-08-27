@@ -12,7 +12,7 @@ from memcommit.adapters.interfaces.agent import (
     copy_memories_agent_tool_schema,
     move_memories_agent_tool_schema,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def _client(root):

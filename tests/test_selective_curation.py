@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-from memcommit.selective_curation import (
+from memcommit.application.semantic.selective_curation import (
     CriterionFrame,
     CurationBatch,
     CurationItem,

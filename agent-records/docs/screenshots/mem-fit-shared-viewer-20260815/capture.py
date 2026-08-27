@@ -81,15 +81,15 @@ def _fit_response(operation: str) -> str:
 
 
 def _use_store_root(root: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     store_module.STORE_DIR = root
 
 
 def _stale_receipt(root: Path):
-    from memcommit.fit_runtime import execute_and_save_ground_fit
-    from memcommit.ground import propose_ground_rule
-    from memcommit.store import ground_session_record_digest
+    from memcommit.application.operations.fit.runtime import execute_and_save_ground_fit
+    from memcommit.application.operations.ground.model import propose_ground_rule
+    from memcommit.persistence.store import ground_session_record_digest
 
     store, session, contexts = FIXTURE._prepare_store(root)
     report = execute_and_save_ground_fit(
@@ -120,8 +120,8 @@ def _run_standalone_child(
     issue: bool = False,
 ) -> None:
     import memcommit.commands.fit.command as fit_command
-    from memcommit.fit_store import FitStore
-    from memcommit.store import MemoryStore
+    from memcommit.application.operations.fit.store import FitStore
+    from memcommit.persistence.store import MemoryStore
 
     copied: list[str] = []
     if stale:
@@ -160,9 +160,9 @@ def _run_standalone_child(
 
 def _run_ground_child(store_root: Path) -> None:
     from memcommit.commands.ground.named_shell import run_named_ground_shell
-    from memcommit.fit_runtime import execute_and_save_ground_fit
-    from memcommit.fit_store import FitStore
-    from memcommit.store import ground_session_record_digest
+    from memcommit.application.operations.fit.runtime import execute_and_save_ground_fit
+    from memcommit.application.operations.fit.store import FitStore
+    from memcommit.persistence.store import ground_session_record_digest
 
     store, session, _contexts = FIXTURE._prepare_store(store_root)
     before_digest = ground_session_record_digest(session)

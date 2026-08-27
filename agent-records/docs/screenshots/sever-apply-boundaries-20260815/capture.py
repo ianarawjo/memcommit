@@ -79,7 +79,7 @@ def _wait(child, recorder, *needles: str, seconds: float = 12.0) -> None:
 
 
 def _configure_store(store_root: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     for name, value in {
         "STORE_DIR": store_root,
@@ -104,7 +104,7 @@ class _Provider:
         del output_schema
         if operation != "sever_context":
             raise AssertionError(operation)
-        from memcommit.sever_provider import SEVER_PAYLOAD_MARKER
+        from memcommit.application.operations.sever.provider import SEVER_PAYLOAD_MARKER
 
         payload = json.loads(prompt.split(SEVER_PAYLOAD_MARKER, 1)[1])
         source = payload["source"]["memories"][0]
@@ -152,7 +152,7 @@ def _child_apply(store_root: Path) -> None:
     import memcommit.commands.shared.command_wait as command_wait
     import memcommit.commands.shared.session_help as session_help
     import memcommit.commands.sever.command as sever_command
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root)
     _initialize(store)
@@ -195,8 +195,8 @@ def _child_apply(store_root: Path) -> None:
 
 def _child_verify(store_root: Path) -> None:
     from memcommit.commands.sever.command import render_sever
-    from memcommit.sever_store import SeverSessionStore
-    from memcommit.store import MemoryStore
+    from memcommit.application.operations.sever.session_store import SeverSessionStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root, create=False)
     session = SeverSessionStore(store).list()[0]
@@ -211,7 +211,7 @@ def _child_verify(store_root: Path) -> None:
 
 def _child_restore(store_root: Path, direction: str) -> None:
     from memcommit.commands.shared.restoration_present import render_command_restore_receipt
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root, create=False)
     result = store.restore_recent_context_command(direction)
@@ -223,8 +223,8 @@ def _child_restore(store_root: Path, direction: str) -> None:
 
 
 def _review(store, output_name: str):
-    from memcommit.sever_application import SeverAnalysisRequest
-    from memcommit.sever_runtime import (
+    from memcommit.application.operations.sever.application import SeverAnalysisRequest
+    from memcommit.application.operations.sever.runtime import (
         execute_sever_analysis,
         execute_sever_session_start,
     )
@@ -242,10 +242,10 @@ def _review(store, output_name: str):
 
 
 def _child_compensation(store_root: Path) -> None:
-    import memcommit.sever_runtime as runtime
-    from memcommit.sever_application import SeverPersistedApplyRequest
-    from memcommit.sever_store import SeverSessionStore
-    from memcommit.store import MemoryStore
+    import memcommit.application.operations.sever.runtime as runtime
+    from memcommit.application.operations.sever.application import SeverPersistedApplyRequest
+    from memcommit.application.operations.sever.session_store import SeverSessionStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root)
     _initialize(store)
@@ -272,15 +272,15 @@ def _child_compensation(store_root: Path) -> None:
 
 def _child_recovery(store_root: Path) -> None:
     from memcommit.commands.sever.command import render_sever
-    from memcommit.sever_application import (
+    from memcommit.application.operations.sever.application import (
         SeverApplyRequest,
         SeverPersistedApplyRequest,
     )
-    from memcommit.sever_runtime import (
+    from memcommit.application.operations.sever.runtime import (
         execute_sever_apply,
         execute_sever_session_apply,
     )
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root)
     _initialize(store)

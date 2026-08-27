@@ -8,13 +8,13 @@ import memcommit.commands.ground.command as ground_command
 from memcommit.application import ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.ground.shell import GroundShellResult
-from memcommit.ground_dialogue import (
+from memcommit.application.operations.ground.dialogue import (
     GroundDialogueError,
     GroundDialogueNewContextSuggestion,
     GroundDialogueProposal,
 )
-from memcommit.ground_workspace_runtime import load_ground_workspace
-from memcommit.store import MemoryStore
+from memcommit.application.operations.ground.workspace_runtime import load_ground_workspace
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner()

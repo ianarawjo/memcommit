@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from memcommit.application_flow import ApplicationFlowResult, run_application_flow
+from memcommit.application.flow import ApplicationFlowResult, run_application_flow
 
 
 class _Port:

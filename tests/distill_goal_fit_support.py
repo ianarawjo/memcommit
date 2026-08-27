@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 
-from memcommit.distill_goal_fit import (
+from memcommit.application.operations.distill.goal_fit import (
     DISTILL_GOAL_FIT_OPERATION,
     DISTILL_GOAL_FIT_PAYLOAD_MARKER,
 )

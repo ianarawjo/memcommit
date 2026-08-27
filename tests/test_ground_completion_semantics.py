@@ -9,8 +9,8 @@ from memcommit.commands.ground.named_shell import (
     render_named_ground_goal_pane,
     render_named_ground_top_panel,
 )
-from memcommit.ground import GroundSession, create_ground_session
-from memcommit.ground_turn_dialogue import ground_turn_aliases
+from memcommit.application.operations.ground.model import GroundSession, create_ground_session
+from memcommit.application.operations.ground.turn_dialogue import ground_turn_aliases
 
 
 runner = CliRunner()

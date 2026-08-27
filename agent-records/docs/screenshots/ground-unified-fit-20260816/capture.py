@@ -42,7 +42,7 @@ class _DetectorProvider:
         self.delay = delay
 
     def complete(self, prompt, *, operation, output_schema=None):
-        from memcommit.fit_coherence import (
+        from memcommit.application.operations.fit.coherence import (
             FIT_COHERENCE_OPERATION,
             FIT_COHERENCE_PAYLOAD_MARKER,
         )
@@ -111,14 +111,14 @@ class _DetectorProvider:
 
 
 def _use_store_root(root: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     store_module.STORE_DIR = root
 
 
 def _prepare_store(root: Path):
     import memcommit.application.ops as ops
-    from memcommit.ground import (
+    from memcommit.application.operations.ground.model import (
         GroundTargetSpec,
         bind_ground_workbench,
         create_ground_session,
@@ -126,7 +126,7 @@ def _prepare_store(root: Path):
         propose_ground_rule,
         upgrade_ground_to_propositions,
     )
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=root)
     raw = ops.init("ticker/raw")
@@ -175,8 +175,8 @@ def _prepare_store(root: Path):
 
 
 def _print_verification(store, session, *, label: str) -> None:
-    from memcommit.fit_store import FitStore
-    from memcommit.store import ground_session_record_digest
+    from memcommit.application.operations.fit.store import FitStore
+    from memcommit.persistence.store import ground_session_record_digest
 
     current = store.load_ground_session(session.contract_name)
     latest = FitStore(store).latest_for_ground(current)
@@ -234,8 +234,8 @@ def _run_viewer_child(store_root: Path) -> None:
 
 def _run_ground_child(store_root: Path) -> None:
     from memcommit.commands.ground.named_shell import run_named_ground_shell
-    from memcommit.fit_runtime import execute_and_save_ground_fit
-    from memcommit.fit_store import FitStore
+    from memcommit.application.operations.fit.runtime import execute_and_save_ground_fit
+    from memcommit.application.operations.fit.store import FitStore
 
     _DetectorProvider.total_calls = 0
     store, session = _prepare_store(store_root)

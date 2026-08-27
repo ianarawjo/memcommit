@@ -1,7 +1,7 @@
 """Unit tests for memcommit.chunking — pure text-splitting functions."""
 import pytest
 
-from memcommit.chunking import chunk_content, ChunkMethod, CHUNKING_METHODS
+from memcommit.application.operations.chunk.domain import chunk_content, ChunkMethod, CHUNKING_METHODS
 
 
 # ---------------------------------------------------------------------------

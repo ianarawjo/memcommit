@@ -38,11 +38,11 @@ def _write_isolated_mem_wrapper(directory: Path) -> Path:
 import os
 from pathlib import Path
 
-import memcommit.store as store_module
+import memcommit.persistence.store as store_module
 
 store_module.STORE_DIR = Path(os.environ["MEMCOMMIT_CAPTURE_STORE"])
 
-from memcommit.cli import app
+from memcommit.adapters.console.entrypoint import app
 
 app()
 """,

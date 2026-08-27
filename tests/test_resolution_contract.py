@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from memcommit.exact_command_review import ExactCommandReview
+from memcommit.application.exact_command_review import ExactCommandReview
 from memcommit.adapters.interfaces.tui.viewers.semantic import SemanticViewerDocument
 from memcommit.adapters.interfaces.tui.workbenches.resolution import (
     ResolutionChoice,

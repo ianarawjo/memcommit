@@ -108,7 +108,7 @@ def _run_success_child() -> None:
 
 
 def _run_failure_child() -> None:
-    from memcommit.clipboard import ClipboardError
+    from memcommit.adapters.console.clipboard import ClipboardError
     from memcommit.commands.shared.context_picker import choose_context
 
     attempts: list[str] = []

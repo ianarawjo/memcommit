@@ -13,7 +13,7 @@ from memcommit.adapters.interfaces.agent.show import (
     ShowAgentAdapter,
     show_agent_tool_schema,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def _client(root):

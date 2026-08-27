@@ -65,14 +65,14 @@ def _save_fixture(store, *, name: str, content: str) -> None:
 
 def _prepare(home: Path) -> tuple[str, tuple[str, str], tuple[Path, Path]]:
     os.environ["HOME"] = str(home)
-    from memcommit.profile_config import (
+    from memcommit.application.operations.profile.config import (
         ProfileEntry,
         ProfileRegistry,
         profile_store_dir,
         virtual_authoring_registry,
     )
-    from memcommit.profiles import _write_registry
-    from memcommit.store import MemoryStore
+    from memcommit.application.operations.profile.model import _write_registry
+    from memcommit.persistence.store import MemoryStore
 
     authoring = virtual_authoring_registry().active
     _save_fixture(
@@ -130,7 +130,7 @@ def _prepare(home: Path) -> tuple[str, tuple[str, str], tuple[Path, Path]]:
 def _spawn(home: Path, *args: str):
     command = (
         f"stty rows {ROWS} cols {COLS}; stty size; "
-        f"exec {shlex.join([sys.executable, '-m', 'memcommit.cli', *args])}"
+        f"exec {shlex.join([sys.executable, '-m', 'memcommit.adapters.console.entrypoint', *args])}"
     )
     recorder = HELPERS._Recorder()
     child = pexpect.spawn(
@@ -248,8 +248,8 @@ def main() -> None:
         )
         _capture_flow(home)
 
-        from memcommit.profile_config import load_profile_registry, profile_store_dir
-        from memcommit.profiles import study_run_profile_pairs
+        from memcommit.application.operations.profile.config import load_profile_registry, profile_store_dir
+        from memcommit.application.operations.profile.model import study_run_profile_pairs
 
         registry = load_profile_registry()
         pair = study_run_profile_pairs(registry.profiles)[0]

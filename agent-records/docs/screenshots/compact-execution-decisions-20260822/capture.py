@@ -56,7 +56,7 @@ class _StreamRecorder(io.StringIO):
 
 
 def _item(uid: str, title: str, question: str, first: str, second: str):
-    from memcommit.resolution_workbench import ResolutionItem, ResolutionOption
+    from memcommit.application.resolution.workbench import ResolutionItem, ResolutionOption
 
     return ResolutionItem(
         uid=uid,
@@ -85,7 +85,7 @@ def _item(uid: str, title: str, question: str, first: str, second: str):
 
 
 def _view():
-    from memcommit.resolution_workbench import ResolutionWorkbenchView
+    from memcommit.application.resolution.workbench import ResolutionWorkbenchView
 
     return ResolutionWorkbenchView(
         operation="MELD",
@@ -124,7 +124,7 @@ def _run_child(kind: str) -> None:
     from memcommit.adapters.interfaces.tui.workbenches.resolution.compact_shell import (
         run_compact_resolution_decisions,
     )
-    from memcommit.resolution_workbench import ResolutionWorkbenchAction
+    from memcommit.application.resolution.workbench import ResolutionWorkbenchAction
 
     size = os.get_terminal_size()
     if (size.columns, size.lines) != (COLUMNS, ROWS):

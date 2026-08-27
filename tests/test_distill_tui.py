@@ -7,8 +7,8 @@ from prompt_toolkit.output import DummyOutput
 
 from memcommit.context import Context, Memory
 from memcommit.core.context_targeting.tui.picker import ContextMemoryRow
-from memcommit.distill import DistillAnalysis, DistilledRule
-from memcommit.distill_goal_fit import DistillGoalFit
+from memcommit.application.operations.distill.model import DistillAnalysis, DistilledRule
+from memcommit.application.operations.distill.goal_fit import DistillGoalFit
 from memcommit.application.operations.distill.application import (
     DistillRequest,
     DistillResult,
@@ -19,7 +19,7 @@ from memcommit.adapters.interfaces.tui.operations.distill import (
     project_distill_result,
     run_distill_tui,
 )
-from memcommit.summarize import collect_summary_scope
+from memcommit.application.operations.summarize.model import collect_summary_scope
 from memcommit.application.operations.summarize.application import FrozenSummarySource
 
 

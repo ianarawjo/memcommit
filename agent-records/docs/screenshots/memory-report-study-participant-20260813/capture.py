@@ -38,7 +38,7 @@ _BASE.ROWS = ROWS
 def _durable_study_digest() -> str:
     """Hash durable Context and current-pointer files without opening a provider."""
 
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     paths = [store_module.STATE_FILE]
     if store_module.CONTEXTS_DIR.exists():
@@ -54,7 +54,7 @@ def _durable_study_digest() -> str:
 
 def _run_child(operation: str) -> None:
     from memcommit.commands import rationale, trace
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(create=False)
     current = store.current_context_name()

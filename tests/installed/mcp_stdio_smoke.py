@@ -16,12 +16,12 @@ from mcp.client.stdio import StdioServerParameters, stdio_client
 import memcommit
 import memcommit.application.ops as ops
 from memcommit.adapters.python_api import MemCommitClient
-from memcommit.atomize_grounding import (
+from memcommit.application.operations.atomize.grounding import (
     AtomizeGroundingAnchor,
     AtomizeGroundingBindings,
     AtomizeGroundingSession,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 _ATOMIZE_PAYLOAD_MARKER = "ATOMIZE IMPACT PAYLOAD:\n"

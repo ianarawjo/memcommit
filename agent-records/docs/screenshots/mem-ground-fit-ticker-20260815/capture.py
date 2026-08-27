@@ -118,7 +118,7 @@ def _proposition(company: str, ticker: str) -> str:
 
 
 def _save_next(store, previous, revised) -> None:
-    from memcommit.store import ground_session_record_digest
+    from memcommit.persistence.store import ground_session_record_digest
 
     store.save_ground_session(
         revised,
@@ -130,7 +130,7 @@ def _save_next(store, previous, revised) -> None:
 
 
 def _add_example(store, session, contexts, company: str, ticker: str):
-    from memcommit.ground import propose_ground_example
+    from memcommit.application.operations.ground.model import propose_ground_example
 
     revised = propose_ground_example(
         session,
@@ -146,14 +146,14 @@ def _add_example(store, session, contexts, company: str, ticker: str):
 
 def _prepare_store(root: Path):
     import memcommit.application.ops as ops
-    from memcommit.ground import (
+    from memcommit.application.operations.ground.model import (
         GroundTargetSpec,
         bind_ground_workbench,
         create_ground_session,
         propose_ground_rule,
         upgrade_ground_to_propositions,
     )
-    from memcommit.store import MemoryStore, ground_session_record_digest
+    from memcommit.persistence.store import MemoryStore, ground_session_record_digest
 
     store = MemoryStore(root=root)
     description = ops.init("test/ground/ticker-description")
@@ -256,7 +256,7 @@ def _print_report(title: str, report, *, current: bool) -> None:
 
 
 def _run_fit(store, provider, session):
-    from memcommit.fit_runtime import execute_and_save_ground_fit
+    from memcommit.application.operations.fit.runtime import execute_and_save_ground_fit
 
     return execute_and_save_ground_fit(
         store=store,
@@ -266,7 +266,7 @@ def _run_fit(store, provider, session):
 
 
 def _write_evidence(*, ledger, reports, final_session, stale_checks) -> None:
-    from memcommit.store import ground_session_record_digest
+    from memcommit.persistence.store import ground_session_record_digest
 
     data = {
         "evaluation": "incremental ticker Ground Fit",
@@ -301,10 +301,10 @@ def _run_child(store_root: Path) -> None:
     from memcommit.commands.ground.named_shell import (
         render_named_ground_memories_pane,
     )
-    from memcommit.fit_store import FitStore
-    from memcommit.ground import review_ground_item
-    from memcommit.query_provider import CodexChatGPTProvider
-    from memcommit.store import ground_session_record_digest
+    from memcommit.application.operations.fit.store import FitStore
+    from memcommit.application.operations.ground.model import review_ground_item
+    from memcommit.providers.subscription import CodexChatGPTProvider
+    from memcommit.persistence.store import ground_session_record_digest
 
     store, contexts, session, ledger = _prepare_store(store_root)
     _clear()

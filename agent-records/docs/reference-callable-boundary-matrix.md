@@ -26,9 +26,9 @@ The focused `memcommit.application.operations.reference` package is the canonica
 the durable Memory and Context Reference use case. Production API, CLI, and TUI
 adapters import its application and runtime modules directly. The previous
 flat `memcommit.reference_application` and `memcommit.reference_runtime` paths
-remain module-identity aliases, not parallel implementations. This preserves
-legacy import order, monkeypatch targets, and serialized Python globals while
-making new code discover the implementation through the operation package.
+were removed with the repository-wide historical Python import cleanup. This
+intentionally drops old import, monkeypatch, and serialized-global lookup while
+leaving the operation request and durable Reference formats unchanged.
 
 Query Reference remains a Query-owned read boundary under
 `memcommit.application.operations.query`. It selects concealed Source material for one

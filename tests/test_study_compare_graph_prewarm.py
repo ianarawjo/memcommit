@@ -4,7 +4,7 @@ import uuid
 
 import memcommit.application.ops as ops
 import memcommit.application.evaluation.study_compare_graph_prewarm as graph_prewarm
-from memcommit.comparison import (
+from memcommit.application.operations.compare.ledger.model import (
     ComparisonAnalysis,
     ComparisonMember,
     ComparisonRelation,
@@ -22,7 +22,7 @@ from memcommit.application.evaluation.study_compare_graph_prewarm import (
     run_graph_prewarm,
 )
 from memcommit.application.evaluation.study_compare_exact_matrix import declared_exact_plans
-from memcommit.provider_types import ProviderIdentity
+from memcommit.providers.types import ProviderIdentity
 
 
 class _Provider:

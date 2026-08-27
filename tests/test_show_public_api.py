@@ -14,7 +14,7 @@ from memcommit.adapters.python_api import (
     ShowQueryViewResult,
 )
 from memcommit.context import Memory
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def _store_with_items(root):

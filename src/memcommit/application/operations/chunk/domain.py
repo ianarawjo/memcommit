@@ -1,6 +1,6 @@
 """Operation-owned chunking methods for splitting Memory content.
 
-Public API compatibility remains available through :mod:`memcommit.chunking`.
+Public API compatibility remains available through :mod:`memcommit.application.operations.chunk.domain`.
 
     chunks = chunk_content("some long text", "paragraphs")
     chunks = chunk_content(content, ChunkMethod.markdown_headers)

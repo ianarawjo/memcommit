@@ -9,9 +9,9 @@ real ~/.mem store.
 import json
 
 import pytest
-import memcommit.semantic_prompt_policy as semantic_prompt_policy_module
-import memcommit.store as store_module
-from memcommit.profile_config import virtual_authoring_registry
+import memcommit.application.semantic.prompt_policy as semantic_prompt_policy_module
+import memcommit.persistence.store as store_module
+from memcommit.application.operations.profile.config import virtual_authoring_registry
 
 
 class _RationaleFixtureProvider:

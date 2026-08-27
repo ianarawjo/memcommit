@@ -9,7 +9,7 @@ import memcommit.application.ops as ops
 import memcommit.application.operations.reference.runtime as reference_runtime
 from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Context, Memory, MemoryRef
-from memcommit.context_snapshot import ContextSnapshotRef
+from memcommit.application.retained_history.context_snapshot import ContextSnapshotRef
 from memcommit.application.operations.reference.application import (
     ContextReferenceRequest,
     ReferenceError,
@@ -18,7 +18,7 @@ from memcommit.application.operations.reference.runtime import (
     MemoryStoreReferencePort,
     execute_context_reference,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner(mix_stderr=False)

@@ -42,7 +42,7 @@ class _Recorder:
 
 
 def _set_store_root(root: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     paths = {
         "STORE_DIR": root,
@@ -65,7 +65,7 @@ def _set_store_root(root: Path) -> None:
 
 class _DelayedCompareProvider:
     def complete(self, prompt, *, operation, output_schema=None):
-        from memcommit.comparison_provider import COMPARISON_PAYLOAD_MARKER
+        from memcommit.application.operations.compare.ledger.provider import COMPARISON_PAYLOAD_MARKER
 
         if operation != "compare_contexts":
             raise AssertionError(f"Unexpected provider operation: {operation}")
@@ -145,10 +145,10 @@ def _run_child(store_root: Path) -> None:
     _set_store_root(store_root)
 
     import memcommit.application.ops as ops
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
     from memcommit.commands import meld as meld_command
-    from memcommit.comparison_store import load_comparison_analysis
-    from memcommit.store import MemoryStore
+    from memcommit.application.operations.compare.ledger.store import load_comparison_analysis
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()
     left = ops.init(LEFT)

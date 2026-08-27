@@ -8,8 +8,8 @@ import memcommit.commands.replace.command as replace_command
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Memory
-from memcommit.replace_application import ReplaceRequest
-from memcommit.store import MemoryStore
+from memcommit.application.operations.replace.application import ReplaceRequest
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner(mix_stderr=False)

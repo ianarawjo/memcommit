@@ -27,24 +27,24 @@ from memcommit.commands.ground.shell import (
     GroundShellResult,
 )
 from memcommit.adapters.interfaces.tui.components.operation_launcher.session import SessionOpenReceipt
-from memcommit.ground import (
+from memcommit.application.operations.ground.model import (
     GroundTargetSpec,
     bind_ground_workbench,
     create_ground_session,
 )
-from memcommit.ground_workspace_draft import GroundWorkspaceDraft
-from memcommit.ground_workspace_draft_store import GroundWorkspaceDraftStore
-from memcommit.ground_workspace_application import CreateGroundWorkspaceRequest
-from memcommit.ground_workspace_runtime import (
+from memcommit.application.operations.ground.workspace_draft import GroundWorkspaceDraft
+from memcommit.application.operations.ground.workspace_draft_store import GroundWorkspaceDraftStore
+from memcommit.application.operations.ground.workspace_application import CreateGroundWorkspaceRequest
+from memcommit.application.operations.ground.workspace_runtime import (
     execute_ground_workspace_creation,
     ground_workspace_exists,
 )
-from memcommit.profile_config import (
+from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_UID,
     ProfileEntry,
     ProfileRegistry,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner()

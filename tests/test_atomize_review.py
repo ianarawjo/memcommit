@@ -7,14 +7,14 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
-from memcommit.atomize import (
+from memcommit.application.operations.atomize.domain import (
     AtomizeAnalysisSession,
     AtomizeFrameOrigin,
     AtomizeImpactError,
     create_atomize_analysis,
     impact_atomize,
 )
-from memcommit.atomize_workbench import (
+from memcommit.application.operations.atomize.workbench import (
     AtomizeWorkbenchError,
     AtomizeWorkbenchSession,
     atomize_workbench_issue_projection,
@@ -22,7 +22,7 @@ from memcommit.atomize_workbench import (
 )
 from memcommit.adapters.console.entrypoint import app
 from memcommit.context import AutoCheckpoint, Memory
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner()

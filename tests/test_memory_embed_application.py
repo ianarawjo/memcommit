@@ -22,7 +22,7 @@ from memcommit.application.operations.embed.runtime import MemoryStoreEmbedPort
 from memcommit.adapters.interfaces.tui.operations.embed import choose_embed_setup
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner(mix_stderr=False)

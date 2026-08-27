@@ -30,7 +30,7 @@ _BASE.ROWS = ROWS
 
 
 def _query_document():
-    from memcommit.find_answer_references import (
+    from memcommit.application.operations.search.answer_references import (
         FindAnswerEvidence,
         FindAnswerSentence,
         build_find_answer_reference_document,
@@ -73,7 +73,7 @@ def _print_clipboard_writes(label: str, writes: list[str]) -> None:
 
 
 def _run_query_child(*, fail: bool = False) -> None:
-    from memcommit.clipboard import ClipboardError
+    from memcommit.adapters.console.clipboard import ClipboardError
     from memcommit.application.operations.query.ordinary_application import OrdinaryQueryResponse
     from memcommit.adapters.interfaces.tui.operations.query import run_query_workbench
 

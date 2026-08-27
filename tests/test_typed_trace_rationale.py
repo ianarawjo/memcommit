@@ -8,12 +8,12 @@ from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Memory, MemoryRef
-from memcommit.rationale_rules import (
+from memcommit.application.operations.rationale.rules import (
     RationaleLimitUnit,
     RationaleNarrativeStatus,
 )
-from memcommit.rationale_semantic import RationaleNarrativeProjection
-from memcommit.store import MemoryStore
+from memcommit.application.operations.rationale.semantic import RationaleNarrativeProjection
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner()

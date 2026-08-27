@@ -11,13 +11,13 @@ from memcommit.commands.find.command import (
     _load_find_frame_roots,
 )
 from memcommit.context import AutoCheckpoint
-from memcommit.meld import MeldSession
-from memcommit.rationale_cache import (
+from memcommit.application.operations.meld.model import MeldSession
+from memcommit.application.operations.rationale.cache import (
     CachedRationaleInference,
     save_rationale_inference,
 )
-from memcommit.search import SearchArtifact
-from memcommit.store import MemoryStore
+from memcommit.application.operations.search.model import SearchArtifact
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner(mix_stderr=False)

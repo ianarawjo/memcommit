@@ -27,7 +27,7 @@ from memcommit.application.operations.fit.runtime import (
 )
 from memcommit.application.operations.fit.judgment import FIT_JUDGMENT_PAYLOAD_MARKER
 from memcommit.application.operations.fit.store import FitStore
-from memcommit.ground import (
+from memcommit.application.operations.ground.model import (
     GroundTargetSpec,
     bind_ground_workbench,
     create_ground_session,
@@ -36,12 +36,12 @@ from memcommit.ground import (
     propose_ground_rule,
     upgrade_ground_to_propositions,
 )
-from memcommit.store import MemoryStore, ground_session_record_digest
-from memcommit.ground_workspace_application import (
+from memcommit.persistence.store import MemoryStore, ground_session_record_digest
+from memcommit.application.operations.ground.workspace_application import (
     AddGroundWorkspaceMemoryRequest,
     CreateGroundWorkspaceRequest,
 )
-from memcommit.ground_workspace_runtime import (
+from memcommit.application.operations.ground.workspace_runtime import (
     execute_ground_workspace_creation,
     execute_ground_workspace_memory_add,
     load_ground_workspace,

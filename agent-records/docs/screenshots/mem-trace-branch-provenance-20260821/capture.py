@@ -34,7 +34,7 @@ _BASE.ROWS = ROWS
 
 
 def _isolate_store(root: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     store_dir = root / ".mem"
     # Commands construct a fresh MemoryStore, so redirect the compatibility
@@ -43,7 +43,7 @@ def _isolate_store(root: Path) -> None:
 
 
 def _store_digest() -> str:
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(create=False)
     digest = hashlib.sha256()
@@ -59,9 +59,9 @@ def _store_digest() -> str:
 def _prepare_recorded_branch() -> tuple[str, str, str]:
     from typer.testing import CliRunner
 
-    from memcommit.cli import _checkout, app
+    from memcommit.adapters.console.entrypoint import _checkout, app
     from memcommit.context import Memory
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     runner = CliRunner()
     initialized = runner.invoke(app, ["init", "practice/1"])
@@ -100,9 +100,9 @@ def _prepare_recorded_branch() -> tuple[str, str, str]:
 def _prepare_legacy_copy() -> str:
     from typer.testing import CliRunner
 
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
     from memcommit.context import Context, Memory
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     runner = CliRunner()
     initialized = runner.invoke(app, ["init", "legacy/source"])

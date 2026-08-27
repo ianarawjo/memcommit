@@ -13,27 +13,27 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
-import memcommit.profiles as profiles_module
+import memcommit.application.operations.profile.model as profiles_module
 from memcommit.adapters.console.entrypoint import app
-from memcommit.profile_config import (
+from memcommit.application.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,
     load_profile_registry,
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.profiles import (
+from memcommit.application.operations.profile.model import (
     create_authority_grant,
     rename_profile,
     rename_study,
     study_run_profile_pairs,
     study_profile_groups,
 )
-from memcommit.study_action_log import (
+from memcommit.persistence.command_ledger.study_actions import (
     StudyActionLedger,
     record_study_action_for_profile,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner(mix_stderr=False)

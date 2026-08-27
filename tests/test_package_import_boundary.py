@@ -308,7 +308,7 @@ from pathlib import Path
 import sys
 import memcommit.application.ops as ops
 from memcommit.adapters.python_api import MemCommitClient
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 root = Path(os.environ['MEMCOMMIT_IMPORT_TEST_ROOT'])
 store = MemoryStore(root=root)
@@ -380,18 +380,21 @@ import sys
 
 class NoGround(importlib.abc.MetaPathFinder):
     def find_spec(self, fullname, path=None, target=None):
-        if fullname == 'memcommit.ground' or fullname.startswith('memcommit.ground_'):
+        if (
+            fullname == 'memcommit.application.operations.ground'
+            or fullname.startswith('memcommit.application.operations.ground.')
+        ):
             raise ImportError(f'blocked Ground integration: {fullname}')
         return None
 
 sys.meta_path.insert(0, NoGround())
 for name in (
-    'memcommit.atomize',
-    'memcommit.update',
-    'memcommit.distill',
+    'memcommit.application.operations.atomize.domain',
+    'memcommit.application.operations.update.model',
+    'memcommit.application.operations.distill.model',
     'memcommit.application.operations.distill.application',
     'memcommit.application.operations.distill.runtime',
-    'memcommit.elaborate',
+    'memcommit.application.operations.elaborate.model',
     'memcommit.application.operations.elaborate.application',
     'memcommit.application.operations.elaborate.runtime',
     'memcommit.application.operations.elaborate.add_runtime',

@@ -6,32 +6,32 @@ import uuid
 
 from typer.testing import CliRunner
 
-import memcommit.config as config_module
+import memcommit.configuration.config as config_module
 import memcommit.application.ops as ops
 from memcommit.commands.meld import command as meld_command
 from memcommit.adapters.console.entrypoint import app
-from memcommit.comparison import ComparisonInput
-from memcommit.comparison_provider import (
+from memcommit.application.operations.compare.ledger.model import ComparisonInput
+from memcommit.application.operations.compare.ledger.provider import (
     COMPARISON_PAYLOAD_MARKER,
     analyze_comparison,
 )
-from memcommit.comparison_store import save_comparison_analysis
-from memcommit.config import Config
+from memcommit.application.operations.compare.ledger.store import save_comparison_analysis
+from memcommit.configuration.config import Config
 from memcommit.context import Context, Memory
 from memcommit.core.context_targeting.loading import load_context_scope
-from memcommit.granted_comparison_store import recursive_comparison_projection
-from memcommit.meld import (
+from memcommit.application.operations.compare.ledger.granted_store import recursive_comparison_projection
+from memcommit.application.operations.meld.model import (
     MeldAssessment,
     MeldProposal,
     MeldSession,
     directional_comparison_basis_assessment,
 )
-from memcommit.profile_config import (
+from memcommit.application.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,
     STUDY_RUN_PARTICIPANT_SOURCE_KIND,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.study_scenarios.legacy.prewarm.meld_directional import (
     BASELINE_NAME,
     DESCRIPTION_NAME,

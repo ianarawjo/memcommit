@@ -9,8 +9,8 @@ import typer
 from typer.testing import CliRunner
 
 import memcommit.commands.semantic_eval.command as command
-from memcommit.provider_types import ProviderIdentity
-from memcommit.query_provider import QueryProviderError
+from memcommit.providers.types import ProviderIdentity
+from memcommit.providers.subscription import QueryProviderError
 
 
 runner = CliRunner(mix_stderr=False)

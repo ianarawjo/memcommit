@@ -14,7 +14,7 @@ from memcommit.commands.shared.exact_name_dialog import choose_exact_name
 from memcommit.commands.shared.flat_selection_dialog import choose_flat_option
 from memcommit.commands.import_profile.workbench import freeze_import_source_catalog
 from memcommit.commands.shared.tui_primitives import ExactNameFieldView
-from memcommit.profile_config import ProfileEntry, ProfileRegistry
+from memcommit.application.operations.profile.config import ProfileEntry, ProfileRegistry
 from memcommit.adapters.interfaces.console.selection import SelectionOption
 
 

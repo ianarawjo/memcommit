@@ -52,7 +52,7 @@ from memcommit.application.operations.sever.runtime import (
     execute_sever_session_start,
 )
 from memcommit.application.operations.sever.session_store import SeverSessionStore
-from memcommit.store import ConcurrentContextUpdateError, MemoryStore
+from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 
 
 SOURCE_CONTEXT_UID = "11111111-1111-4111-8111-111111111111"

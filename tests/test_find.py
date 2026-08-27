@@ -40,8 +40,8 @@ from memcommit.context import (
     MemoryRef,
     QueryContextRef,
 )
-from memcommit.find_turn_dialogue import FindTurnAction
-from memcommit.search import (
+from memcommit.application.operations.search.turn_dialogue import FindTurnAction
+from memcommit.application.operations.search.model import (
     FindError,
     SearchCandidate,
     SearchMatch,
@@ -49,7 +49,7 @@ from memcommit.search import (
     collect_candidates_from_roots,
     rank_candidates,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner(mix_stderr=False)

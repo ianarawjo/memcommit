@@ -58,8 +58,8 @@ def _fixture() -> dict[str, object]:
 
 def _prepare_store(root: Path, operation: str):
     import memcommit.application.ops as ops
-    import memcommit.store as store_module
-    from memcommit.store import MemoryStore
+    import memcommit.persistence.store as store_module
+    from memcommit.persistence.store import MemoryStore
 
     store_module.STORE_DIR = root
     store = MemoryStore()
@@ -92,8 +92,8 @@ def _prepare_store(root: Path, operation: str):
 
 
 def _child(operation: str, root: Path) -> None:
-    from memcommit.cli import app
-    from memcommit.store import context_record_digest
+    from memcommit.adapters.console.entrypoint import app
+    from memcommit.persistence.store import context_record_digest
 
     store, source, target = _prepare_store(root, operation)
     size = os.get_terminal_size()

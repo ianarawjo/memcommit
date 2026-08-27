@@ -13,7 +13,7 @@ from memcommit.adapters.interfaces.tui.workbenches.resolution.session_shell impo
     run_resolution_workbench_shell,
 )
 from memcommit.adapters.interfaces.tui.components.save_location import SaveLocationView
-from memcommit.resolution_workbench import (
+from memcommit.application.resolution.workbench import (
     ResolutionItem,
     ResolutionOption,
     ResolutionWorkbenchAction,

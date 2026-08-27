@@ -13,7 +13,7 @@ from memcommit.providers.policy import (
     STUDY_PROVIDER_POLICY_VERSION,
     study_provider_config,
 )
-from memcommit.profile_config import (
+from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
@@ -22,7 +22,7 @@ from memcommit.profile_config import (
     profile_registry_file,
     study_run_identity,
 )
-from memcommit.profiles import (
+from memcommit.application.operations.profile.model import (
     ProfileError,
     migrate_visible_study_provider_policy,
 )

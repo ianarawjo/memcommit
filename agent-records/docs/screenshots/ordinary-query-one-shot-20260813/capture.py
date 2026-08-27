@@ -49,7 +49,7 @@ class _StreamRecorder(io.StringIO):
 
 
 def _evidence():
-    from memcommit.find_answer_references import FindAnswerEvidence
+    from memcommit.application.operations.search.answer_references import FindAnswerEvidence
 
     return (
         FindAnswerEvidence(
@@ -113,7 +113,7 @@ def _run_child() -> None:
     )
     from memcommit.application.operations.query.ordinary_application import OrdinaryQueryResponse
     from memcommit.adapters.interfaces.tui.operations.query import run_query_workbench
-    from memcommit.ordinary_query_answer import (
+    from memcommit.application.operations.query.answer import (
         build_ordinary_query_reference_document,
         complete_ordinary_query_answer,
         prepare_ordinary_query_answer,

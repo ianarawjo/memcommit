@@ -7,7 +7,7 @@ from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.command_attempts import (
+from memcommit.persistence.command_ledger.attempts import (
     CommandAttempt,
     CommandAttemptLedger,
     annotate_command_outcome,
@@ -15,8 +15,8 @@ from memcommit.command_attempts import (
     finish_command_attempt,
 )
 from memcommit.commands.sever import command as sever_command
-from memcommit.query_provider import QueryProviderTimeoutError
-from memcommit.store import MemoryStore
+from memcommit.providers.subscription import QueryProviderTimeoutError
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner(mix_stderr=False)

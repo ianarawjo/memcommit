@@ -6,11 +6,11 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
-import memcommit.store as store_module
+import memcommit.persistence.store as store_module
 from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.branch.dialog import BranchCreationReceipt
 from memcommit.context import AutoCheckpoint, Context, Memory
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner(mix_stderr=False)
@@ -91,7 +91,7 @@ def test_merge_rejects_source_renamed_after_load(isolated_store, monkeypatch):
     _save(store, source)
     owner = _save(store, ops.init("owner"))
     store.set_current(owner.name)
-    from memcommit.merge_runtime import plan_context_merge
+    from memcommit.application.operations.merge.runtime import plan_context_merge
 
     def rename_then_plan(candidate, target, **kwargs):
         _rename(store, "old", "new")
@@ -101,7 +101,7 @@ def test_merge_rejects_source_renamed_after_load(isolated_store, monkeypatch):
     # ops.merge helper. Interpose at the new pure planning boundary and retain
     # the same rename-between-load-and-apply safety assertion.
     monkeypatch.setattr(
-        "memcommit.merge_runtime.plan_context_merge",
+        "memcommit.application.operations.merge.runtime.plan_context_merge",
         rename_then_plan,
     )
 

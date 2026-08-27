@@ -14,7 +14,7 @@ import memcommit.commands.profile.command as profile_command
 from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.profile.picker import ProfilePickerAction
 from memcommit.context import Memory
-from memcommit.profile_config import (
+from memcommit.application.operations.profile.config import (
     PROFILE_REGISTRY_SCHEMA_VERSION,
     ProfileConfigError,
     ProfileEntry,
@@ -24,7 +24,7 @@ from memcommit.profile_config import (
     profile_store_dir,
     virtual_authoring_registry,
 )
-from memcommit.profiles import (
+from memcommit.application.operations.profile.model import (
     ProfileError,
     _write_registry,
     create_authority_grant,
@@ -34,7 +34,7 @@ from memcommit.profiles import (
     study_run_profile_pairs,
     use_profile,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner(mix_stderr=False)
@@ -481,7 +481,7 @@ def test_registry_write_failure_restores_prepared_store_and_checkpoint(
     def fail_registry_write(_registry):
         raise OSError("simulated registry write failure")
 
-    monkeypatch.setattr("memcommit.profiles._write_registry", fail_registry_write)
+    monkeypatch.setattr("memcommit.application.operations.profile.model._write_registry", fail_registry_write)
 
     with pytest.raises(ProfileError, match="was not deleted"):
         remove_profile(authority.name)

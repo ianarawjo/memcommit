@@ -2,17 +2,10 @@
 
 from __future__ import annotations
 
-import importlib
 from pathlib import Path
-import pickle
 import subprocess
 import sys
 
-import pytest
-
-from tests.legacy_submodule_assertions import (
-    assert_legacy_root_submodule_is_centralized,
-)
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
@@ -49,46 +42,6 @@ MODULE_PAIRS = (
 )
 
 
-@pytest.mark.parametrize("legacy_name,canonical_name", MODULE_PAIRS)
-@pytest.mark.parametrize("legacy_first", (True, False), ids=("old-first", "new-first"))
-def test_atomize_support_module_identity_is_import_order_independent(
-    legacy_name: str,
-    canonical_name: str,
-    legacy_first: bool,
-) -> None:
-    first_name, second_name = (
-        (legacy_name, canonical_name) if legacy_first else (canonical_name, legacy_name)
-    )
-    program = f"""
-import importlib
-import sys
-
-first = importlib.import_module({first_name!r})
-second = importlib.import_module({second_name!r})
-legacy = importlib.import_module({legacy_name!r})
-canonical = importlib.import_module({canonical_name!r})
-
-assert first is second
-assert legacy is canonical
-assert sys.modules[{legacy_name!r}] is canonical
-assert sys.modules[{canonical_name!r}] is canonical
-"""
-
-    subprocess.run(
-        [sys.executable, "-c", program],
-        cwd=REPOSITORY_ROOT,
-        check=True,
-    )
-
-
-@pytest.mark.parametrize("legacy_name,_canonical_name", MODULE_PAIRS)
-def test_atomize_support_legacy_facades_define_no_behavior(
-    legacy_name: str,
-    _canonical_name: str,
-) -> None:
-    assert_legacy_root_submodule_is_centralized(legacy_name, _canonical_name)
-
-
 def test_atomize_package_keeps_support_modules_lazy() -> None:
     canonical_names = tuple(canonical for _legacy, canonical in MODULE_PAIRS)
     program = f"""
@@ -104,64 +57,6 @@ for name in {canonical_names!r}:
         cwd=REPOSITORY_ROOT,
         check=True,
     )
-
-
-@pytest.mark.parametrize(
-    "legacy_name,canonical_name,global_name",
-    (
-        (
-            "memcommit.atomize",
-            "memcommit.application.operations.atomize.domain",
-            "AtomizeAnalysisSession",
-        ),
-        (
-            "memcommit.atomize_workbench",
-            "memcommit.application.operations.atomize.workbench",
-            "AtomizeWorkbenchSession",
-        ),
-        (
-            "memcommit.atomize_grounding",
-            "memcommit.application.operations.atomize.grounding",
-            "AtomizeGroundingSession",
-        ),
-        (
-            "memcommit.atomize_grounding_provider",
-            "memcommit.application.operations.atomize.grounding_provider",
-            "AtomizeGroundingProviderError",
-        ),
-        (
-            "memcommit.atomize_meld_adapter",
-            "memcommit.application.operations.atomize.grounding_meld_adapter",
-            "AtomizeMeldView",
-        ),
-        (
-            "memcommit.atomize_normal_form",
-            "memcommit.application.operations.atomize.normal_form",
-            "AtomizeNormalFormProjection",
-        ),
-        (
-            "memcommit.atomize_result_adapter",
-            "memcommit.application.operations.atomize.result_adapter",
-            "AtomizeResultWorkbenchAdapter",
-        ),
-        (
-            "memcommit.atomize_resolution_adapter",
-            "memcommit.application.operations.atomize.resolution_adapter",
-            "AtomizeResolutionWorkbenchAdapter",
-        ),
-    ),
-)
-def test_pre_relocation_atomize_support_globals_load_through_aliases(
-    legacy_name: str,
-    canonical_name: str,
-    global_name: str,
-) -> None:
-    canonical = importlib.import_module(canonical_name)
-    payload = f"c{legacy_name}\n{global_name}\n.".encode()
-
-    restored = pickle.loads(payload)
-
-    assert restored is getattr(canonical, global_name)
 
 
 def test_atomize_support_imports_follow_the_canonical_dependency_direction() -> None:

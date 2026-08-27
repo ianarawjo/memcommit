@@ -8,7 +8,7 @@ import pytest
 
 import memcommit.application.ops as ops
 from memcommit.adapters.python_api import MemCommitClient, SearchResult, SemanticInputError
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 class _Provider:

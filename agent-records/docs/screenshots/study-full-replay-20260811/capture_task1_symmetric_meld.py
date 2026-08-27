@@ -26,9 +26,9 @@ RIGHT_COUNT = 300
 
 
 def _provider_event_count() -> int:
-    from memcommit.profile_config import load_profile_registry
-    from memcommit.store import MemoryStore
-    from memcommit.study_action_log import StudyActionLedger
+    from memcommit.application.operations.profile.config import load_profile_registry
+    from memcommit.persistence.store import MemoryStore
+    from memcommit.persistence.command_ledger.study_actions import StudyActionLedger
 
     profile = load_profile_registry().active
     store = MemoryStore(create=False)
@@ -37,9 +37,9 @@ def _provider_event_count() -> int:
 
 
 def _latest_completed_meld_seconds() -> tuple[float, float, float]:
-    from memcommit.profile_config import load_profile_registry
-    from memcommit.store import MemoryStore
-    from memcommit.study_action_log import StudyActionLedger
+    from memcommit.application.operations.profile.config import load_profile_registry
+    from memcommit.persistence.store import MemoryStore
+    from memcommit.persistence.command_ledger.study_actions import StudyActionLedger
 
     profile = load_profile_registry().active
     store = MemoryStore(create=False)
@@ -162,8 +162,8 @@ def _finish_applied_replay(
 
 def main() -> None:
     sys.path.insert(0, str(ROOT / "src"))
-    from memcommit.profile_config import load_profile_registry
-    from memcommit.store import MemoryStore
+    from memcommit.application.operations.profile.config import load_profile_registry
+    from memcommit.persistence.store import MemoryStore
 
     if load_profile_registry().active.name != PROFILE_NAME:
         raise RuntimeError(f"Expected active replay Profile {PROFILE_NAME!r}.")

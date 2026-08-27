@@ -90,7 +90,7 @@ ROUTES = (
 
 
 def _configure_store(root: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     for name, value in {
         "STORE_DIR": root,
@@ -112,7 +112,7 @@ def _configure_store(root: Path) -> None:
 
 def _prepare_store(root: Path):
     import memcommit.application.ops as ops
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     _configure_store(root)
     store = MemoryStore()
@@ -160,7 +160,7 @@ def _guard_providers(counter: list[str]) -> None:
 
 
 def _run_route_child(operation: str, route: str, root: Path) -> None:
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
 
     store = _prepare_store(root)
     provider_calls: list[str] = []

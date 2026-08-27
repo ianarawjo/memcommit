@@ -22,21 +22,21 @@ from memcommit.application.retained_history.memory_history_reconstruction.memory
 from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
     MemoryHistory,
 )
-from memcommit.rationale_rules import (
+from memcommit.application.operations.rationale.rules import (
     RATIONALE_RULESET_VERSION,
     RationaleLimitUnit,
     rationale_ruleset,
     rationale_ruleset_prompt_payload,
 )
-from memcommit.rationale_semantic import (
+from memcommit.application.operations.rationale.semantic import (
     RATIONALE_PROVENANCE_OPERATION,
     RATIONALE_PROVENANCE_REPAIR_OPERATION,
     RationaleSynthesisError,
     rationale_provenance_payload,
     synthesize_rationale_provenance,
 )
-from memcommit.semantic_prompt_policy import GENERAL_SEMANTIC_PROMPT_POLICY
-from memcommit.store import MemoryStore
+from memcommit.application.semantic.prompt_policy import GENERAL_SEMANTIC_PROMPT_POLICY
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner()
@@ -47,7 +47,7 @@ def _freeze_general_prompt_policy(monkeypatch):
     """Keep ruleset unit tests independent of the developer's active Profile."""
 
     monkeypatch.setattr(
-        "memcommit.rationale_semantic.resolve_semantic_prompt_policy",
+        "memcommit.application.operations.rationale.semantic.resolve_semantic_prompt_policy",
         lambda: GENERAL_SEMANTIC_PROMPT_POLICY,
     )
 

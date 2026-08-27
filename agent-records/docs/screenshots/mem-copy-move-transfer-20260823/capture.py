@@ -32,7 +32,7 @@ _BASE.ROWS = ROWS
 
 
 def _configure_store(root: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     paths = {
         "STORE_DIR": root,
@@ -182,8 +182,8 @@ def _verification(store, *, label: str, originals: dict[str, dict]) -> str:
 def _run_child(kind: str, directory: str) -> None:
     import click
 
-    from memcommit.cli import app
-    from memcommit.store import MemoryStore, context_record_digest
+    from memcommit.adapters.console.entrypoint import app
+    from memcommit.persistence.store import MemoryStore, context_record_digest
 
     root = Path(directory) / ".mem"
     _configure_store(root)

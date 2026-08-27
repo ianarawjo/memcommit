@@ -27,7 +27,7 @@ CONTEXT = "receipt/colors"
 
 
 def _configure_store(store_dir: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     store_module.STORE_DIR = store_dir
 
@@ -36,7 +36,7 @@ def _prepare_store(store_dir: Path) -> tuple[str, tuple[str, str, str, str]]:
     _configure_store(store_dir)
     import memcommit.application.ops as ops
     from memcommit.context import AutoCheckpoint, Memory
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_dir)
     source = ops.init("receipt/source")
@@ -97,7 +97,7 @@ def _print_state(store_dir: Path, *, label: str) -> None:
     from memcommit.context import Memory
     from memcommit.source_projection.model import SourceForm
     from memcommit.source_projection.presentation import source_object_label
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(create=False)
     context = store.load_direct(CONTEXT)
@@ -122,7 +122,7 @@ def _run_revert(store_dir: Path, target_uid: str) -> None:
 def _verify(store_dir: Path, expected_uids: tuple[str, str, str, str]) -> None:
     _configure_store(store_dir)
     from memcommit.context import Memory, MemoryRef
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     restored_uid, edited_uid, removed_uid, embedded_uid = expected_uids
     store = MemoryStore(create=False)

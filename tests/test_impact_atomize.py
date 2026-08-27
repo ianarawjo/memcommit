@@ -8,9 +8,9 @@ from dataclasses import replace
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.atomize as atomize_module
+import memcommit.application.operations.atomize.domain as atomize_module
 import memcommit.application.ops as ops
-from memcommit.atomize import (
+from memcommit.application.operations.atomize.domain import (
     AtomizeAnalysisSession,
     AtomizeImpactError,
     atomize_lint,
@@ -29,7 +29,7 @@ from memcommit.context import (
     MemoryRef,
     QueryContextRef,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner(mix_stderr=False)
@@ -1476,7 +1476,7 @@ def test_atomize_save_as_rejects_conflicts_and_preserves_published_failure(
         raise AtomizeImpactError("injected apply failure")
 
     monkeypatch.setattr(
-        "memcommit.atomize_normal_form.apply_atomize_analysis",
+        "memcommit.application.operations.atomize.normal_form.apply_atomize_analysis",
         fail_apply,
     )
     failed = runner.invoke(app, ["atomize", "--save-as", "rolled-back"])
@@ -1497,7 +1497,7 @@ def test_atomize_save_as_preserves_destination_when_final_switch_fails(
     isolated_store,
     monkeypatch,
 ):
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     store = MemoryStore()
     source = ops.init("switch-source")
@@ -1648,7 +1648,7 @@ def test_atomize_save_as_preserves_concurrent_current_selection(
     isolated_store,
     monkeypatch,
 ):
-    from memcommit.atomize import apply_atomize_analysis as apply_analysis
+    from memcommit.application.operations.atomize.domain import apply_atomize_analysis as apply_analysis
 
     store = MemoryStore()
     source = ops.init("source")
@@ -1688,7 +1688,7 @@ def test_atomize_save_as_preserves_concurrent_current_selection(
         return apply_analysis(context, analysis)
 
     monkeypatch.setattr(
-        "memcommit.atomize_normal_form.apply_atomize_analysis",
+        "memcommit.application.operations.atomize.normal_form.apply_atomize_analysis",
         switch_then_apply,
     )
 
@@ -1727,7 +1727,7 @@ def test_atomize_save_as_does_not_overwrite_concurrent_destination(
         return result
 
     monkeypatch.setattr(
-        "memcommit.atomize_runtime.ops._atomize_projection",
+        "memcommit.application.operations.atomize.runtime.ops._atomize_projection",
         create_competitor,
     )
 

@@ -69,7 +69,7 @@ def _run_query_child() -> None:
 
 def _run_search_child() -> None:
     from memcommit.commands.find.search_workbench import run_find_search_workbench
-    from memcommit.find_application import FindSearchResponse, FindSearchResult
+    from memcommit.application.operations.search.application import FindSearchResponse, FindSearchResult
 
     _verify_pty()
 
@@ -116,7 +116,7 @@ def _run_find_child() -> None:
         LiteralFindTuiSetup,
         run_literal_find_tui,
     )
-    from memcommit.literal_find_application import (
+    from memcommit.application.operations.find.literal_application import (
         LiteralFindMatch,
         LiteralFindResult,
         LiteralFindSourceItem,

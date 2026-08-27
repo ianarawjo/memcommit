@@ -133,8 +133,8 @@ def _new_context(*, uid: str, name: str, memory_uid: str, content: str):
 
 def _child_update(store_root: Path) -> None:
     from memcommit.commands.update.render import review_update_application
-    from memcommit.store import MemoryStore
-    from memcommit.update import plan_update
+    from memcommit.persistence.store import MemoryStore
+    from memcommit.application.operations.update.model import plan_update
 
     store = MemoryStore(root=store_root)
     source = _new_context(
@@ -171,7 +171,7 @@ def _child_update(store_root: Path) -> None:
 
 
 def _child_verify_update(store_root: Path) -> None:
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root, create=False)
     context = store.load_direct("study/ownership-auto/update-target")
@@ -186,7 +186,7 @@ def _child_verify_update(store_root: Path) -> None:
 
 def _child_undo_update(store_root: Path) -> None:
     from memcommit.commands.shared.restoration_present import render_command_restore_receipt
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root, create=False)
     result = store.restore_recent_context_command("undo")
@@ -201,8 +201,8 @@ def _child_undo_update(store_root: Path) -> None:
 
 def _child_granted_update(store_root: Path) -> None:
     from memcommit.commands.update.render import review_update_application
-    from memcommit.store import MemoryStore
-    from memcommit.update import GrantedUpdateTarget, plan_update
+    from memcommit.persistence.store import MemoryStore
+    from memcommit.application.operations.update.model import GrantedUpdateTarget, plan_update
 
     store = MemoryStore(root=store_root)
     source = _new_context(
@@ -255,8 +255,8 @@ def _child_granted_update(store_root: Path) -> None:
 
 def _child_granted_update_noop(store_root: Path) -> None:
     from memcommit.commands.update.render import review_update_application
-    from memcommit.store import MemoryStore
-    from memcommit.update import GrantedUpdateTarget, plan_update
+    from memcommit.persistence.store import MemoryStore
+    from memcommit.application.operations.update.model import GrantedUpdateTarget, plan_update
 
     store = MemoryStore(root=store_root)
     source = _new_context(

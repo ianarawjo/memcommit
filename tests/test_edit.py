@@ -11,7 +11,7 @@ import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Context, Memory
 from memcommit.core.context_targeting.tui.picker import ContextMemoryRow
-from memcommit.edit_application import EditRequest, FrozenEditPlan
+from memcommit.application.operations.edit.application import EditRequest, FrozenEditPlan
 from memcommit.adapters.interfaces.tui.components.exact_command_review import (
     format_exact_command,
 )
@@ -23,7 +23,7 @@ from memcommit.adapters.interfaces.tui.operations.edit import (
 from memcommit.adapters.interfaces.tui.operations.edit.screen import (
     edit_exact_command_review,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner()
@@ -389,8 +389,8 @@ def test_cli_edit_creates_one_post_edit_checkpoint(isolated_store):
 
 
 def test_exact_edit_rejects_drift_after_interactive_freeze(isolated_store):
-    from memcommit.edit_application import EditRequest, run_edit
-    from memcommit.edit_runtime import MemoryStoreEditPort
+    from memcommit.application.operations.edit.application import EditRequest, run_edit
+    from memcommit.application.operations.edit.runtime import MemoryStoreEditPort
 
     invoke("init", "notes")
     invoke("add", "old content")

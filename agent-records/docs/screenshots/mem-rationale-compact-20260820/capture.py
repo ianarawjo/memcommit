@@ -35,7 +35,7 @@ _BASE.HANGUL_FONT_PATH = "/System/Library/Fonts/AppleSDGothicNeo.ttc"
 
 
 def _isolate_store(root: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     store_dir = root / ".mem"
     assignments = {
@@ -60,9 +60,9 @@ def _isolate_store(root: Path) -> None:
 def _prepare_fixture() -> str:
     from typer.testing import CliRunner
 
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
     from memcommit.context import Memory
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     runner = CliRunner()
     assert runner.invoke(app, ["init", "rationale/origin"]).exit_code == 0
@@ -128,7 +128,7 @@ class _CaptureProvider:
 
 def _run_child() -> None:
     from memcommit.commands import rationale
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     with tempfile.TemporaryDirectory(prefix="memcommit-rationale-compact-") as temp:
         _isolate_store(Path(temp))

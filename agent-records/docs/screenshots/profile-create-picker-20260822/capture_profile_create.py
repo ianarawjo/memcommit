@@ -58,7 +58,7 @@ def _environment(home: Path) -> dict[str, str]:
 def _prepare(home: Path) -> None:
     os.environ["HOME"] = str(home)
     from memcommit.application import ops
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=home / ".mem")
     context = ops.init("authoring-notes")
@@ -69,7 +69,7 @@ def _prepare(home: Path) -> None:
 def _spawn(home: Path, *args: str):
     command = (
         f"stty rows {ROWS} cols {COLS}; stty size; "
-        f"exec {shlex.join([sys.executable, '-m', 'memcommit.cli', *args])}"
+        f"exec {shlex.join([sys.executable, '-m', 'memcommit.adapters.console.entrypoint', *args])}"
     )
     recorder = HELPERS._Recorder()
     child = pexpect.spawn(

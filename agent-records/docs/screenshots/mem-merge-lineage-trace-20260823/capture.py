@@ -76,9 +76,9 @@ set -eu
 printf 'LIVE PTY · '
 stty size
 mem profile current
-before="$(python -c 'from memcommit.store import MemoryStore; print(MemoryStore().current_context_name() or "<none>")')"
+before="$(python -c 'from memcommit.persistence.store import MemoryStore; print(MemoryStore().current_context_name() or "<none>")')"
 mem trace {uid} --all --tui
-after="$(python -c 'from memcommit.store import MemoryStore; print(MemoryStore().current_context_name() or "<none>")')"
+after="$(python -c 'from memcommit.persistence.store import MemoryStore; print(MemoryStore().current_context_name() or "<none>")')"
 test "$before" = "$after"
 printf '{closed_label}\n'
 """.strip()
@@ -105,9 +105,9 @@ set -eu
 printf 'LIVE PTY · '
 stty size
 mem profile current
-before="$(python -c 'from memcommit.store import MemoryStore; print(MemoryStore().current_context_name() or "<none>")')"
+before="$(python -c 'from memcommit.persistence.store import MemoryStore; print(MemoryStore().current_context_name() or "<none>")')"
 mem trace {SOURCE_UID} --plain --all
-after="$(python -c 'from memcommit.store import MemoryStore; print(MemoryStore().current_context_name() or "<none>")')"
+after="$(python -c 'from memcommit.persistence.store import MemoryStore; print(MemoryStore().current_context_name() or "<none>")')"
 test "$before" = "$after"
 printf 'READ-ONLY VERIFIED · SOURCE AND TARGET UID TRACE CONNECTED · CURRENT CONTEXT UNCHANGED\n'
 """.strip()

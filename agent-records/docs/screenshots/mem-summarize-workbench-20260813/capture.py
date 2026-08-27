@@ -32,7 +32,7 @@ _BASE.ROWS = ROWS
 
 
 def _context_state() -> tuple[bytes, tuple[str, ...]]:
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(create=False)
     name = "task-1/participant"
@@ -42,7 +42,7 @@ def _context_state() -> tuple[bytes, tuple[str, ...]]:
 
 
 def _run_tui_child(*, cancel: bool) -> None:
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
 
     before = _context_state()
     print("PTY", os.get_terminal_size().columns, os.get_terminal_size().lines)
@@ -60,7 +60,7 @@ def _run_tui_child(*, cancel: bool) -> None:
 
 
 def _run_plain_child() -> None:
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
 
     before = _context_state()
     print("PTY", os.get_terminal_size().columns, os.get_terminal_size().lines)

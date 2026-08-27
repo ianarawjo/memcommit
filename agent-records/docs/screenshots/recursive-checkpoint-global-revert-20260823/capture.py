@@ -55,7 +55,7 @@ class _Recorder(io.StringIO):
 
 
 def _configure_store(store_dir: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     store_module.STORE_DIR = store_dir
     store_module.CONTEXTS_DIR = store_dir / "contexts"
@@ -90,7 +90,7 @@ def _save_add(store, context, content: str) -> None:
 def _prepare_store(store_dir: Path) -> None:
     import memcommit.application.ops as ops
     from memcommit.context import AutoCheckpoint
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_dir)
     root = ops.init("demo/recovery")
@@ -131,7 +131,7 @@ def _run_checkpoint(store_dir: Path) -> None:
 
 def _recursive_checkpoint_uid(store_dir: Path) -> str:
     _configure_store(store_dir)
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(create=False)
     for checkpoint in store.list_checkpoints("demo/recovery"):
@@ -147,7 +147,7 @@ def _recursive_checkpoint_uid(store_dir: Path) -> str:
 
 def _mutate_after_checkpoint(store_dir: Path) -> int:
     _configure_store(store_dir)
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(create=False)
     root = store.load_direct("demo/recovery")
@@ -186,7 +186,7 @@ def _memory_contents(store, name: str) -> list[str]:
 
 def _run_verification(store_dir: Path, expected: str) -> None:
     _configure_store(store_dir)
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(create=False)
     root = _memory_contents(store, "demo/recovery")

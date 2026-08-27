@@ -3,7 +3,7 @@ import uuid
 
 import memcommit.application.ops as ops
 from memcommit.application.authority.access import ContextAccess
-from memcommit.comparison import (
+from memcommit.application.operations.compare.ledger.model import (
     ComparisonAnalysis,
     ComparisonInput,
     ComparisonMember,
@@ -12,8 +12,8 @@ from memcommit.comparison import (
 )
 from memcommit.context import Context
 from memcommit.application.evaluation.study_compare_prewarm import prewarm_pair
-from memcommit.provider_types import CompletionRun, ProviderIdentity
-from memcommit.store import MemoryStore
+from memcommit.providers.types import CompletionRun, ProviderIdentity
+from memcommit.persistence.store import MemoryStore
 
 
 def _contexts(store: MemoryStore) -> tuple[Context, Context]:

@@ -9,7 +9,7 @@ from memcommit.adapters.interfaces.agent.replace import (
     ReplaceAgentAdapter,
     replace_agent_tool_schema,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def _adapter(tmp_path):

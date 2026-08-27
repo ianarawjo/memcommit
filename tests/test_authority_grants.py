@@ -20,7 +20,7 @@ from memcommit.commands.shared.readable_context_catalog import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.context import Memory
-from memcommit.profile_config import (
+from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
@@ -29,8 +29,8 @@ from memcommit.profile_config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.profiles import create_authority_grant, update_authority_grant
-from memcommit.store import MemoryStore
+from memcommit.application.operations.profile.model import create_authority_grant, update_authority_grant
+from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.summarize.application import SummarizeRequest
 from memcommit.application.operations.summarize.runtime import execute_summarize
 

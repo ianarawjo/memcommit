@@ -59,14 +59,14 @@ def _load_fixture() -> tuple[list[tuple[str, str]], list[str]]:
 
 def _prepare_store(root: Path):
     import memcommit.application.ops as ops
-    from memcommit.ground import (
+    from memcommit.application.operations.ground.model import (
         GroundTargetSpec,
         bind_ground_workbench,
         create_ground_session,
         propose_ground_case,
         propose_ground_rule,
     )
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     cases, rule_texts = _load_fixture()
     store = MemoryStore(root=root)
@@ -198,12 +198,12 @@ def _report_dict(report) -> dict[str, object]:
 
 
 def _run_child(store_root: Path) -> None:
-    from memcommit.conformance_runtime import (
+    from memcommit.application.operations.conformance.runtime import (
         execute_context_conformance,
         execute_ground_conformance,
     )
-    from memcommit.query_provider import CodexChatGPTProvider
-    from memcommit.store import context_record_digest, ground_session_record_digest
+    from memcommit.providers.subscription import CodexChatGPTProvider
+    from memcommit.persistence.store import context_record_digest, ground_session_record_digest
 
     store, session, examples, rules_context, cases, rules = _prepare_store(store_root)
     before_ground = ground_session_record_digest(session)

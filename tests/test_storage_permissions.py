@@ -8,21 +8,21 @@ from pathlib import Path
 
 import pytest
 
-import memcommit.profiles as profiles_module
-import memcommit.store as store_module
-from memcommit.profile_config import (
+import memcommit.application.operations.profile.model as profiles_module
+import memcommit.persistence.store as store_module
+from memcommit.application.operations.profile.config import (
     profile_control_dir,
     profile_registry_file,
     profile_stores_dir,
     virtual_authoring_registry,
 )
-from memcommit.storage_permissions import (
+from memcommit.application.authority.storage_permissions import (
     PRIVATE_DIRECTORY_MODE,
     PRIVATE_FILE_MODE,
     StoragePermissionError,
     harden_private_storage_tree,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def _mode(path: Path) -> int:

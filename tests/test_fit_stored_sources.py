@@ -21,7 +21,7 @@ from memcommit.application.operations.fit.judgment import (
     FitProposition,
 )
 from memcommit.application.operations.fit.runtime import FitSourceError, run_stored_source_fit
-from memcommit.profile_config import (
+from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
@@ -29,12 +29,12 @@ from memcommit.profile_config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.profiles import (
+from memcommit.application.operations.profile.model import (
     ProfileError,
     create_authority_grant,
     update_authority_grant,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 class _FitProvider:

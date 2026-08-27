@@ -5,13 +5,13 @@ import json
 
 import pytest
 
-from memcommit.find_answer_dialogue import (
+from memcommit.application.operations.search.answer_dialogue import (
     FIND_ANSWER_OPERATION,
     FindAnswerCorpusTooLarge,
     FindAnswerError,
     synthesize_find_answer,
 )
-from memcommit.find_answer_references import (
+from memcommit.application.operations.search.answer_references import (
     FindAnswerEvidence,
     FindAnswerSentence,
 )
@@ -253,7 +253,7 @@ def test_generated_sentence_cannot_forge_a_host_citation(field):
 def test_oversized_scope_fails_before_provider_work(monkeypatch):
     provider = Provider(_response())
     monkeypatch.setattr(
-        "memcommit.find_answer_dialogue.FIND_ANSWER_CORPUS_LIMIT",
+        "memcommit.application.operations.search.answer_dialogue.FIND_ANSWER_CORPUS_LIMIT",
         20,
     )
 

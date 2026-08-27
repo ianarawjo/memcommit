@@ -30,7 +30,7 @@ _BASE.ROWS = ROWS
 
 
 def _configure_isolated_store(store_root: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     values = {
         "STORE_DIR": store_root,
@@ -54,7 +54,7 @@ def _configure_isolated_store(store_root: Path) -> None:
 def _initialize(kind: str) -> None:
     import memcommit.application.ops as ops
     from memcommit.context import Context, Memory
-    from memcommit.store import MemoryStore, context_record_digest
+    from memcommit.persistence.store import MemoryStore, context_record_digest
 
     store = MemoryStore()
     shared_uid = "00000000-0000-0000-0000-000000000001"
@@ -107,7 +107,7 @@ def _initialize(kind: str) -> None:
 
 def _verification(kind: str) -> str:
     from memcommit.context import Memory
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()
     target = store.load_direct("target")
@@ -137,7 +137,7 @@ def _run_child(kind: str) -> None:
         _configure_isolated_store(Path(directory) / ".mem")
         _initialize(kind)
         if kind == "stale":
-            from memcommit.merge_runtime import MemoryStoreMergePort
+            from memcommit.application.operations.merge.runtime import MemoryStoreMergePort
 
             original_apply = MemoryStoreMergePort.apply
 

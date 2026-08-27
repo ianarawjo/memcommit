@@ -15,35 +15,35 @@ from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
-import memcommit.config as config_module
+import memcommit.configuration.config as config_module
 import memcommit.commands.meld.command as meld_command
 from memcommit.adapters.python_api import MemCommitClient
 from memcommit.commands.shared.endpoint_setup_flows import MeldSetupReceipt
-from memcommit.atomize_grounding import (
+from memcommit.application.operations.atomize.grounding import (
     AtomizeGroundingAnchor,
     AtomizeGroundingBindings,
     AtomizeGroundingSession,
     atomize_grounding_context_digest,
 )
-from memcommit.atomize_meld_adapter import (
+from memcommit.application.operations.atomize.grounding_meld_adapter import (
     project_atomize_grounding_as_meld,
 )
 from memcommit.adapters.console.entrypoint import app
-from memcommit.comparison import (
+from memcommit.application.operations.compare.ledger.model import (
     ComparisonInput,
     comparison_canonical_digest,
 )
-from memcommit.comparison_provider import (
+from memcommit.application.operations.compare.ledger.provider import (
     COMPARISON_PAYLOAD_MARKER,
     ComparisonProviderError,
     analyze_comparison,
 )
-from memcommit.comparison_store import (
+from memcommit.application.operations.compare.ledger.store import (
     load_comparison_analysis,
     save_comparison_analysis,
 )
 from memcommit.context import Context, Memory, MemoryRef
-from memcommit.config import Config
+from memcommit.configuration.config import Config
 from memcommit.commands.compare.command import render_comparison
 from memcommit.commands.meld.command import render_meld_session
 from memcommit.commands.meld.shell import (
@@ -61,7 +61,7 @@ from memcommit.commands.shared.resolution_workbench_shell import (
     render_resolution_workbench_snapshot,
     resolution_seeded_report_fragments,
 )
-from memcommit.meld import (
+from memcommit.application.operations.meld.model import (
     INLINE_MELD_CONTEXT_NAME,
     MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION,
     MELD_DIRECTIONAL_PRESERVATION_SCHEMA_VERSION,
@@ -74,7 +74,7 @@ from memcommit.meld import (
     meld_canonical_digest,
     meld_accounting,
 )
-from memcommit.meld_provider import (
+from memcommit.application.operations.meld.provider import (
     MELD_PAYLOAD_MARKER,
     MeldProviderError,
     assess_meld_turn,
@@ -82,21 +82,21 @@ from memcommit.meld_provider import (
     meld_output_schema,
 )
 from memcommit.application.operations.meld.runtime import prepare_meld_start
-from memcommit.meld_start_application import MeldStartRequest
-from memcommit.update import GrantedUpdateTarget
-from memcommit.meld_choice_branches import MeldChoiceBranchSet
+from memcommit.application.operations.meld.start_application import MeldStartRequest
+from memcommit.application.operations.update.model import GrantedUpdateTarget
+from memcommit.application.operations.meld.choice_branches import MeldChoiceBranchSet
 from memcommit.adapters.interfaces.console.responses.model import ResponseDraft
-from memcommit.meld_resolution_adapter import MeldResolutionWorkbenchAdapter
+from memcommit.application.operations.meld.resolution_adapter import MeldResolutionWorkbenchAdapter
 from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
     reconstruct_memory_history,
 )
-from memcommit.profile_config import (
+from memcommit.application.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,
     STUDY_RUN_PARTICIPANT_SOURCE_KIND,
 )
-from memcommit.resolution_workbench import ResolutionNavigation
-from memcommit.store import (
+from memcommit.application.resolution.workbench import ResolutionNavigation
+from memcommit.persistence.store import (
     ConcurrentContextUpdateError,
     MemoryStore,
     context_record_digest,

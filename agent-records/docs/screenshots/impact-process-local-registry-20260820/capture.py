@@ -45,7 +45,7 @@ def _environment() -> dict[str, str]:
 
 
 def _configure_store(root: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     store_module.STORE_DIR = root
     store_module.CONTEXTS_DIR = root / "contexts"
@@ -193,7 +193,7 @@ class _ResolveProvider:
 
 def _prepare(kind: str):
     import memcommit.application.ops as ops
-    from memcommit.store import MemoryStore, context_record_digest
+    from memcommit.persistence.store import MemoryStore, context_record_digest
 
     store = MemoryStore()
     context = ops.init(f"capture/impact-{kind}")
@@ -221,8 +221,8 @@ def _prepare(kind: str):
 
 def _child(kind: str, root: Path) -> None:
     import memcommit.commands.impact.process_local as process_local
-    from memcommit.cli import app
-    from memcommit.store import context_record_digest
+    from memcommit.adapters.console.entrypoint import app
+    from memcommit.persistence.store import context_record_digest
 
     _configure_store(root)
     _print_terminal()

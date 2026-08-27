@@ -32,7 +32,7 @@ _BASE.ROWS = ROWS
 
 
 def _isolate_store(root: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     store_dir = root / ".mem"
     assignments = {
@@ -59,11 +59,11 @@ def _run_child() -> None:
 
     import memcommit.commands.ground.command as ground_command
     import memcommit.application.ops as ops
-    from memcommit.cli import app
-    from memcommit.ground_dialogue import GroundDialogueProposal
-    from memcommit.ground_workspace_draft_store import GroundWorkspaceDraftStore
-    from memcommit.ground_workspace_runtime import load_ground_workspace
-    from memcommit.store import MemoryStore
+    from memcommit.adapters.console.entrypoint import app
+    from memcommit.application.operations.ground.dialogue import GroundDialogueProposal
+    from memcommit.application.operations.ground.workspace_draft_store import GroundWorkspaceDraftStore
+    from memcommit.application.operations.ground.workspace_runtime import load_ground_workspace
+    from memcommit.persistence.store import MemoryStore
 
     with tempfile.TemporaryDirectory(prefix="memcommit-ground-draft-capture-") as temp:
         _isolate_store(Path(temp))

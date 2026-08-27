@@ -49,7 +49,7 @@ def _environment() -> dict[str, str]:
 def _invoke(args: list[str]) -> int:
     import click
 
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
 
     try:
         returned = app(args=args, prog_name="mem", standalone_mode=False)
@@ -65,8 +65,8 @@ def _pause(label: str) -> None:
 
 def _run_child(store_root: Path) -> None:
     import memcommit.application.ops as ops
-    import memcommit.store as store_module
-    from memcommit.store import MemoryStore
+    import memcommit.persistence.store as store_module
+    from memcommit.persistence.store import MemoryStore
 
     store_module.STORE_DIR = store_root
     store = MemoryStore()

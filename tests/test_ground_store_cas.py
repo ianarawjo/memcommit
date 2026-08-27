@@ -4,13 +4,13 @@ from __future__ import annotations
 import multiprocessing
 
 import memcommit.application.ops as ops
-from memcommit.ground import (
+from memcommit.application.operations.ground.model import (
     GroundSession,
     GroundTargetSpec,
     bind_ground_workbench,
     create_ground_session,
 )
-from memcommit.store import (
+from memcommit.persistence.store import (
     ConcurrentGroundUpdateError,
     MemoryStore,
     ground_session_record_digest,

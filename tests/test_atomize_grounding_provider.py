@@ -9,33 +9,33 @@ import uuid
 import pytest
 
 import memcommit.application.ops as ops
-from memcommit.atomize import (
+from memcommit.application.operations.atomize.domain import (
     ATOMIZE_RULESET_VERSION,
     AtomizeAnalysisItem,
     AtomizeAnalysisSession,
     AtomizeQualityIssue,
     AtomizeReading,
 )
-from memcommit.atomize_grounding import (
+from memcommit.application.operations.atomize.grounding import (
     AtomizeGroundingAnchor,
     AtomizeGroundingBindings,
     AtomizeGroundingSession,
     atomize_grounding_canonical_digest,
     atomize_grounding_context_digest,
 )
-from memcommit.atomize_grounding_provider import (
+from memcommit.application.operations.atomize.grounding_provider import (
     ATOMIZE_GROUNDING_PAYLOAD_MARKER,
     AtomizeGroundingProviderError,
     assess_atomize_grounding_turn,
 )
-from memcommit.atomize_workbench import (
+from memcommit.application.operations.atomize.workbench import (
     atomize_workbench_issue_digest,
     atomize_workbench_response_digest,
     create_atomize_workbench,
     project_atomize_workbench_findings,
 )
 from memcommit.context import Context
-from memcommit.review import direct_context_digest
+from memcommit.application.operations.review.model import direct_context_digest
 
 
 def _digest(value: str) -> str:

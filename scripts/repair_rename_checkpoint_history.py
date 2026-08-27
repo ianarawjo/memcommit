@@ -13,11 +13,11 @@ from pathlib import Path
 REPOSITORY = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPOSITORY / "src"))
 
-from memcommit.checkpoint_migration import (
+from memcommit.application.retained_history.checkpoint_migration import (  # noqa: E402
     apply_rename_history_repair,
     plan_rename_history_repair,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import MemoryStore  # noqa: E402
 
 
 def _parser() -> argparse.ArgumentParser:

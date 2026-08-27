@@ -7,7 +7,7 @@ import json
 import memcommit.application.ops as ops
 import pytest
 from memcommit.context import Memory
-from memcommit.search import SearchCandidate, rank_candidates
+from memcommit.application.operations.search.model import SearchCandidate, rank_candidates
 from memcommit.application.semantic_execution import SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
 from memcommit.application.operations.translate.runtime import plan_translation
 

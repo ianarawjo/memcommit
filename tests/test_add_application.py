@@ -19,7 +19,7 @@ from memcommit.application.operations.add.application import (
     run_add,
 )
 from memcommit.application.operations.add.runtime import MemoryStoreAddTargetPort, execute_add
-from memcommit.store import ConcurrentContextUpdateError, MemoryStore
+from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 
 
 def _request(*contents: str, mode: str = "TUI_DRAFTS") -> AddRequest:

@@ -33,7 +33,7 @@ _BASE.ROWS = ROWS
 
 
 def _configure_isolated_store(store_root: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     values = {
         "STORE_DIR": store_root,
@@ -56,7 +56,7 @@ def _configure_isolated_store(store_root: Path) -> None:
 
 def _initialize() -> tuple[str, str]:
     import memcommit.application.ops as ops
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()
     source = ops.init("source")
@@ -78,13 +78,13 @@ def _run_merge_child(kind: str) -> None:
     import typer
 
     from memcommit.commands.merge.command import cmd as merge_command
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     with tempfile.TemporaryDirectory(prefix="mem-merge-capture-") as directory:
         _configure_isolated_store(Path(directory) / ".mem")
         root_uid, child_uid = _initialize()
         if kind == "failure":
-            from memcommit.merge_runtime import MemoryStoreMergePort
+            from memcommit.application.operations.merge.runtime import MemoryStoreMergePort
 
             def fail_before_persistence(_port, _plan):
                 raise OSError("injected capture failure before persistence")
@@ -129,7 +129,7 @@ def _run_merge_child(kind: str) -> None:
 
 
 def _run_help_child() -> None:
-    from memcommit.cli import app
+    from memcommit.adapters.console.entrypoint import app
 
     print("PTY", os.get_terminal_size().columns, os.get_terminal_size().lines)
     app(args=["help"], prog_name="mem", standalone_mode=False)

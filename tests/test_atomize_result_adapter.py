@@ -8,7 +8,7 @@ from dataclasses import replace
 
 import pytest
 
-from memcommit.atomize import (
+from memcommit.application.operations.atomize.domain import (
     ATOMIZE_RULESET_VERSION,
     AtomizeAnalysisItem,
     AtomizeAnalysisSession,
@@ -18,12 +18,12 @@ from memcommit.atomize import (
     AtomizeQualityIssue,
     AtomizeReading,
 )
-from memcommit.atomize_result_adapter import (
+from memcommit.application.operations.atomize.result_adapter import (
     AtomizeResultWorkbenchAdapter,
     atomize_result_artifact_digest,
     project_atomize_result,
 )
-from memcommit.result_workbench import ResultWorkbenchView
+from memcommit.application.reviewing.result_workbench import ResultWorkbenchView
 
 
 ATOMIC_UID = "memory-atomic"

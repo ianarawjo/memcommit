@@ -24,7 +24,7 @@ if str(REPOSITORY_ROOT) not in sys.path:
 
 
 def _configure_store(root: Path) -> None:
-    import memcommit.store as store_module
+    import memcommit.persistence.store as store_module
 
     paths = {
         "STORE_DIR": root,
@@ -47,7 +47,7 @@ def _configure_store(root: Path) -> None:
 
 def _create_store():
     import memcommit.application.ops as ops
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()
     current = ops.init("alpha")
@@ -67,8 +67,8 @@ def _create_store():
 
 def _child(store_root: Path, *, cancel: bool) -> None:
     import memcommit.commands.forget.command as forget_command
-    from memcommit.cli import app
-    from memcommit.provider_types import ProviderIdentity
+    from memcommit.adapters.console.entrypoint import app
+    from memcommit.providers.types import ProviderIdentity
 
     _configure_store(store_root)
     os.environ["MEMCOMMIT_TEST_DISABLE_ATTEMPT_LOG"] = "1"

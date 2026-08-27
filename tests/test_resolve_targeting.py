@@ -5,8 +5,8 @@ import pytest
 import memcommit.application.ops as ops
 from memcommit.context import Memory
 from memcommit.application.operations.resolve.application import ResolveError
-from memcommit.resolve_targeting import normalize_resolve_cli_targets
-from memcommit.store import MemoryStore
+from memcommit.application.operations.resolve.targeting import normalize_resolve_cli_targets
+from memcommit.persistence.store import MemoryStore
 
 
 class _UnusedStore:

@@ -22,13 +22,13 @@ from memcommit.application.operations.atomize.runtime import (
     MemoryStoreAtomizeOutputPort,
     capture_atomize_session_snapshot,
 )
-from memcommit.atomize_workflow import open_or_create_atomize_workbench
+from memcommit.application.operations.atomize.workflow import open_or_create_atomize_workbench
 from memcommit.commands.atomize.command import cmd as atomize_command
 from memcommit.context import AutoCheckpoint, Memory
 from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
     reconstruct_memory_history,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner(mix_stderr=False)
@@ -360,7 +360,7 @@ def test_save_as_prepublication_failure_leaves_no_context_or_hidden_analysis(
     isolated_store,
     monkeypatch,
 ):
-    from memcommit.atomize import AtomizeImpactError
+    from memcommit.application.operations.atomize.domain import AtomizeImpactError
 
     store = MemoryStore()
     source, _memory, _opened = _open_all_atomic_session(store)
@@ -370,7 +370,7 @@ def test_save_as_prepublication_failure_leaves_no_context_or_hidden_analysis(
         raise AtomizeImpactError("injected prepublication failure")
 
     monkeypatch.setattr(
-        "memcommit.atomize_normal_form.apply_atomize_analysis",
+        "memcommit.application.operations.atomize.normal_form.apply_atomize_analysis",
         reject_apply,
     )
 

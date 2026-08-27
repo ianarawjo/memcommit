@@ -18,7 +18,7 @@ from memcommit.adapters.interfaces.console.theme import (
     semantic_color_rgb,
 )
 from memcommit.application.semantic.changes import EditChange, RemoveChange
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner()

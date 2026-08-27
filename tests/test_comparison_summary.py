@@ -11,16 +11,16 @@ from typer.testing import CliRunner
 import memcommit.commands.compare.command as compare_command
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.comparison import ComparisonInput
+from memcommit.application.operations.compare.ledger.model import ComparisonInput
 from memcommit.context import MemoryRef
-from memcommit.comparison_store import comparison_analysis_path
+from memcommit.application.operations.compare.ledger.store import comparison_analysis_path
 from memcommit.application.operations.compare.summary import ComparisonSummaryError
 from memcommit.application.operations.compare.summary_provider import summarize_comparison
 from memcommit.providers.policy import ResolvedProviderPolicy
 from memcommit.providers.profile_routes import (
     ProfileProviderRoutesError,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner()

@@ -9,9 +9,9 @@ from typer.testing import CliRunner
 import memcommit.application.ops as ops
 from memcommit.adapters.python_api import MemCommitClient
 from memcommit.adapters.console.entrypoint import app
-from memcommit.findings import DuplicateReport, FindingsError
+from memcommit.application.reviewing.quality.findings import DuplicateReport, FindingsError
 from memcommit.adapters.interfaces.agent.quality_find import QualityFindAgentAdapter
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner(mix_stderr=False)

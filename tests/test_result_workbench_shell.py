@@ -7,7 +7,7 @@ import pytest
 from memcommit.adapters.interfaces.tui.workbenches.result import (
     render_result_workbench_snapshot,
 )
-from memcommit.result_workbench import (
+from memcommit.application.reviewing.result_workbench import (
     ResultCase,
     ResultCaseDetail,
     ResultDetailBlock,

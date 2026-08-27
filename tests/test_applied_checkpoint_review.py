@@ -7,7 +7,7 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
-from memcommit.applied_checkpoint_review import (
+from memcommit.application.retained_history.applied_review import (
     applied_checkpoint_review_controller,
     list_applied_checkpoint_reviews,
     select_applied_checkpoint_review,
@@ -19,8 +19,8 @@ from memcommit.adapters.interfaces.console.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )
-from memcommit.resolution_workbench import ResolutionWorkbenchAction
-from memcommit.store import MemoryStore
+from memcommit.application.resolution.workbench import ResolutionWorkbenchAction
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner()

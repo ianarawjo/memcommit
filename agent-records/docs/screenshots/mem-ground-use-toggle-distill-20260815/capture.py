@@ -32,7 +32,7 @@ class _PayloadProvider:
         self.payload = None
 
     def complete(self, prompt, *, operation, output_schema=None):
-        from memcommit.distill import DISTILL_PAYLOAD_MARKER
+        from memcommit.application.operations.distill.model import DISTILL_PAYLOAD_MARKER
 
         self.payload = json.loads(prompt.split(DISTILL_PAYLOAD_MARKER, 1)[1])
         memories = self.payload["source"]["memories"]
@@ -65,7 +65,7 @@ class _PayloadProvider:
 
 def _prepare_store(root: Path):
     import memcommit.application.ops as ops
-    from memcommit.ground import (
+    from memcommit.application.operations.ground.model import (
         GroundTargetSpec,
         bind_ground_workbench,
         create_ground_session,
@@ -73,7 +73,7 @@ def _prepare_store(root: Path):
         propose_ground_rule,
         upgrade_ground_to_propositions,
     )
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=root)
     raw = ops.init("toggle/raw")
@@ -131,7 +131,7 @@ def _prepare_store(root: Path):
 
 
 def _run_child(store_root: Path) -> None:
-    # The exact approval launches `python -m memcommit.cli`; point both the TUI
+    # The exact approval launches `python -m memcommit.adapters.console.entrypoint`; point both the TUI
     # and that child process at the same isolated default Profile Store.
     os.environ["HOME"] = str(store_root.parent)
 
@@ -140,7 +140,7 @@ def _run_child(store_root: Path) -> None:
         _ground_example_use_proposal,
     )
     from memcommit.commands.ground.named_shell import run_named_ground_shell
-    from memcommit.ground_distill import execute_ground_distill, freeze_ground_distill
+    from memcommit.application.operations.ground.distill import execute_ground_distill, freeze_ground_distill
 
     store, session = _prepare_store(store_root)
     print("$ mem ground ticker-use", flush=True)

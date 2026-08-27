@@ -5,7 +5,7 @@ from typing import Annotated, Optional
 import typer
 from typer.testing import CliRunner
 
-from memcommit.console_invocation import (
+from memcommit.adapters.interfaces.cli.invocation import (
     ConsoleRoute,
     InvocationShape,
     TerminalCapabilities,

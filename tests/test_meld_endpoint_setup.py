@@ -14,7 +14,7 @@ from memcommit.adapters.interfaces.tui.operations.meld import (
     choose_meld_endpoint_setup,
     meld_endpoint_setup_spec,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 LEFT_UID = "11111111-1111-4111-8111-111111111111"

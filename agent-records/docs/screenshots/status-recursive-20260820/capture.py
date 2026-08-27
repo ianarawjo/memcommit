@@ -44,7 +44,7 @@ def main() -> None:
     recorder = _BASE._StreamRecorder()
     command = r"""
 set -eu
-previous="$(python -c 'from memcommit.store import MemoryStore; print(MemoryStore().current_context_name() or "")')"
+previous="$(python -c 'from memcommit.persistence.store import MemoryStore; print(MemoryStore().current_context_name() or "")')"
 restore_current() {
   if [ -n "$previous" ]; then
     mem switch "$previous" >/dev/null

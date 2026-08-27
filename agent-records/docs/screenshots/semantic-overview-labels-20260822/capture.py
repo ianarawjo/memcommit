@@ -51,8 +51,8 @@ def _summary_document(*, both: bool):
         project_summarize_result,
     )
     from memcommit.adapters.interfaces.tui.operations.summarize.model import SummarizeTuiOutcome
-    from memcommit.summarize_application import SummarizeResult
-    from memcommit.understanding import UnderstandingSummary
+    from memcommit.application.operations.summarize.application import SummarizeResult
+    from memcommit.application.semantic.understanding import UnderstandingSummary
 
     direct = SummarizeResult(
         context_name="capture/summary",
@@ -83,12 +83,12 @@ def _summary_document(*, both: bool):
 
 def _distill_document():
     from memcommit.context import Context, Memory
-    from memcommit.distill import DistillAnalysis, DistilledRule
-    from memcommit.distill_application import DistillResult
-    from memcommit.distill_goal_fit import DistillGoalFit
+    from memcommit.application.operations.distill.model import DistillAnalysis, DistilledRule
+    from memcommit.application.operations.distill.application import DistillResult
+    from memcommit.application.operations.distill.goal_fit import DistillGoalFit
     from memcommit.adapters.interfaces.tui.operations.distill.adapter import project_distill_result
-    from memcommit.summarize import collect_summary_scope
-    from memcommit.summarize_application import FrozenSummarySource
+    from memcommit.application.operations.summarize.model import collect_summary_scope
+    from memcommit.application.operations.summarize.application import FrozenSummarySource
 
     context = Context(
         uid="00000000-0000-4000-8000-000000000101",
@@ -139,8 +139,8 @@ def _distill_document():
 
 
 def _elaborate_document():
-    from memcommit.elaborate import ElaborateAnalysis, ElaboratedRule, ElaborateMode
-    from memcommit.elaborate_application import ElaborateResult
+    from memcommit.application.operations.elaborate.model import ElaborateAnalysis, ElaboratedRule, ElaborateMode
+    from memcommit.application.operations.elaborate.application import ElaborateResult
     from memcommit.adapters.interfaces.tui.operations.elaborate.adapter import (
         project_elaborate_result,
     )
@@ -163,7 +163,7 @@ def _elaborate_document():
 
 
 def _resolution_view(kind: str):
-    from memcommit.resolution_workbench import (
+    from memcommit.application.resolution.workbench import (
         ResolutionContextLocation,
         ResolutionOverviewSection,
         ResolutionWorkbenchView,
