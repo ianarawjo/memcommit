@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.infrastructure.clipboard import write_system_clipboard
+from memcommit.adapters.console.clipboard import write_system_clipboard
 from memcommit.commands.shared.command_progress import CommandProgress
 from memcommit.adapters.interfaces.cli.resolve import render_resolve_receipt
 from memcommit.adapters.interfaces.tui.operations.resolve import run_resolve_tui

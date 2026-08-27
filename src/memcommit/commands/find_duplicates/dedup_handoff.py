@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.infrastructure.clipboard import write_system_clipboard
+from memcommit.adapters.console.clipboard import write_system_clipboard
 from memcommit.application.operations.dedup.application import (
     DedupRequest,
     apply_dedup,

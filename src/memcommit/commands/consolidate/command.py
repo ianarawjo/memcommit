@@ -6,7 +6,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.infrastructure.clipboard import write_system_clipboard
+from memcommit.adapters.console.clipboard import write_system_clipboard
 from memcommit.application.operations.dedup.application import (
     DedupConflictError,
     DedupError,
