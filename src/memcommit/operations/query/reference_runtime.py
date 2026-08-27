@@ -11,7 +11,7 @@ from memcommit.operations.query.reference_application import (
     QueryReferenceSourcePort,
     run_query_reference,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 class MemoryStoreQueryReferenceSourcePort(QueryReferenceSourcePort):

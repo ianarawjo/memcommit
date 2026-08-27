@@ -13,7 +13,7 @@ from typing import Literal
 
 from memcommit.context import Context, GrantedMemorySource, MemoryRef
 from memcommit.retained_history.provenance import ProvenanceError, TraceReport, build_trace
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 ReferenceMode = Literal["LIVE", "SNAPSHOT"]

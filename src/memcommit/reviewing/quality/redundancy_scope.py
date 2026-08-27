@@ -22,7 +22,7 @@ from memcommit.reviewing.quality.handoff import (
     QualityFindingHandoff,
     quality_finding_handoffs,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 @dataclass(frozen=True)

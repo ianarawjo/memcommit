@@ -33,7 +33,6 @@ ROOT_BOUNDARIES = {
     "context": "public core Context and Memory model",
     "context_locator": "documented canonical existing-Context resolver",
     "ops": "public in-memory operation API",
-    "store": "public persistence boundary",
 }
 
 
@@ -199,6 +198,7 @@ CONCEPT_TARGETS = {
     "storage_permissions": "memcommit.authority.storage_permissions",
     "study_action_log": "memcommit.infrastructure.command_ledger.study_actions",
     "study_operation_policy": "memcommit.authority.study_operation_policy",
+    "store": "memcommit.persistence.store",
     "temporal_history": "memcommit.retained_history.temporal",
     "uid_locator": "memcommit.context_targeting.uid_locator",
     "understanding": "memcommit.semantic.understanding",

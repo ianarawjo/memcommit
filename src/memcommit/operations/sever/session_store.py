@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Iterator
 
 from memcommit.operations.sever.model import SeverError, SeverSession, sever_record_digest
-from memcommit.store import ConcurrentContextUpdateError, MemoryStore
+from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 
 
 class SeverSessionStore:

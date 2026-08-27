@@ -1,6 +1,6 @@
 """Read the process-local MemoryStore profile selection.
 
-This module deliberately does not import :mod:`memcommit.store`.  The store
+This module deliberately does not import :mod:`memcommit.persistence.store`.  The store
 imports it while establishing its immutable process-local root, so importing
 the two modules in the opposite direction would make profile selection depend
 on import order.

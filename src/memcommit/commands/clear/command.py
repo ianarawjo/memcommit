@@ -8,7 +8,7 @@ from memcommit.operations.clear.application import ClearRequest
 from memcommit.operations.clear.runtime import execute_clear
 from memcommit.operations.profile.config import ProfileConfigError
 from memcommit.operations.profile.model import ProfileError
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def cmd(

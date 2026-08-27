@@ -36,7 +36,7 @@ from memcommit.operations.forget.runtime import MemoryStoreForgetSourcePort
 from memcommit.operations.profile.config import ProfileConfigError
 from memcommit.operations.profile.model import ProfileError
 from memcommit.infrastructure.providers.subscription import QueryProviderError
-from memcommit.store import ConcurrentContextUpdateError
+from memcommit.persistence.store import ConcurrentContextUpdateError
 
 
 def _raise(error_type: type[Exception], error: BaseException) -> NoReturn:

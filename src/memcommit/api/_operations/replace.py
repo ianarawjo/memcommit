@@ -32,7 +32,7 @@ from memcommit.operations.replace.runtime import (
     MemoryStoreReplacePort,
     execute_replace_plan,
 )
-from memcommit.store import ConcurrentContextUpdateError
+from memcommit.persistence.store import ConcurrentContextUpdateError
 from memcommit.authority.write_protection import WriteProtectionError
 
 

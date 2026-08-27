@@ -129,7 +129,7 @@ def test_production_translate_consumers_use_operation_owners() -> None:
         "src/memcommit/ops.py",
         "src/memcommit/operations/profile/model.py",
         "src/memcommit/retained_history/provenance.py",
-        "src/memcommit/store.py",
+        "src/memcommit/persistence/store.py",
     )
     legacy_imports = (
         "from memcommit.translate import",
@@ -194,7 +194,7 @@ def test_translate_command_is_only_an_io_and_presentation_adapter() -> None:
     assert "memcommit.operations.translate.materialization" in imports
     assert "memcommit.context_targeting.loading" not in imports
     assert "memcommit.operations.translate.view_store" not in imports
-    assert "memcommit.store" in imports
+    assert "memcommit.persistence.store" in imports
     assert "import memcommit.ops" not in source
     assert "AutoCheckpoint" not in source
     assert "save_translation_catalog(" not in source

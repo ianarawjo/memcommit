@@ -14,7 +14,7 @@ from typing import Any
 from memcommit.context import AutoCheckpoint, Checkpoint, Context
 from memcommit.operations.ground.workspace_model import GroundWorkspaceError
 from memcommit.operations.ground.workspace_runtime import load_ground_workspace
-from memcommit.store import (
+from memcommit.persistence.store import (
     ConcurrentContextUpdateError,
     MemoryStore,
     canonical_context_record,

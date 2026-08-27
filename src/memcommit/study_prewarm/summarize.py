@@ -12,7 +12,7 @@ from memcommit.infrastructure.config import Config
 from memcommit.infrastructure.providers.policy import (
     resolve_operation_provider_policy,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.operations.summarize.model import (
     SUMMARIZE_PROVIDER_CONTRACT_VERSION,
     SUMMARIZE_TEXT_LIMIT,

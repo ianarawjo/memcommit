@@ -10,8 +10,8 @@ were directly under memcommit at baseline commit 885e62c0.
 | compatibility-facade | 103 |
 | operation-implementation | 74 |
 | retired-prototype | 1 |
-| root-boundary | 7 |
-| shared-concept-implementation | 64 |
+| root-boundary | 6 |
+| shared-concept-implementation | 65 |
 
 ## Modules
 
@@ -245,7 +245,7 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.status_application | compatibility-facade | centralize-alias | memcommit.operations.status.application | 0 |
 | memcommit.status_runtime | compatibility-facade | centralize-alias | memcommit.operations.status.runtime | 0 |
 | memcommit.storage_permissions | shared-concept-implementation | relocate | memcommit.authority.storage_permissions | 4 |
-| memcommit.store | root-boundary | retain | memcommit.store | 217 |
+| memcommit.store | shared-concept-implementation | relocate | memcommit.persistence.store | 217 |
 | memcommit.study_action_log | shared-concept-implementation | relocate | memcommit.infrastructure.command_ledger.study_actions | 11 |
 | memcommit.study_operation_policy | shared-concept-implementation | relocate | memcommit.authority.study_operation_policy | 2 |
 | memcommit.summarize | operation-implementation | relocate | memcommit.operations.summarize.model | 9 |

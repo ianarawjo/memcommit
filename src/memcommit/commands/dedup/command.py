@@ -19,7 +19,7 @@ from memcommit.operations.exact_dedup.application import (
 from memcommit.interfaces.console.text import display_escape_text
 from memcommit.operations.profile.config import ProfileConfigError
 from memcommit.operations.profile.model import ProfileError
-from memcommit.store import ConcurrentContextUpdateError, MemoryStore
+from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 
 
 def cmd(

@@ -21,7 +21,7 @@ from memcommit.interfaces.console.text import display_escape_text
 from memcommit.interfaces.tui.components.operation_launcher.session import (
     SessionPickerEntry,
 )
-from memcommit.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import MemoryStore, context_record_digest
 
 
 @dataclass(frozen=True)

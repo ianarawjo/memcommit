@@ -90,7 +90,7 @@ from memcommit.operations.review.model import (
     atomize_review_matches_analysis,
     review_response_digest,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.study_prewarm.atomize import is_installed_atomize_prewarm
 from memcommit.infrastructure.providers.subscription import (
     QueryProviderError,

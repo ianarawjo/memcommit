@@ -19,7 +19,7 @@ from memcommit.operations.share.model import (
     deliver_prepared_share,
     prepare_share,
 )
-from memcommit.store import ConcurrentContextUpdateError
+from memcommit.persistence.store import ConcurrentContextUpdateError
 
 
 def _interactive_terminal() -> bool:

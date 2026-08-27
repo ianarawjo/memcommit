@@ -15,7 +15,7 @@ from memcommit.operations.context_init.application import (
     CreatedContext,
     run_context_init,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 @dataclass(frozen=True)

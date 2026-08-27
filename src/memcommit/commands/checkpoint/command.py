@@ -14,7 +14,7 @@ from memcommit.context_targeting.presets import (
 )
 from memcommit.context_targeting.resolution import expand_lexical_context_names
 from memcommit.interfaces.console.text import display_escape_text
-from memcommit.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import MemoryStore, context_record_digest
 
 
 @dataclass(frozen=True)

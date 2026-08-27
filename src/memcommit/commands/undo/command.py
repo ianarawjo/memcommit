@@ -10,7 +10,7 @@ from memcommit.commands.shared.restoration_present import (
     render_command_restore_receipt,
 )
 from memcommit.operations.undo.runtime import execute_undo
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def cmd(

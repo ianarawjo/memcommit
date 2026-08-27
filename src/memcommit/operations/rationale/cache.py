@@ -19,7 +19,7 @@ import stat
 import unicodedata
 import uuid
 
-import memcommit.store as store_module
+import memcommit.persistence.store as store_module
 
 
 CACHE_SCHEMA_VERSION = 3

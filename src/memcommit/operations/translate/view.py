@@ -17,7 +17,7 @@ import unicodedata
 import uuid
 
 from memcommit.context import Context, Memory
-from memcommit.store import context_record_digest
+from memcommit.persistence.store import context_record_digest
 from memcommit.operations.translate.runtime import (
     TRANSLATED_CONTENT_CHAR_LIMIT,
     TRANSLATION_TARGET_CHAR_LIMIT,

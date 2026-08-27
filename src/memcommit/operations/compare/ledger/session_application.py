@@ -24,7 +24,7 @@ from memcommit.operations.compare.ledger.granted_store import (
     granted_artifact_contexts,
     iter_granted_comparison_artifacts,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 _FINAL_ANALYSIS_NAME = re.compile(

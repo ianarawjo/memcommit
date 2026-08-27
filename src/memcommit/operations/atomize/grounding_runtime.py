@@ -35,7 +35,7 @@ from memcommit.operations.atomize.workbench import (
     project_atomize_workbench_findings,
 )
 from memcommit.context import AutoCheckpoint, Context, Memory
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 def _content_digest(content: str) -> str:
     return hashlib.sha256(content.encode("utf-8")).hexdigest()

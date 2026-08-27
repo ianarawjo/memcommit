@@ -74,7 +74,7 @@ from memcommit.infrastructure.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )
-from memcommit.store import ConcurrentContextUpdateError, MemoryStore
+from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 
 
 _AUDIT_RECEIPT_PREVIEW_LIMIT = 3

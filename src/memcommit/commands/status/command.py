@@ -19,7 +19,7 @@ from memcommit.operations.status.application import (
     StatusRequest,
 )
 from memcommit.operations.status.runtime import execute_status
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def cmd(

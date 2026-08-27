@@ -13,7 +13,7 @@ from memcommit.retained_history.reconstruction import (
     MemoryVersion,
     build_history,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 @dataclass(frozen=True)

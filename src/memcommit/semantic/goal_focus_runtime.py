@@ -24,7 +24,7 @@ from memcommit.semantic.goal_focus import (
     GoalFocusKind,
     inline_goal_focus,
 )
-from memcommit.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import MemoryStore, context_record_digest
 
 
 def _memory_digest(memory: Memory) -> str:

@@ -24,7 +24,7 @@ from memcommit.operations.edit.application import (
     run_edit,
     validate_edit_request,
 )
-from memcommit.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import MemoryStore, context_record_digest
 
 
 @dataclass(frozen=True)

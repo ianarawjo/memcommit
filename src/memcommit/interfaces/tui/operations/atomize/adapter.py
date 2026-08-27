@@ -15,7 +15,7 @@ from memcommit.interfaces.tui.operations.atomize.screen import (
 from memcommit.interfaces.tui.workbenches.resolution import ResolutionDestination
 from memcommit.interfaces.tui.workbenches.review import ReviewCancelled
 from memcommit.resolution.workbench import ResolutionWorkbenchAction
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def present_atomize_workbench(

@@ -5,7 +5,7 @@ single editable Study baseline deliberately namespaces all three task inputs
 inside one root. ``mem init-study`` snapshots that source into one participant
 Profile and one run-private authority Profile, then restores the fixture's
 real grants between them. Older six-Profile Study groups remain readable.
-A process resolves its selected root once when :mod:`memcommit.store` is
+A process resolves its selected root once when :mod:`memcommit.persistence.store` is
 imported, so a profile selection affects the next CLI invocation while an
 already running operation finishes against the store it opened.
 """
@@ -4078,7 +4078,7 @@ def _write_mapped_study_store(
     if len(uids) != len(set(uids)):
         raise ProfileError("Study store Context identities are duplicated.")
 
-    from memcommit.store import _write_json_atomic
+    from memcommit.persistence.store import _write_json_atomic
 
     (destination / "contexts").mkdir(parents=True)
     _write_json_atomic(destination / "state.json", {"current": current_context})
@@ -5090,7 +5090,7 @@ def _publish_study_run_pair(
             # this block because participant-authored inputs make an exact
             # shared semantic artifact neither stable nor reusable.
             from memcommit.study_prewarm.prepare import prepare_study_prewarms
-            from memcommit.store import MemoryStore
+            from memcommit.persistence.store import MemoryStore
 
             try:
                 prepare_study_prewarms(

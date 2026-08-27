@@ -24,7 +24,7 @@ from memcommit.operations.profile.model import (
     grants_for_attachment,
     resolve_granted_context_view,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.source_projection.model import (
     SourceDisplayFacts,
     SourceForm,

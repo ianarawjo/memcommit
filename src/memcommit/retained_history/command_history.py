@@ -16,7 +16,7 @@ from typing import Any, Literal
 
 from memcommit.context import Checkpoint, Context
 from memcommit.retained_history.reconstruction import HistoryError, flatten_checkpoint_entries
-from memcommit.store import MemoryStore, canonical_context_record
+from memcommit.persistence.store import MemoryStore, canonical_context_record
 
 
 RestoreDirection = Literal["undo", "redo"]

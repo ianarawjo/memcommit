@@ -27,7 +27,7 @@ from memcommit.operations.profile.config import ProfileRegistry
 from memcommit.reviewing.quality.workbench import QualityFindSourceFrame
 from memcommit.reviewing.quality.handoff import QualityFindingSource
 from memcommit.reviewing.quality.redundancy_scope import RedundancyScopeAnalysis
-from memcommit.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import MemoryStore, context_record_digest
 
 
 @dataclass(frozen=True)

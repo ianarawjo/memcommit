@@ -16,7 +16,7 @@ from memcommit.interfaces.tui.operations.context_init import (
     ContextInitTuiSetup,
     run_context_init_tui,
 )
-from memcommit.store import MemoryStore, validate_context_name
+from memcommit.persistence.store import MemoryStore, validate_context_name
 
 
 def cmd(

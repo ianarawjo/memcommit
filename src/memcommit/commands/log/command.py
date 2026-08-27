@@ -53,7 +53,7 @@ from memcommit.retained_history.provenance import ProvenanceError
 from memcommit.operations.profile.config import ProfileConfigError
 from memcommit.operations.profile.config import load_profile_registry
 from memcommit.operations.profile.model import ProfileError
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.infrastructure.command_ledger.study_actions import (
     StudyActionError,
     StudyActionEvent,

@@ -37,7 +37,7 @@ from memcommit.infrastructure.providers.types import (
     CODEX_REASONING_EFFORTS,
 )
 from memcommit.infrastructure.providers.subscription import CodexChatGPTProvider
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.study_prewarm.registry import (
     load_artifact,
     load_registry,

@@ -41,7 +41,7 @@ from memcommit.infrastructure.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )
-from memcommit.store import (
+from memcommit.persistence.store import (
     MemoryStore,
     checkpoint_history_digest,
     context_record_digest,

@@ -30,7 +30,7 @@ from memcommit.operations.embed.application import (
     validate_embed_request,
     validate_memory_embed_request,
 )
-from memcommit.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import MemoryStore, context_record_digest
 
 
 @dataclass(frozen=True)

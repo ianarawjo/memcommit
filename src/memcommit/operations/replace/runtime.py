@@ -23,7 +23,7 @@ from memcommit.operations.replace.application import (
     apply_replace,
     plan_replace,
 )
-from memcommit.store import (
+from memcommit.persistence.store import (
     ConcurrentContextUpdateError,
     MemoryStore,
     context_record_digest,

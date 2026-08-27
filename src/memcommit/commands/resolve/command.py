@@ -39,7 +39,7 @@ from memcommit.reviewing.quality.handoff import (
     conflict_handoff_to_resolve_request,
     quality_finding_handoff_from_json,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def cmd(

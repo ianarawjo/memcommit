@@ -37,7 +37,7 @@ from memcommit.operations.add.semantic_runtime import (
     append_semantic_memories,
     freeze_semantic_add_target,
 )
-from memcommit.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import MemoryStore, context_record_digest
 from memcommit.operations.summarize.application import (
     FrozenSummarySource,
     SummarizeRequest,

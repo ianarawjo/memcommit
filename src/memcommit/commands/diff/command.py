@@ -12,7 +12,7 @@ from memcommit.interfaces.console.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.operations.update.granted_application import inspect_granted_update
 from memcommit.reviewing.memory_diff import (
     MemoryChange,

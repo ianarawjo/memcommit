@@ -21,7 +21,7 @@ from memcommit.operations.elaborate.model import (
     ElaborateTargetContextItem,
 )
 from memcommit.operations.add.semantic_runtime import FrozenSemanticAddTarget
-from memcommit.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import MemoryStore, context_record_digest
 from memcommit.operations.update.model import GrantedUpdateTarget
 
 

@@ -104,7 +104,7 @@ from memcommit.operations.review.model import (
     atomize_review_matches_analysis,
     review_response_digest,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.context_targeting.uid_locator import UidLocatorError, resolve_exact_or_unique_uid
 from memcommit.study_prewarm.registry import StudyPrewarmRegistryError
 from memcommit.operations.update.model import UpdateError, plan_update, session_matches

@@ -33,7 +33,7 @@ from memcommit.reviewing.quality.findings import DuplicateFinding, DuplicateRepo
 from memcommit.reviewing.quality.workbench import create_quality_find_workbench
 from memcommit.reviewing.quality.handoff import quality_finding_handoffs
 from memcommit.operations.review.model import direct_context_digest
-from memcommit.store import context_record_digest
+from memcommit.persistence.store import context_record_digest
 
 
 @dataclass(frozen=True)

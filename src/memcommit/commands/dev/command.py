@@ -55,7 +55,7 @@ def dev_query_source_install(
     readable to the local OS user and is not a production security boundary.
     """
     import memcommit.ops as ops
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()
     try:
@@ -150,7 +150,7 @@ def dev_fake(
     """
     from memcommit.infrastructure.config import Config
     from memcommit.semantic.llm import LLMClient, LLMError
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
     import memcommit.ops as ops
 
     config = Config()

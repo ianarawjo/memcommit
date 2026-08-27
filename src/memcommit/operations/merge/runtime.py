@@ -54,7 +54,7 @@ from memcommit.retained_history.memory_lineage import (
     memory_lineage_record,
     resolve_lineage_target_uids,
 )
-from memcommit.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import MemoryStore, context_record_digest
 from memcommit.authority.write_protection import WriteProtectionError
 
 

@@ -63,7 +63,7 @@ from memcommit.source_projection.model import (
     SourceState,
     context_access_facts,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def _snapshot_context(

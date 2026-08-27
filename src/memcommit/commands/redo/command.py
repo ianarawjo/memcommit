@@ -8,7 +8,7 @@ from memcommit.commands.shared.restoration_present import (
     render_command_restore_receipt,
 )
 from memcommit.operations.redo.runtime import execute_redo
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def cmd() -> None:

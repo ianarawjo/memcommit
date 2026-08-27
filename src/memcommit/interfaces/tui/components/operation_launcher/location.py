@@ -4,14 +4,14 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import memcommit.store as store_module
+import memcommit.persistence.store as store_module
 from memcommit.interfaces.tui.components.operation_launcher import LauncherOrientation
 from memcommit.operations.profile.config import (
     ProfileConfigError,
     load_profile_registry,
     profile_store_dir,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def operation_launcher_orientation(
@@ -19,7 +19,7 @@ def operation_launcher_orientation(
 ) -> LauncherOrientation:
     """Describe the frozen Store without coupling a launcher to Ground.
 
-    ``memcommit.store`` freezes its root at import time. Another process may
+    ``memcommit.persistence.store`` freezes its root at import time. Another process may
     change the registry's active profile while a launcher is open, so matching
     the frozen root is authoritative and the registry's active UID is not.
     """

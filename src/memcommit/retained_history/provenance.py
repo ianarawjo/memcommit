@@ -24,7 +24,7 @@ from memcommit.retained_history.memory_lineage import (
     memory_content_sha256,
     parse_memory_lineage_receipt,
 )
-from memcommit.store import (
+from memcommit.persistence.store import (
     MemoryStore,
     canonical_context_record,
     context_record_digest,

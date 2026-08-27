@@ -19,7 +19,7 @@ from memcommit.operations.profile.config import (
     profile_store_dir,
     study_run_identity,
 )
-from memcommit.store import MemoryStore, _write_json_atomic
+from memcommit.persistence.store import MemoryStore, _write_json_atomic
 from memcommit.study_prewarm.registry import (
     StudyPrewarmEntry,
     StudyPrewarmRegistryError,

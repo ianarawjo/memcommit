@@ -20,7 +20,7 @@ import tempfile
 from typing import Iterator
 import uuid
 
-import memcommit.store as store_module
+import memcommit.persistence.store as store_module
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.eval.study_fixtures import (
     FixtureDataset,
@@ -30,7 +30,7 @@ from memcommit.eval.study_fixtures import (
     pair_fixture_translations,
 )
 from memcommit.operations.profile.config import GRANT_PERMISSIONS
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.operations.translate.view import (
     TRANSLATION_ORIGIN_IMPORTED,
     TRANSLATION_REVIEW_UNREVIEWED,

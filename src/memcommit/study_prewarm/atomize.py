@@ -36,7 +36,7 @@ from memcommit.semantic.prompt_policy import (
     GENERAL_PROMPT_POLICY_ID,
     STUDY_PROMPT_POLICY_ID,
 )
-from memcommit.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import MemoryStore, context_record_digest
 from memcommit.study_prewarm.installations import (
     INSTALLATIONS_DIRECTORY_NAME,
     declared_artifact_available,

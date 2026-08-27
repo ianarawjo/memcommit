@@ -27,7 +27,7 @@ from memcommit.operations.sever.model import (
     SeverSession,
 )
 from memcommit.operations.sever.provider import SEVER_PROVIDER_CONTRACT_VERSION
-from memcommit.store import (
+from memcommit.persistence.store import (
     MemoryStore,
     _write_json_atomic,
     context_record_digest,

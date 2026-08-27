@@ -65,7 +65,7 @@ from memcommit.operations.profile.config import ProfileConfigError
 from memcommit.operations.profile.model import ProfileError
 from memcommit.infrastructure.providers.subscription import QueryProviderError, connect_semantic_provider
 from memcommit.operations.add.semantic_runtime import resolve_semantic_add_endpoints
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.operations.summarize.model import SummaryFrame
 
 

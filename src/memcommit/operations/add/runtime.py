@@ -20,8 +20,8 @@ from memcommit.authority.access import (
 )
 from memcommit.context import AutoCheckpoint
 from memcommit.context_locator import resolve_context_locator
-from memcommit.store import MemoryStore
-from memcommit.store import ConcurrentContextUpdateError
+from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ConcurrentContextUpdateError
 
 
 class _StoreAddTargetToken:

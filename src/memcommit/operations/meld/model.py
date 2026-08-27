@@ -34,7 +34,7 @@ from memcommit.semantic.disclosure import (
     SemanticDisclosureError,
     require_semantic_disclosure_authority,
 )
-from memcommit.store import context_record_digest
+from memcommit.persistence.store import context_record_digest
 from memcommit.operations.update.model import ContextFingerprint, GrantedUpdateTarget
 
 

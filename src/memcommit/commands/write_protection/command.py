@@ -22,7 +22,7 @@ from memcommit.context_targeting.presets import (
     ContextScopePreset,
     resolve_scope_preset,
 )
-from memcommit.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import MemoryStore, context_record_digest
 
 
 class _ProtectionCommandGroup(CanonicalCommandGroup):

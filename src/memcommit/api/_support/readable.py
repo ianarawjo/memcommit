@@ -10,7 +10,7 @@ from memcommit.context_targeting.readable_catalog import (
 )
 from memcommit.operations.profile.config import load_profile_registry, profile_store_dir
 from memcommit.operations.profile.model import authority_grant_snapshot_lock
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 class LocalReadableCatalog:

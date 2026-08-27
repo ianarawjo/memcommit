@@ -28,7 +28,7 @@ from memcommit.operations.search.materialization_application import (
     FrozenFindMaterialization,
     run_find_materialization,
 )
-from memcommit.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import MemoryStore, context_record_digest
 
 
 class FindMaterializationCatalog(Protocol):

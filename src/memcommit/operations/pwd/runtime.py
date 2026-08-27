@@ -6,7 +6,7 @@ from memcommit.operations.pwd.application import (
     CurrentContextResult,
     get_current_context,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 class MemoryStoreCurrentContextReader:

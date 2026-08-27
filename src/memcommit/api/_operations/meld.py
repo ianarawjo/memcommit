@@ -59,7 +59,7 @@ from memcommit.operations.meld.session_application import (
 )
 from memcommit.operations.meld.start_application import MeldStartError, MeldStartRequest
 from memcommit.operations.profile.model import ProfileError
-from memcommit.store import ConcurrentContextUpdateError
+from memcommit.persistence.store import ConcurrentContextUpdateError
 
 
 def _raise(error_type: type[Exception], error: BaseException) -> None:

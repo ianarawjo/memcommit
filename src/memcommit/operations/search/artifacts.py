@@ -14,7 +14,7 @@ from memcommit.commands.meld.sessions import list_meld_session_catalog
 from memcommit.context import Context
 from memcommit.operations.rationale.cache import list_rationale_inferences
 from memcommit.operations.search.model import SearchArtifact
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 SearchArtifactRecord = tuple[str, str, SearchArtifact]

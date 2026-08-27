@@ -13,7 +13,7 @@ from memcommit.operations.search.materialization_runtime import (
     FindMaterializationCatalog,
     execute_find_materialization,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def materialize_find_results(

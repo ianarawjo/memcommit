@@ -84,7 +84,7 @@ from memcommit.operations.profile.config import (
     load_profile_registry,
     profile_store_dir,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 ProviderFactory = Callable[[], object]

@@ -10,7 +10,7 @@ from memcommit.operations.update.model import UpdateSession
 
 
 if TYPE_CHECKING:
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
 
 class UpdateReceiptStore:

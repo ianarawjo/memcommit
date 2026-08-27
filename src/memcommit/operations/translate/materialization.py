@@ -13,7 +13,7 @@ from memcommit.operations.translate.runtime import (
     derive_translation_context,
     translation_plan_matches_context,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 @dataclass(frozen=True)

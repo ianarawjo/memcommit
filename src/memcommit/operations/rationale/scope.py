@@ -23,7 +23,7 @@ from memcommit.retained_history.provenance import (
     collect_trace_candidates,
 )
 from memcommit.operations.rationale.model import RationaleError
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 @dataclass(frozen=True)

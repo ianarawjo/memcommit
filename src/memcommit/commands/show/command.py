@@ -16,7 +16,7 @@ from memcommit.operations.profile.config import ProfileConfigError
 from memcommit.operations.profile.model import ProfileError
 from memcommit.operations.show.application import ShowDirectItemScopeError, ShowError
 from memcommit.operations.show.runtime import execute_show_cli_operand
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def cmd(

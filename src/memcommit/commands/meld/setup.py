@@ -22,7 +22,7 @@ from memcommit.interfaces.tui.operations.meld import (
     MeldTuiSetup,
     choose_meld_endpoint_setup,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 @dataclass(frozen=True)

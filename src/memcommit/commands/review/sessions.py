@@ -27,7 +27,7 @@ from memcommit.interfaces.tui.operations.audit.catalog import audit_session_entr
 from memcommit.commands.sever.sessions import list_sever_session_catalog
 from memcommit.operations.sever.session_store import SeverSessionStore
 from memcommit.reviewing.quality.audit_store import QualityAuditStore
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.operations.update.receipt_store import UpdateReceiptStore
 
 

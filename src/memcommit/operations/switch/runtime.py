@@ -14,7 +14,7 @@ from memcommit.context_targeting.catalog import (
 )
 from memcommit.context_targeting.navigation import ContextNavigationDirection
 from memcommit.operations.profile.model import authority_grant_snapshot_lock
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.operations.switch.application import (
     SwitchContextError,
     SwitchContextRequest,

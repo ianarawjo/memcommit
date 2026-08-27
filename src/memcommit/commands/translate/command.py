@@ -44,7 +44,7 @@ from memcommit.source_projection.presentation import (
     source_annotation_text,
     source_object_label,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def _render_text(prefix: str, value: str) -> None:

@@ -18,7 +18,7 @@ from memcommit.source_projection.model import (
     SourceReach,
     SourceState,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 DeletePickerChooser = Callable[..., object]

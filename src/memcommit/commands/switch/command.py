@@ -19,7 +19,7 @@ from memcommit.interfaces.tui.operations.switch import (
     SwitchTuiSetup,
     run_switch_tui,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.source_projection.presentation import (
     SourceDisplayValue,
 )

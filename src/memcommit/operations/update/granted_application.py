@@ -23,7 +23,7 @@ from memcommit.operations.profile.model import (
     authority_grant_snapshot_lock,
     resolve_granted_context_view,
 )
-from memcommit.store import (
+from memcommit.persistence.store import (
     AutoCheckpoint,
     ConcurrentContextUpdateError,
     MemoryStore,

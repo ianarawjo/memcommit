@@ -18,7 +18,7 @@ from memcommit.operations.query.ordinary_application import (
     OrdinaryQuerySourcePort,
     run_ordinary_query,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 class OrdinaryQueryReadableAccess(Protocol):

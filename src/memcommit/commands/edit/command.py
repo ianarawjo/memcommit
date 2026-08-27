@@ -23,7 +23,7 @@ from memcommit.interfaces.console.text import safe_terminal_text
 from memcommit.interfaces.tui.operations.edit import choose_edit_setup
 from memcommit.operations.profile.config import ProfileConfigError
 from memcommit.operations.profile.model import ProfileError
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def _render_content(prefix: str, content: str, color: str) -> None:

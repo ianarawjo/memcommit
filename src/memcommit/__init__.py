@@ -19,7 +19,7 @@ from memcommit.context import (
     MemoryRef,
     QueryContextRef,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit import ops
 
 

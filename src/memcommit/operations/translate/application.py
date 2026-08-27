@@ -38,7 +38,7 @@ from memcommit.operations.translate.view_store import (
     load_translation_catalog_for_context,
     save_translation_catalog,
 )
-from memcommit.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import MemoryStore, context_record_digest
 
 
 TranslateResultKind = Literal[

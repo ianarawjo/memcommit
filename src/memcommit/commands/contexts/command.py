@@ -8,7 +8,7 @@ from memcommit.operations.contexts.application import ContextCatalogEntry
 from memcommit.operations.contexts.runtime import load_contexts_catalog
 from memcommit.operations.profile.config import ProfileConfigError
 from memcommit.operations.profile.model import ProfileError
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 _OWNED_PREFIX = "       "

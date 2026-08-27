@@ -31,7 +31,7 @@ from memcommit.operations.resolve.application import (
     ResolveRequest,
 )
 from memcommit.operations.resolve.rules import RESOLVE_RULESET_VERSION
-from memcommit.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import MemoryStore, context_record_digest
 
 
 _EFFECT_PERMISSION_ORDER: tuple[ResolveEffectKind, ...] = (

@@ -24,7 +24,7 @@ from memcommit.semantic_execution import (
     plan_semantic_execution,
     run_partitioned,
 )
-from memcommit.store import context_record_digest
+from memcommit.persistence.store import context_record_digest
 
 
 TRANSLATE_CORPUS_CHAR_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT

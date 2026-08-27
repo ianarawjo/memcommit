@@ -35,7 +35,7 @@ from memcommit.operations.delete.application import (
     prepare_context_delete,
     run_direct_item_delete,
 )
-from memcommit.store import (
+from memcommit.persistence.store import (
     ConcurrentContextUpdateError,
     ContextDeletionCommittedError,
     MemoryStore,

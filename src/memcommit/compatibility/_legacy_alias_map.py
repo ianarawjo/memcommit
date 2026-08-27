@@ -225,6 +225,7 @@ LEGACY_SUBMODULE_ALIASES = {
     'memcommit.status_application': 'memcommit.operations.status.application',
     'memcommit.status_runtime': 'memcommit.operations.status.runtime',
     'memcommit.storage_permissions': 'memcommit.authority.storage_permissions',
+    'memcommit.store': 'memcommit.persistence.store',
     'memcommit.study_action_log': 'memcommit.infrastructure.command_ledger.study_actions',
     'memcommit.study_operation_policy': 'memcommit.authority.study_operation_policy',
     'memcommit.summarize': 'memcommit.operations.summarize.model',

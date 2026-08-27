@@ -14,7 +14,7 @@ from memcommit.source_projection.presentation import (
     SourceTokenRole,
     combine_source_display_tokens,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 @dataclass(frozen=True)

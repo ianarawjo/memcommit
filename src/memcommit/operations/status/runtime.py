@@ -35,7 +35,7 @@ from memcommit.operations.status.application import (
     StatusResult,
     inspect_status,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def _required_text(record: Mapping[str, Any], key: str) -> str:

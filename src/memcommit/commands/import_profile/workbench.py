@@ -43,7 +43,7 @@ from memcommit.operations.resource_import.model import (
     plan_memory_import,
 )
 from memcommit.selection import SelectionOption
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 ImportKind = Literal["PROFILE", "CONTEXT", "MEMORY"]

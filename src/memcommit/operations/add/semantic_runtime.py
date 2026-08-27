@@ -8,7 +8,7 @@ from typing import Iterable
 import memcommit.ops as ops
 from memcommit.context import AutoCheckpoint
 from memcommit.context_locator import resolve_context_locator
-from memcommit.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import MemoryStore, context_record_digest
 
 
 @dataclass(frozen=True)

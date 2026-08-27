@@ -17,7 +17,7 @@ from memcommit.checkpoint_migration import (
     apply_rename_history_repair,
     plan_rename_history_repair,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def _parser() -> argparse.ArgumentParser:

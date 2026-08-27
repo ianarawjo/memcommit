@@ -110,7 +110,7 @@ from memcommit.operations.meld.start_application import (
 )
 from memcommit.infrastructure.providers.types import ProviderIdentity
 from memcommit.infrastructure.providers.subscription import CodexChatGPTProvider
-from memcommit.store import (
+from memcommit.persistence.store import (
     ConcurrentContextUpdateError,
     MemoryStore,
     _write_json_atomic,

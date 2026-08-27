@@ -84,7 +84,7 @@ from memcommit.resolution.workbench import (
     ResolutionResult,
     ResolutionWorkbenchView,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def _interactive_terminal() -> bool:

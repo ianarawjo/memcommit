@@ -31,7 +31,7 @@ from memcommit.operations.delete.application import (
 from memcommit.operations.delete.runtime import MemoryStoreDeletePort
 from memcommit.operations.profile.config import ProfileConfigError
 from memcommit.operations.profile.model import ProfileError
-from memcommit.store import ConcurrentContextUpdateError
+from memcommit.persistence.store import ConcurrentContextUpdateError
 from memcommit.authority.write_protection import WriteProtectionError
 
 

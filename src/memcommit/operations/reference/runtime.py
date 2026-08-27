@@ -44,7 +44,7 @@ from memcommit.operations.reference.application import (
 )
 from memcommit.operations.profile.config import profile_store_dir
 from memcommit.operations.profile.model import authority_grant_snapshot_lock
-from memcommit.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import MemoryStore, context_record_digest
 
 
 @dataclass(frozen=True)

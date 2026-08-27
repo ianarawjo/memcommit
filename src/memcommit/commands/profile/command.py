@@ -1294,7 +1294,7 @@ def migrate_context_cmd(
 ) -> None:
     """Migrate one legacy Context namespace to a portable canonical name."""
 
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
     if is_portable_context_name(old_name):
         _fail(

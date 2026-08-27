@@ -37,7 +37,7 @@ from memcommit.semantic.changes import (
     RemoveChange,
     apply_changes,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.infrastructure.providers.policy import FORGET_PROVIDER_POLICY
 
 

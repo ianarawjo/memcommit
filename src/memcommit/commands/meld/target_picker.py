@@ -31,7 +31,7 @@ from memcommit.interfaces.tui.components.frame import (
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 @dataclass(frozen=True)

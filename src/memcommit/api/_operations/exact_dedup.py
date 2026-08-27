@@ -29,7 +29,7 @@ from memcommit.operations.profile.config import (
     profile_store_dir,
 )
 from memcommit.operations.profile.model import ProfileError
-from memcommit.store import ConcurrentContextUpdateError
+from memcommit.persistence.store import ConcurrentContextUpdateError
 
 
 def _active_registry(runtime: ClientRuntime):

@@ -80,7 +80,7 @@ from memcommit.operations.sever.runtime import (
     execute_sever_session_start,
 )
 from memcommit.operations.sever.session_store import SeverSessionStore
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 # Compatibility name for callers that historically caught the command-local

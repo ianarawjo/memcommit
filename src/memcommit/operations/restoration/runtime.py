@@ -8,7 +8,7 @@ from memcommit.retained_history.command_history import (
     RestoreDirection,
 )
 from memcommit.operations.update.granted_application import restore_granted_update
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def restore_context_command(

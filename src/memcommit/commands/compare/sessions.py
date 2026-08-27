@@ -18,7 +18,7 @@ from memcommit.interfaces.tui.components.operation_launcher.session import (
     SessionPickerEntry,
     choose_session,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def _created_timestamp(value: str) -> float:

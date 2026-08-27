@@ -16,7 +16,7 @@ from memcommit.operations.search.model import (
 from memcommit.operations.search.artifacts import collect_search_artifacts
 
 if TYPE_CHECKING:
-    from memcommit.store import MemoryStore
+    from memcommit.persistence.store import MemoryStore
 
 
 class SearchScopeStore(Protocol):

@@ -35,7 +35,7 @@ from memcommit.operations.embed.runtime import MemoryStoreEmbedPort
 from memcommit.interfaces.console.terminal import is_interactive_terminal
 from memcommit.interfaces.console.text import display_escape_text, safe_terminal_text
 from memcommit.interfaces.tui.operations.embed import choose_embed_setup
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def _interactive_terminal() -> bool:

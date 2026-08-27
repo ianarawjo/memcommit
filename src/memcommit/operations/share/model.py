@@ -17,7 +17,7 @@ from memcommit.operations.profile.model import (
     authority_grant_snapshot_lock,
     resolve_share_endpoint,
 )
-from memcommit.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import MemoryStore, context_record_digest
 
 
 class ShareError(RuntimeError):

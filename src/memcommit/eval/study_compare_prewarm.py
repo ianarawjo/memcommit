@@ -45,7 +45,7 @@ from memcommit.infrastructure.providers.types import (
     ProviderIdentity,
 )
 from memcommit.infrastructure.providers.subscription import CodexChatGPTProvider
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 KIND = "STUDY_COMPARE_PREWARM"

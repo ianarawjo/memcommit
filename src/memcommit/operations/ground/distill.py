@@ -42,7 +42,7 @@ from memcommit.operations.add.semantic_runtime import (
     FrozenSemanticAddTarget,
     freeze_semantic_add_target,
 )
-from memcommit.store import (
+from memcommit.persistence.store import (
     MemoryStore,
     context_record_digest,
     ground_session_record_digest,

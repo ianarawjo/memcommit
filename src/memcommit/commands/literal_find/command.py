@@ -44,7 +44,7 @@ from memcommit.operations.find.literal_application import (
 from memcommit.operations.find.literal_runtime import execute_literal_find
 from memcommit.operations.profile.config import ProfileConfigError
 from memcommit.operations.profile.model import ProfileError
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def cmd(

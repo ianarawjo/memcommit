@@ -29,7 +29,7 @@ from memcommit.interfaces.tui.operations.memory_transfer import (
 )
 from memcommit.operations.profile.config import ProfileConfigError
 from memcommit.operations.profile.model import ProfileError
-from memcommit.store import ConcurrentContextUpdateError, MemoryStore
+from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 from memcommit.authority.write_protection import WriteProtectionError
 
 

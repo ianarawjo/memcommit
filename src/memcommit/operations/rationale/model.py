@@ -37,7 +37,7 @@ from memcommit.semantic_execution import (
     json_budget,
     plan_semantic_execution,
 )
-from memcommit.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import MemoryStore, context_record_digest
 
 
 RATIONALE_INPUT_CHAR_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT

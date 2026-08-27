@@ -14,7 +14,7 @@ import sys
 import uuid
 from typing import Callable, Iterator
 
-import memcommit.store as store_module
+import memcommit.persistence.store as store_module
 
 try:
     import fcntl

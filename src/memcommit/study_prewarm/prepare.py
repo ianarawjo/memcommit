@@ -40,7 +40,7 @@ from memcommit.infrastructure.providers.types import (
     CODEX_CHATGPT_PROVIDER,
     CODEX_REASONING_EFFORTS,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.study_prewarm.compare import _exact_input_matches
 from memcommit.study_prewarm.registry import (
     PrewarmOperation,

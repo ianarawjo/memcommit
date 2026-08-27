@@ -32,7 +32,7 @@ from memcommit.interfaces.tui.components.paste_input import (
 from memcommit.interfaces.tui.operations.add import AddTuiSetup, run_add_tui
 from memcommit.operations.profile.config import ProfileConfigError
 from memcommit.operations.profile.model import ProfileError
-from memcommit.store import ConcurrentContextUpdateError, MemoryStore
+from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 
 
 def _prepare_add_tui_setup(

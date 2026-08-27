@@ -14,7 +14,7 @@ from memcommit.infrastructure.providers.subscription import connect_semantic_pro
 from memcommit.operations.resolve.application import apply_resolve, run_resolve
 from memcommit.operations.resolve.runtime import MemoryStoreResolvePort
 from memcommit.operations.resolve.semantic import ProviderResolveSemanticPort
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def run_conflict_resolve_handoff(

@@ -42,7 +42,7 @@ class MemCommandGroup(CanonicalCommandGroup):
         entered_argv: tuple[str, ...] | None = None
         if os.environ.get("MEMCOMMIT_TEST_DISABLE_ATTEMPT_LOG") != "1":
             from memcommit.infrastructure.command_ledger.attempts import begin_command_attempt
-            from memcommit.store import MemoryStore
+            from memcommit.persistence.store import MemoryStore
 
             # Typer 0.27 keeps the unresolved command token on the private
             # compatibility field, while older Click exposes the public

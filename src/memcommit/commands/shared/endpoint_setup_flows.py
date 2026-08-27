@@ -26,7 +26,7 @@ from memcommit.commands.shared.session_endpoint_setup import (
 from memcommit.context_targeting.tui.picker import context_memory_rows
 from memcommit.context import Memory
 from memcommit.source_projection.model import SourceDisplayFacts
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def _readable_memory_loader(store: MemoryStore, *, current_name: str | None):

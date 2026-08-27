@@ -12,7 +12,7 @@ from memcommit.context import AutoCheckpoint
 from memcommit.context_targeting.loading import load_context_scope
 from memcommit.operations.update.granted_application import _authority_name, _remove_checkpoint
 from memcommit.operations.profile.model import authority_grant_snapshot_lock
-from memcommit.store import (
+from memcommit.persistence.store import (
     ConcurrentContextUpdateError,
     MemoryStore,
     _write_json_atomic,

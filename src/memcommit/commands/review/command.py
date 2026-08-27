@@ -61,7 +61,7 @@ from memcommit.operations.review.model import (
     create_ambiguity_review,
     review_matches_context,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.context_targeting.uid_locator import UidLocatorError, resolve_exact_or_unique_uid
 
 

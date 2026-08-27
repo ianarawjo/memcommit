@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from memcommit.authority.access import resolve_context_access
 from memcommit.context import Context
 from memcommit.retained_history.provenance import TraceReport, build_trace
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.authority.study_operation_policy import require_trace_access
 
 

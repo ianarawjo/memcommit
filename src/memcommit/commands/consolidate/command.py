@@ -36,7 +36,7 @@ from memcommit.reviewing.quality.handoff import (
 from memcommit.semantic.redundancy_evidence import (
     redundancy_evidence_from_json,
 )
-from memcommit.store import ConcurrentContextUpdateError, MemoryStore
+from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 
 
 def _selection(value: str) -> DedupSelection:

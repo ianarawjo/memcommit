@@ -12,7 +12,7 @@ import uuid
 from memcommit.context import Context, Memory
 from memcommit.operations.profile.config import GrantContextBinding, load_profile_registry
 from memcommit.operations.profile.model import GrantedContextView
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.operations.translate.view import (
     TranslationCatalog,
     TranslationViewError,

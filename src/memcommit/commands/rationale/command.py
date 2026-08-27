@@ -81,7 +81,7 @@ from memcommit.operations.rationale.scope import (
 from memcommit.operations.profile.config import ProfileConfigError
 from memcommit.operations.profile.model import ProfileError
 from memcommit.infrastructure.providers.subscription import QueryProviderError, connect_semantic_provider
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def _uid(value: str, verbose: bool) -> str:

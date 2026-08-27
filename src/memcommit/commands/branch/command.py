@@ -17,7 +17,7 @@ from memcommit.operations.branch.runtime import (
     execute_branch,
     prepare_branch,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def cmd(

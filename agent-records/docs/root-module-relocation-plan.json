@@ -2510,15 +2510,15 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "retain",
-      "canonical_target": "memcommit.store",
-      "canonical_target_path": "memcommit/store.py",
+      "action": "relocate",
+      "canonical_target": "memcommit.persistence.store",
+      "canonical_target_path": "memcommit/persistence/store.py",
       "inbound_package_importers": 217,
       "lines": 10118,
       "module": "memcommit.store",
       "path": "memcommit/store.py",
-      "reason": "public persistence boundary",
-      "role": "root-boundary"
+      "reason": "implementation belongs to a reusable named concept",
+      "role": "shared-concept-implementation"
     },
     {
       "action": "relocate",
@@ -2748,7 +2748,7 @@
     "compatibility-facade": 103,
     "operation-implementation": 74,
     "retired-prototype": 1,
-    "root-boundary": 7,
-    "shared-concept-implementation": 64
+    "root-boundary": 6,
+    "shared-concept-implementation": 65
   }
 }

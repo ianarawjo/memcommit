@@ -22,7 +22,7 @@ from memcommit.interfaces.tui.components.operation_launcher.session import (
     choose_session,
 )
 from memcommit.operations.sever.session_store import SeverSessionStore
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.operations.update.receipt_store import UpdateReceiptStore
 
 

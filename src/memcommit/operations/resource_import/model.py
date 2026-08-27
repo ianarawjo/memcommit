@@ -28,7 +28,7 @@ from memcommit.operations.profile.model import (
     import_baseline_profile,
     inspect_store,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.context_targeting.naming import validate_portable_context_name
 
 

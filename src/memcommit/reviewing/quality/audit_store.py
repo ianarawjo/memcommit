@@ -15,7 +15,7 @@ from memcommit.reviewing.quality.audit import (
     QualityAuditSession,
     quality_audit_record_digest,
 )
-from memcommit.store import ConcurrentContextUpdateError, MemoryStore
+from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 
 
 class QualityAuditStore:

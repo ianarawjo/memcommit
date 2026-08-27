@@ -25,7 +25,7 @@ from memcommit.operations.reference.runtime import (
     execute_context_reference,
     execute_reference,
 )
-from memcommit.store import ConcurrentContextUpdateError
+from memcommit.persistence.store import ConcurrentContextUpdateError
 
 
 def reference_memory(

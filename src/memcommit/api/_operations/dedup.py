@@ -42,7 +42,7 @@ from memcommit.reviewing.quality.handoff import (
     QualityFindingHandoff,
     QualityFindingHandoffError,
 )
-from memcommit.store import ConcurrentContextUpdateError
+from memcommit.persistence.store import ConcurrentContextUpdateError
 
 
 def _port(runtime: ClientRuntime) -> MemoryStoreDedupPort:

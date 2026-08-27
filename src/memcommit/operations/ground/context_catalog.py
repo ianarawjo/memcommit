@@ -11,8 +11,8 @@ from dataclasses import dataclass
 import re
 import unicodedata
 
-import memcommit.store as store_module
-from memcommit.store import MemoryStore
+import memcommit.persistence.store as store_module
+from memcommit.persistence.store import MemoryStore
 
 
 @dataclass(frozen=True)

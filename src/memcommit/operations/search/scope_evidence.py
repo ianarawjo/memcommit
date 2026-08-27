@@ -7,7 +7,7 @@ from typing import Hashable, Literal, Sequence
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.operations.search.answer_references import FindAnswerEvidence
 from memcommit.operations.search.model import SearchArtifact, SearchCandidate, collect_candidates
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 OutsideCollectionStatus = Literal["SEARCHED", "PARTIAL"]

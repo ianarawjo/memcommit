@@ -34,7 +34,7 @@ from memcommit.authority.derived_policy import (
     authorize_combination,
 )
 from memcommit.operations.profile.config import ProfileEntry, ProfileRegistry, study_run_identity
-from memcommit.store import MemoryStore, _write_json_atomic, context_record_digest
+from memcommit.persistence.store import MemoryStore, _write_json_atomic, context_record_digest
 from memcommit.study_prewarm.installations import (
     INSTALLATIONS_DIRECTORY_NAME,
     declared_artifact_available,

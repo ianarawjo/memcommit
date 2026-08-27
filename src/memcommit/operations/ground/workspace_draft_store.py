@@ -19,7 +19,7 @@ from memcommit.authority.storage_permissions import (
     ensure_private_directory,
     open_private_exclusive,
 )
-from memcommit.store import ConcurrentContextUpdateError, MemoryStore
+from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 
 
 class GroundWorkspaceDraftStore:

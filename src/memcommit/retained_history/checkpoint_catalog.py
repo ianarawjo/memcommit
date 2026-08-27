@@ -17,7 +17,7 @@ from dataclasses import dataclass
 from typing import Any
 
 from memcommit.context import Checkpoint
-from memcommit.store import (
+from memcommit.persistence.store import (
     MemoryStore,
     checkpoint_history_digest,
     context_record_digest,

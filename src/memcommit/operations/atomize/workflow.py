@@ -19,7 +19,7 @@ from memcommit.operations.atomize.analysis_runtime import (
     execute_atomize_analysis_open,
 )
 from memcommit.context import Context
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 # The workflow exposes the result under its original name while delegating the

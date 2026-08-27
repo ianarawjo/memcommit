@@ -20,7 +20,7 @@ from memcommit.operations.ground.workspace_runtime import (
     ground_workspace_exists,
     load_ground_workspace,
 )
-from memcommit.store import MemoryStore, ground_session_record_digest
+from memcommit.persistence.store import MemoryStore, ground_session_record_digest
 
 
 @dataclass(frozen=True)

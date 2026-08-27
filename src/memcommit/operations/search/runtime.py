@@ -18,7 +18,7 @@ from memcommit.operations.search.application import (
     FrozenFindCurrentSource,
     run_find_search,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 class FindReadableAccess(Protocol):

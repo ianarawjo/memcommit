@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from datetime import datetime
 import re
 
-import memcommit.store as store_module
+import memcommit.persistence.store as store_module
 from memcommit.interfaces.tui.components.operation_launcher.location import (
     operation_launcher_orientation,
 )
@@ -17,7 +17,7 @@ from memcommit.interfaces.console.text import (
     display_escape_text,
 )
 from memcommit.operations.ground.model import GroundSession, validate_ground_contract_name
-from memcommit.store import (
+from memcommit.persistence.store import (
     MemoryStore,
     ground_session_record_digest,
 )

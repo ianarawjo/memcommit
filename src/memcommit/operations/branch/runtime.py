@@ -15,7 +15,7 @@ from memcommit.operations.branch.application import (
     BranchedContext,
     run_branch,
 )
-from memcommit.store import (
+from memcommit.persistence.store import (
     ContextBranchBinding,
     ContextBranchMemoryBinding,
     MemoryStore,

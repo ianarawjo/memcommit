@@ -8,7 +8,7 @@ from pathlib import Path
 
 from memcommit.api.query import QueryProviderConfig
 from memcommit.operations.profile.config import ProfileEntry, ProfileRegistry
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 @dataclass(frozen=True, slots=True)

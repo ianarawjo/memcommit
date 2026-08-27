@@ -63,7 +63,7 @@ from memcommit.operations.atomize.workbench import (
 )
 from memcommit.context_locator import resolve_context_locator
 from memcommit.infrastructure.providers.subscription import QueryProviderError
-from memcommit.store import ConcurrentContextUpdateError
+from memcommit.persistence.store import ConcurrentContextUpdateError
 
 
 class _SafeProvider:

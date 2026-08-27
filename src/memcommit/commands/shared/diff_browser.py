@@ -44,7 +44,7 @@ from memcommit.retained_history.display import (
     project_history_display_rows,
 )
 from memcommit.interfaces.tui.core.theme import semantic_action_style
-from memcommit.store import (
+from memcommit.persistence.store import (
     MemoryStore,
     checkpoint_history_digest,
     context_record_digest,

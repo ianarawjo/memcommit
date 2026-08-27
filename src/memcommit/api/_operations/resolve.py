@@ -49,7 +49,7 @@ from memcommit.reviewing.quality.handoff import (
 )
 from memcommit.operations.resolve.runtime import MemoryStoreResolvePort
 from memcommit.operations.resolve.semantic import ProviderResolveSemanticPort
-from memcommit.store import ConcurrentContextUpdateError
+from memcommit.persistence.store import ConcurrentContextUpdateError
 
 
 def _port(runtime: ClientRuntime) -> MemoryStoreResolvePort:

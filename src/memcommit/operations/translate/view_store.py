@@ -7,7 +7,7 @@ from pathlib import Path
 import re
 import uuid
 
-import memcommit.store as store_module
+import memcommit.persistence.store as store_module
 from memcommit.context import Context, Memory
 from memcommit.operations.translate.view import (
     TranslationCatalog,

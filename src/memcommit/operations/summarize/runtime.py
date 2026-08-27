@@ -20,7 +20,7 @@ from memcommit.context import Context
 from memcommit.context_targeting.model import ContextScope
 from memcommit.context_targeting.resolution import expand_lexical_context_names
 from memcommit.operations.profile.model import authority_grant_snapshot_lock
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.operations.summarize.model import (
     SummarizeError,
     SummarizeProvider,

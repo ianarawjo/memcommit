@@ -40,7 +40,7 @@ from memcommit.operations.atomize.workbench import (
 )
 from memcommit.context import AutoCheckpoint, Context, Memory, MemoryRef
 from memcommit.operations.review.model import direct_context_digest
-from memcommit.store import (
+from memcommit.persistence.store import (
     MemoryStore,
     _fsync_directory,
     _write_json_atomic,

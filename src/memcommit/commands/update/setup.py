@@ -20,7 +20,7 @@ from memcommit.interfaces.tui.operations.update import (
     UpdateTuiSetup,
     choose_update_endpoint_setup,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 @dataclass(frozen=True)

@@ -40,7 +40,7 @@ from memcommit.operations.atomize.grounding_runtime import (
     assert_current_grounding_bindings,
 )
 from memcommit.context_locator import resolve_context_locator
-from memcommit.store import ConcurrentContextUpdateError
+from memcommit.persistence.store import ConcurrentContextUpdateError
 
 
 class _SafeProvider:

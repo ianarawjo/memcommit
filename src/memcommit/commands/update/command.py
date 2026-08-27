@@ -62,7 +62,7 @@ from memcommit.infrastructure.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.study_prewarm.registry import StudyPrewarmRegistryError
 from memcommit.operations.update.model import (
     GrantedUpdateTarget,

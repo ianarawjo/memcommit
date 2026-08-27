@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from memcommit.context import AutoCheckpoint, Checkpoint, Context
 from memcommit.context_targeting.model import ContextScope
 from memcommit.context_targeting.resolution import expand_lexical_context_names
-from memcommit.store import (
+from memcommit.persistence.store import (
     ConcurrentContextUpdateError,
     MemoryStore,
     _write_bytes_atomic,

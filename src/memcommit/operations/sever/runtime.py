@@ -66,7 +66,7 @@ from memcommit.operations.sever.application import (
 )
 from memcommit.operations.sever.provider import SeverProviderError
 from memcommit.operations.sever.session_store import SeverSessionStore
-from memcommit.store import MemoryStore, _write_json_atomic, context_record_digest
+from memcommit.persistence.store import MemoryStore, _write_json_atomic, context_record_digest
 from memcommit.study_prewarm.sever import find_installed_projectable_sever_prewarm
 from memcommit.operations.update.model import GrantedUpdateTarget
 

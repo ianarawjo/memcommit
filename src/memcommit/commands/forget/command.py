@@ -42,7 +42,7 @@ from memcommit.operations.profile.model import ProfileError
 from memcommit.infrastructure.providers.types import SemanticProvider
 from memcommit.infrastructure.providers.subscription import QueryProviderError
 from memcommit.semantic.changes import ProposedChange
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def connect_codex_chatgpt_provider() -> SemanticProvider:

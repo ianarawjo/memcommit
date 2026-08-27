@@ -60,7 +60,7 @@ from memcommit.infrastructure.providers.types import (
     CODEX_REASONING_EFFORTS,
 )
 from memcommit.infrastructure.providers.subscription import CodexChatGPTProvider
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.study_prewarm.compare import (
     _exact_input_matches,
     _projection_orientation,

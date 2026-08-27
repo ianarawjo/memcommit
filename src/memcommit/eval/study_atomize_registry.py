@@ -14,7 +14,7 @@ from memcommit.operations.profile.config import (
     profile_store_dir,
     study_run_identity,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.study_prewarm.atomize import build_atomize_prewarm_artifact
 from memcommit.study_prewarm.registry import publish_artifact
 

@@ -7,7 +7,7 @@ import typer
 
 from memcommit.context_locator import resolve_context_locator
 from memcommit.context_targeting.naming import validate_portable_context_name
-from memcommit.store import ConcurrentContextUpdateError, MemoryStore
+from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 
 
 def cmd(

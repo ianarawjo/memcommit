@@ -28,7 +28,7 @@ from memcommit.operations.profile.config import (
 )
 from memcommit.operations.profile.model import ProfileError
 from memcommit.source_projection.presentation import SourceDisplayValue
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 @dataclass(frozen=True)

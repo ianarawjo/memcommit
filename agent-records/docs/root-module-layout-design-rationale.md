@@ -49,7 +49,7 @@ while the JSON preserves exact paths for mechanical checks.
 
 Physical root facades defeated the navigation goal even after their
 implementations moved: a file browser still presented 242 historical names as
-peers of the seven real root boundaries. The facades are therefore consolidated
+peers of the six real root boundaries. The facades are therefore consolidated
 into the exact generated map in
 `memcommit.compatibility._legacy_alias_map` and one process-local finder in
 `memcommit.compatibility.legacy_submodules`.
@@ -83,9 +83,9 @@ baseline. Each relocation batch must collect successfully, keep focused tests
 passing, and introduce no new behavioral failure. Static ownership tests and
 generated callable catalogs may change because their subject is the path
 layout itself; those records are updated only after the canonical moves settle.
-The layout check requires exactly seven root Python files, rejects every
+The layout check requires exactly six root Python files, rejects every
 physical compatibility facade and internal legacy import, and imports every
-non-retired historical name (currently 241) in fresh interpreters in both
+non-retired historical name (currently 242) in fresh interpreters in both
 legacy-first and canonical-first order. It verifies exact module identity and
 canonical `__spec__` ownership so an earlier test import cannot mask a
 package-initialization cycle or metadata regression.

@@ -13,7 +13,7 @@ from memcommit.reviewing.read_report import (
     ReadReportRecent,
     ReadReportTarget,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 def _legacy_memory_target(

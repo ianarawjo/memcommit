@@ -33,7 +33,7 @@ from memcommit.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
 )
 from memcommit.operations.ground.model import GroundSession, is_bound_ground_schema
-from memcommit.store import (
+from memcommit.persistence.store import (
     MemoryStore,
     context_record_digest,
     ground_session_record_digest,

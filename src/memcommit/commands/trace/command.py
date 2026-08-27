@@ -62,7 +62,7 @@ from memcommit.operations.reference.provenance import (
     MemoryReferenceTraceReport,
     build_reference_trace,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.operations.profile.config import ProfileConfigError
 from memcommit.operations.profile.model import ProfileError
 

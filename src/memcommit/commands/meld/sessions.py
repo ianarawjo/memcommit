@@ -13,7 +13,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from memcommit.operations.meld.model import MeldSession, meld_canonical_digest
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 class MeldSessionCatalogError(ValueError):

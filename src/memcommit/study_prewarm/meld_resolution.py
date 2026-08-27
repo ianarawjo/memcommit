@@ -24,7 +24,7 @@ from memcommit.operations.profile.config import (
     study_run_identity,
 )
 from memcommit.infrastructure.providers.types import CODEX_CHATGPT_PROVIDER
-from memcommit.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import MemoryStore, context_record_digest
 from memcommit.study_prewarm.installations import (
     declared_artifact_available,
     record_declared_installation,

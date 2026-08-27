@@ -26,7 +26,7 @@ from memcommit.operations.embed.application import (
 from memcommit.operations.embed.runtime import execute_embed, execute_memory_embed
 from memcommit.operations.profile.config import ProfileConfigError
 from memcommit.operations.profile.model import ProfileError
-from memcommit.store import ConcurrentContextUpdateError
+from memcommit.persistence.store import ConcurrentContextUpdateError
 
 
 def _placement(result) -> EmbedPlacementResult:

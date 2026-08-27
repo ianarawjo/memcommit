@@ -19,7 +19,7 @@ from memcommit.context_targeting.resolution import (
     parse_direct_memory_locator,
 )
 from memcommit.operations.profile.config import ProfileRegistry
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 class CompareTargetingError(ValueError):

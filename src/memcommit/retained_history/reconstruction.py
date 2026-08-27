@@ -12,7 +12,7 @@ import json
 from typing import Any, Literal
 
 from memcommit.context import Context, Memory
-from memcommit.store import MemoryStore, canonical_context_record
+from memcommit.persistence.store import MemoryStore, canonical_context_record
 from memcommit.retained_history.temporal import direct_memory_deltas
 
 

@@ -20,7 +20,7 @@ from memcommit.interfaces.tui.operations.compare import (
     CompareTuiSetup,
     choose_compare_endpoint_setup,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 @dataclass(frozen=True)

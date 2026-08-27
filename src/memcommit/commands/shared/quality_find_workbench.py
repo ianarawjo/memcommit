@@ -86,7 +86,7 @@ from memcommit.reviewing.quality.handoff import (
 )
 from memcommit.operations.dedup.application import DEDUP_ELIGIBLE_RELATIONS
 from memcommit.source_projection.presentation import SourceDisplayValue
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.reviewing.read_report import (
     ReadReportError,
     ReadReportOperation,

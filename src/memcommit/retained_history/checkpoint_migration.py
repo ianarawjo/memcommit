@@ -10,7 +10,7 @@ from pathlib import Path
 
 from memcommit.retained_history.command_history import CommandStacks, build_command_stacks
 from memcommit.retained_history.reconstruction import HistoryError, flatten_checkpoint_entries
-from memcommit.store import (
+from memcommit.persistence.store import (
     MemoryStore,
     _rewrite_checkpoint_record,
     _write_bytes_atomic,

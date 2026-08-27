@@ -63,7 +63,7 @@ import sys
 import memcommit
 assert 'memcommit.api' not in sys.modules
 assert 'memcommit.api.client' not in sys.modules
-assert memcommit.MemoryStore.__module__ == 'memcommit.store'
+assert memcommit.MemoryStore.__module__ == 'memcommit.persistence.store'
 assert 'MemCommitClient' in dir(memcommit)
 assert 'memcommit.api' not in sys.modules
 """

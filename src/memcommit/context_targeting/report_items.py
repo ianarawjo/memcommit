@@ -21,7 +21,7 @@ from memcommit.context_targeting.resolution import parse_direct_memory_locator
 from memcommit.operations.profile.config import ProfileRegistry
 from memcommit.retained_history.provenance import collect_trace_candidates
 from memcommit.operations.reference.provenance import collect_reference_candidates
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 MemoryReportTargetKind = Literal["MEMORY", "MEMORY_REFERENCE"]

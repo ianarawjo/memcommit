@@ -17,7 +17,7 @@ from memcommit.reviewing.read_report_recents import (
     read_report_recents,
     revalidate_read_report_recent,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 MemoryReportOperation = Literal["trace", "rationale"]

@@ -76,7 +76,7 @@ from memcommit.operations.rationale.scope import (
     rationale_trace,
     resolve_rationale_target,
 )
-from memcommit.store import MemoryStore
+from memcommit.persistence.store import MemoryStore
 from memcommit.infrastructure.providers.semantic import connect_operation_provider
 from memcommit.study_prewarm.compare import (
     EquivalentComparePrewarmMatch,
