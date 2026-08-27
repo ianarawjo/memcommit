@@ -2512,7 +2512,7 @@
     {
       "action": "relocate",
       "canonical_target": "memcommit.persistence.store",
-      "canonical_target_path": "memcommit/persistence/store.py",
+      "canonical_target_path": "memcommit/persistence/store/__init__.py",
       "inbound_package_importers": 217,
       "lines": 10118,
       "module": "memcommit.store",

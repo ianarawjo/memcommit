@@ -205,7 +205,9 @@ def test_production_sever_consumers_use_the_operation_owner() -> None:
         "src/memcommit/operations/sever/session_store.py",
         "src/memcommit/operations/sever/runtime.py",
         "src/memcommit/operations/review/report_adapters.py",
-        "src/memcommit/store.py",
+        "src/memcommit/persistence/store/operation_state.py",
+        "src/memcommit/persistence/store/context_memory.py",
+        "src/memcommit/persistence/store/record_restore_checkpoint.py",
     )
     legacy_imports = (
         "from memcommit.sever import",

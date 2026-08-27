@@ -129,7 +129,9 @@ def test_production_translate_consumers_use_operation_owners() -> None:
         "src/memcommit/ops.py",
         "src/memcommit/operations/profile/model.py",
         "src/memcommit/retained_history/provenance.py",
-        "src/memcommit/persistence/store.py",
+        "src/memcommit/persistence/store/operation_state.py",
+        "src/memcommit/persistence/store/context_memory.py",
+        "src/memcommit/persistence/store/record_restore_checkpoint.py",
     )
     legacy_imports = (
         "from memcommit.translate import",

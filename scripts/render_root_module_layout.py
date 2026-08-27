@@ -59,6 +59,12 @@ COMPATIBILITY_TARGET_OVERRIDES = {
 }
 
 
+# A relocated canonical owner may be a package rather than one module file.
+MODULE_TARGET_PATH_OVERRIDES = {
+    "memcommit.persistence.store": "memcommit/persistence/store/__init__.py",
+}
+
+
 OPERATION_TARGETS = {
     "comparison": "memcommit.operations.compare.ledger.model",
     "comparison_evidence": "memcommit.operations.compare.ledger.evidence",
@@ -207,7 +213,10 @@ CONCEPT_TARGETS = {
 
 
 def _module_target_path(module: str) -> str:
-    return module.replace(".", "/") + ".py"
+    return MODULE_TARGET_PATH_OVERRIDES.get(
+        module,
+        module.replace(".", "/") + ".py",
+    )
 
 
 def _compatibility_target(source: str, *, stem: str) -> str | None:

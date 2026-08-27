@@ -202,7 +202,9 @@ def test_atomize_production_consumers_use_canonical_support_modules() -> None:
         "src/memcommit/retained_history/provenance.py",
         "src/memcommit/operations/review/model.py",
         "src/memcommit/operations/review/report_adapters.py",
-        "src/memcommit/store.py",
+        "src/memcommit/persistence/store/operation_state.py",
+        "src/memcommit/persistence/store/context_memory.py",
+        "src/memcommit/persistence/store/record_restore_checkpoint.py",
         "src/memcommit/study_prewarm/atomize.py",
     )
     legacy_names = tuple(legacy_name for legacy_name, _canonical in MODULE_PAIRS)

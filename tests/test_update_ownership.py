@@ -94,7 +94,9 @@ def test_pre_relocation_update_result_global_loads_through_alias() -> None:
 
 def test_production_update_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "src/memcommit/store.py",
+        "src/memcommit/persistence/store/operation_state.py",
+        "src/memcommit/persistence/store/context_memory.py",
+        "src/memcommit/persistence/store/record_restore_checkpoint.py",
         "src/memcommit/operations/update/granted_application.py",
         "src/memcommit/operations/update/granted_source_application.py",
     )
