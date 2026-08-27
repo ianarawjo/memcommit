@@ -21,7 +21,7 @@ from memcommit.application.operations.ground.elaborate import (
     execute_ground_elaborate,
     freeze_ground_elaborate,
 )
-from memcommit.infrastructure.providers.subscription import QueryProviderError
+from memcommit.providers.subscription import QueryProviderError
 
 
 def elaborate_ground(

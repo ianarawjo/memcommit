@@ -24,7 +24,7 @@ from memcommit.adapters.interfaces.console.text import display_escape_text
 from memcommit.adapters.interfaces.tui.operations.resolve import run_resolve_tui
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.infrastructure.providers.subscription import QueryProviderError, connect_semantic_provider
+from memcommit.providers.subscription import QueryProviderError, connect_semantic_provider
 from memcommit.application.operations.resolve.application import (
     ResolveError,
     ResolveRequest,

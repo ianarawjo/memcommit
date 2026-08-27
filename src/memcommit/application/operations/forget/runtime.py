@@ -29,8 +29,8 @@ from memcommit.application.operations.forget.application import (
     run_forget_revision,
     run_forget_selection,
 )
-from memcommit.infrastructure.providers.types import SemanticProvider
-from memcommit.infrastructure.providers.semantic import connect_operation_provider
+from memcommit.providers.types import SemanticProvider
+from memcommit.providers.semantic import connect_operation_provider
 from memcommit.semantic.changes import (
     EditChange,
     ProposedChange,
@@ -38,7 +38,7 @@ from memcommit.semantic.changes import (
     apply_changes,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.infrastructure.providers.policy import FORGET_PROVIDER_POLICY
+from memcommit.providers.policy import FORGET_PROVIDER_POLICY
 
 
 FORGET_PROVIDER_MODEL = FORGET_PROVIDER_POLICY.model

@@ -113,6 +113,16 @@ former package path. Later changes may move one reviewed surface at a time into
 adapter owner; this relocation itself changes neither behavior nor interface
 contracts.
 
+On 2026-08-27 the provider implementations moved from the generic
+`memcommit.infrastructure` container to the explicit top-level
+`memcommit.providers` owner, while global configuration moved to
+`memcommit.configuration.config`. Providers are a named external dependency
+family in the intended architecture, and configuration owns how their routes
+and presets are selected; neither needs an additional `infrastructure` layer.
+The two moves remain in one change because provider configuration imports the
+provider contracts and provider connectors consume that configuration. No
+compatibility facade retains either former infrastructure path.
+
 ## Verification
 
 The pre-relocation full suite and its exact failing node IDs form the behavioral

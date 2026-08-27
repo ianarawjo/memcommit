@@ -5,8 +5,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal
 
-from memcommit.infrastructure.providers.find_query import QUERY_PROVIDER_POLICY
-from memcommit.infrastructure.providers.types import CODEX_REASONING_EFFORTS
+from memcommit.providers.find_query import QUERY_PROVIDER_POLICY
+from memcommit.providers.types import CODEX_REASONING_EFFORTS
 
 
 QUERY_REASONING_EFFORTS = tuple(

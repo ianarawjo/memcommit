@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 from typing import Optional
 
-from memcommit.infrastructure.providers.types import (
+from memcommit.providers.types import (
     CODEX_CHATGPT_PROVIDER,
     CODEX_PROVIDER_PRESETS,
     CODEX_REASONING_EFFORTS,

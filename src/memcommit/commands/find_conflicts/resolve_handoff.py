@@ -10,7 +10,7 @@ from memcommit.application.reviewing.quality.handoff import (
     QualityFindingHandoff,
     conflict_handoff_to_resolve_request,
 )
-from memcommit.infrastructure.providers.subscription import connect_semantic_provider
+from memcommit.providers.subscription import connect_semantic_provider
 from memcommit.application.operations.resolve.application import apply_resolve, run_resolve
 from memcommit.application.operations.resolve.runtime import MemoryStoreResolvePort
 from memcommit.application.operations.resolve.semantic import ProviderResolveSemanticPort

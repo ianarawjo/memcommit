@@ -34,7 +34,7 @@ from memcommit.adapters.interfaces.console.text import (
 from memcommit.adapters.interfaces.console.identity import collision_safe_uid_prefixes
 from memcommit.application.reviewing.quality.findings import FindingsError
 from memcommit.application.operations.fit.judgment import FitJudgmentError
-from memcommit.infrastructure.providers.subscription import (
+from memcommit.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )

@@ -15,7 +15,7 @@ import json
 from typing import Literal, Protocol
 import uuid
 
-from memcommit.infrastructure.providers.types import CompletionRun, ProviderIdentity
+from memcommit.providers.types import CompletionRun, ProviderIdentity
 from memcommit.application.semantic_execution import (
     BudgetLimits,
     ExecutionMode,

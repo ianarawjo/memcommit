@@ -4,9 +4,9 @@ from __future__ import annotations
 
 from dataclasses import replace
 
-from memcommit.infrastructure.config import Config
-from memcommit.infrastructure.providers.types import CODEX_CHATGPT_PROVIDER, SemanticProvider
-from memcommit.infrastructure.providers.policy import (
+from memcommit.configuration.config import Config
+from memcommit.providers.types import CODEX_CHATGPT_PROVIDER, SemanticProvider
+from memcommit.providers.policy import (
     FIND_PROVIDER_POLICY,
     HELP_PROVIDER_POLICY,
     QUERY_PROVIDER_POLICY,
@@ -14,7 +14,7 @@ from memcommit.infrastructure.providers.policy import (
     ProviderPolicyOverride,
     resolve_operation_provider_policy,
 )
-from memcommit.infrastructure.providers.subscription import (
+from memcommit.providers.subscription import (
     CodexChatGPTProvider,
     connect_query_provider as _connect_configured_query_provider,
 )
@@ -27,7 +27,7 @@ from memcommit.infrastructure.command_ledger.study_actions import (
 def _connect_active_operation(operation: str) -> SemanticProvider:
     # semantic_provider imports this package's policy module while it starts;
     # defer the reverse dependency so either public module can load first.
-    from memcommit.infrastructure.providers.semantic import connect_operation_provider
+    from memcommit.providers.semantic import connect_operation_provider
 
     provider, _policy = connect_operation_provider(operation)
     return provider

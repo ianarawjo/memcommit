@@ -30,21 +30,21 @@ from memcommit.application.authority.access import ContextAccess, resolve_contex
 from memcommit.application.operations.compare.ledger.model import ComparisonAnalysis, ComparisonInput
 from memcommit.application.operations.compare.ledger.provider import analyze_comparison
 from memcommit.application.operations.compare.ledger.store import load_comparison_analysis
-from memcommit.infrastructure.config import Config
+from memcommit.configuration.config import Config
 from memcommit.context import Context
 from memcommit.application.operations.compare.ledger.granted_store import load_granted_comparison_artifact
-from memcommit.infrastructure.providers.policy import (
+from memcommit.providers.policy import (
     resolve_codex_evaluation_policy,
 )
 from memcommit.application.operations.profile.config import load_profile_registry
 from memcommit.application.operations.profile.model import authority_grant_snapshot_lock
-from memcommit.infrastructure.providers.types import (
+from memcommit.providers.types import (
     CODEX_CHATGPT_PROVIDER,
     CODEX_REASONING_EFFORTS,
     CompletionRun,
     ProviderIdentity,
 )
-from memcommit.infrastructure.providers.subscription import CodexChatGPTProvider
+from memcommit.providers.subscription import CodexChatGPTProvider
 from memcommit.persistence.store import MemoryStore
 
 

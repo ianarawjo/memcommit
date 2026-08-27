@@ -24,7 +24,7 @@ from memcommit.application.retained_history.memory_history_reconstruction.memory
 from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
     MemoryHistory,
 )
-from memcommit.infrastructure.providers.subscription import QueryProviderError
+from memcommit.providers.subscription import QueryProviderError
 from memcommit.application.operations.rationale.cache import (
     CachedRationaleInference,
     load_rationale_inference,

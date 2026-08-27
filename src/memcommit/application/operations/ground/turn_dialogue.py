@@ -21,7 +21,7 @@ from memcommit.application.operations.ground.model import (
     is_bound_ground_schema,
     validate_ground_goal,
 )
-from memcommit.infrastructure.providers.subscription import QueryProviderError
+from memcommit.providers.subscription import QueryProviderError
 
 
 GROUND_TURN_USER_TEXT_LIMIT = 20_000

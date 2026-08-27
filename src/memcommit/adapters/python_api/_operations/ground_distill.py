@@ -18,7 +18,7 @@ from memcommit.adapters.python_api.errors import (
 from memcommit.adapters.python_api.semantic import DistillProposal
 from memcommit.application.operations.distill.model import DistillError
 from memcommit.application.operations.ground.distill import execute_ground_distill, freeze_ground_distill
-from memcommit.infrastructure.providers.subscription import QueryProviderError
+from memcommit.providers.subscription import QueryProviderError
 
 
 def distill_ground(

@@ -59,10 +59,10 @@ from memcommit.context_targeting.model import DirectMemoryLocator
 from memcommit.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
 )
-from memcommit.infrastructure.providers.profile_routes import (
+from memcommit.providers.profile_routes import (
     ProfileProviderRoutesError,
 )
-from memcommit.infrastructure.providers.subscription import (
+from memcommit.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )
@@ -79,7 +79,7 @@ from memcommit.application.operations.rationale.scope import (
     resolve_rationale_target,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.infrastructure.providers.semantic import connect_operation_provider
+from memcommit.providers.semantic import connect_operation_provider
 from memcommit.study_prewarm.compare import (
     EquivalentComparePrewarmMatch,
     find_declared_equivalent_compare_analysis,

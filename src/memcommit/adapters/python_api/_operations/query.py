@@ -47,7 +47,7 @@ from memcommit.application.operations.profile.config import (
     profile_store_dir,
 )
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.infrastructure.providers.subscription import QueryProviderError
+from memcommit.providers.subscription import QueryProviderError
 from memcommit.application.operations.search.model import FindError
 
 

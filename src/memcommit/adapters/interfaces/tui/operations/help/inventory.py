@@ -64,9 +64,9 @@ from memcommit.application.operations.help.lookup_application import (
     execute_help_lookup,
     prepare_help_lookup,
 )
-from memcommit.infrastructure.providers.find_query import connect_help_provider
+from memcommit.providers.find_query import connect_help_provider
 from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.infrastructure.providers.subscription import QueryProviderError
+from memcommit.providers.subscription import QueryProviderError
 from memcommit.adapters.interfaces.tui.operations.help.localization import (
     HELP_LANGUAGES,
     HelpLanguage,

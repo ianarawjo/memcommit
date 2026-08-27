@@ -17,8 +17,8 @@ from memcommit.adapters.interfaces.cli.command_group import CanonicalCommandGrou
 from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
 )
-from memcommit.infrastructure.config import Config
-from memcommit.infrastructure.providers.policy import (
+from memcommit.configuration.config import Config
+from memcommit.providers.policy import (
     ProviderPolicyOverride,
     resolve_operation_provider_policy,
 )
@@ -32,7 +32,7 @@ from memcommit.application.evaluation.semantic_campaign import (
     run_duplicate_campaign,
 )
 from memcommit.application.evaluation.operation_gate_campaign import run_operation_gate_campaign
-from memcommit.infrastructure.providers.types import (
+from memcommit.providers.types import (
     CODEX_CHATGPT_PROVIDER,
     CODEX_LUNA_LOW_PRESET,
     CODEX_LUNA_MODEL,
@@ -44,8 +44,8 @@ from memcommit.infrastructure.providers.types import (
     ProviderIdentity,
     SemanticProvider,
 )
-from memcommit.infrastructure.providers.subscription import CodexChatGPTProvider, QueryProviderError
-from memcommit.infrastructure.providers.semantic import OllamaProvider, OpenRouterProvider
+from memcommit.providers.subscription import CodexChatGPTProvider, QueryProviderError
+from memcommit.providers.semantic import OllamaProvider, OpenRouterProvider
 
 
 DEFAULT_SEMANTIC_EVAL_LEDGER = Path.home() / ".mem" / "eval" / "semantic"

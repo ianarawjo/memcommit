@@ -8,7 +8,7 @@ from pathlib import Path
 import sys
 from typing import Sequence
 
-from memcommit.infrastructure.config import Config
+from memcommit.configuration.config import Config
 from memcommit.application.operations.profile.config import (
     load_profile_registry,
     profile_store_dir,

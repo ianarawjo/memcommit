@@ -82,7 +82,7 @@ from memcommit.application.operations.rationale.scope import (
 )
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.infrastructure.providers.subscription import QueryProviderError, connect_semantic_provider
+from memcommit.providers.subscription import QueryProviderError, connect_semantic_provider
 from memcommit.persistence.store import MemoryStore
 
 

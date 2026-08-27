@@ -108,8 +108,8 @@ from memcommit.application.operations.meld.start_application import (
     MeldStartResult,
     run_meld_start,
 )
-from memcommit.infrastructure.providers.types import ProviderIdentity
-from memcommit.infrastructure.providers.subscription import CodexChatGPTProvider
+from memcommit.providers.types import ProviderIdentity
+from memcommit.providers.subscription import CodexChatGPTProvider
 from memcommit.persistence.store import (
     ConcurrentContextUpdateError,
     MemoryStore,

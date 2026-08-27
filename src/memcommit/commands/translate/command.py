@@ -30,7 +30,7 @@ from memcommit.application.operations.translate.view import (
     TranslationCatalog,
     TranslationViewError,
 )
-from memcommit.infrastructure.providers.subscription import (
+from memcommit.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )

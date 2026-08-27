@@ -67,7 +67,7 @@ def _write_machine_config(home: Path) -> None:
 
 
 def _write_study_registry(home: Path) -> None:
-    from memcommit.infrastructure.providers.policy import (
+    from memcommit.providers.policy import (
         STUDY_PROVIDER_POLICY_DIGEST,
         STUDY_PROVIDER_POLICY_VERSION,
     )

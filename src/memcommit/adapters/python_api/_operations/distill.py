@@ -20,7 +20,7 @@ from memcommit.adapters.python_api.semantic import DistillApplyResult, DistillPr
 from memcommit.application.operations.distill.model import DistillError
 from memcommit.application.operations.distill.application import DistillApplyRequest, DistillRequest
 from memcommit.application.operations.distill.runtime import execute_distill, execute_distill_apply
-from memcommit.infrastructure.providers.subscription import QueryProviderError
+from memcommit.providers.subscription import QueryProviderError
 
 
 def distill_context(

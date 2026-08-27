@@ -9,7 +9,7 @@ import unicodedata
 import uuid
 
 from memcommit.context import Context, Memory
-from memcommit.infrastructure.providers.subscription import CodexChatGPTProvider
+from memcommit.providers.subscription import CodexChatGPTProvider
 from memcommit.application.semantic_execution import (
     BudgetLimits,
     BudgetVector,

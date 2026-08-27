@@ -487,8 +487,8 @@
     },
     {
       "action": "relocate",
-      "canonical_target": "memcommit.infrastructure.config",
-      "canonical_target_path": "memcommit/infrastructure/config.py",
+      "canonical_target": "memcommit.configuration.config",
+      "canonical_target_path": "memcommit/configuration/config.py",
       "inbound_package_importers": 24,
       "lines": 178,
       "module": "memcommit.config",
@@ -1895,8 +1895,8 @@
     },
     {
       "action": "relocate",
-      "canonical_target": "memcommit.infrastructure.providers.types",
-      "canonical_target_path": "memcommit/infrastructure/providers/types.py",
+      "canonical_target": "memcommit.providers.types",
+      "canonical_target_path": "memcommit/providers/types.py",
       "inbound_package_importers": 45,
       "lines": 79,
       "module": "memcommit.provider_types",
@@ -1972,8 +1972,8 @@
     },
     {
       "action": "relocate",
-      "canonical_target": "memcommit.infrastructure.providers.subscription",
-      "canonical_target_path": "memcommit/infrastructure/providers/subscription.py",
+      "canonical_target": "memcommit.providers.subscription",
+      "canonical_target_path": "memcommit/providers/subscription.py",
       "inbound_package_importers": 63,
       "lines": 421,
       "module": "memcommit.query_provider",
@@ -2346,8 +2346,8 @@
     },
     {
       "action": "relocate",
-      "canonical_target": "memcommit.infrastructure.providers.semantic",
-      "canonical_target_path": "memcommit/infrastructure/providers/semantic.py",
+      "canonical_target": "memcommit.providers.semantic",
+      "canonical_target_path": "memcommit/providers/semantic.py",
       "inbound_package_importers": 7,
       "lines": 684,
       "module": "memcommit.semantic_provider",

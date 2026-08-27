@@ -7,13 +7,13 @@ import uuid
 
 import pytest
 
-from memcommit.infrastructure.providers.policy import (
+from memcommit.providers.policy import (
     PROFILE_PROVIDER_OPERATION_NAMES,
     STUDY_PROVIDER_POLICY_DIGEST,
     STUDY_PROVIDER_POLICY_VERSION,
     ProviderRoute,
 )
-from memcommit.infrastructure.providers.profile_routes import (
+from memcommit.providers.profile_routes import (
     ProfileProviderRoutesError,
     load_active_provider_scope,
     profile_provider_routes_file,

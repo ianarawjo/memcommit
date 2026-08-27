@@ -21,7 +21,7 @@ from memcommit.application.operations.query.granted_runtime import (
     freeze_granted_query_targets,
     resolve_granted_query_target,
 )
-from memcommit.infrastructure.providers.find_query import (
+from memcommit.providers.find_query import (
     connect_ordinary_query_provider as connect_codex_chatgpt_provider,
     connect_query_route_provider as connect_query_provider,
 )
@@ -55,7 +55,7 @@ from memcommit.application.operations.search.answer_dialogue import FindAnswerCo
 from memcommit.application.operations.query.answer import OrdinaryQueryCorpusTooLarge
 from memcommit.application.operations.profile.config import ProfileConfigError, load_profile_registry
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.infrastructure.providers.subscription import QueryProviderError
+from memcommit.providers.subscription import QueryProviderError
 from memcommit.application.operations.query.ordinary_application import OrdinaryQueryRequest
 from memcommit.application.operations.query.ordinary_runtime import execute_ordinary_query
 from memcommit.application.operations.query.reference_application import QueryReferenceRequest

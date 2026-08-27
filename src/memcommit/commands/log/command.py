@@ -45,7 +45,7 @@ from memcommit.application.operations.log.search import (
     HistorySearchResult,
     search_history,
 )
-from memcommit.infrastructure.providers.subscription import (
+from memcommit.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )

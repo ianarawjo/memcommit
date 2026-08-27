@@ -11,7 +11,7 @@ from dataclasses import dataclass
 import hashlib
 import json
 
-from memcommit.infrastructure.providers.types import SemanticProvider
+from memcommit.providers.types import SemanticProvider
 
 
 OPERATION_GATE_PIPELINE_V1 = "operation-gate-v1"

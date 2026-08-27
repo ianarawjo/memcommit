@@ -120,7 +120,7 @@ subscription-authentication checks remain authoritative.
 
 ## Production owner and compatibility
 
-`memcommit.infrastructure.providers.find_query` is the single production owner
+`memcommit.providers.find_query` is the single production owner
 of both operation pins. Find, Query, and the public Python client import that
 owner directly. The former `commands.find_query_provider_policy` and
 `commands.ordinary_query_provider_policy` paths remain implementation-free

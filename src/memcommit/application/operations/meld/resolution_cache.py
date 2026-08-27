@@ -6,10 +6,10 @@ import hashlib
 import json
 from dataclasses import dataclass
 
-from memcommit.infrastructure.config import Config
+from memcommit.configuration.config import Config
 from memcommit.application.operations.meld.model import MELD_TEXT_LIMIT, MeldSession
 from memcommit.application.operations.meld.provider import MELD_RESPONSE_CHAR_LIMIT
-from memcommit.infrastructure.providers.types import (
+from memcommit.providers.types import (
     CODEX_CHATGPT_PROVIDER,
     ProviderIdentity,
 )

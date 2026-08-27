@@ -34,8 +34,8 @@ from memcommit.semantic.classification.gates import (
     OperationGateError,
     classify_operation_gate,
 )
-from memcommit.infrastructure.providers.types import SemanticProvider
-from memcommit.infrastructure.providers.subscription import QueryProviderError
+from memcommit.providers.types import SemanticProvider
+from memcommit.providers.subscription import QueryProviderError
 
 
 DEFAULT_OPERATION_GATE_FIXTURE = Path(__file__).parent / "fixtures" / "operation_gates.json"

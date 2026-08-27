@@ -21,7 +21,7 @@ from memcommit.application.operations.ground.model import (
     context_frame_digest,
     is_bound_ground_schema,
 )
-from memcommit.infrastructure.providers.types import CompletionRun, ProviderIdentity
+from memcommit.providers.types import CompletionRun, ProviderIdentity
 from memcommit.application.semantic_execution import (
     BudgetLimits,
     ExecutionMode,

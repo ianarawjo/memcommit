@@ -61,7 +61,7 @@ from memcommit.application.reviewing.quality.handoff import (
     conflict_handoff_to_resolve_request,
     quality_finding_handoff_from_json,
 )
-from memcommit.infrastructure.providers.subscription import QueryProviderError, connect_semantic_provider
+from memcommit.providers.subscription import QueryProviderError, connect_semantic_provider
 from memcommit.application.operations.resolve.application import (
     ResolveAnalysis,
     ResolveCandidate,

@@ -11,7 +11,7 @@ from importlib import import_module
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from memcommit.infrastructure.providers.find_query import (
+    from memcommit.providers.find_query import (
         FIND_PROVIDER_POLICY,
         QUERY_PROVIDER_POLICY,
         OperationProviderPolicy,
@@ -33,7 +33,7 @@ __all__ = [
 def __getattr__(name: str) -> Any:
     if name not in __all__:
         raise AttributeError(name)
-    policy = import_module("memcommit.infrastructure.providers.find_query")
+    policy = import_module("memcommit.providers.find_query")
     value = getattr(policy, name)
     globals()[name] = value
     return value

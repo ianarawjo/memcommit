@@ -16,7 +16,7 @@ from memcommit.adapters.python_api.semantic import ElaborateProposal
 from memcommit.application.operations.elaborate.model import ElaborateError
 from memcommit.application.operations.elaborate.application import ElaborateRequest
 from memcommit.application.operations.elaborate.runtime import execute_elaborate
-from memcommit.infrastructure.providers.subscription import QueryProviderError
+from memcommit.providers.subscription import QueryProviderError
 
 
 def elaborate(

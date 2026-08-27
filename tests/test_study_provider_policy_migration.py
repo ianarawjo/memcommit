@@ -7,7 +7,7 @@ import uuid
 
 import pytest
 
-from memcommit.infrastructure.providers.policy import (
+from memcommit.providers.policy import (
     LEGACY_STUDY_PROVIDER_POLICY_VERSION,
     STUDY_PROVIDER_POLICY_DIGEST,
     STUDY_PROVIDER_POLICY_VERSION,

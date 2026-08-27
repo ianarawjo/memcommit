@@ -11,7 +11,7 @@ from memcommit.infrastructure.command_ledger.attempts import current_command_att
 from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
 )
-from memcommit.infrastructure.providers.policy import (
+from memcommit.providers.policy import (
     STUDY_PROVIDER_POLICY_DIGEST,
     STUDY_PROVIDER_POLICY_VERSION,
 )

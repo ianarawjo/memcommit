@@ -16,8 +16,8 @@ from memcommit.context import MemoryRef
 from memcommit.comparison_store import comparison_analysis_path
 from memcommit.application.operations.compare.summary import ComparisonSummaryError
 from memcommit.application.operations.compare.summary_provider import summarize_comparison
-from memcommit.infrastructure.providers.policy import ResolvedProviderPolicy
-from memcommit.infrastructure.providers.profile_routes import (
+from memcommit.providers.policy import ResolvedProviderPolicy
+from memcommit.providers.profile_routes import (
     ProfileProviderRoutesError,
 )
 from memcommit.store import MemoryStore

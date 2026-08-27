@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from memcommit.infrastructure.providers import find_query as policy
+from memcommit.providers import find_query as policy
 
 
 def test_find_and_query_follow_the_active_profile_routes(monkeypatch):
@@ -86,7 +86,7 @@ def test_find_and_query_commands_import_the_shared_policy_owner():
     find_source = (commands / "find" / "command.py").read_text(encoding="utf-8")
     query_source = (commands / "query" / "command.py").read_text(encoding="utf-8")
 
-    owner = "from memcommit.infrastructure.providers.find_query import ("
+    owner = "from memcommit.providers.find_query import ("
     assert owner in find_source
     assert owner in query_source
     assert "memcommit.commands.find.provider_policy" not in find_source

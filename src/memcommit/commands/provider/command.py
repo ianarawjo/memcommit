@@ -10,14 +10,14 @@ import typer
 
 from memcommit.commands.shared.command_group import CanonicalCommandGroup
 from memcommit.commands.shared.command_progress import CommandProgress
-from memcommit.infrastructure.config import Config
-from memcommit.infrastructure.providers.policy import (
+from memcommit.configuration.config import Config
+from memcommit.providers.policy import (
     POLICY_VERSION,
     ProviderRoute,
     ResolvedProviderPolicy,
     study_provider_config,
 )
-from memcommit.infrastructure.providers.profile_routes import (
+from memcommit.providers.profile_routes import (
     ProfileProviderRoutesError,
     load_active_provider_scope,
     reset_active_profile_route,
@@ -25,7 +25,7 @@ from memcommit.infrastructure.providers.profile_routes import (
     set_active_profile_route,
 )
 from memcommit.application.operations.profile.config import load_profile_registry
-from memcommit.infrastructure.providers.types import (
+from memcommit.providers.types import (
     CODEX_CHATGPT_PROVIDER,
     CODEX_LUNA_LOW_PRESET,
     CODEX_LUNA_MODEL,
@@ -36,8 +36,8 @@ from memcommit.infrastructure.providers.types import (
     SEMANTIC_PROVIDER_IDS,
     ProviderIdentity,
 )
-from memcommit.infrastructure.providers.subscription import QueryProviderError
-from memcommit.infrastructure.providers.semantic import connect_operation_provider
+from memcommit.providers.subscription import QueryProviderError
+from memcommit.providers.semantic import connect_operation_provider
 
 
 app = typer.Typer(

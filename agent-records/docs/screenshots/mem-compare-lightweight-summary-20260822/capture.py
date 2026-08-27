@@ -94,7 +94,7 @@ def _run_child(root: Path) -> None:
     import memcommit.commands.compare.command as compare_command
     from memcommit.cli import app
     from memcommit.comparison_store import comparison_analysis_path
-    from memcommit.infrastructure.providers.policy import ResolvedProviderPolicy
+    from memcommit.providers.policy import ResolvedProviderPolicy
 
     store, reference, peer = _prepare_store(root)
     before = {

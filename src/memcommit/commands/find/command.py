@@ -86,10 +86,10 @@ from memcommit.application.operations.search.turn_dialogue import (
     FindTurnRefine,
     interpret_find_turn,
 )
-from memcommit.infrastructure.providers.find_query import (
+from memcommit.providers.find_query import (
     connect_find_provider as connect_codex_chatgpt_provider,
 )
-from memcommit.infrastructure.providers.subscription import QueryProviderError
+from memcommit.providers.subscription import QueryProviderError
 from memcommit.application.operations.search.model import (
     FindError,
     SearchArtifact,

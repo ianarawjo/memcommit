@@ -14,7 +14,7 @@ from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
 from typing import Literal
 
-from memcommit.infrastructure.providers.types import CompletionRun, SemanticProvider
+from memcommit.providers.types import CompletionRun, SemanticProvider
 
 
 AmbiguityInterpretation = Literal["SINGLE", "DOMINANT", "COMPETING"]

@@ -13,7 +13,7 @@ from dataclasses import dataclass
 from typing import Literal
 
 from memcommit.application.reviewing.quality.findings import _surface_key
-from memcommit.infrastructure.providers.types import SemanticProvider
+from memcommit.providers.types import SemanticProvider
 
 
 DuplicateRelation = Literal[

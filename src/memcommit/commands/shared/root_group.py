@@ -33,7 +33,7 @@ class MemCommandGroup(CanonicalCommandGroup):
         # one provider/model instance for that root invocation, while separate
         # CliRunner or embedded invocations still observe explicit config
         # changes made between commands.
-        from memcommit.infrastructure.providers.semantic import reset_semantic_provider_cache
+        from memcommit.providers.semantic import reset_semantic_provider_cache
 
         reset_semantic_provider_cache()
         active_attempt = None

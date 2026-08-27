@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from memcommit.infrastructure.providers.policy import (
+from memcommit.providers.policy import (
     LEGACY_STUDY_PROVIDER_POLICY_VERSION,
     POLICY_VERSION,
     STUDY_PROVIDER_POLICY_VERSION,

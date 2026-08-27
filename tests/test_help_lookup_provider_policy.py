@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.infrastructure.providers import find_query as policy
+from memcommit.providers import find_query as policy
 
 
 def test_help_lookup_follows_the_active_profile_route(monkeypatch):

@@ -11,8 +11,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Iterator, Mapping
 
-from memcommit.infrastructure.config import Config
-from memcommit.infrastructure.providers.policy import (
+from memcommit.configuration.config import Config
+from memcommit.providers.policy import (
     ConfiguredProviderRoute,
     PROFILE_PROVIDER_OPERATION_NAMES,
     ProviderPolicyConfig,

@@ -12,7 +12,7 @@ from memcommit.application.operations.search.answer_references import (
     FindAnswerEvidence,
     FindAnswerSentence,
 )
-from memcommit.infrastructure.providers.subscription import QueryProviderError
+from memcommit.providers.subscription import QueryProviderError
 from memcommit.application.semantic_execution import (
     BudgetLimits,
     BudgetVector,

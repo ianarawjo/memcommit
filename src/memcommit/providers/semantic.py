@@ -11,8 +11,8 @@ from dataclasses import dataclass, field
 from threading import Lock
 from typing import TYPE_CHECKING, Callable
 
-from memcommit.infrastructure.config import Config
-from memcommit.infrastructure.providers.types import (
+from memcommit.configuration.config import Config
+from memcommit.providers.types import (
     CODEX_CHATGPT_PROVIDER,
     OLLAMA_PROVIDER,
     OPENROUTER_PROVIDER,
@@ -20,7 +20,7 @@ from memcommit.infrastructure.providers.types import (
     ProviderIdentity,
     SemanticProvider,
 )
-from memcommit.infrastructure.providers.subscription import (
+from memcommit.providers.subscription import (
     CodexChatGPTProvider,
     QueryProviderError,
     _build_query_prompt,
@@ -30,7 +30,7 @@ from memcommit.infrastructure.command_ledger.study_actions import (
     record_provider_connection_started,
     record_study_provider_turn,
 )
-from memcommit.infrastructure.providers.policy import (
+from memcommit.providers.policy import (
     ProviderPolicyMode,
     ProviderPolicyOverride,
     ResolvedProviderPolicy,
@@ -539,7 +539,7 @@ def connect_operation_provider(
         # Import lazily so the core provider adapter does not make Profile
         # selection part of module import. One command freezes one active
         # Profile route before any provider connection.
-        from memcommit.infrastructure.providers.profile_routes import (
+        from memcommit.providers.profile_routes import (
             resolve_active_provider_policy,
         )
 

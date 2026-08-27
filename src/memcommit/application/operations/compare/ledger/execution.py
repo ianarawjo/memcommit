@@ -40,10 +40,10 @@ from memcommit.application.operations.compare.ledger.granted_store import (
     save_granted_comparison_artifact,
 )
 from memcommit.application.operations.profile.model import ProfileError, authority_grant_snapshot_lock
-from memcommit.infrastructure.providers.policy import (
+from memcommit.providers.policy import (
     COMPARE_LEDGER_PROVIDER_POLICY,
 )
-from memcommit.infrastructure.providers.subscription import CodexChatGPTProvider
+from memcommit.providers.subscription import CodexChatGPTProvider
 from memcommit.persistence.store import MemoryStore
 
 if TYPE_CHECKING:

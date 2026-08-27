@@ -1,10 +1,10 @@
 """Compatibility exports for the infrastructure-owned provider policy.
 
 New application and library code imports
-``memcommit.infrastructure.providers.find_query`` directly.
+``memcommit.providers.find_query`` directly.
 """
 
-from memcommit.infrastructure.providers.find_query import (
+from memcommit.providers.find_query import (
     FIND_PROVIDER_POLICY,
     QUERY_PROVIDER_POLICY,
     OperationProviderPolicy,

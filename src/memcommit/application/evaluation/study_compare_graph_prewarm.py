@@ -48,9 +48,9 @@ from memcommit.application.operations.compare.ledger.model import (
     ComparisonMember,
     context_record_digest,
 )
-from memcommit.infrastructure.config import Config
+from memcommit.configuration.config import Config
 from memcommit.context import Context, Memory
-from memcommit.infrastructure.providers.policy import (
+from memcommit.providers.policy import (
     resolve_codex_evaluation_policy,
 )
 from memcommit.study_prewarm.compare_compact import (
@@ -60,12 +60,12 @@ from memcommit.study_prewarm.compare_compact import (
 from memcommit.application.operations.compare.ledger.provider import analyze_comparison
 from memcommit.application.operations.profile.config import load_profile_registry
 from memcommit.application.operations.profile.model import _study_practice_contexts
-from memcommit.infrastructure.providers.types import (
+from memcommit.providers.types import (
     CODEX_CHATGPT_PROVIDER,
     CODEX_REASONING_EFFORTS,
     ProviderIdentity,
 )
-from memcommit.infrastructure.providers.subscription import CodexChatGPTProvider
+from memcommit.providers.subscription import CodexChatGPTProvider
 from memcommit.persistence.store import MemoryStore
 
 

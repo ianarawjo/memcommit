@@ -28,7 +28,7 @@ from memcommit.application.operations.compare.ledger.model import (
     ComparisonRelation,
     ComparisonReports,
 )
-from memcommit.infrastructure.providers.types import (
+from memcommit.providers.types import (
     CompletionRun,
     ProviderIdentity,
 )

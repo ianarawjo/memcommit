@@ -17,7 +17,7 @@ from memcommit.application.operations.compare.ledger.provider import (
     COMPARISON_PROVIDER_CONTRACT_VERSION,
     SUPPORTED_COMPARISON_PROVIDER_CONTRACT_VERSIONS,
 )
-from memcommit.infrastructure.config import Config
+from memcommit.configuration.config import Config
 from memcommit.context_targeting.readable_catalog import (
     freeze_profile_readable_context_catalog,
 )
@@ -27,7 +27,7 @@ from memcommit.application.evaluation.study_compare_exact_matrix import (
     run_exact_matrix,
 )
 from memcommit.application.evaluation.study_compare_graph_prewarm import TaskGraphPlan
-from memcommit.infrastructure.providers.policy import (
+from memcommit.providers.policy import (
     resolve_operation_provider_policy,
 )
 from memcommit.application.operations.profile.config import (
@@ -36,7 +36,7 @@ from memcommit.application.operations.profile.config import (
     profile_control_dir,
     study_run_identity,
 )
-from memcommit.infrastructure.providers.types import (
+from memcommit.providers.types import (
     CODEX_CHATGPT_PROVIDER,
     CODEX_REASONING_EFFORTS,
 )
