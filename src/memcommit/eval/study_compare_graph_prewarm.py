@@ -53,9 +53,9 @@ from memcommit.context import Context, Memory
 from memcommit.infrastructure.providers.policy import (
     resolve_codex_evaluation_policy,
 )
-from memcommit.eval.compare_latency_ab import (
+from memcommit.study_prewarm.compare_compact import (
     COMPACT_PROMPT_VERSION,
-    _run_compact,
+    run_compact_compare,
 )
 from memcommit.operations.compare.ledger.provider import analyze_comparison
 from memcommit.operations.profile.config import load_profile_registry
@@ -617,7 +617,7 @@ def compute_pair(
         reference_descendants=True,
         compared_descendants=True,
     )
-    result = _run_compact(provider, comparison_input, clock=time.monotonic)
+    result = run_compact_compare(provider, comparison_input, clock=time.monotonic)
     if result.analysis is None:
         evidence = result.evidence
         compact_reason = (

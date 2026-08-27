@@ -1,28 +1,20 @@
-"""Controlled one-shot Compare output-contract latency benchmark.
+"""Compact Compare inference owned by Study prewarm preparation.
 
-Condition A calls the production ``analyze_comparison`` boundary unchanged.
-Condition B sends the same two complete provider frames in one turn but asks
-only for positional group assignments, relation kinds, sparse relation notes,
-and issues.  The host reconstructs the current ``ComparisonAnalysis`` shape so
-coverage and downstream structural invariants remain locally testable.
+The provider receives both complete peer Context frames in one turn and returns
+only positional group assignments, relation kinds, sparse notes, and issues.
+The host validates complete disposition and reconstructs the typed
+``ComparisonAnalysis`` used by the task-local prewarm bundle.
 
-This module is an evaluation path, not a production Compare strategy.  In
-particular, it does not enable staged execution or publish a compact analysis
-to a comparison store.
+This is a setup-time Study strategy, not a foreground production Compare
+contract. The historical latency A/B runners that first evaluated this
+contract are intentionally separate from its adopted Study ownership.
 """
 
 from __future__ import annotations
 
-import argparse
-from collections import Counter
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import asdict, dataclass
-from datetime import datetime, timezone
-import hashlib
-import itertools
 import json
-from pathlib import Path
-import sys
 import time
 from typing import Protocol
 import uuid
@@ -36,35 +28,19 @@ from memcommit.operations.compare.ledger.model import (
     ComparisonRelation,
     ComparisonReports,
 )
-from memcommit.operations.compare.ledger.provider import (
-    COMPARISON_PAYLOAD_MARKER,
-    analyze_comparison,
-)
-from memcommit.infrastructure.config import Config
-from memcommit.context import Context, Memory
-from memcommit.eval.semantic_campaign import _atomic_write_json
-from memcommit.eval.study_fixtures import load_study_fixture
 from memcommit.infrastructure.providers.types import (
-    CODEX_CHATGPT_PROVIDER,
-    CODEX_REASONING_EFFORTS,
     CompletionRun,
     ProviderIdentity,
 )
-from memcommit.infrastructure.providers.subscription import CodexChatGPTProvider
 
 
-COMPARE_LATENCY_AB_KIND = "memcommit.semantic-eval.compare-latency-ab-v1"
-COMPARE_LATENCY_AB_SCHEMA_VERSION = 1
+COMPACT_CONDITION = "COMPACT_DECISION_VECTOR"
 COMPACT_PROMPT_VERSION = 1
 COMPACT_PAYLOAD_MARKER = "COMPACT COMPARISON PAYLOAD:\n"
 COMPACT_NOTE_LIMIT = 600
 COMPACT_ISSUE_TEXT_LIMIT = 2_000
 COMPACT_OPTION_LIMIT = 5
-DEFAULT_TIMEOUT_SECONDS = 900.0
 
-BASELINE = "BASELINE_EXHAUSTIVE"
-COMPACT = "COMPACT_DECISION_VECTOR"
-_CONDITIONS = (BASELINE, COMPACT)
 _KINDS = (
     "EQUIVALENT",
     "COMPATIBLE",
@@ -76,11 +52,10 @@ _KINDS = (
 _UNRESOLVED_KINDS = frozenset({"CONFLICT", "UNCLEAR"})
 _NOTE_REQUIRED_KINDS = frozenset({"SCOPED", "CONFLICT", "UNCLEAR"})
 _PRIORITIES = ("REQUIRED", "HELPFUL")
-_FIXTURE_NAMESPACE = uuid.UUID("b6892774-d673-43b9-bc0e-45a54d1d43c2")
 
 
-class CompareLatencyABError(RuntimeError):
-    """The frozen corpus, compact contract, or benchmark record is invalid."""
+class CompactCompareError(RuntimeError):
+    """The compact Study prewarm response failed its local contract."""
 
 
 class _Provider(Protocol):
@@ -150,14 +125,9 @@ class _CapturingProvider:
 
 
 @dataclass(frozen=True)
-class _ConditionResult:
+class CompactComparisonRun:
     evidence: dict[str, object]
     analysis: ComparisonAnalysis | None
-
-
-def _sha(value: str | bytes) -> str:
-    encoded = value.encode("utf-8") if isinstance(value, str) else value
-    return hashlib.sha256(encoded).hexdigest()
 
 
 def _json(value: object, *, pretty: bool = False) -> str:
@@ -171,7 +141,9 @@ def _json(value: object, *, pretty: bool = False) -> str:
             sort_keys=True,
         )
     except (TypeError, ValueError) as error:
-        raise CompareLatencyABError("Benchmark value is not strict JSON.") from error
+        raise CompactCompareError(
+            "Compact Study prewarm value is not strict JSON."
+        ) from error
 
 
 def _strict_object(pairs: list[tuple[str, object]]) -> dict[str, object]:
@@ -185,7 +157,7 @@ def _strict_object(pairs: list[tuple[str, object]]) -> dict[str, object]:
 
 def _load_object(raw_response: str) -> dict[str, object]:
     if not isinstance(raw_response, str) or not raw_response.strip():
-        raise CompareLatencyABError("Compact Compare returned no response.")
+        raise CompactCompareError("Compact Compare returned no response.")
     try:
         value = json.loads(
             raw_response,
@@ -195,11 +167,11 @@ def _load_object(raw_response: str) -> dict[str, object]:
             ),
         )
     except (TypeError, ValueError, json.JSONDecodeError) as error:
-        raise CompareLatencyABError(
+        raise CompactCompareError(
             "Compact Compare returned invalid strict JSON."
         ) from error
     if not isinstance(value, dict):
-        raise CompareLatencyABError("Compact Compare response must be an object.")
+        raise CompactCompareError("Compact Compare response must be an object.")
     return value
 
 
@@ -209,13 +181,13 @@ def _exact_object(
     label: str,
 ) -> dict[str, object]:
     if not isinstance(value, dict) or set(value) != keys:
-        raise CompareLatencyABError(f"Invalid compact {label}.")
+        raise CompactCompareError(f"Invalid compact {label}.")
     return value
 
 
 def _array(value: object, label: str) -> list[object]:
     if not isinstance(value, list):
-        raise CompareLatencyABError(f"Invalid compact {label}.")
+        raise CompactCompareError(f"Invalid compact {label}.")
     return value
 
 
@@ -231,7 +203,7 @@ def _text(
         or (not empty and not value.strip())
         or len(value) > limit
     ):
-        raise CompareLatencyABError(f"Invalid compact {label}.")
+        raise CompactCompareError(f"Invalid compact {label}.")
     return value
 
 
@@ -242,41 +214,8 @@ def _positive_group_id(value: object, group_count: int, label: str) -> int:
         or value < 1
         or value > group_count
     ):
-        raise CompareLatencyABError(f"Invalid compact {label}.")
+        raise CompactCompareError(f"Invalid compact {label}.")
     return value
-
-
-def _fixture_uid(dataset: str, identity: str) -> str:
-    return str(uuid.uuid5(_FIXTURE_NAMESPACE, f"{dataset}:{identity}"))
-
-
-def build_task2_comparison_input(*, language: str = "en") -> ComparisonInput:
-    """Build the frozen 150+150 Task 2 pair without opening a Memory store."""
-
-    datasets = (
-        load_study_fixture("task2-advisor1", language=language),
-        load_study_fixture("task2-advisor2", language=language),
-    )
-    contexts: list[Context] = []
-    for dataset in datasets:
-        context = Context(
-            uid=_fixture_uid(dataset.spec.name, "context"),
-            name=dataset.spec.context_name,
-        )
-        for record in dataset.records:
-            context.add(
-                Memory(
-                    uid=_fixture_uid(dataset.spec.name, record.identity_key),
-                    content=record.content,
-                )
-            )
-        contexts.append(context)
-    comparison_input = ComparisonInput.from_contexts(contexts[0], contexts[1])
-    if tuple(len(frame.memories) for frame in comparison_input.frames) != (150, 150):
-        raise CompareLatencyABError(
-            "Task 2 Compare benchmark requires exactly 150+150 Memories."
-        )
-    return comparison_input
 
 
 def _provider_payload(
@@ -335,7 +274,7 @@ def compact_output_schema(
 
     source_count = reference_count + compared_count
     if reference_count < 1 or compared_count < 1:
-        raise CompareLatencyABError("Compact Compare requires two nonempty sides.")
+        raise CompactCompareError("Compact Compare requires two nonempty sides.")
     group_ids = {"type": "integer"}
     text = {
         "type": "string",
@@ -559,13 +498,13 @@ def parse_compact_analysis(
     groups_raw = _array(data["groups"], "groups")
     source_count = sum(len(frame.memories) for frame in comparison_input.frames)
     if not groups_raw or len(groups_raw) > source_count:
-        raise CompareLatencyABError("Invalid compact group count.")
+        raise CompactCompareError("Invalid compact group count.")
     groups: list[tuple[str, str]] = []
     for raw_group in groups_raw:
         group = _exact_object(raw_group, {"kind", "note"}, "group")
         kind = group["kind"]
         if not isinstance(kind, str) or kind not in _KINDS:
-            raise CompareLatencyABError("Invalid compact relation kind.")
+            raise CompactCompareError("Invalid compact relation kind.")
         note = _text(
             group["note"],
             "relation note",
@@ -573,7 +512,7 @@ def parse_compact_analysis(
             limit=COMPACT_NOTE_LIMIT,
         )
         if kind in _NOTE_REQUIRED_KINDS and not note.strip():
-            raise CompareLatencyABError(
+            raise CompactCompareError(
                 f"Compact {kind} relation requires one sparse note."
             )
         groups.append((kind, note))
@@ -587,7 +526,7 @@ def parse_compact_analysis(
     ):
         raw_vector = _array(data[key], key)
         if len(raw_vector) != len(frame.memories):
-            raise CompareLatencyABError(
+            raise CompactCompareError(
                 f"Compact {key} must contain exactly {len(frame.memories)} rows."
             )
         vectors.append(
@@ -598,7 +537,7 @@ def parse_compact_analysis(
         )
     used_groups = set(vectors[0]) | set(vectors[1])
     if used_groups != set(range(1, group_count + 1)):
-        raise CompareLatencyABError(
+        raise CompactCompareError(
             "Every compact group must be used by at least one source Memory."
         )
 
@@ -623,11 +562,11 @@ def parse_compact_analysis(
         reference_count, compared_count = counts_by_group[group_id]
         if kind == "DISTINCT":
             if bool(reference_count) == bool(compared_count):
-                raise CompareLatencyABError(
+                raise CompactCompareError(
                     "Compact DISTINCT group must contain exactly one source side."
                 )
         elif not reference_count or not compared_count:
-            raise CompareLatencyABError(
+            raise CompactCompareError(
                 "Compact cross-source group must contain both source sides."
             )
         relation_uid = _stable_uid(
@@ -659,7 +598,7 @@ def parse_compact_analysis(
     required_groups: set[int] = set()
     raw_issues = _array(data["issues"], "issues")
     if len(raw_issues) > source_count:
-        raise CompareLatencyABError("Compact issue count is excessive.")
+        raise CompactCompareError("Compact issue count is excessive.")
     for issue_index, raw_issue in enumerate(raw_issues, start=1):
         issue = _exact_object(
             raw_issue,
@@ -679,22 +618,22 @@ def parse_compact_analysis(
             for value in raw_group_ids
         )
         if not group_ids or len(group_ids) != len(set(group_ids)):
-            raise CompareLatencyABError("Invalid compact issue group_ids.")
+            raise CompactCompareError("Invalid compact issue group_ids.")
         priority = issue["priority"]
         if not isinstance(priority, str) or priority not in _PRIORITIES:
-            raise CompareLatencyABError("Invalid compact issue priority.")
+            raise CompactCompareError("Invalid compact issue priority.")
         title = _text(issue["title"], "issue title")
         question = _text(issue["question"], "issue question")
         why = _text(issue["why_it_matters"], "issue consequence")
         signature = (group_ids, question)
         if signature in issue_signatures:
-            raise CompareLatencyABError("Duplicate compact issue.")
+            raise CompactCompareError("Duplicate compact issue.")
         issue_signatures.add(signature)
         if priority == "REQUIRED":
             required_groups.update(group_ids)
         raw_options = _array(issue["options"], "issue options")
         if len(raw_options) > COMPACT_OPTION_LIMIT:
-            raise CompareLatencyABError("Compact issue has excessive options.")
+            raise CompactCompareError("Compact issue has excessive options.")
         options: list[ComparisonOption] = []
         for option_index, raw_option in enumerate(raw_options, start=1):
             option = _exact_object(raw_option, {"label", "text"}, "issue option")
@@ -734,7 +673,7 @@ def parse_compact_analysis(
         if kind in _UNRESOLVED_KINDS
     }
     if not unresolved_groups <= required_groups:
-        raise CompareLatencyABError(
+        raise CompactCompareError(
             "Every compact CONFLICT or UNCLEAR group requires a REQUIRED issue."
         )
 
@@ -757,66 +696,11 @@ def parse_compact_analysis(
     )
 
 
-def _alias_maps(
-    comparison_input: ComparisonInput,
-) -> tuple[dict[tuple[str, str], str], dict[str, tuple[str, str]]]:
-    by_member: dict[tuple[str, str], str] = {}
-    by_alias: dict[str, tuple[str, str]] = {}
-    for frame_index, frame in enumerate(comparison_input.frames, start=1):
-        for memory_index, memory in enumerate(frame.memories, start=1):
-            alias = f"m{frame_index}_{memory_index:06d}"
-            member = (frame.uid, memory.uid)
-            by_member[member] = alias
-            by_alias[alias] = member
-    return by_member, by_alias
-
-
-def _normalized_analysis(
-    analysis: ComparisonAnalysis,
-    comparison_input: ComparisonInput,
-) -> dict[str, object]:
-    by_member, _ = _alias_maps(comparison_input)
-    alias_order = {
-        alias: index
-        for index, alias in enumerate(
-            alias
-            for frame_index, frame in enumerate(comparison_input.frames, start=1)
-            for memory_index, _ in enumerate(frame.memories, start=1)
-            for alias in (f"m{frame_index}_{memory_index:06d}",)
-        )
-    }
-    relations: list[dict[str, object]] = []
-    for relation in analysis.relations:
-        members = [
-            by_member[(member.frame_uid, member.memory_uid)]
-            for member in relation.members
-        ]
-        members.sort(key=alias_order.__getitem__)
-        relations.append(
-            {
-                "kind": relation.kind,
-                "status": relation.status,
-                "members": members,
-            }
-        )
-    relations.sort(key=lambda item: alias_order[item["members"][0]])
-    required_issues = sum(issue.priority == "REQUIRED" for issue in analysis.issues)
-    return {
-        "relation_count": len(relations),
-        "issue_count": len(analysis.issues),
-        "required_issue_count": required_issues,
-        "kind_counts": dict(sorted(Counter(item["kind"] for item in relations).items())),
-        "relations": relations,
-        "analysis_digest": _sha(_json(analysis.to_dict())),
-    }
-
-
 def _condition_evidence(
     *,
     condition: str,
     capture: _CapturedCompletion | None,
     analysis: ComparisonAnalysis | None,
-    comparison_input: ComparisonInput,
     validation_seconds: float,
     elapsed_seconds: float,
     validation_error: str | None,
@@ -838,82 +722,28 @@ def _condition_evidence(
         "validation_error": validation_error,
         "operation": capture.operation if capture is not None else None,
         "prompt_chars": len(capture.prompt) if capture is not None else None,
-        "prompt_digest": _sha(capture.prompt) if capture is not None else None,
         "schema_chars": len(_json(schema)) if schema is not None else 0,
-        "schema_digest": _sha(_json(schema)) if schema is not None else None,
         "response_chars": len(response) if response is not None else None,
         "response_bytes": (
             len(response.encode("utf-8")) if response is not None else None
         ),
-        "response_digest": _sha(response) if response is not None else None,
-        "raw_response": response,
         "provider_seconds": (
             capture.provider_seconds if capture is not None else 0.0
         ),
         "validation_seconds": validation_seconds,
         "elapsed_seconds": elapsed_seconds,
         "provider_run": asdict(provider_run) if provider_run is not None else None,
-        # Kept only until the caller proves that A and B carried byte-identical
-        # semantic payloads. It is removed before the durable ledger is built.
-        "_captured_prompt": capture.prompt if capture is not None else None,
-        "normalized_analysis": (
-            _normalized_analysis(analysis, comparison_input)
-            if analysis is not None
-            else None
-        ),
     }
 
 
-def _run_baseline(
+def run_compact_compare(
     provider: _Provider,
     comparison_input: ComparisonInput,
     *,
     clock: Callable[[], float],
-) -> _ConditionResult:
-    wrapper = _CapturingProvider(provider, clock)
-    started = clock()
-    validation_error: str | None = None
-    analysis: ComparisonAnalysis | None = None
-    try:
-        analysis = analyze_comparison(comparison_input, wrapper)
-    except Exception as error:
-        # Provider errors can contain upstream details or prompt fragments. Keep
-        # only their type; local contract errors are safe enough to diagnose.
-        if wrapper.capture is None or wrapper.capture.error_type is None:
-            validation_error = str(error)
-    elapsed = max(0.0, clock() - started)
-    capture = wrapper.capture
-    provider_seconds = capture.provider_seconds if capture is not None else 0.0
-    validation_seconds = max(0.0, elapsed - provider_seconds)
-    observed = getattr(provider, "last_run", None)
-    provider_run = (
-        observed
-        if isinstance(observed, CompletionRun)
-        and capture is not None
-        and observed.operation == capture.operation
-        else None
-    )
-    return _ConditionResult(
-        evidence=_condition_evidence(
-            condition=BASELINE,
-            capture=capture,
-            analysis=analysis,
-            comparison_input=comparison_input,
-            validation_seconds=validation_seconds,
-            elapsed_seconds=elapsed,
-            validation_error=validation_error,
-            provider_run=provider_run,
-        ),
-        analysis=analysis,
-    )
+) -> CompactComparisonRun:
+    """Run one complete Study prewarm compact decision-vector call."""
 
-
-def _run_compact(
-    provider: _Provider,
-    comparison_input: ComparisonInput,
-    *,
-    clock: Callable[[], float],
-) -> _ConditionResult:
     payload, reference_aliases, compared_aliases = _provider_payload(comparison_input)
     prompt = _compact_prompt(payload)
     schema = compact_output_schema(len(reference_aliases), len(compared_aliases))
@@ -934,7 +764,7 @@ def _run_compact(
                 response,
                 comparison_input=comparison_input,
             )
-        except CompareLatencyABError as error:
+        except CompactCompareError as error:
             validation_error = str(error)
         validation_seconds = max(0.0, clock() - validation_started)
     except Exception as error:
@@ -950,12 +780,11 @@ def _run_compact(
         and observed.operation == capture.operation
         else None
     )
-    return _ConditionResult(
+    return CompactComparisonRun(
         evidence=_condition_evidence(
-            condition=COMPACT,
+            condition=COMPACT_CONDITION,
             capture=capture,
             analysis=analysis,
-            comparison_input=comparison_input,
             validation_seconds=validation_seconds,
             elapsed_seconds=elapsed,
             validation_error=validation_error,
@@ -963,349 +792,3 @@ def _run_compact(
         ),
         analysis=analysis,
     )
-
-
-def _relation_signatures(
-    normalized: Mapping[str, object],
-) -> tuple[dict[str, tuple[str, frozenset[str]]], set[tuple[str, frozenset[str]]]]:
-    relations = normalized.get("relations")
-    if not isinstance(relations, list):
-        raise CompareLatencyABError("Normalized analysis has no relation ledger.")
-    by_source: dict[str, tuple[str, frozenset[str]]] = {}
-    signatures: set[tuple[str, frozenset[str]]] = set()
-    for raw in relations:
-        if not isinstance(raw, dict):
-            raise CompareLatencyABError("Invalid normalized relation.")
-        kind = raw.get("kind")
-        members = raw.get("members")
-        if not isinstance(kind, str) or not isinstance(members, list):
-            raise CompareLatencyABError("Invalid normalized relation.")
-        member_set = frozenset(str(member) for member in members)
-        signature = (kind, member_set)
-        signatures.add(signature)
-        for member in member_set:
-            by_source[member] = signature
-    return by_source, signatures
-
-
-def _same_group_pairs(
-    by_source: Mapping[str, tuple[str, frozenset[str]]],
-) -> set[tuple[str, str]]:
-    groups = {signature[1] for signature in by_source.values()}
-    return {
-        tuple(sorted(pair))
-        for members in groups
-        for pair in itertools.combinations(members, 2)
-    }
-
-
-def _agreement(
-    baseline: ComparisonAnalysis,
-    compact: ComparisonAnalysis,
-    comparison_input: ComparisonInput,
-    baseline_evidence: Mapping[str, object],
-    compact_evidence: Mapping[str, object],
-) -> dict[str, object]:
-    baseline_normalized = _normalized_analysis(baseline, comparison_input)
-    compact_normalized = _normalized_analysis(compact, comparison_input)
-    baseline_by_source, baseline_signatures = _relation_signatures(
-        baseline_normalized
-    )
-    compact_by_source, compact_signatures = _relation_signatures(compact_normalized)
-    sources = set(baseline_by_source)
-    if sources != set(compact_by_source):
-        raise CompareLatencyABError("A/B analyses do not cover the same sources.")
-    exact_source = sum(
-        baseline_by_source[source] == compact_by_source[source] for source in sources
-    )
-    kind_source = sum(
-        baseline_by_source[source][0] == compact_by_source[source][0]
-        for source in sources
-    )
-    baseline_pairs = _same_group_pairs(baseline_by_source)
-    compact_pairs = _same_group_pairs(compact_by_source)
-    true_positive = len(baseline_pairs & compact_pairs)
-    false_positive = len(compact_pairs - baseline_pairs)
-    false_negative = len(baseline_pairs - compact_pairs)
-    precision = (
-        true_positive / (true_positive + false_positive)
-        if true_positive + false_positive
-        else 1.0
-    )
-    recall = (
-        true_positive / (true_positive + false_negative)
-        if true_positive + false_negative
-        else 1.0
-    )
-    f1 = 2 * precision * recall / (precision + recall) if precision + recall else 0.0
-    baseline_chars = baseline_evidence.get("response_chars")
-    compact_chars = compact_evidence.get("response_chars")
-    baseline_seconds = baseline_evidence.get("provider_seconds")
-    compact_seconds = compact_evidence.get("provider_seconds")
-    return {
-        "reference_condition_is_not_ground_truth": True,
-        "source_count": len(sources),
-        "source_kind_agreement": kind_source / len(sources),
-        "source_exact_group_and_kind_agreement": exact_source / len(sources),
-        "exact_relation_signature_overlap": len(
-            baseline_signatures & compact_signatures
-        ),
-        "baseline_relation_count": len(baseline_signatures),
-        "compact_relation_count": len(compact_signatures),
-        "pairwise_same_group": {
-            "true_positive": true_positive,
-            "false_positive": false_positive,
-            "false_negative": false_negative,
-            "precision": precision,
-            "recall": recall,
-            "f1": f1,
-        },
-        "response_char_reduction": (
-            1.0 - (compact_chars / baseline_chars)
-            if isinstance(baseline_chars, int)
-            and baseline_chars > 0
-            and isinstance(compact_chars, int)
-            else None
-        ),
-        "provider_speedup_ratio": (
-            baseline_seconds / compact_seconds
-            if isinstance(baseline_seconds, (int, float))
-            and isinstance(compact_seconds, (int, float))
-            and compact_seconds > 0
-            else None
-        ),
-    }
-
-
-def _payload_from_baseline_prompt(prompt: object) -> str | None:
-    if not isinstance(prompt, str) or COMPARISON_PAYLOAD_MARKER not in prompt:
-        return None
-    return prompt.split(COMPARISON_PAYLOAD_MARKER, 1)[1]
-
-
-def run_compare_latency_ab(
-    provider: _Provider,
-    comparison_input: ComparisonInput,
-    *,
-    order: Sequence[str] = _CONDITIONS,
-    clock: Callable[[], float] = time.monotonic,
-    progress: Callable[[str], None] | None = None,
-) -> dict[str, object]:
-    """Run exactly one call for each condition and return an auditable ledger."""
-
-    if tuple(sorted(order)) != tuple(sorted(_CONDITIONS)) or len(order) != 2:
-        raise CompareLatencyABError(
-            "A/B order must contain BASELINE_EXHAUSTIVE and "
-            "COMPACT_DECISION_VECTOR exactly once."
-        )
-    comparison_input.validate()
-    payload, reference_aliases, compared_aliases = _provider_payload(comparison_input)
-    payload_json = _json(payload)
-    started_at = datetime.now(timezone.utc)
-    campaign_started = clock()
-    results: dict[str, _ConditionResult] = {}
-    for index, condition in enumerate(order, start=1):
-        if progress is not None:
-            progress(f"START {index}/2 {condition}")
-        if condition == BASELINE:
-            result = _run_baseline(provider, comparison_input, clock=clock)
-        else:
-            result = _run_compact(provider, comparison_input, clock=clock)
-        results[condition] = result
-        if progress is not None:
-            progress(
-                f"END {index}/2 {condition} "
-                f"valid={result.analysis is not None} "
-                f"provider_seconds={result.evidence['provider_seconds']:.3f}"
-            )
-
-    baseline_evidence = results[BASELINE].evidence
-    compact_evidence = results[COMPACT].evidence
-    baseline_capture_prompt = baseline_evidence.get("_captured_prompt")
-    baseline_payload = _payload_from_baseline_prompt(baseline_capture_prompt)
-    same_payload = baseline_payload == payload_json
-    identity = (
-        provider.identity
-        if isinstance(getattr(provider, "identity", None), ProviderIdentity)
-        else None
-    )
-    calls = [results[condition].evidence for condition in order]
-    for evidence in calls:
-        evidence.pop("_captured_prompt", None)
-    both_valid = all(result.analysis is not None for result in results.values())
-    experiment_valid = both_valid and same_payload
-    agreement = (
-        _agreement(
-            results[BASELINE].analysis,
-            results[COMPACT].analysis,
-            comparison_input,
-            baseline_evidence,
-            compact_evidence,
-        )
-        if both_valid
-        else None
-    )
-    return {
-        "kind": COMPARE_LATENCY_AB_KIND,
-        "schema_version": COMPARE_LATENCY_AB_SCHEMA_VERSION,
-        "run_id": (
-            started_at.strftime("%Y%m%dT%H%M%S%fZ") + "-" + uuid.uuid4().hex[:8]
-        ),
-        "started_at": started_at.isoformat().replace("+00:00", "Z"),
-        "status": "VALID" if experiment_valid else "INCOMPLETE",
-        "experiment": {
-            "baseline": (
-                "production exhaustive one-shot Compare output contract"
-            ),
-            "compact": (
-                "same complete provider-visible frames; fixed positional group "
-                "vectors, relation kinds, sparse notes, and issues"
-            ),
-            "changed_axis": "OUTPUT_CONTRACT_AND_REQUIRED_NARRATIVE_ONLY",
-            "compact_prompt_version": COMPACT_PROMPT_VERSION,
-            "calls_per_condition": 1,
-            "order": list(order),
-            "same_provider_instance": True,
-            "production_behavior_changed": False,
-        },
-        "provider": asdict(identity) if identity is not None else {},
-        "corpus": {
-            "fixture": "task2-advisor1-vs-task2-advisor2",
-            "language": "en",
-            "reference_count": len(reference_aliases),
-            "compared_count": len(compared_aliases),
-            "source_count": len(reference_aliases) + len(compared_aliases),
-            "provider_payload_chars": len(payload_json),
-            "provider_payload_digest": _sha(payload_json),
-            "baseline_payload_matches_compact_payload": same_payload,
-        },
-        "calls": calls,
-        "agreement": agreement,
-        "timing": {
-            "campaign_seconds": max(0.0, clock() - campaign_started),
-            "provider_seconds": sum(
-                float(result.evidence["provider_seconds"])
-                for result in results.values()
-            ),
-        },
-    }
-
-
-def write_benchmark_ledger(path: Path, record: Mapping[str, object]) -> None:
-    """Write one final A/B record without overwriting prior evidence."""
-
-    path = Path(path)
-    if path.exists():
-        raise CompareLatencyABError(f"Benchmark ledger already exists: {path}")
-    if path.parent.is_symlink():
-        raise CompareLatencyABError("Benchmark ledger directory cannot be a symlink.")
-    path.parent.mkdir(parents=True, exist_ok=True)
-    _atomic_write_json(path, dict(record))
-
-
-def _default_output_path() -> Path:
-    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    return (
-        Path("agent-records")
-        / "outputs"
-        / "compare-latency-ab"
-        / f"{stamp}.json"
-    )
-
-
-def _summary(record: Mapping[str, object], path: Path) -> dict[str, object]:
-    calls = record.get("calls")
-    summaries: list[dict[str, object]] = []
-    if isinstance(calls, list):
-        for raw in calls:
-            if isinstance(raw, dict):
-                summaries.append(
-                    {
-                        key: raw.get(key)
-                        for key in (
-                            "condition",
-                            "contract_valid",
-                            "provider_seconds",
-                            "elapsed_seconds",
-                            "prompt_chars",
-                            "response_chars",
-                        )
-                    }
-                )
-    return {
-        "status": record.get("status"),
-        "ledger": str(path),
-        "calls": summaries,
-        "agreement": record.get("agreement"),
-    }
-
-
-def _parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(
-        description=(
-            "Run one medium-reasoning A/B Compare latency experiment on the "
-            "frozen English Task 2 150+150 fixture."
-        )
-    )
-    parser.add_argument("--output", type=Path, default=None)
-    parser.add_argument("--model", default=None)
-    parser.add_argument(
-        "--reasoning",
-        choices=CODEX_REASONING_EFFORTS,
-        default="medium",
-    )
-    parser.add_argument("--timeout", type=float, default=DEFAULT_TIMEOUT_SECONDS)
-    parser.add_argument(
-        "--compact-first",
-        action="store_true",
-        help="Run B before A; the default is production baseline before compact.",
-    )
-    return parser
-
-
-def main(argv: Sequence[str] | None = None) -> int:
-    args = _parser().parse_args(argv)
-    config = Config()
-    model = args.model or config.model_for_provider(CODEX_CHATGPT_PROVIDER)
-    if not model:
-        print(
-            "No Codex model configured; pass --model explicitly.",
-            file=sys.stderr,
-        )
-        return 2
-    if args.timeout <= 0:
-        print("--timeout must be positive.", file=sys.stderr)
-        return 2
-    output = args.output or _default_output_path()
-    connection_started = time.monotonic()
-    try:
-        provider = CodexChatGPTProvider.connect(
-            timeout=args.timeout,
-            model=model,
-            reasoning_effort=args.reasoning,
-        )
-        connection_seconds = max(0.0, time.monotonic() - connection_started)
-        comparison_input = build_task2_comparison_input(language="en")
-        order = (COMPACT, BASELINE) if args.compact_first else _CONDITIONS
-        record = run_compare_latency_ab(
-            provider,
-            comparison_input,
-            order=order,
-            progress=lambda message: print(message, flush=True),
-        )
-        timing = record["timing"]
-        assert isinstance(timing, dict)
-        timing["provider_connection_seconds"] = connection_seconds
-        timing["total_seconds"] = (
-            float(timing["campaign_seconds"]) + connection_seconds
-        )
-        write_benchmark_ledger(output, record)
-    except Exception as error:
-        print(f"{type(error).__name__}: {error}", file=sys.stderr)
-        return 1
-    print(_json(_summary(record, output), pretty=True))
-    return 0 if record["status"] == "VALID" else 1
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())

@@ -182,7 +182,7 @@ def test_invalid_compact_pair_falls_back_to_exhaustive(monkeypatch):
     )
     monkeypatch.setattr(
         graph_prewarm,
-        "_run_compact",
+        "run_compact_compare",
         lambda *_args, **_kwargs: SimpleNamespace(
             analysis=None,
             evidence={

@@ -2,22 +2,20 @@ from __future__ import annotations
 
 import copy
 import json
+import time
 
 import pytest
 
 from memcommit.comparison import ComparisonInput
 from memcommit.context import Context, Memory
-from memcommit.eval.compare_latency_ab import (
-    BASELINE,
-    COMPACT,
-    CompareLatencyABError,
-    build_task2_comparison_input,
+from memcommit.provider_types import CompletionRun, ProviderIdentity
+from memcommit.study_prewarm.compare_compact import (
+    COMPACT_CONDITION,
+    CompactCompareError,
     compact_output_schema,
     parse_compact_analysis,
-    run_compare_latency_ab,
-    write_benchmark_ledger,
+    run_compact_compare,
 )
-from memcommit.provider_types import CompletionRun, ProviderIdentity
 
 
 def _comparison_input() -> ComparisonInput:
@@ -89,11 +87,9 @@ def test_compact_schema_keeps_fixed_vectors_and_omits_narrative_layers():
 
 
 def test_compact_response_reconstructs_exact_typed_analysis():
-    comparison_input = _comparison_input()
-
     analysis = parse_compact_analysis(
         json.dumps(_compact_response()),
-        comparison_input=comparison_input,
+        comparison_input=_comparison_input(),
     )
 
     assert len(analysis.relations) == 3
@@ -136,19 +132,17 @@ def test_compact_response_reconstructs_exact_typed_analysis():
     ],
 )
 def test_compact_response_rejects_invalid_coverage_or_group_shape(mutator, message):
-    comparison_input = _comparison_input()
     response = copy.deepcopy(_compact_response())
     mutator(response)
 
-    with pytest.raises(CompareLatencyABError, match=message):
+    with pytest.raises(CompactCompareError, match=message):
         parse_compact_analysis(
             json.dumps(response),
-            comparison_input=comparison_input,
+            comparison_input=_comparison_input(),
         )
 
 
 def test_compact_response_rejects_more_groups_than_source_memories():
-    comparison_input = _comparison_input()
     response = copy.deepcopy(_compact_response())
     response["groups"].extend(
         [
@@ -157,30 +151,29 @@ def test_compact_response_rejects_more_groups_than_source_memories():
         ]
     )
 
-    with pytest.raises(CompareLatencyABError, match="Invalid compact group count"):
+    with pytest.raises(CompactCompareError, match="Invalid compact group count"):
         parse_compact_analysis(
             json.dumps(response),
-            comparison_input=comparison_input,
+            comparison_input=_comparison_input(),
         )
 
 
 def test_compact_unresolved_group_requires_required_issue():
-    comparison_input = _comparison_input()
     response = _compact_response()
     response["groups"][0] = {
         "kind": "CONFLICT",
         "note": "The policies prescribe incompatible actions.",
     }
 
-    with pytest.raises(CompareLatencyABError, match="requires a REQUIRED issue"):
+    with pytest.raises(CompactCompareError, match="requires a REQUIRED issue"):
         parse_compact_analysis(
             json.dumps(response),
-            comparison_input=comparison_input,
+            comparison_input=_comparison_input(),
         )
 
 
-class _ABProvider:
-    def __init__(self) -> None:
+class _CompactProvider:
+    def __init__(self, response: dict[str, object]) -> None:
         self.identity = ProviderIdentity(
             provider="fake",
             model="fixed",
@@ -188,82 +181,44 @@ class _ABProvider:
         )
         self.last_run = None
         self.operations: list[str] = []
+        self.response = response
 
     def complete(self, prompt, *, operation, output_schema=None):
         self.operations.append(operation)
         self.last_run = CompletionRun(identity=self.identity, operation=operation)
-        if operation == "compare_contexts":
-            response = {
-                "overview": "The frames share one claim and retain one unique claim each.",
-                "reports": {
-                    "both": "Both frames retain the same operational claim.",
-                    "differences": "",
-                    "reference_only": "The reference has one unique constraint.",
-                    "compared_only": "The compared frame has one unique constraint.",
-                },
-                "relations": [
-                    {
-                        "relation_key": "g1",
-                        "kind": "EQUIVALENT",
-                        "status": "RESOLVED",
-                        "summary": "The first claims are equivalent.",
-                        "reason": "Their operational content is the same.",
-                    },
-                    {
-                        "relation_key": "g2",
-                        "kind": "DISTINCT",
-                        "status": "RESOLVED",
-                        "summary": "The reference constraint is distinct.",
-                        "reason": "Only the reference contains it.",
-                    },
-                    {
-                        "relation_key": "g3",
-                        "kind": "DISTINCT",
-                        "status": "RESOLVED",
-                        "summary": "The compared constraint is distinct.",
-                        "reason": "Only the compared frame contains it.",
-                    },
-                ],
-                "source_assignments": [
-                    {"source_memory_id": "m1_000001", "relation_key": "g1"},
-                    {"source_memory_id": "m1_000002", "relation_key": "g2"},
-                    {"source_memory_id": "m2_000001", "relation_key": "g1"},
-                    {"source_memory_id": "m2_000002", "relation_key": "g3"},
-                ],
-                "issues": [],
-            }
-        else:
-            response = _compact_response()
-        return json.dumps(response)
+        return json.dumps(self.response)
 
 
-def test_ab_runner_uses_same_payload_and_scores_decision_agreement():
-    provider = _ABProvider()
+def test_compact_runner_captures_one_valid_study_prewarm_call():
+    provider = _CompactProvider(_compact_response())
 
-    record = run_compare_latency_ab(provider, _comparison_input())
+    result = run_compact_compare(
+        provider,
+        _comparison_input(),
+        clock=time.monotonic,
+    )
 
-    assert record["status"] == "VALID"
-    assert provider.operations == ["compare_contexts", "compare_contexts_compact_ab_v1"]
-    assert record["corpus"]["baseline_payload_matches_compact_payload"] is True
-    calls = {call["condition"]: call for call in record["calls"]}
-    assert calls[BASELINE]["contract_valid"] is True
-    assert calls[COMPACT]["contract_valid"] is True
-    assert calls[COMPACT]["response_chars"] < calls[BASELINE]["response_chars"]
-    assert record["agreement"]["source_kind_agreement"] == 1.0
-    assert record["agreement"]["source_exact_group_and_kind_agreement"] == 1.0
-    assert record["agreement"]["pairwise_same_group"]["f1"] == 1.0
-
-
-def test_task2_benchmark_input_is_exactly_150_plus_150():
-    comparison_input = build_task2_comparison_input(language="en")
-
-    assert tuple(len(frame.memories) for frame in comparison_input.frames) == (150, 150)
-    assert sum(len(frame.memories) for frame in comparison_input.frames) == 300
+    assert result.analysis is not None
+    assert provider.operations == ["compare_contexts_compact_ab_v1"]
+    assert result.evidence["condition"] == COMPACT_CONDITION
+    assert result.evidence["contract_valid"] is True
+    assert result.evidence["validation_error"] is None
 
 
-def test_benchmark_ledger_refuses_to_overwrite(tmp_path):
-    path = tmp_path / "run.json"
-    write_benchmark_ledger(path, {"status": "VALID"})
+def test_compact_runner_returns_invalid_evidence_for_graph_fallback():
+    response = _compact_response()
+    response["groups"][0] = {
+        "kind": "CONFLICT",
+        "note": "The policies prescribe incompatible actions.",
+    }
+    provider = _CompactProvider(response)
 
-    with pytest.raises(CompareLatencyABError, match="already exists"):
-        write_benchmark_ledger(path, {"status": "VALID"})
+    result = run_compact_compare(
+        provider,
+        _comparison_input(),
+        clock=time.monotonic,
+    )
+
+    assert result.analysis is None
+    assert result.evidence["contract_valid"] is False
+    assert "requires a REQUIRED issue" in str(result.evidence["validation_error"])

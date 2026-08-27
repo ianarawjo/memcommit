@@ -2,10 +2,26 @@
 
 ## Status
 
-This note records an exploratory latency direction. It does not enable staged
-execution, change a provider or model, relax an existing semantic contract, or
-authorize hidden provider calls. The evaluation-only experiments below retain
-their raw responses and publish no production Compare result.
+This note records a completed exploratory latency direction. It does not enable
+staged execution, change a provider or model, relax an existing semantic
+contract, or authorize hidden provider calls. The evaluation-only experiments
+below retained their raw responses and published no production Compare result.
+
+The four one-off runners for exhaustive-versus-compact A/B, minimal I/O,
+full-context parallel ownership, and prewarm projection were retired from the
+distributed package on 2026-08-27 after their decisions were recorded. Their
+last combined executable snapshot is recoverable from commit `487d6999d`;
+their original introductions are commits `7f9cf239a`, `2fdbf815c`,
+`e92ae4ba7`, and `21f4f202c`, respectively. Invocation examples below are
+historical reproduction records for those commits, not commands available in
+the current tree. Immutable ledgers under
+`agent-records/outputs/compare-latency-ab/` remain the result evidence.
+
+The compact decision-vector contract adopted by task-local Study prewarm was
+not retired. Its live schema, strict decoder, typed reconstruction, and bounded
+provider-call primitive now belong to
+`memcommit.study_prewarm.compare_compact`; the move changes ownership, not the
+recorded compact prompt version or Study fallback boundary.
 
 The initial design workload is the existing 300-Memory Compare case. The
 discussion starts with Compare because it exposes the largest combination of
@@ -464,11 +480,11 @@ came from model choice, output compression, approximation, or concurrency.
 
 ## Implemented one-run A/B diagnostic
 
-`memcommit.eval.compare_latency_ab` provides an evaluation-only runner for the
+`memcommit.eval.compare_latency_ab` provided an evaluation-only runner for the
 canonical English Task 2 `advisor1` versus `advisor2` frame. It constructs the
 same frozen 150+150 `ComparisonInput` for both calls and defaults to the
-configured Codex model with explicit `medium` reasoning. A normal invocation
-is:
+configured Codex model with explicit `medium` reasoning. Its historical
+invocation was:
 
 ```console
 python -m memcommit.eval.compare_latency_ab \
@@ -667,7 +683,7 @@ owned position and a relation kind only when the position was itself that
 anchor. The host allowed no retry or provider reconciliation and attempted one
 deterministic merge only after all six calls completed.
 
-The invocation was:
+The historical invocation was:
 
 ```console
 python -m memcommit.eval.compare_parallel_anchor \
@@ -890,7 +906,7 @@ without changing production Compare. It replayed the retained production
 exhaustive response only to reconstruct and seed the existing exact cache;
 the replay did not contact a provider. The new W2 audit used
 `codex_chatgpt:gpt-5.6-sol` with reasoning `medium`, matching the retained
-baseline's requested model and effort. The invocation was:
+baseline's requested model and effort. The historical invocation was:
 
 ```console
 python -m memcommit.eval.compare_prewarm_projection \
