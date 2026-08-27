@@ -4,7 +4,7 @@
   "ruleset_version": "fit-ordinary-reader-v1",
   "corpus_role": "CONSUMED_CALIBRATION",
   "independent_holdout": false,
-  "description": "Reviewed calibration cases for set-level proposition Fit under materially ordinary readings. The balanced cases locate compatibility, contradiction, and genuine reading splits; they are consumed calibration, not an independent holdout and not production-prompt examples.",
+  "description": "Retained reviewed calibration cases for set-level proposition Fit under materially ordinary readings. The balanced cases locate compatibility, contradiction, and genuine reading splits; they are consumed calibration, not an independent holdout and not production-prompt examples.",
   "labels": [
     "YES",
     "MAY",

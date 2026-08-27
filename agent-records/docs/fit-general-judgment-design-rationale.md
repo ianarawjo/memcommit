@@ -294,13 +294,23 @@ Stale results omit old issue detail rather than presenting it as current.
 
 ## Calibration boundary
 
-`memcommit/eval/fixtures/fit.json` is the first reviewed consumed-calibration
-corpus for this contract. Its 18 cases balance `YES`, `MAY`, and `NO` and cover
-explicit scope distinctions, unrelated claims, missing verification, role
-neutrality, Korean and English readings, genuine referential splits, direct
-contradiction, dominant antecedents, and a three-way inconsistency that cannot
-be reduced to isolated pairs. `memcommit.eval.fit_calibration` loads the corpus
-strictly and judges every case in one whole-frame provider call.
+`agent-records/outputs/fit-calibration/fit.json` preserves the first reviewed
+consumed-calibration corpus for this contract. Its 18 cases balance `YES`,
+`MAY`, and `NO` and cover explicit scope distinctions, unrelated claims,
+missing verification, role neutrality, Korean and English readings, genuine
+referential splits, direct contradiction, dominant antecedents, and a
+three-way inconsistency that cannot be reduced to isolated pairs. The
+historical `memcommit.eval.fit_calibration` runner loaded the corpus strictly
+and judged every case in one whole-frame provider call.
+
+The one-off runner and its dedicated fake-provider tests were retired from the
+distributed package on 2026-08-27. Their final executable snapshot is
+recoverable from commit `4fd2d0033`; the calibration was introduced and its
+single observed 18/18 result was recorded in commit `1f30686e4`. The reviewed
+cases moved to the retained output tree because no raw provider response,
+provider identity, timing, or standalone execution ledger was kept. This
+cleanup does not change the live Fit judgment contract or its production
+tests.
 
 The expected labels and rationales are scored locally and never enter the
 production Fit prompt. This is consumed calibration, not an independent
@@ -319,9 +329,9 @@ before making a stability or generalization claim.
 - Stored Context expansion is deliberately direct-only. Reference traversal,
   descendant reach, and interactive source selection remain non-goals until
   their authority and visible range controls are reviewed explicitly.
-- The consumed calibration locates known boundaries but does not prove provider
-  quality; exact contract validation proves coverage and shape, not semantic
-  correctness.
+- The retained consumed calibration locates known boundaries but does not prove
+  provider quality; exact contract validation proved coverage and shape, not
+  semantic correctness.
 - Other operations should adopt the theory through their own explicit design
   reviews. This decision records the shared premise; it does not silently
   change their current provider contracts.

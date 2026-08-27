@@ -207,7 +207,6 @@ def test_production_fit_consumers_use_the_operation_owner() -> None:
         "src/memcommit/commands/impact/process_local.py",
         "src/memcommit/commands/resolve/command.py",
         "src/memcommit/operations/elaborate/model.py",
-        "src/memcommit/eval/fit_calibration.py",
         "src/memcommit/operations/ground/workspace_fit.py",
         "src/memcommit/operations/fit/application.py",
         "src/memcommit/operations/fit/runtime.py",
