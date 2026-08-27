@@ -75,7 +75,7 @@ from memcommit.application.operations.add.semantic_runtime import (
     resolve_semantic_add_endpoints,
     resolve_semantic_add_target,
 )
-from memcommit.resolution.workbench import (
+from memcommit.application.resolution.workbench import (
     ResolutionContextLocation,
     ResolutionDetailBlock,
     ResolutionItem,

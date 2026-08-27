@@ -5,7 +5,7 @@ retain conflict discovery, solver policy, semantic providers, persistence, and
 Apply behavior.
 """
 
-from memcommit.resolution.model import (
+from memcommit.application.resolution.model import (
     ResolutionAttempt,
     ResolutionBinding,
     ResolutionCase,
@@ -14,7 +14,7 @@ from memcommit.resolution.model import (
     ResolutionRequirement,
     ResolutionSubmission,
 )
-from memcommit.resolution.validation import (
+from memcommit.application.resolution.validation import (
     ResolutionValidationError,
     evaluate_resolution,
     require_resolution_ready,

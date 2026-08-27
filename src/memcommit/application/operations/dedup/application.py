@@ -15,7 +15,7 @@ from memcommit.application.reviewing.quality.handoff import (
     QualityFindingHandoff,
     QualityFindingSource,
 )
-from memcommit.resolution import (
+from memcommit.application.resolution import (
     ResolutionAttempt,
     ResolutionBinding,
     ResolutionCase,

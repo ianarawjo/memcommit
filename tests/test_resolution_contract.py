@@ -12,7 +12,7 @@ from memcommit.interfaces.tui.workbenches.resolution import (
     ResolutionOutcome,
     ResolutionWorkbenchSpec,
 )
-from memcommit.resolution import (
+from memcommit.application.resolution import (
     ResolutionAttempt,
     ResolutionBinding,
     ResolutionCase,

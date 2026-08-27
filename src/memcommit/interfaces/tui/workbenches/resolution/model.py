@@ -8,7 +8,7 @@ from memcommit.interfaces.tui.components.exact_command_review import (
     ExactCommandReview,
 )
 from memcommit.interfaces.tui.viewers.semantic import SemanticViewerDocument
-from memcommit.resolution import (
+from memcommit.application.resolution import (
     ResolutionAttempt,
     ResolutionCase,
     ResolutionSubmission,

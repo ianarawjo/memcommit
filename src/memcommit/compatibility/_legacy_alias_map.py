@@ -192,7 +192,7 @@ LEGACY_SUBMODULE_ALIASES = {
     'memcommit.reference_runtime': 'memcommit.application.operations.reference.runtime',
     'memcommit.replace_application': 'memcommit.application.operations.replace.application',
     'memcommit.replace_runtime': 'memcommit.application.operations.replace.runtime',
-    'memcommit.resolution_workbench': 'memcommit.resolution.workbench',
+    'memcommit.resolution_workbench': 'memcommit.application.resolution.workbench',
     'memcommit.resolve_application': 'memcommit.application.operations.resolve.application',
     'memcommit.resolve_rules': 'memcommit.application.operations.resolve.rules',
     'memcommit.resolve_runtime': 'memcommit.application.operations.resolve.runtime',

@@ -11,7 +11,7 @@ from memcommit.application.operations.meld.session_application import (
     PendingMeldTurn,
     prepare_meld_turn,
 )
-from memcommit.resolution import (
+from memcommit.application.resolution import (
     ResolutionAttempt,
     ResolutionBinding,
     ResolutionCase,

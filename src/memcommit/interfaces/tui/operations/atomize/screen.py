@@ -37,7 +37,7 @@ from memcommit.interfaces.tui.core.text_layout import (
     elide_terminal_text,
     single_line_terminal_text,
 )
-from memcommit.resolution.workbench import (
+from memcommit.application.resolution.workbench import (
     ResolutionNavigation,
     ResolutionWorkbenchAction,
 )

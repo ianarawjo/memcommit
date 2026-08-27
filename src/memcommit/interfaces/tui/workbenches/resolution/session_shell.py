@@ -104,7 +104,7 @@ from memcommit.interfaces.tui.components.focus import (
 )
 from memcommit.interfaces.tui.workbenches.impact import ImpactController, ImpactView
 from memcommit.application.reviewing.memory_diff import MemoryChange, MemoryDiffSpan, memory_diff_lines
-from memcommit.resolution.workbench import (
+from memcommit.application.resolution.workbench import (
     ResolutionNavigation,
     ResolutionWorkbenchAction,
     ResolutionWorkbenchError,

@@ -213,7 +213,7 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.reference_runtime | compatibility-facade | centralize-alias | memcommit.application.operations.reference.runtime | 0 |
 | memcommit.replace_application | compatibility-facade | centralize-alias | memcommit.application.operations.replace.application | 0 |
 | memcommit.replace_runtime | compatibility-facade | centralize-alias | memcommit.application.operations.replace.runtime | 0 |
-| memcommit.resolution_workbench | shared-concept-implementation | relocate | memcommit.resolution.workbench | 25 |
+| memcommit.resolution_workbench | shared-concept-implementation | relocate | memcommit.application.resolution.workbench | 25 |
 | memcommit.resolve_application | compatibility-facade | centralize-alias | memcommit.application.operations.resolve.application | 0 |
 | memcommit.resolve_rules | operation-implementation | relocate | memcommit.application.operations.resolve.rules | 2 |
 | memcommit.resolve_runtime | compatibility-facade | centralize-alias | memcommit.application.operations.resolve.runtime | 0 |

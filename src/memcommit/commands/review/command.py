@@ -547,7 +547,7 @@ def _run_atomize_workbench(
         )
         return
     from memcommit.commands.review.report import run_review_report_shell
-    from memcommit.resolution.workbench import ResolutionNavigation
+    from memcommit.application.resolution.workbench import ResolutionNavigation
     from memcommit.application.operations.review.report_adapters import atomize_review_report
 
     navigation = ResolutionNavigation(selected_item_uid=workbench.cursor_uid)

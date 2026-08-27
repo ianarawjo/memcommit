@@ -101,7 +101,7 @@ from memcommit.application.operations.profile.model import (
     ProfileError,
 )
 from memcommit.context_targeting.naming import validate_portable_context_name
-from memcommit.resolution.workbench import ResolutionNavigation
+from memcommit.application.resolution.workbench import ResolutionNavigation
 from memcommit.persistence.store import (
     ConcurrentContextUpdateError,
     MemoryStore,

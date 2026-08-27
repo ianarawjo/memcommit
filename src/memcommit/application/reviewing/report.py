@@ -7,7 +7,7 @@ from dataclasses import dataclass, replace
 from typing import Literal
 
 from memcommit.interfaces.console.theme import SemanticColorRole
-from memcommit.resolution.workbench import ResolutionWorkbenchView
+from memcommit.application.resolution.workbench import ResolutionWorkbenchView
 
 
 ReviewReportKind = Literal[

@@ -2159,8 +2159,8 @@
     },
     {
       "action": "relocate",
-      "canonical_target": "memcommit.resolution.workbench",
-      "canonical_target_path": "memcommit/resolution/workbench.py",
+      "canonical_target": "memcommit.application.resolution.workbench",
+      "canonical_target_path": "memcommit/application/resolution/workbench.py",
       "inbound_package_importers": 25,
       "lines": 971,
       "module": "memcommit.resolution_workbench",

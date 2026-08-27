@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Literal
 
-from memcommit.resolution.model import (
+from memcommit.application.resolution.model import (
     ResolutionAttempt,
     ResolutionCase,
     ResolutionProgress,

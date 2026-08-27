@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections import Counter
 
 from memcommit.application.reviewing.memory_diff import MemoryChange
-from memcommit.resolution.workbench import (
+from memcommit.application.resolution.workbench import (
     ResolutionDetailBlock,
     ResolutionContextLocation,
     ResolutionIssueEvidence,

@@ -5,7 +5,7 @@ from __future__ import annotations
 from memcommit.interfaces.console.text import (
     safe_terminal_text,
 )
-from memcommit.resolution.workbench import ResolutionMemoryRow
+from memcommit.application.resolution.workbench import ResolutionMemoryRow
 from memcommit.application.reviewing.result_workbench import ResultRef
 
 

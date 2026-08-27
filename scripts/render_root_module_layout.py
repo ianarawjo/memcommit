@@ -213,7 +213,7 @@ CONCEPT_TARGETS = {
     "read_report": "memcommit.application.reviewing.read_report",
     "read_report_recents": "memcommit.application.reviewing.read_report_recents",
     "redundancy_scope": "memcommit.application.reviewing.quality.redundancy_scope",
-    "resolution_workbench": "memcommit.resolution.workbench",
+    "resolution_workbench": "memcommit.application.resolution.workbench",
     "result_workbench": "memcommit.application.reviewing.result_workbench",
     "selective_curation": "memcommit.semantic.selective_curation",
     "semantic_disclosure": "memcommit.semantic.disclosure",

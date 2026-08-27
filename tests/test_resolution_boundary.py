@@ -36,7 +36,7 @@ def test_resolution_core_imports_no_operation_interface_or_infrastructure():
     )
     offenders = [
         (str(path.relative_to(ROOT)), module)
-        for path in (PACKAGE / "resolution").glob("*.py")
+        for path in (PACKAGE / "application" / "resolution").glob("*.py")
         for module in _imports(path)
         if any(
             module == prefix or module.startswith(f"{prefix}.") for prefix in forbidden

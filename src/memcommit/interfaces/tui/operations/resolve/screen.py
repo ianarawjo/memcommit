@@ -21,7 +21,7 @@ from memcommit.interfaces.tui.viewers.semantic import (
 from memcommit.interfaces.tui.workbenches.resolution.compact_shell import (
     run_compact_resolution_decisions,
 )
-from memcommit.resolution.workbench import (
+from memcommit.application.resolution.workbench import (
     ResolutionItem,
     ResolutionOption,
     ResolutionWorkbenchAction,

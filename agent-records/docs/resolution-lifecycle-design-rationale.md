@@ -15,6 +15,12 @@ presentation and UID-addressed interaction.  The lifecycle contract owns only
 operation-neutral decision validity and readiness.  Neither owns semantic
 provider behavior, persistence, or Apply.
 
+Both contracts live under `memcommit.application.resolution`: the lifecycle is
+shared application policy, while the workbench is its terminal-independent
+review projection and action vocabulary. Concrete prompt-toolkit rendering
+remains under `memcommit.interfaces`; moving the package does not move provider,
+persistence, or operation-specific Apply authority into the shared contract.
+
 The smaller deterministic Resolution Workbench now retains the exact
 `ResolutionCase` it projects. Its item and choice rows must match the case in
 the same frozen order, and every individual or bulk outcome re-enters the
@@ -56,7 +62,7 @@ frozen operation artifact
   -> separate review and Apply boundary
 ```
 
-`memcommit.resolution` imports no operation, Store, provider, CLI, or TUI
+`memcommit.application.resolution` imports no operation, Store, provider, CLI, or TUI
 module.  It owns:
 
 - `ResolutionBinding(operation, artifact_uid, revision)`;

@@ -11,7 +11,7 @@ from memcommit.commands.shared.resolution_workbench_shell import (
     run_resolution_workbench_shell,
 )
 from memcommit.context import Context, Memory
-from memcommit.resolution.workbench import (
+from memcommit.application.resolution.workbench import (
     ResolutionContextLocation,
     ResolutionIssueEvidence,
     ResolutionIssuePresentation,
