@@ -126,7 +126,11 @@ def test_create_profile_rolls_back_store_when_registry_publish_fails(
     def fail_registry_write(_registry) -> None:
         raise OSError("registry unavailable")
 
-    monkeypatch.setattr(profiles_module, "_write_registry", fail_registry_write)
+    monkeypatch.setattr(
+        profiles_module.lifecycle,
+        "_write_registry",
+        fail_registry_write,
+    )
 
     with pytest.raises(OSError, match="registry unavailable"):
         create_profile("rolled-back")

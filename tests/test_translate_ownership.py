@@ -43,7 +43,7 @@ def test_production_translate_consumers_use_operation_owners() -> None:
         "src/memcommit/application/operations/translate/catalog_application.py",
         "src/memcommit/application/operations/translate/materialization.py",
         "src/memcommit/application/ops.py",
-        "src/memcommit/application/operations/profile/model.py",
+        "src/memcommit/application/operations/profile/model",
         "src/memcommit/application/retained_history/memory_history_reconstruction/memory_history_event_derivation.py",
         "src/memcommit/persistence/store/operation_state.py",
         "src/memcommit/persistence/store/context_memory.py",
@@ -56,8 +56,11 @@ def test_production_translate_consumers_use_operation_owners() -> None:
     )
 
     for relative_path in relative_paths:
-        source = (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
-        assert not [legacy for legacy in legacy_imports if legacy in source]
+        path = REPOSITORY_ROOT / relative_path
+        paths = tuple(sorted(path.glob("*.py"))) if path.is_dir() else (path,)
+        for source_path in paths:
+            source = source_path.read_text(encoding="utf-8")
+            assert not [legacy for legacy in legacy_imports if legacy in source]
 
 
 def test_translate_owners_keep_the_existing_dependency_direction() -> None:
@@ -102,7 +105,9 @@ def test_translate_owners_keep_the_existing_dependency_direction() -> None:
 
 
 def test_translate_command_is_only_an_io_and_presentation_adapter() -> None:
-    path = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/translate/command.py"
+    path = (
+        REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/translate/command.py"
+    )
     source = path.read_text(encoding="utf-8")
     tree = ast.parse(source, filename=str(path))
     imports = {

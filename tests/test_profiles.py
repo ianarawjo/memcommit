@@ -1479,7 +1479,11 @@ def test_archive_legacy_study_keeps_a_reused_manifest_on_registry_failure(
     def fail_registry_write(_registry):
         raise OSError("simulated resumed registry failure")
 
-    monkeypatch.setattr(profiles_module, "_write_registry", fail_registry_write)
+    monkeypatch.setattr(
+        profiles_module.study,
+        "_write_registry",
+        fail_registry_write,
+    )
     result = runner.invoke(app, ["profile", "archive-study", "legacy-run"])
 
     assert result.exit_code == 1
@@ -1661,7 +1665,11 @@ def test_archive_legacy_study_keeps_manifest_when_registry_write_fails(
     def fail_registry_write(_registry):
         raise OSError("simulated registry failure")
 
-    monkeypatch.setattr(profiles_module, "_write_registry", fail_registry_write)
+    monkeypatch.setattr(
+        profiles_module.study,
+        "_write_registry",
+        fail_registry_write,
+    )
     result = runner.invoke(app, ["profile", "archive-study", "legacy-run"])
 
     assert result.exit_code == 1
@@ -1680,14 +1688,14 @@ def test_archive_legacy_study_keeps_visible_commit_after_fsync_failure(
     monkeypatch.setenv("HOME", str(tmp_path))
     _prepare_authoring(isolated_store)
     study_uid, profiles, grants = _install_legacy_split_study()
-    real_write_registry = profiles_module._write_registry
+    real_write_registry = profiles_module.study._write_registry
 
     def fail_after_visible_replace(updated):
         real_write_registry(updated)
         raise OSError("simulated directory fsync failure")
 
     monkeypatch.setattr(
-        profiles_module,
+        profiles_module.study,
         "_write_registry",
         fail_after_visible_replace,
     )

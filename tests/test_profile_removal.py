@@ -375,7 +375,9 @@ def test_interactive_removal_reloads_and_stays_in_profile_selector(
         "memcommit.adapters.console.commands.profile.command._interactive_terminal",
         lambda: True,
     )
-    monkeypatch.setattr("memcommit.adapters.console.commands.profile.command.choose_profile", select)
+    monkeypatch.setattr(
+        "memcommit.adapters.console.commands.profile.command.choose_profile", select
+    )
 
     result = runner.invoke(app, ["profile"])
 
@@ -481,7 +483,10 @@ def test_registry_write_failure_restores_prepared_store_and_checkpoint(
     def fail_registry_write(_registry):
         raise OSError("simulated registry write failure")
 
-    monkeypatch.setattr("memcommit.application.operations.profile.model._write_registry", fail_registry_write)
+    monkeypatch.setattr(
+        "memcommit.application.operations.profile.model._storage._write_registry",
+        fail_registry_write,
+    )
 
     with pytest.raises(ProfileError, match="was not deleted"):
         remove_profile(authority.name)

@@ -1,40 +1,21 @@
-"""Whole-store profile registration and selection.
-
-Profiles are a control-plane selector around complete MemoryStore roots.
-:mod:`memcommit.application.operations.init_study` builds packaged scenarios
-into one participant Profile and one run-private authority Profile, then
-restores the scenario's real grants between them. Older six-Profile Study
-groups remain readable.
-A process resolves its selected root once when :mod:`memcommit.persistence.store` is
-imported, so a profile selection affects the next CLI invocation while an
-already running operation finishes against the store it opened.
-"""
+"""Study Profile grouping, import, publication, and lifecycle operations."""
 
 from __future__ import annotations
 
 import copy
-from contextlib import contextmanager
 from dataclasses import dataclass, replace
 from datetime import datetime, timezone
-import fcntl
 import hashlib
 import json
 import os
 from pathlib import Path
 import shutil
-import stat
 import uuid
-from typing import Iterator
-
 from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
-from memcommit.core.context_targeting.naming import validate_portable_context_name
-from memcommit.core.context_targeting.model import ContextScope
-from memcommit.core.context_targeting.resolution import expand_lexical_context_names
 from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AuthorityGrant,
     GRANT_RESOURCE_CONTEXT_TREE,
-    GrantContextBinding,
     ProfileConfigError,
     ProfileEntry,
     ProfileRegistry,
@@ -43,50 +24,36 @@ from memcommit.application.operations.profile.config import (
     StudyRunIdentity,
     load_profile_registry,
     profile_control_dir,
-    profile_registry_file,
-    profile_registry_lock_file,
     profile_store_dir,
     profile_stores_dir,
     study_run_identity,
     canonical_grant_permissions,
-    validate_grant_permission,
     validate_grant_resource_name,
     validate_profile_name,
 )
-from memcommit.application.authority.storage_permissions import (
-    ensure_private_directory,
-    open_private_exclusive,
-)
 from memcommit.application.operations.translate.view import TranslationCatalog
 
+from ._storage import (
+    ProfileError as ProfileError,
+    StoreInspection as StoreInspection,
+    _assert_plain_tree as _assert_plain_tree,
+    _context_records as _context_records,
+    _fsync_directory as _fsync_directory,
+    _inspection_with_grants as _inspection_with_grants,
+    _prepare_profile_deletion_batch as _prepare_profile_deletion_batch,
+    _publish_permanent_removal as _publish_permanent_removal,
+    _read_granted_public_names as _read_granted_public_names,
+    _read_json as _read_json,
+    _registry_lock as _registry_lock,
+    _source_digest as _source_digest,
+    _source_store as _source_store,
+    _write_registry as _write_registry,
+    inspect_store as inspect_store,
+)
 
-class ProfileError(RuntimeError):
-    """A profile operation cannot complete without risking local state."""
-
-
-@dataclass(frozen=True)
-class ContextInventory:
-    """Countable direct records for one validated ordinary Context."""
-
-    uid: str
-    name: str
-    direct_memory_count: int
-
-
-@dataclass(frozen=True)
-class StoreInspection:
-    """Read-only summary of one validated complete MemoryStore."""
-
-    root: Path
-    current_context: str | None
-    context_names: tuple[str, ...]
-    ordinary_memory_count: int
-    query_source_count: int
-    query_source_names: tuple[str, ...]
-    translation_catalog_count: int
-    context_inventory: tuple[ContextInventory, ...]
-    granted_context_count: int = 0
-    granted_memory_count: int = 0
+from .grants import (
+    _grant_scope as _grant_scope,
+)
 
 
 @dataclass(frozen=True)
@@ -152,15 +119,6 @@ class StudyProviderPolicyMigrationResult:
 
 
 @dataclass(frozen=True)
-class ProfileCreationResult:
-    """One fresh empty managed Profile published without selecting it."""
-
-    profile: ProfileEntry
-    inspection: StoreInspection
-    active_profile_name: str
-
-
-@dataclass(frozen=True)
 class LegacyStudyArchiveResult:
     """One split legacy Study detached from the live Profile selector."""
 
@@ -171,17 +129,6 @@ class LegacyStudyArchiveResult:
     grants: tuple[AuthorityGrant, ...]
     manifest_path: Path
     active_profile_name: str
-
-
-@dataclass(frozen=True)
-class ProfileRenameResult:
-    """One stable Profile identity published under a new display name."""
-
-    previous_name: str
-    profile: ProfileEntry
-    active_profile_name: str
-    was_active: bool
-    changed: bool
 
 
 @dataclass(frozen=True)
@@ -198,19 +145,6 @@ class StudyRenameResult:
 
 
 @dataclass(frozen=True)
-class ProfileRemovalResult:
-    """One Profile permanently deleted behind a retained identity tombstone."""
-
-    profile: ProfileEntry
-    study_name: str | None
-    active_profile_name: str
-    study_profile_count: int
-    study_removed_count: int
-    removed_grant_count: int
-    deleted_store: Path
-
-
-@dataclass(frozen=True)
 class StudyRemovalResult:
     """One complete Study whose Profile stores were permanently deleted."""
 
@@ -223,33 +157,12 @@ class StudyRemovalResult:
     active_profile_name: str
 
 
-@dataclass(frozen=True)
-class GrantedContextView:
-    """One validated Context view resolved for a grantee Profile."""
-
-    grant: AuthorityGrant
-    authority: ProfileEntry
-    grantee: ProfileEntry
-    requested_name: str
-    authority_context_name: str
-    authority_root: Path
-
-
-@dataclass(frozen=True)
-class ShareEndpoint:
-    """One grant-backed cross-Profile delivery target."""
-
-    grant: AuthorityGrant
-    authority: ProfileEntry
-    sender: ProfileEntry
-    public_name: str
-    receiver_context_name: str
-    receiver_root: Path
-
-
 _STUDY_TASKS = (1, 2, 3)
+
 _STUDY_PRACTICE_ROOT = "practice"
+
 _STUDY_PRACTICE_DESCRIPTION = "practice/description"
+
 _STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT = (
     "memcommit is a research prototype that provides command-line and terminal "
     "user interfaces (CLI/TUI) for managing agent memory and supporting "
@@ -260,6 +173,7 @@ _STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT = (
     "memcommit in three different situations, each involving a different context, "
     "goal, and kind of memory."
 )
+
 _STUDY_PRACTICE_DESCRIPTION_SITUATION_CONTENT = (
     "SITUATION · Before beginning the three study tasks, complete a short practice "
     "exercise to become familiar with how memcommit organizes and presents its "
@@ -268,6 +182,7 @@ _STUDY_PRACTICE_DESCRIPTION_SITUATION_CONTENT = (
     "requests. Some notes still combine recurring constraints, rough wording, "
     "and typos."
 )
+
 _STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT = (
     "TASK · Divide their underlying constraints into appropriate atomic Memories "
     "without performing the requested edits, adding instructions, or changing "
@@ -276,6 +191,7 @@ _STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT = (
     "operation designed for atomization, and use it to atomize the notes and "
     "save the result as `practice/source-atomized`."
 )
+
 _PRE_SPLIT_STUDY_PRACTICE_DESCRIPTION_CONTENT = (
     "Before beginning the three study tasks, complete a short practice "
     "exercise to become familiar with how memcommit organizes and presents its "
@@ -289,37 +205,46 @@ _PRE_SPLIT_STUDY_PRACTICE_DESCRIPTION_CONTENT = (
     "operation designed for atomization, and use it to atomize the notes and "
     "save the result as `practice/source-atomized`."
 )
+
 _LEGACY_STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT = (
     _STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT.replace("memcommit", "MemLab")
 )
+
 _LEGACY_STUDY_PRACTICE_DESCRIPTION_SITUATION_CONTENT = (
     _STUDY_PRACTICE_DESCRIPTION_SITUATION_CONTENT.replace("memcommit", "MemLab")
 )
+
 _LEGACY_PRE_SPLIT_STUDY_PRACTICE_DESCRIPTION_CONTENT = (
     _PRE_SPLIT_STUDY_PRACTICE_DESCRIPTION_CONTENT.replace("memcommit", "MemLab")
 )
+
 _STUDY_PRACTICE_DESCRIPTION_OVERVIEW_UID = str(
     uuid.uuid5(uuid.NAMESPACE_URL, "memcommit:study:practice/description:memory")
 )
+
 _STUDY_PRACTICE_DESCRIPTION_SITUATION_UID = str(
     uuid.uuid5(
         uuid.NAMESPACE_URL,
         "memcommit:study:practice/description:situation-memory",
     )
 )
+
 _STUDY_PRACTICE_DESCRIPTION_TASK_UID = str(
     uuid.uuid5(
         uuid.NAMESPACE_URL,
         "memcommit:study:practice/description:task-memory",
     )
 )
+
 _LEGACY_STUDY_PRACTICE_PROVENANCE_UID = str(
     uuid.uuid5(
         uuid.NAMESPACE_URL,
         "memcommit:study:practice/description:reference-memory",
     )
 )
+
 _STUDY_PRACTICE_SOURCE = "practice/source"
+
 _STUDY_PRACTICE_SOURCE_CONTENTS = (
     "When I ask “How does this read?”, I really want an opinion, so don't edit "
     "the draft immediately; first check the sentence order and paragraph "
@@ -359,11 +284,17 @@ _STUDY_PRACTICE_SOURCE_CONTENTS = (
     "or a paper's status. If I asked only for review, report a verification "
     "problem first instead of silently rewriting the draft.",
 )
+
 _LEGACY_SCENARIO_GRANTED_ROOT = "granted-memory"
+
 _STUDY_PROFILE_SOURCE_KIND = "STUDY_RUN_TASK"
+
 _STUDY_AUTHORITY_SOURCE_KIND = "STUDY_RUN_AUTHORITY"
+
 _STUDY_RUN_SOURCE_KIND = STUDY_RUN_PARTICIPANT_SOURCE_KIND
+
 _STUDY_RUN_GRANTED_SOURCE_KIND = STUDY_RUN_AUTHORITY_SOURCE_KIND
+
 _STUDY_PROFILE_SOURCE_FIELDS = {
     "kind",
     "study_uid",
@@ -373,12 +304,15 @@ _STUDY_PROFILE_SOURCE_FIELDS = {
     "manifest_sha256",
     "canonical_language",
 }
+
 _STUDY_PROFILE_OPTIONAL_SOURCE_FIELDS = {
     "baseline_sha256",
     "baseline_profile_uid",
     "baseline_profile_name",
 }
+
 _LEGACY_STUDY_ARCHIVE_SCHEMA_VERSION = 1
+
 _BASELINE_TOP_LEVEL_DIRECTORIES = (
     "query-sources",
     # Unlike ordinary runtime caches, this directory is an explicitly
@@ -621,394 +555,6 @@ def study_run_profile_pairs(
     return tuple(result)
 
 
-def _reject_duplicate_keys(
-    pairs: list[tuple[str, object]],
-) -> dict[str, object]:
-    result: dict[str, object] = {}
-    for key, value in pairs:
-        if key in result:
-            raise ProfileError(f"Duplicate JSON key: {key}")
-        result[key] = value
-    return result
-
-
-def _read_json(path: Path, *, label: str) -> dict[str, object]:
-    if path.is_symlink() or not path.is_file():
-        raise ProfileError(f"{label} is missing or unsafe: {path}")
-    try:
-        with open(path, encoding="utf-8") as file:
-            value = json.load(file, object_pairs_hook=_reject_duplicate_keys)
-    except (OSError, UnicodeError, json.JSONDecodeError) as error:
-        raise ProfileError(f"{label} is invalid JSON: {path}") from error
-    if not isinstance(value, dict):
-        raise ProfileError(f"{label} must be a JSON object: {path}")
-    return value
-
-
-def _assert_plain_tree(root: Path, *, label: str) -> None:
-    """Reject links and special files before a store is trusted or copied."""
-
-    if root.is_symlink() or not root.is_dir():
-        raise ProfileError(f"{label} must be a real directory: {root}")
-    for directory, names, filenames in os.walk(root, followlinks=False):
-        base = Path(directory)
-        for name in [*names, *filenames]:
-            path = base / name
-            if path.is_symlink():
-                raise ProfileError(f"{label} contains a symbolic link: {path}")
-            mode = path.stat(follow_symlinks=False).st_mode
-            if not (stat.S_ISDIR(mode) or stat.S_ISREG(mode)):
-                raise ProfileError(f"{label} contains a special file: {path}")
-
-
-def _context_records(
-    root: Path,
-) -> tuple[dict[str, Context], dict[str, QueryContextRef]]:
-    contexts_dir = root / "contexts"
-    if contexts_dir.is_symlink() or not contexts_dir.is_dir():
-        raise ProfileError("MemoryStore contexts directory is missing or unsafe.")
-    contexts: dict[str, Context] = {}
-    query_refs: dict[str, QueryContextRef] = {}
-    for path in sorted(contexts_dir.rglob("context.json")):
-        name = path.parent.relative_to(contexts_dir).as_posix()
-        data = _read_json(path, label=f"Context {name!r}")
-        try:
-            context = Context.from_dict(data)
-        except (KeyError, TypeError, ValueError) as error:
-            raise ProfileError(f"Context {name!r} is invalid.") from error
-        if context.name != name:
-            raise ProfileError(
-                f"Context path {name!r} does not match record {context.name!r}."
-            )
-        if name in contexts:
-            raise ProfileError(f"Context {name!r} is duplicated.")
-        contexts[name] = context
-        for item in context.iter_items():
-            if isinstance(item, QueryContextRef):
-                previous = query_refs.get(item.target_source_uid)
-                if previous is not None and previous.name != item.name:
-                    raise ProfileError(
-                        "One query source uid is referenced under multiple names."
-                    )
-                query_refs[item.target_source_uid] = item
-    return contexts, query_refs
-
-
-def _context_record_at(root: Path, name: str) -> Context | None:
-    """Load only one exact Context without inspecting sibling authority data."""
-
-    canonical_name = validate_grant_resource_name(name)
-    contexts_dir = root / "contexts"
-    if contexts_dir.is_symlink() or not contexts_dir.is_dir():
-        raise ProfileError("MemoryStore contexts directory is missing or unsafe.")
-    context_dir = contexts_dir
-    for part in canonical_name.split("/"):
-        context_dir /= part
-        if context_dir.is_symlink():
-            raise ProfileError(f"Context {canonical_name!r} has an unsafe path.")
-        if not context_dir.exists():
-            return None
-        if not context_dir.is_dir():
-            raise ProfileError(f"Context {canonical_name!r} has an unsafe path.")
-    record_path = context_dir / "context.json"
-    if not record_path.exists():
-        return None
-    data = _read_json(record_path, label=f"Context {canonical_name!r}")
-    try:
-        context = Context.from_dict(data)
-    except (KeyError, TypeError, ValueError) as error:
-        raise ProfileError(f"Context {canonical_name!r} is invalid.") from error
-    if context.name != canonical_name:
-        raise ProfileError(
-            f"Context path {canonical_name!r} does not match record {context.name!r}."
-        )
-    return context
-
-
-def _query_sources(root: Path) -> dict[str, str]:
-    sources_dir = root / "query-sources"
-    if not sources_dir.exists():
-        return {}
-    if sources_dir.is_symlink() or not sources_dir.is_dir():
-        raise ProfileError("Query-source storage is unsafe.")
-    sources: dict[str, str] = {}
-    for path in sorted(sources_dir.glob("*/source.json")):
-        data = _read_json(path, label="Query source")
-        uid = data.get("uid")
-        name = data.get("name")
-        if not isinstance(uid, str) or not isinstance(name, str) or not name:
-            raise ProfileError("Query source identity is invalid.")
-        try:
-            canonical_uid = str(uuid.UUID(uid))
-        except (AttributeError, TypeError, ValueError) as error:
-            raise ProfileError("Query source uid is invalid.") from error
-        if canonical_uid != uid or path.parent.name != uid:
-            raise ProfileError("Query source path does not match its uid.")
-        if data.get("schema_version") not in {1, 2}:
-            raise ProfileError("Query source schema version is unsupported.")
-        entries = data.get("entries")
-        if data.get("schema_version") == 2 and (
-            not isinstance(entries, list) or not entries
-        ):
-            raise ProfileError("Query source entries are invalid.")
-        sources[uid] = name
-    unexpected = [
-        path
-        for path in sources_dir.rglob("source.json")
-        if path.parent.parent != sources_dir
-    ]
-    if unexpected:
-        raise ProfileError("Query-source storage contains an invalid path.")
-    return sources
-
-
-def _translation_catalogs(
-    root: Path,
-    contexts: dict[str, Context],
-) -> int:
-    directory = root / "translation-views"
-    if not directory.exists():
-        return 0
-    if directory.is_symlink() or not directory.is_dir():
-        raise ProfileError("Translation-view storage is unsafe.")
-    count = 0
-    by_uid = {context.uid: context for context in contexts.values()}
-    for path in sorted(directory.glob("*--catalog.json")):
-        data = _read_json(path, label="Translation catalog")
-        try:
-            catalog = TranslationCatalog.from_dict(data)
-        except (ProfileConfigError, TypeError, ValueError) as error:
-            raise ProfileError(f"Translation catalog is invalid: {path}") from error
-        context = by_uid.get(catalog.context_uid)
-        if context is None or context.name != catalog.context_name:
-            raise ProfileError(
-                "Translation catalog does not identify a Context in this store."
-            )
-        count += 1
-    return count
-
-
-def inspect_store(
-    root: Path,
-    *,
-    allowed_virtual_currents: frozenset[str] = frozenset(),
-) -> StoreInspection:
-    """Validate one complete store without creating or resolving content."""
-
-    root = Path(root).absolute()
-    _assert_plain_tree(root, label="MemoryStore")
-    contexts, query_refs = _context_records(root)
-    state = _read_json(root / "state.json", label="MemoryStore state")
-    current = state.get("current")
-    if current is not None and (
-        not isinstance(current, str)
-        or (current not in contexts and current not in allowed_virtual_currents)
-    ):
-        raise ProfileError("MemoryStore current Context is invalid.")
-    sources = _query_sources(root)
-    for source_uid, reference in query_refs.items():
-        if sources.get(source_uid) != reference.name:
-            raise ProfileError(
-                f"Query-only Context {reference.name!r} has no matching source."
-            )
-    catalog_count = _translation_catalogs(root, contexts)
-    context_inventory = tuple(
-        ContextInventory(
-            uid=context.uid,
-            name=name,
-            direct_memory_count=sum(
-                isinstance(item, Memory) for item in context.iter_items()
-            ),
-        )
-        for name, context in sorted(contexts.items())
-    )
-    return StoreInspection(
-        root=root,
-        current_context=current,
-        context_names=tuple(sorted(contexts)),
-        ordinary_memory_count=sum(
-            item.direct_memory_count for item in context_inventory
-        ),
-        query_source_count=len(sources),
-        # Only an ordinary QueryContextRef makes a source name public routing
-        # metadata.  Do not surface names from orphaned concealed records.
-        query_source_names=tuple(
-            sorted(reference.name for reference in query_refs.values())
-        ),
-        translation_catalog_count=catalog_count,
-        context_inventory=context_inventory,
-    )
-
-
-def _inspection_with_grants(
-    registry: ProfileRegistry,
-    profile: ProfileEntry,
-    inspection: StoreInspection,
-    *,
-    cache: dict[str, StoreInspection] | None = None,
-) -> StoreInspection:
-    """Add distinct READ-granted resources without counting public aliases twice."""
-
-    inspections = cache if cache is not None else {profile.uid: inspection}
-    inspections.setdefault(profile.uid, inspection)
-    profile_by_uid = {item.uid: item for item in registry.profiles}
-    local_by_name = {item.name: item for item in inspection.context_inventory}
-    seen_contexts: set[tuple[str, str]] = set()
-    exact_authority: dict[tuple[str, str], ContextInventory] = {}
-    granted_memory_count = 0
-
-    for grant in registry.grants:
-        if grant.grantee_profile_uid != profile.uid or "READ" not in grant.permissions:
-            continue
-        attachment = local_by_name.get(grant.attachment_context_name)
-        if attachment is None or attachment.uid != grant.attachment_context_uid:
-            raise ProfileError("Grant attachment Context identity changed.")
-        authority = profile_by_uid[grant.authority_profile_uid]
-        authority_inspection = inspections.get(authority.uid)
-        authority_by_name = (
-            {item.name: item for item in authority_inspection.context_inventory}
-            if authority_inspection is not None
-            else {}
-        )
-        for binding in grant.contexts:
-            public_name = grant.public_name + binding.name[len(grant.resource_name) :]
-            candidates = [
-                candidate
-                for candidate in registry.grants
-                if candidate.grantee_profile_uid == profile.uid
-                and candidate.attachment_context_uid == grant.attachment_context_uid
-                and (
-                    public_name == candidate.public_name
-                    or public_name.startswith(candidate.public_name + "/")
-                )
-            ]
-            effective = max(
-                candidates,
-                key=lambda candidate: len(candidate.public_name.split("/")),
-            )
-            if "READ" not in effective.permissions:
-                continue
-            granted = authority_by_name.get(binding.name)
-            if granted is None and authority_inspection is None:
-                cache_key = (authority.uid, binding.name)
-                granted = exact_authority.get(cache_key)
-                if granted is None:
-                    # Selecting a task Profile needs counts only for effective
-                    # READ bindings. Do not scan a sibling QUERY-only authority
-                    # tree merely to render the task's inventory summary.
-                    context = _context_record_at(
-                        profile_store_dir(authority),
-                        binding.name,
-                    )
-                    if context is not None:
-                        granted = ContextInventory(
-                            uid=context.uid,
-                            name=context.name,
-                            direct_memory_count=sum(
-                                isinstance(item, Memory)
-                                for item in context.iter_items()
-                            ),
-                        )
-                        exact_authority[cache_key] = granted
-            if granted is None or granted.uid != binding.uid:
-                raise ProfileError("Grant authority Context identity changed.")
-            identity = (authority.uid, granted.uid)
-            if identity in seen_contexts:
-                continue
-            # Public aliases describe views, not additional knowledge. Count
-            # each stable authority Context once even when two grants expose it.
-            seen_contexts.add(identity)
-            granted_memory_count += granted.direct_memory_count
-
-    return replace(
-        inspection,
-        granted_context_count=len(seen_contexts),
-        granted_memory_count=granted_memory_count,
-    )
-
-
-def _ensure_control_dirs() -> None:
-    control = profile_control_dir()
-    stores = profile_stores_dir()
-    for path, label in ((control, "Profile control"), (stores, "Profile store")):
-        if path.is_symlink():
-            raise ProfileError(f"{label} directory cannot be a symbolic link.")
-        if path.exists() and not path.is_dir():
-            raise ProfileError(f"{label} storage is invalid.")
-        try:
-            ensure_private_directory(path, parents=True)
-        except ValueError as error:
-            raise ProfileError(str(error)) from error
-
-
-@contextmanager
-def _registry_lock() -> Iterator[None]:
-    _ensure_control_dirs()
-    path = profile_registry_lock_file()
-    if path.is_symlink():
-        raise ProfileError("Profile registry lock cannot be a symbolic link.")
-    flags = os.O_RDWR | os.O_CREAT
-    if hasattr(os, "O_NOFOLLOW"):
-        flags |= os.O_NOFOLLOW
-    descriptor = os.open(path, flags, 0o600)
-    try:
-        with os.fdopen(descriptor, "a+", encoding="utf-8") as lock_file:
-            fcntl.flock(lock_file.fileno(), fcntl.LOCK_EX)
-            try:
-                yield
-            finally:
-                fcntl.flock(lock_file.fileno(), fcntl.LOCK_UN)
-    except Exception:
-        try:
-            os.close(descriptor)
-        except OSError:
-            pass
-        raise
-
-
-@contextmanager
-def authority_grant_snapshot_lock() -> Iterator[ProfileRegistry]:
-    """Freeze Profile selection and grant revisions for one authorized publish."""
-
-    with _registry_lock():
-        yield load_profile_registry()
-
-
-def _write_registry(registry: ProfileRegistry) -> None:
-    path = profile_registry_file()
-    ensure_private_directory(path.parent, parents=True)
-    temporary = path.parent / f".{path.name}.write-{uuid.uuid4().hex}"
-    try:
-        descriptor = open_private_exclusive(temporary)
-        with os.fdopen(descriptor, "w", encoding="utf-8") as file:
-            json.dump(registry.to_dict(), file, ensure_ascii=False, indent=2)
-            file.write("\n")
-            file.flush()
-            os.fsync(file.fileno())
-        os.replace(temporary, path)
-        directory_fd = os.open(path.parent, os.O_RDONLY)
-        try:
-            os.fsync(directory_fd)
-        finally:
-            os.close(directory_fd)
-    finally:
-        if temporary.exists() and not temporary.is_symlink():
-            temporary.unlink()
-
-
-def _fsync_directory(path: Path) -> None:
-    flags = os.O_RDONLY
-    if hasattr(os, "O_DIRECTORY"):
-        flags |= os.O_DIRECTORY
-    if hasattr(os, "O_NOFOLLOW"):
-        flags |= os.O_NOFOLLOW
-    descriptor = os.open(path, flags)
-    try:
-        os.fsync(descriptor)
-    finally:
-        os.close(descriptor)
-
-
 def _legacy_study_archives_dir() -> Path:
     return profile_control_dir() / "archives" / "studies"
 
@@ -1191,102 +737,6 @@ def _prepare_legacy_study_archive(
     return _publish_legacy_study_archive(destination, record)
 
 
-def _read_granted_public_names(
-    registry: ProfileRegistry,
-    profile_uid: str,
-) -> frozenset[str]:
-    """Return public names whose effective frozen grant includes READ."""
-
-    result: set[str] = set()
-    grants = tuple(
-        grant for grant in registry.grants if grant.grantee_profile_uid == profile_uid
-    )
-    for grant in grants:
-        for binding in grant.contexts:
-            public_name = grant.public_name + binding.name[len(grant.resource_name) :]
-            candidates = tuple(
-                candidate
-                for candidate in grants
-                if (
-                    candidate.attachment_context_uid == grant.attachment_context_uid
-                    and (
-                        public_name == candidate.public_name
-                        or public_name.startswith(candidate.public_name + "/")
-                    )
-                )
-            )
-            effective = max(
-                candidates,
-                key=lambda candidate: len(candidate.public_name.split("/")),
-            )
-            if "READ" in effective.permissions:
-                result.add(public_name)
-    return frozenset(result)
-
-
-def list_profiles() -> tuple[ProfileRegistry, tuple[StoreInspection, ...]]:
-    registry = load_profile_registry()
-    visible = registry.visible_profiles
-    base = tuple(
-        inspect_store(
-            profile_store_dir(item),
-            allowed_virtual_currents=_read_granted_public_names(
-                registry,
-                item.uid,
-            ),
-        )
-        for item in visible
-    )
-    cache = {
-        profile.uid: inspection
-        for profile, inspection in zip(visible, base, strict=True)
-    }
-    return registry, tuple(
-        _inspection_with_grants(
-            registry,
-            profile,
-            inspection,
-            cache=cache,
-        )
-        for profile, inspection in zip(visible, base, strict=True)
-    )
-
-
-def use_profile(name: str) -> tuple[ProfileRegistry, StoreInspection, bool]:
-    canonical = validate_profile_name(name)
-    with _registry_lock():
-        registry = load_profile_registry()
-        target = registry.by_name(canonical)
-        if target is None:
-            raise ProfileError(f"Profile {canonical!r} does not exist.")
-        if registry.is_removed(target):
-            raise ProfileError(
-                f"Profile {canonical!r} was removed from direct selection."
-            )
-        inspection = _inspection_with_grants(
-            registry,
-            target,
-            inspect_store(
-                profile_store_dir(target),
-                allowed_virtual_currents=_read_granted_public_names(
-                    registry,
-                    target.uid,
-                ),
-            ),
-        )
-        if target.uid == registry.active_uid:
-            return registry, inspection, False
-        updated = ProfileRegistry(
-            generation=max(1, registry.generation + 1),
-            active_uid=target.uid,
-            profiles=registry.profiles,
-            grants=registry.grants,
-            removed_profile_uids=registry.removed_profile_uids,
-        )
-        _write_registry(updated)
-        return updated, inspection, True
-
-
 def migrate_visible_study_provider_policy(
     *,
     target_version: str,
@@ -1383,295 +833,6 @@ def migrate_visible_study_provider_policy(
             generation=updated.generation,
             migrated_study_count=migrated_studies,
             migrated_profile_count=len(migrated_uids),
-        )
-
-
-def _write_empty_profile_store(destination: Path) -> StoreInspection:
-    """Stage the smallest valid store without resolving the active Profile.
-
-    Profile creation is a control-plane operation. Building the new root
-    directly keeps the process-local active store frozen while still using the
-    same private permissions and durable JSON boundary as ordinary stores.
-    """
-
-    if destination.exists() or destination.is_symlink():
-        raise ProfileError(f"Profile staging path is already occupied: {destination}")
-    ensure_private_directory(destination)
-    contexts = destination / "contexts"
-    ensure_private_directory(contexts)
-    state = destination / "state.json"
-    descriptor = open_private_exclusive(state)
-    try:
-        with os.fdopen(descriptor, "w", encoding="utf-8") as file:
-            json.dump({"current": None}, file, ensure_ascii=False, indent=2)
-            file.write("\n")
-            file.flush()
-            os.fsync(file.fileno())
-    except BaseException:
-        if state.exists() and not state.is_symlink():
-            state.unlink()
-        raise
-    _fsync_directory(contexts)
-    _fsync_directory(destination)
-    return inspect_store(destination)
-
-
-def create_profile(
-    name: str,
-    *,
-    expected_generation: int | None = None,
-) -> ProfileCreationResult:
-    """Atomically publish one empty managed Profile and keep selection fixed."""
-
-    try:
-        canonical = validate_profile_name(name)
-    except (ProfileConfigError, ValueError) as error:
-        raise ProfileError("New Profile name is invalid.") from error
-    if canonical.casefold() == AUTHORING_PROFILE_NAME.casefold():
-        raise ProfileError("The fixed authoring Profile name is reserved.")
-    with _registry_lock():
-        registry = load_profile_registry()
-        if (
-            expected_generation is not None
-            and registry.generation != expected_generation
-        ):
-            raise ProfileError(
-                "Profile registry changed after create review; review the current "
-                "Profile list and try again."
-            )
-        collision = next(
-            (
-                profile
-                for profile in registry.profiles
-                if profile.name.casefold() == canonical.casefold()
-            ),
-            None,
-        )
-        if collision is not None:
-            raise ProfileError(f"Profile {collision.name!r} already exists.")
-        legacy_study = next(
-            (
-                group
-                for group in study_profile_groups(registry.profiles)
-                if group.name.casefold() == canonical.casefold()
-            ),
-            None,
-        )
-        if legacy_study is not None:
-            raise ProfileError(
-                f"Profile name {canonical!r} conflicts with existing legacy "
-                f"Study {legacy_study.name!r}."
-            )
-
-        profile = ProfileEntry(
-            uid=str(uuid.uuid4()),
-            name=canonical,
-            kind="MANAGED",
-            source={
-                "kind": "EMPTY_PROFILE",
-                "created_at": datetime.now(timezone.utc).isoformat(),
-            },
-        )
-        staging = profile_stores_dir() / f".{profile.uid}.staging-{uuid.uuid4().hex}"
-        destination = profile_store_dir(profile)
-        published = False
-        try:
-            inspection = _write_empty_profile_store(staging)
-            if destination.exists() or destination.is_symlink():
-                raise ProfileError("Managed Profile destination is occupied.")
-            os.replace(staging, destination)
-            published = True
-            try:
-                _fsync_directory(destination.parent)
-            except Exception:
-                os.replace(destination, staging)
-                published = False
-                _fsync_directory(destination.parent)
-                raise
-            updated = replace(
-                registry,
-                generation=max(1, registry.generation + 1),
-                profiles=(*registry.profiles, profile),
-            )
-            try:
-                _write_registry(updated)
-            except Exception as error:
-                try:
-                    visible = load_profile_registry()
-                except (OSError, ProfileConfigError, ValueError) as read_error:
-                    raise ProfileError(
-                        "Profile creation registry state could not be confirmed; "
-                        "inspect it with 'mem profile list'."
-                    ) from read_error
-                if visible == updated:
-                    raise ProfileError(
-                        f"Profile {canonical!r} was created, but registry "
-                        "durability could not be confirmed; it remains registered."
-                    ) from error
-                if visible != registry:
-                    raise ProfileError(
-                        "Profile creation registry changed unexpectedly; inspect "
-                        "it with 'mem profile list'."
-                    ) from error
-                os.replace(destination, staging)
-                published = False
-                _fsync_directory(destination.parent)
-                raise
-            return ProfileCreationResult(
-                profile=profile,
-                inspection=replace(inspection, root=destination),
-                active_profile_name=updated.active.name,
-            )
-        finally:
-            if not published and staging.exists() and not staging.is_symlink():
-                shutil.rmtree(staging)
-
-
-def rename_profile(
-    new_name: str,
-    *,
-    old_name: str | None = None,
-    expected_uid: str | None = None,
-    expected_generation: int | None = None,
-) -> ProfileRenameResult:
-    """Rename one ordinary managed Profile without changing its stable identity."""
-
-    try:
-        canonical_new = validate_profile_name(new_name)
-        canonical_old = (
-            validate_profile_name(old_name) if old_name is not None else None
-        )
-    except (ProfileConfigError, ValueError) as error:
-        raise ProfileError("Profile rename name is invalid.") from error
-
-    with _registry_lock():
-        registry = load_profile_registry()
-        if (
-            expected_generation is not None
-            and registry.generation != expected_generation
-        ):
-            raise ProfileError(
-                "Profile registry changed after rename selection; review the "
-                "current Profile list and try again."
-            )
-        target = (
-            registry.active
-            if canonical_old is None
-            else registry.by_name(canonical_old)
-        )
-        if target is None:
-            raise ProfileError(f"Profile {canonical_old!r} does not exist.")
-        if expected_uid is not None and target.uid != expected_uid:
-            raise ProfileError(
-                f"Profile {target.name!r} identity changed after rename "
-                "selection; nothing was renamed."
-            )
-        if registry.is_removed(target):
-            raise ProfileError(
-                f"Profile {target.name!r} cannot be renamed while removed."
-            )
-        was_active = target.uid == registry.active_uid
-
-        # An exact no-op must not become a hidden store validation or registry
-        # write, including for fixed anchors that cannot actually be renamed.
-        if target.name == canonical_new:
-            return ProfileRenameResult(
-                previous_name=target.name,
-                profile=target,
-                active_profile_name=registry.active.name,
-                was_active=was_active,
-                changed=False,
-            )
-
-        groups = study_profile_groups(registry.profiles)
-        membership = next(
-            (
-                group
-                for group in groups
-                if any(
-                    profile.uid == target.uid
-                    for profile in (*group.profiles, *group.support_profiles)
-                )
-            ),
-            None,
-        )
-        if target.kind == "AUTHORING":
-            raise ProfileError("The fixed authoring Profile cannot be renamed.")
-        if membership is not None:
-            raise ProfileError(
-                f"Profile {target.name!r} is a member of legacy Study "
-                f"{membership.name!r} and cannot be renamed individually."
-            )
-        if canonical_new.casefold() == AUTHORING_PROFILE_NAME.casefold():
-            raise ProfileError("The fixed authoring Profile name is reserved.")
-        collision = next(
-            (
-                profile
-                for profile in registry.profiles
-                if profile.uid != target.uid
-                and profile.name.casefold() == canonical_new.casefold()
-            ),
-            None,
-        )
-        if collision is not None:
-            raise ProfileError(f"Profile {collision.name!r} already exists.")
-        group_collision = next(
-            (
-                group
-                for group in groups
-                if group.name.casefold() == canonical_new.casefold()
-            ),
-            None,
-        )
-        if group_collision is not None:
-            raise ProfileError(
-                f"Profile name {canonical_new!r} conflicts with existing legacy "
-                f"Study {group_collision.name!r}."
-            )
-
-        # Rename is a control-plane metadata mutation, but validate the live
-        # target before publishing a new locator for an unsafe or missing root.
-        inspect_store(profile_store_dir(target))
-        renamed = replace(target, name=canonical_new)
-        updated = ProfileRegistry(
-            generation=max(1, registry.generation + 1),
-            active_uid=registry.active_uid,
-            profiles=tuple(
-                renamed if profile.uid == target.uid else profile
-                for profile in registry.profiles
-            ),
-            grants=registry.grants,
-            removed_profile_uids=registry.removed_profile_uids,
-        )
-        try:
-            _write_registry(updated)
-        except Exception as error:
-            try:
-                visible = load_profile_registry()
-            except (OSError, ProfileConfigError, ValueError) as read_error:
-                raise ProfileError(
-                    "Profile rename registry state could not be confirmed; "
-                    "inspect it with 'mem profile list'."
-                ) from read_error
-            if visible == updated:
-                raise ProfileError(
-                    f"Profile {target.name!r} was renamed to {renamed.name!r}, "
-                    "but registry durability could not be confirmed; it remains "
-                    "renamed."
-                ) from error
-            if visible != registry:
-                raise ProfileError(
-                    "Profile rename registry changed unexpectedly; inspect it "
-                    "with 'mem profile list'."
-                ) from error
-            raise
-
-        return ProfileRenameResult(
-            previous_name=target.name,
-            profile=renamed,
-            active_profile_name=updated.active.name,
-            was_active=was_active,
-            changed=True,
         )
 
 
@@ -1873,241 +1034,6 @@ def rename_study(
             active_profile_name=updated.active.name,
             changed=True,
             renamed_profile_count=(len(members) if legacy_group is not None else 0),
-        )
-
-
-def _profile_study_target(
-    registry: ProfileRegistry,
-    profile: ProfileEntry,
-) -> tuple[str, str, tuple[ProfileEntry, ...]] | None:
-    """Return the complete Study containing a Profile, when one exists."""
-
-    for group in study_profile_groups(registry.profiles):
-        members = (*group.profiles, *group.support_profiles)
-        if any(member.uid == profile.uid for member in members):
-            return group.uid, group.name, members
-    for pair in study_run_profile_pairs(registry.profiles):
-        members = (pair.participant, pair.authority)
-        if any(member.uid == profile.uid for member in members):
-            return pair.uid, pair.name, members
-    return None
-
-
-def _prepare_profile_deletion_batch(
-    profiles: tuple[ProfileEntry, ...],
-) -> Path:
-    """Move exact managed stores aside before publishing their tombstones.
-
-    The move and registry replacement are separate filesystem operations. A
-    private same-filesystem batch makes the pre-publication half reversible:
-    if the registry write fails, every canonical UID path can be restored
-    before the registry lock is released. Once the registry is published, the
-    batch is recursively destroyed and no mem recovery route remains.
-    """
-
-    stores = profile_stores_dir()
-    batch = stores / f".permanent-profile-removal-{uuid.uuid4().hex}"
-    batch.mkdir(mode=0o700)
-    moved: list[ProfileEntry] = []
-    try:
-        for profile in profiles:
-            source = profile_store_dir(profile)
-            if (
-                profile.kind != "MANAGED"
-                or source.parent != stores
-                or source.name != profile.uid
-                or source.is_symlink()
-                or not source.is_dir()
-            ):
-                raise ProfileError(
-                    f"Profile {profile.name!r} store cannot be permanently deleted."
-                )
-            os.replace(source, batch / profile.uid)
-            moved.append(profile)
-        _fsync_directory(batch)
-        _fsync_directory(stores)
-        return batch
-    except Exception as error:
-        rollback_error: Exception | None = None
-        for profile in reversed(moved):
-            staged = batch / profile.uid
-            destination = profile_store_dir(profile)
-            try:
-                if staged.exists() and not destination.exists():
-                    os.replace(staged, destination)
-            except Exception as candidate_error:  # pragma: no cover - fatal FS fault
-                rollback_error = candidate_error
-        try:
-            if batch.exists() and not batch.is_symlink():
-                batch.rmdir()
-            _fsync_directory(stores)
-        except Exception as candidate_error:  # pragma: no cover - fatal FS fault
-            rollback_error = rollback_error or candidate_error
-        if rollback_error is not None:
-            raise ProfileError(
-                "Profile deletion preparation rollback failed."
-            ) from rollback_error
-        if isinstance(error, ProfileError):
-            raise
-        raise ProfileError("Profile deletion could not be prepared.") from error
-
-
-def _rollback_profile_deletion_batch(
-    batch: Path,
-    profiles: tuple[ProfileEntry, ...],
-) -> None:
-    """Restore a prepared batch after a registry write did not publish."""
-
-    stores = profile_stores_dir()
-    try:
-        for profile in reversed(profiles):
-            staged = batch / profile.uid
-            destination = profile_store_dir(profile)
-            if staged.exists():
-                if destination.exists() or destination.is_symlink():
-                    raise ProfileError(
-                        f"Profile {profile.name!r} rollback destination is occupied."
-                    )
-                os.replace(staged, destination)
-        batch.rmdir()
-        _fsync_directory(stores)
-    except Exception as error:
-        raise ProfileError("Profile deletion rollback failed.") from error
-
-
-def _destroy_profile_deletion_batch(batch: Path) -> None:
-    """Permanently erase a registry-detached batch, including checkpoints."""
-
-    stores = profile_stores_dir()
-    try:
-        if batch.is_symlink() or not batch.is_dir():
-            raise ProfileError("Profile deletion batch is missing or unsafe.")
-        shutil.rmtree(batch)
-        _fsync_directory(stores)
-    except Exception as error:
-        raise ProfileError(
-            "Profile identities were removed, but permanent store cleanup "
-            "did not finish. No mem recovery route is available."
-        ) from error
-
-
-def _publish_permanent_removal(
-    previous: ProfileRegistry,
-    updated: ProfileRegistry,
-    *,
-    batch: Path,
-    profiles: tuple[ProfileEntry, ...],
-    label: str,
-) -> None:
-    """Publish tombstones, rolling back only before durable registry change."""
-
-    try:
-        _write_registry(updated)
-    except Exception as error:
-        try:
-            visible = load_profile_registry()
-        except (OSError, ProfileConfigError, ValueError) as read_error:
-            raise ProfileError(
-                f"{label} deletion registry state could not be confirmed; "
-                f"prepared data remains at {batch}."
-            ) from read_error
-        if visible == previous:
-            _rollback_profile_deletion_batch(batch, profiles)
-            raise ProfileError(f"{label} was not deleted.") from error
-        if visible == updated:
-            _destroy_profile_deletion_batch(batch)
-            raise ProfileError(
-                f"{label} was permanently deleted, but registry durability "
-                "could not be confirmed; it remains deleted."
-            ) from error
-        raise ProfileError(
-            f"{label} deletion changed the registry unexpectedly; prepared "
-            f"data remains at {batch}."
-        ) from error
-    _destroy_profile_deletion_batch(batch)
-
-
-def remove_profile(
-    name: str,
-    *,
-    expected_uid: str | None = None,
-    expected_generation: int | None = None,
-) -> ProfileRemovalResult:
-    """Permanently delete one Profile store, including every checkpoint."""
-
-    canonical = validate_profile_name(name)
-    with _registry_lock():
-        registry = load_profile_registry()
-        if (
-            expected_generation is not None
-            and registry.generation != expected_generation
-        ):
-            raise ProfileError("Profile registry changed after removal review.")
-        target = registry.by_name(canonical)
-        if target is None:
-            raise ProfileError(f"Profile {canonical!r} does not exist.")
-        if expected_uid is not None and target.uid != expected_uid:
-            raise ProfileError("Profile identity changed after removal review.")
-        if target.kind == "AUTHORING":
-            raise ProfileError("The fixed authoring Profile cannot be removed.")
-        if target.uid == registry.active_uid:
-            raise ProfileError(
-                f"Profile {target.name!r} is active; select another Profile "
-                "before removing it."
-            )
-        store = profile_store_dir(target)
-        if (
-            registry.is_removed(target)
-            and not store.exists()
-            and not store.is_symlink()
-        ):
-            raise ProfileError(f"Profile {target.name!r} is already removed.")
-
-        # Validate every byte tree before it is moved into the private deletion
-        # batch. This prevents a recursive delete from following an unsafe link
-        # or accepting an already-corrupt Profile as the reviewed target.
-        inspect_store(
-            store,
-            allowed_virtual_currents=_read_granted_public_names(
-                registry,
-                target.uid,
-            ),
-        )
-        study = _profile_study_target(registry, target)
-        removed = frozenset((*registry.removed_profile_uids, target.uid))
-        ordered_removed = tuple(
-            profile.uid for profile in registry.profiles if profile.uid in removed
-        )
-        retained_grants = tuple(
-            grant
-            for grant in registry.grants
-            if target.uid
-            not in {grant.authority_profile_uid, grant.grantee_profile_uid}
-        )
-        updated = ProfileRegistry(
-            generation=max(1, registry.generation + 1),
-            active_uid=registry.active_uid,
-            profiles=registry.profiles,
-            grants=retained_grants,
-            removed_profile_uids=ordered_removed,
-        )
-        batch = _prepare_profile_deletion_batch((target,))
-        _publish_permanent_removal(
-            registry,
-            updated,
-            batch=batch,
-            profiles=(target,),
-            label=f"Profile {target.name!r}",
-        )
-        members = study[2] if study is not None else ()
-        return ProfileRemovalResult(
-            profile=target,
-            study_name=study[1] if study is not None else None,
-            active_profile_name=registry.active.name,
-            study_profile_count=len(members),
-            study_removed_count=sum(member.uid in removed for member in members),
-            removed_grant_count=len(registry.grants) - len(retained_grants),
-            deleted_store=store,
         )
 
 
@@ -2314,422 +1240,6 @@ def archive_legacy_study(name: str) -> LegacyStudyArchiveResult:
         )
 
 
-def _grant_selector(
-    registry: ProfileRegistry,
-    selector: str,
-) -> AuthorityGrant:
-    matches = [grant for grant in registry.grants if grant.uid.startswith(selector)]
-    if not matches:
-        raise ProfileError(f"Grant {selector!r} does not exist.")
-    if len(matches) > 1:
-        raise ProfileError(
-            f"Grant selector {selector!r} is ambiguous: "
-            + ", ".join(grant.uid[:8] for grant in matches)
-        )
-    return matches[0]
-
-
-def _grant_scope(
-    contexts: dict[str, Context],
-    resource_name: str,
-    *,
-    recursive: bool,
-) -> tuple[GrantContextBinding, ...]:
-    root = contexts.get(resource_name)
-    if root is None:
-        raise ProfileError(f"Authority Context {resource_name!r} does not exist.")
-    scope = ContextScope.create(
-        (resource_name,),
-        include_descendants=recursive,
-    )
-    names = expand_lexical_context_names(scope, sorted(contexts))
-    return tuple(
-        GrantContextBinding(uid=contexts[name].uid, name=name) for name in names
-    )
-
-
-def _assert_grantee_attachment(
-    grantee: ProfileEntry,
-    attachment_name: str,
-) -> Context:
-    contexts, _ = _context_records(profile_store_dir(grantee))
-    attachment = contexts.get(attachment_name)
-    if attachment is None:
-        raise ProfileError(
-            f"Grantee Context {attachment_name!r} does not exist in "
-            f"Profile {grantee.name!r}."
-        )
-    return attachment
-
-
-def _assert_public_view_available(
-    registry: ProfileRegistry,
-    *,
-    grantee: ProfileEntry,
-    attachment: Context,
-    public_name: str,
-    replacing_uid: str | None = None,
-) -> None:
-    grantee_contexts, _ = _context_records(profile_store_dir(grantee))
-    public_folded = public_name.casefold()
-    for name in grantee_contexts:
-        name_folded = name.casefold()
-        if name_folded == public_folded or name_folded.startswith(public_folded + "/"):
-            raise ProfileError(
-                f"Granted view {public_name!r} overlaps local Context {name!r}."
-            )
-        # A lexical local ancestor is safe and lets a borrowed view appear
-        # below its task namespace. The granted leaf and its descendants must
-        # still remain absent locally or local resolution would bypass grants.
-    for grant in registry.grants:
-        if grant.uid == replacing_uid:
-            continue
-        if (
-            grant.grantee_profile_uid == grantee.uid
-            and grant.attachment_context_uid == attachment.uid
-            and grant.public_name.casefold() == public_folded
-        ):
-            raise ProfileError(
-                f"Granted view {public_name!r} already exists on {attachment.name!r}."
-            )
-
-
-def create_authority_grant(
-    *,
-    authority_name: str,
-    grantee_name: str,
-    resource_name: str,
-    attachment_name: str,
-    permissions: object,
-    public_name: str | None = None,
-    recursive: bool = False,
-    grant_uid: str | None = None,
-) -> tuple[ProfileRegistry, AuthorityGrant]:
-    """Create one exact cross-Profile Context view under the registry lock."""
-
-    canonical_permissions = canonical_grant_permissions(permissions)
-    # Existing legacy Grants remain readable, but a new Grant must not publish
-    # or attach another shell-dependent Context locator.
-    validate_portable_context_name(resource_name)
-    validate_portable_context_name(attachment_name)
-    with _registry_lock():
-        registry = load_profile_registry()
-        authority = registry.by_name(authority_name)
-        grantee = registry.by_name(grantee_name)
-        if authority is None:
-            raise ProfileError(f"Profile {authority_name!r} does not exist.")
-        if grantee is None:
-            raise ProfileError(f"Profile {grantee_name!r} does not exist.")
-        if registry.is_removed(authority) or registry.is_removed(grantee):
-            raise ProfileError(
-                "A removed Profile cannot be used to create a new Grant."
-            )
-        if authority.uid == grantee.uid:
-            raise ProfileError("A Profile cannot grant a view to itself.")
-        authority_contexts, _ = _context_records(profile_store_dir(authority))
-        scope = _grant_scope(
-            authority_contexts,
-            resource_name,
-            recursive=recursive,
-        )
-        for binding in scope:
-            validate_portable_context_name(binding.name)
-        attachment = _assert_grantee_attachment(grantee, attachment_name)
-        public = public_name or resource_name
-        public = validate_portable_context_name(public)
-        _assert_public_view_available(
-            registry,
-            grantee=grantee,
-            attachment=attachment,
-            public_name=public,
-        )
-        uid = grant_uid or str(uuid.uuid4())
-        try:
-            uid = str(uuid.UUID(uid))
-        except (AttributeError, TypeError, ValueError) as error:
-            raise ProfileError("Grant uid must be a canonical UUID.") from error
-        if grant_uid is not None and uid != grant_uid:
-            raise ProfileError("Grant uid must be a canonical UUID.")
-        if any(grant.uid == uid for grant in registry.grants):
-            raise ProfileError(f"Grant {uid!r} already exists.")
-        root = scope[0]
-        grant = AuthorityGrant(
-            uid=uid,
-            revision=1,
-            authority_profile_uid=authority.uid,
-            grantee_profile_uid=grantee.uid,
-            attachment_context_uid=attachment.uid,
-            attachment_context_name=attachment.name,
-            resource_kind=GRANT_RESOURCE_CONTEXT_TREE,
-            resource_uid=root.uid,
-            resource_name=root.name,
-            public_name=public,
-            permissions=canonical_permissions,
-            contexts=scope,
-        )
-        updated = ProfileRegistry(
-            generation=max(1, registry.generation + 1),
-            active_uid=registry.active_uid,
-            profiles=registry.profiles,
-            grants=(*registry.grants, grant),
-            removed_profile_uids=registry.removed_profile_uids,
-        )
-        _write_registry(updated)
-        return updated, grant
-
-
-def update_authority_grant(
-    selector: str,
-    *,
-    permissions: object,
-    recursive: bool | None = None,
-) -> tuple[ProfileRegistry, AuthorityGrant]:
-    """Replace one grant's permissions and optionally refresh its exact scope."""
-
-    canonical_permissions = canonical_grant_permissions(permissions)
-    with _registry_lock():
-        registry = load_profile_registry()
-        existing = _grant_selector(registry, selector)
-        authority = next(
-            profile
-            for profile in registry.profiles
-            if profile.uid == existing.authority_profile_uid
-        )
-        grantee = next(
-            profile
-            for profile in registry.profiles
-            if profile.uid == existing.grantee_profile_uid
-        )
-        attachment = _assert_grantee_attachment(
-            grantee,
-            existing.attachment_context_name,
-        )
-        if attachment.uid != existing.attachment_context_uid:
-            raise ProfileError("Grant attachment Context identity changed.")
-        authority_contexts, _ = _context_records(profile_store_dir(authority))
-        if recursive is None:
-            scope = existing.contexts
-            for binding in scope:
-                current = authority_contexts.get(binding.name)
-                if current is None or current.uid != binding.uid:
-                    raise ProfileError("Grant authority Context scope changed.")
-        else:
-            scope = _grant_scope(
-                authority_contexts,
-                existing.resource_name,
-                recursive=recursive,
-            )
-            for binding in scope:
-                validate_portable_context_name(binding.name)
-        replacement = AuthorityGrant(
-            uid=existing.uid,
-            revision=existing.revision + 1,
-            authority_profile_uid=existing.authority_profile_uid,
-            grantee_profile_uid=existing.grantee_profile_uid,
-            attachment_context_uid=existing.attachment_context_uid,
-            attachment_context_name=existing.attachment_context_name,
-            resource_kind=existing.resource_kind,
-            resource_uid=scope[0].uid,
-            resource_name=scope[0].name,
-            public_name=existing.public_name,
-            permissions=canonical_permissions,
-            contexts=scope,
-        )
-        updated = ProfileRegistry(
-            generation=max(1, registry.generation + 1),
-            active_uid=registry.active_uid,
-            profiles=registry.profiles,
-            grants=tuple(
-                replacement if grant.uid == existing.uid else grant
-                for grant in registry.grants
-            ),
-            removed_profile_uids=registry.removed_profile_uids,
-        )
-        _write_registry(updated)
-        return updated, replacement
-
-
-def delete_authority_grant(
-    selector: str,
-) -> tuple[ProfileRegistry, AuthorityGrant]:
-    """Revoke one exact grant without touching either Profile's data."""
-
-    with _registry_lock():
-        registry = load_profile_registry()
-        removed = _grant_selector(registry, selector)
-        updated = ProfileRegistry(
-            generation=max(1, registry.generation + 1),
-            active_uid=registry.active_uid,
-            profiles=registry.profiles,
-            grants=tuple(
-                grant for grant in registry.grants if grant.uid != removed.uid
-            ),
-            removed_profile_uids=registry.removed_profile_uids,
-        )
-        _write_registry(updated)
-        return updated, removed
-
-
-def list_authority_grants() -> tuple[ProfileRegistry, tuple[AuthorityGrant, ...]]:
-    registry = load_profile_registry()
-    return registry, registry.grants
-
-
-def grants_for_attachment(
-    *,
-    attachment_name: str,
-    registry: ProfileRegistry | None = None,
-) -> tuple[AuthorityGrant, ...]:
-    """Return validated grant metadata attached to one active-Profile Context."""
-
-    registry = registry or load_profile_registry()
-    grantee = registry.active
-    attachment = _context_record_at(profile_store_dir(grantee), attachment_name)
-    if attachment is None:
-        return ()
-    return tuple(
-        sorted(
-            (
-                grant
-                for grant in registry.grants
-                if grant.grantee_profile_uid == grantee.uid
-                and grant.attachment_context_uid == attachment.uid
-                and grant.attachment_context_name == attachment.name
-            ),
-            key=lambda grant: grant.public_name,
-        )
-    )
-
-
-def resolve_granted_context_view(
-    requested_name: str,
-    *,
-    attachment_name: str,
-    required_permission: str,
-    registry: ProfileRegistry | None = None,
-) -> GrantedContextView:
-    """Resolve the most-specific grant and fail closed on narrower overrides."""
-
-    registry = registry or load_profile_registry()
-    permission = validate_grant_permission(required_permission)
-    grantee = registry.active
-    attached = grants_for_attachment(
-        attachment_name=attachment_name,
-        registry=registry,
-    )
-    candidates = [
-        grant
-        for grant in attached
-        if requested_name == grant.public_name
-        or requested_name.startswith(grant.public_name + "/")
-    ]
-    if not candidates:
-        raise ProfileError(f"Granted view {requested_name!r} does not exist.")
-    grant = max(candidates, key=lambda item: len(item.public_name.split("/")))
-    suffix = requested_name[len(grant.public_name) :]
-    authority_name = grant.resource_name + suffix
-    bindings = {binding.name: binding.uid for binding in grant.contexts}
-    authority_uid = bindings.get(authority_name)
-    if authority_uid is None:
-        raise ProfileError(f"Context {requested_name!r} is not included in this Grant.")
-    if permission not in grant.permissions:
-        raise ProfileError(
-            f"Grant {grant.uid[:8]} does not allow {permission.lower()} access "
-            f"to {requested_name!r}."
-        )
-    authority = next(
-        profile
-        for profile in registry.profiles
-        if profile.uid == grant.authority_profile_uid
-    )
-    authority_root = profile_store_dir(authority)
-    # Runtime view resolution must not inspect sibling or narrower authority
-    # Contexts merely to validate one frozen binding.  This is especially
-    # important when a readable parent has a query-only nested override.
-    context = _context_record_at(authority_root, authority_name)
-    if context is None or context.uid != authority_uid:
-        raise ProfileError("Granted authority Context identity changed.")
-    return GrantedContextView(
-        grant=grant,
-        authority=authority,
-        grantee=grantee,
-        requested_name=requested_name,
-        authority_context_name=authority_name,
-        authority_root=authority_root,
-    )
-
-
-def resolve_share_endpoint(
-    public_name: str,
-    *,
-    registry: ProfileRegistry | None = None,
-) -> ShareEndpoint:
-    """Resolve an exact SHARE grant without projecting receiver contents.
-
-    SHARE is deliberately an endpoint capability rather than a readable view.
-    The sender can address the public grant name, but learns no receiver data
-    and cannot redirect delivery to an arbitrary Profile or Context path.
-    """
-
-    registry = registry or load_profile_registry()
-    canonical = validate_grant_resource_name(public_name)
-    sender = registry.active
-    candidates = [
-        grant
-        for grant in registry.grants
-        if grant.grantee_profile_uid == sender.uid
-        and grant.public_name == canonical
-        and "SHARE" in grant.permissions
-    ]
-    if not candidates:
-        raise ProfileError(f"Share endpoint {canonical!r} does not exist.")
-    if len(candidates) != 1:
-        raise ProfileError(f"Share endpoint {canonical!r} is ambiguous.")
-    grant = candidates[0]
-
-    attachment = _context_record_at(
-        profile_store_dir(sender),
-        grant.attachment_context_name,
-    )
-    if attachment is None or attachment.uid != grant.attachment_context_uid:
-        raise ProfileError("Share endpoint attachment Context identity changed.")
-
-    authority = next(
-        profile
-        for profile in registry.profiles
-        if profile.uid == grant.authority_profile_uid
-    )
-    receiver_root = profile_store_dir(authority)
-    receiver = _context_record_at(receiver_root, grant.resource_name)
-    if receiver is None or receiver.uid != grant.resource_uid:
-        raise ProfileError("Share endpoint receiver Context identity changed.")
-    if not any(
-        binding.uid == receiver.uid and binding.name == receiver.name
-        for binding in grant.contexts
-    ):
-        raise ProfileError("Share endpoint grant does not contain its receiver root.")
-    return ShareEndpoint(
-        grant=grant,
-        authority=authority,
-        sender=sender,
-        public_name=canonical,
-        receiver_context_name=receiver.name,
-        receiver_root=receiver_root,
-    )
-
-
-def _source_digest(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
-
-
-def _copy_store(source: Path, destination: Path) -> StoreInspection:
-    _assert_plain_tree(source, label="Source MemoryStore")
-    if destination.exists() or destination.is_symlink():
-        raise ProfileError(f"Profile staging path is already occupied: {destination}")
-    shutil.copytree(source, destination, symlinks=True, copy_function=shutil.copy2)
-    return inspect_store(destination)
-
-
 def _baseline_store_files(root: Path) -> tuple[Path, ...]:
     """Return the explicit durable baseline allowlist for one MemoryStore.
 
@@ -2793,61 +1303,6 @@ def _copy_store_baseline(
     if before != after or imported != before:
         raise ProfileError("Source MemoryStore baseline changed during import.")
     return inspect_store(destination)
-
-
-def _source_store(path: Path) -> Path:
-    source = Path(path).expanduser().absolute()
-    if source.name != ".mem" and (source / ".mem").is_dir():
-        source = source / ".mem"
-    return source
-
-
-def import_profile(
-    name: str,
-    source: Path,
-    *,
-    provenance: dict[str, object] | None = None,
-) -> tuple[ProfileEntry, StoreInspection]:
-    canonical = validate_profile_name(name)
-    if canonical == AUTHORING_PROFILE_NAME:
-        raise ProfileError("The fixed authoring profile cannot be imported.")
-    source_root = _source_store(source)
-    inspect_store(source_root)
-    with _registry_lock():
-        registry = load_profile_registry()
-        if registry.by_name(canonical) is not None:
-            raise ProfileError(f"Profile {canonical!r} already exists.")
-        profile = ProfileEntry(
-            uid=str(uuid.uuid4()),
-            name=canonical,
-            kind="MANAGED",
-            source=provenance,
-        )
-        staging = profile_stores_dir() / f".{profile.uid}.staging-{uuid.uuid4().hex}"
-        published = False
-        try:
-            inspection = _copy_store(source_root, staging)
-            destination = profile_store_dir(profile)
-            if destination.exists() or destination.is_symlink():
-                raise ProfileError("Managed profile destination is occupied.")
-            os.replace(staging, destination)
-            published = True
-            updated = replace(
-                registry,
-                generation=max(1, registry.generation + 1),
-                profiles=(*registry.profiles, profile),
-            )
-            try:
-                _write_registry(updated)
-            except Exception:
-                os.replace(destination, staging)
-                published = False
-                raise
-            return profile, replace(inspection, root=destination)
-        finally:
-            candidate = profile_store_dir(profile) if published else staging
-            if not published and candidate.exists() and not candidate.is_symlink():
-                shutil.rmtree(candidate)
 
 
 def _baseline_import_provenance(
@@ -2976,6 +1431,7 @@ def import_baseline_profile(
 
 
 _STUDY_BUNDLE_NAMESPACE = uuid.UUID("50b72d54-cfbe-4f89-8f7f-1e6c785d8552")
+
 _STUDY_AUTHORITY_PROFILE_NAMES = {
     1: "task-1-campus-authority",
     2: "task-2-proposal-authority",

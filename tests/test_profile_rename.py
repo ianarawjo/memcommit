@@ -695,7 +695,11 @@ def test_exact_noop_does_not_validate_the_store_or_write_the_registry(
     def unexpected_write(_registry):
         raise AssertionError("exact no-op must not write the registry")
 
-    monkeypatch.setattr(profiles_module, "_write_registry", unexpected_write)
+    monkeypatch.setattr(
+        profiles_module.lifecycle,
+        "_write_registry",
+        unexpected_write,
+    )
     result = runner.invoke(
         app,
         ["profile", "rename", "unchanged", "unchanged"],
@@ -781,7 +785,11 @@ def test_registry_failure_before_replace_leaves_the_old_name_authoritative(
     def fail_registry_write(_registry):
         raise OSError("simulated registry failure")
 
-    monkeypatch.setattr(profiles_module, "_write_registry", fail_registry_write)
+    monkeypatch.setattr(
+        profiles_module.lifecycle,
+        "_write_registry",
+        fail_registry_write,
+    )
     result = runner.invoke(
         app,
         ["profile", "rename", "before-old", "before-new"],
@@ -801,14 +809,14 @@ def test_registry_failure_after_visible_replace_keeps_the_renamed_identity(
     before = load_profile_registry()
     root = profile_store_dir(profile)
     digest = _tree_digest(root)
-    real_write_registry = profiles_module._write_registry
+    real_write_registry = profiles_module.lifecycle._write_registry
 
     def fail_after_visible_replace(updated):
         real_write_registry(updated)
         raise OSError("simulated directory fsync failure")
 
     monkeypatch.setattr(
-        profiles_module,
+        profiles_module.lifecycle,
         "_write_registry",
         fail_after_visible_replace,
     )
