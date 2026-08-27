@@ -21,7 +21,7 @@ ROOT_BOUNDARIES = {
 }
 def test_package_root_contains_only_real_implementation_boundaries() -> None:
     assert {path.name for path in PACKAGE_ROOT.glob("*.py")} == ROOT_BOUNDARIES
-    assert len(LEGACY_SUBMODULE_ALIASES) == 241
+    assert len(LEGACY_SUBMODULE_ALIASES) == 240
     assert "memcommit.flow_placeholder" not in LEGACY_SUBMODULE_ALIASES
     assert "memcommit.cli" not in LEGACY_SUBMODULE_ALIASES
     assert "memcommit.ops" not in LEGACY_SUBMODULE_ALIASES

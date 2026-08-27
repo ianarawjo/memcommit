@@ -13,14 +13,14 @@
       "role": "root-boundary"
     },
     {
-      "action": "relocate",
-      "canonical_target": "memcommit.architecture.catalog",
-      "canonical_target_path": "memcommit/architecture/catalog.py",
+      "action": "relocate-without-alias",
+      "canonical_target": "scripts.callable_catalog.catalog",
+      "canonical_target_path": "scripts/callable_catalog/catalog.py",
       "inbound_package_importers": 0,
       "lines": 938,
       "module": "memcommit._architecture_catalog",
       "path": "memcommit/_architecture_catalog.py",
-      "reason": "implementation belongs to a reusable named concept",
+      "reason": "implementation belongs to a reusable named concept; the source inventory is repository tooling rather than distributed MemCommit runtime behavior",
       "role": "shared-concept-implementation"
     },
     {

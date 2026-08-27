@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from memcommit.architecture.catalog import (
+from scripts.callable_catalog.catalog import (
     build_catalog,
     render_callable_jsonl,
     render_operation_markdown,

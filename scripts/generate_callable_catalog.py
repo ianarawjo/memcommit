@@ -9,9 +9,9 @@ import sys
 
 
 REPOSITORY = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPOSITORY / "src"))
+sys.path.insert(0, str(REPOSITORY))
 
-from memcommit._architecture_catalog import (  # noqa: E402
+from scripts.callable_catalog.catalog import (  # noqa: E402
     build_catalog,
     render_callable_jsonl,
     render_operation_markdown,

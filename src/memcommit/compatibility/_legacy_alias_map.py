@@ -4,7 +4,6 @@ from __future__ import annotations
 
 
 LEGACY_SUBMODULE_ALIASES = {
-    'memcommit._architecture_catalog': 'memcommit.architecture.catalog',
     'memcommit.add_application': 'memcommit.application.operations.add.application',
     'memcommit.add_runtime': 'memcommit.application.operations.add.runtime',
     'memcommit.ambiguity_pipeline': 'memcommit.semantic.classification.ambiguity',

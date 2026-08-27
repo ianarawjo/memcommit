@@ -19,9 +19,11 @@ or nested callables.
 
 ## Selected contract
 
-[`memcommit.architecture.catalog`](../../src/memcommit/architecture/catalog.py)
+[`scripts.callable_catalog.catalog`](../../scripts/callable_catalog/catalog.py)
 parses every Python source file below `src/memcommit/` with the standard-library
-AST and imports no MemCommit runtime module. The generated JSON Lines catalog
+AST and imports no MemCommit runtime module. It lives beside its generator
+rather than in the distributed `memcommit` package because no application,
+adapter, or public client consumes it. The generated JSON Lines catalog
 records, for every function, async function, class, and lambda:
 
 - stable `module:qualified-name` identity;
@@ -87,6 +89,10 @@ make an otherwise closed current route mixed.
 Run `python scripts/generate_callable_catalog.py` after source changes. Run the
 same command with `--check` in verification; the focused test also rejects any
 checked-in artifact that differs from a fresh scan.
+
+The former `memcommit._architecture_catalog` compatibility name is not
+retained. It existed only to support the repository generator during the flat
+root-module migration and was never a supported runtime or public API.
 
 ## Static-analysis boundary
 

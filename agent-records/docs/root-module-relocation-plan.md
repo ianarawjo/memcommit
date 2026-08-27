@@ -18,7 +18,7 @@ were directly under memcommit at baseline commit 885e62c0.
 | Baseline module | Role | Action | Canonical target | Importers |
 | --- | --- | --- | --- | ---: |
 | memcommit | root-boundary | retain | memcommit | 870 |
-| memcommit._architecture_catalog | shared-concept-implementation | relocate | memcommit.architecture.catalog | 0 |
+| memcommit._architecture_catalog | shared-concept-implementation | relocate-without-alias | scripts.callable_catalog.catalog | 0 |
 | memcommit.add_application | compatibility-facade | centralize-alias | memcommit.application.operations.add.application | 0 |
 | memcommit.add_runtime | compatibility-facade | centralize-alias | memcommit.application.operations.add.runtime | 0 |
 | memcommit.ambiguity_pipeline | shared-concept-implementation | relocate | memcommit.semantic.classification.ambiguity | 1 |

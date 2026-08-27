@@ -48,6 +48,10 @@ RETIRED_ROOT_MODULES = {
 # intentionally no longer supported. Their behavior remains available only
 # through the canonical owner named in the relocation plan.
 REMOVED_LEGACY_ALIASES = {
+    "_architecture_catalog": (
+        "the source inventory is repository tooling rather than distributed "
+        "MemCommit runtime behavior"
+    ),
     "cli": (
         "the console entry point now has one explicit adapter owner and the "
         "former root import is intentionally unsupported"
@@ -162,7 +166,7 @@ OPERATION_TARGETS = {
 
 
 CONCEPT_TARGETS = {
-    "_architecture_catalog": "memcommit.architecture.catalog",
+    "_architecture_catalog": "scripts.callable_catalog.catalog",
     "ambiguity_pipeline": "memcommit.semantic.classification.ambiguity",
     "application_flow": "memcommit.application.flow",
     "application_review_policy": "memcommit.application.review_policy",
