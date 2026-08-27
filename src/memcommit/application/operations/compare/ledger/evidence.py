@@ -13,7 +13,7 @@ from typing import Literal
 import uuid
 
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
-from memcommit.semantic.disclosure import (
+from memcommit.application.semantic.disclosure import (
     SemanticDisclosureError,
     require_semantic_disclosure_authority,
 )

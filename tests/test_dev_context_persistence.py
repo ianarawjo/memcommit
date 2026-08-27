@@ -9,7 +9,7 @@ from typer.testing import CliRunner
 
 import memcommit.config as config_module
 import memcommit.application.ops as ops
-import memcommit.semantic.llm as llm_module
+import memcommit.application.semantic.llm as llm_module
 from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Context, Memory, QueryContextRef
 from memcommit.store import MemoryStore

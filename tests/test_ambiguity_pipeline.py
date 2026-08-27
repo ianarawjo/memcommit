@@ -29,7 +29,8 @@ from memcommit.ambiguity_pipeline import (
 FIXTURE_PATH = (
     Path(__file__).parents[1]
     / "src" / "memcommit"
-    / "eval"
+    / "application"
+    / "evaluation"
     / "fixtures"
     / "ambiguity.json"
 )

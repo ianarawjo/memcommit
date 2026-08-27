@@ -41,7 +41,7 @@ from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.providers.types import SemanticProvider
 from memcommit.providers.subscription import QueryProviderError
-from memcommit.semantic.changes import ProposedChange
+from memcommit.application.semantic.changes import ProposedChange
 from memcommit.persistence.store import MemoryStore
 
 

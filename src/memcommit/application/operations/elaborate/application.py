@@ -22,7 +22,7 @@ from memcommit.application.operations.elaborate.config import (
     DEFAULT_ELABORATE_SEMANTIC_CONFIG,
     ElaborateSemanticConfig,
 )
-from memcommit.semantic.goal_focus import FrozenGoalFocus
+from memcommit.application.semantic.goal_focus import FrozenGoalFocus
 
 
 @dataclass(frozen=True)

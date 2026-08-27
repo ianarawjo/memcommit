@@ -54,7 +54,7 @@ from memcommit.application.operations.dedun.scope import (
 from memcommit.application.reviewing.quality.handoff import (
     QualityFindingSource,
 )
-from memcommit.semantic.redundancy_evidence import (
+from memcommit.application.semantic.redundancy_evidence import (
     redundancy_evidence_json,
 )
 from memcommit.application.reviewing.quality.redundancy_scope import (

@@ -4,7 +4,7 @@
 """
 from __future__ import annotations
 
-from memcommit.semantic.changes import AddChange, EditChange, ProposedChange, RemoveChange
+from memcommit.application.semantic.changes import AddChange, EditChange, ProposedChange, RemoveChange
 
 
 def score_forget(

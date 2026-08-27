@@ -36,13 +36,13 @@ from memcommit.application.semantic_execution import (
     SemanticExecutionPolicy,
     plan_semantic_execution,
 )
-from memcommit.semantic.prompt_policy import (
+from memcommit.application.semantic.prompt_policy import (
     GENERAL_PROMPT_POLICY_ID,
     STUDY_PROMPT_POLICY_ID,
     SemanticPromptPolicy,
     resolve_semantic_prompt_policy,
 )
-from memcommit.semantic.understanding import (
+from memcommit.application.semantic.understanding import (
     UnderstandingError,
     UnderstandingSummary,
     parse_source_linked_understanding,

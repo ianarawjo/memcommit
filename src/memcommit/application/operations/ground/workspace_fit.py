@@ -35,7 +35,7 @@ from memcommit.application.operations.ground.workspace_projection import (
     project_ordinary_memories,
 )
 from memcommit.application.operations.ground.workspace_runtime import load_ground_workspace
-from memcommit.semantic.goal_focus_runtime import freeze_goal_focus_context
+from memcommit.application.semantic.goal_focus_runtime import freeze_goal_focus_context
 from memcommit.persistence.store import MemoryStore
 
 

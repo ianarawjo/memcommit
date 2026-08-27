@@ -22,7 +22,7 @@ from memcommit.application.operations.elaborate.config import (
     DEFAULT_ELABORATE_SEMANTIC_CONFIG,
     ElaborateSemanticConfig,
 )
-from memcommit.semantic.generative_reduction_reference import (
+from memcommit.application.semantic.generative_reduction_reference import (
     distill_elaborate_reference_payload,
     render_distill_elaborate_reference_examples,
 )
@@ -35,7 +35,7 @@ from memcommit.application.semantic_execution import (
     json_budget,
     plan_semantic_execution,
 )
-from memcommit.semantic.prompt_policy import resolve_semantic_prompt_policy
+from memcommit.application.semantic.prompt_policy import resolve_semantic_prompt_policy
 from memcommit.application.operations.fit.judgment import (
     FIT_JUDGMENT_MAX_ITEMS,
     FIT_JUDGMENT_TEXT_LIMIT,
@@ -45,7 +45,7 @@ from memcommit.application.operations.fit.judgment import (
     execute_fit_judgments,
     prepare_fit_judgments,
 )
-from memcommit.semantic.goal_focus import FrozenGoalFocus
+from memcommit.application.semantic.goal_focus import FrozenGoalFocus
 
 
 ELABORATE_OPERATION = "elaborate"

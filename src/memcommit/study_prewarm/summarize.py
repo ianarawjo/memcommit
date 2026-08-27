@@ -18,7 +18,7 @@ from memcommit.application.operations.summarize.model import (
     SUMMARIZE_TEXT_LIMIT,
     SummaryFrame,
 )
-from memcommit.semantic.understanding import (
+from memcommit.application.semantic.understanding import (
     UnderstandingError,
     UnderstandingSummary,
     normalize_understanding_text,

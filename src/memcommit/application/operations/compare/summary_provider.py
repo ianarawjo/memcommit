@@ -25,8 +25,8 @@ from memcommit.application.semantic_execution import (
     json_budget,
     plan_semantic_execution,
 )
-from memcommit.semantic.prompt_policy import resolve_semantic_prompt_policy
-from memcommit.semantic.understanding import (
+from memcommit.application.semantic.prompt_policy import resolve_semantic_prompt_policy
+from memcommit.application.semantic.understanding import (
     UnderstandingError,
     UnderstandingSummary,
     normalize_understanding_text,

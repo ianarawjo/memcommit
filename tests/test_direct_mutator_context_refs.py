@@ -9,7 +9,7 @@ import memcommit.commands.forget.command as forget_command
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Memory
-from memcommit.semantic.changes import RemoveChange
+from memcommit.application.semantic.changes import RemoveChange
 from memcommit.store import MemoryStore
 
 

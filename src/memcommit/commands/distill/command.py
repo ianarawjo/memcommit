@@ -26,7 +26,7 @@ from memcommit.core.context_targeting.tui.picker import (
     ContextMemoryRow,
     context_memory_rows,
 )
-from memcommit.semantic.goal_focus_runtime import freeze_goal_focus_operand
+from memcommit.application.semantic.goal_focus_runtime import freeze_goal_focus_operand
 from memcommit.core.context_targeting.naming import validate_portable_context_name
 from memcommit.application.operations.distill.model import DistillError
 from memcommit.application.operations.distill.application import (

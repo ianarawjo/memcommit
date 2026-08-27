@@ -12,7 +12,7 @@ from memcommit.commands.forget.setup_workbench import (
     ForgetSetupReceipt,
     choose_forget_setup,
 )
-from memcommit.semantic.changes import RemoveChange
+from memcommit.application.semantic.changes import RemoveChange
 from memcommit.store import MemoryStore
 
 

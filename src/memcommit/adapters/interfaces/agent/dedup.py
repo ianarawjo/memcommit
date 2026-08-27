@@ -32,7 +32,7 @@ from memcommit.application.reviewing.quality.handoff import (
     QualityFindingHandoff,
     QualityFindingHandoffError,
 )
-from memcommit.semantic.redundancy_evidence import (
+from memcommit.application.semantic.redundancy_evidence import (
     redundancy_evidence_from_dict,
 )
 

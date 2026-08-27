@@ -12,7 +12,7 @@ from memcommit.commands.shared.command_progress import CommandProgress
 from memcommit.commands.shared.context_operand import ContextOperandSnapshot
 from memcommit.application.operations.elaborate.model import ElaborateError, ElaborateMode
 from memcommit.application.operations.elaborate.application import ElaborateRequest, ElaborateResult
-from memcommit.semantic.goal_focus_runtime import freeze_goal_focus_operand
+from memcommit.application.semantic.goal_focus_runtime import freeze_goal_focus_operand
 from memcommit.application.operations.elaborate.add_runtime import (
     FrozenElaborateSource,
     PreparedElaborateAdd,

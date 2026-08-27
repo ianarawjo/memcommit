@@ -54,7 +54,7 @@ from memcommit.profiles import (
 from memcommit.store import MemoryStore
 from memcommit.application.operations.summarize.application import SummarizeRequest
 from memcommit.application.operations.summarize.runtime import execute_summarize
-from memcommit.semantic.changes import RemoveChange
+from memcommit.application.semantic.changes import RemoveChange
 from memcommit.source_projection.model import SourceAccess
 from memcommit.source_projection.presentation import source_display_text
 

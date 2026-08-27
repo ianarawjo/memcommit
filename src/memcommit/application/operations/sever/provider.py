@@ -12,7 +12,7 @@ from memcommit.application.operations.sever.model import (
     SeverError,
     SeverSession,
 )
-from memcommit.semantic.selective_curation import (
+from memcommit.application.semantic.selective_curation import (
     CriterionFrame,
     CurationBatch,
     CurationItem,

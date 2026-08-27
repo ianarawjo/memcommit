@@ -33,7 +33,7 @@ from memcommit.application.operations.profile.model import ProfileError
 from memcommit.application.reviewing.quality.handoff import (
     QualityFindingHandoffError,
 )
-from memcommit.semantic.redundancy_evidence import (
+from memcommit.application.semantic.redundancy_evidence import (
     redundancy_evidence_from_json,
 )
 from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore

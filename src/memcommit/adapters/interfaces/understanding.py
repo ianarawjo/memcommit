@@ -1,7 +1,7 @@
 """Shared plain-text projection for one understanding-summary unit."""
 
 from memcommit.adapters.interfaces.console.text import display_escape_text
-from memcommit.semantic.understanding import UnderstandingSummary
+from memcommit.application.semantic.understanding import UnderstandingSummary
 
 
 def understanding_lines(

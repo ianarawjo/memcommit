@@ -17,7 +17,7 @@ from memcommit.core.context_targeting.operands import (
 from memcommit.core.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
 )
-from memcommit.semantic.goal_focus import (
+from memcommit.application.semantic.goal_focus import (
     FrozenGoalFocus,
     GoalFocusError,
     GoalFocusItem,

@@ -32,7 +32,14 @@ from memcommit.store import MemoryStore
 
 runner = CliRunner()
 PAYLOAD_MARKER = "QUALITY FIND PAYLOAD:\n"
-FIXTURE_DIR = Path(__file__).parents[1] / "src" / "memcommit" / "eval" / "fixtures"
+FIXTURE_DIR = (
+    Path(__file__).parents[1]
+    / "src"
+    / "memcommit"
+    / "application"
+    / "evaluation"
+    / "fixtures"
+)
 
 
 class PayloadProvider:

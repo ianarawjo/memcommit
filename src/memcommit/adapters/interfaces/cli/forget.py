@@ -16,7 +16,7 @@ from memcommit.adapters.interfaces.console.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )
-from memcommit.semantic.changes import EditChange, ProposedChange, RemoveChange
+from memcommit.application.semantic.changes import EditChange, ProposedChange, RemoveChange
 
 
 _SpanKind = Literal["equal", "remove", "add"]

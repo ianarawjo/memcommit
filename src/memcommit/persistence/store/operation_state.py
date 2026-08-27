@@ -1839,8 +1839,8 @@ class OperationStateStoreMixin:
         )
         from memcommit.application.operations.update.application import prepare_update_application
         from memcommit.core.context_targeting.loading import load_context_scope
-        from memcommit.semantic.goal_focus import GoalFocusError
-        from memcommit.semantic.goal_focus_runtime import revalidate_goal_focus
+        from memcommit.application.semantic.goal_focus import GoalFocusError
+        from memcommit.application.semantic.goal_focus_runtime import revalidate_goal_focus
 
         if not isinstance(session, UpdateSession) or session.status != "staged":
             raise ValueError("Expected one staged UpdateSession.")
@@ -3596,4 +3596,3 @@ class OperationStateStoreMixin:
                 raise ValueError("Atomize grounding history is invalid.")
             sessions.append(session)
         return sessions
-

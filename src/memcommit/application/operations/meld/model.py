@@ -30,7 +30,7 @@ from memcommit.core.context_targeting.memory_focus import (
     MemoryFocusError,
     resolve_memory_focus,
 )
-from memcommit.semantic.disclosure import (
+from memcommit.application.semantic.disclosure import (
     SemanticDisclosureError,
     require_semantic_disclosure_authority,
 )

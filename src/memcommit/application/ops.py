@@ -14,7 +14,7 @@
         # Semantic — forget candidate generation (non-mutating):
         proposals, history = ops.forget(ctx, "elephants", llm_client)
         proposals, history = ops.revise_forget("keep only the edit", llm_client, history, ctx)
-        from memcommit.semantic.changes import apply_changes
+        from memcommit.application.semantic.changes import apply_changes
         apply_changes(ctx, proposals)
 """
 
@@ -41,8 +41,8 @@ if TYPE_CHECKING:
     )
     from memcommit.application.operations.exact_dedup.application import ExactDuplicateReport
     from memcommit.application.operations.search.model import PromptProvider, SearchMatch
-    from memcommit.semantic.llm import LLMClient
-    from memcommit.semantic.changes import ProposedChange
+    from memcommit.application.semantic.llm import LLMClient
+    from memcommit.application.semantic.changes import ProposedChange
     from memcommit.application.operations.translate.runtime import (
         DerivedTranslationApplyResult,
         TranslationApplyResult,
@@ -892,8 +892,8 @@ def _run_integrate_batch(
     llm: "LLMClient",
 ) -> "tuple[list[ProposedChange], list[dict], bool]":
     """Run one LLM call for a single integrate batch. Returns (proposals, history, should_add)."""
-    from memcommit.semantic.changes import parse_proposals
-    from memcommit.semantic.utils import build_messages, extract_json
+    from memcommit.application.semantic.changes import parse_proposals
+    from memcommit.application.semantic.utils import build_messages, extract_json
 
     lines = [f"[{m.uid}] {m.content}" for m in batch]
     memory_block = "\n".join(lines) or "(no memories in this batch)"
@@ -911,7 +911,7 @@ def _run_integrate_batch(
     # Default: if field is missing, assume novel → should add.
     should_add: bool = not bool(data.get("already_captured", False))
     # Integrate never removes — filter defensively in case the model misbehaves.
-    from memcommit.semantic.changes import RemoveChange
+    from memcommit.application.semantic.changes import RemoveChange
 
     proposals = [
         p for p in parse_proposals(data, ctx) if not isinstance(p, RemoveChange)
@@ -1021,7 +1021,7 @@ def integrate(
     Does NOT mutate ctx — call apply_changes(ctx, proposals) then
     store.save(ctx) to commit.
     """
-    from memcommit.semantic.changes import AddChange
+    from memcommit.application.semantic.changes import AddChange
 
     memories = [m for m in ctx.iter_items() if isinstance(m, Memory)]
     batches = _make_integrate_batches(memories, INTEGRATE_BATCH_CHAR_LIMIT)
@@ -1062,8 +1062,8 @@ def revise_integrate(
     Pass the batch_histories returned by integrate() or a prior revise_integrate().
     Returns (revised_proposals, updated_batch_histories).
     """
-    from memcommit.semantic.changes import AddChange, parse_proposals
-    from memcommit.semantic.utils import build_messages, extract_json
+    from memcommit.application.semantic.changes import AddChange, parse_proposals
+    from memcommit.application.semantic.utils import build_messages, extract_json
 
     all_proposals: list[ProposedChange] = []
     new_histories: list[list[dict]] = []
@@ -1074,7 +1074,7 @@ def revise_integrate(
         text = llm.chat(messages)
         updated = messages + [{"role": "assistant", "content": text}]
         data = extract_json(text)
-        from memcommit.semantic.changes import RemoveChange
+        from memcommit.application.semantic.changes import RemoveChange
 
         batch_proposals = [
             p for p in parse_proposals(data, ctx) if not isinstance(p, RemoveChange)

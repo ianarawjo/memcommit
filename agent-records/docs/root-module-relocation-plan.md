@@ -21,7 +21,7 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit._architecture_catalog | shared-concept-implementation | relocate-without-alias | scripts.callable_catalog.catalog | 0 |
 | memcommit.add_application | compatibility-facade | centralize-alias | memcommit.application.operations.add.application | 0 |
 | memcommit.add_runtime | compatibility-facade | centralize-alias | memcommit.application.operations.add.runtime | 0 |
-| memcommit.ambiguity_pipeline | shared-concept-implementation | relocate | memcommit.semantic.classification.ambiguity | 1 |
+| memcommit.ambiguity_pipeline | shared-concept-implementation | relocate | memcommit.application.semantic.classification.ambiguity | 1 |
 | memcommit.application_flow | shared-concept-implementation | relocate | memcommit.application.flow | 2 |
 | memcommit.application_review_policy | shared-concept-implementation | relocate | memcommit.application.review_policy | 7 |
 | memcommit.applied_checkpoint_review | shared-concept-implementation | relocate | memcommit.application.retained_history.applied_review | 2 |
@@ -90,10 +90,10 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.distill | operation-implementation | relocate | memcommit.application.operations.distill.model | 8 |
 | memcommit.distill_application | compatibility-facade | centralize-alias | memcommit.application.operations.distill.application | 0 |
 | memcommit.distill_config | operation-implementation | relocate | memcommit.application.operations.distill.config | 3 |
-| memcommit.distill_elaborate_reference | shared-concept-implementation | relocate | memcommit.semantic.generative_reduction_reference | 2 |
+| memcommit.distill_elaborate_reference | shared-concept-implementation | relocate | memcommit.application.semantic.generative_reduction_reference | 2 |
 | memcommit.distill_goal_fit | operation-implementation | relocate | memcommit.application.operations.distill.goal_fit | 1 |
 | memcommit.distill_runtime | compatibility-facade | centralize-alias | memcommit.application.operations.distill.runtime | 0 |
-| memcommit.duplicate_pipeline | shared-concept-implementation | relocate | memcommit.semantic.classification.duplicates | 1 |
+| memcommit.duplicate_pipeline | shared-concept-implementation | relocate | memcommit.application.semantic.classification.duplicates | 1 |
 | memcommit.edit_application | compatibility-facade | centralize-alias | memcommit.application.operations.edit.application | 0 |
 | memcommit.edit_runtime | compatibility-facade | centralize-alias | memcommit.application.operations.edit.runtime | 0 |
 | memcommit.elaborate | operation-implementation | relocate | memcommit.application.operations.elaborate.model | 11 |
@@ -128,8 +128,8 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.forget_resolution_adapter | compatibility-facade | centralize-alias | memcommit.compatibility.forget_resolution_adapter | 1 |
 | memcommit.forget_review | operation-implementation | relocate | memcommit.application.operations.forget.review | 4 |
 | memcommit.forget_runtime | compatibility-facade | centralize-alias | memcommit.application.operations.forget.runtime | 0 |
-| memcommit.goal_focus | shared-concept-implementation | relocate | memcommit.semantic.goal_focus | 18 |
-| memcommit.goal_focus_runtime | shared-concept-implementation | relocate | memcommit.semantic.goal_focus_runtime | 11 |
+| memcommit.goal_focus | shared-concept-implementation | relocate | memcommit.application.semantic.goal_focus | 18 |
+| memcommit.goal_focus_runtime | shared-concept-implementation | relocate | memcommit.application.semantic.goal_focus_runtime | 11 |
 | memcommit.granted_comparison_store | operation-implementation | relocate | memcommit.application.operations.compare.ledger.granted_store | 8 |
 | memcommit.granted_provenance | shared-concept-implementation | relocate | memcommit.application.retained_history.granted_provenance | 2 |
 | memcommit.granted_query_application | compatibility-facade | centralize-alias | memcommit.application.operations.query.granted_application | 0 |
@@ -183,7 +183,7 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.merge_tree | operation-implementation | relocate | memcommit.application.operations.merge.tree | 1 |
 | memcommit.merge_tree_persistence | operation-implementation | relocate | memcommit.application.operations.merge.tree_persistence | 1 |
 | memcommit.name_suggestions | shared-concept-implementation | relocate | memcommit.core.context_targeting.name_suggestions | 3 |
-| memcommit.operation_gate_pipeline | shared-concept-implementation | relocate | memcommit.semantic.classification.gates | 1 |
+| memcommit.operation_gate_pipeline | shared-concept-implementation | relocate | memcommit.application.semantic.classification.gates | 1 |
 | memcommit.ops | shared-concept-implementation | relocate-without-alias | memcommit.application.ops | 25 |
 | memcommit.ordinary_query_answer | operation-implementation | relocate | memcommit.application.operations.query.answer | 3 |
 | memcommit.profile_config | shared-concept-implementation | relocate | memcommit.application.operations.profile.config | 116 |
@@ -226,12 +226,12 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.review_report_adapters | operation-implementation | relocate | memcommit.application.operations.review.report_adapters | 3 |
 | memcommit.search | operation-implementation | relocate | memcommit.application.operations.search.model | 11 |
 | memcommit.search_artifacts | operation-implementation | relocate | memcommit.application.operations.search.artifacts | 1 |
-| memcommit.selective_curation | shared-concept-implementation | relocate | memcommit.semantic.selective_curation | 5 |
+| memcommit.selective_curation | shared-concept-implementation | relocate | memcommit.application.semantic.selective_curation | 5 |
 | memcommit.semantic_add_runtime | operation-implementation | relocate | memcommit.application.operations.add.semantic_runtime | 8 |
-| memcommit.semantic_disclosure | shared-concept-implementation | relocate | memcommit.semantic.disclosure | 6 |
-| memcommit.semantic_prompt_policy | shared-concept-implementation | relocate | memcommit.semantic.prompt_policy | 10 |
+| memcommit.semantic_disclosure | shared-concept-implementation | relocate | memcommit.application.semantic.disclosure | 6 |
+| memcommit.semantic_prompt_policy | shared-concept-implementation | relocate | memcommit.application.semantic.prompt_policy | 10 |
 | memcommit.semantic_provider | shared-concept-implementation | relocate | memcommit.providers.semantic | 7 |
-| memcommit.semantic_redundancy_evidence | shared-concept-implementation | relocate | memcommit.semantic.redundancy_evidence | 5 |
+| memcommit.semantic_redundancy_evidence | shared-concept-implementation | relocate | memcommit.application.semantic.redundancy_evidence | 5 |
 | memcommit.session_workbench_navigation | shared-concept-implementation | relocate | memcommit.application.reviewing.session_navigation | 11 |
 | memcommit.sever | compatibility-facade | centralize-alias | memcommit.application.operations.sever.model | 0 |
 | memcommit.sever_application | compatibility-facade | centralize-alias | memcommit.application.operations.sever.application | 0 |
@@ -258,7 +258,7 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.translation_view | compatibility-facade | centralize-alias | memcommit.application.operations.translate.view | 0 |
 | memcommit.translation_view_store | compatibility-facade | centralize-alias | memcommit.application.operations.translate.view_store | 0 |
 | memcommit.uid_locator | shared-concept-implementation | relocate | memcommit.core.context_targeting.uid_locator | 6 |
-| memcommit.understanding | shared-concept-implementation | relocate | memcommit.semantic.understanding | 10 |
+| memcommit.understanding | shared-concept-implementation | relocate | memcommit.application.semantic.understanding | 10 |
 | memcommit.update | operation-implementation | relocate | memcommit.application.operations.update.model | 33 |
 | memcommit.update_application | compatibility-facade | centralize-alias | memcommit.application.operations.update.application | 1 |
 | memcommit.update_application_flow | operation-implementation | relocate | memcommit.application.operations.update.application_flow | 1 |

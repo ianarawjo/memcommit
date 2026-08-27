@@ -11,7 +11,7 @@ import json
 import re
 
 from memcommit.context import Context, Memory
-from memcommit.semantic.selective_curation import (
+from memcommit.application.semantic.selective_curation import (
     CriterionFrame,
     CurationAnalysis,
     CurationBatch,
@@ -23,13 +23,13 @@ from memcommit.semantic.selective_curation import (
     decode_curation_response,
     plan_curation_execution,
 )
-from memcommit.semantic.changes import (
+from memcommit.application.semantic.changes import (
     EditChange,
     ProposedChange,
     RemoveChange,
     parse_proposals,
 )
-from memcommit.semantic.utils import build_messages, extract_json
+from memcommit.application.semantic.utils import build_messages, extract_json
 from memcommit.application.semantic_execution import ExecutionMode
 
 

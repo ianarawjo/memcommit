@@ -24,7 +24,7 @@ from memcommit.impact_controller import ImpactController
 from memcommit.provider_types import ProviderIdentity
 from memcommit.resolution_workbench import ResolutionNavigation, ResolutionWorkbenchAction
 from memcommit.selective_curation import CurationAnalysis, CurationDecision
-from memcommit.semantic.changes import EditChange, RemoveChange
+from memcommit.application.semantic.changes import EditChange, RemoveChange
 from memcommit.session_workbench_navigation import SessionWorkbenchNavigation
 
 

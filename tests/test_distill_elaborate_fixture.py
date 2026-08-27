@@ -28,7 +28,8 @@ from memcommit.summarize import collect_summary_frame
 FIXTURE_PATH = (
     Path(__file__).parents[1]
     / "src" / "memcommit"
-    / "eval"
+    / "application"
+    / "evaluation"
     / "fixtures"
     / "distill_elaborate.json"
 )

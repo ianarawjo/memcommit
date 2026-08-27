@@ -31,7 +31,7 @@ from memcommit.application.operations.forget.application import (
 )
 from memcommit.providers.types import SemanticProvider
 from memcommit.providers.semantic import connect_operation_provider
-from memcommit.semantic.changes import (
+from memcommit.application.semantic.changes import (
     EditChange,
     ProposedChange,
     RemoveChange,

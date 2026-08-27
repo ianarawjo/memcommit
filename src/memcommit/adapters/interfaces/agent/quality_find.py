@@ -23,7 +23,7 @@ from memcommit.adapters.interfaces.agent.contract import (
     object_value,
     text_value,
 )
-from memcommit.semantic.redundancy_evidence import (
+from memcommit.application.semantic.redundancy_evidence import (
     REDUNDANCY_EVIDENCE_VERSION,
     redundancy_evidence_dict,
 )

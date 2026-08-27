@@ -36,7 +36,7 @@ from memcommit.application.operations.ground.workspace_projection import (
     GroundWorkspaceProjectionError,
     project_ordinary_memories,
 )
-from memcommit.semantic.goal_focus_runtime import freeze_goal_focus_context
+from memcommit.application.semantic.goal_focus_runtime import freeze_goal_focus_context
 from memcommit.application.operations.add.semantic_runtime import freeze_semantic_add_target
 from memcommit.persistence.store import (
     MemoryStore,

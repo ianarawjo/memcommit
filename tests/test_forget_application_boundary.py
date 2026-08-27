@@ -38,7 +38,7 @@ from memcommit.adapters.interfaces.tui.operations.forget.resolution import (
     ForgetResolutionWorkbenchAdapter,
 )
 from memcommit.adapters.interfaces.tui.operations.forget.setup import ForgetSetupReceipt
-from memcommit.semantic.changes import ProposedChange
+from memcommit.application.semantic.changes import ProposedChange
 from memcommit.store import ConcurrentContextUpdateError, MemoryStore
 
 

@@ -22,7 +22,7 @@ from memcommit.application.semantic_execution import (
     plan_semantic_execution,
     run_partitioned,
 )
-from memcommit.semantic.disclosure import (
+from memcommit.application.semantic.disclosure import (
     SemanticDisclosureError,
     require_semantic_disclosure_authority,
 )

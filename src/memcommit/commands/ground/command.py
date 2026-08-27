@@ -117,7 +117,7 @@ from memcommit.application.operations.ground.workspace_runtime import (
     load_ground_workspace_navigation_contexts,
     load_ground_workspace,
 )
-from memcommit.semantic.goal_focus_runtime import (
+from memcommit.application.semantic.goal_focus_runtime import (
     freeze_goal_focus_operand,
     revalidate_goal_focus,
 )

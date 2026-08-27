@@ -29,8 +29,8 @@ from memcommit.application.operations.distill.config import (
     DEFAULT_DISTILL_SEMANTIC_CONFIG,
     DistillSemanticConfig,
 )
-from memcommit.semantic.goal_focus import FrozenGoalFocus
-from memcommit.semantic.goal_focus_runtime import revalidate_goal_focus
+from memcommit.application.semantic.goal_focus import FrozenGoalFocus
+from memcommit.application.semantic.goal_focus_runtime import revalidate_goal_focus
 from memcommit.application.operations.add.semantic_runtime import (
     FrozenSemanticAddTarget,
     SemanticAddReceipt,

@@ -149,7 +149,7 @@ def dev_fake(
         mem dev fake test-user "a software engineer who likes hiking and coffee"
     """
     from memcommit.configuration.config import Config
-    from memcommit.semantic.llm import LLMClient, LLMError
+    from memcommit.application.semantic.llm import LLMClient, LLMError
     from memcommit.persistence.store import MemoryStore
     import memcommit.application.ops as ops
 
@@ -254,7 +254,7 @@ def dev_eval(
         )
         raise typer.Exit(1)
 
-    from memcommit.semantic.llm import LLMError
+    from memcommit.application.semantic.llm import LLMError
     from memcommit.application.evaluation.runner import run_forget_eval, run_integrate_eval
 
     try:

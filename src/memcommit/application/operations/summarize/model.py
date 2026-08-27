@@ -21,11 +21,11 @@ from memcommit.application.semantic_execution import (
     json_budget,
     plan_semantic_execution,
 )
-from memcommit.semantic.disclosure import (
+from memcommit.application.semantic.disclosure import (
     SemanticDisclosureError,
     require_semantic_disclosure_authority,
 )
-from memcommit.semantic.understanding import (
+from memcommit.application.semantic.understanding import (
     UnderstandingError,
     UnderstandingSummary,
     parse_source_linked_understanding,

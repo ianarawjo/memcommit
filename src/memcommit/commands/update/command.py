@@ -40,8 +40,8 @@ from memcommit.core.context_targeting.model import InlineTextOperand
 from memcommit.core.context_targeting.operands import (
     classify_context_or_inline_text_operand,
 )
-from memcommit.semantic.goal_focus import FrozenGoalFocus
-from memcommit.semantic.goal_focus_runtime import (
+from memcommit.application.semantic.goal_focus import FrozenGoalFocus
+from memcommit.application.semantic.goal_focus_runtime import (
     freeze_goal_focus_operand,
     revalidate_goal_focus,
 )

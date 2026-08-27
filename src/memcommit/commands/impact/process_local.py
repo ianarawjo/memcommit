@@ -36,7 +36,7 @@ from memcommit.application.operations.elaborate.add_runtime import (
 )
 from memcommit.application.operations.elaborate.application import ElaborateRequest, ElaborateResult
 from memcommit.application.operations.fit.judgment import FitJudgmentError
-from memcommit.semantic.goal_focus_runtime import freeze_goal_focus_operand
+from memcommit.application.semantic.goal_focus_runtime import freeze_goal_focus_operand
 from memcommit.application.operations.forget.application import (
     ForgetAnalysisRequest,
     ForgetAnalysisResult,
