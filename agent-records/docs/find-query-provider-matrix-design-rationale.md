@@ -1,5 +1,18 @@
 # Find and Query provider-matrix design rationale
 
+## Status
+
+This note records a completed one-off provider-selection experiment. The
+evaluation runner and its dedicated tests were retired from the distributed
+package on 2026-08-27 after the matrix result and subsequent policy decisions
+had been retained. The final executable snapshot is recoverable from commit
+`4ff5119bc`; the runner was originally introduced in commit `bb7ddaafa`.
+
+The completed 54-call ledger and its readable summary remain under
+`agent-records/outputs/find-query-latency/`. Retiring the runner does not change
+the Task 3 fixtures, active Find or Query provider policy, production prompt
+contracts, or their ordinary tests.
+
 ## Problem
 
 Forget's compact-corpus evidence made `gpt-5.6-sol` with no reasoning a useful
@@ -29,16 +42,16 @@ latency difference is small.
 
 ## Production-contract reuse
 
-The runner in `memcommit.eval.find_query_latency` loads only versioned study
-fixtures and builds an in-memory Context hierarchy. It reuses the production
-Find prompt, JSON schema, candidate collector, decoder, and ranker. It also
-reuses the production Query prompt over the same newline-separated source
-projection. Find must use exactly one provider primitive in this campaign; a
-future fixture growth that triggers staged execution fails the cell instead of
-silently changing the experimental unit.
+The historical runner in `memcommit.eval.find_query_latency` loaded only
+versioned study fixtures and built an in-memory Context hierarchy. It reused
+the production Find prompt, JSON schema, candidate collector, decoder, and
+ranker. It also reused the production Query prompt over the same
+newline-separated source projection. Find used exactly one provider primitive
+in this campaign; fixture growth that would have triggered staged execution
+failed the cell instead of silently changing the experimental unit.
 
-No profile, current Context, provider preference, session, or durable Memory is
-read or changed. Every Codex completion remains an isolated ephemeral process.
+No profile, current Context, provider preference, session, or durable Memory
+was read or changed. Every Codex completion was an isolated ephemeral process.
 The campaign output retains raw completions but omits full prompts because the
 prompt can be reconstructed from the fixture digest and case definition.
 
@@ -62,10 +75,11 @@ provider outputs, or timing measurements.
 
 ## Atomicity and limitations
 
-The JSON ledger is replaced atomically after every cell and `--resume` skips
-only cells already present under the same campaign fingerprint. Provider errors
-and invalid Find structures are retained and do not discard later cells. The
-ledger reports connection, provider, validation, and total wall time separately.
+The JSON ledger was replaced atomically after every cell, and `--resume`
+skipped only cells already present under the same campaign fingerprint.
+Provider errors and invalid Find structures were retained without discarding
+later cells. The ledger reports connection, provider, validation, and total
+wall time separately.
 
 The campaign is English-only, uses one public synthetic fixture family, and
 does not measure TUI rendering, user review time, multi-call staged Find, or
