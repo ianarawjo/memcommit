@@ -1,5 +1,22 @@
 # Compact whole-frame Forget output rationale
 
+## Status
+
+This note records a completed evaluation campaign, not a live Forget output
+contract. The compact runner and its dedicated tests were retired from the
+distributed package on 2026-08-27 after the 64-cell matrix had informed the
+provisional Forget provider policy but rejected the two-field sparse-edit
+topology for production use. Their final executable snapshot is recoverable
+from commit `0b10b4362`; the runner was originally introduced in commit
+`bb7ddaafa`.
+
+The 82 retained JSON artifacts, exact matrix manifest, and readable result
+summary remain under `agent-records/outputs/forget-latency/`. Retiring the
+runner does not change production Forget's whole-frame contract, review and
+mutation boundaries, or current provider routing. No compact implementation
+was migrated because the campaign explicitly found that contract unready for
+production.
+
 ## Motivation
 
 The Task 3 Forget baseline sends one complete 300-Memory Source and one
@@ -10,8 +27,8 @@ valid runs returned 62,311 to 78,115 characters and took 255 to 295 seconds.
 Luna low also failed after a long turn because one `KEEP` candidate did not
 repeat the exact Source text.
 
-The experiment asks whether the output obligation, rather than complete Source
-visibility, is the removable bottleneck. It is evaluation-only and does not
+The experiment asked whether the output obligation, rather than complete Source
+visibility, was the removable bottleneck. It was evaluation-only and did not
 change production `mem forget` behavior.
 
 ## Contract
@@ -58,8 +75,8 @@ provenance and must not be represented as provider explanation.
 
 ## Evaluation boundary
 
-The first controlled run uses the exact historical Task 3 300-Memory
-checkpoint and first Forget instruction. It compares compact Terra-low output
+The first controlled run used the exact historical Task 3 300-Memory
+checkpoint and first Forget instruction. It compared compact Terra-low output
 with both the historical applied result and the retained Terra-low exhaustive
 output. These are agreement measures, not accuracy, because neither prior LLM
 run is reviewed ground truth.
@@ -70,12 +87,12 @@ result remains structurally valid and preserves acceptable KEEP, EDIT, and
 DELETE behavior. One run is a feasibility diagnostic, not authorization to
 replace production Forget.
 
-The evaluation CLI may also receive an explicit criterion ID and instruction
-override for the frozen pilot corpus. When that instruction differs from the
-historical applied instruction, the ledger sets historical agreement to
-`null`; it must not reuse labels from a semantically different Forget request
-as if they were ground truth. A baseline ledger is likewise rejected for a
-different instruction.
+The evaluation CLI also accepted an explicit criterion ID and instruction
+override for the frozen pilot corpus. When that instruction differed from the
+historical applied instruction, the ledger set historical agreement to `null`;
+it did not reuse labels from a semantically different Forget request as if they
+were ground truth. A baseline ledger was likewise rejected for a different
+instruction.
 
 ## Eight-by-eight corpus result — 2026-08-10
 
@@ -100,9 +117,9 @@ Twenty-five cells required 324 conservative cross-field repairs: 138 vector
 whose vector code was not `E`, and three edits exactly repeated Source text.
 `THIRD_PARTY` alone accounted for 268 repair events. Its proposed remainder
 text was often locally plausible, but the action and edit arrays disagreed on
-position. The current decoder deliberately converts unresolved `E` positions
-to KEEP and ignores extra rows. This preserves the no-false-mutation boundary
-at the cost of transformation recall.
+position. The historical decoder deliberately converted unresolved `E`
+positions to KEEP and ignored extra rows. This preserved the no-false-mutation
+boundary at the cost of transformation recall.
 
 The matrix therefore supports output compression as a latency technique for
 many complete 300-Memory turns, but rejects a single universal
