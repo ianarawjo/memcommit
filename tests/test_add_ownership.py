@@ -30,8 +30,8 @@ def test_production_add_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "src/memcommit/adapters/python_api/_operations/add.py",
         "src/memcommit/adapters/console/commands/add/command.py",
-        "src/memcommit/adapters/interfaces/cli/add.py",
-        "src/memcommit/adapters/interfaces/tui/operations/add/screen.py",
+        "src/memcommit/adapters/console/commands/add/receipt.py",
+        "src/memcommit/adapters/console/commands/add/workbench/screen.py",
         "src/memcommit/application/operations/add/runtime.py",
     )
 
@@ -40,6 +40,37 @@ def test_production_add_consumers_use_the_operation_owner() -> None:
         source = path.read_text(encoding="utf-8")
         assert "from memcommit.add_application import" not in source
         assert "from memcommit.add_runtime import" not in source
+
+
+def test_add_presenters_are_colocated_with_their_command() -> None:
+    command = REPOSITORY_ROOT / (
+        "src/memcommit/adapters/console/commands/add/command.py"
+    )
+    receipt = REPOSITORY_ROOT / (
+        "src/memcommit/adapters/console/commands/add/receipt.py"
+    )
+    workbench = REPOSITORY_ROOT / (
+        "src/memcommit/adapters/console/commands/add/workbench/screen.py"
+    )
+    retired = tuple(
+        REPOSITORY_ROOT / path
+        for path in (
+            "src/memcommit/adapters/interfaces/cli/add.py",
+            "src/memcommit/adapters/interfaces/tui/operations/add/__init__.py",
+            "src/memcommit/adapters/interfaces/tui/operations/add/model.py",
+            "src/memcommit/adapters/interfaces/tui/operations/add/screen.py",
+        )
+    )
+
+    assert receipt.is_file()
+    assert workbench.is_file()
+    assert all(not path.exists() for path in retired)
+    assert (
+        "from memcommit.adapters.console.commands.add.receipt import render_add_receipt"
+    ) in command.read_text(encoding="utf-8")
+    assert "memcommit.adapters.console.commands.add.workbench" in command.read_text(
+        encoding="utf-8"
+    )
 
 
 def test_exact_add_does_not_absorb_semantic_materialization_helpers() -> None:

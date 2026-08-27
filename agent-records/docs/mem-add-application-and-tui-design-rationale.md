@@ -65,6 +65,17 @@ inserts a newline while editing, `Ctrl-S` saves only the local draft, and
 application. The success state displays every durable Memory UID and the one
 checkpoint; cancelling from the root performs no Store call.
 
+Add's completed-result presenter is colocated with the command at
+`memcommit.adapters.console.commands.add.receipt`. Naming it a receipt
+distinguishes one-way durable-result output from the interactive Add workbench,
+whose process-local model and prompt-toolkit screen live together under
+`commands.add.workbench`. These modules remain separate from `command.py` so
+presentation and interaction do not absorb argument parsing, Store access,
+authority checks, or application execution. The former
+`adapters.interfaces.cli.add` and `adapters.interfaces.tui.operations.add`
+staging paths are removed rather than retained as facades because both
+presentations are Add-specific and consumed only by this console command.
+
 ## Shared terminal mechanics
 
 The Add workbench introduces no operation-owned scrolling or focus index:

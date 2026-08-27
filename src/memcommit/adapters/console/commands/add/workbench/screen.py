@@ -14,7 +14,11 @@ from prompt_toolkit.layout import Dimension, FormattedTextControl, Layout, Windo
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
-from memcommit.application.operations.add.application import AddRequest, AddResult, AddSource
+from memcommit.application.operations.add.application import (
+    AddRequest,
+    AddResult,
+    AddSource,
+)
 from memcommit.core.context_targeting.tui.selector import (
     ContextSelectorControl,
     ContextSelectorView,
@@ -56,9 +60,9 @@ from memcommit.adapters.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
 )
-from memcommit.adapters.interfaces.tui.operations.add.model import (
+from memcommit.adapters.console.commands.add.workbench.model import (
     AddDraftState,
-    AddTuiSetup,
+    AddWorkbenchSetup,
 )
 
 
@@ -104,9 +108,9 @@ def _draft_fragments(
     return fragments, cursor_position
 
 
-def run_add_tui(
+def run_add_workbench(
     *,
-    setup: AddTuiSetup,
+    setup: AddWorkbenchSetup,
     execute: Callable[[AddRequest], AddResult],
     app_input: Input | None = None,
     app_output: Output | None = None,
@@ -119,8 +123,8 @@ def run_add_tui(
             "Interactive Add",
             snapshot_hint="Pass INFO, --memory, --input, or --paste outside a terminal.",
         )
-    if not isinstance(setup, AddTuiSetup):
-        raise TypeError("Add TUI requires an AddTuiSetup.")
+    if not isinstance(setup, AddWorkbenchSetup):
+        raise TypeError("Add workbench requires an AddWorkbenchSetup.")
 
     selector = ContextSelectorControl(
         ContextSelectorView(

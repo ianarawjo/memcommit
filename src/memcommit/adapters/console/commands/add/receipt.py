@@ -1,4 +1,4 @@
-"""Plain command-line rendering for typed Add results."""
+"""Line-oriented terminal receipts for completed Add results."""
 
 from __future__ import annotations
 
@@ -8,8 +8,8 @@ from memcommit.application.operations.add.application import AddInputMode, AddRe
 from memcommit.adapters.console.text import display_escape_text
 
 
-def render_add_plain(result: AddResult, *, mode: AddInputMode) -> None:
-    """Preserve compact direct output while making batch storage explicit."""
+def render_add_receipt(result: AddResult, *, mode: AddInputMode) -> None:
+    """Present one completed Add without owning command execution."""
 
     if mode == "SINGLE":
         memory = result.memories[0]

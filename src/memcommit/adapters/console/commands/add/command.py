@@ -21,26 +21,32 @@ from memcommit.application.authority.access import (
 )
 from memcommit.core.context_targeting.catalog import freeze_granted_context_navigation
 from memcommit.core.context_targeting.operands import choose_endpoint_operand
-from memcommit.adapters.interfaces.cli.add import render_add_plain
-from memcommit.adapters.interfaces.cli.batch_input import parse_add_lines, read_text_input
+from memcommit.adapters.console.commands.add.receipt import render_add_receipt
+from memcommit.adapters.interfaces.cli.batch_input import (
+    parse_add_lines,
+    read_text_input,
+)
 from memcommit.adapters.console.errors import render_cli_error
 from memcommit.adapters.console.terminal import is_interactive_terminal
 from memcommit.adapters.interfaces.tui.components.paste_input import (
     PasteCancelled,
     capture_paste,
 )
-from memcommit.adapters.interfaces.tui.operations.add import AddTuiSetup, run_add_tui
+from memcommit.adapters.console.commands.add.workbench import (
+    AddWorkbenchSetup,
+    run_add_workbench,
+)
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 
 
-def _prepare_add_tui_setup(
+def _prepare_add_workbench_setup(
     store: MemoryStore,
     *,
     current_name: str | None,
     requested_context: str | None,
-) -> AddTuiSetup:
+) -> AddWorkbenchSetup:
     """Freeze visible Context rows and their CREATE availability."""
 
     local_names = tuple(store.list_context_names())
@@ -89,7 +95,7 @@ def _prepare_add_tui_setup(
         raise ValueError(
             "Interactive Add requires a local or CREATE-granted target Context."
         )
-    return AddTuiSetup(
+    return AddWorkbenchSetup(
         names=tuple(sorted(names, key=str.casefold)),
         selectable_names=frozenset(selectable),
         selected_context=selected,
@@ -188,19 +194,19 @@ def cmd(
 
     try:
         if source_count == 0:
-            setup = _prepare_add_tui_setup(
+            setup = _prepare_add_workbench_setup(
                 store,
                 current_name=current_name,
                 requested_context=requested_context,
             )
-            tui_result = run_add_tui(
+            workbench_result = run_add_workbench(
                 setup=setup,
                 execute=lambda request: run_add(request, target_port=port),
             )
-            if tui_result is None:
+            if workbench_result is None:
                 typer.echo("Add cancelled — no changes made.")
                 return
-            render_add_plain(tui_result, mode="TUI_DRAFTS")
+            render_add_receipt(workbench_result, mode="TUI_DRAFTS")
             return
         if info is not None:
             request = AddRequest(
@@ -288,4 +294,4 @@ def cmd(
         render_cli_error(error)
         raise typer.Exit(1)
 
-    render_add_plain(result, mode=request.source.mode)
+    render_add_receipt(result, mode=request.source.mode)

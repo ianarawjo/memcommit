@@ -5,16 +5,20 @@ from __future__ import annotations
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-from memcommit.application.operations.add.application import AddedMemory, AddRequest, AddResult
-from memcommit.adapters.interfaces.tui.operations.add import (
+from memcommit.application.operations.add.application import (
+    AddedMemory,
+    AddRequest,
+    AddResult,
+)
+from memcommit.adapters.console.commands.add.workbench import (
     AddDraftState,
-    AddTuiSetup,
-    run_add_tui,
+    AddWorkbenchSetup,
+    run_add_workbench,
 )
 
 
-def _setup(*names: str, selected: str = "target") -> AddTuiSetup:
-    return AddTuiSetup(
+def _setup(*names: str, selected: str = "target") -> AddWorkbenchSetup:
+    return AddWorkbenchSetup(
         names=names or ("target",),
         selectable_names=frozenset(names or ("target",)),
         selected_context=selected,
@@ -61,7 +65,7 @@ def test_draft_state_supports_ordered_create_edit_and_delete() -> None:
     assert state.cursor == 0
 
 
-def test_tui_e_to_edit_adds_multiple_explicit_multiline_drafts() -> None:
+def test_workbench_e_to_edit_adds_multiple_explicit_multiline_drafts() -> None:
     requests: list[AddRequest] = []
 
     def execute(request: AddRequest) -> AddResult:
@@ -73,7 +77,7 @@ def test_tui_e_to_edit_adds_multiple_explicit_multiline_drafts() -> None:
         # Ctrl-S saves locally, N starts another draft, and the To Do Enter is
         # the only durable action. A final Enter closes the success receipt.
         pipe_input.send_text("eFirst line.\rSecond line.\x13nAnother.\x13\t\r\r")
-        returned = run_add_tui(
+        returned = run_add_workbench(
             setup=_setup(),
             execute=execute,
             app_input=pipe_input,
@@ -91,14 +95,14 @@ def test_tui_e_to_edit_adds_multiple_explicit_multiline_drafts() -> None:
     assert requests[0].source.mode == "TUI_DRAFTS"
 
 
-def test_tui_context_selector_changes_exact_add_target() -> None:
+def test_workbench_context_selector_changes_exact_add_target() -> None:
     requests: list[AddRequest] = []
     with create_pipe_input() as pipe_input:
         # Shift-Tab reaches the shared Context selector, Up selects alpha,
         # Enter stages it, Tab returns to drafts, and the normal draft flow
         # executes against that exact selected Context.
         pipe_input.send_text("\x1b[Z\x1b[A\r\teOnly alpha receives this.\x13\t\r\r")
-        returned = run_add_tui(
+        returned = run_add_workbench(
             setup=_setup("alpha", "target", selected="target"),
             execute=lambda request: requests.append(request) or _result(request),
             app_input=pipe_input,
@@ -110,11 +114,11 @@ def test_tui_context_selector_changes_exact_add_target() -> None:
     assert requests[0].context_locator == "alpha"
 
 
-def test_tui_escape_cancels_without_calling_application() -> None:
+def test_workbench_escape_cancels_without_calling_application() -> None:
     requests: list[AddRequest] = []
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("q")
-        returned = run_add_tui(
+        returned = run_add_workbench(
             setup=_setup(),
             execute=lambda request: requests.append(request) or _result(request),
             app_input=pipe_input,
@@ -126,11 +130,11 @@ def test_tui_escape_cancels_without_calling_application() -> None:
     assert requests == []
 
 
-def test_tui_ctrl_c_cancels_without_calling_application() -> None:
+def test_workbench_ctrl_c_cancels_without_calling_application() -> None:
     requests: list[AddRequest] = []
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("eUncommitted draft.\x03")
-        returned = run_add_tui(
+        returned = run_add_workbench(
             setup=_setup(),
             execute=lambda request: requests.append(request) or _result(request),
             app_input=pipe_input,

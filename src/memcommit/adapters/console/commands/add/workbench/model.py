@@ -8,7 +8,7 @@ from memcommit.source_projection.presentation import SourceDisplayValue
 
 
 @dataclass(frozen=True)
-class AddTuiSetup:
+class AddWorkbenchSetup:
     """Frozen target catalog supplied by the Add composition boundary."""
 
     names: tuple[str, ...]
@@ -23,9 +23,11 @@ class AddTuiSetup:
             or len(set(self.names)) != len(self.names)
             or any(not isinstance(name, str) or not name for name in self.names)
         ):
-            raise ValueError("Add TUI requires a distinct nonempty target catalog.")
+            raise ValueError(
+                "Add workbench requires a distinct nonempty target catalog."
+            )
         if not self.selectable_names or not self.selectable_names <= set(self.names):
-            raise ValueError("Add TUI requires at least one selectable target.")
+            raise ValueError("Add workbench requires at least one selectable target.")
         if self.selected_context not in self.selectable_names:
             raise ValueError("Initial Add target is unavailable.")
 
