@@ -333,8 +333,8 @@
     },
     {
       "action": "relocate",
-      "canonical_target": "memcommit.infrastructure.command_ledger.attempts",
-      "canonical_target_path": "memcommit/infrastructure/command_ledger/attempts.py",
+      "canonical_target": "memcommit.persistence.command_ledger.attempts",
+      "canonical_target_path": "memcommit/persistence/command_ledger/attempts.py",
       "inbound_package_importers": 16,
       "lines": 571,
       "module": "memcommit.command_attempts",
@@ -2522,8 +2522,8 @@
     },
     {
       "action": "relocate",
-      "canonical_target": "memcommit.infrastructure.command_ledger.study_actions",
-      "canonical_target_path": "memcommit/infrastructure/command_ledger/study_actions.py",
+      "canonical_target": "memcommit.persistence.command_ledger.study_actions",
+      "canonical_target_path": "memcommit/persistence/command_ledger/study_actions.py",
       "inbound_package_importers": 11,
       "lines": 923,
       "module": "memcommit.study_action_log",

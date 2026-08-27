@@ -7,7 +7,7 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.application.authority.access import resolve_context_access
-from memcommit.infrastructure.command_ledger.attempts import annotate_read_report_attempt
+from memcommit.persistence.command_ledger.attempts import annotate_read_report_attempt
 from memcommit.commands.shared.context_operand import (
     ContextOperandSnapshot,
     choose_context_operand,

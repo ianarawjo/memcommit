@@ -123,6 +123,15 @@ The two moves remain in one change because provider configuration imports the
 provider contracts and provider connectors consume that configuration. No
 compatibility facade retains either former infrastructure path.
 
+The same decomposition places the command-attempt and Study-action ledgers at
+`memcommit.persistence.command_ledger`. Their defining contract is durable,
+profile-scoped recording with atomic file replacement and recovery-safe
+publication, so persistence is their owner even though application operations
+and console instrumentation initiate records. The existing modules move as a
+unit to preserve their privacy and lifecycle invariants; separating the
+prompt-toolkit input wrapper inside `study_actions` is deferred. No facade
+retains the former `memcommit.infrastructure.command_ledger` path.
+
 ## Verification
 
 The pre-relocation full suite and its exact failing node IDs form the behavioral

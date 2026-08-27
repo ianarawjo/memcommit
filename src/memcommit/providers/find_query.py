@@ -18,7 +18,7 @@ from memcommit.providers.subscription import (
     CodexChatGPTProvider,
     connect_query_provider as _connect_configured_query_provider,
 )
-from memcommit.infrastructure.command_ledger.study_actions import (
+from memcommit.persistence.command_ledger.study_actions import (
     record_provider_connection_finished,
     record_provider_connection_started,
 )

@@ -25,7 +25,7 @@ from memcommit.providers.subscription import (
     QueryProviderError,
     _build_query_prompt,
 )
-from memcommit.infrastructure.command_ledger.study_actions import (
+from memcommit.persistence.command_ledger.study_actions import (
     record_provider_connection_finished,
     record_provider_connection_started,
     record_study_provider_turn,

@@ -47,7 +47,7 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.chunking | compatibility-facade | centralize-alias | memcommit.application.operations.chunk.domain | 1 |
 | memcommit.cli | shared-concept-implementation | relocate-without-alias | memcommit.adapters.console.entrypoint | 14 |
 | memcommit.clipboard | shared-concept-implementation | relocate | memcommit.infrastructure.clipboard | 11 |
-| memcommit.command_attempts | shared-concept-implementation | relocate | memcommit.infrastructure.command_ledger.attempts | 16 |
+| memcommit.command_attempts | shared-concept-implementation | relocate | memcommit.persistence.command_ledger.attempts | 16 |
 | memcommit.command_history | shared-concept-implementation | relocate | memcommit.application.retained_history.command_history | 11 |
 | memcommit.comparison | operation-implementation | relocate | memcommit.application.operations.compare.ledger.model | 33 |
 | memcommit.comparison_evidence | operation-implementation | relocate | memcommit.application.operations.compare.ledger.evidence | 5 |
@@ -246,7 +246,7 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.status_runtime | compatibility-facade | centralize-alias | memcommit.application.operations.status.runtime | 0 |
 | memcommit.storage_permissions | shared-concept-implementation | relocate | memcommit.application.authority.storage_permissions | 4 |
 | memcommit.store | shared-concept-implementation | relocate | memcommit.persistence.store | 217 |
-| memcommit.study_action_log | shared-concept-implementation | relocate | memcommit.infrastructure.command_ledger.study_actions | 11 |
+| memcommit.study_action_log | shared-concept-implementation | relocate | memcommit.persistence.command_ledger.study_actions | 11 |
 | memcommit.study_operation_policy | shared-concept-implementation | relocate | memcommit.application.authority.study_operation_policy | 2 |
 | memcommit.summarize | operation-implementation | relocate | memcommit.application.operations.summarize.model | 9 |
 | memcommit.summarize_application | compatibility-facade | centralize-alias | memcommit.application.operations.summarize.application | 0 |

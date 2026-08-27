@@ -18,7 +18,7 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
 from memcommit.commands.shared.command_progress import CommandProgress
-from memcommit.infrastructure.command_ledger.attempts import annotate_read_report_attempt
+from memcommit.persistence.command_ledger.attempts import annotate_read_report_attempt
 from memcommit.adapters.interfaces.tui.components.operation_launcher.location import (
     operation_launcher_orientation,
 )

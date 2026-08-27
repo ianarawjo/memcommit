@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.infrastructure.command_ledger.attempts import (
+from memcommit.persistence.command_ledger.attempts import (
     CommandAttempt,
     CommandAttemptError,
     CommandAttemptLedger,

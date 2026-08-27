@@ -10,7 +10,7 @@ from typing import Annotated, Callable, Optional
 
 import typer
 
-from memcommit.infrastructure.command_ledger.attempts import current_command_attempt_uid
+from memcommit.persistence.command_ledger.attempts import current_command_attempt_uid
 from memcommit.commands.shared.command_progress import CommandProgress
 from memcommit.adapters.interfaces.cli.command_group import CanonicalCommandGroup
 from memcommit.commands.profile.group import ProfileAliasGroup
@@ -61,7 +61,7 @@ from memcommit.application.operations.profile.model import (
     update_authority_grant,
     use_profile,
 )
-from memcommit.infrastructure.command_ledger.study_actions import (
+from memcommit.persistence.command_ledger.study_actions import (
     StudyActionError,
     record_study_action,
     record_study_action_for_profile,

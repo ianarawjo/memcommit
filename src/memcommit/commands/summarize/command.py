@@ -9,7 +9,7 @@ import typer
 
 from memcommit.bootstrap import build_summarize_console_runner
 from memcommit.infrastructure.clipboard import ClipboardError, write_system_clipboard
-from memcommit.infrastructure.command_ledger.attempts import annotate_read_report_attempt
+from memcommit.persistence.command_ledger.attempts import annotate_read_report_attempt
 from memcommit.commands.shared.command_progress import CommandProgress
 from memcommit.commands.shared.context_operand import ContextOperandSnapshot
 from memcommit.adapters.interfaces.tui.components.operation_launcher.location import (

@@ -15,7 +15,7 @@ from memcommit.application.authority.access import (
     revalidate_granted_context_binding,
     resolve_context_access,
 )
-from memcommit.infrastructure.command_ledger.attempts import annotate_sever_attempt
+from memcommit.persistence.command_ledger.attempts import annotate_sever_attempt
 from memcommit.context import AutoCheckpoint, Context, Memory, MemoryRef, QueryContextRef
 from memcommit.context_targeting.naming import validate_portable_context_name
 from memcommit.context_targeting.model import ContextScope

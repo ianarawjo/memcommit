@@ -4,7 +4,7 @@ from typing import Annotated, Any, Optional
 
 import typer
 
-from memcommit.infrastructure.command_ledger.attempts import (
+from memcommit.persistence.command_ledger.attempts import (
     CommandAttempt,
     CommandAttemptError,
     CommandAttemptLedger,
@@ -56,7 +56,7 @@ from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.config import load_profile_registry
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import MemoryStore
-from memcommit.infrastructure.command_ledger.study_actions import (
+from memcommit.persistence.command_ledger.study_actions import (
     StudyActionError,
     StudyActionEvent,
     StudyActionLedger,

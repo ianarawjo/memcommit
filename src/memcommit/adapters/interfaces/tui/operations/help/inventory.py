@@ -82,7 +82,7 @@ from memcommit.adapters.interfaces.tui.operations.help.study_copy_guard import (
     authored_study_help_fields,
     find_study_help_copy_match,
 )
-from memcommit.infrastructure.command_ledger.study_actions import (
+from memcommit.persistence.command_ledger.study_actions import (
     record_study_help_lookup_completed,
     record_study_help_lookup_submitted,
 )

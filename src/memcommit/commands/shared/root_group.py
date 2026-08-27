@@ -41,7 +41,7 @@ class MemCommandGroup(CanonicalCommandGroup):
         command_store_dir = None
         entered_argv: tuple[str, ...] | None = None
         if os.environ.get("MEMCOMMIT_TEST_DISABLE_ATTEMPT_LOG") != "1":
-            from memcommit.infrastructure.command_ledger.attempts import begin_command_attempt
+            from memcommit.persistence.command_ledger.attempts import begin_command_attempt
             from memcommit.persistence.store import MemoryStore
 
             # Typer 0.27 keeps the unresolved command token on the private
@@ -73,7 +73,7 @@ class MemCommandGroup(CanonicalCommandGroup):
                     load_profile_registry,
                     profile_store_dir,
                 )
-                from memcommit.infrastructure.command_ledger.study_actions import (
+                from memcommit.persistence.command_ledger.study_actions import (
                     begin_study_action_recording,
                 )
 
@@ -100,7 +100,7 @@ class MemCommandGroup(CanonicalCommandGroup):
                 if active_study_actions is None:
                     result = super().invoke(ctx)
                 else:
-                    from memcommit.infrastructure.command_ledger.study_actions import (
+                    from memcommit.persistence.command_ledger.study_actions import (
                         study_recording_app_session,
                     )
 
@@ -115,7 +115,7 @@ class MemCommandGroup(CanonicalCommandGroup):
                 raise click.exceptions.Exit(1) from error
         except BaseException as error:
             if active_attempt is not None:
-                from memcommit.infrastructure.command_ledger.attempts import finish_command_attempt
+                from memcommit.persistence.command_ledger.attempts import finish_command_attempt
 
                 if isinstance(error, KeyboardInterrupt):
                     status = "INTERRUPTED"
@@ -128,7 +128,7 @@ class MemCommandGroup(CanonicalCommandGroup):
                     status = "COMPLETED" if exit_code == 0 else "FAILED"
                 try:
                     if active_study_actions is not None:
-                        from memcommit.infrastructure.command_ledger.study_actions import (
+                        from memcommit.persistence.command_ledger.study_actions import (
                             finish_study_action_recording,
                         )
 
@@ -159,12 +159,12 @@ class MemCommandGroup(CanonicalCommandGroup):
             raise
         else:
             if active_attempt is not None:
-                from memcommit.infrastructure.command_ledger.attempts import finish_command_attempt
+                from memcommit.persistence.command_ledger.attempts import finish_command_attempt
 
                 study_error: BaseException | None = None
                 try:
                     if active_study_actions is not None:
-                        from memcommit.infrastructure.command_ledger.study_actions import (
+                        from memcommit.persistence.command_ledger.study_actions import (
                             finish_study_action_recording,
                         )
 
