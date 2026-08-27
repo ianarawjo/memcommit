@@ -119,7 +119,7 @@ def _run_standalone_child(
     stale: bool,
     issue: bool = False,
 ) -> None:
-    import memcommit.commands.fit.command as fit_command
+    import memcommit.adapters.console.commands.fit.command as fit_command
     from memcommit.application.operations.fit.store import FitStore
     from memcommit.persistence.store import MemoryStore
 
@@ -159,7 +159,7 @@ def _run_standalone_child(
 
 
 def _run_ground_child(store_root: Path) -> None:
-    from memcommit.commands.ground.named_shell import run_named_ground_shell
+    from memcommit.adapters.console.commands.ground.named_shell import run_named_ground_shell
     from memcommit.application.operations.fit.runtime import execute_and_save_ground_fit
     from memcommit.application.operations.fit.store import FitStore
     from memcommit.persistence.store import ground_session_record_digest

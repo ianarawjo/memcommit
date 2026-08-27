@@ -9,7 +9,7 @@ from pathlib import Path
 
 import pytest
 
-import memcommit.commands.shared.history_location_picker as legacy_location
+import memcommit.adapters.console.commands.shared.history_location_picker as legacy_location
 from memcommit.adapters.interfaces.tui.components import checkpoint_location
 
 
@@ -17,12 +17,12 @@ from memcommit.adapters.interfaces.tui.components import checkpoint_location
     "first, second",
     (
         (
-            "memcommit.commands.shared.history_location_picker",
+            "memcommit.adapters.console.commands.shared.history_location_picker",
             "memcommit.adapters.interfaces.tui.components.checkpoint_location",
         ),
         (
             "memcommit.adapters.interfaces.tui.components.checkpoint_location",
-            "memcommit.commands.shared.history_location_picker",
+            "memcommit.adapters.console.commands.shared.history_location_picker",
         ),
     ),
 )

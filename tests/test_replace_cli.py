@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typer.testing import CliRunner
 
-import memcommit.commands.replace.command as replace_command
+import memcommit.adapters.console.commands.replace.command as replace_command
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Memory

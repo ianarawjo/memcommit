@@ -15,7 +15,7 @@ This document specifies only the directional A-to-B form.
 The typed Impact route registry is owned by
 `memcommit.adapters.interfaces.cli.impact_registry`, alongside the other non-interactive
 CLI composition interfaces. The historical
-`memcommit.commands.impact.registry` path remains an exact module alias so old
+`memcommit.adapters.console.commands.impact.registry` path remains an exact module alias so old
 imports and monkeypatches observe the same module globals and registry objects.
 This is an ownership-only relocation: route order, lifecycle values, help text,
 validation and error behavior, and Typer command installation are unchanged.

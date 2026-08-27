@@ -140,7 +140,7 @@ def _create_source(store, name: str):
 
 
 def _run_forget_command(store, provider, *, granted: bool = False) -> None:
-    from memcommit.commands import forget
+    from memcommit.adapters.console.commands import forget
 
     forget.MemoryStore = lambda: store
     forget.connect_codex_chatgpt_provider = lambda: provider
@@ -176,7 +176,7 @@ def _child_verify(store_root: Path) -> None:
 
 
 def _child_restore(store_root: Path, action: str) -> None:
-    from memcommit.commands.shared.restoration_present import render_command_restore_receipt
+    from memcommit.adapters.console.commands.shared.restoration_present import render_command_restore_receipt
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root, create=False)

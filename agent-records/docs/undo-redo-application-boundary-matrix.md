@@ -12,8 +12,8 @@ checkpoint-producing command unit and returns the existing typed
 | Granted-versus-local stack selection | `memcommit.application.operations.restoration.runtime` | Shared fail-closed restoration mechanic |
 | Undo direction | `memcommit.application.operations.undo.runtime` | Fixed `undo` adapter |
 | Redo direction | `memcommit.application.operations.redo.runtime` | Fixed `redo` adapter |
-| Receipt rendering | `memcommit.commands.shared.restoration_present` | Shared presentation only |
-| CLI errors and syntax | `memcommit.commands.undo.command`, `memcommit.commands.redo.command` | Typer adapters |
+| Receipt rendering | `memcommit.adapters.console.commands.shared.restoration_present` | Shared presentation only |
+| CLI errors and syntax | `memcommit.adapters.console.commands.undo.command`, `memcommit.adapters.console.commands.redo.command` | Typer adapters |
 
 ## Invariants
 

@@ -13,7 +13,7 @@ from memcommit.persistence.command_ledger.attempts import (
     begin_command_attempt,
     finish_command_attempt,
 )
-from memcommit.commands.shared.memory_report_recents import (
+from memcommit.adapters.console.commands.shared.memory_report_recents import (
     MemoryReportRecentError,
     MemoryReportRecentSelection,
     MemoryReportSelectAction,
@@ -134,7 +134,7 @@ def test_launcher_revalidates_selected_recent(isolated_store, monkeypatch):
         return recents[0].target
 
     monkeypatch.setattr(
-        "memcommit.commands.shared.memory_report_recents.choose_read_report_recent",
+        "memcommit.adapters.console.commands.shared.memory_report_recents.choose_read_report_recent",
         choose,
     )
 
@@ -178,7 +178,7 @@ def test_launcher_rejects_recent_that_changes_after_selection(
         return recents[0].target
 
     monkeypatch.setattr(
-        "memcommit.commands.shared.memory_report_recents.choose_read_report_recent",
+        "memcommit.adapters.console.commands.shared.memory_report_recents.choose_read_report_recent",
         choose,
     )
 

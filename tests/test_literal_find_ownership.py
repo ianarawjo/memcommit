@@ -29,7 +29,7 @@ assert "memcommit.application.operations.find.literal_runtime" not in sys.module
 def test_production_literal_find_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "src/memcommit/adapters/python_api/_operations/find.py",
-        "src/memcommit/commands/literal_find/command.py",
+        "src/memcommit/adapters/console/commands/literal_find/command.py",
         "src/memcommit/adapters/interfaces/literal_find.py",
         "src/memcommit/adapters/interfaces/cli/find.py",
         "src/memcommit/adapters/interfaces/tui/operations/find/compact.py",
@@ -56,7 +56,7 @@ def test_literal_find_does_not_absorb_semantic_search_or_interfaces() -> None:
 
     assert "memcommit.application.operations.search.application" not in combined
     assert "memcommit.application.operations.search.runtime" not in combined
-    assert "memcommit.commands" not in combined
+    assert "memcommit.adapters.console.commands" not in combined
     assert "memcommit.adapters.interfaces" not in combined
     assert "provider.complete" not in combined
 

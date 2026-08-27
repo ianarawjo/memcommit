@@ -188,8 +188,8 @@ def _run_child(kind: str) -> None:
     import click
     import typer
 
-    import memcommit.commands.resolve.command as resolve_command
-    from memcommit.commands.resolve.command import cmd as resolve_cmd
+    import memcommit.adapters.console.commands.resolve.command as resolve_command
+    from memcommit.adapters.console.commands.resolve.command import cmd as resolve_cmd
     from memcommit.context import Context, Memory
     from memcommit.persistence.store import MemoryStore
 

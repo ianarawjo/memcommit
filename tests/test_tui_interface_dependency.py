@@ -17,13 +17,13 @@ def _command_imports(path: Path) -> tuple[str, ...]:
             found.extend(
                 alias.name
                 for alias in node.names
-                if alias.name == "memcommit.commands"
-                or alias.name.startswith("memcommit.commands.")
+                if alias.name == "memcommit.adapters.console.commands"
+                or alias.name.startswith("memcommit.adapters.console.commands.")
             )
         elif isinstance(node, ast.ImportFrom):
             module = node.module or ""
-            if module == "memcommit.commands" or module.startswith(
-                "memcommit.commands."
+            if module == "memcommit.adapters.console.commands" or module.startswith(
+                "memcommit.adapters.console.commands."
             ):
                 found.append(module)
     return tuple(found)
@@ -42,11 +42,11 @@ def test_interfaces_do_not_import_command_adapters() -> None:
 def test_legacy_command_paths_preserve_interface_object_identity() -> None:
     import importlib
 
-    from memcommit.commands.shared.save_location_control import SaveLocationView as old_save
-    from memcommit.commands.shared.semantic_detail_renderer import (
+    from memcommit.adapters.console.commands.shared.save_location_control import SaveLocationView as old_save
+    from memcommit.adapters.console.commands.shared.semantic_detail_renderer import (
         semantic_trace_fragments as old_trace,
     )
-    from memcommit.commands.shared.session_help import SessionHelpController as old_help
+    from memcommit.adapters.console.commands.shared.session_help import SessionHelpController as old_help
     from memcommit.adapters.interfaces.tui.components.save_location import (
         SaveLocationView as new_save,
     )
@@ -57,11 +57,11 @@ def test_legacy_command_paths_preserve_interface_object_identity() -> None:
         semantic_trace_fragments as new_trace,
     )
 
-    old_inventory = importlib.import_module("memcommit.commands.help_inventory.command")
+    old_inventory = importlib.import_module("memcommit.adapters.console.commands.help_inventory.command")
     new_inventory = importlib.import_module(
         "memcommit.adapters.interfaces.tui.operations.help.inventory"
     )
-    old_table = importlib.import_module("memcommit.commands.shared.tui_table")
+    old_table = importlib.import_module("memcommit.adapters.console.commands.shared.tui_table")
     new_table = importlib.import_module("memcommit.adapters.interfaces.tui.components.table")
 
     assert old_inventory is new_inventory

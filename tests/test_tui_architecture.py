@@ -25,7 +25,7 @@ def test_interfaces_never_import_command_adapters() -> None:
     offenders = [
         str(path.relative_to(ROOT))
         for path in (PACKAGE / "adapters" / "interfaces").rglob("*.py")
-        if any(module.startswith("memcommit.commands") for module in _imports(path))
+        if any(module.startswith("memcommit.adapters.console.commands") for module in _imports(path))
     ]
 
     assert offenders == []
@@ -33,11 +33,11 @@ def test_interfaces_never_import_command_adapters() -> None:
 
 def test_migrated_tui_modules_have_no_legacy_import_path() -> None:
     retired = {
-        "memcommit.commands.tui_text_layout",
-        "memcommit.commands.surface_focus",
-        "memcommit.commands.semantic_viewer",
-        "memcommit.commands.read_only_viewer",
-        "memcommit.commands.understanding_render",
+        "memcommit.adapters.console.commands.tui_text_layout",
+        "memcommit.adapters.console.commands.surface_focus",
+        "memcommit.adapters.console.commands.semantic_viewer",
+        "memcommit.adapters.console.commands.read_only_viewer",
+        "memcommit.adapters.console.commands.understanding_render",
     }
     offenders = [
         (str(path.relative_to(ROOT)), module)
@@ -122,7 +122,7 @@ def test_no_consumer_reaches_moved_input_symbols_through_legacy_primitives() -> 
         for node in ast.walk(tree):
             if not isinstance(node, ast.ImportFrom):
                 continue
-            if node.module != "memcommit.commands.shared.tui_primitives":
+            if node.module != "memcommit.adapters.console.commands.shared.tui_primitives":
                 continue
             offenders.extend(
                 (str(path.relative_to(ROOT)), alias.name)

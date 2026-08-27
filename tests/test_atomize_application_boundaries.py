@@ -23,7 +23,7 @@ from memcommit.application.operations.atomize.runtime import (
     capture_atomize_session_snapshot,
 )
 from memcommit.application.operations.atomize.workflow import open_or_create_atomize_workbench
-from memcommit.commands.atomize.command import cmd as atomize_command
+from memcommit.adapters.console.commands.atomize.command import cmd as atomize_command
 from memcommit.context import AutoCheckpoint, Memory
 from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
     reconstruct_memory_history,
@@ -152,7 +152,7 @@ def _open_all_atomic_session(store: MemoryStore):
 @pytest.fixture(autouse=True)
 def _normal_form_provider(monkeypatch):
     monkeypatch.setattr(
-        "memcommit.commands.atomize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.atomize.command.connect_codex_chatgpt_provider",
         _AllAtomicProvider,
     )
 
@@ -563,7 +563,7 @@ def test_workbench_race_after_context_save_compensates_the_exact_checkpoint(
 
 def test_atomize_application_and_runtime_do_not_import_terminal_adapters():
     root = Path(__file__).resolve().parents[1]
-    forbidden = ("typer", "prompt_toolkit", "memcommit.commands")
+    forbidden = ("typer", "prompt_toolkit", "memcommit.adapters.console.commands")
     for relative in (
         "src/memcommit/application/operations/atomize/application.py",
         "src/memcommit/application/operations/atomize/runtime.py",

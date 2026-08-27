@@ -161,7 +161,7 @@ def _pause(label: str) -> None:
 def _run_child(kind: str) -> None:
     import click
 
-    import memcommit.commands.find_duplicates.command as find_command
+    import memcommit.adapters.console.commands.find_duplicates.command as find_command
     import memcommit.application.ops as ops
     from memcommit.adapters.console.entrypoint import app
     from memcommit.persistence.store import MemoryStore

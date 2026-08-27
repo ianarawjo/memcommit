@@ -157,6 +157,6 @@ def test_query_cli_adapter_has_no_store_provider_or_command_dependency():
         if isinstance(node, ast.ImportFrom) and node.module is not None
     }
 
-    assert not any(module.startswith("memcommit.commands") for module in imports)
+    assert not any(module.startswith("memcommit.adapters.console.commands") for module in imports)
     assert "memcommit.store" not in imports
     assert not any("provider" in module for module in imports)

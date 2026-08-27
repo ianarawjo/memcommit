@@ -4,7 +4,7 @@
 
 The Context-reach, flat-selection, and exact-name dialogs are reusable
 terminal-interface components, but their implementations lived under
-`memcommit.commands`. That location made operation-neutral interaction
+`memcommit.adapters.console.commands`. That location made operation-neutral interaction
 mechanics appear to belong to the Import command and left the dependency
 direction inconsistent with the rest of the shared TUI components.
 

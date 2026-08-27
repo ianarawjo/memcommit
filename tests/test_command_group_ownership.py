@@ -14,7 +14,7 @@ from typer.core import TyperGroup
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-LEGACY_MODULE = "memcommit.commands.shared.command_group"
+LEGACY_MODULE = "memcommit.adapters.console.commands.shared.command_group"
 OWNER_MODULE = "memcommit.adapters.interfaces.cli.command_group"
 CANONICAL_CONSUMERS = (
     "write_protection/command.py",
@@ -144,4 +144,4 @@ def test_clean_command_groups_import_the_interface_owner() -> None:
             "from memcommit.adapters.interfaces.cli.command_group import "
             "CanonicalCommandGroup" in source
         )
-        assert "from memcommit.commands.shared.command_group import" not in source
+        assert "from memcommit.adapters.console.commands.shared.command_group import" not in source

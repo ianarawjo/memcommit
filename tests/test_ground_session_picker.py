@@ -6,23 +6,23 @@ import os
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.commands.ground.command as ground_command
-import memcommit.commands.shared.operation_launcher_location as launcher_location_module
+import memcommit.adapters.console.commands.ground.command as ground_command
+import memcommit.adapters.console.commands.shared.operation_launcher_location as launcher_location_module
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.commands.ground.session_picker import (
+from memcommit.adapters.console.commands.ground.session_picker import (
     ground_session_picker_location,
     list_ground_session_catalog,
     list_ground_session_entries,
     reload_selected_ground_session,
 )
-from memcommit.commands.ground.workspace_picker import (
+from memcommit.adapters.console.commands.ground.workspace_picker import (
     list_ground_workspace_draft_catalog,
     list_ground_workspace_catalog,
     reload_selected_ground_workspace_draft,
     reload_selected_ground_workspace,
 )
-from memcommit.commands.ground.shell import (
+from memcommit.adapters.console.commands.ground.shell import (
     GroundShellProposal,
     GroundShellResult,
 )

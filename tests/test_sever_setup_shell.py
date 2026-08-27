@@ -6,8 +6,8 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 import pytest
 
-import memcommit.commands.sever.setup_shell as sever_setup_facade
-from memcommit.commands.shared.context_picker import ContextMemoryRow
+import memcommit.adapters.console.commands.sever.setup_shell as sever_setup_facade
+from memcommit.adapters.console.commands.shared.context_picker import ContextMemoryRow
 from memcommit.adapters.interfaces.tui.operations import sever as sever_tui
 from memcommit.adapters.interfaces.tui.operations.sever import (
     SeverEndpointSelection,

@@ -9,7 +9,7 @@ from pathlib import Path
 
 import pytest
 
-import memcommit.commands.sever.command as sever_command
+import memcommit.adapters.console.commands.sever.command as sever_command
 import memcommit.application.ops as ops
 from memcommit.application.operations.sever.model import (
     SeverApplication,
@@ -589,7 +589,7 @@ def test_sever_application_has_no_command_typer_or_tui_imports():
         for name in imported
         if name == "typer"
         or name.startswith("prompt_toolkit")
-        or name.startswith("memcommit.commands")
+        or name.startswith("memcommit.adapters.console.commands")
     )
     assert forbidden == ()
 

@@ -36,9 +36,9 @@ def test_production_consumers_use_operation_owners() -> None:
     relative_paths = (
         "src/memcommit/adapters/python_api/_operations/distill.py",
         "src/memcommit/adapters/python_api/_operations/elaborate.py",
-        "src/memcommit/commands/distill/command.py",
-        "src/memcommit/commands/elaborate/command.py",
-        "src/memcommit/commands/impact/process_local.py",
+        "src/memcommit/adapters/console/commands/distill/command.py",
+        "src/memcommit/adapters/console/commands/elaborate/command.py",
+        "src/memcommit/adapters/console/commands/impact/process_local.py",
         "src/memcommit/application/operations/ground/distill.py",
         "src/memcommit/application/operations/ground/elaborate.py",
         "src/memcommit/adapters/interfaces/cli/distill.py",
@@ -99,5 +99,5 @@ def test_operation_owners_do_not_depend_on_command_or_interface_adapters() -> No
         )
     )
 
-    assert "memcommit.commands" not in package_source
+    assert "memcommit.adapters.console.commands" not in package_source
     assert "memcommit.adapters.interfaces" not in package_source

@@ -69,7 +69,7 @@ assert "memcommit.application.operations.meld.resolution_application" not in sys
 def test_production_meld_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "src/memcommit/adapters/python_api/_operations/meld.py",
-        "src/memcommit/commands/meld/command.py",
+        "src/memcommit/adapters/console/commands/meld/command.py",
         "src/memcommit/application/operations/meld/restart_application.py",
         "src/memcommit/application/operations/meld/resolution_application.py",
         "src/memcommit/application/operations/meld/runtime.py",

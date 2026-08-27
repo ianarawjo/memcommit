@@ -152,10 +152,10 @@ def _initialize(store) -> None:
 
 
 def _invoke(store, argv: list[str]) -> None:
-    import memcommit.commands.atomize.command as atomize_command
-    import memcommit.commands.shared.command_wait as command_wait
-    import memcommit.commands.review.command as review_command
-    import memcommit.commands.shared.session_help as session_help
+    import memcommit.adapters.console.commands.atomize.command as atomize_command
+    import memcommit.adapters.console.commands.shared.command_wait as command_wait
+    import memcommit.adapters.console.commands.review.command as review_command
+    import memcommit.adapters.console.commands.shared.session_help as session_help
     import memcommit.adapters.interfaces.tui.components.session_help as session_help_component
 
     atomize_command.MemoryStore = lambda *args, **kwargs: store

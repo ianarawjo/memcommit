@@ -8,7 +8,7 @@ from typer.testing import CliRunner
 
 import memcommit.configuration.config as config_module
 import memcommit.application.ops as ops
-from memcommit.commands.meld import command as meld_command
+from memcommit.adapters.console.commands.meld import command as meld_command
 from memcommit.adapters.console.entrypoint import app
 from memcommit.application.operations.compare.ledger.model import ComparisonInput
 from memcommit.application.operations.compare.ledger.provider import (

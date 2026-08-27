@@ -10,7 +10,7 @@ save a session, or connect a provider.
 ## Reproduction frame
 
 - Working directory: `/Users/KimMunyeong/Github/memcommit`
-- Adapter: `memcommit.commands.meld.setup.choose_meld_setup`
+- Adapter: `memcommit.adapters.console.commands.meld.setup.choose_meld_setup`
 - Store: one fresh isolated temporary store per route
 - Profile: none; the host Profile and host Memory store are not read
 - Frozen Contexts: `route/from-a` and `route/from-b`

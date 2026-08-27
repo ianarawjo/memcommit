@@ -396,7 +396,7 @@ def _run_slow_cli(home: Path, args: list[str]) -> None:
     """Delay only capture-process deletion so every shared busy frame appears."""
 
     os.environ["HOME"] = str(home)
-    from memcommit.commands import profile as profile_command
+    from memcommit.adapters.console.commands import profile as profile_command
     from memcommit.adapters.console.entrypoint import app
 
     original_profile = profile_command.remove_profile

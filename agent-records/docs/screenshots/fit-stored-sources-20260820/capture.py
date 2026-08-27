@@ -101,7 +101,7 @@ def _prepare_store(root: Path):
 
 
 def _print_verification(store, current, policies, digests) -> None:
-    from memcommit.commands import show as show_command
+    from memcommit.adapters.console.commands import show as show_command
     from memcommit.application.operations.fit.store import FitStore
     from memcommit.persistence.store import context_record_digest
 
@@ -125,7 +125,7 @@ def _print_verification(store, current, policies, digests) -> None:
 
 
 def _run_viewer_child(store_root: Path) -> None:
-    import memcommit.commands.fit.command as fit_command
+    import memcommit.adapters.console.commands.fit.command as fit_command
 
     _Provider.calls = 0
     _use_store_root(store_root)
@@ -151,7 +151,7 @@ def _run_viewer_child(store_root: Path) -> None:
 
 def _run_overlap_child(store_root: Path) -> None:
     import click
-    import memcommit.commands.fit.command as fit_command
+    import memcommit.adapters.console.commands.fit.command as fit_command
     from memcommit.application.operations.fit.store import FitStore
     from memcommit.persistence.store import context_record_digest
 

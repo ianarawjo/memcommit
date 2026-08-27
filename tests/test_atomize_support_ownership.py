@@ -68,7 +68,7 @@ def test_atomize_support_imports_follow_the_canonical_dependency_direction() -> 
 
     for relative_path in canonical_paths:
         source = (REPOSITORY_ROOT / "src" / relative_path).read_text(encoding="utf-8")
-        assert "memcommit.commands" not in source
+        assert "memcommit.adapters.console.commands" not in source
         assert "memcommit.adapters.interfaces" not in source
         for legacy_name in legacy_names:
             assert legacy_name not in source
@@ -79,11 +79,11 @@ def test_atomize_production_consumers_use_canonical_support_modules() -> None:
         "src/memcommit/adapters/python_api/_operations/atomize.py",
         "src/memcommit/adapters/python_api/_operations/atomize_grounding.py",
         "src/memcommit/application/operations/atomize/workflow.py",
-        "src/memcommit/commands/atomize/command.py",
-        "src/memcommit/commands/atomize/grounding.py",
-        "src/memcommit/commands/atomize/sessions.py",
-        "src/memcommit/commands/impact/command.py",
-        "src/memcommit/commands/review/command.py",
+        "src/memcommit/adapters/console/commands/atomize/command.py",
+        "src/memcommit/adapters/console/commands/atomize/grounding.py",
+        "src/memcommit/adapters/console/commands/atomize/sessions.py",
+        "src/memcommit/adapters/console/commands/impact/command.py",
+        "src/memcommit/adapters/console/commands/review/command.py",
         "src/memcommit/adapters/interfaces/cli/atomize.py",
         "src/memcommit/adapters/interfaces/cli/atomize_grounding.py",
         "src/memcommit/adapters/interfaces/tui/operations/atomize/adapter.py",
@@ -121,5 +121,5 @@ def test_atomize_view_adapters_remain_read_only_projections() -> None:
         source = (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         assert "MemoryStore" not in source
         assert "provider.complete" not in source
-        assert "memcommit.commands" not in source
+        assert "memcommit.adapters.console.commands" not in source
         assert "memcommit.adapters.interfaces" not in source

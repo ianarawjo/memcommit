@@ -28,7 +28,7 @@ assert "memcommit.application.reviewing.report" not in sys.modules
 def test_production_review_report_consumers_use_the_shared_owner() -> None:
     relative_paths = (
         "src/memcommit/application/retained_history/applied_review.py",
-        "src/memcommit/commands/review/report.py",
+        "src/memcommit/adapters/console/commands/review/report.py",
         "src/memcommit/application/operations/review/report_adapters.py",
     )
 
@@ -48,7 +48,7 @@ def test_shared_review_report_does_not_own_operation_adapters() -> None:
         / "report.py"
     ).read_text(encoding="utf-8")
 
-    assert "memcommit.commands" not in source
+    assert "memcommit.adapters.console.commands" not in source
     for operation_module in (
         "memcommit.atomize",
         "memcommit.comparison",

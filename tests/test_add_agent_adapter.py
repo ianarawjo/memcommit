@@ -247,7 +247,7 @@ def test_agent_adapter_depends_only_on_public_api_and_shared_agent_contract():
     forbidden = (
         "memcommit.add_application",
         "memcommit.add_runtime",
-        "memcommit.commands",
+        "memcommit.adapters.console.commands",
         "memcommit.application.operations",
         "memcommit.infrastructure",
         "memcommit.store",

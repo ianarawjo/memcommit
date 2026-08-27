@@ -32,7 +32,7 @@ def test_clear_request_and_result_are_terminal_independent() -> None:
 
 
 def test_clear_command_delegates_behavior_to_operation_runtime() -> None:
-    path = REPOSITORY_ROOT / "src/memcommit/commands/clear/command.py"
+    path = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/clear/command.py"
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
     imports = {
         node.module
@@ -53,7 +53,7 @@ def test_clear_operation_has_no_terminal_dependency() -> None:
     ):
         source = (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         assert "import typer" not in source
-        assert "memcommit.commands" not in source
+        assert "memcommit.adapters.console.commands" not in source
 
 
 def test_clear_operation_package_import_is_lazy() -> None:

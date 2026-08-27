@@ -13,7 +13,7 @@ from memcommit.application.retained_history.checkpoint_catalog import (
     resolve_checkpoint_unit,
 )
 from memcommit.adapters.console.entrypoint import app
-from memcommit.commands.shared.history_picker import revert_exact_command_review
+from memcommit.adapters.console.commands.shared.history_picker import revert_exact_command_review
 from memcommit.persistence.store import MemoryStore, context_record_digest
 
 

@@ -10,15 +10,15 @@ import uuid
 import pytest
 
 import memcommit.application.ops as ops
-import memcommit.commands.find.command as find_command
+import memcommit.adapters.console.commands.find.command as find_command
 import memcommit.application.operations.search.materialization_application as materialization_application
 import memcommit.application.operations.search.materialization_runtime as materialization_runtime
 import memcommit.persistence.store as store_module
 from memcommit.application.authority.access import resolve_context_access
-from memcommit.commands.shared.readable_context_catalog import (
+from memcommit.adapters.console.commands.shared.readable_context_catalog import (
     freeze_readable_context_catalog,
 )
-from memcommit.commands.find.search_workbench import FindSearchWorkbenchResult
+from memcommit.adapters.console.commands.find.search_workbench import FindSearchWorkbenchResult
 from memcommit.context import Memory, MemoryRef
 from memcommit.application.operations.search.application import (
     FindSearchRequest,
@@ -508,7 +508,7 @@ def test_materialization_application_has_no_command_typer_tui_or_provider_import
             for name in imported
             if name == "typer"
             or name.startswith("prompt_toolkit")
-            or name.startswith("memcommit.commands")
+            or name.startswith("memcommit.adapters.console.commands")
             or "provider" in name
         )
         assert forbidden == ()

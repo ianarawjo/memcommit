@@ -233,7 +233,7 @@ def _fixture(home: Path) -> None:
     import memcommit.configuration.config as config_module
     import memcommit.application.ops as ops
     from memcommit.application.operations.atomize.domain import create_atomize_analysis, impact_atomize
-    from memcommit.commands.atomize.sessions import atomize_session_entries
+    from memcommit.adapters.console.commands.atomize.sessions import atomize_session_entries
     from memcommit.configuration.config import Config
     from memcommit.application.operations.profile.config import (
         ProfileEntry,
@@ -325,7 +325,7 @@ def _verify(home: Path) -> None:
     os.environ["HOME"] = str(home)
     sys.path.insert(0, str(ROOT / "src"))
 
-    from memcommit.commands.atomize.sessions import atomize_session_entries
+    from memcommit.adapters.console.commands.atomize.sessions import atomize_session_entries
     from memcommit.persistence.store import MemoryStore
     from memcommit.study_scenarios.legacy.prewarm.installations import (
         INSTALLATIONS_DIRECTORY_NAME,

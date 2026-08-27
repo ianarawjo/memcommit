@@ -132,7 +132,7 @@ def _new_context(*, uid: str, name: str, memory_uid: str, content: str):
 
 
 def _child_update(store_root: Path) -> None:
-    from memcommit.commands.update.render import review_update_application
+    from memcommit.adapters.console.commands.update.render import review_update_application
     from memcommit.persistence.store import MemoryStore
     from memcommit.application.operations.update.model import plan_update
 
@@ -185,7 +185,7 @@ def _child_verify_update(store_root: Path) -> None:
 
 
 def _child_undo_update(store_root: Path) -> None:
-    from memcommit.commands.shared.restoration_present import render_command_restore_receipt
+    from memcommit.adapters.console.commands.shared.restoration_present import render_command_restore_receipt
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root, create=False)
@@ -200,7 +200,7 @@ def _child_undo_update(store_root: Path) -> None:
 
 
 def _child_granted_update(store_root: Path) -> None:
-    from memcommit.commands.update.render import review_update_application
+    from memcommit.adapters.console.commands.update.render import review_update_application
     from memcommit.persistence.store import MemoryStore
     from memcommit.application.operations.update.model import GrantedUpdateTarget, plan_update
 
@@ -254,7 +254,7 @@ def _child_granted_update(store_root: Path) -> None:
 
 
 def _child_granted_update_noop(store_root: Path) -> None:
-    from memcommit.commands.update.render import review_update_application
+    from memcommit.adapters.console.commands.update.render import review_update_application
     from memcommit.persistence.store import MemoryStore
     from memcommit.application.operations.update.model import GrantedUpdateTarget, plan_update
 

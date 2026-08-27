@@ -34,7 +34,7 @@ assert not [
 
 def test_production_translate_consumers_use_operation_owners() -> None:
     relative_paths = (
-        "src/memcommit/commands/translate/command.py",
+        "src/memcommit/adapters/console/commands/translate/command.py",
         "src/memcommit/study_scenarios/legacy/bundle.py",
         "src/memcommit/application/operations/query/granted_source.py",
         "src/memcommit/application/operations/translate/view.py",
@@ -96,13 +96,13 @@ def test_translate_owners_keep_the_existing_dependency_direction() -> None:
         + catalog_application_source
         + materialization_source
     )
-    assert "memcommit.commands" not in operation_sources
+    assert "memcommit.adapters.console.commands" not in operation_sources
     assert "memcommit.adapters.interfaces" not in operation_sources
     assert "import typer" not in operation_sources
 
 
 def test_translate_command_is_only_an_io_and_presentation_adapter() -> None:
-    path = REPOSITORY_ROOT / "src/memcommit/commands/translate/command.py"
+    path = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/translate/command.py"
     source = path.read_text(encoding="utf-8")
     tree = ast.parse(source, filename=str(path))
     imports = {

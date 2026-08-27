@@ -11,7 +11,7 @@ import pytest
 
 
 REPOSITORY_ROOT = Path(__file__).parents[1]
-LEGACY_MODULE = "memcommit.commands.shell_init.command"
+LEGACY_MODULE = "memcommit.adapters.console.commands.shell_init.command"
 OWNER_MODULE = "memcommit.adapters.interfaces.cli.shell_init"
 
 
@@ -84,7 +84,7 @@ def test_cli_registers_the_interface_owned_shell_init_command() -> None:
     command_imports = {
         alias.name
         for node in tree.body
-        if isinstance(node, ast.ImportFrom) and node.module == "memcommit.commands"
+        if isinstance(node, ast.ImportFrom) and node.module == "memcommit.adapters.console.commands"
         for alias in node.names
     }
 

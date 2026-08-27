@@ -49,7 +49,7 @@ def _context(
 
 
 def _run_contexts_child(store_root: Path) -> None:
-    import memcommit.commands.fit.command as fit_command
+    import memcommit.adapters.console.commands.fit.command as fit_command
     from memcommit.application.operations.fit.store import FitStore
     from memcommit.persistence.store import MemoryStore, context_record_digest
 
@@ -108,7 +108,7 @@ def _run_contexts_child(store_root: Path) -> None:
 
 
 def _run_memories_child(store_root: Path) -> None:
-    import memcommit.commands.fit.command as fit_command
+    import memcommit.adapters.console.commands.fit.command as fit_command
     from memcommit.context import Context, Memory
     from memcommit.application.operations.fit.store import FitStore
     from memcommit.persistence.store import MemoryStore, context_record_digest

@@ -16,7 +16,7 @@ search, selection, editing, and application authority.
 
 ## Decision
 
-`memcommit.commands.surface_focus` owns the operation-neutral Surface contract:
+`memcommit.adapters.console.commands.surface_focus` owns the operation-neutral Surface contract:
 
 - `FocusSurface` pairs a stable UI UID and prompt-toolkit control with optional
   vertical movement, activation, back, focus synchronization, and

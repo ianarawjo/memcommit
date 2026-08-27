@@ -48,7 +48,7 @@ def replace_rationale_subscription_provider(monkeypatch):
     """No ordinary test may accidentally start a live Rationale provider turn."""
 
     monkeypatch.setattr(
-        "memcommit.commands.rationale.command.connect_semantic_provider",
+        "memcommit.adapters.console.commands.rationale.command.connect_semantic_provider",
         _RationaleFixtureProvider,
     )
 

@@ -4,7 +4,7 @@ import click
 from typer.main import get_command
 
 from memcommit.adapters.console.entrypoint import app
-from memcommit.commands.help_inventory.command import (
+from memcommit.adapters.console.commands.help_inventory.command import (
     HELP_CATEGORY_DESCRIPTIONS,
     HELP_CATEGORY_GROUPS,
     _help_group_fragments,

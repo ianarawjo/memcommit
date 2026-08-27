@@ -611,7 +611,7 @@ its evidence, mutations, and future claims inspectable.
 The shared read-only Memory report picker used by `mem trace` and
 `mem rationale` is owned by
 `memcommit.adapters.interfaces.tui.components.memory_report_picker`. The established
-`memcommit.commands.shared.memory_picker` path remains an exact module alias so
+`memcommit.adapters.console.commands.shared.memory_picker` path remains an exact module alias so
 existing imports and legacy-path monkeypatches reach the same implementation
 globals.
 

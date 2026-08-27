@@ -6,11 +6,11 @@ from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.commands.shared.memory_report_recents import (
+from memcommit.adapters.console.commands.shared.memory_report_recents import (
     MemoryReportRecentSelection,
     MemoryReportSelectAction,
 )
-from memcommit.commands.shared.memory_picker import MemoryReportTargetSelection
+from memcommit.adapters.console.commands.shared.memory_picker import MemoryReportTargetSelection
 from memcommit.context import Memory, MemoryRef, QueryContextRef
 from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
     collect_memory_history_candidates,
@@ -94,7 +94,7 @@ def test_bare_trace_runs_existing_report_for_picker_uid(
         return _target_selection(context_name, context_name, target.uid)
 
     monkeypatch.setattr(
-        "memcommit.commands.trace.command.choose_memory_report_target",
+        "memcommit.adapters.console.commands.trace.command.choose_memory_report_target",
         select,
     )
 
@@ -119,7 +119,7 @@ def test_bare_rationale_selects_provenance_target(
     assert invoke("add", "portable note").exit_code == 0
     target = _direct_memories(MemoryStore())[0]
     monkeypatch.setattr(
-        "memcommit.commands.rationale.command.choose_memory_report_target",
+        "memcommit.adapters.console.commands.rationale.command.choose_memory_report_target",
         lambda items,
         *,
         context_name,
@@ -169,7 +169,7 @@ def test_trace_descendant_range_opens_the_selected_owner_history(
         )
 
     monkeypatch.setattr(
-        "memcommit.commands.trace.command.choose_memory_report_target",
+        "memcommit.adapters.console.commands.trace.command.choose_memory_report_target",
         select,
     )
 
@@ -212,7 +212,7 @@ def test_rationale_picker_groups_memories_under_their_public_context(
         )
 
     monkeypatch.setattr(
-        "memcommit.commands.rationale.command.choose_memory_report_target",
+        "memcommit.adapters.console.commands.rationale.command.choose_memory_report_target",
         select,
     )
 
@@ -240,7 +240,7 @@ def test_interactive_rationale_returns_terminal_receipt_without_viewer(
     assert invoke("add", "portable note").exit_code == 0
     target = _direct_memories(MemoryStore())[0]
     monkeypatch.setattr(
-        "memcommit.commands.rationale.command.interactive_report_terminal",
+        "memcommit.adapters.console.commands.rationale.command.interactive_report_terminal",
         lambda: True,
     )
 
@@ -261,17 +261,17 @@ def test_interactive_trace_opens_vertical_viewer_only_when_requested(
     target = _direct_memories(MemoryStore())[0]
     viewed: list[tuple[str, str]] = []
     monkeypatch.setattr(
-        "memcommit.commands.trace.command.interactive_report_terminal",
+        "memcommit.adapters.console.commands.trace.command.interactive_report_terminal",
         lambda: True,
     )
     monkeypatch.setattr(
-        "memcommit.commands.trace.command.open_trace_viewer",
+        "memcommit.adapters.console.commands.trace.command.open_trace_viewer",
         lambda report, *, verbose, limit: viewed.append(
             (report.context_name, report.selected_uid)
         ),
     )
     monkeypatch.setattr(
-        "memcommit.commands.trace.command.choose_memory_report_target",
+        "memcommit.adapters.console.commands.trace.command.choose_memory_report_target",
         lambda items,
         *,
         context_name,
@@ -280,7 +280,7 @@ def test_interactive_trace_opens_vertical_viewer_only_when_requested(
         **kwargs: (_target_selection(context_name, context_name, target.uid)),
     )
     monkeypatch.setattr(
-        "memcommit.commands.trace.command.choose_memory_report_recent",
+        "memcommit.adapters.console.commands.trace.command.choose_memory_report_recent",
         lambda store, *, operation: MemoryReportSelectAction(),
     )
     bare = invoke("trace")
@@ -304,11 +304,11 @@ def test_bare_trace_recent_reopens_without_context_memory_selector(
     target = _direct_memories(MemoryStore())[0]
     viewed: list[str] = []
     monkeypatch.setattr(
-        "memcommit.commands.trace.command.interactive_report_terminal",
+        "memcommit.adapters.console.commands.trace.command.interactive_report_terminal",
         lambda: True,
     )
     monkeypatch.setattr(
-        "memcommit.commands.trace.command.choose_memory_report_recent",
+        "memcommit.adapters.console.commands.trace.command.choose_memory_report_recent",
         lambda store, *, operation: MemoryReportRecentSelection(
             context_name="notes",
             memory_uid=target.uid,
@@ -316,13 +316,13 @@ def test_bare_trace_recent_reopens_without_context_memory_selector(
         ),
     )
     monkeypatch.setattr(
-        "memcommit.commands.trace.command.choose_memory_report_target",
+        "memcommit.adapters.console.commands.trace.command.choose_memory_report_target",
         lambda *args, **kwargs: (_ for _ in ()).throw(
             AssertionError("a recent receipt must bypass fresh selection")
         ),
     )
     monkeypatch.setattr(
-        "memcommit.commands.trace.command.open_trace_viewer",
+        "memcommit.adapters.console.commands.trace.command.open_trace_viewer",
         lambda report, *, verbose, limit: viewed.append(report.current[0].content),
     )
 
@@ -341,11 +341,11 @@ def test_bare_rationale_recent_reopens_its_recorded_scope(
     assert invoke("add", "portable note").exit_code == 0
     target = _direct_memories(MemoryStore())[0]
     monkeypatch.setattr(
-        "memcommit.commands.rationale.command.interactive_report_terminal",
+        "memcommit.adapters.console.commands.rationale.command.interactive_report_terminal",
         lambda: True,
     )
     monkeypatch.setattr(
-        "memcommit.commands.rationale.command.choose_memory_report_recent",
+        "memcommit.adapters.console.commands.rationale.command.choose_memory_report_recent",
         lambda store, *, operation: MemoryReportRecentSelection(
             context_name="notes",
             memory_uid=target.uid,
@@ -353,7 +353,7 @@ def test_bare_rationale_recent_reopens_its_recorded_scope(
         ),
     )
     monkeypatch.setattr(
-        "memcommit.commands.rationale.command.choose_memory_report_target",
+        "memcommit.adapters.console.commands.rationale.command.choose_memory_report_target",
         lambda *args, **kwargs: (_ for _ in ()).throw(
             AssertionError("a recent receipt must bypass fresh selection")
         ),
@@ -372,7 +372,7 @@ def test_bare_rationale_cancel_returns_without_report(
     assert invoke("init", "notes").exit_code == 0
     assert invoke("add", "portable note").exit_code == 0
     monkeypatch.setattr(
-        "memcommit.commands.rationale.command.choose_memory_report_target",
+        "memcommit.adapters.console.commands.rationale.command.choose_memory_report_target",
         lambda items,
         *,
         context_name,
@@ -427,11 +427,11 @@ def test_bare_commands_open_empty_current_memory_tree_before_cancelling(
         return None
 
     monkeypatch.setattr(
-        "memcommit.commands.trace.command.choose_memory_report_target",
+        "memcommit.adapters.console.commands.trace.command.choose_memory_report_target",
         cancel_target,
     )
     monkeypatch.setattr(
-        "memcommit.commands.rationale.command.choose_memory_report_target",
+        "memcommit.adapters.console.commands.rationale.command.choose_memory_report_target",
         cancel_target,
     )
 
@@ -466,7 +466,7 @@ def test_bare_trace_does_not_browse_away_from_empty_current_context(
         return None
 
     monkeypatch.setattr(
-        "memcommit.commands.trace.command.choose_memory_report_target",
+        "memcommit.adapters.console.commands.trace.command.choose_memory_report_target",
         cancel_target,
     )
 
@@ -496,7 +496,7 @@ def test_bare_rationale_does_not_browse_away_from_empty_current_context(
         return None
 
     monkeypatch.setattr(
-        "memcommit.commands.rationale.command.choose_memory_report_target",
+        "memcommit.adapters.console.commands.rationale.command.choose_memory_report_target",
         cancel_target,
     )
     result = invoke("rationale")
@@ -516,11 +516,11 @@ def test_explicit_selectors_bypass_picker(isolated_store, monkeypatch):
         raise AssertionError("an explicit selector must not open the picker")
 
     monkeypatch.setattr(
-        "memcommit.commands.trace.command.choose_memory_report_target",
+        "memcommit.adapters.console.commands.trace.command.choose_memory_report_target",
         unexpected,
     )
     monkeypatch.setattr(
-        "memcommit.commands.rationale.command.choose_memory_report_target",
+        "memcommit.adapters.console.commands.rationale.command.choose_memory_report_target",
         unexpected,
     )
 
@@ -543,11 +543,11 @@ def test_explicit_context_bypasses_recents_and_uses_exact_picker_root(
         raise AssertionError("an explicit Context must bypass global launchers")
 
     monkeypatch.setattr(
-        "memcommit.commands.trace.command.choose_memory_report_recent",
+        "memcommit.adapters.console.commands.trace.command.choose_memory_report_recent",
         unexpected,
     )
     monkeypatch.setattr(
-        "memcommit.commands.rationale.command.choose_memory_report_recent",
+        "memcommit.adapters.console.commands.rationale.command.choose_memory_report_recent",
         unexpected,
     )
     observed_roots: dict[str, str] = {}
@@ -561,11 +561,11 @@ def test_explicit_context_bypasses_recents_and_uses_exact_picker_root(
         return _target_selection(context_name, context_name, target.uid)
 
     monkeypatch.setattr(
-        "memcommit.commands.trace.command.choose_memory_report_target",
+        "memcommit.adapters.console.commands.trace.command.choose_memory_report_target",
         select_trace,
     )
     monkeypatch.setattr(
-        "memcommit.commands.rationale.command.choose_memory_report_target",
+        "memcommit.adapters.console.commands.rationale.command.choose_memory_report_target",
         select_rationale,
     )
 
@@ -589,11 +589,11 @@ def test_bare_json_requires_an_explicit_selector(isolated_store, monkeypatch):
         raise AssertionError("bare JSON output must not open a picker")
 
     monkeypatch.setattr(
-        "memcommit.commands.trace.command.choose_memory_report_target",
+        "memcommit.adapters.console.commands.trace.command.choose_memory_report_target",
         unexpected,
     )
     monkeypatch.setattr(
-        "memcommit.commands.rationale.command.choose_memory_report_target",
+        "memcommit.adapters.console.commands.rationale.command.choose_memory_report_target",
         unexpected,
     )
 

@@ -246,7 +246,7 @@ def test_bare_cli_edit_enters_and_can_cancel_interactive_setup(
     isolated_store,
     monkeypatch,
 ):
-    import memcommit.commands.edit.command as edit_command
+    import memcommit.adapters.console.commands.edit.command as edit_command
 
     monkeypatch.setattr(edit_command, "is_interactive_terminal", lambda: True)
     monkeypatch.setattr(

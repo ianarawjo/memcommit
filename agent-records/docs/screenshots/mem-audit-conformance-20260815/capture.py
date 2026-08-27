@@ -23,7 +23,7 @@ def _demo_child() -> None:
     """Run the product Audit wait/review path with deterministic provider replies."""
 
     from memcommit.application import ops
-    from memcommit.commands.audit.command import (
+    from memcommit.adapters.console.commands.audit.command import (
         _run_quality_audit_checks,
         run_quality_audit_review,
     )
@@ -31,7 +31,7 @@ def _demo_child() -> None:
     from memcommit.providers.types import ProviderIdentity
     from memcommit.application.reviewing.quality.audit import quality_audit_resolution_view
     from memcommit.application.reviewing.quality.audit_store import QualityAuditStore
-    from memcommit.commands.shared.resolution_workbench_shell import (
+    from memcommit.adapters.console.commands.shared.resolution_workbench_shell import (
         render_resolution_workbench_snapshot,
     )
     from memcommit.application.operations.review.model import direct_context_digest

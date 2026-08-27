@@ -7,8 +7,8 @@ from typer.testing import CliRunner
 import memcommit.application.ops as ops
 import memcommit.application.operations.forget.runtime as forget_runtime
 from memcommit.adapters.console.entrypoint import app
-from memcommit.commands.forget import command as forget_command
-from memcommit.commands.forget.setup_workbench import (
+from memcommit.adapters.console.commands.forget import command as forget_command
+from memcommit.adapters.console.commands.forget.setup_workbench import (
     ForgetSetupReceipt,
     choose_forget_setup,
 )

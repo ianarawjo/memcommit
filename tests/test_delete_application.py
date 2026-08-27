@@ -248,7 +248,7 @@ def test_delete_boundary_has_no_terminal_dependencies(path):
         name == prefix or name.startswith(f"{prefix}.")
         for name in imports
         for prefix in (
-            "memcommit.commands",
+            "memcommit.adapters.console.commands",
             "memcommit.adapters.interfaces",
             "prompt_toolkit",
             "typer",

@@ -42,7 +42,7 @@ def _context_state() -> tuple[bytes, tuple[str, ...]]:
 
 def _run_tui_child(*, cancel: bool) -> None:
     from memcommit.adapters.console.entrypoint import app
-    from memcommit.commands import summarize as summarize_command
+    from memcommit.adapters.console.commands import summarize as summarize_command
 
     copied: list[str] = []
     summarize_command.write_system_clipboard = copied.append

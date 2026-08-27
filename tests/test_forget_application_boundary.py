@@ -31,7 +31,7 @@ from memcommit.application.operations.forget.runtime import (
 from memcommit.adapters.interfaces.tui.operations.forget.resolution import (
     ForgetResolutionWorkbenchAdapter as LegacyForgetResolutionWorkbenchAdapter,
 )
-from memcommit.commands.forget.setup_workbench import (
+from memcommit.adapters.console.commands.forget.setup_workbench import (
     ForgetSetupReceipt as LegacyForgetSetupReceipt,
 )
 from memcommit.adapters.interfaces.tui.operations.forget.resolution import (
@@ -153,7 +153,7 @@ def test_forget_application_has_no_command_or_terminal_dependency() -> None:
             for node in ast.walk(tree)
             if isinstance(node, ast.ImportFrom) and node.module is not None
         }
-        assert not any(name.startswith("memcommit.commands") for name in imports)
+        assert not any(name.startswith("memcommit.adapters.console.commands") for name in imports)
         assert "typer" not in imports
         assert not any(name.startswith("prompt_toolkit") for name in imports)
 
@@ -173,7 +173,7 @@ def test_forget_tui_modules_own_the_legacy_component_identities() -> None:
             for node in ast.walk(tree)
             if isinstance(node, ast.ImportFrom) and node.module is not None
         }
-        assert not any(module.startswith("memcommit.commands") for module in imports)
+        assert not any(module.startswith("memcommit.adapters.console.commands") for module in imports)
 
 
 def test_forget_freezes_source_before_provider_construction() -> None:

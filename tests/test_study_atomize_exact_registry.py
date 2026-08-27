@@ -244,7 +244,7 @@ def test_exact_atomize_cli_reuses_analysis_then_verifies_normal_form(
         registry_snapshot=registry,
     )
     monkeypatch.setattr(
-        "memcommit.commands.atomize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.atomize.command.connect_codex_chatgpt_provider",
         CompositeProvider,
     )
 
@@ -271,7 +271,7 @@ def test_exact_single_memory_focus_reuses_equivalent_atomize_prewarm(
     )
     memory = next(item for item in source.iter_items() if isinstance(item, Memory))
     monkeypatch.setattr(
-        "memcommit.commands.atomize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.atomize.command.connect_codex_chatgpt_provider",
         lambda: (_ for _ in ()).throw(
             AssertionError("equivalent focused prewarm opened a provider")
         ),

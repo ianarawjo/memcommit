@@ -12,7 +12,7 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
-import memcommit.commands.elaborate.command as elaborate_command
+import memcommit.adapters.console.commands.elaborate.command as elaborate_command
 import memcommit.application.operations.elaborate.application as elaborate_application
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
@@ -776,7 +776,7 @@ def test_elaborate_application_imports_no_terminal_or_command_adapter() -> None:
         for name in imports
         if name == "typer"
         or name.startswith("prompt_toolkit")
-        or name.startswith("memcommit.commands")
+        or name.startswith("memcommit.adapters.console.commands")
     ) == ()
 
 

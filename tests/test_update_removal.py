@@ -95,7 +95,7 @@ def test_mem_update_applies_explicit_removal_and_diff_keeps_provenance(
     )
     provider = _RemovalProvider()
     monkeypatch.setattr(
-        "memcommit.commands.update.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.update.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 

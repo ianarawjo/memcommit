@@ -13,8 +13,8 @@ from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
-import memcommit.commands.atomize.command as atomize_command
-import memcommit.commands.atomize.sessions as atomize_sessions_module
+import memcommit.adapters.console.commands.atomize.command as atomize_command
+import memcommit.adapters.console.commands.atomize.sessions as atomize_sessions_module
 from memcommit.application.operations.atomize.domain import (
     ATOMIZE_LEGACY_RULESET_VERSION,
     AtomizeAnalysisSession,
@@ -37,7 +37,7 @@ from memcommit.application.operations.atomize.workflow import (
     open_or_create_atomize_workbench,
 )
 from memcommit.adapters.console.entrypoint import app
-from memcommit.commands.atomize.command import _materialize_reviewed_workbench
+from memcommit.adapters.console.commands.atomize.command import _materialize_reviewed_workbench
 from memcommit.adapters.interfaces.tui.operations.atomize.screen import (
     _finding_map,
     _list_text,
@@ -45,12 +45,12 @@ from memcommit.adapters.interfaces.tui.operations.atomize.screen import (
     render_atomize_workbench_snapshot,
     run_atomize_workbench_shell,
 )
-from memcommit.commands.atomize.sessions import (
+from memcommit.adapters.console.commands.atomize.sessions import (
     atomize_session_entries,
     choose_atomize_session,
     revalidate_saved_atomize_analysis,
 )
-from memcommit.commands.shared.endpoint_setup_flows import AtomizeSetupReceipt
+from memcommit.adapters.console.commands.shared.endpoint_setup_flows import AtomizeSetupReceipt
 from memcommit.adapters.interfaces.tui.workbenches.review import RESPONSE_LABEL
 from memcommit.adapters.interfaces.tui.workbenches.resolution import ResolutionDestination
 from memcommit.adapters.interfaces.tui.components.operation_launcher.session import (
@@ -244,11 +244,11 @@ def _init_context(store: MemoryStore):
 
 def _patch_provider(monkeypatch, provider):
     monkeypatch.setattr(
-        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     monkeypatch.setattr(
-        "memcommit.commands.atomize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.atomize.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -259,7 +259,7 @@ def _default_apply_provider(monkeypatch):
 
     provider = AggregateProvider()
     monkeypatch.setattr(
-        "memcommit.commands.atomize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.atomize.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -564,7 +564,7 @@ def test_atomize_sessions_catalog_reopens_exact_analysis_provider_free(
     store.set_current(other.name)
     before = store._context_file(ctx.name).read_bytes()
     monkeypatch.setattr(
-        "memcommit.commands.atomize.command.choose_atomize_session",
+        "memcommit.adapters.console.commands.atomize.command.choose_atomize_session",
         lambda _store, *, show_all: SessionOpenReceipt(
             kind="atomize",
             key=entry.key,
@@ -576,7 +576,7 @@ def test_atomize_sessions_catalog_reopens_exact_analysis_provider_free(
         raise AssertionError("saved selection must be provider-free")
 
     monkeypatch.setattr(
-        "memcommit.commands.atomize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.atomize.command.connect_codex_chatgpt_provider",
         provider_must_not_connect,
     )
     resumed = runner.invoke(app, ["atomize", "--sessions"])
@@ -597,17 +597,17 @@ def test_bare_interactive_atomize_applies_the_current_context_without_a_session(
     provider = AggregateProvider()
     _patch_provider(monkeypatch, provider)
     monkeypatch.setattr(
-        "memcommit.commands.atomize.command._interactive_terminal",
+        "memcommit.adapters.console.commands.atomize.command._interactive_terminal",
         lambda: True,
     )
     monkeypatch.setattr(
-        "memcommit.commands.atomize.command.choose_atomize_session",
+        "memcommit.adapters.console.commands.atomize.command.choose_atomize_session",
         lambda *_args, **_kwargs: (_ for _ in ()).throw(
             AssertionError("bare Atomize must not open the session launcher")
         ),
     )
     monkeypatch.setattr(
-        "memcommit.commands.atomize.command.present_atomize_workbench",
+        "memcommit.adapters.console.commands.atomize.command.present_atomize_workbench",
         lambda **_kwargs: (_ for _ in ()).throw(
             AssertionError("bare Atomize must not open the workbench")
         ),
@@ -717,13 +717,13 @@ def test_bare_atomize_receipt_samples_content_and_applied_review_remains_complet
     provider = SplitProvider()
     _patch_provider(monkeypatch, provider)
     monkeypatch.setattr(
-        "memcommit.commands.atomize.command.choose_atomize_session",
+        "memcommit.adapters.console.commands.atomize.command.choose_atomize_session",
         lambda *_args, **_kwargs: (_ for _ in ()).throw(
             AssertionError("bare Atomize must not open the session launcher")
         ),
     )
     monkeypatch.setattr(
-        "memcommit.commands.atomize.command.present_atomize_workbench",
+        "memcommit.adapters.console.commands.atomize.command.present_atomize_workbench",
         lambda **_kwargs: (_ for _ in ()).throw(
             AssertionError("bare Atomize must not open the workbench")
         ),
@@ -822,14 +822,14 @@ def test_atomize_launcher_new_persists_input_output_on_shared_workbench(
     provider = AggregateProvider()
     _patch_provider(monkeypatch, provider)
     monkeypatch.setattr(
-        "memcommit.commands.atomize.command.choose_atomize_session",
+        "memcommit.adapters.console.commands.atomize.command.choose_atomize_session",
         lambda _store, *, show_all: SessionNewReceipt(
             kind="atomize",
             argv=("mem", "atomize"),
         ),
     )
     monkeypatch.setattr(
-        "memcommit.commands.atomize.command.choose_atomize_setup",
+        "memcommit.adapters.console.commands.atomize.command.choose_atomize_setup",
         lambda _store: AtomizeSetupReceipt(
             input_name=ctx.name,
             output_name="workbench/atomized-output",
@@ -960,7 +960,7 @@ def test_atomize_sessions_empty_and_forged_receipts_fail_closed(
 ):
     store = MemoryStore()
     monkeypatch.setattr(
-        "memcommit.commands.atomize.sessions.choose_session",
+        "memcommit.adapters.console.commands.atomize.sessions.choose_session",
         lambda *_args, **_kwargs: (_ for _ in ()).throw(
             AssertionError("empty catalog must not open the picker")
         ),
@@ -980,7 +980,7 @@ def test_atomize_sessions_empty_and_forged_receipts_fail_closed(
     monkeypatch.setattr(atomize_sessions_module.sys, "stdout", TTY())
     new_receipt = SessionNewReceipt(kind="atomize", argv=("mem", "atomize"))
     monkeypatch.setattr(
-        "memcommit.commands.atomize.sessions.choose_session",
+        "memcommit.adapters.console.commands.atomize.sessions.choose_session",
         lambda entries, **kwargs: (
             new_receipt
             if entries == () and kwargs["new_receipt"] == new_receipt
@@ -996,7 +996,7 @@ def test_atomize_sessions_empty_and_forged_receipts_fail_closed(
         provider_factory=AggregateProvider,
     )
     monkeypatch.setattr(
-        "memcommit.commands.atomize.sessions.choose_session",
+        "memcommit.adapters.console.commands.atomize.sessions.choose_session",
         lambda *_args, **_kwargs: SessionOpenReceipt(
             kind="atomize",
             key=opened.analysis.uid,
@@ -1031,11 +1031,11 @@ def test_atomize_session_selection_rechecks_persisted_identity(
         )
 
     monkeypatch.setattr(
-        "memcommit.commands.atomize.command.choose_atomize_session",
+        "memcommit.adapters.console.commands.atomize.command.choose_atomize_session",
         remove_selected,
     )
     monkeypatch.setattr(
-        "memcommit.commands.atomize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.atomize.command.connect_codex_chatgpt_provider",
         lambda: (_ for _ in ()).throw(
             AssertionError("missing selection must not refresh")
         ),
@@ -1067,7 +1067,7 @@ def test_atomize_sessions_refuse_legacy_ruleset_without_provider_call(
     entry = atomize_session_entries(store)[0]
     assert entry.status == "STALE"
     monkeypatch.setattr(
-        "memcommit.commands.atomize.command.choose_atomize_session",
+        "memcommit.adapters.console.commands.atomize.command.choose_atomize_session",
         lambda _store, *, show_all: SessionOpenReceipt(
             kind="atomize",
             key=legacy.uid,
@@ -1075,7 +1075,7 @@ def test_atomize_sessions_refuse_legacy_ruleset_without_provider_call(
         ),
     )
     monkeypatch.setattr(
-        "memcommit.commands.atomize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.atomize.command.connect_codex_chatgpt_provider",
         lambda: (_ for _ in ()).throw(
             AssertionError("legacy selection must not refresh")
         ),
@@ -1905,7 +1905,7 @@ def test_shared_atomize_apply_action_uses_the_normal_save_boundary(
     assert reviewed.analysis.source_review_uid == opened.workbench.uid
     checkpoints_before = store.list_checkpoints(ctx.name)
     monkeypatch.setattr(
-        "memcommit.commands.atomize.command.present_atomize_workbench",
+        "memcommit.adapters.console.commands.atomize.command.present_atomize_workbench",
         lambda **_kwargs: ResolutionWorkbenchAction(kind="ACCEPT"),
     )
 
@@ -1944,15 +1944,15 @@ def test_atomize_persists_shared_destination_change_before_final_apply(
         )
     )
     monkeypatch.setattr(
-        "memcommit.commands.atomize.command.present_atomize_workbench",
+        "memcommit.adapters.console.commands.atomize.command.present_atomize_workbench",
         lambda **_kwargs: next(actions),
     )
     monkeypatch.setattr(
-        "memcommit.commands.atomize.command._interactive_terminal",
+        "memcommit.adapters.console.commands.atomize.command._interactive_terminal",
         lambda: True,
     )
     monkeypatch.setattr(
-        "memcommit.commands.shared.save_location_review.review_save_location",
+        "memcommit.adapters.console.commands.shared.save_location_review.review_save_location",
         lambda *_args, **_kwargs: (_ for _ in ()).throw(
             AssertionError(
                 "a planned Output was already reviewed in the shared workbench"
@@ -2056,7 +2056,7 @@ def test_compound_atomize_action_incorporates_then_uses_normal_apply_boundary(
     store.save_atomize_workbench(opened.workbench)
     checkpoints_before = store.list_checkpoints(ctx.name)
     monkeypatch.setattr(
-        "memcommit.commands.atomize.command.present_atomize_workbench",
+        "memcommit.adapters.console.commands.atomize.command.present_atomize_workbench",
         lambda **_kwargs: ResolutionWorkbenchAction(
             kind="INCORPORATE_AND_APPLY",
             comment="Incorporate every saved Atomize response and apply.",

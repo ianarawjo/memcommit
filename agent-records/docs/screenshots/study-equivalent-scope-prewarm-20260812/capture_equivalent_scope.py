@@ -55,12 +55,12 @@ store_module.GROUND_SESSIONS_DIR = root / 'ground-sessions'
 store_module.MELD_SESSIONS_DIR = root / 'meld-sessions'
 fail_live = {fail}
 if fail_live == 'directional':
-    from memcommit.commands import meld as command
+    from memcommit.adapters.console.commands import meld as command
     def stopped(*args, **kwargs):
         raise RuntimeError('capture provider stopper: live Directional analysis required')
     command._assess_and_save = stopped
 elif fail_live == 'update':
-    from memcommit.commands import update as command
+    from memcommit.adapters.console.commands import update as command
     def stopped(*args, **kwargs):
         raise RuntimeError('capture provider stopper: live Update planning required')
     command._plan_update_with_wait = stopped

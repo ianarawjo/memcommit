@@ -338,7 +338,7 @@ def test_agent_adapter_depends_only_on_public_api_and_shared_contract() -> None:
     assert "memcommit.adapters.python_api" in imported
     assert "memcommit.adapters.interfaces.agent.contract" in imported
     forbidden = (
-        "memcommit.commands",
+        "memcommit.adapters.console.commands",
         "memcommit.application.operations",
         "memcommit.infrastructure",
         "memcommit.store",

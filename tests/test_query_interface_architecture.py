@@ -28,7 +28,7 @@ def test_query_tui_package_has_no_command_dependency():
         (str(path.relative_to(ROOT)), module)
         for path in operation.rglob("*.py")
         for module in _imports(path)
-        if module.startswith("memcommit.commands")
+        if module.startswith("memcommit.adapters.console.commands")
     ]
 
     assert offenders == []
@@ -38,11 +38,11 @@ def test_query_command_imports_interface_owner_directly():
     source = (PACKAGE / "commands" / "query" / "command.py").read_text(encoding="utf-8")
 
     assert "from memcommit.adapters.interfaces.tui.operations.query import (" in source
-    assert "from memcommit.commands.query.workbench import" not in source
+    assert "from memcommit.adapters.console.commands.query.workbench import" not in source
 
 
 def test_query_workbench_compatibility_exports_are_object_identical():
-    compatibility = importlib.import_module("memcommit.commands.query.workbench")
+    compatibility = importlib.import_module("memcommit.adapters.console.commands.query.workbench")
     owner = importlib.import_module("memcommit.adapters.interfaces.tui.operations.query")
 
     assert compatibility.__all__ == owner.__all__

@@ -12,8 +12,8 @@ from prompt_toolkit.layout import FormattedTextControl, Layout, Window
 from prompt_toolkit.output import DummyOutput
 from prompt_toolkit.widgets import TextArea
 
-from memcommit.commands.help_inventory.command import CommandEntry
-from memcommit.commands.shared.session_help import SessionHelpController
+from memcommit.adapters.console.commands.help_inventory.command import CommandEntry
+from memcommit.adapters.console.commands.shared.session_help import SessionHelpController
 
 
 def _entries() -> tuple[CommandEntry, ...]:

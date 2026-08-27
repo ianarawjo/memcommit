@@ -48,7 +48,7 @@ def _prepare_store(root: Path):
 
 def _run_child(root: Path) -> None:
     from memcommit.adapters.console.entrypoint import app
-    from memcommit.commands import distill as command
+    from memcommit.adapters.console.commands import distill as command
 
     store, cases, other = _prepare_store(root)
     before = {

@@ -98,7 +98,7 @@ def test_application_layer_has_no_store_command_or_terminal_imports() -> None:
     assert not any(
         name == "typer"
         or name.startswith("prompt_toolkit")
-        or name.startswith("memcommit.commands")
+        or name.startswith("memcommit.adapters.console.commands")
         or name == "memcommit.store"
         for name in imports
     )

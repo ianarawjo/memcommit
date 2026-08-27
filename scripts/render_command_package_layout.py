@@ -11,7 +11,12 @@ import sys
 
 
 REPOSITORY = Path(__file__).resolve().parents[1]
-COMMANDS = REPOSITORY / "src" / "memcommit" / "commands"
+COMMANDS = (
+    REPOSITORY / "src" / "memcommit" / "adapters" / "console" / "commands"
+)
+FORMER_COMMANDS = REPOSITORY / "src" / "memcommit" / "commands"
+LEGACY_NAMESPACE = "memcommit.commands"
+CANONICAL_NAMESPACE = "memcommit.adapters.console.commands"
 OUTPUT_JSON = (
     REPOSITORY / "agent-records" / "docs" / "command-package-layout-plan.json"
 )
@@ -220,8 +225,8 @@ def build_plan() -> dict[str, object]:
     for stem, exports in sorted(ENTRY_EXPORTS.items()):
         entries.append(
             {
-                "legacy_module": f"memcommit.commands.{stem}",
-                "canonical_module": f"memcommit.commands.{stem}.command",
+                "legacy_module": f"{LEGACY_NAMESPACE}.{stem}",
+                "canonical_module": f"{CANONICAL_NAMESPACE}.{stem}.command",
                 "owner": stem,
                 "role": "command-entry",
                 "public_exports": list(exports),
@@ -231,8 +236,8 @@ def build_plan() -> dict[str, object]:
         owner = target.split(".", 1)[0]
         entries.append(
             {
-                "legacy_module": f"memcommit.commands.{stem}",
-                "canonical_module": f"memcommit.commands.{target}",
+                "legacy_module": f"{LEGACY_NAMESPACE}.{stem}",
+                "canonical_module": f"{CANONICAL_NAMESPACE}.{target}",
                 "owner": owner,
                 "role": "command-owned-support",
                 "public_exports": [],
@@ -241,8 +246,8 @@ def build_plan() -> dict[str, object]:
     for stem in sorted(SHARED_MODULES):
         entries.append(
             {
-                "legacy_module": f"memcommit.commands.{stem}",
-                "canonical_module": f"memcommit.commands.shared.{stem}",
+                "legacy_module": f"{LEGACY_NAMESPACE}.{stem}",
+                "canonical_module": f"{CANONICAL_NAMESPACE}.shared.{stem}",
                 "owner": "shared",
                 "role": "shared-command-mechanism",
                 "public_exports": [],
@@ -260,7 +265,8 @@ def build_plan() -> dict[str, object]:
         "schema_version": 1,
         "purpose": (
             "Give every CLI entry a predictable package and place multi-file "
-            "support beside its owning entry without changing command behavior."
+            "support beside its owning entry under the explicit console adapter "
+            "without changing command behavior."
         ),
         "baseline_commit": BASELINE_COMMIT,
         "baseline_module_count": len(entries),
@@ -275,7 +281,8 @@ def render_markdown(plan: dict[str, object]) -> str:
         "# Command package layout plan",
         "",
         "This is the exact path-only classification of the formerly flat",
-        "`memcommit.commands` modules. Route closure remains solely in the",
+        "`memcommit.commands` modules. Their canonical implementations now live under",
+        "`memcommit.adapters.console.commands`; route closure remains solely in the",
         "operation evidence ledger.",
         "",
         f"- Baseline modules: {plan['baseline_module_count']}",
@@ -303,7 +310,7 @@ def render_entry_init(stem: str, exports: tuple[str, ...]) -> str:
         [
             f'"""Lazy public CLI surface for the {stem} command package."""',
             "",
-            "from memcommit.commands import _load_entrypoint_attribute",
+            "from memcommit.adapters.console.commands import _load_entrypoint_attribute",
             "",
             "",
             f"__all__ = [{rendered_exports}]",
@@ -316,18 +323,20 @@ def render_entry_init(stem: str, exports: tuple[str, ...]) -> str:
     )
 
 
-def _removed_support_modules(plan: dict[str, object]) -> dict[str, str]:
+def _removed_command_modules(plan: dict[str, object]) -> dict[str, str]:
     modules = plan["modules"]
     assert isinstance(modules, list)
     return {
         str(entry["legacy_module"]): str(entry["canonical_module"])
         for entry in modules
-        if isinstance(entry, dict) and entry["role"] != "command-entry"
+        if isinstance(entry, dict)
     }
 
 
 def verify_layout(plan: dict[str, object]) -> None:
     failures: list[str] = []
+    if FORMER_COMMANDS.exists():
+        failures.append(f"former command package remains: {FORMER_COMMANDS}")
     root_files = {path.name for path in COMMANDS.glob("*.py")}
     if root_files != {"__init__.py"}:
         failures.append(
@@ -344,7 +353,7 @@ def verify_layout(plan: dict[str, object]) -> None:
             package_init = target.parent / "__init__.py"
             if not package_init.is_file():
                 failures.append(f"missing command package boundary: {package_init}")
-    removed = _removed_support_modules(plan)
+    removed = _removed_command_modules(plan)
     for path in (REPOSITORY / "src" / "memcommit").rglob("*.py"):
         try:
             tree = ast.parse(path.read_text(encoding="utf-8"))
@@ -366,15 +375,15 @@ def verify_layout(plan: dict[str, object]) -> None:
         raise SystemExit("\n".join(failures))
     print(
         "command package layout is canonical: "
-        f"{len(ENTRY_EXPORTS)} entry packages, {len(removed)} removed support paths, "
+        f"{len(ENTRY_EXPORTS)} entry packages, {len(removed)} removed command paths, "
         f"{len(SHARED_MODULES)} shared mechanisms"
     )
 
 
 def verify_removed_imports(plan: dict[str, object]) -> None:
-    """Prove that runtime hooks do not restore flat support imports."""
+    """Prove that runtime hooks do not restore the former command package."""
 
-    removed = sorted(_removed_support_modules(plan))
+    removed = [LEGACY_NAMESPACE, *sorted(_removed_command_modules(plan))]
     code = "\n".join(
         [
             "from importlib import import_module",
@@ -399,7 +408,7 @@ def verify_removed_imports(plan: dict[str, object]) -> None:
     )
     if result.returncode:
         raise SystemExit(result.stderr.strip() or result.stdout.strip())
-    print(f"historical flat-command imports are unavailable: {len(removed)} modules")
+    print(f"former command imports are unavailable: {len(removed)} modules")
 
 
 def main() -> int:

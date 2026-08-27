@@ -220,7 +220,7 @@ def _prepare(kind: str):
 
 
 def _child(kind: str, root: Path) -> None:
-    import memcommit.commands.impact.process_local as process_local
+    import memcommit.adapters.console.commands.impact.process_local as process_local
     from memcommit.adapters.console.entrypoint import app
     from memcommit.persistence.store import context_record_digest
 

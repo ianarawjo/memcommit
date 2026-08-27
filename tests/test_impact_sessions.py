@@ -8,13 +8,13 @@ from dataclasses import replace
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.commands.impact.command as impact_command
-import memcommit.commands.update.command as update_command
+import memcommit.adapters.console.commands.impact.command as impact_command
+import memcommit.adapters.console.commands.update.command as update_command
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.commands.help_inventory.command import COMMAND_FORMS
-from memcommit.commands.impact.registry import IMPACT_ROUTES, ImpactLifecycle
-from memcommit.commands.impact.sessions import (
+from memcommit.adapters.console.commands.help_inventory.command import COMMAND_FORMS
+from memcommit.adapters.console.commands.impact.registry import IMPACT_ROUTES, ImpactLifecycle
+from memcommit.adapters.console.commands.impact.sessions import (
     render_impact_session_snapshot,
     update_impact_presentation,
 )

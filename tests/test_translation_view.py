@@ -93,7 +93,7 @@ def _saved_context(
 
 def _patch_provider(monkeypatch, provider) -> None:
     monkeypatch.setattr(
-        "memcommit.commands.translate.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.translate.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -103,7 +103,7 @@ def _forbid_provider(monkeypatch) -> None:
         raise AssertionError("a saved translation view must be reused")
 
     monkeypatch.setattr(
-        "memcommit.commands.translate.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.translate.command.connect_codex_chatgpt_provider",
         forbidden,
     )
 

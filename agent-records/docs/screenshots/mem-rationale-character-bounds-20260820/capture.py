@@ -73,7 +73,7 @@ _SCENARIOS = {
 def _run_child(scenario: str) -> None:
     import json
 
-    from memcommit.commands import rationale
+    from memcommit.adapters.console.commands import rationale
     from memcommit.application.operations.rationale.rules import RationaleLimitUnit
     from memcommit.persistence.store import MemoryStore
 

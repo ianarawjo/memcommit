@@ -4,7 +4,7 @@
 
 Atomize's analysis and Apply semantics already had typed application/runtime
 entry points, but the saved-session terminal screen still lived in
-`memcommit.commands.atomize.workbench_shell`. The command module also assembled
+`memcommit.adapters.console.commands.atomize.workbench_shell`. The command module also assembled
 the workbench destination editor and rendered Apply receipts. This made the CLI
 the practical owner of a TUI that should be reusable by any terminal adapter,
 and an interface module could not import the screen without depending outward
@@ -45,7 +45,7 @@ rendering, provider, Store, or application behavior.
 
 ## Invariants
 
-1. Interface-owned Atomize and Result modules import no `memcommit.commands`
+1. Interface-owned Atomize and Result modules import no `memcommit.adapters.console.commands`
    modules.
 2. Moving the screen does not change saved analysis/workbench schemas,
    application receipts, checkpoints, Save As behavior, focus topology,
@@ -71,7 +71,7 @@ separate operation slice.
 ## Verification
 
 The boundary tests parse every new interface-owned module and reject imports
-from `memcommit.commands`. They also prove the old paths re-export the exact
+from `memcommit.adapters.console.commands`. They also prove the old paths re-export the exact
 same function objects. Atomize workbench, Result workbench, impact, Save As,
 Undo/Redo, and application-boundary suites exercise snapshot, interactive,
 application, failure, and recovery behavior. The ordered 180×52 color replay

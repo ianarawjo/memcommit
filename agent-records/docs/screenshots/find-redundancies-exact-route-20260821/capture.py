@@ -109,7 +109,7 @@ def _invoke(app, args: list[str]) -> int:
 
 
 def _run_child() -> None:
-    import memcommit.commands.find_duplicates.command as find_command
+    import memcommit.adapters.console.commands.find_duplicates.command as find_command
     from memcommit.adapters.console.entrypoint import app
 
     with tempfile.TemporaryDirectory(

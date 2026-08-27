@@ -51,7 +51,7 @@ def _prepare_store(root: Path):
 
 
 def _run_child(store_root: Path, *, cancel: bool) -> None:
-    import memcommit.commands.update.setup as update_setup
+    import memcommit.adapters.console.commands.update.setup as update_setup
 
     store, contexts, source_focus = _prepare_store(store_root)
     before = {

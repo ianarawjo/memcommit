@@ -13,7 +13,7 @@ import pytest
 
 
 REPOSITORY_ROOT = Path(__file__).parents[1]
-LEGACY_MODULE = "memcommit.commands.shared.batch_input"
+LEGACY_MODULE = "memcommit.adapters.console.commands.shared.batch_input"
 OWNER_MODULE = "memcommit.adapters.interfaces.cli.batch_input"
 
 
@@ -75,4 +75,4 @@ def test_add_and_edit_commands_import_the_interface_owner() -> None:
             encoding="utf-8"
         )
         assert "from memcommit.adapters.interfaces.cli.batch_input import" in source
-        assert "from memcommit.commands.shared.batch_input import" not in source
+        assert "from memcommit.adapters.console.commands.shared.batch_input import" not in source

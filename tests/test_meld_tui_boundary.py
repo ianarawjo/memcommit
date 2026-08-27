@@ -5,8 +5,8 @@ from __future__ import annotations
 import ast
 from pathlib import Path
 
-import memcommit.commands.meld.command as meld_command
-import memcommit.commands.compare.command as compare_command
+import memcommit.adapters.console.commands.meld.command as meld_command
+import memcommit.adapters.console.commands.compare.command as compare_command
 from memcommit.adapters.interfaces.presentation.comparison import render_comparison
 import memcommit.adapters.interfaces.tui.operations.meld.screen as meld_screen
 
@@ -26,7 +26,7 @@ def test_meld_uses_the_interface_neutral_compare_presenter() -> None:
         if isinstance(node, ast.ImportFrom)
     }
     assert "memcommit.adapters.interfaces.presentation.comparison" in imported_modules
-    assert "memcommit.commands.compare.command" not in imported_modules
+    assert "memcommit.adapters.console.commands.compare.command" not in imported_modules
 
 
 def test_meld_screen_has_one_live_workbench_host() -> None:

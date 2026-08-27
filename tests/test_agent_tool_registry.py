@@ -443,7 +443,7 @@ def test_registry_depends_only_on_public_client_and_agent_adapters():
             imported.append(node.module)
 
     forbidden = (
-        "memcommit.commands",
+        "memcommit.adapters.console.commands",
         "memcommit.application.operations",
         "memcommit.infrastructure",
         "memcommit.store",

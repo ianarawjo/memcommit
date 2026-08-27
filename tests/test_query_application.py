@@ -311,7 +311,7 @@ def test_ordinary_query_application_and_runtime_have_no_interface_dependency():
                 values.append(node.module)
         return tuple(values)
 
-    forbidden = ("typer", "prompt_toolkit", "memcommit.commands")
+    forbidden = ("typer", "prompt_toolkit", "memcommit.adapters.console.commands")
     assert not any(name.startswith(forbidden) for name in imports(application))
     assert not any(name.startswith(forbidden) for name in imports(runtime))
     assert "memcommit.store" not in imports(application)
@@ -321,7 +321,7 @@ def test_ordinary_query_application_and_runtime_have_no_interface_dependency():
 
 def test_production_adapters_import_ordinary_query_from_new_owner():
     root = Path(__file__).parents[1]
-    command = (root / "src/memcommit/commands/query/command.py").read_text()
+    command = (root / "src/memcommit/adapters/console/commands/query/command.py").read_text()
     workbench_model = (
         root / "src/memcommit/adapters/interfaces/tui/operations/query/model.py"
     ).read_text()

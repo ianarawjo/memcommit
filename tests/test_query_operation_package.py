@@ -40,11 +40,11 @@ def test_command_owned_query_execution_facade_is_retired():
         for node in ast.walk(tree):
             if (
                 isinstance(node, ast.ImportFrom)
-                and node.module == "memcommit.commands.query_execution"
+                and node.module == "memcommit.adapters.console.commands.query_execution"
             ):
                 violations.append(path.relative_to(root))
             elif isinstance(node, ast.Import) and any(
-                alias.name == "memcommit.commands.query_execution"
+                alias.name == "memcommit.adapters.console.commands.query_execution"
                 for alias in node.names
             ):
                 violations.append(path.relative_to(root))

@@ -544,7 +544,7 @@ def test_cli_gap_receipt_and_json_are_provider_free(isolated_store, monkeypatch)
     store.save(context)
     store.set_current(context.name)
     monkeypatch.setattr(
-        "memcommit.commands.rationale.command.connect_semantic_provider",
+        "memcommit.adapters.console.commands.rationale.command.connect_semantic_provider",
         lambda: pytest.fail("CLI gap receipt connected a provider"),
     )
     selector = f"{context.name}:{memory.uid}"
@@ -608,7 +608,7 @@ def test_cli_renders_a_natural_language_receipt_for_remove_and_undo(
     case = _case("direct-add-remove-undo")
     expected = case["expected"]["provenance"]
     monkeypatch.setattr(
-        "memcommit.commands.rationale.command.connect_semantic_provider",
+        "memcommit.adapters.console.commands.rationale.command.connect_semantic_provider",
         lambda: _CapturingProvider(expected),
     )
     assert runner.invoke(app, ["init", "lifecycle"]).exit_code == 0
@@ -635,7 +635,7 @@ def test_compare_source_rationale_uses_the_same_semantic_rules(
     monkeypatch,
     capsys,
 ):
-    from memcommit.commands.compare import command as compare_command
+    from memcommit.adapters.console.commands.compare import command as compare_command
 
     assert runner.invoke(app, ["init", "compare-source"]).exit_code == 0
     assert runner.invoke(app, ["add", "Source claim."]).exit_code == 0

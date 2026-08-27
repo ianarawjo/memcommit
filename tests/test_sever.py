@@ -11,16 +11,16 @@ from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.commands.sever import command as sever_command
+from memcommit.adapters.console.commands.sever import command as sever_command
 from memcommit.adapters.interfaces.tui.components.operation_launcher.session import (
     SessionNewReceipt,
     SessionOpenReceipt,
 )
-from memcommit.commands.sever.sessions import (
+from memcommit.adapters.console.commands.sever.sessions import (
     list_sever_session_catalog,
     reload_selected_sever_session,
 )
-from memcommit.commands.shared.resolution_workbench_shell import (
+from memcommit.adapters.console.commands.shared.resolution_workbench_shell import (
     resolution_report_fragments,
     resolution_viewer_fragments,
     session_review_action_view,
@@ -1078,7 +1078,7 @@ def test_sever_routes_its_local_output_to_decision_free_auto_accept(
         return ResolutionWorkbenchAction(kind="CLOSE")
 
     monkeypatch.setattr(
-        "memcommit.commands.shared.resolution_workbench_shell.run_resolution_workbench_shell",
+        "memcommit.adapters.console.commands.shared.resolution_workbench_shell.run_resolution_workbench_shell",
         next_action,
     )
 

@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from typer.testing import CliRunner
 
-import memcommit.commands.add.command as add_command
-import memcommit.commands.forget.command as forget_command
+import memcommit.adapters.console.commands.add.command as add_command
+import memcommit.adapters.console.commands.forget.command as forget_command
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Memory

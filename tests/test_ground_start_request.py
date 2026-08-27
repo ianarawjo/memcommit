@@ -4,10 +4,10 @@ from __future__ import annotations
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.commands.ground.command as ground_command
+import memcommit.adapters.console.commands.ground.command as ground_command
 from memcommit.application import ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.commands.ground.shell import GroundShellResult
+from memcommit.adapters.console.commands.ground.shell import GroundShellResult
 from memcommit.application.operations.ground.dialogue import (
     GroundDialogueError,
     GroundDialogueNewContextSuggestion,

@@ -10,7 +10,7 @@ from typer.testing import CliRunner
 import memcommit.configuration.config as config_module
 import memcommit.application.ops as ops
 from memcommit.application.authority.access import resolve_context_access
-from memcommit.commands.sever.command import _capture_binding, _start
+from memcommit.adapters.console.commands.sever.command import _capture_binding, _start
 from memcommit.adapters.console.entrypoint import app
 from memcommit.configuration.config import Config
 from memcommit.context import Memory
@@ -223,7 +223,7 @@ def test_exact_sever_cli_discloses_prewarm_origin(
         registry_snapshot=registry,
     )
     monkeypatch.setattr(
-        "memcommit.commands.sever.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.sever.command.connect_codex_chatgpt_provider",
         lambda: (_ for _ in ()).throw(AssertionError("provider must not connect")),
     )
 

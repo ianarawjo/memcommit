@@ -10,10 +10,10 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
-import memcommit.commands.distill.command as distill_command
+import memcommit.adapters.console.commands.distill.command as distill_command
 import memcommit.application.operations.distill.application as distill_application
 from memcommit.adapters.console.entrypoint import app
-from memcommit.commands.help_inventory.command import COMMAND_FORMS
+from memcommit.adapters.console.commands.help_inventory.command import COMMAND_FORMS
 from memcommit.context import Context, Memory
 from memcommit.application.operations.distill.model import (
     DISTILL_OPERATION,
@@ -656,7 +656,7 @@ def test_distill_application_imports_no_terminal_or_command_adapter():
         for name in imports
         if name == "typer"
         or name.startswith("prompt_toolkit")
-        or name.startswith("memcommit.commands")
+        or name.startswith("memcommit.adapters.console.commands")
     ) == ()
 
 

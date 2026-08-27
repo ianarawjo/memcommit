@@ -216,7 +216,7 @@ Viewer owns focus; they do not submit a response or change session state.
   frame, input, report-card, tree-row, and viewport components.
 - `935ec9b5` moved the remaining Resolution dependencies—Help, Save Location,
   and semantic detail—under `interfaces.tui`. An AST-based regression test now
-  rejects every `memcommit.adapters.interfaces` import of `memcommit.commands`.
+  rejects every `memcommit.adapters.interfaces` import of `memcommit.adapters.console.commands`.
 - `agent-records/docs/screenshots/mem-meld-shared-tui-20260815` records 24 ordered 180x52
   true-color PTY states for both setup shapes and the relocated session screen.
   The captured setup receipts are process-local, sources and Result remain

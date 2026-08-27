@@ -20,8 +20,8 @@ from memcommit.application.operations.conformance.model import (
 from memcommit.application.operations.conformance.runtime import freeze_context_conformance
 from memcommit.application.operations.conformance.runtime import freeze_ground_conformance
 from memcommit.adapters.console.entrypoint import app
-import memcommit.commands.check_conformance.command as check_conformance_command
-import memcommit.commands.audit.command as audit_command
+import memcommit.adapters.console.commands.check_conformance.command as check_conformance_command
+import memcommit.adapters.console.commands.audit.command as audit_command
 from memcommit.application.operations.ground.model import (
     GroundTargetSpec,
     bind_ground_workbench,
@@ -31,7 +31,7 @@ from memcommit.application.operations.ground.model import (
 )
 from memcommit.providers.types import ProviderIdentity
 from memcommit.persistence.store import MemoryStore
-from memcommit.commands.audit.command import _run_quality_audit_checks
+from memcommit.adapters.console.commands.audit.command import _run_quality_audit_checks
 from memcommit.application.reviewing.quality.audit import (
     QUALITY_AUDIT_LEGACY_SCHEMA_VERSION,
     QualityAuditSession,

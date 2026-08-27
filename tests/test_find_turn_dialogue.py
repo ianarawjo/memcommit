@@ -5,7 +5,7 @@ import json
 
 import pytest
 
-from memcommit.commands.find.chat_shell import (
+from memcommit.adapters.console.commands.find.chat_shell import (
     FindChatMessage,
     FindChatResult,
     FindChatState,

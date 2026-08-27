@@ -574,7 +574,7 @@ The implementation is covered by tests for:
 
 Implementation:
 
-- [`memcommit/commands/list_memories/command.py`](../../src/memcommit/commands/list_memories/command.py)
+- [`memcommit/adapters/console/commands/list_memories/command.py`](../../src/memcommit/adapters/console/commands/list_memories/command.py)
 - [`memcommit/adapters/console/clipboard.py`](../../src/memcommit/adapters/console/clipboard.py)
 - [`memcommit/persistence/store/context_memory.py`](../../src/memcommit/persistence/store/context_memory.py)
 - [`tests/test_commands.py`](../../tests/test_commands.py)

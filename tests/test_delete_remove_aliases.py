@@ -8,7 +8,7 @@ from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.commands.shared.context_picker import ContextMemorySelection
+from memcommit.adapters.console.commands.shared.context_picker import ContextMemorySelection
 from memcommit.context import Context, Memory
 from memcommit.persistence.store import MemoryStore
 
@@ -152,7 +152,7 @@ def test_both_spellings_use_shared_picker_for_context_selection(
         observed.update(kwargs)
         return next(selections)
 
-    monkeypatch.setattr("memcommit.commands.delete.command.choose_context", choose)
+    monkeypatch.setattr("memcommit.adapters.console.commands.delete.command.choose_context", choose)
 
     result = runner.invoke(app, [command, "--force"])
 
@@ -188,7 +188,7 @@ def test_both_spellings_apply_exact_picker_item_receipt(
         return None
 
     monkeypatch.setattr(
-        "memcommit.commands.delete.command.choose_context",
+        "memcommit.adapters.console.commands.delete.command.choose_context",
         choose,
     )
 
@@ -227,7 +227,7 @@ def test_picker_session_removes_multiple_items_until_closed(
         )
         return None
 
-    monkeypatch.setattr("memcommit.commands.delete.command.choose_context", choose)
+    monkeypatch.setattr("memcommit.adapters.console.commands.delete.command.choose_context", choose)
 
     result = runner.invoke(app, [command])
 
@@ -454,7 +454,7 @@ def test_explicit_batch_revalidates_every_context_after_shared_approval(
         return True
 
     monkeypatch.setattr(
-        "memcommit.commands.delete.command.typer.confirm",
+        "memcommit.adapters.console.commands.delete.command.typer.confirm",
         replace_second_during_approval,
     )
 
@@ -492,7 +492,7 @@ def test_picker_item_failure_stays_in_footer_without_normal_output(
         )
         return None
 
-    monkeypatch.setattr("memcommit.commands.delete.command.choose_context", choose)
+    monkeypatch.setattr("memcommit.adapters.console.commands.delete.command.choose_context", choose)
 
     result = runner.invoke(app, ["remove"])
 

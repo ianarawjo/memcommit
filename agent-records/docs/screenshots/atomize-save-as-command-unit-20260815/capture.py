@@ -131,7 +131,7 @@ def _review(store) -> None:
 
 
 def _invoke_atomize(store) -> None:
-    import memcommit.commands.atomize.command as atomize_command
+    import memcommit.adapters.console.commands.atomize.command as atomize_command
 
     atomize_command.MemoryStore = lambda *args, **kwargs: store
     app = typer.Typer()
@@ -160,9 +160,9 @@ def _invoke_atomize(store) -> None:
 
 def _invoke_restore(store, direction: str) -> None:
     if direction == "undo":
-        import memcommit.commands.undo.command as command
+        import memcommit.adapters.console.commands.undo.command as command
     else:
-        import memcommit.commands.redo.command as command
+        import memcommit.adapters.console.commands.redo.command as command
     command.MemoryStore = lambda *args, **kwargs: store
     command.cmd()
 

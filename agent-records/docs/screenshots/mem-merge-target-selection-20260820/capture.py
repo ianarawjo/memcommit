@@ -93,7 +93,7 @@ def _run_child(kind: str) -> None:
     import click
     import typer
 
-    from memcommit.commands.merge.command import cmd as merge_command
+    from memcommit.adapters.console.commands.merge.command import cmd as merge_command
 
     with tempfile.TemporaryDirectory(prefix="mem-merge-target-capture-") as directory:
         _configure_isolated_store(Path(directory) / ".mem")

@@ -4,7 +4,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.commands import (
+from memcommit.adapters.console.commands import (
     add,
     audit,
     atomize,
@@ -63,13 +63,13 @@ from memcommit.commands import (
     write_protection,
 )
 from memcommit.adapters.interfaces.cli import embed, memory_transfer, reference, shell_init
-from memcommit.commands.clear.command import cmd as clear_cmd
-from memcommit.commands.config.command import app as config_app
-from memcommit.commands.dev.command import app as dev_app
-from memcommit.commands.semantic_eval.command import eval_app
-from memcommit.commands.profile.command import app as profile_app
-from memcommit.commands.provider.command import app as provider_app
-from memcommit.commands.shared.root_group import MemCommandGroup
+from memcommit.adapters.console.commands.clear.command import cmd as clear_cmd
+from memcommit.adapters.console.commands.config.command import app as config_app
+from memcommit.adapters.console.commands.dev.command import app as dev_app
+from memcommit.adapters.console.commands.semantic_eval.command import eval_app
+from memcommit.adapters.console.commands.profile.command import app as profile_app
+from memcommit.adapters.console.commands.provider.command import app as provider_app
+from memcommit.adapters.console.commands.shared.root_group import MemCommandGroup
 from memcommit.application.operations.operation_catalog import operation_summary
 
 _HELP_CONTEXT_SETTINGS = {

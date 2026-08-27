@@ -36,9 +36,9 @@ assert not [name for name in blocked if name in sys.modules]
 def test_production_search_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "src/memcommit/adapters/python_api/_operations/search.py",
-        "src/memcommit/commands/find/command.py",
-        "src/memcommit/commands/find/materialization.py",
-        "src/memcommit/commands/find/search_workbench.py",
+        "src/memcommit/adapters/console/commands/find/command.py",
+        "src/memcommit/adapters/console/commands/find/materialization.py",
+        "src/memcommit/adapters/console/commands/find/search_workbench.py",
         "src/memcommit/application/operations/search/runtime.py",
         "src/memcommit/application/operations/search/materialization_application.py",
         "src/memcommit/application/operations/search/materialization_runtime.py",
@@ -75,7 +75,7 @@ def test_search_analysis_and_materialization_remain_separate_use_cases() -> None
 
     assert "materialization" not in application_source.lower()
     assert "memcommit.application.operations.search.application" in materialization_source
-    assert "memcommit.commands" not in package_source
+    assert "memcommit.adapters.console.commands" not in package_source
     assert "memcommit.adapters.interfaces" not in package_source
 
 

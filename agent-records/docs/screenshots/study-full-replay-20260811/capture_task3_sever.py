@@ -52,7 +52,7 @@ def _provider_event_count() -> int:
 
 def _bindings():
     from memcommit.application.authority.access import resolve_context_access
-    from memcommit.commands.sever.command import _capture_binding
+    from memcommit.adapters.console.commands.sever.command import _capture_binding
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(create=False)

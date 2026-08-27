@@ -138,8 +138,8 @@ def _initialize(store):
 
 
 def _invoke_impact(store, provider_factory, *, refresh: bool = False) -> int:
-    import memcommit.commands.impact.command as impact_command
-    import memcommit.commands.shared.session_help as session_help
+    import memcommit.adapters.console.commands.impact.command as impact_command
+    import memcommit.adapters.console.commands.shared.session_help as session_help
 
     impact_command.MemoryStore = lambda *args, **kwargs: store
     impact_command.connect_codex_chatgpt_provider = provider_factory

@@ -10,7 +10,7 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
 import memcommit.application.ops as ops
-from memcommit.commands.shared.quality_find_workbench import (
+from memcommit.adapters.console.commands.shared.quality_find_workbench import (
     run_quality_find_resolution_workbench,
 )
 from memcommit.application.reviewing.quality.findings import (

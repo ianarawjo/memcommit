@@ -79,7 +79,7 @@ def _prepare_store(store_dir: Path) -> tuple[str, ...]:
 
 def _run_revert(store_dir: Path) -> None:
     _configure_store(store_dir)
-    from memcommit.commands.revert.command import cmd
+    from memcommit.adapters.console.commands.revert.command import cmd
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(create=False)

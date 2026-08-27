@@ -70,7 +70,7 @@ INITIAL_CASES = (
 
 
 def _child() -> None:
-    from memcommit.commands.shared.command_wait import CommandWaitView, run_command_wait
+    from memcommit.adapters.console.commands.shared.command_wait import CommandWaitView, run_command_wait
 
     columns, rows = os.get_terminal_size()
     print(f"CAPTURE PTY · {columns}x{rows}", flush=True)

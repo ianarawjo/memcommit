@@ -85,7 +85,7 @@ also rejected because the checked-set and focus semantics would still fork.
 
 Per-root reach mixtures are not encoded: one reach choice applies to the
 complete staged root set. Search remains physically hosted under
-`memcommit.commands` pending its broader interface-package migration. Find and
+`memcommit.adapters.console.commands` pending its broader interface-package migration. Find and
 Search share Scope mechanics and compact row geometry, not one semantic result
 model or one materialization contract.
 

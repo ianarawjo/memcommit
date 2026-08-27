@@ -198,7 +198,7 @@ def _run_merge() -> None:
 
 
 def _run_compare() -> None:
-    from memcommit.commands import compare as compare_command
+    from memcommit.adapters.console.commands import compare as compare_command
     from memcommit.application.operations.compare.ledger.store import comparison_analyses_dir
     from memcommit.persistence.store import MemoryStore
 
@@ -230,7 +230,7 @@ def _run_compare() -> None:
 
 
 def _run_sever(*, mode: Literal["SELF_DEFAULT", "OTHER_SAVE"]) -> None:
-    from memcommit.commands import sever as sever_command
+    from memcommit.adapters.console.commands import sever as sever_command
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()

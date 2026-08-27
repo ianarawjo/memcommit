@@ -119,7 +119,7 @@ def _prepare_store(store_dir: Path) -> None:
 
 def _run_checkpoint(store_dir: Path) -> None:
     _configure_store(store_dir)
-    from memcommit.commands.checkpoint.command import cmd
+    from memcommit.adapters.console.commands.checkpoint.command import cmd
 
     print("PTY", os.get_terminal_size().columns, os.get_terminal_size().lines)
     cmd(
@@ -163,7 +163,7 @@ def _mutate_after_checkpoint(store_dir: Path) -> int:
 
 def _run_revert(store_dir: Path) -> None:
     _configure_store(store_dir)
-    from memcommit.commands.revert.command import cmd
+    from memcommit.adapters.console.commands.revert.command import cmd
 
     print("PTY", os.get_terminal_size().columns, os.get_terminal_size().lines)
     cmd()
@@ -171,7 +171,7 @@ def _run_revert(store_dir: Path) -> None:
 
 def _run_undo(store_dir: Path) -> None:
     _configure_store(store_dir)
-    from memcommit.commands.undo.command import cmd
+    from memcommit.adapters.console.commands.undo.command import cmd
 
     print("PTY", os.get_terminal_size().columns, os.get_terminal_size().lines)
     cmd()

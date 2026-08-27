@@ -5,7 +5,7 @@ from __future__ import annotations
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-from memcommit.commands.branch.dialog import (
+from memcommit.adapters.console.commands.branch.dialog import (
     BranchCreationReceipt,
     choose_branch_creation,
 )

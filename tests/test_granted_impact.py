@@ -12,8 +12,8 @@ from typer.testing import CliRunner
 
 import memcommit.adapters.console.clipboard as clipboard
 import memcommit.application.ops as ops
-import memcommit.commands.meld.command as meld_command
-import memcommit.commands.meld.setup as meld_setup_command
+import memcommit.adapters.console.commands.meld.command as meld_command
+import memcommit.adapters.console.commands.meld.setup as meld_setup_command
 from memcommit.adapters.console.entrypoint import app
 from memcommit.application.operations.compare.ledger.provider import COMPARISON_PAYLOAD_MARKER
 from memcommit.application.operations.compare.ledger.store import comparison_analysis_path
@@ -22,13 +22,13 @@ from memcommit.application.authority.access import (
     resolve_context_access,
     revalidate_granted_context_binding,
 )
-from memcommit.commands.compare.sessions import comparison_session_entries
-from memcommit.commands.compare.setup import choose_compare_setup
-from memcommit.commands.shared.endpoint_setup_flows import (
+from memcommit.adapters.console.commands.compare.sessions import comparison_session_entries
+from memcommit.adapters.console.commands.compare.setup import choose_compare_setup
+from memcommit.adapters.console.commands.shared.endpoint_setup_flows import (
     _readable_endpoint_catalog,
     choose_update_setup,
 )
-from memcommit.commands.meld.setup import MeldSetupReceipt
+from memcommit.adapters.console.commands.meld.setup import MeldSetupReceipt
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.core.context_targeting.readable_catalog import ReadableContextCatalog
 from memcommit.application.authority.derived_policy import analysis_retention, authorize_analysis_save
@@ -697,7 +697,7 @@ def test_local_namespace_root_reads_granted_and_owned_descendants_together(
     active.set_current("task-root")
     provider = _GrantedFindProvider()
     monkeypatch.setattr(
-        "memcommit.commands.find.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.find.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -881,7 +881,7 @@ def test_find_and_quality_finders_read_granted_current_projection(
     active.set_current_virtual_context_if(source.name, "campus-wiki")
     provider = _GrantedFindProvider()
     monkeypatch.setattr(
-        "memcommit.commands.find.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.find.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     for module in (
@@ -890,7 +890,7 @@ def test_find_and_quality_finders_read_granted_current_projection(
         "find_conflicts",
     ):
         monkeypatch.setattr(
-            f"memcommit.commands.{module}.command.connect_codex_chatgpt_provider",
+            f"memcommit.adapters.console.commands.{module}.command.connect_codex_chatgpt_provider",
             lambda: provider,
         )
 
@@ -922,7 +922,7 @@ def test_recursive_dedun_rejects_granted_boundaries_before_provider(
     )
     active.set_current("task-root")
     monkeypatch.setattr(
-        "memcommit.commands.find_duplicates.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.find_duplicates.command.connect_codex_chatgpt_provider",
         lambda: (_ for _ in ()).throw(
             AssertionError("authority rejection must precede provider connection")
         ),
@@ -1067,7 +1067,7 @@ def test_granted_forget_rejects_delete_when_only_update_is_granted(
     active.set_current_virtual_context_if(source.name, "campus-wiki")
     original = next(item for item in wiki.iter_items() if isinstance(item, Memory))
     monkeypatch.setattr(
-        "memcommit.commands.forget.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.forget.command.connect_codex_chatgpt_provider",
         lambda: object(),
     )
 
@@ -1085,7 +1085,7 @@ def test_granted_forget_rejects_delete_when_only_update_is_granted(
         return changes
 
     monkeypatch.setattr(
-        "memcommit.commands.forget.command._run_interactive_forget",
+        "memcommit.adapters.console.commands.forget.command._run_interactive_forget",
         approve_remove,
     )
 
@@ -1328,7 +1328,7 @@ def test_compare_reads_recursive_grant_excludes_query_override_and_saves_nothing
             )
 
     monkeypatch.setattr(
-        "memcommit.commands.compare.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.compare.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
     switched = runner.invoke(app, ["switch", wiki.name])
@@ -1449,11 +1449,11 @@ def test_granted_source_impact_and_update_apply_to_local_target(
             return _source_grant_addition_plan(prompt)
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
     monkeypatch.setattr(
-        "memcommit.commands.update.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.update.command.connect_codex_chatgpt_provider",
         lambda: pytest.fail("matching impact plan must be reused"),
     )
 
@@ -1554,7 +1554,7 @@ def test_derived_transfer_permissions_fail_before_provider_or_write(
     local_target = ops.init("participant-proposal")
     active.save(local_target)
     monkeypatch.setattr(
-        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: pytest.fail("provider must not run without derivation consent"),
     )
 
@@ -1652,7 +1652,7 @@ def test_symmetric_meld_requires_durable_grant_basis_before_provider(
     active.set_current(source.name)
     result_name = "participant/unsavable-meld"
     monkeypatch.setattr(
-        "memcommit.commands.meld.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.meld.command.connect_codex_chatgpt_provider",
         lambda: pytest.fail("provider must not run without analysis retention"),
     )
 
@@ -1721,7 +1721,7 @@ def test_granted_compare_is_retained_and_seeds_local_symmetric_meld(
             )
 
     monkeypatch.setattr(
-        "memcommit.commands.compare.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.compare.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
     compared = runner.invoke(
@@ -1744,7 +1744,7 @@ def test_granted_compare_is_retained_and_seeds_local_symmetric_meld(
     # Compare command or a hidden current-Context switch.
     granted_comparison_analysis_path(active, source.uid, wiki.uid).unlink()
     monkeypatch.setattr(
-        "memcommit.commands.meld.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.meld.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
 
@@ -1842,11 +1842,11 @@ def test_update_between_distinct_grants_writes_only_accepting_target(
             return _source_grant_addition_plan(prompt)
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
     monkeypatch.setattr(
-        "memcommit.commands.update.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.update.command.connect_codex_chatgpt_provider",
         lambda: pytest.fail("Update must reuse the exact impact plan"),
     )
 
@@ -1884,7 +1884,7 @@ def test_granted_impact_projects_only_readable_target_scope(
             return _empty_plan()
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
 
@@ -1941,7 +1941,7 @@ def test_granted_impact_revocation_during_provider_turn_discards_preview(
             return _empty_plan()
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
 
@@ -1969,7 +1969,7 @@ def test_granted_impact_query_only_target_fails_before_provider(
         raise AssertionError("provider must not connect")
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
         connect,
     )
 
@@ -2064,11 +2064,11 @@ def test_granted_impact_then_update_changes_only_run_authority(
             return _edit_and_add_plan(prompt)
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
     monkeypatch.setattr(
-        "memcommit.commands.update.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.update.command.connect_codex_chatgpt_provider",
         lambda: pytest.fail("the matching impact plan must be reused"),
     )
 
@@ -2142,11 +2142,11 @@ def test_granted_target_empty_update_records_only_an_idempotent_receipt(
             return _empty_plan()
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
     monkeypatch.setattr(
-        "memcommit.commands.update.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.update.command.connect_codex_chatgpt_provider",
         lambda: pytest.fail("the matching empty impact plan must be reused"),
     )
 
@@ -2195,7 +2195,7 @@ def test_granted_diff_revalidates_authority_and_keeps_public_names(
             return _edit_and_add_plan(prompt)
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
     assert (
@@ -2239,7 +2239,7 @@ def test_granted_diff_remains_inspectable_after_revocation(
             return _edit_and_add_plan(prompt)
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
     assert (
@@ -2283,7 +2283,7 @@ def test_granted_diff_marks_authority_drift_stale_but_keeps_receipts(
             return _edit_and_add_plan(prompt)
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
     assert (
@@ -2329,7 +2329,7 @@ def test_revoked_granted_update_cannot_be_undone_by_participant(
             return _edit_and_add_plan(prompt)
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
     assert (
@@ -2377,7 +2377,7 @@ def test_granted_undo_does_not_substitute_newer_authority_command(
             return _edit_and_add_plan(prompt)
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
     assert (
@@ -2431,7 +2431,7 @@ def test_granted_update_undo_and_redo_restore_exact_authority_unit(
             return _edit_and_add_plan(prompt)
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
     assert (
@@ -2505,7 +2505,7 @@ def test_granted_update_checks_create_permission_before_first_write(
             return _edit_and_add_plan(prompt)
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
     assert (
@@ -2555,7 +2555,7 @@ def test_granted_update_requires_explicit_delete_for_removal(
             return _removal_plan(prompt)
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
     impact = runner.invoke(
@@ -2596,7 +2596,7 @@ def test_granted_update_does_not_special_case_a_legacy_baseline_name(
             return _edit_and_add_plan(prompt)
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
     assert (
@@ -2634,7 +2634,7 @@ def test_granted_multi_owner_write_failure_rolls_back_authority(
             return _edit_and_add_plan(prompt)
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
     assert (

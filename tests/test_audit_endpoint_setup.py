@@ -4,7 +4,7 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 import pytest
 
-import memcommit.commands.audit.command as audit_command
+import memcommit.adapters.console.commands.audit.command as audit_command
 import memcommit.application.ops as ops
 from memcommit.adapters.interfaces.tui.operations.audit import (
     audit_endpoint_setup_spec,

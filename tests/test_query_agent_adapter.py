@@ -387,7 +387,7 @@ def test_agent_adapter_depends_only_on_public_api_and_durable_reference_type():
             imported.append(node.module)
 
     forbidden = (
-        "memcommit.commands",
+        "memcommit.adapters.console.commands",
         "memcommit.application.operations",
         "memcommit.infrastructure",
         "memcommit.store",

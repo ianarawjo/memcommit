@@ -143,8 +143,8 @@ its `Public route hint` displayed A's `--left-descendants` and omitted B's
 execution receipt, provider input, and six owner-routed writes all retained B's
 descendant scope.
 
-The directional route builders in `memcommit.commands.meld.command` and
-`memcommit.commands.meld.sessions` were updated to retain the B flag. A focused
+The directional route builders in `memcommit.adapters.console.commands.meld.command` and
+`memcommit.adapters.console.commands.meld.sessions` were updated to retain the B flag. A focused
 catalog regression now requires this complete route:
 
 ```text

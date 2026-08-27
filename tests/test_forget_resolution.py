@@ -6,8 +6,8 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
 import memcommit.application.ops as ops
-from memcommit.commands.forget import command as forget_command
-from memcommit.commands.shared.resolution_workbench_shell import (
+from memcommit.adapters.console.commands.forget import command as forget_command
+from memcommit.adapters.console.commands.shared.resolution_workbench_shell import (
     resolution_report_fragments,
     resolution_viewer_fragments,
     run_resolution_workbench_shell,

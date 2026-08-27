@@ -50,7 +50,7 @@ def test_meld_execution_modules_have_no_terminal_or_command_dependencies(module)
             for name in imported
             if name == "typer"
             or name.startswith("prompt_toolkit")
-            or name.startswith("memcommit.commands")
+            or name.startswith("memcommit.adapters.console.commands")
         )
         == ()
     )

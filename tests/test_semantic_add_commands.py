@@ -7,9 +7,9 @@ import json
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.commands.distill.command as distill_command
-import memcommit.commands.elaborate.command as elaborate_command
-import memcommit.commands.impact.process_local as impact_process_local
+import memcommit.adapters.console.commands.distill.command as distill_command
+import memcommit.adapters.console.commands.elaborate.command as elaborate_command
+import memcommit.adapters.console.commands.impact.process_local as impact_process_local
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.application.operations.distill.model import DISTILL_OPERATION, DISTILL_PAYLOAD_MARKER

@@ -84,9 +84,9 @@ def _run_child(kind: str) -> None:
     import click
     import typer
 
-    from memcommit.commands.merge.command import cmd as merge_command
-    from memcommit.commands.redo.command import cmd as redo_command
-    from memcommit.commands.undo.command import cmd as undo_command
+    from memcommit.adapters.console.commands.merge.command import cmd as merge_command
+    from memcommit.adapters.console.commands.redo.command import cmd as redo_command
+    from memcommit.adapters.console.commands.undo.command import cmd as undo_command
 
     with tempfile.TemporaryDirectory(prefix="mem-merge-auto-apply-") as directory:
         _configure_isolated_store(Path(directory) / ".mem")

@@ -116,7 +116,7 @@ def _source_bytes(store, source) -> bytes:
 
 def _run_distill_review(root: Path, *, cancel: bool) -> None:
     from memcommit.adapters.console.entrypoint import app
-    from memcommit.commands import distill as command
+    from memcommit.adapters.console.commands import distill as command
 
     store, source = _prepare_source(root)
     before = _source_bytes(store, source)
@@ -161,7 +161,7 @@ def _run_distill_review(root: Path, *, cancel: bool) -> None:
 
 def _run_distill_apply(root: Path) -> None:
     from memcommit.adapters.console.entrypoint import app
-    from memcommit.commands import distill as command
+    from memcommit.adapters.console.commands import distill as command
 
     store, source = _prepare_source(root)
     before = _source_bytes(store, source)
@@ -255,7 +255,7 @@ def _prepare_ground_distill(root: Path):
 
 def _run_ground_distill(root: Path) -> None:
     from memcommit.adapters.console.entrypoint import app
-    from memcommit.commands import distill as command
+    from memcommit.adapters.console.commands import distill as command
     from memcommit.persistence.store import ground_session_record_digest
 
     store, session, contexts = _prepare_ground_distill(root)
@@ -289,7 +289,7 @@ def _run_ground_distill(root: Path) -> None:
 
 def _run_elaborate(root: Path, *, rules: bool) -> None:
     from memcommit.adapters.console.entrypoint import app
-    from memcommit.commands import elaborate as command
+    from memcommit.adapters.console.commands import elaborate as command
 
     store, source = _prepare_source(root)
     before = _source_bytes(store, source)

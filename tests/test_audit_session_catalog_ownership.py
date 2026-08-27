@@ -12,7 +12,7 @@ import pytest
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-LEGACY_MODULE = "memcommit.commands.audit.sessions"
+LEGACY_MODULE = "memcommit.adapters.console.commands.audit.sessions"
 CANONICAL_MODULE = "memcommit.adapters.interfaces.tui.operations.audit.catalog"
 
 
@@ -49,7 +49,7 @@ assert legacy.audit_session_entries is canonical.audit_session_entries
 
 
 def test_audit_catalog_legacy_facade_defines_no_behavior() -> None:
-    source_path = REPOSITORY_ROOT / "src/memcommit/commands/audit/sessions.py"
+    source_path = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/audit/sessions.py"
     tree = ast.parse(source_path.read_text(encoding="utf-8"), filename=str(source_path))
 
     definitions = [
@@ -71,7 +71,7 @@ def test_audit_catalog_legacy_facade_defines_no_behavior() -> None:
 
 def test_review_consumers_import_the_interface_owner() -> None:
     for filename in ("review/command.py", "review/sessions.py"):
-        source = (REPOSITORY_ROOT / "src/memcommit/commands" / filename).read_text(
+        source = (REPOSITORY_ROOT / "src/memcommit/adapters/console/commands" / filename).read_text(
             encoding="utf-8"
         )
         assert (
@@ -79,7 +79,7 @@ def test_review_consumers_import_the_interface_owner() -> None:
             "audit_session_entries"
         ) in source
         assert (
-            "from memcommit.commands.audit.sessions import audit_session_entries"
+            "from memcommit.adapters.console.commands.audit.sessions import audit_session_entries"
             not in source
         )
 

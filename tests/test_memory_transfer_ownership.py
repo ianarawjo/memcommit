@@ -59,7 +59,7 @@ assert "memcommit.application.operations.memory_transfer.runtime" not in sys.mod
 
 
 def test_branch_remains_a_separate_context_creation_operation() -> None:
-    path = REPOSITORY_ROOT / "src/memcommit/commands/branch/command.py"
+    path = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/branch/command.py"
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
     imports = {
         node.module

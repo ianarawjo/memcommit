@@ -147,7 +147,7 @@ perform the bounded semantic call, revalidate the exact source, and return a
 typed result.
 
 The application module imports neither Typer, prompt-toolkit, nor
-`memcommit.commands`. `memcommit.summarize_runtime` now supplies the real
+`memcommit.adapters.console.commands`. `memcommit.summarize_runtime` now supplies the real
 MemoryStore/Grant adapter and a terminal-free `execute_summarize` composition;
 provider construction remains injected and terminal rendering remains above the
 application. The console host selects an adapter without putting terminal state

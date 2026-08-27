@@ -53,7 +53,7 @@ def _durable_study_digest() -> str:
 
 
 def _run_child(operation: str) -> None:
-    from memcommit.commands import rationale, trace
+    from memcommit.adapters.console.commands import rationale, trace
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(create=False)

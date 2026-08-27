@@ -22,7 +22,7 @@ def _top_level_function_names(relative_path: str) -> set[str]:
 
 
 def test_init_study_command_imports_the_operation_owned_application() -> None:
-    path = REPOSITORY_ROOT / "src/memcommit/commands/init_study/command.py"
+    path = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/init_study/command.py"
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
     imports = {
         node.module: {alias.name for alias in node.names}

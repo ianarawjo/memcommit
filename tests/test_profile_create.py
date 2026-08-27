@@ -13,7 +13,7 @@ from prompt_toolkit.output import DummyOutput
 import pytest
 
 import memcommit.application.operations.profile.model as profiles_module
-from memcommit.commands.profile.picker import (
+from memcommit.adapters.console.commands.profile.picker import (
     ProfilePickerAction,
     ProfilePickerEntry,
     _creation_review,

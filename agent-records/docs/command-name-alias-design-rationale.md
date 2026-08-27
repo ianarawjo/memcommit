@@ -44,7 +44,7 @@ ledger records the canonical operation instead of the entered alias.
 
 The shared Click routing implementation is owned by
 `memcommit.adapters.interfaces.cli.command_group`. The historical
-`memcommit.commands.shared.command_group` import is a true module alias, rather than
+`memcommit.adapters.console.commands.shared.command_group` import is a true module alias, rather than
 a wrapper or copied export list. This preserves class and alias-map identity,
 including legacy-path monkeypatches, while command adapters may import the
 interface owner directly. The ownership move deliberately did not change

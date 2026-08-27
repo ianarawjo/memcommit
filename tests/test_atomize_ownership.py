@@ -30,7 +30,7 @@ def test_primary_atomize_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "src/memcommit/adapters/python_api/atomize.py",
         "src/memcommit/adapters/python_api/_operations/atomize.py",
-        "src/memcommit/commands/atomize/command.py",
+        "src/memcommit/adapters/console/commands/atomize/command.py",
         "src/memcommit/application/operations/atomize/runtime.py",
     )
 

@@ -7,8 +7,8 @@ import inspect
 from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
-from memcommit.commands.contexts import command as contexts
-from memcommit.commands.list_memories import command as list_memories
+from memcommit.adapters.console.commands.contexts import command as contexts
+from memcommit.adapters.console.commands.list_memories import command as list_memories
 
 
 runner = CliRunner()

@@ -144,10 +144,10 @@ def _store_digest(root: Path) -> str:
 
 
 def _guard_providers(counter: list[str]) -> None:
-    import memcommit.commands.compare.command as compare_command
-    import memcommit.commands.meld.command as meld_command
-    import memcommit.commands.sever.command as sever_command
-    import memcommit.commands.update.command as update_command
+    import memcommit.adapters.console.commands.compare.command as compare_command
+    import memcommit.adapters.console.commands.meld.command as meld_command
+    import memcommit.adapters.console.commands.sever.command as sever_command
+    import memcommit.adapters.console.commands.update.command as update_command
 
     def reject_provider() -> None:
         counter.append("unexpected")

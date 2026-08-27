@@ -33,7 +33,7 @@ assert "memcommit.comparison_store" not in sys.modules
 
 def test_production_summary_consumers_use_operation_owner() -> None:
     relative_paths = (
-        "src/memcommit/commands/compare/command.py",
+        "src/memcommit/adapters/console/commands/compare/command.py",
         "src/memcommit/application/operations/compare/summary.py",
         "src/memcommit/application/operations/compare/summary_provider.py",
         "src/memcommit/application/operations/compare/summary_application.py",
@@ -59,7 +59,7 @@ def test_summary_owner_does_not_absorb_deep_compare_or_presentation() -> None:
         )
     )
 
-    assert "memcommit.commands" not in package_source
+    assert "memcommit.adapters.console.commands" not in package_source
     assert "memcommit.adapters.interfaces" not in package_source
     assert "render_comparison" not in package_source
     assert "from memcommit.comparison import ComparisonAnalysis" not in package_source

@@ -108,7 +108,7 @@ slices completed with 140 and 59 passing tests respectively.
 
 ## Command package layout follow-up
 
-On 2026-08-26 the 153 non-package modules under `memcommit.commands` were
+On 2026-08-26 the 153 non-package modules under `memcommit.adapters.console.commands` were
 organized into one uniform package per Python command entry plus one explicit
 shared command-support package.
 

@@ -7,9 +7,9 @@ import json
 from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
-from memcommit.commands.trace import command as trace_command
-from memcommit.commands.trace import projection as trace_projection
-from memcommit.commands.trace.projection import (
+from memcommit.adapters.console.commands.trace import command as trace_command
+from memcommit.adapters.console.commands.trace import projection as trace_projection
+from memcommit.adapters.console.commands.trace.projection import (
     format_compact_trace_report,
     trace_document_fragments,
 )

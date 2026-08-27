@@ -27,7 +27,7 @@ if str(ROOT) not in sys.path:
 
 
 def _run_blank_child() -> None:
-    from memcommit.commands.ground.shell import run_ground_shell
+    from memcommit.adapters.console.commands.ground.shell import run_ground_shell
     from tests.test_ground_shell import proposal
 
     applied = []
@@ -53,7 +53,7 @@ def _run_blank_child() -> None:
 
 
 def _run_named_child() -> None:
-    from memcommit.commands.ground.named_shell import run_named_ground_shell
+    from memcommit.adapters.console.commands.ground.named_shell import run_named_ground_shell
     from memcommit.application.operations.ground.model import create_ground_session
     from tests.test_ground_named_shell import proposal
 
@@ -84,7 +84,7 @@ def _run_named_child() -> None:
 
 
 def _run_import_child() -> None:
-    from memcommit.commands.shared.exact_command_review_shell import approve_exact_command
+    from memcommit.adapters.console.commands.shared.exact_command_review_shell import approve_exact_command
     from memcommit.application.exact_command_review import ExactCommandReview
 
     approved = approve_exact_command(

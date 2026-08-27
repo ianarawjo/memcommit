@@ -114,7 +114,7 @@ class DeterministicForgetProvider:
 
 
 def _child(*, cancel: bool) -> None:
-    import memcommit.commands.forget.command as forget_command
+    import memcommit.adapters.console.commands.forget.command as forget_command
 
     rows, columns = os.get_terminal_size()
     print(f"CAPTURE PTY · {columns}x{rows}", flush=True)

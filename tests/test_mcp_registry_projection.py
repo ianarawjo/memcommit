@@ -319,7 +319,7 @@ def test_projection_has_no_sdk_terminal_or_runtime_dependency():
 
     forbidden = (
         "mcp",
-        "memcommit.commands",
+        "memcommit.adapters.console.commands",
         "memcommit.application.operations",
         "memcommit.infrastructure",
         "memcommit.store",

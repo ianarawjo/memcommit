@@ -29,7 +29,7 @@ assert "memcommit.application.operations.summarize.runtime" not in sys.modules
 def test_production_summarize_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "src/memcommit/bootstrap.py",
-        "src/memcommit/commands/summarize/command.py",
+        "src/memcommit/adapters/console/commands/summarize/command.py",
         "src/memcommit/application/operations/distill/application.py",
         "src/memcommit/application/operations/distill/runtime.py",
         "src/memcommit/application/evaluation/study_summarize_exact_matrix.py",

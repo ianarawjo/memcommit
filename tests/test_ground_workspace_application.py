@@ -125,7 +125,7 @@ def test_application_module_has_no_store_command_typer_or_tui_imports():
         for name in imported
         if name == "typer"
         or name.startswith("prompt_toolkit")
-        or name.startswith("memcommit.commands")
+        or name.startswith("memcommit.adapters.console.commands")
         or name.startswith("memcommit.adapters.interfaces")
         or name == "memcommit.store"
     ) == ()

@@ -57,7 +57,7 @@ def _isolate_store(root: Path) -> None:
 
 
 def _prepare_fixture() -> str:
-    from memcommit.commands import add, delete, edit, init, switch
+    from memcommit.adapters.console.commands import add, delete, edit, init, switch
     from memcommit.context import Memory
     from memcommit.persistence.store import MemoryStore
 
@@ -114,7 +114,7 @@ def _prepare_fixture() -> str:
 
 
 def _run_child(operation: str) -> None:
-    from memcommit.commands import rationale, trace
+    from memcommit.adapters.console.commands import rationale, trace
 
     with tempfile.TemporaryDirectory(prefix="memcommit-report-capture-") as temporary:
         _isolate_store(Path(temporary))

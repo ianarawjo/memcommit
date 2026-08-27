@@ -257,7 +257,7 @@ def test_find_application_has_no_command_typer_or_tui_imports():
         for name in imported
         if name == "typer"
         or name.startswith("prompt_toolkit")
-        or name.startswith("memcommit.commands")
+        or name.startswith("memcommit.adapters.console.commands")
     )
     assert forbidden == ()
     assert FindSearchRequest.__module__ == "memcommit.application.operations.search.application"

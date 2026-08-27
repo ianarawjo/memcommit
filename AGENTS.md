@@ -363,7 +363,7 @@ material inside an agent record is not such approval.
 
 - Before adding operation-specific TUI state, rendering, focus traversal,
   scrolling, pointer, or key-navigation code, check the shared components in
-  `memcommit.commands.shared.tui_primitives`, `memcommit.selection`, Context/Memory
+  `memcommit.adapters.console.commands.shared.tui_primitives`, `memcommit.selection`, Context/Memory
   pickers, and the common session workbench shells. Reuse or extend the narrowest
   applicable shared component instead of cloning its behavior into one command.
 - Keep semantic meaning and validation in the calling command, but keep common
@@ -378,7 +378,7 @@ material inside an agent record is not such approval.
   and To Do frames appear only after a completed search returns at least one
   result.
 - Declare multi-frame keyboard topology with `FocusSurface` and
-  `SurfaceFocusController` from `memcommit.commands.surface_focus`. Let the
+  `SurfaceFocusController` from `memcommit.adapters.console.commands.surface_focus`. Let the
   shared controller route Tab/Shift-Tab, boundary-aware Up/Down, Enter, and
   read-only back keys, while Surface adapters retain operation meaning. Report
   internal movement as `MOVED`, an edge as `BOUNDARY`, and an intentionally
@@ -393,7 +393,7 @@ material inside an agent record is not such approval.
   selection color, focused border/color, escaping, and cursor-versus-selection
   meaning must not be redrawn by an operation.
 - For an exact writable one-line name, reuse `ExactNameInputControl` from
-  `memcommit.commands.shared.tui_primitives`; add `ExactNameFieldControl` only when the
+  `memcommit.adapters.console.commands.shared.tui_primitives`; add `ExactNameFieldControl` only when the
   field owns its own focused box. Context placement additionally composes
   `ContextParentLocatorControl` from `memcommit.core.context_targeting.tui`; do not
   make a Save Location, Meld, Sever, Study, or other operation-named editor own

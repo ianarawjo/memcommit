@@ -87,7 +87,7 @@ def _saved_context(
 
 def _patch_provider(monkeypatch, provider):
     monkeypatch.setattr(
-        "memcommit.commands.translate.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.translate.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -793,7 +793,7 @@ def test_cli_rejects_destination_collision_and_conflicting_modes_pre_provider(
         raise AssertionError("provider must not be connected")
 
     monkeypatch.setattr(
-        "memcommit.commands.translate.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.translate.command.connect_codex_chatgpt_provider",
         forbidden,
     )
     collision = runner.invoke(
@@ -856,7 +856,7 @@ def test_cli_empty_context_is_provider_free(
         raise AssertionError("provider must not be connected")
 
     monkeypatch.setattr(
-        "memcommit.commands.translate.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.translate.command.connect_codex_chatgpt_provider",
         forbidden,
     )
     result = runner.invoke(app, ["translate"])
@@ -897,7 +897,7 @@ def test_cli_without_current_context_is_provider_free(
         raise AssertionError("provider must not be connected")
 
     monkeypatch.setattr(
-        "memcommit.commands.translate.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.translate.command.connect_codex_chatgpt_provider",
         forbidden,
     )
     result = runner.invoke(app, ["translate"])

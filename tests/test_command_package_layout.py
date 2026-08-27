@@ -10,7 +10,9 @@ import sys
 
 
 REPOSITORY = Path(__file__).resolve().parents[1]
-COMMANDS = REPOSITORY / "src" / "memcommit" / "commands"
+COMMANDS = (
+    REPOSITORY / "src" / "memcommit" / "adapters" / "console" / "commands"
+)
 PLAN = json.loads(
     (
         REPOSITORY
@@ -46,13 +48,13 @@ def test_entry_packages_publish_only_their_declared_cli_surface() -> None:
             assert getattr(package, exported) is getattr(command, exported)
 
 
-def test_flat_support_imports_are_unavailable() -> None:
+def test_former_command_imports_are_unavailable() -> None:
     removed = [
         entry["legacy_module"]
         for entry in PLAN["modules"]
-        if entry["role"] != "command-entry"
     ]
-    assert len(removed) == 89
+    removed.insert(0, "memcommit.commands")
+    assert len(removed) == 154
     program = "\n".join(
         [
             "from importlib import import_module",
@@ -76,5 +78,5 @@ def test_flat_support_imports_are_unavailable() -> None:
 
 
 def test_canonical_support_module_remains_importable() -> None:
-    module = import_module("memcommit.commands.atomize.sessions")
-    assert module.__spec__.name == "memcommit.commands.atomize.sessions"
+    module = import_module("memcommit.adapters.console.commands.atomize.sessions")
+    assert module.__spec__.name == "memcommit.adapters.console.commands.atomize.sessions"

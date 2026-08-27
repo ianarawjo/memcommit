@@ -170,7 +170,7 @@ def test_literal_find_application_does_not_depend_on_reference_presentation():
     assert not any(
         name.startswith(
             (
-                "memcommit.commands",
+                "memcommit.adapters.console.commands",
                 "memcommit.adapters.interfaces.cli",
                 "memcommit.adapters.interfaces.tui",
             )

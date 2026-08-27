@@ -6,14 +6,14 @@ import json
 from dataclasses import replace
 
 import memcommit.application.ops as ops
-from memcommit.commands.update.checkpoint_history import (
+from memcommit.adapters.console.commands.update.checkpoint_history import (
     update_checkpoint_detail_renderer,
     update_checkpoint_entry,
     update_location_annotations,
     update_subtree_checkpoint_entries,
     update_subtree_locations,
 )
-from memcommit.commands.shared.history_picker import HistoryDetailView
+from memcommit.adapters.console.commands.shared.history_picker import HistoryDetailView
 from memcommit.application.operations.update.model import (
     UpdateApplicationReceipt,
     UpdateCheckpointReceipt,

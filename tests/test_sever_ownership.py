@@ -32,13 +32,13 @@ assert "memcommit.application.operations.sever.resolution_adapter" not in sys.mo
 
 def test_production_sever_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "src/memcommit/commands/impact/command.py",
-        "src/memcommit/commands/impact/catalog.py",
-        "src/memcommit/commands/impact/sessions.py",
-        "src/memcommit/commands/review/command.py",
-        "src/memcommit/commands/review/sessions.py",
-        "src/memcommit/commands/sever/command.py",
-        "src/memcommit/commands/sever/sessions.py",
+        "src/memcommit/adapters/console/commands/impact/command.py",
+        "src/memcommit/adapters/console/commands/impact/catalog.py",
+        "src/memcommit/adapters/console/commands/impact/sessions.py",
+        "src/memcommit/adapters/console/commands/review/command.py",
+        "src/memcommit/adapters/console/commands/review/sessions.py",
+        "src/memcommit/adapters/console/commands/sever/command.py",
+        "src/memcommit/adapters/console/commands/sever/sessions.py",
         "src/memcommit/application/operations/sever/application.py",
         "src/memcommit/application/operations/sever/provider.py",
         "src/memcommit/application/operations/sever/resolution_adapter.py",

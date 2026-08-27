@@ -16,7 +16,7 @@ scrollable table have different information priorities and disclosure paths.
 
 ## Decision
 
-`memcommit.commands.tui_text_layout` is the shared terminal text geometry
+`memcommit.adapters.console.commands.tui_text_layout` is the shared terminal text geometry
 boundary. It owns:
 
 - terminal-cell measurement for ASCII, CJK, and other wide characters;

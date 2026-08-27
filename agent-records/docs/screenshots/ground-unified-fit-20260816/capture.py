@@ -191,7 +191,7 @@ def _print_verification(store, session, *, label: str) -> None:
 
 
 def _run_plain_child(store_root: Path) -> None:
-    import memcommit.commands.fit.command as fit_command
+    import memcommit.adapters.console.commands.fit.command as fit_command
 
     _DetectorProvider.total_calls = 0
     store, session = _prepare_store(store_root)
@@ -213,7 +213,7 @@ def _run_plain_child(store_root: Path) -> None:
 
 
 def _run_viewer_child(store_root: Path) -> None:
-    import memcommit.commands.fit.command as fit_command
+    import memcommit.adapters.console.commands.fit.command as fit_command
 
     _DetectorProvider.total_calls = 0
     store, session = _prepare_store(store_root)
@@ -233,7 +233,7 @@ def _run_viewer_child(store_root: Path) -> None:
 
 
 def _run_ground_child(store_root: Path) -> None:
-    from memcommit.commands.ground.named_shell import run_named_ground_shell
+    from memcommit.adapters.console.commands.ground.named_shell import run_named_ground_shell
     from memcommit.application.operations.fit.runtime import execute_and_save_ground_fit
     from memcommit.application.operations.fit.store import FitStore
 

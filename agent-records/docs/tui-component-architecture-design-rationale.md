@@ -11,7 +11,7 @@ Last reviewed: 2026-08-16.
 ## Motivating problem
 
 The repository already shared substantial terminal behavior, but its lowest
-visual contracts were owned by `memcommit.commands.shared.tui_primitives` and adjacent
+visual contracts were owned by `memcommit.adapters.console.commands.shared.tui_primitives` and adjacent
 command modules. Selection, Context targeting, result workbenches, and other
 surfaces therefore imported `commands` even when they did not depend on a
 command. Adding another operation screen would either deepen that reverse
@@ -42,7 +42,7 @@ memcommit/adapters/interfaces/tui/
 ```
 
 The dependency direction is `core -> components -> viewers -> operation
-adapters`. `memcommit.adapters.interfaces` does not import `memcommit.commands`.
+adapters`. `memcommit.adapters.interfaces` does not import `memcommit.adapters.console.commands`.
 Existing callers import the narrow owning package directly, and the retired
 `commands.semantic_viewer`, `commands.surface_focus`,
 `commands.tui_text_layout`, `commands.read_only_viewer`, and

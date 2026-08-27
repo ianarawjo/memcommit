@@ -212,11 +212,11 @@ def test_atomize_review_comment_is_persisted_reanalyzed_and_applied(
     ctx, memory = _init_uncertain_context(store)
     provider = ReviewedAtomizeProvider()
     monkeypatch.setattr(
-        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     monkeypatch.setattr(
-        "memcommit.commands.atomize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.atomize.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     context_before = store._context_file(ctx.name).read_bytes()
@@ -304,7 +304,7 @@ def test_atomize_review_comment_is_persisted_reanalyzed_and_applied(
     assert len(provider.payloads) == 2
 
     monkeypatch.setattr(
-        "memcommit.commands.atomize.command._interactive_terminal",
+        "memcommit.adapters.console.commands.atomize.command._interactive_terminal",
         lambda: True,
     )
     applied = runner.invoke(
@@ -341,7 +341,7 @@ def test_atomize_review_comment_is_persisted_reanalyzed_and_applied(
     # review evidence must therefore remain reconstructible from the
     # checkpoint rather than only from that replaceable preview artifact.
     monkeypatch.setattr(
-        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
         AllAtomicProvider,
     )
     later_preview = runner.invoke(
@@ -450,7 +450,7 @@ def test_legacy_atomize_analysis_loads_with_empty_review_provenance(
     ctx, _ = _init_uncertain_context(store)
     provider = ReviewedAtomizeProvider()
     monkeypatch.setattr(
-        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
@@ -484,7 +484,7 @@ def test_atomize_with_review_requires_a_nonempty_comment_without_provider_call(
     _init_uncertain_context(store)
     provider = ReviewedAtomizeProvider()
     monkeypatch.setattr(
-        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -507,7 +507,7 @@ def test_plain_impact_resumes_without_incorporating_saved_comments(
     _, memory = _init_uncertain_context(store)
     provider = ReviewedAtomizeProvider()
     monkeypatch.setattr(
-        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
@@ -548,7 +548,7 @@ def test_review_and_atomize_schema_versions_reject_booleans(
     ctx, _ = _init_uncertain_context(store)
     provider = ReviewedAtomizeProvider()
     monkeypatch.setattr(
-        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
@@ -618,7 +618,7 @@ def test_resuming_atomize_review_reports_a_malformed_analysis_cleanly(
     ctx, _ = _init_uncertain_context(store)
     provider = ReviewedAtomizeProvider()
     monkeypatch.setattr(
-        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
@@ -643,7 +643,7 @@ def test_atomize_analysis_rejects_forged_frame_content_and_positions(
     _, memory = _init_uncertain_context(store)
     provider = ReviewedAtomizeProvider()
     monkeypatch.setattr(
-        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
@@ -763,11 +763,11 @@ def test_multiple_atomize_comments_share_one_source_analysis_and_stay_per_memory
             )
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
         Provider,
     )
     monkeypatch.setattr(
-        "memcommit.commands.atomize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.atomize.command.connect_codex_chatgpt_provider",
         Provider,
     )
     assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
@@ -867,7 +867,7 @@ def test_partial_atomize_review_isolated_to_answered_memory(
             )
 
     monkeypatch.setattr(
-        "memcommit.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
         Provider,
     )
     assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0

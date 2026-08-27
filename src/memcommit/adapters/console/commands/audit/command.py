@@ -1,0 +1,455 @@
+"""Run and review one durable three-finder Memory quality Audit."""
+
+from __future__ import annotations
+
+import sys
+from collections.abc import Callable, Mapping, Sequence
+from typing import Annotated, Optional
+
+from prompt_toolkit.input import Input
+from prompt_toolkit.output import Output
+import typer
+
+from memcommit.adapters.console.commands.shared.command_progress import BUSY_INTERVAL_SECONDS
+from memcommit.adapters.console.commands.shared.command_wait import (
+    CommandWaitProgress,
+    run_command_wait,
+)
+from memcommit.adapters.console.commands.shared.context_operand import (
+    ContextOperandSnapshot,
+    choose_context_operand,
+)
+from memcommit.application.authority.access import (
+    GrantedReadStore,
+    context_access_display_facts,
+    resolve_context_access,
+)
+from memcommit.adapters.console.commands.help_inventory.command import CommandEntry
+from memcommit.adapters.console.commands.shared.readable_context_catalog import (
+    freeze_profile_readable_context_catalog,
+)
+from memcommit.adapters.interfaces.console.identity import collision_safe_uid_prefixes
+from memcommit.adapters.interfaces.console.text import (
+    display_escape_text,
+    safe_terminal_text,
+)
+from memcommit.adapters.interfaces.console.theme import (
+    memory_object_color_rgb,
+    semantic_color_rgb,
+    semantic_quality_role,
+)
+from memcommit.adapters.interfaces.tui.operations.audit import (
+    choose_audit_setup,
+    quality_audit_review_document,
+    render_quality_audit_review_snapshot,
+)
+from memcommit.adapters.interfaces.tui.viewers.semantic import run_semantic_viewer
+from memcommit.context import Context
+from memcommit.application.operations.conformance.model import ConformanceError, check_context_conformance
+from memcommit.application.operations.conformance.runtime import freeze_context_conformance
+from memcommit.application.authority.derived_policy import authorize_analysis_save
+from memcommit.application.reviewing.quality.findings import FindingsError, FindingsProvider
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.reviewing.quality.audit import (
+    QualityAuditError,
+    QualityAuditKind,
+    QualityAuditSession,
+    create_quality_audit,
+    run_quality_audit,
+)
+from memcommit.application.reviewing.quality.audit_store import QualityAuditStore
+from memcommit.application.reviewing.quality.report import (
+    QualityFindingReportItem,
+    quality_find_category_label,
+    quality_finding_label_parts,
+    quality_find_report_summary_text,
+)
+from memcommit.application.reviewing.quality.workbench import (
+    QualityFindSourceFrame,
+    QualityFindWorkbenchSession,
+    quality_find_report_view,
+)
+from memcommit.providers.subscription import (
+    QueryProviderError,
+    connect_codex_chatgpt_provider,
+)
+from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
+
+
+_AUDIT_RECEIPT_PREVIEW_LIMIT = 3
+_AUDIT_RECEIPT_MEMORY_PREVIEW_LIMIT = 48
+
+
+def _run_quality_audit_checks(
+    ctx: Context,
+    provider_factory: Callable[[], FindingsProvider],
+    *,
+    conformance_rules: Context | None = None,
+    app_input: Input | None = None,
+    app_output: Output | None = None,
+    interactive: bool | None = None,
+    interval: float = BUSY_INTERVAL_SECONDS,
+    help_entries: Sequence[CommandEntry] | None = None,
+    on_help_action: Callable[[str, str | None], None] | None = None,
+) -> QualityAuditSession:
+    """Run the frozen checks behind one shared transient progress line."""
+
+    total_checks = 4 if conformance_rules is not None else 3
+
+    def work(progress: CommandWaitProgress) -> QualityAuditSession:
+        def update_progress(kind: QualityAuditKind, step: int, _total: int) -> None:
+            progress.update(
+                f"finding {quality_find_category_label(kind).casefold()}",
+                step=step,
+            )
+
+        session = run_quality_audit(
+            ctx,
+            provider_factory,
+            on_check=update_progress,
+        )
+        if conformance_rules is not None:
+            progress.update("checking conformance", step=4)
+            frozen = freeze_context_conformance(ctx, conformance_rules)
+            report = check_context_conformance(
+                source_label=frozen.target_name,
+                rules_label=frozen.rules_name,
+                rules=frozen.rules,
+                subjects=frozen.subjects,
+                provider=provider_factory(),
+            )
+            session = create_quality_audit(
+                ctx,
+                session.checks,
+                conformance=report,
+                uid=session.uid,
+                created_at=session.created_at,
+            )
+        return session
+
+    return run_command_wait(
+        "AUDIT",
+        "finding redundancies",
+        total=total_checks,
+        work=work,
+        app_input=app_input,
+        app_output=app_output,
+        interactive=interactive,
+        interval=interval,
+        help_entries=help_entries,
+        on_help_action=on_help_action,
+    )
+
+
+def _interactive_terminal() -> bool:
+    return sys.stdin.isatty() and sys.stdout.isatty()
+
+
+def run_quality_audit_review(
+    store: MemoryStore,
+    session: QualityAuditSession,
+    *,
+    app_input: Input | None = None,
+    app_output: Output | None = None,
+    require_tty: bool = True,
+) -> QualityAuditSession:
+    """Read one complete saved Audit without rerunning or editing it."""
+
+    # Keep the Store parameter for the established command adapter signature,
+    # but do not open it: the already validated saved snapshot is the review
+    # object and this Viewer owns no persistence boundary.
+    del store
+    run_semantic_viewer(
+        quality_audit_review_document(session),
+        title="AUDIT REVIEW",
+        app_input=app_input,
+        app_output=app_output,
+        require_tty=require_tty,
+    )
+    return session
+
+
+def _receipt_memory_preview(value: str) -> str:
+    compact = " ".join(safe_terminal_text(value).split()) or "(empty Memory)"
+    if len(compact) <= _AUDIT_RECEIPT_MEMORY_PREVIEW_LIMIT:
+        return compact
+    return compact[: _AUDIT_RECEIPT_MEMORY_PREVIEW_LIMIT - 1].rstrip() + "…"
+
+
+def _render_quality_audit_finding_preview(
+    item: QualityFindingReportItem,
+    *,
+    uid_prefixes: Mapping[str, str],
+) -> None:
+    marker, finding_label, classification = quality_finding_label_parts(item)
+    role = semantic_quality_role(item.category)
+    if role is None:  # pragma: no cover - the typed item validates this union.
+        raise ValueError("Unsupported Audit quality finding category.")
+    typer.echo(f"  {marker} ", nl=False)
+    typer.secho(
+        finding_label,
+        fg=semantic_color_rgb(role),
+        bold=True,
+        nl=False,
+    )
+    if classification:
+        typer.secho(f" · {classification}", bold=True, nl=False)
+    typer.echo(" · ", nl=False)
+    for index, source in enumerate(item.sources):
+        if index:
+            typer.echo(" ↔ ", nl=False)
+        typer.secho(
+            f"[MEMORY {uid_prefixes[source.memory_uid]}] ",
+            bold=True,
+            nl=False,
+        )
+        typer.secho(
+            f"“{_receipt_memory_preview(source.content)}”",
+            fg=memory_object_color_rgb(),
+            nl=False,
+        )
+    typer.echo()
+
+
+def render_quality_audit_receipt(session: QualityAuditSession) -> None:
+    """Print the saved artifact with each finder's truthful result unit."""
+
+    typer.secho("Audit saved:", bold=True, nl=False)
+    typer.echo(f" {len(session.checks)} quality checks.")
+    memory_count = len(session.source.memories)
+    memory_label = "memory" if memory_count == 1 else "memories"
+    typer.secho("Source:", bold=True, nl=False)
+    typer.echo(
+        f" {display_escape_text(session.source.context_name)} · "
+        f"{memory_count} {memory_label}"
+    )
+
+    context = session.source.context()
+    source_frame = QualityFindSourceFrame.create((context,))
+    uid_prefixes = collision_safe_uid_prefixes(
+        memory.uid for memory in session.source.memories
+    )
+    typer.echo()
+    for check in session.checks:
+        label = quality_find_category_label(check.kind)
+        role = semantic_quality_role(check.kind)
+        if role is None:  # pragma: no cover - Audit validates this union.
+            raise ValueError("Unsupported Audit quality check kind.")
+        report_view = quality_find_report_view(
+            QualityFindWorkbenchSession(
+                uid=session.uid,
+                kind=check.kind,
+                source=source_frame,
+                report=check.report,
+                responses=session.responses,
+            ),
+            source_frame,
+            operation_label=f"AUDIT · {label}",
+        )
+        typer.secho(
+            label,
+            fg=semantic_color_rgb(role),
+            bold=True,
+            nl=False,
+        )
+        typer.echo(
+            f"{' ' * (15 - len(label))}{quality_find_report_summary_text(report_view)}"
+        )
+        for item in report_view.items[:_AUDIT_RECEIPT_PREVIEW_LIMIT]:
+            _render_quality_audit_finding_preview(
+                item,
+                uid_prefixes=uid_prefixes,
+            )
+        remaining = len(report_view.items) - _AUDIT_RECEIPT_PREVIEW_LIMIT
+        if remaining > 0:
+            typer.echo(f"  … {remaining} more")
+
+    typer.echo()
+    typer.secho("Review full audit:", bold=True)
+    typer.echo(f"mem review audit --session {session.uid}")
+
+
+def _interactive_source(store: MemoryStore, *, current_name: str | None):
+    access = resolve_context_access(
+        store,
+        None,
+        current_name=current_name,
+        required_permission="READ",
+    )
+    catalog = freeze_profile_readable_context_catalog(
+        store,
+        access,
+        include_query_routes=False,
+    )
+    names = tuple(catalog.list_context_names())
+    annotations = {
+        name: context_access_display_facts(catalog.access_for(name))
+        for name in names
+        if catalog.access_for(name).is_granted
+    }
+    selected_name = choose_audit_setup(
+        names,
+        current=access.display_name,
+        annotations=annotations,
+    )
+    if selected_name is None:
+        return None
+    selected_access = catalog.access_for(selected_name)
+    # Audit retains source-derived content and provider judgments. READ alone
+    # is sufficient for one-shot Find, but not for this durable artifact.
+    authorize_analysis_save((selected_access,), retention="RETAINED")
+    return selected_access, catalog.load_direct(selected_name)
+
+
+def cmd(
+    context_operand: Annotated[
+        Optional[str],
+        typer.Argument(
+            metavar="CONTEXT",
+            help="Exact readable Context to audit (defaults to current)",
+        ),
+    ] = None,
+    context_name: Annotated[
+        Optional[str],
+        typer.Option(
+            "--context",
+            "-c",
+            help="Exact readable Context to audit (defaults to current)",
+        ),
+    ] = None,
+    against: Annotated[
+        Optional[list[str]],
+        typer.Option(
+            "--against",
+            "--rule",
+            metavar="RULES_CONTEXT",
+            help=(
+                "Optional local Rules Context; --against and --rule are "
+                "equivalent and add the shared Conformance check"
+            ),
+        ),
+    ] = None,
+    snapshot: Annotated[
+        bool,
+        typer.Option(
+            "--snapshot",
+            help="Print the complete newly saved Audit instead of its receipt",
+        ),
+    ] = False,
+    select_source: Annotated[
+        bool,
+        typer.Option(
+            "--select",
+            help="Choose one readable Source Context interactively",
+        ),
+    ] = False,
+) -> None:
+    """Run quality checks and optional Rule Conformance, then save one Audit."""
+
+    try:
+        context_name = choose_context_operand(
+            context_operand,
+            option=context_name,
+        )
+    except ValueError as error:
+        typer.secho(
+            "Audit error: " + display_escape_text(str(error)),
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
+    store = MemoryStore(create=False)
+    try:
+        context_snapshot = ContextOperandSnapshot.capture(store)
+        if select_source and context_name is not None:
+            raise QualityAuditError(
+                "--select cannot be combined with an explicit Context."
+            )
+        if select_source and not _interactive_terminal():
+            raise QualityAuditError("--select requires an interactive terminal.")
+        rules_ctx: Context | None = None
+        rules_operands = tuple(against or ())
+        if len(rules_operands) > 1:
+            raise QualityAuditError(
+                "Use only one of --against or --rule; they are aliases for "
+                "the Rules Context."
+            )
+        if rules_operands:
+            rules_name = context_snapshot.resolve(rules_operands[0])
+            if not store.context_exists(rules_name):
+                raise ConformanceError(
+                    "Audit Conformance currently requires a local Rules Context."
+                )
+            rules_ctx = store.load_direct(rules_name)
+        if select_source:
+            selected = _interactive_source(
+                store,
+                current_name=context_snapshot.current_name,
+            )
+            if selected is None:
+                typer.echo("Audit cancelled.")
+                return
+            selected_access, ctx = selected
+            if rules_ctx is not None and selected_access.is_granted:
+                raise ConformanceError(
+                    "Audit Conformance currently requires a local Target Context."
+                )
+        else:
+            canonical_name = (
+                None if context_name is None else context_snapshot.resolve(context_name)
+            )
+            access = resolve_context_access(
+                store,
+                canonical_name,
+                current_name=context_snapshot.current_name,
+                required_permission="READ",
+            )
+            authorize_analysis_save((access,), retention="RETAINED")
+            ctx = (
+                GrantedReadStore(access).load_direct(access.display_name)
+                if access.is_granted
+                else store.load_direct(access.context_name)
+            )
+            if rules_ctx is not None and access.is_granted:
+                raise ConformanceError(
+                    "Audit Conformance currently requires a local Target Context."
+                )
+
+        if rules_ctx is not None:
+            # Fail structural Conformance setup before opening any of the four
+            # provider turns; a bad Rules frame must not waste a partial Audit.
+            freeze_context_conformance(ctx, rules_ctx)
+        session = _run_quality_audit_checks(
+            ctx,
+            connect_codex_chatgpt_provider,
+            conformance_rules=rules_ctx,
+        )
+
+        # Publish the complete snapshot before printing its receipt. Review is
+        # a separate command, so a terminal disconnect cannot lose the result.
+        QualityAuditStore(store).save(session, expected_digest=None)
+    except (
+        ConcurrentContextUpdateError,
+        ConformanceError,
+        FileNotFoundError,
+        FindingsError,
+        OSError,
+        ProfileConfigError,
+        ProfileError,
+        QualityAuditError,
+        QueryProviderError,
+        RuntimeError,
+        ValueError,
+    ) as error:
+        typer.secho(
+            "Audit error: " + display_escape_text(str(error)),
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
+
+    if snapshot:
+        typer.echo(render_quality_audit_review_snapshot(session))
+        return
+    render_quality_audit_receipt(session)

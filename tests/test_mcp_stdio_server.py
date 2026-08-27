@@ -175,7 +175,7 @@ def test_server_source_is_a_thin_transport_adapter():
             imported.append(node.module)
 
     forbidden = (
-        "memcommit.commands",
+        "memcommit.adapters.console.commands",
         "memcommit.application.operations",
         "memcommit.infrastructure",
         "memcommit.store",

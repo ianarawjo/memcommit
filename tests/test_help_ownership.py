@@ -52,7 +52,7 @@ def test_help_owner_preserves_catalog_and_injected_provider_boundaries() -> None
     ).read_text(encoding="utf-8")
     combined = application_source + lookup_source
 
-    assert "memcommit.commands" not in combined
+    assert "memcommit.adapters.console.commands" not in combined
     assert "memcommit.adapters.interfaces" not in combined
     assert "memcommit.store" not in combined
     assert "memcommit.infrastructure" not in combined

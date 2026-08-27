@@ -19,13 +19,13 @@ def _command_imports(path: Path) -> tuple[str, ...]:
     imports: list[str] = []
     for node in ast.walk(ast.parse(path.read_text(encoding="utf-8"))):
         if isinstance(node, ast.ImportFrom) and node.module:
-            if node.module.startswith("memcommit.commands"):
+            if node.module.startswith("memcommit.adapters.console.commands"):
                 imports.append(node.module)
         elif isinstance(node, ast.Import):
             imports.extend(
                 alias.name
                 for alias in node.names
-                if alias.name.startswith("memcommit.commands")
+                if alias.name.startswith("memcommit.adapters.console.commands")
             )
     return tuple(imports)
 
@@ -41,8 +41,8 @@ def test_atomize_tui_boundary_does_not_import_command_modules() -> None:
 
 
 def test_atomize_legacy_shell_paths_are_identity_preserving_facades() -> None:
-    from memcommit.commands.atomize import render as legacy_cli
-    from memcommit.commands.atomize import workbench_shell as legacy_atomize
+    from memcommit.adapters.console.commands.atomize import render as legacy_cli
+    from memcommit.adapters.console.commands.atomize import workbench_shell as legacy_atomize
     from memcommit.adapters.interfaces.cli import atomize as atomize_cli
     from memcommit.adapters.interfaces.tui.operations.atomize import screen as atomize_screen
 
@@ -59,12 +59,12 @@ def test_atomize_legacy_shell_paths_are_identity_preserving_facades() -> None:
 
 def test_atomize_command_delegates_terminal_presentation_to_interfaces() -> None:
     source = (
-        REPOSITORY / "src/memcommit/commands/atomize/command.py"
+        REPOSITORY / "src/memcommit/adapters/console/commands/atomize/command.py"
     ).read_text(encoding="utf-8")
 
     assert "memcommit.adapters.interfaces.tui.operations.atomize.adapter" in source
     assert "memcommit.adapters.interfaces.cli.atomize" in source
-    assert "memcommit.commands.atomize.workbench_shell" not in source
+    assert "memcommit.adapters.console.commands.atomize.workbench_shell" not in source
     assert "prompt_toolkit" not in source
 
 
@@ -87,4 +87,4 @@ def test_result_projection_has_no_orphan_live_shell() -> None:
     source = INTERFACE_MODULES[2].read_text(encoding="utf-8")
 
     assert "def run_result_workbench_shell" not in source
-    assert not (REPOSITORY / "src/memcommit/commands/result_workbench_shell.py").exists()
+    assert not (REPOSITORY / "src/memcommit/adapters/console/commands/result_workbench_shell.py").exists()

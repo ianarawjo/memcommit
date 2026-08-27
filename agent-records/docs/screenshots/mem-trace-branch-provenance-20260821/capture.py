@@ -126,7 +126,7 @@ def _prepare_legacy_copy() -> str:
 
 
 def _run_child() -> None:
-    from memcommit.commands import trace
+    from memcommit.adapters.console.commands import trace
 
     with tempfile.TemporaryDirectory(prefix="memcommit-trace-branch-") as temp:
         _isolate_store(Path(temp))

@@ -189,8 +189,8 @@ def _run_child(kind: str) -> None:
     import click
     import typer
 
-    import memcommit.commands.resolve.command as resolve_command
-    from memcommit.commands.resolve.command import cmd as resolve_cmd
+    import memcommit.adapters.console.commands.resolve.command as resolve_command
+    from memcommit.adapters.console.commands.resolve.command import cmd as resolve_cmd
 
     with tempfile.TemporaryDirectory(prefix="mem-resolve-capture-") as directory:
         _configure_isolated_store(Path(directory) / ".mem")

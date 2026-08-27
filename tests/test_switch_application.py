@@ -210,7 +210,7 @@ def test_tui_adapter_returns_request_without_selecting_state() -> None:
 
 
 def test_switch_application_and_runtime_do_not_import_terminal_adapters() -> None:
-    forbidden = ("typer", "prompt_toolkit", "memcommit.commands")
+    forbidden = ("typer", "prompt_toolkit", "memcommit.adapters.console.commands")
     for relative in (
         "src/memcommit/application/operations/switch/application.py",
         "src/memcommit/application/operations/switch/runtime.py",
@@ -235,7 +235,7 @@ def test_context_picker_compatibility_module_is_behavior_free() -> None:
         for source in (ROOT / "src" / "memcommit").rglob("*.py")
         if source != path
         and source.name != "_legacy_command_alias_map.py"
-        and "memcommit.commands.shared.context_picker" in source.read_text()
+        and "memcommit.adapters.console.commands.shared.context_picker" in source.read_text()
     ]
     assert production_importers == []
 
@@ -246,7 +246,7 @@ def test_switch_tui_operation_does_not_import_command_adapters() -> None:
         source
         for source in operation.rglob("*.py")
         if any(
-            module == "memcommit.commands" or module.startswith("memcommit.commands.")
+            module == "memcommit.adapters.console.commands" or module.startswith("memcommit.adapters.console.commands.")
             for module in _imports(source)
         )
     ]

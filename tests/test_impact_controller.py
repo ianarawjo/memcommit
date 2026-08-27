@@ -6,7 +6,7 @@ import pytest
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-from memcommit.commands.shared.resolution_workbench_shell import (
+from memcommit.adapters.console.commands.shared.resolution_workbench_shell import (
     RESOLUTION_WORKBENCH_STYLE,
     _seeded_report_lines,
     resolution_report_fragments,

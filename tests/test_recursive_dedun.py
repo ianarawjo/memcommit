@@ -206,7 +206,7 @@ def test_recursive_dedun_applies_semantic_groups_per_context(
     store.set_current(root.name)
     provider = SemanticGroupProvider()
     monkeypatch.setattr(
-        "memcommit.commands.find_duplicates.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.find_duplicates.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -272,7 +272,7 @@ def test_recursive_dedun_later_analysis_failure_publishes_no_context(
         return DuplicateReport(memory_count=len(context.memories), findings=())
 
     monkeypatch.setattr(
-        "memcommit.commands.find_duplicates.command.ops.find_redundancies",
+        "memcommit.adapters.console.commands.find_duplicates.command.ops.find_redundancies",
         analyze,
     )
 

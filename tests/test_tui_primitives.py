@@ -16,14 +16,14 @@ from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.layout import FormattedTextControl, Layout, Window
 from prompt_toolkit.output import DummyOutput
 
-import memcommit.commands.shared.tui_primitives as legacy_tui_primitives
+import memcommit.adapters.console.commands.shared.tui_primitives as legacy_tui_primitives
 
-from memcommit.commands.shared.exact_command_review import (
+from memcommit.adapters.console.commands.shared.exact_command_review import (
     ExactCommandReview,
     format_exact_command,
     render_exact_command_review,
 )
-from memcommit.commands.shared.tui_primitives import (
+from memcommit.adapters.console.commands.shared.tui_primitives import (
     ExactNameFieldControl,
     ExactNameFieldView,
     ExactNameInputControl,

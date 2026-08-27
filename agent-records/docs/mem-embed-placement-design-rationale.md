@@ -32,7 +32,7 @@ checkpoint creation, and persistence. The previous flat module paths are
 module-identity compatibility aliases. The plain command adapter is
 `memcommit.adapters.interfaces.cli.embed`; the interactive adapter is the
 `memcommit.adapters.interfaces.tui.operations.embed` package. The former
-`memcommit.commands.embed` and `memcommit.commands.embed_dialog` modules were
+`memcommit.adapters.console.commands.embed` and `memcommit.adapters.console.commands.embed_dialog` modules were
 removed instead of retained as compatibility facades.
 
 The representative `180×52` color-PTY interaction against the actual current
@@ -207,7 +207,7 @@ component without inheriting Embed semantics.
 
 The component projects only the target's frozen direct-item sequence. It does
 not import a command adapter or gain storage, authority, or apply behavior.
-The former `memcommit.commands.shared.direct_item_placement` implementation is now a
+The former `memcommit.adapters.console.commands.shared.direct_item_placement` implementation is now a
 module-identity compatibility alias to this owner. The relocation deliberately
 retains the old import path while removing the second implementation and its
 independent globals. Older command screens may still have separate review

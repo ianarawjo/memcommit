@@ -123,13 +123,13 @@ def test_branch_application_has_no_cli_tui_or_store_dependency() -> None:
         module == "typer"
         or module == "memcommit.store"
         or module.startswith("memcommit.adapters.interfaces.")
-        or module.startswith("memcommit.commands.")
+        or module.startswith("memcommit.adapters.console.commands.")
         for module in imports
     )
 
 
 def test_branch_command_delegates_materialization_to_the_operation_runtime() -> None:
-    path = REPOSITORY_ROOT / "src/memcommit/commands/branch/command.py"
+    path = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/branch/command.py"
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
     imports = {
         node.module

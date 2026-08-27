@@ -3,7 +3,7 @@
 ## Problem
 
 The compact exact-name dialog is operation-neutral terminal interaction, but
-its implementation lived under `memcommit.commands`. Its input control and
+its implementation lived under `memcommit.adapters.console.commands`. Its input control and
 frame were already interface-owned, so the host dialog's location made the
 remaining ownership boundary look command-specific and invited interface code
 to depend on a command compatibility module.
@@ -13,7 +13,7 @@ to depend on a command compatibility module.
 The implementation lives in
 `memcommit.adapters.interfaces.tui.components.exact_name_dialog`. It imports the exact
 name field directly from `memcommit.adapters.interfaces.tui.components.exact_name`.
-The former `memcommit.commands.shared.exact_name_dialog` path is a `sys.modules`
+The former `memcommit.adapters.console.commands.shared.exact_name_dialog` path is a `sys.modules`
 alias to that canonical module.
 
 The alias is intentionally stronger than copied re-exports. Legacy-first and

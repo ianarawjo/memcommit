@@ -11,7 +11,7 @@ from PIL import Image, ImageDraw, ImageFont
 ROOT = Path("/Users/KimMunyeong/Github/memcommit")
 sys.path.insert(0, str(ROOT))
 
-from memcommit.commands.meld.command import render_meld_session
+from memcommit.adapters.console.commands.meld.command import render_meld_session
 from memcommit.store import MemoryStore
 
 

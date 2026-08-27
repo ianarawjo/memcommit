@@ -48,7 +48,7 @@ class _SlowProvider:
 
 
 def _patch_shared_wait_help() -> None:
-    import memcommit.commands.shared.session_help as session_help
+    import memcommit.adapters.console.commands.shared.session_help as session_help
     import memcommit.adapters.interfaces.tui.components.session_help as tui_session_help
 
     session_help.current_help_entries = lambda: ()
@@ -90,7 +90,7 @@ def _initialize_meld_store(root: Path):
 
 
 def _run_meld_child(store_root: Path) -> None:
-    import memcommit.commands.meld.command as meld_command
+    import memcommit.adapters.console.commands.meld.command as meld_command
     from tests.test_meld import Task2CompareProvider
 
     store, study, chat, result = _initialize_meld_store(store_root)
@@ -134,7 +134,7 @@ def _initialize_update_store(root: Path):
 
 
 def _run_update_child(store_root: Path) -> None:
-    import memcommit.commands.update.command as update_command
+    import memcommit.adapters.console.commands.update.command as update_command
     from tests.test_update import PlanProvider
 
     def one_capture_edit(prompt: str) -> dict[str, object]:

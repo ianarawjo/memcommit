@@ -36,7 +36,7 @@ def test_context_catalog_entry_keeps_grant_metadata_typed() -> None:
 
 
 def test_contexts_command_imports_the_operation_runtime() -> None:
-    path = REPOSITORY_ROOT / "src/memcommit/commands/contexts/command.py"
+    path = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/contexts/command.py"
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
     imports = {
         node.module
@@ -56,7 +56,7 @@ def test_contexts_operation_has_no_terminal_dependency() -> None:
     ):
         source = (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         assert "import typer" not in source
-        assert "memcommit.commands" not in source
+        assert "memcommit.adapters.console.commands" not in source
 
 
 def test_contexts_operation_package_import_is_lazy() -> None:

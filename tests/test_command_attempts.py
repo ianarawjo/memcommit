@@ -14,7 +14,7 @@ from memcommit.persistence.command_ledger.attempts import (
     begin_command_attempt,
     finish_command_attempt,
 )
-from memcommit.commands.sever import command as sever_command
+from memcommit.adapters.console.commands.sever import command as sever_command
 from memcommit.providers.subscription import QueryProviderTimeoutError
 from memcommit.persistence.store import MemoryStore
 
@@ -235,7 +235,7 @@ def test_cancelled_edit_is_qualified_without_a_completed_label(
     isolated_store,
     monkeypatch,
 ):
-    import memcommit.commands.edit.command as edit_command
+    import memcommit.adapters.console.commands.edit.command as edit_command
 
     _enable_attempt_log(monkeypatch)
     assert runner.invoke(app, ["init", "working"]).exit_code == 0

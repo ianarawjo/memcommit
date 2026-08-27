@@ -227,7 +227,7 @@ def test_refresh_calls_provider_and_preserves_durable_output_plan(isolated_store
 
 def test_analysis_application_and_runtime_import_no_terminal_adapters():
     root = Path(__file__).resolve().parents[1]
-    forbidden = ("typer", "prompt_toolkit", "memcommit.commands")
+    forbidden = ("typer", "prompt_toolkit", "memcommit.adapters.console.commands")
     for relative in (
         "src/memcommit/application/operations/atomize/analysis_application.py",
         "src/memcommit/application/operations/atomize/analysis_runtime.py",

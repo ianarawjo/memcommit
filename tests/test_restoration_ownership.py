@@ -34,7 +34,7 @@ def test_operation_adapters_preserve_distinct_directions(monkeypatch) -> None:
 
 def test_commands_do_not_own_restoration_route_selection() -> None:
     for operation in ("undo", "redo"):
-        path = REPOSITORY_ROOT / f"src/memcommit/commands/{operation}/command.py"
+        path = REPOSITORY_ROOT / f"src/memcommit/adapters/console/commands/{operation}/command.py"
         tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
         imports = {
             node.module
@@ -53,7 +53,7 @@ def test_restoration_modules_have_no_terminal_dependency() -> None:
     ):
         source = (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         assert "import typer" not in source
-        assert "memcommit.commands" not in source
+        assert "memcommit.adapters.console.commands" not in source
 
 
 def test_operation_packages_import_lazily() -> None:

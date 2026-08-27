@@ -14,8 +14,8 @@ import memcommit.application.ops as ops
 import memcommit.persistence.store as store_module
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.python_api import MemCommitClient
-from memcommit.commands.compare.command import render_comparison
-from memcommit.commands.compare.execution import ensure_comparison_analysis
+from memcommit.adapters.console.commands.compare.command import render_comparison
+from memcommit.adapters.console.commands.compare.execution import ensure_comparison_analysis
 from memcommit.application.authority.access import ContextAccess
 from memcommit.application.operations.compare.ledger.model import (
     ComparisonAnalysis,
@@ -356,11 +356,11 @@ def test_exact_compare_cli_materializes_hidden_receipt_without_provider(
     )
     assert load_comparison_analysis(reference.uid, compared.uid) is None
     monkeypatch.setattr(
-        "memcommit.commands.compare.command.MemoryStore",
+        "memcommit.adapters.console.commands.compare.command.MemoryStore",
         lambda create=False: store,
     )
     monkeypatch.setattr(
-        "memcommit.commands.compare.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.compare.command.connect_codex_chatgpt_provider",
         lambda: (_ for _ in ()).throw(
             AssertionError("hidden exact Compare receipt opened a provider")
         ),

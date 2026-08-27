@@ -12,7 +12,7 @@ checkpoint-producing command unit.
 | Text boundaries and size limits | `memcommit.application.operations.chunk.domain` | Pure text in, ordered text chunks out |
 | Direct-Memory resolution and child construction | `memcommit.application.operations.chunk.application` | Frozen in-memory Context, no Store or terminal |
 | Authority revalidation, replacement, checkpoint, save | `memcommit.application.operations.chunk.runtime` | One CREATE+DELETE authorized save or no publication |
-| Operand discovery, preview, receipt | `memcommit.commands.chunk.command` | Typer-only adapter around the operation package |
+| Operand discovery, preview, receipt | `memcommit.adapters.console.commands.chunk.command` | Typer-only adapter around the operation package |
 | Historical Python import | `memcommit.chunking` | Identity alias to the operation-owned domain |
 | Historical in-memory call | `memcommit.application.ops.chunk` | Thin lazy adapter to the application function |
 

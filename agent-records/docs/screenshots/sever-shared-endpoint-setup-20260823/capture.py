@@ -35,7 +35,7 @@ _BASE._BASE.ROWS = ROWS
 
 def _run_child(store_root: Path) -> None:
     from memcommit.adapters.console.entrypoint import app
-    import memcommit.commands.sever.command as sever_command
+    import memcommit.adapters.console.commands.sever.command as sever_command
     from memcommit.providers.subscription import QueryProviderError
     from memcommit.application.operations.sever.session_store import SeverSessionStore
 

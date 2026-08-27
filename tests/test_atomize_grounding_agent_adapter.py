@@ -295,7 +295,7 @@ def test_adapter_imports_only_public_api_and_shared_agent_contract():
     assert not any(
         name.startswith(
             (
-                "memcommit.commands",
+                "memcommit.adapters.console.commands",
                 "memcommit.atomize_grounding_application",
                 "memcommit.atomize_grounding_runtime",
                 "memcommit.application.operations.atomize.grounding_application",

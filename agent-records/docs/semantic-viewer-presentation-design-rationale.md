@@ -17,7 +17,7 @@ change to alter Compare's section parser.
 
 ## Shared boundary
 
-`memcommit.commands.semantic_viewer` owns the presentation of one semantic
+`memcommit.adapters.console.commands.semantic_viewer` owns the presentation of one semantic
 Viewer stop. A `SemanticViewerBlock` receives neutral semantic fragments and
 adds the common focus styles and prompt-toolkit viewport anchor. A
 `SemanticViewerSection` pairs that block with one stable UID, kind, and optional

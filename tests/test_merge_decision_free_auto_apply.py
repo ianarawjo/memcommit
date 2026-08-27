@@ -5,7 +5,7 @@ from __future__ import annotations
 import typer
 from typer.testing import CliRunner
 
-import memcommit.commands.merge.command as merge_command
+import memcommit.adapters.console.commands.merge.command as merge_command
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Memory

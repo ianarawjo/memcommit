@@ -12,7 +12,7 @@ from presentation code.
 
 The extraction keeps the existing operation behavior while making the same
 Grounding lifecycle callable by a future Python API, TUI adapter, or agent tool
-adapter without importing `memcommit.commands`.
+adapter without importing `memcommit.adapters.console.commands`.
 
 ## Boundary
 
@@ -26,8 +26,8 @@ The Grounding slice is now divided into four responsibilities:
   mutation, checkpoint recovery, and durable dialogue receipts.
 - `memcommit.adapters.interfaces.cli.atomize_grounding` renders a saved dialogue without
   provider or Store access.
-- `memcommit.commands.atomize.grounding` preserves the historical Python import
-  surface as a thin compatibility facade. `memcommit.commands.atomize.command` uses the
+- `memcommit.adapters.console.commands.atomize.grounding` preserves the historical Python import
+  surface as a thin compatibility facade. `memcommit.adapters.console.commands.atomize.command` uses the
   typed application/runtime boundary directly.
 
 The former flat `memcommit.atomize_grounding_application` and
@@ -82,7 +82,7 @@ current CLI feedback without making non-terminal callers emulate a TTY.
 
 This change deliberately does not alter provider prompts, saved Grounding
 schema, session selection, proposal semantics, checkpoint payloads, error text,
-or CLI transcript content. The existing `memcommit.commands.atomize.grounding`
+or CLI transcript content. The existing `memcommit.adapters.console.commands.atomize.grounding`
 functions remain supported during the migration.
 
 The Store adapter still contains the existing transaction mechanics as one

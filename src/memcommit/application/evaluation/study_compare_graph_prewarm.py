@@ -37,7 +37,7 @@ from memcommit.application.operations.compare.ledger.execution import (
     recursive_comparison_projection,
 )
 from memcommit.application.authority.access import resolve_context_access
-from memcommit.commands.shared.readable_context_catalog import (
+from memcommit.adapters.console.commands.shared.readable_context_catalog import (
     ReadableContextCatalog,
     freeze_profile_readable_context_catalog,
 )

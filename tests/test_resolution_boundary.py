@@ -25,7 +25,7 @@ def _imports(path: Path) -> tuple[str, ...]:
 
 def test_resolution_core_imports_no_operation_interface_or_infrastructure():
     forbidden = (
-        "memcommit.commands",
+        "memcommit.adapters.console.commands",
         "memcommit.adapters.interfaces",
         "memcommit.merge",
         "memcommit.meld",
@@ -48,7 +48,7 @@ def test_resolution_core_imports_no_operation_interface_or_infrastructure():
 
 def test_merge_application_does_not_import_an_interface_adapter():
     forbidden = (
-        "memcommit.commands",
+        "memcommit.adapters.console.commands",
         "memcommit.adapters.interfaces",
         "prompt_toolkit",
         "typer",
@@ -66,7 +66,7 @@ def test_merge_application_does_not_import_an_interface_adapter():
 
 def test_meld_resolution_application_does_not_import_runtime_or_interfaces():
     forbidden = (
-        "memcommit.commands",
+        "memcommit.adapters.console.commands",
         "memcommit.adapters.interfaces",
         "memcommit.application.operations.meld.runtime",
         "memcommit.store",
@@ -108,7 +108,7 @@ def test_merge_cli_and_tui_depend_on_the_typed_application_contract():
 
     assert "memcommit.application.operations.merge.application" in cli_imports
     assert "memcommit.application.operations.merge.application" in tui_imports
-    assert not any(module.startswith("memcommit.commands") for module in tui_imports)
+    assert not any(module.startswith("memcommit.adapters.console.commands") for module in tui_imports)
 
 
 @pytest.mark.parametrize(
@@ -142,7 +142,7 @@ def test_deterministic_resolution_adapters_keep_one_application_owner(
         / Path(*application_name.removeprefix("memcommit.").split("."))
     ).with_suffix(".py")
     forbidden_application_imports = (
-        "memcommit.commands",
+        "memcommit.adapters.console.commands",
         "memcommit.adapters.interfaces",
         "prompt_toolkit",
         "typer",
@@ -161,12 +161,12 @@ def test_deterministic_resolution_adapters_keep_one_application_owner(
     assert application_name in tui_imports
     assert application_name in cli_imports
     assert application_name in public_imports
-    assert not any(module.startswith("memcommit.commands") for module in tui_imports)
-    assert not any(module.startswith("memcommit.commands") for module in public_imports)
+    assert not any(module.startswith("memcommit.adapters.console.commands") for module in tui_imports)
+    assert not any(module.startswith("memcommit.adapters.console.commands") for module in public_imports)
     assert "memcommit.adapters.python_api" in agent_imports
     assert application_name not in agent_imports
     assert not any(
-        module.startswith("memcommit.commands")
+        module.startswith("memcommit.adapters.console.commands")
         or module.startswith("memcommit.adapters.interfaces.tui")
         for module in agent_imports
     )
@@ -187,11 +187,11 @@ def test_read_report_identity_and_launcher_keep_runtime_and_ui_ownership_separat
     )
 
     assert not any(
-        module.startswith("memcommit.commands")
+        module.startswith("memcommit.adapters.console.commands")
         or module.startswith("memcommit.adapters.interfaces")
         or module == "prompt_toolkit"
         or module.startswith("prompt_toolkit.")
         for module in identity_imports
     )
     assert "memcommit.application.reviewing.read_report" in launcher_imports
-    assert not any(module.startswith("memcommit.commands") for module in launcher_imports)
+    assert not any(module.startswith("memcommit.adapters.console.commands") for module in launcher_imports)

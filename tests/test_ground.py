@@ -12,14 +12,14 @@ from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
 import memcommit.persistence.store as store_module
-import memcommit.commands.ground.command as ground_command
+import memcommit.adapters.console.commands.ground.command as ground_command
 from memcommit.adapters.console.entrypoint import app
-from memcommit.commands.ground.command import (
+from memcommit.adapters.console.commands.ground.command import (
     render_ground_focus,
     render_ground_snapshot,
     render_ground_start,
 )
-from memcommit.commands.ground.shell import GroundShellResult
+from memcommit.adapters.console.commands.ground.shell import GroundShellResult
 from memcommit.application.operations.ground.model import (
     GROUND_PROPOSITION_SCHEMA_VERSION,
     GroundError,

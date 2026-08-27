@@ -8,7 +8,7 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.commands.fit.command as fit_command
+import memcommit.adapters.console.commands.fit.command as fit_command
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Context, Memory

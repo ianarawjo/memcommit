@@ -38,7 +38,7 @@ agent/MCP memcommit_search ------/          |
 ```
 
 The application module imports no command, Typer, prompt-toolkit, clipboard,
-or materialization code. `memcommit.commands.find.search_workbench` retains
+or materialization code. `memcommit.adapters.console.commands.find.search_workbench` retains
 compatibility imports for callers that historically obtained the request and
 response types from that module, but it no longer owns them. New internal code
 imports the application owner directly.
@@ -197,7 +197,7 @@ commit self-contained.
    public operation adapter now owns Store/Profile bootstrap and stable typed
    errors; operation-specific provider configuration remains infrastructure.
 3. The interactive workbench is still physically hosted under
-   `memcommit.commands`; only its application data and execution dependency
+   `memcommit.adapters.console.commands`; only its application data and execution dependency
    point moved. Physical TUI relocation is a separate presentation change.
 4. Conversational refinement, answer generation, and outside-Context
    confirmation retain their existing controllers and must be extracted as

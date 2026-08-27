@@ -68,11 +68,11 @@ def test_trace_context_tui_reads_one_lineage_without_checkpoint_picker(
     _evolving_context()
     opened = []
     monkeypatch.setattr(
-        "memcommit.commands.trace.command.interactive_report_terminal",
+        "memcommit.adapters.console.commands.trace.command.interactive_report_terminal",
         lambda: True,
     )
     monkeypatch.setattr(
-        "memcommit.commands.trace.command.open_context_trace_viewer",
+        "memcommit.adapters.console.commands.trace.command.open_context_trace_viewer",
         lambda report, **kwargs: opened.append((report, kwargs)),
     )
 
@@ -110,7 +110,7 @@ def test_rationale_context_uses_the_whole_context_trace(
 ):
     _ContextRationaleProvider.calls.clear()
     monkeypatch.setattr(
-        "memcommit.commands.rationale.command.connect_semantic_provider",
+        "memcommit.adapters.console.commands.rationale.command.connect_semantic_provider",
         _ContextRationaleProvider,
     )
     _evolving_context()

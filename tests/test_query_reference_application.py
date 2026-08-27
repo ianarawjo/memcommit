@@ -207,7 +207,7 @@ def test_query_reference_modules_have_no_interface_or_concrete_provider_dependen
     runtime_imports = imports(
         root / "src/memcommit/application/operations/query/reference_runtime.py"
     )
-    forbidden = ("typer", "prompt_toolkit", "memcommit.commands")
+    forbidden = ("typer", "prompt_toolkit", "memcommit.adapters.console.commands")
 
     assert not any(name.startswith(forbidden) for name in application_imports)
     assert not any(name.startswith(forbidden) for name in runtime_imports)
@@ -218,7 +218,7 @@ def test_query_reference_modules_have_no_interface_or_concrete_provider_dependen
 
 def test_query_command_uses_reference_application_without_legacy_executor():
     command = (
-        Path(__file__).parents[1] / "src/memcommit/commands/query/command.py"
+        Path(__file__).parents[1] / "src/memcommit/adapters/console/commands/query/command.py"
     ).read_text(encoding="utf-8")
 
     assert "from memcommit.application.operations.query.reference_application import" in command

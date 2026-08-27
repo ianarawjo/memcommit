@@ -9,8 +9,8 @@ from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
 from memcommit.adapters.console.clipboard import ClipboardError
-import memcommit.commands.summarize.command as summarize_command
-from memcommit.commands.help_inventory.command import COMMAND_FORMS
+import memcommit.adapters.console.commands.summarize.command as summarize_command
+from memcommit.adapters.console.commands.help_inventory.command import COMMAND_FORMS
 from memcommit.adapters.console.entrypoint import app
 from memcommit.application.operations.compare.ledger.model import ComparisonInput
 from memcommit.application.operations.compare.ledger.provider import analyze_comparison
@@ -129,7 +129,7 @@ def test_mem_summarize_recurses_and_renders_only_shared_understanding(
     store.save(root)
     provider = SummaryProvider()
     monkeypatch.setattr(
-        "memcommit.commands.summarize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.summarize.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -165,7 +165,7 @@ def test_mem_summarize_direct_excludes_child_memories(
     store.save(root)
     provider = SummaryProvider()
     monkeypatch.setattr(
-        "memcommit.commands.summarize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.summarize.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -191,7 +191,7 @@ def test_mem_summarize_recursive_includes_unembedded_lexical_descendants(
     store.save(root)
     provider = SummaryProvider()
     monkeypatch.setattr(
-        "memcommit.commands.summarize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.summarize.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -219,7 +219,7 @@ def test_mem_summarize_forced_tui_requires_terminal_before_store_execution(
     monkeypatch,
 ):
     monkeypatch.setattr(
-        "memcommit.commands.summarize.command.MemoryStore",
+        "memcommit.adapters.console.commands.summarize.command.MemoryStore",
         lambda *args, **kwargs: (_ for _ in ()).throw(
             AssertionError("forced TUI failure must not open the Store")
         ),
@@ -508,7 +508,7 @@ def test_mem_summarize_plain_preserves_noninteractive_output(
     store = MemoryStore()
     store.save(ops.init("plain-summary"))
     monkeypatch.setattr(
-        "memcommit.commands.summarize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.summarize.command.connect_codex_chatgpt_provider",
         lambda: (_ for _ in ()).throw(
             AssertionError("empty summary must remain provider-free")
         ),
@@ -623,7 +623,7 @@ def test_mem_summarize_empty_context_is_provider_free(
         raise AssertionError("empty summarize must not connect a provider")
 
     monkeypatch.setattr(
-        "memcommit.commands.summarize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.summarize.command.connect_codex_chatgpt_provider",
         forbidden,
     )
 
@@ -643,7 +643,7 @@ def test_mem_summarize_rejects_unknown_evidence_alias(
     store.save(ctx)
     provider = SummaryProvider(invalid_source=True)
     monkeypatch.setattr(
-        "memcommit.commands.summarize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.summarize.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -676,7 +676,7 @@ def test_mem_summarize_rejects_source_change_before_publishing(
             return response
 
     monkeypatch.setattr(
-        "memcommit.commands.summarize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.summarize.command.connect_codex_chatgpt_provider",
         lambda: MutatingProvider(),
     )
 

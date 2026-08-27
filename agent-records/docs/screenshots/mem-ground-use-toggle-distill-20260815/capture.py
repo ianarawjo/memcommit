@@ -135,11 +135,11 @@ def _run_child(store_root: Path) -> None:
     # and that child process at the same isolated default Profile Store.
     os.environ["HOME"] = str(store_root.parent)
 
-    from memcommit.commands.ground.command import (
+    from memcommit.adapters.console.commands.ground.command import (
         _apply_named_ground_proposal,
         _ground_example_use_proposal,
     )
-    from memcommit.commands.ground.named_shell import run_named_ground_shell
+    from memcommit.adapters.console.commands.ground.named_shell import run_named_ground_shell
     from memcommit.application.operations.ground.distill import execute_ground_distill, freeze_ground_distill
 
     store, session = _prepare_store(store_root)

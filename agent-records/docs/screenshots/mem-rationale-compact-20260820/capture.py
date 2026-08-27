@@ -127,7 +127,7 @@ class _CaptureProvider:
 
 
 def _run_child() -> None:
-    from memcommit.commands import rationale
+    from memcommit.adapters.console.commands import rationale
     from memcommit.persistence.store import MemoryStore
 
     with tempfile.TemporaryDirectory(prefix="memcommit-rationale-compact-") as temp:

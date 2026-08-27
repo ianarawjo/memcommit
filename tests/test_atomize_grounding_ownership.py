@@ -29,8 +29,8 @@ assert "memcommit.application.operations.atomize.grounding_runtime" not in sys.m
 def test_migrated_grounding_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "src/memcommit/adapters/python_api/_operations/atomize_grounding.py",
-        "src/memcommit/commands/atomize/command.py",
-        "src/memcommit/commands/atomize/grounding.py",
+        "src/memcommit/adapters/console/commands/atomize/command.py",
+        "src/memcommit/adapters/console/commands/atomize/grounding.py",
         "src/memcommit/application/operations/atomize/grounding_runtime.py",
     )
 

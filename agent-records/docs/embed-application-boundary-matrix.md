@@ -7,7 +7,7 @@ one shared placement contract. Both application contracts are terminal-,
 Store-, and provider-independent. Infrastructure and presentation point
 inward to those contracts; the application never calls the CLI or TUI.
 
-There is no compatibility facade under `memcommit.commands`. Keeping one would
+There is no compatibility facade under `memcommit.adapters.console.commands`. Keeping one would
 make the old command package remain the effective public dependency even after
 the implementation moved. All repository callers are migrated in the same
 change instead.

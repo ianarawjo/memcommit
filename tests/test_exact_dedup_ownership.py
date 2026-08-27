@@ -31,8 +31,8 @@ def test_production_exact_dedup_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "src/memcommit/adapters/python_api/_operations/exact_dedup.py",
         "src/memcommit/adapters/python_api/_operations/exact_duplicates.py",
-        "src/memcommit/commands/dedup/command.py",
-        "src/memcommit/commands/find_exact_duplicates/command.py",
+        "src/memcommit/adapters/console/commands/dedup/command.py",
+        "src/memcommit/adapters/console/commands/find_exact_duplicates/command.py",
         "src/memcommit/application/ops.py",
     )
 

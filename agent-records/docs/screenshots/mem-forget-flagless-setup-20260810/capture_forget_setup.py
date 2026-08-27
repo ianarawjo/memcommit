@@ -66,7 +66,7 @@ def _create_store():
 
 
 def _child(store_root: Path, *, cancel: bool) -> None:
-    import memcommit.commands.forget.command as forget_command
+    import memcommit.adapters.console.commands.forget.command as forget_command
     from memcommit.adapters.console.entrypoint import app
     from memcommit.providers.types import ProviderIdentity
 

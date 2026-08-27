@@ -369,5 +369,5 @@ def test_public_api_modules_have_no_command_or_terminal_dependency():
             elif isinstance(node, ast.ImportFrom) and node.module:
                 imported.append(node.module)
 
-    forbidden = ("memcommit.commands", "typer", "prompt_toolkit")
+    forbidden = ("memcommit.adapters.console.commands", "typer", "prompt_toolkit")
     assert not any(name.startswith(forbidden) for name in imported)

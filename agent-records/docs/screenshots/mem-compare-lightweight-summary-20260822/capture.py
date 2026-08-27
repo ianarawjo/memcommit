@@ -91,7 +91,7 @@ class _Provider:
 
 
 def _run_child(root: Path) -> None:
-    import memcommit.commands.compare.command as compare_command
+    import memcommit.adapters.console.commands.compare.command as compare_command
     from memcommit.adapters.console.entrypoint import app
     from memcommit.application.operations.compare.ledger.store import comparison_analysis_path
     from memcommit.providers.policy import ResolvedProviderPolicy

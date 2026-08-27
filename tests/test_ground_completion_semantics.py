@@ -4,8 +4,8 @@ from __future__ import annotations
 from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
-from memcommit.commands.ground.command import render_ground_snapshot
-from memcommit.commands.ground.named_shell import (
+from memcommit.adapters.console.commands.ground.command import render_ground_snapshot
+from memcommit.adapters.console.commands.ground.named_shell import (
     render_named_ground_goal_pane,
     render_named_ground_top_panel,
 )

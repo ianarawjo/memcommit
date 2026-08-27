@@ -11,9 +11,9 @@ import pytest
 from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
-import memcommit.commands.help_inventory.command as help_inventory
+import memcommit.adapters.console.commands.help_inventory.command as help_inventory
 from memcommit.adapters.console.entrypoint import app
-from memcommit.commands.shell_init.command import render_zsh_init
+from memcommit.adapters.console.commands.shell_init.command import render_zsh_init
 
 
 runner = CliRunner(mix_stderr=False)

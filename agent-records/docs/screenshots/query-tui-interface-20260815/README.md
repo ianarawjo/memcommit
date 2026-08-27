@@ -1,7 +1,7 @@
 # Query TUI interface and semantic clipboard capture log
 
 This ordered set records the Query workbench after its ownership moved from
-`memcommit.commands` to `memcommit.adapters.interfaces.tui.operations.query`. It covers
+`memcommit.adapters.console.commands` to `memcommit.adapters.interfaces.tui.operations.query`. It covers
 entry, question input, provider completion, the typed Answer/Reference focus
 sequence, focused `y` copy, complete-document `Y` copy, the nonfatal clipboard
 failure boundary, and read-only verification.

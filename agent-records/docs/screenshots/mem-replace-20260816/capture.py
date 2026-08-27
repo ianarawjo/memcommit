@@ -77,7 +77,7 @@ def _run_child(kind: str) -> None:
     import click
     import typer
 
-    import memcommit.commands.replace.command as replace_command
+    import memcommit.adapters.console.commands.replace.command as replace_command
     from memcommit.context import Context
     from memcommit.persistence.store import MemoryStore
 
