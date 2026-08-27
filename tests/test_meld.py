@@ -85,7 +85,7 @@ from memcommit.application.operations.meld.runtime import prepare_meld_start
 from memcommit.application.operations.meld.start_application import MeldStartRequest
 from memcommit.application.operations.update.model import GrantedUpdateTarget
 from memcommit.application.operations.meld.choice_branches import MeldChoiceBranchSet
-from memcommit.adapters.interfaces.console.responses.model import ResponseDraft
+from memcommit.adapters.console.responses.model import ResponseDraft
 from memcommit.application.operations.meld.resolution_adapter import MeldResolutionWorkbenchAdapter
 from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
     reconstruct_memory_history,

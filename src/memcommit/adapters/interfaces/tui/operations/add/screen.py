@@ -19,8 +19,8 @@ from memcommit.core.context_targeting.tui.selector import (
     ContextSelectorControl,
     ContextSelectorView,
 )
-from memcommit.adapters.interfaces.console.terminal import require_interactive_terminal
-from memcommit.adapters.interfaces.console.text import safe_terminal_text
+from memcommit.adapters.console.terminal import require_interactive_terminal
+from memcommit.adapters.console.text import safe_terminal_text
 from memcommit.adapters.interfaces.tui.components.focus import (
     FocusSurface,
     SurfaceActionResult,

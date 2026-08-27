@@ -33,7 +33,7 @@ from prompt_toolkit.widgets import TextArea
 from memcommit.adapters.interfaces.tui.core.keybindings import (
     bind_case_insensitive_key,
 )
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     display_escape_text,
 )
 from memcommit.adapters.interfaces.tui.components.frame import (

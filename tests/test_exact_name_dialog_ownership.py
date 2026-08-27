@@ -53,21 +53,38 @@ def test_canonical_source_matches_pre_move_source_after_import_normalization() -
     ExactNameFieldView,
 )"""
     legacy_control_import = (
-        "from memcommit.adapters.console.commands.tui_primitives import "
+        "from memcommit.commands.tui_primitives import "
         "ExactNameFieldControl, ExactNameFieldView"
     )
-    console_import = (
-        "from memcommit.adapters.interfaces.console.text import "
+    canonical_console_import = (
+        "from memcommit.adapters.console.text import "
         "display_escape_text, safe_terminal_text"
+    )
+    legacy_console_import = (
+        "from memcommit.interfaces.console.text import "
+        "display_escape_text, safe_terminal_text"
+    )
+    canonical_theme_import = (
+        "from memcommit.adapters.interfaces.tui.core.theme import "
+        "MEMCOMMIT_TUI_STYLE"
+    )
+    legacy_theme_import = (
+        "from memcommit.interfaces.tui.core.theme import MEMCOMMIT_TUI_STYLE"
     )
 
     assert source.count(canonical_control_import) == 1
+    assert source.count(canonical_console_import) == 1
+    assert source.count(canonical_theme_import) == 1
     normalized = source.replace(canonical_control_import, legacy_control_import)
+    # Later adapter staging and console-owner consolidations are also
+    # ownership-only moves, so restore every import to the original snapshot.
+    normalized = normalized.replace(canonical_console_import, legacy_console_import)
+    normalized = normalized.replace(canonical_theme_import, legacy_theme_import)
     # Canonical import sorting places console before components. Restore the
     # former command-hosted order before comparing the complete source digest.
     normalized = normalized.replace(
-        f"{console_import}\n{legacy_control_import}",
-        f"{legacy_control_import}\n{console_import}",
+        f"{legacy_console_import}\n{legacy_control_import}",
+        f"{legacy_control_import}\n{legacy_console_import}",
     )
 
     assert hashlib.sha256(normalized.encode("utf-8")).hexdigest() == (

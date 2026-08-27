@@ -1,6 +1,6 @@
 """Width-aware neutral text cards for terminal report surfaces."""
 
-from memcommit.adapters.interfaces.console.text import safe_terminal_text
+from memcommit.adapters.console.text import safe_terminal_text
 from memcommit.adapters.interfaces.tui.core.text_layout import (
     elide_terminal_text,
     pad_terminal_text,

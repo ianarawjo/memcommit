@@ -32,7 +32,7 @@ from memcommit.core.context_targeting.tui.picker import context_memory_rows
 from memcommit.adapters.console.commands.sever.setup_shell import (
     choose_sever_setup,
 )
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     display_escape_text,
     safe_terminal_text,
 )

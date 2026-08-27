@@ -26,11 +26,11 @@ from memcommit.adapters.console.commands.shared.quality_find_workbench import (
     interactive_quality_find_available,
     run_interactive_quality_find,
 )
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     display_escape_text,
 )
-from memcommit.adapters.interfaces.console.identity import collision_safe_uid_prefixes
-from memcommit.adapters.interfaces.console.theme import (
+from memcommit.adapters.console.identity import collision_safe_uid_prefixes
+from memcommit.adapters.console.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )

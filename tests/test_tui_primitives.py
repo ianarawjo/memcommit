@@ -68,7 +68,7 @@ from memcommit.adapters.interfaces.tui.components.scrollable_pane import (
     move_wrapped_read_cursor,
     set_scrollable_pane_text,
 )
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     display_escape_text,
     restore_display_escape_text,
     safe_terminal_text,

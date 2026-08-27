@@ -36,7 +36,7 @@ from memcommit.adapters.console.commands.trace.projection import (
     format_compact_trace_report,
     open_trace_viewer,
 )
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     display_escape_text,
     safe_terminal_text,
 )

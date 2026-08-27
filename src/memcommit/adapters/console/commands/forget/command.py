@@ -14,7 +14,7 @@ from memcommit.adapters.console.commands.shared.readable_context_catalog import 
     freeze_profile_readable_context_catalog,
 )
 from memcommit.adapters.interfaces.cli.forget import render_forget_change_lines
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     display_escape_text,
     safe_terminal_text,
 )

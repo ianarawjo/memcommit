@@ -6,12 +6,12 @@ from dataclasses import dataclass, field
 
 from prompt_toolkit.formatted_text.base import StyleAndTextTuples
 
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     display_escape_text,
 )
-from memcommit.adapters.interfaces.console.selection.model import SelectionOption
-from memcommit.adapters.interfaces.console.selection.state import FlatSelectionState
-from memcommit.adapters.interfaces.console.selection.tui import (
+from memcommit.adapters.console.selection.model import SelectionOption
+from memcommit.adapters.console.selection.state import FlatSelectionState
+from memcommit.adapters.console.selection.tui import (
     choice_marker,
     choice_visual_state,
     render_choice_card_rows,

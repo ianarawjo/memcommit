@@ -8,7 +8,7 @@ from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
 from memcommit.application.operations.distill.application import DistillRequest, DistillResult
-from memcommit.adapters.interfaces.console.terminal import require_interactive_terminal
+from memcommit.adapters.console.terminal import require_interactive_terminal
 from memcommit.adapters.interfaces.tui.operations.distill.adapter import (
     project_distill_clipboard,
     project_distill_result,

@@ -15,7 +15,7 @@ from memcommit.adapters.console.commands.shared.flat_selection_dialog import cho
 from memcommit.adapters.console.commands.import_profile.workbench import freeze_import_source_catalog
 from memcommit.adapters.console.commands.shared.tui_primitives import ExactNameFieldView
 from memcommit.application.operations.profile.config import ProfileEntry, ProfileRegistry
-from memcommit.adapters.interfaces.console.selection import SelectionOption
+from memcommit.adapters.console.selection import SelectionOption
 
 
 runner = CliRunner(mix_stderr=False)

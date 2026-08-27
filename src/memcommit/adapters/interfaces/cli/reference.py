@@ -19,8 +19,8 @@ from memcommit.core.context_targeting.presets import (
 from memcommit.core.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
 )
-from memcommit.adapters.interfaces.console.text import display_escape_text, safe_terminal_text
-from memcommit.adapters.interfaces.console.terminal import is_interactive_terminal
+from memcommit.adapters.console.text import display_escape_text, safe_terminal_text
+from memcommit.adapters.console.terminal import is_interactive_terminal
 from memcommit.adapters.interfaces.tui.operations.reference import choose_reference_setup
 from memcommit.application.operations.reference.application import (
     ContextReferenceRequest,

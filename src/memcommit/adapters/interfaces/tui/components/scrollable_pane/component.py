@@ -22,7 +22,7 @@ from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.lexers import Lexer
 from prompt_toolkit.widgets import Frame, TextArea
 
-from memcommit.adapters.interfaces.console.text import display_escape_text, safe_terminal_text
+from memcommit.adapters.console.text import display_escape_text, safe_terminal_text
 from memcommit.adapters.interfaces.tui.components.scrollable_pane.model import (
     ScrollAnchor,
     ScrollableFormattedTextPane,

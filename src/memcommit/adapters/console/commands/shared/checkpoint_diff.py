@@ -11,7 +11,7 @@ from typing import Any
 from prompt_toolkit.formatted_text.base import StyleAndTextTuples
 
 from memcommit.adapters.console.commands.shared.history_picker import HistoryDetailView, HistoryPickerItem
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     display_escape_text,
 )
 from memcommit.adapters.interfaces.tui.core.theme import semantic_action_style

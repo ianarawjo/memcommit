@@ -135,7 +135,7 @@ def test_query_command_uses_cli_and_terminal_interfaces_without_local_presenters
 
     assert "from memcommit.adapters.interfaces.cli.query import (" in source
     assert (
-        "from memcommit.adapters.interfaces.console.terminal import is_interactive_terminal"
+        "from memcommit.adapters.console.terminal import is_interactive_terminal"
         in source
     )
     assert "_interactive_terminal" not in local_functions

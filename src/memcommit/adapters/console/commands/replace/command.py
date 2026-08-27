@@ -14,13 +14,13 @@ from memcommit.core.context_targeting.presets import (
     resolve_scope_preset,
 )
 from memcommit.adapters.interfaces.cli.replace import render_replace_apply_result
-from memcommit.adapters.interfaces.console import (
+from memcommit.adapters.console import (
     ConsoleMode,
     ConsoleModeError,
     SystemTerminalCapabilities,
     resolve_console_mode,
 )
-from memcommit.adapters.interfaces.console.text import display_escape_text
+from memcommit.adapters.console.text import display_escape_text
 from memcommit.adapters.interfaces.tui.operations.replace import (
     ReplaceTuiSetup,
     run_replace_tui,

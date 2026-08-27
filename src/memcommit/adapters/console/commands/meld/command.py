@@ -69,7 +69,7 @@ from memcommit.application.operations.meld.model import (
 from memcommit.application.operations.meld.provider import (
     MeldProviderError,
 )
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     display_escape_text,
     safe_terminal_text,
 )

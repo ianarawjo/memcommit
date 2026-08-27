@@ -3,7 +3,7 @@ from __future__ import annotations
 import pytest
 
 from memcommit.adapters.interfaces.cli.semantic_add import applied_memory_preview_lines
-from memcommit.adapters.interfaces.console.theme import memory_object_color_rgb
+from memcommit.adapters.console.theme import memory_object_color_rgb
 from memcommit.adapters.interfaces.tui.core.theme import SEMANTIC_VIEWER_STYLE
 
 

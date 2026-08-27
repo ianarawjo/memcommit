@@ -41,7 +41,7 @@ from memcommit.adapters.interfaces.agent import (
     DEDUP_AGENT_TOOL_NAME,
     build_default_agent_tool_registry,
 )
-from memcommit.adapters.interfaces.console.theme import (
+from memcommit.adapters.console.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )

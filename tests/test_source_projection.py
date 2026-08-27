@@ -13,7 +13,7 @@ from memcommit.core.context_targeting.tui.rendering import (
     render_context_tree_rows,
 )
 from memcommit.core.context_targeting.tui.tree import ContextTreeState, build_context_tree
-from memcommit.adapters.interfaces.console.theme import (
+from memcommit.adapters.console.theme import (
     SemanticColorRole,
     semantic_color_rgb,
     semantic_source_role,

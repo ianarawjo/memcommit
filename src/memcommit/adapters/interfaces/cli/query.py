@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import typer
 
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     display_escape_text,
     safe_terminal_text,
 )

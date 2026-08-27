@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from memcommit.application.operations.distill.application import DistillResult
 from memcommit.adapters.interfaces.cli.distill import distill_result_text
-from memcommit.adapters.interfaces.console.text import safe_terminal_text
+from memcommit.adapters.console.text import safe_terminal_text
 from memcommit.adapters.interfaces.tui.operations.distill.model import (
     DistillClipboardProjection,
 )

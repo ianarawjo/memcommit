@@ -5,9 +5,9 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Literal
 
-from memcommit.adapters.interfaces.console.responses.model import ResponseDraft, ResponseTarget
-from memcommit.adapters.interfaces.console.selection.model import SelectionOption
-from memcommit.adapters.interfaces.console.selection.state import FlatSelectionState
+from memcommit.adapters.console.responses.model import ResponseDraft, ResponseTarget
+from memcommit.adapters.console.selection.model import SelectionOption
+from memcommit.adapters.console.selection.state import FlatSelectionState
 
 
 ResponseSection = Literal["DECISION", "RESPONSE"]

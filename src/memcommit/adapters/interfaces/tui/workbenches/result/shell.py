@@ -7,7 +7,7 @@ judgment, reference, persisted artifact, provider call, and mutation.
 
 from __future__ import annotations
 
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     safe_terminal_text,
 )
 from memcommit.adapters.interfaces.tui.core.text_layout import (

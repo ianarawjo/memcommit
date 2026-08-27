@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from prompt_toolkit.styles import Style
 
-from memcommit.adapters.interfaces.console.theme import (
+from memcommit.adapters.console.theme import (
     DETAIL_HEX,
     ERROR_HEX,
     FOCUS_HEX,

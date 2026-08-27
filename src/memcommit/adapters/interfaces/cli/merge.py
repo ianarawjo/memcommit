@@ -4,11 +4,11 @@ from __future__ import annotations
 
 import typer
 
-from memcommit.adapters.interfaces.console.merge import (
+from memcommit.adapters.console.merge import (
     merge_conflict_summary_lines,
     merge_plan_summary_lines,
 )
-from memcommit.adapters.interfaces.console.text import display_escape_text
+from memcommit.adapters.console.text import display_escape_text
 from memcommit.application.operations.merge.application import (
     FrozenMergePlan,
     MergeDecision,

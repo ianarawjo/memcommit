@@ -26,7 +26,7 @@ from memcommit.core.context_targeting.model import (
 from memcommit.core.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
 )
-from memcommit.adapters.interfaces.console.text import display_escape_text
+from memcommit.adapters.console.text import display_escape_text
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import MemoryStore

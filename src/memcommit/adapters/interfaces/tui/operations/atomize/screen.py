@@ -30,7 +30,7 @@ from memcommit.application.review_policy import (
 from memcommit.adapters.interfaces.tui.workbenches.result import (
     render_result_workbench_snapshot,
 )
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     safe_terminal_text,
 )
 from memcommit.adapters.interfaces.tui.core.text_layout import (
@@ -44,7 +44,7 @@ from memcommit.application.resolution.workbench import (
 from memcommit.application.reviewing.result_workbench import (
     ResultWorkbenchView,
 )
-from memcommit.adapters.interfaces.console.selection.tui import choice_marker
+from memcommit.adapters.console.selection.tui import choice_marker
 
 if TYPE_CHECKING:
     from memcommit.adapters.interfaces.tui.workbenches.resolution import ResolutionDestination

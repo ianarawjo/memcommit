@@ -43,7 +43,7 @@ from memcommit.adapters.console.commands.review.sessions import (
     SAVED_REVIEW_KIND,
     choose_review_session,
 )
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     display_escape_text,
 )
 from memcommit.application.reviewing.quality.findings import FindingsError

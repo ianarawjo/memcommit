@@ -5,7 +5,7 @@ from __future__ import annotations
 import typer
 
 from memcommit.application.operations.add.application import AddInputMode, AddResult
-from memcommit.adapters.interfaces.console.text import display_escape_text
+from memcommit.adapters.console.text import display_escape_text
 
 
 def render_add_plain(result: AddResult, *, mode: AddInputMode) -> None:

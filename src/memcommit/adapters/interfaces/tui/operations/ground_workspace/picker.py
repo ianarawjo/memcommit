@@ -17,7 +17,7 @@ from memcommit.application.operations.ground.workspace_runtime import (
     list_ground_workspace_names,
     load_ground_workspace,
 )
-from memcommit.adapters.interfaces.console.text import display_escape_text
+from memcommit.adapters.console.text import display_escape_text
 from memcommit.adapters.interfaces.tui.components.operation_launcher.session import (
     SessionPickerEntry,
 )

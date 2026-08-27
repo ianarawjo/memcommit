@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.application.operations.ground.workspace_model import GroundWorkspace
-from memcommit.adapters.interfaces.console.text import safe_terminal_text
+from memcommit.adapters.console.text import safe_terminal_text
 
 
 def _direct_item_label(value: object) -> str:

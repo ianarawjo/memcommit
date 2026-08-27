@@ -12,7 +12,7 @@ from prompt_toolkit.layout.margins import ScrollbarMargin
 from memcommit.adapters.interfaces.tui.components.frame import (
     build_focused_frame,
 )
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     safe_terminal_text,
 )
 from memcommit.core.context_targeting.model import ContextSelectionMode
@@ -27,7 +27,7 @@ from memcommit.core.context_targeting.tui.tree import (
     context_ancestors,
 )
 from memcommit.core.context_targeting.tui.tree import ContextTreeRow
-from memcommit.adapters.interfaces.console.selection.tui import tree_choice_marker, tree_choice_styles
+from memcommit.adapters.console.selection.tui import tree_choice_marker, tree_choice_styles
 from memcommit.source_projection.model import SourceDisplayFacts, SourceState
 from memcommit.source_projection.presentation import (
     SourceDisplayValue,

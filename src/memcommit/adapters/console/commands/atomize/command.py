@@ -54,7 +54,7 @@ from memcommit.application.operations.atomize.workbench import (
 )
 from memcommit.adapters.interfaces.cli.atomize import render_atomize_apply_result
 from memcommit.adapters.interfaces.cli.atomize_grounding import render_grounding_session
-from memcommit.adapters.interfaces.console.text import display_escape_text
+from memcommit.adapters.console.text import display_escape_text
 from memcommit.adapters.interfaces.tui.operations.atomize.adapter import (
     present_atomize_workbench,
 )

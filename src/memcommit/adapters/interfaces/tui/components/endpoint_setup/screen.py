@@ -29,8 +29,8 @@ from memcommit.core.context_targeting.tui.selector import (
     ContextSelectorControl,
     ContextSelectorView,
 )
-from memcommit.adapters.interfaces.console.terminal import require_interactive_terminal
-from memcommit.adapters.interfaces.console.text import safe_terminal_text
+from memcommit.adapters.console.terminal import require_interactive_terminal
+from memcommit.adapters.console.text import safe_terminal_text
 from memcommit.adapters.interfaces.tui.components.endpoint_setup.compact_screen import (
     run_compact_endpoint_setup,
 )
@@ -72,8 +72,8 @@ from memcommit.adapters.interfaces.tui.components.exact_name import (
     ExactNameFieldControl,
     ExactNameFieldView,
 )
-from memcommit.adapters.interfaces.console.selection import FlatSelectionState, SelectionOption
-from memcommit.adapters.interfaces.console.selection.tui import render_vertical_choice_rows
+from memcommit.adapters.console.selection import FlatSelectionState, SelectionOption
+from memcommit.adapters.console.selection.tui import render_vertical_choice_rows
 
 
 DraftValidator = Callable[[EndpointSetupDraft], str | None]

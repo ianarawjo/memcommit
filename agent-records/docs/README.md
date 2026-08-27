@@ -59,6 +59,14 @@ The check also rejects missing evidence files, unregistered final boundary
 matrices, broken governed local links, Help coverage drift, duplicate
 classification, and stale generated output.
 
+## Console adapter boundary
+
+- [`console-adapter-ownership-design-rationale.md`](console-adapter-ownership-design-rationale.md)
+  records `memcommit.adapters.console` as the canonical owner of command
+  assembly and the reusable routing, terminal, text, theme, progress,
+  Response, and selection contracts formerly staged beneath
+  `memcommit.adapters.interfaces.console`.
+
 ## Multilingual Memory and explanation-language research TODO
 
 - [`multilingual-memory-and-explanation-language-design-rationale.md`](multilingual-memory-and-explanation-language-design-rationale.md)

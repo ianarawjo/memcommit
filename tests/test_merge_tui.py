@@ -50,8 +50,8 @@ from memcommit.application.operations.merge.application import (
     run_merge,
 )
 from memcommit.application.operations.merge.runtime import MemoryStoreMergePort
-from memcommit.adapters.interfaces.console.selection.model import SelectionOption
-from memcommit.adapters.interfaces.console.selection.state import FlatSelectionState
+from memcommit.adapters.console.selection.model import SelectionOption
+from memcommit.adapters.console.selection.state import FlatSelectionState
 from memcommit.persistence.store import MemoryStore
 
 

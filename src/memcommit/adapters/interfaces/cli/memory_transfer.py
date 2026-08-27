@@ -7,10 +7,10 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.core.context_targeting.operands import choose_endpoint_operand
-from memcommit.adapters.interfaces.console.errors import render_cli_error
-from memcommit.adapters.interfaces.console.terminal import is_interactive_terminal
-from memcommit.adapters.interfaces.console.text import display_escape_text
-from memcommit.adapters.interfaces.console.theme import (
+from memcommit.adapters.console.errors import render_cli_error
+from memcommit.adapters.console.terminal import is_interactive_terminal
+from memcommit.adapters.console.text import display_escape_text
+from memcommit.adapters.console.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )

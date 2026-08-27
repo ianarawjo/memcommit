@@ -17,8 +17,8 @@ from memcommit.adapters.console.commands.shared.readable_context_catalog import 
     freeze_readable_context_catalog,
 )
 from memcommit.core.context import Memory, MemoryRef
-from memcommit.adapters.interfaces.console.selection import FlatMultiSelectionState, SelectionOption
-from memcommit.adapters.interfaces.console.selection.tui.multiple import render_vertical_multi_choice_rows
+from memcommit.adapters.console.selection import FlatMultiSelectionState, SelectionOption
+from memcommit.adapters.console.selection.tui.multiple import render_vertical_multi_choice_rows
 from memcommit.persistence.store import MemoryStore, context_record_digest
 
 

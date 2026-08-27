@@ -51,7 +51,7 @@ from memcommit.core.context_targeting.presets import (
     resolve_scope_preset,
 )
 from memcommit.application.authority.derived_policy import authorize_combination
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     display_escape_text,
     safe_terminal_text,
 )

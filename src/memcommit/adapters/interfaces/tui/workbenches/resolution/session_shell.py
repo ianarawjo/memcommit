@@ -61,11 +61,11 @@ from memcommit.adapters.interfaces.tui.components.frame import (
 from memcommit.adapters.interfaces.tui.components.scrollable_pane import (
     WrappedScrollbarMargin,
 )
-from memcommit.adapters.interfaces.console.content_row import render_numbered_content_row
-from memcommit.adapters.interfaces.console.terminal import (
+from memcommit.adapters.console.content_row import render_numbered_content_row
+from memcommit.adapters.console.terminal import (
     require_interactive_terminal,
 )
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     safe_terminal_text,
 )
 from memcommit.adapters.interfaces.tui.core.text_layout import (
@@ -112,17 +112,17 @@ from memcommit.application.resolution.workbench import (
     ResolutionMemoryRow,
     ResolutionWorkbenchView,
 )
-from memcommit.adapters.interfaces.console.responses.model import ResponseDraft, ResponseTarget
-from memcommit.adapters.interfaces.console.responses.resolution import (
+from memcommit.adapters.console.responses.model import ResponseDraft, ResponseTarget
+from memcommit.adapters.console.responses.resolution import (
     response_draft_from_item,
     response_target_from_item,
 )
 from memcommit.persistence.command_ledger.study_actions import record_study_action
-from memcommit.adapters.interfaces.console.responses.state import ResponseFrameState
-from memcommit.adapters.interfaces.console.responses.tui import response_frame_fragments
-from memcommit.adapters.interfaces.console.selection.model import SelectionOption
-from memcommit.adapters.interfaces.console.selection.state import FlatSelectionState
-from memcommit.adapters.interfaces.console.selection.tui import render_vertical_choice_cards
+from memcommit.adapters.console.responses.state import ResponseFrameState
+from memcommit.adapters.console.responses.tui import response_frame_fragments
+from memcommit.adapters.console.selection.model import SelectionOption
+from memcommit.adapters.console.selection.state import FlatSelectionState
+from memcommit.adapters.console.selection.tui import render_vertical_choice_cards
 from memcommit.application.reviewing.session_navigation import (
     SessionWorkbenchNavigation,
     WorkbenchSection,

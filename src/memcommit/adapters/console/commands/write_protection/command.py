@@ -14,7 +14,7 @@ from memcommit.core.context_targeting.loading import (
     resolve_local_direct_memory_locator,
 )
 from memcommit.core.context_targeting.model import DirectMemoryTarget
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     display_escape_text,
 )
 from memcommit.core.context import Context, Memory

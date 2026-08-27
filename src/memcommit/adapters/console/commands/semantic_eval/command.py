@@ -14,7 +14,7 @@ import typer
 
 from memcommit.adapters.interfaces.cli.command_group import CanonicalCommandGroup
 
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     display_escape_text,
 )
 from memcommit.configuration.config import Config

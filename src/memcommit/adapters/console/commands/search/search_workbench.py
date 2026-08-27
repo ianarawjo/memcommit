@@ -50,10 +50,10 @@ from memcommit.adapters.interfaces.tui.core.keybindings import (
     bind_case_insensitive_key,
     dispatch_tui_back,
 )
-from memcommit.adapters.interfaces.console.terminal import (
+from memcommit.adapters.console.terminal import (
     require_interactive_terminal,
 )
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     safe_terminal_text,
 )
 from memcommit.adapters.console.commands.search.result_present import (
@@ -78,8 +78,8 @@ from memcommit.core.context_targeting.tui.name_editor import (
     ContextNameControl,
     suggest_fresh_context_name,
 )
-from memcommit.adapters.interfaces.console.selection import FlatMultiSelectionState, SelectionOption
-from memcommit.adapters.interfaces.console.selection.tui.multiple import render_vertical_multi_choice_rows
+from memcommit.adapters.console.selection import FlatMultiSelectionState, SelectionOption
+from memcommit.adapters.console.selection.tui.multiple import render_vertical_multi_choice_rows
 from memcommit.application.operations.search.application import (
     FindSearchRequest,
     FindSearchResponse,

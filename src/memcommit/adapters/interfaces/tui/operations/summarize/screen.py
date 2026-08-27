@@ -7,7 +7,7 @@ from collections.abc import Callable
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.adapters.interfaces.console.terminal import require_interactive_terminal
+from memcommit.adapters.console.terminal import require_interactive_terminal
 from memcommit.adapters.interfaces.tui.operations.summarize.adapter import (
     project_summarize_clipboard,
     project_summarize_outcome,

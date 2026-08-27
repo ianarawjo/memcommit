@@ -5,7 +5,7 @@ from __future__ import annotations
 import typer
 
 from memcommit.application.operations.context_init.application import ContextInitResult
-from memcommit.adapters.interfaces.console.text import display_escape_text
+from memcommit.adapters.console.text import display_escape_text
 
 
 def render_context_init(result: ContextInitResult) -> None:

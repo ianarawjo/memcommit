@@ -51,7 +51,7 @@ from memcommit.application.operations.forget.runtime import (
     connect_forget_provider,
 )
 from memcommit.adapters.interfaces.tui.workbenches.impact import ImpactController
-from memcommit.adapters.interfaces.console.text import display_escape_text
+from memcommit.adapters.console.text import display_escape_text
 from memcommit.adapters.interfaces.tui.operations.forget import choose_forget_setup
 from memcommit.application.reviewing.memory_diff import MemoryChange
 from memcommit.application.operations.profile.config import ProfileConfigError

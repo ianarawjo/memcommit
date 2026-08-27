@@ -7,7 +7,7 @@ from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 
 from memcommit.application.exact_command_review import ExactCommandReview
-from memcommit.adapters.interfaces.console.text import display_escape_text
+from memcommit.adapters.console.text import display_escape_text
 from memcommit.adapters.interfaces.tui.components.exact_command_review.rendering import (
     format_exact_command,
 )

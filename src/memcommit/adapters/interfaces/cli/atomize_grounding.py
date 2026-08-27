@@ -5,7 +5,7 @@ from __future__ import annotations
 from memcommit.application.operations.atomize.domain import AtomizeAnalysisSession
 from memcommit.application.operations.atomize.grounding import AtomizeGroundingSession
 from memcommit.application.operations.atomize.workbench import project_atomize_workbench_findings
-from memcommit.adapters.interfaces.console.text import safe_terminal_text
+from memcommit.adapters.console.text import safe_terminal_text
 
 
 def render_grounding_session(

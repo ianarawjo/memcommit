@@ -26,7 +26,7 @@ from memcommit.adapters.interfaces.tui.components.exact_command_review.model imp
 from memcommit.adapters.interfaces.tui.components.exact_command_review.rendering import (
     render_exact_command_review,
 )
-from memcommit.adapters.interfaces.console.text import safe_terminal_text
+from memcommit.adapters.console.text import safe_terminal_text
 from memcommit.adapters.interfaces.tui.components.scrollable_pane import (
     build_scrollable_text_pane,
     move_wrapped_read_cursor,

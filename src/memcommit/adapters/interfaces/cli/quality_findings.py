@@ -7,8 +7,8 @@ from collections.abc import Iterable
 import typer
 
 from memcommit.core.context import Memory
-from memcommit.adapters.interfaces.console.text import display_escape_text
-from memcommit.adapters.interfaces.console.theme import (
+from memcommit.adapters.console.text import display_escape_text
+from memcommit.adapters.console.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )

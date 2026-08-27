@@ -213,7 +213,7 @@ def _capture_reference() -> None:
 
 
 def _capture_edit() -> None:
-    from memcommit.adapters.interfaces.console.text import display_escape_text
+    from memcommit.adapters.console.text import display_escape_text
 
     child, recorder = _spawn("edit")
     try:

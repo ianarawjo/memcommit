@@ -13,7 +13,7 @@ from memcommit.adapters.interfaces.tui.components.operation_launcher.session imp
     SessionPickerEntry,
     SessionPickerLocation,
 )
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     display_escape_text,
 )
 from memcommit.application.operations.ground.model import GroundSession, validate_ground_contract_name

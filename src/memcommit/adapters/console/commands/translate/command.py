@@ -12,7 +12,7 @@ import typer
 from memcommit.adapters.console.commands.shared.command_progress import progressing_provider_factory
 from memcommit.adapters.console.commands.shared.context_operand import ContextOperandSnapshot
 from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
-from memcommit.adapters.interfaces.console.text import safe_terminal_text
+from memcommit.adapters.console.text import safe_terminal_text
 from memcommit.application.operations.translate.application import (
     PreparedTranslation,
     TranslateRequest,

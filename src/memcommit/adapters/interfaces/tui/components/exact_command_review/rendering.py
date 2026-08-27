@@ -5,7 +5,7 @@ from __future__ import annotations
 import shlex
 
 from memcommit.application.exact_command_review import ExactCommandReview
-from memcommit.adapters.interfaces.console.text import display_escape_text
+from memcommit.adapters.console.text import display_escape_text
 
 
 def format_exact_command(review: ExactCommandReview) -> str:

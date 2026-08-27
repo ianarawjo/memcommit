@@ -5,15 +5,15 @@ from __future__ import annotations
 from memcommit.adapters.interfaces.tui.core.theme import (
     focused_control_style,
 )
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     safe_terminal_text,
 )
 from memcommit.adapters.interfaces.tui.core.text_layout import (
     terminal_cell_width,
     wrap_terminal_text,
 )
-from memcommit.adapters.interfaces.console.selection.state import FlatMultiSelectionState
-from memcommit.adapters.interfaces.console.selection.tui.rendering import choice_marker
+from memcommit.adapters.console.selection.state import FlatMultiSelectionState
+from memcommit.adapters.console.selection.tui.rendering import choice_marker
 
 
 def render_vertical_multi_choice_rows(

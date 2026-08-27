@@ -323,7 +323,7 @@ material inside an agent record is not such approval.
 
 ### Shared terminal semantic palette
 
-- Treat `memcommit.adapters.interfaces.console.theme` as the sole authored source of
+- Treat `memcommit.adapters.console.theme` as the sole authored source of
   semantic terminal colors shared by line-oriented CLI output and
   prompt-toolkit TUI styles. A console or TUI adapter may own escape/style
   mechanics, but must not restate a semantic hex value, RGB tuple, or parallel

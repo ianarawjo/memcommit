@@ -24,7 +24,7 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 from prompt_toolkit.widgets import TextArea
 
-from memcommit.adapters.interfaces.console.text import safe_terminal_text
+from memcommit.adapters.console.text import safe_terminal_text
 from memcommit.adapters.interfaces.tui.components.exact_name import ExactNameInputControl
 from memcommit.adapters.interfaces.tui.components.frame import (
     TuiRegion,
@@ -43,8 +43,8 @@ from memcommit.application.resolution.workbench import (
     ResolutionWorkbenchAction,
     ResolutionWorkbenchView,
 )
-from memcommit.adapters.interfaces.console.selection import FlatSelectionState, SelectionOption
-from memcommit.adapters.interfaces.console.selection.tui import render_vertical_choice_rows
+from memcommit.adapters.console.selection import FlatSelectionState, SelectionOption
+from memcommit.adapters.console.selection.tui import render_vertical_choice_rows
 
 
 def _recommended(option_uid: str, label: str) -> bool:

@@ -7,8 +7,8 @@ from typing import Annotated
 
 import typer
 
-from memcommit.adapters.interfaces.console.identity import collision_safe_uid_prefixes
-from memcommit.adapters.interfaces.console.theme import (
+from memcommit.adapters.console.identity import collision_safe_uid_prefixes
+from memcommit.adapters.console.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )

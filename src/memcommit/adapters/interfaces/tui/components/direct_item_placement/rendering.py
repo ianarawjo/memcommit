@@ -7,12 +7,12 @@ import textwrap
 from prompt_toolkit.utils import get_cwidth
 
 from memcommit.core.context_targeting.tui.tree import ContextTreeRow
-from memcommit.adapters.interfaces.console.text import display_escape_text
+from memcommit.adapters.console.text import display_escape_text
 from memcommit.adapters.interfaces.tui.components.direct_item_placement.model import (
     DirectItemGapState,
     DirectItemPreview,
 )
-from memcommit.adapters.interfaces.console.selection.tui import tree_choice_marker, tree_choice_styles
+from memcommit.adapters.console.selection.tui import tree_choice_marker, tree_choice_styles
 from memcommit.source_projection.presentation import (
     source_annotation_tokens,
     source_object_label,

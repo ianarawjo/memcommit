@@ -15,7 +15,7 @@ from memcommit.application.retained_history.display import (
     HistoryRowSegment,
     history_display_row_segments,
 )
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     display_escape_text,
 )
 from memcommit.adapters.interfaces.tui.components.plain_text_clipboard import (

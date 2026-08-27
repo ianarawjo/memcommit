@@ -37,8 +37,8 @@ from memcommit.adapters.console.commands.shared.readable_context_catalog import 
     freeze_profile_readable_context_catalog,
     freeze_readable_context_catalog,
 )
-from memcommit.adapters.interfaces.console.identity import collision_safe_uid_prefixes
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.identity import collision_safe_uid_prefixes
+from memcommit.adapters.console.text import (
     display_escape_text,
 )
 from memcommit.application.operations.profile.config import AuthorityGrant, ProfileConfigError

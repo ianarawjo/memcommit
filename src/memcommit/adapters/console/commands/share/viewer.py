@@ -27,7 +27,7 @@ from memcommit.adapters.interfaces.tui.core.keybindings import (
 from memcommit.adapters.interfaces.tui.components.frame import (
     bind_focused_frame_style,
 )
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     display_escape_text,
 )
 from memcommit.application.exact_command_review import ExactCommandReview

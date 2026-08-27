@@ -18,7 +18,7 @@ from memcommit.core.context_targeting.tui.picker import (
     ContextPickerActionReceipt,
     choose_context,
 )
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     display_escape_text,
 )
 from memcommit.adapters.interfaces.tui.core.text_layout import (

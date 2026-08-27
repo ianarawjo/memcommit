@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from prompt_toolkit.layout import AnyDimension, FormattedTextControl, HSplit, Window
 from prompt_toolkit.layout.containers import AnyContainer
 
-from memcommit.adapters.interfaces.console.text import display_escape_text
+from memcommit.adapters.console.text import display_escape_text
 from memcommit.adapters.interfaces.tui.components.in_frame_input.model import (
     InFrameInputSection,
 )

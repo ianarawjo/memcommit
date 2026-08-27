@@ -10,7 +10,7 @@ from memcommit.application.operations.delete.application import (
     DirectItemDeleteResult,
     FrozenContextDeletePlan,
 )
-from memcommit.adapters.interfaces.console.text import display_escape_text
+from memcommit.adapters.console.text import display_escape_text
 
 
 def context_delete_warning(plan: FrozenContextDeletePlan) -> str:

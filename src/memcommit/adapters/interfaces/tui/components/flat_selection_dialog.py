@@ -19,15 +19,15 @@ from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
-from memcommit.adapters.interfaces.console.text import safe_terminal_text
+from memcommit.adapters.console.text import safe_terminal_text
 from memcommit.adapters.interfaces.tui.components.frame import build_focused_frame
 from memcommit.adapters.interfaces.tui.core.keybindings import bind_case_insensitive_key
 from memcommit.adapters.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
 )
-from memcommit.adapters.interfaces.console.selection import FlatSelectionState, SelectionOption
-from memcommit.adapters.interfaces.console.selection.tui import render_vertical_choice_rows
+from memcommit.adapters.console.selection import FlatSelectionState, SelectionOption
+from memcommit.adapters.console.selection.tui import render_vertical_choice_rows
 
 
 def choose_flat_option(

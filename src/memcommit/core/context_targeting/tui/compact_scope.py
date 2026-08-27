@@ -27,7 +27,7 @@ from memcommit.core.context_targeting.tui.range_selection import (
     ContextRangeSelectionState,
 )
 from memcommit.core.context_targeting.tui.reach import render_context_reach
-from memcommit.adapters.interfaces.console.text import safe_terminal_text
+from memcommit.adapters.console.text import safe_terminal_text
 from memcommit.adapters.interfaces.tui.components.exact_name import (
     ExactNameFieldView,
     ExactNameInputControl,

@@ -14,8 +14,8 @@ from prompt_toolkit.layout import Dimension, FormattedTextControl, Layout, Windo
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
-from memcommit.adapters.interfaces.console.terminal import require_interactive_terminal
-from memcommit.adapters.interfaces.console.text import safe_terminal_text
+from memcommit.adapters.console.terminal import require_interactive_terminal
+from memcommit.adapters.console.text import safe_terminal_text
 from memcommit.adapters.interfaces.tui.components.exact_command_review import (
     ExactCommandReview,
     render_exact_command_review,
@@ -52,9 +52,9 @@ from memcommit.adapters.interfaces.tui.workbenches.resolution.model import (
     ResolutionOutcome,
     ResolutionWorkbenchSpec,
 )
-from memcommit.adapters.interfaces.console.selection.model import SelectionOption
-from memcommit.adapters.interfaces.console.selection.state import FlatSelectionState
-from memcommit.adapters.interfaces.console.selection.tui import choice_marker, choice_visual_state
+from memcommit.adapters.console.selection.model import SelectionOption
+from memcommit.adapters.console.selection.state import FlatSelectionState
+from memcommit.adapters.console.selection.tui import choice_marker, choice_visual_state
 
 
 T = TypeVar("T")

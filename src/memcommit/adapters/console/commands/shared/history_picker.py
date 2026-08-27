@@ -60,7 +60,7 @@ from memcommit.adapters.interfaces.tui.components.scrollable_pane import (
     move_wrapped_read_cursor,
     scroll_wrapped_page,
 )
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     display_escape_text,
 )
 from memcommit.adapters.interfaces.tui.components.focus import (

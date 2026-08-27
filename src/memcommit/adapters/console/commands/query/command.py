@@ -33,10 +33,10 @@ from memcommit.adapters.console.commands.shared.readable_context_catalog import 
     freeze_readable_context_catalog,
     freeze_profile_readable_context_catalog,
 )
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     display_escape_text,
 )
-from memcommit.adapters.interfaces.console.terminal import is_interactive_terminal
+from memcommit.adapters.console.terminal import is_interactive_terminal
 from memcommit.adapters.interfaces.cli.query import (
     render_granted_query_response,
     render_ordinary_query_response,

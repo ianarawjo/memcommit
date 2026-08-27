@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from memcommit.adapters.interfaces.console.text import safe_terminal_text
-from memcommit.adapters.interfaces.console.theme import semantic_quality_role
+from memcommit.adapters.console.text import safe_terminal_text
+from memcommit.adapters.console.theme import semantic_quality_role
 from memcommit.adapters.interfaces.tui.core.theme import semantic_role_style
 from memcommit.adapters.interfaces.tui.viewers.semantic import (
     SemanticViewerBlock,

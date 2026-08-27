@@ -32,8 +32,8 @@ from memcommit.application.operations.embed.application import (
     run_memory_embed,
 )
 from memcommit.application.operations.embed.runtime import MemoryStoreEmbedPort
-from memcommit.adapters.interfaces.console.terminal import is_interactive_terminal
-from memcommit.adapters.interfaces.console.text import display_escape_text, safe_terminal_text
+from memcommit.adapters.console.terminal import is_interactive_terminal
+from memcommit.adapters.console.text import display_escape_text, safe_terminal_text
 from memcommit.adapters.interfaces.tui.operations.embed import choose_embed_setup
 from memcommit.persistence.store import MemoryStore
 

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.adapters.interfaces.console.selection.model import SelectionOption
+from memcommit.adapters.console.selection.model import SelectionOption
 
 
 @dataclass

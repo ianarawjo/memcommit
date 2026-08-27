@@ -8,7 +8,7 @@ from memcommit.application.operations.search.answer_references import (
     FindAnswerReferenceDocument,
     render_numbered_find_answer_reference,
 )
-from memcommit.adapters.interfaces.console.text import safe_terminal_text
+from memcommit.adapters.console.text import safe_terminal_text
 from memcommit.adapters.interfaces.tui.core.theme import focused_control_style
 from memcommit.application.operations.query.granted_application import GrantedQueryResponse
 from memcommit.application.operations.query.ordinary_application import OrdinaryQueryResponse

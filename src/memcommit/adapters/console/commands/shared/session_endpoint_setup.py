@@ -44,7 +44,7 @@ from memcommit.core.context_targeting.tui.tree import ContextTreeState, build_co
 from memcommit.core.context_targeting.tui.memory_selection import (
     DirectMemorySelectionState,
 )
-from memcommit.adapters.interfaces.console.selection.tui import tree_choice_marker, tree_choice_styles
+from memcommit.adapters.console.selection.tui import tree_choice_marker, tree_choice_styles
 from memcommit.core.context_targeting.tui.picker import (
     CONTEXT_PICKER_STYLE,
     ContextMemoryPreviewController,
@@ -71,7 +71,7 @@ from memcommit.adapters.interfaces.tui.core.keybindings import (
 from memcommit.adapters.interfaces.tui.components.frame import (
     bind_focused_frame_style,
 )
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     display_escape_text,
 )
 from memcommit.adapters.interfaces.tui.components.focus import (

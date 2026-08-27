@@ -36,11 +36,11 @@ from memcommit.core.context_targeting.tui.name_draft import (
     ContextNameDraftState,
     infer_context_parent,
 )
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     display_escape_text,
     safe_terminal_text,
 )
-from memcommit.adapters.interfaces.console.terminal import require_interactive_terminal
+from memcommit.adapters.console.terminal import require_interactive_terminal
 from memcommit.application.exact_command_review import ExactCommandReview
 from memcommit.adapters.interfaces.tui.components.endpoint_setup.memory_focus import (
     EndpointMemoryFocusController,
@@ -76,7 +76,7 @@ from memcommit.adapters.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     focused_control_style,
 )
-from memcommit.adapters.interfaces.console.selection.tui import choice_marker, choice_visual_state
+from memcommit.adapters.console.selection.tui import choice_marker, choice_visual_state
 from memcommit.source_projection.presentation import source_display_text
 
 

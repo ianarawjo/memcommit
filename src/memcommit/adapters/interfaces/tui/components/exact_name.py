@@ -12,7 +12,7 @@ from prompt_toolkit.layout import AnyDimension
 from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.widgets import Frame, TextArea
 
-from memcommit.adapters.interfaces.console.text import safe_terminal_text
+from memcommit.adapters.console.text import safe_terminal_text
 from memcommit.adapters.interfaces.tui.components.frame import build_focused_frame
 
 

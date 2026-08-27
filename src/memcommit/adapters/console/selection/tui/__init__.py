@@ -1,6 +1,6 @@
 """Terminal presentation for operation-neutral selection controls."""
 
-from memcommit.adapters.interfaces.console.selection.tui.rendering import (
+from memcommit.adapters.console.selection.tui.rendering import (
     ChoiceVisualState,
     choice_marker,
     choice_visual_state,

@@ -11,10 +11,10 @@ from prompt_toolkit.output import Output
 from memcommit.application.review_policy import (
     ownership_aware_application_review,
 )
-from memcommit.adapters.interfaces.console.terminal import (
+from memcommit.adapters.console.terminal import (
     require_interactive_terminal,
 )
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     safe_terminal_text,
 )
 from memcommit.adapters.interfaces.tui.core.text_layout import (

@@ -22,7 +22,7 @@ from prompt_toolkit.output.defaults import create_output
 from prompt_toolkit.styles import Style, merge_styles
 from prompt_toolkit.widgets import Frame
 
-from memcommit.adapters.interfaces.console.progress import CommandProgress
+from memcommit.adapters.console.progress import CommandProgress
 from memcommit.adapters.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
@@ -40,7 +40,7 @@ from memcommit.adapters.interfaces.tui.components.frame import (
     bind_focused_frame_style,
     horizontal_rule,
 )
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     display_escape_text,
 )
 from memcommit.adapters.interfaces.tui.components.focus import (

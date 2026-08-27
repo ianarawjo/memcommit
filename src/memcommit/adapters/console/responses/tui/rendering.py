@@ -5,15 +5,15 @@ from __future__ import annotations
 from memcommit.adapters.interfaces.tui.viewers.semantic import (
     semantic_viewer_block_fragments,
 )
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     safe_terminal_text,
 )
 from memcommit.adapters.interfaces.tui.core.text_layout import (
     wrap_terminal_text,
 )
-from memcommit.adapters.interfaces.console.responses.model import ResponseDraft, ResponseTarget
-from memcommit.adapters.interfaces.console.responses.state import ResponseFrameState
-from memcommit.adapters.interfaces.console.selection.tui import render_vertical_choice_rows
+from memcommit.adapters.console.responses.model import ResponseDraft, ResponseTarget
+from memcommit.adapters.console.responses.state import ResponseFrameState
+from memcommit.adapters.console.selection.tui import render_vertical_choice_rows
 
 
 def _wrap(value: str, width: int) -> tuple[str, ...]:

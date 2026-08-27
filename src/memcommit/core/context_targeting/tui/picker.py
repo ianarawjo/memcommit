@@ -44,7 +44,7 @@ from memcommit.adapters.interfaces.tui.core.theme import (
 from memcommit.adapters.interfaces.tui.components.scrollable_pane import (
     WrappedScrollbarMargin,
 )
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     display_escape_text,
 )
 from memcommit.adapters.interfaces.tui.components.tree_row import (
@@ -70,7 +70,7 @@ from memcommit.core.context_targeting.tui.reach import (
     render_context_reach,
 )
 from memcommit.core.context_targeting.model import DirectMemoryTarget
-from memcommit.adapters.interfaces.console.selection.tui import tree_choice_marker
+from memcommit.adapters.console.selection.tui import tree_choice_marker
 from memcommit.source_projection.model import (
     SourceDisplayFacts,
     SourceForm,

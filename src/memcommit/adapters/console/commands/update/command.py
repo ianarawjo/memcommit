@@ -23,7 +23,7 @@ from memcommit.adapters.interfaces.tui.components.operation_launcher.session imp
     SessionPickerEntry,
     choose_session,
 )
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     display_escape_text,
     safe_terminal_text,
 )

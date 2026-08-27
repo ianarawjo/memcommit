@@ -18,7 +18,7 @@ from prompt_toolkit.layout import (
 )
 from prompt_toolkit.output import Output
 
-from memcommit.adapters.interfaces.console.text import display_escape_text, safe_terminal_text
+from memcommit.adapters.console.text import display_escape_text, safe_terminal_text
 from memcommit.adapters.interfaces.tui.components.exact_name import (
     ExactNameFieldControl,
     ExactNameFieldView,

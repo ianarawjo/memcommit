@@ -1,6 +1,6 @@
 """Shared semantic palette contracts for console and TUI adapters."""
 
-from memcommit.adapters.interfaces.console.theme import (
+from memcommit.adapters.console.theme import (
     SemanticColorRole,
     semantic_action_role,
     semantic_color_hex,

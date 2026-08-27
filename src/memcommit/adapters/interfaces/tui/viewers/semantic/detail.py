@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     safe_terminal_text,
 )
 from memcommit.application.resolution.workbench import ResolutionMemoryRow

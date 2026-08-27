@@ -29,7 +29,7 @@ from memcommit.core.context_targeting.presets import (
 )
 from memcommit.core.context_targeting.tui.picker import context_memory_rows
 from memcommit.core.context_targeting.tui.reach import ContextReachViewMode
-from memcommit.adapters.interfaces.console import (
+from memcommit.adapters.console import (
     ConsoleMode,
     ConsoleModeError,
     SystemTerminalCapabilities,
@@ -39,7 +39,7 @@ from memcommit.adapters.interfaces.tui.workbenches.read_report import (
     ReadReportSelectTarget,
     choose_read_report_recent,
 )
-from memcommit.adapters.interfaces.console.text import display_escape_text
+from memcommit.adapters.console.text import display_escape_text
 from memcommit.adapters.interfaces.tui.operations.summarize import (
     SummarizeTuiOutcome,
     SummarizeTuiSetup,

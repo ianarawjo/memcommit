@@ -117,6 +117,15 @@ former package path. Later changes may move one reviewed surface at a time into
 adapter owner; this relocation itself changes neither behavior nor interface
 contracts.
 
+Later on 2026-08-27 the reviewed console-common slice crossed that staging
+boundary: `memcommit.adapters.interfaces.console` moved to the existing
+canonical `memcommit.adapters.console` owner without a compatibility facade.
+Reusable route, terminal, text, theme, progress, Response, and selection
+contracts stay outside `commands`, so CLI and TUI consumers do not depend on
+Typer command assembly. The remaining `adapters.interfaces.cli` and
+`adapters.interfaces.tui` trees remain temporary staging surfaces pending
+their own ownership reviews.
+
 On 2026-08-27 the provider implementations moved from the generic
 `memcommit.infrastructure` container to the explicit top-level
 `memcommit.providers` owner, while global configuration moved to

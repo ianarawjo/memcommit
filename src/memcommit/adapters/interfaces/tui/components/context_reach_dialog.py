@@ -20,7 +20,7 @@ from memcommit.core.context_targeting.tui.reach import (
     ContextReachState,
     render_context_reach,
 )
-from memcommit.adapters.interfaces.console.text import safe_terminal_text
+from memcommit.adapters.console.text import safe_terminal_text
 from memcommit.adapters.interfaces.tui.components.frame import build_focused_frame
 from memcommit.adapters.interfaces.tui.core.theme import MEMCOMMIT_TUI_STYLE
 

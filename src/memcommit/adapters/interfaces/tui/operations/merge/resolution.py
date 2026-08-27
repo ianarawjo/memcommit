@@ -7,7 +7,7 @@ from collections.abc import Callable
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.adapters.interfaces.console.text import safe_terminal_text
+from memcommit.adapters.console.text import safe_terminal_text
 from memcommit.adapters.interfaces.tui.components.exact_command_review import (
     ExactCommandReview,
 )

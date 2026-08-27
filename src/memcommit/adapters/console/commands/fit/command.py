@@ -27,7 +27,7 @@ from memcommit.adapters.console.commands.fit.render import (
     render_fit_plain,
     render_proposition_fit_plain,
 )
-from memcommit.adapters.interfaces.console.text import display_escape_text
+from memcommit.adapters.console.text import display_escape_text
 from memcommit.adapters.console.commands.fit.presentation import fit_result_text
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError

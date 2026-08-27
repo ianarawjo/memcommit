@@ -28,12 +28,12 @@ from memcommit.adapters.console.commands.help_inventory.command import CommandEn
 from memcommit.adapters.console.commands.shared.readable_context_catalog import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.adapters.interfaces.console.identity import collision_safe_uid_prefixes
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.identity import collision_safe_uid_prefixes
+from memcommit.adapters.console.text import (
     display_escape_text,
     safe_terminal_text,
 )
-from memcommit.adapters.interfaces.console.theme import (
+from memcommit.adapters.console.theme import (
     memory_object_color_rgb,
     semantic_color_rgb,
     semantic_quality_role,

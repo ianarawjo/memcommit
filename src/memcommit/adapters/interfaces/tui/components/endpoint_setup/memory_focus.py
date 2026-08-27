@@ -9,8 +9,8 @@ from memcommit.adapters.interfaces.tui.components.endpoint_setup.model import (
     EndpointSetupMemory,
 )
 from memcommit.adapters.interfaces.tui.core.theme import focused_control_style
-from memcommit.adapters.interfaces.console.selection import FlatSelectionState, SelectionOption
-from memcommit.adapters.interfaces.console.selection.tui import render_vertical_choice_rows
+from memcommit.adapters.console.selection import FlatSelectionState, SelectionOption
+from memcommit.adapters.console.selection.tui import render_vertical_choice_rows
 
 
 MemoryProjectionLoader = Callable[

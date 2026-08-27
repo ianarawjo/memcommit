@@ -191,7 +191,7 @@ def _capture(kind: str, store_root: Path, stem: str) -> None:
 
 
 def main() -> None:
-    from memcommit.adapters.interfaces.console.theme import (
+    from memcommit.adapters.console.theme import (
         SemanticColorRole,
         semantic_color_rgb,
     )

@@ -6,8 +6,8 @@ from collections.abc import Sequence
 
 import typer
 
-from memcommit.adapters.interfaces.console.text import display_escape_text
-from memcommit.adapters.interfaces.console.theme import memory_object_color_rgb
+from memcommit.adapters.console.text import display_escape_text
+from memcommit.adapters.console.theme import memory_object_color_rgb
 
 
 APPLIED_MEMORY_PREVIEW_LIMIT = 20

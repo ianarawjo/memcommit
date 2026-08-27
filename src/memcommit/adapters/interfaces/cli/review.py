@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from memcommit.core.context import Context, Memory
-from memcommit.adapters.interfaces.console.text import safe_terminal_text
+from memcommit.adapters.console.text import safe_terminal_text
 from memcommit.adapters.interfaces.tui.workbenches.review import (
     ATOMIZE_RESPONSE_LABEL,
     RESPONSE_LABEL,

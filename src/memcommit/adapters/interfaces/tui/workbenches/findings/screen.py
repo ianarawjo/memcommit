@@ -10,8 +10,8 @@ from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
-from memcommit.adapters.interfaces.console.terminal import require_interactive_terminal
-from memcommit.adapters.interfaces.console.text import safe_terminal_text
+from memcommit.adapters.console.terminal import require_interactive_terminal
+from memcommit.adapters.console.text import safe_terminal_text
 from memcommit.adapters.interfaces.tui.components.frame import TuiRegion, build_tui_frame
 from memcommit.adapters.interfaces.tui.core.keybindings import bind_case_insensitive_key
 from memcommit.adapters.interfaces.tui.core.theme import (

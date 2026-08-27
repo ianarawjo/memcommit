@@ -13,7 +13,7 @@ from memcommit.application.operations.conformance.runtime import (
     execute_context_conformance_with_rules_operand,
     execute_ground_conformance,
 )
-from memcommit.adapters.interfaces.console.text import display_escape_text, safe_terminal_text
+from memcommit.adapters.console.text import display_escape_text, safe_terminal_text
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.providers.subscription import QueryProviderError, connect_semantic_provider

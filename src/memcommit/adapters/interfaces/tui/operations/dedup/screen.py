@@ -14,7 +14,7 @@ from memcommit.application.operations.dedup.application import (
     FrozenDedupPlan,
     dedup_resolution_case,
 )
-from memcommit.adapters.interfaces.console.text import safe_terminal_text
+from memcommit.adapters.console.text import safe_terminal_text
 from memcommit.adapters.interfaces.tui.components.exact_command_review import (
     ExactCommandReview,
 )

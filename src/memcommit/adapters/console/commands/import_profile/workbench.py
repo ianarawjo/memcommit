@@ -42,7 +42,7 @@ from memcommit.application.operations.resource_import.model import (
     plan_context_import,
     plan_memory_import,
 )
-from memcommit.adapters.interfaces.console.selection import SelectionOption
+from memcommit.adapters.console.selection import SelectionOption
 from memcommit.persistence.store import MemoryStore
 
 

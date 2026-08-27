@@ -35,7 +35,7 @@ from memcommit.adapters.interfaces.tui.core.theme import (
 from memcommit.adapters.interfaces.tui.components.frame import (
     build_focused_frame,
 )
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     display_escape_text,
     safe_terminal_text,
 )
@@ -57,7 +57,7 @@ from memcommit.core.context_targeting.tui.name_draft import (
 )
 from memcommit.core.context_targeting.tui.selection import ContextSelectionState
 from memcommit.core.context_targeting.tui.tree import ContextTreeState, build_context_tree
-from memcommit.adapters.interfaces.console.selection.tui import tree_choice_marker, tree_choice_styles
+from memcommit.adapters.console.selection.tui import tree_choice_marker, tree_choice_styles
 
 
 def suggest_fresh_context_name(

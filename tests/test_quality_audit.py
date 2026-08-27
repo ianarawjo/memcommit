@@ -37,7 +37,7 @@ from memcommit.adapters.interfaces.tui.operations.audit import (
     quality_audit_review_document,
     render_quality_audit_review_snapshot,
 )
-from memcommit.adapters.interfaces.console.theme import (
+from memcommit.adapters.console.theme import (
     SemanticColorRole,
     memory_object_color_rgb,
     semantic_color_rgb,

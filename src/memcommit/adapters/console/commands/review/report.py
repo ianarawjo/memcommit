@@ -12,10 +12,10 @@ from memcommit.adapters.console.commands.shared.resolution_workbench_shell impor
     resolution_report_fragments,
     run_resolution_workbench_shell,
 )
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     safe_terminal_text,
 )
-from memcommit.adapters.interfaces.console.theme import SemanticColorRole, semantic_color_rgb
+from memcommit.adapters.console.theme import SemanticColorRole, semantic_color_rgb
 from memcommit.adapters.interfaces.tui.core.theme import semantic_role_style
 from memcommit.application.resolution.workbench import (
     ResolutionNavigation,
@@ -23,11 +23,11 @@ from memcommit.application.resolution.workbench import (
     ResolutionWorkbenchAction,
     ResolutionWorkbenchView,
 )
-from memcommit.adapters.interfaces.console.responses.resolution import (
+from memcommit.adapters.console.responses.resolution import (
     response_draft_from_item,
     response_target_from_item,
 )
-from memcommit.adapters.interfaces.console.responses.tui import response_snapshot_lines
+from memcommit.adapters.console.responses.tui import response_snapshot_lines
 from memcommit.application.reviewing.report import (
     ReviewReport,
     ReviewReportController,

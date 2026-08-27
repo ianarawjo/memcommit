@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import typer
 
-from memcommit.adapters.interfaces.console.text import display_escape_text
+from memcommit.adapters.console.text import display_escape_text
 
 
 def render_cli_error(error: object) -> None:

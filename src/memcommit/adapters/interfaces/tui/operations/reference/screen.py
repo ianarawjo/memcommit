@@ -28,8 +28,8 @@ from memcommit.core.context_targeting.tui.selector import (
     ContextSelectorView,
 )
 from memcommit.application.exact_command_review import ExactCommandReview
-from memcommit.adapters.interfaces.console.terminal import require_interactive_terminal
-from memcommit.adapters.interfaces.console.text import display_escape_text
+from memcommit.adapters.console.terminal import require_interactive_terminal
+from memcommit.adapters.console.text import display_escape_text
 from memcommit.adapters.interfaces.tui.components.exact_command_review import (
     render_exact_command_review,
 )

@@ -39,7 +39,7 @@ from memcommit.adapters.interfaces.tui.components.operation_launcher.session imp
     SessionOpenReceipt,
     choose_session,
 )
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     safe_terminal_text,
 )
 from memcommit.adapters.interfaces.cli.ground_workspace import render_ground_workspace

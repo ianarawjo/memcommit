@@ -54,7 +54,7 @@ from memcommit.adapters.console.commands.rationale.command import render_rationa
 from memcommit.adapters.interfaces.tui.components.operation_launcher.session import (
     SessionNewReceipt,
 )
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     display_escape_text,
 )
 from memcommit.core.context_targeting.presets import (

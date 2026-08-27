@@ -28,13 +28,13 @@ from memcommit.application.operations.ground.elaborate import (
     freeze_ground_elaborate,
 )
 from memcommit.adapters.interfaces.cli.semantic_add import render_applied_memory_preview
-from memcommit.adapters.interfaces.console import (
+from memcommit.adapters.console import (
     ConsoleMode,
     ConsoleModeError,
     SystemTerminalCapabilities,
     resolve_console_mode,
 )
-from memcommit.adapters.interfaces.console.text import display_escape_text
+from memcommit.adapters.console.text import display_escape_text
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.providers.subscription import QueryProviderError, connect_semantic_provider

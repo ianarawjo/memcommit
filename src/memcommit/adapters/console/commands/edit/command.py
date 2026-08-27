@@ -18,8 +18,8 @@ from memcommit.application.operations.edit.application import (
 )
 from memcommit.application.operations.edit.runtime import MemoryStoreEditPort
 from memcommit.adapters.interfaces.cli.batch_input import parse_edit_lines, read_text_input
-from memcommit.adapters.interfaces.console.terminal import is_interactive_terminal
-from memcommit.adapters.interfaces.console.text import safe_terminal_text
+from memcommit.adapters.console.terminal import is_interactive_terminal
+from memcommit.adapters.console.text import safe_terminal_text
 from memcommit.adapters.interfaces.tui.operations.edit import choose_edit_setup
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from memcommit.application.operations.compare.summary import ComparisonSummary
-from memcommit.adapters.interfaces.console.text import display_escape_text
+from memcommit.adapters.console.text import display_escape_text
 
 
 def render_comparison_summary(summary: ComparisonSummary) -> str:

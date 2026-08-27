@@ -1,6 +1,6 @@
 """Prompt-toolkit presentation for service-wide item responses."""
 
-from memcommit.adapters.interfaces.console.responses.tui.rendering import (
+from memcommit.adapters.console.responses.tui.rendering import (
     response_frame_fragments,
     response_snapshot_lines,
 )

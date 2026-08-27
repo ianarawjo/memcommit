@@ -25,8 +25,8 @@ from memcommit.application.operations.edit.application import (
     validate_edit_request,
 )
 from memcommit.application.exact_command_review import ExactCommandReview
-from memcommit.adapters.interfaces.console.terminal import require_interactive_terminal
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.terminal import require_interactive_terminal
+from memcommit.adapters.console.text import (
     display_escape_text,
     restore_display_escape_text,
 )

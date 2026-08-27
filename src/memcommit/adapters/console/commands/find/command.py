@@ -24,13 +24,13 @@ from memcommit.adapters.interfaces.cli.find import (
     DEFAULT_LITERAL_FIND_PREVIEW_MATCHES,
     render_literal_find_result,
 )
-from memcommit.adapters.interfaces.console import (
+from memcommit.adapters.console import (
     ConsoleMode,
     ConsoleModeError,
     SystemTerminalCapabilities,
     resolve_console_mode,
 )
-from memcommit.adapters.interfaces.console.text import display_escape_text
+from memcommit.adapters.console.text import display_escape_text
 from memcommit.adapters.interfaces.tui.operations.find import (
     LiteralFindTuiSetup,
     run_compact_literal_find_result,

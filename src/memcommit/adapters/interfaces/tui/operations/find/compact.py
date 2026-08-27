@@ -10,7 +10,7 @@ from memcommit.adapters.interfaces.cli.find import (
     DEFAULT_LITERAL_FIND_PREVIEW_MATCHES,
     literal_find_result_header_lines,
 )
-from memcommit.adapters.interfaces.console.text import safe_terminal_text
+from memcommit.adapters.console.text import safe_terminal_text
 from memcommit.adapters.console.commands.find.source_row import render_literal_find_reference_row
 from memcommit.adapters.interfaces.tui.components.paged_result import (
     PagedResultRenderer,

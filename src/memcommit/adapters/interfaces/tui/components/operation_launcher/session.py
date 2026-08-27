@@ -30,7 +30,7 @@ from memcommit.adapters.interfaces.tui.components.operation_launcher.screen impo
     _visible_grouped_bounds,
     run_operation_launcher,
 )
-from memcommit.adapters.interfaces.console.text import display_escape_text
+from memcommit.adapters.console.text import display_escape_text
 
 
 SessionSortMode = Literal["recent", "name"]

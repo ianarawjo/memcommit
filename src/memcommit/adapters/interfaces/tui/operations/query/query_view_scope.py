@@ -23,7 +23,7 @@ from prompt_toolkit.layout import (
 from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.layout.menus import CompletionsMenu
 
-from memcommit.adapters.interfaces.console.text import safe_terminal_text
+from memcommit.adapters.console.text import safe_terminal_text
 from memcommit.adapters.interfaces.tui.components.exact_name import (
     ExactNameFieldView,
     ExactNameInputControl,
@@ -40,9 +40,9 @@ from memcommit.adapters.interfaces.tui.components.horizontal_choice import (
 )
 from memcommit.adapters.interfaces.tui.core.theme import focused_control_style
 from memcommit.application.operations.query.granted_application import GrantedQueryTarget
-from memcommit.adapters.interfaces.console.selection.model import SelectionOption
-from memcommit.adapters.interfaces.console.selection.state import FlatSelectionState
-from memcommit.adapters.interfaces.console.selection.tui import render_vertical_choice_rows
+from memcommit.adapters.console.selection.model import SelectionOption
+from memcommit.adapters.console.selection.state import FlatSelectionState
+from memcommit.adapters.console.selection.tui import render_vertical_choice_rows
 
 
 ScopeChanged = Callable[[str], None]

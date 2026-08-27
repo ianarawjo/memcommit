@@ -20,10 +20,10 @@ from memcommit.adapters.console.commands.shared.command_progress import CommandP
 from memcommit.adapters.console.commands.shared.quality_find_workbench import (
     annotate_quality_find_attempt,
 )
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     display_escape_text,
 )
-from memcommit.adapters.interfaces.console.identity import collision_safe_uid_prefixes
+from memcommit.adapters.console.identity import collision_safe_uid_prefixes
 from memcommit.core.context import Memory
 from memcommit.core.context_targeting.presets import (
     ContextScopePreset,

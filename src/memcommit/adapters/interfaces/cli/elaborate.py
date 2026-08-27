@@ -6,8 +6,8 @@ import typer
 
 from memcommit.application.operations.elaborate.model import ElaborateMode
 from memcommit.application.operations.elaborate.application import ElaborateResult
-from memcommit.adapters.interfaces.console.content_row import render_numbered_content_row
-from memcommit.adapters.interfaces.console.text import safe_terminal_text
+from memcommit.adapters.console.content_row import render_numbered_content_row
+from memcommit.adapters.console.text import safe_terminal_text
 
 
 def elaborate_result_lines(result: ElaborateResult) -> tuple[str, ...]:

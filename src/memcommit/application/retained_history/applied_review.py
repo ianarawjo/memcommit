@@ -13,8 +13,8 @@ import hashlib
 import json
 from typing import Iterable
 
-from memcommit.adapters.interfaces.console.text import safe_terminal_text
-from memcommit.adapters.interfaces.console.theme import SemanticColorRole
+from memcommit.adapters.console.text import safe_terminal_text
+from memcommit.adapters.console.theme import SemanticColorRole
 from memcommit.application.reviewing.report import ReviewReportController, ReviewTextFragment
 from memcommit.persistence.store import MemoryStore
 from memcommit.core.context_targeting.uid_locator import resolve_exact_or_unique_uid

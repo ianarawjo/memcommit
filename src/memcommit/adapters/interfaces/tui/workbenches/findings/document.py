@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
-from memcommit.adapters.interfaces.console.identity import collision_safe_uid_prefixes
-from memcommit.adapters.interfaces.console.text import safe_terminal_text
-from memcommit.adapters.interfaces.console.theme import (
+from memcommit.adapters.console.identity import collision_safe_uid_prefixes
+from memcommit.adapters.console.text import safe_terminal_text
+from memcommit.adapters.console.theme import (
     SemanticColorRole,
     semantic_quality_role,
 )

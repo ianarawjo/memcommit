@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import typer
 
-from memcommit.adapters.interfaces.console.text import display_escape_text
+from memcommit.adapters.console.text import display_escape_text
 from memcommit.adapters.console.commands.summarize.scope_label import (
     summarize_scope_label,
 )

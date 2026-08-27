@@ -25,8 +25,8 @@ from prompt_toolkit.widgets import Frame, TextArea
 from memcommit.core.context_targeting.tui.compact_scope import (
     CompactReadableScopeControl,
 )
-from memcommit.adapters.interfaces.console.terminal import require_interactive_terminal
-from memcommit.adapters.interfaces.console.text import safe_terminal_text
+from memcommit.adapters.console.terminal import require_interactive_terminal
+from memcommit.adapters.console.text import safe_terminal_text
 from memcommit.adapters.interfaces.tui.components.background_turn import BackgroundExecutorTurn
 from memcommit.adapters.interfaces.tui.components.focus import (
     FocusSurface,

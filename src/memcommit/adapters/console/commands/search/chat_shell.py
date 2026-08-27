@@ -38,10 +38,10 @@ from memcommit.adapters.interfaces.tui.core.keybindings import (
     bind_case_insensitive_key,
     dispatch_tui_back,
 )
-from memcommit.adapters.interfaces.console.terminal import (
+from memcommit.adapters.console.terminal import (
     require_interactive_terminal,
 )
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     safe_terminal_text,
 )
 from memcommit.adapters.console.commands.shared.background_turn import BackgroundExecutorTurn

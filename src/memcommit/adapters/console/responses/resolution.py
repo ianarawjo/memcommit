@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from memcommit.application.resolution.workbench import ResolutionItem, ResolutionWorkbenchView
-from memcommit.adapters.interfaces.console.responses.model import ResponseChoice, ResponseDraft, ResponseTarget
+from memcommit.adapters.console.responses.model import ResponseChoice, ResponseDraft, ResponseTarget
 
 
 def response_draft_from_item(item: ResolutionItem) -> ResponseDraft:

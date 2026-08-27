@@ -11,7 +11,7 @@ from prompt_toolkit.layout import ConditionalContainer, Dimension, HSplit, Windo
 from prompt_toolkit.layout.controls import FormattedTextControl
 from prompt_toolkit.widgets import TextArea
 
-from memcommit.adapters.interfaces.console.text import display_escape_text
+from memcommit.adapters.console.text import display_escape_text
 from memcommit.adapters.interfaces.tui.components.exact_command_review.form import (
     ExactCommandDraft,
 )

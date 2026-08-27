@@ -30,8 +30,8 @@ from memcommit.adapters.interfaces.cli.delete import (
     render_context_delete_result,
     render_removed_item,
 )
-from memcommit.adapters.interfaces.console.errors import render_cli_error
-from memcommit.adapters.interfaces.console.text import display_escape_text
+from memcommit.adapters.console.errors import render_cli_error
+from memcommit.adapters.console.text import display_escape_text
 from memcommit.adapters.interfaces.tui.operations.delete import (
     choose_delete_target,
     delete_picker_rows,

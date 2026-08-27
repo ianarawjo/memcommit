@@ -11,7 +11,7 @@ from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
-from memcommit.adapters.interfaces.console.terminal import is_interactive_terminal
+from memcommit.adapters.console.terminal import is_interactive_terminal
 from memcommit.adapters.interfaces.tui.components.frame import (
     TuiRegion,
     bind_focused_frame_style,

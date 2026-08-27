@@ -1,9 +1,9 @@
 import typer
 
-from memcommit.adapters.interfaces.console.text import (
+from memcommit.adapters.console.text import (
     display_escape_text,
 )
-from memcommit.adapters.interfaces.console.theme import SOURCE_CAPABILITY_RGB
+from memcommit.adapters.console.theme import SOURCE_CAPABILITY_RGB
 from memcommit.application.operations.contexts.application import ContextCatalogEntry
 from memcommit.application.operations.contexts.runtime import load_contexts_catalog
 from memcommit.application.operations.profile.config import ProfileConfigError
