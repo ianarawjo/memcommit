@@ -200,7 +200,7 @@ def test_bare_cli_reference_enters_and_can_cancel_interactive_setup(
     isolated_store,
     monkeypatch,
 ):
-    import memcommit.adapters.interfaces.cli.reference as reference_cli
+    import memcommit.adapters.console.commands.reference.command as reference_cli
 
     monkeypatch.setattr(reference_cli, "is_interactive_terminal", lambda: True)
     monkeypatch.setattr(reference_cli, "choose_reference_setup", lambda _port: None)
