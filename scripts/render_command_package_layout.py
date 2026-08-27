@@ -98,7 +98,7 @@ OWNED_SUPPORT_TARGETS = {
     "atomize_grounding": "atomize.grounding",
     "atomize_render": "atomize.render",
     "atomize_sessions": "atomize.sessions",
-    "atomize_workbench_shell": "atomize.workbench_shell",
+    "atomize_workbench_shell": "atomize.workbench.screen",
     "audit_sessions": "audit.sessions",
     "branch_dialog": "branch.dialog",
     "compare_sessions": "compare.sessions",

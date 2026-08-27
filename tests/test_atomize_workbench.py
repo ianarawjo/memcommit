@@ -38,7 +38,7 @@ from memcommit.application.operations.atomize.workflow import (
 )
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.atomize.command import _materialize_reviewed_workbench
-from memcommit.adapters.interfaces.tui.operations.atomize.screen import (
+from memcommit.adapters.console.commands.atomize.workbench.screen import (
     _finding_map,
     _list_text,
     _source_map,

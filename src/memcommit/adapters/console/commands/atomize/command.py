@@ -52,10 +52,10 @@ from memcommit.application.operations.atomize.workbench import (
     create_atomize_workbench,
     project_atomize_workbench_findings,
 )
-from memcommit.adapters.interfaces.cli.atomize import render_atomize_apply_result
-from memcommit.adapters.interfaces.cli.atomize_grounding import render_grounding_session
+from memcommit.adapters.console.commands.atomize.grounding import render_grounding_session
+from memcommit.adapters.console.commands.atomize.render import render_atomize_apply_result
 from memcommit.adapters.console.text import display_escape_text
-from memcommit.adapters.interfaces.tui.operations.atomize.adapter import (
+from memcommit.adapters.console.commands.atomize.workbench.adapter import (
     present_atomize_workbench,
 )
 from memcommit.adapters.console.commands.shared.command_progress import progressing_provider_factory

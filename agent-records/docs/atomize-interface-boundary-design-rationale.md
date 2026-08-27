@@ -1,14 +1,14 @@
-# Atomize interface boundary design rationale
+# Atomize console presentation ownership
 
 ## Problem
 
-Atomize's analysis and Apply semantics already had typed application/runtime
-entry points, but the saved-session terminal screen still lived in
-`memcommit.adapters.console.commands.atomize.workbench_shell`. The command module also assembled
-the workbench destination editor and rendered Apply receipts. This made the CLI
-the practical owner of a TUI that should be reusable by any terminal adapter,
-and an interface module could not import the screen without depending outward
-on `commands`.
+Atomize's analysis and Apply semantics have typed application/runtime entry
+points, while every current presentation consumer is a console command. The
+plain receipt, Grounding transcript, and saved-session workbench had been split
+between `adapters.interfaces.cli`, `adapters.interfaces.tui.operations`, and
+thin modules under `commands.atomize`. That split obscured the single console
+owner and required compatibility facades even though there was only one live
+implementation of each presentation.
 
 ## Selected boundary
 
@@ -19,62 +19,69 @@ atomize domain/application/runtime
               ↑
 interfaces/tui/workbenches/{review,result,resolution}
               ↑
-interfaces/tui/operations/atomize/{screen,adapter}
+commands/atomize/{render,grounding,workbench}
               ↑
-commands/atomize and commands/impact
+commands/atomize/command and commands/impact/command
 ```
 
-- `interfaces/tui/operations/atomize/screen.py` owns the saved workbench's
+- `commands/atomize/workbench/screen.py` owns the saved workbench's
   prompt-toolkit composition and operation-specific projection.
-- `interfaces/tui/operations/atomize/adapter.py` converts a saved analysis,
-  workbench, and `MemoryStore` orientation into that screen. It may save a
-  draft through the supplied Store method, but it does not create analyses,
-  call a provider, apply Memories, or bypass the typed application boundary.
+- `commands/atomize/workbench/adapter.py` converts a saved analysis, workbench,
+  and `MemoryStore` orientation into that screen. It may save a draft through
+  the supplied Store method, but it does not create analyses, call a provider,
+  apply Memories, or bypass the typed application boundary.
 - `interfaces/tui/workbenches/result` owns the shared read-only Result viewer
-  used by Atomize. `interfaces/tui/workbenches/review` owns the small shared
-  response label and normal-cancellation type.
-- `interfaces/cli/atomize.py` owns plain impact and Apply-result rendering.
-  The command still owns option parsing and orchestration, then delegates
-  presentation.
+  used by Atomize. `interfaces/tui/workbenches/review` and `resolution` own the
+  operation-neutral response and session mechanics.
+- `commands/atomize/render.py` owns plain impact and Apply-result rendering,
+  and `commands/atomize/grounding.py` owns the provider-free Grounding
+  transcript. The command owns option parsing and orchestration, then
+  delegates presentation.
 
-The former `commands.atomize_workbench_shell`,
-`commands.result_workbench_shell`, and `commands.atomize_render` modules remain
-thin identity-preserving import facades. New implementation code and tests use
-the interface-owned paths. The facades contain no layout, key binding,
-rendering, provider, Store, or application behavior.
+`impact atomize` imports the Atomize workbench screen from its operation owner.
+That reuse does not make the screen operation-neutral: Impact is presenting a
+saved Atomize analysis and its Atomize-specific findings. Shared Result,
+Review, and Resolution mechanics remain under `interfaces/tui/workbenches`.
+
+The former Atomize-specific interface paths and
+`commands/atomize/workbench_shell.py` were removed rather than retained as
+facades. Function names, screen behavior, and persisted models remain
+unchanged, but callers must import the one command-owned implementation.
 
 ## Invariants
 
-1. Interface-owned Atomize and Result modules import no `memcommit.adapters.console.commands`
-   modules.
-2. Moving the screen does not change saved analysis/workbench schemas,
+1. Atomize workbench modules do not reach through unrelated command packages;
+   operation-neutral workbench mechanics remain shared interface modules.
+2. Moving the presenters does not change saved analysis/workbench schemas,
    application receipts, checkpoints, Save As behavior, focus topology,
    keyboard actions, or non-TTY snapshots.
 3. The adapter never treats screen completion as permission to mutate a
-   Context. Apply still returns an operation action to `commands.atomize`,
-   which invokes the typed application/runtime use case.
+   Context. Apply returns an operation action to `commands.atomize`, which
+   invokes the typed application/runtime use case.
 4. The Result viewer remains read-only and operation-neutral. Atomize owns only
    its projection into the common Result model.
-5. Existing imports keep object identity through thin facades, so the move does
-   not create two controller classes or two copies of mutable state.
+5. There is one implementation path for each Atomize presenter and no
+   Atomize-specific compatibility facade that could drift from it.
 
 ## Alternatives considered
 
-Keeping the implementation under `commands` and adding another wrapper under
-`interfaces` would preserve imports but invert the intended dependency. Moving
-all Atomize Grounding dialogue and analysis orchestration in the same change
-would make functional parity harder to establish and mix semantic policy with
-the terminal boundary. The selected slice moves the complete saved-workbench
-presentation first; Grounding command/application extraction remains a
-separate operation slice.
+Keeping `interfaces/cli/atomize` and `interfaces/tui/operations/atomize` as
+canonical owners would preserve the prior import direction, but every live
+consumer is a console command and the extra boundary required Atomize-specific
+facades. Moving the workbench to an operation-neutral shared package was also
+rejected: its finding projection, destination rules, and actions remain
+Atomize-specific. The selected move co-locates presentation only; Grounding
+semantics, provider work, Store transactions, and Apply policy remain in the
+application/runtime boundary.
 
 ## Verification
 
-The boundary tests parse every new interface-owned module and reject imports
-from `memcommit.adapters.console.commands`. They also prove the old paths re-export the exact
-same function objects. Atomize workbench, Result workbench, impact, Save As,
-Undo/Redo, and application-boundary suites exercise snapshot, interactive,
-application, failure, and recovery behavior. The ordered 180×52 color replay
-under `agent-records/docs/screenshots/atomize-apply-boundaries-20260815/` executes the new
-screen path directly and retains the established eight-step review, Apply,
-verification, compensation, late-success, recovery, and race evidence.
+Boundary tests prove that the removed paths are absent, the Atomize and Impact
+commands import the command-owned presenters, and the workbench does not reach
+through unrelated commands. Atomize workbench, receipt, Grounding, Impact, Save
+As, Undo/Redo, and application-boundary suites exercise snapshot, interactive,
+application, failure, and recovery behavior. The existing ordered 180×52
+replay under
+`agent-records/docs/screenshots/atomize-apply-boundaries-20260815/` imports the
+new screen path; no visible interaction changed, so its captured frames remain
+valid.

@@ -16,7 +16,7 @@ operation evidence ledger.
 | `memcommit.commands.atomize_grounding` | `memcommit.adapters.console.commands.atomize.grounding` | command-owned-support | `atomize` |
 | `memcommit.commands.atomize_render` | `memcommit.adapters.console.commands.atomize.render` | command-owned-support | `atomize` |
 | `memcommit.commands.atomize_sessions` | `memcommit.adapters.console.commands.atomize.sessions` | command-owned-support | `atomize` |
-| `memcommit.commands.atomize_workbench_shell` | `memcommit.adapters.console.commands.atomize.workbench_shell` | command-owned-support | `atomize` |
+| `memcommit.commands.atomize_workbench_shell` | `memcommit.adapters.console.commands.atomize.workbench.screen` | command-owned-support | `atomize` |
 | `memcommit.commands.audit` | `memcommit.adapters.console.commands.audit.command` | command-entry | `audit` |
 | `memcommit.commands.audit_sessions` | `memcommit.adapters.console.commands.audit.sessions` | command-owned-support | `audit` |
 | `memcommit.commands.background_turn` | `memcommit.adapters.console.commands.shared.background_turn` | shared-command-mechanism | `shared` |

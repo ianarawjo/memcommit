@@ -24,11 +24,11 @@ The Grounding slice is now divided into four responsibilities:
 - `memcommit.application.operations.atomize.grounding_runtime` adapts that contract to
   `MemoryStore`, the semantic provider, CAS-style freshness checks, Context
   mutation, checkpoint recovery, and durable dialogue receipts.
-- `memcommit.adapters.interfaces.cli.atomize_grounding` renders a saved dialogue without
-  provider or Store access.
-- `memcommit.adapters.console.commands.atomize.grounding` preserves the historical Python import
-  surface as a thin compatibility facade. `memcommit.adapters.console.commands.atomize.command` uses the
-  typed application/runtime boundary directly.
+- `memcommit.adapters.console.commands.atomize.grounding` renders a saved
+  dialogue without provider or Store access.
+- `memcommit.adapters.console.commands.atomize.command` uses the typed
+  application/runtime boundary directly and delegates only transcript
+  projection to the command-owned renderer.
 
 The former flat `memcommit.atomize_grounding_application` and
 `memcommit.atomize_grounding_runtime` paths remain behavior-free
@@ -61,8 +61,8 @@ remaining independent of terminal modules and command code.
    `MemoryRef` target content do not enter this transaction.
 6. The CLI transcript is a provider-free projection of durable state. Opening
    or rendering it cannot silently reassess the dialogue.
-7. Existing command-level call signatures remain available through the facade,
-   but new internal callers use typed requests and the runtime port.
+7. The console renderer exposes no parallel Start, Reply, Keep, or Accept
+   wrappers; executable callers use typed requests and the runtime port.
 
 ## Alternatives considered
 
@@ -82,8 +82,11 @@ current CLI feedback without making non-terminal callers emulate a TTY.
 
 This change deliberately does not alter provider prompts, saved Grounding
 schema, session selection, proposal semantics, checkpoint payloads, error text,
-or CLI transcript content. The existing `memcommit.adapters.console.commands.atomize.grounding`
-functions remain supported during the migration.
+or CLI transcript content. The unused command-level Grounding wrappers and the
+former `adapters.interfaces.cli.atomize_grounding` path were deliberately
+removed rather than kept as compatibility facades. This changes internal
+import compatibility but not provider prompts, saved schemas, CLI options, or
+transcript content.
 
 The Store adapter still contains the existing transaction mechanics as one
 focused runtime module. A later repository abstraction may split dialogue CAS

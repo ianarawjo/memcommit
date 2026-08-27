@@ -1,4 +1,4 @@
-"""Interactive and snapshot views over one saved atomize workbench."""
+"""Interactive and snapshot views over one saved Atomize workbench."""
 
 from __future__ import annotations
 

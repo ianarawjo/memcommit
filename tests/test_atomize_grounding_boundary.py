@@ -48,13 +48,18 @@ def test_grounding_application_and_runtime_do_not_import_commands() -> None:
         assert not any(name.startswith("memcommit.adapters.console.commands") for name in imports)
 
 
-def test_command_grounding_module_is_a_compatibility_facade() -> None:
-    source = (ROOT / "src/memcommit/adapters/console/commands/atomize/grounding.py").read_text(
-        encoding="utf-8"
+def test_command_grounding_module_is_a_provider_free_renderer() -> None:
+    path = ROOT / "src/memcommit/adapters/console/commands/atomize/grounding.py"
+    source = path.read_text(encoding="utf-8")
+    imports = _imports(path)
+
+    assert "def render_grounding_session" in source
+    assert not any(
+        name.startswith("memcommit.application.operations.atomize.grounding_")
+        for name in imports
     )
-    assert len(source.splitlines()) < 150
-    assert "MemoryStoreAtomizeGroundingPort" in source
-    assert "AutoCheckpoint" not in source
+    assert not any(name.startswith("memcommit.persistence") for name in imports)
+    assert "MemoryStore" not in source
     assert "assess_atomize_grounding_turn" not in source
 
 

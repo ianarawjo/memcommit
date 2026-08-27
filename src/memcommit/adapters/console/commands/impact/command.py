@@ -28,7 +28,7 @@ from memcommit.application.operations.atomize.workbench import (
     atomize_workbench_declared_frames,
     atomize_workbench_response_digest,
 )
-from memcommit.adapters.interfaces.tui.operations.atomize.screen import (
+from memcommit.adapters.console.commands.atomize.workbench.screen import (
     render_atomize_workbench_snapshot,
     run_atomize_workbench_shell,
 )

@@ -43,7 +43,7 @@
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.atomize.workbench_shell",
+      "canonical_module": "memcommit.adapters.console.commands.atomize.workbench.screen",
       "legacy_module": "memcommit.commands.atomize_workbench_shell",
       "owner": "atomize",
       "public_exports": [],

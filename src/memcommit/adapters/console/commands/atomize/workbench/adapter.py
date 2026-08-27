@@ -8,7 +8,7 @@ import typer
 
 from memcommit.application.operations.atomize.domain import AtomizeAnalysisSession
 from memcommit.application.operations.atomize.workbench import AtomizeWorkbenchSession
-from memcommit.adapters.interfaces.tui.operations.atomize.screen import (
+from memcommit.adapters.console.commands.atomize.workbench.screen import (
     render_atomize_workbench_snapshot,
     run_atomize_workbench_shell,
 )

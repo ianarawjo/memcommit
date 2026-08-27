@@ -2,11 +2,10 @@
 
 This ordered replay records the local Atomize in-place Apply path after moving
 materialization and terminal receipt persistence behind typed application and
-runtime ports. It was replayed again after the saved-workbench screen moved to
-`memcommit.adapters.interfaces.tui.operations.atomize`; the command compatibility path
-is not used by the recorder. The semantic assessment, explicit `--save`
-command boundary, ordinary success receipt, and visible terminal grammar remain
-unchanged.
+runtime ports. The recorder now imports the saved-workbench screen from
+`memcommit.adapters.console.commands.atomize.workbench`; only the owning module
+moved, while the semantic assessment, explicit `--save` command boundary,
+ordinary success receipt, and visible terminal grammar remain unchanged.
 
 ## Environment
 
