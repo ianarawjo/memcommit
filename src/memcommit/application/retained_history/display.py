@@ -6,7 +6,7 @@ from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from typing import Any, Literal
 
-from memcommit.retained_history.command_history import command_unit_uid
+from memcommit.application.retained_history.command_history import command_unit_uid
 
 
 HistoryBadgeStyle = Literal[

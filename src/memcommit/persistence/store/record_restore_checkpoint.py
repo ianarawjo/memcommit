@@ -17,7 +17,7 @@ from functools import wraps
 from pathlib import Path
 from typing import Any, Callable, Iterable, Iterator, Literal, Optional
 
-from memcommit.retained_history.checkpoint_frames import map_restorable_checkpoint_frames
+from memcommit.application.retained_history.checkpoint_frames import map_restorable_checkpoint_frames
 from memcommit.context import AutoCheckpoint, Checkpoint, Context, Memory, MemoryRef
 from memcommit.context_targeting.naming import (
     RESERVED_CONTEXT_SEGMENTS,
@@ -30,7 +30,7 @@ from memcommit.context_targeting.navigation import (
     record_current_context_transition,
     rewrite_context_navigation_names,
 )
-from memcommit.retained_history.context_lifecycle import (
+from memcommit.application.retained_history.context_lifecycle import (
     ContextLifecycleEvent,
     PREVIOUS_CHECKPOINT_NONE,
     PREVIOUS_CHECKPOINT_RECORDED,
@@ -52,7 +52,7 @@ from memcommit.application.authority.write_protection import (
     WriteProtectionRegistryError,
     WriteProtectionState,
 )
-from memcommit.retained_history.memory_lineage import (
+from memcommit.application.retained_history.memory_lineage import (
     MemoryLineageEdge,
     checkpoint_memory_lineage_edges,
     memory_content_sha256,
@@ -586,7 +586,7 @@ class RecordRestoreCheckpointStoreMixin:
         atomicity for multi-Context Update commands; as elsewhere in this
         prototype, a machine crash can still interrupt several file replaces.
         """
-        from memcommit.retained_history.command_history import (
+        from memcommit.application.retained_history.command_history import (
             CommandHistoryError,
             CommandRestoreResult,
             build_command_stacks,
@@ -823,7 +823,7 @@ class RecordRestoreCheckpointStoreMixin:
         changed since the original command.
         """
 
-        from memcommit.retained_history.command_history import (
+        from memcommit.application.retained_history.command_history import (
             CommandHistoryError,
             CommandRestoreResult,
             branch_tree_receipt,
@@ -1237,7 +1237,7 @@ class RecordRestoreCheckpointStoreMixin:
         place. Every member receives the same restoration receipt, so neither
         a partial tree nor an incomplete redo can enter the global stack.
         """
-        from memcommit.retained_history.command_history import (
+        from memcommit.application.retained_history.command_history import (
             CommandRestoreResult,
             command_restore_metadata,
         )
@@ -1650,7 +1650,7 @@ class RecordRestoreCheckpointStoreMixin:
 
         from memcommit.application.operations.atomize.domain import AtomizeAnalysisSession
         from memcommit.application.operations.atomize.workbench import atomize_workbench_record_digest
-        from memcommit.retained_history.command_history import (
+        from memcommit.application.retained_history.command_history import (
             CommandRestoreResult,
             command_restore_metadata,
         )
@@ -2093,7 +2093,7 @@ class RecordRestoreCheckpointStoreMixin:
         restore the same identity and history, including every restoration
         receipt, without copying Memory text into lifecycle metadata.
         """
-        from memcommit.retained_history.command_history import (
+        from memcommit.application.retained_history.command_history import (
             CommandRestoreResult,
             command_restore_metadata,
         )
@@ -2781,7 +2781,7 @@ class RecordRestoreCheckpointStoreMixin:
         Undo/Redo cannot split the recovery unit later.
         """
 
-        from memcommit.retained_history.checkpoint_catalog import (
+        from memcommit.application.retained_history.checkpoint_catalog import (
             CheckpointUnitRevertMember,
             CheckpointUnitRevertResult,
             ResolvedCheckpointUnit,

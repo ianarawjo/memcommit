@@ -6,7 +6,7 @@ from dataclasses import dataclass
 
 from memcommit.application.authority.access import resolve_context_access
 from memcommit.context import Context
-from memcommit.retained_history.memory_history_reconstruction.memory_history_construction import (
+from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
     MemoryHistory,
     reconstruct_memory_history,
 )

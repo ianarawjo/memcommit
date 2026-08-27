@@ -128,7 +128,7 @@ def test_production_translate_consumers_use_operation_owners() -> None:
         "src/memcommit/application/operations/translate/materialization.py",
         "src/memcommit/application/ops.py",
         "src/memcommit/application/operations/profile/model.py",
-        "src/memcommit/retained_history/memory_history_reconstruction/memory_history_event_derivation.py",
+        "src/memcommit/application/retained_history/memory_history_reconstruction/memory_history_event_derivation.py",
         "src/memcommit/persistence/store/operation_state.py",
         "src/memcommit/persistence/store/context_memory.py",
         "src/memcommit/persistence/store/record_restore_checkpoint.py",

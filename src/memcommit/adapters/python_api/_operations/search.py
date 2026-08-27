@@ -23,7 +23,7 @@ from memcommit.application.operations.search.application import (
     FindSearchResponse,
 )
 from memcommit.application.operations.search.runtime import execute_find_search
-from memcommit.retained_history.reconstruction import HistoryError
+from memcommit.application.retained_history.reconstruction import HistoryError
 from memcommit.application.operations.log.search import HistorySearchError
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError

@@ -23,7 +23,7 @@ from functools import wraps
 from pathlib import Path
 from typing import Any, Callable, Iterable, Iterator, Literal, Optional
 
-from memcommit.retained_history.checkpoint_frames import map_restorable_checkpoint_frames
+from memcommit.application.retained_history.checkpoint_frames import map_restorable_checkpoint_frames
 from memcommit.context import AutoCheckpoint, Checkpoint, Context, Memory, MemoryRef
 from memcommit.context_targeting.naming import (
     RESERVED_CONTEXT_SEGMENTS,
@@ -36,7 +36,7 @@ from memcommit.context_targeting.navigation import (
     record_current_context_transition,
     rewrite_context_navigation_names,
 )
-from memcommit.retained_history.context_lifecycle import (
+from memcommit.application.retained_history.context_lifecycle import (
     ContextLifecycleEvent,
     PREVIOUS_CHECKPOINT_NONE,
     PREVIOUS_CHECKPOINT_RECORDED,
@@ -58,7 +58,7 @@ from memcommit.application.authority.write_protection import (
     WriteProtectionRegistryError,
     WriteProtectionState,
 )
-from memcommit.retained_history.memory_lineage import (
+from memcommit.application.retained_history.memory_lineage import (
     MemoryLineageEdge,
     checkpoint_memory_lineage_edges,
     memory_content_sha256,
@@ -487,7 +487,7 @@ def _rewrite_context_pointers(
                 collisions.add(target_name)
             selector_names[target_name] = "context_ref"
         elif kind == "context_snapshot_ref":
-            from memcommit.retained_history.context_snapshot import ContextSnapshotRef
+            from memcommit.application.retained_history.context_snapshot import ContextSnapshotRef
 
             snapshot = ContextSnapshotRef.from_dict(item)
             target_name = snapshot.target_context_name
@@ -634,7 +634,7 @@ def _rewrite_branched_context_pointers(
             # external to the local subtree UID remapping.
             ordinary_names.add(name)
         elif kind == "context_snapshot_ref":
-            from memcommit.retained_history.context_snapshot import ContextSnapshotRef
+            from memcommit.application.retained_history.context_snapshot import ContextSnapshotRef
 
             snapshot = ContextSnapshotRef.from_dict(item)
             ordinary_names.add(snapshot.target_context_name)

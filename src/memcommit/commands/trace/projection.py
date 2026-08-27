@@ -9,7 +9,7 @@ from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 from prompt_toolkit.formatted_text.base import StyleAndTextTuples
 
-from memcommit.retained_history.display import (
+from memcommit.application.retained_history.display import (
     HistoryDisplayBadge,
     HistoryDisplayRow,
     HistoryRowSegment,
@@ -28,14 +28,14 @@ from memcommit.interfaces.tui.core.theme import (
     semantic_action_style,
 )
 from memcommit.interfaces.tui.viewers.read_only import run_read_only_viewer
-from memcommit.retained_history.memory_history_reconstruction.retained_record_verification import (
+from memcommit.application.retained_history.memory_history_reconstruction.retained_record_verification import (
     MemoryState,
     MemoryHistoryContextTransition,
 )
-from memcommit.retained_history.memory_history_reconstruction.memory_history_event_derivation import (
+from memcommit.application.retained_history.memory_history_reconstruction.memory_history_event_derivation import (
     MemoryHistoryEvent,
 )
-from memcommit.retained_history.memory_history_reconstruction.memory_history_construction import (
+from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
     MemoryHistory,
 )
 

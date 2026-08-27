@@ -27,7 +27,7 @@ from memcommit.atomize_grounding_provider import (
 from memcommit.atomize_workbench import create_atomize_workbench
 from memcommit.adapters.console.entrypoint import app
 from memcommit.context import AutoCheckpoint, Memory, MemoryRef
-from memcommit.retained_history.memory_history_reconstruction.memory_history_construction import (
+from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
     reconstruct_memory_history,
 )
 from memcommit.rationale import build_rationale

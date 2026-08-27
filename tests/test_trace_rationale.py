@@ -14,7 +14,7 @@ from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.add import command as add_command
 from memcommit.context import AutoCheckpoint, Memory
 from memcommit.findings import AmbiguityFinding, AmbiguityReport
-from memcommit.retained_history.memory_history_reconstruction.memory_history_construction import (
+from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
     reconstruct_memory_history,
 )
 from memcommit.rationale import build_rationale

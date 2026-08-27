@@ -13,7 +13,7 @@ from typing import Any, Literal
 
 from memcommit.context import Context, Memory
 from memcommit.persistence.store import MemoryStore, canonical_context_record
-from memcommit.retained_history.temporal import direct_memory_deltas
+from memcommit.application.retained_history.temporal import direct_memory_deltas
 
 
 HistoryTransitionKind = Literal[

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.retained_history.command_history import (
+from memcommit.application.retained_history.command_history import (
     CommandHistoryError,
     CommandRestoreResult,
     RestoreDirection,

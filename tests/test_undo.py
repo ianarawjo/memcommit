@@ -8,7 +8,7 @@ import memcommit.application.ops as ops
 from memcommit.command_history import CommandHistoryError
 from memcommit.adapters.console.entrypoint import app
 from memcommit.history import build_history
-from memcommit.retained_history.memory_history_reconstruction.memory_history_construction import (
+from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
     reconstruct_memory_history,
 )
 from memcommit.store import MemoryStore

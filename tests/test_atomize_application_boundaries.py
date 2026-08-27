@@ -25,7 +25,7 @@ from memcommit.application.operations.atomize.runtime import (
 from memcommit.atomize_workflow import open_or_create_atomize_workbench
 from memcommit.commands.atomize.command import cmd as atomize_command
 from memcommit.context import AutoCheckpoint, Memory
-from memcommit.retained_history.memory_history_reconstruction.memory_history_construction import (
+from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
     reconstruct_memory_history,
 )
 from memcommit.store import MemoryStore

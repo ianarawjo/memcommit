@@ -67,7 +67,7 @@ from memcommit.infrastructure.providers.subscription import (
     connect_codex_chatgpt_provider,
 )
 from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.retained_history.memory_history_reconstruction.retained_record_verification import (
+from memcommit.application.retained_history.memory_history_reconstruction.retained_record_verification import (
     MemoryHistoryReconstructionError,
 )
 from memcommit.application.operations.profile.model import ProfileError, authority_grant_snapshot_lock

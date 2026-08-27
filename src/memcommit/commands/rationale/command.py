@@ -29,11 +29,11 @@ from memcommit.interfaces.console.text import (
     display_escape_text,
     safe_terminal_text,
 )
-from memcommit.retained_history.granted_provenance import (
+from memcommit.application.retained_history.granted_provenance import (
     GrantedMemoryTraceReport,
     build_granted_memory_trace,
 )
-from memcommit.retained_history.context_history import (
+from memcommit.application.retained_history.context_history import (
     ContextTraceReport,
     build_context_trace,
     current_context_trace,
@@ -47,7 +47,7 @@ from memcommit.context_targeting.report_items import (
     resolve_local_memory_report_target,
     resolve_readable_memory_target,
 )
-from memcommit.retained_history.memory_history_reconstruction.retained_record_verification import (
+from memcommit.application.retained_history.memory_history_reconstruction.retained_record_verification import (
     MemoryHistoryReconstructionError,
 )
 from memcommit.application.operations.reference.provenance import (

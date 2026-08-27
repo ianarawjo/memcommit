@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from memcommit.context import Context, Memory
-from memcommit.retained_history.reconstruction import (
+from memcommit.application.retained_history.reconstruction import (
     HistoryEvidence,
     HistoryTimeline,
     HistoryTransitionKind,

@@ -192,7 +192,7 @@ def _closed_import_contexts(
     reference and avoids silently transferring query-only authority.
     """
 
-    from memcommit.retained_history.context_snapshot import ContextSnapshotRef
+    from memcommit.application.retained_history.context_snapshot import ContextSnapshotRef
 
     source_by_name = {context.name: context for context in source_contexts}
     imported: list[Context] = []

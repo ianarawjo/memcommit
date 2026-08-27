@@ -14,16 +14,16 @@ from typing import Any, Iterable, Literal
 import uuid
 
 from memcommit.application.operations.chunk.domain import chunk_content
-from memcommit.retained_history.command_history import (
+from memcommit.application.retained_history.command_history import (
     CommandHistoryError,
     branch_tree_receipt,
 )
 from memcommit.context import Context, Memory
-from memcommit.retained_history.reconstruction import (
+from memcommit.application.retained_history.reconstruction import (
     HistoryError,
     flatten_checkpoint_entries,
 )
-from memcommit.retained_history.memory_lineage import (
+from memcommit.application.retained_history.memory_lineage import (
     MemoryLineageEdge,
     parse_memory_lineage_receipt,
 )

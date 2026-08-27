@@ -198,7 +198,7 @@ def checkpoint_memory_lineage_edges(
     accepted: list[MemoryLineageEdge] = []
     seen: set[MemoryLineageEdge] = set()
     # Import locally because history reconstruction itself depends on Store.
-    from memcommit.retained_history.reconstruction import HistoryError, flatten_checkpoint_entries
+    from memcommit.application.retained_history.reconstruction import HistoryError, flatten_checkpoint_entries
 
     for physical in histories:
         try:

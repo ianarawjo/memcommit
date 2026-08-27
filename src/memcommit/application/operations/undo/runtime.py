@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.retained_history.command_history import CommandRestoreResult
+from memcommit.application.retained_history.command_history import CommandRestoreResult
 from memcommit.application.operations.restoration.runtime import restore_context_command
 from memcommit.persistence.store import MemoryStore
 

@@ -10,7 +10,7 @@ import json
 from typing import get_args
 import unicodedata
 
-from memcommit.retained_history.memory_history_reconstruction.memory_history_event_derivation import (
+from memcommit.application.retained_history.memory_history_reconstruction.memory_history_event_derivation import (
     MemoryHistoryEventKind,
 )
 

@@ -13,11 +13,11 @@ from typing import Any, Literal
 import uuid
 
 from memcommit.context import Context
-from memcommit.retained_history.memory_lineage import memory_content_sha256
+from memcommit.application.retained_history.memory_lineage import memory_content_sha256
 from memcommit.persistence.store import MemoryStore, context_record_digest
-from memcommit.retained_history.temporal import direct_memory_deltas
+from memcommit.application.retained_history.temporal import direct_memory_deltas
 from memcommit.application.operations.translate.runtime import TRANSLATION_TARGET_CHAR_LIMIT
-from memcommit.retained_history.memory_history_reconstruction.retained_record_verification import (
+from memcommit.application.retained_history.memory_history_reconstruction.retained_record_verification import (
     MemoryHistoryChildEvidence,
     MemoryHistoryCommandContext,
     MemoryHistoryCommandOperation,

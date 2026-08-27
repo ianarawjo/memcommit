@@ -26,7 +26,7 @@ from memcommit.context import (
 from memcommit.context_targeting.loading import load_context_scope
 from memcommit.goal_focus import inline_goal_focus
 from memcommit.goal_focus_runtime import freeze_goal_focus_operand
-from memcommit.retained_history.memory_history_reconstruction.memory_history_construction import (
+from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
     reconstruct_memory_history,
 )
 from memcommit.resolution_workbench import ResolutionWorkbenchAction

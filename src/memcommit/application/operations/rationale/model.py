@@ -15,13 +15,13 @@ from typing import Callable, Protocol
 import unicodedata
 
 from memcommit.context import Context, Memory
-from memcommit.retained_history.memory_history_reconstruction.retained_record_verification import (
+from memcommit.application.retained_history.memory_history_reconstruction.retained_record_verification import (
     MemoryState,
 )
-from memcommit.retained_history.memory_history_reconstruction.memory_history_event_derivation import (
+from memcommit.application.retained_history.memory_history_reconstruction.memory_history_event_derivation import (
     MemoryHistoryEvent,
 )
-from memcommit.retained_history.memory_history_reconstruction.memory_history_construction import (
+from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
     MemoryHistory,
 )
 from memcommit.infrastructure.providers.subscription import QueryProviderError

@@ -15,10 +15,10 @@ from memcommit.context_targeting.readable_catalog import (
 )
 from memcommit.context import Context, Memory
 from memcommit.application.authority.derived_policy import authorize_combination
-from memcommit.retained_history.memory_history_reconstruction.retained_record_verification import (
+from memcommit.application.retained_history.memory_history_reconstruction.retained_record_verification import (
     MemoryState,
 )
-from memcommit.retained_history.memory_history_reconstruction.memory_history_construction import (
+from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
     MemoryHistoryCandidate,
     MemoryHistory,
     reconstruct_memory_history,

@@ -14,7 +14,7 @@ from memcommit.meld import (
     MeldProposal,
     MeldSession,
 )
-from memcommit.retained_history.memory_history_reconstruction.memory_history_construction import (
+from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
     reconstruct_memory_history,
 )
 from memcommit.store import MemoryStore

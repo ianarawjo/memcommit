@@ -15,7 +15,7 @@ from memcommit.context import (
     MemoryRef,
     QueryContextRef,
 )
-from memcommit.retained_history.memory_history_reconstruction.memory_history_construction import (
+from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
     reconstruct_memory_history,
 )
 from memcommit.query_provider import QueryProviderError

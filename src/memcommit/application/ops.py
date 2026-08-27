@@ -265,7 +265,7 @@ def reference_context(
     and self-reference checks without importing Store or CLI concerns.
     """
 
-    from memcommit.retained_history.context_snapshot import ContextSnapshotRef
+    from memcommit.application.retained_history.context_snapshot import ContextSnapshotRef
 
     if not isinstance(snapshot, ContextSnapshotRef):
         raise TypeError("Context Reference requires a ContextSnapshotRef.")
@@ -467,7 +467,7 @@ def _copy_context_for_branch(
         uid=str(uuid.uuid4()),
         name=validate_portable_context_name(new_name),
     )
-    from memcommit.retained_history.context_snapshot import ContextSnapshotRef
+    from memcommit.application.retained_history.context_snapshot import ContextSnapshotRef
 
     uid_map = _branch_memory_uid_map(
         ctx,
@@ -586,7 +586,7 @@ def branch_subtree(
         )
         for source in sources
     }
-    from memcommit.retained_history.context_snapshot import ContextSnapshotRef
+    from memcommit.application.retained_history.context_snapshot import ContextSnapshotRef
 
     # Populate every target Memory first so an internal live reference can
     # bind to the independently owned target occurrence regardless of Context

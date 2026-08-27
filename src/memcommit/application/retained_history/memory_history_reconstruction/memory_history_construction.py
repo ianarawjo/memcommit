@@ -13,7 +13,7 @@ from typing import Iterable, Literal, Sequence
 
 from memcommit.context import Context
 from memcommit.persistence.store import MemoryStore
-from memcommit.retained_history.memory_history_reconstruction.retained_record_verification import (
+from memcommit.application.retained_history.memory_history_reconstruction.retained_record_verification import (
     MemoryHistoryContextTransition,
     MemoryHistoryReconstructionError,
     MemoryState,
@@ -26,7 +26,7 @@ from memcommit.retained_history.memory_history_reconstruction.retained_record_ve
     _frame_from_snapshot,
     _recorded_merge_transition,
 )
-from memcommit.retained_history.memory_history_reconstruction.memory_history_event_derivation import (
+from memcommit.application.retained_history.memory_history_reconstruction.memory_history_event_derivation import (
     MemoryHistoryEvent,
     derive_memory_history_events,
 )
