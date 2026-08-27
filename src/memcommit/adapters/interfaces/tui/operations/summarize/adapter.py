@@ -6,7 +6,9 @@ from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
     safe_terminal_text,
 )
-from memcommit.adapters.interfaces.summarize import summarize_scope_label
+from memcommit.adapters.console.commands.summarize.scope_label import (
+    summarize_scope_label,
+)
 from memcommit.adapters.interfaces.tui.operations.summarize.model import (
     SummarizeClipboardProjection,
     SummarizeTuiOutcome,
