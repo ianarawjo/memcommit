@@ -108,7 +108,16 @@ def test_command_group_error_contract_keeps_exit_and_suggestion_order() -> None:
 
 
 def test_legacy_command_group_facade_defines_no_behavior() -> None:
-    path = REPOSITORY_ROOT / "src" / "memcommit" / "commands" / "shared" / "command_group.py"
+    path = (
+        REPOSITORY_ROOT
+        / "src"
+        / "memcommit"
+        / "adapters"
+        / "console"
+        / "commands"
+        / "shared"
+        / "command_group.py"
+    )
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
 
     assert not any(
@@ -136,7 +145,14 @@ def test_legacy_command_group_facade_defines_no_behavior() -> None:
 
 
 def test_clean_command_groups_import_the_interface_owner() -> None:
-    commands = REPOSITORY_ROOT / "src" / "memcommit" / "commands"
+    commands = (
+        REPOSITORY_ROOT
+        / "src"
+        / "memcommit"
+        / "adapters"
+        / "console"
+        / "commands"
+    )
 
     for filename in CANONICAL_CONSUMERS:
         source = (commands / filename).read_text(encoding="utf-8")

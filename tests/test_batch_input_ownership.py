@@ -49,7 +49,16 @@ assert sys.modules[{OWNER_MODULE!r}] is canonical
 
 
 def test_legacy_batch_input_facade_defines_no_behavior() -> None:
-    path = REPOSITORY_ROOT / "src" / "memcommit" / "commands" / "shared" / "batch_input.py"
+    path = (
+        REPOSITORY_ROOT
+        / "src"
+        / "memcommit"
+        / "adapters"
+        / "console"
+        / "commands"
+        / "shared"
+        / "batch_input.py"
+    )
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
 
     assert not any(
@@ -71,8 +80,14 @@ def test_legacy_monkeypatch_changes_canonical_stdin(monkeypatch) -> None:
 
 def test_add_and_edit_commands_import_the_interface_owner() -> None:
     for filename in ("add/command.py", "edit/command.py"):
-        source = (REPOSITORY_ROOT / "src" / "memcommit" / "commands" / filename).read_text(
-            encoding="utf-8"
-        )
+        source = (
+            REPOSITORY_ROOT
+            / "src"
+            / "memcommit"
+            / "adapters"
+            / "console"
+            / "commands"
+            / filename
+        ).read_text(encoding="utf-8")
         assert "from memcommit.adapters.interfaces.cli.batch_input import" in source
         assert "from memcommit.adapters.console.commands.shared.batch_input import" not in source

@@ -49,7 +49,16 @@ assert sys.modules[{OWNER_MODULE!r}] is canonical
 
 
 def test_legacy_paste_input_facade_defines_no_behavior() -> None:
-    path = REPOSITORY_ROOT / "src" / "memcommit" / "commands" / "shared" / "paste_input.py"
+    path = (
+        REPOSITORY_ROOT
+        / "src"
+        / "memcommit"
+        / "adapters"
+        / "console"
+        / "commands"
+        / "shared"
+        / "paste_input.py"
+    )
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
 
     assert not any(
@@ -77,7 +86,14 @@ def test_legacy_monkeypatch_changes_canonical_capture_globals(monkeypatch) -> No
 
 def test_add_command_imports_the_interface_owner() -> None:
     source = (
-        REPOSITORY_ROOT / "src" / "memcommit" / "commands" / "add" / "command.py"
+        REPOSITORY_ROOT
+        / "src"
+        / "memcommit"
+        / "adapters"
+        / "console"
+        / "commands"
+        / "add"
+        / "command.py"
     ).read_text(encoding="utf-8")
 
     assert "from memcommit.adapters.interfaces.tui.components.paste_input import (" in source
