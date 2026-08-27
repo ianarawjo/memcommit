@@ -1,4 +1,4 @@
-"""Lazy public CLI surface for the literal_find command package."""
+"""Lazy public CLI surface for the find command package."""
 
 from memcommit.adapters.console.commands import _load_entrypoint_attribute
 

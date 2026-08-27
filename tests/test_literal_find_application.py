@@ -159,7 +159,7 @@ def test_literal_find_application_does_not_depend_on_reference_presentation():
     application_imports = imported_modules(
         root / "src/memcommit/application/operations/find/literal_application.py"
     )
-    projection_imports = imported_modules(root / "src/memcommit/adapters/interfaces/literal_find.py")
+    projection_imports = imported_modules(root / "src/memcommit/adapters/console/commands/find/source_row.py")
 
     assert not any(
         name.startswith(("memcommit.adapters.interfaces", "memcommit.source_projection"))

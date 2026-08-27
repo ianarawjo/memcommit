@@ -654,9 +654,9 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.literal_find.command",
+      "canonical_module": "memcommit.adapters.console.commands.find.command",
       "legacy_module": "memcommit.commands.literal_find",
-      "owner": "literal_find",
+      "owner": "find",
       "public_exports": [
         "cmd"
       ],

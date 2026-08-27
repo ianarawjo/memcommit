@@ -94,7 +94,7 @@ operation evidence ledger.
 | `memcommit.commands.init` | `memcommit.adapters.console.commands.init.command` | command-entry | `init` |
 | `memcommit.commands.init_study` | `memcommit.adapters.console.commands.init_study.command` | command-entry | `init_study` |
 | `memcommit.commands.list_memories` | `memcommit.adapters.console.commands.list_memories.command` | command-entry | `list_memories` |
-| `memcommit.commands.literal_find` | `memcommit.adapters.console.commands.literal_find.command` | command-entry | `literal_find` |
+| `memcommit.commands.literal_find` | `memcommit.adapters.console.commands.find.command` | command-entry | `find` |
 | `memcommit.commands.log` | `memcommit.adapters.console.commands.log.command` | command-entry | `log` |
 | `memcommit.commands.meld` | `memcommit.adapters.console.commands.meld.command` | command-entry | `meld` |
 | `memcommit.commands.meld_sessions` | `memcommit.adapters.console.commands.meld.sessions` | command-owned-support | `meld` |

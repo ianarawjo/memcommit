@@ -25,7 +25,7 @@ from memcommit.adapters.interfaces.cli.find import (
 )
 from memcommit.adapters.interfaces.console.terminal import require_interactive_terminal
 from memcommit.adapters.interfaces.console.text import safe_terminal_text
-from memcommit.adapters.interfaces.literal_find import render_literal_find_reference_row
+from memcommit.adapters.console.commands.find.source_row import render_literal_find_reference_row
 from memcommit.adapters.interfaces.tui.components.focus import (
     FocusSurface,
     SurfaceFocusController,

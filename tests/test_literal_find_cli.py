@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import memcommit.adapters.console.commands.literal_find.command as literal_find_command
+import memcommit.adapters.console.commands.find.command as literal_find_command
 import memcommit.application.ops as ops
 from typer.testing import CliRunner
 

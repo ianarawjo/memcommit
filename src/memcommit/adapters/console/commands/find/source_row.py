@@ -1,4 +1,4 @@
-"""Terminal-independent projection of literal Find matches as Source rows."""
+"""Project deterministic Find matches as compact console Source rows."""
 
 from __future__ import annotations
 

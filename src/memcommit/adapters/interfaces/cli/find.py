@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.adapters.interfaces.literal_find import render_literal_find_reference_row
+from memcommit.adapters.console.commands.find.source_row import render_literal_find_reference_row
 from memcommit.adapters.interfaces.console.text import safe_terminal_text
 from memcommit.application.operations.find.literal_application import (
     LiteralFindMatch,

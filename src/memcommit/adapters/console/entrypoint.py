@@ -22,7 +22,7 @@ from memcommit.adapters.console.commands import (
     distill,
     elaborate,
     edit,
-    literal_find,
+    find,
     search,
     find_ambiguities,
     find_conflicts,
@@ -328,7 +328,7 @@ app.command(
 app.command(
     "find",
     help=operation_summary("find"),
-)(literal_find.cmd)
+)(find.cmd)
 app.command(
     "find-redundancies",
     help=operation_summary("find-redundancies"),
