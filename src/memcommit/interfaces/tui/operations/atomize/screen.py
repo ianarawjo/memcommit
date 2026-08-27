@@ -41,7 +41,7 @@ from memcommit.resolution.workbench import (
     ResolutionNavigation,
     ResolutionWorkbenchAction,
 )
-from memcommit.reviewing.result_workbench import (
+from memcommit.application.reviewing.result_workbench import (
     ResultWorkbenchView,
 )
 from memcommit.selection.tui import choice_marker

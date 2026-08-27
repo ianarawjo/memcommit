@@ -11,7 +11,7 @@ from memcommit.operations.compare.ledger.model import ComparisonAnalysis, compar
 from memcommit.interfaces.presentation.comparison import render_comparison
 from memcommit.operations.meld.model import MeldSession
 from memcommit.operations.meld.resolution_adapter import MeldResolutionWorkbenchAdapter
-from memcommit.reviewing.report import ReviewReportController
+from memcommit.application.reviewing.report import ReviewReportController
 from memcommit.operations.sever.model import SeverSession
 from memcommit.operations.sever.resolution_adapter import (
     SeverResolutionWorkbenchAdapter,

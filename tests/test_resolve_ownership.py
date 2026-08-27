@@ -133,7 +133,7 @@ def test_production_resolve_consumers_use_the_operation_owner() -> None:
         "src/memcommit/commands/impact/process_local.py",
         "src/memcommit/interfaces/cli/resolve.py",
         "src/memcommit/interfaces/tui/operations/resolve/screen.py",
-        "src/memcommit/reviewing/quality/handoff.py",
+        "src/memcommit/application/reviewing/quality/handoff.py",
         "src/memcommit/operations/resolve/semantic.py",
         "src/memcommit/operations/resolve/targeting.py",
         "src/memcommit/operations/resolve/runtime.py",

@@ -38,7 +38,7 @@ from memcommit.operations.profile.config import (
     profile_store_dir,
 )
 from memcommit.operations.profile.model import ProfileError
-from memcommit.reviewing.quality.handoff import (
+from memcommit.application.reviewing.quality.handoff import (
     QualityFindingHandoff,
     QualityFindingHandoffError,
 )

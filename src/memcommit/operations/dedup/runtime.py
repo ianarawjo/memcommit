@@ -24,7 +24,7 @@ from memcommit.operations.dedup.application import (
     dedup_projection_record,
 )
 from memcommit.operations.dedup.planning import freeze_dedup_plan
-from memcommit.reviewing.direct_item_duplicates import find_exact_duplicate_groups
+from memcommit.application.reviewing.direct_item_duplicates import find_exact_duplicate_groups
 from memcommit.operations.profile.config import ProfileRegistry
 from memcommit.operations.review.model import direct_context_digest
 from memcommit.persistence.store import MemoryStore, context_record_digest

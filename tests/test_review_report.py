@@ -16,7 +16,7 @@ from memcommit.resolution_workbench import (
     ResolutionOption,
     ResolutionWorkbenchView,
 )
-from memcommit.reviewing.report import ReviewReportController
+from memcommit.application.reviewing.report import ReviewReportController
 from memcommit.review_report_adapters import update_review_report
 from memcommit.store import MemoryStore
 from memcommit.update import (

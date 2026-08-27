@@ -12,8 +12,8 @@ from memcommit.interfaces.tui.workbenches.read_report import (
     ReadReportSelectTarget,
     choose_read_report_recent,
 )
-from memcommit.reviewing.read_report import ReadReportError, ReadReportTarget
-from memcommit.reviewing.read_report_recents import (
+from memcommit.application.reviewing.read_report import ReadReportError, ReadReportTarget
+from memcommit.application.reviewing.read_report_recents import (
     read_report_recents,
     revalidate_read_report_recent,
 )

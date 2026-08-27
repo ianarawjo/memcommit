@@ -33,7 +33,7 @@ if TYPE_CHECKING:
         AtomizeImpactReport,
         AtomizeProvider,
     )
-    from memcommit.reviewing.quality.findings import (
+    from memcommit.application.reviewing.quality.findings import (
         AmbiguityReport,
         ConflictReport,
         DuplicateReport,
@@ -949,7 +949,7 @@ def find_redundancies(
     context_name_by_uid: "Mapping[str, str] | None" = None,
 ) -> "DuplicateReport":
     """Find exact DUP and semantic-DUN evidence without mutating *ctx*."""
-    from memcommit.reviewing.quality.findings import find_redundancies as _find_redundancies
+    from memcommit.application.reviewing.quality.findings import find_redundancies as _find_redundancies
 
     return _find_redundancies(
         ctx,
@@ -974,7 +974,7 @@ def find_ambiguities(
     context_name_by_uid: "Mapping[str, str] | None" = None,
 ) -> "AmbiguityReport":
     """Find ambiguous direct Memories without mutating *ctx*."""
-    from memcommit.reviewing.quality.findings import find_ambiguities as _find_ambiguities
+    from memcommit.application.reviewing.quality.findings import find_ambiguities as _find_ambiguities
 
     return _find_ambiguities(
         ctx,
@@ -990,7 +990,7 @@ def find_conflicts(
     context_name_by_uid: "Mapping[str, str] | None" = None,
 ) -> "ConflictReport":
     """Find conflicting direct-Memory pairs without mutating *ctx*."""
-    from memcommit.reviewing.quality.findings import find_conflicts as _find_conflicts
+    from memcommit.application.reviewing.quality.findings import find_conflicts as _find_conflicts
 
     return _find_conflicts(
         ctx,

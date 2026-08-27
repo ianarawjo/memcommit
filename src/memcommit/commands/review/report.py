@@ -28,7 +28,7 @@ from memcommit.responses.resolution import (
     response_target_from_item,
 )
 from memcommit.responses.tui import response_snapshot_lines
-from memcommit.reviewing.report import (
+from memcommit.application.reviewing.report import (
     ReviewReport,
     ReviewReportController,
     ReviewTextFragment,

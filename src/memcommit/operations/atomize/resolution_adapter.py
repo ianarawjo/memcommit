@@ -24,7 +24,7 @@ from memcommit.resolution.workbench import (
     ResolutionWorkbenchView,
     resolution_overview_text,
 )
-from memcommit.reviewing.result_workbench import ResultRef
+from memcommit.application.reviewing.result_workbench import ResultRef
 
 
 def _priority_label(finding: AtomizeWorkbenchFinding) -> str:

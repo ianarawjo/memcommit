@@ -26,7 +26,7 @@ from memcommit.operations.review.model import (
     ReviewError,
     ReviewSession,
 )
-from memcommit.reviewing.session_navigation import SessionWorkbenchNavigation
+from memcommit.application.reviewing.session_navigation import SessionWorkbenchNavigation
 
 
 def _direct_memories(ctx: Context) -> tuple[Memory, ...]:

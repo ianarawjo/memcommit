@@ -5,8 +5,8 @@ from __future__ import annotations
 from datetime import datetime
 
 from memcommit.interfaces.tui.components.operation_launcher.session import SessionPickerEntry
-from memcommit.reviewing.quality.audit import QualityAuditSession
-from memcommit.reviewing.quality.audit_store import QualityAuditStore
+from memcommit.application.reviewing.quality.audit import QualityAuditSession
+from memcommit.application.reviewing.quality.audit_store import QualityAuditStore
 
 
 def _timestamp(session: QualityAuditSession, sessions: QualityAuditStore) -> float:

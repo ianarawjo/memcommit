@@ -20,7 +20,7 @@ import time
 from typing import Literal
 import uuid
 
-from memcommit.reviewing.read_report import ReadReportTarget
+from memcommit.application.reviewing.read_report import ReadReportTarget
 
 
 AttemptStatus = Literal["RUNNING", "COMPLETED", "FAILED", "INTERRUPTED"]

@@ -76,6 +76,14 @@ that name and reason visible but deliberately omits it from the generated alias
 map. This makes retirement an explicit compatibility decision rather than a
 missing target or an untracked deletion.
 
+On 2026-08-27 the existing `memcommit.reviewing` package moved intact to
+`memcommit.application.reviewing`. Its dominant responsibility is coordinating
+quality analysis, review state, and operation handoff, so application is the
+clearest provisional owner. This is deliberately a physical staging move: it
+does not claim that persistence-backed Audit storage or console navigation and
+rendering belong permanently to application. Those narrower responsibilities
+remain candidates for later extraction after their contracts are reviewed.
+
 ## Verification
 
 The pre-relocation full suite and its exact failing node IDs form the behavioral

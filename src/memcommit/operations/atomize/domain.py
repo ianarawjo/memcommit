@@ -22,7 +22,7 @@ from memcommit.context_targeting.memory_focus import (
     MemoryFocusError,
     resolve_memory_focus,
 )
-from memcommit.reviewing.result_workbench import (
+from memcommit.application.reviewing.result_workbench import (
     RESULT_REPORT_SECTION_SOFT_MAX_WORDS,
     RESULT_REPORT_SECTION_TARGET_MIN_WORDS,
 )
@@ -2079,7 +2079,7 @@ def _payload(
     # The aggregate call names the complete pair space instead of asking the
     # model to silently choose likely pairs. The provider-capacity preflight
     # below remains the only aggregate size boundary.
-    from memcommit.reviewing.quality.findings import (
+    from memcommit.application.reviewing.quality.findings import (
         _load_calibration_cases,
     )
     pairs: list[dict[str, str]] = []

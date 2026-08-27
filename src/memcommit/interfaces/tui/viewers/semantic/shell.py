@@ -33,7 +33,7 @@ from memcommit.interfaces.tui.viewers.semantic.controller import (
     SemanticViewerController,
 )
 from memcommit.interfaces.tui.viewers.semantic.model import SemanticViewerDocument
-from memcommit.reviewing.session_navigation import SessionWorkbenchNavigation
+from memcommit.application.reviewing.session_navigation import SessionWorkbenchNavigation
 from prompt_toolkit.widgets import Frame
 
 

@@ -6,7 +6,7 @@ from memcommit.infrastructure.clipboard import write_system_clipboard
 from memcommit.commands.shared.command_progress import CommandProgress
 from memcommit.interfaces.cli.resolve import render_resolve_receipt
 from memcommit.interfaces.tui.operations.resolve import run_resolve_tui
-from memcommit.reviewing.quality.handoff import (
+from memcommit.application.reviewing.quality.handoff import (
     QualityFindingHandoff,
     conflict_handoff_to_resolve_request,
 )

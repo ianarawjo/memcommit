@@ -15,7 +15,7 @@ from memcommit.operations.dedup.application import (
     DEDUP_CONTRACT_VERSION,
 )
 from memcommit.context import Memory
-from memcommit.reviewing.direct_item_duplicates import ExactDuplicateGroup
+from memcommit.application.reviewing.direct_item_duplicates import ExactDuplicateGroup
 
 if TYPE_CHECKING:
     from memcommit.operations.update.model import GrantedUpdateTarget

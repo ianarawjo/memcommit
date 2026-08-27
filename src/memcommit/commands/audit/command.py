@@ -48,24 +48,24 @@ from memcommit.context import Context
 from memcommit.operations.conformance.model import ConformanceError, check_context_conformance
 from memcommit.operations.conformance.runtime import freeze_context_conformance
 from memcommit.authority.derived_policy import authorize_analysis_save
-from memcommit.reviewing.quality.findings import FindingsError, FindingsProvider
+from memcommit.application.reviewing.quality.findings import FindingsError, FindingsProvider
 from memcommit.operations.profile.config import ProfileConfigError
 from memcommit.operations.profile.model import ProfileError
-from memcommit.reviewing.quality.audit import (
+from memcommit.application.reviewing.quality.audit import (
     QualityAuditError,
     QualityAuditKind,
     QualityAuditSession,
     create_quality_audit,
     run_quality_audit,
 )
-from memcommit.reviewing.quality.audit_store import QualityAuditStore
-from memcommit.reviewing.quality.report import (
+from memcommit.application.reviewing.quality.audit_store import QualityAuditStore
+from memcommit.application.reviewing.quality.report import (
     QualityFindingReportItem,
     quality_find_category_label,
     quality_finding_label_parts,
     quality_find_report_summary_text,
 )
-from memcommit.reviewing.quality.workbench import (
+from memcommit.application.reviewing.quality.workbench import (
     QualityFindSourceFrame,
     QualityFindWorkbenchSession,
     quality_find_report_view,

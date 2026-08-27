@@ -81,7 +81,7 @@ def cmd(
                 run_share_unavailable_viewer,
                 run_share_viewer,
             )
-            from memcommit.reviewing.session_navigation import (
+            from memcommit.application.reviewing.session_navigation import (
                 SessionWorkbenchNavigation,
             )
 

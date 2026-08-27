@@ -7,7 +7,7 @@ from memcommit.resolution_workbench import (
     ResolutionMemoryRow,
     ResolutionWorkbenchView,
 )
-from memcommit.reviewing.report import ReviewReportController
+from memcommit.application.reviewing.report import ReviewReportController
 
 
 def test_review_report_snapshot_renders_typed_memory_rows() -> None:

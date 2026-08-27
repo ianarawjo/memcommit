@@ -6,7 +6,7 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 from typing import Literal
 
-from memcommit.reviewing.session_navigation import WorkbenchSection
+from memcommit.application.reviewing.session_navigation import WorkbenchSection
 
 
 ViewerAnchor = Literal["start", "end", "both"]

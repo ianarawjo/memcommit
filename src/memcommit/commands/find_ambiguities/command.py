@@ -34,7 +34,7 @@ from memcommit.interfaces.console.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )
-from memcommit.reviewing.quality.findings import FindingsError
+from memcommit.application.reviewing.quality.findings import FindingsError
 from memcommit.infrastructure.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
@@ -42,7 +42,7 @@ from memcommit.infrastructure.providers.subscription import (
 from memcommit.persistence.store import MemoryStore
 from memcommit.operations.profile.config import ProfileConfigError
 from memcommit.operations.profile.model import ProfileError
-from memcommit.reviewing.quality.workbench import QualityFindSourceFrame
+from memcommit.application.reviewing.quality.workbench import QualityFindSourceFrame
 
 
 def cmd(

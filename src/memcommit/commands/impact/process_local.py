@@ -53,10 +53,10 @@ from memcommit.operations.forget.runtime import (
 from memcommit.interfaces.tui.workbenches.impact import ImpactController
 from memcommit.interfaces.console.text import display_escape_text
 from memcommit.interfaces.tui.operations.forget import choose_forget_setup
-from memcommit.reviewing.memory_diff import MemoryChange
+from memcommit.application.reviewing.memory_diff import MemoryChange
 from memcommit.operations.profile.config import ProfileConfigError
 from memcommit.operations.profile.model import ProfileError
-from memcommit.reviewing.quality.handoff import (
+from memcommit.application.reviewing.quality.handoff import (
     QualityFindingHandoffError,
     conflict_handoff_to_resolve_request,
     quality_finding_handoff_from_json,

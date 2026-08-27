@@ -12,7 +12,7 @@ from dataclasses import dataclass, field
 from typing import Literal
 
 from memcommit.context import Context, Memory
-from memcommit.reviewing.quality.findings import AmbiguityReport
+from memcommit.application.reviewing.quality.findings import AmbiguityReport
 
 
 REVIEW_SCHEMA_VERSION = 2

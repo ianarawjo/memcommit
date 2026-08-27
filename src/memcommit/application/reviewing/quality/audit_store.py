@@ -10,7 +10,7 @@ import uuid
 from pathlib import Path
 from typing import Iterator
 
-from memcommit.reviewing.quality.audit import (
+from memcommit.application.reviewing.quality.audit import (
     QualityAuditError,
     QualityAuditSession,
     quality_audit_record_digest,

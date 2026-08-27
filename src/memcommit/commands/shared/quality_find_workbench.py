@@ -70,7 +70,7 @@ from memcommit.context_targeting.tui.selector import (
     ContextSelectorView,
 )
 from memcommit.authority.derived_policy import authorize_combination
-from memcommit.reviewing.quality.workbench import (
+from memcommit.application.reviewing.quality.workbench import (
     QualityFindKind,
     QualityFindReport,
     QualityFindSourceFrame,
@@ -79,7 +79,7 @@ from memcommit.reviewing.quality.workbench import (
     create_quality_find_workbench,
     quality_find_report_view,
 )
-from memcommit.reviewing.quality.handoff import (
+from memcommit.application.reviewing.quality.handoff import (
     QualityFindingHandoff,
     quality_finding_handoff,
     quality_finding_handoffs,
@@ -87,12 +87,12 @@ from memcommit.reviewing.quality.handoff import (
 from memcommit.operations.dedup.application import DEDUP_ELIGIBLE_RELATIONS
 from memcommit.source_projection.presentation import SourceDisplayValue
 from memcommit.persistence.store import MemoryStore
-from memcommit.reviewing.read_report import (
+from memcommit.application.reviewing.read_report import (
     ReadReportError,
     ReadReportOperation,
     ReadReportTarget,
 )
-from memcommit.reviewing.read_report_recents import (
+from memcommit.application.reviewing.read_report_recents import (
     read_report_recents,
     revalidate_read_report_recent,
 )

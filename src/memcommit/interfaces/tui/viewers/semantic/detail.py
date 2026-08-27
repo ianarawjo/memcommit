@@ -6,7 +6,7 @@ from memcommit.interfaces.console.text import (
     safe_terminal_text,
 )
 from memcommit.resolution.workbench import ResolutionMemoryRow
-from memcommit.reviewing.result_workbench import ResultRef
+from memcommit.application.reviewing.result_workbench import ResultRef
 
 
 def semantic_ref_text(reference: ResultRef) -> str:

@@ -10,7 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Literal, Protocol
 
-from memcommit.reviewing.result_workbench import ResultRef
+from memcommit.application.reviewing.result_workbench import ResultRef
 
 
 RESOLUTION_TEXT_LIMIT = 20_000

@@ -7,7 +7,7 @@ from memcommit.infrastructure.command_ledger.attempts import (
     CommandAttemptError,
     CommandAttemptLedger,
 )
-from memcommit.reviewing.read_report import (
+from memcommit.application.reviewing.read_report import (
     ReadReportError,
     ReadReportOperation,
     ReadReportRecent,

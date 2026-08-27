@@ -67,7 +67,7 @@ from memcommit.interfaces.tui.workbenches.resolution.inline_shell import (
 from memcommit.selection.model import SelectionOption
 from memcommit.selection.state import FlatSelectionState
 from memcommit.selection.tui import render_vertical_choice_rows
-from memcommit.reviewing.session_navigation import SessionWorkbenchNavigation
+from memcommit.application.reviewing.session_navigation import SessionWorkbenchNavigation
 
 
 T = TypeVar("T")

@@ -24,9 +24,9 @@ from memcommit.operations.dedup.application import (
 )
 from memcommit.operations.dedup.runtime import MemoryStoreDedupPort
 from memcommit.operations.profile.config import ProfileRegistry
-from memcommit.reviewing.quality.workbench import QualityFindSourceFrame
-from memcommit.reviewing.quality.handoff import QualityFindingSource
-from memcommit.reviewing.quality.redundancy_scope import RedundancyScopeAnalysis
+from memcommit.application.reviewing.quality.workbench import QualityFindSourceFrame
+from memcommit.application.reviewing.quality.handoff import QualityFindingSource
+from memcommit.application.reviewing.quality.redundancy_scope import RedundancyScopeAnalysis
 from memcommit.persistence.store import MemoryStore, context_record_digest
 
 

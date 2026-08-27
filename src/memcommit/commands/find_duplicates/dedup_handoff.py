@@ -10,7 +10,7 @@ from memcommit.operations.dedup.application import (
 )
 from memcommit.operations.dedup.runtime import MemoryStoreDedupPort
 from memcommit.interfaces.tui.operations.dedup import run_dedup_tui
-from memcommit.reviewing.quality.handoff import QualityFindingHandoff
+from memcommit.application.reviewing.quality.handoff import QualityFindingHandoff
 from memcommit.persistence.store import MemoryStore
 
 

@@ -78,7 +78,7 @@ from memcommit.interfaces.tui.core.text_layout import (
     pad_terminal_text,
     terminal_cell_width,
 )
-from memcommit.reviewing.session_navigation import SessionWorkbenchNavigation
+from memcommit.application.reviewing.session_navigation import SessionWorkbenchNavigation
 
 
 HistoryPickerMode = Literal["log", "revert"]

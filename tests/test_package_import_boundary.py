@@ -251,7 +251,7 @@ blocked = (
     'memcommit.operations.translate.materialization',
     'memcommit.operations.translate.view',
     'memcommit.operations.translate.view_store',
-    'memcommit.reviewing.report',
+    'memcommit.application.reviewing.report',
     'memcommit.reference_application',
     'memcommit.sever_application',
     'memcommit.sever_runtime',

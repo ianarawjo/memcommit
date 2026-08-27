@@ -22,7 +22,7 @@ from memcommit.interfaces.tui.workbenches.findings.document import (
     quality_finding_compact_fragments,
     quality_find_report_header_text,
 )
-from memcommit.reviewing.quality.report import (
+from memcommit.application.reviewing.quality.report import (
     QualityFindBrowserReceipt,
     QualityFindReportView,
     QualityFindingReportItem,

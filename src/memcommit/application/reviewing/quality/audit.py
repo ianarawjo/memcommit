@@ -19,7 +19,7 @@ from typing import Callable, Literal
 
 from memcommit.context import Context, Memory
 from memcommit.operations.conformance.model import ConformanceReport
-from memcommit.reviewing.quality.findings import (
+from memcommit.application.reviewing.quality.findings import (
     AmbiguityFinding,
     AmbiguityReport,
     ConflictFinding,
@@ -33,11 +33,11 @@ from memcommit.reviewing.quality.findings import (
     find_redundancies,
 )
 from memcommit.infrastructure.providers.types import CompletionRun, ProviderIdentity
-from memcommit.reviewing.quality.report import (
+from memcommit.application.reviewing.quality.report import (
     quality_find_category_label,
     quality_find_report_summary_text,
 )
-from memcommit.reviewing.quality.workbench import (
+from memcommit.application.reviewing.quality.workbench import (
     QualityFindResponse,
     QualityFindSourceFrame,
     QualityFindWorkbenchSession,

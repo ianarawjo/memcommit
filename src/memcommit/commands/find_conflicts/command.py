@@ -32,7 +32,7 @@ from memcommit.interfaces.console.text import (
     display_escape_text,
 )
 from memcommit.interfaces.console.identity import collision_safe_uid_prefixes
-from memcommit.reviewing.quality.findings import FindingsError
+from memcommit.application.reviewing.quality.findings import FindingsError
 from memcommit.operations.fit.judgment import FitJudgmentError
 from memcommit.infrastructure.providers.subscription import (
     QueryProviderError,
@@ -42,11 +42,11 @@ from memcommit.persistence.store import MemoryStore
 from memcommit.operations.profile.config import ProfileConfigError
 from memcommit.operations.profile.model import ProfileError
 from memcommit.operations.resolve.application import ResolveError
-from memcommit.reviewing.quality.workbench import (
+from memcommit.application.reviewing.quality.workbench import (
     QualityFindSourceFrame,
     create_quality_find_workbench,
 )
-from memcommit.reviewing.quality.handoff import (
+from memcommit.application.reviewing.quality.handoff import (
     quality_finding_handoff_json,
     quality_finding_handoffs,
 )

@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import ast
 import importlib
 from pathlib import Path
 import pickle
@@ -16,7 +15,7 @@ from tests.legacy_submodule_assertions import (
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 LEGACY_MODULE = "memcommit.review_report"
-CANONICAL_MODULE = "memcommit.reviewing.report"
+CANONICAL_MODULE = "memcommit.application.reviewing.report"
 
 
 def test_review_report_module_identity_is_independent_of_import_order() -> None:
@@ -65,9 +64,9 @@ def test_review_report_legacy_facade_defines_no_behavior() -> None:
 def test_reviewing_package_import_is_lazy() -> None:
     program = """
 import sys
-import memcommit.reviewing
+import memcommit.application.reviewing
 
-assert "memcommit.reviewing.report" not in sys.modules
+assert "memcommit.application.reviewing.report" not in sys.modules
 """
     subprocess.run(
         [sys.executable, "-c", program],
@@ -102,12 +101,17 @@ def test_production_review_report_consumers_use_the_shared_owner() -> None:
     for relative_path in relative_paths:
         source = (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         assert "from memcommit.review_report import" not in source
-        assert "from memcommit.reviewing.report import" in source
+        assert "from memcommit.application.reviewing.report import" in source
 
 
 def test_shared_review_report_does_not_own_operation_adapters() -> None:
     source = (
-        REPOSITORY_ROOT / "src" / "memcommit" / "reviewing" / "report.py"
+        REPOSITORY_ROOT
+        / "src"
+        / "memcommit"
+        / "application"
+        / "reviewing"
+        / "report.py"
     ).read_text(encoding="utf-8")
 
     assert "memcommit.commands" not in source

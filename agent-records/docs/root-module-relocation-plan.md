@@ -86,7 +86,7 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.delete_application | compatibility-facade | centralize-alias | memcommit.operations.delete.application | 0 |
 | memcommit.delete_runtime | compatibility-facade | centralize-alias | memcommit.operations.delete.runtime | 0 |
 | memcommit.derived_policy | shared-concept-implementation | relocate | memcommit.authority.derived_policy | 26 |
-| memcommit.direct_item_duplicates | shared-concept-implementation | relocate | memcommit.reviewing.direct_item_duplicates | 8 |
+| memcommit.direct_item_duplicates | shared-concept-implementation | relocate | memcommit.application.reviewing.direct_item_duplicates | 8 |
 | memcommit.distill | operation-implementation | relocate | memcommit.operations.distill.model | 8 |
 | memcommit.distill_application | compatibility-facade | centralize-alias | memcommit.operations.distill.application | 0 |
 | memcommit.distill_config | operation-implementation | relocate | memcommit.operations.distill.config | 3 |
@@ -115,7 +115,7 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.find_runtime | compatibility-facade | centralize-alias | memcommit.operations.search.runtime | 0 |
 | memcommit.find_scope_evidence | operation-implementation | relocate | memcommit.operations.search.scope_evidence | 2 |
 | memcommit.find_turn_dialogue | operation-implementation | relocate | memcommit.operations.search.turn_dialogue | 1 |
-| memcommit.findings | shared-concept-implementation | relocate | memcommit.reviewing.quality.findings | 15 |
+| memcommit.findings | shared-concept-implementation | relocate | memcommit.application.reviewing.quality.findings | 15 |
 | memcommit.fit | compatibility-facade | centralize-alias | memcommit.operations.fit.ground_report | 1 |
 | memcommit.fit_application | compatibility-facade | centralize-alias | memcommit.operations.fit.application | 0 |
 | memcommit.fit_coherence | compatibility-facade | centralize-alias | memcommit.operations.fit.coherence | 0 |
@@ -173,7 +173,7 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.meld_runtime | compatibility-facade | centralize-alias | memcommit.operations.meld.runtime | 0 |
 | memcommit.meld_session_application | compatibility-facade | centralize-alias | memcommit.operations.meld.session_application | 0 |
 | memcommit.meld_start_application | compatibility-facade | centralize-alias | memcommit.operations.meld.start_application | 0 |
-| memcommit.memory_diff | shared-concept-implementation | relocate | memcommit.reviewing.memory_diff | 12 |
+| memcommit.memory_diff | shared-concept-implementation | relocate | memcommit.application.reviewing.memory_diff | 12 |
 | memcommit.memory_lineage | shared-concept-implementation | relocate | memcommit.retained_history.memory_lineage | 4 |
 | memcommit.memory_transfer_application | compatibility-facade | centralize-alias | memcommit.operations.memory_transfer.application | 0 |
 | memcommit.memory_transfer_runtime | compatibility-facade | centralize-alias | memcommit.operations.memory_transfer.runtime | 0 |
@@ -190,11 +190,11 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.profiles | shared-concept-implementation | relocate | memcommit.operations.profile.model | 87 |
 | memcommit.provenance | shared-concept-implementation | relocate | memcommit.retained_history.provenance | 13 |
 | memcommit.provider_types | shared-concept-implementation | relocate | memcommit.infrastructure.providers.types | 45 |
-| memcommit.quality_audit | shared-concept-implementation | relocate | memcommit.reviewing.quality.audit | 6 |
-| memcommit.quality_audit_store | shared-concept-implementation | relocate | memcommit.reviewing.quality.audit_store | 4 |
-| memcommit.quality_find_report | shared-concept-implementation | relocate | memcommit.reviewing.quality.report | 6 |
-| memcommit.quality_find_workbench | shared-concept-implementation | relocate | memcommit.reviewing.quality.workbench | 11 |
-| memcommit.quality_finding_handoff | shared-concept-implementation | relocate | memcommit.reviewing.quality.handoff | 21 |
+| memcommit.quality_audit | shared-concept-implementation | relocate | memcommit.application.reviewing.quality.audit | 6 |
+| memcommit.quality_audit_store | shared-concept-implementation | relocate | memcommit.application.reviewing.quality.audit_store | 4 |
+| memcommit.quality_find_report | shared-concept-implementation | relocate | memcommit.application.reviewing.quality.report | 6 |
+| memcommit.quality_find_workbench | shared-concept-implementation | relocate | memcommit.application.reviewing.quality.workbench | 11 |
+| memcommit.quality_finding_handoff | shared-concept-implementation | relocate | memcommit.application.reviewing.quality.handoff | 21 |
 | memcommit.query_application | compatibility-facade | centralize-alias | memcommit.operations.query.ordinary_application | 0 |
 | memcommit.query_provider | shared-concept-implementation | relocate | memcommit.infrastructure.providers.subscription | 63 |
 | memcommit.query_reference_application | compatibility-facade | centralize-alias | memcommit.operations.query.reference_application | 0 |
@@ -205,9 +205,9 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.rationale_rules | operation-implementation | relocate | memcommit.operations.rationale.rules | 3 |
 | memcommit.rationale_scope | operation-implementation | relocate | memcommit.operations.rationale.scope | 2 |
 | memcommit.rationale_semantic | operation-implementation | relocate | memcommit.operations.rationale.semantic | 3 |
-| memcommit.read_report | shared-concept-implementation | relocate | memcommit.reviewing.read_report | 7 |
-| memcommit.read_report_recents | shared-concept-implementation | relocate | memcommit.reviewing.read_report_recents | 3 |
-| memcommit.redundancy_scope | shared-concept-implementation | relocate | memcommit.reviewing.quality.redundancy_scope | 3 |
+| memcommit.read_report | shared-concept-implementation | relocate | memcommit.application.reviewing.read_report | 7 |
+| memcommit.read_report_recents | shared-concept-implementation | relocate | memcommit.application.reviewing.read_report_recents | 3 |
+| memcommit.redundancy_scope | shared-concept-implementation | relocate | memcommit.application.reviewing.quality.redundancy_scope | 3 |
 | memcommit.reference_application | compatibility-facade | centralize-alias | memcommit.operations.reference.application | 0 |
 | memcommit.reference_provenance | operation-implementation | relocate | memcommit.operations.reference.provenance | 3 |
 | memcommit.reference_runtime | compatibility-facade | centralize-alias | memcommit.operations.reference.runtime | 0 |
@@ -220,9 +220,9 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.resolve_semantic | operation-implementation | relocate | memcommit.operations.resolve.semantic | 4 |
 | memcommit.resolve_targeting | operation-implementation | relocate | memcommit.operations.resolve.targeting | 1 |
 | memcommit.resource_import | operation-implementation | relocate | memcommit.operations.resource_import.model | 2 |
-| memcommit.result_workbench | shared-concept-implementation | relocate | memcommit.reviewing.result_workbench | 13 |
+| memcommit.result_workbench | shared-concept-implementation | relocate | memcommit.application.reviewing.result_workbench | 13 |
 | memcommit.review | operation-implementation | relocate | memcommit.operations.review.model | 21 |
-| memcommit.review_report | compatibility-facade | centralize-alias | memcommit.reviewing.report | 3 |
+| memcommit.review_report | compatibility-facade | centralize-alias | memcommit.application.reviewing.report | 3 |
 | memcommit.review_report_adapters | operation-implementation | relocate | memcommit.operations.review.report_adapters | 3 |
 | memcommit.search | operation-implementation | relocate | memcommit.operations.search.model | 11 |
 | memcommit.search_artifacts | operation-implementation | relocate | memcommit.operations.search.artifacts | 1 |
@@ -232,7 +232,7 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.semantic_prompt_policy | shared-concept-implementation | relocate | memcommit.semantic.prompt_policy | 10 |
 | memcommit.semantic_provider | shared-concept-implementation | relocate | memcommit.infrastructure.providers.semantic | 7 |
 | memcommit.semantic_redundancy_evidence | shared-concept-implementation | relocate | memcommit.semantic.redundancy_evidence | 5 |
-| memcommit.session_workbench_navigation | shared-concept-implementation | relocate | memcommit.reviewing.session_navigation | 11 |
+| memcommit.session_workbench_navigation | shared-concept-implementation | relocate | memcommit.application.reviewing.session_navigation | 11 |
 | memcommit.sever | compatibility-facade | centralize-alias | memcommit.operations.sever.model | 0 |
 | memcommit.sever_application | compatibility-facade | centralize-alias | memcommit.operations.sever.application | 0 |
 | memcommit.sever_provider | compatibility-facade | centralize-alias | memcommit.operations.sever.provider | 0 |

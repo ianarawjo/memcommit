@@ -14,7 +14,7 @@ from memcommit.interfaces.console.theme import (
 )
 from memcommit.persistence.store import MemoryStore
 from memcommit.operations.update.granted_application import inspect_granted_update
-from memcommit.reviewing.memory_diff import (
+from memcommit.application.reviewing.memory_diff import (
     MemoryChange,
     memory_diff_lines,
     update_operation_change,

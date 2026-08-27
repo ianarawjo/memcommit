@@ -11,14 +11,14 @@ from memcommit.context_targeting.model import ContextScope
 from memcommit.context_targeting.readable_catalog import ReadableContextCatalog
 from memcommit.context_targeting.resolution import expand_lexical_context_names
 from memcommit.authority.derived_policy import authorize_combination
-from memcommit.reviewing.direct_item_duplicates import ExactDuplicateGroup
-from memcommit.reviewing.quality.findings import DuplicateReport, FindingsProvider
+from memcommit.application.reviewing.direct_item_duplicates import ExactDuplicateGroup
+from memcommit.application.reviewing.quality.findings import DuplicateReport, FindingsProvider
 from memcommit.operations.profile.config import ProfileRegistry
-from memcommit.reviewing.quality.workbench import (
+from memcommit.application.reviewing.quality.workbench import (
     QualityFindSourceFrame,
     create_quality_find_workbench,
 )
-from memcommit.reviewing.quality.handoff import (
+from memcommit.application.reviewing.quality.handoff import (
     QualityFindingHandoff,
     quality_finding_handoffs,
 )

@@ -14,7 +14,7 @@ from dataclasses import dataclass, field
 from typing import Literal, Sequence
 
 from memcommit.context import Context, Memory
-from memcommit.reviewing.quality.findings import (
+from memcommit.application.reviewing.quality.findings import (
     AmbiguityFinding,
     AmbiguityReport,
     ConflictFinding,
@@ -22,7 +22,7 @@ from memcommit.reviewing.quality.findings import (
     DuplicateFinding,
     DuplicateReport,
 )
-from memcommit.reviewing.quality.report import (
+from memcommit.application.reviewing.quality.report import (
     QualityFindReportView,
     QualityFindingReading,
     QualityFindingReportItem,

@@ -103,7 +103,7 @@ from memcommit.interfaces.tui.components.focus import (
     bind_surface_navigation,
 )
 from memcommit.interfaces.tui.workbenches.impact import ImpactController, ImpactView
-from memcommit.reviewing.memory_diff import MemoryChange, MemoryDiffSpan, memory_diff_lines
+from memcommit.application.reviewing.memory_diff import MemoryChange, MemoryDiffSpan, memory_diff_lines
 from memcommit.resolution.workbench import (
     ResolutionNavigation,
     ResolutionWorkbenchAction,
@@ -123,7 +123,7 @@ from memcommit.responses.tui import response_frame_fragments
 from memcommit.selection.model import SelectionOption
 from memcommit.selection.state import FlatSelectionState
 from memcommit.selection.tui import render_vertical_choice_cards
-from memcommit.reviewing.session_navigation import (
+from memcommit.application.reviewing.session_navigation import (
     SessionWorkbenchNavigation,
     WorkbenchSection,
     WorkbenchPane,

@@ -34,7 +34,7 @@ from memcommit.operations.resolve.application import (
 from memcommit.operations.resolve.runtime import MemoryStoreResolvePort
 from memcommit.operations.resolve.semantic import ProviderResolveSemanticPort
 from memcommit.operations.resolve.targeting import normalize_resolve_cli_targets
-from memcommit.reviewing.quality.handoff import (
+from memcommit.application.reviewing.quality.handoff import (
     QualityFindingHandoffError,
     conflict_handoff_to_resolve_request,
     quality_finding_handoff_from_json,
