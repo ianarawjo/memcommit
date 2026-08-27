@@ -7,18 +7,18 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.application.authority.access import resolve_context_access
-from memcommit.context_targeting.loading import (
+from memcommit.core.context_targeting.loading import (
     resolve_local_context_memory_target,
     resolve_local_direct_memory_locator,
 )
-from memcommit.context_targeting.memory_focus import is_memory_uid_prefix
-from memcommit.context_targeting.model import (
+from memcommit.core.context_targeting.memory_focus import is_memory_uid_prefix
+from memcommit.core.context_targeting.model import (
     ContextTarget,
     DirectMemoryLocator,
     DirectMemoryTarget,
 )
-from memcommit.context_targeting.operands import choose_endpoint_operand
-from memcommit.context_targeting.resolution import (
+from memcommit.core.context_targeting.operands import choose_endpoint_operand
+from memcommit.core.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
 )
 from memcommit.application.operations.embed.application import (

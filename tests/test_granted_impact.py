@@ -30,7 +30,7 @@ from memcommit.commands.shared.endpoint_setup_flows import (
 )
 from memcommit.commands.meld.setup import MeldSetupReceipt
 from memcommit.context import AutoCheckpoint, Context, Memory
-from memcommit.context_targeting.readable_catalog import ReadableContextCatalog
+from memcommit.core.context_targeting.readable_catalog import ReadableContextCatalog
 from memcommit.derived_policy import analysis_retention, authorize_analysis_save
 from memcommit.granted_comparison_store import (
     granted_comparison_analysis_path,

@@ -8,7 +8,7 @@ from typing import Annotated, Iterator, Optional
 import typer
 
 from memcommit.bootstrap import build_summarize_console_runner
-from memcommit.infrastructure.clipboard import ClipboardError, write_system_clipboard
+from memcommit.adapters.console.clipboard import ClipboardError, write_system_clipboard
 from memcommit.persistence.command_ledger.attempts import annotate_read_report_attempt
 from memcommit.commands.shared.command_progress import CommandProgress
 from memcommit.commands.shared.context_operand import ContextOperandSnapshot
@@ -22,13 +22,13 @@ from memcommit.application.authority.access import (
 from memcommit.commands.shared.readable_context_catalog import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.context_targeting.presets import (
+from memcommit.core.context_targeting.presets import (
     ContextScopePreset,
     resolve_context_traversal,
     resolve_scope_preset,
 )
-from memcommit.context_targeting.tui.picker import context_memory_rows
-from memcommit.context_targeting.tui.reach import ContextReachViewMode
+from memcommit.core.context_targeting.tui.picker import context_memory_rows
+from memcommit.core.context_targeting.tui.reach import ContextReachViewMode
 from memcommit.adapters.interfaces.console import (
     ConsoleMode,
     ConsoleModeError,

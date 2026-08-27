@@ -21,8 +21,8 @@ from memcommit.application.retained_history.context_snapshot import (
     snapshot_record_with_frozen_memory_embeds,
 )
 from memcommit.context_locator import resolve_context_locator
-from memcommit.context_targeting.model import ContextScope
-from memcommit.context_targeting.resolution import expand_lexical_context_names
+from memcommit.core.context_targeting.model import ContextScope
+from memcommit.core.context_targeting.resolution import expand_lexical_context_names
 from memcommit.application.authority.derived_policy import (
     authorize_analysis_save,
     authorize_derived_transfer,

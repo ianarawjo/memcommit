@@ -6,7 +6,7 @@ from dataclasses import dataclass
 
 import memcommit.application.ops as ops
 from memcommit.context import AutoCheckpoint
-from memcommit.context_targeting.naming import validate_portable_context_name
+from memcommit.core.context_targeting.naming import validate_portable_context_name
 from memcommit.application.operations.context_init.application import (
     ContextInitError,
     ContextInitPlan,

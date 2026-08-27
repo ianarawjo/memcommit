@@ -11,9 +11,9 @@ from memcommit.application.authority.access import (
     ContextAccess,
     context_access_display_facts,
 )
-from memcommit.context_targeting.tui.picker import context_memory_rows
+from memcommit.core.context_targeting.tui.picker import context_memory_rows
 from memcommit.commands.meld.target_picker import eligible_meld_targets
-from memcommit.context_targeting.readable_catalog import (
+from memcommit.core.context_targeting.readable_catalog import (
     ReadableContextCatalog,
     freeze_profile_readable_context_catalog,
 )

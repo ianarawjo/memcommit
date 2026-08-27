@@ -8,11 +8,11 @@ from memcommit.application.authority.access import (
     GrantedReadStore,
     resolve_context_access,
 )
-from memcommit.context_targeting.catalog import (
+from memcommit.core.context_targeting.catalog import (
     GrantedContextNavigation,
     freeze_granted_context_navigation,
 )
-from memcommit.context_targeting.navigation import ContextNavigationDirection
+from memcommit.core.context_targeting.navigation import ContextNavigationDirection
 from memcommit.application.operations.profile.model import authority_grant_snapshot_lock
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.switch.application import (

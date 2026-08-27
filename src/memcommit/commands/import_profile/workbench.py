@@ -8,7 +8,7 @@ from typing import Literal
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.context_targeting.tui.picker import (
+from memcommit.core.context_targeting.tui.picker import (
     ContextMemoryRow,
     ContextMemorySelection,
     choose_context,
@@ -23,8 +23,8 @@ from memcommit.adapters.interfaces.tui.components.exact_name_dialog import choos
 from memcommit.adapters.interfaces.tui.components.flat_selection_dialog import choose_flat_option
 from memcommit.commands.shared.tui_primitives import ExactNameFieldView
 from memcommit.context import Memory, MemoryRef
-from memcommit.context_targeting.naming import validate_portable_context_name
-from memcommit.context_targeting.tui.name_editor import (
+from memcommit.core.context_targeting.naming import validate_portable_context_name
+from memcommit.core.context_targeting.tui.name_editor import (
     ContextNameView,
     choose_context_name,
 )

@@ -4,7 +4,7 @@
 
 Update and Meld accept an unambiguously non-Context string as one exact,
 process-local Source Memory. The shared classifier lives in
-`memcommit.context_targeting.operands`; each operation retains its own frame,
+`memcommit.core.context_targeting.operands`; each operation retains its own frame,
 session, authority, provider, review, and Apply semantics.
 
 The same low-level classifier and direct-Memory resolver now back `--goal`

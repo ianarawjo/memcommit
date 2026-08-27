@@ -11,7 +11,7 @@ to change disclosure scope accidentally while refactoring another.
 
 ## Decision
 
-`memcommit.context_targeting.search` owns two operation-neutral steps:
+`memcommit.core.context_targeting.search` owns two operation-neutral steps:
 
 1. `load_readable_search_roots` validates ordinary roots, optionally expands
    canonical lexical descendants, independently chooses direct loading or

@@ -23,10 +23,10 @@ from prompt_toolkit.layout import (
 from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.layout.menus import CompletionsMenu
 
-from memcommit.context_targeting.tui.range_selection import (
+from memcommit.core.context_targeting.tui.range_selection import (
     ContextRangeSelectionState,
 )
-from memcommit.context_targeting.tui.reach import render_context_reach
+from memcommit.core.context_targeting.tui.reach import render_context_reach
 from memcommit.adapters.interfaces.console.text import safe_terminal_text
 from memcommit.adapters.interfaces.tui.components.exact_name import (
     ExactNameFieldView,

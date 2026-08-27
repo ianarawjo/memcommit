@@ -15,10 +15,10 @@ from memcommit.application.authority.access import (
     resolve_context_access,
     revalidate_granted_context_binding,
 )
-from memcommit.context_targeting.readable_catalog import ReadableContextCatalog
+from memcommit.core.context_targeting.readable_catalog import ReadableContextCatalog
 from memcommit.context import Context
-from memcommit.context_targeting.model import ContextScope
-from memcommit.context_targeting.resolution import expand_lexical_context_names
+from memcommit.core.context_targeting.model import ContextScope
+from memcommit.core.context_targeting.resolution import expand_lexical_context_names
 from memcommit.application.operations.profile.model import authority_grant_snapshot_lock
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.summarize.model import (

@@ -29,7 +29,7 @@ from prompt_toolkit.widgets import Frame, TextArea
 
 from memcommit.commands.shared.background_turn import BackgroundExecutorTurn
 from memcommit.commands.shared.command_progress import busy_suffix
-from memcommit.context_targeting.tui.compact_scope import (
+from memcommit.core.context_targeting.tui.compact_scope import (
     CompactReadableScopeControl,
 )
 from memcommit.commands.shared.horizontal_choice import (
@@ -74,7 +74,7 @@ from memcommit.adapters.interfaces.tui.components.focus import (
     SurfaceMoveResult,
     bind_surface_navigation,
 )
-from memcommit.context_targeting.tui.name_editor import (
+from memcommit.core.context_targeting.tui.name_editor import (
     ContextNameControl,
     suggest_fresh_context_name,
 )

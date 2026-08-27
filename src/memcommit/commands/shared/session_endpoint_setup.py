@@ -23,29 +23,29 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 from prompt_toolkit.widgets import Frame, TextArea
 
-from memcommit.context_targeting.tui.reach import (
+from memcommit.core.context_targeting.tui.reach import (
     ContextReachState,
     render_context_reach,
 )
-from memcommit.context_targeting.naming import validate_portable_context_name
-from memcommit.context_targeting.tui.range_selection import (
+from memcommit.core.context_targeting.naming import validate_portable_context_name
+from memcommit.core.context_targeting.tui.range_selection import (
     project_checked_context_names,
 )
-from memcommit.context_targeting.tui.name_draft import (
+from memcommit.core.context_targeting.tui.name_draft import (
     ContextNameDraftState,
     infer_context_parent,
 )
-from memcommit.context_targeting.tui.rendering import (
+from memcommit.core.context_targeting.tui.rendering import (
     ContextTreeRowDecoration,
     render_context_tree_rows,
 )
-from memcommit.context_targeting.tui.selection import ContextSelectionState
-from memcommit.context_targeting.tui.tree import ContextTreeState, build_context_tree
-from memcommit.context_targeting.tui.memory_selection import (
+from memcommit.core.context_targeting.tui.selection import ContextSelectionState
+from memcommit.core.context_targeting.tui.tree import ContextTreeState, build_context_tree
+from memcommit.core.context_targeting.tui.memory_selection import (
     DirectMemorySelectionState,
 )
 from memcommit.adapters.interfaces.console.selection.tui import tree_choice_marker, tree_choice_styles
-from memcommit.context_targeting.tui.picker import (
+from memcommit.core.context_targeting.tui.picker import (
     CONTEXT_PICKER_STYLE,
     ContextMemoryPreviewController,
     ContextMemoryRow,

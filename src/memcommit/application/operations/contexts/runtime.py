@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-from memcommit.context_targeting.naming import is_portable_context_name
-from memcommit.context_targeting.catalog import (
+from memcommit.core.context_targeting.naming import is_portable_context_name
+from memcommit.core.context_targeting.catalog import (
     freeze_granted_context_navigation,
     grant_navigation_capability_text,
 )
-from memcommit.context_targeting.resolution import order_context_names_by_hierarchy
+from memcommit.core.context_targeting.resolution import order_context_names_by_hierarchy
 from memcommit.application.operations.contexts.application import (
     ContextCatalogEntry,
     ContextsCatalog,

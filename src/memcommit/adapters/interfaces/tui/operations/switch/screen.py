@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 
-from memcommit.context_targeting.tui.picker import (
+from memcommit.core.context_targeting.tui.picker import (
     ContextMemorySelection,
     ContextSubtreeSelection,
     choose_context,

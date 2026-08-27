@@ -19,8 +19,8 @@ from memcommit.application.authority.access import (
     context_access_display_facts,
     resolve_context_access,
 )
-from memcommit.context_targeting.catalog import freeze_granted_context_navigation
-from memcommit.context_targeting.operands import choose_endpoint_operand
+from memcommit.core.context_targeting.catalog import freeze_granted_context_navigation
+from memcommit.core.context_targeting.operands import choose_endpoint_operand
 from memcommit.adapters.interfaces.cli.add import render_add_plain
 from memcommit.adapters.interfaces.cli.batch_input import parse_add_lines, read_text_input
 from memcommit.adapters.interfaces.console.errors import render_cli_error

@@ -11,11 +11,11 @@ from memcommit.application.authority.access import (
     resolve_context_access,
 )
 from memcommit.context import AutoCheckpoint
-from memcommit.context_targeting.model import ContextScope
-from memcommit.context_targeting.readable_catalog import (
+from memcommit.core.context_targeting.model import ContextScope
+from memcommit.core.context_targeting.readable_catalog import (
     freeze_readable_context_catalog,
 )
-from memcommit.context_targeting.resolution import expand_lexical_context_names
+from memcommit.core.context_targeting.resolution import expand_lexical_context_names
 from memcommit.application.operations.clear.application import ClearRequest, ClearResult
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import MemoryStore, context_record_digest

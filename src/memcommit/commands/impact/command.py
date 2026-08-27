@@ -67,22 +67,22 @@ from memcommit.commands.update.render import (
     render_plan,
     run_update_workbench,
 )
-from memcommit.context_targeting.loading import (
+from memcommit.core.context_targeting.loading import (
     DirectMemoryAmbiguityError,
     load_context_scope,
     resolve_local_context_memory_target,
 )
-from memcommit.context_targeting.memory_focus import is_memory_uid_prefix
-from memcommit.context_targeting.model import (
+from memcommit.core.context_targeting.memory_focus import is_memory_uid_prefix
+from memcommit.core.context_targeting.model import (
     ContextTarget,
     DirectMemoryLocator,
     DirectMemoryTarget,
     ExistingContextOperand,
 )
-from memcommit.context_targeting.resolution import (
+from memcommit.core.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
 )
-from memcommit.context_targeting.presets import (
+from memcommit.core.context_targeting.presets import (
     ContextScopePreset,
     legacy_root_only_option_alias,
     resolve_descendant_scopes,
@@ -105,7 +105,7 @@ from memcommit.application.operations.review.model import (
     review_response_digest,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.context_targeting.uid_locator import UidLocatorError, resolve_exact_or_unique_uid
+from memcommit.core.context_targeting.uid_locator import UidLocatorError, resolve_exact_or_unique_uid
 from memcommit.study_prewarm.registry import StudyPrewarmRegistryError
 from memcommit.application.operations.update.model import UpdateError, plan_update, session_matches
 from memcommit.application.operations.update.endpoints import (

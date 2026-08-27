@@ -11,23 +11,23 @@ from memcommit.application.authority.access import (
     resolve_context_access,
 )
 from memcommit.bootstrap import build_distill_console_runner
-from memcommit.infrastructure.clipboard import write_system_clipboard
+from memcommit.adapters.console.clipboard import write_system_clipboard
 from memcommit.commands.shared.command_progress import CommandProgress
 from memcommit.commands.shared.context_operand import ContextOperandSnapshot
 from memcommit.commands.shared.readable_context_catalog import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.context_targeting.presets import (
+from memcommit.core.context_targeting.presets import (
     ContextScopePreset,
     resolve_context_traversal,
     resolve_scope_preset,
 )
-from memcommit.context_targeting.tui.picker import (
+from memcommit.core.context_targeting.tui.picker import (
     ContextMemoryRow,
     context_memory_rows,
 )
 from memcommit.semantic.goal_focus_runtime import freeze_goal_focus_operand
-from memcommit.context_targeting.naming import validate_portable_context_name
+from memcommit.core.context_targeting.naming import validate_portable_context_name
 from memcommit.application.operations.distill.model import DistillError
 from memcommit.application.operations.distill.application import (
     DistillApplyRequest,

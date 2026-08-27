@@ -132,7 +132,7 @@ from memcommit.application.operations.ground.turn_dialogue import (
 from memcommit.application.operations.fit.runtime import execute_and_save_ground_fit
 from memcommit.application.operations.fit.store import FitStore
 from memcommit.providers.subscription import connect_codex_chatgpt_provider
-from memcommit.context_targeting.naming import validate_portable_context_name
+from memcommit.core.context_targeting.naming import validate_portable_context_name
 from memcommit.persistence.store import (
     ConcurrentGroundUpdateError,
     MemoryStore,

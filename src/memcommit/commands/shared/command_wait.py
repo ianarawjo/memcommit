@@ -32,7 +32,7 @@ from memcommit.commands.shared.command_progress import (
     CommandProgress,
     render_progress_line,
 )
-from memcommit.context_targeting.tui.picker import (
+from memcommit.core.context_targeting.tui.picker import (
     CONTEXT_PICKER_STYLE,
     ContextMemoryRow,
     ContextPickerNavigationUnit,
@@ -71,11 +71,11 @@ from memcommit.adapters.interfaces.tui.core.keybindings import (
 from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
 )
-from memcommit.context_targeting.tui.tree import (
+from memcommit.core.context_targeting.tui.tree import (
     ContextTreeState,
     build_context_tree,
 )
-from memcommit.context_targeting.catalog import freeze_granted_context_navigation
+from memcommit.core.context_targeting.catalog import freeze_granted_context_navigation
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.source_projection.model import SourceDisplayFacts, SourceState

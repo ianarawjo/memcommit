@@ -21,7 +21,7 @@ from memcommit.application.operations.compare.ledger.evidence import (
     ProjectedComparisonMemory,
     project_comparison_context,
 )
-from memcommit.context_targeting.memory_focus import (
+from memcommit.core.context_targeting.memory_focus import (
     MemoryFocusError,
     resolve_memory_focus,
 )

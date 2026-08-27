@@ -12,12 +12,12 @@ from prompt_toolkit.layout import Dimension, FormattedTextControl, Layout, Windo
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
-from memcommit.context_targeting.model import DirectMemoryTarget
-from memcommit.context_targeting.tui.direct_memory_selector import (
+from memcommit.core.context_targeting.model import DirectMemoryTarget
+from memcommit.core.context_targeting.tui.direct_memory_selector import (
     DirectMemorySelectorControl,
     DirectMemorySelectorView,
 )
-from memcommit.context_targeting.tui.picker import ContextMemoryRow
+from memcommit.core.context_targeting.tui.picker import ContextMemoryRow
 from memcommit.application.operations.edit.application import (
     EditRequest,
     FrozenEditPlan,

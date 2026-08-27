@@ -14,12 +14,12 @@ from memcommit.application.authority.access import (
 )
 from memcommit.context import Context, QueryContextRef
 from memcommit.application.retained_history.context_snapshot import ContextSnapshotRef
-from memcommit.context_targeting.catalog import (
+from memcommit.core.context_targeting.catalog import (
     GrantedContextNavigation,
     freeze_granted_context_navigation,
 )
-from memcommit.context_targeting.model import ContextScope
-from memcommit.context_targeting.resolution import expand_lexical_context_names
+from memcommit.core.context_targeting.model import ContextScope
+from memcommit.core.context_targeting.resolution import expand_lexical_context_names
 from memcommit.application.operations.profile.config import (
     AuthorityGrant,
     ProfileRegistry,

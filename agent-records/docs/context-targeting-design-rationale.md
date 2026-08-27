@@ -17,7 +17,7 @@ there is intentionally no profile-wide “last Scope” preference.
 
 ## Decision
 
-`memcommit.context_targeting` is the concept package for the shared family:
+`memcommit.core.context_targeting` is the concept package for the shared family:
 
 - `model.py` owns operation-neutral targeting values and cardinality types,
   including a raw existing-Context operand, a canonical Context target, an

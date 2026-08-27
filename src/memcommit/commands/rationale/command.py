@@ -39,8 +39,8 @@ from memcommit.application.retained_history.context_history import (
     current_context_trace,
 )
 from memcommit.application.operations.rationale.context import synthesize_context_rationale
-from memcommit.context_targeting.model import ContextTarget
-from memcommit.context_targeting.report_items import (
+from memcommit.core.context_targeting.model import ContextTarget
+from memcommit.core.context_targeting.report_items import (
     ReadableMemoryTargetNotFoundError,
     freeze_memory_report_readable_catalog,
     parse_memory_report_locator,

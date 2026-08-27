@@ -1,6 +1,6 @@
 """Compatibility imports for the operation-neutral readable Context catalog."""
 
-from memcommit.context_targeting.readable_catalog import (
+from memcommit.core.context_targeting.readable_catalog import (
     ProfileContextNavigation,
     ReadableContextBinding,
     ReadableContextCatalog,

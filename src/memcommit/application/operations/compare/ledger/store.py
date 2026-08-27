@@ -16,9 +16,9 @@ from memcommit.application.operations.compare.ledger.model import (
 )
 from memcommit.context import Context
 from memcommit.application.operations.compare.ledger.evidence import project_comparison_context
-from memcommit.context_targeting.loading import load_context_scope
-from memcommit.context_targeting.model import ContextScope
-from memcommit.context_targeting.resolution import expand_lexical_context_names
+from memcommit.core.context_targeting.loading import load_context_scope
+from memcommit.core.context_targeting.model import ContextScope
+from memcommit.core.context_targeting.resolution import expand_lexical_context_names
 
 
 class ConcurrentComparisonUpdateError(RuntimeError):

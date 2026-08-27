@@ -10,7 +10,7 @@ from typer.testing import CliRunner
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Context, Memory
-from memcommit.context_targeting.tui.picker import ContextMemoryRow
+from memcommit.core.context_targeting.tui.picker import ContextMemoryRow
 from memcommit.edit_application import EditRequest, FrozenEditPlan
 from memcommit.adapters.interfaces.tui.components.exact_command_review import (
     format_exact_command,

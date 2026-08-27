@@ -71,18 +71,18 @@ from memcommit.commands.shared.context_operand import (
     ContextOperandSnapshot,
     choose_context_operand,
 )
-from memcommit.context_targeting.loading import (
+from memcommit.core.context_targeting.loading import (
     DirectMemoryAmbiguityError,
     resolve_local_context_memory_target,
 )
-from memcommit.context_targeting.memory_focus import is_memory_uid_prefix
-from memcommit.context_targeting.model import (
+from memcommit.core.context_targeting.memory_focus import is_memory_uid_prefix
+from memcommit.core.context_targeting.model import (
     ContextTarget,
     DirectMemoryLocator,
     DirectMemoryTarget,
     ExistingContextOperand,
 )
-from memcommit.context_targeting.resolution import (
+from memcommit.core.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
 )
 from memcommit.application.operations.review.model import (

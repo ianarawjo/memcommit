@@ -28,7 +28,7 @@ from memcommit.application.authority.access import (
 )
 from memcommit.context import Context
 from memcommit.application.operations.compare.ledger.evidence import project_comparison_context
-from memcommit.context_targeting.loading import load_context_scope
+from memcommit.core.context_targeting.loading import load_context_scope
 from memcommit.application.authority.derived_policy import (
     AnalysisRetention,
     analysis_retention,

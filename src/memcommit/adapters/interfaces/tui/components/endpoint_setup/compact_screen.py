@@ -27,12 +27,12 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 from prompt_toolkit.widgets import TextArea
 
-from memcommit.context_targeting.tui.selector import (
+from memcommit.core.context_targeting.tui.selector import (
     ContextSelectorControl,
     ContextSelectorView,
 )
-from memcommit.context_targeting.tui.reach import ContextReachState
-from memcommit.context_targeting.tui.name_draft import (
+from memcommit.core.context_targeting.tui.reach import ContextReachState
+from memcommit.core.context_targeting.tui.name_draft import (
     ContextNameDraftState,
     infer_context_parent,
 )

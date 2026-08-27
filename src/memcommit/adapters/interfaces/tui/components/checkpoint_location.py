@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.context_targeting.tui.picker import (
+from memcommit.core.context_targeting.tui.picker import (
     ContextMemoryRow,
     ContextSubtreeSelection,
     choose_context,

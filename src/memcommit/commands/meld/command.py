@@ -15,19 +15,19 @@ from memcommit.application.operations.compare.ledger.provider import (
     ComparisonProviderError,
 )
 from memcommit.context import Context
-from memcommit.context_targeting.loading import load_context_scope
-from memcommit.context_targeting.presets import (
+from memcommit.core.context_targeting.loading import load_context_scope
+from memcommit.core.context_targeting.presets import (
     ContextScopePreset,
     legacy_root_only_option_alias,
     resolve_descendant_scopes,
     resolve_scope_preset,
 )
-from memcommit.context_targeting.memory_focus import (
+from memcommit.core.context_targeting.memory_focus import (
     MemoryFocusError,
     resolve_memory_focus,
 )
-from memcommit.context_targeting.model import InlineTextOperand
-from memcommit.context_targeting.operands import (
+from memcommit.core.context_targeting.model import InlineTextOperand
+from memcommit.core.context_targeting.operands import (
     classify_context_or_inline_text_operand,
 )
 from memcommit.context_locator import resolve_context_locator
@@ -100,7 +100,7 @@ from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import (
     ProfileError,
 )
-from memcommit.context_targeting.naming import validate_portable_context_name
+from memcommit.core.context_targeting.naming import validate_portable_context_name
 from memcommit.application.resolution.workbench import ResolutionNavigation
 from memcommit.persistence.store import (
     ConcurrentContextUpdateError,

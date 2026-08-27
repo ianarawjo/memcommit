@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Protocol
 
 from memcommit.context import Context
-from memcommit.context_targeting.search import (
+from memcommit.core.context_targeting.search import (
     collect_readable_search_candidates,
     load_readable_search_roots,
 )

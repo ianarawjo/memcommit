@@ -17,7 +17,7 @@ from memcommit.adapters.interfaces.cli.quality_findings import (
     render_cleanup_member,
     render_heading,
 )
-from memcommit.context_targeting.presets import (
+from memcommit.core.context_targeting.presets import (
     ContextScopePreset,
     resolve_scope_preset,
 )

@@ -5,7 +5,7 @@ from typing import Annotated, Literal, Optional
 import typer
 from prompt_toolkit.utils import get_cwidth
 
-from memcommit.infrastructure.clipboard import (
+from memcommit.adapters.console.clipboard import (
     ClipboardError,
     ClipboardPayload,
     copy_payload,
@@ -19,7 +19,7 @@ from memcommit.context import (
     QueryContextRef,
 )
 from memcommit.application.retained_history.context_snapshot import ContextSnapshotRef
-from memcommit.context_targeting.presets import (
+from memcommit.core.context_targeting.presets import (
     ContextScopePreset,
     resolve_scope_preset,
 )

@@ -16,7 +16,7 @@ from memcommit.commands.trace.projection import (
 from memcommit.adapters.interfaces.tui.components.plain_text_clipboard import (
     plain_text_from_fragments,
 )
-from memcommit.context_targeting.report_items import ResolvedMemoryReportTarget
+from memcommit.core.context_targeting.report_items import ResolvedMemoryReportTarget
 from memcommit.application.retained_history.memory_history_reconstruction.retained_record_verification import (
     MemoryHistoryCommandContext,
     MemoryHistoryContextTransition,

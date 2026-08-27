@@ -27,7 +27,7 @@ from memcommit.comparison import (
 from memcommit.comparison_store import load_comparison_analysis
 from memcommit.config import Config
 from memcommit.context import Context, Memory
-from memcommit.context_targeting.loading import load_context_scope
+from memcommit.core.context_targeting.loading import load_context_scope
 from memcommit.granted_comparison_store import recursive_comparison_projection
 from memcommit.application.operations.meld.start_application import MeldStartRequest
 from memcommit.profile_config import (

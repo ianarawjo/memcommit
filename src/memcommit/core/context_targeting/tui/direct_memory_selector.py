@@ -7,16 +7,16 @@ from dataclasses import dataclass
 
 from prompt_toolkit.application.current import get_app
 
-from memcommit.context_targeting.model import DirectMemoryTarget
-from memcommit.context_targeting.model import ContextSelectionMode
-from memcommit.context_targeting.tui.memory_selection import (
+from memcommit.core.context_targeting.model import DirectMemoryTarget
+from memcommit.core.context_targeting.model import ContextSelectionMode
+from memcommit.core.context_targeting.tui.memory_selection import (
     DirectMemorySelectionState,
 )
-from memcommit.context_targeting.tui.picker import (
+from memcommit.core.context_targeting.tui.picker import (
     ContextMemoryPreviewController,
     ContextMemoryRow,
 )
-from memcommit.context_targeting.tui.selector import (
+from memcommit.core.context_targeting.tui.selector import (
     ContextSelectorControl,
     ContextSelectorRowProjection,
     ContextSelectorView,

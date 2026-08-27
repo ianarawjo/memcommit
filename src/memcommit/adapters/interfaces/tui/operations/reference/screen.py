@@ -18,12 +18,12 @@ from prompt_toolkit.layout import (
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
-from memcommit.context_targeting.tui.direct_memory_selector import (
+from memcommit.core.context_targeting.tui.direct_memory_selector import (
     DirectMemorySelectorControl,
     DirectMemorySelectorView,
 )
-from memcommit.context_targeting.tui.picker import ContextMemoryRow
-from memcommit.context_targeting.tui.selector import (
+from memcommit.core.context_targeting.tui.picker import ContextMemoryRow
+from memcommit.core.context_targeting.tui.selector import (
     ContextSelectorControl,
     ContextSelectorView,
 )

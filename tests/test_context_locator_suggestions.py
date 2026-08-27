@@ -5,7 +5,7 @@ from __future__ import annotations
 import pytest
 
 from memcommit.context_locator import suggest_context_locators
-from memcommit.context_targeting.checkpoint import (
+from memcommit.core.context_targeting.checkpoint import (
     resolve_local_context_checkpoint_target,
 )
 

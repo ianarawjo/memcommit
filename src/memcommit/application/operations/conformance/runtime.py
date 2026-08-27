@@ -21,15 +21,15 @@ from memcommit.context_locator import (
     is_relative_context_locator,
     resolve_context_locator,
 )
-from memcommit.context_targeting.loading import (
+from memcommit.core.context_targeting.loading import (
     resolve_local_direct_memory_locator,
     try_resolve_short_local_direct_memory_locator,
 )
-from memcommit.context_targeting.model import (
+from memcommit.core.context_targeting.model import (
     DirectMemoryLocator,
     ExistingContextOperand,
 )
-from memcommit.context_targeting.resolution import (
+from memcommit.core.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
 )
 from memcommit.application.operations.ground.model import GroundSession, is_bound_ground_schema

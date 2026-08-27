@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 
-from memcommit.context_targeting.tui.name_editor import (
+from memcommit.core.context_targeting.tui.name_editor import (
     ContextNameView,
     choose_context_name,
 )

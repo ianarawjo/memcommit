@@ -139,7 +139,7 @@ def test_add_tui_delegates_common_interaction_mechanics() -> None:
     imports = set(_imports(path))
 
     assert {
-        "memcommit.context_targeting.tui.selector",
+        "memcommit.core.context_targeting.tui.selector",
         "memcommit.adapters.interfaces.tui.components.focus",
         "memcommit.adapters.interfaces.tui.components.frame",
         "memcommit.adapters.interfaces.tui.components.in_frame_input",
@@ -152,13 +152,13 @@ def test_add_tui_delegates_common_interaction_mechanics() -> None:
 
 
 def test_direct_memory_actions_share_one_selector_composition() -> None:
-    owner = PACKAGE / "context_targeting" / "tui" / "direct_memory_selector.py"
+    owner = PACKAGE / "core" / "context_targeting" / "tui" / "direct_memory_selector.py"
     owner_imports = set(_imports(owner))
 
     assert {
-        "memcommit.context_targeting.tui.memory_selection",
-        "memcommit.context_targeting.tui.picker",
-        "memcommit.context_targeting.tui.selector",
+        "memcommit.core.context_targeting.tui.memory_selection",
+        "memcommit.core.context_targeting.tui.picker",
+        "memcommit.core.context_targeting.tui.selector",
     } <= owner_imports
 
     consumers = (
@@ -169,6 +169,6 @@ def test_direct_memory_actions_share_one_selector_composition() -> None:
     for path in consumers:
         imports = set(_imports(path))
         source = path.read_text()
-        assert "memcommit.context_targeting.tui.direct_memory_selector" in imports
+        assert "memcommit.core.context_targeting.tui.direct_memory_selector" in imports
         assert "ContextMemoryPreviewController(" not in source
         assert "DirectMemorySelectionState(" not in source

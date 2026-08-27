@@ -8,7 +8,7 @@ import typer
 
 from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
 from memcommit.commands.shared.context_operand import ContextOperandSnapshot
-from memcommit.context_targeting.presets import (
+from memcommit.core.context_targeting.presets import (
     ContextScopePreset,
     resolve_context_traversal,
     resolve_scope_preset,

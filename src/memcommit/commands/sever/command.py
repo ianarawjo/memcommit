@@ -25,10 +25,10 @@ from memcommit.commands.sever.sessions import (
     list_sever_session_catalog,
     reload_selected_sever_session,
 )
-from memcommit.context_targeting.catalog import freeze_granted_context_navigation
-from memcommit.context_targeting.operands import choose_endpoint_operand
-from memcommit.context_targeting.naming import validate_portable_context_name
-from memcommit.context_targeting.tui.picker import context_memory_rows
+from memcommit.core.context_targeting.catalog import freeze_granted_context_navigation
+from memcommit.core.context_targeting.operands import choose_endpoint_operand
+from memcommit.core.context_targeting.naming import validate_portable_context_name
+from memcommit.core.context_targeting.tui.picker import context_memory_rows
 from memcommit.commands.sever.setup_shell import (
     choose_sever_setup,
 )
@@ -36,7 +36,7 @@ from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
     safe_terminal_text,
 )
-from memcommit.context_targeting.presets import (
+from memcommit.core.context_targeting.presets import (
     ContextScopePreset,
     legacy_root_only_option_alias,
     resolve_descendant_scopes,

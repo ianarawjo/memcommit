@@ -20,12 +20,12 @@ from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
-from memcommit.context_targeting.tui.reach import (
+from memcommit.core.context_targeting.tui.reach import (
     ContextReachState,
     render_context_reach,
 )
-from memcommit.context_targeting.naming import validate_portable_context_name
-from memcommit.context_targeting.tui.selector import (
+from memcommit.core.context_targeting.naming import validate_portable_context_name
+from memcommit.core.context_targeting.tui.selector import (
     ContextSelectorControl,
     ContextSelectorView,
 )

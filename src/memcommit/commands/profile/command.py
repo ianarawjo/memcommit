@@ -27,11 +27,11 @@ from memcommit.adapters.interfaces.console.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )
-from memcommit.context_targeting.presets import (
+from memcommit.core.context_targeting.presets import (
     ContextScopePreset,
     resolve_scope_preset,
 )
-from memcommit.context_targeting.naming import is_portable_context_name
+from memcommit.core.context_targeting.naming import is_portable_context_name
 from memcommit.application.operations.profile.config import (
     AuthorityGrant,
     ProfileConfigError,

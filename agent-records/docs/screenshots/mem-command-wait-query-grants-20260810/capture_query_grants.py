@@ -24,7 +24,7 @@ def _child() -> None:
         run_command_wait,
     )
     from memcommit.commands.shared.context_picker import ContextMemoryRow
-    from memcommit.context_targeting.catalog import grant_navigation_annotation
+    from memcommit.core.context_targeting.catalog import grant_navigation_annotation
     from memcommit.source_projection.model import SourceDisplayFacts, SourceState
     from memcommit.source_projection.presentation import combine_source_display_tokens
 

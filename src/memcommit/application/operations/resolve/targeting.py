@@ -7,17 +7,17 @@ from dataclasses import dataclass
 
 from memcommit.application.authority.access import resolve_context_access
 from memcommit.context_locator import resolve_context_locator
-from memcommit.context_targeting.memory_focus import is_memory_uid_prefix
-from memcommit.context_targeting.loading import (
+from memcommit.core.context_targeting.memory_focus import is_memory_uid_prefix
+from memcommit.core.context_targeting.loading import (
     LocalDirectMemoryLocatorStore,
     resolve_local_direct_memory_locator,
     try_resolve_short_local_direct_memory_locator,
 )
-from memcommit.context_targeting.model import (
+from memcommit.core.context_targeting.model import (
     DirectMemoryLocator,
     ExistingContextOperand,
 )
-from memcommit.context_targeting.resolution import (
+from memcommit.core.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
     parse_direct_memory_locator,
 )

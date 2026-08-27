@@ -7,12 +7,12 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.commands.shared.context_operand import ContextOperandSnapshot
-from memcommit.context_targeting.model import ContextScope
-from memcommit.context_targeting.presets import (
+from memcommit.core.context_targeting.model import ContextScope
+from memcommit.core.context_targeting.presets import (
     ContextScopePreset,
     resolve_scope_preset,
 )
-from memcommit.context_targeting.resolution import expand_lexical_context_names
+from memcommit.core.context_targeting.resolution import expand_lexical_context_names
 from memcommit.adapters.interfaces.console.text import display_escape_text
 from memcommit.persistence.store import MemoryStore, context_record_digest
 

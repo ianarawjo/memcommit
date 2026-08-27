@@ -45,8 +45,8 @@ def test_contexts_command_imports_the_operation_runtime() -> None:
     }
     assert "memcommit.application.operations.contexts.application" in imports
     assert "memcommit.application.operations.contexts.runtime" in imports
-    assert "memcommit.context_targeting.catalog" not in imports
-    assert "memcommit.context_targeting.resolution" not in imports
+    assert "memcommit.core.context_targeting.catalog" not in imports
+    assert "memcommit.core.context_targeting.resolution" not in imports
 
 
 def test_contexts_operation_has_no_terminal_dependency() -> None:

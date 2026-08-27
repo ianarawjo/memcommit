@@ -30,7 +30,7 @@ from memcommit.adapters.interfaces.tui.operations.embed import (
     parse_embed_command_argv,
 )
 from memcommit.context import Context, Memory
-from memcommit.context_targeting.tui.tree import ContextTreeRow
+from memcommit.core.context_targeting.tui.tree import ContextTreeRow
 from memcommit.source_projection.model import SourceForm, SourceReach
 from memcommit.store import MemoryStore
 

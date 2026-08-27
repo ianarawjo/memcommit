@@ -17,7 +17,7 @@ from memcommit.application.authority.access import (
 )
 from memcommit.context import AutoCheckpoint, Context, Memory, MemoryRef
 from memcommit.context_locator import resolve_context_locator
-from memcommit.context_targeting.resolution import parse_direct_memory_locator
+from memcommit.core.context_targeting.resolution import parse_direct_memory_locator
 from memcommit.application.authority.derived_policy import (
     authorize_analysis_save,
     authorize_combination,

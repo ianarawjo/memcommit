@@ -9,7 +9,7 @@ import typer
 from memcommit.commands.consolidate import command as consolidate
 from memcommit.commands.find_duplicates import command as find_duplicates
 from memcommit.commands.shared.context_operand import choose_context_operand
-from memcommit.context_targeting.presets import (
+from memcommit.core.context_targeting.presets import (
     ContextScopePreset,
     resolve_scope_preset,
 )

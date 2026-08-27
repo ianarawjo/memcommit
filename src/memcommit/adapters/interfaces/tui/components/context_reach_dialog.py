@@ -16,7 +16,7 @@ from prompt_toolkit.layout import (
 )
 from prompt_toolkit.output import Output
 
-from memcommit.context_targeting.tui.reach import (
+from memcommit.core.context_targeting.tui.reach import (
     ContextReachState,
     render_context_reach,
 )

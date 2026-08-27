@@ -1,13 +1,13 @@
 """Compatibility exports for the shared Context-targeting picker.
 
-The implementation moved to :mod:`memcommit.context_targeting.tui.picker` so
+The implementation moved to :mod:`memcommit.core.context_targeting.tui.picker` so
 operation and interface adapters can depend on a neutral owner.  Keep this
 module behavior-free while older callers migrate.
 """
 
 # ruff: noqa: F401 - compatibility imports are this module's complete purpose.
 
-from memcommit.context_targeting.tui.picker import (
+from memcommit.core.context_targeting.tui.picker import (
     CONTEXT_PICKER_STYLE,
     ContextMemoryBadge,
     ContextMemoryPreviewController,

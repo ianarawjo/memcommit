@@ -18,7 +18,7 @@ from typing import Callable, Literal, Protocol
 import uuid
 
 from memcommit.context import Context, Memory
-from memcommit.context_targeting.memory_focus import (
+from memcommit.core.context_targeting.memory_focus import (
     MemoryFocusError,
     resolve_memory_focus,
 )

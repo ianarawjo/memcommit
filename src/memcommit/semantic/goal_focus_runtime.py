@@ -6,15 +6,15 @@ import hashlib
 
 from memcommit.context import Context, Memory
 from memcommit.context_locator import resolve_context_locator
-from memcommit.context_targeting.loading import (
+from memcommit.core.context_targeting.loading import (
     resolve_local_direct_memory_locator,
     try_resolve_short_local_direct_memory_locator,
 )
-from memcommit.context_targeting.model import DirectMemoryLocator, InlineTextOperand
-from memcommit.context_targeting.operands import (
+from memcommit.core.context_targeting.model import DirectMemoryLocator, InlineTextOperand
+from memcommit.core.context_targeting.operands import (
     classify_context_or_inline_text_operand,
 )
-from memcommit.context_targeting.resolution import (
+from memcommit.core.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
 )
 from memcommit.semantic.goal_focus import (

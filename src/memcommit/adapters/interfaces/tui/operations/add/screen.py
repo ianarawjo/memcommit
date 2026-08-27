@@ -15,7 +15,7 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
 from memcommit.application.operations.add.application import AddRequest, AddResult, AddSource
-from memcommit.context_targeting.tui.selector import (
+from memcommit.core.context_targeting.tui.selector import (
     ContextSelectorControl,
     ContextSelectorView,
 )

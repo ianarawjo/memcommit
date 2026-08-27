@@ -43,7 +43,7 @@ def _file_snapshot(root: Path) -> dict[str, bytes]:
 def _run_child() -> None:
     import memcommit.application.ops as ops
     from memcommit.application.authority.access import ContextAccess
-    from memcommit.context_targeting.readable_catalog import (
+    from memcommit.core.context_targeting.readable_catalog import (
         freeze_readable_context_catalog,
     )
     from memcommit.adapters.interfaces.tui.operations.query import run_query_workbench

@@ -5,7 +5,7 @@ from __future__ import annotations
 import uuid
 
 from memcommit.context import AutoCheckpoint, Context
-from memcommit.context_targeting.naming import validate_portable_context_name
+from memcommit.core.context_targeting.naming import validate_portable_context_name
 from memcommit.application.operations.ground.workspace_model import (
     GROUND_WORKSPACE_LANES,
     GroundWorkspace,

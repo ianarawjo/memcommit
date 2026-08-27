@@ -47,16 +47,16 @@ from memcommit.adapters.interfaces.tui.core.text_layout import (
     single_line_terminal_text,
     terminal_cell_width,
 )
-from memcommit.context_targeting.tui.rendering import (
+from memcommit.core.context_targeting.tui.rendering import (
     ContextTreeRowDecoration,
     render_context_tree_rows,
 )
-from memcommit.context_targeting.tui.name_draft import (
+from memcommit.core.context_targeting.tui.name_draft import (
     ContextNameDraftState,
     infer_context_parent,
 )
-from memcommit.context_targeting.tui.selection import ContextSelectionState
-from memcommit.context_targeting.tui.tree import ContextTreeState, build_context_tree
+from memcommit.core.context_targeting.tui.selection import ContextSelectionState
+from memcommit.core.context_targeting.tui.tree import ContextTreeState, build_context_tree
 from memcommit.adapters.interfaces.console.selection.tui import tree_choice_marker, tree_choice_styles
 
 

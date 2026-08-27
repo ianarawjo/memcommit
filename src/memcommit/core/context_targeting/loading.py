@@ -7,15 +7,15 @@ from typing import Protocol
 
 from memcommit.context import Context, Information, Memory
 from memcommit.context_locator import resolve_context_locator
-from memcommit.context_targeting.memory_focus import is_memory_uid_prefix
-from memcommit.context_targeting.model import (
+from memcommit.core.context_targeting.memory_focus import is_memory_uid_prefix
+from memcommit.core.context_targeting.model import (
     ContextScope,
     ContextTarget,
     DirectItemTarget,
     DirectMemoryTarget,
     ExistingContextOperand,
 )
-from memcommit.context_targeting.resolution import (
+from memcommit.core.context_targeting.resolution import (
     expand_lexical_context_names,
     parse_auto_typed_context_memory_operand,
     parse_direct_memory_locator,

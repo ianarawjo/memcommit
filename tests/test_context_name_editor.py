@@ -5,14 +5,14 @@ from __future__ import annotations
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-from memcommit.context_targeting.tui.name_editor import (
+from memcommit.core.context_targeting.tui.name_editor import (
     ContextParentLocatorControl,
     ContextParentLocatorState,
     ContextNameView,
     choose_context_name,
     suggest_fresh_context_name,
 )
-from memcommit.context_targeting.tui.name_draft import ContextNameDraftState
+from memcommit.core.context_targeting.tui.name_draft import ContextNameDraftState
 
 
 def test_generic_name_view_has_no_save_location_semantics() -> None:

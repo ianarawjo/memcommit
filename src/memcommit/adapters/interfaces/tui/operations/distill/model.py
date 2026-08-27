@@ -5,8 +5,8 @@ from __future__ import annotations
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass, field
 
-from memcommit.context_targeting.tui.picker import ContextMemoryRow
-from memcommit.context_targeting.tui.reach import ContextReachViewMode
+from memcommit.core.context_targeting.tui.picker import ContextMemoryRow
+from memcommit.core.context_targeting.tui.reach import ContextReachViewMode
 from memcommit.source_projection.presentation import SourceDisplayValue
 
 

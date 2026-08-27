@@ -28,9 +28,9 @@ from memcommit.commands.shared.session_endpoint_setup import (
 )
 from memcommit.adapters.interfaces.tui.operations.meld import MeldEndpointSelection
 from memcommit.commands.shared.context_picker import ContextMemoryRow, context_memory_rows
-from memcommit.context_targeting.tui.reach import ContextReachState
-from memcommit.context_targeting.tui.selection import ContextSelectionState
-from memcommit.context_targeting.tui.tree import ContextTreeState, build_context_tree
+from memcommit.core.context_targeting.tui.reach import ContextReachState
+from memcommit.core.context_targeting.tui.selection import ContextSelectionState
+from memcommit.core.context_targeting.tui.tree import ContextTreeState, build_context_tree
 from memcommit.store import MemoryStore
 
 

@@ -42,8 +42,8 @@ def test_clear_command_delegates_behavior_to_operation_runtime() -> None:
     assert "memcommit.application.operations.clear.application" in imports
     assert "memcommit.application.operations.clear.runtime" in imports
     assert "memcommit.application.authority.access" not in imports
-    assert "memcommit.context_targeting.readable_catalog" not in imports
-    assert "memcommit.context_targeting.resolution" not in imports
+    assert "memcommit.core.context_targeting.readable_catalog" not in imports
+    assert "memcommit.core.context_targeting.resolution" not in imports
 
 
 def test_clear_operation_has_no_terminal_dependency() -> None:

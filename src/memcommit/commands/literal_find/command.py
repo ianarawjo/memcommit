@@ -10,12 +10,12 @@ from memcommit.application.authority.access import (
     context_access_display_facts,
     resolve_context_access,
 )
-from memcommit.infrastructure.clipboard import ClipboardError, write_system_clipboard
+from memcommit.adapters.console.clipboard import ClipboardError, write_system_clipboard
 from memcommit.commands.shared.context_operand import ContextOperandSnapshot
 from memcommit.commands.shared.readable_context_catalog import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.context_targeting.presets import (
+from memcommit.core.context_targeting.presets import (
     ContextScopePreset,
     resolve_context_traversal,
     resolve_scope_preset,

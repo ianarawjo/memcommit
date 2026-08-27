@@ -9,7 +9,7 @@ from memcommit.application.authority.access import (
     revalidate_granted_context_binding,
 )
 from memcommit.context import AutoCheckpoint
-from memcommit.context_targeting.loading import load_context_scope
+from memcommit.core.context_targeting.loading import load_context_scope
 from memcommit.application.operations.update.granted_application import _authority_name, _remove_checkpoint
 from memcommit.application.operations.profile.model import authority_grant_snapshot_lock
 from memcommit.persistence.store import (

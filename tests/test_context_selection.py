@@ -2,26 +2,26 @@
 
 import pytest
 
-from memcommit.context_targeting.model import ContextScope, DirectMemoryTarget
-from memcommit.context_targeting.resolution import (
+from memcommit.core.context_targeting.model import ContextScope, DirectMemoryTarget
+from memcommit.core.context_targeting.resolution import (
     expand_lexical_context_names,
     order_context_names_by_hierarchy,
 )
-from memcommit.context_targeting.loading import load_context_scope
-from memcommit.context_targeting.tui.reach import (
+from memcommit.core.context_targeting.loading import load_context_scope
+from memcommit.core.context_targeting.tui.reach import (
     ContextReachState,
     ContextReachViewState,
     render_context_reach,
 )
-from memcommit.context_targeting.tui.range_selection import (
+from memcommit.core.context_targeting.tui.range_selection import (
     ContextRangeSelectionState,
     project_checked_context_names,
 )
-from memcommit.context_targeting.tui.selection import ContextSelectionState
-from memcommit.context_targeting.tui.memory_selection import (
+from memcommit.core.context_targeting.tui.selection import ContextSelectionState
+from memcommit.core.context_targeting.tui.memory_selection import (
     DirectMemorySelectionState,
 )
-from memcommit.context_targeting.tui.tree import (
+from memcommit.core.context_targeting.tui.tree import (
     build_context_tree,
     context_subtree_names,
     visible_context_rows,

@@ -8,7 +8,7 @@ from typer.testing import CliRunner
 import memcommit.application.ops as ops
 import memcommit.commands.query.command as query_command
 from memcommit.adapters.console.entrypoint import app
-from memcommit.context_targeting.presets import (
+from memcommit.core.context_targeting.presets import (
     ContextScopePreset,
     ContextTraversal,
     resolve_context_traversal,

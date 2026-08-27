@@ -22,7 +22,7 @@ visible before the operation input.
 
 ## Shared component boundary
 
-`CompactReadableScopeControl` under `memcommit.context_targeting.tui` owns only
+`CompactReadableScopeControl` under `memcommit.core.context_targeting.tui` owns only
 operation-neutral mechanics:
 
 - one exact, single-line readable Context input with frozen-catalog completion;

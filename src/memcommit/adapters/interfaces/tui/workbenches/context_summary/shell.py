@@ -15,16 +15,16 @@ from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
-from memcommit.context_targeting.tui.reach import (
+from memcommit.core.context_targeting.tui.reach import (
     ContextReachState,
     ContextReachViewState,
     render_context_reach,
 )
-from memcommit.context_targeting.tui.picker import (
+from memcommit.core.context_targeting.tui.picker import (
     ContextMemoryPreviewController,
     memory_visibility_key_hint,
 )
-from memcommit.context_targeting.tui.selector import (
+from memcommit.core.context_targeting.tui.selector import (
     ContextSelectorControl,
     ContextSelectorRowProjection,
     ContextSelectorView,

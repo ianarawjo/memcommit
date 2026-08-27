@@ -17,9 +17,9 @@ from memcommit.context import (
     Context,
     Memory,
 )
-from memcommit.context_targeting.model import ContextScope
-from memcommit.context_targeting.resolution import expand_lexical_context_names
-from memcommit.context_targeting.catalog import freeze_granted_context_navigation
+from memcommit.core.context_targeting.model import ContextScope
+from memcommit.core.context_targeting.resolution import expand_lexical_context_names
+from memcommit.core.context_targeting.catalog import freeze_granted_context_navigation
 from memcommit.application.authority.derived_policy import authorize_derived_transfer
 from memcommit.application.operations.merge.application import (
     FrozenMergePlan,

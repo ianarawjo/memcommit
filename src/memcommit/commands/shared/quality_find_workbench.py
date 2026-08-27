@@ -60,12 +60,12 @@ from memcommit.adapters.interfaces.tui.workbenches.read_report import (
 )
 from memcommit.adapters.interfaces.tui.workbenches.findings import run_quality_find_browser
 from memcommit.context import Context
-from memcommit.context_targeting.tui.range_selection import (
+from memcommit.core.context_targeting.tui.range_selection import (
     ContextRangeSelectionState,
 )
-from memcommit.context_targeting.tui.reach import render_context_reach
-from memcommit.context_targeting.tui.selection import render_context_target_mode
-from memcommit.context_targeting.tui.selector import (
+from memcommit.core.context_targeting.tui.reach import render_context_reach
+from memcommit.core.context_targeting.tui.selection import render_context_target_mode
+from memcommit.core.context_targeting.tui.selector import (
     ContextSelectorControl,
     ContextSelectorView,
 )

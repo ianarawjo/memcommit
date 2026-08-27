@@ -6,17 +6,17 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.context_targeting.loading import (
+from memcommit.core.context_targeting.loading import (
     resolve_local_context_memory_target,
     resolve_local_direct_memory_locator,
 )
-from memcommit.context_targeting.model import DirectMemoryLocator, DirectMemoryTarget
-from memcommit.context_targeting.operands import choose_endpoint_operand
-from memcommit.context_targeting.presets import (
+from memcommit.core.context_targeting.model import DirectMemoryLocator, DirectMemoryTarget
+from memcommit.core.context_targeting.operands import choose_endpoint_operand
+from memcommit.core.context_targeting.presets import (
     ContextScopePreset,
     resolve_scope_preset,
 )
-from memcommit.context_targeting.resolution import (
+from memcommit.core.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
 )
 from memcommit.adapters.interfaces.console.text import display_escape_text, safe_terminal_text

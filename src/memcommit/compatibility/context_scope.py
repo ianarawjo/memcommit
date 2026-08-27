@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.context_targeting.loading import (
+from memcommit.core.context_targeting.loading import (
     ReadableContextScopeStore,
     load_context_scope,
 )

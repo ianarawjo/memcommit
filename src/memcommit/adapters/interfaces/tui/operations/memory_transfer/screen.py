@@ -15,14 +15,14 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
 from memcommit.context import Context
-from memcommit.context_targeting.model import DirectMemoryTarget
-from memcommit.context_targeting.resolution import parse_direct_memory_locator
-from memcommit.context_targeting.tui.direct_memory_selector import (
+from memcommit.core.context_targeting.model import DirectMemoryTarget
+from memcommit.core.context_targeting.resolution import parse_direct_memory_locator
+from memcommit.core.context_targeting.tui.direct_memory_selector import (
     DirectMemorySelectorControl,
     DirectMemorySelectorView,
 )
-from memcommit.context_targeting.tui.picker import ContextMemoryRow
-from memcommit.context_targeting.tui.selector import (
+from memcommit.core.context_targeting.tui.picker import ContextMemoryRow
+from memcommit.core.context_targeting.tui.selector import (
     ContextSelectorControl,
     ContextSelectorView,
 )

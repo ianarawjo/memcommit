@@ -51,7 +51,7 @@ def _load_scopes():
         GrantedReadStore,
         resolve_context_access,
     )
-    from memcommit.context_targeting.loading import load_context_scope
+    from memcommit.core.context_targeting.loading import load_context_scope
     from memcommit.store import MemoryStore
 
     store = MemoryStore(create=False)

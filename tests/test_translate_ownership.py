@@ -194,7 +194,7 @@ def test_translate_command_is_only_an_io_and_presentation_adapter() -> None:
 
     assert "memcommit.application.operations.translate.application" in imports
     assert "memcommit.application.operations.translate.materialization" in imports
-    assert "memcommit.context_targeting.loading" not in imports
+    assert "memcommit.core.context_targeting.loading" not in imports
     assert "memcommit.application.operations.translate.view_store" not in imports
     assert "memcommit.persistence.store" in imports
     assert "import memcommit.application.ops" not in source

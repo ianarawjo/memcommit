@@ -2,14 +2,14 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.context_targeting.tui.picker import choose_context, context_memory_rows
+from memcommit.core.context_targeting.tui.picker import choose_context, context_memory_rows
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.application.authority.access import (
     GrantedReadStore,
     resolve_context_access,
 )
-from memcommit.context_targeting.catalog import (
+from memcommit.core.context_targeting.catalog import (
     GrantedContextNavigation,
     freeze_granted_context_navigation,
     grant_navigation_annotation,

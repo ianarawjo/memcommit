@@ -10,7 +10,7 @@ from datetime import datetime, timezone
 from typing import Callable, Literal, Protocol, TypeAlias
 
 from memcommit.context import Context, Memory, MemoryRef
-from memcommit.context_targeting.memory_focus import (
+from memcommit.core.context_targeting.memory_focus import (
     MemoryFocusError,
     resolve_memory_focus,
 )

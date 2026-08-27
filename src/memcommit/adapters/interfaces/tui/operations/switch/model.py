@@ -6,7 +6,7 @@ from collections.abc import Callable, Sequence
 from dataclasses import dataclass, field
 from typing import Mapping
 
-from memcommit.context_targeting.tui.picker import ContextMemoryRow
+from memcommit.core.context_targeting.tui.picker import ContextMemoryRow
 from memcommit.source_projection.presentation import SourceDisplayValue
 
 

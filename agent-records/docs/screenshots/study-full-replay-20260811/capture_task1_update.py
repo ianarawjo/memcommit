@@ -71,7 +71,7 @@ def _load_inputs():
         freeze_granted_context_binding,
         resolve_context_access,
     )
-    from memcommit.context_targeting.loading import load_context_scope
+    from memcommit.core.context_targeting.loading import load_context_scope
     from memcommit.store import MemoryStore
     from memcommit.update import collect_update_inputs
 

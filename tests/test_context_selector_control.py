@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.context_targeting.tui.selector import (
+from memcommit.core.context_targeting.tui.selector import (
     ContextSelectorControl,
     ContextSelectorView,
 )

@@ -56,7 +56,7 @@ from memcommit.adapters.interfaces.tui.components.plain_text_clipboard import (
     copy_plain_text,
 )
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
-from memcommit.context_targeting.tui.tree import (
+from memcommit.core.context_targeting.tui.tree import (
     ContextTree,
     ContextTreeRow,
     ContextTreeState,
@@ -65,11 +65,11 @@ from memcommit.context_targeting.tui.tree import (
     expandable_context_subtree,
     visible_context_rows,
 )
-from memcommit.context_targeting.tui.reach import (
+from memcommit.core.context_targeting.tui.reach import (
     ContextReachState,
     render_context_reach,
 )
-from memcommit.context_targeting.model import DirectMemoryTarget
+from memcommit.core.context_targeting.model import DirectMemoryTarget
 from memcommit.adapters.interfaces.console.selection.tui import tree_choice_marker
 from memcommit.source_projection.model import (
     SourceDisplayFacts,

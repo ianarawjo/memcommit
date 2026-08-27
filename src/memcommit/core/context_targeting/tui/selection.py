@@ -12,7 +12,7 @@ from memcommit.adapters.interfaces.tui.components.horizontal_choice import (
     HorizontalChoiceState,
     render_horizontal_choice,
 )
-from memcommit.context_targeting.model import ContextSelectionMode
+from memcommit.core.context_targeting.model import ContextSelectionMode
 
 
 @dataclass

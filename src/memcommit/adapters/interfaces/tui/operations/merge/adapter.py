@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from memcommit.application.authority.access import resolve_context_access
-from memcommit.context_targeting.readable_catalog import (
+from memcommit.core.context_targeting.readable_catalog import (
     freeze_profile_context_navigation,
 )
 from memcommit.adapters.interfaces.tui.operations.merge.model import MergeTuiSetup

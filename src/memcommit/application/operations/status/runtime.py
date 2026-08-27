@@ -12,9 +12,9 @@ from memcommit.application.authority.access import (
 )
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.application.retained_history.context_snapshot import ContextSnapshotRef
-from memcommit.context_targeting.model import ContextScope
-from memcommit.context_targeting.readable_catalog import ReadableContextCatalog
-from memcommit.context_targeting.resolution import expand_lexical_context_names
+from memcommit.core.context_targeting.model import ContextScope
+from memcommit.core.context_targeting.readable_catalog import ReadableContextCatalog
+from memcommit.core.context_targeting.resolution import expand_lexical_context_names
 from memcommit.application.operations.profile.config import ProfileRegistry, profile_store_dir
 from memcommit.application.operations.profile.model import (
     authority_grant_snapshot_lock,

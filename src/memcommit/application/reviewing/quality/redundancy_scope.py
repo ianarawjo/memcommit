@@ -7,9 +7,9 @@ from dataclasses import dataclass
 
 import memcommit.application.ops as ops
 from memcommit.application.authority.access import ContextAccess, GrantedReadStore
-from memcommit.context_targeting.model import ContextScope
-from memcommit.context_targeting.readable_catalog import ReadableContextCatalog
-from memcommit.context_targeting.resolution import expand_lexical_context_names
+from memcommit.core.context_targeting.model import ContextScope
+from memcommit.core.context_targeting.readable_catalog import ReadableContextCatalog
+from memcommit.core.context_targeting.resolution import expand_lexical_context_names
 from memcommit.application.authority.derived_policy import authorize_combination
 from memcommit.application.reviewing.direct_item_duplicates import ExactDuplicateGroup
 from memcommit.application.reviewing.quality.findings import DuplicateReport, FindingsProvider

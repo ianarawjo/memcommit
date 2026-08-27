@@ -22,7 +22,7 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 from prompt_toolkit.widgets import Frame, TextArea
 
-from memcommit.context_targeting.tui.compact_scope import (
+from memcommit.core.context_targeting.tui.compact_scope import (
     CompactReadableScopeControl,
 )
 from memcommit.adapters.interfaces.console.terminal import require_interactive_terminal

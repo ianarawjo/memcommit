@@ -42,7 +42,7 @@ from memcommit.adapters.interfaces.console.terminal import (
 from memcommit.adapters.interfaces.console.text import (
     safe_terminal_text,
 )
-from memcommit.context_targeting.tui.selector import (
+from memcommit.core.context_targeting.tui.selector import (
     ContextSelectorControl,
     ContextSelectorView,
 )

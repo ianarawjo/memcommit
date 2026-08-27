@@ -4,15 +4,15 @@ from memcommit.commands.find.search_workbench import (
     FindSearchResult,
     _has_granted_materialization_source,
 )
-from memcommit.context_targeting.catalog import (
+from memcommit.core.context_targeting.catalog import (
     grant_navigation_annotation,
     grant_navigation_capability_labels,
 )
-from memcommit.context_targeting.tui.rendering import (
+from memcommit.core.context_targeting.tui.rendering import (
     ContextTreeRowDecoration,
     render_context_tree_rows,
 )
-from memcommit.context_targeting.tui.tree import ContextTreeState, build_context_tree
+from memcommit.core.context_targeting.tui.tree import ContextTreeState, build_context_tree
 from memcommit.adapters.interfaces.console.theme import (
     SemanticColorRole,
     semantic_color_rgb,

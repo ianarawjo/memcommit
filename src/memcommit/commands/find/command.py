@@ -41,11 +41,11 @@ from memcommit.commands.shared.readable_context_catalog import (
     freeze_readable_context_catalog,
     freeze_profile_readable_context_catalog,
 )
-from memcommit.context_targeting.search import (
+from memcommit.core.context_targeting.search import (
     collect_readable_search_candidates,
     load_readable_search_roots,
 )
-from memcommit.context_targeting.presets import (
+from memcommit.core.context_targeting.presets import (
     ContextScopePreset,
     resolve_context_traversal,
     resolve_scope_preset,

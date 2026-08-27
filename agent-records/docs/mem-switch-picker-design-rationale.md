@@ -196,14 +196,14 @@ current-Context change. This prevents a slow picker or relative resolution
 from silently overwriting another terminal's later switch.
 
 The namespace tree is also available from
-`memcommit.context_targeting.tui.tree` as the terminal-independent
+`memcommit.core.context_targeting.tui.tree` as the terminal-independent
 `ContextTree` plus `ContextTreeState` component. It owns the frozen tree,
 cursor, visible-row projection, depth-wise expansion and collapse, and
 expand-all restore behavior. Optional `ContextMemoryRow` projections—the
 retained compatibility type name—add read-only direct-item leaves without
 changing the Context cursor. The component performs
 no terminal I/O and assigns no operational role to the selected name.
-`choose_context()` in `memcommit.context_targeting.tui.picker` is the
+`choose_context()` in `memcommit.core.context_targeting.tui.picker` is the
 full-screen, single-selection wrapper over
 that state and can also run in read-only browse mode. Larger TUIs may embed one or more
 independent states and retain their own role, scope, validation, and receipt

@@ -23,7 +23,7 @@ from memcommit.commands.shared.exact_command_review import (
     ExactCommandReview,
     render_exact_command_blocks,
 )
-from memcommit.context_targeting.tui.picker import choose_context
+from memcommit.core.context_targeting.tui.picker import choose_context
 from memcommit.commands.ground.shell import (
     GROUND_CONTEXTS_FRAME_HEIGHT,
     GROUND_GOAL_FRAME_HEIGHT,

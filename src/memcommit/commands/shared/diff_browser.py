@@ -9,7 +9,7 @@ from dataclasses import dataclass, replace as dataclass_replace
 from memcommit.commands.shared.checkpoint_diff import (
     checkpoint_revision_detail_renderer,
 )
-from memcommit.context_targeting.tui.picker import (
+from memcommit.core.context_targeting.tui.picker import (
     ContextMemoryBadge,
     ContextMemoryDetail,
     ContextMemoryRow,

@@ -5,8 +5,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Protocol
 
-from memcommit.context_targeting.model import DirectMemoryLocator
-from memcommit.context_targeting.resolution import parse_direct_memory_locator
+from memcommit.core.context_targeting.model import DirectMemoryLocator
+from memcommit.core.context_targeting.resolution import parse_direct_memory_locator
 
 
 class EditError(RuntimeError):

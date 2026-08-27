@@ -34,16 +34,16 @@ from memcommit.adapters.interfaces.tui.components.exact_command_review import (
     resolve_displayed_command_value,
     shortest_unique_identifier_prefix,
 )
-from memcommit.context_targeting.tui.selector import (
+from memcommit.core.context_targeting.tui.selector import (
     ContextSelectorControl,
     ContextSelectorView,
 )
-from memcommit.context_targeting.tui.direct_memory_selector import (
+from memcommit.core.context_targeting.tui.direct_memory_selector import (
     DirectMemorySelectorControl,
     DirectMemorySelectorView,
 )
-from memcommit.context_targeting.tui.picker import ContextMemoryRow
-from memcommit.context_targeting.resolution import parse_direct_memory_locator
+from memcommit.core.context_targeting.tui.picker import ContextMemoryRow
+from memcommit.core.context_targeting.resolution import parse_direct_memory_locator
 from memcommit.adapters.interfaces.console.terminal import require_interactive_terminal
 from memcommit.adapters.interfaces.console.text import display_escape_text
 from memcommit.adapters.interfaces.tui.components.focus import (

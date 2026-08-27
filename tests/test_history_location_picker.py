@@ -7,7 +7,7 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
 from memcommit.commands.shared.context_picker import ContextSubtreeSelection
-from memcommit.context_targeting.tui.picker import ContextMemoryRow
+from memcommit.core.context_targeting.tui.picker import ContextMemoryRow
 
 
 def test_location_picker_keeps_real_catalog_parents_as_unavailable_tree_rows(

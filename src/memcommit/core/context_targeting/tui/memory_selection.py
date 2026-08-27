@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 
-from memcommit.context_targeting.model import ContextSelectionMode, DirectMemoryTarget
+from memcommit.core.context_targeting.model import ContextSelectionMode, DirectMemoryTarget
 
 
 class DirectMemorySelectionState:

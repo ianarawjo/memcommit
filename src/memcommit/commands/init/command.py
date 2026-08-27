@@ -10,7 +10,7 @@ from memcommit.application.operations.context_init.runtime import (
     execute_context_init,
     prepare_context_init,
 )
-from memcommit.context_targeting.tui.name_editor import choose_context_name
+from memcommit.core.context_targeting.tui.name_editor import choose_context_name
 from memcommit.adapters.interfaces.cli.context_init import render_context_init
 from memcommit.adapters.interfaces.tui.operations.context_init import (
     ContextInitTuiSetup,

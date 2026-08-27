@@ -49,14 +49,14 @@ from memcommit.adapters.interfaces.tui.components.operation_launcher.session imp
 from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
 )
-from memcommit.context_targeting.presets import (
+from memcommit.core.context_targeting.presets import (
     ContextScopePreset,
     legacy_root_only_option_alias,
     resolve_descendant_scopes,
     resolve_scope_preset,
 )
-from memcommit.context_targeting.model import DirectMemoryLocator
-from memcommit.context_targeting.resolution import (
+from memcommit.core.context_targeting.model import DirectMemoryLocator
+from memcommit.core.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
 )
 from memcommit.providers.profile_routes import (

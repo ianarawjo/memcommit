@@ -115,7 +115,7 @@ compound Context-name editor:
 - a parent-locator tree that preserves the exact final name segment; and
 - compact-row, expanded-tree, and review-card projections.
 
-Context-specific composition lives under `memcommit.context_targeting.tui` as
+Context-specific composition lives under `memcommit.core.context_targeting.tui` as
 `ContextNameView`, `ContextParentLocatorState`,
 `ContextParentLocatorControl`, `ContextNameControl`, and `context_name_*`
 renderers. `ContextNameDraftState` in `tui/name_draft.py` owns the shared

@@ -7,8 +7,8 @@ from dataclasses import dataclass
 
 from prompt_toolkit.application.current import get_app
 
-from memcommit.context_targeting.tui.selector import ContextSelectorRowProjection
-from memcommit.context_targeting.tui.tree import ContextTreeRow
+from memcommit.core.context_targeting.tui.selector import ContextSelectorRowProjection
+from memcommit.core.context_targeting.tui.tree import ContextTreeRow
 from memcommit.adapters.interfaces.tui.components.direct_item_placement.model import (
     DirectItemGapState,
     DirectItemPlacementRow,

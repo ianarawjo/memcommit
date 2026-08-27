@@ -14,7 +14,7 @@ from memcommit.providers.policy import (
     resolve_operation_provider_policy,
 )
 from memcommit.context import Context
-from memcommit.context_targeting.naming import validate_portable_context_name
+from memcommit.core.context_targeting.naming import validate_portable_context_name
 from memcommit.application.authority.derived_policy import (
     authorize_analysis_save,
     authorize_combination,

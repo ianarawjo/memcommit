@@ -8,7 +8,7 @@ import typer
 
 from memcommit.application.authority.access import resolve_context_access
 from memcommit.commands.shared.context_operand import ContextOperandSnapshot
-from memcommit.context_targeting.presets import (
+from memcommit.core.context_targeting.presets import (
     ContextScopePreset,
     resolve_scope_preset,
 )

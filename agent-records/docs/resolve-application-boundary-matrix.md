@@ -101,7 +101,7 @@ before, after, ordered result, rule list, rationale, and known-wrong result.
 | Concern | Application owner | Invariant |
 | --- | --- | --- |
 | Exact rules and cases | `memcommit.resolve_rules` plus `memcommit/eval/fixtures/resolve.json` | one versioned source is shared by production prompts and regression tests; all cases enter the prompt |
-| CLI target normalization | `memcommit.resolve_targeting` composed from `memcommit.context_targeting` | mixed Context, UUID-shaped Memory, qualified Memory, `--context`, and `--memory` forms produce exactly one canonical Context and an optional exact mutable set before provider construction; bare Memory owner discovery is local-only |
+| CLI target normalization | `memcommit.resolve_targeting` composed from `memcommit.core.context_targeting` | mixed Context, UUID-shaped Memory, qualified Memory, `--context`, and `--memory` forms produce exactly one canonical Context and an optional exact mutable set before provider construction; bare Memory owner discovery is local-only |
 | Request target | `ResolveRequest.target_fit` | MAY is the default resolution floor; YES is a separately frozen strict resolution target |
 | Source freeze | `MemoryStoreResolvePort.freeze` | complete direct frame, exact mutable UID set, authority, digest, and target-bound revision precede provider connection |
 | Initial judgment | `fit_judgment` through `ProviderResolveSemanticPort` | the complete frame is judged once; initial MAY is still eligible for an exact YES improvement |

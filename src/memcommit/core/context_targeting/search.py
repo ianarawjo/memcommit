@@ -6,8 +6,8 @@ from collections.abc import Sequence
 from typing import TYPE_CHECKING, Protocol
 
 from memcommit.context import Context
-from memcommit.context_targeting.model import ContextScope
-from memcommit.context_targeting.resolution import expand_lexical_context_names
+from memcommit.core.context_targeting.model import ContextScope
+from memcommit.core.context_targeting.resolution import expand_lexical_context_names
 from memcommit.application.operations.search.model import (
     SearchCandidate,
     append_artifact_candidates,

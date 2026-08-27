@@ -5,8 +5,8 @@ from __future__ import annotations
 from collections.abc import Callable
 
 from memcommit.context_locator import resolve_context_locator
-from memcommit.context_targeting.naming import validate_portable_context_name
-from memcommit.context_targeting.model import (
+from memcommit.core.context_targeting.naming import validate_portable_context_name
+from memcommit.core.context_targeting.model import (
     ExistingContextOperand,
     InlineTextOperand,
 )

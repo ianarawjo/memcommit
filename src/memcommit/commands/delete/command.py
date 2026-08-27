@@ -7,13 +7,13 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.commands.shared.context_operand import ContextOperandSnapshot
-from memcommit.context_targeting.tui.picker import (
+from memcommit.core.context_targeting.tui.picker import (
     ContextMemorySelection,
     ContextPickerActionReceipt,
     choose_context,
 )
-from memcommit.context_targeting.loading import DirectItemAmbiguityError
-from memcommit.context_targeting.model import DirectItemTarget
+from memcommit.core.context_targeting.loading import DirectItemAmbiguityError
+from memcommit.core.context_targeting.model import DirectItemTarget
 from memcommit.application.operations.delete.application import (
     DeleteError,
     DeleteStalePlanError,

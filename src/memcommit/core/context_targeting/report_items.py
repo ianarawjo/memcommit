@@ -13,11 +13,11 @@ from typing import Literal
 from memcommit.application.authority.access import ContextAccess, resolve_context_access
 from memcommit.context import Context, Memory
 from memcommit.context_locator import resolve_context_locator
-from memcommit.context_targeting.readable_catalog import (
+from memcommit.core.context_targeting.readable_catalog import (
     ReadableContextCatalog,
     freeze_profile_readable_context_catalog,
 )
-from memcommit.context_targeting.resolution import parse_direct_memory_locator
+from memcommit.core.context_targeting.resolution import parse_direct_memory_locator
 from memcommit.application.operations.profile.config import ProfileRegistry
 from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
     collect_memory_history_candidates,

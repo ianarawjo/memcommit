@@ -23,7 +23,7 @@ from memcommit.adapters.python_api.query import (
 from memcommit.application.authority.access import resolve_context_access
 from memcommit.context import QueryContextRef
 from memcommit.context_locator import resolve_context_locator
-from memcommit.context_targeting.readable_catalog import (
+from memcommit.core.context_targeting.readable_catalog import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.application.operations.search.answer_dialogue import FindAnswerCorpusTooLarge

@@ -12,7 +12,7 @@ from memcommit.commands.update import command as update_command
 from memcommit.adapters.console.entrypoint import app
 from memcommit.config import Config
 from memcommit.context import Context, Memory
-from memcommit.context_targeting.loading import load_context_scope
+from memcommit.core.context_targeting.loading import load_context_scope
 from memcommit.profile_config import (
     ProfileEntry,
     ProfileRegistry,

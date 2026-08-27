@@ -15,25 +15,25 @@ from memcommit.application.authority.access import (
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.application.retained_history.context_snapshot import ContextSnapshotRef
 from memcommit.context_locator import resolve_context_locator
-from memcommit.context_targeting.loading import (
+from memcommit.core.context_targeting.loading import (
     DirectItemAmbiguityError,
     DirectItemNotFoundError,
     resolve_local_direct_item_locator,
 )
-from memcommit.context_targeting.report_items import (
+from memcommit.core.context_targeting.report_items import (
     ReadableMemoryTargetAmbiguityError,
     ReadableMemoryTargetNotFoundError,
     freeze_memory_report_readable_catalog,
     resolve_readable_memory_target,
 )
-from memcommit.context_targeting.memory_focus import is_memory_uid_prefix
-from memcommit.context_targeting.model import (
+from memcommit.core.context_targeting.memory_focus import is_memory_uid_prefix
+from memcommit.core.context_targeting.model import (
     ContextScope,
     DirectMemoryLocator,
     ExistingContextOperand,
 )
-from memcommit.context_targeting.readable_catalog import ReadableContextCatalog
-from memcommit.context_targeting.resolution import (
+from memcommit.core.context_targeting.readable_catalog import ReadableContextCatalog
+from memcommit.core.context_targeting.resolution import (
     expand_lexical_context_names,
     parse_auto_typed_context_memory_operand,
 )

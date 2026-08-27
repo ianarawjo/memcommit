@@ -9,16 +9,16 @@ import typer
 import memcommit.application.ops as ops
 from memcommit.adapters.interfaces.cli.command_group import CanonicalCommandGroup
 from memcommit.commands.shared.context_operand import ContextOperandSnapshot
-from memcommit.context_targeting.loading import (
+from memcommit.core.context_targeting.loading import (
     resolve_local_context_memory_target,
     resolve_local_direct_memory_locator,
 )
-from memcommit.context_targeting.model import DirectMemoryTarget
+from memcommit.core.context_targeting.model import DirectMemoryTarget
 from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
 )
 from memcommit.context import Context, Memory
-from memcommit.context_targeting.presets import (
+from memcommit.core.context_targeting.presets import (
     ContextScopePreset,
     resolve_scope_preset,
 )

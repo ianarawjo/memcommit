@@ -4,13 +4,13 @@ import typer
 
 from memcommit.commands.branch.dialog import choose_branch_creation
 from memcommit.context_locator import resolve_context_locator
-from memcommit.context_targeting.presets import (
+from memcommit.core.context_targeting.presets import (
     ContextScopePreset,
     legacy_root_only_option_alias,
     resolve_descendant_scopes,
     resolve_scope_preset,
 )
-from memcommit.context_targeting.tui.name_editor import suggest_fresh_context_name
+from memcommit.core.context_targeting.tui.name_editor import suggest_fresh_context_name
 from memcommit.adapters.interfaces.console.text import display_escape_text
 from memcommit.application.operations.branch.application import BranchRequest
 from memcommit.application.operations.branch.runtime import (

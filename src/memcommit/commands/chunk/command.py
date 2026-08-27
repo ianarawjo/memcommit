@@ -13,17 +13,17 @@ from memcommit.application.operations.chunk.domain import ChunkMethod, chunk_con
 from memcommit.application.operations.chunk.runtime import apply_chunk_proposals
 from memcommit.commands.shared.context_operand import ContextOperandSnapshot
 from memcommit.context import Memory
-from memcommit.context_targeting.loading import (
+from memcommit.core.context_targeting.loading import (
     resolve_local_context_memory_target,
     resolve_local_direct_memory_locator,
 )
-from memcommit.context_targeting.memory_focus import is_memory_uid_prefix
-from memcommit.context_targeting.model import (
+from memcommit.core.context_targeting.memory_focus import is_memory_uid_prefix
+from memcommit.core.context_targeting.model import (
     ContextTarget,
     DirectMemoryLocator,
     DirectMemoryTarget,
 )
-from memcommit.context_targeting.resolution import (
+from memcommit.core.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
 )
 from memcommit.adapters.interfaces.console.text import display_escape_text

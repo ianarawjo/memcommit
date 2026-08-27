@@ -14,11 +14,11 @@ from memcommit.application.authority.access import (
 from memcommit.context import AutoCheckpoint, Context, Information, Memory, MemoryRef
 from memcommit.context import QueryContextRef
 from memcommit.context_locator import resolve_context_locator
-from memcommit.context_targeting.loading import (
+from memcommit.core.context_targeting.loading import (
     DirectItemNotFoundError,
     resolve_local_direct_item_locator,
 )
-from memcommit.context_targeting.model import DirectItemTarget
+from memcommit.core.context_targeting.model import DirectItemTarget
 from memcommit.application.operations.delete.application import (
     ContextDeleteRequest,
     ContextDeleteResult,

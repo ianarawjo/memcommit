@@ -15,18 +15,18 @@ from memcommit.adapters.interfaces.tui.components.frame import (
 from memcommit.adapters.interfaces.console.text import (
     safe_terminal_text,
 )
-from memcommit.context_targeting.model import ContextSelectionMode
-from memcommit.context_targeting.tui.rendering import (
+from memcommit.core.context_targeting.model import ContextSelectionMode
+from memcommit.core.context_targeting.tui.rendering import (
     ContextTreeRowDecoration,
     render_context_tree_rows,
 )
-from memcommit.context_targeting.tui.selection import ContextSelectionState
-from memcommit.context_targeting.tui.tree import (
+from memcommit.core.context_targeting.tui.selection import ContextSelectionState
+from memcommit.core.context_targeting.tui.tree import (
     ContextTreeState,
     build_context_tree,
     context_ancestors,
 )
-from memcommit.context_targeting.tui.tree import ContextTreeRow
+from memcommit.core.context_targeting.tui.tree import ContextTreeRow
 from memcommit.adapters.interfaces.console.selection.tui import tree_choice_marker, tree_choice_styles
 from memcommit.source_projection.model import SourceDisplayFacts, SourceState
 from memcommit.source_projection.presentation import (

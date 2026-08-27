@@ -6,7 +6,7 @@ from collections.abc import Sequence
 from typing import Protocol
 
 from memcommit.context import Context, Memory, MemoryRef
-from memcommit.context_targeting.search import load_readable_search_roots
+from memcommit.core.context_targeting.search import load_readable_search_roots
 from memcommit.application.operations.find.literal_application import (
     FrozenLiteralFindSource,
     LiteralFindRequest,

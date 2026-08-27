@@ -5,18 +5,18 @@ from __future__ import annotations
 from collections.abc import Mapping, Sequence, Set
 from dataclasses import dataclass, field
 
-from memcommit.context_targeting.model import ContextScope
-from memcommit.context_targeting.resolution import expand_lexical_context_names
-from memcommit.context_targeting.tui.reach import ContextReachState
-from memcommit.context_targeting.tui.rendering import (
+from memcommit.core.context_targeting.model import ContextScope
+from memcommit.core.context_targeting.resolution import expand_lexical_context_names
+from memcommit.core.context_targeting.tui.reach import ContextReachState
+from memcommit.core.context_targeting.tui.rendering import (
     ContextTreeRowDecoration,
     render_context_tree_rows,
 )
-from memcommit.context_targeting.tui.selection import (
+from memcommit.core.context_targeting.tui.selection import (
     ContextSelectionState,
     ContextTargetModeState,
 )
-from memcommit.context_targeting.tui.tree import (
+from memcommit.core.context_targeting.tui.tree import (
     ContextTree,
     ContextTreeState,
     build_context_tree,

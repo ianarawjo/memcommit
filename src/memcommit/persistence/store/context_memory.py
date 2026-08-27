@@ -19,11 +19,11 @@ from typing import Any, Callable, Iterable, Iterator, Literal, Optional
 
 from memcommit.application.retained_history.checkpoint_frames import map_restorable_checkpoint_frames
 from memcommit.context import AutoCheckpoint, Checkpoint, Context, Memory, MemoryRef
-from memcommit.context_targeting.naming import (
+from memcommit.core.context_targeting.naming import (
     RESERVED_CONTEXT_SEGMENTS,
     validate_portable_context_name,
 )
-from memcommit.context_targeting.navigation import (
+from memcommit.core.context_targeting.navigation import (
     ContextNavigationDirection,
     apply_context_navigation,
     context_navigation_target,
@@ -36,7 +36,7 @@ from memcommit.application.retained_history.context_lifecycle import (
     PREVIOUS_CHECKPOINT_RECORDED,
     PREVIOUS_CHECKPOINT_UNREADABLE,
 )
-from memcommit.context_targeting.context_catalog import (
+from memcommit.core.context_targeting.context_catalog import (
     ContextCatalogDiagnostic,
     ContextCatalogDiagnosticCode,
     ContextCatalogScan,
@@ -2129,8 +2129,8 @@ class ContextMemoryStoreMixin:
         with self._command_write_lock():
             with self._context_graph_lock(exclusive=include_descendants):
                 if include_descendants:
-                    from memcommit.context_targeting.model import ContextScope
-                    from memcommit.context_targeting.resolution import (
+                    from memcommit.core.context_targeting.model import ContextScope
+                    from memcommit.core.context_targeting.resolution import (
                         expand_lexical_context_names,
                     )
 
@@ -2416,8 +2416,8 @@ class ContextMemoryStoreMixin:
             with self._context_graph_lock(exclusive=include_descendants):
                 with self._context_write_locks(lock_names):
                     if include_descendants:
-                        from memcommit.context_targeting.model import ContextScope
-                        from memcommit.context_targeting.resolution import (
+                        from memcommit.core.context_targeting.model import ContextScope
+                        from memcommit.core.context_targeting.resolution import (
                             expand_lexical_context_names,
                         )
 
