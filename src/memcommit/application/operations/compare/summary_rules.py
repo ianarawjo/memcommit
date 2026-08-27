@@ -161,7 +161,7 @@ def _validate_case(raw: object, *, rule_ids: set[str]) -> str:
 @lru_cache(maxsize=1)
 def _loaded_ruleset() -> dict[str, object]:
     try:
-        resource = resources.files("memcommit.eval").joinpath(
+        resource = resources.files("memcommit.application.evaluation").joinpath(
             "fixtures", COMPARISON_SUMMARY_RULESET_FIXTURE
         )
         raw = json.loads(

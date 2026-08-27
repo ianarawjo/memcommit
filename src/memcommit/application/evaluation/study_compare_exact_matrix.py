@@ -39,7 +39,7 @@ from memcommit.application.operations.compare.ledger.provider import (
     analyze_comparison,
 )
 from memcommit.infrastructure.config import Config
-from memcommit.eval.study_compare_graph_prewarm import (
+from memcommit.application.evaluation.study_compare_graph_prewarm import (
     GraphPair,
     GraphView,
     TaskGraphPlan,

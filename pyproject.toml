@@ -28,7 +28,7 @@ where = ["src"]
 include = ["memcommit*"]
 
 [tool.setuptools.package-data]
-"memcommit.eval" = ["fixtures/*.json"]
+"memcommit.application.evaluation" = ["fixtures/*.json"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0"]

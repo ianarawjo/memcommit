@@ -10,9 +10,9 @@ from types import SimpleNamespace
 
 import pytest
 
-import memcommit.eval.semantic_campaign as campaign_module
+import memcommit.application.evaluation.semantic_campaign as campaign_module
 from memcommit.ambiguity_pipeline import AmbiguityPipelineError
-from memcommit.eval.semantic_campaign import (
+from memcommit.application.evaluation.semantic_campaign import (
     DEFAULT_AMBIGUITY_FIXTURE,
     DEFAULT_AMBIGUITY_HOLDOUT_FIXTURE,
     DEFAULT_DUPLICATE_FIXTURE,

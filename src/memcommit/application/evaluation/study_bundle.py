@@ -22,7 +22,7 @@ import uuid
 
 import memcommit.persistence.store as store_module
 from memcommit.context import AutoCheckpoint, Context, Memory
-from memcommit.eval.study_fixtures import (
+from memcommit.application.evaluation.study_fixtures import (
     FixtureDataset,
     FixtureMemory,
     FixtureTranslationPair,
@@ -1057,7 +1057,7 @@ def _build_study_bundle_contents(
         )
     package.mkdir(parents=True, exist_ok=True)
     root = fixture_root or (
-        Path(__file__).resolve().parents[3]
+        Path(__file__).resolve().parents[4]
         / "agent-records"
         / "docs"
         / "fixtures"

@@ -1927,7 +1927,7 @@ def _load_calibration(
 ) -> tuple[dict[str, object], list[dict[str, object]]]:
     """Load human-reviewed examples valid for the active evidence mode."""
     try:
-        resource = resources.files("memcommit.eval").joinpath(
+        resource = resources.files("memcommit.application.evaluation").joinpath(
             "fixtures",
             "atomize.json",
         )

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from memcommit.eval.study_sheet import build_study_workbook_spec
+from memcommit.application.evaluation.study_sheet import build_study_workbook_spec
 
 
 def test_bilingual_workbook_spec_pairs_every_fixture() -> None:

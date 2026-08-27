@@ -994,7 +994,7 @@ graph does not split one selected Context across calls. The broadened cache is
 documented separately in
 `agent-records/docs/study-compare-graph-prewarm-design-rationale.md`.
 
-`memcommit.eval.study_compare_prewarm` resolves the same local or granted
+`memcommit.application.evaluation.study_compare_prewarm` resolves the same local or granted
 accesses as production Compare, uses the same recursive source projection and
 atomic execution boundary, and keeps the semantic artifact inside the active
 Profile's authorized store. Its repository receipt is content-free. The first

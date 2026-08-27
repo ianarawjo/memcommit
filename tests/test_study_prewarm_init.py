@@ -28,7 +28,7 @@ from memcommit.comparison import (
 )
 from memcommit.config import Config
 from memcommit.context import Memory
-from memcommit.eval.study_bundle import build_all_study_bundles
+from memcommit.application.evaluation.study_bundle import build_all_study_bundles
 from memcommit.granted_comparison_store import load_granted_comparison_artifact
 from memcommit.profile_config import load_profile_registry, profile_store_dir
 from memcommit.store import MemoryStore

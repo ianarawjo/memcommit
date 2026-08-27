@@ -338,7 +338,7 @@ def _pair_payload(pairs: list[MemoryPair]) -> list[dict[str, str]]:
 def _load_calibration_cases(filename: str) -> list[object]:
     """Load versioned examples shared by prompts and fixture contract tests."""
     try:
-        resource = resources.files("memcommit.eval").joinpath(
+        resource = resources.files("memcommit.application.evaluation").joinpath(
             "fixtures",
             filename,
         )

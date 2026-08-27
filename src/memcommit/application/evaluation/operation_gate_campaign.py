@@ -12,7 +12,7 @@ from pathlib import Path
 import statistics
 import time
 
-from memcommit.eval.semantic_campaign import (
+from memcommit.application.evaluation.semantic_campaign import (
     CALIBRATION_CORPUS_ROLE,
     CALIBRATION_MODE,
     LEDGER_KIND,

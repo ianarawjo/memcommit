@@ -24,7 +24,7 @@ import memcommit.study_prewarm.prepare as prewarm_prepare_module
 from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.switch.command import _granted_picker_state, _granted_picker_views
 from memcommit.context import AutoCheckpoint, Context, Memory
-from memcommit.eval.study_bundle import build_all_study_bundles
+from memcommit.application.evaluation.study_bundle import build_all_study_bundles
 from memcommit.infrastructure.providers.policy import (
     STUDY_PROVIDER_POLICY_DIGEST,
     STUDY_PROVIDER_POLICY_VERSION,

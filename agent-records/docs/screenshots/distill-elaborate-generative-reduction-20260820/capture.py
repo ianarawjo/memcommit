@@ -50,7 +50,7 @@ def _environment() -> dict[str, str]:
 
 def _fixture() -> dict[str, object]:
     return json.loads(
-        (ROOT / "src/memcommit/eval/fixtures/distill_elaborate.json").read_text(
+        (ROOT / "src/memcommit/application/evaluation/fixtures/distill_elaborate.json").read_text(
             encoding="utf-8"
         )
     )

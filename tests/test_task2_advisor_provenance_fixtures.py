@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections import Counter
 import csv
 
-from memcommit.eval.study_fixtures import default_fixture_root, load_study_fixture
+from memcommit.application.evaluation.study_fixtures import default_fixture_root, load_study_fixture
 
 
 CONFLICT_IDS = {

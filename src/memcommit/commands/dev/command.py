@@ -255,7 +255,7 @@ def dev_eval(
         raise typer.Exit(1)
 
     from memcommit.semantic.llm import LLMError
-    from memcommit.eval.runner import run_forget_eval, run_integrate_eval
+    from memcommit.application.evaluation.runner import run_forget_eval, run_integrate_eval
 
     try:
         if command == "forget":

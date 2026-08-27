@@ -57,7 +57,7 @@ while a medium artifact cannot satisfy a high request.
 ## Implemented first slice and measured boundary
 
 `memcommit.study_prewarm` now gives the editable Study baseline one strict,
-versioned, task-local registry. `memcommit.eval.study_compare_registry`
+versioned, task-local registry. `memcommit.application.evaluation.study_compare_registry`
 publishes an already retained exact `ComparisonAnalysis` into that fixture
 without a provider call. A new `init-study` publishes this declared fixture
 once into shared content-addressed storage, writes a small digest reference,
@@ -127,7 +127,7 @@ The implemented production transfer order after the Atomize slice was:
 ### Tutorial Atomize exact prewarm
 
 The second production slice moves only the fixed tutorial analysis out of the
-participant turn. `memcommit.eval.study_atomize_registry` publishes an already
+participant turn. `memcommit.application.evaluation.study_atomize_registry` publishes an already
 validated `AtomizeAnalysisSession` into the baseline registry. A new Study run
 checks the exact `practice/source` direct-Memory ledger, the complete
 `practice/description` digest, Atomize ruleset and prompt/decoder contract,

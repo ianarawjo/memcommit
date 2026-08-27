@@ -599,7 +599,7 @@ authorized target.
 
 ## Compact executable Task 1 fixture
 
-[`../src/memcommit/eval/fixtures/update.json`](../../src/memcommit/eval/fixtures/update.json)
+[`../src/memcommit/application/evaluation/fixtures/update.json`](../../src/memcommit/application/evaluation/fixtures/update.json)
 contains a small regression/example set rather than the complete
 participant-facing study corpus. It provisions five verified source Memories
 and five target-baseline Memories. The expected result is:

@@ -119,7 +119,7 @@ def test_pre_relocation_translate_globals_load_through_aliases() -> None:
 def test_production_translate_consumers_use_operation_owners() -> None:
     relative_paths = (
         "src/memcommit/commands/translate/command.py",
-        "src/memcommit/eval/study_bundle.py",
+        "src/memcommit/application/evaluation/study_bundle.py",
         "src/memcommit/application/operations/query/granted_source.py",
         "src/memcommit/application/operations/translate/view.py",
         "src/memcommit/application/operations/translate/view_store.py",

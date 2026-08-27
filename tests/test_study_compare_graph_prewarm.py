@@ -3,7 +3,7 @@ from types import SimpleNamespace
 import uuid
 
 import memcommit.application.ops as ops
-import memcommit.eval.study_compare_graph_prewarm as graph_prewarm
+import memcommit.application.evaluation.study_compare_graph_prewarm as graph_prewarm
 from memcommit.comparison import (
     ComparisonAnalysis,
     ComparisonMember,
@@ -11,7 +11,7 @@ from memcommit.comparison import (
     ComparisonReports,
 )
 from memcommit.context import Context
-from memcommit.eval.study_compare_graph_prewarm import (
+from memcommit.application.evaluation.study_compare_graph_prewarm import (
     GraphPair,
     TaskGraphPlan,
     _identity_containment,
@@ -21,7 +21,7 @@ from memcommit.eval.study_compare_graph_prewarm import (
     project_pair_deletions,
     run_graph_prewarm,
 )
-from memcommit.eval.study_compare_exact_matrix import declared_exact_plans
+from memcommit.application.evaluation.study_compare_exact_matrix import declared_exact_plans
 from memcommit.provider_types import ProviderIdentity
 
 

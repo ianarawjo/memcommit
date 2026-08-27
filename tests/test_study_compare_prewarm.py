@@ -11,7 +11,7 @@ from memcommit.comparison import (
     ComparisonReports,
 )
 from memcommit.context import Context
-from memcommit.eval.study_compare_prewarm import prewarm_pair
+from memcommit.application.evaluation.study_compare_prewarm import prewarm_pair
 from memcommit.provider_types import CompletionRun, ProviderIdentity
 from memcommit.store import MemoryStore
 

@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Callable
 
 from memcommit.context import Context, Memory
-from memcommit.eval.scoring import score_forget, score_integrate, score_stability
+from memcommit.application.evaluation.scoring import score_forget, score_integrate, score_stability
 from memcommit.semantic.llm import LLMClient, LLMError
 from memcommit.semantic.changes import AddChange, EditChange, ProposedChange, RemoveChange
 

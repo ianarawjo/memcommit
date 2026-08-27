@@ -7,10 +7,10 @@ import json
 
 import pytest
 
-import memcommit.eval.study_bundle as bundle_module
+import memcommit.application.evaluation.study_bundle as bundle_module
 import memcommit.store as store_module
 from memcommit.context import Context, Memory
-from memcommit.eval.study_bundle import (
+from memcommit.application.evaluation.study_bundle import (
     StudyBundleError,
     _isolated_store_root,
     build_all_study_bundles,

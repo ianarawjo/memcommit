@@ -16,7 +16,7 @@ import json
 from pathlib import Path
 from typing import Iterable, Mapping
 
-from memcommit.eval.study_fixtures import (
+from memcommit.application.evaluation.study_fixtures import (
     AudienceRole,
     FixtureDataset,
     FixtureMemory,

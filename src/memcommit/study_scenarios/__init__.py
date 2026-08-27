@@ -1,6 +1,6 @@
 """Versioned built-in Study scenarios.
 
-Legacy fixture bundles remain owned by :mod:`memcommit.eval.study_bundle` and
+Legacy fixture bundles remain owned by :mod:`memcommit.application.evaluation.study_bundle` and
 the editable ``study-baseline`` Profile.  Built-in scenarios live here so a
 new default can evolve without rewriting that regression fixture.
 """

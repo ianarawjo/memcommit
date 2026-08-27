@@ -400,7 +400,7 @@ def default_fixture_root() -> Path:
     """Return the repository's language-partitioned fixture directory."""
 
     return (
-        Path(__file__).resolve().parents[3]
+        Path(__file__).resolve().parents[4]
         / "agent-records"
         / "docs"
         / "fixtures"

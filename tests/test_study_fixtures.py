@@ -9,7 +9,7 @@ from pathlib import Path
 
 import pytest
 
-from memcommit.eval.study_fixtures import (
+from memcommit.application.evaluation.study_fixtures import (
     EXPECTED_CORPUS_COUNT,
     AudienceRole,
     FixtureDataset,

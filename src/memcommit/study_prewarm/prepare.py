@@ -21,12 +21,12 @@ from memcommit.infrastructure.config import Config
 from memcommit.context_targeting.readable_catalog import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.eval.study_compare_exact_matrix import (
+from memcommit.application.evaluation.study_compare_exact_matrix import (
     _comparison_input,
     plans_from_declared_exact_coordinates,
     run_exact_matrix,
 )
-from memcommit.eval.study_compare_graph_prewarm import TaskGraphPlan
+from memcommit.application.evaluation.study_compare_graph_prewarm import TaskGraphPlan
 from memcommit.infrastructure.providers.policy import (
     resolve_operation_provider_policy,
 )
