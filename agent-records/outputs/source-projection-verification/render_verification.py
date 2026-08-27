@@ -13,11 +13,11 @@ from typer.testing import CliRunner
 import memcommit.ops as ops
 import memcommit.store as store_module
 from memcommit.cli import app
-from memcommit.adapters.console.commands.find.materialization import (
+from memcommit.adapters.console.commands.search.materialization import (
     FindMaterializationError,
     materialize_find_results,
 )
-from memcommit.adapters.console.commands.find.search_workbench import (
+from memcommit.adapters.console.commands.search.search_workbench import (
     FindSearchRequest,
     FindSearchResponse,
     FindSearchResult,

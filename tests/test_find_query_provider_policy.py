@@ -90,12 +90,12 @@ def test_find_and_query_commands_import_the_shared_policy_owner():
         / "console"
         / "commands"
     )
-    find_source = (commands / "find" / "command.py").read_text(encoding="utf-8")
+    find_source = (commands / "search" / "command.py").read_text(encoding="utf-8")
     query_source = (commands / "query" / "command.py").read_text(encoding="utf-8")
 
     owner = "from memcommit.providers.find_query import ("
     assert owner in find_source
     assert owner in query_source
-    assert "memcommit.adapters.console.commands.find.provider_policy" not in find_source
-    assert "memcommit.adapters.console.commands.find.provider_policy" not in query_source
+    assert "memcommit.adapters.console.commands.search.provider_policy" not in find_source
+    assert "memcommit.adapters.console.commands.search.provider_policy" not in query_source
     assert "memcommit.adapters.console.commands.query.provider_policy" not in query_source

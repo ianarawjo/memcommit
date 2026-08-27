@@ -17,7 +17,7 @@ from memcommit.adapters.console.commands.shared.exact_command_review import (
     ExactCommandReview,
     format_exact_command,
 )
-from memcommit.adapters.console.commands.find.chat_shell import (
+from memcommit.adapters.console.commands.search.chat_shell import (
     FindChatMessage,
     FindChatResult,
     FindChatSessionResult,
@@ -25,7 +25,7 @@ from memcommit.adapters.console.commands.find.chat_shell import (
     FindPendingAnswerRequest,
     run_find_chat_session,
 )
-from memcommit.adapters.console.commands.find.search_workbench import (
+from memcommit.adapters.console.commands.search.search_workbench import (
     run_find_search_workbench,
 )
 from memcommit.application.operations.search.materialization_application import (
@@ -55,7 +55,7 @@ from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
     safe_terminal_text,
 )
-from memcommit.adapters.console.commands.find.result_present import group_search_items
+from memcommit.adapters.console.commands.search.result_present import group_search_items
 from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.application.operations.search.answer_dialogue import (
     FindAnswerCorpusTooLarge,

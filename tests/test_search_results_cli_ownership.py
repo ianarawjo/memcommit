@@ -12,7 +12,7 @@ import pytest
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-LEGACY_MODULE = "memcommit.adapters.console.commands.find.result_present"
+LEGACY_MODULE = "memcommit.adapters.console.commands.search.result_present"
 OWNER_MODULE = "memcommit.adapters.interfaces.cli.search_results"
 
 
@@ -66,7 +66,7 @@ def test_search_result_presenter_legacy_path_is_the_canonical_module() -> None:
 
 
 def test_search_result_presenter_legacy_facade_defines_no_behavior() -> None:
-    source_path = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/find/result_present.py"
+    source_path = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/search/result_present.py"
     tree = ast.parse(source_path.read_text(encoding="utf-8"), filename=str(source_path))
 
     assert not any(

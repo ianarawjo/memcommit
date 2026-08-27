@@ -9,7 +9,7 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
 from memcommit.adapters.console.commands.shared.background_turn import BackgroundExecutorTurn
-from memcommit.adapters.console.commands.find.search_workbench import (
+from memcommit.adapters.console.commands.search.search_workbench import (
     FindSearchRequest,
     FindSearchResponse,
     FindSearchResult,

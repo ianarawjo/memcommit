@@ -380,9 +380,9 @@
       "role": "shared-command-mechanism"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.find.command",
+      "canonical_module": "memcommit.adapters.console.commands.search.command",
       "legacy_module": "memcommit.commands.find",
-      "owner": "find",
+      "owner": "search",
       "public_exports": [
         "cmd"
       ],
@@ -398,9 +398,9 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.find.chat_shell",
+      "canonical_module": "memcommit.adapters.console.commands.search.chat_shell",
       "legacy_module": "memcommit.commands.find_chat_shell",
-      "owner": "find",
+      "owner": "search",
       "public_exports": [],
       "role": "command-owned-support"
     },
@@ -432,23 +432,23 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.find.materialization",
+      "canonical_module": "memcommit.adapters.console.commands.search.materialization",
       "legacy_module": "memcommit.commands.find_materialization",
-      "owner": "find",
+      "owner": "search",
       "public_exports": [],
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.find.provider_policy",
+      "canonical_module": "memcommit.adapters.console.commands.search.provider_policy",
       "legacy_module": "memcommit.commands.find_query_provider_policy",
-      "owner": "find",
+      "owner": "search",
       "public_exports": [],
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.find.search_workbench",
+      "canonical_module": "memcommit.adapters.console.commands.search.search_workbench",
       "legacy_module": "memcommit.commands.find_search_workbench",
-      "owner": "find",
+      "owner": "search",
       "public_exports": [],
       "role": "command-owned-support"
     },
@@ -968,9 +968,9 @@
       "role": "shared-command-mechanism"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.find.result_present",
+      "canonical_module": "memcommit.adapters.console.commands.search.result_present",
       "legacy_module": "memcommit.commands.search_result_present",
-      "owner": "find",
+      "owner": "search",
       "public_exports": [],
       "role": "command-owned-support"
     },

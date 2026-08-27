@@ -9,7 +9,7 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
-import memcommit.adapters.console.commands.find.command as find_command
+import memcommit.adapters.console.commands.search.command as find_command
 import memcommit.adapters.console.commands.query.command as query_command
 import memcommit.adapters.console.commands.rationale.command as rationale_command
 from memcommit.adapters.python_api import MemCommitClient, ShowContextResult

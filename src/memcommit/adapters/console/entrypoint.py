@@ -23,7 +23,7 @@ from memcommit.adapters.console.commands import (
     elaborate,
     edit,
     literal_find,
-    find as semantic_search,
+    search,
     find_ambiguities,
     find_conflicts,
     find_duplicates,
@@ -324,7 +324,7 @@ app.command(
 app.command(
     "search",
     help=operation_summary("search"),
-)(semantic_search.cmd)
+)(search.cmd)
 app.command(
     "find",
     help=operation_summary("find"),

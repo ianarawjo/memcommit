@@ -9,8 +9,8 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.layout import FormattedTextControl
 from prompt_toolkit.output import DummyOutput
 
-import memcommit.adapters.console.commands.find.chat_shell as find_chat_shell_module
-from memcommit.adapters.console.commands.find.chat_shell import (
+import memcommit.adapters.console.commands.search.chat_shell as find_chat_shell_module
+from memcommit.adapters.console.commands.search.chat_shell import (
     FindChatAction,
     FindChatMessage,
     FindChatResult,

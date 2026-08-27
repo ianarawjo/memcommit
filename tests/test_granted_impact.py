@@ -697,7 +697,7 @@ def test_local_namespace_root_reads_granted_and_owned_descendants_together(
     active.set_current("task-root")
     provider = _GrantedFindProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.find.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -881,7 +881,7 @@ def test_find_and_quality_finders_read_granted_current_projection(
     active.set_current_virtual_context_if(source.name, "campus-wiki")
     provider = _GrantedFindProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.find.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     for module in (

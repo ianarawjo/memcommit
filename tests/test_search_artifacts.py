@@ -6,7 +6,7 @@ from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.find.command import (
+from memcommit.adapters.console.commands.search.command import (
     _collect_find_frame_candidates,
     _load_find_frame_roots,
 )

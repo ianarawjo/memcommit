@@ -1,6 +1,6 @@
 import click
 
-from memcommit.adapters.console.commands.find.search_workbench import (
+from memcommit.adapters.console.commands.search.search_workbench import (
     FindSearchResult,
     _has_granted_materialization_source,
 )

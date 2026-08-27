@@ -56,7 +56,7 @@ from memcommit.adapters.interfaces.console.terminal import (
 from memcommit.adapters.interfaces.console.text import (
     safe_terminal_text,
 )
-from memcommit.adapters.console.commands.find.result_present import (
+from memcommit.adapters.console.commands.search.result_present import (
     SearchResultViewRow,
     render_grouped_search_results,
 )

@@ -11,7 +11,7 @@ import unicodedata
 from dataclasses import dataclass, field
 from typing import Callable, Literal, Protocol, TypeAlias, cast
 
-from memcommit.adapters.console.commands.find.chat_shell import FindChatState
+from memcommit.adapters.console.commands.search.chat_shell import FindChatState
 from memcommit.providers.subscription import QueryProviderError
 
 

@@ -10,7 +10,7 @@ import uuid
 import pytest
 
 import memcommit.application.ops as ops
-import memcommit.adapters.console.commands.find.command as find_command
+import memcommit.adapters.console.commands.search.command as find_command
 import memcommit.application.operations.search.materialization_application as materialization_application
 import memcommit.application.operations.search.materialization_runtime as materialization_runtime
 import memcommit.persistence.store as store_module
@@ -18,7 +18,7 @@ from memcommit.application.authority.access import resolve_context_access
 from memcommit.adapters.console.commands.shared.readable_context_catalog import (
     freeze_readable_context_catalog,
 )
-from memcommit.adapters.console.commands.find.search_workbench import FindSearchWorkbenchResult
+from memcommit.adapters.console.commands.search.search_workbench import FindSearchWorkbenchResult
 from memcommit.core.context import Memory, MemoryRef
 from memcommit.application.operations.search.application import (
     FindSearchRequest,

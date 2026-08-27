@@ -3,11 +3,11 @@
 import pytest
 
 import memcommit.application.ops as ops
-from memcommit.adapters.console.commands.find.materialization import (
+from memcommit.adapters.console.commands.search.materialization import (
     FindMaterializationError,
     materialize_find_results,
 )
-from memcommit.adapters.console.commands.find.search_workbench import (
+from memcommit.adapters.console.commands.search.search_workbench import (
     FindSearchRequest,
     FindSearchResponse,
     FindSearchResult,
