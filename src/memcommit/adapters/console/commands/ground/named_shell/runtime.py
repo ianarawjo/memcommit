@@ -1,8 +1,8 @@
-"""Persistent Goal–Rules–Memories TUI for one already named Ground."""
+"""Interactive runtime for one existing named Ground."""
+
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Literal, Protocol
+from typing import Literal
 
 from prompt_toolkit.application import Application, run_in_terminal
 from prompt_toolkit.filters import Condition, has_focus
@@ -19,10 +19,6 @@ from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.output import Output
 from prompt_toolkit.widgets import Frame
 
-from memcommit.adapters.console.commands.shared.exact_command_review import (
-    ExactCommandReview,
-    render_exact_command_blocks,
-)
 from memcommit.core.context_targeting.tui.picker import choose_context
 from memcommit.adapters.console.commands.ground.shell import (
     GROUND_CONTEXTS_FRAME_HEIGHT,
@@ -68,17 +64,13 @@ from memcommit.adapters.console.terminal import (
 from memcommit.adapters.console.text import (
     safe_terminal_text,
 )
-from memcommit.adapters.interfaces.tui.core.text_layout import (
-    elide_terminal_text,
-    single_line_terminal_text,
-)
 from memcommit.application.operations.ground.model import (
     GROUND_PROPOSITION_SCHEMA_VERSION,
     GroundItem,
     GroundSession,
     is_bound_ground_schema,
 )
-from memcommit.application.operations.fit.ground_report import FitJudgment, FitReport
+from memcommit.application.operations.fit.ground_report import FitReport
 from memcommit.application.operations.fit.store import GroundFitReceipt
 from memcommit.adapters.console.commands.fit.presentation import fit_fraction, fit_mark
 from memcommit.application.operations.fit.application import FitResult
@@ -87,968 +79,33 @@ from memcommit.application.operations.ground.turn_dialogue import (
     GroundTurnDraftBatch,
 )
 
-
-class NamedGroundInterpreter(Protocol):
-    def __call__(
-        self,
-        session: GroundSession,
-        dialogue_text: str,
-        draft_source_text: str,
-    ) -> object:
-        """Return an ASK object or one frozen command proposal."""
-
-
-@dataclass(frozen=True)
-class GroundCommandProposal:
-    """One operation-specific action reduced to a frozen local argv."""
-
-    kind: str
-    understanding: str
-    question: str
-    review: ExactCommandReview
-    expected_ground_uid: str
-    expected_revision: int
-    expected_state_digest: str
-    expected_context_versions: tuple[str, ...] = ()
-
-
-class NamedGroundApplier(Protocol):
-    def __call__(
-        self,
-        session: GroundSession,
-        proposal: GroundCommandProposal,
-    ) -> tuple[GroundSession, str]:
-        """Apply exactly one approved command and reload the Ground."""
-
-
-class NamedGroundReloader(Protocol):
-    def __call__(self, contract_name: str) -> GroundSession:
-        """Reload one required named Ground from durable storage."""
-
-
-class NamedGroundFitRunner(Protocol):
-    def __call__(self, session: GroundSession) -> FitReport:
-        """Run Fit through the application service, never by shelling out."""
-
-
-class NamedGroundFitLookup(Protocol):
-    def __call__(self, session: GroundSession) -> GroundFitReceipt | None:
-        """Return the latest immutable Fit receipt for this Ground identity."""
-
-
-class NamedGroundDraftPreparer(Protocol):
-    def __call__(
-        self,
-        session: GroundSession,
-        draft: GroundTurnDraft,
-    ) -> GroundCommandProposal:
-        """Reduce one selected READY Rule draft to a frozen command."""
-
-
-class NamedGroundProposalRetargeter(Protocol):
-    def __call__(
-        self,
-        session: GroundSession,
-        proposal: GroundCommandProposal,
-        target_name: str,
-    ) -> GroundCommandProposal:
-        """Replace one proposal's placement with an exact local selection."""
-
-
-class NamedGroundDirectEditPreparer(Protocol):
-    def __call__(
-        self,
-        session: GroundSession,
-        target: Literal["GOAL", "RULE", "MEMORY"],
-        selector: str,
-        edited: str,
-        comment: str,
-    ) -> GroundCommandProposal:
-        """Freeze one exact pane-local replacement as one reviewed command."""
-
-
-class NamedGroundUseTogglePreparer(Protocol):
-    def __call__(
-        self,
-        session: GroundSession,
-        selector: str,
-    ) -> GroundCommandProposal:
-        """Freeze one selected Example's next USE value as a reviewed command."""
-
-
-@dataclass(frozen=True)
-class NamedGroundShellResult:
-    status: Literal["CLOSED", "BACK_TO_PICKER"]
-    session: GroundSession
-    applied_argvs: tuple[tuple[str, ...], ...] = ()
-    submitted_turns: tuple[str, ...] = ()
-
-
-def _line(value: str, limit: int = 110) -> str:
-    normalized = single_line_terminal_text(safe_terminal_text(value))
-    return elide_terminal_text(normalized, limit)
-
-
-def _case_card_value(value: str) -> str:
-    """Fold stored multiline Case text into one visible card row."""
-    normalized = value.replace("\r\n", "\n").replace("\r", "\n")
-    return (
-        safe_terminal_text(normalized)
-        .replace("\n", " ↵ ")
-        .replace("\t", " ⇥ ")
-    )
-
-
-def _aliased_items(
-    session: GroundSession,
-    kind: str,
-) -> tuple[tuple[str, GroundItem], ...]:
-    prefix = "r" if kind == "RULE" else "c"
-    return tuple(
-        (f"{prefix}{number}", item)
-        for number, item in enumerate(
-            (item for item in session.items if item.kind == kind),
-            start=1,
-        )
-    )
-
-
-def _ground_item_target_names(
-    session: GroundSession,
-    item: GroundItem,
-) -> tuple[str, ...]:
-    names = {
-        frame.context_uid: frame.context_name
-        for frame in session.frames
-        if frame.role in {"PUBLICATION_TARGET", "PLACEMENT_TARGET"}
-    }
-    return tuple(names[uid] for uid in item.target_context_uids if uid in names)
-
-
-def _alias_range(
-    items: tuple[tuple[str, GroundItem], ...],
-) -> str:
-    if not items:
-        return ""
-    if len(items) == 1:
-        return f" · ID {items[0][0]}"
-    return f" · IDs {items[0][0]}–{items[-1][0]}"
-
-
-def _display_ground_compatibility_token(value: str) -> str:
-    """Translate persisted Case-era tokens only at the presentation boundary."""
-    if value in {"DISTILLED_FROM_GOAL", "INDUCED_FROM_CASES"}:
-        return "DISTILLED"
-    return value
-
-
-def render_named_ground_top_panel(session: GroundSession) -> str:
-    """Render a compact fixed Goal–Rules–Memories state panel."""
-    state = (
-        "BOUND"
-        if is_bound_ground_schema(session.schema_version)
-        else "UNBOUND"
-    )
-    rules = _aliased_items(session, "RULE")
-    cases = _aliased_items(session, "CASE")
-    rule_summary = (
-        "(none yet)"
-        if not rules
-        else (
-            f"{rules[-1][0]} [{rules[-1][1].status}] "
-            f"{_line(rules[-1][1].content)}"
-        )
-    )
-    case_summary = (
-        "(none yet)"
-        if not cases
-        else (
-            f"{cases[-1][0]} [{cases[-1][1].status}] "
-            f"{_line(cases[-1][1].content)}"
-        )
-    )
-    return "\n".join(
-        [
-            (
-                f"MEM GROUND · {safe_terminal_text(session.contract_name)} · "
-                f"WORKING · SAVED · {state} · REV {session.revision}"
-            ),
-            "GOAL",
-            f"  {_line(session.goal or '(not yet stated)')}",
-            (
-                f"RULES {len(rules)} · "
-                f"{sum(item.status == 'PROPOSED' for _, item in rules)} "
-                f"proposed{_alias_range(rules)}"
-            ),
-            f"  {rule_summary}",
-            (
-                f"MEMORIES {len(cases)} · "
-                f"{sum(item.status == 'PROPOSED' for _, item in cases)} "
-                f"proposed{_alias_range(cases)}"
-            ),
-            f"  {case_summary}",
-        ]
-    )
-
-
-def render_named_ground_header(session: GroundSession) -> str:
-    """Render the one-line identity/status row above the five work areas."""
-    state = (
-        "BOUND"
-        if is_bound_ground_schema(session.schema_version)
-        else "UNBOUND"
-    )
-    return (
-        f" MEM GROUND · {safe_terminal_text(session.contract_name)} · "
-        f"WORKING · SAVED · {state} · REV {session.revision}"
-    )
-
-
-def _coherence_finding_applies(finding, alias: str) -> bool:
-    if alias not in finding.subject_aliases:
-        return False
-    if finding.status == "FIT" or not finding.material_aliases:
-        return True
-    return alias in finding.material_aliases
-
-
-def _coherence_subject_mark(
-    receipt: GroundFitReceipt | None,
-    subject_uid: str,
-) -> str:
-    if receipt is None or receipt.report.coherence is None:
-        return "·"
-    if not receipt.current:
-        return "◷"
-    coherence = receipt.report.coherence
-    subject = next(
-        (item for item in coherence.subjects if item.uid == subject_uid),
-        None,
-    )
-    if subject is None:
-        return "·"
-    findings = tuple(
-        item
-        for item in coherence.findings
-        if _coherence_finding_applies(item, subject.alias)
-    )
-    return "!" if any(item.status != "FIT" for item in findings) else "✓"
-
-
-def _coherence_issue_lines(
-    receipt: GroundFitReceipt | None,
-    subject_uid: str,
-) -> tuple[str, ...]:
-    if (
-        receipt is None
-        or not receipt.current
-        or receipt.report.coherence is None
-    ):
-        return ()
-    coherence = receipt.report.coherence
-    subject = next(
-        (item for item in coherence.subjects if item.uid == subject_uid),
-        None,
-    )
-    if subject is None:
-        return ()
-    return tuple(
-        f"{item.axis} · {item.status} · {safe_terminal_text(item.reason)}"
-        for item in coherence.findings
-        if item.status != "FIT"
-        and _coherence_finding_applies(item, subject.alias)
-    )
-
-
-def _coherence_context_mark(receipt: GroundFitReceipt | None) -> str:
-    if receipt is None or receipt.report.coherence is None:
-        return "·"
-    if not receipt.current:
-        return "◷"
-    return (
-        "!"
-        if any(
-            item.axis == "CONTEXT" and item.status != "FIT"
-            for item in receipt.report.coherence.findings
-        )
-        else "✓"
-    )
-
-
-def render_named_ground_goal_pane(
-    session: GroundSession,
-    *,
-    fit_receipt: GroundFitReceipt | None = None,
-) -> str:
-    """Render the complete Goal without truncation."""
-    if fit_receipt is None:
-        return safe_terminal_text(session.goal or "(not yet stated)")
-    return "\n".join(
-        [
-            f"FIT · {_coherence_subject_mark(fit_receipt, session.uid)}",
-            safe_terminal_text(session.goal or "(not yet stated)"),
-            *_coherence_issue_lines(fit_receipt, session.uid),
-        ]
-    )
-
-
-def render_named_ground_contexts_pane(
-    session: GroundSession,
-    *,
-    context_hints: tuple[str, ...] = (),
-    new_context_hint: str | None = None,
-    fit_receipt: GroundFitReceipt | None = None,
-) -> str:
-    """Render saved frame metadata without reading live Context contents."""
-    if not is_bound_ground_schema(session.schema_version) or not session.frames:
-        if context_hints or new_context_hint:
-            hint_lines = [
-                *(
-                    f"{'MAIN' if index == 0 else 'ADDITIONAL'} · "
-                    f"{safe_terminal_text(name)} · SUGGESTED"
-                    for index, name in enumerate(context_hints)
-                )
-            ]
-            if new_context_hint:
-                hint_lines.append(
-                    "NEW CONTEXT · "
-                    f"{safe_terminal_text(new_context_hint)} · "
-                    "PLANNED · NOT CREATED"
-                )
-            return "\n".join(
-                [
-                    "CONTEXT PLAN",
-                    *hint_lines,
-                    "",
-                    "Create any NEW Context and assign frame roles through",
-                    "separately reviewed commands.",
-                    "Context Memory content was not opened.",
-                ]
-            )
-        return "\n".join(
-            [
-                "UNBOUND",
-                "",
-                "Name the raw evidence, working candidates,",
-                "publication target, and placement targets.",
-                "No current Context is inferred.",
-            ]
-        )
-    role_labels = {
-        "RAW_EVIDENCE": "RAW EVIDENCE",
-        "WORKING_CANDIDATES": "WORKING CANDIDATES",
-        "PUBLICATION_TARGET": "PUBLICATION TARGET",
-        "PLACEMENT_TARGET": "PLACEMENT TARGET",
-    }
-    blocks: list[str] = (
-        [f"FIT · {_coherence_context_mark(fit_receipt)}"]
-        if fit_receipt is not None
-        else []
-    )
-    for frame in session.frames:
-        counts = f"{frame.direct_memory_count} direct Memories"
-        if frame.direct_item_count != frame.direct_memory_count:
-            counts += f" · {frame.direct_item_count} direct items"
-        blocks.append(
-            "\n".join(
-                [
-                    role_labels[frame.role],
-                    f"{safe_terminal_text(frame.context_name)} · {counts}",
-                ]
-            )
-        )
-    blocks.append(
-        "Recorded binding; freshness is rechecked before mutation."
-    )
-    return "\n\n".join(blocks)
-
-
-def render_named_ground_rules_pane(
-    session: GroundSession,
-    *,
-    drafts: tuple[GroundTurnDraft, ...] = (),
-    selected_draft_index: int = 0,
-    drafts_stale: bool = False,
-    selected_rule_index: int | None = None,
-    placement_hint: str = "",
-    fit_receipt: GroundFitReceipt | None = None,
-) -> str:
-    """Render saved Rules and the current unsaved classified draft queue."""
-    rules = _aliased_items(session, "RULE")
-    blocks: list[str] = []
-    if rules:
-        blocks.append("SAVED RULES")
-        for index, (alias, item) in enumerate(rules):
-            provenance = _display_ground_compatibility_token(
-                item.rule_provenance or item.origin
-            )
-            marker = "› " if index == selected_rule_index else ""
-            fit_suffix = (
-                f" · FIT {_coherence_subject_mark(fit_receipt, item.uid)}"
-                if fit_receipt is not None
-                else ""
-            )
-            lines = [
-                f"{marker}{alias} [{item.status}] · "
-                f"{safe_terminal_text(provenance)}{fit_suffix}",
-                safe_terminal_text(item.content),
-            ]
-            lines.extend(_coherence_issue_lines(fit_receipt, item.uid))
-            if item.rationale:
-                lines.extend(
-                    [
-                        "WHY",
-                        safe_terminal_text(item.rationale),
-                    ]
-                )
-            target_names = _ground_item_target_names(session, item)
-            lines.append(
-                "PLACEMENT · "
-                + (", ".join(target_names) if target_names else "(legacy unspecified)")
-            )
-            blocks.append("\n".join(lines))
-    else:
-        blocks.append("SAVED RULES\n(none yet)")
-
-    if drafts:
-        draft_heading = f"DRAFTS · PENDING · {len(drafts)}"
-        if drafts_stale:
-            draft_heading += " · RECLASSIFY REQUIRED"
-        blocks.append(
-            "\n".join(
-                [
-                    draft_heading,
-                    (
-                        "Press R to reclassify against the saved Ground."
-                        if drafts_stale
-                        else (
-                            "Select a READY Rule and press R to review "
-                            "one exact proposal."
-                        )
-                    ),
-                ]
-            )
-        )
-        for index, draft in enumerate(drafts):
-            marker = "›" if index == selected_draft_index else " "
-            alias = f"d{index + 1}"
-            displayed_kind = (
-                "MEMORY" if draft.kind == "CASE" else draft.kind
-            )
-            displayed_status = (
-                "STALE" if drafts_stale else draft.status
-            )
-            lines = [
-                (
-                    f"{marker} {alias} [{displayed_kind} · "
-                    f"{displayed_status}] "
-                    f"{safe_terminal_text(draft.content)}"
-                )
-            ]
-            if index == selected_draft_index:
-                lines.extend(
-                    [
-                        "WHY",
-                        safe_terminal_text(draft.classification_reason),
-                        "SOURCE",
-                        " | ".join(
-                            safe_terminal_text(span)
-                            for span in draft.source_spans
-                        ),
-                    ]
-                )
-                if placement_hint:
-                    lines.extend(
-                        ["PLACEMENT · DIRECT SELECTION", safe_terminal_text(placement_hint)]
-                    )
-            blocks.append("\n".join(lines))
-    return "\n\n".join(blocks)
-
-
-def render_named_ground_memories_pane(
-    session: GroundSession,
-    *,
-    selected_memory_index: int | None = None,
-    placement_hint: str = "",
-    fit_receipt: GroundFitReceipt | None = None,
-) -> str:
-    """Render saved Ground Memories as one compact, non-wrapping list."""
-    cases = _aliased_items(session, "CASE")
-    if not cases:
-        return "(none yet)"
-    fit_by_example = _fit_judgments_by_example(fit_receipt)
-    rows = ["  USE ID  FIT EXAMPLE"]
-    for index, (alias, item) in enumerate(cases):
-        marker = "›" if index == selected_memory_index else " "
-        fit_label = _fit_label(item.uid, fit_receipt, fit_by_example)
-        # USE is the durable participation decision; FIT is an independently
-        # computed receipt projection. Keep the two axes adjacent and do not
-        # ask readers to decode the legacy FIT/BOUNDARY/CONTRAST authoring
-        # classification, which does not change executable Fit membership.
-        use = _memory_use_checkbox(item.disposition)
-        qualifiers = [item.status] if item.status != "PROPOSED" else []
-        qualifier_label = (
-            f"[{' · '.join(safe_terminal_text(value) for value in qualifiers)}] "
-            if qualifiers
-            else ""
-        )
-        prefix = f"{marker} {use} {alias:<3} {fit_label}  {qualifier_label}"
-        # LIST is the scanning surface: one durable Ground Memory must consume
-        # one physical terminal row. Enter opens the selected record's complete
-        # vertical detail without duplicating the list as a wide table.
-        if session.schema_version == GROUND_PROPOSITION_SCHEMA_VERSION:
-            value = _case_card_value(item.proposition)
-        else:
-            expected = (
-                _case_card_value(item.expected)
-                if item.expected
-                else "(no output)"
-            )
-            value = f"{_case_card_value(item.content)} → {expected}"
-        rows.append(f"{prefix}{value}")
-    if placement_hint:
-        rows.extend(
-            (
-                "",
-                "PLACEMENT · DIRECT SELECTION",
-                safe_terminal_text(placement_hint),
-            )
-        )
-    return "\n".join(rows)
-
-
-def _memory_use_checkbox(disposition: str) -> str:
-    """Project persisted Fit participation without changing its authority."""
-    return {
-        "INCLUDE": "[x]",
-        "EXCLUDE": "[ ]",
-        "UNRESOLVED": "[?]",
-    }.get(disposition, "[?]")
-
-
-def render_named_ground_memory_detail(
-    session: GroundSession,
-    *,
-    selected_memory_index: int,
-    fit_receipt: GroundFitReceipt | None = None,
-) -> str:
-    """Render one selected Ground Memory as an inspectable vertical record."""
-    cases = _aliased_items(session, "CASE")
-    if not cases:
-        return "(none yet)"
-    selected_memory_index = max(
-        0,
-        min(selected_memory_index, len(cases) - 1),
-    )
-    alias, item = cases[selected_memory_index]
-    aliases = _item_aliases_by_uid(session)
-    fit_by_example = _fit_judgments_by_example(fit_receipt)
-    linked_rules = [
-        f"{aliases[uid]} · {linked.content}"
-        for uid in item.related_uids
-        for linked in session.items
-        if linked.uid == uid
-        and uid in aliases
-        and aliases[uid].startswith("r")
-    ]
-    context_names = {
-        frame.context_uid: frame.context_name for frame in session.frames
-    }
-    sources = [
-        (
-            f"{context_names.get(source.context_uid, source.context_uid[:8])}"
-            f" · {source.memory_uid[:8]}"
-        )
-        for source in item.source_refs
-    ]
-    targets = [
-        context_names.get(uid, uid[:8]) for uid in item.target_context_uids
-    ]
-    lines = [
-        f"MEMORY · {alias}",
-        f"STATUS · {safe_terminal_text(item.status)}",
-        (
-            f"USE · {_memory_use_checkbox(item.disposition)} "
-            f"{safe_terminal_text(item.disposition)}"
-        ),
-        f"FIT · {_fit_label(item.uid, fit_receipt, fit_by_example)}",
-    ]
-    if session.schema_version == GROUND_PROPOSITION_SCHEMA_VERSION:
-        lines.extend(("", "PROPOSITION", safe_terminal_text(item.proposition)))
-    lines.extend(
-        (
-            "",
-            "INPUT",
-            safe_terminal_text(item.content) if item.content else "(none)",
-            "",
-            "EXPECTED",
-            safe_terminal_text(item.expected) if item.expected else "(none)",
-            "",
-            "RULES",
-            *(safe_terminal_text(value) for value in linked_rules or ["(none)"]),
-            "",
-            "SOURCES",
-            *(safe_terminal_text(value) for value in sources or ["(none)"]),
-            "",
-            "TARGETS",
-            *(safe_terminal_text(value) for value in targets or ["(none)"]),
-            "",
-            "NOTES",
-            safe_terminal_text(item.rationale) if item.rationale else "(none)",
-        )
-    )
-    judgment = fit_by_example.get(item.uid)
-    if judgment is not None:
-        lines.extend(
-            (
-                "",
-                f"FIT JUDGMENT · {safe_terminal_text(judgment.status)}",
-                safe_terminal_text(judgment.reason),
-            )
-        )
-        if judgment.observed:
-            lines.extend(("OBSERVED", safe_terminal_text(judgment.observed)))
-    coherence_issues = _coherence_issue_lines(fit_receipt, item.uid)
-    if coherence_issues:
-        lines.extend(("", "GROUND FIT", *coherence_issues))
-    return "\n".join(lines)
-
-
-def render_named_ground_cases_pane(session: GroundSession) -> str:
-    """Compatibility alias for the former user-facing Cases renderer."""
-    return render_named_ground_memories_pane(session)
-
-
-def _fit_judgments_by_example(
-    receipt: GroundFitReceipt | None,
-) -> dict[str, FitJudgment]:
-    if receipt is None:
-        return {}
-    return {
-        judgment.example_uid: judgment
-        for judgment in receipt.report.judgments
-    }
-
-
-def _fit_label(
-    example_uid: str,
-    receipt: GroundFitReceipt | None,
-    judgments: dict[str, FitJudgment],
-) -> str:
-    judgment = judgments.get(example_uid)
-    if receipt is None or judgment is None:
-        return "·"
-    coherence_mark = _coherence_subject_mark(receipt, example_uid)
-    if coherence_mark in {"!", "◷"}:
-        return coherence_mark
-    return fit_mark(
-        FitResult(receipt.report, receipt.current),
-        status=judgment.status,
-    )
-
-
-def _option_values(argv: tuple[str, ...], option: str) -> tuple[str, ...]:
-    return tuple(
-        argv[index + 1]
-        for index, value in enumerate(argv[:-1])
-        if value == option
-    )
-
-
-def _option_value(argv: tuple[str, ...], option: str) -> str:
-    values = _option_values(argv, option)
-    return values[0] if values else ""
-
-
-def _item_aliases_by_uid(session: GroundSession) -> dict[str, str]:
-    return {
-        item.uid: alias
-        for kind in ("RULE", "CASE")
-        for alias, item in _aliased_items(session, kind)
-    }
-
-
-def _review_item_effects(
-    session: GroundSession,
-    proposal: GroundCommandProposal,
-) -> tuple[str, ...]:
-    argv = proposal.review.argv
-    selector = _option_value(argv, "--decide")
-    action = _option_value(argv, "--action").upper()
-    target = next(
-        (item for item in session.items if item.uid == selector),
-        None,
-    )
-    if target is None or target.kind not in {"RULE", "CASE"}:
-        return ()
-    alias = _item_aliases_by_uid(session).get(target.uid, target.uid[:8])
-    item_name = (
-        "Ground Memory" if target.kind == "CASE" else target.kind.title()
-    )
-    statement = (
-        target.proposition
-        if (
-            target.kind == "CASE"
-            and session.schema_version == GROUND_PROPOSITION_SCHEMA_VERSION
-        )
-        else target.content
-    )
-    details = [
-        (
-            f"Selected item: {alias} · {item_name} · {target.status} · "
-            f"{_line(statement)}"
-        )
-    ]
-    if action == "REFINE":
-        replacement = _option_value(argv, "--response")
-        if target.kind == "RULE":
-            details.extend(
-                [
-                    (
-                        f"REFINE: replace {alias} Rule content with "
-                        f"'{_line(replacement)}'"
-                    ),
-                    (
-                        f"{alias} remains PROPOSED; provenance becomes "
-                        "JOINTLY_REVISED"
-                    ),
-                ]
-            )
-        else:
-            field_name = (
-                "proposition"
-                if session.schema_version == GROUND_PROPOSITION_SCHEMA_VERSION
-                else "expected output"
-            )
-            details.extend(
-                [
-                    (
-                        f"REFINE: replace {alias} {field_name} with "
-                        f"'{_line(replacement)}'"
-                    ),
-                    (
-                        f"{alias} remains PROPOSED; its source, linked Rule, "
-                        "role, disposition, and targets remain unchanged"
-                    ),
-                ]
-            )
-    elif action in {"ACCEPT", "DEFER", "REJECT"}:
-        status = {
-            "ACCEPT": "ACCEPTED",
-            "DEFER": "DEFERRED",
-            "REJECT": "REJECTED",
-        }[action]
-        unchanged_field = (
-            "proposition"
-            if (
-                target.kind == "CASE"
-                and session.schema_version
-                == GROUND_PROPOSITION_SCHEMA_VERSION
-            )
-            else "content"
-        )
-        details.append(
-            f"{action}: mark {alias} {status}; its {unchanged_field} "
-            "remains unchanged"
-        )
-    details.append("One review Decision record: ADD")
-    return tuple(details)
-
-
-def _proposal_item_effects(
-    session: GroundSession,
-    proposal: GroundCommandProposal,
-) -> tuple[str, ...]:
-    argv = proposal.review.argv
-    if proposal.kind == "BIND":
-        placements = _option_values(argv, "--placement-target")
-        details = [
-            f"Task binding: '{_line(_option_value(argv, '--description'))}'",
-            (
-                "Frames: raw="
-                f"{_option_value(argv, '--raw-context')} · derived="
-                f"{_option_value(argv, '--derived-context')}"
-            ),
-            (
-                "Publication target: "
-                f"{_option_value(argv, '--publication-target')}"
-            ),
-        ]
-        if placements:
-            details.append("Placement targets: " + ", ".join(placements))
-        return tuple(details)
-    if proposal.kind == "REVISE_GOAL":
-        return (
-            (
-                "Replacement Goal: "
-                f"'{_line(_option_value(argv, '--revise-goal'))}'"
-            ),
-            (
-                "Reason: "
-                f"{_line(_option_value(argv, '--change-reason'))}"
-            ),
-        )
-    if proposal.kind == "PROPOSE_RULE":
-        alias = f"r{len(_aliased_items(session, 'RULE')) + 1}"
-        return (
-            (
-                f"New {alias} · PROPOSED Rule: "
-                f"{_line(_option_value(argv, '--propose-rule'))}"
-            ),
-            (
-                "Provenance: "
-                f"{_display_ground_compatibility_token(_option_value(argv, '--rule-provenance'))}"
-            ),
-            f"Rationale: {_line(_option_value(argv, '--rationale'))}",
-        )
-    if proposal.kind == "PROPOSE_CASE":
-        aliases = _item_aliases_by_uid(session)
-        native = bool(_option_value(argv, "--propose-example"))
-        rule_uid = _option_value(
-            argv,
-            "--example-rule" if native else "--fit-rule",
-        )
-        rule = next(
-            (item for item in session.items if item.uid == rule_uid),
-            None,
-        )
-        rule_alias = aliases.get(rule_uid, rule_uid[:8])
-        alias = f"c{len(_aliased_items(session, 'CASE')) + 1}"
-        details = [
-            (
-                f"New {alias} · PROPOSED "
-                f"{_option_value(argv, '--case-role')}/"
-                f"{_option_value(argv, '--disposition')} Ground Memory"
-            ),
-            (
-                f"Linked Rule: {rule_alias}"
-                + (f" · {_line(rule.content)}" if rule is not None else "")
-            ),
-            (
-                "Targets: "
-                + ", ".join(
-                    _option_values(
-                        argv,
-                        "--example-target" if native else "--propose-target",
-                    )
-                )
-            ),
-            (
-                "Expected output: "
-                + (
-                    _line(_option_value(argv, "--expected"))
-                    or "(none for this disposition)"
-                )
-            ),
-            (
-                "Source: exact Context Memory selected from the bound "
-                "candidate Context"
-            ),
-        ]
-        if native:
-            details.insert(
-                1,
-                "Proposition: "
-                + _line(_option_value(argv, "--propose-example")),
-            )
-            exact_input = _option_value(argv, "--example-input")
-            exact_expected = _option_value(argv, "--example-expected")
-            details[4] = (
-                "Exact projection: "
-                + (
-                    f"{_line(exact_input)} → {_line(exact_expected)}"
-                    if exact_input and exact_expected
-                    else "(none)"
-                )
-            )
-        return tuple(details)
-    if proposal.kind == "SET_EXAMPLE_USE":
-        selector = _option_value(argv, "--set-example-use")
-        use = _option_value(argv, "--use")
-        aliases = _item_aliases_by_uid(session)
-        item = next(
-            (candidate for candidate in session.items if candidate.uid == selector),
-            None,
-        )
-        alias = aliases.get(selector, selector[:8])
-        before = item.disposition if item is not None else "UNKNOWN"
-        return (
-            f"Selected Memory: {alias}",
-            f"USE: {before} -> {use}",
-            "Future Fit and Ground Distill runs use this participation set.",
-        )
-    if proposal.kind == "REVIEW_ITEM":
-        return _review_item_effects(session, proposal)
-    return ()
-
-
-def render_named_ground_proposal_blocks(
-    session: GroundSession,
-    proposal: GroundCommandProposal,
-) -> tuple[str, str]:
-    """Render one Ground proposal with operation-aware approval context."""
-    details = _proposal_item_effects(session, proposal)
-    base_effects = proposal.review.effects
-    if proposal.kind == "REVIEW_ITEM":
-        base_effects = tuple(
-            effect
-            for effect in base_effects
-            if not effect.startswith("Selected Rule/Ground Memory:")
-            and not effect.startswith("One review Decision:")
-        )
-    informed_review = ExactCommandReview(
-        argv=proposal.review.argv,
-        effects=(*details, *base_effects),
-    )
-    return render_exact_command_blocks(informed_review)
-
-
-def _initial_question(session: GroundSession) -> str:
-    if not is_bound_ground_schema(session.schema_version):
-        return "\n".join(
-            [
-                "OPEN QUESTION · BINDING",
-                "  Which explicit Task description, raw Context, derived",
-                "  Context, and publication target should this Ground bind?",
-                "",
-                "No current Context is inferred. Placement or blocked targets",
-                "can be supplied when they are part of the intended Ground.",
-            ]
-        )
-    proposed = [
-        item
-        for item in session.items
-        if item.kind in {"RULE", "CASE"} and item.status == "PROPOSED"
-    ]
-    if proposed:
-        return "\n".join(
-            [
-                "OPEN QUESTION · REVIEW OR CONTINUE",
-                "  Should the latest proposed Rule or Ground Memory be accepted,",
-                "  refined, deferred, or rejected?",
-            ]
-        )
-    return "\n".join(
-        [
-            "OPEN QUESTION · NEXT",
-            "  Which one Ground layer should the next command change:",
-            "  Goal, Rules, or Memories?",
-        ]
-    )
-
-
-def _response_kind(response: object) -> str:
-    raw = getattr(response, "kind", None)
-    if not isinstance(raw, str):
-        raise ValueError("Ground turn has no ASK or action kind.")
-    return raw
-
-
-def _response_text(response: object, field_name: str) -> str:
-    value = getattr(response, field_name, None)
-    if not isinstance(value, str) or not value.strip():
-        raise ValueError(f"Ground turn has no {field_name}.")
-    return value.strip()
+from memcommit.adapters.console.commands.ground.named_shell.presentation import (
+    _aliased_items,
+    _initial_question,
+    _memory_use_checkbox,
+    render_named_ground_contexts_pane,
+    render_named_ground_goal_pane,
+    render_named_ground_header,
+    render_named_ground_memories_pane,
+    render_named_ground_memory_detail,
+    render_named_ground_rules_pane,
+)
+from memcommit.adapters.console.commands.ground.named_shell.proposal import (
+    GroundCommandProposal,
+    NamedGroundApplier,
+    NamedGroundDirectEditPreparer,
+    NamedGroundDraftPreparer,
+    NamedGroundFitLookup,
+    NamedGroundFitRunner,
+    NamedGroundInterpreter,
+    NamedGroundProposalRetargeter,
+    NamedGroundReloader,
+    NamedGroundShellResult,
+    NamedGroundUseTogglePreparer,
+    _response_kind,
+    _response_text,
+    render_named_ground_proposal_blocks,
+)
 
 
 def run_named_ground_shell(
@@ -1099,13 +156,11 @@ def run_named_ground_shell(
     fit_turn: BackgroundExecutorTurn[FitReport] = BackgroundExecutorTurn()
     auto_fit_pending = {"value": False}
     auto_fit_enabled = auto_fit and run_fit is not None
-    deferred_exit_status: dict[
-        str, Literal["CLOSED", "BACK_TO_PICKER"]
-    ] = {"value": "CLOSED"}
+    deferred_exit_status: dict[str, Literal["CLOSED", "BACK_TO_PICKER"]] = {
+        "value": "CLOSED"
+    }
     last_submission = {"value": ""}
-    inline_target: dict[
-        str, Literal["GOAL", "RULE", "MEMORY"] | None
-    ] = {"value": None}
+    inline_target: dict[str, Literal["GOAL", "RULE", "MEMORY"] | None] = {"value": None}
     inline_selector = {"value": ""}
     inline_original = {"value": ""}
     inline_direct_locked = {"value": False}
@@ -1165,6 +220,7 @@ def run_named_ground_shell(
             if frame.role in {"PUBLICATION_TARGET", "PLACEMENT_TARGET"}
         )
         return bound or tuple(placement_catalog_names)
+
     # Notification dots track unseen process-local results, not completion or
     # agreement. A provider-selected focus does not count as the person's
     # explicit visit, and this state never enters the saved Ground or command
@@ -1227,6 +283,7 @@ def run_named_ground_shell(
             + safe_terminal_text(placement_choice["CONTEXTS"])
             + " · P to choose from the Context tree"
         )
+
     goal_pane = build_scrollable_text_pane(
         "GOAL",
         render_named_ground_goal_pane(
@@ -1283,9 +340,7 @@ def run_named_ground_shell(
                 proposal,
             )
             blocks.append(
-                effects_block
-                if review_view["value"] == "EFFECTS"
-                else command_block
+                effects_block if review_view["value"] == "EFFECTS" else command_block
             )
         if error_message["value"]:
             blocks.append(
@@ -1312,9 +367,7 @@ def run_named_ground_shell(
         buffer_name="ground-named-direct-edit",
     )
     direct_edit_area = direct_editor.text_area
-    direct_edit_area.buffer.read_only = Condition(
-        lambda: inline_direct_locked["value"]
-    )
+    direct_edit_area.buffer.read_only = Condition(lambda: inline_direct_locked["value"])
     header = Window(
         FormattedTextControl(
             lambda: (
@@ -1328,8 +381,7 @@ def run_named_ground_shell(
     approval_panel = Frame(
         Window(
             FormattedTextControl(
-                "CHAT: ←/↑ cmd · →/↓ fx\n"
-                "Enter apply · A also · E/B/Q"
+                "CHAT: ←/↑ cmd · →/↓ fx\nEnter apply · A also · E/B/Q"
             ),
             wrap_lines=True,
         ),
@@ -1338,9 +390,7 @@ def run_named_ground_shell(
     )
     error_panel = Frame(
         Window(
-            FormattedTextControl(
-                "R retry · E refine · B/Q"
-            ),
+            FormattedTextControl("R retry · E refine · B/Q"),
             wrap_lines=True,
         ),
         title="ACTION",
@@ -1348,9 +398,7 @@ def run_named_ground_shell(
     )
     apply_error_panel = Frame(
         Window(
-            FormattedTextControl(
-                "E refine · B/Q"
-            ),
+            FormattedTextControl("E refine · B/Q"),
             wrap_lines=True,
         ),
         title="ACTION",
@@ -1368,12 +416,10 @@ def run_named_ground_shell(
             else empty_action_panel
         )
     )
+
     def footer_text() -> str:
         if panel_comment_target["value"] is not None:
-            return (
-                " Enter · send focused comment    Ctrl-J · newline    "
-                "Esc · collapse"
-            )
+            return " Enter · send focused comment    Ctrl-J · newline    Esc · collapse"
         if inline_target["value"] is not None:
             if inline_direct_locked["value"]:
                 return (
@@ -1404,9 +450,7 @@ def run_named_ground_shell(
             and _aliased_items(current["value"], "CASE")
         ):
             tail = (
-                "E · edit selected"
-                if active_mode == "INPUT"
-                else "A · exact approval"
+                "E · edit selected" if active_mode == "INPUT" else "A · exact approval"
             )
             if memory_detail_open["value"]:
                 return (
@@ -1439,9 +483,7 @@ def run_named_ground_shell(
                     "F · Fit    P · placement    E · edit selected    "
                     "B · Grounds    Q · quit"
                 )
-        if active_mode == "INPUT" and application.layout.has_focus(
-            goal_pane.text_area
-        ):
+        if active_mode == "INPUT" and application.layout.has_focus(goal_pane.text_area):
             return (
                 " Enter · talk here    F · Fit    E · edit Goal    "
                 "B · Grounds    Q · quit"
@@ -1592,9 +634,7 @@ def run_named_ground_shell(
     ):
         bind_focused_frame_style(
             pane.frame,
-            is_focused=lambda pane=pane: application.layout.has_focus(
-                pane.frame
-            ),
+            is_focused=lambda pane=pane: application.layout.has_focus(pane.frame),
         )
 
     def sync_rules_pane(
@@ -1608,9 +648,7 @@ def run_named_ground_shell(
             selected_draft_index=draft_index["value"],
             drafts_stale=draft_queue_stale["value"],
             selected_rule_index=(
-                None
-                if draft_queue["value"]
-                else selected_rule_index["value"]
+                None if draft_queue["value"] else selected_rule_index["value"]
             ),
             placement_hint=placement_choice["RULES"],
             fit_receipt=fit_receipt["value"],
@@ -1623,9 +661,7 @@ def run_named_ground_shell(
                 # immutable until one exact proposal receives approval.
                 rules_pane.text_area.buffer.cursor_position = marker
         elif align_saved and not draft_queue["value"]:
-            marker = rendered.find(
-                f"› r{selected_rule_index['value'] + 1} "
-            )
+            marker = rendered.find(f"› r{selected_rule_index['value'] + 1} ")
             if marker >= 0:
                 rules_pane.text_area.buffer.cursor_position = marker
 
@@ -1793,11 +829,7 @@ def run_named_ground_shell(
             refresh_current(announce=True)
             if append_user or not cycle_dialogue:
                 user_turn_number = (
-                    sum(
-                        block.startswith("USER TURN ")
-                        for block in cycle_dialogue
-                    )
-                    + 1
+                    sum(block.startswith("USER TURN ") for block in cycle_dialogue) + 1
                 )
                 focus_line = f"\nFOCUS · {focus}" if focus else ""
                 cycle_dialogue.append(
@@ -1827,11 +859,7 @@ def run_named_ground_shell(
             understanding = _response_text(response, "understanding")
             question = _response_text(response, "question")
             agent_turn_number = (
-                sum(
-                    block.startswith("AGENT TURN ")
-                    for block in cycle_dialogue
-                )
-                + 1
+                sum(block.startswith("AGENT TURN ") for block in cycle_dialogue) + 1
             )
             cycle_dialogue.append(
                 "\n".join(
@@ -1845,11 +873,7 @@ def run_named_ground_shell(
             conversation.append(
                 "\n".join(
                     [
-                        (
-                            "AGENT UNDERSTANDING"
-                            if append_user
-                            else "AGENT RETRY"
-                        ),
+                        ("AGENT UNDERSTANDING" if append_user else "AGENT RETRY"),
                         f"  {safe_terminal_text(understanding)}",
                         "",
                         "AGENT QUESTION",
@@ -1873,8 +897,7 @@ def run_named_ground_shell(
                     (
                         index
                         for index, draft in enumerate(response.drafts)
-                        if draft.kind == "RULE"
-                        and draft.status == "READY"
+                        if draft.kind == "RULE" and draft.status == "READY"
                     ),
                     0,
                 )
@@ -1909,9 +932,7 @@ def run_named_ground_shell(
                 application.invalidate()
                 return
             if not isinstance(response, GroundCommandProposal):
-                raise ValueError(
-                    "Ground action was not reduced to an exact command."
-                )
+                raise ValueError("Ground action was not reduced to an exact command.")
             layer = {
                 "BIND": "CONTEXTS",
                 "PROPOSE_RULE": "RULES",
@@ -2063,17 +1084,15 @@ def run_named_ground_shell(
         if mode["value"] != "INPUT":
             return
         acknowledge_pane(
-            {"GOAL": "GOAL", "RULE": "RULES", "MEMORY": "MEMORIES"}[
-                target
-            ]
+            {"GOAL": "GOAL", "RULE": "RULES", "MEMORY": "MEMORIES"}[target]
         )
         suspended_message["value"] = input_area.text
         input_area.text = ""
         inline_target["value"] = target
         inline_selector["value"] = selector
         inline_original["value"] = original
-        inline_direct_locked["value"] = (
-            not is_bound_ground_schema(current["value"].schema_version)
+        inline_direct_locked["value"] = not is_bound_ground_schema(
+            current["value"].schema_version
         )
         direct_edit_area.text = original
         direct_edit_area.buffer.cursor_position = len(original)
@@ -2081,9 +1100,7 @@ def run_named_ground_shell(
         status_message["value"] = ""
         sync_input_host()
         application.layout.focus(
-            input_area
-            if inline_direct_locked["value"]
-            else direct_edit_area
+            input_area if inline_direct_locked["value"] else direct_edit_area
         )
         application.invalidate()
 
@@ -2139,9 +1156,7 @@ def run_named_ground_shell(
             )
             return
         if prepare_direct_edit is None:
-            status_message["value"] = (
-                "This shell cannot prepare a direct Ground edit."
-            )
+            status_message["value"] = "This shell cannot prepare a direct Ground edit."
             application.invalidate()
             return
         try:
@@ -2154,8 +1169,7 @@ def run_named_ground_shell(
             )
         except Exception as error:
             status_message["value"] = (
-                f"{type(error).__name__}: "
-                f"{safe_terminal_text(str(error))}"
+                f"{type(error).__name__}: {safe_terminal_text(str(error))}"
             )
             application.invalidate()
             return
@@ -2206,18 +1220,14 @@ def run_named_ground_shell(
 
     input_mode = Condition(lambda: mode["value"] == "INPUT")
     inline_editor_mode = Condition(
-        lambda: mode["value"] == "INPUT"
-        and inline_target["value"] is not None
+        lambda: mode["value"] == "INPUT" and inline_target["value"] is not None
     )
     panel_comment_mode = Condition(
-        lambda: mode["value"] == "INPUT"
-        and panel_comment_target["value"] is not None
+        lambda: mode["value"] == "INPUT" and panel_comment_target["value"] is not None
     )
     normal_input_mode = input_mode & ~inline_editor_mode & ~panel_comment_mode
     approval_mode = Condition(lambda: mode["value"] == "APPROVAL")
-    approval_dialogue_focus = approval_mode & has_focus(
-        dialogue_pane.text_area
-    )
+    approval_dialogue_focus = approval_mode & has_focus(dialogue_pane.text_area)
     error_mode = Condition(lambda: mode["value"] == "ERROR")
     action_mode = Condition(
         lambda: mode["value"] in {"APPROVAL", "ERROR", "APPLY_ERROR"}
@@ -2239,9 +1249,7 @@ def run_named_ground_shell(
     memory_pane_focus = (
         has_focus(cases_pane.text_area)
         & ~inline_editor_mode
-        & Condition(
-            lambda: bool(_aliased_items(current["value"], "CASE"))
-        )
+        & Condition(lambda: bool(_aliased_items(current["value"], "CASE")))
     )
     fit_pane_focus = (
         has_focus(goal_pane.text_area)
@@ -2257,19 +1265,15 @@ def run_named_ground_shell(
         & has_focus(rules_pane.text_area)
         & Condition(lambda: bool(draft_queue["value"]))
     )
-    stale_rule_draft_focus = (
-        rule_draft_focus
-        & Condition(lambda: draft_queue_stale["value"])
+    stale_rule_draft_focus = rule_draft_focus & Condition(
+        lambda: draft_queue_stale["value"]
     )
     saved_rule_focus = (
         normal_input_mode
         & has_focus(rules_pane.text_area)
         & Condition(lambda: not draft_queue["value"])
     )
-    saved_memory_focus = (
-        normal_input_mode
-        & has_focus(cases_pane.text_area)
-    )
+    saved_memory_focus = normal_input_mode & has_focus(cases_pane.text_area)
     saved_memory_list_focus = saved_memory_focus & Condition(
         lambda: not memory_detail_open["value"]
     )
@@ -2483,9 +1487,7 @@ def run_named_ground_shell(
         if selected is None:
             return
         if prepare_use_toggle is None:
-            status_message["value"] = (
-                "This Ground adapter cannot change Example USE."
-            )
+            status_message["value"] = "This Ground adapter cannot change Example USE."
             event.app.invalidate()
             return
         try:
@@ -2609,9 +1611,7 @@ def run_named_ground_shell(
                 report,
                 current=receipt.current if receipt is not None else True,
             )
-            status_message["value"] = (
-                f"{fit_mark(result)} {fit_fraction(result)}"
-            )
+            status_message["value"] = f"{fit_mark(result)} {fit_fraction(result)}"
             mark_pane_updates("GOAL", "CONTEXTS", "RULES", "MEMORIES")
             sync_panes()
 
@@ -2640,9 +1640,8 @@ def run_named_ground_shell(
             )
 
         status_message["value"] = (
-            ("AUTO-FIT" if automatic else "FIT")
-            + " RUNNING · Ground and Contexts unchanged"
-        )
+            "AUTO-FIT" if automatic else "FIT"
+        ) + " RUNNING · Ground and Contexts unchanged"
         sync_memories_pane(align_selection=True)
         started = fit_turn.start(
             app,
@@ -2667,11 +1666,7 @@ def run_named_ground_shell(
         if not items:
             return
         acknowledge_pane("RULES" if kind == "RULE" else "MEMORIES")
-        state = (
-            selected_rule_index
-            if kind == "RULE"
-            else selected_memory_index
-        )
+        state = selected_rule_index if kind == "RULE" else selected_memory_index
         state["value"] = max(
             0,
             min(state["value"] + step, len(items) - 1),
@@ -2747,9 +1742,7 @@ def run_named_ground_shell(
             event.app.invalidate()
             return
         if prepare_rule_draft is None:
-            status_message["value"] = (
-                "This shell has no Rule-draft command preparer."
-            )
+            status_message["value"] = "This shell has no Rule-draft command preparer."
             event.app.invalidate()
             return
         try:
@@ -2789,10 +1782,7 @@ def run_named_ground_shell(
             "\n".join(
                 [
                     f"DRAFT SELECTED · d{selected_index + 1}",
-                    (
-                        "  One READY Rule was reduced to the exact command "
-                        "shown below."
-                    ),
+                    ("  One READY Rule was reduced to the exact command shown below."),
                     "  Press Enter to approve and save it.",
                 ]
             )
@@ -2855,8 +1845,7 @@ def run_named_ground_shell(
         )
         if selected is None:
             status_message["value"] = (
-                "No saved Ground Memory is available; describe one in "
-                "Message."
+                "No saved Ground Memory is available; describe one in Message."
             )
             event.app.invalidate()
             return
@@ -2868,19 +1857,14 @@ def run_named_ground_shell(
             # keeps its exact source immutable and refines expected output.
             original=(
                 item.proposition
-                if current["value"].schema_version
-                == GROUND_PROPOSITION_SCHEMA_VERSION
+                if current["value"].schema_version == GROUND_PROPOSITION_SCHEMA_VERSION
                 else item.expected
             ),
         )
 
     @bindings.add(
         "enter",
-        filter=(
-            normal_input_mode
-            & read_pane_focus
-            & ~has_focus(cases_pane.text_area)
-        ),
+        filter=(normal_input_mode & read_pane_focus & ~has_focus(cases_pane.text_area)),
         eager=True,
     )
     def _talk_in_focused_pane(_event) -> None:
@@ -2904,11 +1888,7 @@ def run_named_ground_shell(
 
     @bindings.add(
         "enter",
-        filter=(
-            has_focus(input_area)
-            & ~inline_editor_mode
-            & ~panel_comment_mode
-        ),
+        filter=(has_focus(input_area) & ~inline_editor_mode & ~panel_comment_mode),
         eager=True,
     )
     def _submit(event) -> None:
@@ -2924,10 +1904,7 @@ def run_named_ground_shell(
 
     @bindings.add(
         "c-j",
-        filter=(
-            (has_focus(input_area) & ~inline_editor_mode)
-            | inline_field_focus
-        ),
+        filter=((has_focus(input_area) & ~inline_editor_mode) | inline_field_focus),
         eager=True,
     )
     def _insert_newline(event) -> None:
@@ -3016,9 +1993,8 @@ def run_named_ground_shell(
         )
         applied_argvs.append(proposal.review.argv)
         applied_draft_index = pending_draft_index["value"]
-        if (
-            applied_draft_index is not None
-            and 0 <= applied_draft_index < len(draft_queue["value"])
+        if applied_draft_index is not None and 0 <= applied_draft_index < len(
+            draft_queue["value"]
         ):
             remaining = list(draft_queue["value"])
             del remaining[applied_draft_index]
@@ -3098,9 +2074,7 @@ def run_named_ground_shell(
             return
         previous_mode = mode["value"]
         inline_draft = pending_inline_edit["value"]
-        conversation.append(
-            "REFINEMENT\n  The pending action returned for revision."
-        )
+        conversation.append("REFINEMENT\n  The pending action returned for revision.")
         if inline_draft is not None and previous_mode == "APPROVAL":
             target, selector, original, edited, comment = inline_draft
             focus_input(restore=False)
@@ -3197,9 +2171,7 @@ def run_named_ground_shell(
     try:
         return application.run(
             pre_run=(
-                lambda: _schedule_auto_fit(application)
-                if auto_fit_enabled
-                else None
+                lambda: _schedule_auto_fit(application) if auto_fit_enabled else None
             )
         )
     except (EOFError, KeyboardInterrupt):
