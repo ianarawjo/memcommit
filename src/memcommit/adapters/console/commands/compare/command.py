@@ -18,13 +18,15 @@ from memcommit.application.operations.compare.summary import (
 from memcommit.application.operations.compare.summary_application import (
     run_comparison_summary,
 )
-from memcommit.adapters.interfaces.cli.comparison_summary import render_comparison_summary
 from memcommit.application.operations.compare.summary_provider import (
     COMPARISON_SUMMARY_OPERATION,
 )
-from memcommit.adapters.interfaces.presentation.comparison import (
+from memcommit.adapters.console.commands.compare.presentation import (
     render_comparison,
     render_comparison_receipt,
+)
+from memcommit.adapters.console.commands.compare.summary_presentation import (
+    render_comparison_summary,
 )
 from memcommit.application.operations.compare.ledger.provider import (
     ComparisonProviderError,

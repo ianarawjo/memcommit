@@ -8,7 +8,7 @@ from memcommit.application.operations.atomize.domain import AtomizeAnalysisSessi
 from memcommit.application.operations.atomize.resolution_adapter import AtomizeResolutionWorkbenchAdapter
 from memcommit.application.operations.atomize.workbench import AtomizeWorkbenchSession
 from memcommit.application.operations.compare.ledger.model import ComparisonAnalysis, comparison_canonical_digest
-from memcommit.adapters.interfaces.presentation.comparison import render_comparison
+from memcommit.adapters.console.commands.compare.presentation import render_comparison
 from memcommit.application.operations.meld.model import MeldSession
 from memcommit.application.operations.meld.resolution_adapter import MeldResolutionWorkbenchAdapter
 from memcommit.application.reviewing.report import ReviewReportController

@@ -7,6 +7,9 @@ from pathlib import Path
 
 
 INTERFACES_ROOT = Path(__file__).parents[1] / "src" / "memcommit" / "adapters" / "interfaces"
+ALLOWED_CONSOLE_PRESENTATION_IMPORTS = {
+    "memcommit.adapters.console.commands.compare.presentation",
+}
 
 
 def _command_imports(path: Path) -> tuple[str, ...]:
@@ -31,9 +34,17 @@ def _command_imports(path: Path) -> tuple[str, ...]:
 
 def test_interfaces_do_not_import_command_adapters() -> None:
     violations = {
-        str(path.relative_to(INTERFACES_ROOT.parent.parent)): imports
+        str(path.relative_to(INTERFACES_ROOT.parent.parent)): tuple(
+            module
+            for module in imports
+            if module not in ALLOWED_CONSOLE_PRESENTATION_IMPORTS
+        )
         for path in sorted(INTERFACES_ROOT.rglob("*.py"))
         if (imports := _command_imports(path))
+        and any(
+            module not in ALLOWED_CONSOLE_PRESENTATION_IMPORTS
+            for module in imports
+        )
     }
 
     assert violations == {}

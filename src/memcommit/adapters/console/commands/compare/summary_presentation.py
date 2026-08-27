@@ -1,4 +1,4 @@
-"""Stable plain-text presentation for lightweight Compare."""
+"""Console presentation for lightweight Compare."""
 
 from __future__ import annotations
 
@@ -7,6 +7,8 @@ from memcommit.adapters.interfaces.console.text import display_escape_text
 
 
 def render_comparison_summary(summary: ComparisonSummary) -> str:
+    """Render the bounded line-oriented result for lightweight Compare."""
+
     if not isinstance(summary, ComparisonSummary):
         raise TypeError("Compare summary rendering requires a ComparisonSummary.")
     reference, compared = summary.frames
@@ -21,6 +23,3 @@ def render_comparison_summary(summary: ComparisonSummary) -> str:
         f"  {display_escape_text(summary.paragraph.text)}",
     ]
     return "\n".join(lines)
-
-
-__all__ = ["render_comparison_summary"]

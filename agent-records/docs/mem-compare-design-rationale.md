@@ -443,6 +443,21 @@ that Context. Compare never opens query-only sources.
 
 ## Explicit workbench, compact default receipt, and exact ledger
 
+Compare owns one console presentation family under
+`memcommit.adapters.console.commands.compare`: the lightweight summary,
+bounded receipt, compact snapshot, and exhaustive ledger. Interactive endpoint
+setup is co-located with that family because line-oriented and prompt-toolkit
+routes are two presentations of the same console operation, not independent
+public interfaces. The still-staged shared terminal components remain reusable
+dependencies; they do not own Compare labels, setup meaning, or report prose.
+
+Symmetric Meld and Review may render an exact saved `ComparisonAnalysis`
+through this Compare-owned presenter. That downstream reuse is an explicit
+Compare-artifact dependency, not evidence that the renderer is
+operation-neutral. Those consumers must not import or invoke Compare's Typer
+entrypoint, and the renderer must not acquire Meld target, response, Apply, or
+mutation semantics.
+
 Completing or reopening Compare does not automatically enter a Viewer in a
 TTY. A transient summary stays line-oriented; an exhaustive saved analysis
 returns a bounded receipt with overview, relation/attention counts, analysis

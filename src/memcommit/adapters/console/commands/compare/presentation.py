@@ -1,4 +1,4 @@
-"""Interface-neutral plain-text presentation for frozen Compare analyses."""
+"""Console presentation for frozen Compare analyses."""
 
 from __future__ import annotations
 

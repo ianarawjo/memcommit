@@ -52,13 +52,13 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.comparison | operation-implementation | relocate-without-alias | memcommit.application.operations.compare.ledger.model | 33 |
 | memcommit.comparison_evidence | operation-implementation | relocate-without-alias | memcommit.application.operations.compare.ledger.evidence | 5 |
 | memcommit.comparison_execution | operation-implementation | relocate-without-alias | memcommit.application.operations.compare.ledger.execution | 9 |
-| memcommit.comparison_present | operation-implementation | relocate-without-alias | memcommit.adapters.interfaces.presentation.comparison | 5 |
+| memcommit.comparison_present | operation-implementation | relocate-without-alias | memcommit.adapters.console.commands.compare.presentation | 5 |
 | memcommit.comparison_provider | operation-implementation | relocate-without-alias | memcommit.application.operations.compare.ledger.provider | 11 |
 | memcommit.comparison_session_application | operation-implementation | relocate-without-alias | memcommit.application.operations.compare.ledger.session_application | 2 |
 | memcommit.comparison_store | operation-implementation | relocate-without-alias | memcommit.application.operations.compare.ledger.store | 10 |
 | memcommit.comparison_summary | historical-compatibility-facade | remove | memcommit.application.operations.compare.summary | 1 |
 | memcommit.comparison_summary_application | historical-compatibility-facade | remove | memcommit.application.operations.compare.summary_application | 0 |
-| memcommit.comparison_summary_present | operation-implementation | relocate-without-alias | memcommit.adapters.interfaces.cli.comparison_summary | 1 |
+| memcommit.comparison_summary_present | operation-implementation | relocate-without-alias | memcommit.adapters.console.commands.compare.summary_presentation | 1 |
 | memcommit.comparison_summary_provider | historical-compatibility-facade | remove | memcommit.application.operations.compare.summary_provider | 0 |
 | memcommit.comparison_summary_rules | historical-compatibility-facade | remove | memcommit.application.operations.compare.summary_rules | 0 |
 | memcommit.config | shared-concept-implementation | relocate-without-alias | memcommit.configuration.config | 24 |

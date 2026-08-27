@@ -179,7 +179,7 @@ def run_meld_shell(
         # that exact artifact instead of maintaining a second summary dialect.
         # Navigation hints are omitted because this target-bound Meld already
         # supplies the next interaction below the shared report.
-        from memcommit.adapters.interfaces.presentation.comparison import render_comparison
+        from memcommit.adapters.console.commands.compare.presentation import render_comparison
 
         compare_report = (
             render_comparison(

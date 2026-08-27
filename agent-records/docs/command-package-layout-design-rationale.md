@@ -33,9 +33,10 @@ commands/atomize/
 Command-layer mechanics used by more than one entry live under
 `commands/shared/`. This is not a general utility directory: a module belongs
 there only when its command-adapter mechanics genuinely have multiple command
-consumers. Application policy remains under `operations/`, presentation
-ownership remains under `interfaces/`, and other neutral concepts keep their
-existing owners.
+consumers. Application policy remains under `operations/`; operation-owned
+console presentation and interactive setup live beside their command, while
+still-staged reusable terminal components retain their narrower owners until
+reviewed. Other neutral concepts keep their existing owners.
 
 The exact baseline classification is authored mechanically by
 `scripts/render_command_package_layout.py` and rendered in

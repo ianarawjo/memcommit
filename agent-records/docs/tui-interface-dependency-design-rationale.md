@@ -9,10 +9,13 @@ legacy command adapter layer and allowed later work to recreate the same cycle.
 
 ## Intended boundary
 
-- Reusable terminal components, viewers, workbenches, and terminal operations
-  are owned by `memcommit.adapters.interfaces.tui`.
-- Command modules may invoke or re-export interface objects, but interface
-  modules must not import `memcommit.adapters.console.commands`.
+- Reusable terminal components, viewers, and workbenches remain staged under
+  `memcommit.adapters.interfaces.tui` until each reviewed console slice moves
+  to its explicit owner.
+- Operation-owned console setup and presentation belong beside their command.
+  A still-staged interface screen may consume an exact operation-owned
+  presentation module, but must not import that operation's command entrypoint
+  or orchestration module.
 - Existing command import paths remain compatibility facades while internal
   code moves to the neutral owner.
 - Moving ownership must not change keyboard behavior, rendering, validation,
@@ -31,7 +34,9 @@ remain unchanged.
 ## Enforcement
 
 `tests/test_tui_interface_dependency.py` parses every Python module under
-`memcommit/adapters/interfaces` and rejects absolute imports from `memcommit.adapters.console.commands`.
+`memcommit/adapters/interfaces` and rejects absolute imports from
+`memcommit.adapters.console.commands`, except for the reviewed narrow
+operation-presentation edges recorded by that test.
 The same test verifies object or module identity across the compatibility paths
 for the smaller shared controls and terminal table.
 

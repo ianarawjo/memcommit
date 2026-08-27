@@ -388,8 +388,8 @@
     },
     {
       "action": "relocate-without-alias",
-      "canonical_target": "memcommit.adapters.interfaces.presentation.comparison",
-      "canonical_target_path": "memcommit/adapters/interfaces/presentation/comparison.py",
+      "canonical_target": "memcommit.adapters.console.commands.compare.presentation",
+      "canonical_target_path": "memcommit/adapters/console/commands/compare/presentation.py",
       "inbound_package_importers": 5,
       "lines": 424,
       "module": "memcommit.comparison_present",
@@ -454,8 +454,8 @@
     },
     {
       "action": "relocate-without-alias",
-      "canonical_target": "memcommit.adapters.interfaces.cli.comparison_summary",
-      "canonical_target_path": "memcommit/adapters/interfaces/cli/comparison_summary.py",
+      "canonical_target": "memcommit.adapters.console.commands.compare.summary_presentation",
+      "canonical_target_path": "memcommit/adapters/console/commands/compare/summary_presentation.py",
       "inbound_package_importers": 1,
       "lines": 26,
       "module": "memcommit.comparison_summary_present",
