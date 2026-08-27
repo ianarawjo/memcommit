@@ -38,7 +38,7 @@ from memcommit.atomize_workflow import (
 )
 from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.atomize.command import _materialize_reviewed_workbench
-from memcommit.interfaces.tui.operations.atomize.screen import (
+from memcommit.adapters.interfaces.tui.operations.atomize.screen import (
     _finding_map,
     _list_text,
     _source_map,
@@ -51,9 +51,9 @@ from memcommit.commands.atomize.sessions import (
     revalidate_saved_atomize_analysis,
 )
 from memcommit.commands.shared.endpoint_setup_flows import AtomizeSetupReceipt
-from memcommit.interfaces.tui.workbenches.review import RESPONSE_LABEL
-from memcommit.interfaces.tui.workbenches.resolution import ResolutionDestination
-from memcommit.interfaces.tui.components.operation_launcher.session import (
+from memcommit.adapters.interfaces.tui.workbenches.review import RESPONSE_LABEL
+from memcommit.adapters.interfaces.tui.workbenches.resolution import ResolutionDestination
+from memcommit.adapters.interfaces.tui.components.operation_launcher.session import (
     SessionNewReceipt,
     SessionOpenReceipt,
     SessionPickerLocation,
@@ -1737,7 +1737,7 @@ def test_applied_atomize_workbench_keeps_comments_but_removes_reapply_actions(
         return ResolutionWorkbenchAction(kind="CLOSE")
 
     monkeypatch.setattr(
-        "memcommit.interfaces.tui.workbenches.resolution."
+        "memcommit.adapters.interfaces.tui.workbenches.resolution."
         "run_resolution_workbench_shell",
         inspect_view,
     )
@@ -1776,7 +1776,7 @@ def test_actionable_atomize_auto_accepts_when_no_response_is_required(
         return ResolutionWorkbenchAction(kind="CLOSE")
 
     monkeypatch.setattr(
-        "memcommit.interfaces.tui.workbenches.resolution."
+        "memcommit.adapters.interfaces.tui.workbenches.resolution."
         "run_resolution_workbench_shell",
         inspect_view,
     )

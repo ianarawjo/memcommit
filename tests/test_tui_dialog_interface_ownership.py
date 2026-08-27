@@ -12,11 +12,11 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 DIALOG_MODULES = (
     (
         "memcommit.commands.shared.context_reach_dialog",
-        "memcommit.interfaces.tui.components.context_reach_dialog",
+        "memcommit.adapters.interfaces.tui.components.context_reach_dialog",
     ),
     (
         "memcommit.commands.shared.flat_selection_dialog",
-        "memcommit.interfaces.tui.components.flat_selection_dialog",
+        "memcommit.adapters.interfaces.tui.components.flat_selection_dialog",
     ),
 )
 

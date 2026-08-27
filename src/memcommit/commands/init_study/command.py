@@ -8,7 +8,7 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.infrastructure.command_ledger.attempts import current_command_attempt_uid
-from memcommit.interfaces.console.text import (
+from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
 )
 from memcommit.infrastructure.providers.policy import (

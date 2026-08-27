@@ -26,15 +26,15 @@ from memcommit.application.retained_history.applied_review import (
 )
 from memcommit.commands.shared.command_progress import CommandProgress
 from memcommit.commands.shared.context_operand import ContextOperandSnapshot
-from memcommit.interfaces.cli.review import (
+from memcommit.adapters.interfaces.cli.review import (
     render_review_snapshot,
     visible_ordinal_index,
 )
-from memcommit.interfaces.tui.workbenches.review import ReviewCancelled
+from memcommit.adapters.interfaces.tui.workbenches.review import ReviewCancelled
 from memcommit.commands.review.resolution_shell import (
     run_review_resolution_shell as run_review_shell,
 )
-from memcommit.interfaces.tui.components.operation_launcher.session import (
+from memcommit.adapters.interfaces.tui.components.operation_launcher.session import (
     SessionOpenReceipt,
     SessionPickerEntry,
     choose_session,
@@ -43,7 +43,7 @@ from memcommit.commands.review.sessions import (
     SAVED_REVIEW_KIND,
     choose_review_session,
 )
-from memcommit.interfaces.console.text import (
+from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
 )
 from memcommit.application.reviewing.quality.findings import FindingsError
@@ -257,8 +257,8 @@ def _run_audit_review(
     """Open one exact saved Audit without rerunning any finder."""
 
     from memcommit.commands.audit.command import run_quality_audit_review
-    from memcommit.interfaces.tui.operations.audit.catalog import audit_session_entries
-    from memcommit.interfaces.tui.operations.audit import (
+    from memcommit.adapters.interfaces.tui.operations.audit.catalog import audit_session_entries
+    from memcommit.adapters.interfaces.tui.operations.audit import (
         render_quality_audit_review_snapshot,
     )
 

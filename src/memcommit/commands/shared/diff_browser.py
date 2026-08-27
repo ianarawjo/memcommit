@@ -15,7 +15,7 @@ from memcommit.context_targeting.tui.picker import (
     ContextMemoryRow,
     ContextSubtreeSelection,
 )
-from memcommit.interfaces.tui.components.checkpoint_location import (
+from memcommit.adapters.interfaces.tui.components.checkpoint_location import (
     CheckpointLocationSelection,
     choose_history_location,
 )
@@ -43,7 +43,7 @@ from memcommit.application.retained_history.display import (
     checkpoint_inherited_from,
     project_history_display_rows,
 )
-from memcommit.interfaces.tui.core.theme import semantic_action_style
+from memcommit.adapters.interfaces.tui.core.theme import semantic_action_style
 from memcommit.persistence.store import (
     MemoryStore,
     checkpoint_history_digest,

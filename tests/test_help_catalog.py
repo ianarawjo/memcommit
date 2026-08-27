@@ -23,8 +23,8 @@ from memcommit.application.operations.operation_catalog.details import (
     ALL_OPERATION_DETAILS,
     DETAILS_BY_OPERATION,
 )
-from memcommit.interfaces.tui.core.text_layout import terminal_cell_width
-from memcommit.interfaces.tui.operations.help.localization import HELP_LANGUAGES
+from memcommit.adapters.interfaces.tui.core.text_layout import terminal_cell_width
+from memcommit.adapters.interfaces.tui.operations.help.localization import HELP_LANGUAGES
 
 
 def _root_context():

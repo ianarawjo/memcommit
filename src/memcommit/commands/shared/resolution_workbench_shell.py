@@ -1,6 +1,6 @@
 """Compatibility imports for the interface-owned Resolution Session shell."""
 
-from memcommit.interfaces.tui.workbenches.resolution.session_shell import (
+from memcommit.adapters.interfaces.tui.workbenches.resolution.session_shell import (
     RESOLUTION_WORKBENCH_STYLE,
     ResolutionDestination,
     ResolutionGlobalStrategy,

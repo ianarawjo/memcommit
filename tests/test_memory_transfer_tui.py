@@ -13,8 +13,8 @@ from typer.testing import CliRunner
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Context, Memory, MemoryRef
-from memcommit.interfaces.tui.components.direct_item_placement import DirectItemGap
-from memcommit.interfaces.tui.operations.memory_transfer import (
+from memcommit.adapters.interfaces.tui.components.direct_item_placement import DirectItemGap
+from memcommit.adapters.interfaces.tui.operations.memory_transfer import (
     build_memory_transfer_tui_setup,
     choose_memory_transfer_setup,
     memory_transfer_exact_command_review,
@@ -38,7 +38,7 @@ from memcommit.memory_transfer_application import (
 )
 from memcommit.memory_transfer_runtime import MemoryStoreMemoryTransferPort
 from memcommit.store import MemoryStore
-from memcommit.interfaces.cli import memory_transfer as transfer_command
+from memcommit.adapters.interfaces.cli import memory_transfer as transfer_command
 
 
 runner = CliRunner(mix_stderr=False)

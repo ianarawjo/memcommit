@@ -135,7 +135,7 @@ def test_production_forget_consumers_use_the_operation_owner() -> None:
         "src/memcommit/adapters/python_api/_operations/forget.py",
         "src/memcommit/commands/forget/command.py",
         "src/memcommit/commands/impact/process_local.py",
-        "src/memcommit/interfaces/tui/operations/forget/workbench.py",
+        "src/memcommit/adapters/interfaces/tui/operations/forget/workbench.py",
         "src/memcommit/application/operations/forget/runtime.py",
     )
 

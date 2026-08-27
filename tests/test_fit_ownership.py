@@ -198,8 +198,8 @@ def test_production_fit_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "src/memcommit/adapters/python_api/_operations/fit.py",
         "src/memcommit/adapters/python_api/_operations/resolve.py",
-        "src/memcommit/interfaces/cli/fit.py",
-        "src/memcommit/interfaces/fit.py",
+        "src/memcommit/adapters/interfaces/cli/fit.py",
+        "src/memcommit/adapters/interfaces/fit.py",
         "src/memcommit/commands/fit/command.py",
         "src/memcommit/commands/find_conflicts/command.py",
         "src/memcommit/commands/ground/command.py",

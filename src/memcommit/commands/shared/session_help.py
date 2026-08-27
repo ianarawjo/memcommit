@@ -1,6 +1,6 @@
 """Compatibility facade for interface-owned session Help."""
 
-from memcommit.interfaces.tui.components.session_help import (
+from memcommit.adapters.interfaces.tui.components.session_help import (
     HelpActionObserver,
     HelpClosedHandler,
     HelpUnavailableHandler,

@@ -10,11 +10,11 @@ from typing import Any
 import typer
 
 from memcommit.application.retained_history.command_history import CommandRestoreResult, ContextCommandUnit
-from memcommit.interfaces.console.identity import collision_safe_uid_prefixes
-from memcommit.interfaces.console.text import (
+from memcommit.adapters.interfaces.console.identity import collision_safe_uid_prefixes
+from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
 )
-from memcommit.interfaces.console.theme import (
+from memcommit.adapters.interfaces.console.theme import (
     SemanticColorRole,
     memory_object_color_rgb,
     semantic_action_role,

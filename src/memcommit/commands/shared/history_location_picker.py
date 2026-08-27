@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import sys
 
-from memcommit.interfaces.tui.components import checkpoint_location as _checkpoint_location
+from memcommit.adapters.interfaces.tui.components import checkpoint_location as _checkpoint_location
 
 # Preserve one implementation module so legacy-path monkeypatches keep changing
 # the globals used by callers imported through the interface-owned path.

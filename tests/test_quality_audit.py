@@ -33,17 +33,17 @@ from memcommit.findings import (
     DuplicateReport,
 )
 from memcommit.provider_types import CompletionRun, ProviderIdentity
-from memcommit.interfaces.tui.operations.audit import (
+from memcommit.adapters.interfaces.tui.operations.audit import (
     quality_audit_review_document,
     render_quality_audit_review_snapshot,
 )
-from memcommit.interfaces.console.theme import (
+from memcommit.adapters.interfaces.console.theme import (
     SemanticColorRole,
     memory_object_color_rgb,
     semantic_color_rgb,
 )
-from memcommit.interfaces.tui.core.theme import semantic_role_style
-from memcommit.interfaces.tui.viewers.semantic import semantic_document_plain_text
+from memcommit.adapters.interfaces.tui.core.theme import semantic_role_style
+from memcommit.adapters.interfaces.tui.viewers.semantic import semantic_document_plain_text
 from memcommit.quality_audit import (
     QUALITY_AUDIT_PREVIOUS_SCHEMA_VERSION,
     QUALITY_AUDIT_RULESETS,

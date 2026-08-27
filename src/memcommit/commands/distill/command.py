@@ -48,19 +48,19 @@ from memcommit.application.operations.ground.distill import (
     execute_ground_distill,
     freeze_ground_distill,
 )
-from memcommit.interfaces.cli.distill import (
+from memcommit.adapters.interfaces.cli.distill import (
     distill_result_text,
     render_distill_receipt,
 )
-from memcommit.interfaces.cli.semantic_add import render_applied_memory_preview
-from memcommit.interfaces.console import (
+from memcommit.adapters.interfaces.cli.semantic_add import render_applied_memory_preview
+from memcommit.adapters.interfaces.console import (
     ConsoleMode,
     ConsoleModeError,
     SystemTerminalCapabilities,
     resolve_console_mode,
 )
-from memcommit.interfaces.console.text import display_escape_text
-from memcommit.interfaces.tui.operations.distill import DistillTuiSetup
+from memcommit.adapters.interfaces.console.text import display_escape_text
+from memcommit.adapters.interfaces.tui.operations.distill import DistillTuiSetup
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.infrastructure.providers.subscription import QueryProviderError, connect_semantic_provider

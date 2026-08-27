@@ -12,7 +12,7 @@ from memcommit.commands.shared.context_operand import (
     choose_context_operand,
 )
 from memcommit.application.authority.access import GrantedReadStore, resolve_context_access
-from memcommit.interfaces.cli.quality_findings import (
+from memcommit.adapters.interfaces.cli.quality_findings import (
     render_heading,
     render_memory,
     render_question,
@@ -26,11 +26,11 @@ from memcommit.commands.shared.quality_find_workbench import (
     interactive_quality_find_available,
     run_interactive_quality_find,
 )
-from memcommit.interfaces.console.text import (
+from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
 )
-from memcommit.interfaces.console.identity import collision_safe_uid_prefixes
-from memcommit.interfaces.console.theme import (
+from memcommit.adapters.interfaces.console.identity import collision_safe_uid_prefixes
+from memcommit.adapters.interfaces.console.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )

@@ -16,9 +16,9 @@ from memcommit.application.operations.compare.summary import (
     ComparisonSummaryError,
 )
 from memcommit.application.operations.compare.summary_application import run_comparison_summary
-from memcommit.interfaces.cli.comparison_summary import render_comparison_summary
+from memcommit.adapters.interfaces.cli.comparison_summary import render_comparison_summary
 from memcommit.application.operations.compare.summary_provider import COMPARISON_SUMMARY_OPERATION
-from memcommit.interfaces.presentation.comparison import (
+from memcommit.adapters.interfaces.presentation.comparison import (
     render_comparison,
     render_comparison_receipt,
 )
@@ -45,8 +45,8 @@ from memcommit.commands.shared.command_wait import run_command_wait
 from memcommit.commands.compare.setup import choose_compare_setup
 from memcommit.commands.compare.targeting import resolve_compare_cli_targets
 from memcommit.commands.rationale.command import render_rationale
-from memcommit.interfaces.tui.components.operation_launcher.session import SessionNewReceipt
-from memcommit.interfaces.console.text import (
+from memcommit.adapters.interfaces.tui.components.operation_launcher.session import SessionNewReceipt
+from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
 )
 from memcommit.context_targeting.presets import (

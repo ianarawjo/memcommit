@@ -29,14 +29,14 @@ from memcommit.commands.trace.context_projection import (
     format_context_trace_report,
     open_context_trace_viewer,
 )
-from memcommit.interfaces.tui.viewers.read_only import interactive_report_terminal
+from memcommit.adapters.interfaces.tui.viewers.read_only import interactive_report_terminal
 from memcommit.commands.trace.projection import (
     DEFAULT_TRACE_OPERATION_LIMIT,
     MAX_TRACE_OPERATION_LIMIT,
     format_compact_trace_report,
     open_trace_viewer,
 )
-from memcommit.interfaces.console.text import (
+from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
     safe_terminal_text,
 )

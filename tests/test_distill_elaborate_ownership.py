@@ -133,8 +133,8 @@ def test_production_consumers_use_operation_owners() -> None:
         "src/memcommit/commands/impact/process_local.py",
         "src/memcommit/application/operations/ground/distill.py",
         "src/memcommit/application/operations/ground/elaborate.py",
-        "src/memcommit/interfaces/cli/distill.py",
-        "src/memcommit/interfaces/cli/elaborate.py",
+        "src/memcommit/adapters/interfaces/cli/distill.py",
+        "src/memcommit/adapters/interfaces/cli/elaborate.py",
         "src/memcommit/application/operations/distill/runtime.py",
         "src/memcommit/application/operations/elaborate/runtime.py",
         "src/memcommit/application/operations/elaborate/add_runtime.py",
@@ -192,4 +192,4 @@ def test_operation_owners_do_not_depend_on_command_or_interface_adapters() -> No
     )
 
     assert "memcommit.commands" not in package_source
-    assert "memcommit.interfaces" not in package_source
+    assert "memcommit.adapters.interfaces" not in package_source

@@ -8,8 +8,8 @@ import pytest
 
 import memcommit.commands.compare.setup as compare_setup_command
 import memcommit.application.ops as ops
-from memcommit.interfaces.tui.components.endpoint_setup import EndpointSetupMemory
-from memcommit.interfaces.tui.operations.compare import (
+from memcommit.adapters.interfaces.tui.components.endpoint_setup import EndpointSetupMemory
+from memcommit.adapters.interfaces.tui.operations.compare import (
     CompareEndpointSelection,
     CompareTuiSetup,
     choose_compare_endpoint_setup,

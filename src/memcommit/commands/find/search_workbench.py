@@ -37,23 +37,23 @@ from memcommit.commands.shared.horizontal_choice import (
     HorizontalChoiceState,
     render_horizontal_choice,
 )
-from memcommit.interfaces.tui.core.theme import (
+from memcommit.adapters.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
 )
-from memcommit.interfaces.tui.components.frame import (
+from memcommit.adapters.interfaces.tui.components.frame import (
     TuiRegion,
     bind_focused_frame_style,
     build_tui_frame,
 )
-from memcommit.interfaces.tui.core.keybindings import (
+from memcommit.adapters.interfaces.tui.core.keybindings import (
     bind_case_insensitive_key,
     dispatch_tui_back,
 )
-from memcommit.interfaces.console.terminal import (
+from memcommit.adapters.interfaces.console.terminal import (
     require_interactive_terminal,
 )
-from memcommit.interfaces.console.text import (
+from memcommit.adapters.interfaces.console.text import (
     safe_terminal_text,
 )
 from memcommit.commands.find.result_present import (
@@ -67,7 +67,7 @@ from memcommit.commands.shared.semantic_clipboard import (
     copy_plain_text,
 )
 from memcommit.commands.shared.session_help import bind_session_help
-from memcommit.interfaces.tui.components.focus import (
+from memcommit.adapters.interfaces.tui.components.focus import (
     FocusSurface,
     SurfaceActionResult,
     SurfaceFocusController,
@@ -78,8 +78,8 @@ from memcommit.context_targeting.tui.name_editor import (
     ContextNameControl,
     suggest_fresh_context_name,
 )
-from memcommit.interfaces.console.selection import FlatMultiSelectionState, SelectionOption
-from memcommit.interfaces.console.selection.tui.multiple import render_vertical_multi_choice_rows
+from memcommit.adapters.interfaces.console.selection import FlatMultiSelectionState, SelectionOption
+from memcommit.adapters.interfaces.console.selection.tui.multiple import render_vertical_multi_choice_rows
 from memcommit.application.operations.search.application import (
     FindSearchRequest,
     FindSearchResponse,

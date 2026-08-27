@@ -121,7 +121,7 @@ def _view():
 
 
 def _run_child(kind: str) -> None:
-    from memcommit.interfaces.tui.workbenches.resolution.compact_shell import (
+    from memcommit.adapters.interfaces.tui.workbenches.resolution.compact_shell import (
         run_compact_resolution_decisions,
     )
     from memcommit.resolution_workbench import ResolutionWorkbenchAction

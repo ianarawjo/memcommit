@@ -10,7 +10,7 @@ import memcommit.application.ops as ops
 from memcommit.adapters.python_api import MemCommitClient
 from memcommit.adapters.console.entrypoint import app
 from memcommit.findings import DuplicateReport, FindingsError
-from memcommit.interfaces.agent.quality_find import QualityFindAgentAdapter
+from memcommit.adapters.interfaces.agent.quality_find import QualityFindAgentAdapter
 from memcommit.store import MemoryStore
 
 

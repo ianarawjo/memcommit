@@ -15,7 +15,7 @@ from memcommit.find_answer_references import (
     FindAnswerSentence,
     build_find_answer_reference_document,
 )
-from memcommit.interfaces.tui.operations.query import (
+from memcommit.adapters.interfaces.tui.operations.query import (
     QueryAnswerFocus,
     project_query_answer_clipboard,
     query_answer_stop_count,
@@ -63,7 +63,7 @@ def test_blank_query_workbench_does_not_connect_before_submission():
 def test_query_scope_uses_transient_browse_without_todo_or_transcripts():
     source = (
         Path(__file__).parents[1]
-        / "src/memcommit/interfaces/tui/operations/query/screen.py"
+        / "src/memcommit/adapters/interfaces/tui/operations/query/screen.py"
     ).read_text(encoding="utf-8")
     assert "CompactReadableScopeControl" in source
     assert "SAVED TRANSCRIPTS" not in source

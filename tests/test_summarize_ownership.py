@@ -141,11 +141,11 @@ def test_production_summarize_consumers_use_the_operation_owner() -> None:
         "src/memcommit/application/operations/distill/runtime.py",
         "src/memcommit/eval/study_summarize_exact_matrix.py",
         "src/memcommit/application/operations/ground/distill.py",
-        "src/memcommit/interfaces/summarize.py",
-        "src/memcommit/interfaces/cli/summarize.py",
-        "src/memcommit/interfaces/tui/operations/summarize/adapter.py",
-        "src/memcommit/interfaces/tui/operations/summarize/model.py",
-        "src/memcommit/interfaces/tui/operations/summarize/screen.py",
+        "src/memcommit/adapters/interfaces/summarize.py",
+        "src/memcommit/adapters/interfaces/cli/summarize.py",
+        "src/memcommit/adapters/interfaces/tui/operations/summarize/adapter.py",
+        "src/memcommit/adapters/interfaces/tui/operations/summarize/model.py",
+        "src/memcommit/adapters/interfaces/tui/operations/summarize/screen.py",
         "src/memcommit/application/operations/summarize/runtime.py",
     )
 

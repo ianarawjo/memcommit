@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from memcommit.interfaces.cli.resolve import render_resolve_receipt
+from memcommit.adapters.interfaces.cli.resolve import render_resolve_receipt
 from memcommit.application.operations.resolve.application import ResolveReceipt
 
 

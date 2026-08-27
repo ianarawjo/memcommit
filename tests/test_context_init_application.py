@@ -21,7 +21,7 @@ from memcommit.context_init_runtime import (
     execute_context_init,
     prepare_context_init,
 )
-from memcommit.interfaces.tui.operations.context_init import (
+from memcommit.adapters.interfaces.tui.operations.context_init import (
     ContextInitTuiSetup,
     run_context_init_tui,
 )
@@ -135,7 +135,7 @@ def test_context_init_application_has_no_command_typer_or_tui_imports():
         if name == "typer"
         or name.startswith("prompt_toolkit")
         or name.startswith("memcommit.commands")
-        or name.startswith("memcommit.interfaces")
+        or name.startswith("memcommit.adapters.interfaces")
     )
     assert forbidden == ()
 

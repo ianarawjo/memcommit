@@ -154,7 +154,7 @@ def _session(kind: str, *, empty: bool = False):
 
 
 def _run_child(kind: str) -> None:
-    from memcommit.interfaces.tui.workbenches.findings import run_quality_find_browser
+    from memcommit.adapters.interfaces.tui.workbenches.findings import run_quality_find_browser
     from memcommit.quality_find_workbench import quality_find_report_view
 
     empty = kind == "empty"

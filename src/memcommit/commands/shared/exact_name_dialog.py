@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import sys
 
-from memcommit.interfaces.tui.components import (
+from memcommit.adapters.interfaces.tui.components import (
     exact_name_dialog as _exact_name_dialog,
 )
 

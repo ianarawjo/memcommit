@@ -12,7 +12,7 @@ from memcommit.commands.shared.context_operand import (
     ContextOperandSnapshot,
     choose_context_operand,
 )
-from memcommit.interfaces.cli.quality_findings import (
+from memcommit.adapters.interfaces.cli.quality_findings import (
     plural,
     render_cleanup_member,
     render_heading,
@@ -25,8 +25,8 @@ from memcommit.application.operations.exact_dedup.application import (
     ExactDuplicateContextReport,
     find_exact_duplicate_scope,
 )
-from memcommit.interfaces.console.identity import collision_safe_uid_prefixes
-from memcommit.interfaces.console.text import display_escape_text
+from memcommit.adapters.interfaces.console.identity import collision_safe_uid_prefixes
+from memcommit.adapters.interfaces.console.text import display_escape_text
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.application.reviewing.read_report import ReadReportTarget

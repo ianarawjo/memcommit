@@ -28,22 +28,22 @@ from memcommit.commands.help_inventory.command import CommandEntry
 from memcommit.commands.shared.readable_context_catalog import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.interfaces.console.identity import collision_safe_uid_prefixes
-from memcommit.interfaces.console.text import (
+from memcommit.adapters.interfaces.console.identity import collision_safe_uid_prefixes
+from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
     safe_terminal_text,
 )
-from memcommit.interfaces.console.theme import (
+from memcommit.adapters.interfaces.console.theme import (
     memory_object_color_rgb,
     semantic_color_rgb,
     semantic_quality_role,
 )
-from memcommit.interfaces.tui.operations.audit import (
+from memcommit.adapters.interfaces.tui.operations.audit import (
     choose_audit_setup,
     quality_audit_review_document,
     render_quality_audit_review_snapshot,
 )
-from memcommit.interfaces.tui.viewers.semantic import run_semantic_viewer
+from memcommit.adapters.interfaces.tui.viewers.semantic import run_semantic_viewer
 from memcommit.context import Context
 from memcommit.application.operations.conformance.model import ConformanceError, check_context_conformance
 from memcommit.application.operations.conformance.runtime import freeze_context_conformance

@@ -12,7 +12,7 @@ integration path covers tool
 discovery, name dispatch, shared client ownership, JSON-safe output, and the
 transition from one durable mutation to a later read through the same process.
 
-`memcommit.interfaces.agent.registry` is the host-neutral in-process connection
+`memcommit.adapters.interfaces.agent.registry` is the host-neutral in-process connection
 point. It makes shipped tools discoverable and callable without importing the
 CLI or TUI and without choosing a wire protocol.
 

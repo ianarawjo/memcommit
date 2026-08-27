@@ -7,8 +7,8 @@ import pytest
 import memcommit.commands.meld.command as meld_command
 import memcommit.commands.meld.setup as meld_setup_command
 import memcommit.application.ops as ops
-from memcommit.interfaces.tui.components.endpoint_setup import EndpointSetupMemory
-from memcommit.interfaces.tui.operations.meld import (
+from memcommit.adapters.interfaces.tui.components.endpoint_setup import EndpointSetupMemory
+from memcommit.adapters.interfaces.tui.operations.meld import (
     MeldEndpointSelection,
     MeldTuiSetup,
     choose_meld_endpoint_setup,

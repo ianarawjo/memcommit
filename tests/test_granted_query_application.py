@@ -234,7 +234,7 @@ def test_production_adapters_import_granted_query_from_operation_owners():
     root = Path(__file__).parents[1]
     command = (root / "src/memcommit/commands/query/command.py").read_text(encoding="utf-8")
     workbench_model = (
-        root / "src/memcommit/interfaces/tui/operations/query/model.py"
+        root / "src/memcommit/adapters/interfaces/tui/operations/query/model.py"
     ).read_text(encoding="utf-8")
 
     assert "from memcommit.application.operations.query.granted_application import (" in command

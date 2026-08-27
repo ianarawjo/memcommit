@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import sys
 
-from memcommit.interfaces.cli import impact_registry as _impact_registry
+from memcommit.adapters.interfaces.cli import impact_registry as _impact_registry
 
 # Preserve one implementation module so imports and monkeypatches through the
 # historical command path observe the interface-owned module's exact globals.

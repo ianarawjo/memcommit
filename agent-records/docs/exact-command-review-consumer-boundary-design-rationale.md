@@ -26,7 +26,7 @@ identity adjacent to a typed frozen request, plan, or action and must validate
 that identity again at its mutation or dispatch boundary.
 
 The standalone full-screen approval surface is owned by
-`memcommit.interfaces.tui.components.exact_command_review.shell`. The former
+`memcommit.adapters.interfaces.tui.components.exact_command_review.shell`. The former
 `memcommit.commands.shared.exact_command_review_shell` path is a module-identity
 compatibility alias so legacy imports and monkeypatches reach the same globals.
 This is an ownership-only relocation: key bindings, rendering, validation,

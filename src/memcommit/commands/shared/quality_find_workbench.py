@@ -19,7 +19,7 @@ from prompt_toolkit.styles import merge_styles
 
 from memcommit.commands.shared.command_progress import CommandProgress
 from memcommit.infrastructure.command_ledger.attempts import annotate_read_report_attempt
-from memcommit.interfaces.tui.components.operation_launcher.location import (
+from memcommit.adapters.interfaces.tui.components.operation_launcher.location import (
     operation_launcher_orientation,
 )
 from memcommit.application.authority.access import (
@@ -29,36 +29,36 @@ from memcommit.application.authority.access import (
 from memcommit.commands.shared.readable_context_catalog import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.interfaces.tui.components.focus import (
+from memcommit.adapters.interfaces.tui.components.focus import (
     FocusSurface,
     SurfaceFocusController,
     SurfaceMoveResult,
     bind_surface_navigation,
 )
-from memcommit.interfaces.tui.core.theme import (
+from memcommit.adapters.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
 )
-from memcommit.interfaces.tui.components.frame import (
+from memcommit.adapters.interfaces.tui.components.frame import (
     TuiRegion,
     build_focused_frame,
     build_tui_frame,
 )
-from memcommit.interfaces.tui.core.keybindings import (
+from memcommit.adapters.interfaces.tui.core.keybindings import (
     bind_case_insensitive_key,
     dispatch_tui_back,
 )
-from memcommit.interfaces.console.terminal import (
+from memcommit.adapters.interfaces.console.terminal import (
     require_interactive_terminal,
 )
-from memcommit.interfaces.console.text import (
+from memcommit.adapters.interfaces.console.text import (
     safe_terminal_text,
 )
-from memcommit.interfaces.tui.workbenches.read_report import (
+from memcommit.adapters.interfaces.tui.workbenches.read_report import (
     ReadReportSelectTarget,
     choose_read_report_recent,
 )
-from memcommit.interfaces.tui.workbenches.findings import run_quality_find_browser
+from memcommit.adapters.interfaces.tui.workbenches.findings import run_quality_find_browser
 from memcommit.context import Context
 from memcommit.context_targeting.tui.range_selection import (
     ContextRangeSelectionState,

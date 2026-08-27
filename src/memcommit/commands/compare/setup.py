@@ -15,8 +15,8 @@ from memcommit.context_targeting.tui.picker import context_memory_rows
 from memcommit.commands.shared.readable_context_catalog import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.interfaces.tui.components.endpoint_setup import EndpointSetupMemory
-from memcommit.interfaces.tui.operations.compare import (
+from memcommit.adapters.interfaces.tui.components.endpoint_setup import EndpointSetupMemory
+from memcommit.adapters.interfaces.tui.operations.compare import (
     CompareTuiSetup,
     choose_compare_endpoint_setup,
 )

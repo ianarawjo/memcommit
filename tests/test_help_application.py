@@ -97,7 +97,7 @@ def test_application_boundary_has_no_store_provider_or_terminal_dependency():
     forbidden = (
         "memcommit.store",
         "memcommit.commands",
-        "memcommit.interfaces",
+        "memcommit.adapters.interfaces",
         "memcommit.providers",
         "typer",
         "prompt_toolkit",

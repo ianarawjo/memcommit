@@ -16,7 +16,7 @@ the command layer implemented the TUI.
 The Query terminal interface now owns three explicit modules:
 
 ```text
-memcommit/interfaces/tui/operations/query/
+memcommit/adapters/interfaces/tui/operations/query/
   model.py    process-local transcript, response, receipt, and runner types
   adapter.py  typed answer/reference/transcript and clipboard projections
   screen.py   prompt-toolkit layout, focus, keys, and background-turn lifecycle

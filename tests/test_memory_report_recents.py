@@ -109,7 +109,7 @@ def test_empty_launcher_goes_directly_to_common_memory_picker(
     isolated_store, monkeypatch
 ):
     monkeypatch.setattr(
-        "memcommit.interfaces.tui.workbenches.read_report.launcher.run_operation_launcher",
+        "memcommit.adapters.interfaces.tui.workbenches.read_report.launcher.run_operation_launcher",
         lambda *args, **kwargs: (_ for _ in ()).throw(
             AssertionError("an empty recent catalog must be skipped")
         ),

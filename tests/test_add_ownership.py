@@ -118,8 +118,8 @@ def test_production_add_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "src/memcommit/adapters/python_api/_operations/add.py",
         "src/memcommit/commands/add/command.py",
-        "src/memcommit/interfaces/cli/add.py",
-        "src/memcommit/interfaces/tui/operations/add/screen.py",
+        "src/memcommit/adapters/interfaces/cli/add.py",
+        "src/memcommit/adapters/interfaces/tui/operations/add/screen.py",
         "src/memcommit/application/operations/add/runtime.py",
     )
 

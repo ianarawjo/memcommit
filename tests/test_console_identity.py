@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from memcommit.interfaces.console.identity import collision_safe_uid_prefixes
+from memcommit.adapters.interfaces.console.identity import collision_safe_uid_prefixes
 
 
 def test_compact_uid_projection_uses_eight_characters_when_unique() -> None:

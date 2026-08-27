@@ -103,7 +103,7 @@ Context's direct Memories as viewport stops; Enter keeps the whole Context and
 cannot place a Memory UID in the typed setup receipt. Query-only rows remain
 name-only, and preview loading neither changes the frozen Sever scope nor
 starts provider analysis. The command-local 684-line screen was retired; the
-compatibility import now aliases `memcommit.interfaces.tui.operations.sever`.
+compatibility import now aliases `memcommit.adapters.interfaces.tui.operations.sever`.
 
 The ordered 180×52 color trace under
 [`screenshots/sever-shared-endpoint-setup-20260823/`](screenshots/sever-shared-endpoint-setup-20260823/README.md)

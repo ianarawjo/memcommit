@@ -8,8 +8,8 @@ import pytest
 
 import memcommit.commands.sever.setup_shell as sever_setup_facade
 from memcommit.commands.shared.context_picker import ContextMemoryRow
-from memcommit.interfaces.tui.operations import sever as sever_tui
-from memcommit.interfaces.tui.operations.sever import (
+from memcommit.adapters.interfaces.tui.operations import sever as sever_tui
+from memcommit.adapters.interfaces.tui.operations.sever import (
     SeverEndpointSelection,
     SeverSetupReceipt,
     SeverTuiSetup,
@@ -18,11 +18,11 @@ from memcommit.interfaces.tui.operations.sever import (
     choose_sever_setup,
     sever_endpoint_setup_spec,
 )
-from memcommit.interfaces.tui.components.endpoint_setup import (
+from memcommit.adapters.interfaces.tui.components.endpoint_setup import (
     EndpointSetupDraft,
     EndpointSetupValue,
 )
-from memcommit.interfaces.tui.operations.sever.setup import _validate_sever_draft
+from memcommit.adapters.interfaces.tui.operations.sever.setup import _validate_sever_draft
 from memcommit.source_projection.model import SourceAccess, SourceDisplayFacts
 
 

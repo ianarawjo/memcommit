@@ -102,8 +102,8 @@ def test_pre_relocation_help_globals_load_through_aliases() -> None:
 def test_production_help_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "src/memcommit/adapters/python_api/_operations/help.py",
-        "src/memcommit/interfaces/agent/help.py",
-        "src/memcommit/interfaces/tui/operations/help/inventory.py",
+        "src/memcommit/adapters/interfaces/agent/help.py",
+        "src/memcommit/adapters/interfaces/tui/operations/help/inventory.py",
         "src/memcommit/application/operations/help/lookup_application.py",
     )
     legacy_imports = (
@@ -126,7 +126,7 @@ def test_help_owner_preserves_catalog_and_injected_provider_boundaries() -> None
     combined = application_source + lookup_source
 
     assert "memcommit.commands" not in combined
-    assert "memcommit.interfaces" not in combined
+    assert "memcommit.adapters.interfaces" not in combined
     assert "memcommit.store" not in combined
     assert "memcommit.infrastructure" not in combined
     assert "provider.complete" not in application_source

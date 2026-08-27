@@ -1,6 +1,6 @@
 """Compatibility facade for console-owned progress feedback."""
 
-from memcommit.interfaces.console.progress import (
+from memcommit.adapters.interfaces.console.progress import (
     BUSY_FRAMES as BUSY_FRAMES,
     BUSY_INTERVAL_SECONDS as BUSY_INTERVAL_SECONDS,
     CommandProgress as CommandProgress,

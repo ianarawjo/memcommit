@@ -14,7 +14,7 @@ from memcommit.commands.meld.sessions import (
     list_meld_session_catalog,
     reload_selected_meld_session,
 )
-from memcommit.interfaces.tui.components.operation_launcher.session import SessionNewReceipt, SessionOpenReceipt
+from memcommit.adapters.interfaces.tui.components.operation_launcher.session import SessionNewReceipt, SessionOpenReceipt
 from memcommit.meld import MeldSession
 from memcommit.store import MemoryStore
 

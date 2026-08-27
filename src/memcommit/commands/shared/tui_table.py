@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import sys
 
-from memcommit.interfaces.tui.components import table as _table
+from memcommit.adapters.interfaces.tui.components import table as _table
 
 # Preserve one implementation module so legacy-path monkeypatches keep changing
 # the globals used by callers imported through the interface-owned path.

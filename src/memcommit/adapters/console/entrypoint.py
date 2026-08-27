@@ -62,7 +62,7 @@ from memcommit.commands import (
     update,
     write_protection,
 )
-from memcommit.interfaces.cli import embed, memory_transfer, reference, shell_init
+from memcommit.adapters.interfaces.cli import embed, memory_transfer, reference, shell_init
 from memcommit.commands.clear.command import cmd as clear_cmd
 from memcommit.commands.config.command import app as config_app
 from memcommit.commands.dev.command import app as dev_app

@@ -17,31 +17,31 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 from prompt_toolkit.widgets import Frame
 
-from memcommit.interfaces.tui.core.theme import (
+from memcommit.adapters.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
 )
-from memcommit.interfaces.tui.core.keybindings import (
+from memcommit.adapters.interfaces.tui.core.keybindings import (
     bind_case_insensitive_key,
 )
-from memcommit.interfaces.tui.components.frame import (
+from memcommit.adapters.interfaces.tui.components.frame import (
     bind_focused_frame_style,
 )
-from memcommit.interfaces.console.text import (
+from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
 )
 from memcommit.application.exact_command_review import ExactCommandReview
-from memcommit.interfaces.tui.components.exact_command_review import (
+from memcommit.adapters.interfaces.tui.components.exact_command_review import (
     format_exact_command,
 )
-from memcommit.interfaces.tui.viewers.semantic import (
+from memcommit.adapters.interfaces.tui.viewers.semantic import (
     SemanticViewerBlock,
     SemanticViewerController,
     SemanticViewerDocument,
     SemanticViewerSection,
     semantic_viewer_block_fragments,
 )
-from memcommit.interfaces.tui.components.focus import (
+from memcommit.adapters.interfaces.tui.components.focus import (
     FocusSurface,
     SurfaceActionResult,
     SurfaceFocusController,

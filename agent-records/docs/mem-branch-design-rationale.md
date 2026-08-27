@@ -86,7 +86,7 @@ regenerated for this ownership-only change.
 ## Compact setup and shared component boundary
 
 Branch's interface adapter lives under
-`memcommit.interfaces.tui.operations.branch`. It owns the A/B role labels,
+`memcommit.adapters.interfaces.tui.operations.branch`. It owns the A/B role labels,
 local-only availability, require-new validation, exact command review, and the
 typed `BranchEndpointSelection`. The command-layer `branch_dialog` remains a
 thin compatibility translation to `BranchCreationReceipt`; it no longer owns

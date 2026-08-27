@@ -10,7 +10,7 @@ import pytest
 
 import memcommit.application.ops as ops
 from memcommit.adapters.python_api import MemCommitClient
-from memcommit.interfaces.agent import (
+from memcommit.adapters.interfaces.agent import (
     ADD_AGENT_TOOL_NAME,
     APPLY_CONTEXT_DELETE_AGENT_TOOL_NAME,
     ATOMIZE_AGENT_TOOL_NAME,
@@ -432,7 +432,7 @@ def test_custom_handler_failures_are_redacted_and_nonretryable(handler):
 
 def test_registry_depends_only_on_public_client_and_agent_adapters():
     path = (
-        Path(__file__).parents[1] / "src" / "memcommit" / "interfaces" / "agent" / "registry.py"
+        Path(__file__).parents[1] / "src" / "memcommit" / "adapters" / "interfaces" / "agent" / "registry.py"
     )
     tree = ast.parse(path.read_text(encoding="utf-8"))
     imported: list[str] = []
@@ -453,10 +453,10 @@ def test_registry_depends_only_on_public_client_and_agent_adapters():
     )
     assert not any(name.startswith(forbidden) for name in imported)
     assert "memcommit.adapters.python_api" in imported
-    assert "memcommit.interfaces.agent.add" in imported
-    assert "memcommit.interfaces.agent.atomize" in imported
-    assert "memcommit.interfaces.agent.atomize_grounding" in imported
-    assert "memcommit.interfaces.agent.query" in imported
-    assert "memcommit.interfaces.agent.forget" in imported
-    assert "memcommit.interfaces.agent.resolve" in imported
-    assert "memcommit.interfaces.agent.help" in imported
+    assert "memcommit.adapters.interfaces.agent.add" in imported
+    assert "memcommit.adapters.interfaces.agent.atomize" in imported
+    assert "memcommit.adapters.interfaces.agent.atomize_grounding" in imported
+    assert "memcommit.adapters.interfaces.agent.query" in imported
+    assert "memcommit.adapters.interfaces.agent.forget" in imported
+    assert "memcommit.adapters.interfaces.agent.resolve" in imported
+    assert "memcommit.adapters.interfaces.agent.help" in imported

@@ -43,44 +43,44 @@ from memcommit.commands.shared.exact_command_review import (
 )
 from memcommit.commands.shared.session_help import bind_session_help
 from memcommit.context_targeting.tui.picker import choose_context
-from memcommit.interfaces.tui.components.in_frame_input import (
+from memcommit.adapters.interfaces.tui.components.in_frame_input import (
     InFrameInputManager,
     InFrameInputSection,
     INLINE_AGENT_COMMENT_TITLE,
     build_inline_direct_edit_input,
     classify_inline_edit_submission,
 )
-from memcommit.interfaces.tui.components.multiline_input import (
+from memcommit.adapters.interfaces.tui.components.multiline_input import (
     build_framed_multiline_input,
 )
-from memcommit.interfaces.tui.components.exact_command_review import (
+from memcommit.adapters.interfaces.tui.components.exact_command_review import (
     bind_exact_command_approval,
 )
 from memcommit.commands.shared.tui_primitives import anchored_fragments
-from memcommit.interfaces.tui.core.theme import (
+from memcommit.adapters.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
 )
-from memcommit.interfaces.tui.components.frame import (
+from memcommit.adapters.interfaces.tui.components.frame import (
     TuiRegion,
     bind_focused_frame_style,
     build_tui_frame,
 )
-from memcommit.interfaces.tui.core.keybindings import (
+from memcommit.adapters.interfaces.tui.core.keybindings import (
     bind_case_insensitive_key,
     dispatch_tui_back,
 )
-from memcommit.interfaces.tui.components.scrollable_pane import (
+from memcommit.adapters.interfaces.tui.components.scrollable_pane import (
     build_scrollable_text_pane,
     equal_pane_height,
     scroll_wrapped_page,
 )
-from memcommit.interfaces.console.terminal import (
+from memcommit.adapters.interfaces.console.terminal import (
     require_interactive_terminal,
 )
-from memcommit.interfaces.console.text import (
+from memcommit.adapters.interfaces.console.text import (
     safe_terminal_text,
 )
-from memcommit.interfaces.tui.components.table import (
+from memcommit.adapters.interfaces.tui.components.table import (
     RenderedTuiTable,
     SelectedTableCellProcessor,
     TuiTableColumn,

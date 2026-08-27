@@ -8,7 +8,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.interfaces.console.text import (
+from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
 )
 from memcommit.context_targeting.presets import (

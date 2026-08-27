@@ -14,7 +14,7 @@ identity, and selection projection.
 
 ## Decision
 
-Relocate the complete package to `memcommit.interfaces.console.selection`.
+Relocate the complete package to `memcommit.adapters.interfaces.console.selection`.
 Keep its pure option and state modules together with its current terminal
 renderers so one console component owns the selection interaction vocabulary.
 The relocation changes canonical import paths only; it does not change cursor,

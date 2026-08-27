@@ -24,13 +24,13 @@ from memcommit.adapters.python_api import (
     AtomizeStructuralApplyResult,
     MemCommitClient,
 )
-from memcommit.interfaces.agent.atomize import (
+from memcommit.adapters.interfaces.agent.atomize import (
     ATOMIZE_AGENT_TOOL_NAME,
     AtomizeAgentAdapter,
     atomize_agent_tool_schema,
 )
-from memcommit.interfaces.agent.registry import build_default_agent_tool_registry
-from memcommit.interfaces.mcp import McpRegistryProjection
+from memcommit.adapters.interfaces.agent.registry import build_default_agent_tool_registry
+from memcommit.adapters.interfaces.mcp import McpRegistryProjection
 from memcommit.store import MemoryStore
 
 
@@ -674,6 +674,7 @@ def test_adapter_imports_only_public_api_and_shared_agent_contract():
     path = (
         Path(__file__).parents[1]
         / "src" / "memcommit"
+        / "adapters"
         / "interfaces"
         / "agent"
         / "atomize.py"
@@ -686,7 +687,7 @@ def test_adapter_imports_only_public_api_and_shared_agent_contract():
     ]
 
     assert "memcommit.adapters.python_api" in imported
-    assert "memcommit.interfaces.agent.contract" in imported
+    assert "memcommit.adapters.interfaces.agent.contract" in imported
     assert not any(
         name.startswith(
             (
@@ -695,7 +696,7 @@ def test_adapter_imports_only_public_api_and_shared_agent_contract():
                 "memcommit.atomize_application",
                 "memcommit.application.operations.atomize",
                 "memcommit.store",
-                "memcommit.interfaces.mcp",
+                "memcommit.adapters.interfaces.mcp",
             )
         )
         for name in imported

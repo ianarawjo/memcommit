@@ -6,7 +6,7 @@ from typing import Annotated
 import json
 import typer
 
-from memcommit.interfaces.cli.command_group import CanonicalCommandGroup
+from memcommit.adapters.interfaces.cli.command_group import CanonicalCommandGroup
 from memcommit.context_locator import resolve_context_locator
 
 app = typer.Typer(

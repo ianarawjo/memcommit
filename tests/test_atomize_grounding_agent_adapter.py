@@ -16,13 +16,13 @@ from memcommit.adapters.python_api import (
     AtomizeGroundingSessionResult,
     MemCommitClient,
 )
-from memcommit.interfaces.agent.atomize_grounding import (
+from memcommit.adapters.interfaces.agent.atomize_grounding import (
     ATOMIZE_GROUNDING_AGENT_TOOL_NAME,
     AtomizeGroundingAgentAdapter,
     atomize_grounding_agent_tool_schema,
 )
-from memcommit.interfaces.agent.registry import build_default_agent_tool_registry
-from memcommit.interfaces.mcp import McpRegistryProjection
+from memcommit.adapters.interfaces.agent.registry import build_default_agent_tool_registry
+from memcommit.adapters.interfaces.mcp import McpRegistryProjection
 
 
 def _client(tmp_path) -> MemCommitClient:
@@ -278,6 +278,7 @@ def test_adapter_imports_only_public_api_and_shared_agent_contract():
     path = (
         Path(__file__).parents[1]
         / "src" / "memcommit"
+        / "adapters"
         / "interfaces"
         / "agent"
         / "atomize_grounding.py"
@@ -290,7 +291,7 @@ def test_adapter_imports_only_public_api_and_shared_agent_contract():
     ]
 
     assert "memcommit.adapters.python_api" in imported
-    assert "memcommit.interfaces.agent.contract" in imported
+    assert "memcommit.adapters.interfaces.agent.contract" in imported
     assert not any(
         name.startswith(
             (
@@ -300,7 +301,7 @@ def test_adapter_imports_only_public_api_and_shared_agent_contract():
                 "memcommit.application.operations.atomize.grounding_application",
                 "memcommit.application.operations.atomize.grounding_runtime",
                 "memcommit.store",
-                "memcommit.interfaces.mcp",
+                "memcommit.adapters.interfaces.mcp",
             )
         )
         for name in imported

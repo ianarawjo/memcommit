@@ -24,7 +24,7 @@ TUI presentations remain sibling adapters over one typed application result.
 ## Chosen structure
 
 ```text
-memcommit/interfaces/tui/
+memcommit/adapters/interfaces/tui/
   core/                         terminal text layout, style, buffers, keys
   components/
     frame/                      frame model and focused chrome
@@ -42,7 +42,7 @@ memcommit/interfaces/tui/
 ```
 
 The dependency direction is `core -> components -> viewers -> operation
-adapters`. `memcommit.interfaces` does not import `memcommit.commands`.
+adapters`. `memcommit.adapters.interfaces` does not import `memcommit.commands`.
 Existing callers import the narrow owning package directly, and the retired
 `commands.semantic_viewer`, `commands.surface_focus`,
 `commands.tui_text_layout`, `commands.read_only_viewer`, and

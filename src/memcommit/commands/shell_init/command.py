@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import sys
 
-from memcommit.interfaces.cli import shell_init as _shell_init
+from memcommit.adapters.interfaces.cli import shell_init as _shell_init
 
 # Preserve one implementation module so legacy-path monkeypatches keep changing
 # the globals used by callers imported through the interface-owned path.

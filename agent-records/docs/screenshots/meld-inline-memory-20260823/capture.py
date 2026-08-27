@@ -139,7 +139,7 @@ def _patch_meld_command(store, provider_factory) -> None:
     import memcommit.commands.shared.command_wait as command_wait
     import memcommit.commands.meld.command as meld_command
     import memcommit.commands.shared.session_help as session_help
-    import memcommit.interfaces.tui.components.session_help as tui_session_help
+    import memcommit.adapters.interfaces.tui.components.session_help as tui_session_help
 
     meld_command.MemoryStore = lambda *args, **kwargs: store
     meld_command.connect_codex_chatgpt_provider = provider_factory
@@ -291,7 +291,7 @@ def _run_verify_child(store_root: Path) -> None:
 
 
 def _run_unresolved_review_child(store_root: Path) -> None:
-    from memcommit.interfaces.tui.operations.meld.screen import run_meld_shell
+    from memcommit.adapters.interfaces.tui.operations.meld.screen import run_meld_shell
     from memcommit.meld import MeldSession
     from memcommit.meld_provider import assess_meld_turn
 

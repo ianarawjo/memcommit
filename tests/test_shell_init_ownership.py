@@ -12,7 +12,7 @@ import pytest
 
 REPOSITORY_ROOT = Path(__file__).parents[1]
 LEGACY_MODULE = "memcommit.commands.shell_init.command"
-OWNER_MODULE = "memcommit.interfaces.cli.shell_init"
+OWNER_MODULE = "memcommit.adapters.interfaces.cli.shell_init"
 
 
 @pytest.mark.parametrize(
@@ -78,7 +78,7 @@ def test_cli_registers_the_interface_owned_shell_init_command() -> None:
         alias.name
         for node in tree.body
         if isinstance(node, ast.ImportFrom)
-        and node.module == "memcommit.interfaces.cli"
+        and node.module == "memcommit.adapters.interfaces.cli"
         for alias in node.names
     }
     command_imports = {
@@ -92,7 +92,7 @@ def test_cli_registers_the_interface_owned_shell_init_command() -> None:
     assert "shell_init" not in command_imports
 
     from memcommit.adapters.console.entrypoint import app
-    from memcommit.interfaces.cli import shell_init
+    from memcommit.adapters.interfaces.cli import shell_init
 
     registration = next(
         command for command in app.registered_commands if command.name == "shell-init"

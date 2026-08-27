@@ -17,10 +17,10 @@ from memcommit.application.operations.edit.application import (
     run_edit,
 )
 from memcommit.application.operations.edit.runtime import MemoryStoreEditPort
-from memcommit.interfaces.cli.batch_input import parse_edit_lines, read_text_input
-from memcommit.interfaces.console.terminal import is_interactive_terminal
-from memcommit.interfaces.console.text import safe_terminal_text
-from memcommit.interfaces.tui.operations.edit import choose_edit_setup
+from memcommit.adapters.interfaces.cli.batch_input import parse_edit_lines, read_text_input
+from memcommit.adapters.interfaces.console.terminal import is_interactive_terminal
+from memcommit.adapters.interfaces.console.text import safe_terminal_text
+from memcommit.adapters.interfaces.tui.operations.edit import choose_edit_setup
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import MemoryStore

@@ -17,13 +17,13 @@ from memcommit.application.authority.access import (
     freeze_granted_context_binding,
     resolve_context_access,
 )
-from memcommit.interfaces.tui.components.operation_launcher.session import (
+from memcommit.adapters.interfaces.tui.components.operation_launcher.session import (
     SessionNewReceipt,
     SessionOpenReceipt,
     SessionPickerEntry,
     choose_session,
 )
-from memcommit.interfaces.console.text import (
+from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
     safe_terminal_text,
 )

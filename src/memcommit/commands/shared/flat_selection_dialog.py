@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import sys
 
-from memcommit.interfaces.tui.components import (
+from memcommit.adapters.interfaces.tui.components import (
     flat_selection_dialog as _flat_selection_dialog,
 )
 

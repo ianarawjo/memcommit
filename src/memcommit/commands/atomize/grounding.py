@@ -26,7 +26,7 @@ from memcommit.application.operations.atomize.grounding_runtime import (
 from memcommit.application.operations.atomize.workbench import AtomizeWorkbenchSession
 from memcommit.commands.shared.command_progress import progressing_provider_factory
 from memcommit.context import Context
-from memcommit.interfaces.cli.atomize_grounding import render_grounding_session
+from memcommit.adapters.interfaces.cli.atomize_grounding import render_grounding_session
 from memcommit.persistence.store import MemoryStore
 
 

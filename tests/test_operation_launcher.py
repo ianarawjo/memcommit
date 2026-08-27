@@ -7,7 +7,7 @@ from dataclasses import fields
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-from memcommit.interfaces.tui.components.operation_launcher import (
+from memcommit.adapters.interfaces.tui.components.operation_launcher import (
     LauncherAction,
     LauncherActionSelection,
     LauncherEntry,

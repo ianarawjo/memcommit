@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
-from memcommit.interfaces.cli.atomize import render_atomize_apply_result
+from memcommit.adapters.interfaces.cli.atomize import render_atomize_apply_result
 
 
 def _split(index: int) -> tuple[SimpleNamespace, SimpleNamespace]:

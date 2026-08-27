@@ -30,8 +30,8 @@ The implementation now enters through
 `memcommit.application.operations.embed.runtime` owning Store loading, concurrency checks,
 checkpoint creation, and persistence. The previous flat module paths are
 module-identity compatibility aliases. The plain command adapter is
-`memcommit.interfaces.cli.embed`; the interactive adapter is the
-`memcommit.interfaces.tui.operations.embed` package. The former
+`memcommit.adapters.interfaces.cli.embed`; the interactive adapter is the
+`memcommit.adapters.interfaces.tui.operations.embed` package. The former
 `memcommit.commands.embed` and `memcommit.commands.embed_dialog` modules were
 removed instead of retained as compatibility facades.
 
@@ -192,7 +192,7 @@ plan. Escape cancels, and Backspace remains ordinary text deletion.
 
 ## Reuse boundary
 
-`memcommit.interfaces.tui.components.direct_item_placement` owns the
+`memcommit.adapters.interfaces.tui.components.direct_item_placement` owns the
 operation-neutral row projection, gap model, separate hover/selection state,
 and single moving-line renderer. The neighboring exact-command receipt is a
 separate component whose form/draft/editor mechanics are shared under

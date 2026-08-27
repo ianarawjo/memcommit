@@ -1,6 +1,6 @@
 """Compatibility exports for the interface-owned Query workbench."""
 
-from memcommit.interfaces.tui.operations.query import (
+from memcommit.adapters.interfaces.tui.operations.query import (
     GrantedQueryRunner,
     OrdinaryQueryRunner,
     QUERY_VIEW_LABEL,

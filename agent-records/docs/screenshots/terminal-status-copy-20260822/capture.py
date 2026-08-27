@@ -104,10 +104,10 @@ def _run_compare_child(store_root: Path) -> None:
 
 
 def _run_summary_child(_store_root: Path) -> None:
-    from memcommit.interfaces.tui.operations.summarize.adapter import (
+    from memcommit.adapters.interfaces.tui.operations.summarize.adapter import (
         project_summarize_result,
     )
-    from memcommit.interfaces.tui.viewers.semantic import run_semantic_viewer
+    from memcommit.adapters.interfaces.tui.viewers.semantic import run_semantic_viewer
     from memcommit.summarize_application import SummarizeResult
     from memcommit.understanding import UnderstandingSummary
 

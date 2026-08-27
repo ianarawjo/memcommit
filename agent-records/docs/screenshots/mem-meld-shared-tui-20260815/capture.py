@@ -109,7 +109,7 @@ def _run_session_child(store_root: Path) -> None:
     import memcommit.application.ops as ops
     from memcommit.comparison import ComparisonInput
     from memcommit.comparison_provider import analyze_comparison
-    from memcommit.interfaces.tui.operations.meld.screen import run_meld_shell
+    from memcommit.adapters.interfaces.tui.operations.meld.screen import run_meld_shell
     from memcommit.meld import MeldSession
     from memcommit.store import MemoryStore
     from tests.test_meld import Task2CompareProvider
@@ -136,7 +136,7 @@ def _run_session_child(store_root: Path) -> None:
     )
     action = run_meld_shell(session)
     print("\nMELD SESSION VIEW CLOSED · READ-ONLY")
-    print("  ADAPTER · memcommit.interfaces.tui.operations.meld.screen.run_meld_shell")
+    print("  ADAPTER · memcommit.adapters.interfaces.tui.operations.meld.screen.run_meld_shell")
     print(f"  RETURNED ACTION · {action!r}")
     print(f"  SESSION STATE · {session.state}")
     print(

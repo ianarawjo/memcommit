@@ -28,22 +28,22 @@ from memcommit.commands.ground.session_picker import (
     list_ground_session_catalog,
     reload_selected_ground_session,
 )
-from memcommit.interfaces.tui.operations.ground_workspace.picker import (
+from memcommit.adapters.interfaces.tui.operations.ground_workspace.picker import (
     list_ground_workspace_draft_catalog,
     list_ground_workspace_catalog,
     reload_selected_ground_workspace_draft,
     reload_selected_ground_workspace,
 )
-from memcommit.interfaces.tui.components.operation_launcher.session import (
+from memcommit.adapters.interfaces.tui.components.operation_launcher.session import (
     SessionNewReceipt,
     SessionOpenReceipt,
     choose_session,
 )
-from memcommit.interfaces.console.text import (
+from memcommit.adapters.interfaces.console.text import (
     safe_terminal_text,
 )
-from memcommit.interfaces.cli.ground_workspace import render_ground_workspace
-from memcommit.interfaces.tui.operations.ground_workspace import (
+from memcommit.adapters.interfaces.cli.ground_workspace import render_ground_workspace
+from memcommit.adapters.interfaces.tui.operations.ground_workspace import (
     GroundWorkspaceLocationSetup,
     run_ground_workspace_location_tui,
     run_ground_workspace_tui,

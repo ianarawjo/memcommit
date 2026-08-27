@@ -24,7 +24,7 @@ from memcommit.commands.profile.picker import (
     _render_profile_options,
     choose_profile,
 )
-from memcommit.interfaces.console.text import (
+from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
 )
 from memcommit.context import AutoCheckpoint

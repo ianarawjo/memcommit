@@ -11,10 +11,10 @@ from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
-import memcommit.interfaces.tui.operations.merge.adapter as merge_tui_adapter
+import memcommit.adapters.interfaces.tui.operations.merge.adapter as merge_tui_adapter
 from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Memory
-from memcommit.interfaces.tui.operations.merge import (
+from memcommit.adapters.interfaces.tui.operations.merge import (
     MergeTuiSetup,
     build_merge_tui_setup,
     choose_merge_setup,
@@ -27,8 +27,8 @@ from memcommit.interfaces.tui.operations.merge import (
     run_merge_conflict_review,
     run_merge_plan_review,
 )
-from memcommit.interfaces.tui.workbenches.resolution import ResolutionOutcome
-from memcommit.interfaces.tui.workbenches.resolution.inline_shell import (
+from memcommit.adapters.interfaces.tui.workbenches.resolution import ResolutionOutcome
+from memcommit.adapters.interfaces.tui.workbenches.resolution.inline_shell import (
     render_inline_resolution_item,
     run_inline_resolution_workbench,
 )
@@ -50,8 +50,8 @@ from memcommit.merge_application import (
     run_merge,
 )
 from memcommit.merge_runtime import MemoryStoreMergePort
-from memcommit.interfaces.console.selection.model import SelectionOption
-from memcommit.interfaces.console.selection.state import FlatSelectionState
+from memcommit.adapters.interfaces.console.selection.model import SelectionOption
+from memcommit.adapters.interfaces.console.selection.state import FlatSelectionState
 from memcommit.store import MemoryStore
 
 

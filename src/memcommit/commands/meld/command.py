@@ -69,24 +69,24 @@ from memcommit.application.operations.meld.model import (
 from memcommit.application.operations.meld.provider import (
     MeldProviderError,
 )
-from memcommit.interfaces.console.text import (
+from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
     safe_terminal_text,
 )
 from memcommit.application.operations.meld.restart_application import MeldRestartRequest
 from memcommit.application.operations.meld.start_application import MeldStartRequest
-from memcommit.interfaces.tui.core.text_layout import (
+from memcommit.adapters.interfaces.tui.core.text_layout import (
     elide_terminal_text,
     single_line_terminal_text,
 )
-from memcommit.interfaces.tui.operations.meld.screen import run_meld_shell
+from memcommit.adapters.interfaces.tui.operations.meld.screen import run_meld_shell
 from memcommit.commands.meld.sessions import (
     MeldSessionCatalogEntry,
     MeldSessionCatalogError,
     list_meld_session_catalog,
     reload_selected_meld_session,
 )
-from memcommit.interfaces.tui.components.operation_launcher.session import (
+from memcommit.adapters.interfaces.tui.components.operation_launcher.session import (
     SessionNewReceipt,
     SessionOpenReceipt,
     SessionPickerEntry,

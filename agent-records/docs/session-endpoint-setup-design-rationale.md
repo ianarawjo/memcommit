@@ -359,10 +359,10 @@ The implementation has three layers:
 3. Compare, Update, Meld, and Sever adapters own role specs, typed receipts,
    semantic validation, and orchestration. Sever's command import is now a
    behavior-free compatibility facade over
-   `memcommit.interfaces.tui.operations.sever`.
+   `memcommit.adapters.interfaces.tui.operations.sever`.
 
 The Endpoint Setup composition lives under
-`memcommit.interfaces.tui.components.endpoint_setup` and imports the narrow
+`memcommit.adapters.interfaces.tui.components.endpoint_setup` and imports the narrow
 Context targeting controls it needs. `ContextTreeState` remains the sole owner
 of namespace cursor and expansion mechanics, and `ContextSelectionState`
 remains the checked-value owner. The setup shell composes them rather than

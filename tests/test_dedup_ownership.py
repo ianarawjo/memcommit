@@ -127,8 +127,8 @@ def test_production_dedup_consumers_use_the_operation_owner() -> None:
         "src/memcommit/commands/shared/quality_find_workbench.py",
         "src/memcommit/application/operations/dedup/planning.py",
         "src/memcommit/application/operations/dedun/scope.py",
-        "src/memcommit/interfaces/cli/dedup.py",
-        "src/memcommit/interfaces/tui/operations/dedup/screen.py",
+        "src/memcommit/adapters/interfaces/cli/dedup.py",
+        "src/memcommit/adapters/interfaces/tui/operations/dedup/screen.py",
         "src/memcommit/application/operations/dedup/runtime.py",
     )
 

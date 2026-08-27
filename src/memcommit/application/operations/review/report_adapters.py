@@ -8,7 +8,7 @@ from memcommit.application.operations.atomize.domain import AtomizeAnalysisSessi
 from memcommit.application.operations.atomize.resolution_adapter import AtomizeResolutionWorkbenchAdapter
 from memcommit.application.operations.atomize.workbench import AtomizeWorkbenchSession
 from memcommit.application.operations.compare.ledger.model import ComparisonAnalysis, comparison_canonical_digest
-from memcommit.interfaces.presentation.comparison import render_comparison
+from memcommit.adapters.interfaces.presentation.comparison import render_comparison
 from memcommit.application.operations.meld.model import MeldSession
 from memcommit.application.operations.meld.resolution_adapter import MeldResolutionWorkbenchAdapter
 from memcommit.application.reviewing.report import ReviewReportController
@@ -83,7 +83,7 @@ def atomize_review_report(
 ) -> ReviewReportController:
     """Expose Atomize findings and saved clarification responses."""
     from memcommit.application.operations.atomize.result_adapter import AtomizeResultWorkbenchAdapter
-    from memcommit.interfaces.tui.workbenches.result import (
+    from memcommit.adapters.interfaces.tui.workbenches.result import (
         render_result_workbench_snapshot,
     )
 

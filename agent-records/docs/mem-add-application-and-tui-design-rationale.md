@@ -72,11 +72,11 @@ The Add workbench introduces no operation-owned scrolling or focus index:
 | Interaction | Shared owner | Add-specific meaning |
 | --- | --- | --- |
 | Context tree, cursor, selection, and CREATE availability | `memcommit.context_targeting.tui.ContextSelectorControl` | which frozen target to put in `AddRequest` |
-| Read-only wrapped draft viewport and scrollbar | `memcommit.interfaces.tui.components.scrollable_pane` | ordered compact draft projections |
-| Writable multiline cursor, wrapping, and scrollbar | `memcommit.interfaces.tui.components.multiline_input` | exact text of one draft |
-| Attaching the editor inside the draft frame | `memcommit.interfaces.tui.components.in_frame_input` | edit/save/cancel lifecycle |
-| Cross-frame Up/Down and Tab traversal | `memcommit.interfaces.tui.components.focus` | Target → Drafts → To Do topology |
-| Outer frames and vertical composition | `memcommit.interfaces.tui.components.frame` | Add labels and effect text |
+| Read-only wrapped draft viewport and scrollbar | `memcommit.adapters.interfaces.tui.components.scrollable_pane` | ordered compact draft projections |
+| Writable multiline cursor, wrapping, and scrollbar | `memcommit.adapters.interfaces.tui.components.multiline_input` | exact text of one draft |
+| Attaching the editor inside the draft frame | `memcommit.adapters.interfaces.tui.components.in_frame_input` | edit/save/cancel lifecycle |
+| Cross-frame Up/Down and Tab traversal | `memcommit.adapters.interfaces.tui.components.focus` | Target → Drafts → To Do topology |
+| Outer frames and vertical composition | `memcommit.adapters.interfaces.tui.components.frame` | Add labels and effect text |
 
 The multiline and in-frame input components were moved out of the legacy
 `commands.tui_primitives` owner. Every existing consumer of those moved

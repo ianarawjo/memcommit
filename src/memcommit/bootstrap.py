@@ -7,18 +7,18 @@ from typing import TypeAlias
 
 from memcommit.application.operations.elaborate.application import ElaborateRequest, ElaborateResult
 from memcommit.application.operations.distill.application import DistillRequest, DistillResult
-from memcommit.interfaces.cli.distill import render_distill_plain
-from memcommit.interfaces.cli.elaborate import render_elaborate_plain
-from memcommit.interfaces.cli.summarize import render_summarize_plain
-from memcommit.interfaces.console.router import ConsoleRunner
-from memcommit.interfaces.console.terminal import TerminalCapabilities
-from memcommit.interfaces.tui.components.plain_text_clipboard import ClipboardWriter
-from memcommit.interfaces.tui.operations.distill import (
+from memcommit.adapters.interfaces.cli.distill import render_distill_plain
+from memcommit.adapters.interfaces.cli.elaborate import render_elaborate_plain
+from memcommit.adapters.interfaces.cli.summarize import render_summarize_plain
+from memcommit.adapters.interfaces.console.router import ConsoleRunner
+from memcommit.adapters.interfaces.console.terminal import TerminalCapabilities
+from memcommit.adapters.interfaces.tui.components.plain_text_clipboard import ClipboardWriter
+from memcommit.adapters.interfaces.tui.operations.distill import (
     DistillTuiSetup,
     run_distill_tui,
 )
-from memcommit.interfaces.tui.operations.elaborate import run_elaborate_tui
-from memcommit.interfaces.tui.operations.summarize import (
+from memcommit.adapters.interfaces.tui.operations.elaborate import run_elaborate_tui
+from memcommit.adapters.interfaces.tui.operations.summarize import (
     SummarizeTuiOutcome,
     SummarizeTuiSetup,
     run_summarize_tui,

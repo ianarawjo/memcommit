@@ -12,9 +12,9 @@ import anyio
 import pytest
 
 from memcommit.adapters.python_api import HelpDetailReferenceResult
-from memcommit.interfaces.agent import AgentToolBinding, AgentToolRegistry
-from memcommit.interfaces.mcp import McpRegistryProjection
-from memcommit.interfaces.mcp.server import (
+from memcommit.adapters.interfaces.agent import AgentToolBinding, AgentToolRegistry
+from memcommit.adapters.interfaces.mcp import McpRegistryProjection
+from memcommit.adapters.interfaces.mcp.server import (
     MCP_SERVER_NAME,
     build_mcp_server,
     main,
@@ -158,14 +158,14 @@ def test_mcp_entrypoint_and_v2_sdk_remain_an_optional_distribution_surface():
     metadata = tomllib.loads((root / "pyproject.toml").read_text(encoding="utf-8"))
 
     assert metadata["project"]["scripts"]["mem-mcp"] == (
-        "memcommit.interfaces.mcp.server:main"
+        "memcommit.adapters.interfaces.mcp.server:main"
     )
     assert metadata["project"]["optional-dependencies"]["mcp"] == ["mcp>=2,<3"]
     assert version("mcp").split(".", 1)[0] == "2"
 
 
 def test_server_source_is_a_thin_transport_adapter():
-    path = Path(__file__).parents[1] / "src" / "memcommit" / "interfaces" / "mcp" / "server.py"
+    path = Path(__file__).parents[1] / "src" / "memcommit" / "adapters" / "interfaces" / "mcp" / "server.py"
     tree = ast.parse(path.read_text(encoding="utf-8"))
     imported: list[str] = []
     for node in ast.walk(tree):

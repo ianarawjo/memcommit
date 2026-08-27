@@ -1,6 +1,6 @@
 """Compatibility facade for the relocated Meld terminal adapter."""
 
-from memcommit.interfaces.tui.operations.meld.screen import (
+from memcommit.adapters.interfaces.tui.operations.meld.screen import (
     MeldShellAction,
     _comparison_issue_resolution_badges,
     _line,

@@ -9,8 +9,8 @@ import memcommit.commands.merge.command as merge_command
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Memory
-from memcommit.interfaces.tui.operations.merge import merge_endpoint_setup_spec
-from memcommit.interfaces.tui.operations.merge.model import MergeTuiSetup
+from memcommit.adapters.interfaces.tui.operations.merge import merge_endpoint_setup_spec
+from memcommit.adapters.interfaces.tui.operations.merge.model import MergeTuiSetup
 from memcommit.merge_application import (
     FrozenMergePlan,
     MergeAddition,

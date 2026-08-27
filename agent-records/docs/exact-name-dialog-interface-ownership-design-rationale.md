@@ -11,8 +11,8 @@ to depend on a command compatibility module.
 ## Decision
 
 The implementation lives in
-`memcommit.interfaces.tui.components.exact_name_dialog`. It imports the exact
-name field directly from `memcommit.interfaces.tui.components.exact_name`.
+`memcommit.adapters.interfaces.tui.components.exact_name_dialog`. It imports the exact
+name field directly from `memcommit.adapters.interfaces.tui.components.exact_name`.
 The former `memcommit.commands.shared.exact_name_dialog` path is a `sys.modules`
 alias to that canonical module.
 

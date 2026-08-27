@@ -173,7 +173,7 @@ def test_atomize_support_imports_follow_the_canonical_dependency_direction() -> 
             encoding="utf-8"
         )
         assert "memcommit.commands" not in source
-        assert "memcommit.interfaces" not in source
+        assert "memcommit.adapters.interfaces" not in source
         for legacy_name in legacy_names:
             assert legacy_name not in source
 
@@ -188,10 +188,10 @@ def test_atomize_production_consumers_use_canonical_support_modules() -> None:
         "src/memcommit/commands/atomize/sessions.py",
         "src/memcommit/commands/impact/command.py",
         "src/memcommit/commands/review/command.py",
-        "src/memcommit/interfaces/cli/atomize.py",
-        "src/memcommit/interfaces/cli/atomize_grounding.py",
-        "src/memcommit/interfaces/tui/operations/atomize/adapter.py",
-        "src/memcommit/interfaces/tui/operations/atomize/screen.py",
+        "src/memcommit/adapters/interfaces/cli/atomize.py",
+        "src/memcommit/adapters/interfaces/cli/atomize_grounding.py",
+        "src/memcommit/adapters/interfaces/tui/operations/atomize/adapter.py",
+        "src/memcommit/adapters/interfaces/tui/operations/atomize/screen.py",
         "src/memcommit/application/operations/atomize/analysis_application.py",
         "src/memcommit/application/operations/atomize/analysis_runtime.py",
         "src/memcommit/application/operations/atomize/application.py",
@@ -226,4 +226,4 @@ def test_atomize_view_adapters_remain_read_only_projections() -> None:
         assert "MemoryStore" not in source
         assert "provider.complete" not in source
         assert "memcommit.commands" not in source
-        assert "memcommit.interfaces" not in source
+        assert "memcommit.adapters.interfaces" not in source

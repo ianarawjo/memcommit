@@ -11,10 +11,10 @@ from typing import Any
 from prompt_toolkit.formatted_text.base import StyleAndTextTuples
 
 from memcommit.commands.shared.history_picker import HistoryDetailView, HistoryPickerItem
-from memcommit.interfaces.console.text import (
+from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
 )
-from memcommit.interfaces.tui.core.theme import semantic_action_style
+from memcommit.adapters.interfaces.tui.core.theme import semantic_action_style
 from memcommit.application.reviewing.memory_diff import MemoryChange, memory_diff_lines
 
 

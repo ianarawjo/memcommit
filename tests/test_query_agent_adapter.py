@@ -23,7 +23,7 @@ from memcommit.adapters.python_api import (
     ReferenceQueryResult,
 )
 from memcommit.context import QueryContextRef
-from memcommit.interfaces.agent.query import (
+from memcommit.adapters.interfaces.agent.query import (
     QUERY_AGENT_CONTRACT_VERSION,
     QUERY_AGENT_ERROR_MESSAGE_LIMIT,
     QUERY_AGENT_TOOL_NAME,
@@ -377,7 +377,7 @@ def test_public_error_taxonomy_is_stable_and_sensitive_details_are_bounded(
 
 
 def test_agent_adapter_depends_only_on_public_api_and_durable_reference_type():
-    path = Path(__file__).parents[1] / "src" / "memcommit" / "interfaces" / "agent" / "query.py"
+    path = Path(__file__).parents[1] / "src" / "memcommit" / "adapters" / "interfaces" / "agent" / "query.py"
     tree = ast.parse(path.read_text(encoding="utf-8"))
     imported: list[str] = []
     for node in ast.walk(tree):

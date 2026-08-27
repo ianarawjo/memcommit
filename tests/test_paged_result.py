@@ -5,7 +5,7 @@ from __future__ import annotations
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-from memcommit.interfaces.tui.components.paged_result import (
+from memcommit.adapters.interfaces.tui.components.paged_result import (
     PagedResultRenderer,
     PagedResultState,
     run_paged_result,

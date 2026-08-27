@@ -323,7 +323,7 @@ def test_production_adapters_import_ordinary_query_from_new_owner():
     root = Path(__file__).parents[1]
     command = (root / "src/memcommit/commands/query/command.py").read_text()
     workbench_model = (
-        root / "src/memcommit/interfaces/tui/operations/query/model.py"
+        root / "src/memcommit/adapters/interfaces/tui/operations/query/model.py"
     ).read_text()
 
     assert (

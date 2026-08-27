@@ -3,7 +3,7 @@
 ## Status
 
 Compare's new-session A/B selection now uses
-`memcommit.interfaces.tui.components.endpoint_setup` through a narrow
+`memcommit.adapters.interfaces.tui.components.endpoint_setup` through a narrow
 operation adapter under `interfaces/tui/operations/compare`.  Explicit
 noninteractive Compare operands, saved-session selection, provider analysis,
 cache lookup, analysis persistence, and result workbench behavior are not

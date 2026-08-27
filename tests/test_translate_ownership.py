@@ -178,7 +178,7 @@ def test_translate_owners_keep_the_existing_dependency_direction() -> None:
         + materialization_source
     )
     assert "memcommit.commands" not in operation_sources
-    assert "memcommit.interfaces" not in operation_sources
+    assert "memcommit.adapters.interfaces" not in operation_sources
     assert "import typer" not in operation_sources
 
 

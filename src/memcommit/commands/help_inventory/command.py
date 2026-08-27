@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import sys
 
-from memcommit.interfaces.tui.operations.help import inventory as _inventory
+from memcommit.adapters.interfaces.tui.operations.help import inventory as _inventory
 
 # Preserve module identity for callers that patch Help rendering during a test
 # or an embedding session. A copied namespace would make those patches affect

@@ -8,7 +8,7 @@ from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.interfaces.tui.components.direct_item_placement import (
+from memcommit.adapters.interfaces.tui.components.direct_item_placement import (
     DirectItemGap,
     DirectItemGapState,
     direct_item_gap,
@@ -23,8 +23,8 @@ from memcommit.embed_application import (
     run_embed,
 )
 from memcommit.embed_runtime import MemoryStoreEmbedPort
-from memcommit.interfaces.cli import embed as embed_command
-from memcommit.interfaces.tui.operations.embed import (
+from memcommit.adapters.interfaces.cli import embed as embed_command
+from memcommit.adapters.interfaces.tui.operations.embed import (
     choose_embed_setup,
     embed_exact_command_review,
     parse_embed_command_argv,

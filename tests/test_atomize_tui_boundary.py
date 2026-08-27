@@ -8,10 +8,10 @@ from pathlib import Path
 
 REPOSITORY = Path(__file__).parents[1]
 INTERFACE_MODULES = (
-    REPOSITORY / "src/memcommit/interfaces/tui/operations/atomize/adapter.py",
-    REPOSITORY / "src/memcommit/interfaces/tui/operations/atomize/screen.py",
-    REPOSITORY / "src/memcommit/interfaces/tui/workbenches/result/shell.py",
-    REPOSITORY / "src/memcommit/interfaces/tui/workbenches/review/model.py",
+    REPOSITORY / "src/memcommit/adapters/interfaces/tui/operations/atomize/adapter.py",
+    REPOSITORY / "src/memcommit/adapters/interfaces/tui/operations/atomize/screen.py",
+    REPOSITORY / "src/memcommit/adapters/interfaces/tui/workbenches/result/shell.py",
+    REPOSITORY / "src/memcommit/adapters/interfaces/tui/workbenches/review/model.py",
 )
 
 
@@ -43,8 +43,8 @@ def test_atomize_tui_boundary_does_not_import_command_modules() -> None:
 def test_atomize_legacy_shell_paths_are_identity_preserving_facades() -> None:
     from memcommit.commands.atomize import render as legacy_cli
     from memcommit.commands.atomize import workbench_shell as legacy_atomize
-    from memcommit.interfaces.cli import atomize as atomize_cli
-    from memcommit.interfaces.tui.operations.atomize import screen as atomize_screen
+    from memcommit.adapters.interfaces.cli import atomize as atomize_cli
+    from memcommit.adapters.interfaces.tui.operations.atomize import screen as atomize_screen
 
     assert (
         legacy_atomize.run_atomize_workbench_shell
@@ -62,8 +62,8 @@ def test_atomize_command_delegates_terminal_presentation_to_interfaces() -> None
         REPOSITORY / "src/memcommit/commands/atomize/command.py"
     ).read_text(encoding="utf-8")
 
-    assert "memcommit.interfaces.tui.operations.atomize.adapter" in source
-    assert "memcommit.interfaces.cli.atomize" in source
+    assert "memcommit.adapters.interfaces.tui.operations.atomize.adapter" in source
+    assert "memcommit.adapters.interfaces.cli.atomize" in source
     assert "memcommit.commands.atomize.workbench_shell" not in source
     assert "prompt_toolkit" not in source
 

@@ -24,7 +24,7 @@ def _imports(path: Path) -> tuple[str, ...]:
 def test_interfaces_never_import_command_adapters() -> None:
     offenders = [
         str(path.relative_to(ROOT))
-        for path in (PACKAGE / "interfaces").rglob("*.py")
+        for path in (PACKAGE / "adapters" / "interfaces").rglob("*.py")
         if any(module.startswith("memcommit.commands") for module in _imports(path))
     ]
 
@@ -53,12 +53,12 @@ def test_migrated_tui_modules_have_no_legacy_import_path() -> None:
 
 
 def test_summarize_operation_tui_only_composes_shared_workbench() -> None:
-    operation_dir = PACKAGE / "interfaces" / "tui" / "operations" / "summarize"
+    operation_dir = PACKAGE / "adapters" / "interfaces" / "tui" / "operations" / "summarize"
     forbidden = {
         "prompt_toolkit.application",
         "prompt_toolkit.layout",
         "prompt_toolkit.widgets",
-        "memcommit.interfaces.cli",
+        "memcommit.adapters.interfaces.cli",
     }
     offenders = [
         (str(path.relative_to(ROOT)), module)
@@ -69,7 +69,7 @@ def test_summarize_operation_tui_only_composes_shared_workbench() -> None:
 
     assert offenders == []
     assert any(
-        module == "memcommit.interfaces.tui.workbenches.context_summary"
+        module == "memcommit.adapters.interfaces.tui.workbenches.context_summary"
         for path in operation_dir.rglob("*.py")
         for module in _imports(path)
     )
@@ -134,17 +134,17 @@ def test_no_consumer_reaches_moved_input_symbols_through_legacy_primitives() -> 
 
 
 def test_add_tui_delegates_common_interaction_mechanics() -> None:
-    path = PACKAGE / "interfaces" / "tui" / "operations" / "add" / "screen.py"
+    path = PACKAGE / "adapters" / "interfaces" / "tui" / "operations" / "add" / "screen.py"
     source = path.read_text()
     imports = set(_imports(path))
 
     assert {
         "memcommit.context_targeting.tui.selector",
-        "memcommit.interfaces.tui.components.focus",
-        "memcommit.interfaces.tui.components.frame",
-        "memcommit.interfaces.tui.components.in_frame_input",
-        "memcommit.interfaces.tui.components.multiline_input",
-        "memcommit.interfaces.tui.components.scrollable_pane",
+        "memcommit.adapters.interfaces.tui.components.focus",
+        "memcommit.adapters.interfaces.tui.components.frame",
+        "memcommit.adapters.interfaces.tui.components.in_frame_input",
+        "memcommit.adapters.interfaces.tui.components.multiline_input",
+        "memcommit.adapters.interfaces.tui.components.scrollable_pane",
     } <= imports
     assert ".vertical_scroll" not in source
     assert "ScrollbarMargin" not in source
@@ -162,9 +162,9 @@ def test_direct_memory_actions_share_one_selector_composition() -> None:
     } <= owner_imports
 
     consumers = (
-        PACKAGE / "interfaces" / "tui" / "operations" / "edit" / "screen.py",
-        PACKAGE / "interfaces" / "tui" / "operations" / "embed" / "screen.py",
-        PACKAGE / "interfaces" / "tui" / "operations" / "reference" / "screen.py",
+        PACKAGE / "adapters" / "interfaces" / "tui" / "operations" / "edit" / "screen.py",
+        PACKAGE / "adapters" / "interfaces" / "tui" / "operations" / "embed" / "screen.py",
+        PACKAGE / "adapters" / "interfaces" / "tui" / "operations" / "reference" / "screen.py",
     )
     for path in consumers:
         imports = set(_imports(path))

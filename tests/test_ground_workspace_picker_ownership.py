@@ -11,7 +11,7 @@ import pytest
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 LEGACY_MODULE = "memcommit.commands.ground.workspace_picker"
-CANONICAL_MODULE = "memcommit.interfaces.tui.operations.ground_workspace.picker"
+CANONICAL_MODULE = "memcommit.adapters.interfaces.tui.operations.ground_workspace.picker"
 
 
 @pytest.mark.parametrize(

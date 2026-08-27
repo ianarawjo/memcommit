@@ -15,19 +15,19 @@ from memcommit.application.retained_history.display import (
     HistoryRowSegment,
     history_display_row_segments,
 )
-from memcommit.interfaces.console.text import (
+from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
 )
-from memcommit.interfaces.tui.components.plain_text_clipboard import (
+from memcommit.adapters.interfaces.tui.components.plain_text_clipboard import (
     plain_text_from_fragments,
 )
-from memcommit.interfaces.tui.core.text_layout import (
+from memcommit.adapters.interfaces.tui.core.text_layout import (
     elide_terminal_text,
 )
-from memcommit.interfaces.tui.core.theme import (
+from memcommit.adapters.interfaces.tui.core.theme import (
     semantic_action_style,
 )
-from memcommit.interfaces.tui.viewers.read_only import run_read_only_viewer
+from memcommit.adapters.interfaces.tui.viewers.read_only import run_read_only_viewer
 from memcommit.application.retained_history.memory_history_reconstruction.retained_record_verification import (
     MemoryState,
     MemoryHistoryContextTransition,

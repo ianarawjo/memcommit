@@ -23,34 +23,34 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.styles import Style, merge_styles
 from prompt_toolkit.utils import get_cwidth
 
-from memcommit.interfaces.tui.components.focus import (
+from memcommit.adapters.interfaces.tui.components.focus import (
     FocusSurface,
     SurfaceFocusController,
     bind_surface_navigation,
 )
-from memcommit.interfaces.tui.components.frame import (
+from memcommit.adapters.interfaces.tui.components.frame import (
     TuiRegion,
     build_focused_frame,
     build_tui_frame,
 )
-from memcommit.interfaces.tui.core.keybindings import (
+from memcommit.adapters.interfaces.tui.core.keybindings import (
     NavigationAccelerator,
     bind_case_insensitive_key,
 )
-from memcommit.interfaces.tui.core.theme import (
+from memcommit.adapters.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
 )
-from memcommit.interfaces.tui.components.scrollable_pane import (
+from memcommit.adapters.interfaces.tui.components.scrollable_pane import (
     WrappedScrollbarMargin,
 )
-from memcommit.interfaces.console.text import (
+from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
 )
-from memcommit.interfaces.tui.components.tree_row import (
+from memcommit.adapters.interfaces.tui.components.tree_row import (
     navigable_tree_row_prefix,
 )
-from memcommit.interfaces.tui.components.plain_text_clipboard import (
+from memcommit.adapters.interfaces.tui.components.plain_text_clipboard import (
     PlainTextClipboardReceipt,
     clipboard_failure_receipt,
     copy_plain_text,
@@ -70,7 +70,7 @@ from memcommit.context_targeting.tui.reach import (
     render_context_reach,
 )
 from memcommit.context_targeting.model import DirectMemoryTarget
-from memcommit.interfaces.console.selection.tui import tree_choice_marker
+from memcommit.adapters.interfaces.console.selection.tui import tree_choice_marker
 from memcommit.source_projection.model import (
     SourceDisplayFacts,
     SourceForm,

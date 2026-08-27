@@ -48,10 +48,10 @@ from memcommit.application.operations.atomize.workbench import (
     create_atomize_workbench,
     project_atomize_workbench_findings,
 )
-from memcommit.interfaces.cli.atomize import render_atomize_apply_result
-from memcommit.interfaces.cli.atomize_grounding import render_grounding_session
-from memcommit.interfaces.console.text import display_escape_text
-from memcommit.interfaces.tui.operations.atomize.adapter import (
+from memcommit.adapters.interfaces.cli.atomize import render_atomize_apply_result
+from memcommit.adapters.interfaces.cli.atomize_grounding import render_grounding_session
+from memcommit.adapters.interfaces.console.text import display_escape_text
+from memcommit.adapters.interfaces.tui.operations.atomize.adapter import (
     present_atomize_workbench,
 )
 from memcommit.commands.shared.command_progress import progressing_provider_factory
@@ -64,7 +64,7 @@ from memcommit.commands.atomize.sessions import (
     revalidate_saved_atomize_analysis,
 )
 from memcommit.commands.shared.endpoint_setup_flows import choose_atomize_setup
-from memcommit.interfaces.tui.components.operation_launcher.session import (
+from memcommit.adapters.interfaces.tui.components.operation_launcher.session import (
     SessionNewReceipt,
 )
 from memcommit.commands.shared.context_operand import (

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import sys
 
-from memcommit.interfaces.cli import command_group as _command_group
+from memcommit.adapters.interfaces.cli import command_group as _command_group
 
 # Preserve one implementation module so old-path monkeypatches keep changing
 # the routing globals observed by canonical interface imports.

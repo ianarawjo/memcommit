@@ -46,7 +46,7 @@ def _run_child() -> None:
     from memcommit.context_targeting.readable_catalog import (
         freeze_readable_context_catalog,
     )
-    from memcommit.interfaces.tui.operations.query import run_query_workbench
+    from memcommit.adapters.interfaces.tui.operations.query import run_query_workbench
     from memcommit.application.operations.query.ordinary_runtime import execute_ordinary_query
     from memcommit.store import MemoryStore
 
@@ -146,7 +146,7 @@ def _run_child() -> None:
 
 
 def _run_query_view_child() -> None:
-    from memcommit.interfaces.tui.operations.query import run_query_workbench
+    from memcommit.adapters.interfaces.tui.operations.query import run_query_workbench
     from memcommit.application.operations.query.granted_application import GrantedQueryTarget
 
     ordinary_calls = []

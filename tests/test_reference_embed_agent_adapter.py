@@ -12,12 +12,12 @@ from memcommit.adapters.python_api import (
     MemCommitClient,
     MemoryReferenceResult,
 )
-from memcommit.interfaces.agent.embed import (
+from memcommit.adapters.interfaces.agent.embed import (
     EMBED_AGENT_TOOL_NAME,
     EmbedAgentAdapter,
     embed_agent_tool_schema,
 )
-from memcommit.interfaces.agent.reference import (
+from memcommit.adapters.interfaces.agent.reference import (
     REFERENCE_AGENT_TOOL_NAME,
     ReferenceAgentAdapter,
     reference_agent_tool_schema,

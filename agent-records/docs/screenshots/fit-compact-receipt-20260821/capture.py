@@ -221,7 +221,7 @@ def _run_general_no_child() -> None:
 
 
 def _run_ground_projection_child(*, current: bool) -> None:
-    from memcommit.interfaces.cli.fit import render_fit_plain
+    from memcommit.adapters.interfaces.cli.fit import render_fit_plain
 
     command = (
         "$ mem fit --ground ticker"
@@ -364,7 +364,7 @@ def _capture(kind: str, store_root: Path, stem: str, *, running=False) -> None:
 
 
 def main() -> None:
-    from memcommit.interfaces.console.theme import (
+    from memcommit.adapters.interfaces.console.theme import (
         SemanticColorRole,
         semantic_color_rgb,
     )

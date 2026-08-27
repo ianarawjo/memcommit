@@ -13,7 +13,7 @@ from memcommit.find_answer_references import (
     FindAnswerSentence,
     build_find_answer_reference_document,
 )
-from memcommit.interfaces.cli.query import (
+from memcommit.adapters.interfaces.cli.query import (
     render_granted_query_response,
     render_ordinary_query_response,
     render_query_reference_response,
@@ -133,9 +133,9 @@ def test_query_command_uses_cli_and_terminal_interfaces_without_local_presenters
         if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
     }
 
-    assert "from memcommit.interfaces.cli.query import (" in source
+    assert "from memcommit.adapters.interfaces.cli.query import (" in source
     assert (
-        "from memcommit.interfaces.console.terminal import is_interactive_terminal"
+        "from memcommit.adapters.interfaces.console.terminal import is_interactive_terminal"
         in source
     )
     assert "_interactive_terminal" not in local_functions
@@ -149,7 +149,7 @@ def test_query_command_uses_cli_and_terminal_interfaces_without_local_presenters
 
 
 def test_query_cli_adapter_has_no_store_provider_or_command_dependency():
-    path = PACKAGE / "interfaces" / "cli" / "query.py"
+    path = PACKAGE / "adapters" / "interfaces" / "cli" / "query.py"
     tree = ast.parse(path.read_text(encoding="utf-8"))
     imports = {
         node.module

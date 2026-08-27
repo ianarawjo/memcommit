@@ -8,14 +8,14 @@ from memcommit.application.review_policy import (
     ownership_aware_application_review,
 )
 from memcommit.context_targeting.operands import choose_endpoint_operand
-from memcommit.interfaces.cli.merge import (
+from memcommit.adapters.interfaces.cli.merge import (
     parse_merge_resolutions,
     render_merge_conflicts_plain,
     render_merge_plain,
 )
-from memcommit.interfaces.console.terminal import is_interactive_terminal
-from memcommit.interfaces.console.text import display_escape_text
-from memcommit.interfaces.tui.operations.merge import (
+from memcommit.adapters.interfaces.console.terminal import is_interactive_terminal
+from memcommit.adapters.interfaces.console.text import display_escape_text
+from memcommit.adapters.interfaces.tui.operations.merge import (
     build_merge_tui_setup,
     choose_merge_setup,
     run_merge_conflict_review,

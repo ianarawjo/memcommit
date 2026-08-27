@@ -206,7 +206,7 @@ PTY 180 52
 
 [C[0mR[Csponses are stacked[C· use Up/D[Cwn for choices and Response.[51A[62D[0m[J[0m[?7h[?1049l[?2004l
 MELD SESSION VIEW CLOSED · READ-ONLY
-  ADAPTER · memcommit.interfaces.tui.operations.meld.screen.run_meld_shell
+  ADAPTER · memcommit.adapters.interfaces.tui.operations.meld.screen.run_meld_shell
   RETURNED ACTION · None
   SESSION STATE · AWAITING_REPLY
   TARGET BYTES UNCHANGED · True

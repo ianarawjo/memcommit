@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.interfaces.cli.find import (
+from memcommit.adapters.interfaces.cli.find import (
     DEFAULT_LITERAL_FIND_PREVIEW_MATCHES,
     literal_find_result_header_lines,
     project_literal_find_match,

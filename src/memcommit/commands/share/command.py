@@ -8,7 +8,7 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.infrastructure.command_ledger.attempts import annotate_command_outcome
-from memcommit.interfaces.console.text import (
+from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
 )
 from memcommit.application.operations.profile.config import ProfileConfigError

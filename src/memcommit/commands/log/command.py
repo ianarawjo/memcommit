@@ -23,11 +23,11 @@ from memcommit.commands.shared.memory_history import (
 from memcommit.commands.trace.projection import (
     format_compact_trace_report,
 )
-from memcommit.interfaces.console.text import (
+from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
     safe_terminal_text,
 )
-from memcommit.interfaces.console.theme import (
+from memcommit.adapters.interfaces.console.theme import (
     MEMORY_HEX,
     SemanticColorRole,
     semantic_action_role,

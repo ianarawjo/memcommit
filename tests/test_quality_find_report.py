@@ -19,13 +19,13 @@ from memcommit.findings import (
     DuplicateFinding,
     DuplicateReport,
 )
-from memcommit.interfaces.tui.workbenches.findings.document import (
+from memcommit.adapters.interfaces.tui.workbenches.findings.document import (
     quality_finding_compact_fragments,
     quality_finding_compact_text,
     quality_find_report_header_text,
 )
-from memcommit.interfaces.console.theme import SemanticColorRole
-from memcommit.interfaces.tui.core.theme import semantic_role_style
+from memcommit.adapters.interfaces.console.theme import SemanticColorRole
+from memcommit.adapters.interfaces.tui.core.theme import semantic_role_style
 from memcommit.quality_find_workbench import (
     create_quality_find_workbench,
     quality_find_report_view,
@@ -256,7 +256,7 @@ def test_negative_duplicate_boundary_cannot_be_rendered_as_redundancy() -> None:
 def test_compact_finding_browser_never_enters_the_alternate_screen() -> None:
     path = (
         Path(__file__).parents[1]
-        / "src/memcommit/interfaces/tui/workbenches/findings/screen.py"
+        / "src/memcommit/adapters/interfaces/tui/workbenches/findings/screen.py"
     )
     module = ast.parse(path.read_text(encoding="utf-8"))
     application_calls = [

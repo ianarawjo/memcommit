@@ -142,7 +142,7 @@ def test_summary_owner_does_not_absorb_deep_compare_or_presentation() -> None:
     )
 
     assert "memcommit.commands" not in package_source
-    assert "memcommit.interfaces" not in package_source
+    assert "memcommit.adapters.interfaces" not in package_source
     assert "render_comparison" not in package_source
     assert "from memcommit.comparison import ComparisonAnalysis" not in package_source
     assert "ensure_comparison_analysis" not in package_source

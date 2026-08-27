@@ -14,7 +14,7 @@ from memcommit.application.authority.access import (
     GrantedReadStore,
     resolve_context_access,
 )
-from memcommit.interfaces.tui.components.operation_launcher.session import (
+from memcommit.adapters.interfaces.tui.components.operation_launcher.session import (
     SessionNewReceipt,
     SessionOpenReceipt,
     choose_session,
@@ -32,7 +32,7 @@ from memcommit.context_targeting.tui.picker import context_memory_rows
 from memcommit.commands.sever.setup_shell import (
     choose_sever_setup,
 )
-from memcommit.interfaces.console.text import (
+from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
     safe_terminal_text,
 )
@@ -421,7 +421,7 @@ def _run_workbench(
         ResolutionDestination,
         run_resolution_workbench_shell,
     )
-    from memcommit.interfaces.tui.workbenches.impact import ImpactController
+    from memcommit.adapters.interfaces.tui.workbenches.impact import ImpactController
     from memcommit.application.operations.review.report_adapters import sever_review_report
 
     snapshot = execute_sever_session_open(session.uid, store=store)

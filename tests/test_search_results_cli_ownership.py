@@ -13,7 +13,7 @@ import pytest
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 LEGACY_MODULE = "memcommit.commands.find.result_present"
-OWNER_MODULE = "memcommit.interfaces.cli.search_results"
+OWNER_MODULE = "memcommit.adapters.interfaces.cli.search_results"
 
 
 @pytest.mark.parametrize(
@@ -75,7 +75,7 @@ def test_search_result_presenter_legacy_facade_defines_no_behavior() -> None:
     )
     assert any(
         isinstance(node, ast.ImportFrom)
-        and node.module == "memcommit.interfaces.cli"
+        and node.module == "memcommit.adapters.interfaces.cli"
         and any(alias.name == "search_results" for alias in node.names)
         for node in ast.walk(tree)
     )

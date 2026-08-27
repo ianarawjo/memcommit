@@ -18,7 +18,7 @@ Its optional `ImpactController` is likewise a presentation controller, not a
 mutation controller. It supplies a provider-free immutable effect projection
 bound to the same operation, artifact UID, and revision as the active view.
 The implementation is therefore owned by
-`memcommit.interfaces.tui.workbenches.impact`; the former
+`memcommit.adapters.interfaces.tui.workbenches.impact`; the former
 `memcommit.impact_controller` path is a true module alias so legacy imports
 and module-level patches still address the one implementation. This is an
 ownership-only move: projection validation, rendered output, navigation,

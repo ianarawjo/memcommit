@@ -12,7 +12,7 @@ from typer.testing import CliRunner
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.sever import command as sever_command
-from memcommit.interfaces.tui.components.operation_launcher.session import (
+from memcommit.adapters.interfaces.tui.components.operation_launcher.session import (
     SessionNewReceipt,
     SessionOpenReceipt,
 )

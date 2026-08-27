@@ -74,7 +74,7 @@ review contract.
 ## Compatibility boundary
 
 The saved-session catalog is owned by
-`memcommit.interfaces.tui.operations.audit.catalog`, alongside the other Audit
+`memcommit.adapters.interfaces.tui.operations.audit.catalog`, alongside the other Audit
 terminal projections. `memcommit.commands.audit.sessions` remains an exact
 module alias so existing imports and monkeypatches observe the same module
 object. This is an ownership-only relocation: catalog reads, validation,

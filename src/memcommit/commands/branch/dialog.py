@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.interfaces.tui.operations.branch import (
+from memcommit.adapters.interfaces.tui.operations.branch import (
     choose_branch_endpoint_setup,
 )
 

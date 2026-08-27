@@ -13,8 +13,8 @@ from memcommit.application.authority.access import (
 from memcommit.commands.shared.readable_context_catalog import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.interfaces.cli.forget import render_forget_change_lines
-from memcommit.interfaces.console.text import (
+from memcommit.adapters.interfaces.cli.forget import render_forget_change_lines
+from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
     safe_terminal_text,
 )
@@ -33,7 +33,7 @@ from memcommit.application.operations.forget.runtime import (
     MemoryStoreForgetSourcePort,
     connect_forget_provider,
 )
-from memcommit.interfaces.tui.operations.forget import (
+from memcommit.adapters.interfaces.tui.operations.forget import (
     choose_forget_setup,
     run_forget_review_workbench,
 )

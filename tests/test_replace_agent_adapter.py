@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import memcommit.application.ops as ops
 from memcommit.adapters.python_api import MemCommitClient
-from memcommit.interfaces.agent.replace import (
+from memcommit.adapters.interfaces.agent.replace import (
     REPLACE_AGENT_TOOL_NAME,
     ReplaceAgentAdapter,
     replace_agent_tool_schema,

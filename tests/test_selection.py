@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from memcommit.interfaces.console.selection.model import SelectionOption
-from memcommit.interfaces.console.selection.state import FlatSelectionState
-from memcommit.interfaces.console.selection.tui import (
+from memcommit.adapters.interfaces.console.selection.model import SelectionOption
+from memcommit.adapters.interfaces.console.selection.state import FlatSelectionState
+from memcommit.adapters.interfaces.console.selection.tui import (
     render_vertical_choice_cards,
     render_vertical_choice_rows,
     tree_choice_styles,

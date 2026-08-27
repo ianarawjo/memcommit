@@ -16,18 +16,18 @@ from memcommit.application.operations.dedup.application import (
     prepare_dedup,
 )
 from memcommit.application.operations.dedup.runtime import MemoryStoreDedupPort
-from memcommit.interfaces.cli.dedup import (
+from memcommit.adapters.interfaces.cli.dedup import (
     render_dedup_plan_plain,
     render_dedup_receipt,
 )
-from memcommit.interfaces.console import (
+from memcommit.adapters.interfaces.console import (
     ConsoleMode,
     ConsoleModeError,
     SystemTerminalCapabilities,
     resolve_console_mode,
 )
-from memcommit.interfaces.console.text import display_escape_text
-from memcommit.interfaces.tui.operations.dedup import run_dedup_tui
+from memcommit.adapters.interfaces.console.text import display_escape_text
+from memcommit.adapters.interfaces.tui.operations.dedup import run_dedup_tui
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.application.reviewing.quality.handoff import (

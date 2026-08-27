@@ -29,7 +29,7 @@ from memcommit.infrastructure.providers.policy import (
     STUDY_PROVIDER_POLICY_DIGEST,
     STUDY_PROVIDER_POLICY_VERSION,
 )
-from memcommit.interfaces.console.theme import (
+from memcommit.adapters.interfaces.console.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )

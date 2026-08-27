@@ -2,7 +2,7 @@
 
 import typer
 
-from memcommit.interfaces.cli.command_group import CanonicalCommandGroup
+from memcommit.adapters.interfaces.cli.command_group import CanonicalCommandGroup
 from memcommit.infrastructure.config import Config
 
 app = typer.Typer(

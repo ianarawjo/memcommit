@@ -103,6 +103,16 @@ does not claim that persistence-backed Audit storage or console navigation and
 rendering belong permanently to application. Those narrower responsibilities
 remain candidates for later extraction after their contracts are reviewed.
 
+On 2026-08-27 the existing `memcommit.interfaces` tree moved intact to
+`memcommit.adapters.interfaces`. This deliberately redundant name is a temporary
+staging boundary: it establishes that the CLI, console, TUI, agent, MCP, and
+presentation implementations are outward adapters without prematurely splitting
+their 53,000-line shared dependency graph. No compatibility facade retains the
+former package path. Later changes may move one reviewed surface at a time into
+`memcommit.adapters.console`, `memcommit.adapters.agent`, or another explicit
+adapter owner; this relocation itself changes neither behavior nor interface
+contracts.
+
 ## Verification
 
 The pre-relocation full suite and its exact failing node IDs form the behavioral

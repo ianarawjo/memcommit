@@ -46,11 +46,11 @@ CASES = (
 
 
 def _summary_document(*, both: bool):
-    from memcommit.interfaces.tui.operations.summarize.adapter import (
+    from memcommit.adapters.interfaces.tui.operations.summarize.adapter import (
         project_summarize_outcome,
         project_summarize_result,
     )
-    from memcommit.interfaces.tui.operations.summarize.model import SummarizeTuiOutcome
+    from memcommit.adapters.interfaces.tui.operations.summarize.model import SummarizeTuiOutcome
     from memcommit.summarize_application import SummarizeResult
     from memcommit.understanding import UnderstandingSummary
 
@@ -86,7 +86,7 @@ def _distill_document():
     from memcommit.distill import DistillAnalysis, DistilledRule
     from memcommit.distill_application import DistillResult
     from memcommit.distill_goal_fit import DistillGoalFit
-    from memcommit.interfaces.tui.operations.distill.adapter import project_distill_result
+    from memcommit.adapters.interfaces.tui.operations.distill.adapter import project_distill_result
     from memcommit.summarize import collect_summary_scope
     from memcommit.summarize_application import FrozenSummarySource
 
@@ -141,7 +141,7 @@ def _distill_document():
 def _elaborate_document():
     from memcommit.elaborate import ElaborateAnalysis, ElaboratedRule, ElaborateMode
     from memcommit.elaborate_application import ElaborateResult
-    from memcommit.interfaces.tui.operations.elaborate.adapter import (
+    from memcommit.adapters.interfaces.tui.operations.elaborate.adapter import (
         project_elaborate_result,
     )
 
@@ -250,7 +250,7 @@ def _run_case_child(kind: str) -> None:
     from memcommit.commands.shared.resolution_workbench_shell import (
         run_resolution_workbench_shell,
     )
-    from memcommit.interfaces.tui.viewers.semantic import run_semantic_viewer
+    from memcommit.adapters.interfaces.tui.viewers.semantic import run_semantic_viewer
 
     print(f"CAPTURE CASE · {kind}")
     print(f"PTY · {os.get_terminal_size().columns} COLUMNS × {os.get_terminal_size().lines} ROWS", flush=True)

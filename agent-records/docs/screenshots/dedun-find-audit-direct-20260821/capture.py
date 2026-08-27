@@ -515,7 +515,7 @@ def _capture_audit() -> None:
         assert "… 1 more" in receipt
         assert "Review full audit:" in receipt
         assert "mem review audit --session" in receipt
-        from memcommit.interfaces.console.theme import (
+        from memcommit.adapters.interfaces.console.theme import (
             SemanticColorRole,
             memory_object_color_rgb,
             semantic_color_rgb,
@@ -569,7 +569,7 @@ def main() -> None:
     assert "\x1b[32m" in raw
     assert "\x1b[33m" in raw
     sys.path.insert(0, str(ROOT / "src"))
-    from memcommit.interfaces.console.theme import (
+    from memcommit.adapters.interfaces.console.theme import (
         SemanticColorRole,
         semantic_color_rgb,
     )

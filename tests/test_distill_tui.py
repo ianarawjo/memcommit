@@ -13,7 +13,7 @@ from memcommit.application.operations.distill.application import (
     DistillRequest,
     DistillResult,
 )
-from memcommit.interfaces.tui.operations.distill import (
+from memcommit.adapters.interfaces.tui.operations.distill import (
     DistillTuiSetup,
     project_distill_clipboard,
     project_distill_result,

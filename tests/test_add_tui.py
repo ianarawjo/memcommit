@@ -6,7 +6,7 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
 from memcommit.application.operations.add.application import AddedMemory, AddRequest, AddResult
-from memcommit.interfaces.tui.operations.add import (
+from memcommit.adapters.interfaces.tui.operations.add import (
     AddDraftState,
     AddTuiSetup,
     run_add_tui,

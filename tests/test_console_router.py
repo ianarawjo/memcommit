@@ -6,7 +6,7 @@ from dataclasses import dataclass
 
 import pytest
 
-from memcommit.interfaces.console import (
+from memcommit.adapters.interfaces.console import (
     ConsoleMode,
     ConsoleModeError,
     ConsoleRunner,

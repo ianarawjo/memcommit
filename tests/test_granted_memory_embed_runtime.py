@@ -16,7 +16,7 @@ from memcommit.context_snapshot import ContextSnapshotRef
 from memcommit.comparison_store import comparison_analysis_path
 from memcommit.embed_application import MemoryEmbedRequest
 from memcommit.embed_runtime import MemoryStoreEmbedPort
-from memcommit.interfaces.agent.embed import EmbedAgentAdapter
+from memcommit.adapters.interfaces.agent.embed import EmbedAgentAdapter
 from memcommit.profile_config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,

@@ -18,7 +18,7 @@ from memcommit.adapters.python_api import (
 )
 from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Memory, MemoryRef
-from memcommit.interfaces.agent.reference import ReferenceAgentAdapter
+from memcommit.adapters.interfaces.agent.reference import ReferenceAgentAdapter
 from memcommit.profile_config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,

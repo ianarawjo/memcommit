@@ -43,7 +43,7 @@ def _configure_isolated_store(store_root: Path) -> None:
     def empty_navigation(_store):
         return SimpleNamespace(names=(), annotations={})
 
-    import memcommit.interfaces.tui.operations.edit.adapter as edit_adapter
+    import memcommit.adapters.interfaces.tui.operations.edit.adapter as edit_adapter
 
     edit_adapter.freeze_granted_context_navigation = empty_navigation
 
@@ -213,7 +213,7 @@ def _capture_reference() -> None:
 
 
 def _capture_edit() -> None:
-    from memcommit.interfaces.console.text import display_escape_text
+    from memcommit.adapters.interfaces.console.text import display_escape_text
 
     child, recorder = _spawn("edit")
     try:

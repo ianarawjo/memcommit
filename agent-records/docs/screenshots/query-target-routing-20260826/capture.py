@@ -32,7 +32,7 @@ _BASE.ROWS = ROWS
 
 
 def _run_child() -> None:
-    from memcommit.interfaces.tui.operations.query.screen import run_query_workbench
+    from memcommit.adapters.interfaces.tui.operations.query.screen import run_query_workbench
     from memcommit.application.operations.query.granted_application import (
         GrantedQueryResponse,
         GrantedQueryTarget,

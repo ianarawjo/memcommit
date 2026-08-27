@@ -34,10 +34,10 @@ from memcommit.forget_resolution_adapter import (
 from memcommit.commands.forget.setup_workbench import (
     ForgetSetupReceipt as LegacyForgetSetupReceipt,
 )
-from memcommit.interfaces.tui.operations.forget.resolution import (
+from memcommit.adapters.interfaces.tui.operations.forget.resolution import (
     ForgetResolutionWorkbenchAdapter,
 )
-from memcommit.interfaces.tui.operations.forget.setup import ForgetSetupReceipt
+from memcommit.adapters.interfaces.tui.operations.forget.setup import ForgetSetupReceipt
 from memcommit.semantic.changes import ProposedChange
 from memcommit.store import ConcurrentContextUpdateError, MemoryStore
 
@@ -164,7 +164,7 @@ def test_forget_tui_modules_own_the_legacy_component_identities() -> None:
         LegacyForgetResolutionWorkbenchAdapter
         is ForgetResolutionWorkbenchAdapter
     )
-    root = Path(__file__).parents[1] / "src" / "memcommit" / "interfaces" / "tui"
+    root = Path(__file__).parents[1] / "src" / "memcommit" / "adapters" / "interfaces" / "tui"
     for name in ("setup.py", "resolution.py", "workbench.py"):
         path = root / "operations" / "forget" / name
         tree = ast.parse(path.read_text(encoding="utf-8"))

@@ -9,18 +9,18 @@ from prompt_toolkit.output import DummyOutput
 
 from memcommit.context_targeting.tui.picker import ContextMemoryRow
 from memcommit.edit_application import EditRequest, FrozenEditPlan
-from memcommit.interfaces.tui.components.exact_command_review import (
+from memcommit.adapters.interfaces.tui.components.exact_command_review import (
     format_exact_command,
 )
-from memcommit.interfaces.tui.operations.edit import (
+from memcommit.adapters.interfaces.tui.operations.edit import (
     EditTuiSetup,
     parse_edit_command_argv,
     run_edit_tui,
 )
-from memcommit.interfaces.tui.operations.edit.screen import (
+from memcommit.adapters.interfaces.tui.operations.edit.screen import (
     edit_exact_command_review,
 )
-from memcommit.interfaces.tui.operations.reference import (
+from memcommit.adapters.interfaces.tui.operations.reference import (
     ReferenceTuiSetup,
     run_reference_tui,
 )

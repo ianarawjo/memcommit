@@ -12,7 +12,7 @@ from memcommit.infrastructure.clipboard import ClipboardError, write_system_clip
 from memcommit.infrastructure.command_ledger.attempts import annotate_read_report_attempt
 from memcommit.commands.shared.command_progress import CommandProgress
 from memcommit.commands.shared.context_operand import ContextOperandSnapshot
-from memcommit.interfaces.tui.components.operation_launcher.location import (
+from memcommit.adapters.interfaces.tui.components.operation_launcher.location import (
     operation_launcher_orientation,
 )
 from memcommit.application.authority.access import (
@@ -29,18 +29,18 @@ from memcommit.context_targeting.presets import (
 )
 from memcommit.context_targeting.tui.picker import context_memory_rows
 from memcommit.context_targeting.tui.reach import ContextReachViewMode
-from memcommit.interfaces.console import (
+from memcommit.adapters.interfaces.console import (
     ConsoleMode,
     ConsoleModeError,
     SystemTerminalCapabilities,
     resolve_console_mode,
 )
-from memcommit.interfaces.tui.workbenches.read_report import (
+from memcommit.adapters.interfaces.tui.workbenches.read_report import (
     ReadReportSelectTarget,
     choose_read_report_recent,
 )
-from memcommit.interfaces.console.text import display_escape_text
-from memcommit.interfaces.tui.operations.summarize import (
+from memcommit.adapters.interfaces.console.text import display_escape_text
+from memcommit.adapters.interfaces.tui.operations.summarize import (
     SummarizeTuiOutcome,
     SummarizeTuiSetup,
     project_summarize_clipboard,

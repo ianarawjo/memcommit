@@ -127,9 +127,9 @@ def test_pre_relocation_reference_request_global_loads_through_alias() -> None:
 def test_production_reference_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "src/memcommit/adapters/python_api/_operations/reference.py",
-        "src/memcommit/interfaces/cli/reference.py",
-        "src/memcommit/interfaces/tui/operations/reference/adapter.py",
-        "src/memcommit/interfaces/tui/operations/reference/screen.py",
+        "src/memcommit/adapters/interfaces/cli/reference.py",
+        "src/memcommit/adapters/interfaces/tui/operations/reference/adapter.py",
+        "src/memcommit/adapters/interfaces/tui/operations/reference/screen.py",
         "src/memcommit/application/operations/reference/runtime.py",
     )
 

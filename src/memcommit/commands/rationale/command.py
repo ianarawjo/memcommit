@@ -22,10 +22,10 @@ from memcommit.commands.shared.memory_report_recents import (
     choose_memory_report_recent,
 )
 from memcommit.commands.shared.history_target import resolve_explicit_context_history_target
-from memcommit.interfaces.tui.viewers.read_only import (
+from memcommit.adapters.interfaces.tui.viewers.read_only import (
     interactive_report_terminal,
 )
-from memcommit.interfaces.console.text import (
+from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
     safe_terminal_text,
 )

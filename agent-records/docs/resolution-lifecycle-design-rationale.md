@@ -18,7 +18,7 @@ provider behavior, persistence, or Apply.
 Both contracts live under `memcommit.application.resolution`: the lifecycle is
 shared application policy, while the workbench is its terminal-independent
 review projection and action vocabulary. Concrete prompt-toolkit rendering
-remains under `memcommit.interfaces`; moving the package does not move provider,
+remains under `memcommit.adapters.interfaces`; moving the package does not move provider,
 persistence, or operation-specific Apply authority into the shared contract.
 
 The smaller deterministic Resolution Workbench now retains the exact

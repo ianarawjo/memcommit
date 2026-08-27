@@ -13,7 +13,7 @@ This document specifies only the directional A-to-B form.
 ## CLI registry ownership
 
 The typed Impact route registry is owned by
-`memcommit.interfaces.cli.impact_registry`, alongside the other non-interactive
+`memcommit.adapters.interfaces.cli.impact_registry`, alongside the other non-interactive
 CLI composition interfaces. The historical
 `memcommit.commands.impact.registry` path remains an exact module alias so old
 imports and monkeypatches observe the same module globals and registry objects.

@@ -10,7 +10,7 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
 import memcommit.application.ops as ops
-from memcommit.interfaces.tui.operations.reference import (
+from memcommit.adapters.interfaces.tui.operations.reference import (
     ReferenceTuiSetup,
     build_reference_tui_setup,
     choose_reference_setup,

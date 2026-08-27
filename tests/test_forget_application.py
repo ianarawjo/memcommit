@@ -12,8 +12,8 @@ import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.forget import command as forget_command
 from memcommit.context import AutoCheckpoint
-from memcommit.interfaces.cli import forget as forget_cli
-from memcommit.interfaces.console.theme import (
+from memcommit.adapters.interfaces.cli import forget as forget_cli
+from memcommit.adapters.interfaces.console.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )

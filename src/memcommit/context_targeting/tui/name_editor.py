@@ -23,26 +23,26 @@ from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.widgets import Frame, TextArea
 
-from memcommit.interfaces.tui.components.exact_name import (
+from memcommit.adapters.interfaces.tui.components.exact_name import (
     ExactNameFieldControl,
     ExactNameFieldView,
 )
-from memcommit.interfaces.tui.components.report_card import boxed_lines
-from memcommit.interfaces.tui.core.theme import (
+from memcommit.adapters.interfaces.tui.components.report_card import boxed_lines
+from memcommit.adapters.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     focused_control_style,
 )
-from memcommit.interfaces.tui.components.frame import (
+from memcommit.adapters.interfaces.tui.components.frame import (
     build_focused_frame,
 )
-from memcommit.interfaces.console.text import (
+from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
     safe_terminal_text,
 )
-from memcommit.interfaces.tui.components.focus import (
+from memcommit.adapters.interfaces.tui.components.focus import (
     focus_in_order,
 )
-from memcommit.interfaces.tui.core.text_layout import (
+from memcommit.adapters.interfaces.tui.core.text_layout import (
     elide_terminal_text,
     single_line_terminal_text,
     terminal_cell_width,
@@ -57,7 +57,7 @@ from memcommit.context_targeting.tui.name_draft import (
 )
 from memcommit.context_targeting.tui.selection import ContextSelectionState
 from memcommit.context_targeting.tui.tree import ContextTreeState, build_context_tree
-from memcommit.interfaces.console.selection.tui import tree_choice_marker, tree_choice_styles
+from memcommit.adapters.interfaces.console.selection.tui import tree_choice_marker, tree_choice_styles
 
 
 def suggest_fresh_context_name(

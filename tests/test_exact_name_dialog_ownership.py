@@ -13,7 +13,7 @@ import pytest
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 LEGACY_MODULE = "memcommit.commands.shared.exact_name_dialog"
-CANONICAL_MODULE = "memcommit.interfaces.tui.components.exact_name_dialog"
+CANONICAL_MODULE = "memcommit.adapters.interfaces.tui.components.exact_name_dialog"
 LEGACY_SOURCE_SHA256 = "b3875ebf6bdc72cf5f6b9070cb853eb51ce080fc1b5f068af167747d42bf10e1"
 
 
@@ -59,7 +59,7 @@ def test_legacy_exact_name_dialog_is_an_import_only_module_alias() -> None:
     )
     assert any(
         isinstance(node, ast.ImportFrom)
-        and node.module == "memcommit.interfaces.tui.components"
+        and node.module == "memcommit.adapters.interfaces.tui.components"
         and any(alias.name == "exact_name_dialog" for alias in node.names)
         for node in ast.walk(tree)
     )
@@ -80,10 +80,10 @@ def test_legacy_exact_name_dialog_is_an_import_only_module_alias() -> None:
 def test_canonical_source_matches_pre_move_source_after_import_normalization() -> None:
     source_path = (
         REPOSITORY_ROOT
-        / "src/memcommit/interfaces/tui/components/exact_name_dialog.py"
+        / "src/memcommit/adapters/interfaces/tui/components/exact_name_dialog.py"
     )
     source = source_path.read_text(encoding="utf-8")
-    canonical_control_import = """from memcommit.interfaces.tui.components.exact_name import (
+    canonical_control_import = """from memcommit.adapters.interfaces.tui.components.exact_name import (
     ExactNameFieldControl,
     ExactNameFieldView,
 )"""
@@ -92,7 +92,7 @@ def test_canonical_source_matches_pre_move_source_after_import_normalization() -
         "ExactNameFieldControl, ExactNameFieldView"
     )
     console_import = (
-        "from memcommit.interfaces.console.text import "
+        "from memcommit.adapters.interfaces.console.text import "
         "display_escape_text, safe_terminal_text"
     )
 

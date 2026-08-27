@@ -14,13 +14,13 @@ from memcommit.commands.shared.history_picker import (
     HistoryPickerItem,
     choose_history,
 )
-from memcommit.interfaces.tui.components.checkpoint_location import (
+from memcommit.adapters.interfaces.tui.components.checkpoint_location import (
     choose_history_location,
 )
-from memcommit.interfaces.console.text import (
+from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
 )
-from memcommit.interfaces.tui.core.theme import semantic_action_style
+from memcommit.adapters.interfaces.tui.core.theme import semantic_action_style
 from memcommit.application.reviewing.memory_diff import memory_diff_lines, update_operation_change
 from memcommit.application.operations.update.model import UpdateSession
 

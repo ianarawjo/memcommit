@@ -13,7 +13,7 @@ from memcommit.context_targeting.presets import (
     resolve_scope_preset,
 )
 from memcommit.context_targeting.resolution import expand_lexical_context_names
-from memcommit.interfaces.console.text import display_escape_text
+from memcommit.adapters.interfaces.console.text import display_escape_text
 from memcommit.persistence.store import MemoryStore, context_record_digest
 
 

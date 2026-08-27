@@ -5,14 +5,14 @@ from dataclasses import replace
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-from memcommit.interfaces.tui.workbenches.resolution.compact_shell import (
+from memcommit.adapters.interfaces.tui.workbenches.resolution.compact_shell import (
     run_compact_resolution_decisions,
 )
-from memcommit.interfaces.tui.workbenches.resolution.session_shell import (
+from memcommit.adapters.interfaces.tui.workbenches.resolution.session_shell import (
     ResolutionGlobalStrategy,
     run_resolution_workbench_shell,
 )
-from memcommit.interfaces.tui.components.save_location import SaveLocationView
+from memcommit.adapters.interfaces.tui.components.save_location import SaveLocationView
 from memcommit.resolution_workbench import (
     ResolutionItem,
     ResolutionOption,

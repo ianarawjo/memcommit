@@ -70,7 +70,7 @@ content.
 
 ## Interface projections
 
-The plain CLI presenter under `memcommit.interfaces.cli.show` keeps a direct
+The plain CLI presenter under `memcommit.adapters.interfaces.cli.show` keeps a direct
 ordinary-Memory lookup compact as `[Memory CONTEXT:UID] CONTENT`. The owner and
 full durable identity remain visible, but the single selected object's metadata
 does not consume a separate header block. Structured detail remains appropriate

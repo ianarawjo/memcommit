@@ -21,15 +21,15 @@ from memcommit.application.authority.access import (
 )
 from memcommit.context_targeting.catalog import freeze_granted_context_navigation
 from memcommit.context_targeting.operands import choose_endpoint_operand
-from memcommit.interfaces.cli.add import render_add_plain
-from memcommit.interfaces.cli.batch_input import parse_add_lines, read_text_input
-from memcommit.interfaces.console.errors import render_cli_error
-from memcommit.interfaces.console.terminal import is_interactive_terminal
-from memcommit.interfaces.tui.components.paste_input import (
+from memcommit.adapters.interfaces.cli.add import render_add_plain
+from memcommit.adapters.interfaces.cli.batch_input import parse_add_lines, read_text_input
+from memcommit.adapters.interfaces.console.errors import render_cli_error
+from memcommit.adapters.interfaces.console.terminal import is_interactive_terminal
+from memcommit.adapters.interfaces.tui.components.paste_input import (
     PasteCancelled,
     capture_paste,
 )
-from memcommit.interfaces.tui.operations.add import AddTuiSetup, run_add_tui
+from memcommit.adapters.interfaces.tui.operations.add import AddTuiSetup, run_add_tui
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore

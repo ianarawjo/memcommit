@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import typer
 
-from memcommit.interfaces.console.theme import (
+from memcommit.adapters.interfaces.console.theme import (
     semantic_color_rgb,
     semantic_source_role,
 )

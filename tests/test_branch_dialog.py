@@ -9,11 +9,11 @@ from memcommit.commands.branch.dialog import (
     BranchCreationReceipt,
     choose_branch_creation,
 )
-from memcommit.interfaces.tui.components.endpoint_setup import (
+from memcommit.adapters.interfaces.tui.components.endpoint_setup import (
     EndpointSetupDraft,
     EndpointSetupValue,
 )
-from memcommit.interfaces.tui.operations.branch import (
+from memcommit.adapters.interfaces.tui.operations.branch import (
     branch_endpoint_setup_spec,
     branch_exact_command_review,
 )

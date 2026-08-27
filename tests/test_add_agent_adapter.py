@@ -20,7 +20,7 @@ from memcommit.adapters.python_api import (
     AddedMemoryResult,
     MemCommitClient,
 )
-from memcommit.interfaces.agent.add import (
+from memcommit.adapters.interfaces.agent.add import (
     ADD_AGENT_CONTRACT_VERSION,
     ADD_AGENT_ERROR_MESSAGE_LIMIT,
     ADD_AGENT_TOOL_NAME,
@@ -235,7 +235,7 @@ def test_internal_failure_does_not_expose_host_details(tmp_path, monkeypatch):
 
 
 def test_agent_adapter_depends_only_on_public_api_and_shared_agent_contract():
-    path = Path(__file__).parents[1] / "src" / "memcommit" / "interfaces" / "agent" / "add.py"
+    path = Path(__file__).parents[1] / "src" / "memcommit" / "adapters" / "interfaces" / "agent" / "add.py"
     tree = ast.parse(path.read_text(encoding="utf-8"))
     imported: list[str] = []
     for node in ast.walk(tree):
@@ -256,7 +256,7 @@ def test_agent_adapter_depends_only_on_public_api_and_shared_agent_contract():
     )
     assert not any(name.startswith(forbidden) for name in imported)
     assert "memcommit.adapters.python_api" in imported
-    assert "memcommit.interfaces.agent.contract" in imported
+    assert "memcommit.adapters.interfaces.agent.contract" in imported
 
 
 def test_companion_skill_preserves_exact_mutation_and_failure_boundaries():

@@ -23,13 +23,13 @@ from memcommit.delete_application import (
     run_direct_item_delete,
 )
 from memcommit.delete_runtime import MemoryStoreDeletePort
-from memcommit.interfaces.agent import (
+from memcommit.adapters.interfaces.agent import (
     APPLY_CONTEXT_DELETE_AGENT_TOOL_NAME,
     PLAN_CONTEXT_DELETE_AGENT_TOOL_NAME,
     REMOVE_ITEM_AGENT_TOOL_NAME,
     build_default_agent_tool_registry,
 )
-from memcommit.interfaces.mcp import McpRegistryProjection
+from memcommit.adapters.interfaces.mcp import McpRegistryProjection
 from memcommit.store import MemoryStore
 
 
@@ -249,7 +249,7 @@ def test_delete_boundary_has_no_terminal_dependencies(path):
         for name in imports
         for prefix in (
             "memcommit.commands",
-            "memcommit.interfaces",
+            "memcommit.adapters.interfaces",
             "prompt_toolkit",
             "typer",
         )

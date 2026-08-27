@@ -21,12 +21,12 @@ from memcommit.adapters.python_api import (
     SemanticContextError,
 )
 from memcommit.context import Memory, MemoryRef
-from memcommit.interfaces.agent import (
+from memcommit.adapters.interfaces.agent import (
     RESOLVE_AGENT_CONTRACT_VERSION,
     RESOLVE_AGENT_TOOL_NAME,
     build_default_agent_tool_registry,
 )
-from memcommit.interfaces.cli.resolve import render_resolve_plain
+from memcommit.adapters.interfaces.cli.resolve import render_resolve_plain
 from memcommit.profile_config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
@@ -36,7 +36,7 @@ from memcommit.profile_config import (
     profile_store_dir,
 )
 from memcommit.profiles import create_authority_grant, update_authority_grant
-from memcommit.interfaces.tui.operations.resolve import (
+from memcommit.adapters.interfaces.tui.operations.resolve import (
     project_resolve_analysis,
     resolve_candidate_exact_review,
     run_resolve_tui,

@@ -37,20 +37,20 @@ from memcommit.application.operations.dedup.application import (
 from memcommit.application.operations.dedup.runtime import MemoryStoreDedupPort
 from memcommit.direct_item_duplicates import find_exact_duplicate_groups
 from memcommit.findings import DuplicateFinding, DuplicateReport
-from memcommit.interfaces.agent import (
+from memcommit.adapters.interfaces.agent import (
     DEDUP_AGENT_TOOL_NAME,
     build_default_agent_tool_registry,
 )
-from memcommit.interfaces.console.theme import (
+from memcommit.adapters.interfaces.console.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )
-from memcommit.interfaces.tui.operations.dedup import (
+from memcommit.adapters.interfaces.tui.operations.dedup import (
     dedup_exact_review,
     dedup_resolution_spec,
     run_dedup_tui,
 )
-from memcommit.interfaces.tui.workbenches.resolution import ResolutionOutcome
+from memcommit.adapters.interfaces.tui.workbenches.resolution import ResolutionOutcome
 from memcommit.quality_find_workbench import create_quality_find_workbench
 from memcommit.quality_finding_handoff import (
     QualityFindingHandoff,

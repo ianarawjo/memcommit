@@ -8,7 +8,7 @@ import pytest
 
 import memcommit.application.ops as ops
 from memcommit.adapters.python_api import MemCommitClient
-from memcommit.interfaces.agent.show import (
+from memcommit.adapters.interfaces.agent.show import (
     SHOW_AGENT_TOOL_NAME,
     ShowAgentAdapter,
     show_agent_tool_schema,

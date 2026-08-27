@@ -24,15 +24,15 @@ from memcommit.application.operations.delete.application import (
     run_direct_item_delete,
 )
 from memcommit.application.operations.delete.runtime import MemoryStoreDeletePort
-from memcommit.interfaces.cli.delete import (
+from memcommit.adapters.interfaces.cli.delete import (
     context_delete_warning,
     removed_item_description,
     render_context_delete_result,
     render_removed_item,
 )
-from memcommit.interfaces.console.errors import render_cli_error
-from memcommit.interfaces.console.text import display_escape_text
-from memcommit.interfaces.tui.operations.delete import (
+from memcommit.adapters.interfaces.console.errors import render_cli_error
+from memcommit.adapters.interfaces.console.text import display_escape_text
+from memcommit.adapters.interfaces.tui.operations.delete import (
     choose_delete_target,
     delete_picker_rows,
 )

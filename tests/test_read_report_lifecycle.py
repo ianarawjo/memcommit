@@ -15,7 +15,7 @@ from memcommit.command_attempts import (
     begin_command_attempt,
     finish_command_attempt,
 )
-from memcommit.interfaces.tui.workbenches.read_report import (
+from memcommit.adapters.interfaces.tui.workbenches.read_report import (
     ReadReportSelectTarget,
     choose_read_report_recent,
 )

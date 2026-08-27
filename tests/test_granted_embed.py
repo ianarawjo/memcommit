@@ -14,7 +14,7 @@ from memcommit.adapters.console.entrypoint import app
 from memcommit.context import Context, Memory
 from memcommit.context_snapshot import ContextSnapshotRef
 from memcommit.embed_runtime import MemoryStoreEmbedPort
-from memcommit.interfaces.tui.operations.embed import build_embed_tui_setup
+from memcommit.adapters.interfaces.tui.operations.embed import build_embed_tui_setup
 from memcommit.profile_config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,

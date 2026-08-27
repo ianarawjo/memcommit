@@ -24,7 +24,7 @@ The Grounding slice is now divided into four responsibilities:
 - `memcommit.application.operations.atomize.grounding_runtime` adapts that contract to
   `MemoryStore`, the semantic provider, CAS-style freshness checks, Context
   mutation, checkpoint recovery, and durable dialogue receipts.
-- `memcommit.interfaces.cli.atomize_grounding` renders a saved dialogue without
+- `memcommit.adapters.interfaces.cli.atomize_grounding` renders a saved dialogue without
   provider or Store access.
 - `memcommit.commands.atomize.grounding` preserves the historical Python import
   surface as a thin compatibility facade. `memcommit.commands.atomize.command` uses the

@@ -66,7 +66,7 @@ apply B. The real picker caller passes that receipt into `commands.meld`, where
 behavior is covered by the Meld test
 matrix (`340` Meld/component/Resolution boundary tests, `10` Grant-focused
 tests, and `35` Study-prewarm tests at this migration). The boundary suite also
-parses every module under `memcommit/interfaces` and verifies that no interface
+parses every module under `memcommit/adapters/interfaces` and verifies that no interface
 imports a legacy command adapter. Existing full-replay captures continue to
 cover provider reconciliation, exact application, Undo/Redo, and durable Result
 inspection because the relocated screen did not change those semantics.

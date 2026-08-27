@@ -31,15 +31,15 @@ from memcommit.application.operations.fit.coherence import (
     FitContextFrame,
     FitContextMemory,
 )
-from memcommit.interfaces.cli.fit import (
+from memcommit.adapters.interfaces.cli.fit import (
     render_fit_plain,
     render_proposition_fit_plain,
 )
-from memcommit.interfaces.console.theme import (
+from memcommit.adapters.interfaces.console.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )
-from memcommit.interfaces.fit import (
+from memcommit.adapters.interfaces.fit import (
     _coherence_issue_lines,
     _coherence_participant_label,
     fit_result_text,

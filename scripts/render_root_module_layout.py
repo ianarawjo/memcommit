@@ -77,6 +77,11 @@ COMPATIBILITY_TARGET_OVERRIDES = {
     "forget_resolution_adapter": (
         "memcommit.compatibility.forget_resolution_adapter"
     ),
+    # The baseline facade still names the pre-staging interface package; keep
+    # its historical key while advancing only the canonical implementation.
+    "impact_controller": (
+        "memcommit.adapters.interfaces.tui.workbenches.impact"
+    ),
     "review_report": "memcommit.application.reviewing.report",
 }
 
@@ -91,11 +96,11 @@ OPERATION_TARGETS = {
     "comparison": "memcommit.application.operations.compare.ledger.model",
     "comparison_evidence": "memcommit.application.operations.compare.ledger.evidence",
     "comparison_execution": "memcommit.application.operations.compare.ledger.execution",
-    "comparison_present": "memcommit.interfaces.presentation.comparison",
+    "comparison_present": "memcommit.adapters.interfaces.presentation.comparison",
     "comparison_provider": "memcommit.application.operations.compare.ledger.provider",
     "comparison_session_application": "memcommit.application.operations.compare.ledger.session_application",
     "comparison_store": "memcommit.application.operations.compare.ledger.store",
-    "comparison_summary_present": "memcommit.interfaces.cli.comparison_summary",
+    "comparison_summary_present": "memcommit.adapters.interfaces.cli.comparison_summary",
     "conformance": "memcommit.application.operations.conformance.model",
     "conformance_runtime": "memcommit.application.operations.conformance.runtime",
     "dedun_scope": "memcommit.application.operations.dedun.scope",
@@ -179,7 +184,7 @@ CONCEPT_TARGETS = {
     "command_attempts": "memcommit.infrastructure.command_ledger.attempts",
     "command_history": "memcommit.application.retained_history.command_history",
     "config": "memcommit.infrastructure.config",
-    "console_invocation": "memcommit.interfaces.cli.invocation",
+    "console_invocation": "memcommit.adapters.interfaces.cli.invocation",
     "context_catalog": "memcommit.context_targeting.context_catalog",
     "context_history": "memcommit.application.retained_history.context_history",
     "context_lifecycle": "memcommit.application.retained_history.context_lifecycle",

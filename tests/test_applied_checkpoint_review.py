@@ -15,7 +15,7 @@ from memcommit.applied_checkpoint_review import (
 from memcommit.context import AutoCheckpoint
 from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.review.report import run_review_report_shell
-from memcommit.interfaces.console.theme import (
+from memcommit.adapters.interfaces.console.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )

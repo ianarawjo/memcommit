@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import sys
 
-from memcommit.interfaces.tui.components.exact_command_review import shell as _shell
+from memcommit.adapters.interfaces.tui.components.exact_command_review import shell as _shell
 
 # Preserve one implementation module so patches through the historical command
 # path still change the globals used by the canonical interface component.

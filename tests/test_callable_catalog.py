@@ -62,7 +62,7 @@ def test_operation_routes_cover_every_help_operation_and_cli_entry() -> None:
     assert by_operation["checkout"].cli_entry == (
         "memcommit.adapters.console.entrypoint:_checkout"
     )
-    assert by_operation["embed"].cli_entry == "memcommit.interfaces.cli.embed:cmd"
+    assert by_operation["embed"].cli_entry == "memcommit.adapters.interfaces.cli.embed:cmd"
 
 
 def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() -> None:
@@ -77,9 +77,9 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
         "memcommit.application.operations.summarize.application"
         in by_operation["summarize"].application_modules
     )
-    assert "memcommit.interfaces.tui.operations.summarize.screen" in by_operation["summarize"].tui_modules
+    assert "memcommit.adapters.interfaces.tui.operations.summarize.screen" in by_operation["summarize"].tui_modules
     assert "query_ordinary" in by_operation["query"].public_methods
-    assert "memcommit.interfaces.agent.query" in by_operation["query"].agent_modules
+    assert "memcommit.adapters.interfaces.agent.query" in by_operation["query"].agent_modules
     for operation, public_method in (
         ("copy", "copy_memories"),
         ("move", "move_memories"),
@@ -94,12 +94,12 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
             in route.application_modules
         )
         assert (
-            "memcommit.interfaces.tui.operations.memory_transfer.screen"
+            "memcommit.adapters.interfaces.tui.operations.memory_transfer.screen"
             in route.tui_modules
         )
         assert route.public_methods == (public_method,)
         assert route.agent_modules == (
-            "memcommit.interfaces.agent.memory_transfer",
+            "memcommit.adapters.interfaces.agent.memory_transfer",
         )
         assert route.curated_state == "CLOSED"
     assert by_operation["query"].curated_state == "CLOSED"
@@ -201,7 +201,7 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
         in by_operation["show"].application_modules
     )
     assert "show" in by_operation["show"].public_methods
-    assert "memcommit.interfaces.agent.show" in by_operation["show"].agent_modules
+    assert "memcommit.adapters.interfaces.agent.show" in by_operation["show"].agent_modules
     assert by_operation["show"].curated_state == "CLOSED"
     for operation in ("branch", "chunk", "clear", "contexts", "undo", "redo"):
         assert by_operation[operation].curated_state == "CLOSED"

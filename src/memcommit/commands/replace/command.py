@@ -13,15 +13,15 @@ from memcommit.context_targeting.presets import (
     resolve_context_traversal,
     resolve_scope_preset,
 )
-from memcommit.interfaces.cli.replace import render_replace_apply_result
-from memcommit.interfaces.console import (
+from memcommit.adapters.interfaces.cli.replace import render_replace_apply_result
+from memcommit.adapters.interfaces.console import (
     ConsoleMode,
     ConsoleModeError,
     SystemTerminalCapabilities,
     resolve_console_mode,
 )
-from memcommit.interfaces.console.text import display_escape_text
-from memcommit.interfaces.tui.operations.replace import (
+from memcommit.adapters.interfaces.console.text import display_escape_text
+from memcommit.adapters.interfaces.tui.operations.replace import (
     ReplaceTuiSetup,
     run_replace_tui,
 )

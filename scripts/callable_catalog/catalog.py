@@ -809,16 +809,16 @@ def _operation_routes(
                     or _operation_package_matches(module, tokens)
                 )
                 and not module.startswith("memcommit.adapters.python_api.")
-                and not module.startswith("memcommit.interfaces.")
+                and not module.startswith("memcommit.adapters.interfaces.")
             )
         )
         tui_modules = tuple(
             sorted(
                 module
                 for module in module_names
-                if module.startswith("memcommit.interfaces.tui.operations.")
+                if module.startswith("memcommit.adapters.interfaces.tui.operations.")
                 and _module_owner_matches(
-                    module.removeprefix("memcommit.interfaces.tui.operations.").split(
+                    module.removeprefix("memcommit.adapters.interfaces.tui.operations.").split(
                         ".", 1
                     )[0],
                     tokens,
@@ -837,7 +837,7 @@ def _operation_routes(
             sorted(
                 module
                 for module in module_names
-                if module.startswith("memcommit.interfaces.agent.")
+                if module.startswith("memcommit.adapters.interfaces.agent.")
                 and _module_owner_matches(module, tokens)
                 and module.rsplit(".", 1)[-1] not in {"contract", "registry"}
             )

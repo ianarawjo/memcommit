@@ -11,7 +11,7 @@ from typer.testing import CliRunner
 from memcommit.adapters.console.entrypoint import app
 from memcommit.commands.log import command as log_command
 from memcommit.context import Memory
-from memcommit.interfaces.console.theme import (
+from memcommit.adapters.interfaces.console.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )

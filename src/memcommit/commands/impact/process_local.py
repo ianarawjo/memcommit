@@ -42,7 +42,7 @@ from memcommit.application.operations.forget.application import (
     ForgetAnalysisResult,
     run_forget_analysis,
 )
-from memcommit.interfaces.tui.operations.forget.resolution import (
+from memcommit.adapters.interfaces.tui.operations.forget.resolution import (
     ForgetResolutionWorkbenchAdapter,
     forget_memory_changes,
 )
@@ -50,9 +50,9 @@ from memcommit.application.operations.forget.runtime import (
     MemoryStoreForgetSourcePort,
     connect_forget_provider,
 )
-from memcommit.interfaces.tui.workbenches.impact import ImpactController
-from memcommit.interfaces.console.text import display_escape_text
-from memcommit.interfaces.tui.operations.forget import choose_forget_setup
+from memcommit.adapters.interfaces.tui.workbenches.impact import ImpactController
+from memcommit.adapters.interfaces.console.text import display_escape_text
+from memcommit.adapters.interfaces.tui.operations.forget import choose_forget_setup
 from memcommit.application.reviewing.memory_diff import MemoryChange
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError

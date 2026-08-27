@@ -13,7 +13,7 @@ import pytest
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 LEGACY_NAME = "memcommit.commands.shared.direct_item_placement"
-CANONICAL_NAME = "memcommit.interfaces.tui.components.direct_item_placement"
+CANONICAL_NAME = "memcommit.adapters.interfaces.tui.components.direct_item_placement"
 
 
 @pytest.mark.parametrize("legacy_first", (True, False), ids=("old-first", "new-first"))

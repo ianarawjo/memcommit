@@ -23,7 +23,7 @@ def _imports(path: Path) -> tuple[str, ...]:
 
 
 def test_query_tui_package_has_no_command_dependency():
-    operation = PACKAGE / "interfaces" / "tui" / "operations" / "query"
+    operation = PACKAGE / "adapters" / "interfaces" / "tui" / "operations" / "query"
     offenders = [
         (str(path.relative_to(ROOT)), module)
         for path in operation.rglob("*.py")
@@ -37,13 +37,13 @@ def test_query_tui_package_has_no_command_dependency():
 def test_query_command_imports_interface_owner_directly():
     source = (PACKAGE / "commands" / "query" / "command.py").read_text(encoding="utf-8")
 
-    assert "from memcommit.interfaces.tui.operations.query import (" in source
+    assert "from memcommit.adapters.interfaces.tui.operations.query import (" in source
     assert "from memcommit.commands.query.workbench import" not in source
 
 
 def test_query_workbench_compatibility_exports_are_object_identical():
     compatibility = importlib.import_module("memcommit.commands.query.workbench")
-    owner = importlib.import_module("memcommit.interfaces.tui.operations.query")
+    owner = importlib.import_module("memcommit.adapters.interfaces.tui.operations.query")
 
     assert compatibility.__all__ == owner.__all__
     for name in owner.__all__:

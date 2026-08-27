@@ -4,7 +4,7 @@ from dataclasses import replace
 
 import pytest
 
-from memcommit.interfaces.tui.workbenches.result import (
+from memcommit.adapters.interfaces.tui.workbenches.result import (
     render_result_workbench_snapshot,
 )
 from memcommit.result_workbench import (

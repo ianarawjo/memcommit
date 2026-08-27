@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from memcommit.interfaces.tui.viewers.semantic import (
+from memcommit.adapters.interfaces.tui.viewers.semantic import (
     SemanticViewerBlock,
     SemanticViewerController,
     SemanticViewerDocument,

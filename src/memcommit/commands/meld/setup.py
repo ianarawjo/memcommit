@@ -17,8 +17,8 @@ from memcommit.context_targeting.readable_catalog import (
     ReadableContextCatalog,
     freeze_profile_readable_context_catalog,
 )
-from memcommit.interfaces.tui.components.endpoint_setup import EndpointSetupMemory
-from memcommit.interfaces.tui.operations.meld import (
+from memcommit.adapters.interfaces.tui.components.endpoint_setup import EndpointSetupMemory
+from memcommit.adapters.interfaces.tui.operations.meld import (
     MeldTuiSetup,
     choose_meld_endpoint_setup,
 )

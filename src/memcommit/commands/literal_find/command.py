@@ -20,18 +20,18 @@ from memcommit.context_targeting.presets import (
     resolve_context_traversal,
     resolve_scope_preset,
 )
-from memcommit.interfaces.cli.find import (
+from memcommit.adapters.interfaces.cli.find import (
     DEFAULT_LITERAL_FIND_PREVIEW_MATCHES,
     render_literal_find_result,
 )
-from memcommit.interfaces.console import (
+from memcommit.adapters.interfaces.console import (
     ConsoleMode,
     ConsoleModeError,
     SystemTerminalCapabilities,
     resolve_console_mode,
 )
-from memcommit.interfaces.console.text import display_escape_text
-from memcommit.interfaces.tui.operations.find import (
+from memcommit.adapters.interfaces.console.text import display_escape_text
+from memcommit.adapters.interfaces.tui.operations.find import (
     LiteralFindTuiSetup,
     run_compact_literal_find_result,
     run_literal_find_tui,

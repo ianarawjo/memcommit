@@ -80,7 +80,7 @@ Escape and Ctrl-C both cancel capture without returning any concealed payload;
 F2 or Ctrl-D remains the only path that returns the batch for Add.
 
 The terminal capture component is owned by
-`memcommit.interfaces.tui.components.paste_input`. The historical
+`memcommit.adapters.interfaces.tui.components.paste_input`. The historical
 `memcommit.commands.shared.paste_input` import remains an identity-preserving
 compatibility alias so existing imports and monkeypatches continue to target
 the same module globals. This is an ownership-only relocation: key bindings,
@@ -88,7 +88,7 @@ paste normalization, TTY checks, cancellation and failure behavior, and the
 no-payload-echo boundary are unchanged.
 
 The shared UTF-8 file/stdin reader and line parsers are owned separately by
-`memcommit.interfaces.cli.batch_input`. The historical
+`memcommit.adapters.interfaces.cli.batch_input`. The historical
 `memcommit.commands.shared.batch_input` path remains an identity-preserving alias.
 This ownership-only relocation does not change newline preservation, UTF-8 or
 I/O failure handling, Add line stripping, or Edit's first-tab record grammar.

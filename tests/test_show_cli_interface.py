@@ -3,8 +3,8 @@ from __future__ import annotations
 import click
 from click.testing import CliRunner
 
-from memcommit.interfaces.cli.show import render_show
-from memcommit.interfaces.console.theme import memory_object_color_rgb
+from memcommit.adapters.interfaces.cli.show import render_show
+from memcommit.adapters.interfaces.console.theme import memory_object_color_rgb
 from memcommit.application.operations.show.application import (
     ShowContextSnapshot,
     ShowMemory,

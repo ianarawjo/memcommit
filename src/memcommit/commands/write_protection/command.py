@@ -7,14 +7,14 @@ from typing import Annotated, Any, Optional
 import typer
 
 import memcommit.application.ops as ops
-from memcommit.interfaces.cli.command_group import CanonicalCommandGroup
+from memcommit.adapters.interfaces.cli.command_group import CanonicalCommandGroup
 from memcommit.commands.shared.context_operand import ContextOperandSnapshot
 from memcommit.context_targeting.loading import (
     resolve_local_context_memory_target,
     resolve_local_direct_memory_locator,
 )
 from memcommit.context_targeting.model import DirectMemoryTarget
-from memcommit.interfaces.console.text import (
+from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
 )
 from memcommit.context import Context, Memory

@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-from memcommit.interfaces.tui.operations.switch import (
+from memcommit.adapters.interfaces.tui.operations.switch import (
     SwitchTuiSetup,
     run_switch_tui,
 )
@@ -241,7 +241,7 @@ def test_context_picker_compatibility_module_is_behavior_free() -> None:
 
 
 def test_switch_tui_operation_does_not_import_command_adapters() -> None:
-    operation = ROOT / "src" / "memcommit" / "interfaces" / "tui" / "operations" / "switch"
+    operation = ROOT / "src" / "memcommit" / "adapters" / "interfaces" / "tui" / "operations" / "switch"
     offenders = [
         source
         for source in operation.rglob("*.py")

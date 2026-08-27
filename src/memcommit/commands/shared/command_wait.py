@@ -55,20 +55,20 @@ from memcommit.commands.shared.session_help import (
     SessionHelpController,
     current_help_entries,
 )
-from memcommit.interfaces.tui.core.theme import (
+from memcommit.adapters.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
 )
-from memcommit.interfaces.tui.components.scrollable_pane import (
+from memcommit.adapters.interfaces.tui.components.scrollable_pane import (
     WrappedScrollbarMargin,
     build_scrollable_formatted_text_pane,
     move_wrapped_read_cursor,
     scroll_wrapped_page,
 )
-from memcommit.interfaces.tui.core.keybindings import (
+from memcommit.adapters.interfaces.tui.core.keybindings import (
     bind_case_insensitive_key,
 )
-from memcommit.interfaces.console.text import (
+from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
 )
 from memcommit.context_targeting.tui.tree import (

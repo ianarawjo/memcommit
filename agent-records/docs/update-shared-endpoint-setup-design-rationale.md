@@ -3,7 +3,7 @@
 ## Status
 
 Update's new-session Source/Target selection now uses
-`memcommit.interfaces.tui.components.endpoint_setup` through a narrow adapter
+`memcommit.adapters.interfaces.tui.components.endpoint_setup` through a narrow adapter
 under `interfaces/tui/operations/update`. Explicit noninteractive operands,
 provider planning, cache lookup, persisted sessions, and mutation semantics
 remain owned by the existing Update modules. The later review-to-Apply phase

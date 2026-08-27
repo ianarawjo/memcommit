@@ -5,7 +5,7 @@ from __future__ import annotations
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-from memcommit.interfaces.tui.operations.find import (
+from memcommit.adapters.interfaces.tui.operations.find import (
     LiteralFindTuiOutcome,
     LiteralFindTuiSetup,
     run_literal_find_tui,

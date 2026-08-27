@@ -9,14 +9,14 @@ from memcommit.adapters.python_api import MemCommitClient
 from memcommit.distill import DISTILL_PAYLOAD_MARKER
 from memcommit.elaborate import ELABORATE_PAYLOAD_MARKER
 from memcommit.application.operations.fit.judgment import FIT_JUDGMENT_PAYLOAD_MARKER
-from memcommit.interfaces.agent import (
+from memcommit.adapters.interfaces.agent import (
     DISTILL_AGENT_TOOL_NAME,
     ELABORATE_AGENT_CONTRACT_VERSION,
     ELABORATE_AGENT_TOOL_NAME,
     FIT_AGENT_TOOL_NAME,
     build_default_agent_tool_registry,
 )
-from memcommit.interfaces.mcp import McpRegistryProjection
+from memcommit.adapters.interfaces.mcp import McpRegistryProjection
 from memcommit.store import MemoryStore
 from tests.distill_goal_fit_support import passing_distill_goal_fit_response
 from tests.elaborate_validation_support import (

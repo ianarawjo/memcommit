@@ -7,7 +7,7 @@ import json
 import pytest
 
 from memcommit.adapters.python_api import MemCommitClient
-from memcommit.interfaces.agent.help import (
+from memcommit.adapters.interfaces.agent.help import (
     HELP_AGENT_TOOL_NAME,
     HelpAgentAdapter,
     help_agent_tool_schema,

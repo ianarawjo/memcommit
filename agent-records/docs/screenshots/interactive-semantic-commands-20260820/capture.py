@@ -51,7 +51,7 @@ def _print_terminal() -> None:
 
 
 def _meld_start() -> None:
-    from memcommit.interfaces.tui.operations.meld import (
+    from memcommit.adapters.interfaces.tui.operations.meld import (
         MeldTuiSetup,
         choose_meld_endpoint_setup,
     )
@@ -72,7 +72,7 @@ def _meld_start() -> None:
 
 
 def _update_start() -> None:
-    from memcommit.interfaces.tui.operations.update import (
+    from memcommit.adapters.interfaces.tui.operations.update import (
         UpdateTuiSetup,
         choose_update_endpoint_setup,
     )
@@ -149,7 +149,7 @@ def _update_view(*, accept_only: bool = False):
 
 def _turn() -> None:
     from memcommit.interactive_command_review import update_turn_command_review
-    from memcommit.interfaces.tui.workbenches.resolution.session_shell import (
+    from memcommit.adapters.interfaces.tui.workbenches.resolution.session_shell import (
         ResolutionGlobalStrategy,
         run_resolution_workbench_shell,
     )
@@ -188,7 +188,7 @@ def _turn() -> None:
 
 
 def _apply_review() -> None:
-    from memcommit.interfaces.tui.workbenches.resolution.session_shell import (
+    from memcommit.adapters.interfaces.tui.workbenches.resolution.session_shell import (
         run_resolution_workbench_shell,
     )
 

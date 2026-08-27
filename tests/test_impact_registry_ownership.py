@@ -14,7 +14,7 @@ import pytest
 ROOT = Path(__file__).parents[1]
 PACKAGE = ROOT / "src" / "memcommit"
 LEGACY_MODULE = "memcommit.commands.impact.registry"
-OWNER_MODULE = "memcommit.interfaces.cli.impact_registry"
+OWNER_MODULE = "memcommit.adapters.interfaces.cli.impact_registry"
 
 
 @pytest.mark.parametrize(
@@ -127,6 +127,6 @@ def test_impact_command_imports_the_interface_owner() -> None:
     )
 
     assert (
-        "from memcommit.interfaces.cli.impact_registry import IMPACT_ROUTES" in source
+        "from memcommit.adapters.interfaces.cli.impact_registry import IMPACT_ROUTES" in source
     )
     assert "from memcommit.commands.impact.registry import IMPACT_ROUTES" not in source

@@ -56,7 +56,7 @@ from memcommit.ground_workspace_history import (
     build_ground_workspace_command_stack,
     undo_ground_workspace_command,
 )
-from memcommit.interfaces.tui.operations.elaborate import (
+from memcommit.adapters.interfaces.tui.operations.elaborate import (
     project_elaborate_clipboard,
     project_elaborate_result,
     run_elaborate_tui,

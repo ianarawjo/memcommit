@@ -12,7 +12,7 @@ from memcommit.application.operations.compare.ledger.session_application import 
     load_saved_comparison,
     revalidate_saved_comparison,
 )
-from memcommit.interfaces.tui.components.operation_launcher.session import (
+from memcommit.adapters.interfaces.tui.components.operation_launcher.session import (
     SessionNewReceipt,
     SessionOpenReceipt,
     SessionPickerEntry,
@@ -49,7 +49,7 @@ def comparison_session_entries(
     # Import lazily because compare.py owns command orchestration and imports
     # this picker adapter. The picker preview must nevertheless reuse the exact
     # compact renderer instead of maintaining a second summary shape.
-    from memcommit.interfaces.presentation.comparison import render_comparison
+    from memcommit.adapters.interfaces.presentation.comparison import render_comparison
 
     entries: list[SessionPickerEntry] = []
     for analysis, path in iter_saved_comparisons(store):

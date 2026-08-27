@@ -122,7 +122,7 @@ def test_branch_application_has_no_cli_tui_or_store_dependency() -> None:
     assert not any(
         module == "typer"
         or module == "memcommit.store"
-        or module.startswith("memcommit.interfaces.")
+        or module.startswith("memcommit.adapters.interfaces.")
         or module.startswith("memcommit.commands.")
         for module in imports
     )

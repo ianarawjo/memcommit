@@ -118,7 +118,7 @@ def test_production_show_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "src/memcommit/adapters/python_api/_operations/show.py",
         "src/memcommit/commands/show/command.py",
-        "src/memcommit/interfaces/cli/show.py",
+        "src/memcommit/adapters/interfaces/cli/show.py",
         "src/memcommit/application/operations/show/runtime.py",
     )
 
@@ -138,7 +138,7 @@ def test_show_owner_retains_read_only_effect_boundary() -> None:
     combined = application_source + runtime_source
 
     assert "memcommit.commands" not in combined
-    assert "memcommit.interfaces" not in combined
+    assert "memcommit.adapters.interfaces" not in combined
     assert "provider.complete" not in combined
     assert "store.save(" not in runtime_source
     assert "set_current(" not in runtime_source

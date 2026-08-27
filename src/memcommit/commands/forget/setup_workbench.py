@@ -1,6 +1,6 @@
 """Compatibility imports for the interface-owned Forget setup screen."""
 
-from memcommit.interfaces.tui.operations.forget.setup import (
+from memcommit.adapters.interfaces.tui.operations.forget.setup import (
     ForgetSetupReceipt,
     choose_forget_setup,
 )

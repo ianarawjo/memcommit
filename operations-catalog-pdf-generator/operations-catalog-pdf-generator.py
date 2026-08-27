@@ -27,7 +27,7 @@ from reportlab.platypus import Flowable, Paragraph, Table, TableStyle  # noqa: E
 
 from memcommit.help_application import list_operation_help  # noqa: E402
 from memcommit.cli import app as CLI_APP  # noqa: E402
-from memcommit.interfaces.tui.operations.help.inventory import (  # noqa: E402
+from memcommit.adapters.interfaces.tui.operations.help.inventory import (  # noqa: E402
     COMMAND_ANNOTATIONS,
     COMMAND_DISPLAY_ALIASES,
     COMMAND_FORMS,

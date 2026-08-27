@@ -86,7 +86,7 @@ def _patch_meld_command(store, provider_factory) -> None:
     import memcommit.commands.shared.command_wait as command_wait
     import memcommit.commands.meld.command as meld_command
     import memcommit.commands.shared.session_help as session_help
-    import memcommit.interfaces.tui.components.session_help as tui_session_help
+    import memcommit.adapters.interfaces.tui.components.session_help as tui_session_help
 
     meld_command.MemoryStore = lambda *args, **kwargs: store
     meld_command.connect_codex_chatgpt_provider = provider_factory

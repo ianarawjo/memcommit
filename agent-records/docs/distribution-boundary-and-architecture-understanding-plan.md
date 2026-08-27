@@ -311,7 +311,7 @@ for the eventual composition root.
 
 Only the component family needed for the Summarize slice moved initially. The
 later Add trace justified moving the existing multiline-input and in-frame
-input/edit contracts into `memcommit.interfaces.tui.components`; every existing
+input/edit contracts into `memcommit.adapters.interfaces.tui.components`; every existing
 consumer of those moved contracts now imports that owner directly. Exact-name,
 fixed-choice, and other semantic controls retain their current owners until an
 operation trace demonstrates the same invariant. Each next slice should reuse

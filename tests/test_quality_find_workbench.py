@@ -30,7 +30,7 @@ from memcommit.quality_find_workbench import (
     quality_find_resolution_view,
 )
 from memcommit.read_report import ReadReportRecent, ReadReportTarget
-from memcommit.interfaces.console.responses.resolution import response_target_from_item
+from memcommit.adapters.interfaces.console.responses.resolution import response_target_from_item
 from memcommit.store import MemoryStore
 
 

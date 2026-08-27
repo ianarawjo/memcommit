@@ -13,7 +13,7 @@ import pytest
 ROOT = Path(__file__).parents[1]
 PACKAGE = ROOT / "src" / "memcommit"
 LEGACY_MODULE = "memcommit.commands.shared.findings_render"
-OWNER_MODULE = "memcommit.interfaces.cli.quality_findings"
+OWNER_MODULE = "memcommit.adapters.interfaces.cli.quality_findings"
 
 
 @pytest.mark.parametrize(
@@ -49,5 +49,5 @@ def test_quality_finding_commands_import_the_interface_owner() -> None:
         "find_exact_duplicates/command.py",
     ):
         source = (PACKAGE / "commands" / filename).read_text(encoding="utf-8")
-        assert "from memcommit.interfaces.cli.quality_findings import (" in source
+        assert "from memcommit.adapters.interfaces.cli.quality_findings import (" in source
         assert "from memcommit.commands.shared.findings_render import (" not in source

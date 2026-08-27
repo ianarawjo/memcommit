@@ -8,7 +8,7 @@ import importlib
 def test_legacy_impact_controller_path_is_the_canonical_interface_module() -> None:
     legacy = importlib.import_module("memcommit.impact_controller")
     canonical = importlib.import_module(
-        "memcommit.interfaces.tui.workbenches.impact"
+        "memcommit.adapters.interfaces.tui.workbenches.impact"
     )
 
     assert legacy is canonical

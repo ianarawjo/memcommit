@@ -152,7 +152,7 @@ def _patch_command_stores(store) -> None:
     import memcommit.commands.meld.command as meld_command
     import memcommit.commands.review.command as review_command
     import memcommit.commands.shared.session_help as session_help
-    import memcommit.interfaces.tui.components.session_help as tui_session_help
+    import memcommit.adapters.interfaces.tui.components.session_help as tui_session_help
 
     atomize_command.MemoryStore = lambda *args, **kwargs: store
     meld_command.MemoryStore = lambda *args, **kwargs: store

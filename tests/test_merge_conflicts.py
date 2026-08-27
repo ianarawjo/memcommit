@@ -21,7 +21,7 @@ from memcommit.merge_application import (
     prepare_merge,
     resolve_merge_conflicts,
 )
-from memcommit.interfaces.tui.operations.merge import merge_resolution_spec
+from memcommit.adapters.interfaces.tui.operations.merge import merge_resolution_spec
 from memcommit.merge_runtime import MemoryStoreMergePort, execute_merge
 from memcommit.store import MemoryStore, context_record_digest
 

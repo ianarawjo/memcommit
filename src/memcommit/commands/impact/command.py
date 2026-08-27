@@ -28,7 +28,7 @@ from memcommit.application.operations.atomize.workbench import (
     atomize_workbench_declared_frames,
     atomize_workbench_response_digest,
 )
-from memcommit.interfaces.tui.operations.atomize.screen import (
+from memcommit.adapters.interfaces.tui.operations.atomize.screen import (
     render_atomize_workbench_snapshot,
     run_atomize_workbench_shell,
 )
@@ -53,14 +53,14 @@ from memcommit.commands.impact.process_local import (
     forget_cmd as forget_impact_cmd,
     resolve_cmd as resolve_impact_cmd,
 )
-from memcommit.interfaces.cli.impact_registry import IMPACT_ROUTES
-from memcommit.interfaces.tui.workbenches.review import ReviewCancelled
-from memcommit.interfaces.tui.components.operation_launcher.session import (
+from memcommit.adapters.interfaces.cli.impact_registry import IMPACT_ROUTES
+from memcommit.adapters.interfaces.tui.workbenches.review import ReviewCancelled
+from memcommit.adapters.interfaces.tui.components.operation_launcher.session import (
     SessionOpenReceipt,
     SessionPickerEntry,
     choose_session,
 )
-from memcommit.interfaces.console.text import (
+from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
 )
 from memcommit.commands.update.render import (

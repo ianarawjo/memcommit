@@ -8,7 +8,7 @@ from pathlib import Path
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-from memcommit.interfaces.tui.operations.replace import ReplaceTuiSetup, run_replace_tui
+from memcommit.adapters.interfaces.tui.operations.replace import ReplaceTuiSetup, run_replace_tui
 from memcommit.replace_application import (
     FrozenReplaceContext,
     FrozenReplacePlan,
@@ -161,7 +161,7 @@ def test_replace_tui_projects_descendants_as_exact_checked_execution_set() -> No
 def test_replace_tui_uses_primary_screen_and_erases_when_done() -> None:
     path = (
         Path(__file__).parents[1]
-        / "src/memcommit/interfaces/tui/operations/replace/screen.py"
+        / "src/memcommit/adapters/interfaces/tui/operations/replace/screen.py"
     )
     module = ast.parse(path.read_text(encoding="utf-8"))
     application_calls = [

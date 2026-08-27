@@ -181,7 +181,7 @@ def test_search_analysis_and_materialization_remain_separate_use_cases() -> None
     assert "materialization" not in application_source.lower()
     assert "memcommit.application.operations.search.application" in materialization_source
     assert "memcommit.commands" not in package_source
-    assert "memcommit.interfaces" not in package_source
+    assert "memcommit.adapters.interfaces" not in package_source
 
 
 def test_selected_public_search_loads_analysis_without_materialization(

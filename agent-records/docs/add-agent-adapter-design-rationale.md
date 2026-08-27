@@ -59,7 +59,7 @@ reclassifying an exception.
 ## Shared agent mechanics and skill boundary
 
 Query and Add share only generic JSON-object validation and bounded error
-envelope construction in `memcommit.interfaces.agent.contract`. Their routes,
+envelope construction in `memcommit.adapters.interfaces.agent.contract`. Their routes,
 schemas, result serialization, error categories, and retry rules remain
 operation-owned. In particular, Query may retry one provider failure while Add
 never advertises an automatic retry.

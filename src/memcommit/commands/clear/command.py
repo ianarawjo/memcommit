@@ -3,7 +3,7 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.commands.shared.context_operand import ContextOperandSnapshot
-from memcommit.interfaces.console.text import display_escape_text
+from memcommit.adapters.interfaces.console.text import display_escape_text
 from memcommit.application.operations.clear.application import ClearRequest
 from memcommit.application.operations.clear.runtime import execute_clear
 from memcommit.application.operations.profile.config import ProfileConfigError

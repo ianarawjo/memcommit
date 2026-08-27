@@ -36,7 +36,7 @@ from memcommit.ground_workspace_history import (
     undo_ground_workspace_command,
 )
 from memcommit.ground_workspace_application import AddGroundWorkspaceMemoryRequest
-from memcommit.interfaces.tui.operations.ground_workspace import (
+from memcommit.adapters.interfaces.tui.operations.ground_workspace import (
     GroundWorkspaceLocationSetup,
     GroundWorkspaceTuiResult,
     run_ground_workspace_location_tui,
@@ -126,7 +126,7 @@ def test_application_module_has_no_store_command_typer_or_tui_imports():
         if name == "typer"
         or name.startswith("prompt_toolkit")
         or name.startswith("memcommit.commands")
-        or name.startswith("memcommit.interfaces")
+        or name.startswith("memcommit.adapters.interfaces")
         or name == "memcommit.store"
     ) == ()
 

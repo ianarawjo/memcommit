@@ -121,7 +121,7 @@ rather than consuming the Revert one Context at a time.
 ## Terminal location-picker ownership
 
 The Context-first checkpoint location picker is owned by
-`memcommit.interfaces.tui.components.checkpoint_location`. Diff and Update
+`memcommit.adapters.interfaces.tui.components.checkpoint_location`. Diff and Update
 checkpoint consumers import that interface path directly, while
 `memcommit.commands.shared.history_location_picker` remains a compatibility alias to
 the same module object. The alias preserves legacy imports and monkeypatches

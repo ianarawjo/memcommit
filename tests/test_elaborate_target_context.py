@@ -29,8 +29,8 @@ from memcommit.ground_workspace_runtime import (
     execute_ground_workspace_creation,
     execute_ground_workspace_memory_add,
 )
-from memcommit.interfaces.cli.elaborate import elaborate_result_text
-from memcommit.interfaces.tui.operations.elaborate import project_elaborate_result
+from memcommit.adapters.interfaces.cli.elaborate import elaborate_result_text
+from memcommit.adapters.interfaces.tui.operations.elaborate import project_elaborate_result
 from memcommit.fit_judgment import FIT_JUDGMENT_OPERATION
 from memcommit.profile_config import (
     AUTHORING_PROFILE_NAME,

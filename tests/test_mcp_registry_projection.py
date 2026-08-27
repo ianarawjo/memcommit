@@ -9,7 +9,7 @@ from pathlib import Path
 import pytest
 
 from memcommit.adapters.python_api import MemCommitClient
-from memcommit.interfaces.agent import (
+from memcommit.adapters.interfaces.agent import (
     ADD_AGENT_TOOL_NAME,
     APPLY_CONTEXT_DELETE_AGENT_TOOL_NAME,
     ATOMIZE_AGENT_TOOL_NAME,
@@ -39,7 +39,7 @@ from memcommit.interfaces.agent import (
     AgentToolRegistry,
     build_default_agent_tool_registry,
 )
-from memcommit.interfaces.mcp import (
+from memcommit.adapters.interfaces.mcp import (
     McpRegistryProjection,
     McpToolDefinition,
     McpToolProjectionError,
@@ -307,7 +307,7 @@ def test_manual_tool_definition_rejects_nested_nontext_schema_keys():
 
 def test_projection_has_no_sdk_terminal_or_runtime_dependency():
     path = (
-        Path(__file__).parents[1] / "src" / "memcommit" / "interfaces" / "mcp" / "projection.py"
+        Path(__file__).parents[1] / "src" / "memcommit" / "adapters" / "interfaces" / "mcp" / "projection.py"
     )
     tree = ast.parse(path.read_text(encoding="utf-8"))
     imported: list[str] = []

@@ -25,7 +25,7 @@ from memcommit.infrastructure.providers.find_query import (
     connect_ordinary_query_provider as connect_codex_chatgpt_provider,
     connect_query_route_provider as connect_query_provider,
 )
-from memcommit.interfaces.tui.operations.query import (
+from memcommit.adapters.interfaces.tui.operations.query import (
     run_query_workbench,
 )
 from memcommit.commands.shared.session_help import bind_session_help
@@ -33,11 +33,11 @@ from memcommit.commands.shared.readable_context_catalog import (
     freeze_readable_context_catalog,
     freeze_profile_readable_context_catalog,
 )
-from memcommit.interfaces.console.text import (
+from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
 )
-from memcommit.interfaces.console.terminal import is_interactive_terminal
-from memcommit.interfaces.cli.query import (
+from memcommit.adapters.interfaces.console.terminal import is_interactive_terminal
+from memcommit.adapters.interfaces.cli.query import (
     render_granted_query_response,
     render_ordinary_query_response,
     render_query_reference_response,

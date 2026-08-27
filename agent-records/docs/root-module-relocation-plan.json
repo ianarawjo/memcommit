@@ -388,8 +388,8 @@
     },
     {
       "action": "relocate",
-      "canonical_target": "memcommit.interfaces.presentation.comparison",
-      "canonical_target_path": "memcommit/interfaces/presentation/comparison.py",
+      "canonical_target": "memcommit.adapters.interfaces.presentation.comparison",
+      "canonical_target_path": "memcommit/adapters/interfaces/presentation/comparison.py",
       "inbound_package_importers": 5,
       "lines": 424,
       "module": "memcommit.comparison_present",
@@ -454,8 +454,8 @@
     },
     {
       "action": "relocate",
-      "canonical_target": "memcommit.interfaces.cli.comparison_summary",
-      "canonical_target_path": "memcommit/interfaces/cli/comparison_summary.py",
+      "canonical_target": "memcommit.adapters.interfaces.cli.comparison_summary",
+      "canonical_target_path": "memcommit/adapters/interfaces/cli/comparison_summary.py",
       "inbound_package_importers": 1,
       "lines": 26,
       "module": "memcommit.comparison_summary_present",
@@ -520,8 +520,8 @@
     },
     {
       "action": "relocate",
-      "canonical_target": "memcommit.interfaces.cli.invocation",
-      "canonical_target_path": "memcommit/interfaces/cli/invocation.py",
+      "canonical_target": "memcommit.adapters.interfaces.cli.invocation",
+      "canonical_target_path": "memcommit/adapters/interfaces/cli/invocation.py",
       "inbound_package_importers": 0,
       "lines": 88,
       "module": "memcommit.console_invocation",
@@ -1521,8 +1521,8 @@
     },
     {
       "action": "centralize-alias",
-      "canonical_target": "memcommit.interfaces.tui.workbenches.impact",
-      "canonical_target_path": "memcommit/interfaces/tui/workbenches/impact.py",
+      "canonical_target": "memcommit.adapters.interfaces.tui.workbenches.impact",
+      "canonical_target_path": "memcommit/adapters/interfaces/tui/workbenches/impact.py",
       "inbound_package_importers": 0,
       "lines": 11,
       "module": "memcommit.impact_controller",

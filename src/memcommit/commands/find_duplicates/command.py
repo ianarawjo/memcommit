@@ -12,7 +12,7 @@ from memcommit.commands.shared.context_operand import (
     choose_context_operand,
 )
 from memcommit.application.authority.access import resolve_context_access
-from memcommit.interfaces.cli.quality_findings import (
+from memcommit.adapters.interfaces.cli.quality_findings import (
     render_cleanup_member,
     render_heading,
 )
@@ -20,10 +20,10 @@ from memcommit.commands.shared.command_progress import CommandProgress
 from memcommit.commands.shared.quality_find_workbench import (
     annotate_quality_find_attempt,
 )
-from memcommit.interfaces.console.text import (
+from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
 )
-from memcommit.interfaces.console.identity import collision_safe_uid_prefixes
+from memcommit.adapters.interfaces.console.identity import collision_safe_uid_prefixes
 from memcommit.context import Memory
 from memcommit.context_targeting.presets import (
     ContextScopePreset,

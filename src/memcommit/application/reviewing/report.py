@@ -6,7 +6,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, replace
 from typing import Literal
 
-from memcommit.interfaces.console.theme import SemanticColorRole
+from memcommit.adapters.interfaces.console.theme import SemanticColorRole
 from memcommit.application.resolution.workbench import ResolutionWorkbenchView
 
 
