@@ -1,20 +1,13 @@
-"""Interactive, fail-closed shell for starting one Ground from a blank page.
-
-The dialogue provider may explain or propose, but it cannot supply a shell
-command.  This module freezes the Ground name and Goal, renders their argv
-locally, and calls the supplied ``apply`` adapter only after one explicit
-approval.
-"""
+"""Interactive prompt-toolkit runtime for starting one blank Ground."""
 
 from __future__ import annotations
 
 import asyncio
 import threading
-import unicodedata
-from collections.abc import Callable, Mapping, Sequence
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass, replace
 from functools import partial
-from typing import Literal, Protocol
+from typing import Literal
 
 from prompt_toolkit.application import Application, run_in_terminal
 from prompt_toolkit.filters import Condition, has_focus
@@ -35,14 +28,17 @@ from memcommit.adapters.console.commands.shared.command_progress import (
     BUSY_FRAMES,
     BUSY_INTERVAL_SECONDS,
 )
-from memcommit.adapters.console.commands.shared.exact_command_review import (
-    ExactCommandReview,
-    format_exact_command,
-    render_exact_command_blocks,
-    render_exact_command_review,
-)
 from memcommit.adapters.console.commands.shared.session_help import bind_session_help
-from memcommit.core.context_targeting.tui.picker import choose_context
+from memcommit.adapters.console.terminal import require_interactive_terminal
+from memcommit.adapters.console.text import safe_terminal_text
+from memcommit.adapters.interfaces.tui.components.exact_command_review import (
+    bind_exact_command_approval,
+)
+from memcommit.adapters.interfaces.tui.components.frame import (
+    TuiRegion,
+    bind_focused_frame_style,
+    build_tui_frame,
+)
 from memcommit.adapters.interfaces.tui.components.in_frame_input import (
     InFrameInputManager,
     InFrameInputSection,
@@ -53,47 +49,59 @@ from memcommit.adapters.interfaces.tui.components.in_frame_input import (
 from memcommit.adapters.interfaces.tui.components.multiline_input import (
     build_framed_multiline_input,
 )
-from memcommit.adapters.interfaces.tui.components.exact_command_review import (
-    bind_exact_command_approval,
-)
-from memcommit.adapters.console.commands.shared.tui_primitives import anchored_fragments
-from memcommit.adapters.interfaces.tui.core.theme import (
-    MEMCOMMIT_TUI_STYLE,
-)
-from memcommit.adapters.interfaces.tui.components.frame import (
-    TuiRegion,
-    bind_focused_frame_style,
-    build_tui_frame,
-)
-from memcommit.adapters.interfaces.tui.core.keybindings import (
-    bind_case_insensitive_key,
-    dispatch_tui_back,
-)
 from memcommit.adapters.interfaces.tui.components.scrollable_pane import (
     build_scrollable_text_pane,
     equal_pane_height,
     scroll_wrapped_page,
 )
-from memcommit.adapters.console.terminal import (
-    require_interactive_terminal,
-)
-from memcommit.adapters.console.text import (
-    safe_terminal_text,
-)
 from memcommit.adapters.interfaces.tui.components.table import (
     RenderedTuiTable,
     SelectedTableCellProcessor,
-    TuiTableColumn,
-    TuiTableRow,
     clamp_table_position,
-    render_tui_table,
 )
+from memcommit.adapters.interfaces.tui.core.keybindings import (
+    bind_case_insensitive_key,
+    dispatch_tui_back,
+)
+from memcommit.adapters.interfaces.tui.core.theme import MEMCOMMIT_TUI_STYLE
 from memcommit.application.operations.ground.model import (
     GroundError,
-    validate_ground_contract_name,
     validate_ground_goal,
 )
 from memcommit.core.context_targeting.naming import validate_portable_context_name
+from memcommit.core.context_targeting.tui.picker import choose_context
+
+from memcommit.adapters.console.commands.ground.shell.presentation import (
+    _BLANK_MEMORY_TABLE_COLUMNS,
+    _agent_block,
+    _render_ground_memory_table,
+    _render_proposal_command_block,
+    _render_proposal_effects_block,
+    render_ground_contexts_pane,
+    render_ground_goal_pane,
+    render_ground_location_pane,
+    render_ground_memories_pane,
+    render_ground_rules_pane,
+    render_ground_workspace_pane,
+)
+from memcommit.adapters.console.commands.ground.shell.proposal import (
+    GroundApplier,
+    GroundInterpreter,
+    GroundShellContextSuggestion,
+    GroundShellMemoryDraft,
+    GroundShellNewContextSuggestion,
+    GroundShellProposal,
+    GroundShellResult,
+    GroundShellRuleDraft,
+    _field,
+    _freeze_context_suggestions,
+    _freeze_memory_drafts,
+    _freeze_new_context_suggestions,
+    _freeze_proposal,
+    _freeze_rule_drafts,
+    _required_text,
+    _response_kind,
+)
 
 
 INITIAL_QUESTION = (
@@ -124,24 +132,6 @@ _GroundPaneActivityPhase = Literal[
     "NEEDS_CLARIFICATION",
     "FAILED",
 ]
-_CONTEXT_SUGGESTION_ROLES = {
-    "MAIN",
-    "ALTERNATIVE",
-}
-_CONTEXT_ROLE_LABELS = {
-    "MAIN": "MAIN?",
-    "ALTERNATIVE": "ALTERNATIVE",
-}
-_BLANK_MEMORY_TABLE_COLUMNS = (
-    TuiTableColumn("id", "ID", 6),
-    TuiTableColumn("from", "FROM", 12),
-    TuiTableColumn("check", "CHECK", 16),
-    TuiTableColumn("input", "INPUT", 24),
-    TuiTableColumn("expected", "EXPECTED", 24),
-    TuiTableColumn("role", "ROLE", 12),
-    TuiTableColumn("decision", "DECISION", 14),
-    TuiTableColumn("rule", "RULE", 8),
-)
 
 
 @dataclass
@@ -151,75 +141,6 @@ class _GroundPaneActivity:
     phase: _GroundPaneActivityPhase = "IDLE"
     request: str = ""
     detail: str = ""
-
-
-class GroundInterpreter(Protocol):
-    """A semantic adapter that returns an ASK or PROPOSE object."""
-
-    def __call__(self, text: str) -> object: ...
-
-
-@dataclass(frozen=True)
-class GroundShellContextSuggestion:
-    """One display-only Context hypothesis returned by the interpreter."""
-
-    context_name: str
-    role: str
-    reason: str
-
-
-@dataclass(frozen=True)
-class GroundShellNewContextSuggestion:
-    """One display-only fresh Context name; never an implicit init."""
-
-    context_name: str
-    reason: str
-
-
-@dataclass(frozen=True)
-class GroundShellRuleDraft:
-    """One unsaved, process-local Rule preview."""
-
-    content: str
-    rationale: str
-    origin: str
-    source_spans: tuple[str, ...]
-
-
-@dataclass(frozen=True)
-class GroundShellMemoryDraft:
-    """One unsaved input-to-output Case preview."""
-
-    content: str
-    expected: str
-    rationale: str
-    case_role: str
-    disposition: str
-    rule_draft_index: int
-    origin: str
-    source_spans: tuple[str, ...]
-
-
-@dataclass(frozen=True)
-class GroundShellProposal:
-    """The immutable Ground creation fields displayed for approval."""
-
-    ground_name: str
-    goal: str
-    understanding: str
-    question: str
-    context_suggestions: tuple[GroundShellContextSuggestion, ...] = ()
-    new_context_suggestions: tuple[
-        GroundShellNewContextSuggestion, ...
-    ] = ()
-    rule_drafts: tuple[GroundShellRuleDraft, ...] = ()
-    memory_drafts: tuple[GroundShellMemoryDraft, ...] = ()
-
-
-class GroundApplier(Protocol):
-    """An execution adapter for one already-approved structured proposal."""
-
-    def __call__(self, proposal: GroundShellProposal) -> object: ...
 
 
 @dataclass(frozen=True)
@@ -273,892 +194,6 @@ async def _interpret_from_daemon_thread(
         daemon=True,
     ).start()
     return await completed
-
-
-@dataclass(frozen=True)
-class GroundShellResult:
-    """Terminal outcome of one blank-Ground shell."""
-
-    status: Literal["APPLIED", "CANCELLED", "BACK_TO_PICKER"]
-    proposal: GroundShellProposal | None = None
-    actual_output: str | None = None
-    submitted_turns: tuple[str, ...] = ()
-    selected_context_names: tuple[str, ...] = ()
-    new_context_name_hint: str | None = None
-
-
-def proposal_argv(proposal: GroundShellProposal) -> tuple[str, ...]:
-    """Build the only command shape this initial shell can approve."""
-    return (
-        "mem",
-        "ground",
-        proposal.ground_name,
-        "--goal",
-        proposal.goal,
-    )
-
-
-def format_proposal_command(proposal: GroundShellProposal) -> str:
-    """Render exact POSIX argv for review; never execute it as a shell line."""
-    return format_exact_command(_proposal_review(proposal))
-
-
-def render_ground_top_panel(
-    proposal: GroundShellProposal | None = None,
-    *,
-    working_goal: str = "",
-    current_context_name: str | None = None,
-    context_catalog_count: int = 0,
-    context_discovery_complete: bool = False,
-    context_discovery_in_progress: bool = False,
-    thinking_suffix: str = "…",
-) -> str:
-    """Render the compact unsaved Goal–Contexts–Rules–Memories state."""
-    goal = (
-        proposal.goal
-        if proposal is not None
-        else working_goal or "(not yet stated)"
-    )
-    context_lines = render_ground_contexts_pane(
-        proposal.context_suggestions if proposal is not None else (),
-        new_context_suggestions=(
-            proposal.new_context_suggestions
-            if proposal is not None
-            else ()
-        ),
-        current_context_name=current_context_name,
-        catalog_count=context_catalog_count,
-        discovery_complete=(
-            context_discovery_complete or proposal is not None
-        ),
-        discovery_in_progress=context_discovery_in_progress,
-        thinking_suffix=thinking_suffix,
-    ).splitlines()
-    return "\n".join(
-        [
-            "MEM GROUND · DRAFT",
-            "GOAL",
-            f"  {safe_terminal_text(goal)}",
-            "CONTEXTS",
-            *(f"  {line}" for line in context_lines),
-            "RULES",
-            *(
-                f"  {line}"
-                for line in render_ground_rules_pane(
-                    proposal.rule_drafts if proposal is not None else ()
-                ).splitlines()
-            ),
-            "MEMORIES",
-            *(
-                f"  {line}"
-                for line in render_ground_memories_pane(
-                    proposal.memory_drafts if proposal is not None else ()
-                ).splitlines()
-            ),
-        ]
-    )
-
-
-def render_ground_goal_pane(
-    proposal: GroundShellProposal | None = None,
-    *,
-    working_goal: str = "",
-) -> str:
-    """Render the complete blank-Ground Goal state for its own viewport."""
-    if proposal is None:
-        return safe_terminal_text(working_goal or "(not yet stated)")
-
-    lines = [
-        "PROPOSED",
-        safe_terminal_text(proposal.goal),
-    ]
-    if working_goal and working_goal != proposal.goal:
-        lines.extend(
-            [
-                "",
-                "STARTING REQUEST",
-                safe_terminal_text(working_goal),
-            ]
-        )
-    return "\n".join(lines)
-
-
-def render_ground_contexts_pane(
-    suggestions: Sequence[GroundShellContextSuggestion] = (),
-    *,
-    new_context_suggestions: Sequence[
-        GroundShellNewContextSuggestion
-    ] = (),
-    current_context_name: str | None = None,
-    catalog_count: int = 0,
-    discovery_complete: bool = False,
-    discovery_in_progress: bool = False,
-    thinking_suffix: str = "…",
-    candidate_cursor_name: str | None = None,
-    candidate_cursor_kind: str | None = None,
-    selected_context_names: Sequence[str] = (),
-    local_new_context_name: str = "",
-    selection_finished: bool = False,
-    direct_context_names: Sequence[str] = (),
-) -> str:
-    """Render name-only Context choices without implying a binding."""
-
-    def one_line(value: str) -> str:
-        return safe_terminal_text(value).replace("\r", " ").replace("\n", " ")
-
-    current_name = (
-        one_line(current_context_name)
-        if current_context_name
-        else "(none)"
-    )
-    main = next(
-        (item for item in suggestions if item.role == "MAIN"),
-        None,
-    )
-    alternatives = tuple(
-        item for item in suggestions if item.role == "ALTERNATIVE"
-    )
-    current_match = next(
-        (
-            item
-            for item in suggestions
-            if item.context_name == current_context_name
-        ),
-        None,
-    )
-
-    suggestion_by_name = {
-        item.context_name: item
-        for item in suggestions
-    }
-    selectable_names = set(suggestion_by_name) | set(direct_context_names)
-    selected_names = tuple(
-        name
-        for name in dict.fromkeys(selected_context_names)
-        if name in selectable_names
-    )
-    selected_set = set(selected_names)
-
-    def candidate_prefix(item: GroundShellContextSuggestion) -> str:
-        if (
-            candidate_cursor_name is None
-            or selection_finished
-            or candidate_cursor_kind not in {None, "EXISTING"}
-        ):
-            return ""
-        return "› " if item.context_name == candidate_cursor_name else "  "
-
-    def planning_prefix(kind: str, context_name: str = "") -> str:
-        if selection_finished or candidate_cursor_kind != kind:
-            return ""
-        if kind == "NEW_SUGGESTION":
-            return "› " if candidate_cursor_name == context_name else "  "
-        return "› "
-
-    def candidate_label(item: GroundShellContextSuggestion) -> str:
-        if item.context_name in selected_set:
-            return (
-                "MAIN"
-                if selected_names and item.context_name == selected_names[0]
-                else "ADDITIONAL"
-            )
-        return _CONTEXT_ROLE_LABELS[item.role]
-
-    def selection_marker(item: GroundShellContextSuggestion) -> str:
-        return (
-            " · SELECTED"
-            if item.context_name in selected_set
-            else ""
-        )
-
-    def candidate_line(
-        item: GroundShellContextSuggestion,
-        *,
-        current: bool = False,
-    ) -> str:
-        checkbox = (
-            ""
-            if selection_finished
-            else "[x] "
-            if item.context_name in selected_set
-            else "[ ] "
-        )
-        current_marker = "CURRENT · " if current else ""
-        return (
-            f"{candidate_prefix(item)}{checkbox}{current_marker}"
-            f"{candidate_label(item)} · "
-            f"{one_line(item.context_name)}{selection_marker(item)} — "
-            f"{one_line(item.reason)}"
-        )
-
-    if selection_finished:
-        lines = (
-            [f"SELECTED CONTEXTS · {len(selected_names)}"]
-            if selected_names
-            else [
-                "CONTEXT PLAN · "
-                + ("NEW ONLY" if local_new_context_name else "NONE")
-            ]
-        )
-        for name in selected_names:
-            item = suggestion_by_name.get(name)
-            if item is not None:
-                lines.append(
-                    candidate_line(
-                        item,
-                        current=name == current_context_name,
-                    )
-                )
-            else:
-                lines.append(
-                    f"DIRECT · {one_line(name)} · SELECTED"
-                )
-        if local_new_context_name:
-            lines.append(
-                "NEW CONTEXT · "
-                f"{one_line(local_new_context_name)} · "
-                "PLANNED · NOT CREATED"
-            )
-        lines.append(
-            "These Contexts will be reviewed with the Ground draft."
-        )
-        return "\n".join(lines)
-
-    lines = ["CONTEXT SUGGESTIONS"]
-    if current_context_name is None:
-        lines.append("CURRENT · (none)")
-    elif current_match is not None:
-        lines.append(candidate_line(current_match, current=True))
-    else:
-        lines.append(f"CURRENT · {current_name}")
-
-    if discovery_in_progress:
-        subject = (
-            f"ranking {catalog_count} Context locator names; CURRENT stays local"
-            if catalog_count
-            else "no ordinary Context locator names to rank; CURRENT stays local"
-        )
-        suffix = (
-            thinking_suffix
-            if thinking_suffix in _THINKING_SUFFIXES
-            else "…"
-        )
-        lines.append(f"THINKING{suffix} · {subject}")
-    elif main is not None:
-        if main.context_name != current_context_name:
-            lines.append(candidate_line(main))
-        for alternative in alternatives:
-            if alternative.context_name == current_context_name:
-                continue
-            lines.append(candidate_line(alternative))
-    elif discovery_complete:
-        lines.append("MAIN? · (none found from Context names)")
-    elif catalog_count:
-        lines.append(
-            f"READY · {catalog_count} ordinary Context locator names"
-        )
-    else:
-        lines.append("READY · no ordinary Context locator names found")
-
-    if not selection_finished:
-        for candidate in new_context_suggestions:
-            lines.append(
-                planning_prefix(
-                    "NEW_SUGGESTION",
-                    candidate.context_name,
-                )
-                + "NEW? · "
-                f"{one_line(candidate.context_name)} · NOT CREATED — "
-                f"{one_line(candidate.reason)}"
-            )
-        if local_new_context_name:
-            lines.append(
-                "NEW CONTEXT · "
-                f"{one_line(local_new_context_name)} · "
-                "PLANNED · NOT CREATED"
-            )
-        if direct_context_names:
-            lines.append(
-                planning_prefix("DIRECT_PICK")
-                + "DIRECT SELECT · P opens the ordinary Context tree"
-            )
-        if discovery_complete:
-            lines.append(
-                planning_prefix("ADD_NEW")
-                + "ADD NEW CONTEXT · N to enter an exact Context name"
-            )
-            if not suggestions:
-                lines.append(
-                    planning_prefix("CONTINUE_EMPTY")
-                    + "CONTINUE WITHOUT CONTEXT PLAN · Review Ground only"
-                )
-
-    lines.append("Suggestions use Context names only; Memory content was not opened.")
-    return "\n".join(lines)
-
-
-def render_ground_location_pane(
-    ground_name: str | None,
-    *,
-    source: Literal["UNSET", "SUGGESTED", "SELECTED", "RESUMED"] = "UNSET",
-) -> str:
-    """Render the session-owned Context Save Location above Goal."""
-
-    if ground_name is None:
-        return "NOT SET · Enter/L to choose with the Context tree"
-    name = validate_portable_context_name(ground_name)
-    label = {
-        "UNSET": "NOT SET",
-        "SUGGESTED": "SUGGESTED · REVIEW REQUIRED",
-        "SELECTED": "SELECTED",
-        "RESUMED": "RESUMED",
-    }[source]
-    return (
-        f"{safe_terminal_text(name)} · {label} · NOT CREATED\n"
-        "Enter/L to change; final exact approval saves this Ground here."
-    )
-
-
-def render_ground_workspace_pane(ground_name: str | None) -> str:
-    """Render one already chosen, still-uncreated physical workspace root."""
-
-    if ground_name is None:
-        return "\n".join(
-            (
-                "SAVE LOCATION · NOT SET",
-                "Choose Location above Goal before exact save approval.",
-                "No physical Context, manifest, or checkpoint exists.",
-            )
-        )
-    name = validate_portable_context_name(ground_name)
-    return "\n".join(
-        (
-            f"SAVE LOCATION · {safe_terminal_text(name)} · NOT CREATED",
-            "PHYSICAL CONTEXTS AFTER APPROVAL",
-            f"  {safe_terminal_text(name)}/goals",
-            f"  {safe_terminal_text(name)}/rules",
-            f"  {safe_terminal_text(name)}/examples",
-            f"  {safe_terminal_text(name)}/contexts",
-            f"  {safe_terminal_text(name)}/relations",
-            "Existing Contexts are not recommended or selected here.",
-        )
-    )
-
-
-def _preview_card_value(value: str) -> str:
-    normalized = value.replace("\r\n", "\n").replace("\r", "\n")
-    return (
-        safe_terminal_text(normalized)
-        .replace("\n", " ↵ ")
-        .replace("\t", " ⇥ ")
-    )
-
-
-def _rule_draft_origin_label(origin: str) -> str:
-    return (
-        "[Provided] [Source-matched]"
-        if origin == "USER_EXACT"
-        else "[Suggested] [Unverified]"
-    )
-
-
-def _memory_draft_origin_label(origin: str) -> str:
-    return (
-        "[Provided] [Source-matched]"
-        if origin == "USER_EXACT"
-        else "[Suggested] [Unverified]"
-    )
-
-
-def render_ground_rules_pane(
-    drafts: Sequence[GroundShellRuleDraft] = (),
-) -> str:
-    """Render process-local first-turn Rule hypotheses."""
-    if drafts:
-        return "\n".join(
-            (
-                f"r{index} {_rule_draft_origin_label(draft.origin)} "
-                f"{_preview_card_value(draft.content)}"
-            )
-            for index, draft in enumerate(drafts, start=1)
-        )
-    return "\n".join(
-        [
-            "(none yet)",
-            "",
-            "Rule drafts may appear as the Ground takes shape.",
-        ]
-    )
-
-
-def render_ground_memories_pane(
-    drafts: Sequence[GroundShellMemoryDraft] = (),
-    *,
-    view: Literal["LIST", "TABLE"] = "LIST",
-    selected_memory_index: int = 0,
-    selected_memory_column: int = 0,
-) -> str:
-    """Render process-local Memory previews in list or table form."""
-    if view == "TABLE":
-        return _render_ground_memory_table(
-            drafts,
-            selected_memory_index=selected_memory_index,
-            selected_memory_column=selected_memory_column,
-        ).text
-    if view != "LIST":
-        raise ValueError("Memory view must be LIST or TABLE.")
-    if drafts:
-        lines: list[str] = []
-        for index, draft in enumerate(drafts, start=1):
-            relation = (
-                f" · r{draft.rule_draft_index}"
-                if draft.rule_draft_index
-                else ""
-            )
-            lines.append(
-                f"c{index} {_memory_draft_origin_label(draft.origin)} "
-                f"{_preview_card_value(draft.content)} | "
-                + (
-                    _preview_card_value(draft.expected)
-                    if draft.expected
-                    else "(no output)"
-                )
-                + f" · {draft.case_role} / {draft.disposition}{relation}"
-            )
-        return "\n".join(lines)
-    return "\n".join(
-        [
-            "(none yet)",
-            "",
-            "Memory drafts may appear as the Ground takes shape.",
-        ]
-    )
-
-
-def _render_ground_memory_table(
-    drafts: Sequence[GroundShellMemoryDraft],
-    *,
-    selected_memory_index: int,
-    selected_memory_column: int,
-) -> RenderedTuiTable:
-    rows = tuple(
-        TuiTableRow(
-            row_id=f"c{index}",
-            cells=(
-                f"c{index}",
-                "Provided" if draft.origin == "USER_EXACT" else "Suggested",
-                (
-                    "Source-matched"
-                    if draft.origin == "USER_EXACT"
-                    else "Unverified"
-                ),
-                draft.content,
-                draft.expected or "(no output)",
-                draft.case_role,
-                draft.disposition,
-                (
-                    f"r{draft.rule_draft_index}"
-                    if draft.rule_draft_index
-                    else "—"
-                ),
-            ),
-        )
-        for index, draft in enumerate(drafts, start=1)
-    )
-    return render_tui_table(
-        columns=_BLANK_MEMORY_TABLE_COLUMNS,
-        rows=rows,
-        selected_row=selected_memory_index,
-        selected_column=selected_memory_column,
-        noun="MEMORIES",
-    )
-
-
-def render_ground_cases_pane(
-    drafts: Sequence[GroundShellMemoryDraft] = (),
-) -> str:
-    """Compatibility alias for the former user-facing Cases renderer."""
-    return render_ground_memories_pane(drafts)
-
-
-def render_proposal_review(proposal: GroundShellProposal) -> str:
-    """Render the exact proposal and its complete first-slice effect boundary."""
-    return render_exact_command_review(_proposal_review(proposal))
-
-
-def _proposal_review(
-    proposal: GroundShellProposal,
-    *,
-    has_local_new_context: bool = False,
-) -> ExactCommandReview:
-    if has_local_new_context:
-        new_context_effect = "New Context plan: reviewed with this Ground"
-    elif proposal.new_context_suggestions:
-        new_context_effect = (
-            "New Context suggestion: not selected"
-        )
-    else:
-        new_context_effect = "New Context plan: none"
-    return ExactCommandReview(
-        argv=proposal_argv(proposal),
-        effects=(
-            f"Ground: CREATE {proposal.ground_name}",
-            "Goal: SET",
-            "Rules and Ground Memories: none in this draft",
-            new_context_effect,
-            "Other Contexts will not be edited by this command",
-        ),
-    )
-
-
-def _render_proposal_command_block(
-    proposal: GroundShellProposal,
-) -> str:
-    return render_exact_command_blocks(_proposal_review(proposal))[0]
-
-
-def _render_proposal_effects_block(
-    proposal: GroundShellProposal,
-    *,
-    has_local_new_context: bool = False,
-) -> str:
-    return render_exact_command_blocks(
-        _proposal_review(
-            proposal,
-            has_local_new_context=has_local_new_context,
-        )
-    )[1]
-
-
-def _anchored_conversation_fragments(
-    blocks: Sequence[str],
-    *,
-    anchor_index: int | None,
-    anchor_at_end: bool = False,
-) -> list[tuple[str, str]]:
-    """Render dialogue blocks with the active content as the scroll anchor.
-
-    ``FormattedTextControl`` uses ``[SetCursorPosition]`` as its viewport
-    anchor. Approval anchors the end of the exact command so its wrapped text
-    remains visible when it fits, rather than anchoring the end of a
-    potentially long transcript and hiding the command before Enter applies.
-    """
-    return anchored_fragments(
-        blocks,
-        anchor_index=anchor_index,
-        anchor_at_end=anchor_at_end,
-    )
-
-
-def _field(value: object, name: str, default: object = None) -> object:
-    if isinstance(value, Mapping):
-        return value.get(name, default)
-    return getattr(value, name, default)
-
-
-def _required_text(value: object, label: str) -> str:
-    if not isinstance(value, str) or not value.strip():
-        raise ValueError(f"Chat response has no {label}.")
-    return value.strip()
-
-
-def _command_text(value: object, label: str) -> str:
-    text = _required_text(value, label)
-    if any(unicodedata.category(character) == "Cc" for character in text):
-        raise ValueError(
-            f"Chat response {label} contains a control character."
-        )
-    return text
-
-
-def _response_kind(value: object) -> str:
-    raw = _field(value, "kind")
-    raw = getattr(raw, "value", raw)
-    if not isinstance(raw, str):
-        raise ValueError("Chat response has no ASK or PROPOSE kind.")
-    kind = raw.upper()
-    if kind not in {"ASK", "PROPOSE"}:
-        raise ValueError("Chat response kind must be ASK or PROPOSE.")
-    return kind
-
-
-def _freeze_proposal(
-    response: object,
-    *,
-    expected_ground_name: str | None = None,
-) -> GroundShellProposal:
-    nested = _field(response, "proposal")
-    source = nested if nested is not None else response
-    understanding = _field(response, "understanding")
-    if understanding is None:
-        understanding = _field(source, "understanding")
-    question = _field(response, "question")
-    if question is None:
-        question = _field(source, "question")
-    proposed_ground_name = _command_text(
-        _field(source, "ground_name"),
-        "Ground name",
-    )
-    if expected_ground_name is None:
-        ground_name = validate_ground_contract_name(proposed_ground_name)
-    else:
-        ground_name = validate_portable_context_name(expected_ground_name)
-        if proposed_ground_name != ground_name:
-            raise ValueError(
-                "Chat response changed the exact Ground Save Location."
-            )
-    try:
-        goal = validate_ground_goal(
-            _command_text(_field(source, "goal"), "Goal"),
-            label="Ground goal",
-        )
-    except GroundError as error:
-        raise ValueError(str(error)) from error
-    rule_drafts = _freeze_rule_drafts(response)
-    return GroundShellProposal(
-        ground_name=ground_name,
-        goal=goal,
-        understanding=_required_text(understanding, "understanding"),
-        question=_required_text(question, "question"),
-        context_suggestions=_freeze_context_suggestions(response),
-        new_context_suggestions=(
-            _freeze_new_context_suggestions(response)
-        ),
-        rule_drafts=rule_drafts,
-        memory_drafts=_freeze_memory_drafts(
-            response,
-            rule_draft_count=len(rule_drafts),
-        ),
-    )
-
-
-def _freeze_context_suggestions(
-    response: object,
-) -> tuple[GroundShellContextSuggestion, ...]:
-    raw = _field(response, "context_suggestions", ())
-    if (
-        not isinstance(raw, Sequence)
-        or isinstance(raw, (str, bytes))
-        or len(raw) > 4
-    ):
-        raise ValueError("Chat response has invalid Context suggestions.")
-    result: list[GroundShellContextSuggestion] = []
-    seen: set[str] = set()
-    for candidate in raw:
-        context_name = _command_text(
-            _field(candidate, "context_name"),
-            "Context suggestion name",
-        )
-        role = _required_text(
-            _field(candidate, "role"),
-            "Context suggestion role",
-        )
-        reason = _required_text(
-            _field(candidate, "reason"),
-            "Context suggestion reason",
-        )
-        if role not in _CONTEXT_SUGGESTION_ROLES or context_name in seen:
-            raise ValueError(
-                "Chat response has invalid Context suggestions."
-            )
-        seen.add(context_name)
-        result.append(
-            GroundShellContextSuggestion(
-                context_name=context_name,
-                role=role,
-                reason=reason,
-            )
-        )
-    if result and sum(item.role == "MAIN" for item in result) != 1:
-        raise ValueError("Chat response has invalid Context suggestions.")
-    return tuple(result)
-
-
-def _freeze_new_context_suggestions(
-    response: object,
-) -> tuple[GroundShellNewContextSuggestion, ...]:
-    raw = _field(response, "new_context_suggestions", ())
-    if (
-        not isinstance(raw, Sequence)
-        or isinstance(raw, (str, bytes))
-        or len(raw) > 1
-    ):
-        raise ValueError(
-            "Chat response has invalid new Context suggestions."
-        )
-    result: list[GroundShellNewContextSuggestion] = []
-    for candidate in raw:
-        try:
-            context_name = validate_portable_context_name(
-                _command_text(
-                    _field(candidate, "context_name"),
-                    "new Context suggestion name",
-                )
-            )
-        except ValueError as error:
-            raise ValueError(
-                "Chat response has invalid new Context suggestions."
-            ) from error
-        result.append(
-            GroundShellNewContextSuggestion(
-                context_name=context_name,
-                reason=_required_text(
-                    _field(candidate, "reason"),
-                    "new Context suggestion reason",
-                ),
-            )
-        )
-    return tuple(result)
-
-
-def _freeze_source_spans(value: object, *, label: str) -> tuple[str, ...]:
-    if (
-        not isinstance(value, Sequence)
-        or isinstance(value, (str, bytes))
-        or len(value) > 4
-    ):
-        raise ValueError(f"Chat response has invalid {label} spans.")
-    spans = tuple(_required_text(span, f"{label} span") for span in value)
-    if len(set(spans)) != len(spans):
-        raise ValueError(f"Chat response has invalid {label} spans.")
-    return spans
-
-
-def _freeze_rule_drafts(
-    response: object,
-) -> tuple[GroundShellRuleDraft, ...]:
-    raw = _field(response, "rule_drafts", ())
-    if (
-        not isinstance(raw, Sequence)
-        or isinstance(raw, (str, bytes))
-        or len(raw) > 4
-    ):
-        raise ValueError("Chat response has invalid Rule drafts.")
-    result: list[GroundShellRuleDraft] = []
-    for candidate in raw:
-        origin = _required_text(
-            _field(candidate, "origin"),
-            "Rule draft origin",
-        )
-        if origin not in {"USER_EXACT", "AGENT_SUGGESTED"}:
-            raise ValueError("Chat response has invalid Rule drafts.")
-        spans = _freeze_source_spans(
-            _field(candidate, "source_spans", ()),
-            label="Rule draft source",
-        )
-        if (origin == "USER_EXACT") != bool(spans):
-            raise ValueError("Chat response has invalid Rule drafts.")
-        content = _required_text(
-            _field(candidate, "content"),
-            "Rule draft content",
-        )
-        if origin == "USER_EXACT" and not any(
-            content in span for span in spans
-        ):
-            raise ValueError("Chat response has invalid Rule drafts.")
-        rationale = _field(candidate, "rationale", "")
-        if not isinstance(rationale, str):
-            raise ValueError("Chat response has invalid Rule drafts.")
-        result.append(
-            GroundShellRuleDraft(
-                content=content,
-                rationale=rationale,
-                origin=origin,
-                source_spans=spans,
-            )
-        )
-    return tuple(result)
-
-
-def _freeze_memory_drafts(
-    response: object,
-    *,
-    rule_draft_count: int,
-) -> tuple[GroundShellMemoryDraft, ...]:
-    raw = _field(response, "memory_drafts", ())
-    if (
-        not isinstance(raw, Sequence)
-        or isinstance(raw, (str, bytes))
-        or len(raw) > 3
-    ):
-        raise ValueError("Chat response has invalid Memory drafts.")
-    result: list[GroundShellMemoryDraft] = []
-    for candidate in raw:
-        role = _required_text(
-            _field(candidate, "case_role"),
-            "Memory draft role",
-        )
-        disposition = _required_text(
-            _field(candidate, "disposition"),
-            "Memory draft disposition",
-        )
-        origin = _required_text(
-            _field(candidate, "origin"),
-            "Memory draft origin",
-        )
-        rule_index = _field(candidate, "rule_draft_index", 0)
-        if (
-            role not in {"FIT", "BOUNDARY", "CONTRAST"}
-            or disposition not in {"INCLUDE", "EXCLUDE", "UNRESOLVED"}
-            or origin not in {"USER_EXACT", "AGENT_SUGGESTED"}
-            or (
-                origin == "AGENT_SUGGESTED"
-                and disposition != "UNRESOLVED"
-            )
-            or isinstance(rule_index, bool)
-            or not isinstance(rule_index, int)
-            or not 0 <= rule_index <= rule_draft_count
-        ):
-            raise ValueError("Chat response has invalid Memory drafts.")
-        spans = _freeze_source_spans(
-            _field(candidate, "source_spans", ()),
-            label="Memory draft source",
-        )
-        if (origin == "USER_EXACT") != bool(spans):
-            raise ValueError("Chat response has invalid Memory drafts.")
-        expected = _field(candidate, "expected", "")
-        rationale = _field(candidate, "rationale", "")
-        if not isinstance(expected, str) or not isinstance(rationale, str):
-            raise ValueError("Chat response has invalid Memory drafts.")
-        if disposition == "INCLUDE" and not expected.strip():
-            raise ValueError("Chat response has invalid Memory drafts.")
-        content = _required_text(
-            _field(candidate, "content"),
-            "Memory draft content",
-        )
-        if origin == "USER_EXACT" and (
-            not any(content in span for span in spans)
-            or (
-                expected
-                and not any(expected in span for span in spans)
-            )
-        ):
-            raise ValueError("Chat response has invalid Memory drafts.")
-        result.append(
-            GroundShellMemoryDraft(
-                content=content,
-                expected=expected,
-                rationale=rationale,
-                case_role=role,
-                disposition=disposition,
-                rule_draft_index=rule_index,
-                origin=origin,
-                source_spans=spans,
-            )
-        )
-    return tuple(result)
-
-
-def _agent_block(*, understanding: str, question: str) -> str:
-    return "\n".join(
-        [
-            "AGENT UNDERSTANDING",
-            f"  {safe_terminal_text(understanding)}",
-            "",
-            "AGENT QUESTION",
-            f"  {safe_terminal_text(question)}",
-        ]
-    )
 
 
 def run_ground_shell(

@@ -12,7 +12,7 @@ from prompt_toolkit.layout import FormattedTextControl
 from prompt_toolkit.output import DummyOutput
 from prompt_toolkit.utils import get_cwidth
 
-import memcommit.adapters.console.commands.ground.shell as ground_shell_module
+import memcommit.adapters.console.commands.ground.shell.runtime as ground_shell_module
 from memcommit.adapters.console.commands.ground.shell import (
     GROUND_CONTEXTS_FRAME_HEIGHT,
     GROUND_GOAL_FRAME_HEIGHT,
