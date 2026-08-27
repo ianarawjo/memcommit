@@ -25,7 +25,7 @@ from memcommit.application.operations.compare.ledger.model import (
     ComparisonMemory,
     comparison_canonical_digest,
 )
-from memcommit.context import Context, Memory, QueryContextRef
+from memcommit.core.context import Context, Memory, QueryContextRef
 from memcommit.core.context_targeting.memory_focus import (
     MemoryFocusError,
     resolve_memory_focus,

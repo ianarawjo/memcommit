@@ -12,7 +12,7 @@ from memcommit.application.retained_history.applied_review import (
     list_applied_checkpoint_reviews,
     select_applied_checkpoint_review,
 )
-from memcommit.context import AutoCheckpoint
+from memcommit.core.context import AutoCheckpoint
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.review.report import run_review_report_shell
 from memcommit.adapters.interfaces.console.theme import (

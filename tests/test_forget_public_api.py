@@ -14,7 +14,7 @@ from memcommit.adapters.python_api import (
     ForgetReviewResult,
     MemCommitClient,
 )
-from memcommit.context import AutoCheckpoint, Context, Memory
+from memcommit.core.context import AutoCheckpoint, Context, Memory
 from memcommit.persistence.store import MemoryStore
 
 

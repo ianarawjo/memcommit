@@ -8,7 +8,7 @@ import re
 import uuid
 
 import memcommit.persistence.store as store_module
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.application.operations.translate.view import (
     TranslationCatalog,
     TranslationView,

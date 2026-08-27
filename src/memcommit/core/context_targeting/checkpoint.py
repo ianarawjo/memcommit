@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Mapping, Sequence
 from typing import Protocol
 
-from memcommit.context_locator import (
+from memcommit.application.context_locator import (
     resolve_context_locator,
     suggest_context_locators,
 )

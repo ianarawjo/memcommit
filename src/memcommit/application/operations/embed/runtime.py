@@ -14,8 +14,8 @@ from memcommit.application.authority.access import (
     granted_memory_source,
     resolve_context_access,
 )
-from memcommit.context import AutoCheckpoint, Context, Memory, MemoryRef
-from memcommit.context_locator import resolve_context_locator
+from memcommit.core.context import AutoCheckpoint, Context, Memory, MemoryRef
+from memcommit.application.context_locator import resolve_context_locator
 from memcommit.application.operations.embed.application import (
     EmbedPlacement,
     EmbedPort,

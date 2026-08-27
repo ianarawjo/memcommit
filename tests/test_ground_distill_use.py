@@ -6,7 +6,7 @@ import json
 
 import pytest
 
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.application.operations.distill.model import DISTILL_PAYLOAD_MARKER, DistillError
 from memcommit.application.operations.ground.model import (
     GroundTargetSpec,

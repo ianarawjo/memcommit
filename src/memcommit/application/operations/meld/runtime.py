@@ -29,7 +29,7 @@ from memcommit.application.operations.compare.ledger.provider import analyze_com
 from memcommit.application.operations.compare.ledger.store import (
     load_comparison_analysis,
 )
-from memcommit.context import AutoCheckpoint, Context, Memory
+from memcommit.core.context import AutoCheckpoint, Context, Memory
 from memcommit.core.context_targeting.naming import validate_portable_context_name
 from memcommit.core.context_targeting.loading import load_context_scope
 from memcommit.application.operations.compare.ledger.granted_store import (

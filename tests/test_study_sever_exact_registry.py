@@ -13,7 +13,7 @@ from memcommit.application.authority.access import resolve_context_access
 from memcommit.adapters.console.commands.sever.command import _capture_binding, _start
 from memcommit.adapters.console.entrypoint import app
 from memcommit.configuration.config import Config
-from memcommit.context import Memory
+from memcommit.core.context import Memory
 from memcommit.application.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,

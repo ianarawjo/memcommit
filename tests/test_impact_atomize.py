@@ -22,7 +22,7 @@ from memcommit.adapters.console.commands.atomize.sessions import (
     atomize_session_entries,
     revalidate_saved_atomize_analysis,
 )
-from memcommit.context import (
+from memcommit.core.context import (
     AutoCheckpoint,
     Context,
     Memory,

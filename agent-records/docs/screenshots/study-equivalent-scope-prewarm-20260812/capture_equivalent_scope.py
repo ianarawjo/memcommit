@@ -181,7 +181,7 @@ def _clear_copied_meld_sessions(store_root: Path) -> None:
 
 
 def _add_wrapper_memory(store_root: Path) -> None:
-    from memcommit.context import Memory
+    from memcommit.core.context import Memory
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root, create=False)

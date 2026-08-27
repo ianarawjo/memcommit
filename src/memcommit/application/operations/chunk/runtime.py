@@ -10,7 +10,7 @@ from memcommit.application.authority.access import (
     authorized_context_mutation,
     grant_checkpoint_args,
 )
-from memcommit.context import AutoCheckpoint, Context, Memory
+from memcommit.core.context import AutoCheckpoint, Context, Memory
 from memcommit.application.operations.chunk.domain import ChunkMethod
 
 

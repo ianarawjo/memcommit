@@ -29,7 +29,7 @@ from memcommit.adapters.interfaces.tui.operations.embed import (
     embed_exact_command_review,
     parse_embed_command_argv,
 )
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.core.context_targeting.tui.tree import ContextTreeRow
 from memcommit.source_projection.model import SourceForm, SourceReach
 from memcommit.persistence.store import MemoryStore

@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 import memcommit.application.ops as ops
-from memcommit.context import AutoCheckpoint
+from memcommit.core.context import AutoCheckpoint
 from memcommit.core.context_targeting.naming import validate_portable_context_name
 from memcommit.application.operations.context_init.application import (
     ContextInitError,

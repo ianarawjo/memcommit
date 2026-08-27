@@ -317,7 +317,7 @@ def test_delete_removes_context(isolated_store):
     store = MemoryStore()
     ctx = ops.init("to-delete")
     memory = ops.add(ctx, "private body must not enter the lifecycle ledger")
-    from memcommit.context import AutoCheckpoint
+    from memcommit.core.context import AutoCheckpoint
 
     store.save(
         ctx,
@@ -372,7 +372,7 @@ def test_delete_without_checkpoint_records_absent_checkpoint_metadata(
 def test_delete_with_unreadable_checkpoint_records_unknown_history(
     isolated_store,
 ):
-    from memcommit.context import AutoCheckpoint
+    from memcommit.core.context import AutoCheckpoint
 
     store = MemoryStore()
     context = ops.init("unreadable-history")
@@ -442,7 +442,7 @@ def test_delete_ledger_write_failure_restores_context_and_history(
     isolated_store,
     monkeypatch,
 ):
-    from memcommit.context import AutoCheckpoint
+    from memcommit.core.context import AutoCheckpoint
 
     store = MemoryStore()
     context = ops.init("ledger-write-failure")
@@ -474,7 +474,7 @@ def test_delete_refuses_symlinked_lifecycle_storage_and_restores_context(
     monkeypatch,
     symlink_target,
 ):
-    from memcommit.context import AutoCheckpoint
+    from memcommit.core.context import AutoCheckpoint
 
     store = MemoryStore()
     context = ops.init("unsafe-ledger")
@@ -513,7 +513,7 @@ def test_event_directory_fsync_failure_removes_event_and_restores_context(
     isolated_store,
     monkeypatch,
 ):
-    from memcommit.context import AutoCheckpoint
+    from memcommit.core.context import AutoCheckpoint
 
     store = MemoryStore()
     context = ops.init("ledger-fsync-failure")
@@ -577,7 +577,7 @@ def test_post_unlink_cleanup_failure_keeps_committed_lifecycle_event(
     isolated_store,
     monkeypatch,
 ):
-    from memcommit.context import AutoCheckpoint
+    from memcommit.core.context import AutoCheckpoint
 
     store = MemoryStore()
     context = ops.init("cleanup-failure")
@@ -910,7 +910,7 @@ def test_delete_preflights_symbolic_link_atomize_grounding_artifact(
 # ---------------------------------------------------------------------------
 
 def test_checkpoint_is_created_on_auto_save(isolated_store):
-    from memcommit.context import AutoCheckpoint
+    from memcommit.core.context import AutoCheckpoint
     store = MemoryStore()
     ctx = ops.init("ckpt-ctx")
     store.save(ctx, AutoCheckpoint(command="init", args={}, description="setup"))
@@ -1031,7 +1031,7 @@ def test_auto_checkpoint_is_rolled_back_when_context_write_fails(
     isolated_store,
     monkeypatch,
 ):
-    from memcommit.context import AutoCheckpoint
+    from memcommit.core.context import AutoCheckpoint
 
     store = MemoryStore()
     ctx = ops.init("failed-new-context")
@@ -1066,7 +1066,7 @@ def test_failed_existing_context_write_does_not_leave_false_checkpoint(
     isolated_store,
     monkeypatch,
 ):
-    from memcommit.context import AutoCheckpoint
+    from memcommit.core.context import AutoCheckpoint
 
     store = MemoryStore()
     ctx = ops.init("existing")
@@ -1101,7 +1101,7 @@ def test_failed_existing_context_write_does_not_leave_false_checkpoint(
 
 
 def test_list_checkpoints_sorted_newest_first(isolated_store):
-    from memcommit.context import AutoCheckpoint
+    from memcommit.core.context import AutoCheckpoint
     import time
     store = MemoryStore()
     ctx = ops.init("timeline")
@@ -1116,7 +1116,7 @@ def test_list_checkpoints_sorted_newest_first(isolated_store):
 
 
 def test_rapid_checkpoints_with_same_description_use_unique_files(isolated_store):
-    from memcommit.context import AutoCheckpoint
+    from memcommit.core.context import AutoCheckpoint
 
     store = MemoryStore()
     ctx = ops.init("rapid-history")
@@ -1146,7 +1146,7 @@ def test_rapid_checkpoints_with_same_description_use_unique_files(isolated_store
 
 
 def test_revert_restores_earlier_state(isolated_store):
-    from memcommit.context import AutoCheckpoint
+    from memcommit.core.context import AutoCheckpoint
     store = MemoryStore()
 
     ctx = ops.init("rev-ctx")
@@ -1169,7 +1169,7 @@ def test_revert_carries_loaded_digest_into_locked_save(
     isolated_store,
     monkeypatch,
 ):
-    from memcommit.context import AutoCheckpoint
+    from memcommit.core.context import AutoCheckpoint
 
     store = MemoryStore()
     ctx = ops.init("revert-cas")
@@ -1240,7 +1240,7 @@ def test_revert_rejects_stale_reviewed_frame_before_any_mutation(
     stale_value,
     message,
 ):
-    from memcommit.context import AutoCheckpoint
+    from memcommit.core.context import AutoCheckpoint
 
     store = MemoryStore()
     context = ops.init("revert-reviewed-frame")

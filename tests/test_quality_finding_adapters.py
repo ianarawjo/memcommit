@@ -11,7 +11,7 @@ from typer.testing import CliRunner
 import memcommit.application.ops as ops
 from memcommit.adapters.python_api import MemCommitClient, SemanticConflictError
 from memcommit.adapters.console.entrypoint import app
-from memcommit.context import MemoryRef
+from memcommit.core.context import MemoryRef
 from memcommit.adapters.interfaces.agent.quality_find import QualityFindAgentAdapter
 from memcommit.adapters.interfaces.agent.resolve import (
     RESOLVE_AGENT_CONTRACT_VERSION,

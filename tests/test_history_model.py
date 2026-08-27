@@ -1,6 +1,6 @@
 """Recoverable checkpoint timeline and direct-Memory privacy contracts."""
 
-from memcommit.context import (
+from memcommit.core.context import (
     AutoCheckpoint,
     Memory,
     MemoryRef,

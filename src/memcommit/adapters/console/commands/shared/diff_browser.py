@@ -32,7 +32,7 @@ from memcommit.adapters.console.commands.update.checkpoint_history import (
     choose_update_checkpoint_at_location,
     choose_update_checkpoint_subtree,
 )
-from memcommit.context_locator import resolve_context_locator
+from memcommit.application.context_locator import resolve_context_locator
 from memcommit.application.retained_history.checkpoint_catalog import (
     ResolvedCheckpointUnit,
     freeze_checkpoint_catalog,

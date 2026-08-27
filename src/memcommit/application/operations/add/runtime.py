@@ -18,8 +18,8 @@ from memcommit.application.authority.access import (
     grant_checkpoint_args,
     resolve_context_access,
 )
-from memcommit.context import AutoCheckpoint
-from memcommit.context_locator import resolve_context_locator
+from memcommit.core.context import AutoCheckpoint
+from memcommit.application.context_locator import resolve_context_locator
 from memcommit.persistence.store import MemoryStore
 from memcommit.persistence.store import ConcurrentContextUpdateError
 

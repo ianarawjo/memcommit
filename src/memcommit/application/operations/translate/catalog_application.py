@@ -6,7 +6,7 @@ from dataclasses import dataclass
 import hashlib
 import json
 
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.application.operations.translate.runtime import TranslateError
 from memcommit.application.operations.translate.view import (
     TRANSLATION_REVIEW_UNREVIEWED,

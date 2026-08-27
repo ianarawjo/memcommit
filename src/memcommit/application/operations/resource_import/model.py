@@ -6,14 +6,14 @@ import copy
 import hashlib
 from dataclasses import dataclass
 
-from memcommit.context import (
+from memcommit.core.context import (
     AutoCheckpoint,
     Context,
     Memory,
     MemoryRef,
     QueryContextRef,
 )
-from memcommit.context_locator import resolve_context_locator
+from memcommit.application.context_locator import resolve_context_locator
 from memcommit.application.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,

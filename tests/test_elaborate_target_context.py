@@ -9,7 +9,7 @@ import pytest
 
 import memcommit.application.ops as ops
 from memcommit.application.authority.access import granted_context_link, resolve_context_access
-from memcommit.context import Context, QueryContextRef
+from memcommit.core.context import Context, QueryContextRef
 from memcommit.application.operations.conformance.model import CONTEXT_CONFORMANCE_OPERATION
 from memcommit.application.operations.elaborate.model import ELABORATE_PAYLOAD_MARKER, ElaborateError
 from memcommit.application.operations.elaborate.add_runtime import (

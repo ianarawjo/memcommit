@@ -56,7 +56,7 @@ def _environment(home: Path) -> dict[str, str]:
 
 
 def _new_context(*, name: str, content: str):
-    from memcommit.context import Context, Memory
+    from memcommit.core.context import Context, Memory
 
     context = Context(uid=str(uuid.uuid4()), name=name)
     context.add(Memory(uid=str(uuid.uuid4()), content=content))

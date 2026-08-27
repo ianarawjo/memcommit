@@ -14,7 +14,7 @@ from typer.testing import CliRunner
 import memcommit.adapters.console.commands.profile.command as profile_command
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.context import AutoCheckpoint, Context
+from memcommit.core.context import AutoCheckpoint, Context
 from memcommit.core.context_targeting.naming import (
     is_portable_context_name,
     validate_portable_context_name,

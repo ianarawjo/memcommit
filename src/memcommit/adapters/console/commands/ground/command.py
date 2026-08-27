@@ -48,7 +48,7 @@ from memcommit.adapters.interfaces.tui.operations.ground_workspace import (
     run_ground_workspace_location_tui,
     run_ground_workspace_tui,
 )
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.application.operations.ground.model import (
     GROUND_PROPOSITION_SCHEMA_VERSION,
     GROUND_TEXT_LIMIT,

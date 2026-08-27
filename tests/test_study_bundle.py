@@ -9,7 +9,7 @@ import pytest
 
 import memcommit.study_scenarios.legacy.bundle as bundle_module
 import memcommit.persistence.store as store_module
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.study_scenarios.legacy.bundle import (
     StudyBundleError,
     _isolated_store_root,

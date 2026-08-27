@@ -59,7 +59,7 @@ def _configure_isolated_store(store_root: Path) -> None:
 
 
 def _initialize() -> None:
-    from memcommit.context import Context, Memory
+    from memcommit.core.context import Context, Memory
     from memcommit.persistence.store import MemoryStore
 
     context = Context(
@@ -207,7 +207,7 @@ class _Provider:
 
 
 def _verification(kind: str, provider: _Provider) -> str:
-    from memcommit.context import Memory
+    from memcommit.core.context import Memory
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()

@@ -12,7 +12,7 @@ from memcommit.application.authority.access import (
     revalidate_granted_context_binding,
     resolve_context_access,
 )
-from memcommit.context import AutoCheckpoint, Memory, MemoryRef
+from memcommit.core.context import AutoCheckpoint, Memory, MemoryRef
 from memcommit.application.operations.dedup.application import (
     DedupAuthorityError,
     DedupConflictError,

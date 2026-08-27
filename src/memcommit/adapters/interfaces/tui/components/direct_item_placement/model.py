@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Sequence
 from dataclasses import dataclass
 
-from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.source_projection.model import (
     SourceDisplayFacts,
     SourceForm,

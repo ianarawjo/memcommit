@@ -18,7 +18,7 @@ from memcommit.adapters.console.commands.impact.process_local import (
 )
 from memcommit.adapters.console.commands.impact.registry import IMPACT_ROUTES
 from memcommit.adapters.console.commands.impact.sessions import render_impact_session_snapshot
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.application.operations.distill.model import (
     DISTILL_OPERATION,
     DISTILL_PAYLOAD_MARKER,

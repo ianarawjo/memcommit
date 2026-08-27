@@ -5,7 +5,7 @@ from typing import Annotated
 
 import typer
 
-from memcommit.context_locator import resolve_context_locator
+from memcommit.application.context_locator import resolve_context_locator
 from memcommit.core.context_targeting.naming import validate_portable_context_name
 from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 

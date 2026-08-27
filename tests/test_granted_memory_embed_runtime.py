@@ -11,7 +11,7 @@ from typer.testing import CliRunner
 import memcommit.application.ops as ops
 from memcommit.adapters.python_api import EmbedAuthorityError, EmbedContextError, MemCommitClient
 from memcommit.adapters.console.entrypoint import app
-from memcommit.context import Memory, MemoryRef
+from memcommit.core.context import Memory, MemoryRef
 from memcommit.application.retained_history.context_snapshot import ContextSnapshotRef
 from memcommit.application.operations.compare.ledger.store import comparison_analysis_path
 from memcommit.application.operations.embed.application import MemoryEmbedRequest

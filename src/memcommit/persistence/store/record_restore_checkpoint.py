@@ -18,7 +18,7 @@ from pathlib import Path
 from typing import Any, Callable, Iterable, Iterator, Literal, Optional
 
 from memcommit.application.retained_history.checkpoint_frames import map_restorable_checkpoint_frames
-from memcommit.context import AutoCheckpoint, Checkpoint, Context, Memory, MemoryRef
+from memcommit.core.context import AutoCheckpoint, Checkpoint, Context, Memory, MemoryRef
 from memcommit.core.context_targeting.naming import (
     RESERVED_CONTEXT_SEGMENTS,
     validate_portable_context_name,

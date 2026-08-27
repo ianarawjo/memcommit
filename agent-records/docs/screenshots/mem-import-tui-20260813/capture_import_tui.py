@@ -28,7 +28,7 @@ def _child(root: Path, *, branch: str) -> None:
 
     from memcommit.adapters.console.entrypoint import app
     from memcommit.adapters.console.commands.list_memories.command import render_index
-    from memcommit.context import Context, Memory
+    from memcommit.core.context import Context, Memory
     from memcommit.persistence.store import MemoryStore
     from tests.test_resource_import import _write_source_store
 

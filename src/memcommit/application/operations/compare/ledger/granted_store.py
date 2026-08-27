@@ -19,7 +19,7 @@ from memcommit.application.operations.compare.ledger.model import (
     ComparisonError,
     comparison_canonical_digest,
 )
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.application.operations.compare.ledger.evidence import (
     ProjectedComparisonMemory,
     project_comparison_context,

@@ -17,7 +17,7 @@ from memcommit.adapters.python_api.errors import (
     SemanticStorageError,
 )
 from memcommit.adapters.python_api.search import SearchItemResult, SearchResult
-from memcommit.context_locator import resolve_context_locator
+from memcommit.application.context_locator import resolve_context_locator
 from memcommit.application.operations.search.application import (
     FindSearchRequest,
     FindSearchResponse,

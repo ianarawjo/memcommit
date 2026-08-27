@@ -125,7 +125,7 @@ class _ForgetProvider:
 
 
 def _create_source(store, name: str):
-    from memcommit.context import Context, Memory
+    from memcommit.core.context import Context, Memory
 
     context = Context(uid="11111111-1111-4111-8111-111111111111", name=name)
     context.add(
@@ -210,7 +210,7 @@ def _child_granted_noop(store_root: Path) -> None:
 def _child_stale(store_root: Path) -> None:
     import typer
 
-    from memcommit.context import AutoCheckpoint, Memory
+    from memcommit.core.context import AutoCheckpoint, Memory
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root)

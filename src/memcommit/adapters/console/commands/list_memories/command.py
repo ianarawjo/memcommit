@@ -12,7 +12,7 @@ from memcommit.adapters.console.clipboard import (
     load_payload,
     selection_digest,
 )
-from memcommit.context import (
+from memcommit.core.context import (
     Context,
     Information,
     MemoryRef,

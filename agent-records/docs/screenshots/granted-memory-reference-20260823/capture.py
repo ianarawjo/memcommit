@@ -92,7 +92,7 @@ def _child(directory: Path) -> None:
     os.environ["MEMCOMMIT_TEST_DISABLE_ATTEMPT_LOG"] = "1"
 
     from memcommit.adapters.console.entrypoint import app
-    from memcommit.context import MemoryRef
+    from memcommit.core.context import MemoryRef
 
     columns, rows = os.get_terminal_size()
     print(f"CAPTURE PTY · {columns}x{rows}", flush=True)

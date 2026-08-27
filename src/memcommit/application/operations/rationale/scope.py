@@ -13,7 +13,7 @@ from memcommit.core.context_targeting.readable_catalog import (
     freeze_readable_context_catalog,
     freeze_profile_readable_context_catalog,
 )
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.application.authority.derived_policy import authorize_combination
 from memcommit.application.retained_history.memory_history_reconstruction.retained_record_verification import (
     MemoryState,

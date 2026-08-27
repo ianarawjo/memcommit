@@ -15,7 +15,7 @@ from memcommit.adapters.console.commands.shared.restoration_present import (
     _render_impact,
     _restored_command,
 )
-from memcommit.context import AutoCheckpoint, Memory
+from memcommit.core.context import AutoCheckpoint, Memory
 from memcommit.adapters.interfaces.console.theme import (
     SemanticColorRole,
     memory_object_color_rgb,

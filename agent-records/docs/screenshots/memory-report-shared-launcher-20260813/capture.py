@@ -58,7 +58,7 @@ def _isolate_store(root: Path) -> None:
 
 def _prepare_fixture() -> str:
     from memcommit.adapters.console.commands import add, delete, edit, init, switch
-    from memcommit.context import Memory
+    from memcommit.core.context import Memory
     from memcommit.persistence.store import MemoryStore
 
     # Invoke the same command functions directly so this focused capture does

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import uuid
 
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.application.operations.chunk.domain import ChunkMethod, chunk_content
 
 

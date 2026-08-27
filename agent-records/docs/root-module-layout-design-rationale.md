@@ -22,9 +22,10 @@ the implementation that owns it without first knowing the repository history.
   exports may load lazily when eager loading would make a foundational module
   depend on a higher-level adapter merely because both now share a package.
 - One source implementation has exactly one canonical path.
-- Public Context, bootstrap, and the documented Context locator remain at the
-  package root. Store belongs to persistence, while the in-memory operation API
-  belongs to application orchestration.
+- The package root retains only its public package surface and bootstrap
+  composition root. Public Context values remain re-exported by `memcommit`,
+  while their defining module belongs to core; existing-Context operand
+  resolution belongs to application orchestration.
 - Existing behavioral failures are not silently converted into new contracts.
   Baseline failures remain a comparison set during path-only work.
 - Operation evidence state remains authored only in the existing evidence
@@ -96,6 +97,16 @@ does not claim that persistence-backed Audit storage or console navigation and
 rendering belong permanently to application. Those narrower responsibilities
 remain candidates for later extraction after their contracts are reviewed.
 
+On 2026-08-27 the Context, Memory, reference, and checkpoint values moved
+intact from `memcommit.context` to `memcommit.core.context`. The stable
+`from memcommit import Context`-style value exports remain part of the package
+surface, but the former submodule path is intentionally unavailable. The
+existing-Context locator moved separately from `memcommit.context_locator` to
+`memcommit.application.context_locator`: it interprets an operand against
+captured application state and is shared by console and Python routes, so it
+is neither a core entity rule nor a console-only parser. Consolidating it with
+the broader `core.context_targeting` family remains later work.
+
 On 2026-08-27 the existing `memcommit.interfaces` tree moved intact to
 `memcommit.adapters.interfaces`. This deliberately redundant name is a temporary
 staging boundary: it establishes that the CLI, console, TUI, agent, MCP, and
@@ -141,7 +152,7 @@ baseline. Each relocation batch must collect successfully, keep focused tests
 passing, and introduce no new behavioral failure. Static ownership tests and
 generated callable catalogs may change because their subject is the path
 layout itself; those records are updated only after the canonical moves settle.
-The layout check requires exactly four root Python files, rejects every
+The layout check requires exactly two root Python files, rejects every
 physical compatibility facade and internal historical import, verifies every
 canonical target, and proves in a fresh interpreter that no removed root or
 semantic-execution package path is restored by a runtime hook.

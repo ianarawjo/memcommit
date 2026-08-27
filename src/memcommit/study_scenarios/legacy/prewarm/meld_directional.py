@@ -26,7 +26,7 @@ from memcommit.configuration.config import Config
 from memcommit.providers.policy import (
     resolve_operation_provider_policy,
 )
-from memcommit.context import Context
+from memcommit.core.context import Context
 from memcommit.core.context_targeting.loading import load_context_scope
 from memcommit.application.authority.derived_policy import (
     analysis_retention,

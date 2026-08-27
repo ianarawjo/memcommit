@@ -15,7 +15,7 @@ from memcommit.adapters.python_api.errors import (
     FindStorageError,
 )
 from memcommit.adapters.python_api.find import FindMatchResult, FindResult, FindSpanResult
-from memcommit.context_locator import resolve_context_locator
+from memcommit.application.context_locator import resolve_context_locator
 from memcommit.application.operations.find.literal_application import (
     LiteralFindError,
     LiteralFindInputError,

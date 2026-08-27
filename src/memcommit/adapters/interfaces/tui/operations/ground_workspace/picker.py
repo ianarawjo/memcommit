@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import datetime
 
-from memcommit.context import Memory
+from memcommit.core.context import Memory
 from memcommit.application.operations.ground.workspace_model import GroundWorkspace
 from memcommit.application.operations.ground.workspace_draft import (
     GroundWorkspaceDraft,

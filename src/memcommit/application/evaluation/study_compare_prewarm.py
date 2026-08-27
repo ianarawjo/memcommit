@@ -31,7 +31,7 @@ from memcommit.application.operations.compare.ledger.model import ComparisonAnal
 from memcommit.application.operations.compare.ledger.provider import analyze_comparison
 from memcommit.application.operations.compare.ledger.store import load_comparison_analysis
 from memcommit.configuration.config import Config
-from memcommit.context import Context
+from memcommit.core.context import Context
 from memcommit.application.operations.compare.ledger.granted_store import load_granted_comparison_artifact
 from memcommit.providers.policy import (
     resolve_codex_evaluation_policy,

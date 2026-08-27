@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from memcommit.context import Memory
+from memcommit.core.context import Memory
 from memcommit.application.operations.profile.config import load_profile_registry, profile_store_dir
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.application.operations.resource_import.model import (

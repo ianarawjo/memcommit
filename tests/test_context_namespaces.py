@@ -8,7 +8,7 @@ from typer.testing import CliRunner
 import memcommit.application.ops as ops
 import memcommit.persistence.store as store_module
 from memcommit.adapters.console.entrypoint import app
-from memcommit.context import AutoCheckpoint, Context
+from memcommit.core.context import AutoCheckpoint, Context
 from memcommit.persistence.store import MemoryStore
 
 

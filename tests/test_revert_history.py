@@ -9,7 +9,7 @@ from typer.testing import CliRunner
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.shared.history_picker import HistorySelectionReceipt
-from memcommit.context import AutoCheckpoint, Memory
+from memcommit.core.context import AutoCheckpoint, Memory
 from memcommit.persistence.store import MemoryStore
 
 

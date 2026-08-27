@@ -16,7 +16,7 @@ from memcommit.application.authority.access import (
     resolve_context_access,
 )
 from memcommit.persistence.command_ledger.attempts import annotate_sever_attempt
-from memcommit.context import (
+from memcommit.core.context import (
     AutoCheckpoint,
     Context,
     Memory,

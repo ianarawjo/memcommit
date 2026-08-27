@@ -12,9 +12,9 @@ from memcommit.application.authority.access import (
     resolve_context_access,
     top_level_grants,
 )
-from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.application.retained_history.context_snapshot import ContextSnapshotRef
-from memcommit.context_locator import resolve_context_locator
+from memcommit.application.context_locator import resolve_context_locator
 from memcommit.core.context_targeting.loading import (
     DirectItemAmbiguityError,
     DirectItemNotFoundError,

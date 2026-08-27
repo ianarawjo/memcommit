@@ -9,7 +9,7 @@ import uuid
 
 import pytest
 
-from memcommit.context import Context, Memory, QueryContextRef
+from memcommit.core.context import Context, Memory, QueryContextRef
 import memcommit.application.operations.search.application as find_application
 from memcommit.application.operations.search.application import (
     FindSearchRequest,

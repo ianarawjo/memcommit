@@ -21,7 +21,7 @@ from memcommit.application.operations.atomize.workbench import (
     project_atomize_workbench_findings,
 )
 from memcommit.adapters.console.entrypoint import app
-from memcommit.context import AutoCheckpoint, Memory
+from memcommit.core.context import AutoCheckpoint, Memory
 from memcommit.persistence.store import MemoryStore
 
 

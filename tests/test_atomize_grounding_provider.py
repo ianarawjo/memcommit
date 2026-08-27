@@ -34,7 +34,7 @@ from memcommit.application.operations.atomize.workbench import (
     create_atomize_workbench,
     project_atomize_workbench_findings,
 )
-from memcommit.context import Context
+from memcommit.core.context import Context
 from memcommit.application.operations.review.model import direct_context_digest
 
 

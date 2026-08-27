@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal, Protocol
 
-from memcommit.context import Memory, MemoryRef, QueryContextRef
+from memcommit.core.context import Memory, MemoryRef, QueryContextRef
 from memcommit.application.operations.search.model import (
     FindError,
     SearchArtifact,

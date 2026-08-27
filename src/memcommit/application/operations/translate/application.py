@@ -7,7 +7,7 @@ from contextlib import AbstractContextManager
 from dataclasses import dataclass
 from typing import Literal
 
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.core.context_targeting.loading import resolve_local_context_memory_target
 from memcommit.core.context_targeting.model import ContextTarget, DirectMemoryTarget
 from memcommit.application.operations.translate.catalog_application import (

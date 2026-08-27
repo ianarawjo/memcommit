@@ -14,7 +14,7 @@ from pathlib import Path
 import statistics
 import time
 
-from memcommit.context import Context
+from memcommit.core.context import Context
 from memcommit.application.evaluation.semantic_campaign import _atomic_write_json
 from memcommit.ops import analyze_forget
 from memcommit.provider_types import CODEX_REASONING_EFFORTS

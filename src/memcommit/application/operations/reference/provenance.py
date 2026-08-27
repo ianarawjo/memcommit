@@ -11,7 +11,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal
 
-from memcommit.context import Context, GrantedMemorySource, MemoryRef
+from memcommit.core.context import Context, GrantedMemorySource, MemoryRef
 from memcommit.application.retained_history.memory_history_reconstruction.retained_record_verification import (
     MemoryHistoryReconstructionError,
 )

@@ -41,7 +41,7 @@ def _context(
     memory_uid: str,
     content: str,
 ):
-    from memcommit.context import Context, Memory
+    from memcommit.core.context import Context, Memory
 
     context = Context(uid=context_uid, name=name)
     context.add(Memory(uid=memory_uid, content=content))
@@ -109,7 +109,7 @@ def _run_contexts_child(store_root: Path) -> None:
 
 def _run_memories_child(store_root: Path) -> None:
     import memcommit.adapters.console.commands.fit.command as fit_command
-    from memcommit.context import Context, Memory
+    from memcommit.core.context import Context, Memory
     from memcommit.application.operations.fit.store import FitStore
     from memcommit.persistence.store import MemoryStore, context_record_digest
 

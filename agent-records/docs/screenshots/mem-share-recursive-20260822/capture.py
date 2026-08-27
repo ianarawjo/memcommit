@@ -33,7 +33,7 @@ if str(ROOT) not in sys.path:
 
 
 def _prepare_topology(home: Path):
-    from memcommit.context import Context, Memory
+    from memcommit.core.context import Context, Memory
     from memcommit.application.operations.profile.config import (
         AUTHORING_PROFILE_NAME,
         AUTHORING_PROFILE_UID,
@@ -135,7 +135,7 @@ def _run_child(home: Path, kind: str) -> None:
     import typer
 
     from memcommit.adapters.console.commands.share.command import cmd
-    from memcommit.context import Context
+    from memcommit.core.context import Context
     from memcommit.application.operations.profile.config import (
         ProfileRegistry,
         load_profile_registry,

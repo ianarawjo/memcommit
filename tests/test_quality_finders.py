@@ -12,7 +12,7 @@ from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.context import Memory, MemoryRef, QueryContextRef
+from memcommit.core.context import Memory, MemoryRef, QueryContextRef
 from memcommit.application.reviewing.quality.findings import (
     FindingsError,
     collect_direct_memories,

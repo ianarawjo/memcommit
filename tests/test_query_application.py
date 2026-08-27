@@ -9,7 +9,7 @@ import uuid
 
 import pytest
 
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 import memcommit.application.operations.query.ordinary_application as query_application
 from memcommit.application.operations.query.ordinary_application import (
     FrozenOrdinaryQuerySource,

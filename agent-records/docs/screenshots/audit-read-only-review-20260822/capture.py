@@ -28,7 +28,7 @@ _BASE.ROWS = ROWS
 
 
 def _session(*, empty: bool):
-    from memcommit.context import Context, Memory
+    from memcommit.core.context import Context, Memory
     from memcommit.application.reviewing.quality.findings import (
         AmbiguityFinding,
         AmbiguityReport,

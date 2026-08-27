@@ -74,7 +74,7 @@ def _configure_store(store_dir: Path) -> None:
 
 def _save_add(store, context, content: str) -> None:
     import memcommit.application.ops as ops
-    from memcommit.context import AutoCheckpoint
+    from memcommit.core.context import AutoCheckpoint
 
     ops.add(context, content)
     store.save(
@@ -89,7 +89,7 @@ def _save_add(store, context, content: str) -> None:
 
 def _prepare_store(store_dir: Path) -> None:
     import memcommit.application.ops as ops
-    from memcommit.context import AutoCheckpoint
+    from memcommit.core.context import AutoCheckpoint
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_dir)
@@ -178,7 +178,7 @@ def _run_undo(store_dir: Path) -> None:
 
 
 def _memory_contents(store, name: str) -> list[str]:
-    from memcommit.context import Memory
+    from memcommit.core.context import Memory
 
     context = store.load_direct(name)
     return [item.content for item in context.iter_items() if isinstance(item, Memory)]

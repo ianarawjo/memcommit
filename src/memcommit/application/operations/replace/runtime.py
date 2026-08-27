@@ -6,7 +6,7 @@ import hashlib
 import uuid
 from dataclasses import dataclass
 
-from memcommit.context import AutoCheckpoint, Context, Memory
+from memcommit.core.context import AutoCheckpoint, Context, Memory
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
 from memcommit.application.operations.replace.application import (

@@ -12,7 +12,7 @@ from typer.testing import CliRunner
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.add import command as add_command
-from memcommit.context import AutoCheckpoint, Memory
+from memcommit.core.context import AutoCheckpoint, Memory
 from memcommit.application.reviewing.quality.findings import AmbiguityFinding, AmbiguityReport
 from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
     reconstruct_memory_history,

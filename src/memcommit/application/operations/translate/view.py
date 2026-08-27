@@ -16,7 +16,7 @@ from typing import Iterable
 import unicodedata
 import uuid
 
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.persistence.store import context_record_digest
 from memcommit.application.operations.translate.runtime import (
     TRANSLATED_CONTENT_CHAR_LIMIT,

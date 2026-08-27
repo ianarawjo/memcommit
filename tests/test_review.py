@@ -22,7 +22,7 @@ from memcommit.adapters.console.commands.review.resolution_shell import (
     review_resolution_view,
     run_review_resolution_shell,
 )
-from memcommit.context import Memory
+from memcommit.core.context import Memory
 from memcommit.application.reviewing.quality.findings import (
     AmbiguityFinding,
     AmbiguityReport,

@@ -9,7 +9,7 @@ from pathlib import Path
 import re
 import uuid
 
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.application.operations.profile.config import GrantContextBinding, load_profile_registry
 from memcommit.application.operations.profile.model import GrantedContextView
 from memcommit.persistence.store import MemoryStore

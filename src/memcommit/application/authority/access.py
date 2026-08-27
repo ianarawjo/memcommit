@@ -7,7 +7,7 @@ from contextlib import contextmanager
 from dataclasses import dataclass
 from typing import Iterator, Literal
 
-from memcommit.context import (
+from memcommit.core.context import (
     Context,
     GrantedContextLink,
     GrantedMemorySource,
@@ -15,7 +15,7 @@ from memcommit.context import (
     MemoryRef,
     QueryContextRef,
 )
-from memcommit.context_locator import resolve_context_locator
+from memcommit.application.context_locator import resolve_context_locator
 from memcommit.application.operations.profile.config import AuthorityGrant, ProfileRegistry, load_profile_registry
 from memcommit.application.operations.profile.model import (
     GrantedContextView,

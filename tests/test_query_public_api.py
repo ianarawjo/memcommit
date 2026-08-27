@@ -22,7 +22,7 @@ from memcommit.adapters.python_api import (
     QueryProviderFailure,
     ReferenceQueryResult,
 )
-from memcommit.context import QueryContextRef
+from memcommit.core.context import QueryContextRef
 from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,

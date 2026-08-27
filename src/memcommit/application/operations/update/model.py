@@ -9,7 +9,7 @@ from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 from typing import Callable, Literal, Protocol, TypeAlias
 
-from memcommit.context import Context, Memory, MemoryRef
+from memcommit.core.context import Context, Memory, MemoryRef
 from memcommit.core.context_targeting.memory_focus import (
     MemoryFocusError,
     resolve_memory_focus,

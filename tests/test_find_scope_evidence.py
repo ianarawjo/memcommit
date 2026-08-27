@@ -4,7 +4,7 @@ from __future__ import annotations
 import pytest
 
 import memcommit.application.ops as ops
-from memcommit.context import QueryContextRef
+from memcommit.core.context import QueryContextRef
 from memcommit.core.context_targeting.context_catalog import ContextCatalogScan
 from memcommit.application.operations.search.scope_evidence import (
     candidate_logical_identity,

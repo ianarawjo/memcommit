@@ -15,7 +15,7 @@ from memcommit.application.operations.atomize.workbench import (
     AtomizeWorkbenchSession,
     atomize_workbench_issue_projection,
 )
-from memcommit.context import Context
+from memcommit.core.context import Context
 
 
 AtomizeAnalysisOrigin = Literal["SAVED", "EXACT_PREWARM", "PROVIDER"]

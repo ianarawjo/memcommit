@@ -34,7 +34,7 @@ from memcommit.application.retained_history.checkpoint_catalog import (
     ResolvedCheckpointUnit,
     freeze_checkpoint_catalog,
 )
-from memcommit.context import Memory
+from memcommit.core.context import Memory
 from memcommit.application.retained_history.reconstruction import HistoryError, build_history
 from memcommit.application.operations.log.search import HistorySearchError, search_history
 from memcommit.providers.subscription import (

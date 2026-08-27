@@ -21,7 +21,7 @@ from memcommit.application.operations.atomize.domain import (
     create_atomize_analysis,
     impact_atomize,
 )
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.application.operations.dedup.application import (
     DedupRequest,
     DedupSelection,

@@ -7,7 +7,7 @@ from collections.abc import Callable, Sequence
 from dataclasses import dataclass, replace
 from typing import Literal, Protocol
 
-from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.application.semantic_execution import (
     BudgetLimits,
     BudgetVector,

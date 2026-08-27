@@ -12,7 +12,7 @@ from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 import memcommit.application.operations.ground.workspace_application as ground_workspace_application
-from memcommit.context import Memory
+from memcommit.core.context import Memory
 from memcommit.application.retained_history.command_history import build_command_stacks
 from memcommit.application.operations.ground.workspace_model import (
     GROUND_WORKSPACE_LANES,

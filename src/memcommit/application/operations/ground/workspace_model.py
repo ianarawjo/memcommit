@@ -14,7 +14,7 @@ import uuid
 from dataclasses import dataclass, replace
 from typing import Literal
 
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 
 
 GROUND_WORKSPACE_SCHEMA_VERSION = 1

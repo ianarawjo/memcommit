@@ -5,7 +5,7 @@ from __future__ import annotations
 import uuid
 from collections.abc import Mapping, Sequence
 
-from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
 
 
 def relative_context_suffix(name: str, root: str) -> str:

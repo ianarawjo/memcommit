@@ -19,7 +19,7 @@ from memcommit.adapters.python_api.errors import (
 )
 from memcommit.adapters.python_api.quality_find import QualityFindContextResult, QualityFindResult
 from memcommit.application.authority.access import GrantedReadStore, resolve_context_access
-from memcommit.context_locator import resolve_context_locator
+from memcommit.application.context_locator import resolve_context_locator
 from memcommit.application.authority.derived_policy import authorize_combination
 from memcommit.application.reviewing.direct_item_duplicates import find_exact_duplicate_groups
 from memcommit.application.reviewing.quality.findings import ConflictReport, FindingsError

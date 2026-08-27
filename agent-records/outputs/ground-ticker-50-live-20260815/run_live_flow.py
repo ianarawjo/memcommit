@@ -28,7 +28,7 @@ PROGRESS_PATH = OUTPUT_ROOT / "progress.json"
 sys.path.insert(0, str(REPO_ROOT))
 
 import memcommit.study_action_log as study_action_log
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.distill import DistillError
 from memcommit.elaborate import ElaborateError
 from memcommit.fit import FitError

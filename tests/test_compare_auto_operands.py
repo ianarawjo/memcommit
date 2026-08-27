@@ -9,7 +9,7 @@ from typer.testing import CliRunner
 import memcommit.adapters.console.commands.compare.command as compare_command
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.context import Memory
+from memcommit.core.context import Memory
 from memcommit.providers.policy import ResolvedProviderPolicy
 from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,

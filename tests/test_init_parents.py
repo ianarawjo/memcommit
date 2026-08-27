@@ -5,7 +5,7 @@ from __future__ import annotations
 from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
-from memcommit.context import Context
+from memcommit.core.context import Context
 from memcommit.persistence.store import MemoryStore
 
 

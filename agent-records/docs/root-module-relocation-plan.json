@@ -530,15 +530,15 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "retain",
-      "canonical_target": "memcommit.context",
-      "canonical_target_path": "memcommit/context.py",
+      "action": "relocate-without-alias",
+      "canonical_target": "memcommit.core.context",
+      "canonical_target_path": "memcommit/core/context.py",
       "inbound_package_importers": 279,
       "lines": 683,
       "module": "memcommit.context",
       "path": "memcommit/context.py",
-      "reason": "public core Context and Memory model",
-      "role": "root-boundary"
+      "reason": "implementation belongs to a reusable named concept",
+      "role": "shared-concept-implementation"
     },
     {
       "action": "relocate-without-alias",
@@ -596,15 +596,15 @@
       "role": "shared-concept-implementation"
     },
     {
-      "action": "retain",
-      "canonical_target": "memcommit.context_locator",
-      "canonical_target_path": "memcommit/context_locator.py",
+      "action": "relocate-without-alias",
+      "canonical_target": "memcommit.application.context_locator",
+      "canonical_target_path": "memcommit/application/context_locator.py",
       "inbound_package_importers": 44,
       "lines": 100,
       "module": "memcommit.context_locator",
       "path": "memcommit/context_locator.py",
-      "reason": "documented canonical existing-Context resolver",
-      "role": "root-boundary"
+      "reason": "implementation belongs to a reusable named concept",
+      "role": "shared-concept-implementation"
     },
     {
       "action": "relocate-without-alias",
@@ -2748,7 +2748,7 @@
     "historical-compatibility-facade": 103,
     "operation-implementation": 74,
     "retired-prototype": 1,
-    "root-boundary": 4,
-    "shared-concept-implementation": 67
+    "root-boundary": 2,
+    "shared-concept-implementation": 69
   }
 }

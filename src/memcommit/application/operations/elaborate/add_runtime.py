@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal
 
-from memcommit.context import Memory
+from memcommit.core.context import Memory
 from memcommit.application.operations.elaborate.model import (
     ElaborateError,
     ElaborateMode,

@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from memcommit.application.authority.access import ContextAccess
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.application.retained_history.memory_history_reconstruction.retained_record_verification import (
     MemoryHistoryReconstructionError,
     MemoryState,

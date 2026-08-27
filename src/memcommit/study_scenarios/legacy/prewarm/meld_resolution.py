@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Iterable
 
-from memcommit.context import Context
+from memcommit.core.context import Context
 from memcommit.application.operations.meld.model import MeldError, MeldSession
 from memcommit.application.operations.meld.provider import (
     MELD_RESOLUTION_REQUEST_CONTRACT_VERSION,

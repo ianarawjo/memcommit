@@ -26,8 +26,6 @@ BASELINE_COMMIT = "885e62c0"
 ROOT_BOUNDARIES = {
     "__init__": "public package surface",
     "bootstrap": "application composition root",
-    "context": "public core Context and Memory model",
-    "context_locator": "documented canonical existing-Context resolver",
 }
 
 
@@ -176,9 +174,11 @@ CONCEPT_TARGETS = {
     "command_history": "memcommit.application.retained_history.command_history",
     "config": "memcommit.configuration.config",
     "console_invocation": "memcommit.adapters.interfaces.cli.invocation",
+    "context": "memcommit.core.context",
     "context_catalog": "memcommit.core.context_targeting.context_catalog",
     "context_history": "memcommit.application.retained_history.context_history",
     "context_lifecycle": "memcommit.application.retained_history.context_lifecycle",
+    "context_locator": "memcommit.application.context_locator",
     "context_naming": "memcommit.core.context_targeting.naming",
     "context_snapshot": "memcommit.application.retained_history.context_snapshot",
     "current_context_navigation": "memcommit.core.context_targeting.navigation",

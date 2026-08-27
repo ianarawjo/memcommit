@@ -3,7 +3,7 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.adapters.console.commands.branch.dialog import choose_branch_creation
-from memcommit.context_locator import resolve_context_locator
+from memcommit.application.context_locator import resolve_context_locator
 from memcommit.core.context_targeting.presets import (
     ContextScopePreset,
     legacy_root_only_option_alias,

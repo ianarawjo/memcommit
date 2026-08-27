@@ -8,7 +8,7 @@ import hashlib
 from typing import Iterator, Protocol
 import uuid
 
-from memcommit.context import AutoCheckpoint, Context, Memory
+from memcommit.core.context import AutoCheckpoint, Context, Memory
 from memcommit.core.context_targeting.naming import validate_portable_context_name
 from memcommit.application.operations.distill.model import (
     DistillAnalysis,

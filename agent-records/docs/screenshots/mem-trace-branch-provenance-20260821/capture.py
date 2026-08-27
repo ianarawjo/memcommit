@@ -60,7 +60,7 @@ def _prepare_recorded_branch() -> tuple[str, str, str]:
     from typer.testing import CliRunner
 
     from memcommit.adapters.console.entrypoint import _checkout, app
-    from memcommit.context import Memory
+    from memcommit.core.context import Memory
     from memcommit.persistence.store import MemoryStore
 
     runner = CliRunner()
@@ -101,7 +101,7 @@ def _prepare_legacy_copy() -> str:
     from typer.testing import CliRunner
 
     from memcommit.adapters.console.entrypoint import app
-    from memcommit.context import Context, Memory
+    from memcommit.core.context import Context, Memory
     from memcommit.persistence.store import MemoryStore
 
     runner = CliRunner()

@@ -10,7 +10,7 @@ from prompt_toolkit.output import Output
 from memcommit.adapters.console.commands.shared.resolution_workbench_shell import (
     run_resolution_workbench_shell,
 )
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.application.resolution.workbench import (
     ResolutionContextLocation,
     ResolutionIssueEvidence,

@@ -14,7 +14,7 @@ from memcommit.adapters.console.commands.shared.resolution_workbench_shell impor
     session_review_action_view,
     session_todo_view,
 )
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.adapters.interfaces.tui.operations.forget.resolution import (
     ForgetResolutionWorkbenchAdapter,
     forget_memory_changes,

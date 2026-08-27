@@ -5,8 +5,8 @@ from __future__ import annotations
 import json
 from typing import Protocol
 
-from memcommit.context import Context, Information, Memory
-from memcommit.context_locator import resolve_context_locator
+from memcommit.core.context import Context, Information, Memory
+from memcommit.application.context_locator import resolve_context_locator
 from memcommit.core.context_targeting.memory_focus import is_memory_uid_prefix
 from memcommit.core.context_targeting.model import (
     ContextScope,

@@ -7,7 +7,7 @@ import pytest
 
 import memcommit.application.ops as ops
 from memcommit.application.operations.meld.runtime import meld_checkpoint_record
-from memcommit.context import AutoCheckpoint, Context, Memory
+from memcommit.core.context import AutoCheckpoint, Context, Memory
 from memcommit.application.operations.meld.model import (
     MeldChangeSet,
     MeldMember,

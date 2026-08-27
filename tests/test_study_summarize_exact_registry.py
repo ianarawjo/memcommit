@@ -7,7 +7,7 @@ import memcommit.configuration.config as config_module
 import memcommit.application.ops as ops
 import memcommit.study_scenarios.legacy.prewarm.summarize as summarize_prewarm_module
 from memcommit.configuration.config import Config
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.persistence.store import MemoryStore
 from memcommit.study_scenarios.legacy.prewarm.installations import (
     record_declared_installation,

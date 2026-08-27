@@ -15,7 +15,7 @@ from memcommit.adapters.python_api import (
     MemoryTransferContextError,
 )
 from memcommit.adapters.console.entrypoint import app
-from memcommit.context import Memory
+from memcommit.core.context import Memory
 from memcommit.adapters.interfaces.agent.memory_transfer import MemoryTransferAgentAdapter
 from memcommit.application.operations.memory_transfer.application import (
     CopyMemoriesRequest,

@@ -10,7 +10,7 @@ from memcommit.adapters.console.commands.find.command import (
     _collect_find_frame_candidates,
     _load_find_frame_roots,
 )
-from memcommit.context import AutoCheckpoint
+from memcommit.core.context import AutoCheckpoint
 from memcommit.application.operations.meld.model import MeldSession
 from memcommit.application.operations.rationale.cache import (
     CachedRationaleInference,

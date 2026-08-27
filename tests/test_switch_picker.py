@@ -28,7 +28,7 @@ from memcommit.adapters.console.commands.shared.context_picker import (
     _visible_context_rows,
     choose_context,
 )
-from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.core.context_targeting.catalog import grant_navigation_annotation
 from memcommit.core.context_targeting.tui.picker import (
     ContextMemoryBadge,

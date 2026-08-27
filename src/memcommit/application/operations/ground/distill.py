@@ -8,7 +8,7 @@ import hashlib
 import json
 from typing import Iterator, Literal, Protocol
 
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.application.operations.distill.model import DistillError, DistillProvider
 from memcommit.application.operations.distill.model import ensure_distill_goal_fit_allows_add
 from memcommit.application.operations.distill.application import (

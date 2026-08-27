@@ -17,7 +17,7 @@ from memcommit.adapters.python_api.errors import (
     SemanticStorageError,
 )
 from memcommit.application.authority.access import resolve_context_access
-from memcommit.context_locator import resolve_context_locator
+from memcommit.application.context_locator import resolve_context_locator
 from memcommit.application.operations.exact_dedup.application import find_exact_duplicate_scope
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError

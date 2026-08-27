@@ -82,7 +82,7 @@ def _summary_document(*, both: bool):
 
 
 def _distill_document():
-    from memcommit.context import Context, Memory
+    from memcommit.core.context import Context, Memory
     from memcommit.application.operations.distill.model import DistillAnalysis, DistilledRule
     from memcommit.application.operations.distill.application import DistillResult
     from memcommit.application.operations.distill.goal_fit import DistillGoalFit

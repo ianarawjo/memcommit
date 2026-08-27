@@ -10,8 +10,8 @@ were directly under memcommit at baseline commit 885e62c0.
 | historical-compatibility-facade | 103 |
 | operation-implementation | 74 |
 | retired-prototype | 1 |
-| root-boundary | 4 |
-| shared-concept-implementation | 67 |
+| root-boundary | 2 |
+| shared-concept-implementation | 69 |
 
 ## Modules
 
@@ -65,13 +65,13 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.conformance | operation-implementation | relocate-without-alias | memcommit.application.operations.conformance.model | 6 |
 | memcommit.conformance_runtime | operation-implementation | relocate-without-alias | memcommit.application.operations.conformance.runtime | 2 |
 | memcommit.console_invocation | shared-concept-implementation | relocate-without-alias | memcommit.adapters.interfaces.cli.invocation | 0 |
-| memcommit.context | root-boundary | retain | memcommit.context | 279 |
+| memcommit.context | shared-concept-implementation | relocate-without-alias | memcommit.core.context | 279 |
 | memcommit.context_catalog | shared-concept-implementation | relocate-without-alias | memcommit.core.context_targeting.context_catalog | 1 |
 | memcommit.context_history | shared-concept-implementation | relocate-without-alias | memcommit.application.retained_history.context_history | 4 |
 | memcommit.context_init_application | historical-compatibility-facade | remove | memcommit.application.operations.context_init.application | 0 |
 | memcommit.context_init_runtime | historical-compatibility-facade | remove | memcommit.application.operations.context_init.runtime | 0 |
 | memcommit.context_lifecycle | shared-concept-implementation | relocate-without-alias | memcommit.application.retained_history.context_lifecycle | 1 |
-| memcommit.context_locator | root-boundary | retain | memcommit.context_locator | 44 |
+| memcommit.context_locator | shared-concept-implementation | relocate-without-alias | memcommit.application.context_locator | 44 |
 | memcommit.context_naming | shared-concept-implementation | relocate-without-alias | memcommit.core.context_targeting.naming | 26 |
 | memcommit.context_rationale | operation-implementation | relocate-without-alias | memcommit.application.operations.rationale.context | 1 |
 | memcommit.context_scope | historical-compatibility-facade | remove | memcommit.core.context_targeting.loading | 0 |

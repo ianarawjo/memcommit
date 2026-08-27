@@ -7,7 +7,7 @@ from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.context import AutoCheckpoint, Context, Memory, MemoryRef
+from memcommit.core.context import AutoCheckpoint, Context, Memory, MemoryRef
 from memcommit.application.semantic.changes import parse_proposals
 from memcommit.persistence.store import MemoryStore, context_record_digest
 

@@ -10,7 +10,7 @@ from memcommit.application.authority.access import (
     GrantedReadStore,
     resolve_context_access,
 )
-from memcommit.context import Context
+from memcommit.core.context import Context
 from memcommit.core.context_targeting.catalog import freeze_granted_context_navigation
 from memcommit.core.context_targeting.tui.picker import context_memory_rows
 from memcommit.application.operations.memory_transfer.application import (

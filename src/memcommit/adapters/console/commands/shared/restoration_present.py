@@ -20,7 +20,7 @@ from memcommit.adapters.interfaces.console.theme import (
     semantic_action_role,
     semantic_color_rgb,
 )
-from memcommit.context import Checkpoint
+from memcommit.core.context import Checkpoint
 from memcommit.source_projection.console import (
     styled_source_object_label,
     styled_source_relationship_label,

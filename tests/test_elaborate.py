@@ -17,7 +17,7 @@ import memcommit.application.operations.elaborate.application as elaborate_appli
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.application.operations.conformance.model import CONTEXT_CONFORMANCE_OPERATION
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.application.operations.elaborate.model import (
     ELABORATE_OPERATION,
     ELABORATE_PAYLOAD_MARKER,

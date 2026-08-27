@@ -11,7 +11,7 @@ import memcommit.configuration.config as config_module
 import memcommit.application.ops as ops
 import memcommit.application.semantic.llm as llm_module
 from memcommit.adapters.console.entrypoint import app
-from memcommit.context import Context, Memory, QueryContextRef
+from memcommit.core.context import Context, Memory, QueryContextRef
 from memcommit.persistence.store import MemoryStore
 
 

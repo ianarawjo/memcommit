@@ -24,7 +24,7 @@ from memcommit.adapters.console.commands.shared.session_endpoint_setup import (
     choose_session_endpoints,
 )
 from memcommit.core.context_targeting.tui.picker import context_memory_rows
-from memcommit.context import Memory
+from memcommit.core.context import Memory
 from memcommit.source_projection.model import SourceDisplayFacts
 from memcommit.persistence.store import MemoryStore
 

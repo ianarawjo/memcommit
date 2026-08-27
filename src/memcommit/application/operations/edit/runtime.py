@@ -11,7 +11,7 @@ from memcommit.application.authority.access import (
     grant_checkpoint_args,
     resolve_context_access,
 )
-from memcommit.context import AutoCheckpoint, Context, Memory
+from memcommit.core.context import AutoCheckpoint, Context, Memory
 from memcommit.core.context_targeting.loading import (
     resolve_local_direct_memory_locator,
 )

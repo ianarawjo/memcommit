@@ -11,9 +11,9 @@ from memcommit.application.authority.access import (
     grant_checkpoint_args,
     resolve_context_access,
 )
-from memcommit.context import AutoCheckpoint, Context, Information, Memory, MemoryRef
-from memcommit.context import QueryContextRef
-from memcommit.context_locator import resolve_context_locator
+from memcommit.core.context import AutoCheckpoint, Context, Information, Memory, MemoryRef
+from memcommit.core.context import QueryContextRef
+from memcommit.application.context_locator import resolve_context_locator
 from memcommit.core.context_targeting.loading import (
     DirectItemNotFoundError,
     resolve_local_direct_item_locator,

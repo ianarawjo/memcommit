@@ -24,7 +24,7 @@ from memcommit.adapters.console.commands.switch.command import (
     _granted_picker_state,
     _granted_picker_views,
 )
-from memcommit.context import AutoCheckpoint, Context, Memory
+from memcommit.core.context import AutoCheckpoint, Context, Memory
 from memcommit.study_scenarios.legacy.bundle import build_all_study_bundles
 from memcommit.study_scenarios.legacy import LEGACY_BASELINE_UID
 from memcommit.study_scenarios.legacy import LEGACY_DIGEST

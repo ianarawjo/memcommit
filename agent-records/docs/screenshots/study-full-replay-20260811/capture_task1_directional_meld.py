@@ -74,7 +74,7 @@ def _load_scopes():
 
 
 def _memory_count(context) -> int:
-    from memcommit.context import Context, Memory
+    from memcommit.core.context import Context, Memory
 
     seen: set[str] = set()
 

@@ -47,7 +47,7 @@ from memcommit.application.operations.compare.ledger.session_application import 
 from memcommit.application.operations.compare.ledger.store import (
     ConcurrentComparisonUpdateError,
 )
-from memcommit.context_locator import resolve_context_locator
+from memcommit.application.context_locator import resolve_context_locator
 from memcommit.application.operations.compare.ledger.granted_store import (
     load_granted_comparison_artifact,
 )

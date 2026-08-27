@@ -33,7 +33,7 @@ capture_support.COLUMNS = COLUMNS
 
 
 def _source_context():
-    from memcommit.context import Context, Memory
+    from memcommit.core.context import Context, Memory
 
     context = Context(
         uid="10000000-0000-4000-8000-000000000001",

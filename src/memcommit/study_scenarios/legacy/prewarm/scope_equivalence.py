@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Iterable
 from typing import Hashable, Literal
 
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 
 
 ScopeEvidenceRelation = Literal["EQUAL", "SUBSET"]

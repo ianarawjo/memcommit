@@ -19,7 +19,7 @@ from memcommit.adapters.console.commands.shared.readable_context_catalog import 
     freeze_readable_context_catalog,
 )
 from memcommit.adapters.console.commands.find.search_workbench import FindSearchWorkbenchResult
-from memcommit.context import Memory, MemoryRef
+from memcommit.core.context import Memory, MemoryRef
 from memcommit.application.operations.search.application import (
     FindSearchRequest,
     FindSearchResponse,

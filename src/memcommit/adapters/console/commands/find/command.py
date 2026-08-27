@@ -56,7 +56,7 @@ from memcommit.adapters.interfaces.console.text import (
     safe_terminal_text,
 )
 from memcommit.adapters.console.commands.find.result_present import group_search_items
-from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.application.operations.search.answer_dialogue import (
     FindAnswerCorpusTooLarge,
     FindAnswerProvider,

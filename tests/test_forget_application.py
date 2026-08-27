@@ -11,7 +11,7 @@ from typer.testing import CliRunner
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.forget import command as forget_command
-from memcommit.context import AutoCheckpoint
+from memcommit.core.context import AutoCheckpoint
 from memcommit.adapters.interfaces.cli import forget as forget_cli
 from memcommit.adapters.interfaces.console.theme import (
     SemanticColorRole,

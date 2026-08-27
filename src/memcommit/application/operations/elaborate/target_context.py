@@ -14,7 +14,7 @@ from memcommit.application.authority.access import (
     revalidate_granted_context_binding,
     resolve_context_access,
 )
-from memcommit.context import Context, GrantedContextLink, Memory, MemoryRef, QueryContextRef
+from memcommit.core.context import Context, GrantedContextLink, Memory, MemoryRef, QueryContextRef
 from memcommit.application.operations.elaborate.model import (
     ElaborateError,
     ElaborateTargetContext,

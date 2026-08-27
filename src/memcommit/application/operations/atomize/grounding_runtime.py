@@ -34,7 +34,7 @@ from memcommit.application.operations.atomize.workbench import (
     atomize_workbench_response_digest,
     project_atomize_workbench_findings,
 )
-from memcommit.context import AutoCheckpoint, Context, Memory
+from memcommit.core.context import AutoCheckpoint, Context, Memory
 from memcommit.persistence.store import MemoryStore
 
 def _content_digest(content: str) -> str:

@@ -6,7 +6,7 @@ import uuid
 from dataclasses import dataclass, replace
 from typing import Literal
 
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.application.semantic.selective_curation import CurationAnalysis, CurationDecision, CurationItem
 from memcommit.application.semantic.changes import EditChange, ProposedChange, RemoveChange
 

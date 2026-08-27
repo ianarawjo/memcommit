@@ -38,7 +38,7 @@ def _configure_store(store_dir: Path) -> None:
 
 def _prepare_revert_store(store_dir: Path) -> tuple[str, str]:
     import memcommit.application.ops as ops
-    from memcommit.context import AutoCheckpoint
+    from memcommit.core.context import AutoCheckpoint
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_dir)
@@ -113,7 +113,7 @@ def _run_merge(store_dir: Path) -> None:
 
 def _verify_revert(store_dir: Path, first_uid: str, second_uid: str) -> None:
     _configure_store(store_dir)
-    from memcommit.context import Memory
+    from memcommit.core.context import Memory
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(create=False)
@@ -133,7 +133,7 @@ def _verify_revert(store_dir: Path, first_uid: str, second_uid: str) -> None:
 
 def _verify_merge(store_dir: Path) -> None:
     _configure_store(store_dir)
-    from memcommit.context import Memory
+    from memcommit.core.context import Memory
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(create=False)

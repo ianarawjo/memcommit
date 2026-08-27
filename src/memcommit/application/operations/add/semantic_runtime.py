@@ -6,8 +6,8 @@ from dataclasses import dataclass
 from typing import Iterable
 
 import memcommit.application.ops as ops
-from memcommit.context import AutoCheckpoint
-from memcommit.context_locator import resolve_context_locator
+from memcommit.core.context import AutoCheckpoint
+from memcommit.application.context_locator import resolve_context_locator
 from memcommit.persistence.store import MemoryStore, context_record_digest
 
 

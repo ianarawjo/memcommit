@@ -55,7 +55,7 @@ from memcommit.adapters.interfaces.tui.components.plain_text_clipboard import (
     clipboard_failure_receipt,
     copy_plain_text,
 )
-from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.core.context_targeting.tui.tree import (
     ContextTree,
     ContextTreeRow,

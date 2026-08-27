@@ -8,7 +8,7 @@ ordinary-Memory projection therefore fails closed before provider connection.
 
 from __future__ import annotations
 
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 
 
 class GroundWorkspaceProjectionError(ValueError):

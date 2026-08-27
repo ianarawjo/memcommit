@@ -8,7 +8,7 @@ from typing import Callable, Protocol
 import unicodedata
 import uuid
 
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.providers.subscription import CodexChatGPTProvider
 from memcommit.application.semantic_execution import (
     BudgetLimits,

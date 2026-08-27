@@ -22,7 +22,7 @@ from memcommit.adapters.console.commands.share.viewer import (
     share_exact_command_text,
     share_memories_text,
 )
-from memcommit.context import AutoCheckpoint, Context, Memory
+from memcommit.core.context import AutoCheckpoint, Context, Memory
 from memcommit.application.reviewing.session_navigation import SessionWorkbenchNavigation
 from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,

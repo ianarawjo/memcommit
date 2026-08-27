@@ -32,7 +32,7 @@ from memcommit.adapters.console.commands.find.search_workbench import (
     FindSearchRequest,
     FindSearchResponse,
 )
-from memcommit.context import (
+from memcommit.core.context import (
     Context,
     GrantedContextLink,
     GrantedMemorySource,

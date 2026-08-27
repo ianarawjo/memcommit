@@ -44,7 +44,7 @@ from memcommit.adapters.interfaces.tui.operations.audit import (
     render_quality_audit_review_snapshot,
 )
 from memcommit.adapters.interfaces.tui.viewers.semantic import run_semantic_viewer
-from memcommit.context import Context
+from memcommit.core.context import Context
 from memcommit.application.operations.conformance.model import ConformanceError, check_context_conformance
 from memcommit.application.operations.conformance.runtime import freeze_context_conformance
 from memcommit.application.authority.derived_policy import authorize_analysis_save

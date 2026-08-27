@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass
 
-from memcommit.context import AutoCheckpoint, Checkpoint, Context
+from memcommit.core.context import AutoCheckpoint, Checkpoint, Context
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
 from memcommit.persistence.store import (

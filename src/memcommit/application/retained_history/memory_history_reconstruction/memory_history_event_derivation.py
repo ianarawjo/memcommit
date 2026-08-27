@@ -12,7 +12,7 @@ import hashlib
 from typing import Any, Literal
 import uuid
 
-from memcommit.context import Context
+from memcommit.core.context import Context
 from memcommit.application.retained_history.memory_lineage import memory_content_sha256
 from memcommit.persistence.store import MemoryStore, context_record_digest
 from memcommit.application.retained_history.temporal import direct_memory_deltas

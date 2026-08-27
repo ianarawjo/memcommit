@@ -11,7 +11,7 @@ from dataclasses import dataclass, replace
 import json
 from typing import Iterable, Literal, Sequence
 
-from memcommit.context import Context
+from memcommit.core.context import Context
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.retained_history.memory_history_reconstruction.retained_record_verification import (
     MemoryHistoryContextTransition,

@@ -10,7 +10,7 @@ from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.context import (
+from memcommit.core.context import (
     AutoCheckpoint,
     Context,
 )

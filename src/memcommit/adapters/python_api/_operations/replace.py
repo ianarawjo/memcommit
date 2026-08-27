@@ -21,7 +21,7 @@ from memcommit.adapters.python_api.replace import (
     ReplacePlanResult,
     ReplaceSpanResult,
 )
-from memcommit.context_locator import resolve_context_locator
+from memcommit.application.context_locator import resolve_context_locator
 from memcommit.application.operations.replace.application import (
     ReplaceError,
     ReplaceInputError as InternalReplaceInputError,

@@ -9,7 +9,7 @@ The repository tracked 164 paths under `build/`, including a complete copied
 incremental wheel build instead of recopying a source file whose timestamp does
 not appear newer. A wheel built from commit `b8cae0bd` consequently contained
 the stale copied `context.py`; its digest matched `build/lib`, not the canonical
-`src/memcommit/context.py`, and `mem-mcp` failed during import.
+`src/memcommit/core/context.py`, and `mem-mcp` failed during import.
 
 This is not only unused duplication. It makes artifact content depend on old
 local build history, so a successful source checkout and its wheel can execute

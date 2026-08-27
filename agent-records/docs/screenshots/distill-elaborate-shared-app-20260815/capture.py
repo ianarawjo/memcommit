@@ -201,7 +201,7 @@ def _run_distill_apply(root: Path) -> None:
 
 
 def _prepare_ground_distill(root: Path):
-    from memcommit.context import Context, Memory
+    from memcommit.core.context import Context, Memory
     from memcommit.application.operations.ground.model import (
         GroundTargetSpec,
         bind_ground_workbench,

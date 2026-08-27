@@ -21,8 +21,8 @@ from memcommit.adapters.python_api.query import (
     ReferenceQueryResult,
 )
 from memcommit.application.authority.access import resolve_context_access
-from memcommit.context import QueryContextRef
-from memcommit.context_locator import resolve_context_locator
+from memcommit.core.context import QueryContextRef
+from memcommit.application.context_locator import resolve_context_locator
 from memcommit.core.context_targeting.readable_catalog import (
     freeze_profile_readable_context_catalog,
 )

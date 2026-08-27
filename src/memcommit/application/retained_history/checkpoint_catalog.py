@@ -16,7 +16,7 @@ from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from typing import Any
 
-from memcommit.context import Checkpoint
+from memcommit.core.context import Checkpoint
 from memcommit.persistence.store import (
     MemoryStore,
     checkpoint_history_digest,

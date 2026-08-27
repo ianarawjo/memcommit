@@ -1,7 +1,4 @@
-"""
-    Defines an abstract memory store, called a "context" in memcommit.
-    Contexts store atomic chunks of information, called memories.
-"""
+"""Core Context, Memory, reference, and checkpoint domain values."""
 from __future__ import annotations
 
 import hashlib

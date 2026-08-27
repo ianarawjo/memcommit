@@ -7,7 +7,7 @@ import hashlib
 import json
 from typing import Callable
 
-from memcommit.context import Context
+from memcommit.core.context import Context
 from memcommit.application.operations.fit.ground_report import (
     FIT_RULESET_VERSION,
     FIT_SCHEMA_VERSION,

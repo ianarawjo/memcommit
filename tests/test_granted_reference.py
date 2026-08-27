@@ -17,7 +17,7 @@ from memcommit.adapters.python_api import (
     ReferenceContextError,
 )
 from memcommit.adapters.console.entrypoint import app
-from memcommit.context import Memory, MemoryRef
+from memcommit.core.context import Memory, MemoryRef
 from memcommit.adapters.interfaces.agent.reference import ReferenceAgentAdapter
 from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,

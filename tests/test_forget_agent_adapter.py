@@ -8,7 +8,7 @@ from pathlib import Path
 import uuid
 
 from memcommit.adapters.python_api import ForgetProviderFailure, MemCommitClient
-from memcommit.context import AutoCheckpoint, Context, Memory
+from memcommit.core.context import AutoCheckpoint, Context, Memory
 from memcommit.adapters.interfaces.agent.forget import (
     FORGET_AGENT_TOOL_NAME,
     ForgetAgentAdapter,

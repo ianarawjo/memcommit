@@ -23,7 +23,7 @@ from memcommit.adapters.python_api.meld import (
     MeldSessionResult,
 )
 from memcommit.application.authority.access import resolve_context_access
-from memcommit.context_locator import resolve_context_locator
+from memcommit.application.context_locator import resolve_context_locator
 from memcommit.application.operations.meld.model import (
     MELD_SCHEMA_VERSION,
     MeldError as CoreMeldError,

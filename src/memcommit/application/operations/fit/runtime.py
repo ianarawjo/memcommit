@@ -13,8 +13,8 @@ from memcommit.application.authority.access import (
     revalidate_granted_context_binding,
     resolve_context_access,
 )
-from memcommit.context import Context, Memory
-from memcommit.context_locator import (
+from memcommit.core.context import Context, Memory
+from memcommit.application.context_locator import (
     is_relative_context_locator,
     resolve_context_locator,
 )

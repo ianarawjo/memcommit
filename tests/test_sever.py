@@ -27,7 +27,7 @@ from memcommit.adapters.console.commands.shared.resolution_workbench_shell impor
     session_todo_view,
 )
 from memcommit.adapters.interfaces.tui.workbenches.impact import ImpactController
-from memcommit.context import QueryContextRef
+from memcommit.core.context import QueryContextRef
 from memcommit.providers.subscription import QueryProviderError
 from memcommit.application.resolution.workbench import (
     ResolutionNavigation,

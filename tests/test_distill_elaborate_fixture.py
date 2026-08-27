@@ -8,7 +8,7 @@ import re
 
 import memcommit.application.operations.distill.model as distill_module
 import memcommit.application.operations.elaborate.model as elaborate_module
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.application.operations.distill.model import DISTILL_PAYLOAD_MARKER, analyze_distill
 from memcommit.application.semantic.generative_reduction_reference import (
     REFERENCE_EXAMPLES_MARKER,

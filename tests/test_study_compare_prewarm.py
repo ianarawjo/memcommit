@@ -10,7 +10,7 @@ from memcommit.application.operations.compare.ledger.model import (
     ComparisonRelation,
     ComparisonReports,
 )
-from memcommit.context import Context
+from memcommit.core.context import Context
 from memcommit.application.evaluation.study_compare_prewarm import prewarm_pair
 from memcommit.providers.types import CompletionRun, ProviderIdentity
 from memcommit.persistence.store import MemoryStore

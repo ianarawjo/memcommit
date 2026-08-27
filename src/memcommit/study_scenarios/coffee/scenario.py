@@ -12,7 +12,7 @@ import hashlib
 import json
 import uuid
 
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.application.operations.translate.view import (
     TRANSLATION_ORIGIN_IMPORTED,
     TranslationCatalog,

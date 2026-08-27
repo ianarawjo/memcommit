@@ -8,7 +8,7 @@ import hashlib
 import json
 from pathlib import Path
 
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.application.operations.profile.config import (
     ProfileConfigError,
     canonical_grant_permissions,

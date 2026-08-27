@@ -60,7 +60,7 @@ mem reference --from LOCATOR [--to LOCATOR | --into LOCATOR]
 mem dev query-source install ... --into LOCATOR
 ```
 
-These commands use `memcommit.context_locator.resolve_context_locator` for
+These commands use `memcommit.application.context_locator.resolve_context_locator` for
 their existing-Context operands, normally through the command-entry
 `ContextOperandSnapshot` that freezes one active-Context base for the complete
 invocation.

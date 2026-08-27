@@ -6,7 +6,7 @@ import pytest
 from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.application.operations.ground.model import (
     GroundError,
     GroundTargetSpec,

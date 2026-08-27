@@ -14,7 +14,7 @@ from memcommit.adapters.python_api import (
     MemoryReferenceResult,
     ReferenceContextError,
 )
-from memcommit.context import Memory, MemoryRef
+from memcommit.core.context import Memory, MemoryRef
 from memcommit.application.retained_history.context_snapshot import ContextSnapshotRef
 from memcommit.persistence.store import MemoryStore
 

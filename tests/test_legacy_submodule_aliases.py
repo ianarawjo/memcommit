@@ -12,8 +12,6 @@ PACKAGE_ROOT = REPOSITORY_ROOT / "src" / "memcommit"
 ROOT_BOUNDARIES = {
     "__init__.py",
     "bootstrap.py",
-    "context.py",
-    "context_locator.py",
 }
 
 
@@ -30,6 +28,8 @@ removed = (
     "memcommit.store",
     "memcommit.atomize_analysis_runtime",
     "memcommit.semantic_execution",
+    "memcommit.context",
+    "memcommit.context_locator",
 )
 for module in removed:
     try:

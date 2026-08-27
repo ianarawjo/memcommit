@@ -7,7 +7,7 @@ from typer.testing import CliRunner
 import memcommit.adapters.console.commands.replace.command as replace_command
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.context import Memory
+from memcommit.core.context import Memory
 from memcommit.application.operations.replace.application import ReplaceRequest
 from memcommit.persistence.store import MemoryStore
 

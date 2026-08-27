@@ -6,7 +6,7 @@ import uuid
 from dataclasses import dataclass
 
 from memcommit.application.authority.access import ContextAccess, authorized_context_mutation
-from memcommit.context import AutoCheckpoint, Memory, MemoryRef
+from memcommit.core.context import AutoCheckpoint, Memory, MemoryRef
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.core.context_targeting.readable_catalog import ReadableContextCatalog
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names

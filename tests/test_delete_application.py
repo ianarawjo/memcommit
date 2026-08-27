@@ -13,7 +13,7 @@ from memcommit.adapters.python_api import (
     DeleteInputError,
     MemCommitClient,
 )
-from memcommit.context import AutoCheckpoint
+from memcommit.core.context import AutoCheckpoint
 from memcommit.application.operations.delete.application import (
     ContextDeleteRequest,
     DeleteStalePlanError,

@@ -51,7 +51,7 @@ def _run_long_child() -> None:
 
     import memcommit.application.ops as ops
     from memcommit.adapters.console.commands.merge.command import cmd as merge_command
-    from memcommit.context import Memory
+    from memcommit.core.context import Memory
     from memcommit.persistence.store import MemoryStore
 
     with tempfile.TemporaryDirectory(prefix="mem-merge-long-capture-") as directory:
@@ -108,7 +108,7 @@ def _run_zero_delta_child() -> None:
 
     import memcommit.application.ops as ops
     from memcommit.adapters.console.commands.merge.command import cmd as merge_command
-    from memcommit.context import Memory
+    from memcommit.core.context import Memory
     from memcommit.persistence.store import MemoryStore
 
     with tempfile.TemporaryDirectory(prefix="mem-merge-zero-capture-") as directory:

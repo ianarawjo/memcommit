@@ -11,8 +11,8 @@ from dataclasses import dataclass
 from typing import Literal
 
 from memcommit.application.authority.access import ContextAccess, resolve_context_access
-from memcommit.context import Context, Memory
-from memcommit.context_locator import resolve_context_locator
+from memcommit.core.context import Context, Memory
+from memcommit.application.context_locator import resolve_context_locator
 from memcommit.core.context_targeting.readable_catalog import (
     ReadableContextCatalog,
     freeze_profile_readable_context_catalog,

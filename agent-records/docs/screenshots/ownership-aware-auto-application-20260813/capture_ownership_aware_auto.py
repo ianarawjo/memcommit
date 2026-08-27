@@ -124,7 +124,7 @@ class _EmptyUpdateProvider:
 
 
 def _new_context(*, uid: str, name: str, memory_uid: str, content: str):
-    from memcommit.context import Context, Memory
+    from memcommit.core.context import Context, Memory
 
     context = Context(uid=uid, name=name)
     context.add(Memory(uid=memory_uid, content=content))

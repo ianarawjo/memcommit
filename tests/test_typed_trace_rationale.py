@@ -7,7 +7,7 @@ import json
 from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
-from memcommit.context import Memory, MemoryRef
+from memcommit.core.context import Memory, MemoryRef
 from memcommit.application.operations.rationale.rules import (
     RationaleLimitUnit,
     RationaleNarrativeStatus,

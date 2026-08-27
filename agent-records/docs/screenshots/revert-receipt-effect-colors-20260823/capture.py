@@ -35,7 +35,7 @@ def _configure_store(store_dir: Path) -> None:
 def _prepare_store(store_dir: Path) -> tuple[str, tuple[str, str, str, str]]:
     _configure_store(store_dir)
     import memcommit.application.ops as ops
-    from memcommit.context import AutoCheckpoint, Memory
+    from memcommit.core.context import AutoCheckpoint, Memory
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_dir)
@@ -94,7 +94,7 @@ def _prepare_store(store_dir: Path) -> tuple[str, tuple[str, str, str, str]]:
 
 def _print_state(store_dir: Path, *, label: str) -> None:
     _configure_store(store_dir)
-    from memcommit.context import Memory
+    from memcommit.core.context import Memory
     from memcommit.source_projection.model import SourceForm
     from memcommit.source_projection.presentation import source_object_label
     from memcommit.persistence.store import MemoryStore
@@ -121,7 +121,7 @@ def _run_revert(store_dir: Path, target_uid: str) -> None:
 
 def _verify(store_dir: Path, expected_uids: tuple[str, str, str, str]) -> None:
     _configure_store(store_dir)
-    from memcommit.context import Memory, MemoryRef
+    from memcommit.core.context import Memory, MemoryRef
     from memcommit.persistence.store import MemoryStore
 
     restored_uid, edited_uid, removed_uid, embedded_uid = expected_uids

@@ -20,7 +20,7 @@ from memcommit.application.operations.atomize.analysis_application import (
 from memcommit.application.operations.atomize.analysis_runtime import (
     execute_atomize_analysis_open,
 )
-from memcommit.context import Memory
+from memcommit.core.context import Memory
 from memcommit.persistence.store import MemoryStore
 from memcommit.study_scenarios.legacy.prewarm.atomize import AtomizePrewarmMatch
 

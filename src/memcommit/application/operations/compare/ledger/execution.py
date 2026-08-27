@@ -26,7 +26,7 @@ from memcommit.application.authority.access import (
     resolve_context_access,
     revalidate_granted_context_binding,
 )
-from memcommit.context import Context
+from memcommit.core.context import Context
 from memcommit.application.operations.compare.ledger.evidence import project_comparison_context
 from memcommit.core.context_targeting.loading import load_context_scope
 from memcommit.application.authority.derived_policy import (

@@ -10,7 +10,7 @@ from __future__ import annotations
 import json
 import re
 
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.application.semantic.selective_curation import (
     CriterionFrame,
     CurationAnalysis,

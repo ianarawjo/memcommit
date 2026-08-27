@@ -1654,7 +1654,7 @@ class TestShow:
         assert "No Context or direct item matches 'missing'" in result.stderr
 
     def test_fails_for_ambiguous_uid_prefix(self, isolated_store):
-        from memcommit.context import Memory as Mem
+        from memcommit.core.context import Memory as Mem
 
         invoke("init", "ctx")
         store = MemoryStore()
@@ -1717,7 +1717,7 @@ class TestRemove:
         self,
         isolated_store,
     ):
-        from memcommit.context import Memory as Mem
+        from memcommit.core.context import Memory as Mem
 
         store = MemoryStore()
         first = ops.init("first")
@@ -1744,7 +1744,7 @@ class TestRemove:
         assert len(store.load_direct("second").memories) == 1
 
     def test_fails_on_ambiguous_prefix(self, isolated_store):
-        from memcommit.context import Memory as Mem
+        from memcommit.core.context import Memory as Mem
 
         invoke("init", "ctx")
         # Insert two memories that share a prefix directly.

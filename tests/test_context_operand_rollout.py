@@ -27,7 +27,7 @@ from memcommit.adapters.console.commands.profile.picker import (
 from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
 )
-from memcommit.context import AutoCheckpoint
+from memcommit.core.context import AutoCheckpoint
 from memcommit.application.reviewing.quality.findings import AmbiguityReport, ConflictReport, DuplicateReport
 from memcommit.persistence.store import MemoryStore
 

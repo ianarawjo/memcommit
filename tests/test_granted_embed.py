@@ -11,7 +11,7 @@ from typer.testing import CliRunner
 import memcommit.application.ops as ops
 from memcommit.application.authority.access import GrantedReadStore, resolve_context_access
 from memcommit.adapters.console.entrypoint import app
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.application.retained_history.context_snapshot import ContextSnapshotRef
 from memcommit.application.operations.embed.runtime import MemoryStoreEmbedPort
 from memcommit.adapters.interfaces.tui.operations.embed import build_embed_tui_setup

@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import hashlib
 
-from memcommit.context import Context, Memory
-from memcommit.context_locator import resolve_context_locator
+from memcommit.core.context import Context, Memory
+from memcommit.application.context_locator import resolve_context_locator
 from memcommit.core.context_targeting.loading import (
     resolve_local_direct_memory_locator,
     try_resolve_short_local_direct_memory_locator,

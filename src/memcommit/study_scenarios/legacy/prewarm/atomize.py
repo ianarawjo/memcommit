@@ -18,7 +18,7 @@ from memcommit.configuration.config import Config
 from memcommit.providers.policy import (
     resolve_operation_provider_policy,
 )
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.application.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,

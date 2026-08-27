@@ -57,7 +57,7 @@ def _environment(home: Path) -> dict[str, str]:
 def _prepare_store(home: Path, *, ambiguous: bool) -> None:
     script = textwrap.dedent(
         f"""
-        from memcommit.context import Context, Memory
+        from memcommit.core.context import Context, Memory
         from memcommit.persistence.store import MemoryStore
 
         store = MemoryStore()
@@ -184,7 +184,7 @@ def main() -> None:
             "02-bare-uid-embed-default-current-target",
             """
             run("embed", "ca562047")
-            from memcommit.context import MemoryRef
+            from memcommit.core.context import MemoryRef
             from memcommit.persistence.store import MemoryStore
             store = MemoryStore(create=False)
             target = store.load_direct("practice/4")
@@ -200,7 +200,7 @@ def main() -> None:
             "03-bare-uid-reference-default-current-target",
             """
             run("reference", "dbdb4436")
-            from memcommit.context import MemoryRef
+            from memcommit.core.context import MemoryRef
             from memcommit.persistence.store import MemoryStore
             store = MemoryStore(create=False)
             target = store.load_direct("practice/4")
@@ -234,7 +234,7 @@ def main() -> None:
             "06-read-only-target-verification",
             """
             run("list")
-            from memcommit.context import MemoryRef
+            from memcommit.core.context import MemoryRef
             from memcommit.persistence.store import MemoryStore
             store = MemoryStore(create=False)
             target = store.load_direct("practice/4")

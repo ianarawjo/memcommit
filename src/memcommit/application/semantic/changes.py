@@ -4,10 +4,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, TypeAlias
 
-from memcommit.context import Memory
+from memcommit.core.context import Memory
 
 if TYPE_CHECKING:
-    from memcommit.context import Context
+    from memcommit.core.context import Context
 
 
 @dataclass

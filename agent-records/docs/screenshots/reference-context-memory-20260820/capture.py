@@ -79,7 +79,7 @@ def _initialize_rejection() -> None:
 
 
 def _contents(context) -> tuple[str, ...]:
-    from memcommit.context import Context, Memory
+    from memcommit.core.context import Context, Memory
 
     found: list[str] = []
     seen: set[str] = set()
@@ -100,7 +100,7 @@ def _contents(context) -> tuple[str, ...]:
 
 def _run_child(kind: str) -> None:
     from memcommit.adapters.console.entrypoint import app
-    from memcommit.context import MemoryRef
+    from memcommit.core.context import MemoryRef
     from memcommit.application.retained_history.context_snapshot import ContextSnapshotRef
     from memcommit.persistence.store import MemoryStore
 

@@ -22,7 +22,7 @@ from memcommit.application.reviewing.memory_diff import (
 from memcommit.adapters.console.commands.shared.checkpoint_diff import render_checkpoint_revision_cli
 from memcommit.adapters.console.commands.shared.history_present import checkpoint_picker_entries
 from memcommit.adapters.console.commands.update.render import render_plan
-from memcommit.context_locator import resolve_context_locator
+from memcommit.application.context_locator import resolve_context_locator
 from memcommit.core.context_targeting.checkpoint import (
     resolve_local_checkpoint_target,
     resolve_local_context_checkpoint_target,

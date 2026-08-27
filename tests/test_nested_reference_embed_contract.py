@@ -11,7 +11,7 @@ from __future__ import annotations
 import pytest
 
 import memcommit.application.ops as ops
-from memcommit.context import Context, GrantedMemorySource, Memory, MemoryRef
+from memcommit.core.context import Context, GrantedMemorySource, Memory, MemoryRef
 from memcommit.application.retained_history.context_snapshot import ContextSnapshotRef
 from memcommit.application.operations.embed.application import EmbedRequest, MemoryEmbedRequest
 from memcommit.application.operations.embed.runtime import MemoryStoreEmbedPort, execute_embed

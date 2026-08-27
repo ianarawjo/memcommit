@@ -12,7 +12,7 @@ import memcommit.application.ops as ops
 import memcommit.application.operations.rationale.model as rationale_module
 import memcommit.persistence.store as store_module
 from memcommit.adapters.console.entrypoint import app
-from memcommit.context import AutoCheckpoint, Memory
+from memcommit.core.context import AutoCheckpoint, Memory
 from memcommit.application.operations.rationale.cache import (
     CachedRationaleInference,
     load_rationale_inference,

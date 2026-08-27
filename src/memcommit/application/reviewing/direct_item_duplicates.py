@@ -11,7 +11,7 @@ import json
 from dataclasses import dataclass
 from typing import Literal
 
-from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.application.retained_history.context_snapshot import ContextSnapshotRef
 
 

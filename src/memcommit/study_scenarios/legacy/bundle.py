@@ -21,7 +21,7 @@ from typing import Iterator
 import uuid
 
 import memcommit.persistence.store as store_module
-from memcommit.context import AutoCheckpoint, Context, Memory
+from memcommit.core.context import AutoCheckpoint, Context, Memory
 from memcommit.study_scenarios.legacy.fixtures import (
     FixtureDataset,
     FixtureMemory,

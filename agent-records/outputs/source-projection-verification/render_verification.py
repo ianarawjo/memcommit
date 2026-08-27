@@ -26,7 +26,7 @@ from memcommit.adapters.console.commands.granted_context import resolve_context_
 from memcommit.adapters.console.commands.shared.readable_context_catalog import (
     freeze_readable_context_catalog,
 )
-from memcommit.context import Memory, MemoryRef
+from memcommit.core.context import Memory, MemoryRef
 from memcommit.store import MemoryStore
 
 

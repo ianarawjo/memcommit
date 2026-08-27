@@ -9,7 +9,7 @@ from memcommit.application.operations.atomize.domain import AtomizeAnalysisSessi
 from memcommit.application.operations.atomize.grounding import AtomizeGroundingSession
 from memcommit.application.operations.atomize.grounding_provider import AtomizeGroundingProvider
 from memcommit.application.operations.atomize.workbench import AtomizeWorkbenchSession
-from memcommit.context import Context
+from memcommit.core.context import Context
 
 
 AtomizeGroundingProviderFactory = Callable[[], AtomizeGroundingProvider]

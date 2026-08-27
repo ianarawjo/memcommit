@@ -31,7 +31,7 @@ _BASE.ROWS = ROWS
 
 
 def _initialize(store) -> None:
-    from memcommit.context import Context, Memory
+    from memcommit.core.context import Context, Memory
 
     root = Context(
         uid="10000000-0000-4000-8000-000000000001",
@@ -59,7 +59,7 @@ def _initialize(store) -> None:
 
 
 def _verification(store, *, label: str) -> str:
-    from memcommit.context import Memory
+    from memcommit.core.context import Memory
 
     lines = [f"{label} · READ-ONLY STORE VERIFICATION"]
     checkpoint_count = 0
@@ -95,7 +95,7 @@ def _run_child(kind: str) -> None:
     import typer
 
     import memcommit.adapters.console.commands.replace.command as replace_command
-    from memcommit.context import Context
+    from memcommit.core.context import Context
     from memcommit.application.operations.replace.runtime import execute_replace_plan, plan_replace_with_store
     from memcommit.persistence.store import MemoryStore
 

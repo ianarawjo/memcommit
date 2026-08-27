@@ -19,7 +19,7 @@ from memcommit.adapters.python_api import (
     QueryStorageError,
     ReferenceQueryResult,
 )
-from memcommit.context import QueryContextRef
+from memcommit.core.context import QueryContextRef
 from memcommit.adapters.interfaces.agent.contract import (
     AGENT_ERROR_MESSAGE_LIMIT,
     AgentRequestError as _AgentRequestError,

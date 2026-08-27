@@ -165,7 +165,7 @@ def _run_help(operation: str) -> None:
 
 
 def _run_merge() -> None:
-    from memcommit.context import Memory
+    from memcommit.core.context import Memory
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()

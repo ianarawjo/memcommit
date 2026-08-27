@@ -42,7 +42,7 @@ from memcommit.application.operations.compare.ledger.store import (
     load_comparison_analysis,
     save_comparison_analysis,
 )
-from memcommit.context import Context, Memory, MemoryRef
+from memcommit.core.context import Context, Memory, MemoryRef
 from memcommit.configuration.config import Config
 from memcommit.adapters.console.commands.compare.command import render_comparison
 from memcommit.adapters.console.commands.meld.command import render_meld_session

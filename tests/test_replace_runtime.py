@@ -7,7 +7,7 @@ from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.context import Context, MemoryRef
+from memcommit.core.context import Context, MemoryRef
 from memcommit.application.operations.replace.application import ReplaceRequest, ReplaceStalePlanError
 from memcommit.application.operations.replace.runtime import execute_replace_plan, plan_replace_with_store
 from memcommit.persistence.store import MemoryStore

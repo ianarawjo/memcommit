@@ -28,7 +28,7 @@ from memcommit.application.operations.atomize.grounding import (
     AtomizeGroundingSession,
     atomize_grounding_context_digest,
 )
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.application.operations.meld.model import MeldError, MeldRevision, meld_canonical_digest
 
 

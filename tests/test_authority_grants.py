@@ -19,7 +19,7 @@ from memcommit.adapters.console.commands.shared.memory_picker import MemoryRepor
 from memcommit.adapters.console.commands.shared.readable_context_catalog import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.context import Memory
+from memcommit.core.context import Memory
 from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,

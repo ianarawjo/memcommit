@@ -9,7 +9,7 @@ from memcommit.application.authority.access import (
     grant_checkpoint_args,
     resolve_context_access,
 )
-from memcommit.context import AutoCheckpoint
+from memcommit.core.context import AutoCheckpoint
 from memcommit.application.operations.edit.application import (
     EditRequest,
     EditResult,

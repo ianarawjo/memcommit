@@ -12,7 +12,7 @@ import memcommit.adapters.console.commands.compare.command as compare_command
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.application.operations.compare.ledger.model import ComparisonInput
-from memcommit.context import MemoryRef
+from memcommit.core.context import MemoryRef
 from memcommit.application.operations.compare.ledger.store import comparison_analysis_path
 from memcommit.application.operations.compare.summary import ComparisonSummaryError
 from memcommit.application.operations.compare.summary_provider import summarize_comparison

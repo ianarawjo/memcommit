@@ -17,7 +17,7 @@ from memcommit.application.operations.atomize.domain import create_atomize_analy
 from memcommit.application.operations.atomize.workflow import open_or_create_atomize_workbench
 from memcommit.adapters.console.entrypoint import app
 from memcommit.configuration.config import Config
-from memcommit.context import Memory
+from memcommit.core.context import Memory
 from memcommit.application.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,

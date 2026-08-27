@@ -11,7 +11,7 @@ import uuid
 from dataclasses import dataclass
 from typing import Any
 
-from memcommit.context import AutoCheckpoint, Checkpoint, Context
+from memcommit.core.context import AutoCheckpoint, Checkpoint, Context
 from memcommit.application.operations.ground.workspace_model import GroundWorkspaceError
 from memcommit.application.operations.ground.workspace_runtime import load_ground_workspace
 from memcommit.persistence.store import (

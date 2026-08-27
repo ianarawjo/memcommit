@@ -49,7 +49,7 @@ from memcommit.application.operations.compare.ledger.model import (
     context_record_digest,
 )
 from memcommit.configuration.config import Config
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.providers.policy import (
     resolve_codex_evaluation_policy,
 )

@@ -59,7 +59,7 @@ from memcommit.adapters.interfaces.tui.workbenches.read_report import (
     choose_read_report_recent,
 )
 from memcommit.adapters.interfaces.tui.workbenches.findings import run_quality_find_browser
-from memcommit.context import Context
+from memcommit.core.context import Context
 from memcommit.core.context_targeting.tui.range_selection import (
     ContextRangeSelectionState,
 )

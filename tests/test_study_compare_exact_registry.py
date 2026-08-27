@@ -26,7 +26,7 @@ from memcommit.application.operations.compare.ledger.model import (
 )
 from memcommit.application.operations.compare.ledger.store import load_comparison_analysis
 from memcommit.configuration.config import Config
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.core.context_targeting.loading import load_context_scope
 from memcommit.application.operations.compare.ledger.granted_store import recursive_comparison_projection
 from memcommit.application.operations.meld.start_application import MeldStartRequest

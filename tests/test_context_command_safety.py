@@ -9,7 +9,7 @@ import memcommit.application.ops as ops
 import memcommit.persistence.store as store_module
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.branch.dialog import BranchCreationReceipt
-from memcommit.context import AutoCheckpoint, Context, Memory
+from memcommit.core.context import AutoCheckpoint, Context, Memory
 from memcommit.persistence.store import MemoryStore
 
 

@@ -287,7 +287,7 @@ target and the final compare-and-set rejects both a changed target record and
 a changed current pointer.
 
 The lexical resolver itself is operation-neutral and lives in
-`memcommit.context_locator`; Switch owns existence and load validation plus
+`memcommit.application.context_locator`; Switch owns existence and load validation plus
 the final state compare-and-set through `switch_application.py` and
 `switch_runtime.py`. Compare uses the same
 resolver without inheriting Switch's mutation semantics. The reuse boundary is

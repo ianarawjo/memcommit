@@ -71,7 +71,7 @@ from memcommit.adapters.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
 )
-from memcommit.context import Context
+from memcommit.core.context import Context
 from memcommit.application.operations.embed.application import (
     EmbedPlacement,
     EmbedRequest,

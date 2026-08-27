@@ -10,7 +10,7 @@ from memcommit.application.authority.access import (
     grant_checkpoint_args,
     resolve_context_access,
 )
-from memcommit.context import AutoCheckpoint
+from memcommit.core.context import AutoCheckpoint
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.core.context_targeting.readable_catalog import (
     freeze_readable_context_catalog,

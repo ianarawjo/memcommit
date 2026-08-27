@@ -12,7 +12,7 @@ from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.context import Context
+from memcommit.core.context import Context
 from memcommit.application.operations.embed.application import EmbedRequest
 from memcommit.application.operations.embed.runtime import MemoryStoreEmbedPort
 from memcommit.application.operations.profile.config import (

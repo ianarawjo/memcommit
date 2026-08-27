@@ -29,7 +29,7 @@ _BASE.ROWS = ROWS
 
 
 def _initialize(store) -> None:
-    from memcommit.context import Context, Memory
+    from memcommit.core.context import Context, Memory
 
     root = Context(
         uid="10000000-0000-4000-8000-000000000001",
@@ -57,7 +57,7 @@ def _initialize(store) -> None:
 
 
 def _verification(store, *, stale: bool) -> str:
-    from memcommit.context import Memory
+    from memcommit.core.context import Memory
 
     contents = []
     checkpoints = []
@@ -78,7 +78,7 @@ def _run_child(kind: str) -> None:
     import typer
 
     import memcommit.adapters.console.commands.replace.command as replace_command
-    from memcommit.context import Context
+    from memcommit.core.context import Context
     from memcommit.persistence.store import MemoryStore
 
     with tempfile.TemporaryDirectory(prefix="memcommit-replace-capture-") as directory:

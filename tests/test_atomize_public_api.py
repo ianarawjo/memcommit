@@ -30,7 +30,7 @@ from memcommit.application.operations.atomize.runtime import (
     capture_atomize_session_snapshot,
 )
 from memcommit.adapters.python_api.errors import AtomizeExecutionError
-from memcommit.context import Memory
+from memcommit.core.context import Memory
 from memcommit.persistence.store import MemoryStore
 from memcommit.study_scenarios.legacy.prewarm.atomize import AtomizePrewarmMatch
 

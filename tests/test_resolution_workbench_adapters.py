@@ -20,7 +20,7 @@ from memcommit.application.operations.atomize.resolution_adapter import (
     AtomizeResolutionWorkbenchAdapter,
 )
 from memcommit.application.operations.atomize.workbench import create_atomize_workbench
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.adapters.console.commands.shared.resolution_workbench_shell import (
     resolution_viewer_fragments,
     session_review_action_view,

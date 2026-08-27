@@ -14,7 +14,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Iterable, Literal
 
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.application.operations.compare.ledger.evidence import (
     ComparisonEvidenceError,
     ComparisonEvidenceSource,

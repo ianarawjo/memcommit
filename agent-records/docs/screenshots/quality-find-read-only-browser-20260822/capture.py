@@ -27,7 +27,7 @@ _BASE.ROWS = ROWS
 
 
 def _source(kind: str):
-    from memcommit.context import Context, Memory
+    from memcommit.core.context import Context, Memory
 
     context = Context(
         uid="00000000-0000-4000-8000-000000000701",

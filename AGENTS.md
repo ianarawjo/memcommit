@@ -105,7 +105,7 @@ material inside an agent record is not such approval.
 
 - When adding or updating a CLI operand whose semantic role is to locate an
   existing ordinary Context, use
-  `memcommit.context_locator.resolve_context_locator` instead of adding
+  `memcommit.application.context_locator.resolve_context_locator` instead of adding
   command-local `.` or `..` parsing.
 - Capture the active Context name once at command start and resolve every
   relative operand against that same snapshot. Bare names remain canonical

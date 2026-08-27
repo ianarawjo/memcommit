@@ -6,7 +6,7 @@ import json
 import uuid
 from pathlib import Path
 
-from memcommit.context import Context, Memory, QueryContextRef
+from memcommit.core.context import Context, Memory, QueryContextRef
 from memcommit.application.operations.update.model import (
     AddOperation,
     EditOperation,

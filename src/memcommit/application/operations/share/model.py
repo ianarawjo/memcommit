@@ -7,8 +7,8 @@ import hashlib
 import json
 import uuid
 
-from memcommit.context import AutoCheckpoint, Context, Memory
-from memcommit.context_locator import resolve_context_locator
+from memcommit.core.context import AutoCheckpoint, Context, Memory
+from memcommit.application.context_locator import resolve_context_locator
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
 from memcommit.application.operations.profile.config import ProfileRegistry, profile_store_dir

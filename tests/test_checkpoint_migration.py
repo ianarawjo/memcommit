@@ -12,7 +12,7 @@ from memcommit.application.retained_history.checkpoint_migration import (
     plan_rename_history_repair,
 )
 from memcommit.application.retained_history.command_history import CommandHistoryError, build_command_stacks
-from memcommit.context import AutoCheckpoint
+from memcommit.core.context import AutoCheckpoint
 from memcommit.persistence.store import MemoryStore
 
 

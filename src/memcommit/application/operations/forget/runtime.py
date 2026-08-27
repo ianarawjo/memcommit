@@ -11,7 +11,7 @@ from memcommit.application.authority.access import (
     grant_checkpoint_args,
     resolve_context_access,
 )
-from memcommit.context import AutoCheckpoint, Context
+from memcommit.core.context import AutoCheckpoint, Context
 from memcommit.application.operations.forget.application import (
     ForgetAnalysisRequest,
     ForgetAnalysisResult,

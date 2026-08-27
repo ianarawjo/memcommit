@@ -247,7 +247,7 @@ def _child_refresh(store_root: Path) -> None:
 def _child_stale(store_root: Path) -> None:
     from memcommit.application.operations.atomize.analysis_application import AtomizeAnalysisOpenRequest
     from memcommit.application.operations.atomize.analysis_runtime import execute_atomize_analysis_open
-    from memcommit.context import Memory
+    from memcommit.core.context import Memory
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root)

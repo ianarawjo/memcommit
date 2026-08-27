@@ -6,7 +6,7 @@ from collections.abc import Iterable
 
 import typer
 
-from memcommit.context import Memory
+from memcommit.core.context import Memory
 from memcommit.adapters.interfaces.console.text import display_escape_text
 from memcommit.adapters.interfaces.console.theme import (
     SemanticColorRole,

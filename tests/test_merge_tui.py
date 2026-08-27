@@ -13,7 +13,7 @@ from typer.testing import CliRunner
 import memcommit.application.ops as ops
 import memcommit.adapters.interfaces.tui.operations.merge.adapter as merge_tui_adapter
 from memcommit.adapters.console.entrypoint import app
-from memcommit.context import Memory
+from memcommit.core.context import Memory
 from memcommit.adapters.interfaces.tui.operations.merge import (
     MergeTuiSetup,
     build_merge_tui_setup,

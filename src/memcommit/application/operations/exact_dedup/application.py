@@ -11,7 +11,7 @@ from memcommit.application.authority.access import (
     authorized_context_mutation,
     grant_checkpoint_args,
 )
-from memcommit.context import AutoCheckpoint, Context, Memory, MemoryRef
+from memcommit.core.context import AutoCheckpoint, Context, Memory, MemoryRef
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.core.context_targeting.readable_catalog import ReadableContextCatalog
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names

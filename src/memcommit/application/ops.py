@@ -25,7 +25,7 @@ import uuid
 from collections.abc import Mapping, Sequence
 from typing import TYPE_CHECKING, Callable
 
-from memcommit.context import Context, Information, Memory, MemoryRef, QueryContextRef
+from memcommit.core.context import Context, Information, Memory, MemoryRef, QueryContextRef
 from memcommit.core.context_targeting.naming import validate_portable_context_name
 
 if TYPE_CHECKING:

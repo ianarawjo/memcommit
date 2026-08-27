@@ -16,7 +16,7 @@ import uuid
 from dataclasses import dataclass, replace
 from typing import Iterable, Literal
 
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 
 
 GROUND_SCHEMA_VERSION = 2

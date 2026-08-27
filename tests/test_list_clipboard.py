@@ -16,7 +16,7 @@ from typer.testing import CliRunner
 import memcommit.adapters.console.clipboard as clipboard
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.clipboard import ClipboardError, ClipboardPayload
-from memcommit.context import Context, Memory, QueryContextRef
+from memcommit.core.context import Context, Memory, QueryContextRef
 from memcommit.application.retained_history.context_snapshot import ContextSnapshotRef, context_snapshot_digest
 from memcommit.adapters.interfaces.console.theme import (
     SemanticColorRole,

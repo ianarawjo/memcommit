@@ -4,7 +4,7 @@ from __future__ import annotations
 from dataclasses import dataclass, replace
 from typing import Hashable, Literal, Sequence
 
-from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.application.operations.search.answer_references import FindAnswerEvidence
 from memcommit.application.operations.search.model import SearchArtifact, SearchCandidate, collect_candidates
 from memcommit.persistence.store import MemoryStore

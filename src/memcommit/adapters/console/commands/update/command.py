@@ -33,8 +33,8 @@ from memcommit.adapters.console.commands.update.render import (
     render_update_report_snapshot,
     review_update_application,
 )
-from memcommit.context import Context
-from memcommit.context_locator import resolve_context_locator
+from memcommit.core.context import Context
+from memcommit.application.context_locator import resolve_context_locator
 from memcommit.core.context_targeting.loading import load_context_scope
 from memcommit.core.context_targeting.model import InlineTextOperand
 from memcommit.core.context_targeting.operands import (

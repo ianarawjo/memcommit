@@ -12,7 +12,7 @@ from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.context import Context, Memory, MemoryRef
+from memcommit.core.context import Context, Memory, MemoryRef
 from memcommit.adapters.interfaces.tui.components.direct_item_placement import DirectItemGap
 from memcommit.adapters.interfaces.tui.operations.memory_transfer import (
     build_memory_transfer_tui_setup,

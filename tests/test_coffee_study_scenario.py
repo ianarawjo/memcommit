@@ -9,7 +9,7 @@ from typer.testing import CliRunner
 import memcommit.application.ops as ops
 import memcommit.application.operations.profile.model as profiles_module
 from memcommit.adapters.console.entrypoint import app
-from memcommit.context import Memory
+from memcommit.core.context import Memory
 from memcommit.application.operations.profile.config import (
     load_profile_registry,
     profile_store_dir,

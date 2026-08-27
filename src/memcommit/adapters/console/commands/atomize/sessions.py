@@ -22,7 +22,7 @@ from memcommit.adapters.interfaces.tui.components.operation_launcher.session imp
 from memcommit.adapters.console.commands.ground.session_picker import (
     session_picker_location,
 )
-from memcommit.context import Context
+from memcommit.core.context import Context
 from memcommit.persistence.store import MemoryStore
 from memcommit.core.context_targeting.uid_locator import (
     UidLocatorUnavailableError,

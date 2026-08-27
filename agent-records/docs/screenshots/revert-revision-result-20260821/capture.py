@@ -60,7 +60,7 @@ def _prepare_store(
 ) -> tuple[str, tuple[str, ...]]:
     _configure_store(store_dir)
     import memcommit.application.ops as ops
-    from memcommit.context import AutoCheckpoint
+    from memcommit.core.context import AutoCheckpoint
     from memcommit.application.operations.add.semantic_runtime import (
         append_semantic_memories,
         freeze_semantic_add_target,
@@ -237,7 +237,7 @@ def _verify_revert(
     original_uids: tuple[str, ...],
 ) -> None:
     _configure_store(store_dir)
-    from memcommit.context import Memory
+    from memcommit.core.context import Memory
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(create=False)

@@ -1,4 +1,4 @@
-"""Pure lexical resolution for CLI operands that locate existing Contexts."""
+"""Application-level lexical resolution for existing-Context operands."""
 from __future__ import annotations
 
 from collections.abc import Sequence

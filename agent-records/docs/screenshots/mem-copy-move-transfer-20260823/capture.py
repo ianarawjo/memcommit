@@ -54,7 +54,7 @@ def _configure_store(root: Path) -> None:
 
 
 def _initialize(store, *, self_link: bool = False):
-    from memcommit.context import Context, Memory, MemoryRef
+    from memcommit.core.context import Context, Memory, MemoryRef
 
     archive = Context(
         uid="10000000-0000-4000-8000-000000000001",
@@ -125,7 +125,7 @@ def _initialize(store, *, self_link: bool = False):
 
 
 def _verification(store, *, label: str, originals: dict[str, dict]) -> str:
-    from memcommit.context import Memory, MemoryRef
+    from memcommit.core.context import Memory, MemoryRef
 
     lines = [f"{label} · READ-ONLY STORE VERIFICATION"]
     names = tuple(store.list_context_names())

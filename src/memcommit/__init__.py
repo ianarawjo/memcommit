@@ -2,7 +2,7 @@
 
 from importlib import import_module
 
-from memcommit.context import (
+from memcommit.core.context import (
     Checkpoint,
     Context,
     Information,

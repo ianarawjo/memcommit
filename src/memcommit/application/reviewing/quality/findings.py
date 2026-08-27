@@ -15,7 +15,7 @@ from dataclasses import dataclass
 from importlib import resources
 from typing import Callable, Literal, Protocol
 
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.application.reviewing.direct_item_duplicates import (
     ExactDuplicateGroup,
     find_exact_duplicate_groups,

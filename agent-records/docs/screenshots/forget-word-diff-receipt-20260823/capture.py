@@ -76,7 +76,7 @@ class _ForgetProvider:
 
 def _initialize_store(store_root: Path):
     import memcommit.application.ops as ops
-    from memcommit.context import Memory
+    from memcommit.core.context import Memory
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root)

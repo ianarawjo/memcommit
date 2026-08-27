@@ -38,7 +38,7 @@ from memcommit.application.operations.atomize.workbench import (
     AtomizeWorkbenchSession,
     atomize_workbench_record_digest,
 )
-from memcommit.context import AutoCheckpoint, Context, Memory, MemoryRef
+from memcommit.core.context import AutoCheckpoint, Context, Memory, MemoryRef
 from memcommit.application.operations.review.model import direct_context_digest
 from memcommit.persistence.store import (
     MemoryStore,

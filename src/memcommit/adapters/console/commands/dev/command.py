@@ -7,7 +7,7 @@ import json
 import typer
 
 from memcommit.adapters.interfaces.cli.command_group import CanonicalCommandGroup
-from memcommit.context_locator import resolve_context_locator
+from memcommit.application.context_locator import resolve_context_locator
 
 app = typer.Typer(
     cls=CanonicalCommandGroup,

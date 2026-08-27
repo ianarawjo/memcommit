@@ -74,7 +74,7 @@ def _initialize_edit() -> None:
 
 def _run_child(kind: str) -> None:
     from memcommit.adapters.console.entrypoint import app
-    from memcommit.context import Memory, MemoryRef
+    from memcommit.core.context import Memory, MemoryRef
     from memcommit.persistence.store import MemoryStore
 
     with tempfile.TemporaryDirectory(

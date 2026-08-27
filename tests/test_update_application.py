@@ -5,7 +5,7 @@ import uuid
 
 import pytest
 
-from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.application.operations.update.model import AddOperation, EditOperation, UpdateSession
 from memcommit.application.operations.update.application import (
     UpdateApplicationError,

@@ -10,7 +10,7 @@ import uuid
 import pytest
 
 import memcommit.application.ops as ops
-from memcommit.context import AutoCheckpoint, Context, Memory
+from memcommit.core.context import AutoCheckpoint, Context, Memory
 from memcommit.application.operations.forget.application import (
     ForgetAnalysisRequest,
     ForgetApplicationError,

@@ -19,7 +19,7 @@ import uuid
 from dataclasses import dataclass, replace
 from typing import Iterable, Literal
 
-from memcommit.context import Context
+from memcommit.core.context import Context
 from memcommit.application.operations.meld.model import (
     MeldError,
     MeldProposalOperation as AtomizeGroundingProposalOperation,

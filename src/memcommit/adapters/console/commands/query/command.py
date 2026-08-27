@@ -42,8 +42,8 @@ from memcommit.adapters.interfaces.cli.query import (
     render_ordinary_query_response,
     render_query_reference_response,
 )
-from memcommit.context import QueryContextRef
-from memcommit.context_locator import is_relative_context_locator
+from memcommit.core.context import QueryContextRef
+from memcommit.application.context_locator import is_relative_context_locator
 from memcommit.core.context_targeting.presets import (
     ContextScopePreset,
     ContextTraversal,

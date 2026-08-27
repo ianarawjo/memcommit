@@ -3,7 +3,7 @@
 import pytest
 
 import memcommit.application.ops as ops
-from memcommit.context import Context, Memory, MemoryRef
+from memcommit.core.context import Context, Memory, MemoryRef
 
 
 # ---------------------------------------------------------------------------

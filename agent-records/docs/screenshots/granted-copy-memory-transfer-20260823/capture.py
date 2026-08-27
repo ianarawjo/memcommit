@@ -103,7 +103,7 @@ def _run_child() -> None:
         source_memory_uid, marker_uid, source_context_uid = _initialize()
 
         from memcommit.adapters.console.entrypoint import app
-        from memcommit.context import Memory
+        from memcommit.core.context import Memory
         from memcommit.application.operations.profile.config import load_profile_registry, profile_store_dir
         from memcommit.persistence.store import MemoryStore
 

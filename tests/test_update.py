@@ -16,7 +16,7 @@ from memcommit.adapters.console.commands.shared.endpoint_setup_flows import Upda
 from memcommit.adapters.interfaces.tui.components.operation_launcher.session import (
     SessionOpenReceipt,
 )
-from memcommit.context import (
+from memcommit.core.context import (
     Context,
     GrantedMemorySource,
     Memory,

@@ -14,7 +14,7 @@ import json
 from typing import Callable, Protocol
 import unicodedata
 
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.application.retained_history.memory_history_reconstruction.retained_record_verification import (
     MemoryState,
 )

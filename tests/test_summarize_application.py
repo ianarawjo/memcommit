@@ -10,7 +10,7 @@ from pathlib import Path
 import pytest
 
 import memcommit.application.ops as ops
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.application.operations.summarize.model import SummarizeError, collect_summary_frame
 import memcommit.application.operations.summarize.application as summarize_application
 from memcommit.application.operations.summarize.application import (

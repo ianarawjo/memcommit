@@ -20,7 +20,7 @@ from memcommit.adapters.python_api import (
     SemanticAuthorityError,
     SemanticContextError,
 )
-from memcommit.context import Memory, MemoryRef
+from memcommit.core.context import Memory, MemoryRef
 from memcommit.adapters.interfaces.agent import (
     RESOLVE_AGENT_CONTRACT_VERSION,
     RESOLVE_AGENT_TOOL_NAME,

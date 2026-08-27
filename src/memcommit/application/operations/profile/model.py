@@ -26,7 +26,7 @@ import stat
 import uuid
 from typing import Iterator
 
-from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.core.context_targeting.naming import validate_portable_context_name
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names

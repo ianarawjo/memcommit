@@ -18,7 +18,7 @@ from memcommit.application.retained_history.command_history import (
     CommandHistoryError,
     branch_tree_receipt,
 )
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.application.retained_history.reconstruction import (
     HistoryError,
     flatten_checkpoint_entries,

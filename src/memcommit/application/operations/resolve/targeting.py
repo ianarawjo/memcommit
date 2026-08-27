@@ -6,7 +6,7 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 
 from memcommit.application.authority.access import resolve_context_access
-from memcommit.context_locator import resolve_context_locator
+from memcommit.application.context_locator import resolve_context_locator
 from memcommit.core.context_targeting.memory_focus import is_memory_uid_prefix
 from memcommit.core.context_targeting.loading import (
     LocalDirectMemoryLocatorStore,

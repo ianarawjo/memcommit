@@ -14,7 +14,7 @@ from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
-from memcommit.context import Context
+from memcommit.core.context import Context
 from memcommit.core.context_targeting.model import DirectMemoryTarget
 from memcommit.core.context_targeting.resolution import parse_direct_memory_locator
 from memcommit.core.context_targeting.tui.direct_memory_selector import (

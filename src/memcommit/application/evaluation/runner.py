@@ -8,7 +8,7 @@ import json
 from pathlib import Path
 from typing import Callable
 
-from memcommit.context import Context, Memory
+from memcommit.core.context import Context, Memory
 from memcommit.application.evaluation.scoring import score_forget, score_integrate, score_stability
 from memcommit.application.semantic.llm import LLMClient, LLMError
 from memcommit.application.semantic.changes import AddChange, EditChange, ProposedChange, RemoveChange

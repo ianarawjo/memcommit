@@ -13,7 +13,7 @@ from memcommit.adapters.python_api import (
     ShowMemoryResult,
     ShowQueryViewResult,
 )
-from memcommit.context import Memory
+from memcommit.core.context import Memory
 from memcommit.persistence.store import MemoryStore
 
 

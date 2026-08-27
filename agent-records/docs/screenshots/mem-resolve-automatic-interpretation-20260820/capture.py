@@ -168,7 +168,7 @@ class _Provider:
 
 
 def _verification(kind: str) -> str:
-    from memcommit.context import Memory
+    from memcommit.core.context import Memory
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()
@@ -190,7 +190,7 @@ def _run_child(kind: str) -> None:
 
     import memcommit.adapters.console.commands.resolve.command as resolve_command
     from memcommit.adapters.console.commands.resolve.command import cmd as resolve_cmd
-    from memcommit.context import Context, Memory
+    from memcommit.core.context import Context, Memory
     from memcommit.persistence.store import MemoryStore
 
     with tempfile.TemporaryDirectory(prefix="mem-resolve-auto-capture-") as directory:

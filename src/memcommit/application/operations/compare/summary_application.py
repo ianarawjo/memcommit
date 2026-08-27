@@ -17,7 +17,7 @@ from memcommit.application.operations.compare.summary_provider import (
     ComparisonSummaryProvider,
     summarize_comparison,
 )
-from memcommit.context import Context
+from memcommit.core.context import Context
 from memcommit.application.authority.derived_policy import authorize_combination
 from memcommit.application.operations.profile.model import authority_grant_snapshot_lock
 from memcommit.persistence.store import MemoryStore

@@ -42,7 +42,7 @@ def _configure_store(store_dir: Path) -> None:
 def _prepare_store(store_dir: Path) -> tuple[str, ...]:
     _configure_store(store_dir)
     import memcommit.application.ops as ops
-    from memcommit.context import AutoCheckpoint
+    from memcommit.core.context import AutoCheckpoint
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_dir)
@@ -95,7 +95,7 @@ def _verify(
     original_uids: tuple[str, ...],
 ) -> None:
     _configure_store(store_dir)
-    from memcommit.context import Memory
+    from memcommit.core.context import Memory
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(create=False)

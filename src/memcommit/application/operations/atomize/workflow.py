@@ -18,7 +18,7 @@ from memcommit.application.operations.atomize.analysis_runtime import (
     _connect_aggregate_atomize_provider,
     execute_atomize_analysis_open,
 )
-from memcommit.context import Context
+from memcommit.core.context import Context
 from memcommit.persistence.store import MemoryStore
 
 

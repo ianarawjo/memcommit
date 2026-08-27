@@ -359,7 +359,7 @@ class TestEmbedWorkflow:
 
         # The embedded context is tracked as a nested context, not a flat memory.
         store = MemoryStore()
-        from memcommit.context import Context
+        from memcommit.core.context import Context
         parent = store.load("dev-notes")
         embedded = [v for v in parent.memories.values() if isinstance(v, Context)]
         assert len(embedded) == 1

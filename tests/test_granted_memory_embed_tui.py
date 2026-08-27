@@ -9,7 +9,7 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
 import memcommit.application.ops as ops
-from memcommit.context import MemoryRef
+from memcommit.core.context import MemoryRef
 from memcommit.application.operations.embed.application import (
     FrozenMemoryEmbedPlan,
     MemoryEmbedRequest,

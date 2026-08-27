@@ -4,7 +4,7 @@ import json
 
 import pytest
 
-from memcommit.context import AutoCheckpoint, Memory
+from memcommit.core.context import AutoCheckpoint, Memory
 from memcommit.application.retained_history.reconstruction import build_history
 from memcommit.application.operations.log.search import (
     HistorySearchError,

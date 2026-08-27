@@ -29,7 +29,7 @@ from memcommit.adapters.console.commands.shared.endpoint_setup_flows import (
     choose_update_setup,
 )
 from memcommit.adapters.console.commands.meld.setup import MeldSetupReceipt
-from memcommit.context import AutoCheckpoint, Context, Memory
+from memcommit.core.context import AutoCheckpoint, Context, Memory
 from memcommit.core.context_targeting.readable_catalog import ReadableContextCatalog
 from memcommit.application.authority.derived_policy import analysis_retention, authorize_analysis_save
 from memcommit.application.operations.compare.ledger.granted_store import (

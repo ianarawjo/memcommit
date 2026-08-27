@@ -47,7 +47,7 @@ def _initialize(
     redundant: bool,
     audit_preview: bool = False,
 ) -> None:
-    from memcommit.context import Context, Memory
+    from memcommit.core.context import Context, Memory
     from memcommit.persistence.store import MemoryStore
 
     context = Context(
@@ -90,7 +90,7 @@ def _initialize(
 
 
 def _initialize_exact_duplicates(context_name: str) -> None:
-    from memcommit.context import Context, Memory
+    from memcommit.core.context import Context, Memory
     from memcommit.persistence.store import MemoryStore
 
     context = Context(
@@ -222,7 +222,7 @@ def _run_app(args: list[str]) -> int:
 
 
 def _verification(context_name: str, provider: _Provider) -> str:
-    from memcommit.context import Memory
+    from memcommit.core.context import Memory
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()

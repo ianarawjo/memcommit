@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 
-from memcommit.context import Context, MemoryRef
+from memcommit.core.context import Context, MemoryRef
 
 
 class SemanticDisclosureError(RuntimeError):

@@ -11,7 +11,7 @@ repository_root = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(repository_root))
 
 import memcommit.application.ops as ops  # noqa: E402
-from memcommit.context import Memory  # noqa: E402
+from memcommit.core.context import Memory  # noqa: E402
 from memcommit.persistence.store import MemoryStore  # noqa: E402
 
 

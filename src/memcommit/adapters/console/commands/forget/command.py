@@ -18,7 +18,7 @@ from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
     safe_terminal_text,
 )
-from memcommit.context import Context
+from memcommit.core.context import Context
 from memcommit.application.operations.forget.application import (
     ForgetAnalysisRequest,
     ForgetApplyRequest,

@@ -15,8 +15,8 @@ from memcommit.application.authority.access import (
     revalidate_granted_context_binding,
     resolve_context_access,
 )
-from memcommit.context import AutoCheckpoint, Context, Memory, MemoryRef
-from memcommit.context_locator import resolve_context_locator
+from memcommit.core.context import AutoCheckpoint, Context, Memory, MemoryRef
+from memcommit.application.context_locator import resolve_context_locator
 from memcommit.application.operations.profile.config import ProfileRegistry
 from memcommit.application.operations.resolve.application import (
     RESOLVE_CONTRACT_VERSION,

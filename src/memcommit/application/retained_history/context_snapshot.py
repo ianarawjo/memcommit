@@ -14,7 +14,7 @@ import json
 from collections.abc import Mapping
 from typing import Any
 
-from memcommit.context import (
+from memcommit.core.context import (
     Context,
     GrantedContextLink,
     Memory,

@@ -11,7 +11,7 @@ from collections.abc import Sequence
 
 from memcommit.adapters.console.commands.compare.sessions import iter_saved_comparisons
 from memcommit.adapters.console.commands.meld.sessions import list_meld_session_catalog
-from memcommit.context import Context
+from memcommit.core.context import Context
 from memcommit.application.operations.rationale.cache import list_rationale_inferences
 from memcommit.application.operations.search.model import SearchArtifact
 from memcommit.persistence.store import MemoryStore

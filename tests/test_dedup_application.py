@@ -18,7 +18,7 @@ from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.shared.quality_find_workbench import (
     run_quality_find_resolution_workbench,
 )
-from memcommit.context import Context, MemoryRef, QueryContextRef
+from memcommit.core.context import Context, MemoryRef, QueryContextRef
 from memcommit.application.retained_history.context_snapshot import (
     CONTEXT_SNAPSHOT_SCHEMA_VERSION,
     ContextSnapshotRef,
