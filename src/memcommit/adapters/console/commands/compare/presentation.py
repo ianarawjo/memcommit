@@ -16,7 +16,6 @@ from memcommit.adapters.interfaces.tui.core.text_layout import (
     elide_terminal_text,
     single_line_terminal_text,
 )
-from memcommit.adapters.interfaces.understanding import understanding_lines
 from memcommit.source_projection.model import SourceAccess, SourceDisplayFacts
 from memcommit.source_projection.presentation import source_display_text
 
@@ -255,7 +254,12 @@ def render_comparison(
         retention=retention,
     )
     lines.append("")
-    lines.extend(understanding_lines(analysis.understanding))
+    lines.extend(
+        [
+            "WHAT MEM UNDERSTOOD",
+            display_escape_text(analysis.understanding.text),
+        ]
+    )
 
     if not ledger:
         if analysis.reports is None:
