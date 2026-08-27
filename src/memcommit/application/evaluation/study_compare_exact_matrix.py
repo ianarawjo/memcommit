@@ -32,7 +32,9 @@ from memcommit.application.operations.compare.ledger.model import (
     ComparisonAnalysis,
     ComparisonInput,
 )
-from memcommit.application.operations.compare.ledger.evidence import ComparisonEvidenceError
+from memcommit.application.operations.compare.ledger.evidence import (
+    ComparisonEvidenceError,
+)
 from memcommit.application.operations.compare.ledger.provider import (
     COMPARISON_PROVIDER_CONTRACT_VERSION,
     SUPPORTED_COMPARISON_PROVIDER_CONTRACT_VERSIONS,
@@ -61,13 +63,13 @@ from memcommit.providers.types import (
 )
 from memcommit.providers.subscription import CodexChatGPTProvider
 from memcommit.persistence.store import MemoryStore
-from memcommit.study_prewarm.compare import (
+from memcommit.study_scenarios.legacy.prewarm.compare import (
     _exact_input_matches,
     _projection_orientation,
     _validate_artifact,
     build_compare_prewarm_artifact,
 )
-from memcommit.study_prewarm.registry import (
+from memcommit.study_scenarios.legacy.prewarm.registry import (
     canonical_json,
     load_artifact,
     load_registry,
@@ -663,7 +665,11 @@ def run_exact_matrix(
 
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--baseline-profile", default="study-baseline")
+    parser.add_argument(
+        "--baseline-profile",
+        required=True,
+        help="Explicit historical source Profile; packaged scenarios are not registered",
+    )
     parser.add_argument("--model", default=None)
     parser.add_argument("--reasoning", choices=CODEX_REASONING_EFFORTS, default=None)
     parser.add_argument("--timeout", type=float, default=None)

@@ -29,6 +29,7 @@ include = ["memcommit*"]
 
 [tool.setuptools.package-data]
 "memcommit.application.evaluation" = ["fixtures/*.json"]
+"memcommit.study_scenarios.legacy" = ["data/en/*", "data/ko/*"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0"]

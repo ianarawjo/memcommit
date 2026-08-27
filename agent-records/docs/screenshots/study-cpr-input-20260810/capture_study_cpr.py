@@ -221,7 +221,7 @@ def _capture_read_only(
 
 def main() -> None:
     sys.path.insert(0, str(ROOT / "src"))
-    from memcommit.application.evaluation.study_bundle import build_all_study_bundles
+    from memcommit.study_scenarios.legacy.bundle import build_all_study_bundles
 
     OUT.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="memcommit-cpr-capture-") as temporary:

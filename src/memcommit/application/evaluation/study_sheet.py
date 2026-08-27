@@ -16,7 +16,7 @@ import json
 from pathlib import Path
 from typing import Iterable, Mapping
 
-from memcommit.application.evaluation.study_fixtures import (
+from memcommit.study_scenarios.legacy.fixtures import (
     AudienceRole,
     FixtureDataset,
     FixtureMemory,
@@ -277,7 +277,9 @@ def _task1_rows(
             rows.append(
                 prefix
                 + (
-                    label["query_only"] if dataset.spec.query_only else label["ordinary"],
+                    label["query_only"]
+                    if dataset.spec.query_only
+                    else label["ordinary"],
                     _source_file(record),
                 )
             )
@@ -368,12 +370,20 @@ def _task2_columns(
 ) -> tuple[SheetColumn, ...]:
     label = _labels(language)
     relation_columns = (
-        SheetColumn("relation", label["relation"], 24),
-        SheetColumn("counterparts", label["counterparts"], 25),
-    ) if include_relations else ()
-    return _base_columns(language) + relation_columns + (
-        SheetColumn("storage", label["storage"], 16),
-        SheetColumn("source", label["source"], 30),
+        (
+            SheetColumn("relation", label["relation"], 24),
+            SheetColumn("counterparts", label["counterparts"], 25),
+        )
+        if include_relations
+        else ()
+    )
+    return (
+        _base_columns(language)
+        + relation_columns
+        + (
+            SheetColumn("storage", label["storage"], 16),
+            SheetColumn("source", label["source"], 30),
+        )
     )
 
 
@@ -456,10 +466,7 @@ def build_study_workbook_spec(
                     fixture_root=root,
                 )
                 if not include_relations:
-                    rows = tuple(
-                        row[:6] + row[8:]
-                        for row in rows
-                    )
+                    rows = tuple(row[:6] + row[8:] for row in rows)
             else:
                 columns = _task3_columns(language)
                 rows = _task3_rows(dataset, language=language)
@@ -487,9 +494,7 @@ def build_study_workbook_spec(
         if not spec.query_only
     )
     query_count = sum(
-        spec.expected_count
-        for spec in STUDY_FIXTURE_SPECS.values()
-        if spec.query_only
+        spec.expected_count for spec in STUDY_FIXTURE_SPECS.values() if spec.query_only
     )
     return StudyWorkbookSpec(
         schema_version=SHEET_SPEC_SCHEMA_VERSION,

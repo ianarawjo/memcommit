@@ -26,11 +26,11 @@ from memcommit.application.operations.sever.model import (
 )
 from memcommit.application.operations.sever.session_store import SeverSessionStore
 from memcommit.store import MemoryStore
-from memcommit.study_prewarm.registry import (
+from memcommit.study_scenarios.legacy.prewarm.registry import (
     StudyPrewarmRegistryError,
     publish_artifact,
 )
-from memcommit.study_prewarm.sever import (
+from memcommit.study_scenarios.legacy.prewarm.sever import (
     CRITERIA_NAME,
     DESCRIPTION_NAME,
     OUTPUT_NAME,
@@ -126,7 +126,9 @@ def _fixture(tmp_path, monkeypatch, root):
     )
     baseline_uid = str(uuid.uuid4())
     profile = _profile(baseline_uid)
-    registry = ProfileRegistry(generation=1, active_uid=profile.uid, profiles=(profile,))
+    registry = ProfileRegistry(
+        generation=1, active_uid=profile.uid, profiles=(profile,)
+    )
     key, artifact = build_sever_prewarm_artifact(
         task_description=description,
         session=session,

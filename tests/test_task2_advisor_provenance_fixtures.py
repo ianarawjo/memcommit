@@ -5,7 +5,10 @@ from __future__ import annotations
 from collections import Counter
 import csv
 
-from memcommit.application.evaluation.study_fixtures import default_fixture_root, load_study_fixture
+from memcommit.study_scenarios.legacy.fixtures import (
+    default_fixture_root,
+    load_study_fixture,
+)
 
 
 CONFLICT_IDS = {
@@ -103,9 +106,7 @@ def test_eight_conflicts_are_identical_in_english_and_korean_sidecars() -> None:
             "Compatible Complement": 2,
         }
         assert {
-            row["pair_id"]
-            for row in rows
-            if row["relationship_band"] == "Conflict"
+            row["pair_id"] for row in rows if row["relationship_band"] == "Conflict"
         } == CONFLICT_IDS
 
 
@@ -121,7 +122,9 @@ def test_five_new_choices_have_non_rule_support_in_the_same_context_subtree() ->
                 # The builder maps the first locator segment to one direct
                 # descendant Context. Keeping target and support together makes
                 # parent-scoped Rationale useful without inventing provenance.
-                assert len({memory.locator.split("/", 1)[0] for memory in memories}) == 1
+                assert (
+                    len({memory.locator.split("/", 1)[0] for memory in memories}) == 1
+                )
                 assert any(memory.purpose != "PP" for memory in memories)
 
 
@@ -152,9 +155,9 @@ def test_advisor_memory_voice_matches_reader_user_and_self_perspectives() -> Non
     assert korean_left["T2-L-057"].content.startswith("약속을 수동태로 표현하면")
     assert english_left["T2-L-107"].purpose == "PP"
     assert english_right["T2-R-105"].purpose == "PP"
-    assert "should not alternate between “I” and “we”" in english_left[
-        "T2-L-107"
-    ].content
+    assert (
+        "should not alternate between “I” and “we”" in english_left["T2-L-107"].content
+    )
     assert "should not mix them" in english_right["T2-R-105"].content
     assert english_left["T2-L-034"].purpose == "OM"
     assert english_right["T2-R-034"].purpose == "OM"
@@ -163,4 +166,6 @@ def test_advisor_memory_voice_matches_reader_user_and_self_perspectives() -> Non
     for records in (english_left, english_right):
         assert not any(memory.content.startswith("I ") for memory in records.values())
     for records in (korean_left, korean_right):
-        assert not any(memory.content.startswith("나는 ") for memory in records.values())
+        assert not any(
+            memory.content.startswith("나는 ") for memory in records.values()
+        )

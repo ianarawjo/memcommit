@@ -4,18 +4,18 @@ from __future__ import annotations
 
 import copy
 from dataclasses import replace
+import hashlib
+import json
 from pathlib import Path
 
 from memcommit.context import Context, Memory
 from memcommit.application.operations.profile.config import (
     ProfileConfigError,
-    ProfileEntry,
     canonical_grant_permissions,
-    profile_store_dir,
 )
 from memcommit.application.operations.profile.model import (
     ProfileError,
-    _STUDY_BASELINE_GRANTED_ROOT,
+    _LEGACY_SCENARIO_GRANTED_ROOT,
     _STUDY_PRACTICE_DESCRIPTION,
     _STUDY_PRACTICE_ROOT,
     _STUDY_PRACTICE_SOURCE,
@@ -24,13 +24,16 @@ from memcommit.application.operations.profile.model import (
     _StudyTaskPackage,
     _canonicalize_study_practice_description,
     _context_records,
+    _compose_legacy_scenario_store,
     _expected_study_grant_uid,
     _is_study_practice_name,
     _remap_context_records,
     _remap_translation_catalogs,
-    _study_baseline_branch,
+    _legacy_scenario_branch,
     _study_catalogs,
+    _study_packages,
     _study_practice_contexts,
+    _validate_study_package_grants,
     _write_mapped_study_store,
 )
 from memcommit.application.operations.translate.view import TranslationCatalog
@@ -86,12 +89,12 @@ def _query_view_count_for_baseline(
     return len(memories)
 
 
-def _snapshot_study_baseline(
-    baseline: ProfileEntry,
+def _snapshot_legacy_scenario(
+    baseline_root: Path,
     task_records: dict[int, dict[str, object]],
     destination: Path,
 ) -> dict[int, _StudyTaskPackage]:
-    root = profile_store_dir(baseline)
+    root = Path(baseline_root)
     contexts, query_refs = _context_records(root)
     if query_refs:
         raise ProfileError(
@@ -99,8 +102,8 @@ def _snapshot_study_baseline(
         )
     structural = {
         *(f"task-{task}" for task in _STUDY_TASKS),
-        _STUDY_BASELINE_GRANTED_ROOT,
-        *(f"{_STUDY_BASELINE_GRANTED_ROOT}/task-{task}" for task in _STUDY_TASKS),
+        _LEGACY_SCENARIO_GRANTED_ROOT,
+        *(f"{_LEGACY_SCENARIO_GRANTED_ROOT}/task-{task}" for task in _STUDY_TASKS),
     }
     practice_names = {
         _STUDY_PRACTICE_ROOT,
@@ -114,7 +117,7 @@ def _snapshot_study_baseline(
     expected.update(present_practice_names)
     for task in _STUDY_TASKS:
         for authority in (False, True):
-            branch = _study_baseline_branch(task, authority=authority)
+            branch = _legacy_scenario_branch(task, authority=authority)
             expected.update(name for name in contexts if name.startswith(branch + "/"))
     if set(contexts) != expected:
         extras = sorted(set(contexts) - expected)
@@ -140,7 +143,7 @@ def _snapshot_study_baseline(
                 raw["authority_profile_name"] if authority else raw["task_profile_name"]
             )
             assert isinstance(source_name, str)
-            branch = _study_baseline_branch(task, authority=authority)
+            branch = _legacy_scenario_branch(task, authority=authority)
             selected = {
                 name: context
                 for name, context in contexts.items()
@@ -209,6 +212,77 @@ def _snapshot_study_baseline(
     return packages
 
 
+def _legacy_study_packages(
+    destination: Path,
+) -> tuple[dict[int, _StudyTaskPackage], str]:
+    """Materialize the packaged Legacy fixture through the former baseline path.
+
+    The intermediate store is deliberately process-local. It preserves the
+    exact Practice normalization and Task/authority remapping that the removed
+    editable baseline used to provide without publishing an installation
+    prerequisite in the Profile registry.
+    """
+
+    from memcommit.study_scenarios.legacy import LEGACY_DIGEST
+    from memcommit.study_scenarios.legacy.bundle import build_all_study_bundles
+
+    bundle_root = destination / "bundles"
+    build_all_study_bundles(bundle_root)
+    source_packages = _study_packages(bundle_root)
+    _validate_study_package_grants(source_packages)
+
+    baseline_root = destination / "baseline"
+    _compose_legacy_scenario_store(source_packages, baseline_root)
+
+    task_records: dict[int, dict[str, object]] = {}
+    for task, package in source_packages.items():
+        task_source = next(
+            source for source in package.profiles if source.role == "TASK"
+        )
+        authority_source = next(
+            source for source in package.profiles if source.role == "AUTHORITY"
+        )
+        task_records[task] = {
+            "manifest_sha256": package.manifest_digest,
+            "canonical_language": package.manifest.get("canonical_language"),
+            "task_profile_name": task_source.name,
+            "authority_profile_name": authority_source.name,
+            "task_current_context": task_source.inspection.current_context,
+            "authority_current_context": authority_source.inspection.current_context,
+            "grant_templates": list(package.grant_templates),
+        }
+
+    packages = _snapshot_legacy_scenario(
+        baseline_root,
+        task_records,
+        destination / "snapshots",
+    )
+    # Translation-catalog audit timestamps are intentionally created at build
+    # time, so a raw staging-tree digest would make identical scenario inputs
+    # look different. Manifest digests cover the reviewed task and authority
+    # data; the canonical Practice records cover the only added scenario data.
+    scenario_material = json.dumps(
+        {
+            "schema_version": 1,
+            "task_manifests": [
+                packages[task].manifest_digest for task in sorted(packages)
+            ],
+            "practice_contexts": [
+                context.to_dict() for context in _study_practice_contexts()
+            ],
+        },
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+    scenario_digest = hashlib.sha256(scenario_material).hexdigest()
+    if scenario_digest != LEGACY_DIGEST:
+        raise ProfileError(
+            "Legacy scenario content changed without updating its reviewed digest."
+        )
+    return packages, scenario_digest
+
+
 def _coffee_study_packages(destination: Path) -> dict[int, _StudyTaskPackage]:
     """Materialize fresh package sources for the built-in Coffee scenario.
 
@@ -218,14 +292,14 @@ def _coffee_study_packages(destination: Path) -> dict[int, _StudyTaskPackage]:
     prefix.
     """
 
-    from memcommit.study_scenarios.coffee_v1 import build_coffee_v1_scenario
+    from memcommit.study_scenarios.coffee import build_coffee_scenario
 
-    scenario = build_coffee_v1_scenario()
+    scenario = build_coffee_scenario()
     packages: dict[int, _StudyTaskPackage] = {}
     for task_spec in scenario.tasks:
         task = task_spec.task
-        participant_name = f"coffee-v1-task-{task}-participant"
-        authority_name = f"coffee-v1-task-{task}-authority"
+        participant_name = f"coffee-task-{task}-participant"
+        authority_name = f"coffee-task-{task}-authority"
         sources: list[_StudyProfileSource] = []
         contexts_by_role: dict[str, dict[str, Context]] = {}
         for role, name, contexts, catalogs, current in (

@@ -114,11 +114,9 @@ and at the staged destination. An allowlist was selected so a newly introduced
 runtime artifact cannot silently enter a participant baseline.
 
 `mem profile import` remains the explicit archival whole-store copy, including
-history. `mem profile import-study` first composes the generated task packages
-into one editable `study-baseline`; `mem init-study --scenario legacy-v1` then
-snapshots that live Profile through the same clean Profile-level primitive,
-publishing one ordinary Profile with the complete baseline topology in one
-atomic registry update.
+history. Study provisioning is a separate packaged-scenario operation:
+`mem init-study --scenario legacy` validates its owned fixture and publishes
+an isolated participant/authority pair without importing a source Profile.
 
 ## Context import
 

@@ -12,7 +12,7 @@ import memcommit.config as config_module
 import memcommit.atomize as atomize_module
 import memcommit.application.operations.atomize.analysis_runtime as atomize_analysis_runtime_module
 import memcommit.application.ops as ops
-import memcommit.study_prewarm.atomize as atomize_prewarm_module
+import memcommit.study_scenarios.legacy.prewarm.atomize as atomize_prewarm_module
 from memcommit.atomize import create_atomize_analysis, impact_atomize
 from memcommit.atomize_workflow import open_or_create_atomize_workbench
 from memcommit.adapters.console.entrypoint import app
@@ -26,13 +26,13 @@ from memcommit.profile_config import (
 from memcommit.store import MemoryStore
 from memcommit.semantic_prompt_policy import STUDY_SEMANTIC_PROMPT_POLICY
 from memcommit.semantic_prompt_policy import GENERAL_PROMPT_POLICY_ID
-from memcommit.study_prewarm.atomize import (
+from memcommit.study_scenarios.legacy.prewarm.atomize import (
     build_atomize_prewarm_artifact,
     find_declared_atomize_prewarm,
     install_declared_atomize_prewarms,
     is_installed_atomize_prewarm,
 )
-from memcommit.study_prewarm.registry import (
+from memcommit.study_scenarios.legacy.prewarm.registry import (
     StudyPrewarmRegistryError,
     publish_artifact,
 )
@@ -56,8 +56,7 @@ class CompositeProvider:
                         "understood": {
                             "text": "The final Memories each have one focus.",
                             "source_ids": [
-                                memory["candidate_id"]
-                                for memory in payload["memories"]
+                                memory["candidate_id"] for memory in payload["memories"]
                             ],
                         },
                         "changed": {"text": "", "source_ids": []},
@@ -329,9 +328,7 @@ def test_exact_atomize_instruction_change_fails_before_publication(
         tmp_path, monkeypatch, isolated_store
     )
     description = store.load_direct("practice/description")
-    memory = next(
-        item for item in description.iter_items() if isinstance(item, Memory)
-    )
+    memory = next(item for item in description.iter_items() if isinstance(item, Memory))
     description.replace(
         Memory(uid=memory.uid, content=memory.content + " Changed instruction.")
     )
@@ -428,9 +425,7 @@ def test_exact_description_wins_over_legacy_compatible_duplicate(
     assert exact_match is not None
 
     description = store.load_direct("practice/description")
-    memory = next(
-        item for item in description.iter_items() if isinstance(item, Memory)
-    )
+    memory = next(item for item in description.iter_items() if isinstance(item, Memory))
     exact_content = memory.content
     description.replace(
         Memory(uid=memory.uid, content="A retained compatible legacy instruction.")

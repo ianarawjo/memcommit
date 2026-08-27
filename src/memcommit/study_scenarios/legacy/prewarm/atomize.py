@@ -19,7 +19,11 @@ from memcommit.providers.policy import (
     resolve_operation_provider_policy,
 )
 from memcommit.context import Context, Memory
-from memcommit.application.operations.profile.config import ProfileEntry, ProfileRegistry, study_run_identity
+from memcommit.application.operations.profile.config import (
+    ProfileEntry,
+    ProfileRegistry,
+    study_run_identity,
+)
 from memcommit.application.operations.profile.model import (
     _LEGACY_PRE_SPLIT_STUDY_PRACTICE_DESCRIPTION_CONTENT,
     _LEGACY_STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT,
@@ -37,18 +41,18 @@ from memcommit.application.semantic.prompt_policy import (
     STUDY_PROMPT_POLICY_ID,
 )
 from memcommit.persistence.store import MemoryStore, context_record_digest
-from memcommit.study_prewarm.installations import (
+from memcommit.study_scenarios.legacy.prewarm.installations import (
     INSTALLATIONS_DIRECTORY_NAME,
     declared_artifact_available,
     declared_installation_matches,
     record_declared_installation,
 )
-from memcommit.study_prewarm.quality import (
+from memcommit.study_scenarios.legacy.prewarm.quality import (
     SemanticIdentity,
     highest_quality_candidates,
     prewarm_quality_satisfies,
 )
-from memcommit.study_prewarm.registry import (
+from memcommit.study_scenarios.legacy.prewarm.registry import (
     StudyPrewarmRegistryError,
     load_artifact,
     load_registry,
@@ -92,10 +96,7 @@ def _analysis_digest(analysis: AtomizeAnalysisSession) -> str:
 
 def _analysis_source_digest(analysis: AtomizeAnalysisSession) -> str:
     encoded = json.dumps(
-        [
-            {"uid": item.memory_uid, "content": item.content}
-            for item in analysis.items
-        ],
+        [{"uid": item.memory_uid, "content": item.content} for item in analysis.items],
         ensure_ascii=False,
         separators=(",", ":"),
     ).encode("utf-8")
@@ -144,9 +145,7 @@ def _description_matches_prepared_digest(
     if context_record_digest(legacy_brand) != context_record_digest(description):
         variants.append(legacy_brand)
     for variant in tuple(variants):
-        situation = variant.memories.get(
-            _STUDY_PRACTICE_DESCRIPTION_SITUATION_UID
-        )
+        situation = variant.memories.get(_STUDY_PRACTICE_DESCRIPTION_SITUATION_UID)
         task = variant.memories.get(_STUDY_PRACTICE_DESCRIPTION_TASK_UID)
         if (
             isinstance(situation, Memory)
@@ -160,9 +159,7 @@ def _description_matches_prepared_digest(
         ):
             pre_split = copy.deepcopy(variant)
             pre_split.remove(_STUDY_PRACTICE_DESCRIPTION_SITUATION_UID)
-            pre_split_task = pre_split.memories[
-                _STUDY_PRACTICE_DESCRIPTION_TASK_UID
-            ]
+            pre_split_task = pre_split.memories[_STUDY_PRACTICE_DESCRIPTION_TASK_UID]
             assert isinstance(pre_split_task, Memory)
             pre_split_task.content = (
                 _LEGACY_PRE_SPLIT_STUDY_PRACTICE_DESCRIPTION_CONTENT
@@ -341,15 +338,9 @@ def _validate_artifact(
     }
     schema_version = value.get("schema_version")
     legacy = schema_version == 1
-    expected = (
-        common_expected
-        if legacy
-        else common_expected | {"prompt_policy_id"}
-    )
+    expected = common_expected if legacy else common_expected | {"prompt_policy_id"}
     prompt_policy_id = (
-        GENERAL_PROMPT_POLICY_ID
-        if legacy
-        else value.get("prompt_policy_id")
+        GENERAL_PROMPT_POLICY_ID if legacy else value.get("prompt_policy_id")
     )
     if set(value) != expected or (
         value.get("kind") != ATOMIZE_ARTIFACT_KIND
@@ -357,11 +348,9 @@ def _validate_artifact(
         or value.get("key") != entry_key
         or value.get("task") != "tutorial"
         or value.get("operation") != "ATOMIZE"
-        or value.get("provider_contract_version")
-        != ATOMIZE_PROVIDER_CONTRACT_VERSION
+        or value.get("provider_contract_version") != ATOMIZE_PROVIDER_CONTRACT_VERSION
         or value.get("ruleset_version") != ATOMIZE_RULESET_VERSION
-        or prompt_policy_id
-        not in {GENERAL_PROMPT_POLICY_ID, STUDY_PROMPT_POLICY_ID}
+        or prompt_policy_id not in {GENERAL_PROMPT_POLICY_ID, STUDY_PROMPT_POLICY_ID}
     ):
         raise StudyPrewarmRegistryError("Declared Atomize prewarm is invalid.")
     provider = value.get("provider")
@@ -422,9 +411,7 @@ def _validate_artifact(
 
 def _installation_path(store: MemoryStore, analysis_uid: str) -> Path:
     return (
-        store.store_dir
-        / INSTALLATIONS_DIRECTORY_NAME
-        / f"atomize-{analysis_uid}.json"
+        store.store_dir / INSTALLATIONS_DIRECTORY_NAME / f"atomize-{analysis_uid}.json"
     )
 
 
@@ -529,15 +516,13 @@ def find_declared_atomize_prewarm(
             continue
         current_description = store.load_direct(description["name"])
         exact_description = (
-            context_record_digest(current_description)
-            == description["context_digest"]
+            context_record_digest(current_description) == description["context_digest"]
         )
-        if (
-            current_description.uid != description["context_uid"]
-            or not _description_matches_prepared_digest(
-                current_description,
-                description["context_digest"],
-            )
+        if current_description.uid != description[
+            "context_uid"
+        ] or not _description_matches_prepared_digest(
+            current_description,
+            description["context_digest"],
         ):
             continue
         if (
@@ -600,7 +585,9 @@ def install_declared_atomize_prewarms(
             continue
         declared += 1
         if entry.task != "tutorial":
-            raise StudyPrewarmRegistryError("Atomize prewarm belongs to an invalid task.")
+            raise StudyPrewarmRegistryError(
+                "Atomize prewarm belongs to an invalid task."
+            )
         artifact = load_artifact(store.store_dir, entry)
         analysis, description = _validate_artifact(
             artifact,
@@ -625,19 +612,19 @@ def install_declared_atomize_prewarms(
             continue
         source = store.load_direct(analysis.context_name)
         current_description = store.load_direct(description["name"])
-        if (
-            current_description.uid != description["context_uid"]
-            or not _description_matches_prepared_digest(
-                current_description,
-                description["context_digest"],
-            )
+        if current_description.uid != description[
+            "context_uid"
+        ] or not _description_matches_prepared_digest(
+            current_description,
+            description["context_digest"],
         ):
             raise StudyPrewarmRegistryError(
                 "Tutorial instruction changed after Atomize was prepared."
             )
-        if (
-            direct_context_digest(source) != analysis.context_digest
-            or not atomize_analysis_matches_context(analysis, source)
+        if direct_context_digest(
+            source
+        ) != analysis.context_digest or not atomize_analysis_matches_context(
+            analysis, source
         ):
             raise StudyPrewarmRegistryError(
                 "Declared Atomize prewarm does not match the current Source."

@@ -23,8 +23,7 @@ ROOT = Path(__file__).resolve().parents[3]
 OUT = Path(__file__).resolve().parent
 PYTHON = Path(sys.executable)
 SUPPORT_PATHS = {
-    str(Path(module.__file__).resolve().parents[1])
-    for module in (pexpect, pyte)
+    str(Path(module.__file__).resolve().parents[1]) for module in (pexpect, pyte)
 }
 COLS = 180
 ROWS = 52
@@ -79,9 +78,7 @@ def _color(value: str, *, background: bool = False) -> str:
         if value == "default" and background:
             return "#101217"
         return _NAMED_COLORS[value]
-    if len(value) == 6 and all(
-        character in "0123456789abcdef" for character in value
-    ):
+    if len(value) == 6 and all(character in "0123456789abcdef" for character in value):
         return "#" + value
     return "#101217" if background else "#e6e9ef"
 
@@ -244,14 +241,14 @@ def _fixture(home: Path) -> None:
         STUDY_RUN_PARTICIPANT_SOURCE_KIND,
     )
     from memcommit.store import MemoryStore
-    from memcommit.study_prewarm.atomize import (
+    from memcommit.study_scenarios.legacy.prewarm.atomize import (
         build_atomize_prewarm_artifact,
         install_declared_atomize_prewarms,
     )
-    from memcommit.study_prewarm.installations import (
+    from memcommit.study_scenarios.legacy.prewarm.installations import (
         INSTALLATIONS_DIRECTORY_NAME,
     )
-    from memcommit.study_prewarm.registry import publish_artifact
+    from memcommit.study_scenarios.legacy.prewarm.registry import publish_artifact
 
     config_module.CONFIG_FILE = home / ".mem" / "config.json"
     Config().update(
@@ -330,7 +327,7 @@ def _verify(home: Path) -> None:
 
     from memcommit.commands.atomize.sessions import atomize_session_entries
     from memcommit.store import MemoryStore
-    from memcommit.study_prewarm.installations import (
+    from memcommit.study_scenarios.legacy.prewarm.installations import (
         INSTALLATIONS_DIRECTORY_NAME,
     )
 

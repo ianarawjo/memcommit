@@ -122,11 +122,7 @@ class FixtureCorpus:
 
     @property
     def records(self) -> tuple[FixtureMemory, ...]:
-        return tuple(
-            record
-            for dataset in self.datasets
-            for record in dataset.records
-        )
+        return tuple(record for dataset in self.datasets for record in dataset.records)
 
     def by_name(self) -> dict[str, FixtureDataset]:
         return {dataset.spec.name: dataset for dataset in self.datasets}
@@ -346,9 +342,7 @@ _TASK3_RECORD = re.compile(
 _FIELD_LINE = re.compile(r"^-\s+([^:]+):\s*(.*)$")
 _LANGUAGE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9-]*$")
 
-_LOCATION_LABELS = frozenset(
-    {"Memory 위치", "Memory Location", "Memory location"}
-)
+_LOCATION_LABELS = frozenset({"Memory 위치", "Memory Location", "Memory location"})
 _CONTENT_LABELS = frozenset({"본문", "Content"})
 _AUDIENCE_LABELS = frozenset({"열람 대상", "Audience"})
 _VERIFIED_LABELS = frozenset({"Verified", "verified", "검수", "검증"})
@@ -397,14 +391,9 @@ class _PurposeEntry:
 
 
 def default_fixture_root() -> Path:
-    """Return the repository's language-partitioned fixture directory."""
+    """Return the Legacy scenario's packaged bilingual fixture directory."""
 
-    return (
-        Path(__file__).resolve().parents[4]
-        / "agent-records"
-        / "docs"
-        / "fixtures"
-    )
+    return Path(__file__).resolve().parent / "data"
 
 
 def load_study_fixture(
@@ -418,9 +407,7 @@ def load_study_fixture(
     spec = _resolve_spec(dataset)
     language = _validate_language(language)
     fixture_root = Path(root) if root is not None else default_fixture_root()
-    source_path = _resolve_language_file(
-        fixture_root, language, spec.file_stem, ".md"
-    )
+    source_path = _resolve_language_file(fixture_root, language, spec.file_stem, ".md")
     sidecar_path = _resolve_language_file(
         fixture_root,
         language,
@@ -455,8 +442,7 @@ def load_study_fixture_corpus(
     records = corpus.records
     if len(records) != EXPECTED_CORPUS_COUNT:
         raise StudyFixtureError(
-            f"Expected {EXPECTED_CORPUS_COUNT} corpus records, found "
-            f"{len(records)}."
+            f"Expected {EXPECTED_CORPUS_COUNT} corpus records, found {len(records)}."
         )
     _reject_duplicates(
         (record.canonical_locator for record in records),
@@ -492,9 +478,7 @@ def pair_fixture_translations(
         )
 
     translated_by_locator = translation.by_locator()
-    canonical_locators = {
-        record.canonical_locator for record in canonical.records
-    }
+    canonical_locators = {record.canonical_locator for record in canonical.records}
     translated_locators = set(translated_by_locator)
     if canonical_locators != translated_locators:
         missing = sorted(canonical_locators - translated_locators)
@@ -518,16 +502,12 @@ def pair_fixture_translations(
                 f"{source.purpose!r} != {target.purpose!r}."
             )
         if source.audiences != target.audiences:
-            raise StudyFixtureError(
-                f"Audience drift at {source.canonical_locator!r}."
-            )
+            raise StudyFixtureError(f"Audience drift at {source.canonical_locator!r}.")
         if source.verified != target.verified:
             raise StudyFixtureError(
                 f"Verified-state drift at {source.canonical_locator!r}."
             )
-        pairs.append(
-            FixtureTranslationPair(canonical=source, translation=target)
-        )
+        pairs.append(FixtureTranslationPair(canonical=source, translation=target))
     return tuple(pairs)
 
 
@@ -604,15 +584,11 @@ def _parse_task1_blocks(
         fields = _parse_block_fields(lines[start + 1 : end], start + 2, path)
         locator = _required_field(fields, _LOCATION_LABELS, fixture_id, path)
         content = _required_field(fields, _CONTENT_LABELS, fixture_id, path)
-        audience_text = _required_field(
-            fields, _AUDIENCE_LABELS, fixture_id, path
-        )
+        audience_text = _required_field(fields, _AUDIENCE_LABELS, fixture_id, path)
         purpose_text = _optional_field(fields, _PURPOSE_LABELS)
         purpose = _validate_purpose(purpose_text, path) if purpose_text else None
         verified_text = _optional_field(fields, _VERIFIED_LABELS)
-        verified = (
-            _parse_verified(verified_text, path) if verified_text else None
-        )
+        verified = _parse_verified(verified_text, path) if verified_text else None
         records.append(
             _RawRecord(
                 fixture_id=fixture_id,
@@ -640,8 +616,7 @@ def _parse_block_fields(
             label = match.group(1).strip()
             if label in fields:
                 raise StudyFixtureError(
-                    f"Duplicate field {label!r} at "
-                    f"{path}:{first_line_number + offset}."
+                    f"Duplicate field {label!r} at {path}:{first_line_number + offset}."
                 )
             fields[label] = match.group(2).strip()
             active_label = label
@@ -712,8 +687,7 @@ def _required_field(
     value = _optional_field(fields, labels)
     if not value:
         raise StudyFixtureError(
-            f"Record {fixture_id!r} in {path} is missing "
-            f"one of {sorted(labels)!r}."
+            f"Record {fixture_id!r} in {path} is missing one of {sorted(labels)!r}."
         )
     return value
 
@@ -747,9 +721,7 @@ def _parse_audiences(value: str, path: Path) -> tuple[AudienceRole, ...]:
                 f"Unknown audience label {piece!r} in {path}."
             ) from error
         if role in audiences:
-            raise StudyFixtureError(
-                f"Duplicate audience label {piece!r} in {path}."
-            )
+            raise StudyFixtureError(f"Duplicate audience label {piece!r} in {path}.")
         audiences.append(role)
     if not audiences:
         raise StudyFixtureError(f"Empty audience metadata in {path}.")
@@ -849,34 +821,24 @@ def _load_purpose_sidecar(
                 )
             fixture_id = (row.get(id_column) or "").strip() if id_column else None
             locator = (
-                (row.get(locator_column) or "").strip()
-                if locator_column
-                else None
+                (row.get(locator_column) or "").strip() if locator_column else None
             )
             purpose = _validate_purpose(row.get(purpose_column) or "", path)
             audience_value = (
-                (row.get(audience_column) or "").strip()
-                if audience_column
-                else ""
+                (row.get(audience_column) or "").strip() if audience_column else ""
             )
             verified_value = (
-                (row.get(verified_column) or "").strip()
-                if verified_column
-                else ""
+                (row.get(verified_column) or "").strip() if verified_column else ""
             )
             all_entries[key] = _PurposeEntry(
                 fixture_id=fixture_id or None,
                 canonical_locator=locator or None,
                 purpose=purpose,
                 audiences=(
-                    _parse_audiences(audience_value, path)
-                    if audience_value
-                    else None
+                    _parse_audiences(audience_value, path) if audience_value else None
                 ),
                 verified=(
-                    _parse_verified(verified_value, path)
-                    if verified_value
-                    else None
+                    _parse_verified(verified_value, path) if verified_value else None
                 ),
             )
     if row_count != spec.purpose_sidecar_count:
@@ -905,9 +867,7 @@ def _find_column(
 ) -> str | None:
     matches = [header for header in headers if header in aliases]
     if len(matches) > 1:
-        raise StudyFixtureError(
-            f"TSV has multiple equivalent columns {matches!r}."
-        )
+        raise StudyFixtureError(f"TSV has multiple equivalent columns {matches!r}.")
     if not matches:
         if required:
             raise StudyFixtureError(
@@ -931,9 +891,7 @@ def _merge_and_validate(
             f"found {len(raw_records)}."
         )
     fixture_ids = [
-        record.fixture_id
-        for record in raw_records
-        if record.fixture_id is not None
+        record.fixture_id for record in raw_records if record.fixture_id is not None
     ]
     if spec.fixture_ids_required and len(fixture_ids) != len(raw_records):
         raise StudyFixtureError(f"Fixture IDs are required in {source_path}.")
@@ -1014,17 +972,13 @@ def _merge_and_validate(
                 purpose=metadata.purpose,
                 audiences=metadata.audiences or raw.audiences,
                 verified=(
-                    metadata.verified
-                    if metadata.verified is not None
-                    else raw.verified
+                    metadata.verified if metadata.verified is not None else raw.verified
                 ),
                 source_path=source_path,
                 source_line=raw.source_line,
             )
         )
-    _reject_duplicates(
-        canonical_locators, f"canonical Memory locator in {source_path}"
-    )
+    _reject_duplicates(canonical_locators, f"canonical Memory locator in {source_path}")
     unused = set(sidecar) - consumed_sidecar_keys
     if unused:
         raise StudyFixtureError(
@@ -1042,6 +996,4 @@ def _reject_duplicates(values: Iterable[str], label: str) -> None:
             duplicates.add(value)
         seen.add(value)
     if duplicates:
-        raise StudyFixtureError(
-            f"Duplicate {label}: {sorted(duplicates)[:5]!r}."
-        )
+        raise StudyFixtureError(f"Duplicate {label}: {sorted(duplicates)[:5]!r}.")

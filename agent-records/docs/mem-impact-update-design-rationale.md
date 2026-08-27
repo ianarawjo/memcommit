@@ -83,8 +83,8 @@ non-mutating. `mem update` can promote that exact schema-v6 plan and apply it
 to the run-private authority store. It holds the grant registry snapshot,
 rechecks the active grantee and complete frozen binding, resolves every owner
 through the same grant, and requires `UPDATE`, `CREATE`, or `DELETE` for the
-corresponding operation before the first write. The fixed `study-baseline`
-Profile is rejected explicitly. A `-fork` suffix would still imply a
+corresponding operation before the first write. Authority is determined by the
+frozen Grant and permissions, not by a historical Profile display name. A `-fork` suffix would still imply a
 divergent-copy model that this design deliberately avoids.
 
 ## Usage
@@ -433,7 +433,7 @@ constrained removals in B. It changes only directly owned `Memory` values in
 either an ordinary local target or the exact run-private authority Contexts
 covered by a frozen editable grant. `MemoryRef`, `QueryContextRef`,
 embedded-Context pointers, the verified source, concealed query-only
-descendants, and `study-baseline` remain unchanged. Repository terminology
+descendants, and every unrelated Profile remain unchanged. Repository terminology
 reserves `delete` for a whole Context, so removing one target Memory is
 represented as `RemoveOperation`.
 

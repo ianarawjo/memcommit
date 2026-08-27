@@ -38,19 +38,24 @@ from memcommit.providers.types import (
 )
 from memcommit.providers.subscription import CodexChatGPTProvider
 from memcommit.persistence.store import MemoryStore
-from memcommit.study_prewarm.registry import (
+from memcommit.study_scenarios.legacy.prewarm.registry import (
     load_artifact,
     load_registry,
     publish_artifact,
 )
-from memcommit.study_prewarm.summarize import (
+from memcommit.study_scenarios.legacy.prewarm.summarize import (
     _validate_artifact,
     build_summarize_prewarm_artifact,
     summarize_prewarm_key,
 )
-from memcommit.application.operations.summarize.model import SummaryFrame, summarize_frame
+from memcommit.application.operations.summarize.model import (
+    SummaryFrame,
+    summarize_frame,
+)
 from memcommit.application.operations.summarize.application import SummarizeRequest
-from memcommit.application.operations.summarize.runtime import MemoryStoreSummarySourcePort
+from memcommit.application.operations.summarize.runtime import (
+    MemoryStoreSummarySourcePort,
+)
 
 
 KIND = "STUDY_SUMMARIZE_EXACT_MATRIX"
@@ -152,7 +157,12 @@ def _row_path(
     model: str,
     reasoning: str,
 ) -> Path:
-    return output_root / plan.task / "rows" / f"{_row_key(plan, model=model, reasoning=reasoning)}.json"
+    return (
+        output_root
+        / plan.task
+        / "rows"
+        / f"{_row_key(plan, model=model, reasoning=reasoning)}.json"
+    )
 
 
 def _validate_row(
@@ -244,10 +254,14 @@ def run_exact_matrix(
     profile_registry = load_profile_registry()
     identity = study_run_identity(profile_registry.active)
     if identity is None or identity.role != "PARTICIPANT":
-        raise StudySummarizeExactMatrixError("Active Profile is not a Study participant.")
+        raise StudySummarizeExactMatrixError(
+            "Active Profile is not a Study participant."
+        )
     baseline = profile_registry.by_name(baseline_profile_name)
     if baseline is None or baseline.uid != identity.baseline_profile_uid:
-        raise StudySummarizeExactMatrixError("Study baseline does not match the active run.")
+        raise StudySummarizeExactMatrixError(
+            "Study baseline does not match the active run."
+        )
     if len(plans) != 218:
         raise StudySummarizeExactMatrixError(
             f"Frozen Summarize matrix has {len(plans)} rows instead of 218."
@@ -381,7 +395,9 @@ def run_exact_matrix(
                     outputs[key] = value
                     provider_keys_this_run.add(key)
                     if progress is not None:
-                        reach = "recursive" if plan.frame.include_descendants else "direct"
+                        reach = (
+                            "recursive" if plan.frame.include_descendants else "direct"
+                        )
                         progress(
                             f"COMPLETE {len(outputs)}/{len(nonempty)} "
                             f"{plan.frame.context_name} [{reach}]"
@@ -458,8 +474,7 @@ def run_exact_matrix(
             if key in provider_keys_this_run
         ),
         "artifact_provider_seconds": sum(
-            float(value.get("provider_seconds", 0.0))
-            for value in outputs.values()
+            float(value.get("provider_seconds", 0.0)) for value in outputs.values()
         ),
         "failures": [],
         "published": True,
@@ -470,7 +485,11 @@ def run_exact_matrix(
 
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--baseline-profile", default="study-baseline")
+    parser.add_argument(
+        "--baseline-profile",
+        required=True,
+        help="Explicit historical source Profile; packaged scenarios are not registered",
+    )
     parser.add_argument("--model", default=None)
     parser.add_argument(
         "--reasoning",

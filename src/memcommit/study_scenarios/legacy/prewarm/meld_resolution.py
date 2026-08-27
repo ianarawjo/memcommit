@@ -25,16 +25,16 @@ from memcommit.application.operations.profile.config import (
 )
 from memcommit.providers.types import CODEX_CHATGPT_PROVIDER
 from memcommit.persistence.store import MemoryStore, context_record_digest
-from memcommit.study_prewarm.installations import (
+from memcommit.study_scenarios.legacy.prewarm.installations import (
     declared_artifact_available,
     record_declared_installation,
 )
-from memcommit.study_prewarm.quality import (
+from memcommit.study_scenarios.legacy.prewarm.quality import (
     SemanticIdentity,
     highest_quality_candidates,
     prewarm_quality_satisfies,
 )
-from memcommit.study_prewarm.registry import (
+from memcommit.study_scenarios.legacy.prewarm.registry import (
     StudyPrewarmRegistryError,
     load_artifact,
     load_registry,
@@ -116,11 +116,7 @@ def _pending_copy(session: MeldSession) -> MeldSession:
             "Each prepared Meld branch requires one assessed follow-up turn."
         )
     current = session.current_turn
-    if (
-        current is None
-        or current.sequence <= 0
-        or current.assessment is None
-    ):
+    if current is None or current.sequence <= 0 or current.assessment is None:
         raise StudyPrewarmRegistryError(
             "Each prepared Meld branch requires one assessed follow-up turn."
         )
@@ -290,14 +286,14 @@ def _validate_artifact(
         or value.get("request_contract_version")
         != MELD_RESOLUTION_REQUEST_CONTRACT_VERSION
     ):
-        raise StudyPrewarmRegistryError(
-            "Declared Meld resolution prewarm is invalid."
-        )
+        raise StudyPrewarmRegistryError("Declared Meld resolution prewarm is invalid.")
     raw_description = value.get("task_description")
     if (
         not isinstance(raw_description, dict)
         or set(raw_description) != {"name", "context_uid", "context_digest"}
-        or any(not isinstance(item, str) or not item for item in raw_description.values())
+        or any(
+            not isinstance(item, str) or not item for item in raw_description.values()
+        )
     ):
         raise StudyPrewarmRegistryError(
             "Meld resolution task description identity is invalid."
@@ -377,9 +373,7 @@ def _installation_evidence(
     return {
         "task_description_uid": description["context_uid"],
         "task_description_digest": description["context_digest"],
-        "branch_set_digest": payload_digest(
-            [branch.to_dict() for branch in branches]
-        ),
+        "branch_set_digest": payload_digest([branch.to_dict() for branch in branches]),
     }
 
 

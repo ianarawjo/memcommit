@@ -52,7 +52,8 @@ The tombstone is display metadata, not a trash or restore mechanism.
 
 ## Invariants
 
-1. The fixed `authoring` and `study-baseline` Profiles cannot be deleted.
+1. The fixed `authoring` Profile cannot be deleted. `study-baseline` has no
+   special status after removal of the registered baseline lifecycle.
 2. The active Profile cannot be deleted. A Study containing it cannot be
    deleted; the person must select another Profile first.
 3. Study membership is resolved from validated provenance and stable Study UID,

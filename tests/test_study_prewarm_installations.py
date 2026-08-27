@@ -5,20 +5,20 @@ import uuid
 
 import pytest
 
-import memcommit.study_prewarm.installations as installations_module
+import memcommit.study_scenarios.legacy.prewarm.installations as installations_module
 from memcommit.profile_config import (
     ProfileEntry,
     ProfileRegistry,
     STUDY_RUN_PARTICIPANT_SOURCE_KIND,
 )
 from memcommit.store import MemoryStore
-from memcommit.study_prewarm.installations import (
+from memcommit.study_scenarios.legacy.prewarm.installations import (
     declared_artifact_available,
     declared_installation_matches,
     declared_installation_path,
     record_declared_installation,
 )
-from memcommit.study_prewarm.registry import (
+from memcommit.study_scenarios.legacy.prewarm.registry import (
     StudyPrewarmEntry,
     StudyPrewarmRegistryError,
     attach_shared_bundle,

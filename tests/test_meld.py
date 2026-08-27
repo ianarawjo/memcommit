@@ -101,11 +101,11 @@ from memcommit.store import (
     MemoryStore,
     context_record_digest,
 )
-from memcommit.study_prewarm.meld_resolution import (
+from memcommit.study_scenarios.legacy.prewarm.meld_resolution import (
     build_meld_resolution_prewarm_artifact,
     install_declared_meld_resolution_prewarms,
 )
-from memcommit.study_prewarm.registry import publish_artifact
+from memcommit.study_scenarios.legacy.prewarm.registry import publish_artifact
 
 
 runner = CliRunner()
@@ -858,11 +858,8 @@ def test_default_tty_symmetric_meld_applies_without_a_response_turn(
         for relation in applied.current_assessment.relations
     )
     assert {
-        memory.content
-        for memory in store.load_direct(target.name).memories.values()
-    } == {
-        memory.content for frame in applied.frames for memory in frame.memories
-    }
+        memory.content for memory in store.load_direct(target.name).memories.values()
+    } == {memory.content for frame in applied.frames for memory in frame.memories}
 
 
 def test_default_tty_meld_command_prints_the_applied_receipt_directly(
@@ -1911,9 +1908,7 @@ def test_seeded_meld_report_uses_nested_cards_and_blue_selection_badges():
         comparison,
         reused=True,
         durable=True,
-    ).partition(
-        "\nThe complete source-linked relation ledger"
-    )[0]
+    ).partition("\nThe complete source-linked relation ledger")[0]
     conflict_section = next(
         index
         for index, (_offset, key) in enumerate(
@@ -2049,9 +2044,7 @@ def test_result_rows_share_tree_prefix_and_keep_apply_card_fully_anchored():
         comparison,
         reused=True,
         durable=True,
-    ).partition(
-        "\nThe complete source-linked relation ledger"
-    )[0]
+    ).partition("\nThe complete source-linked relation ledger")[0]
     sections = _seeded_report_sections(
         _seeded_report_lines(view, report, (), True, False)
     )
@@ -2314,9 +2307,7 @@ def test_context_meld_one_shot_reply_resume_and_provider_free_apply(
         comparison,
         reused=True,
         durable=True,
-    ).partition(
-        "\nThe complete source-linked relation ledger"
-    )[0]
+    ).partition("\nThe complete source-linked relation ledger")[0]
     ready_sections = _seeded_report_sections(
         _seeded_report_lines(ready_view, ready_report, (), True, False)
     )
@@ -2556,9 +2547,9 @@ def test_seeded_meld_schema_round_trips_and_rejects_tampering(
         MeldSession.from_dict(bad_digest)
 
     bad_import = json.loads(json.dumps(value))
-    bad_import["turns"][0]["assessment"]["relations"][0][
-        "summary"
-    ] = "A forged imported relation."
+    bad_import["turns"][0]["assessment"]["relations"][0]["summary"] = (
+        "A forged imported relation."
+    )
     with pytest.raises(MeldError, match="turn zero does not match"):
         MeldSession.from_dict(bad_import)
 

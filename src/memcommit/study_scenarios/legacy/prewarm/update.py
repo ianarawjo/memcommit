@@ -26,24 +26,28 @@ from memcommit.application.operations.profile.config import (
     load_profile_registry,
     study_run_identity,
 )
-from memcommit.persistence.store import MemoryStore, _write_json_atomic, context_record_digest
-from memcommit.study_prewarm.installations import (
+from memcommit.persistence.store import (
+    MemoryStore,
+    _write_json_atomic,
+    context_record_digest,
+)
+from memcommit.study_scenarios.legacy.prewarm.installations import (
     INSTALLATIONS_DIRECTORY_NAME,
     declared_artifact_available,
     record_declared_installation,
 )
-from memcommit.study_prewarm.registry import (
+from memcommit.study_scenarios.legacy.prewarm.registry import (
     StudyPrewarmRegistryError,
     load_artifact,
     load_registry,
     payload_digest,
 )
-from memcommit.study_prewarm.quality import (
+from memcommit.study_scenarios.legacy.prewarm.quality import (
     SemanticIdentity,
     highest_quality_candidates,
     prewarm_quality_satisfies,
 )
-from memcommit.study_prewarm.scope_equivalence import (
+from memcommit.study_scenarios.legacy.prewarm.scope_equivalence import (
     ordered_scope_evidence_relation,
 )
 from memcommit.application.operations.update.model import (

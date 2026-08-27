@@ -16,7 +16,13 @@ from memcommit.application.authority.access import (
     resolve_context_access,
 )
 from memcommit.persistence.command_ledger.attempts import annotate_sever_attempt
-from memcommit.context import AutoCheckpoint, Context, Memory, MemoryRef, QueryContextRef
+from memcommit.context import (
+    AutoCheckpoint,
+    Context,
+    Memory,
+    MemoryRef,
+    QueryContextRef,
+)
 from memcommit.core.context_targeting.naming import validate_portable_context_name
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
@@ -25,13 +31,19 @@ from memcommit.application.authority.derived_policy import (
     authorize_combination,
     authorize_derived_transfer,
 )
-from memcommit.providers.subscription import QueryProviderError, QueryProviderTimeoutError
+from memcommit.providers.subscription import (
+    QueryProviderError,
+    QueryProviderTimeoutError,
+)
 from memcommit.application.semantic.disclosure import (
     SemanticDisclosureError,
     require_semantic_disclosure_authority,
 )
 from memcommit.application.operations.profile.config import ProfileRegistry
-from memcommit.application.operations.profile.model import ProfileError, authority_grant_snapshot_lock
+from memcommit.application.operations.profile.model import (
+    ProfileError,
+    authority_grant_snapshot_lock,
+)
 from memcommit.application.operations.sever.model import (
     SeverApplication,
     SeverContextBinding,
@@ -66,8 +78,14 @@ from memcommit.application.operations.sever.application import (
 )
 from memcommit.application.operations.sever.provider import SeverProviderError
 from memcommit.application.operations.sever.session_store import SeverSessionStore
-from memcommit.persistence.store import MemoryStore, _write_json_atomic, context_record_digest
-from memcommit.study_prewarm.sever import find_installed_projectable_sever_prewarm
+from memcommit.persistence.store import (
+    MemoryStore,
+    _write_json_atomic,
+    context_record_digest,
+)
+from memcommit.study_scenarios.legacy.prewarm.sever import (
+    find_installed_projectable_sever_prewarm,
+)
 from memcommit.application.operations.update.model import GrantedUpdateTarget
 
 
@@ -125,7 +143,9 @@ class MemoryStoreSeverDestinationPort:
                     "Source descendants excluded."
                 )
             return
-        if output_name != current_output_name and self.store.context_exists(output_name):
+        if output_name != current_output_name and self.store.context_exists(
+            output_name
+        ):
             raise SeverApplicationError(
                 f"Output Context '{output_name}' already exists."
             )
@@ -384,9 +404,7 @@ def execute_sever_analysis(
         return run_sever_analysis(
             request,
             input_port=input_port,
-            provider_factory=lambda: _provider_with_attempt_evidence(
-                provider_factory
-            ),
+            provider_factory=lambda: _provider_with_attempt_evidence(provider_factory),
             prepared_lookup=lambda inputs, output_name: _prepared_analysis(
                 store,
                 inputs,
@@ -716,9 +734,7 @@ class MemoryStoreSeverOutputPort:
         registry: ProfileRegistry,
     ) -> None:
         if binding.granted is None:
-            raise SeverApplicationError(
-                f"The Sever {label} is not a granted input."
-            )
+            raise SeverApplicationError(f"The Sever {label} is not a granted input.")
         frozen = GrantedUpdateTarget.from_dict(binding.granted)
         try:
             access = revalidate_granted_context_binding(
@@ -774,9 +790,7 @@ class MemoryStoreSeverOutputPort:
             # path to lock while the require-new local output is published.
             checkpoint = self.store.create_context(output, auto_checkpoint)
         if checkpoint is None:
-            raise SeverApplicationError(
-                "Sever output creation produced no checkpoint."
-            )
+            raise SeverApplicationError("Sever output creation produced no checkpoint.")
         return session.with_application(
             SeverApplication(
                 output_context_uid=output.uid,
@@ -802,9 +816,7 @@ class MemoryStoreSeverOutputPort:
             ),
         )
         criteria_bindings = (
-            session.criteria.contexts
-            if session.criteria.granted is None
-            else ()
+            session.criteria.contexts if session.criteria.granted is None else ()
         )
         if criteria_bindings:
             checkpoint = self.store.save_context_with_sources(
@@ -873,8 +885,7 @@ class MemoryStoreSeverOutputPort:
                         checkpoints = self.store.list_checkpoints(applied.output_name)
                         if (
                             len(checkpoints) != 1
-                            or checkpoints[0].get("uid")
-                            != application.checkpoint_uid
+                            or checkpoints[0].get("uid") != application.checkpoint_uid
                         ):
                             raise SeverApplicationError(
                                 "The new Sever Result checkpoint changed before "
@@ -919,7 +930,9 @@ class MemoryStoreSeverOutputPort:
                             if isinstance(checkpoint, dict)
                             else None
                         )
-                        if not isinstance(before, dict) or not isinstance(snapshot, dict):
+                        if not isinstance(before, dict) or not isinstance(
+                            snapshot, dict
+                        ):
                             raise SeverApplicationError(
                                 "The self-save checkpoint cannot restore its Source."
                             )

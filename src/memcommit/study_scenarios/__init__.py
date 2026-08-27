@@ -1,16 +1,13 @@
-"""Versioned built-in Study scenarios.
+"""Built-in Study scenarios with self-contained materialization inputs."""
 
-Legacy fixture bundles remain owned by :mod:`memcommit.application.evaluation.study_bundle` and
-the editable ``study-baseline`` Profile.  Built-in scenarios live here so a
-new default can evolve without rewriting that regression fixture.
-"""
-
-from memcommit.study_scenarios.coffee_v1 import (
-    COFFEE_V1_SCENARIO_ID,
-    build_coffee_v1_scenario,
+from memcommit.study_scenarios.coffee import (
+    COFFEE_SCENARIO_ID,
+    build_coffee_scenario,
 )
+from memcommit.study_scenarios.legacy import LEGACY_SCENARIO_ID
 
 __all__ = (
-    "COFFEE_V1_SCENARIO_ID",
-    "build_coffee_v1_scenario",
+    "COFFEE_SCENARIO_ID",
+    "LEGACY_SCENARIO_ID",
+    "build_coffee_scenario",
 )

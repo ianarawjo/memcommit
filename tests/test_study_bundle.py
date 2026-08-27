@@ -7,17 +7,19 @@ import json
 
 import pytest
 
-import memcommit.application.evaluation.study_bundle as bundle_module
+import memcommit.study_scenarios.legacy.bundle as bundle_module
 import memcommit.store as store_module
 from memcommit.context import Context, Memory
-from memcommit.application.evaluation.study_bundle import (
+from memcommit.study_scenarios.legacy.bundle import (
     StudyBundleError,
     _isolated_store_root,
     build_all_study_bundles,
     build_study_bundle,
 )
 from memcommit.store import MemoryStore
-from memcommit.application.operations.translate.view_store import load_translation_catalog
+from memcommit.application.operations.translate.view_store import (
+    load_translation_catalog,
+)
 
 
 EXPECTED_PROFILES = {
@@ -310,7 +312,9 @@ def _assert_grant_templates(task, manifest, context_uids):
         healthcare = grants["task-3-healthcare-questions-and-answers-query"]
         assert healthcare["permissions"] == ["QUERY"]
         assert healthcare["provider"] == "codex_chatgpt"
-        assert grants["task-3-healthcare-transmission-guidance-view"]["permissions"] == [
+        assert grants["task-3-healthcare-transmission-guidance-view"][
+            "permissions"
+        ] == [
             "READ",
             "EMBED",
             "DERIVE",
@@ -395,9 +399,7 @@ def test_builds_task_and_authority_profiles_with_grant_templates(
                         if isinstance(item, Memory)
                     ]
                     assert len(description_memories) == 2
-                    assert description_memories[0].content.startswith(
-                        "SITUATION ·"
-                    )
+                    assert description_memories[0].content.startswith("SITUATION ·")
                     assert description_memories[1].content.startswith("TASK ·")
                 assert not (store_root / "query-sources").exists()
 
@@ -419,8 +421,9 @@ def test_builds_task_and_authority_profiles_with_grant_templates(
                         translation = catalog.entry_for(memory.uid)
                         assert translation is not None
                         assert translation.curated is not None
-                        assert translation.curated.source_sha256 == (
-                            entry["english_sha256"]
+                        assert (
+                            translation.curated.source_sha256
+                            == (entry["english_sha256"])
                         )
                         assert (
                             _digest(translation.curated.translated_content)

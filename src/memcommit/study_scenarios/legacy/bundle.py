@@ -22,7 +22,7 @@ import uuid
 
 import memcommit.persistence.store as store_module
 from memcommit.context import AutoCheckpoint, Context, Memory
-from memcommit.application.evaluation.study_fixtures import (
+from memcommit.study_scenarios.legacy.fixtures import (
     FixtureDataset,
     FixtureMemory,
     FixtureTranslationPair,
@@ -36,7 +36,9 @@ from memcommit.application.operations.translate.view import (
     TRANSLATION_REVIEW_UNREVIEWED,
     TranslationCatalog,
 )
-from memcommit.application.operations.translate.view_store import save_translation_catalog
+from memcommit.application.operations.translate.view_store import (
+    save_translation_catalog,
+)
 
 
 _BUNDLE_NAMESPACE = uuid.UUID("50b72d54-cfbe-4f89-8f7f-1e6c785d8552")
@@ -209,9 +211,7 @@ TASK_SPECS = {
             name="task-2",
             role="TASK",
             current_context="participant/proposal-workspace",
-            datasets=(
-                BundleDatasetSpec("task2-description", "description"),
-            ),
+            datasets=(BundleDatasetSpec("task2-description", "description"),),
             initial_contexts=("participant/proposal-workspace",),
         ),
         authority_profile=BundleProfileSpec(
@@ -447,7 +447,7 @@ def _atomic_output_directory(destination: Path) -> Iterator[Path]:
         # platforms even though initial validation rejected one.
         if destination.is_symlink() or destination.exists():
             raise StudyBundleError(
-                f"Study bundle destination {destination} appeared during " "the build."
+                f"Study bundle destination {destination} appeared during the build."
             )
         os.replace(staging, destination)
         published = True
@@ -927,7 +927,7 @@ def _grant_template_records(
         authority_contexts = contexts_by_profile[template.authority_profile]
         if template.authority_context not in authority_contexts:
             raise StudyBundleError(
-                f"Grant template {template.key!r} names a missing authority " "Context."
+                f"Grant template {template.key!r} names a missing authority Context."
             )
         permissions = template.permissions
         if (
@@ -1056,12 +1056,7 @@ def _build_study_bundle_contents(
             f"Study bundle staging directory {package} is not empty."
         )
     package.mkdir(parents=True, exist_ok=True)
-    root = fixture_root or (
-        Path(__file__).resolve().parents[4]
-        / "agent-records"
-        / "docs"
-        / "fixtures"
-    )
+    root = fixture_root or Path(__file__).resolve().parent / "data"
     profile_records: list[dict[str, object]] = []
     manifest: list[BundleManifestEntry] = []
     contexts_by_profile: dict[str, frozenset[str]] = {}
@@ -1164,14 +1159,10 @@ are never retained by the study Profile.
 Audience annotations remain review metadata and are not automatically
 interpreted as ACL rules.
 
-Run `mem profile import-study` once to compose a clean editable
-`study-baseline` Profile without authoring checkpoints or run artifacts. Its
-`task-N` branches contain participant starting state and its
-`granted-memory/task-N` branches contain authority source material. Refine that
-single live Profile, then use `mem init-study NAME` to snapshot its current
-state into one ordinary Profile with the complete topology unchanged. The
-legacy `~/.mem` remains the `authoring` profile and package sources are never
-edited in place.
+`mem init-study --scenario legacy` validates these packages inside a private
+staging directory and directly publishes an isolated participant/authority
+pair. No editable baseline Profile or separate import step is required, and
+the packaged scenario sources are never edited in place.
 """,
             encoding="utf-8",
         )

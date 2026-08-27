@@ -553,9 +553,8 @@ def test_authoring_name_is_reserved_case_insensitively(profile_home):
     assert profile_registry_file().read_bytes() == before
 
 
-def test_fixed_study_baseline_cannot_be_renamed(profile_home):
+def test_study_baseline_name_has_no_special_rename_status(profile_home):
     baseline = _register_profile("study-baseline")
-    before = profile_registry_file().read_bytes()
     digest = _tree_digest(profile_store_dir(baseline))
 
     result = runner.invoke(
@@ -563,24 +562,10 @@ def test_fixed_study_baseline_cannot_be_renamed(profile_home):
         ["profile", "rename", "study-baseline", "new-baseline"],
     )
 
-    assert result.exit_code == 1
-    assert "fixed study-baseline Profile cannot be renamed" in result.stderr
-    assert profile_registry_file().read_bytes() == before
-    assert _tree_digest(profile_store_dir(baseline)) == digest
-
-
-def test_study_baseline_name_is_reserved_case_insensitively(profile_home):
-    profile = _register_profile("ordinary")
-    before = profile_registry_file().read_bytes()
-
-    result = runner.invoke(
-        app,
-        ["profile", "rename", profile.name, "Study-Baseline"],
-    )
-
-    assert result.exit_code == 1
-    assert "study-baseline Profile name is reserved" in result.stderr
-    assert profile_registry_file().read_bytes() == before
+    assert result.exit_code == 0, result.stderr or result.output
+    renamed = load_profile_registry().by_name("new-baseline")
+    assert renamed is not None and renamed.uid == baseline.uid
+    assert _tree_digest(profile_store_dir(renamed)) == digest
 
 
 def test_legacy_split_member_cannot_be_renamed_individually(profile_home):

@@ -99,7 +99,7 @@ large repeated overview, report prose, member objects, and boilerplate that
 dominated the original exhaustive JSON response.
 
 The live contract is owned by
-`memcommit.study_prewarm.compare_compact`. On 2026-08-27 its schema, prompt,
+`memcommit.study_scenarios.legacy.prewarm.compare_compact`. On 2026-08-27 its schema, prompt,
 strict decoder, typed reconstruction, and one-call evidence boundary moved out
 of the retired latency A/B runner so Study preparation no longer imports a
 private experiment helper. This intermediate ownership cleanup deliberately

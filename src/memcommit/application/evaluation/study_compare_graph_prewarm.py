@@ -53,7 +53,7 @@ from memcommit.context import Context, Memory
 from memcommit.providers.policy import (
     resolve_codex_evaluation_policy,
 )
-from memcommit.study_prewarm.compare_compact import (
+from memcommit.study_scenarios.legacy.prewarm.compare_compact import (
     COMPACT_PROMPT_VERSION,
     run_compact_compare,
 )
@@ -207,9 +207,7 @@ def _read_json(path: Path) -> dict[str, object]:
 
 
 def _view(task: str, context: Context) -> GraphView:
-    memories = tuple(
-        item for item in context.iter_items() if isinstance(item, Memory)
-    )
+    memories = tuple(item for item in context.iter_items() if isinstance(item, Memory))
     return GraphView(
         task=task,
         name=context.name,
@@ -217,9 +215,7 @@ def _view(task: str, context: Context) -> GraphView:
         context_digest=context_record_digest(context),
         memory_uids=tuple(memory.uid for memory in memories),
         memory_contents=tuple(memory.content for memory in memories),
-        memory_content_digests=tuple(
-            _sha(memory.content) for memory in memories
-        ),
+        memory_content_digests=tuple(_sha(memory.content) for memory in memories),
     )
 
 
@@ -387,9 +383,7 @@ def _compact_artifact(
     issues = [
         {
             "priority": issue.priority,
-            "relation_keys": [
-                relation_key_by_uid[uid] for uid in issue.relation_uids
-            ],
+            "relation_keys": [relation_key_by_uid[uid] for uid in issue.relation_uids],
             "title": issue.title,
             "question": issue.question,
             "why_it_matters": issue.why_it_matters,
@@ -630,9 +624,7 @@ def compute_pair(
         fallback_seconds = max(0.0, time.monotonic() - fallback_started)
         compact_seconds = evidence.get("provider_seconds", 0.0)
         compact_seconds = (
-            float(compact_seconds)
-            if isinstance(compact_seconds, (int, float))
-            else 0.0
+            float(compact_seconds) if isinstance(compact_seconds, (int, float)) else 0.0
         )
         return _compact_artifact(
             pair,
@@ -1030,7 +1022,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         or args.workers < 1
         or args.retries < 0
     ):
-        print("Timeout/workers must be positive and retries nonnegative.", file=sys.stderr)
+        print(
+            "Timeout/workers must be positive and retries nonnegative.", file=sys.stderr
+        )
         return 2
     config = Config()
     policy = resolve_codex_evaluation_policy(

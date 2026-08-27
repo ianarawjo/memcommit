@@ -5,13 +5,18 @@ import json
 
 import memcommit.config as config_module
 import memcommit.application.ops as ops
-import memcommit.study_prewarm.summarize as summarize_prewarm_module
+import memcommit.study_scenarios.legacy.prewarm.summarize as summarize_prewarm_module
 from memcommit.config import Config
 from memcommit.context import Context, Memory
 from memcommit.store import MemoryStore
-from memcommit.study_prewarm.installations import record_declared_installation
-from memcommit.study_prewarm.registry import payload_digest, publish_artifact
-from memcommit.study_prewarm.summarize import (
+from memcommit.study_scenarios.legacy.prewarm.installations import (
+    record_declared_installation,
+)
+from memcommit.study_scenarios.legacy.prewarm.registry import (
+    payload_digest,
+    publish_artifact,
+)
+from memcommit.study_scenarios.legacy.prewarm.summarize import (
     build_summarize_prewarm_artifact,
 )
 from memcommit.summarize import collect_summary_frame

@@ -15,8 +15,10 @@ from memcommit.application.operations.profile.config import (
     study_run_identity,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.study_prewarm.atomize import build_atomize_prewarm_artifact
-from memcommit.study_prewarm.registry import publish_artifact
+from memcommit.study_scenarios.legacy.prewarm.atomize import (
+    build_atomize_prewarm_artifact,
+)
+from memcommit.study_scenarios.legacy.prewarm.registry import publish_artifact
 
 
 class StudyAtomizeRegistryError(RuntimeError):
@@ -51,11 +53,7 @@ def publish_active_tutorial_analysis(
     config = Config()
     provider = config.semantic_provider()
     model = config.model_for_provider(provider)
-    reasoning = (
-        config.codex_reasoning_effort()
-        if provider == "codex_chatgpt"
-        else None
-    )
+    reasoning = config.codex_reasoning_effort() if provider == "codex_chatgpt" else None
     key, artifact = build_atomize_prewarm_artifact(
         task_description=description,
         analysis=analysis,
@@ -89,7 +87,11 @@ def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Publish the active exact Tutorial Atomize analysis."
     )
-    parser.add_argument("--baseline-profile", default="study-baseline")
+    parser.add_argument(
+        "--baseline-profile",
+        required=True,
+        help="Explicit historical source Profile; packaged scenarios are not registered",
+    )
     parser.add_argument("--offline-provider-seconds", type=float, required=True)
     parser.add_argument("--output", type=Path, default=None)
     return parser

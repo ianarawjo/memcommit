@@ -26,7 +26,9 @@ from memcommit.application.operations.compare.ledger.execution import (
     install_prepared_comparison_analysis,
 )
 from memcommit.application.operations.compare.ledger.provider import analyze_comparison
-from memcommit.application.operations.compare.ledger.store import load_comparison_analysis
+from memcommit.application.operations.compare.ledger.store import (
+    load_comparison_analysis,
+)
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.core.context_targeting.naming import validate_portable_context_name
 from memcommit.core.context_targeting.loading import load_context_scope
@@ -35,7 +37,9 @@ from memcommit.application.operations.compare.ledger.granted_store import (
     load_granted_comparison_artifact,
     recursive_comparison_projection,
 )
-from memcommit.application.operations.update.granted_application import _remove_checkpoint
+from memcommit.application.operations.update.granted_application import (
+    _remove_checkpoint,
+)
 from memcommit.application.authority.derived_policy import (
     analysis_retention,
     authorize_analysis_save,
@@ -116,15 +120,15 @@ from memcommit.persistence.store import (
     _write_json_atomic,
     context_record_digest,
 )
-from memcommit.study_prewarm.meld_resolution import (
+from memcommit.study_scenarios.legacy.prewarm.meld_resolution import (
     find_installed_meld_resolution_branch,
 )
-from memcommit.study_prewarm.meld_directional import (
+from memcommit.study_scenarios.legacy.prewarm.meld_directional import (
     DirectionalMeldPrewarmMatch,
     find_installed_equivalent_directional_comparison,
     find_installed_directional_meld_prewarm,
 )
-from memcommit.study_prewarm.compare import (
+from memcommit.study_scenarios.legacy.prewarm.compare import (
     EquivalentComparePrewarmMatch,
     find_declared_equivalent_compare_analysis,
     find_declared_projected_compare_analysis,
@@ -208,8 +212,7 @@ def load_bound_meld_contexts(
         return left, right, right
 
     if session.mode == "DIRECTIONAL" and (
-        session.granted_incoming is not None
-        or session.granted_target is not None
+        session.granted_incoming is not None or session.granted_target is not None
     ):
         bindings = (session.granted_incoming, session.granted_target)
         loaded = []
@@ -231,9 +234,7 @@ def load_bound_meld_contexts(
                 load_meld_source(
                     access,
                     include_descendants=bool(frame.include_descendants),
-                    project=(
-                        session.schema_version < MELD_OWNER_AWARE_SCHEMA_VERSION
-                    ),
+                    project=(session.schema_version < MELD_OWNER_AWARE_SCHEMA_VERSION),
                 )
             )
         left, right = loaded
@@ -389,10 +390,7 @@ def target_save_source_bindings(
             return ()
     bindings: list[tuple[str, str, str]] = []
     for index, frame in enumerate(session.frames):
-        if (
-            session.schema_version == MELD_INLINE_MEMORY_SCHEMA_VERSION
-            and index == 0
-        ):
+        if session.schema_version == MELD_INLINE_MEMORY_SCHEMA_VERSION and index == 0:
             # The frozen one-Memory source has no storage path or lock. Its
             # exact bytes are already part of the session CAS and checkpoint.
             continue
@@ -435,9 +433,7 @@ def target_save_source_bindings(
                 include_descendants=True,
             )
             if (
-                context_record_digest(
-                    recursive_comparison_projection(reloaded_scope)
-                )
+                context_record_digest(recursive_comparison_projection(reloaded_scope))
                 != frame.context_digest
             ):
                 raise MeldApplicationError(
@@ -462,7 +458,11 @@ def meld_checkpoint_record(
         and session.schema_version >= MELD_OWNER_AWARE_SCHEMA_VERSION
     )
     record: dict[str, object] = {
-        "schema_version": 3 if owner_aware else 2 if session.mode == "DIRECTIONAL" else 1,
+        "schema_version": 3
+        if owner_aware
+        else 2
+        if session.mode == "DIRECTIONAL"
+        else 1,
         "session_uid": session.uid,
         "turn_uid": change_set.turn_uid,
         "mode": session.mode,
@@ -647,7 +647,10 @@ def recover_owner_aware_application(
     checkpoint_store: MemoryStore,
     checkpoint_name_by_public: dict[str, str] | None = None,
 ) -> tuple[tuple[MeldCheckpointReceipt, ...], tuple[str, ...]] | None:
-    if target.uid != session.target.context_uid or target.name != session.target.context_name:
+    if (
+        target.uid != session.target.context_uid
+        or target.name != session.target.context_name
+    ):
         return None
     contexts = {
         (context.uid, context.name): context
@@ -710,7 +713,10 @@ def recover_meld_application(
     checkpoint_store: MemoryStore | None = None,
     checkpoint_context_name: str | None = None,
 ) -> tuple[str, tuple[str, ...]] | None:
-    if target.uid != session.target.context_uid or target.name != session.target.context_name:
+    if (
+        target.uid != session.target.context_uid
+        or target.name != session.target.context_name
+    ):
         return None
     result_uids = tuple(proposal.memory_uid for proposal in change_set.proposals)
     expected = expected_target_memories(session, change_set)
@@ -1348,7 +1354,10 @@ class MemoryStoreMeldStartPort(MeldStartPort):
         provider_factory,
     ) -> MeldStartResult:
         if self.prepared is not None:
-            if self.prepared.request != request or self.prepared.store is not self.store:
+            if (
+                self.prepared.request != request
+                or self.prepared.store is not self.store
+            ):
                 raise MeldStartError("Prepared Meld Start does not match its request.")
             session, origin = _execute_prepared_initial_meld(
                 self.prepared,
@@ -1417,7 +1426,10 @@ class MemoryStoreMeldRestartPort(MeldRestartPort):
         provider_factory,
     ) -> MeldRestartResult:
         if self.prepared is not None:
-            if self.prepared.request != request or self.prepared.store is not self.store:
+            if (
+                self.prepared.request != request
+                or self.prepared.store is not self.store
+            ):
                 raise MeldRestartError(
                     "Prepared Meld Restart does not match its request."
                 )
@@ -1686,7 +1698,10 @@ class MemoryStoreMeldAssessmentPort(MeldAssessmentPort):
         origin_provider: object | None,
     ) -> MeldSession:
         token = frozen.token
-        if not isinstance(token, _MeldAssessmentToken) or token.owner is not self._owner:
+        if (
+            not isinstance(token, _MeldAssessmentToken)
+            or token.owner is not self._owner
+        ):
             raise MeldApplicationError(
                 "Meld assessment binding belongs to another runtime port."
             )
@@ -1710,9 +1725,7 @@ class MemoryStoreMeldAssessmentPort(MeldAssessmentPort):
                     "UPDATE" if proposal.operation == "EDIT" else "CREATE"
                     for proposal in assessment.proposals
                 }
-                missing = sorted(
-                    required - set(session.granted_target.permissions)
-                )
+                missing = sorted(required - set(session.granted_target.permissions))
                 if missing:
                     raise ProfileError(
                         "The BASELINE Grant does not authorize "
@@ -1989,9 +2002,7 @@ class MemoryStoreMeldApplyPort(MeldApplyPort):
         )
         if checkpoint is None:
             raise MeldApplicationError("Meld application created no checkpoint.")
-        result_uids = tuple(
-            proposal.memory_uid for proposal in change_set.proposals
-        )
+        result_uids = tuple(proposal.memory_uid for proposal in change_set.proposals)
         session.record_application(
             change_set_digest=change_set.digest,
             checkpoint_uid=checkpoint.uid,
@@ -2030,8 +2041,7 @@ class MemoryStoreMeldApplyPort(MeldApplyPort):
             identity: tuple(
                 proposal
                 for proposal in change_set.proposals
-                if (proposal.owner_context_uid, proposal.owner_context_name)
-                == identity
+                if (proposal.owner_context_uid, proposal.owner_context_name) == identity
             )
             for identity in owners
         }
@@ -2044,9 +2054,7 @@ class MemoryStoreMeldApplyPort(MeldApplyPort):
                 continue
             if index == 0 and session.granted_incoming is not None:
                 continue
-            local_lock_names.update(
-                context.name for context in (frame.contexts or ())
-            )
+            local_lock_names.update(context.name for context in (frame.contexts or ()))
 
         receipts: tuple[MeldCheckpointReceipt, ...] | None = None
         result_uids: tuple[str, ...] = ()
@@ -2197,8 +2205,7 @@ class MemoryStoreMeldApplyPort(MeldApplyPort):
             identity: tuple(
                 proposal
                 for proposal in change_set.proposals
-                if (proposal.owner_context_uid, proposal.owner_context_name)
-                == identity
+                if (proposal.owner_context_uid, proposal.owner_context_name) == identity
             )
             for identity in owners
         }
@@ -2208,14 +2215,6 @@ class MemoryStoreMeldApplyPort(MeldApplyPort):
                 binding,
                 registry=registry,
             )
-            authority_source = target_access.view.authority.source or {}
-            if (
-                target_access.view.authority.name.casefold() == "study-baseline"
-                or authority_source.get("kind") == "STUDY_BASELINE"
-            ):
-                raise MeldApplicationError(
-                    "The fixed study-baseline Profile cannot be updated."
-                )
             validate_owner_aware_grant_permissions(
                 session,
                 change_set.proposals,
@@ -2345,7 +2344,9 @@ class MemoryStoreMeldApplyPort(MeldApplyPort):
                                         f"{len(change_set.proposals)} changes"
                                     ),
                                 ),
-                                expected_context_digest=expected_digests[authority_name],
+                                expected_context_digest=expected_digests[
+                                    authority_name
+                                ],
                             )
                             if checkpoint is None:
                                 raise MeldApplicationError(
@@ -2364,8 +2365,7 @@ class MemoryStoreMeldApplyPort(MeldApplyPort):
                             )
                         receipts = tuple(receipt for _name, receipt in created)
                         result_uids = tuple(
-                            proposal.memory_uid
-                            for proposal in change_set.proposals
+                            proposal.memory_uid for proposal in change_set.proposals
                         )
                         session.record_application(
                             change_set_digest=change_set.digest,
@@ -2450,14 +2450,6 @@ class MemoryStoreMeldApplyPort(MeldApplyPort):
                 binding,
                 registry=registry,
             )
-            authority_source = target_access.view.authority.source or {}
-            if (
-                target_access.view.authority.name.casefold() == "study-baseline"
-                or authority_source.get("kind") == "STUDY_BASELINE"
-            ):
-                raise MeldApplicationError(
-                    "The fixed study-baseline Profile cannot be updated."
-                )
             for permission in required_permissions:
                 revalidate_granted_context_binding(
                     binding,

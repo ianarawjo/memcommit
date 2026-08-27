@@ -32,7 +32,7 @@ from memcommit.profile_config import (
     STUDY_RUN_PARTICIPANT_SOURCE_KIND,
 )
 from memcommit.store import MemoryStore
-from memcommit.study_prewarm.meld_directional import (
+from memcommit.study_scenarios.legacy.prewarm.meld_directional import (
     BASELINE_NAME,
     DESCRIPTION_NAME,
     INCOMING_NAME,
@@ -42,7 +42,7 @@ from memcommit.study_prewarm.meld_directional import (
     find_installed_directional_meld_prewarm,
     install_declared_directional_meld_prewarms,
 )
-from memcommit.study_prewarm.registry import publish_artifact
+from memcommit.study_scenarios.legacy.prewarm.registry import publish_artifact
 
 
 runner = CliRunner()
@@ -52,12 +52,8 @@ class _DistinctCompareProvider:
     def complete(self, prompt, *, operation, output_schema=None):
         assert operation == "compare_contexts"
         payload = json.loads(prompt.split(COMPARISON_PAYLOAD_MARKER, 1)[1])
-        incoming = [
-            item["memory_id"] for item in payload["frames"][0]["memories"]
-        ]
-        baseline = [
-            item["memory_id"] for item in payload["frames"][1]["memories"]
-        ]
+        incoming = [item["memory_id"] for item in payload["frames"][0]["memories"]]
+        baseline = [item["memory_id"] for item in payload["frames"][1]["memories"]]
         relations = []
         for index, memory_id in enumerate(incoming, start=1):
             relations.append(
@@ -155,17 +151,11 @@ def _fixture(tmp_path, monkeypatch, root):
     basis = directional_comparison_basis_assessment(
         comparison, (session.frames[0], session.frames[1])
     )
-    incoming_by_uid = {
-        item.uid: item for item in session.frames[0].memories
-    }
+    incoming_by_uid = {item.uid: item for item in session.frames[0].memories}
     proposals = []
     for relation in basis.relations:
         member = next(
-            (
-                item
-                for item in relation.members
-                if item.memory_uid in incoming_by_uid
-            ),
+            (item for item in relation.members if item.memory_uid in incoming_by_uid),
             None,
         )
         if member is None:
@@ -370,10 +360,7 @@ def test_directional_meld_empty_parent_scope_is_provider_free(
     )
 
     assert result.exit_code == 0, result.output
-    assert (
-        "ANALYSIS · EQUIVALENT SCOPE PREWARM · PROVIDER NOT CALLED"
-        in result.output
-    )
+    assert "ANALYSIS · EQUIVALENT SCOPE PREWARM · PROVIDER NOT CALLED" in result.output
     saved = store.load_meld_session(store.load_direct(BASELINE_NAME).uid)
     assert saved is not None
     assert saved.frames[0].context_name == parent.name
@@ -514,9 +501,7 @@ def test_directional_equivalence_rejects_added_wrapper_memory_and_target_change(
         if isinstance(item, Memory)
     )
     changed_target = Context(uid=str(uuid.uuid4()), name="task-1/other-target")
-    changed_target.add(
-        Memory(uid=baseline_memory.uid, content=baseline_memory.content)
-    )
+    changed_target.add(Memory(uid=baseline_memory.uid, content=baseline_memory.content))
     changed_target_input = ComparisonInput.from_contexts(
         clean_incoming,
         changed_target,

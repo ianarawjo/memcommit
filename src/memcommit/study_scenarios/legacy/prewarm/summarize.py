@@ -23,13 +23,15 @@ from memcommit.application.semantic.understanding import (
     UnderstandingSummary,
     normalize_understanding_text,
 )
-from memcommit.study_prewarm.installations import declared_artifact_available
-from memcommit.study_prewarm.quality import (
+from memcommit.study_scenarios.legacy.prewarm.installations import (
+    declared_artifact_available,
+)
+from memcommit.study_scenarios.legacy.prewarm.quality import (
     SemanticIdentity,
     compatible_cached_identities,
     highest_quality_candidates,
 )
-from memcommit.study_prewarm.registry import (
+from memcommit.study_scenarios.legacy.prewarm.registry import (
     StudyPrewarmRegistryError,
     load_artifact,
     load_registry,
@@ -195,7 +197,10 @@ def _validate_frame_identity(value: object) -> dict[str, object]:
     if any(
         not isinstance(source, dict)
         or set(source) != expected_source_fields
-        or any(not isinstance(source.get(field), str) or not source.get(field) for field in expected_source_fields)
+        or any(
+            not isinstance(source.get(field), str) or not source.get(field)
+            for field in expected_source_fields
+        )
         for source in sources
     ):
         raise StudyPrewarmRegistryError("Summarize prewarm sources are invalid.")
@@ -214,8 +219,7 @@ def _validate_artifact(
         or value.get("key") != entry_key
         or value.get("operation") != "SUMMARIZE"
         or value.get("task") != entry_task
-        or value.get("provider_contract_version")
-        != SUMMARIZE_PROVIDER_CONTRACT_VERSION
+        or value.get("provider_contract_version") != SUMMARIZE_PROVIDER_CONTRACT_VERSION
         or not isinstance(value.get("provider"), str)
         or not isinstance(value.get("model"), str)
         or (

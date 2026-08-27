@@ -35,9 +35,7 @@ def test_translate_module_identity_is_independent_of_import_order(
     legacy_first: bool,
 ) -> None:
     first_name, second_name = (
-        (legacy_name, canonical_name)
-        if legacy_first
-        else (canonical_name, legacy_name)
+        (legacy_name, canonical_name) if legacy_first else (canonical_name, legacy_name)
     )
     program = f"""
 import importlib
@@ -93,7 +91,9 @@ assert not [
 
 
 def test_pre_relocation_translate_globals_load_through_aliases() -> None:
-    runtime = importlib.import_module("memcommit.application.operations.translate.runtime")
+    runtime = importlib.import_module(
+        "memcommit.application.operations.translate.runtime"
+    )
     view = importlib.import_module("memcommit.application.operations.translate.view")
     view_store = importlib.import_module(
         "memcommit.application.operations.translate.view_store"
@@ -119,7 +119,7 @@ def test_pre_relocation_translate_globals_load_through_aliases() -> None:
 def test_production_translate_consumers_use_operation_owners() -> None:
     relative_paths = (
         "src/memcommit/commands/translate/command.py",
-        "src/memcommit/application/evaluation/study_bundle.py",
+        "src/memcommit/study_scenarios/legacy/bundle.py",
         "src/memcommit/application/operations/query/granted_source.py",
         "src/memcommit/application/operations/translate/view.py",
         "src/memcommit/application/operations/translate/view_store.py",
@@ -155,7 +155,8 @@ def test_translate_owners_keep_the_existing_dependency_direction() -> None:
         REPOSITORY_ROOT / "src/memcommit/application/operations/translate/view_store.py"
     ).read_text(encoding="utf-8")
     application_source = (
-        REPOSITORY_ROOT / "src/memcommit/application/operations/translate/application.py"
+        REPOSITORY_ROOT
+        / "src/memcommit/application/operations/translate/application.py"
     ).read_text(encoding="utf-8")
     catalog_application_source = (
         REPOSITORY_ROOT
@@ -167,7 +168,9 @@ def test_translate_owners_keep_the_existing_dependency_direction() -> None:
     ).read_text(encoding="utf-8")
 
     assert "memcommit.application.operations.translate.view" not in runtime_source
-    assert "from memcommit.application.operations.translate.runtime import" in view_source
+    assert (
+        "from memcommit.application.operations.translate.runtime import" in view_source
+    )
     assert "from memcommit.application.operations.translate.view import" in store_source
     operation_sources = (
         runtime_source

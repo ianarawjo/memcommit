@@ -9,7 +9,7 @@ import pytest
 from memcommit.comparison import ComparisonInput
 from memcommit.context import Context, Memory
 from memcommit.provider_types import CompletionRun, ProviderIdentity
-from memcommit.study_prewarm.compare_compact import (
+from memcommit.study_scenarios.legacy.prewarm.compare_compact import (
     COMPACT_CONDITION,
     CompactCompareError,
     compact_output_schema,
@@ -114,9 +114,7 @@ def test_compact_response_reconstructs_exact_typed_analysis():
             "exactly 2 rows",
         ),
         (
-            lambda value: value["groups"].append(
-                {"kind": "DISTINCT", "note": ""}
-            ),
+            lambda value: value["groups"].append({"kind": "DISTINCT", "note": ""}),
             "Every compact group must be used",
         ),
         (
@@ -124,9 +122,7 @@ def test_compact_response_reconstructs_exact_typed_analysis():
             "exactly one source side",
         ),
         (
-            lambda value: value["groups"][0].update(
-                {"kind": "CONFLICT", "note": ""}
-            ),
+            lambda value: value["groups"][0].update({"kind": "CONFLICT", "note": ""}),
             "requires one sparse note",
         ),
     ],

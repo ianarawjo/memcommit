@@ -534,12 +534,8 @@ class TestHelp:
 
         forms = help_inventory.COMMAND_FORMS["meld"]
         assert "mem meld (choose mode and endpoints for a new Meld)" in forms
-        assert (
-            "mem meld [incoming_context] [baseline_context] (directional)"
-        ) in forms
-        assert (
-            "mem meld [peer_a] [peer_b] [result_context] (symmetric Result)" in forms
-        )
+        assert ("mem meld [incoming_context] [baseline_context] (directional)") in forms
+        assert "mem meld [peer_a] [peer_b] [result_context] (symmetric Result)" in forms
         assert (
             "mem meld team/draft-a team/draft-b team/merged-draft "
             "(example: symmetric Result)"
@@ -595,8 +591,7 @@ class TestHelp:
             "Target defaults to current Context" in form for form in reference_forms
         )
         assert any(
-            "--from" in form and "compatibility" in form
-            for form in reference_forms
+            "--from" in form and "compatibility" in form for form in reference_forms
         )
         assert any(
             "--from [source_context] --to [target_context]" in form
@@ -643,8 +638,8 @@ class TestHelp:
             "mem translate (show/save a default-English view of the current Context)"
         )
         assert help_inventory.COMMAND_FORMS["init-study"][:2] == (
-            "mem init-study (initialize coffee-v1 with an edited or generated Profile name)",
-            "mem init-study [profile_name] (initialize coffee-v1 with an explicit Profile name)",
+            "mem init-study (initialize coffee with an edited or generated Profile name)",
+            "mem init-study [profile_name] (initialize coffee with an explicit Profile name)",
         )
         assert help_inventory.COMMAND_FORMS["checkout"][0] == (
             "mem checkout (enter the Git-style interactive Context picker)"
@@ -774,9 +769,7 @@ class TestHelp:
                     for parameter in command.params
                     if isinstance(parameter, click.Argument) and parameter.required
                 ]
-                meaningful_bare = (
-                    not required_arguments
-                )
+                meaningful_bare = not required_arguments
             if not meaningful_bare:
                 continue
 
@@ -1198,7 +1191,9 @@ class TestInit:
             observed["view"] = view
             return view.value
 
-        monkeypatch.setattr("memcommit.commands.init.command.choose_context_name", choose)
+        monkeypatch.setattr(
+            "memcommit.commands.init.command.choose_context_name", choose
+        )
 
         result = invoke("init")
 
@@ -1726,13 +1721,9 @@ class TestRemove:
 
         store = MemoryStore()
         first = ops.init("first")
-        first.add(
-            Mem(uid="aaaa1111-1111-1111-1111-111111111111", content="first")
-        )
+        first.add(Mem(uid="aaaa1111-1111-1111-1111-111111111111", content="first"))
         second = ops.init("second")
-        second.add(
-            Mem(uid="aaaa2222-2222-2222-2222-222222222222", content="second")
-        )
+        second.add(Mem(uid="aaaa2222-2222-2222-2222-222222222222", content="second"))
         store.create_context(first)
         store.create_context(second)
         store.set_current("second")
@@ -2253,9 +2244,9 @@ class TestClear:
         assert not store.load_direct("tree").memories
         assert not store.load_direct("tree/child").memories
         assert not store.load_direct("tree/empty").memories
-        assert [
-            item.content for item in store.load_direct("outside").iter_items()
-        ] == ["outside survives"]
+        assert [item.content for item in store.load_direct("outside").iter_items()] == [
+            "outside survives"
+        ]
 
         undone = invoke("undo")
 
@@ -2267,9 +2258,9 @@ class TestClear:
             item.content for item in store.load_direct("tree/child").iter_items()
         ] == ["child item"]
         assert not store.load_direct("tree/empty").memories
-        assert [
-            item.content for item in store.load_direct("outside").iter_items()
-        ] == ["outside survives"]
+        assert [item.content for item in store.load_direct("outside").iter_items()] == [
+            "outside survives"
+        ]
 
         redone = invoke("redo")
 
@@ -2294,9 +2285,9 @@ class TestClear:
         assert "tree/child" in (result.output + result.stderr)
         assert "locked against changes" in (result.output + result.stderr)
         store = MemoryStore()
-        assert [
-            item.content for item in store.load_direct("tree").iter_items()
-        ] == ["root stays"]
+        assert [item.content for item in store.load_direct("tree").iter_items()] == [
+            "root stays"
+        ]
         assert [
             item.content for item in store.load_direct("tree/child").iter_items()
         ] == ["child stays"]
@@ -2359,9 +2350,9 @@ class TestClear:
             result.output + result.stderr
         )
         store = MemoryStore()
-        assert [
-            item.content for item in store.load_direct("tree").iter_items()
-        ] == ["root stays"]
+        assert [item.content for item in store.load_direct("tree").iter_items()] == [
+            "root stays"
+        ]
         assert [
             item.content for item in store.load_direct("tree/child").iter_items()
         ] == ["child stays"]

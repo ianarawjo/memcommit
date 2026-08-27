@@ -41,19 +41,15 @@ from memcommit.application.operations.profile.config import (
 )
 from memcommit.application.operations.profile.model import (
     ProfileError,
-    STUDY_BASELINE_PROFILE_NAME,
     archive_legacy_study,
     create_profile,
     create_authority_grant,
-    default_study_bundle_root,
     delete_authority_grant,
     import_profile,
-    import_study_profiles,
     list_authority_grants,
     list_profiles,
     remove_profile,
     remove_study,
-    refresh_study_profile,
     rename_profile,
     rename_study,
     study_run_profile_pairs,
@@ -331,24 +327,16 @@ def _pick_profile(
             removal_block=(
                 "The fixed authoring Profile cannot be removed"
                 if profile.kind == "AUTHORING"
-                else (
-                    "The fixed study-baseline Profile cannot be removed"
-                    if profile.name.casefold() == STUDY_BASELINE_PROFILE_NAME.casefold()
-                    else None
-                )
+                else None
             ),
             rename_block=(
                 "The fixed authoring Profile cannot be renamed"
                 if profile.kind == "AUTHORING"
                 else (
-                    "The fixed study-baseline Profile cannot be renamed"
-                    if profile.name.casefold() == STUDY_BASELINE_PROFILE_NAME.casefold()
-                    else (
-                        "Legacy Study members cannot be renamed individually"
-                        if profile.uid in memberships
-                        and memberships[profile.uid].task is not None
-                        else None
-                    )
+                    "Legacy Study members cannot be renamed individually"
+                    if profile.uid in memberships
+                    and memberships[profile.uid].task is not None
+                    else None
                 )
             ),
         )
@@ -455,21 +443,17 @@ def _profile_creation_status(result) -> str:
 
 def _print_profile_creation(result) -> None:
     typer.secho(
-        "Created empty Profile '"
-        + display_escape_text(result.profile.name)
-        + "'.",
+        "Created empty Profile '" + display_escape_text(result.profile.name) + "'.",
         fg=semantic_color_rgb(SemanticColorRole.CREATE),
     )
     typer.echo("Profile UID: " + display_escape_text(result.profile.uid))
     typer.echo("Store: " + display_escape_text(str(result.inspection.root)))
     typer.echo("Contexts 0 owned + 0 granted · Memories 0 owned + 0 granted")
     typer.echo(
-        "Active Profile unchanged: "
-        + display_escape_text(result.active_profile_name)
+        "Active Profile unchanged: " + display_escape_text(result.active_profile_name)
     )
     typer.echo(
-        "Use it with: mem profile use "
-        + display_escape_text(result.profile.name)
+        "Use it with: mem profile use " + display_escape_text(result.profile.name)
     )
     typer.echo("Then create its first Context with: mem init CONTEXT")
 
@@ -1446,103 +1430,6 @@ def import_cmd(
     )
     typer.echo(f"{_inventory_label(inspection)} · current={current_label}")
     typer.echo("The source store was not modified.")
-
-
-@app.command("import-study")
-def import_study_cmd(
-    source: Annotated[
-        Optional[Path],
-        typer.Option(
-            "--from",
-            help=(
-                "Directory containing task-1, task-2, and task-3 packages; "
-                "defaults to this checkout's generated bundles"
-            ),
-        ),
-    ] = None,
-) -> None:
-    """Bootstrap one editable Profile containing the complete Study baseline."""
-
-    bundle_root = source or default_study_bundle_root()
-    try:
-        result = import_study_profiles(bundle_root)
-    except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
-        _fail(error)
-    typer.secho("Imported editable Study baseline.", fg=typer.colors.GREEN)
-    for profile, inspection in zip(
-        result.profiles,
-        result.inspections,
-        strict=True,
-    ):
-        current_label = (
-            display_escape_text(inspection.current_context)
-            if inspection.current_context
-            else "(none)"
-        )
-        typer.echo(
-            f"  {display_escape_text(profile.name)}: "
-            f"{_inventory_label(inspection)} · current={current_label} · "
-            f"kind={display_escape_text(profile.kind.lower())}"
-        )
-    typer.echo("The authoring store and generated package sources were not modified.")
-    typer.echo(
-        "Authoring checkpoints, sessions, caches, locks, and run logs "
-        "were not imported."
-    )
-    typer.echo(
-        "Edit it with: mem profile use "
-        + display_escape_text(STUDY_BASELINE_PROFILE_NAME)
-    )
-    typer.echo(
-        "Clone it as an isolated participant/authority run with: mem init-study NAME"
-    )
-
-
-@app.command("refresh-study")
-def refresh_study_cmd(
-    source: Annotated[
-        Optional[Path],
-        typer.Option(
-            "--from",
-            help=(
-                "Directory containing task-1, task-2, and task-3 packages; "
-                "defaults to this checkout's generated bundles"
-            ),
-        ),
-    ] = None,
-    replace_edited_baseline: Annotated[
-        bool,
-        typer.Option(
-            "--replace-edited-baseline",
-            help="Replace local edits made since the previous Study import",
-        ),
-    ] = False,
-) -> None:
-    """Refresh the editable Study baseline from validated fixture packages."""
-
-    bundle_root = source or default_study_bundle_root()
-    try:
-        result = refresh_study_profile(
-            bundle_root,
-            replace_edited_baseline=replace_edited_baseline,
-        )
-    except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
-        _fail(error)
-    profile = result.profiles[0]
-    inspection = result.inspections[0]
-    current_label = (
-        display_escape_text(inspection.current_context)
-        if inspection.current_context
-        else "(none)"
-    )
-    typer.secho("Refreshed editable Study baseline.", fg=typer.colors.GREEN)
-    typer.echo(
-        f"  {display_escape_text(profile.name)}: "
-        f"{_inventory_label(inspection)} · current={current_label} · "
-        f"kind={display_escape_text(profile.kind.lower())}"
-    )
-    typer.echo("The Profile identity and active Profile selection were preserved.")
-    typer.echo("New Study runs will use this refreshed baseline.")
 
 
 @app.command("archive-study")

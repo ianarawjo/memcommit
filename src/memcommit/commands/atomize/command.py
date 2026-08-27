@@ -13,8 +13,12 @@ from memcommit.application.operations.atomize.domain import (
     AtomizeImpactError,
     atomize_analysis_matches_context,
 )
-from memcommit.application.operations.atomize.analysis_application import AtomizeAnalysisOpenRequest
-from memcommit.application.operations.atomize.analysis_runtime import execute_atomize_analysis_open
+from memcommit.application.operations.atomize.analysis_application import (
+    AtomizeAnalysisOpenRequest,
+)
+from memcommit.application.operations.atomize.analysis_runtime import (
+    execute_atomize_analysis_open,
+)
 from memcommit.application.operations.atomize.application import (
     AtomizeOutputPlanRequest,
     AtomizePersistedApplyRequest,
@@ -91,7 +95,9 @@ from memcommit.application.operations.review.model import (
     review_response_digest,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.study_prewarm.atomize import is_installed_atomize_prewarm
+from memcommit.study_scenarios.legacy.prewarm.atomize import (
+    is_installed_atomize_prewarm,
+)
 from memcommit.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
@@ -815,9 +821,13 @@ def cmd(
 
         applying = save or save_as is not None or auto_apply_exact_context
         if auto_apply_exact_context:
-            existing_applied = not refresh and session is not None and (
-                atomize_analysis_was_applied(store, direct_ctx, session.uid)
-                or atomize_workbench_was_applied(store, session)
+            existing_applied = (
+                not refresh
+                and session is not None
+                and (
+                    atomize_analysis_was_applied(store, direct_ctx, session.uid)
+                    or atomize_workbench_was_applied(store, session)
+                )
             )
             if not existing_applied:
                 # Bare Atomize means the complete current Context. Opening

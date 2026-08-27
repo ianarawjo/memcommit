@@ -6,10 +6,11 @@ from dataclasses import replace
 import os
 from pathlib import Path
 import shutil
-from typing import Callable
 import uuid
 
-from memcommit.application.operations.init_study.composition import _compose_study_run_pair
+from memcommit.application.operations.init_study.composition import (
+    _compose_study_run_pair,
+)
 from memcommit.application.operations.init_study.model import StudyInitializationResult
 from memcommit.application.operations.profile.config import (
     ProfileConfigError,
@@ -32,28 +33,6 @@ from memcommit.application.operations.profile.model import (
 )
 
 
-def _attach_declared_study_prewarms(
-    baseline_root: Path,
-    participant_root: Path,
-) -> None:
-    """Pin one shared immutable semantic fixture to a new participant run."""
-
-    from memcommit.study_prewarm.registry import (
-        StudyPrewarmRegistryError,
-        attach_shared_bundle,
-    )
-
-    try:
-        attach_shared_bundle(
-            baseline_store_root=baseline_root,
-            participant_store_root=participant_root,
-        )
-    except StudyPrewarmRegistryError as error:
-        raise ProfileError(
-            f"Study semantic prewarm could not be attached: {error}"
-        ) from error
-
-
 def _publish_study_run_pair(
     registry: ProfileRegistry,
     *,
@@ -65,11 +44,7 @@ def _publish_study_run_pair(
     baseline_digest: str,
     provider_policy_version: str,
     provider_policy_digest: str,
-    prewarm_workers: int,
-    prewarm_reasoning: str,
-    prewarm_progress: Callable[[str], None] | None,
-    scenario_id: str = "legacy-v1",
-    prepare_prewarms: bool = True,
+    scenario_id: str = "legacy",
 ) -> StudyInitializationResult:
     """Publish the run's two stores and grants as one registry transaction."""
 
@@ -166,40 +141,6 @@ def _publish_study_run_pair(
                 raise ProfileError("Managed profile destination is occupied.")
             os.replace(source, destination)
             published.append((destination, source))
-        if prepare_prewarms:
-            # Cache compatibility is checked only after the complete staged
-            # grant topology can be resolved, but before the registry
-            # advertises the new run. The Coffee scenario deliberately skips
-            # this block because participant-authored inputs make an exact
-            # shared semantic artifact neither stable nor reusable.
-            from memcommit.study_prewarm.prepare import prepare_study_prewarms
-            from memcommit.persistence.store import MemoryStore
-
-            try:
-                prepare_study_prewarms(
-                    baseline=baseline,
-                    baseline_store_root=profile_store_dir(baseline),
-                    participant_store=MemoryStore(
-                        root=profile_store_dir(participant),
-                        create=False,
-                    ),
-                    registry_snapshot=updated,
-                    workers=prewarm_workers,
-                    reasoning=prewarm_reasoning,
-                    progress=prewarm_progress,
-                )
-                _attach_declared_study_prewarms(
-                    profile_store_dir(baseline),
-                    profile_store_dir(participant),
-                )
-            except Exception as error:
-                raise ProfileError(
-                    f"Study semantic prewarm could not be prepared: {error}"
-                ) from error
-        # The participant pins a digest-checked immutable bundle, but no
-        # operation artifact or hidden receipt is installed during setup.
-        # Operation-specific evidence and authority validation happen only
-        # when that participant first invokes the exact declared request.
         try:
             _write_registry(updated)
         except Exception as error:
@@ -229,7 +170,6 @@ def _publish_study_run_pair(
                 authority_inspection,
                 root=profile_store_dir(authority),
             ),
-            baseline_profile_name=baseline.name,
             active_profile_name=participant.name,
             scenario_id=scenario_id,
         )

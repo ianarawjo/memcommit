@@ -26,7 +26,10 @@ ROWS = 52
 
 
 def _helpers():
-    path = ROOT / "agent-records/docs/screenshots/study-full-replay-20260811/capture_init_study.py"
+    path = (
+        ROOT
+        / "agent-records/docs/screenshots/study-full-replay-20260811/capture_init_study.py"
+    )
     spec = importlib.util.spec_from_file_location("atomize_open_capture_helpers", path)
     if spec is None or spec.loader is None:
         raise RuntimeError("Could not load PTY capture helpers.")
@@ -169,7 +172,9 @@ def _child_provider(store_root: Path) -> None:
         store,
         lambda: _Provider(delay=3.0, label="provider"),
     )
-    analysis = store.load_atomize_analysis(store.load_direct("atomize/open-boundary").uid)
+    analysis = store.load_atomize_analysis(
+        store.load_direct("atomize/open-boundary").uid
+    )
     print("PROVIDER CREATE · EXIT", code, "· SAVED", analysis is not None)
 
 
@@ -180,9 +185,7 @@ def _child_saved(store_root: Path) -> None:
     before = store.load_atomize_analysis(store.load_direct("atomize/open-boundary").uid)
     code = _invoke_impact(
         store,
-        lambda: (_ for _ in ()).throw(
-            AssertionError("saved resume opened a provider")
-        ),
+        lambda: (_ for _ in ()).throw(AssertionError("saved resume opened a provider")),
     )
     after = store.load_atomize_analysis(store.load_direct("atomize/open-boundary").uid)
     print("SAVED RESUME · EXIT", code, "· SAME ANALYSIS", before.uid == after.uid)
@@ -192,7 +195,7 @@ def _child_prepared(store_root: Path) -> None:
     import memcommit.atomize_analysis_runtime as runtime
     from memcommit.atomize import create_atomize_analysis, impact_atomize
     from memcommit.store import MemoryStore
-    from memcommit.study_prewarm.atomize import AtomizePrewarmMatch
+    from memcommit.study_scenarios.legacy.prewarm.atomize import AtomizePrewarmMatch
 
     store = MemoryStore(root=store_root)
     _initialize(store)
@@ -261,12 +264,15 @@ def _child_stale(store_root: Path) -> None:
     store.save(changed)
     code = _invoke_impact(
         store,
-        lambda: (_ for _ in ()).throw(
-            AssertionError("stale resume opened a provider")
-        ),
+        lambda: (_ for _ in ()).throw(AssertionError("stale resume opened a provider")),
     )
     retained = store.load_atomize_analysis(context.uid)
-    print("STALE REJECTION · EXIT", code, "· ORIGINAL RETAINED", retained.uid == first.analysis.uid)
+    print(
+        "STALE REJECTION · EXIT",
+        code,
+        "· ORIGINAL RETAINED",
+        retained.uid == first.analysis.uid,
+    )
 
 
 def _child_publication_failure(store_root: Path) -> None:
@@ -361,7 +367,10 @@ def main() -> None:
         HELPERS._snapshot(recorder, "06-exact-prewarm-workbench")
         child.send("q")
         HELPERS._pump(child, recorder, seconds=15, require_eof=True)
-        if "PREPARED MATERIALIZATION · EXIT 0 · SAME ANALYSIS True" not in recorder.getvalue():
+        if (
+            "PREPARED MATERIALIZATION · EXIT 0 · SAME ANALYSIS True"
+            not in recorder.getvalue()
+        ):
             raise RuntimeError("Exact prewarm did not materialize provider-free.")
         HELPERS._snapshot(recorder, "07-exact-prewarm-receipt")
 

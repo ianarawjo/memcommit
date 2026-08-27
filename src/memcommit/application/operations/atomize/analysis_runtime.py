@@ -26,7 +26,9 @@ from memcommit.context import Context
 from memcommit.providers.subscription import CodexChatGPTProvider
 from memcommit.application.semantic.prompt_policy import resolve_semantic_prompt_policy
 from memcommit.persistence.store import MemoryStore
-from memcommit.study_prewarm.atomize import find_declared_atomize_prewarm
+from memcommit.study_scenarios.legacy.prewarm.atomize import (
+    find_declared_atomize_prewarm,
+)
 
 
 ATOMIZE_AGGREGATE_TIMEOUT_SECONDS = 300
@@ -86,7 +88,9 @@ def _requested_memory_uids(
     # Keeping the import at the activated edge lets the extracted application
     # boundary remain compatible with profiles that expose only whole-Context
     # Atomize.
-    from memcommit.application.operations.atomize.domain import select_atomize_candidates
+    from memcommit.application.operations.atomize.domain import (
+        select_atomize_candidates,
+    )
 
     return tuple(
         candidate.memory.uid
@@ -254,10 +258,7 @@ class MemoryStoreAtomizeAnalysisOpenPort:
         if not request.allow_prepared:
             return None, request.output_context_name
         if self.prepared_analysis_override is not None:
-            if (
-                self.prepared_analysis_override.prompt_policy_id
-                != prompt_policy_id
-            ):
+            if self.prepared_analysis_override.prompt_policy_id != prompt_policy_id:
                 return None, request.output_context_name
             return self.prepared_analysis_override, (
                 request.output_context_name or self.prepared_output_name
@@ -298,8 +299,7 @@ class MemoryStoreAtomizeAnalysisOpenPort:
                 or existing.context_name != context.name
             ):
                 raise AtomizeImpactError(
-                    "The saved atomize analysis does not match this Context's "
-                    "identity."
+                    "The saved atomize analysis does not match this Context's identity."
                 )
             if not atomize_analysis_matches_context(existing, context):
                 raise AtomizeImpactError(
@@ -334,9 +334,7 @@ class MemoryStoreAtomizeAnalysisOpenPort:
             prompt_policy_id=prompt_policy_id,
         )
         if prepared_analysis is not None and not request.refresh:
-            prepared_uids = tuple(
-                item.memory_uid for item in prepared_analysis.items
-            )
+            prepared_uids = tuple(item.memory_uid for item in prepared_analysis.items)
             if request.memory_selector is not None and requested_uids != prepared_uids:
                 raise AtomizeImpactError(
                     "A focused atomize request cannot reuse a whole-Context "

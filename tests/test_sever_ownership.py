@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import ast
 import importlib
 from pathlib import Path
 import pickle
@@ -53,9 +52,7 @@ def test_sever_module_identity_is_independent_of_import_order(
     legacy_first: bool,
 ) -> None:
     first_name, second_name = (
-        (legacy_name, canonical_name)
-        if legacy_first
-        else (canonical_name, legacy_name)
+        (legacy_name, canonical_name) if legacy_first else (canonical_name, legacy_name)
     )
     program = f"""
 import importlib
@@ -81,7 +78,9 @@ assert sys.modules[{canonical_name!r}] is canonical
 
 def test_sever_legacy_paths_expose_the_canonical_contract() -> None:
     legacy_model = importlib.import_module("memcommit.sever")
-    canonical_model = importlib.import_module("memcommit.application.operations.sever.model")
+    canonical_model = importlib.import_module(
+        "memcommit.application.operations.sever.model"
+    )
     legacy_provider = importlib.import_module("memcommit.sever_provider")
     canonical_provider = importlib.import_module(
         "memcommit.application.operations.sever.provider"
@@ -90,9 +89,7 @@ def test_sever_legacy_paths_expose_the_canonical_contract() -> None:
     canonical_store = importlib.import_module(
         "memcommit.application.operations.sever.session_store"
     )
-    legacy_resolution = importlib.import_module(
-        "memcommit.sever_resolution_adapter"
-    )
+    legacy_resolution = importlib.import_module("memcommit.sever_resolution_adapter")
     canonical_resolution = importlib.import_module(
         "memcommit.application.operations.sever.resolution_adapter"
     )
@@ -172,11 +169,11 @@ assert "memcommit.application.operations.sever.resolution_adapter" not in sys.mo
 
 
 def test_pre_relocation_sever_request_global_loads_through_alias() -> None:
-    canonical = importlib.import_module("memcommit.application.operations.sever.application")
-
-    restored = pickle.loads(
-        b"cmemcommit.sever_application\nSeverAnalysisRequest\n."
+    canonical = importlib.import_module(
+        "memcommit.application.operations.sever.application"
     )
+
+    restored = pickle.loads(b"cmemcommit.sever_application\nSeverAnalysisRequest\n.")
 
     assert restored is canonical.SeverAnalysisRequest
 
@@ -201,7 +198,7 @@ def test_production_sever_consumers_use_the_operation_owner() -> None:
         "src/memcommit/application/operations/sever/application.py",
         "src/memcommit/application/operations/sever/provider.py",
         "src/memcommit/application/operations/sever/resolution_adapter.py",
-        "src/memcommit/study_prewarm/sever.py",
+        "src/memcommit/study_scenarios/legacy/prewarm/sever.py",
         "src/memcommit/application/operations/sever/session_store.py",
         "src/memcommit/application/operations/sever/runtime.py",
         "src/memcommit/application/operations/review/report_adapters.py",

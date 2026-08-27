@@ -23,14 +23,20 @@ from memcommit.adapters.python_api.errors import (
     CompareStorageError,
 )
 from memcommit.application.authority.access import resolve_context_access
-from memcommit.application.operations.compare.ledger.model import ComparisonError, comparison_canonical_digest
+from memcommit.application.operations.compare.ledger.model import (
+    ComparisonError,
+    comparison_canonical_digest,
+)
 from memcommit.application.operations.compare.ledger.execution import (
     ComparisonExecutionResult,
     connect_comparison_provider,
     ensure_comparison_analysis,
     load_comparison_context,
 )
-from memcommit.application.operations.compare.ledger.provider import ComparisonProviderError, analyze_comparison
+from memcommit.application.operations.compare.ledger.provider import (
+    ComparisonProviderError,
+    analyze_comparison,
+)
 from memcommit.application.operations.compare.ledger.session_application import (
     ComparisonSessionConflictError,
     ComparisonSessionInputError,
@@ -38,11 +44,18 @@ from memcommit.application.operations.compare.ledger.session_application import 
     open_comparison_session,
     prepare_comparison_refresh,
 )
-from memcommit.application.operations.compare.ledger.store import ConcurrentComparisonUpdateError
+from memcommit.application.operations.compare.ledger.store import (
+    ConcurrentComparisonUpdateError,
+)
 from memcommit.context_locator import resolve_context_locator
-from memcommit.application.operations.compare.ledger.granted_store import load_granted_comparison_artifact
-from memcommit.application.operations.profile.model import ProfileError, authority_grant_snapshot_lock
-from memcommit.study_prewarm.compare import (
+from memcommit.application.operations.compare.ledger.granted_store import (
+    load_granted_comparison_artifact,
+)
+from memcommit.application.operations.profile.model import (
+    ProfileError,
+    authority_grant_snapshot_lock,
+)
+from memcommit.study_scenarios.legacy.prewarm.compare import (
     EquivalentComparePrewarmMatch,
     find_declared_equivalent_compare_analysis,
     installed_compare_prewarm_origin,
@@ -50,7 +63,7 @@ from memcommit.study_prewarm.compare import (
     record_equivalent_compare_prewarm,
     record_exact_compare_prewarm,
 )
-from memcommit.study_prewarm.registry import StudyPrewarmRegistryError
+from memcommit.study_scenarios.legacy.prewarm.registry import StudyPrewarmRegistryError
 
 
 def _raise(error_type: type[Exception], error: BaseException) -> None:
@@ -203,9 +216,7 @@ def _execute(
             current_name=current_name,
             registry_snapshot=registry_snapshot,
         )
-        return (
-            equivalent_match.analysis if equivalent_match is not None else None
-        )
+        return equivalent_match.analysis if equivalent_match is not None else None
 
     execution = ensure_comparison_analysis(
         store=runtime.store,
@@ -220,9 +231,7 @@ def _execute(
         expected_version=expected_version,
         analyze=lambda comparison_input: _analyze(runtime, comparison_input),
         equivalent=(
-            equivalent
-            if reference_memory is None and compared_memory is None
-            else None
+            equivalent if reference_memory is None and compared_memory is None else None
         ),
         project=(
             (
@@ -237,10 +246,7 @@ def _execute(
             else None
         ),
     )
-    if (
-        execution.origin == "EQUIVALENT_SCOPE_PREWARM"
-        and equivalent_match is not None
-    ):
+    if execution.origin == "EQUIVALENT_SCOPE_PREWARM" and equivalent_match is not None:
         if equivalent_match.origin == "EXACT_PREWARM":
             record_exact_compare_prewarm(
                 runtime.store,
@@ -277,7 +283,10 @@ def _validate_request(
         for value in (reference_context, compared_context)
     ):
         raise CompareInputError("Compare Context locators must be nonblank text.")
-    if type(reference_descendants) is not bool or type(compared_descendants) is not bool:
+    if (
+        type(reference_descendants) is not bool
+        or type(compared_descendants) is not bool
+    ):
         raise CompareInputError("Compare descendant controls must be booleans.")
     for value, label in (
         (reference_memory, "reference_memory"),
@@ -397,10 +406,7 @@ def refresh_comparison(
             store=runtime.store,
         )
         analysis = snapshot.analysis
-        selectors = tuple(
-            frame.selected_memory_uid
-            for frame in analysis.frames
-        )
+        selectors = tuple(frame.selected_memory_uid for frame in analysis.frames)
         return _execute(
             runtime,
             analysis.frames[0].context_name,

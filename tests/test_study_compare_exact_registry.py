@@ -36,7 +36,7 @@ from memcommit.profile_config import (
     STUDY_RUN_PARTICIPANT_SOURCE_KIND,
 )
 from memcommit.store import MemoryStore
-from memcommit.study_prewarm.compare import (
+from memcommit.study_scenarios.legacy.prewarm.compare import (
     build_compare_prewarm_artifact,
     find_declared_equivalent_compare_analysis,
     install_declared_compare_prewarms,
@@ -45,7 +45,7 @@ from memcommit.study_prewarm.compare import (
     project_declared_compare_analysis,
     record_equivalent_compare_prewarm,
 )
-from memcommit.study_prewarm.registry import (
+from memcommit.study_scenarios.legacy.prewarm.registry import (
     StudyPrewarmRegistryError,
     publish_artifact,
 )
@@ -587,11 +587,7 @@ def test_declared_parent_projection_supports_reversed_opposite_sides(
         member.memory_uid
         for relation in projected.relations
         for member in relation.members
-    } == {
-        memory.uid
-        for frame in comparison_input.frames
-        for memory in frame.memories
-    }
+    } == {memory.uid for frame in comparison_input.frames for memory in frame.memories}
 
 
 @pytest.mark.parametrize("condition", ["edit", "addition", "same-side", "cross-task"])
@@ -729,9 +725,7 @@ def test_empty_ancestor_scope_reuses_exact_task1_ledger_durably(
         for relation in execution.analysis.relations
         for member in relation.members
     } == {
-        memory.uid
-        for frame in execution.analysis.frames
-        for memory in frame.memories
+        memory.uid for frame in execution.analysis.frames for memory in frame.memories
     }
     record_equivalent_compare_prewarm(
         store,
@@ -771,9 +765,7 @@ def test_equivalent_compare_rejects_nontransparent_task1_scopes(
         source_memory = next(
             item for item in reference.iter_items() if isinstance(item, Memory)
         )
-        parent.add(
-            Memory(uid=source_memory.uid, content=source_memory.content)
-        )
+        parent.add(Memory(uid=source_memory.uid, content=source_memory.content))
     store.create_context(parent)
     current_reference = recursive_comparison_projection(
         load_context_scope(store, parent.name, include_descendants=True)
@@ -814,8 +806,7 @@ def test_task3_child_subset_uses_projected_symmetric_compare_without_provider(
     store = MemoryStore(root=root)
     description = ops.init("task-3/description")
     parent = ops.init(
-        "task-3/remote/government/healthcare-agent/info-request/"
-        "transmission-guidance"
+        "task-3/remote/government/healthcare-agent/info-request/transmission-guidance"
     )
     child = ops.init(parent.name + "/public-guidance")
     sibling = ops.init(parent.name + "/private-guidance")

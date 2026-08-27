@@ -6,9 +6,9 @@
 different namespace from `mem switch`:
 
 ```text
-mem profile use study-baseline  # select the editable source store
-mem profile study-baseline      # concise spelling of the same selection
-mem switch              # select a Context inside that store
+mem profile use pilot-001  # select one complete registered store
+mem profile pilot-001      # concise spelling of the same selection
+mem switch                 # select a Context inside that store
 ```
 
 In a terminal, the bare `mem profile` command is the primary Profile browser.
@@ -22,7 +22,7 @@ the concise interactive spelling requested to parallel `mem switch NAME`.
 Both forms reach the same validation, locking, and atomic selector update;
 the shorthand is parser routing rather than a second mutation path. Known
 subcommands (`list`, its hidden `ls` alias, `current`, `create`, `use`, `import`,
-`import-study`, `archive-study`, `rename`, and `grant`) take precedence, so a
+`archive-study`, `rename`, and `grant`) take precedence, so a
 Profile whose name equals one of those reserved command tokens must be selected
 with the explicit `use` form. `mem profile list` remains an explicit inventory
 command.
@@ -74,32 +74,16 @@ Managed profiles are editable copies under an external control plane:
 ├── archives/studies/
 │   └── <legacy-study-uid>/manifest.json
 └── stores/
-    ├── <stable-profile-uid>/         # study-baseline
     ├── <run-profile-uid>/            # participant Task branches
     ├── <run-authority-uid>/          # run-private granted Memory
     └── <archived-profile-uid>/       # detached but not moved or deleted
 ```
 
-`mem profile import-study` validates the three generated packages once and
-publishes one editable `study-baseline` Profile. Package sources remain
-unchanged. The baseline uses one explicit Context contract:
-
-```text
-study-baseline
-├── task-1/...
-├── task-2/...
-├── task-3/...
-└── granted-memory/
-    ├── task-1/...
-    ├── task-2/...
-    └── task-3/...
-```
-
-The first three branches contain participant starting state. The
-`granted-memory` branches contain the associated source material as ordinary
-Contexts. Keeping all six branches in one Profile makes incomplete Memory sets
-easy to inspect, import, revise, and copy without coordinating identities that
-are not yet stable.
+Study scenario inputs are not registered Profiles. `mem init-study` builds the
+selected packaged scenario in private staging and publishes only the final
+participant and authority Profiles. The old `import-study`, `refresh-study`,
+and special `study-baseline` lifecycle has no public control-plane state to
+select or synchronize.
 
 Every slash-delimited branch is completed with real empty ordinary Contexts
 for lexical prefixes absent from an older fixture package. For example,
@@ -113,10 +97,9 @@ same topology in the initialized Profile as in the baseline.
 
 ## Isolated two-Profile Study runs
 
-`mem init-study [NAME] --scenario legacy-v1` is the repeatable legacy
-run-oriented entry point. It snapshots the currently registered
-`study-baseline` Profile, not the generated bundle,
-and publishes two managed Profiles plus their grants in one registry generation:
+`mem init-study [NAME] --scenario legacy` is the repeatable legacy
+run-oriented entry point. It builds the packaged scenario and publishes two
+managed Profiles plus their grants in one registry generation:
 
 ```text
 pilot-001                 Contexts 47 owned + 52 granted · Memories 375 owned + 675 granted
@@ -126,9 +109,8 @@ pilot-001-granted-memory  Contexts 85 owned + 0 granted · Memories 915 owned + 
 The participant target is named exactly `NAME`; its run-private authority is
 named `NAME-granted-memory`. Omitting `NAME` generates
 `study-YYYYMMDDTHHMMSSZ-<uid-prefix>`, so two initializations in the same second
-remain distinct. `--from-profile` selects another registered self-contained
-source while the default remains the stable `study-baseline` name rather than
-the globally active Profile.
+remain distinct. Scenario selection is independent of the globally active
+Profile; no registered Profile can substitute for a packaged scenario.
 
 The snapshot preserves every durable Context, Memory, and translation identity
 while remapping placement. Participant content remains below `task-N`; source
@@ -139,8 +121,8 @@ parent, so list/show/export access remains closed while `mem query` receives
 only the frozen authority scope.
 
 The authority store is copied for every run. Task 1's allowed add or edit saves
-through the grant into that copy and cannot mutate `study-baseline` or another
-run. This reuses the existing permission, most-specific override, grant
+through the grant into that copy and cannot mutate another run or the packaged
+scenario source. This reuses the existing permission, most-specific override, grant
 revocation, checkpoint provenance, and mutation revalidation boundaries rather
 than introducing a second local ACL implementation.
 
@@ -286,8 +268,8 @@ import already preserves the active selection. The person can inspect the zero
 inventory row and press Enter to switch explicitly.
 
 Names retain the portable one-segment contract. Creation rejects
-case-insensitive collisions with live or removed Profile identities, fixed
-`authoring` and `study-baseline` anchors, and live legacy Study headings. The
+case-insensitive collisions with live or removed Profile identities, the fixed
+`authoring` anchor, and live legacy Study headings. The
 retained-name boundary keeps tombstones and Study grouping unambiguous.
 
 ## Stable-identity Profile rename
@@ -358,10 +340,10 @@ publish a new registry generation, or turn a fixed anchor into an error. A
 case-only change such as `Pilot` to `pilot` is a real rename and is allowed
 when the same Profile owns both spellings.
 
-The fixed `authoring` and `study-baseline` names are protected both as rename
-sources and destinations. `authoring` is the backward-compatible store anchor;
-`study-baseline` is the default `init-study` and bootstrap anchor. Members of a
-live legacy split Study are also protected from individual rename because their
+The fixed `authoring` name is protected as both rename source and destination
+because it is the backward-compatible store anchor. `study-baseline` has no
+special status after removal of the registered baseline lifecycle. Members of
+a live legacy split Study remain protected from individual rename because their
 task/authority names are validated against immutable grouping provenance. A
 whole legacy-group rename would need to revise all member identities and is not
 an ordinary Profile rename.
@@ -455,11 +437,10 @@ directories, so a display-name rename does not move the data. The fixed
 
 ## Authority, query-only, and translation boundaries
 
-Generated study packages still model query-only data in separate authority
-stores and grant templates, and `profile import-study` validates that package
-contract before composing the baseline. A new single-Profile snapshot does not
-activate those grants: its merged `granted-memory` branches are ordinary owned
-Contexts. Legacy split Study Profiles keep their existing grant behavior.
+Packaged Study scenarios still model query-only data in separate authority
+stores and Grant templates. `init-study` validates that package contract before
+publishing a participant/authority pair with real Grants. Legacy split Study
+Profiles keep their existing Grant behavior.
 Korean representations remain same-UID translation catalogs rather than
 additional Contexts or Memories.
 
@@ -508,13 +489,13 @@ The local account can still read its files.
 
 - Profile selection takes effect for the next CLI process, not an operation
   already running in another terminal.
-- Editing a managed profile does not rewrite `agent-records/docs/fixtures/` or refresh the
-  generated package. Re-import refuses to overwrite the edited profile.
+- Editing a managed Profile does not rewrite a packaged scenario. Scenario
+  changes require an explicit source, digest, rationale, and regression update.
 - Generic Profile removal, replacement, backup, and reset remain deferred. The
   narrow legacy split-Study archive has an explicit recoverable manifest, but a
   matching restore command remains future work.
 - Profile rename is limited to live ordinary managed Profiles. It does not
-  rename the fixed authoring/baseline anchors, individual legacy Study members,
+  rename the fixed authoring anchor, individual legacy Study members,
   archived records, historical provenance, or any Context inside the Store.
 - `archive-study` does not promise repeated-success acknowledgement. After the
   registry detach commits, repeating the old Study name reports that the live
@@ -525,6 +506,3 @@ The local account can still read its files.
   single-Profile Study completion/archive state remain a separate lifecycle
   boundary; ordinary checkpoint and opt-in query-session history retain their
   existing narrower contracts.
-- `mem profile import-study` is a checkout-oriented research convenience; a
-  packaged installation must pass `--from` when generated bundles are not
-  shipped with the Python package.

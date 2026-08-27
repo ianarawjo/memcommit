@@ -107,7 +107,7 @@ from memcommit.persistence.store import (
     MemoryStore,
     context_record_digest,
 )
-from memcommit.study_prewarm.registry import StudyPrewarmRegistryError
+from memcommit.study_scenarios.legacy.prewarm.registry import StudyPrewarmRegistryError
 
 
 class MeldCommandError(RuntimeError):
@@ -789,8 +789,7 @@ def _meld_wait_view(session: MeldSession) -> CommandWaitView:
     current = session.current_turn
     if current is None or current.assessment is not None or len(session.turns) <= 1:
         raise ValueError(
-            "A Meld wait report requires a submitted turn after a completed "
-            "assessment."
+            "A Meld wait report requires a submitted turn after a completed assessment."
         )
 
     prior_turn = session.turns[-2]
@@ -905,7 +904,9 @@ def _assess_and_save(
         execute_prepared_meld_turn,
         prepare_pending_meld_turn,
     )
-    from memcommit.application.operations.meld.session_application import PendingMeldTurn
+    from memcommit.application.operations.meld.session_application import (
+        PendingMeldTurn,
+    )
 
     prepared = prepare_pending_meld_turn(
         PendingMeldTurn(
@@ -1024,7 +1025,9 @@ def _run_interactive(
     analysis_origin: str | None = None,
 ) -> MeldSession:
     """Run issue and whole-set turns through one shared interactive shell."""
-    from memcommit.commands.shared.resolution_workbench_shell import ResolutionDestination
+    from memcommit.commands.shared.resolution_workbench_shell import (
+        ResolutionDestination,
+    )
     from memcommit.application.operations.meld.runtime import (
         execute_meld_destination_change,
         execute_meld_preservation,
@@ -1041,7 +1044,7 @@ def _run_interactive(
     )
 
     if analysis_origin is None and session.comparison_seed is not None:
-        from memcommit.study_prewarm.compare import (
+        from memcommit.study_scenarios.legacy.prewarm.compare import (
             installed_compare_prewarm_origin,
         )
 
@@ -2040,8 +2043,7 @@ def cmd(
             if incoming_text is not None:
                 if right_access.is_granted:
                     raise MeldCommandError(
-                        "Inline-Memory Meld currently requires a local "
-                        "BASELINE/Target."
+                        "Inline-Memory Meld currently requires a local BASELINE/Target."
                     )
             else:
                 left_access = _resolve_meld_source(

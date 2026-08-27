@@ -60,9 +60,7 @@ def _study_ledger():
 
 
 def _provider_event_count() -> int:
-    return sum(
-        event.action.startswith("PROVIDER_") for event in _study_ledger().list()
-    )
+    return sum(event.action.startswith("PROVIDER_") for event in _study_ledger().list())
 
 
 def _load_inputs():
@@ -89,16 +87,24 @@ def _load_inputs():
         current_name=current,
         required_permission="READ",
     )
-    source_store = GrantedReadStore(source_access) if source_access.is_granted else store
-    target_store = GrantedReadStore(target_access) if target_access.is_granted else store
+    source_store = (
+        GrantedReadStore(source_access) if source_access.is_granted else store
+    )
+    target_store = (
+        GrantedReadStore(target_access) if target_access.is_granted else store
+    )
     source = load_context_scope(
         source_store,
-        source_access.display_name if source_access.is_granted else source_access.context_name,
+        source_access.display_name
+        if source_access.is_granted
+        else source_access.context_name,
         include_descendants=True,
     )
     target = load_context_scope(
         target_store,
-        target_access.display_name if target_access.is_granted else target_access.context_name,
+        target_access.display_name
+        if target_access.is_granted
+        else target_access.context_name,
         include_descendants=True,
     )
     return (
@@ -106,7 +112,9 @@ def _load_inputs():
         source,
         target,
         collect_update_inputs(source, target),
-        freeze_granted_context_binding(target_access) if target_access.is_granted else None,
+        freeze_granted_context_binding(target_access)
+        if target_access.is_granted
+        else None,
     )
 
 
@@ -131,8 +139,7 @@ def _verify_latest_update_attempt() -> None:
     start = next(
         event
         for event in ledger.list()
-        if event.action == "COMMAND_STARTED"
-        and event.data.get("operation") == "update"
+        if event.action == "COMMAND_STARTED" and event.data.get("operation") == "update"
     )
     attempt = ledger.events_for_attempt(start.attempt_uid)
     if any(event.action.startswith("PROVIDER_") for event in attempt):
@@ -145,7 +152,9 @@ def _verify_latest_update_attempt() -> None:
 def main() -> None:
     sys.path.insert(0, str(ROOT / "src"))
     from memcommit.profile_config import load_profile_registry
-    from memcommit.study_prewarm.update import is_installed_update_prewarm
+    from memcommit.study_scenarios.legacy.prewarm.update import (
+        is_installed_update_prewarm,
+    )
     from memcommit.update import applied_session_matches, session_matches
 
     if load_profile_registry().active.name != PROFILE_NAME:
@@ -166,7 +175,9 @@ def main() -> None:
     ):
         raise RuntimeError("Replay has a nonmatching existing Update receipt.")
     if len(before.source_candidates) != 75 or len(before.target_memories) != 300:
-        raise RuntimeError("Task 1 Update baseline is not the expected 75-to-300 frame.")
+        raise RuntimeError(
+            "Task 1 Update baseline is not the expected 75-to-300 frame."
+        )
     provider_events_before = _provider_event_count()
 
     child, recorder = _spawn(*ARGV)

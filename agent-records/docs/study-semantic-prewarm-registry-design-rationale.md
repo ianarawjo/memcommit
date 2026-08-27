@@ -2,13 +2,17 @@
 
 ## Status
 
-This note defines a study-design registry for moving known long semantic work
-out of participant-facing time. It is a cache-hit eligibility list, never an
-operation allowlist. `init-study` now pins one content-addressed immutable
-baseline bundle instead of copying its semantic artifacts into every
-participant Store. Operation state is materialized only in the participant
-Profile that invokes it. The ownership and invalidation boundary is specified
-in [`study-shared-prewarm-bundle-design-rationale.md`](study-shared-prewarm-bundle-design-rationale.md).
+This note records the retained Study prewarm registry and its cache-eligibility
+rules. It is research tooling owned by
+`memcommit.study_scenarios.legacy.prewarm`, never an operation allowlist or an
+implicit part of participant setup. `init-study --scenario legacy` now creates
+the participant and authority Profiles directly from the scenario fixtures and
+does not publish, attach, or reference semantic prewarm artifacts. A researcher
+may still prepare or install an artifact explicitly against a named Profile;
+operation state is otherwise materialized only by the Profile that invokes the
+operation. The former shared-bundle rollout remains documented in
+[`study-shared-prewarm-bundle-design-rationale.md`](study-shared-prewarm-bundle-design-rationale.md)
+as historical evidence rather than the current initialization contract.
 Task 3 Sever accepts only an exact ordinary whole Source × whole Criteria
 artifact. Update and Directional Meld classify provider-visible ordered
 evidence as `EQUAL`, `SUBSET`, or unsafe; those operation-owned subset rules do
@@ -56,15 +60,14 @@ while a medium artifact cannot satisfy a high request.
 
 ## Implemented first slice and measured boundary
 
-`memcommit.study_prewarm` now gives the editable Study baseline one strict,
+`memcommit.study_scenarios.legacy.prewarm` owns the preserved strict,
 versioned, task-local registry. `memcommit.application.evaluation.study_compare_registry`
-publishes an already retained exact `ComparisonAnalysis` into that fixture
-without a provider call. A new `init-study` publishes this declared fixture
-once into shared content-addressed storage, writes a small digest reference,
-and validates its artifact digest, task, task-description digest, Context and
+can publish an already retained exact `ComparisonAnalysis` into an explicitly
+selected research fixture without a provider call. The research installer
+validates its artifact digest, task, task-description digest, Context and
 Memory revisions, descendant scopes, Compare ruleset, provider contract,
 model, and reasoning setting, then installs it through Compare's production
-authorization and CAS boundary.
+authorization and CAS boundary. `init-study` does none of this work.
 
 Only the semantic `ComparisonAnalysis` is portable. The source run's granted
 artifact wrapper is deliberately excluded because every new run receives new
@@ -85,9 +88,9 @@ artifact. The old and new Profile, authority, and Grant UIDs differed.
 
 Parallelism is intentionally asymmetric. Independent offline provider calls
 may be prepared concurrently because they do not split one semantic frame.
-`init-study` registry publication and Grant rebinding remain serialized under
-the Profile and operation locks. That serialized work is local host work and
-does not add a participant-facing provider wait.
+Explicit research installation and Grant rebinding remain serialized under the
+Profile and operation locks. Direct scenario initialization has no registry
+publication or prewarm installation phase.
 
 The following projection measurements are superseded rollout history, not
 current participant behavior. Projecting the actual retained Task

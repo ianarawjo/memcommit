@@ -15,9 +15,13 @@ from memcommit.application.operations.compare.summary import (
     ComparisonSummary,
     ComparisonSummaryError,
 )
-from memcommit.application.operations.compare.summary_application import run_comparison_summary
+from memcommit.application.operations.compare.summary_application import (
+    run_comparison_summary,
+)
 from memcommit.adapters.interfaces.cli.comparison_summary import render_comparison_summary
-from memcommit.application.operations.compare.summary_provider import COMPARISON_SUMMARY_OPERATION
+from memcommit.application.operations.compare.summary_provider import (
+    COMPARISON_SUMMARY_OPERATION,
+)
 from memcommit.adapters.interfaces.presentation.comparison import (
     render_comparison,
     render_comparison_receipt,
@@ -45,7 +49,9 @@ from memcommit.commands.shared.command_wait import run_command_wait
 from memcommit.commands.compare.setup import choose_compare_setup
 from memcommit.commands.compare.targeting import resolve_compare_cli_targets
 from memcommit.commands.rationale.command import render_rationale
-from memcommit.adapters.interfaces.tui.components.operation_launcher.session import SessionNewReceipt
+from memcommit.adapters.interfaces.tui.components.operation_launcher.session import (
+    SessionNewReceipt,
+)
 from memcommit.adapters.interfaces.console.text import (
     display_escape_text,
 )
@@ -70,9 +76,17 @@ from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.retained_history.memory_history_reconstruction.retained_record_verification import (
     MemoryHistoryReconstructionError,
 )
-from memcommit.application.operations.profile.model import ProfileError, authority_grant_snapshot_lock
-from memcommit.application.operations.rationale.model import RationaleError, build_rationale
-from memcommit.application.operations.rationale.semantic import synthesize_rationale_provenance
+from memcommit.application.operations.profile.model import (
+    ProfileError,
+    authority_grant_snapshot_lock,
+)
+from memcommit.application.operations.rationale.model import (
+    RationaleError,
+    build_rationale,
+)
+from memcommit.application.operations.rationale.semantic import (
+    synthesize_rationale_provenance,
+)
 from memcommit.application.operations.rationale.scope import (
     load_rationale_scope,
     rationale_memory_history,
@@ -80,7 +94,7 @@ from memcommit.application.operations.rationale.scope import (
 )
 from memcommit.persistence.store import MemoryStore
 from memcommit.providers.semantic import connect_operation_provider
-from memcommit.study_prewarm.compare import (
+from memcommit.study_scenarios.legacy.prewarm.compare import (
     EquivalentComparePrewarmMatch,
     find_declared_equivalent_compare_analysis,
     installed_compare_prewarm_origin,
@@ -88,7 +102,7 @@ from memcommit.study_prewarm.compare import (
     record_equivalent_compare_prewarm,
     record_exact_compare_prewarm,
 )
-from memcommit.study_prewarm.registry import StudyPrewarmRegistryError
+from memcommit.study_scenarios.legacy.prewarm.registry import StudyPrewarmRegistryError
 
 
 # A full Task 1 subtree Compare is one intentionally indivisible relation
@@ -298,9 +312,7 @@ def cmd(
         Optional[str],
         typer.Option(
             "--from",
-            help=(
-                "Compatibility alias for an explicit REFERENCE Context locator"
-            ),
+            help=("Compatibility alias for an explicit REFERENCE Context locator"),
         ),
     ] = None,
     to: Annotated[
@@ -324,9 +336,7 @@ def cmd(
         bool,
         typer.Option(
             "--ledger",
-            help=(
-                "Run, save, and show the exhaustive relation ledger used by Meld"
-            ),
+            help=("Run, save, and show the exhaustive relation ledger used by Meld"),
         ),
     ] = False,
     snapshot: Annotated[
@@ -428,8 +438,7 @@ def cmd(
             )
         if compared_is_auto_memory and compared_memory is not None:
             raise CompareCommandError(
-                "PEER Memory was supplied both positionally and with "
-                "--compared-memory."
+                "PEER Memory was supplied both positionally and with --compared-memory."
             )
     except CompareCommandError as error:
         typer.secho(
@@ -488,9 +497,7 @@ def cmd(
             err=True,
         )
         raise typer.Exit(2)
-    if to is None and (
-        reference_memory is not None or compared_memory is not None
-    ):
+    if to is None and (reference_memory is not None or compared_memory is not None):
         typer.secho(
             "Compare error: Memory scope flags require an explicit PEER Context.",
             fg=typer.colors.RED,
@@ -600,6 +607,7 @@ def cmd(
             raise CompareCommandError("Compare requires two distinct Contexts.")
 
         if not ledger and not refresh:
+
             def summarize_frames(progress):
                 def provider_factory():
                     provider, policy = connect_operation_provider(
@@ -638,9 +646,7 @@ def cmd(
 
         def analyze_input(comparison_input: ComparisonInput) -> ComparisonAnalysis:
             def compare_frames(progress):
-                provider = _connect_compare_provider(
-                    connect_codex_chatgpt_provider
-                )
+                provider = _connect_compare_provider(connect_codex_chatgpt_provider)
                 progress.update("analyzing relations", step=2)
                 return analyze_comparison(comparison_input, provider)
 
@@ -661,11 +667,7 @@ def cmd(
                 current_name=current_name,
                 registry_snapshot=profile_registry,
             )
-            return (
-                equivalent_match.analysis
-                if equivalent_match is not None
-                else None
-            )
+            return equivalent_match.analysis if equivalent_match is not None else None
 
         execution = ensure_comparison_analysis(
             store=store,
@@ -714,9 +716,7 @@ def cmd(
                     store,
                     entry_key=equivalent_match.entry_key,
                     analysis=execution.analysis,
-                    prepared_context_names=(
-                        equivalent_match.prepared_context_names
-                    ),
+                    prepared_context_names=(equivalent_match.prepared_context_names),
                 )
         _present_comparison(
             store=store,

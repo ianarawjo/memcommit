@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import ast
 import importlib
 from pathlib import Path
 import pickle
@@ -19,8 +18,14 @@ from tests.legacy_submodule_assertions import (
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 MODULE_PAIRS = (
     ("memcommit.atomize", "memcommit.application.operations.atomize.domain"),
-    ("memcommit.atomize_workbench", "memcommit.application.operations.atomize.workbench"),
-    ("memcommit.atomize_grounding", "memcommit.application.operations.atomize.grounding"),
+    (
+        "memcommit.atomize_workbench",
+        "memcommit.application.operations.atomize.workbench",
+    ),
+    (
+        "memcommit.atomize_grounding",
+        "memcommit.application.operations.atomize.grounding",
+    ),
     (
         "memcommit.atomize_grounding_provider",
         "memcommit.application.operations.atomize.grounding_provider",
@@ -52,9 +57,7 @@ def test_atomize_support_module_identity_is_import_order_independent(
     legacy_first: bool,
 ) -> None:
     first_name, second_name = (
-        (legacy_name, canonical_name)
-        if legacy_first
-        else (canonical_name, legacy_name)
+        (legacy_name, canonical_name) if legacy_first else (canonical_name, legacy_name)
     )
     program = f"""
 import importlib
@@ -169,9 +172,7 @@ def test_atomize_support_imports_follow_the_canonical_dependency_direction() -> 
     legacy_names = tuple(legacy_name for legacy_name, _canonical in MODULE_PAIRS)
 
     for relative_path in canonical_paths:
-        source = (REPOSITORY_ROOT / "src" / relative_path).read_text(
-            encoding="utf-8"
-        )
+        source = (REPOSITORY_ROOT / "src" / relative_path).read_text(encoding="utf-8")
         assert "memcommit.commands" not in source
         assert "memcommit.adapters.interfaces" not in source
         for legacy_name in legacy_names:
@@ -207,7 +208,7 @@ def test_atomize_production_consumers_use_canonical_support_modules() -> None:
         "src/memcommit/persistence/store/operation_state.py",
         "src/memcommit/persistence/store/context_memory.py",
         "src/memcommit/persistence/store/record_restore_checkpoint.py",
-        "src/memcommit/study_prewarm/atomize.py",
+        "src/memcommit/study_scenarios/legacy/prewarm/atomize.py",
     )
     legacy_names = tuple(legacy_name for legacy_name, _canonical in MODULE_PAIRS)
 

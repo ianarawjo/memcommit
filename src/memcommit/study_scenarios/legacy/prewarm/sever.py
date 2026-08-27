@@ -20,34 +20,41 @@ from memcommit.application.authority.derived_policy import (
     authorize_combination,
     authorize_derived_transfer,
 )
-from memcommit.application.operations.profile.config import ProfileEntry, ProfileRegistry, study_run_identity
+from memcommit.application.operations.profile.config import (
+    ProfileEntry,
+    ProfileRegistry,
+    study_run_identity,
+)
 from memcommit.application.operations.sever.model import (
     SEVER_SCHEMA_VERSION,
     SeverContextBinding,
     SeverSession,
 )
-from memcommit.application.operations.sever.provider import SEVER_PROVIDER_CONTRACT_VERSION
+from memcommit.application.operations.sever.provider import (
+    SEVER_PROVIDER_CONTRACT_VERSION,
+)
 from memcommit.persistence.store import (
     MemoryStore,
     _write_json_atomic,
     context_record_digest,
 )
-from memcommit.study_prewarm.installations import (
+from memcommit.study_scenarios.legacy.prewarm.installations import (
     INSTALLATIONS_DIRECTORY_NAME,
     declared_artifact_available,
     record_declared_installation,
 )
-from memcommit.study_prewarm.registry import (
+from memcommit.study_scenarios.legacy.prewarm.registry import (
     StudyPrewarmRegistryError,
     load_artifact,
     load_registry,
     payload_digest,
 )
-from memcommit.study_prewarm.quality import (
+from memcommit.study_scenarios.legacy.prewarm.quality import (
     SemanticIdentity,
     highest_quality_candidates,
     prewarm_quality_satisfies,
 )
+
 SEVER_ARTIFACT_KIND = "STUDY_SEVER_EXACT_PREWARM"
 SEVER_ARTIFACT_SCHEMA_VERSION = 1
 TASK = "task-3"

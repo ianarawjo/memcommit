@@ -35,7 +35,9 @@ class _Recorder:
 def _run_child() -> None:
     from memcommit.cli import app
     from memcommit.store import MemoryStore
-    from memcommit.study_prewarm.atomize import is_installed_atomize_prewarm
+    from memcommit.study_scenarios.legacy.prewarm.atomize import (
+        is_installed_atomize_prewarm,
+    )
 
     print("$ mem atomize --context practice/source", flush=True)
     app(

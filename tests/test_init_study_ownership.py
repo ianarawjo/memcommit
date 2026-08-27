@@ -3,12 +3,9 @@
 from __future__ import annotations
 
 import ast
-from datetime import datetime, timezone
-import importlib
 from pathlib import Path
 import subprocess
 import sys
-import uuid
 
 
 REPOSITORY_ROOT = Path(__file__).parents[1]
@@ -36,15 +33,17 @@ def test_init_study_command_imports_the_operation_owned_application() -> None:
     assert {
         "generate_study_profile_name",
         "init_coffee_study_profile",
-        "init_study_profile",
+        "init_legacy_study_profile",
     } <= imports["memcommit.application.operations.init_study.application"]
     assert not {
         "init_coffee_study_profile",
-        "init_study_profile",
+        "init_legacy_study_profile",
     }.intersection(imports["memcommit.application.operations.profile.model"])
 
 
-def test_init_study_composition_and_publication_are_not_profile_implementation() -> None:
+def test_init_study_composition_and_publication_are_not_profile_implementation() -> (
+    None
+):
     profile_functions = _top_level_function_names(
         "src/memcommit/application/operations/profile/model.py"
     )
@@ -55,33 +54,14 @@ def test_init_study_composition_and_publication_are_not_profile_implementation()
         "src/memcommit/application/operations/init_study/publication.py"
     )
 
-    assert "_snapshot_study_baseline" in composition_functions
+    assert "_snapshot_legacy_scenario" in composition_functions
     assert "_compose_study_run_pair" in composition_functions
     assert "_publish_study_run_pair" in publication_functions
     assert not {
-        "_snapshot_study_baseline",
+        "_snapshot_legacy_scenario",
         "_compose_study_run_pair",
         "_publish_study_run_pair",
     }.intersection(profile_functions)
-
-
-def test_legacy_profile_imports_delegate_to_the_operation_owned_result() -> None:
-    legacy = importlib.import_module("memcommit.profiles")
-    result_model = importlib.import_module("memcommit.application.operations.init_study.model")
-    application = importlib.import_module(
-        "memcommit.application.operations.init_study.application"
-    )
-    created = datetime(2026, 8, 27, 12, 0, tzinfo=timezone.utc)
-    generated_uid = uuid.UUID("12345678-0000-4000-8000-000000000000")
-
-    assert legacy.StudyInitializationResult is result_model.StudyInitializationResult
-    assert legacy.generate_study_profile_name(
-        created=created,
-        generated_uid=generated_uid,
-    ) == application.generate_study_profile_name(
-        created=created,
-        generated_uid=generated_uid,
-    )
 
 
 def test_init_study_package_import_is_lazy() -> None:

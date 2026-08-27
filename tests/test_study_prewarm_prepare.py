@@ -7,8 +7,8 @@ import pytest
 
 import memcommit.comparison as comparison_module
 import memcommit.application.ops as ops
-import memcommit.study_prewarm.compare as compare_prewarm_module
-import memcommit.study_prewarm.update as update_prewarm_module
+import memcommit.study_scenarios.legacy.prewarm.compare as compare_prewarm_module
+import memcommit.study_scenarios.legacy.prewarm.update as update_prewarm_module
 import memcommit.update as update_module
 from memcommit.comparison import (
     ComparisonAnalysis,
@@ -17,8 +17,10 @@ from memcommit.comparison import (
     ComparisonRelation,
     ComparisonReports,
 )
-from memcommit.study_prewarm.prepare import inspect_study_prewarm_compatibility
-from memcommit.study_prewarm.registry import (
+from memcommit.study_scenarios.legacy.prewarm.prepare import (
+    inspect_study_prewarm_compatibility,
+)
+from memcommit.study_scenarios.legacy.prewarm.registry import (
     StudyPrewarmRegistryError,
     load_registry,
     payload_digest,

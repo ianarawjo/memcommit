@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from memcommit.study_prewarm.quality import (
+from memcommit.study_scenarios.legacy.prewarm.quality import (
     PrewarmQualityRelation,
     compare_prewarm_quality,
     highest_quality_candidates,

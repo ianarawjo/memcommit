@@ -41,8 +41,8 @@ from memcommit.providers.types import (
     CODEX_REASONING_EFFORTS,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.study_prewarm.compare import _exact_input_matches
-from memcommit.study_prewarm.registry import (
+from memcommit.study_scenarios.legacy.prewarm.compare import _exact_input_matches
+from memcommit.study_scenarios.legacy.prewarm.registry import (
     PrewarmOperation,
     StudyPrewarmEntry,
     StudyPrewarmRegistry,
@@ -52,7 +52,7 @@ from memcommit.study_prewarm.registry import (
     payload_digest,
     replace_operation_artifacts,
 )
-from memcommit.study_prewarm.quality import prewarm_quality_satisfies
+from memcommit.study_scenarios.legacy.prewarm.quality import prewarm_quality_satisfies
 
 
 DEFAULT_INIT_STUDY_PREWARM_WORKERS = 96
@@ -96,7 +96,7 @@ def _validate_current_entry(
     artifact: dict[str, object],
 ) -> None:
     if entry.operation == "COMPARE":
-        from memcommit.study_prewarm.compare import _validate_artifact
+        from memcommit.study_scenarios.legacy.prewarm.compare import _validate_artifact
 
         _validate_artifact(
             artifact,
@@ -104,19 +104,21 @@ def _validate_current_entry(
             entry_task=entry.task,
         )
     elif entry.operation == "UPDATE":
-        from memcommit.study_prewarm.update import _validate_artifact
+        from memcommit.study_scenarios.legacy.prewarm.update import _validate_artifact
 
         _validate_artifact(artifact, entry_key=entry.key)
     elif entry.operation == "ATOMIZE":
-        from memcommit.study_prewarm.atomize import _validate_artifact
+        from memcommit.study_scenarios.legacy.prewarm.atomize import _validate_artifact
 
         _validate_artifact(artifact, entry_key=entry.key)
     elif entry.operation == "SEVER":
-        from memcommit.study_prewarm.sever import _validate_artifact
+        from memcommit.study_scenarios.legacy.prewarm.sever import _validate_artifact
 
         _validate_artifact(artifact, entry_key=entry.key)
     elif entry.operation == "SUMMARIZE":
-        from memcommit.study_prewarm.summarize import _validate_artifact
+        from memcommit.study_scenarios.legacy.prewarm.summarize import (
+            _validate_artifact,
+        )
 
         _validate_artifact(
             artifact,
@@ -124,11 +126,15 @@ def _validate_current_entry(
             entry_task=entry.task,
         )
     elif entry.operation == "MELD_DIRECTIONAL":
-        from memcommit.study_prewarm.meld_directional import _validate_artifact
+        from memcommit.study_scenarios.legacy.prewarm.meld_directional import (
+            _validate_artifact,
+        )
 
         _validate_artifact(artifact, entry_key=entry.key)
     elif entry.operation == "MELD_RESOLUTION":
-        from memcommit.study_prewarm.meld_resolution import _validate_artifact
+        from memcommit.study_scenarios.legacy.prewarm.meld_resolution import (
+            _validate_artifact,
+        )
 
         _validate_artifact(
             artifact,
@@ -174,7 +180,9 @@ def inspect_study_prewarm_compatibility(
                 ):
                     _validate_current_entry(entry, artifact)
                     raise AssertionError("unreachable")
-                from memcommit.study_prewarm.compare import _validate_artifact
+                from memcommit.study_scenarios.legacy.prewarm.compare import (
+                    _validate_artifact,
+                )
 
                 analysis, _ = _validate_artifact(
                     artifact,
@@ -189,7 +197,9 @@ def inspect_study_prewarm_compatibility(
                     verified_enabled += 1
                 continue
             if entry.enabled:
-                from memcommit.study_prewarm.compare import _validate_artifact
+                from memcommit.study_scenarios.legacy.prewarm.compare import (
+                    _validate_artifact,
+                )
 
                 analysis, _ = _validate_artifact(
                     artifact,
@@ -212,7 +222,7 @@ def inspect_study_prewarm_compatibility(
                 if schema_version not in _LEGACY_UPDATE_SCHEMA_VERSIONS:
                     _validate_current_entry(entry, artifact)
                     raise AssertionError("unreachable")
-                from memcommit.study_prewarm.update import (
+                from memcommit.study_scenarios.legacy.prewarm.update import (
                     upgrade_update_prewarm_artifact,
                 )
 

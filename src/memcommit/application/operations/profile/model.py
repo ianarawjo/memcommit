@@ -1,11 +1,10 @@
 """Whole-store profile registration and selection.
 
-Profiles are a control-plane selector around complete MemoryStore roots. A
-single editable Study baseline deliberately namespaces all three task inputs
-inside one root. :mod:`memcommit.application.operations.init_study` snapshots that source
+Profiles are a control-plane selector around complete MemoryStore roots.
+:mod:`memcommit.application.operations.init_study` builds packaged scenarios
 into one participant Profile and one run-private authority Profile, then
-restores the fixture's real grants between them. Older six-Profile Study groups
-remain readable.
+restores the scenario's real grants between them. Older six-Profile Study
+groups remain readable.
 A process resolves its selected root once when :mod:`memcommit.persistence.store` is
 imported, so a profile selection affects the next CLI invocation while an
 already running operation finishes against the store it opened.
@@ -25,7 +24,7 @@ from pathlib import Path
 import shutil
 import stat
 import uuid
-from typing import Callable, Iterator
+from typing import Iterator
 
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.core.context_targeting.naming import validate_portable_context_name
@@ -142,6 +141,7 @@ class StudyRunProfilePair:
     participant: ProfileEntry
     authority: ProfileEntry
 
+
 @dataclass(frozen=True)
 class StudyProviderPolicyMigrationResult:
     """One atomic pilot migration of visible current Study pairs."""
@@ -245,17 +245,6 @@ class ShareEndpoint:
     public_name: str
     receiver_context_name: str
     receiver_root: Path
-
-
-def default_study_bundle_root() -> Path:
-    """Return the editable-checkout fixture location when it is available."""
-
-    return (
-        Path(__file__).resolve().parents[5]
-        / "agent-records"
-        / "outputs"
-        / "study-fixtures"
-    )
 
 
 _STUDY_TASKS = (1, 2, 3)
@@ -370,10 +359,7 @@ _STUDY_PRACTICE_SOURCE_CONTENTS = (
     "or a paper's status. If I asked only for review, report a verification "
     "problem first instead of silently rewriting the draft.",
 )
-STUDY_BASELINE_PROFILE_NAME = "study-baseline"
-_STUDY_BASELINE_SOURCE_KIND = "STUDY_BASELINE"
-_STUDY_BASELINE_SCHEMA_VERSION = 1
-_STUDY_BASELINE_GRANTED_ROOT = "granted-memory"
+_LEGACY_SCENARIO_GRANTED_ROOT = "granted-memory"
 _STUDY_PROFILE_SOURCE_KIND = "STUDY_RUN_TASK"
 _STUDY_AUTHORITY_SOURCE_KIND = "STUDY_RUN_AUTHORITY"
 _STUDY_RUN_SOURCE_KIND = STUDY_RUN_PARTICIPANT_SOURCE_KIND
@@ -1443,9 +1429,6 @@ def create_profile(
         raise ProfileError("New Profile name is invalid.") from error
     if canonical.casefold() == AUTHORING_PROFILE_NAME.casefold():
         raise ProfileError("The fixed authoring Profile name is reserved.")
-    if canonical.casefold() == STUDY_BASELINE_PROFILE_NAME.casefold():
-        raise ProfileError("The fixed study-baseline Profile name is reserved.")
-
     with _registry_lock():
         registry = load_profile_registry()
         if (
@@ -1614,8 +1597,6 @@ def rename_profile(
         )
         if target.kind == "AUTHORING":
             raise ProfileError("The fixed authoring Profile cannot be renamed.")
-        if target.name.casefold() == STUDY_BASELINE_PROFILE_NAME.casefold():
-            raise ProfileError("The fixed study-baseline Profile cannot be renamed.")
         if membership is not None:
             raise ProfileError(
                 f"Profile {target.name!r} is a member of legacy Study "
@@ -1623,8 +1604,6 @@ def rename_profile(
             )
         if canonical_new.casefold() == AUTHORING_PROFILE_NAME.casefold():
             raise ProfileError("The fixed authoring Profile name is reserved.")
-        if canonical_new.casefold() == STUDY_BASELINE_PROFILE_NAME.casefold():
-            raise ProfileError("The fixed study-baseline Profile name is reserved.")
         collision = next(
             (
                 profile
@@ -2071,8 +2050,6 @@ def remove_profile(
             raise ProfileError("Profile identity changed after removal review.")
         if target.kind == "AUTHORING":
             raise ProfileError("The fixed authoring Profile cannot be removed.")
-        if target.name.casefold() == STUDY_BASELINE_PROFILE_NAME.casefold():
-            raise ProfileError("The fixed study-baseline Profile cannot be removed.")
         if target.uid == registry.active_uid:
             raise ProfileError(
                 f"Profile {target.name!r} is active; select another Profile "
@@ -3811,9 +3788,9 @@ def _study_packages(
     return packages
 
 
-def _study_baseline_branch(task: int, *, authority: bool) -> str:
+def _legacy_scenario_branch(task: int, *, authority: bool) -> str:
     task_name = f"task-{task}"
-    return f"{_STUDY_BASELINE_GRANTED_ROOT}/{task_name}" if authority else task_name
+    return f"{_LEGACY_SCENARIO_GRANTED_ROOT}/{task_name}" if authority else task_name
 
 
 def _study_practice_contexts() -> tuple[Context, ...]:
@@ -4017,10 +3994,18 @@ def _materialize_study_context_parents(
             if "/".join(parts[:index]) not in by_name
         )
     # These are structural navigation nodes, not copies of source content.
-    # Fresh identities keep them ordinary editable Contexts while leaving all
-    # imported Context and Memory identities untouched.
+    # Their name-derived identities keep a packaged scenario reproducible
+    # across runs while leaving imported Context and Memory identities intact.
     for name in sorted(missing, key=lambda value: (value.count("/"), value)):
-        by_name[name] = Context(uid=str(uuid.uuid4()), name=name)
+        by_name[name] = Context(
+            uid=str(
+                uuid.uuid5(
+                    _STUDY_BUNDLE_NAMESPACE,
+                    f"structural-context\0{name}",
+                )
+            ),
+            name=name,
+        )
     return tuple(by_name[name] for name in sorted(by_name))
 
 
@@ -4070,7 +4055,7 @@ def _write_mapped_study_store(
     return inspect_store(destination)
 
 
-def _compose_study_baseline_store(
+def _compose_legacy_scenario_store(
     packages: dict[int, _StudyTaskPackage],
     destination: Path,
 ) -> StoreInspection:
@@ -4078,10 +4063,21 @@ def _compose_study_baseline_store(
 
     structural_names = [
         *(f"task-{task}" for task in _STUDY_TASKS),
-        _STUDY_BASELINE_GRANTED_ROOT,
-        *(f"{_STUDY_BASELINE_GRANTED_ROOT}/task-{task}" for task in _STUDY_TASKS),
+        _LEGACY_SCENARIO_GRANTED_ROOT,
+        *(f"{_LEGACY_SCENARIO_GRANTED_ROOT}/task-{task}" for task in _STUDY_TASKS),
     ]
-    contexts = [Context(uid=str(uuid.uuid4()), name=name) for name in structural_names]
+    contexts = [
+        Context(
+            uid=str(
+                uuid.uuid5(
+                    _STUDY_BUNDLE_NAMESPACE,
+                    f"legacy-scenario-context\0{name}",
+                )
+            ),
+            name=name,
+        )
+        for name in structural_names
+    ]
     contexts.extend(_study_practice_contexts())
     catalogs: list[TranslationCatalog] = []
     seen_context_uids = {context.uid for context in contexts}
@@ -4105,7 +4101,7 @@ def _compose_study_baseline_store(
                     "Study baseline sources must materialize granted Memory as "
                     "ordinary Contexts."
                 )
-            branch = _study_baseline_branch(task, authority=authority)
+            branch = _legacy_scenario_branch(task, authority=authority)
             mapping = {name: f"{branch}/{name}" for name in source_contexts}
             remapped = _remap_context_records(source_contexts, mapping)
             duplicate_uids = seen_context_uids.intersection(
@@ -4123,42 +4119,6 @@ def _compose_study_baseline_store(
         catalogs=tuple(catalogs),
         current_context="task-1",
     )
-
-
-def _study_baseline_source_record(
-    packages: dict[int, _StudyTaskPackage],
-    *,
-    imported_at: str,
-    initial_digest: str,
-) -> dict[str, object]:
-    tasks: list[dict[str, object]] = []
-    for task in _STUDY_TASKS:
-        package = packages[task]
-        task_source = next(
-            source for source in package.profiles if source.role == "TASK"
-        )
-        authority_source = next(
-            source for source in package.profiles if source.role == "AUTHORITY"
-        )
-        tasks.append(
-            {
-                "task": task,
-                "manifest_sha256": package.manifest_digest,
-                "canonical_language": package.manifest.get("canonical_language"),
-                "task_profile_name": task_source.name,
-                "authority_profile_name": authority_source.name,
-                "task_current_context": task_source.inspection.current_context,
-                "authority_current_context": authority_source.inspection.current_context,
-                "grant_templates": list(package.grant_templates),
-            }
-        )
-    return {
-        "kind": _STUDY_BASELINE_SOURCE_KIND,
-        "schema_version": _STUDY_BASELINE_SCHEMA_VERSION,
-        "imported_at": imported_at,
-        "initial_baseline_sha256": initial_digest,
-        "tasks": tasks,
-    }
 
 
 def _validate_study_package_grants(
@@ -4181,322 +4141,3 @@ def _validate_study_package_grants(
         for source in packages[task].profiles
     }
     _materialize_study_grants(packages, profiles_by_name, roots)
-
-
-def import_study_profiles(bundle_root: Path) -> StudyImportResult:
-    """Bootstrap one editable source Profile from the three fixture packages."""
-
-    packages = _study_packages(bundle_root)
-    _validate_study_package_grants(packages)
-    imported_at = datetime.now(timezone.utc).isoformat()
-    with _registry_lock():
-        registry = load_profile_registry()
-        if registry.by_name(STUDY_BASELINE_PROFILE_NAME) is not None:
-            raise ProfileError(
-                f"Profile {STUDY_BASELINE_PROFILE_NAME!r} already exists."
-            )
-        profile_uid = str(uuid.uuid4())
-        staging = profile_stores_dir() / (
-            f".{profile_uid}.study-baseline-{uuid.uuid4().hex}"
-        )
-        published = False
-        try:
-            inspection = _compose_study_baseline_store(packages, staging)
-            initial_digest = baseline_store_digest(staging)
-            profile = ProfileEntry(
-                uid=profile_uid,
-                name=STUDY_BASELINE_PROFILE_NAME,
-                kind="MANAGED",
-                source=_study_baseline_source_record(
-                    packages,
-                    imported_at=imported_at,
-                    initial_digest=initial_digest,
-                ),
-            )
-            destination = profile_store_dir(profile)
-            if destination.exists() or destination.is_symlink():
-                raise ProfileError("Managed profile destination is occupied.")
-            os.replace(staging, destination)
-            published = True
-            updated = replace(
-                registry,
-                generation=max(1, registry.generation + 1),
-                profiles=(*registry.profiles, profile),
-            )
-            try:
-                _write_registry(updated)
-            except Exception:
-                os.replace(destination, staging)
-                published = False
-                raise
-            return StudyImportResult(
-                profiles=(profile,),
-                inspections=(replace(inspection, root=destination),),
-            )
-        finally:
-            if not published and staging.exists() and not staging.is_symlink():
-                shutil.rmtree(staging)
-
-
-def refresh_study_profile(
-    bundle_root: Path,
-    *,
-    replace_edited_baseline: bool = False,
-) -> StudyImportResult:
-    """Replace the registered Study baseline with current fixture packages.
-
-    The baseline remains an intentionally editable intermediate source.  A
-    refresh therefore fails closed when it has diverged from the digest saved
-    at its last import, unless the caller explicitly accepts replacing those
-    edits.
-    """
-
-    packages = _study_packages(bundle_root)
-    _validate_study_package_grants(packages)
-    imported_at = datetime.now(timezone.utc).isoformat()
-    with _registry_lock():
-        registry = load_profile_registry()
-        baseline = registry.by_name(STUDY_BASELINE_PROFILE_NAME)
-        if baseline is None:
-            raise ProfileError(
-                f"Profile {STUDY_BASELINE_PROFILE_NAME!r} does not exist; "
-                "bootstrap it with 'mem profile import-study'."
-            )
-        _study_baseline_tasks(baseline)
-        if any(
-            baseline.uid in {grant.authority_profile_uid, grant.grantee_profile_uid}
-            for grant in registry.grants
-        ):
-            raise ProfileError(
-                f"Study baseline Profile {baseline.name!r} participates in registry "
-                "grants and cannot be refreshed."
-            )
-
-        source = baseline.source
-        assert isinstance(source, dict)
-        initial_digest = source["initial_baseline_sha256"]
-        assert isinstance(initial_digest, str)
-        destination = profile_store_dir(baseline)
-        current_digest = baseline_store_digest(destination)
-        if current_digest != initial_digest and not replace_edited_baseline:
-            raise ProfileError(
-                "Study baseline has local edits. Re-run with "
-                "--replace-edited-baseline to replace them with the generated bundles."
-            )
-
-        staging = profile_stores_dir() / (
-            f".{baseline.uid}.study-refresh-{uuid.uuid4().hex}"
-        )
-        backup = profile_stores_dir() / (
-            f".{baseline.uid}.study-refresh-backup-{uuid.uuid4().hex}"
-        )
-        replacement_visible = False
-        old_store_moved = False
-        registry_published = False
-        try:
-            inspection = _compose_study_baseline_store(packages, staging)
-            refreshed_digest = baseline_store_digest(staging)
-            refreshed = replace(
-                baseline,
-                source=_study_baseline_source_record(
-                    packages,
-                    imported_at=imported_at,
-                    initial_digest=refreshed_digest,
-                ),
-            )
-            updated = replace(
-                registry,
-                generation=max(1, registry.generation + 1),
-                profiles=tuple(
-                    refreshed if profile.uid == baseline.uid else profile
-                    for profile in registry.profiles
-                ),
-            )
-
-            # The stable Profile UID keeps selection and references intact;
-            # the private backup makes the store swap reversible until the
-            # matching provenance record is durably visible.
-            os.replace(destination, backup)
-            old_store_moved = True
-            os.replace(staging, destination)
-            replacement_visible = True
-            try:
-                _write_registry(updated)
-                registry_published = True
-            except Exception as error:
-                try:
-                    registry_published = load_profile_registry() == updated
-                except (OSError, ProfileConfigError, ValueError):
-                    registry_published = False
-                if registry_published:
-                    raise ProfileError(
-                        "Study baseline was refreshed, but registry durability "
-                        "could not be confirmed; the replacement remains visible."
-                    ) from error
-                os.replace(destination, staging)
-                replacement_visible = False
-                os.replace(backup, destination)
-                old_store_moved = False
-                raise
-
-            shutil.rmtree(backup)
-            old_store_moved = False
-            return StudyImportResult(
-                profiles=(refreshed,),
-                inspections=(replace(inspection, root=destination),),
-            )
-        finally:
-            if not registry_published:
-                if replacement_visible and old_store_moved:
-                    os.replace(destination, staging)
-                    replacement_visible = False
-                if old_store_moved:
-                    os.replace(backup, destination)
-                    old_store_moved = False
-            for candidate in (staging, backup):
-                if candidate.exists() and not candidate.is_symlink():
-                    shutil.rmtree(candidate)
-
-
-def _study_baseline_tasks(
-    profile: ProfileEntry,
-) -> dict[int, dict[str, object]]:
-    source = profile.source
-    if not isinstance(source, dict) or set(source) != {
-        "kind",
-        "schema_version",
-        "imported_at",
-        "initial_baseline_sha256",
-        "tasks",
-    }:
-        raise ProfileError("Study baseline Profile provenance is invalid.")
-    if (
-        source.get("kind") != _STUDY_BASELINE_SOURCE_KIND
-        or source.get("schema_version") != _STUDY_BASELINE_SCHEMA_VERSION
-    ):
-        raise ProfileError("Selected Profile is not an editable Study baseline.")
-    _timezone_timestamp(source.get("imported_at"))
-    _manifest_digest(
-        source.get("initial_baseline_sha256"),
-        field="initial baseline digest",
-    )
-    raw_tasks = source.get("tasks")
-    if not isinstance(raw_tasks, list) or len(raw_tasks) != len(_STUDY_TASKS):
-        raise ProfileError("Study baseline Task provenance is incomplete.")
-    tasks: dict[int, dict[str, object]] = {}
-    required = {
-        "task",
-        "manifest_sha256",
-        "canonical_language",
-        "task_profile_name",
-        "authority_profile_name",
-        "task_current_context",
-        "authority_current_context",
-        "grant_templates",
-    }
-    for raw in raw_tasks:
-        if not isinstance(raw, dict) or set(raw) != required:
-            raise ProfileError("Study baseline Task provenance is invalid.")
-        task = raw.get("task")
-        if type(task) is not int or task not in _STUDY_TASKS or task in tasks:
-            raise ProfileError("Study baseline Task number is invalid.")
-        _manifest_digest(raw.get("manifest_sha256"), field="manifest digest")
-        if (
-            raw.get("task_profile_name") != f"task-{task}"
-            or raw.get("authority_profile_name") != _STUDY_AUTHORITY_PROFILE_NAMES[task]
-        ):
-            raise ProfileError("Study baseline Profile topology is invalid.")
-        for field in ("task_current_context", "authority_current_context"):
-            try:
-                validate_grant_resource_name(raw.get(field))
-            except (ProfileConfigError, ValueError) as error:
-                raise ProfileError(
-                    "Study baseline current Context provenance is invalid."
-                ) from error
-        language = raw.get("canonical_language")
-        templates = raw.get("grant_templates")
-        if (
-            not isinstance(language, str)
-            or not language
-            or not isinstance(templates, list)
-            or any(not isinstance(template, dict) for template in templates)
-        ):
-            raise ProfileError("Study baseline Task provenance is invalid.")
-        tasks[task] = raw
-    if set(tasks) != set(_STUDY_TASKS):
-        raise ProfileError("Study baseline Task provenance is incomplete.")
-    return tasks
-
-
-
-
-
-
-def generate_study_profile_name(
-    *,
-    created: datetime | None = None,
-    generated_uid: uuid.UUID | None = None,
-) -> str:
-    """Compatibility shim for the former Profile-owned import path."""
-
-    from memcommit.application.operations.init_study.application import (
-        generate_study_profile_name as operation_generate_study_profile_name,
-    )
-
-    return operation_generate_study_profile_name(
-        created=created,
-        generated_uid=generated_uid,
-    )
-
-
-def init_study_profile(
-    baseline_profile_name: str = STUDY_BASELINE_PROFILE_NAME,
-    *,
-    name: str | None = None,
-    provider_policy_version: str,
-    provider_policy_digest: str,
-    prewarm_workers: int = 96,
-    prewarm_reasoning: str = "xhigh",
-    prewarm_progress: Callable[[str], None] | None = None,
-) -> object:
-    """Compatibility shim for the former Profile-owned import path."""
-
-    from memcommit.application.operations.init_study.application import (
-        init_study_profile as operation_init_study_profile,
-    )
-
-    return operation_init_study_profile(
-        baseline_profile_name,
-        name=name,
-        provider_policy_version=provider_policy_version,
-        provider_policy_digest=provider_policy_digest,
-        prewarm_workers=prewarm_workers,
-        prewarm_reasoning=prewarm_reasoning,
-        prewarm_progress=prewarm_progress,
-    )
-
-
-def init_coffee_study_profile(
-    *,
-    name: str | None = None,
-    provider_policy_version: str,
-    provider_policy_digest: str,
-) -> object:
-    """Compatibility shim for the former Profile-owned import path."""
-
-    from memcommit.application.operations.init_study.application import (
-        init_coffee_study_profile as operation_init_coffee_study_profile,
-    )
-
-    return operation_init_coffee_study_profile(
-        name=name,
-        provider_policy_version=provider_policy_version,
-        provider_policy_digest=provider_policy_digest,
-    )
-
-
-# Import after the Profile primitives are defined so direct operation imports
-# cannot cycle through this legacy compatibility alias.
-from memcommit.application.operations.init_study.model import (  # noqa: E402
-    StudyInitializationResult as StudyInitializationResult,
-)

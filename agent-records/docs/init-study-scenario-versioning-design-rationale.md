@@ -1,155 +1,64 @@
-# Init-study scenario versioning design rationale
+# Init-study packaged-scenario design rationale
 
-## Motivation
+## Decision
 
-The original three-task Study deliberately used different, large data domains.
-Pilot participants reported fatigue from repeatedly learning a new corpus, and
-that load obscured the memory-management behavior the Study intended to elicit.
-The revised design keeps one continuous Coffee workspace while still
-escalating the operation: participants form a customer perspective, extend it
-with operational perspectives, and then curate advice for a friend's concrete
-café conditions.
+`mem init-study [NAME]` creates the packaged `coffee` scenario, and
+`mem init-study [NAME] --scenario legacy` creates the preserved three-task
+regression scenario. These are the only public scenario names. The former
+`coffee-v1` and `legacy-v1` spellings were implementation versions rather than
+useful participant choices, so they are no longer accepted.
 
-The original corpus is also an important regression world. Long-running debug
-and world sessions have used its exact Context, Grant, query, endpoint, and
-prewarm topology to expose bugs. Replacing that data in place would make later
-fixes impossible to compare with the earlier runs. Study iteration and bug
-reproduction therefore need separate, explicitly versioned inputs.
+Both scenarios are self-contained. Initialization builds an isolated
+participant Profile and a run-private authority Profile directly from the
+selected scenario, materializes the scenario's Grants, and atomically publishes
+the pair. It does not require or create a registered source Profile. Therefore
+`init-study --from-profile`, `profile import-study`, `profile refresh-study`,
+and the special `study-baseline` Profile lifecycle were removed together.
 
-## Command contract
+## Scenario ownership
 
-`mem init-study` and `mem init-study NAME` initialize the built-in
-`coffee-v1` scenario. The ordinary participant path has no setup choice and
-does not require an imported `study-baseline` Profile.
+`memcommit.study_scenarios.coffee` owns the Coffee specification and builder.
+`memcommit.study_scenarios.legacy` owns the old fixture loader, bundle builder,
+source corpus, and scenario-specific prewarm tooling. Keeping these together
+makes the scenario a coherent input package instead of distributing its source
+between `eval`, `agent-records`, and a root-level runtime package.
 
-The preserved debugging route is explicit:
+The generated files under `agent-records/outputs/study-fixtures` remain
+historical execution evidence. They are not the runtime source of truth and are
+not imported before initialization.
 
-```text
-mem init-study --scenario legacy-v1
-mem init-study NAME --scenario legacy-v1
-```
+## Reproducibility and provenance
 
-`--from-profile BASELINE` remains the editable legacy escape hatch. Supplying
-it without `--scenario` implies `legacy-v1`, preserving existing custom-baseline
-scripts. Combining it with `coffee-v1` fails before publishing a Profile.
-Unknown scenario names also fail closed; a mutable alias such as `latest` would
-make a recorded command non-reproducible.
+Every run still records the source identity and digest in the existing Study
+provenance fields. Because no source Profile exists, each packaged scenario has
+a stable virtual source UID and scenario name. The Legacy UID intentionally
+matches the former canonical baseline identity so already recorded provenance
+continues to correlate with the same fixture world. The Coffee UUID namespace
+is also held constant after shortening the public name, preserving its
+published Context and Memory identities.
 
-Existing initialized Study runs are unaffected. Both routes copy their source
-into isolated participant and authority stores at initialization; no run reads
-future scenario changes dynamically.
+The Legacy scenario reconstructs the same validated task packages and then
+uses the same participant/authority composition and Grant materialization as
+the old import-then-init route. Regression tests freeze its externally relevant
+result: 65 participant Contexts with 471 owned Memories, 43 readable granted
+Contexts with 625 granted Memories, 75 authority Contexts, and eight Grants.
 
-## Coffee topology
+## Prewarm boundary
 
-The participant owns the fixed rehearsal packs and writable Task roots at setup:
+Scenario initialization installs no semantic prewarm. A new run starts with no
+checkpoints, sessions, receipts, ad-hoc caches, or shared prewarm attachment.
+The Legacy prewarm modules remain scenario-owned research tooling for existing
+artifacts and exact-registry tests, but they are not a hidden initialization
+dependency.
 
-```text
-practice                         empty direct inventory; initial Context
-└── coffee
-    ├── chunk-atomize-summarize             1 deliberately repetitive transcript
-    ├── compare-merge-meld-update
-    │   ├── a                               4 preference Memories
-    │   └── b                               4 contrasting preference Memories
-    └── search-find-sever-forget            5 review Memories
-task-1                          empty participant-authored perspective target
-task-2                          empty Meld result target
-task-3                          empty Sever/share-draft target
-```
+## Tradeoff and non-goals
 
-The run-private authority Profile owns the fixed external inputs:
+Removing the editable baseline eliminates the ability to change one registered
+Profile and have later runs copy it. The selected replacement favors a command
+whose scenario name completely identifies its packaged input. Editing a
+scenario now means editing and reviewing its owned source, tests, and digest.
 
-```text
-task-1/customer-perspectives
-├── woohooovertime              8 Memories
-├── saycheesecake               8 Memories
-└── strollersnackpack           8 Memories
-task-2/operational-perspectives
-├── coffeewithtaylor            8 Memories
-├── morrowcoffee-official       8 Memories
-└── consulting-newwavecafeculture  8 Memories
-task-3/friend-cafe
-└── conditions                  8 Memories
-```
-
-Task 1 and Task 2 expose recursive READ/EMBED/DERIVE/COMBINE/EXPORT and
-analysis-save views below their local Task roots. Task 3 exposes `conditions`
-as an exact readable source and `task-3/friend-cafe` separately as an exact,
-non-recursive SHARE endpoint. The endpoint does not make receiver contents
-readable. This split lets participants inspect the friend's conditions and
-later deliver a curated result without conflating reading with transfer
-authority.
-
-The initialized participant therefore has ten local Contexts containing
-fourteen fixed practice Memories, plus nine effective READ-granted Contexts
-containing 56 Memories. The authority store has thirteen Contexts after
-structural parents are included. Task instructions remain facilitator speech
-rather than durable Memories, so the experiment does not accidentally merge
-instructions into semantic Source frames.
-
-## Data and language invariants
-
-English is canonical durable `Memory.content`. Every authored Korean row is an
-IMPORTED same-UID translation-catalog entry. Switching display language does
-not duplicate a Memory or alter the scenario fingerprint. Designer labels
-such as KB, PP, SM, UM, WM, and OM remain source annotations in the scenario
-specification rather than prefixes in participant-visible content.
-
-Context and Memory UIDs are deterministic within `coffee-v1`. The scenario
-digest covers the complete bilingual content, Context placement, purpose
-annotations, and Grant declarations. Each created Study pair records the
-stable virtual-baseline UID, scenario name, and digest in the existing Study
-provenance fields. The virtual baseline is deliberately not published as a
-mutable Profile: a researcher cannot unknowingly edit `coffee-v1` between two
-runs. Any material data change must be introduced under a new scenario name,
-such as `coffee-v2`, rather than silently changing the meaning of `coffee-v1`.
-
-## Workflow intent
-
-The data supports the planned escalation without encoding the facilitator's
-script as Memory:
-
-1. Use the three packs below `practice/coffee` to contrast Chunk, Atomize, and
-   Summarize; Compare, Merge, Meld, and Update; and Find, Search, Sever, and
-   Forget. The pack contents are durable inputs, while the order and exact
-   instructions remain facilitator speech.
-2. Collect and Atomize the participant's own café experiences into direct
-   Memories on `task-1`.
-3. Use the 24 customer-agent Memories to Update that perspective.
-4. Meld the resulting customer perspective with the 24 operational Memories
-   into direct Memories on `task-2`.
-5. Use the eight friend-café conditions to Sever or otherwise curate a
-   context-specific result on `task-3`, then Share it to
-   `task-3/friend-cafe`.
-
-The three empty Task roots are intentional. They preserve exact-versus-
-descendant targeting, provide stable result locations, and let participant
-authorship grow the store progressively instead of preloading a supposed
-personal viewpoint.
-
-## Prewarm and debugging boundary
-
-`legacy-v1` retains the editable baseline, exact prewarm declarations,
-compatibility checks, regeneration, and shared-bundle attachment used by
-existing debug sessions. It remains the route for reproducing the old Task 1,
-Task 2, Task 3, and world-session failures.
-
-`coffee-v1` attaches no shared semantic prewarm and does not emit prewarm
-compatibility progress. Its measured Update, Meld, and Sever frames depend on
-participant-authored Memories, so a fixed exact semantic artifact would not be
-portable across participants. This does not disable ordinary operation
-sessions, checkpoints, Undo/Redo, or run-local caches; it excludes only the
-cross-run exact Study prewarm bundle.
-
-The legacy fixture sources, generated bundles, tests, and baseline import
-commands remain in the repository. They are not hidden fallback data for the
-new default and are not rewritten by Coffee scenario changes.
-
-## Limitations
-
-Scenario selection currently covers `coffee-v1` and `legacy-v1`; it is not a
-general plugin registry. The Coffee scenario stores purpose annotations in
-Python source rather than the generated legacy manifest format because it has
-no editable baseline or build step. If future studies require researcher-
-editable Coffee data, that work should add a validated scenario build and
-atomic version publication instead of making the versioned built-in data
-mutable.
+This change does not migrate or delete previously created `study-baseline`
+Profiles or historical Study runs. After the special lifecycle is removed,
+such a Profile is ordinary stored data and can be renamed or removed under the
+normal Profile rules.

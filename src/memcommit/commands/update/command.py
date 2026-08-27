@@ -55,7 +55,9 @@ from memcommit.application.authority.derived_policy import authorize_derived_tra
 from memcommit.application.operations.update.granted_source_application import (
     apply_granted_source_staged_update,
 )
-from memcommit.application.operations.update.granted_application import apply_granted_staged_update
+from memcommit.application.operations.update.granted_application import (
+    apply_granted_staged_update,
+)
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.providers.subscription import (
@@ -63,7 +65,7 @@ from memcommit.providers.subscription import (
     connect_codex_chatgpt_provider,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.study_prewarm.registry import StudyPrewarmRegistryError
+from memcommit.study_scenarios.legacy.prewarm.registry import StudyPrewarmRegistryError
 from memcommit.application.operations.update.model import (
     GrantedUpdateTarget,
     UpdateError,
@@ -76,7 +78,9 @@ from memcommit.application.operations.update.model import (
     session_matches,
     update_session_record_digest,
 )
-from memcommit.application.operations.update.application_flow import UpdateApplicationFlowPort
+from memcommit.application.operations.update.application_flow import (
+    UpdateApplicationFlowPort,
+)
 from memcommit.application.operations.update.endpoints import (
     choose_update_endpoint_operands,
     resolve_update_endpoints,
@@ -403,9 +407,7 @@ def _review_granted_target_authority(
         _current: UpdateSession,
         _guidance: str,
     ) -> UpdateSession:
-        raise RuntimeError(
-            "Granted Target approval cannot revise the Update plan."
-        )
+        raise RuntimeError("Granted Target approval cannot revise the Update plan.")
 
     return review_update_application(
         prepared,
@@ -931,7 +933,7 @@ def cmd(
         update_prewarm_match = None
         update_analysis_origin: str | None = None
         if session is not None:
-            from memcommit.study_prewarm.update import (
+            from memcommit.study_scenarios.legacy.prewarm.update import (
                 installed_update_prewarm_origin,
             )
 
@@ -982,7 +984,7 @@ def cmd(
                 )
             ):
                 session = cached.with_status("staged")
-                from memcommit.study_prewarm.update import (
+                from memcommit.study_scenarios.legacy.prewarm.update import (
                     installed_update_prewarm_origin,
                 )
 
@@ -1006,7 +1008,7 @@ def cmd(
                         f"{label} · UPDATE PLAN REUSED · provider was not called."
                     )
             else:
-                from memcommit.study_prewarm.update import (
+                from memcommit.study_scenarios.legacy.prewarm.update import (
                     find_installed_projectable_update_prewarm,
                 )
 
@@ -1073,7 +1075,7 @@ def cmd(
                     f"{completed_previous.uid}"
                 )
             if update_prewarm_match is not None:
-                from memcommit.study_prewarm.update import (
+                from memcommit.study_scenarios.legacy.prewarm.update import (
                     record_equivalent_update_prewarm,
                     record_exact_update_prewarm,
                     record_projected_update_prewarm,

@@ -19,11 +19,11 @@ from memcommit.profile_config import (
     STUDY_RUN_PARTICIPANT_SOURCE_KIND,
 )
 from memcommit.store import MemoryStore
-from memcommit.study_prewarm.registry import (
+from memcommit.study_scenarios.legacy.prewarm.registry import (
     StudyPrewarmRegistryError,
     publish_artifact,
 )
-from memcommit.study_prewarm.update import (
+from memcommit.study_scenarios.legacy.prewarm.update import (
     build_update_prewarm_artifact,
     find_installed_equivalent_update_prewarm,
     find_installed_projectable_update_prewarm,
@@ -102,7 +102,9 @@ def _fixture(tmp_path, monkeypatch, root):
     assert source_memory.uid == inputs.source_candidates[0].memory_uid
     baseline_uid = str(uuid.uuid4())
     profile = _profile(baseline_uid)
-    registry = ProfileRegistry(generation=1, active_uid=profile.uid, profiles=(profile,))
+    registry = ProfileRegistry(
+        generation=1, active_uid=profile.uid, profiles=(profile,)
+    )
     key, artifact = build_update_prewarm_artifact(
         task_description=description,
         session=session,
@@ -125,9 +127,7 @@ def _fixture(tmp_path, monkeypatch, root):
 def test_exact_update_registry_installs_hidden_receipt_then_materializes(
     isolated_store, tmp_path, monkeypatch
 ):
-    store, profile, registry, prepared = _fixture(
-        tmp_path, monkeypatch, isolated_store
-    )
+    store, profile, registry, prepared = _fixture(tmp_path, monkeypatch, isolated_store)
 
     result = install_declared_update_prewarms(
         store=store,
@@ -154,9 +154,10 @@ def test_exact_update_registry_installs_hidden_receipt_then_materializes(
     assert match.origin == "EXACT_PREWARM"
     assert match.session.to_dict() == prepared.to_dict()
     assert store.load_staged_update() is None
-    assert store.load("task-1/campus-wiki").to_dict() == store.load_direct(
-        "task-1/campus-wiki"
-    ).to_dict()
+    assert (
+        store.load("task-1/campus-wiki").to_dict()
+        == store.load_direct("task-1/campus-wiki").to_dict()
+    )
 
 
 def test_exact_update_impact_materializes_hidden_receipt_without_provider(
@@ -164,9 +165,7 @@ def test_exact_update_impact_materializes_hidden_receipt_without_provider(
     tmp_path,
     monkeypatch,
 ):
-    store, profile, registry, prepared = _fixture(
-        tmp_path, monkeypatch, isolated_store
-    )
+    store, profile, registry, prepared = _fixture(tmp_path, monkeypatch, isolated_store)
     install_declared_update_prewarms(
         store=store,
         profile=profile,
@@ -186,10 +185,10 @@ def test_exact_update_impact_materializes_hidden_receipt_without_provider(
             "impact",
             "--from",
             "task-1/participant/construction-updates",
-                "--to",
-                "task-1/campus-wiki",
-                "--recursive",
-            ],
+            "--to",
+            "task-1/campus-wiki",
+            "--recursive",
+        ],
     )
 
     assert result.exit_code == 0, result.output
@@ -341,9 +340,7 @@ def test_update_equal_evidence_ignores_locator_scope_flags(
     source_descendants,
     target_descendants,
 ):
-    store, profile, registry, prepared = _fixture(
-        tmp_path, monkeypatch, isolated_store
-    )
+    store, profile, registry, prepared = _fixture(tmp_path, monkeypatch, isolated_store)
     install_declared_update_prewarms(
         store=store,
         profile=profile,
@@ -415,17 +412,13 @@ def test_update_scope_equivalence_rejects_nontransparent_requests(
         registry_snapshot=registry,
     )
     source_name = (
-        "task-1/unrelated-source"
-        if violation == "unrelated"
-        else "task-1/participant"
+        "task-1/unrelated-source" if violation == "unrelated" else "task-1/participant"
     )
     parent = ops.init(source_name)
     if violation == "memory":
         ops.add(parent, "A wrapper-local source claim.")
     elif violation == "unrelated":
-        exact_source = store.load_direct(
-            "task-1/participant/construction-updates"
-        )
+        exact_source = store.load_direct("task-1/participant/construction-updates")
         source_memory = next(
             item for item in exact_source.iter_items() if isinstance(item, Memory)
         )

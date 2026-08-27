@@ -9,7 +9,6 @@ from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.evaluation.study_bundle import build_all_study_bundles
 from memcommit.profile_config import load_profile_registry, profile_store_dir
 
 
@@ -68,24 +67,15 @@ def test_mem_import_preserves_content_identity_but_not_history(
     assert not (imported / "query-sessions").exists()
 
 
-def test_init_study_imports_an_isolated_pair_with_empty_history(
+def test_init_study_materializes_an_isolated_pair_with_empty_history(
     isolated_store,
     tmp_path,
     monkeypatch,
 ):
     monkeypatch.setenv("HOME", str(tmp_path))
-    bundles = tmp_path / "bundles"
-    build_all_study_bundles(bundles)
-    assert any(bundles.rglob("checkpoints/*.json"))
-    imported = runner.invoke(
-        app,
-        ["profile", "import-study", "--from", str(bundles)],
-    )
-    assert imported.exit_code == 0, imported.stderr or imported.output
-
     result = runner.invoke(
         app,
-        ["init-study", "clean-study", "--scenario", "legacy-v1"],
+        ["init-study", "clean-study", "--scenario", "legacy"],
     )
 
     assert result.exit_code == 0, result.stderr or result.output
@@ -95,7 +85,6 @@ def test_init_study_imports_an_isolated_pair_with_empty_history(
     assert profile is not None and authority is not None
     assert [item.name for item in registry.profiles] == [
         "authoring",
-        "study-baseline",
         "clean-study",
         "clean-study-granted-memory",
     ]

@@ -35,7 +35,9 @@ from memcommit.application.operations.summarize.application import (
     SummarySourcePort,
     run_summarize,
 )
-from memcommit.study_prewarm.summarize import find_declared_summarize_prewarm
+from memcommit.study_scenarios.legacy.prewarm.summarize import (
+    find_declared_summarize_prewarm,
+)
 from memcommit.application.operations.update.model import GrantedUpdateTarget
 
 

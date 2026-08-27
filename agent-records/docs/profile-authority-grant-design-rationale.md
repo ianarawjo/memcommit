@@ -87,13 +87,11 @@ instead of writing through stale authority.
 
 ## Study topology
 
-The generated study package for each task contains a task store, a separate
-authority store, and grant templates. `mem profile import-study` validates all
-six package stores and composes one editable `study-baseline` Profile. `mem
-init-study` copies that merged source into one participant Profile and one
-run-private authority Profile, then materializes these templates as real
-registry grants. The table therefore describes both the package contract and
-each newly initialized run.
+The packaged Legacy scenario contains one task store, one separate authority
+store, and Grant templates for each task. `mem init-study --scenario legacy`
+builds and validates the six intermediate stores privately, composes one
+participant Profile and one run-private authority Profile, and materializes
+the templates as real registry Grants. No intermediate Profile is registered.
 
 | Task | Task-owned data | Authority Profile and ordinary data | Granted views |
 | --- | --- | --- | --- |
@@ -111,11 +109,10 @@ command-attempt telemetry may retain a direct CLI command containing a
 question, but it does not retain the answer or create a reopenable Query
 transcript.
 
-Within `study-baseline`, the corresponding authority material remains under
-`granted-memory/task-N` as ordinary owned Contexts. `init-study` separates
-those copied Contexts into its run-private authority Profile before creating
-the table's participant-facing grants; it never grants against the baseline
-itself.
+During private composition, authority material is temporarily namespaced below
+`granted-memory/task-N`; the published authority Profile owns it below
+`task-N`. The temporary store is deleted after the final pair is published and
+is never a Grant endpoint.
 
 When `mem init-study` omits its name in a TTY, the command stays in the ordinary
 terminal transcript and opens a five-row inline TUI prefilled with the existing

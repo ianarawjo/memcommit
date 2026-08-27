@@ -347,9 +347,7 @@ limiting is implemented.
    omissions, and expected outcomes by task.
 3. Review the approved Korean source and English translation for semantic
    preservation.
-4. Import the generated packages with `mem profile import-study`, which imports
-   task and authority Context baselines, translation catalogs, and grant
-   templates into one editable `study-baseline` without changing `authoring`.
-   Use `mem init-study NAME` to make one complete clean Profile copy after
-   reviewing that merged topology. Authoring checkpoints and other run
-   artifacts stay outside both the baseline and initialized copy.
+4. Run `mem init-study NAME --scenario legacy` to validate the packaged sources
+   and create one isolated participant/authority Profile pair. The command does
+   not register an intermediate baseline Profile, and authoring checkpoints or
+   other run artifacts are never copied into the initialized pair.

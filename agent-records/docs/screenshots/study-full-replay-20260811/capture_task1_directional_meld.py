@@ -41,9 +41,7 @@ def _study_ledger():
 
 
 def _provider_event_count() -> int:
-    return sum(
-        event.action.startswith("PROVIDER_") for event in _study_ledger().list()
-    )
+    return sum(event.action.startswith("PROVIDER_") for event in _study_ledger().list())
 
 
 def _load_scopes():
@@ -85,7 +83,9 @@ def _memory_count(context) -> int:
             return 0
         seen.add(current.uid)
         return sum(
-            1 if isinstance(item, Memory) else visit(item)
+            1
+            if isinstance(item, Memory)
+            else visit(item)
             if isinstance(item, Context)
             else 0
             for item in current.iter_items()
@@ -98,10 +98,7 @@ def _verify_latest_attempt() -> None:
     ledger = _study_ledger()
     attempt = None
     for event in ledger.list():
-        if (
-            event.action != "COMMAND_STARTED"
-            or event.data.get("operation") != "meld"
-        ):
+        if event.action != "COMMAND_STARTED" or event.data.get("operation") != "meld":
             continue
         candidate = ledger.events_for_attempt(event.attempt_uid)
         if "APPROVAL_ACCEPTED" in {item.action for item in candidate}:
@@ -135,10 +132,7 @@ def _capture_command(
 def _approved_attempt_seconds() -> float:
     ledger = _study_ledger()
     for event in ledger.list():
-        if (
-            event.action != "COMMAND_STARTED"
-            or event.data.get("operation") != "meld"
-        ):
+        if event.action != "COMMAND_STARTED" or event.data.get("operation") != "meld":
             continue
         attempt = ledger.events_for_attempt(event.attempt_uid)
         if "APPROVAL_ACCEPTED" not in {item.action for item in attempt}:
@@ -256,7 +250,7 @@ def main() -> None:
         raise RuntimeError("Task 1 directional Meld baseline is not 75 into 300.")
     if existing is None or existing.state != "READY_TO_APPLY":
         raise RuntimeError("Exact Task 1 directional Meld session is not ready.")
-    from memcommit.study_prewarm.meld_directional import (
+    from memcommit.study_scenarios.legacy.prewarm.meld_directional import (
         find_installed_exact_directional_meld_prewarm,
     )
 

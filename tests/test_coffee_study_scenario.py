@@ -17,11 +17,12 @@ from memcommit.profile_config import (
 )
 from memcommit.profiles import resolve_share_endpoint
 from memcommit.store import MemoryStore
-from memcommit.study_scenarios.coffee_v1 import (
-    COFFEE_V1_BASELINE_UID,
-    COFFEE_V1_DIGEST,
-    build_coffee_v1_scenario,
+from memcommit.study_scenarios.coffee import (
+    COFFEE_BASELINE_UID,
+    COFFEE_DIGEST,
+    build_coffee_scenario,
 )
+from memcommit.study_scenarios.legacy import LEGACY_BASELINE_UID, LEGACY_DIGEST
 
 
 runner = CliRunner(mix_stderr=False)
@@ -40,13 +41,13 @@ def _direct_contents(store: MemoryStore, name: str) -> tuple[str, ...]:
     )
 
 
-def test_coffee_v1_spec_is_stable_bilingual_and_has_24_24_8_inputs():
-    scenario = build_coffee_v1_scenario()
-    rebuilt = build_coffee_v1_scenario()
+def test_coffee_spec_is_stable_bilingual_and_has_24_24_8_inputs():
+    scenario = build_coffee_scenario()
+    rebuilt = build_coffee_scenario()
 
-    assert scenario.scenario_id == "coffee-v1"
-    assert scenario.baseline_uid == COFFEE_V1_BASELINE_UID
-    assert scenario.digest == rebuilt.digest == COFFEE_V1_DIGEST
+    assert scenario.scenario_id == "coffee"
+    assert scenario.baseline_uid == COFFEE_BASELINE_UID
+    assert scenario.digest == rebuilt.digest == COFFEE_DIGEST
     assert [
         sum(len(context.memories) for context in task.authority_contexts)
         for task in scenario.tasks
@@ -70,7 +71,7 @@ def test_coffee_v1_spec_is_stable_bilingual_and_has_24_24_8_inputs():
     assert "이 카페" not in translated.curated.translated_content
 
 
-def test_plain_init_study_builds_coffee_v1_without_a_baseline_or_prewarm(
+def test_plain_init_study_builds_coffee_without_a_baseline_or_prewarm(
     isolated_store: Path,
     tmp_path: Path,
     monkeypatch,
@@ -79,17 +80,17 @@ def test_plain_init_study_builds_coffee_v1_without_a_baseline_or_prewarm(
     _prepare_authoring()
 
     def reject_legacy_prewarm(*_args, **_kwargs):
-        raise AssertionError("coffee-v1 must not inspect or prepare legacy prewarms")
+        raise AssertionError("coffee must not inspect or prepare legacy prewarms")
 
     monkeypatch.setattr(
-        "memcommit.study_prewarm.prepare.prepare_study_prewarms",
+        "memcommit.study_scenarios.legacy.prewarm.prepare.prepare_study_prewarms",
         reject_legacy_prewarm,
     )
 
     result = runner.invoke(app, ["init-study", "coffee-default"])
 
     assert result.exit_code == 0, result.stderr or result.output
-    assert "Scenario: coffee-v1" in result.output
+    assert "Scenario: coffee" in result.output
     assert "Baseline Profile:" not in result.output
     assert "Contexts 10 · Memories 14 · current=practice" in result.output
     assert "Granted Contexts 9 · Granted Memories 56" in result.output
@@ -105,9 +106,9 @@ def test_plain_init_study_builds_coffee_v1_without_a_baseline_or_prewarm(
     authority_identity = study_run_identity(authority)
     assert identity is not None and authority_identity is not None
     assert identity.uid == authority_identity.uid
-    assert identity.baseline_profile_uid == COFFEE_V1_BASELINE_UID
-    assert identity.baseline_profile_name == "coffee-v1"
-    assert identity.baseline_sha256 == COFFEE_V1_DIGEST
+    assert identity.baseline_profile_uid == COFFEE_BASELINE_UID
+    assert identity.baseline_profile_name == "coffee"
+    assert identity.baseline_sha256 == COFFEE_DIGEST
 
     participant_root = profile_store_dir(participant)
     authority_root = profile_store_dir(authority)
@@ -223,6 +224,54 @@ def test_plain_init_study_builds_coffee_v1_without_a_baseline_or_prewarm(
     assert "아이스 아메리카노" in practice_korean.curated.translated_content
 
 
+def test_explicit_legacy_scenario_materializes_without_profile_import(
+    isolated_store: Path,
+    tmp_path: Path,
+    monkeypatch,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    _prepare_authoring()
+
+    result = runner.invoke(
+        app,
+        ["init-study", "legacy-direct", "--scenario", "legacy"],
+    )
+
+    assert result.exit_code == 0, result.stderr or result.output
+    assert "Scenario: legacy" in result.output
+    assert "Baseline Profile:" not in result.output
+    assert "Contexts 65 · Memories 471 · current=practice" in result.output
+    assert "Granted Contexts 43 · Granted Memories 625" in result.output
+    registry = load_profile_registry()
+    assert [profile.name for profile in registry.profiles] == [
+        "authoring",
+        "legacy-direct",
+        "legacy-direct-granted-memory",
+    ]
+    assert registry.by_name("study-baseline") is None
+    participant = registry.by_name("legacy-direct")
+    authority = registry.by_name("legacy-direct-granted-memory")
+    assert participant is not None and authority is not None
+    participant_identity = study_run_identity(participant)
+    authority_identity = study_run_identity(authority)
+    assert participant_identity is not None and authority_identity is not None
+    assert participant_identity.uid == authority_identity.uid
+    assert participant_identity.baseline_profile_uid == LEGACY_BASELINE_UID
+    assert participant_identity.baseline_profile_name == "legacy"
+    assert participant_identity.baseline_sha256 == LEGACY_DIGEST
+    assert len(registry.grants) == 8
+
+    participant_store = MemoryStore(
+        root=profile_store_dir(participant),
+        create=False,
+    )
+    authority_store = MemoryStore(root=profile_store_dir(authority), create=False)
+    assert len(participant_store.list_context_names()) == 65
+    assert len(authority_store.list_context_names()) == 75
+    assert participant_store.current_context_name() == "practice"
+    assert authority_store.current_context_name() == "task-1/campus-wiki"
+
+
 def test_init_study_rejects_unknown_scenario_before_creating_profiles(
     isolated_store: Path,
     tmp_path: Path,
@@ -237,7 +286,7 @@ def test_init_study_rejects_unknown_scenario_before_creating_profiles(
     )
 
     assert result.exit_code == 1
-    assert "must be 'coffee-v1' or 'legacy-v1'" in result.stderr
+    assert "must be 'coffee' or 'legacy'" in result.stderr
     assert [profile.name for profile in load_profile_registry().profiles] == [
         "authoring"
     ]

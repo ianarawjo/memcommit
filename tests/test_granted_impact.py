@@ -2577,7 +2577,7 @@ def test_granted_update_requires_explicit_delete_for_removal(
     assert active_store.load_staged_update().status == "staged"
 
 
-def test_granted_update_rejects_fixed_study_baseline_authority(
+def test_granted_update_does_not_special_case_a_legacy_baseline_name(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -2612,11 +2612,10 @@ def test_granted_update_rejects_fixed_study_baseline_authority(
         ["update", "--from", source.name, "--to", wiki.name],
     )
 
-    assert update.exit_code == 1
-    assert "study-baseline Profile cannot be updated" in update.stderr
-    assert authority_store.load_direct(wiki.name).to_dict() == root_before
-    assert authority_store.list_checkpoints(wiki.name) == []
-    assert active_store.load_staged_update().status == "staged"
+    assert update.exit_code == 0, update.stderr or update.output
+    assert authority_store.load_direct(wiki.name).to_dict() != root_before
+    assert authority_store.list_checkpoints(wiki.name)
+    assert active_store.load_staged_update().status == "applied"
 
 
 def test_granted_multi_owner_write_failure_rolls_back_authority(

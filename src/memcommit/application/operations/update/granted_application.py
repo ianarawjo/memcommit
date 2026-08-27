@@ -46,7 +46,9 @@ from memcommit.application.operations.update.model import (
     required_grant_permissions,
     session_matches,
 )
-from memcommit.application.operations.update.application import prepare_update_application
+from memcommit.application.operations.update.application import (
+    prepare_update_application,
+)
 
 
 def _authority_name(binding: GrantedUpdateTarget, public_name: str) -> str:
@@ -146,9 +148,7 @@ def inspect_granted_update(
                     granted_target=session.granted_target,
                 )
             )
-            return GrantedUpdateInspection(
-                status="current" if fresh else "stale"
-            )
+            return GrantedUpdateInspection(status="current" if fresh else "stale")
     except ProfileError as error:
         return GrantedUpdateInspection("revoked", str(error))
     except (FileNotFoundError, OSError, RuntimeError, ValueError) as error:
@@ -176,10 +176,14 @@ def restore_granted_update(
 ) -> CommandRestoreResult:
     """Restore the exact authority command named by a participant receipt."""
 
-    restorable_statuses = {"applied"} if direction == "undo" else {
-        "applied",
-        "undone",
-    }
+    restorable_statuses = (
+        {"applied"}
+        if direction == "undo"
+        else {
+            "applied",
+            "undone",
+        }
+    )
     if (
         session.status not in restorable_statuses
         or session.granted_target is None
@@ -187,9 +191,7 @@ def restore_granted_update(
     ):
         raise ValueError("Expected one restorable granted UpdateSession.")
     binding = session.granted_target
-    expected_unit_uid = (
-        f"update:{session.uid}:{session.application.operation_digest}"
-    )
+    expected_unit_uid = f"update:{session.uid}:{session.application.operation_digest}"
     with authority_grant_snapshot_lock() as registry:
         access = _resolve_exact_access(active_store, binding, registry)
         _validate_operation_permissions(session, registry)
@@ -259,12 +261,6 @@ def _resolve_exact_access(
         )
     if access.view is None:
         raise UpdateError("Expected a granted update target.")
-    authority_source = access.view.authority.source or {}
-    if (
-        access.view.authority.name.casefold() == "study-baseline"
-        or authority_source.get("kind") == "STUDY_BASELINE"
-    ):
-        raise UpdateError("The fixed study-baseline Profile cannot be updated.")
     return access
 
 
@@ -335,8 +331,7 @@ def apply_granted_staged_update(
     binding = session.granted_target
     source_binding = session.granted_source
     authority_lock_names = {
-        _authority_name(binding, context.name)
-        for context in session.target_contexts
+        _authority_name(binding, context.name) for context in session.target_contexts
     }
 
     with authority_grant_snapshot_lock() as registry:
@@ -387,9 +382,7 @@ def apply_granted_staged_update(
             )
 
         with active_store._update_session_write_lock():
-            current = active_store._load_update_session(
-                active_store.staged_update_file
-            )
+            current = active_store._load_update_session(active_store.staged_update_file)
             if current != session:
                 raise ConcurrentContextUpdateError(
                     "The active staged update changed before application."
@@ -405,9 +398,7 @@ def apply_granted_staged_update(
                     combined_authority_locks = set(authority_lock_names)
                     if source_store.store_dir == authority_store.store_dir:
                         combined_authority_locks.update(source_lock_names)
-                    with authority_store._context_write_locks(
-                        combined_authority_locks
-                    ):
+                    with authority_store._context_write_locks(combined_authority_locks):
                         source = load_source()
                         target_reader = GrantedReadStore(
                             access,
@@ -570,8 +561,7 @@ def apply_granted_staged_update(
                             )
                             checkpoint_by_public = {
                                 public: checkpoint_uid
-                                for _authority, public, checkpoint_uid
-                                in created_checkpoints
+                                for _authority, public, checkpoint_uid in created_checkpoints
                             }
                             receipt = UpdateApplicationReceipt(
                                 applied_at=datetime.now().astimezone().isoformat(),

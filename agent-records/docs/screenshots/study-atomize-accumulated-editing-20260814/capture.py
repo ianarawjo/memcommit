@@ -65,8 +65,7 @@ def _verify_latest_atomize_attempt() -> None:
     if not required.issubset({event.action for event in attempt}):
         raise RuntimeError("Atomize attempt is missing local auto-apply evidence.")
     if any(
-        event.action in {"APPROVAL_PRESENTED", "APPROVAL_ACCEPTED"}
-        for event in attempt
+        event.action in {"APPROVAL_PRESENTED", "APPROVAL_ACCEPTED"} for event in attempt
     ):
         raise RuntimeError("Decision-free local Atomize unexpectedly asked approval.")
 
@@ -75,7 +74,9 @@ def main() -> None:
     sys.path.insert(0, str(ROOT / "src"))
     from memcommit.profile_config import load_profile_registry
     from memcommit.store import MemoryStore
-    from memcommit.study_prewarm.atomize import find_declared_atomize_prewarm
+    from memcommit.study_scenarios.legacy.prewarm.atomize import (
+        find_declared_atomize_prewarm,
+    )
 
     OUT.mkdir(parents=True, exist_ok=True)
     registry = load_profile_registry()
@@ -145,10 +146,12 @@ def main() -> None:
             "DECISION_FREE_AUTO_ACCEPT",
         ),
     )
-    if "\x1b[32m" not in (
-        OUT / "02-auto-apply-receipt.typescript"
-    ).read_text(encoding="utf-8"):
-        raise RuntimeError("PTY stream did not contain the expected green receipt ANSI.")
+    if "\x1b[32m" not in (OUT / "02-auto-apply-receipt.typescript").read_text(
+        encoding="utf-8"
+    ):
+        raise RuntimeError(
+            "PTY stream did not contain the expected green receipt ANSI."
+        )
 
 
 if __name__ == "__main__":

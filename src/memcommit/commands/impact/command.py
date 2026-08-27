@@ -105,9 +105,16 @@ from memcommit.application.operations.review.model import (
     review_response_digest,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.core.context_targeting.uid_locator import UidLocatorError, resolve_exact_or_unique_uid
-from memcommit.study_prewarm.registry import StudyPrewarmRegistryError
-from memcommit.application.operations.update.model import UpdateError, plan_update, session_matches
+from memcommit.core.context_targeting.uid_locator import (
+    UidLocatorError,
+    resolve_exact_or_unique_uid,
+)
+from memcommit.study_scenarios.legacy.prewarm.registry import StudyPrewarmRegistryError
+from memcommit.application.operations.update.model import (
+    UpdateError,
+    plan_update,
+    session_matches,
+)
 from memcommit.application.operations.update.endpoints import (
     choose_update_endpoint_operands,
     resolve_update_endpoints,
@@ -183,8 +190,7 @@ def _select_saved_session(
         if len(entries) == 1:
             return entries[0]
         raise ValueError(
-            f"Several saved {kind.title()} artifacts are available; pass "
-            "--session UID."
+            f"Several saved {kind.title()} artifacts are available; pass --session UID."
         )
     receipt = choose_session(entries, title=title)
     if receipt is None:
@@ -310,6 +316,7 @@ def _saved_update_impact(
             label="Saved Update Impact artifact",
         )
     selected_is_retained = session.uid in retained_uids
+
     def load_presentation() -> ImpactSessionPresentation:
         if selected_is_retained:
             return update_impact_presentation(receipts.load(session.uid))
@@ -382,11 +389,7 @@ def _saved_meld_impact(
     def load_presentation() -> ImpactSessionPresentation:
         refreshed_catalog = list_meld_session_catalog(store)
         refreshed = next(
-            (
-                entry
-                for entry in refreshed_catalog
-                if entry.session_uid == selected.key
-            ),
+            (entry for entry in refreshed_catalog if entry.session_uid == selected.key),
             None,
         )
         if refreshed is None:
@@ -394,9 +397,7 @@ def _saved_meld_impact(
                 "The saved Meld changed while returning from Apply. Reopen it."
             )
         active_entry["value"] = refreshed
-        return meld_impact_presentation(
-            reload_selected_meld_session(store, refreshed)
-        )
+        return meld_impact_presentation(reload_selected_meld_session(store, refreshed))
 
     def open_owning_workflow() -> None:
         # The owning resume route reloads the catalog identity and enforces its
@@ -618,7 +619,7 @@ def _directional_impact(
             if target_access.is_granted
             else None
         )
-        from memcommit.study_prewarm.update import (
+        from memcommit.study_scenarios.legacy.prewarm.update import (
             find_installed_projectable_update_prewarm,
         )
 
@@ -738,7 +739,7 @@ def _directional_impact(
                 )
             store.save_impact_plan(session)
             if update_prewarm_match is not None:
-                from memcommit.study_prewarm.update import (
+                from memcommit.study_scenarios.legacy.prewarm.update import (
                     record_equivalent_update_prewarm,
                     record_exact_update_prewarm,
                     record_projected_update_prewarm,
@@ -748,17 +749,14 @@ def _directional_impact(
                     record_exact_update_prewarm
                     if update_prewarm_match.origin == "EXACT_PREWARM"
                     else record_equivalent_update_prewarm
-                    if update_prewarm_match.origin
-                    == "EQUIVALENT_SCOPE_PREWARM"
+                    if update_prewarm_match.origin == "EQUIVALENT_SCOPE_PREWARM"
                     else record_projected_update_prewarm
                 )
                 recorder(
                     store,
                     entry_key=update_prewarm_match.entry_key,
                     session=session,
-                    prepared_source_name=(
-                        update_prewarm_match.prepared_source_name
-                    ),
+                    prepared_source_name=(update_prewarm_match.prepared_source_name),
                 )
     except (
         OSError,
@@ -923,9 +921,7 @@ def _atomize_impact(
                     source_review_digest=source_review_digest,
                     memory_selector=memory_selector,
                     allow_prepared=(
-                        not refresh
-                        and not with_review
-                        and memory_selector is None
+                        not refresh and not with_review and memory_selector is None
                     ),
                 ),
                 store=store,

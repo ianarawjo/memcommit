@@ -22,7 +22,7 @@ from memcommit.application.operations.atomize.analysis_runtime import (
 )
 from memcommit.context import Memory
 from memcommit.store import MemoryStore
-from memcommit.study_prewarm.atomize import AtomizePrewarmMatch
+from memcommit.study_scenarios.legacy.prewarm.atomize import AtomizePrewarmMatch
 
 
 _PAYLOAD_MARKER = "ATOMIZE IMPACT PAYLOAD:\n"

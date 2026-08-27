@@ -20,7 +20,7 @@ from memcommit.application.operations.profile.config import (
     study_run_identity,
 )
 from memcommit.persistence.store import MemoryStore, _write_json_atomic
-from memcommit.study_prewarm.registry import (
+from memcommit.study_scenarios.legacy.prewarm.registry import (
     StudyPrewarmEntry,
     StudyPrewarmRegistryError,
     load_registry,
@@ -50,10 +50,7 @@ def declared_installation_path(
 
 def _normalized_evidence(evidence: Mapping[str, str]) -> dict[str, str]:
     if not evidence or any(
-        not isinstance(key, str)
-        or not key
-        or not isinstance(value, str)
-        or not value
+        not isinstance(key, str) or not key or not isinstance(value, str) or not value
         for key, value in evidence.items()
     ):
         raise StudyPrewarmRegistryError(
@@ -71,12 +68,8 @@ def record_declared_installation(
     """Record one validated cache artifact without publishing a session."""
 
     path = declared_installation_path(store, entry)
-    if path.parent.exists() and (
-        not path.parent.is_dir() or path.parent.is_symlink()
-    ):
-        raise StudyPrewarmRegistryError(
-            "Study prewarm receipt directory is unsafe."
-        )
+    if path.parent.exists() and (not path.parent.is_dir() or path.parent.is_symlink()):
+        raise StudyPrewarmRegistryError("Study prewarm receipt directory is unsafe.")
     path.parent.mkdir(parents=True, exist_ok=True)
     _write_json_atomic(
         path,
@@ -109,9 +102,7 @@ def declared_installation_matches(
     try:
         value = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as error:
-        raise StudyPrewarmRegistryError(
-            "Study prewarm receipt is invalid."
-        ) from error
+        raise StudyPrewarmRegistryError("Study prewarm receipt is invalid.") from error
     return bool(
         isinstance(value, dict)
         and set(value)
@@ -126,8 +117,7 @@ def declared_installation_matches(
             "evidence",
         }
         and value.get("kind") == DECLARED_INSTALLATION_KIND
-        and value.get("schema_version")
-        == DECLARED_INSTALLATION_SCHEMA_VERSION
+        and value.get("schema_version") == DECLARED_INSTALLATION_SCHEMA_VERSION
         and isinstance(value.get("installed_at"), str)
         and bool(value.get("installed_at"))
         and value.get("operation") == entry.operation

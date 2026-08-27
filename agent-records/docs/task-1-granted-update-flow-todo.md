@@ -4,7 +4,7 @@
 
 Make the participant-facing Task 1 flow executable against the run-private
 granted campus wiki without copying authority Memories into the participant
-Profile or modifying `study-baseline`:
+Profile or modifying the packaged scenario source:
 
 ```text
 inspect participant/construction-updates
@@ -24,8 +24,8 @@ but it is not a substitute for the runtime work below.
 - The target remains the run-private authority Profile's granted
   `task-1/campus-wiki` graph. No target copy is materialized in the participant
   Profile.
-- `study-baseline` is never a mutation target. A participant update can change
-  only the authority Profile created for that Study run.
+- The packaged scenario is never a mutation target. A participant update can
+  change only the authority Profile created for that Study run.
 - `impact` requires target `READ` and discloses only the frozen granted scope.
 - `update` additionally requires the exact operation permissions it will use:
   `UPDATE` for replacements, `CREATE` for additions, and `DELETE` for
@@ -121,7 +121,7 @@ but it is not a substitute for the runtime work below.
   - Preview and apply the full Task 1 update against the granted wiki, then
     score all 75 source dispositions and 77 expected patches.
   - Confirm the run-private authority changed, the participant source did not,
-    and `study-baseline` remained byte-for-byte unchanged.
+    and the packaged scenario source remained byte-for-byte unchanged.
   - Confirm Task 2/3 grants and one-shot Query routes are unaffected.
 
 - [ ] 7. Refresh examples and participant-facing documentation.

@@ -9,7 +9,7 @@ from pathlib import Path
 
 import pytest
 
-from memcommit.application.evaluation.study_fixtures import (
+from memcommit.study_scenarios.legacy.fixtures import (
     EXPECTED_CORPUS_COUNT,
     AudienceRole,
     FixtureDataset,
@@ -17,6 +17,7 @@ from memcommit.application.evaluation.study_fixtures import (
     PurposeSidecarKey,
     StudyFixtureError,
     StudyFixtureSpec,
+    default_fixture_root,
     load_study_fixture,
     load_study_fixture_corpus,
     pair_fixture_translations,
@@ -171,21 +172,12 @@ def test_every_task1_update_memory_names_its_target_and_action(
     modify: str,
     add: str,
 ) -> None:
-    fixture_root = (
-        Path(__file__).resolve().parents[1]
-        / "agent-records"
-        / "docs"
-        / "fixtures"
-    )
+    fixture_root = default_fixture_root()
     dataset = load_study_fixture_corpus(
         language=language,
         root=fixture_root,
     ).by_name()["task1-construction-updates"]
-    action_path = (
-        fixture_root
-        / language
-        / f"task-1-update-actions-{language}.tsv"
-    )
+    action_path = fixture_root / language / f"task-1-update-actions-{language}.tsv"
     with action_path.open(encoding="utf-8", newline="") as handle:
         rows = tuple(csv.DictReader(handle, delimiter="\t"))
 
@@ -223,18 +215,14 @@ def test_english_block_labels_verified_and_compound_audience_are_supported(
                 "",
                 "- Memory Location: ctx/item",
                 "- Content: Keep the source meaning.",
-                (
-                    "- Audience: Visitors · "
-                    "Construction/Facilities Personnel"
-                ),
+                ("- Audience: Visitors · Construction/Facilities Personnel"),
                 "- Verified: true",
             ]
         ),
         encoding="utf-8",
     )
     (language_root / "sample-purpose-en.tsv").write_text(
-        "fixture_id\tMemory Location\tPurpose\n"
-        "T1-U-001\tctx/item\tPP\n",
+        "fixture_id\tMemory Location\tPurpose\nT1-U-001\tctx/item\tPP\n",
         encoding="utf-8",
     )
     spec = StudyFixtureSpec(

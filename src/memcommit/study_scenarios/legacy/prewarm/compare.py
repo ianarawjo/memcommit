@@ -9,8 +9,13 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 import uuid
 
-from memcommit.application.operations.compare.ledger.execution import load_comparison_context
-from memcommit.application.authority.access import GrantedReadStore, resolve_context_access
+from memcommit.application.operations.compare.ledger.execution import (
+    load_comparison_context,
+)
+from memcommit.application.authority.access import (
+    GrantedReadStore,
+    resolve_context_access,
+)
 from memcommit.application.operations.compare.ledger.model import (
     COMPARISON_RULESET_VERSION,
     ComparisonAnalysis,
@@ -21,7 +26,9 @@ from memcommit.application.operations.compare.ledger.model import (
     ComparisonReports,
     comparison_canonical_digest,
 )
-from memcommit.application.operations.compare.ledger.provider import COMPARISON_PROVIDER_CONTRACT_VERSION
+from memcommit.application.operations.compare.ledger.provider import (
+    COMPARISON_PROVIDER_CONTRACT_VERSION,
+)
 from memcommit.configuration.config import Config
 from memcommit.providers.policy import (
     resolve_operation_provider_policy,
@@ -33,27 +40,35 @@ from memcommit.application.authority.derived_policy import (
     authorize_analysis_save,
     authorize_combination,
 )
-from memcommit.application.operations.profile.config import ProfileEntry, ProfileRegistry, study_run_identity
-from memcommit.persistence.store import MemoryStore, _write_json_atomic, context_record_digest
-from memcommit.study_prewarm.installations import (
+from memcommit.application.operations.profile.config import (
+    ProfileEntry,
+    ProfileRegistry,
+    study_run_identity,
+)
+from memcommit.persistence.store import (
+    MemoryStore,
+    _write_json_atomic,
+    context_record_digest,
+)
+from memcommit.study_scenarios.legacy.prewarm.installations import (
     INSTALLATIONS_DIRECTORY_NAME,
     declared_artifact_available,
     declared_installation_matches,
     record_declared_installation,
 )
-from memcommit.study_prewarm.registry import (
+from memcommit.study_scenarios.legacy.prewarm.registry import (
     StudyPrewarmRegistryError,
     payload_digest,
     load_artifact,
     load_registry,
     uses_shared_bundle,
 )
-from memcommit.study_prewarm.quality import (
+from memcommit.study_scenarios.legacy.prewarm.quality import (
     SemanticIdentity,
     highest_quality_candidates,
     prewarm_quality_satisfies,
 )
-from memcommit.study_prewarm.scope_equivalence import (
+from memcommit.study_scenarios.legacy.prewarm.scope_equivalence import (
     transparent_context_scope_matches,
     transparent_scope_evidence_matches,
 )

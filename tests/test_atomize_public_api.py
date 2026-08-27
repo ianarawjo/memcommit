@@ -26,11 +26,13 @@ from memcommit import (
     MemCommitClient,
 )
 from memcommit.atomize import create_atomize_analysis, impact_atomize
-from memcommit.application.operations.atomize.runtime import capture_atomize_session_snapshot
+from memcommit.application.operations.atomize.runtime import (
+    capture_atomize_session_snapshot,
+)
 from memcommit.adapters.python_api.errors import AtomizeExecutionError
 from memcommit.context import Memory
 from memcommit.store import MemoryStore
-from memcommit.study_prewarm.atomize import AtomizePrewarmMatch
+from memcommit.study_scenarios.legacy.prewarm.atomize import AtomizePrewarmMatch
 
 
 _PAYLOAD_MARKER = "ATOMIZE IMPACT PAYLOAD:\n"
@@ -118,9 +120,7 @@ class _Provider:
                     },
                     "unresolved": {
                         "text": (
-                            "The Memory needs more context."
-                            if self.uncertain
-                            else ""
+                            "The Memory needs more context." if self.uncertain else ""
                         ),
                         "source_ids": ids if self.uncertain else [],
                     },
@@ -157,19 +157,26 @@ def _client_and_context(
 
 def test_root_exports_structural_atomize_contract():
     assert AtomizeAnalysisResult.__module__ == "memcommit.adapters.python_api.atomize"
-    assert AtomizeReviewUpdateResult.__module__ == "memcommit.adapters.python_api.atomize"
-    assert AtomizeReviewedApplyResult.__module__ == "memcommit.adapters.python_api.atomize"
-    assert AtomizeSaveAsApplyResult.__module__ == "memcommit.adapters.python_api.atomize"
-    assert AtomizeStructuralApplyResult.__module__ == "memcommit.adapters.python_api.atomize"
+    assert (
+        AtomizeReviewUpdateResult.__module__ == "memcommit.adapters.python_api.atomize"
+    )
+    assert (
+        AtomizeReviewedApplyResult.__module__ == "memcommit.adapters.python_api.atomize"
+    )
+    assert (
+        AtomizeSaveAsApplyResult.__module__ == "memcommit.adapters.python_api.atomize"
+    )
+    assert (
+        AtomizeStructuralApplyResult.__module__
+        == "memcommit.adapters.python_api.atomize"
+    )
     assert issubclass(AtomizeConflictError, Exception)
 
 
 def test_open_projects_provider_analysis_then_resumes_without_provider(
     isolated_store,
 ):
-    client, _store, context, memory, provider = _client_and_context(
-        composite=True
-    )
+    client, _store, context, memory, provider = _client_and_context(composite=True)
 
     created = client.open_atomize_analysis(".")
     resumed_client = MemCommitClient(
@@ -251,9 +258,7 @@ def test_refresh_dominates_prepared_preference_and_calls_provider(
 def test_apply_as_is_records_one_checkpoint_and_exact_retry_recovers(
     isolated_store,
 ):
-    client, store, context, memory, _provider = _client_and_context(
-        composite=True
-    )
+    client, store, context, memory, _provider = _client_and_context(composite=True)
     proposal = client.open_atomize_analysis(context.name)
 
     first = client.apply_atomize_as_is(proposal)
@@ -277,9 +282,7 @@ def test_apply_as_is_records_one_checkpoint_and_exact_retry_recovers(
 
 
 def test_saved_version_apply_runs_normal_form_once_and_is_retryable(isolated_store):
-    client, store, context, _memory, provider = _client_and_context(
-        composite=True
-    )
+    client, store, context, _memory, provider = _client_and_context(composite=True)
     proposal = client.open_atomize_analysis(context.name)
 
     first = client.apply_saved_atomize_as_is(
@@ -424,6 +427,8 @@ def test_terminal_review_cannot_be_edited(isolated_store):
             expected_version=terminal.version_token,
             output_context_name="atomize/late-output",
         )
+
+
 def test_output_plan_is_exact_provider_free_and_require_new(isolated_store):
     client, store, context, _memory, provider = _client_and_context(composite=True)
     opened = client.open_atomize_analysis(context.name)
@@ -623,9 +628,7 @@ def test_all_preserved_apply_still_records_deliberate_completion(
 
 
 def test_open_uncertainty_is_preserved_and_audited_as_is(isolated_store):
-    client, store, context, memory, _provider = _client_and_context(
-        uncertain=True
-    )
+    client, store, context, memory, _provider = _client_and_context(uncertain=True)
     proposal = client.open_atomize_analysis(context.name)
 
     result = client.apply_atomize_as_is(proposal)
@@ -680,9 +683,7 @@ def test_save_as_plan_is_visible_but_not_silently_applied_in_place(
     with pytest.raises(AtomizeInputError, match="different Output Context"):
         client.apply_atomize_as_is(planned)
     with pytest.raises(AtomizeInputError, match="accepted Atomize revision"):
-        client.apply_atomize_as_is(
-            replace(planned, in_place_apply_allowed=True)
-        )
+        client.apply_atomize_as_is(replace(planned, in_place_apply_allowed=True))
     assert store.list_checkpoints(context.name) == []
 
 

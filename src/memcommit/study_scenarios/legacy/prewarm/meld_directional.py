@@ -18,7 +18,10 @@ from memcommit.application.authority.access import (
     freeze_granted_context_binding,
     resolve_context_access,
 )
-from memcommit.application.operations.compare.ledger.model import COMPARISON_RULESET_VERSION, ComparisonInput
+from memcommit.application.operations.compare.ledger.model import (
+    COMPARISON_RULESET_VERSION,
+    ComparisonInput,
+)
 from memcommit.configuration.config import Config
 from memcommit.providers.policy import (
     resolve_operation_provider_policy,
@@ -39,37 +42,45 @@ from memcommit.application.operations.meld.model import (
     MeldSession,
     directional_comparison_basis_assessment,
 )
-from memcommit.application.operations.meld.provider import MELD_DIRECTIONAL_PROVIDER_CONTRACT_VERSION
-from memcommit.application.operations.compare.ledger.granted_store import recursive_comparison_projection
+from memcommit.application.operations.meld.provider import (
+    MELD_DIRECTIONAL_PROVIDER_CONTRACT_VERSION,
+)
+from memcommit.application.operations.compare.ledger.granted_store import (
+    recursive_comparison_projection,
+)
 from memcommit.application.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,
     load_profile_registry,
     study_run_identity,
 )
-from memcommit.persistence.store import MemoryStore, _write_json_atomic, context_record_digest
-from memcommit.study_prewarm.installations import (
+from memcommit.persistence.store import (
+    MemoryStore,
+    _write_json_atomic,
+    context_record_digest,
+)
+from memcommit.study_scenarios.legacy.prewarm.installations import (
     INSTALLATIONS_DIRECTORY_NAME,
     declared_artifact_available,
     record_declared_installation,
 )
-from memcommit.study_prewarm.compare import (
+from memcommit.study_scenarios.legacy.prewarm.compare import (
     EquivalentComparePrewarmMatch,
     project_prepared_compare_analysis,
     rebind_equivalent_compare_analysis,
 )
-from memcommit.study_prewarm.registry import (
+from memcommit.study_scenarios.legacy.prewarm.registry import (
     StudyPrewarmRegistryError,
     load_artifact,
     load_registry,
     payload_digest,
 )
-from memcommit.study_prewarm.quality import (
+from memcommit.study_scenarios.legacy.prewarm.quality import (
     SemanticIdentity,
     highest_quality_candidates,
     prewarm_quality_satisfies,
 )
-from memcommit.study_prewarm.scope_equivalence import (
+from memcommit.study_scenarios.legacy.prewarm.scope_equivalence import (
     transparent_context_scope_matches,
     transparent_scope_evidence_matches,
 )
@@ -364,8 +375,7 @@ def _receipt_matches(
             (
                 item
                 for item in registry.entries
-                if item.key == entry_key
-                and item.operation == "MELD_DIRECTIONAL"
+                if item.key == entry_key and item.operation == "MELD_DIRECTIONAL"
             ),
             None,
         )
@@ -482,8 +492,7 @@ def _equivalent_semantic_request_matches(
     )
     return bool(
         rebound_analysis is not None
-        and rebound_analysis.to_dict()
-        == current.comparison_seed.analysis.to_dict()
+        and rebound_analysis.to_dict() == current.comparison_seed.analysis.to_dict()
     )
 
 
@@ -562,13 +571,10 @@ def _project_prepared_session(
         for prior, replacement in zip(prepared.frames, current.frames, strict=True)
     }
     current_keys = {
-        (frame.uid, memory.uid)
-        for frame in current.frames
-        for memory in frame.memories
+        (frame.uid, memory.uid) for frame in current.frames for memory in frame.memories
     }
     current_owner_keys = {
-        (context.uid, context.name)
-        for context in (current.frames[1].contexts or ())
+        (context.uid, context.name) for context in (current.frames[1].contexts or ())
     }
     parent_relations = {
         relation.uid: {
@@ -633,9 +639,9 @@ def _project_prepared_session(
                 owner_context_name=owner_name,
             )
         )
-    ready = not any(
-        issue.priority == "REQUIRED" for issue in basis.issues
-    ) and not any(relation.status == "UNRESOLVED" for relation in basis.relations)
+    ready = not any(issue.priority == "REQUIRED" for issue in basis.issues) and not any(
+        relation.status == "UNRESOLVED" for relation in basis.relations
+    )
     assessment = MeldAssessment(
         overview=(
             "Projected from the declared Directional Meld basis over the "
@@ -1021,7 +1027,5 @@ def find_installed_exact_directional_meld_prewarm(
 
     match = find_installed_directional_meld_prewarm(store=store, current=current)
     return (
-        match.session
-        if match is not None and match.origin == "EXACT_PREWARM"
-        else None
+        match.session if match is not None and match.origin == "EXACT_PREWARM" else None
     )

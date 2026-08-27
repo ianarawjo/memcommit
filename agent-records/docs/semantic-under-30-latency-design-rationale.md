@@ -20,7 +20,7 @@ the current tree. Immutable ledgers under
 The compact decision-vector contract adopted by task-local Study prewarm was
 not retired. Its live schema, strict decoder, typed reconstruction, and bounded
 provider-call primitive now belong to
-`memcommit.study_prewarm.compare_compact`; the move changes ownership, not the
+`memcommit.study_scenarios.legacy.prewarm.compare_compact`; the move changes ownership, not the
 recorded compact prompt version or Study fallback boundary.
 
 The initial design workload is the existing 300-Memory Compare case. The

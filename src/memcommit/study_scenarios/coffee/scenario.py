@@ -1,4 +1,4 @@
-"""The version-pinned continuous Coffee Study scenario.
+"""The built-in continuous Coffee Study scenario.
 
 English is the canonical durable Memory text.  Korean is retained as a
 same-UID imported translation catalog so changing the display language never
@@ -19,12 +19,11 @@ from memcommit.application.operations.translate.view import (
 )
 
 
-COFFEE_V1_SCENARIO_ID = "coffee-v1"
-_SCENARIO_NAMESPACE = uuid.uuid5(
-    uuid.NAMESPACE_URL,
-    "memcommit:study-scenario:coffee-v1",
-)
-COFFEE_V1_BASELINE_UID = str(uuid.uuid5(_SCENARIO_NAMESPACE, "baseline"))
+COFFEE_SCENARIO_ID = "coffee"
+# Preserve the already-published deterministic identities while simplifying
+# the public scenario name. The fixed UUID replaces the former versioned seed.
+_SCENARIO_NAMESPACE = uuid.UUID("1cc6d666-a735-5e4b-9cf8-412bef7819a2")
+COFFEE_BASELINE_UID = str(uuid.uuid5(_SCENARIO_NAMESPACE, "baseline"))
 _CATALOG_TIMESTAMP = "2026-08-25T00:00:00+00:00"
 
 
@@ -525,7 +524,7 @@ _TASK_CONTEXT_SPECS = {
         _TASK_1_AUTHORITY,
         (
             ScenarioGrantSpec(
-                key="coffee-v1-task-1-customer-perspectives",
+                key="coffee-task-1-customer-perspectives",
                 authority_context="task-1/customer-perspectives",
                 attachment_context="task-1",
                 public_name="task-1/customer-perspectives",
@@ -539,7 +538,7 @@ _TASK_CONTEXT_SPECS = {
         _TASK_2_AUTHORITY,
         (
             ScenarioGrantSpec(
-                key="coffee-v1-task-2-operational-perspectives",
+                key="coffee-task-2-operational-perspectives",
                 authority_context="task-2/operational-perspectives",
                 attachment_context="task-2",
                 public_name="task-2/operational-perspectives",
@@ -553,7 +552,7 @@ _TASK_CONTEXT_SPECS = {
         _TASK_3_AUTHORITY,
         (
             ScenarioGrantSpec(
-                key="coffee-v1-task-3-friend-conditions",
+                key="coffee-task-3-friend-conditions",
                 authority_context="task-3/friend-cafe/conditions",
                 attachment_context="task-3",
                 public_name="task-3/friend-cafe/conditions",
@@ -561,7 +560,7 @@ _TASK_CONTEXT_SPECS = {
                 recursive=False,
             ),
             ScenarioGrantSpec(
-                key="coffee-v1-task-3-friend-share-endpoint",
+                key="coffee-task-3-friend-share-endpoint",
                 authority_context="task-3/friend-cafe",
                 attachment_context="task-3",
                 public_name="task-3/friend-cafe",
@@ -632,7 +631,7 @@ def _build_contexts(
 
 def _scenario_digest() -> str:
     payload: dict[str, object] = {
-        "scenario_id": COFFEE_V1_SCENARIO_ID,
+        "scenario_id": COFFEE_SCENARIO_ID,
         "canonical_language": "en",
         "translation_languages": ["ko"],
         "tasks": [],
@@ -684,14 +683,14 @@ def _scenario_digest() -> str:
     return hashlib.sha256(encoded).hexdigest()
 
 
-COFFEE_V1_DIGEST = "fdfd2fd1f788723c0eb56b2a2f3838e16e9b073e3e9719c72800a0c920f5ffce"
-if _scenario_digest() != COFFEE_V1_DIGEST:
-    # A versioned Study command must never keep its name while its experiment
-    # changes. Bump the scenario identifier and pin a new digest deliberately.
-    raise RuntimeError("coffee-v1 data changed without a scenario version bump.")
+COFFEE_DIGEST = "630a753c1a6352fe66b2125eb456ec7201526208e8f84cc63d3270c556891ecf"
+if _scenario_digest() != COFFEE_DIGEST:
+    # The concise public name still identifies one pinned experiment. A data
+    # change must deliberately refresh the recorded digest.
+    raise RuntimeError("coffee data changed without updating its pinned digest.")
 
 
-def build_coffee_v1_scenario() -> StudyScenario:
+def build_coffee_scenario() -> StudyScenario:
     """Return fresh mutable Context objects for one Coffee Study run."""
 
     tasks: list[StudyScenarioTask] = []
@@ -718,8 +717,8 @@ def build_coffee_v1_scenario() -> StudyScenario:
             )
         )
     return StudyScenario(
-        scenario_id=COFFEE_V1_SCENARIO_ID,
-        baseline_uid=COFFEE_V1_BASELINE_UID,
-        digest=COFFEE_V1_DIGEST,
+        scenario_id=COFFEE_SCENARIO_ID,
+        baseline_uid=COFFEE_BASELINE_UID,
+        digest=COFFEE_DIGEST,
         tasks=tuple(tasks),
     )

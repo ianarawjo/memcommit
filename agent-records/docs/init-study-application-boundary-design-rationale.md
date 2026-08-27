@@ -1,58 +1,36 @@
 # Init-study application boundary design rationale
 
-## Motivation
-
-The `init-study` CLI adapter already had its own command package, but the
-operation's run composition, atomic publication, and result model lived at
-the end of `operations/profile/model.py`. That made the Profile control plane
-own both reusable Profile primitives and one concrete provisioning workflow.
-It also obscured the fact that `init-study` is an operation with its own
-application boundary.
-
-This change is an ownership refactor. It must not change the command grammar,
-scenario data, Profile registry schema, Grant schema, durable store layout,
-prewarm policy, or user-visible receipts.
-
 ## Selected boundary
 
-`operations/init_study/model.py` owns the typed initialization result.
-`operations/init_study/composition.py` snapshots a validated editable baseline
-or materializes a built-in scenario, then composes its three Task inputs into
-one participant store and one run-private authority store.
-`operations/init_study/publication.py` stages those stores, materializes their
-Grants, publishes both Profile roots, and replaces the registry as one locked
-transaction.
-`operations/init_study/application.py` selects the `coffee-v1` or `legacy-v1`
-source and exposes the operation's public initialization functions.
+`operations/init_study/model.py` owns the result type,
+`composition.py` turns one packaged scenario into participant and authority
+stores, `publication.py` materializes Grants and atomically publishes the pair,
+and `application.py` selects `coffee` or `legacy` and coordinates the workflow.
+The console command owns only argument validation, receipts, and action-ledger
+presentation.
 
-`operations/profile` remains the owner of Profile validation, registry and
-store lifecycle primitives, authority Grant primitives, and editable legacy
-Study baseline import and refresh. The dependency therefore runs from the
-concrete `init-study` workflow toward reusable Profile infrastructure.
+`operations/profile` remains reusable control-plane infrastructure: Profile
+validation, registry locking and replacement, store inspection, Grant
+materialization, and legacy split-Study administration. It no longer owns a
+Study baseline importer or compatibility facade for initialization. Production
+callers import the `init_study` operation directly.
 
-## Preserved invariants
+## Invariants
 
-- One run still publishes exactly one participant Profile and one authority
-  Profile, with all three Task namespaces composed inside those two roots.
-- The participant Profile becomes active in the same registry generation that
-  publishes the authority Profile and their Grants; the authority side is not
-  selected.
-- A failed batch publishes no partial pair. A registry replacement whose
-  durability cannot be confirmed retains both stores rather than leaving
-  visible registry entries pointing at missing roots.
-- `coffee-v1` remains the default immutable virtual baseline. `legacy-v1` and
-  `--from-profile` retain editable-baseline snapshot and prewarm behavior.
-- Former `memcommit.profiles` initialization functions remain deferred
-  compatibility shims and the relocated result type remains a compatibility
-  alias, while new production callers import the operation-owned modules
-  directly.
+- One initialization publishes exactly one participant Profile, one authority
+  Profile, and all scenario Grants in one registry generation.
+- The participant becomes active; the authority Profile is never selected.
+- A failure before registry publication leaves no partial pair. If replacement
+  becomes visible but final durability confirmation fails, both stores remain
+  so the registry cannot point at missing data.
+- Scenario inputs are staged privately, validated, copied without operational
+  history, and removed after publication.
+- Neither scenario depends on a registered source Profile or installs a shared
+  semantic prewarm.
 
-## Staged limitation
+## Limitation
 
-Composition and publication currently call narrow private helpers in
-`operations.profile.model`. Promoting those reusable registry, inspection,
-and Study-baseline primitives into smaller Profile-owned modules is a later
-step. Performing that larger migration simultaneously would broaden a
-behavior-preserving ownership change into a storage and compatibility
-redesign. Legacy Study group administration also remains Profile-owned because
-it is exposed by `mem profile`, not by `mem init-study`.
+Composition still calls narrow Profile-owned helpers for the established
+Legacy package and Grant schemas. Moving those reusable primitives into
+smaller Profile modules is separate from removing the public baseline
+lifecycle and was intentionally not combined with this change.
