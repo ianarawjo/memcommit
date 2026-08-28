@@ -3,7 +3,9 @@
 ## Status
 
 The flat `memcommit/persistence/store.py` implementation was mechanically divided into
-three coarse slices under `memcommit.persistence.store`.
+three coarse slices under `memcommit.persistence.store`. The live Context/Memory and
+operation-state slices have since been divided into focused packages, while shared
+Store paths, atomic I/O, locking, and protection are exposed under `infrastructure`.
 `memcommit.persistence.store.MemoryStore` remains a temporary compatibility
 assembly while callers still depend on the original combined method surface.
 It is not the target architecture and must be deleted after callers move to
@@ -20,18 +22,100 @@ with semantic redesign across hundreds of importers and tests.
 The first extraction therefore preserves method bodies and established call
 ordering while making those three axes physically visible:
 
-- `persistence/store/operation_state.py` owns the former lines 1-3,596: shared path,
-  atomic-write, protection, and lock mechanics plus Current and operation
-  session persistence;
-- `persistence/store/context_memory.py` owns the former lines 3,597-7,026: catalog, load,
-  rename, save, create, query-source, and deletion behavior for the current
-  Context/Memory graph; and
-- `persistence/store/record_restore_checkpoint.py` owns the former lines 7,027-10,118:
-  checkpoint recording, command archives, operation restoration, and Revert.
+- `persistence/store/infrastructure/` owns shared paths, atomic-write primitives,
+  protection, and lock mechanics, while `persistence/store/operation_state/` owns
+  Current, Update, Review, Ground, Meld, and Atomize working-state persistence;
+- `persistence/store/context_memory/` owns the former lines 3,597-7,026: discovery,
+  loading, rename, saving, creation, lifecycle, and query-source behavior for the
+  current Context/Memory graph; and
+- `persistence/store/checkpoint/` owns checkpoint recording, reading, and Revert,
+  while `persistence/store/command_restoration/` owns command archives, Undo/Redo
+  orchestration, and operation-specific restoration handlers. The former
+  `record_restore_checkpoint.py` remains only as a compatibility composition.
 
-The extracted files contain repeated imports and remain larger than the final
-desired components. Those are deliberate transitional costs, not evidence
-that the three slices are final ownership boundaries.
+The extracted files contain repeated imports and some remain larger than the final
+desired components. Those are deliberate transitional costs, not evidence that the
+three initial slices or the seven Context/Memory modules are final service boundaries.
+
+## Context/Memory package decomposition
+
+The second-stage split follows independently named persistence actions rather than an
+arbitrary line limit:
+
+- `discovery.py` scans the Context catalog, resolves record paths, and validates names
+  and storage availability;
+- `loading.py` owns direct, referenced, current, graph, and locked snapshot reads;
+- `rename.py` plans and commits Context graph renames together with every persisted
+  reference that must move atomically;
+- `saving.py` owns ordinary, batch, Meld-target, and source-bound saves;
+- `creation.py` owns create, branch, and create-missing transactions;
+- `lifecycle.py` records lifecycle events and performs guarded deletion; and
+- `query_source.py` stores and loads the separate Query Source record type.
+
+These modules remain mixins because their existing transactions still collaborate
+through one Store instance. `context_memory/__init__.py` composes them as
+`ContextMemoryStoreMixin`, so existing imports and method resolution remain stable.
+It also forwards legacy test overrides of atomic-write helpers to the defining modules;
+that forwarding is a compatibility boundary, not a new persistence abstraction.
+
+This change intentionally does not redesign transaction ordering, factor shared helper
+calls into services, or alter record formats. Its purpose is to expose cohesive change
+axes first, so a later extraction can introduce narrower actors without again moving a
+3,500-line source file at the same time.
+
+## Operation-state and infrastructure decomposition
+
+The former `operation_state.py` combined three dependency levels. Its second-stage
+split assigns them as follows:
+
+- `infrastructure/paths.py`, `atomic_io.py`, `protection.py`, and `locking.py` own the
+  Store-wide persistence mechanics used by more than one record or session family;
+- `context_memory/models.py` and `records.py` own Context transaction values, record
+  validation, pointer rewriting, and canonical digests, while `query_source.py` now
+  owns its own value objects and parsers; and
+- `operation_state/current.py`, `update.py`, `review.py`, `ground.py`, `meld.py`, and
+  `atomize.py` own only the corresponding persisted working state.
+
+`operation_state/__init__.py` composes those method owners as the existing
+`OperationStateStoreMixin` and re-exports the established Store symbols. This preserves
+the temporary `MemoryStore` method-resolution order and the root Store module's legacy
+failure-injection overrides. The extraction preserves every moved method and helper
+body; it does not change record schemas, lock acquisition order, or transaction meaning.
+
+The important dependency correction is that Context/Memory and checkpoint persistence
+no longer import their record models, validators, and digests from a module named after
+operation state. Context-aware protection and locking still consume those pure Context
+contracts, and all components still collaborate through one combined Store instance;
+that remaining coupling is explicit and intentionally deferred.
+
+## Checkpoint and command-restoration decomposition
+
+The former `record_restore_checkpoint.py` name combined a noun with two actions that
+were not three peer responsibilities. Recording and listing are persistence operations
+over the same checkpoint repository, while Revert applies one selected checkpoint or
+checkpoint unit. Command restoration is a different workflow: it reconstructs a global
+Undo/Redo unit and restores every affected Context and companion operation session.
+
+The physical boundary now follows that distinction:
+
+- `checkpoint/repository.py` records individual and batch checkpoints, lists them, and
+  removes a provisional checkpoint during rollback;
+- `checkpoint/revert.py` restores a selected Context snapshot or complete checkpoint
+  unit while preserving Context identity and freshness checks;
+- `command_restoration/archive.py` retains exact records and histories for commands
+  whose Undo removes newly created Contexts, allowing Redo to restore the original
+  identities rather than rerunning a changed Source;
+- `command_restoration/engine.py` selects one ordered command unit, coordinates locks,
+  commits Context and companion-session changes, and rolls the complete attempt back
+  after an exception; and
+- `command_restoration/handlers/` owns Branch, Merge, Atomize, Sever, and companion
+  session restoration rules without moving their operation-specific receipts into the
+  generic engine.
+
+`record_restore_checkpoint.py` composes `CheckpointStoreMixin` and
+`CommandRestorationStoreMixin` and forwards legacy failure-injection overrides. It owns
+no checkpoint or restoration behavior. Every moved method body, lock boundary, CAS
+check, archive format, checkpoint record, and rollback order remains unchanged.
 
 ## Compatibility boundary
 
@@ -62,12 +146,11 @@ removed together with `MemoryStore`; it is not a general module-proxy pattern.
 
 ## Follow-up decomposition
 
-After this mechanical split is stable, extract focused actors from one slice
-at a time. Likely owners include path and atomic-write components, lock and
-write-protection coordination, operation-specific session stores,
-Context/Memory readers and writers, lifecycle actors, checkpoint recorders,
-and operation-specific restorers. Migrate each caller to only the actor or port
-it needs.
+After these mechanical splits are stable, replace mixin-to-mixin `self` calls with
+narrow persistence actors or ports one transaction family at a time. Context-aware
+locking and protection should receive an explicit record contract rather than reaching
+through the combined Store, and operation adapters should depend on their own session
+store rather than the full `MemoryStore` surface.
 
 Completion requires all callers to stop importing or constructing
 `MemoryStore`, removal of the compatibility forwarding adapter and inheritance
@@ -90,7 +173,7 @@ The package may remain as the persistence namespace; the façade must not.
 ## Intentional limitation
 
 This stage improves physical navigability, not architectural independence.
-The slices still call one another through the temporary combined instance, and
-their approximate sizes remain 3,000-3,600 lines. Subsequent work must remove
-those cross-slice assumptions instead of treating the current inheritance as
+The focused modules still call one another through the temporary combined instance,
+and `infrastructure` still contains Context-aware coordination. Subsequent work must
+remove those cross-slice assumptions instead of treating the current inheritance as
 the completed design.
