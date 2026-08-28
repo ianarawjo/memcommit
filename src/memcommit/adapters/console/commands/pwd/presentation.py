@@ -1,4 +1,4 @@
-"""Plain command-line presenter for current Context orientation."""
+"""Plain console presentation for current Context orientation."""
 
 from __future__ import annotations
 

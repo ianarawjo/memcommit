@@ -34,8 +34,14 @@ and operation-specific permission checks while keeping `pwd` deterministic.
   protocol, typed result, and missing/invalid-state failures.
 - `operations/pwd/runtime.py` adapts one explicit `MemoryStore` without
   creating the Store or loading Context contents.
-- `interfaces/cli/pwd.py` renders the typed result as one line.
+- `commands/pwd/presentation.py` renders the typed result as one line.
 - `commands/pwd/command.py` is the Typer error/exit-code and composition boundary.
+
+The plain presenter is co-located with the command because it is specific to
+the `mem pwd` console surface rather than a cross-interface adapter. The former
+`interfaces/cli/pwd.py` path is removed without a compatibility facade. This is
+an ownership-only relocation: the one-line text contract and the command's
+error boundary remain unchanged.
 
 The former top-level application and runtime paths remain true module aliases,
 not copied re-export namespaces. This keeps existing imports, object identity,
