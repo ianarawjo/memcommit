@@ -7,7 +7,7 @@ from typing import Annotated, Any, Optional
 import typer
 
 import memcommit.application.ops as ops
-from memcommit.adapters.interfaces.cli.command_group import CanonicalCommandGroup
+from memcommit.adapters.console.shared.command_group import CanonicalCommandGroup
 from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
 from memcommit.core.context_targeting.loading import (
     resolve_local_context_memory_target,

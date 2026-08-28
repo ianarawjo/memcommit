@@ -5,8 +5,6 @@ from __future__ import annotations
 import ast
 import importlib
 from pathlib import Path
-import subprocess
-import sys
 
 import click
 import pytest
@@ -14,75 +12,66 @@ from typer.core import TyperGroup
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-LEGACY_MODULE = "memcommit.adapters.console.shared.command_group"
-OWNER_MODULE = "memcommit.adapters.interfaces.cli.command_group"
+OWNER_MODULE = "memcommit.adapters.console.shared.command_group"
+OWNER_PATH = (
+    REPOSITORY_ROOT
+    / "src"
+    / "memcommit"
+    / "adapters"
+    / "console"
+    / "shared"
+    / "command_group.py"
+)
+REMOVED_INTERFACE_PATH = (
+    REPOSITORY_ROOT
+    / "src"
+    / "memcommit"
+    / "adapters"
+    / "interfaces"
+    / "cli"
+    / "command_group.py"
+)
 CANONICAL_CONSUMERS = (
-    "commands/write_protection/command.py",
     "commands/config/command.py",
-    "commands/profile/group.py",
     "commands/dev/command.py",
+    "commands/impact/command.py",
     "commands/profile/command.py",
-    "shared/root_group.py",
+    "commands/profile/group.py",
+    "commands/provider/command.py",
     "commands/semantic_eval/command.py",
+    "commands/write_protection/command.py",
+    "shared/root_group.py",
 )
 
 
-@pytest.mark.parametrize(
-    "first_name,second_name",
-    ((LEGACY_MODULE, OWNER_MODULE), (OWNER_MODULE, LEGACY_MODULE)),
-    ids=("old-first", "new-first"),
-)
-def test_command_group_module_identity_is_independent_of_import_order(
-    first_name: str,
-    second_name: str,
-) -> None:
-    source = f"""
-import importlib
-import sys
+def test_console_shared_command_group_is_the_only_implementation_owner() -> None:
+    tree = ast.parse(OWNER_PATH.read_text(encoding="utf-8"), filename=str(OWNER_PATH))
 
-first = importlib.import_module({first_name!r})
-second = importlib.import_module({second_name!r})
-legacy = importlib.import_module({LEGACY_MODULE!r})
-canonical = importlib.import_module({OWNER_MODULE!r})
-
-assert first is second
-assert legacy is canonical
-assert sys.modules[{LEGACY_MODULE!r}] is canonical
-assert sys.modules[{OWNER_MODULE!r}] is canonical
-assert legacy.CanonicalCommandGroup is canonical.CanonicalCommandGroup
-assert legacy.command_name_alias_targets is canonical.command_name_alias_targets
-assert legacy.resolve_canonical_command_name is canonical.resolve_canonical_command_name
-assert legacy.command_name_alias_collisions is canonical.command_name_alias_collisions
-assert legacy.EXPLICIT_COMMAND_NAME_ALIASES is canonical.EXPLICIT_COMMAND_NAME_ALIASES
-"""
-
-    subprocess.run(
-        [sys.executable, "-c", source],
-        cwd=REPOSITORY_ROOT,
-        check=True,
-    )
+    assert any(isinstance(node, ast.ClassDef) for node in tree.body)
+    assert any(isinstance(node, ast.FunctionDef) for node in tree.body)
+    assert not REMOVED_INTERFACE_PATH.exists()
+    with pytest.raises(ModuleNotFoundError):
+        importlib.import_module("memcommit.adapters.interfaces.cli.command_group")
 
 
 def test_command_group_class_and_alias_map_keep_one_identity() -> None:
-    legacy = importlib.import_module(LEGACY_MODULE)
     canonical = importlib.import_module(OWNER_MODULE)
+    imported_again = importlib.import_module(OWNER_MODULE)
 
-    assert legacy is canonical
-    assert legacy.CanonicalCommandGroup is canonical.CanonicalCommandGroup
+    assert canonical is imported_again
     assert issubclass(canonical.CanonicalCommandGroup, TyperGroup)
     assert (
-        legacy.EXPLICIT_COMMAND_NAME_ALIASES is canonical.EXPLICIT_COMMAND_NAME_ALIASES
+        canonical.EXPLICIT_COMMAND_NAME_ALIASES
+        is imported_again.EXPLICIT_COMMAND_NAME_ALIASES
     )
 
 
-def test_legacy_monkeypatch_changes_canonical_routing_globals(monkeypatch) -> None:
-    legacy = importlib.import_module(LEGACY_MODULE)
+def test_canonical_monkeypatch_changes_routing_globals(monkeypatch) -> None:
     canonical = importlib.import_module(OWNER_MODULE)
     patched_aliases = {"old-spelling": "canonical-name"}
 
-    monkeypatch.setattr(legacy, "EXPLICIT_COMMAND_NAME_ALIASES", patched_aliases)
+    monkeypatch.setattr(canonical, "EXPLICIT_COMMAND_NAME_ALIASES", patched_aliases)
 
-    assert canonical.EXPLICIT_COMMAND_NAME_ALIASES is patched_aliases
     assert canonical.command_name_alias_targets(("canonical-name",)) == {
         "old-spelling": ("canonical-name",),
         "oldspelling": ("canonical-name",),
@@ -107,55 +96,13 @@ def test_command_group_error_contract_keeps_exit_and_suggestion_order() -> None:
     )
 
 
-def test_legacy_command_group_facade_defines_no_behavior() -> None:
-    path = (
-        REPOSITORY_ROOT
-        / "src"
-        / "memcommit"
-        / "adapters"
-        / "console"
-        / "shared"
-        / "command_group.py"
-    )
-    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
-
-    assert not any(
-        isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
-        for node in ast.walk(tree)
-    )
-    assert any(
-        isinstance(node, ast.ImportFrom)
-        and node.module == "memcommit.adapters.interfaces.cli"
-        and any(alias.name == "command_group" for alias in node.names)
-        for node in ast.walk(tree)
-    )
-    assert any(
-        isinstance(node, ast.Assign)
-        and any(
-            isinstance(target, ast.Subscript)
-            and isinstance(target.value, ast.Attribute)
-            and isinstance(target.value.value, ast.Name)
-            and target.value.value.id == "sys"
-            and target.value.attr == "modules"
-            for target in node.targets
-        )
-        for node in tree.body
-    )
-
-
-def test_clean_command_groups_import_the_interface_owner() -> None:
-    console = (
-        REPOSITORY_ROOT
-        / "src"
-        / "memcommit"
-        / "adapters"
-        / "console"
-    )
+def test_all_command_groups_import_the_console_shared_owner() -> None:
+    console = REPOSITORY_ROOT / "src" / "memcommit" / "adapters" / "console"
 
     for filename in CANONICAL_CONSUMERS:
         source = (console / filename).read_text(encoding="utf-8")
         assert (
-            "from memcommit.adapters.interfaces.cli.command_group import "
+            "from memcommit.adapters.console.shared.command_group import "
             "CanonicalCommandGroup" in source
         )
-        assert "from memcommit.adapters.console.shared.command_group import" not in source
+        assert "memcommit.adapters.interfaces.cli.command_group" not in source

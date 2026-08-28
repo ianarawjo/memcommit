@@ -9,7 +9,7 @@ from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
 from memcommit.persistence.command_ledger.attempts import CommandAttemptLedger
-from memcommit.adapters.interfaces.cli.command_group import (
+from memcommit.adapters.console.shared.command_group import (
     CanonicalCommandGroup,
     command_name_alias_collisions,
     resolve_canonical_command_name,

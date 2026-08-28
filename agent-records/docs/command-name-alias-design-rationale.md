@@ -43,13 +43,14 @@ resolution, so command Help renders canonical usage and the root attempt
 ledger records the canonical operation instead of the entered alias.
 
 The shared Click routing implementation is owned by
-`memcommit.adapters.interfaces.cli.command_group`. The historical
-`memcommit.adapters.console.shared.command_group` import is a true module alias, rather than
-a wrapper or copied export list. This preserves class and alias-map identity,
-including legacy-path monkeypatches, while command adapters may import the
-interface owner directly. The ownership move deliberately did not change
-accepted spellings, collision handling, suggestion order, stderr text, exit
-codes, or Typer/Click routing behavior.
+`memcommit.adapters.console.shared.command_group`, beside the root command
+group and the other multi-command console mechanics. Every root or nested
+command group imports that owner directly. The former
+`memcommit.adapters.interfaces.cli.command_group` path is removed without a
+facade because it was an internal adapter path and preserving it would leave
+the ownership direction ambiguous. This relocation deliberately does not
+change accepted spellings, collision handling, suggestion order, stderr text,
+exit codes, or Typer/Click routing behavior.
 
 The Profile group resolves a known command alias before applying its existing
 `mem profile NAME` fallback. This keeps `mem profile archivestudy` attached to
