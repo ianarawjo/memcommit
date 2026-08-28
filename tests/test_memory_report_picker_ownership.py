@@ -13,7 +13,7 @@ import pytest
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 LEGACY_MODULE = "memcommit.adapters.console.shared.memory_picker"
-OWNER_MODULE = "memcommit.adapters.interfaces.tui.components.memory_report_picker"
+OWNER_MODULE = "memcommit.adapters.console.tui.components.memory_report_picker"
 
 
 @pytest.mark.parametrize(
@@ -64,7 +64,7 @@ def test_memory_picker_legacy_facade_defines_no_behavior() -> None:
     )
     assert any(
         isinstance(node, ast.ImportFrom)
-        and node.module == "memcommit.adapters.interfaces.tui.components"
+        and node.module == "memcommit.adapters.console.tui.components"
         and any(alias.name == "memory_report_picker" for alias in node.names)
         for node in ast.walk(tree)
     )

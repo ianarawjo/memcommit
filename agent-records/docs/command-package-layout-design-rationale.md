@@ -36,9 +36,10 @@ module belongs there only when its console-adapter mechanics genuinely have
 multiple command consumers. Keeping it outside `commands/` makes that tree's
 physical invariant exact: every first-level child is an actual command entry
 package. Application policy remains under `operations/`; operation-owned
-console presentation and interactive setup live beside their command, while
-still-staged reusable terminal components retain their narrower owners until
-reviewed. Other neutral concepts keep their existing owners.
+console presentation and interactive setup live beside their command. Shared
+terminal foundations live in the sibling `adapters/console/tui/` component
+tree, while Viewer and Workbench compositions retain their staged owners until
+reviewed separately. Other neutral concepts keep their existing owners.
 
 The exact baseline classification is authored mechanically by
 `scripts/render_command_package_layout.py` and rendered in

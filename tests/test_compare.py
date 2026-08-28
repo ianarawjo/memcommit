@@ -39,7 +39,7 @@ from memcommit.adapters.console.commands.compare.sessions import (
     comparison_session_entries,
 )
 from memcommit.core.context import Context, Memory, MemoryRef
-from memcommit.adapters.interfaces.tui.components.operation_launcher.session import (
+from memcommit.adapters.console.tui.components.operation_launcher.session import (
     SessionNewReceipt,
     SessionOpenReceipt,
 )

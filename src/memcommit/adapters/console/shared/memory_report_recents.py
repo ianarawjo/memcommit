@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal
 
-from memcommit.adapters.interfaces.tui.components.operation_launcher.location import (
+from memcommit.adapters.console.tui.components.operation_launcher.location import (
     operation_launcher_orientation,
 )
 from memcommit.adapters.interfaces.tui.workbenches.read_report import (

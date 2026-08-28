@@ -85,7 +85,7 @@ def _view():
 
 
 def _run_child() -> None:
-    from memcommit.adapters.interfaces.tui.components.save_location import SaveLocationView
+    from memcommit.adapters.console.tui.components.save_location import SaveLocationView
     from memcommit.adapters.interfaces.tui.workbenches.resolution.compact_shell import (
         run_compact_resolution_decisions,
     )

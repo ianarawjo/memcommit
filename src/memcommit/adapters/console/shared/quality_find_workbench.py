@@ -19,7 +19,7 @@ from prompt_toolkit.styles import merge_styles
 
 from memcommit.adapters.console.shared.command_progress import CommandProgress
 from memcommit.persistence.command_ledger.attempts import annotate_read_report_attempt
-from memcommit.adapters.interfaces.tui.components.operation_launcher.location import (
+from memcommit.adapters.console.tui.components.operation_launcher.location import (
     operation_launcher_orientation,
 )
 from memcommit.application.authority.access import (
@@ -29,22 +29,22 @@ from memcommit.application.authority.access import (
 from memcommit.adapters.console.shared.readable_context_catalog import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.adapters.interfaces.tui.components.focus import (
+from memcommit.adapters.console.tui.components.focus import (
     FocusSurface,
     SurfaceFocusController,
     SurfaceMoveResult,
     bind_surface_navigation,
 )
-from memcommit.adapters.interfaces.tui.core.theme import (
+from memcommit.adapters.console.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
 )
-from memcommit.adapters.interfaces.tui.components.frame import (
+from memcommit.adapters.console.tui.components.frame import (
     TuiRegion,
     build_focused_frame,
     build_tui_frame,
 )
-from memcommit.adapters.interfaces.tui.core.keybindings import (
+from memcommit.adapters.console.tui.core.keybindings import (
     bind_case_insensitive_key,
     dispatch_tui_back,
 )

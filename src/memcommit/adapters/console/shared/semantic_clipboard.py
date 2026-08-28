@@ -1,6 +1,6 @@
 """Compatibility exports for the interface-owned plain-text clipboard."""
 
-from memcommit.adapters.interfaces.tui.components.plain_text_clipboard import (
+from memcommit.adapters.console.tui.components.plain_text_clipboard import (
     ClipboardWriter,
     PlainTextClipboardReceipt,
     clipboard_failure_receipt,

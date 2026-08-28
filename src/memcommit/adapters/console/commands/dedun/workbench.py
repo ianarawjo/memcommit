@@ -15,10 +15,10 @@ from memcommit.application.operations.dedun.application import (
     dedun_resolution_case,
 )
 from memcommit.adapters.console.text import safe_terminal_text
-from memcommit.adapters.interfaces.tui.components.exact_command_review import (
+from memcommit.adapters.console.tui.components.exact_command_review import (
     ExactCommandReview,
 )
-from memcommit.adapters.interfaces.tui.components.plain_text_clipboard import ClipboardWriter
+from memcommit.adapters.console.tui.components.plain_text_clipboard import ClipboardWriter
 from memcommit.adapters.interfaces.tui.viewers.semantic import (
     SemanticViewerBlock,
     SemanticViewerDocument,

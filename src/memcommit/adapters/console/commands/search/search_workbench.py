@@ -39,16 +39,16 @@ from memcommit.adapters.console.shared.horizontal_choice import (
     HorizontalChoiceState,
     render_horizontal_choice,
 )
-from memcommit.adapters.interfaces.tui.core.theme import (
+from memcommit.adapters.console.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
 )
-from memcommit.adapters.interfaces.tui.components.frame import (
+from memcommit.adapters.console.tui.components.frame import (
     TuiRegion,
     bind_focused_frame_style,
     build_tui_frame,
 )
-from memcommit.adapters.interfaces.tui.core.keybindings import (
+from memcommit.adapters.console.tui.core.keybindings import (
     bind_case_insensitive_key,
     dispatch_tui_back,
 )
@@ -71,7 +71,7 @@ from memcommit.adapters.console.shared.semantic_clipboard import (
     copy_plain_text,
 )
 from memcommit.adapters.console.shared.session_help import bind_session_help
-from memcommit.adapters.interfaces.tui.components.focus import (
+from memcommit.adapters.console.tui.components.focus import (
     FocusSurface,
     SurfaceActionResult,
     SurfaceFocusController,

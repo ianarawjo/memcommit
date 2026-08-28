@@ -18,7 +18,7 @@ from memcommit.adapters.console.commands.impact.sessions import (
     render_impact_session_snapshot,
     update_impact_presentation,
 )
-from memcommit.adapters.interfaces.tui.components.operation_launcher.session import (
+from memcommit.adapters.console.tui.components.operation_launcher.session import (
     SessionOpenReceipt,
 )
 from memcommit.persistence.store import MemoryStore

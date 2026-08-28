@@ -25,7 +25,7 @@ from memcommit.adapters.console.shared.history_picker import (
     parse_revert_command_argv,
     revert_exact_command_review,
 )
-from memcommit.adapters.interfaces.tui.components.exact_command_review import (
+from memcommit.adapters.console.tui.components.exact_command_review import (
     format_exact_command,
 )
 from memcommit.application.reviewing.session_navigation import SessionWorkbenchNavigation

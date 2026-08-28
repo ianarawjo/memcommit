@@ -8,25 +8,25 @@ from dataclasses import dataclass
 from prompt_toolkit.utils import get_cwidth
 
 from memcommit.application.exact_command_review import ExactCommandReview
-from memcommit.adapters.interfaces.tui.components.exact_command_review.rendering import (
+from memcommit.adapters.console.tui.components.exact_command_review.rendering import (
     format_exact_command,
 )
-from memcommit.adapters.interfaces.tui.components.report_card import boxed_lines
-from memcommit.adapters.interfaces.tui.components.tree_row import navigable_tree_row_prefix
-from memcommit.adapters.interfaces.tui.core.theme import (
+from memcommit.adapters.console.tui.components.report_card import boxed_lines
+from memcommit.adapters.console.tui.components.tree_row import navigable_tree_row_prefix
+from memcommit.adapters.console.tui.core.theme import (
     SEMANTIC_VIEWER_STYLE,
 )
 from memcommit.adapters.console.content_row import render_numbered_content_row
 from memcommit.adapters.console.text import (
     safe_terminal_text,
 )
-from memcommit.adapters.interfaces.tui.core.text_layout import (
+from memcommit.adapters.console.tui.core.text_layout import (
     elide_terminal_text,
     single_line_terminal_text,
     terminal_cell_width,
     wrap_terminal_text,
 )
-from memcommit.adapters.interfaces.tui.components.save_location import (
+from memcommit.adapters.console.tui.components.save_location import (
     SaveLocationView,
 )
 from memcommit.adapters.interfaces.tui.viewers.semantic.detail import (

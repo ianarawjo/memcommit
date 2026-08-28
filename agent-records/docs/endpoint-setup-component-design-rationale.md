@@ -7,7 +7,7 @@ endpoint setup shell, but that implementation still lives under `commands/`.
 New operation interfaces must not import command adapters, and moving the
 existing shell while its Memory-focus behavior is being revised would mix two
 independent changes. Merge therefore becomes the first consumer of a rebuilt,
-operation-neutral endpoint setup component under `interfaces/tui/components/`.
+operation-neutral endpoint setup component under `console/tui/components/`.
 
 ## Contract
 

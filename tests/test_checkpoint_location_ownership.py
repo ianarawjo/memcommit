@@ -10,7 +10,7 @@ from pathlib import Path
 import pytest
 
 import memcommit.adapters.console.shared.history_location_picker as legacy_location
-from memcommit.adapters.interfaces.tui.components import checkpoint_location
+from memcommit.adapters.console.tui.components import checkpoint_location
 
 
 @pytest.mark.parametrize(
@@ -18,10 +18,10 @@ from memcommit.adapters.interfaces.tui.components import checkpoint_location
     (
         (
             "memcommit.adapters.console.shared.history_location_picker",
-            "memcommit.adapters.interfaces.tui.components.checkpoint_location",
+            "memcommit.adapters.console.tui.components.checkpoint_location",
         ),
         (
-            "memcommit.adapters.interfaces.tui.components.checkpoint_location",
+            "memcommit.adapters.console.tui.components.checkpoint_location",
             "memcommit.adapters.console.shared.history_location_picker",
         ),
     ),

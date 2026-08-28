@@ -9,8 +9,8 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from prompt_toolkit.utils import get_cwidth
 
-import memcommit.adapters.interfaces.tui.components.operation_launcher.screen as launcher_screen
-from memcommit.adapters.interfaces.tui.components.operation_launcher.session import (
+import memcommit.adapters.console.tui.components.operation_launcher.screen as launcher_screen
+from memcommit.adapters.console.tui.components.operation_launcher.session import (
     SessionNewReceipt,
     SessionOpenReceipt,
     SessionPickerEntry,

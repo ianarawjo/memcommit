@@ -12,18 +12,18 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
 from memcommit.adapters.console.terminal import is_interactive_terminal
-from memcommit.adapters.interfaces.tui.components.frame import (
+from memcommit.adapters.console.tui.components.frame import (
     TuiRegion,
     bind_focused_frame_style,
     build_tui_frame,
 )
-from memcommit.adapters.interfaces.tui.components.scrollable_pane import (
+from memcommit.adapters.console.tui.components.scrollable_pane import (
     build_scrollable_formatted_text_pane,
     move_wrapped_read_cursor,
     scroll_wrapped_page,
 )
-from memcommit.adapters.interfaces.tui.core.keybindings import bind_case_insensitive_key
-from memcommit.adapters.interfaces.tui.core.theme import (
+from memcommit.adapters.console.tui.core.keybindings import bind_case_insensitive_key
+from memcommit.adapters.console.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
 )

@@ -16,7 +16,7 @@ from memcommit.adapters.console.text import (
     safe_terminal_text,
 )
 from memcommit.adapters.console.theme import SemanticColorRole, semantic_color_rgb
-from memcommit.adapters.interfaces.tui.core.theme import semantic_role_style
+from memcommit.adapters.console.tui.core.theme import semantic_role_style
 from memcommit.application.resolution.workbench import (
     ResolutionNavigation,
     ResolutionOverviewSection,

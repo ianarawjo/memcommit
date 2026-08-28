@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.adapters.interfaces.tui.components.plain_text_clipboard import (
+from memcommit.adapters.console.tui.components.plain_text_clipboard import (
     plain_text_from_fragments,
 )
 from memcommit.adapters.interfaces.tui.viewers.semantic.model import SemanticViewerDocument

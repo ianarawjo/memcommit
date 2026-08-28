@@ -9,7 +9,7 @@ from prompt_toolkit.application.current import get_app
 from prompt_toolkit.layout import Dimension, FormattedTextControl, Window
 from prompt_toolkit.layout.margins import ScrollbarMargin
 
-from memcommit.adapters.interfaces.tui.components.frame import (
+from memcommit.adapters.console.tui.components.frame import (
     build_focused_frame,
 )
 from memcommit.adapters.console.text import (

@@ -21,22 +21,22 @@ from memcommit.core.context_targeting.tui.selector import (
 from memcommit.application.operations.ground.workspace_model import GroundWorkspace
 from memcommit.adapters.console.terminal import require_interactive_terminal
 from memcommit.adapters.console.text import safe_terminal_text
-from memcommit.adapters.interfaces.tui.components.focus import (
+from memcommit.adapters.console.tui.components.focus import (
     FocusSurface,
     SurfaceActionResult,
     SurfaceFocusController,
     SurfaceMoveResult,
     bind_surface_navigation,
 )
-from memcommit.adapters.interfaces.tui.components.frame import (
+from memcommit.adapters.console.tui.components.frame import (
     TuiRegion,
     build_tui_frame,
 )
-from memcommit.adapters.interfaces.tui.components.scrollable_pane import (
+from memcommit.adapters.console.tui.components.scrollable_pane import (
     build_scrollable_formatted_text_pane,
 )
-from memcommit.adapters.interfaces.tui.core.keybindings import bind_case_insensitive_key
-from memcommit.adapters.interfaces.tui.core.theme import MEMCOMMIT_TUI_STYLE
+from memcommit.adapters.console.tui.core.keybindings import bind_case_insensitive_key
+from memcommit.adapters.console.tui.core.theme import MEMCOMMIT_TUI_STYLE
 
 
 @dataclass(frozen=True)

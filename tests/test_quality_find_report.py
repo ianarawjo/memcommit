@@ -25,7 +25,7 @@ from memcommit.adapters.interfaces.tui.workbenches.findings.document import (
     quality_find_report_header_text,
 )
 from memcommit.adapters.console.theme import SemanticColorRole
-from memcommit.adapters.interfaces.tui.core.theme import semantic_role_style
+from memcommit.adapters.console.tui.core.theme import semantic_role_style
 from memcommit.application.reviewing.quality.workbench import (
     create_quality_find_workbench,
     quality_find_report_view,

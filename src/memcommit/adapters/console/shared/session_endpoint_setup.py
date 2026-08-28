@@ -60,21 +60,21 @@ from memcommit.adapters.console.shared.tui_primitives import (
     ExactNameFieldView,
     ExactNameInputControl,
 )
-from memcommit.adapters.interfaces.tui.core.theme import (
+from memcommit.adapters.console.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     focused_control_style,
 )
-from memcommit.adapters.interfaces.tui.core.keybindings import (
+from memcommit.adapters.console.tui.core.keybindings import (
     bind_case_insensitive_key,
     bind_tui_interrupt,
 )
-from memcommit.adapters.interfaces.tui.components.frame import (
+from memcommit.adapters.console.tui.components.frame import (
     bind_focused_frame_style,
 )
 from memcommit.adapters.console.text import (
     display_escape_text,
 )
-from memcommit.adapters.interfaces.tui.components.focus import (
+from memcommit.adapters.console.tui.components.focus import (
     FocusSurface,
     SurfaceFocusController,
     focus_in_order,

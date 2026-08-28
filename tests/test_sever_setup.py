@@ -19,7 +19,7 @@ from memcommit.adapters.console.commands.sever.setup import (
     choose_sever_setup,
     sever_endpoint_setup_spec,
 )
-from memcommit.adapters.interfaces.tui.components.endpoint_setup import (
+from memcommit.adapters.console.tui.components.endpoint_setup import (
     EndpointSetupDraft,
     EndpointSetupValue,
 )

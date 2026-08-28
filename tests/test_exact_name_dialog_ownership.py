@@ -7,15 +7,18 @@ import hashlib
 from pathlib import Path
 
 
-
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 LEGACY_MODULE = "memcommit.adapters.console.shared.exact_name_dialog"
-CANONICAL_MODULE = "memcommit.adapters.interfaces.tui.components.exact_name_dialog"
-LEGACY_SOURCE_SHA256 = "b3875ebf6bdc72cf5f6b9070cb853eb51ce080fc1b5f068af167747d42bf10e1"
+CANONICAL_MODULE = "memcommit.adapters.console.tui.components.exact_name_dialog"
+LEGACY_SOURCE_SHA256 = (
+    "b3875ebf6bdc72cf5f6b9070cb853eb51ce080fc1b5f068af167747d42bf10e1"
+)
 
 
 def test_legacy_exact_name_dialog_is_an_import_only_module_alias() -> None:
-    source_path = REPOSITORY_ROOT / "src/memcommit/adapters/console/shared/exact_name_dialog.py"
+    source_path = (
+        REPOSITORY_ROOT / "src/memcommit/adapters/console/shared/exact_name_dialog.py"
+    )
     tree = ast.parse(source_path.read_text(encoding="utf-8"), filename=str(source_path))
 
     assert not any(
@@ -24,7 +27,7 @@ def test_legacy_exact_name_dialog_is_an_import_only_module_alias() -> None:
     )
     assert any(
         isinstance(node, ast.ImportFrom)
-        and node.module == "memcommit.adapters.interfaces.tui.components"
+        and node.module == "memcommit.adapters.console.tui.components"
         and any(alias.name == "exact_name_dialog" for alias in node.names)
         for node in ast.walk(tree)
     )
@@ -45,10 +48,10 @@ def test_legacy_exact_name_dialog_is_an_import_only_module_alias() -> None:
 def test_canonical_source_matches_pre_move_source_after_import_normalization() -> None:
     source_path = (
         REPOSITORY_ROOT
-        / "src/memcommit/adapters/interfaces/tui/components/exact_name_dialog.py"
+        / "src/memcommit/adapters/console/tui/components/exact_name_dialog.py"
     )
     source = source_path.read_text(encoding="utf-8")
-    canonical_control_import = """from memcommit.adapters.interfaces.tui.components.exact_name import (
+    canonical_control_import = """from memcommit.adapters.console.tui.components.exact_name import (
     ExactNameFieldControl,
     ExactNameFieldView,
 )"""
@@ -65,8 +68,7 @@ def test_canonical_source_matches_pre_move_source_after_import_normalization() -
         "display_escape_text, safe_terminal_text"
     )
     canonical_theme_import = (
-        "from memcommit.adapters.interfaces.tui.core.theme import "
-        "MEMCOMMIT_TUI_STYLE"
+        "from memcommit.adapters.console.tui.core.theme import MEMCOMMIT_TUI_STYLE"
     )
     legacy_theme_import = (
         "from memcommit.interfaces.tui.core.theme import MEMCOMMIT_TUI_STYLE"
@@ -92,8 +94,11 @@ def test_canonical_source_matches_pre_move_source_after_import_normalization() -
     )
 
 
-def test_import_workbench_uses_the_interface_owned_dialog() -> None:
-    source_path = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/import_profile/workbench.py"
+def test_import_workbench_uses_the_console_tui_owned_dialog() -> None:
+    source_path = (
+        REPOSITORY_ROOT
+        / "src/memcommit/adapters/console/commands/import_profile/workbench.py"
+    )
     tree = ast.parse(source_path.read_text(encoding="utf-8"), filename=str(source_path))
 
     imports = [

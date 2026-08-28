@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 
 from prompt_toolkit.formatted_text.base import StyleAndTextTuples
 
-from memcommit.adapters.interfaces.tui.components.horizontal_choice import (
+from memcommit.adapters.console.tui.components.horizontal_choice import (
     HorizontalChoiceOption,
     HorizontalChoiceState,
     render_horizontal_choice,

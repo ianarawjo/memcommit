@@ -12,7 +12,7 @@ from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Context, Memory
 from memcommit.core.context_targeting.tui.picker import ContextMemoryRow
 from memcommit.application.operations.edit.application import EditRequest, FrozenEditPlan
-from memcommit.adapters.interfaces.tui.components.exact_command_review import (
+from memcommit.adapters.console.tui.components.exact_command_review import (
     format_exact_command,
 )
 from memcommit.adapters.console.commands.edit.workbench import (

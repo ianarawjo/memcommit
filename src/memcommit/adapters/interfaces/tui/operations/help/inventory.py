@@ -23,31 +23,31 @@ from prompt_toolkit.styles import Style, merge_styles
 from prompt_toolkit.widgets import Frame
 
 from memcommit.adapters.console.progress import CommandProgress
-from memcommit.adapters.interfaces.tui.core.theme import (
+from memcommit.adapters.console.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
 )
-from memcommit.adapters.interfaces.tui.core.keybindings import (
+from memcommit.adapters.console.tui.core.keybindings import (
     NavigationAccelerator,
     bind_case_insensitive_key,
 )
-from memcommit.adapters.interfaces.tui.core.text_layout import (
+from memcommit.adapters.console.tui.core.text_layout import (
     pad_terminal_text,
     terminal_cell_width,
     wrap_terminal_text,
 )
-from memcommit.adapters.interfaces.tui.components.frame import (
+from memcommit.adapters.console.tui.components.frame import (
     bind_focused_frame_style,
     horizontal_rule,
 )
 from memcommit.adapters.console.text import (
     display_escape_text,
 )
-from memcommit.adapters.interfaces.tui.components.focus import (
+from memcommit.adapters.console.tui.components.focus import (
     FocusSurface,
     SurfaceFocusController,
 )
-from memcommit.adapters.interfaces.tui.components.horizontal_choice import (
+from memcommit.adapters.console.tui.components.horizontal_choice import (
     HorizontalChoiceOption,
     HorizontalChoiceState,
     render_horizontal_choice,

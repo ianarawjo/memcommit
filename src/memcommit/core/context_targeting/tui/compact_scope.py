@@ -28,21 +28,21 @@ from memcommit.core.context_targeting.tui.range_selection import (
 )
 from memcommit.core.context_targeting.tui.reach import render_context_reach
 from memcommit.adapters.console.text import safe_terminal_text
-from memcommit.adapters.interfaces.tui.components.exact_name import (
+from memcommit.adapters.console.tui.components.exact_name import (
     ExactNameFieldView,
     ExactNameInputControl,
 )
-from memcommit.adapters.interfaces.tui.components.focus import (
+from memcommit.adapters.console.tui.components.focus import (
     FocusSurface,
     SurfaceActionResult,
     SurfaceMoveResult,
 )
-from memcommit.adapters.interfaces.tui.components.horizontal_choice import (
+from memcommit.adapters.console.tui.components.horizontal_choice import (
     HorizontalChoiceOption,
     HorizontalChoiceState,
     render_horizontal_choice,
 )
-from memcommit.adapters.interfaces.tui.core.theme import focused_control_style
+from memcommit.adapters.console.tui.core.theme import focused_control_style
 from memcommit.source_projection.presentation import (
     SourceDisplayValue,
     source_display_text,

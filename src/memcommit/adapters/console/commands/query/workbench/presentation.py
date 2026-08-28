@@ -9,7 +9,7 @@ from memcommit.application.operations.search.answer_references import (
     render_numbered_search_answer_reference,
 )
 from memcommit.adapters.console.text import safe_terminal_text
-from memcommit.adapters.interfaces.tui.core.theme import focused_control_style
+from memcommit.adapters.console.tui.core.theme import focused_control_style
 from memcommit.application.operations.query.ordinary_application import (
     OrdinaryQueryResponse,
 )

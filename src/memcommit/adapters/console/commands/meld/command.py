@@ -75,7 +75,7 @@ from memcommit.adapters.console.text import (
 )
 from memcommit.application.operations.meld.restart_application import MeldRestartRequest
 from memcommit.application.operations.meld.start_application import MeldStartRequest
-from memcommit.adapters.interfaces.tui.core.text_layout import (
+from memcommit.adapters.console.tui.core.text_layout import (
     elide_terminal_text,
     single_line_terminal_text,
 )
@@ -86,7 +86,7 @@ from memcommit.adapters.console.commands.meld.sessions import (
     list_meld_session_catalog,
     reload_selected_meld_session,
 )
-from memcommit.adapters.interfaces.tui.components.operation_launcher.session import (
+from memcommit.adapters.console.tui.components.operation_launcher.session import (
     SessionNewReceipt,
     SessionOpenReceipt,
     SessionPickerEntry,

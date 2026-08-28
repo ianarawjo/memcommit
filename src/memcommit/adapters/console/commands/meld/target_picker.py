@@ -19,13 +19,13 @@ from memcommit.adapters.console.shared.tui_primitives import (
     ExactNameFieldControl,
     ExactNameFieldView,
 )
-from memcommit.adapters.interfaces.tui.core.theme import (
+from memcommit.adapters.console.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
 )
-from memcommit.adapters.interfaces.tui.core.keybindings import (
+from memcommit.adapters.console.tui.core.keybindings import (
     bind_case_insensitive_key,
 )
-from memcommit.adapters.interfaces.tui.components.frame import (
+from memcommit.adapters.console.tui.components.frame import (
     bind_focused_frame_style,
 )
 from memcommit.adapters.console.text import (

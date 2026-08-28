@@ -6,7 +6,7 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 import pytest
 
-from memcommit.adapters.interfaces.tui.components.endpoint_setup import (
+from memcommit.adapters.console.tui.components.endpoint_setup import (
     EndpointSetupDraft,
     EndpointSetupMemory,
     EndpointSetupMode,

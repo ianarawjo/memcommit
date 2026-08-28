@@ -166,7 +166,7 @@ replace the first.
   Embed fails closed.
 
 The shared direct-item placement renderer lives at
-`memcommit.adapters.interfaces.tui.components.direct_item_placement`; the old command
+`memcommit.adapters.console.tui.components.direct_item_placement`; the old command
 path is only a module-identity compatibility alias. That presentation
 dependency remains outside the application/runtime boundary and does not
 change the Embed use case.

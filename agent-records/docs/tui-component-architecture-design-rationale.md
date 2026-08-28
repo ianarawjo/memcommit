@@ -4,9 +4,11 @@
 
 Implemented and verified for the shared frame, focus, scrollable-pane,
 plain-text projection, semantic Viewer, read-only Viewer, Context Summary, and
-both Resolution workbench shells.
+both Resolution workbench shells. The reusable `core` and `components`
+families now have their physical owner under the console adapter; Viewer and
+Workbench ownership remains a separately reviewed migration.
 
-Last reviewed: 2026-08-16.
+Last reviewed: 2026-08-28.
 
 ## Motivating problem
 
@@ -24,13 +26,15 @@ TUI presentations remain sibling adapters over one typed application result.
 ## Chosen structure
 
 ```text
-memcommit/adapters/interfaces/tui/
+memcommit/adapters/console/tui/
   core/                         terminal text layout, style, buffers, keys
   components/
     frame/                      frame model and focused chrome
     focus/                      cross-surface focus controller
     scrollable_pane/            model, navigation, scrollbar, component
     plain_text_clipboard/       projection, writer boundary, result receipt
+
+memcommit/adapters/interfaces/tui/       # later ownership review
   viewers/
     semantic/                   typed document, controller, renderer, text, shell
     read_only/                  generic read-only shell
@@ -41,13 +45,24 @@ memcommit/adapters/interfaces/tui/
     summarize/                  picker/reach composition and result projection
 ```
 
-The dependency direction is `core -> components -> viewers -> operation
-adapters`. `memcommit.adapters.interfaces` does not import `memcommit.adapters.console.commands`.
-Existing callers import the narrow owning package directly, and the retired
+The reusable dependency direction starts `console.tui.core ->
+console.tui.components`; command-owned screens and the still-staged Viewers,
+Workbenches, and operation screens consume those components. Core never
+imports components, and components do not acquire operation policy merely
+because they render a control. `memcommit.adapters.interfaces` does not import
+`memcommit.adapters.console.commands`. Existing callers import the narrow
+owning package directly, and the retired
 `commands.semantic_viewer`, `commands.surface_focus`,
 `commands.tui_text_layout`, `commands.read_only_viewer`, and
 `commands.understanding_render` modules are removed rather than retained as
 permanent compatibility facades.
+
+The former `interfaces.tui.core` and `interfaces.tui.components` paths are
+removed rather than retained as forwarding packages. This makes
+`adapters/console/tui` a component-library boundary analogous to a UI
+component tree: a small behavior can remain one module, while a richer control
+may group its model, rendering, and interaction behind one package API. It is
+not a second operation or command hierarchy.
 
 `memcommit.bootstrap` is the only module that knows both the plain Summarize
 presenter and the Summarize TUI presenter. The current Typer command asks that
@@ -127,6 +142,9 @@ application behavior.
 7. Focused/complete text projection is pure and separate from the operating-
    system clipboard writer; cursor anchors are presentation mechanics, not
    copied content.
+8. `core` cannot import `components`; a component package publishes its narrow
+   composition surface without absorbing operation validation, provider,
+   persistence, receipt, or Apply behavior.
 
 ## Alternatives considered
 
@@ -143,8 +161,9 @@ application behavior.
   Viewer controller; only its screen topology, labels, and Run meaning remain
   operation-owned.
 - **Move every TUI helper at once.** Input controls, tree selectors, and review
-  workbenches have different state and safety contracts. They remain in place
-  until a vertical slice can migrate and verify each family.
+  workbenches have different state and safety contracts. Core and components
+  move first; Viewer and Workbench ownership remains in place until each
+  family has a reviewed semantic boundary.
 
 ## Verification evidence
 
@@ -152,9 +171,15 @@ application behavior.
   the Context-first, three-range, dual-result and scoped-copy workbench slice.
 - 1,258 existing TUI-consumer tests pass across bounded partitions after the
   import migration.
+- The later console-TUI ownership move passes 85 focused architecture and
+  primitive tests plus 834 tests selected from every current core/component
+  consumer. The old interface package directories and imports are rejected
+  mechanically.
 - Architecture tests reject imports from retired command paths, reject
-  `interfaces -> commands` dependencies, and ensure the Summarize adapter
-  composes the shared Context-summary workbench instead of raw layout widgets.
+  `interfaces -> commands` dependencies, reject the former physical core and
+  component owners and import paths, enforce `core -> components`, and ensure
+  the Summarize adapter composes the shared Context-summary workbench instead
+  of raw layout widgets.
 - A real color-capable 180×52 PTY trace records Context-first entry, the empty
   Summary Run action, all three range choices, direct and recursive result
   sections, focused and complete clipboard projections, cancellation before
@@ -185,5 +210,7 @@ It does not prove editable text input, review/Apply,
 cache/receipt, or CAS behavior through the new operation-adapter hierarchy. The
 two Resolution workbench semantic models also remain separate until optional
 items, comments, drafts, and provider-turn behavior demonstrate a safe common
-contract. The public Python API and machine-readable adapter remain separate
-gates.
+contract. The physical ownership of `viewers/` and `workbenches/` is
+deliberately undecided by the core/component move; moving them later must
+preserve their distinct typed documents and operation safety boundaries. The
+public Python API and machine-readable adapter remain separate gates.

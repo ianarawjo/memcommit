@@ -5,13 +5,13 @@ from __future__ import annotations
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.adapters.interfaces.tui.components.endpoint_setup import (
+from memcommit.adapters.console.tui.components.endpoint_setup import (
     EndpointSetupMode,
     EndpointSetupRole,
     EndpointSetupSpec,
     run_endpoint_setup,
 )
-from memcommit.adapters.interfaces.tui.components.endpoint_setup.memory_focus import (
+from memcommit.adapters.console.tui.components.endpoint_setup.memory_focus import (
     MemoryProjectionLoader,
 )
 from memcommit.adapters.interfaces.tui.operations.update.model import (

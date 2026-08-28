@@ -34,7 +34,7 @@ from memcommit.adapters.interfaces.tui.operations.ground_workspace.picker import
     reload_selected_ground_workspace_draft,
     reload_selected_ground_workspace,
 )
-from memcommit.adapters.interfaces.tui.components.operation_launcher.session import (
+from memcommit.adapters.console.tui.components.operation_launcher.session import (
     SessionNewReceipt,
     SessionOpenReceipt,
     choose_session,

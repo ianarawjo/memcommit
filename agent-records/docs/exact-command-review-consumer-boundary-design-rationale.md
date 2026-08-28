@@ -14,7 +14,7 @@ operation's application-boundary rationale.
 
 ## Shared contract
 
-`interfaces.tui.components.exact_command_review` owns one immutable logical
+`console.tui.components.exact_command_review` owns one immutable logical
 `argv` plus effects value and its terminal-safe projection.  A consequential
 review owns a focused `Enter` action.  Existing `A`/`a` bindings remain only as
 compatibility aliases where they were already published.  Escape or the
@@ -26,7 +26,7 @@ identity adjacent to a typed frozen request, plan, or action and must validate
 that identity again at its mutation or dispatch boundary.
 
 The standalone full-screen approval surface is owned by
-`memcommit.adapters.interfaces.tui.components.exact_command_review.shell`. The former
+`memcommit.adapters.console.tui.components.exact_command_review.shell`. The former
 `memcommit.adapters.console.shared.exact_command_review_shell` path is a module-identity
 compatibility alias so legacy imports and monkeypatches reach the same globals.
 This is an ownership-only relocation: key bindings, rendering, validation,

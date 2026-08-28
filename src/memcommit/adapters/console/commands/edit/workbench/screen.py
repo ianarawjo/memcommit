@@ -30,32 +30,32 @@ from memcommit.adapters.console.text import (
     display_escape_text,
     restore_display_escape_text,
 )
-from memcommit.adapters.interfaces.tui.components.exact_command_review import (
+from memcommit.adapters.console.tui.components.exact_command_review import (
     EditableExactCommandControl,
     ExactCommandDraft,
     ExactCommandForm,
     ExactCommandFormField,
     resolve_displayed_command_value,
 )
-from memcommit.adapters.interfaces.tui.components.focus import (
+from memcommit.adapters.console.tui.components.focus import (
     FocusSurface,
     SurfaceActionResult,
     SurfaceFocusController,
     bind_surface_navigation,
 )
-from memcommit.adapters.interfaces.tui.components.frame import (
+from memcommit.adapters.console.tui.components.frame import (
     TuiRegion,
     build_focused_frame,
     build_tui_frame,
 )
-from memcommit.adapters.interfaces.tui.components.multiline_input import (
+from memcommit.adapters.console.tui.components.multiline_input import (
     build_framed_multiline_input,
 )
-from memcommit.adapters.interfaces.tui.core.keybindings import (
+from memcommit.adapters.console.tui.core.keybindings import (
     bind_tui_interrupt,
     dispatch_tui_back,
 )
-from memcommit.adapters.interfaces.tui.core.theme import (
+from memcommit.adapters.console.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
 )

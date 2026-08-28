@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import sys
 
-from memcommit.adapters.interfaces.tui.components import (
+from memcommit.adapters.console.tui.components import (
     context_reach_dialog as _context_reach_dialog,
 )
 

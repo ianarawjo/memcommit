@@ -80,7 +80,7 @@ Escape and Ctrl-C both cancel capture without returning any concealed payload;
 F2 or Ctrl-D remains the only path that returns the batch for Add.
 
 The terminal capture component is owned by
-`memcommit.adapters.interfaces.tui.components.paste_input`. The historical
+`memcommit.adapters.console.tui.components.paste_input`. The historical
 `memcommit.adapters.console.shared.paste_input` import remains an identity-preserving
 compatibility alias so existing imports and monkeypatches continue to target
 the same module globals. This is an ownership-only relocation: key bindings,

@@ -13,7 +13,7 @@ from memcommit.application.operations.atomize.domain import (
     AtomizeAnalysisSession,
     atomize_analysis_matches_context,
 )
-from memcommit.adapters.interfaces.tui.components.operation_launcher.session import (
+from memcommit.adapters.console.tui.components.operation_launcher.session import (
     SessionNewReceipt,
     SessionOpenReceipt,
     SessionPickerEntry,

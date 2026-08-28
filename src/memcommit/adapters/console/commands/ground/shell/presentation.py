@@ -12,7 +12,7 @@ from memcommit.adapters.console.shared.exact_command_review import (
 )
 from memcommit.adapters.console.shared.tui_primitives import anchored_fragments
 from memcommit.adapters.console.text import safe_terminal_text
-from memcommit.adapters.interfaces.tui.components.table import (
+from memcommit.adapters.console.tui.components.table import (
     RenderedTuiTable,
     TuiTableColumn,
     TuiTableRow,

@@ -25,38 +25,38 @@ from memcommit.core.context_targeting.tui.selector import (
 )
 from memcommit.adapters.console.terminal import require_interactive_terminal
 from memcommit.adapters.console.text import safe_terminal_text
-from memcommit.adapters.interfaces.tui.components.focus import (
+from memcommit.adapters.console.tui.components.focus import (
     FocusSurface,
     SurfaceActionResult,
     SurfaceFocusController,
     SurfaceMoveResult,
     bind_surface_navigation,
 )
-from memcommit.adapters.interfaces.tui.components.frame import (
+from memcommit.adapters.console.tui.components.frame import (
     TuiRegion,
     build_focused_frame,
     build_tui_frame,
 )
-from memcommit.adapters.interfaces.tui.components.in_frame_input import (
+from memcommit.adapters.console.tui.components.in_frame_input import (
     InFrameInputManager,
     InFrameInputSection,
 )
-from memcommit.adapters.interfaces.tui.components.multiline_input import (
+from memcommit.adapters.console.tui.components.multiline_input import (
     build_framed_multiline_input,
 )
-from memcommit.adapters.interfaces.tui.components.scrollable_pane import (
+from memcommit.adapters.console.tui.components.scrollable_pane import (
     build_scrollable_formatted_text_pane,
 )
-from memcommit.adapters.interfaces.tui.core.keybindings import (
+from memcommit.adapters.console.tui.core.keybindings import (
     bind_case_insensitive_key,
     bind_tui_interrupt,
     dispatch_tui_back,
 )
-from memcommit.adapters.interfaces.tui.core.text_layout import (
+from memcommit.adapters.console.tui.core.text_layout import (
     elide_terminal_text,
     single_line_terminal_text,
 )
-from memcommit.adapters.interfaces.tui.core.theme import (
+from memcommit.adapters.console.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
 )

@@ -4,7 +4,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from memcommit.adapters.interfaces.tui.components.focus import (
+from memcommit.adapters.console.tui.components.focus import (
     FocusSurface,
     SurfaceFocusController,
     focus_in_order,

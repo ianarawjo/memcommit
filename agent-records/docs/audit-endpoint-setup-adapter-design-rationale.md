@@ -7,7 +7,7 @@ setup component, after Merge.
 
 ## Problem
 
-The rebuilt `interfaces.tui.components.endpoint_setup` screen initially had one
+The rebuilt `console.tui.components.endpoint_setup` screen initially had one
 real operation consumer: Merge.  The older
 `commands.session_endpoint_setup` shell has a wider capability set, including
 per-role descendant reach, focused Memory selection, and require-new Context

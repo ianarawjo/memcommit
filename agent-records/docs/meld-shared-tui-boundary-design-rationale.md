@@ -16,7 +16,7 @@ labels, and may focus one direct Memory when descendant reach is off.
 
 ## Shared component contract
 
-`interfaces.tui.components.endpoint_setup` owns only the reusable interaction
+`console.tui.components.endpoint_setup` owns only the reusable interaction
 mechanics:
 
 - mode-dependent active role order and role labels;
@@ -160,14 +160,15 @@ The intended dependency direction is:
 commands.meld (CLI orchestration)
   -> commands.meld.setup (typed setup and frozen readable authority)
   -> commands.meld.workbench (saved-session presentation)
-  -> interfaces.tui.components (operation-neutral mechanics)
+  -> console.tui.components (operation-neutral mechanics)
 ```
 
 The CLI may open its workbench adapter, but the adapter does not invoke the
 CLI. Meld runtime, provider, cache, receipt, and Apply semantics remain outside
 this relocation. The operation-specific setup and saved-session presentation
-belong to the Meld command package; only operation-neutral endpoint and
-resolution mechanics remain under `interfaces.tui`.
+belong to the Meld command package; only operation-neutral endpoint mechanics
+move to `console.tui.components`, while the shared Resolution workbench remains
+under `interfaces.tui` pending its separate ownership review.
 
 ## Verification boundary
 

@@ -14,7 +14,7 @@ import pytest
 
 REPOSITORY_ROOT = Path(__file__).parents[1]
 LEGACY_MODULE = "memcommit.adapters.console.shared.paste_input"
-OWNER_MODULE = "memcommit.adapters.interfaces.tui.components.paste_input"
+OWNER_MODULE = "memcommit.adapters.console.tui.components.paste_input"
 
 
 @pytest.mark.parametrize(
@@ -95,5 +95,5 @@ def test_add_command_imports_the_interface_owner() -> None:
         / "command.py"
     ).read_text(encoding="utf-8")
 
-    assert "from memcommit.adapters.interfaces.tui.components.paste_input import (" in source
+    assert "from memcommit.adapters.console.tui.components.paste_input import (" in source
     assert "from memcommit.adapters.console.shared.paste_input import" not in source

@@ -25,15 +25,15 @@ from prompt_toolkit.styles import merge_styles
 from prompt_toolkit.widgets import TextArea
 
 from memcommit.adapters.console.text import safe_terminal_text
-from memcommit.adapters.interfaces.tui.components.exact_name import ExactNameInputControl
-from memcommit.adapters.interfaces.tui.components.frame import (
+from memcommit.adapters.console.tui.components.exact_name import ExactNameInputControl
+from memcommit.adapters.console.tui.components.frame import (
     TuiRegion,
     build_focused_frame,
     build_tui_frame,
 )
-from memcommit.adapters.interfaces.tui.components.save_location import SaveLocationView
-from memcommit.adapters.interfaces.tui.core.keybindings import bind_case_insensitive_key
-from memcommit.adapters.interfaces.tui.core.theme import (
+from memcommit.adapters.console.tui.components.save_location import SaveLocationView
+from memcommit.adapters.console.tui.core.keybindings import bind_case_insensitive_key
+from memcommit.adapters.console.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
     focused_control_style,

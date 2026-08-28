@@ -13,7 +13,7 @@ from memcommit.application.operations.profile.config import ProfileConfigError
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 LEGACY_MODULE = "memcommit.adapters.console.shared.operation_launcher_location"
 CANONICAL_MODULE = (
-    "memcommit.adapters.interfaces.tui.components.operation_launcher.location"
+    "memcommit.adapters.console.tui.components.operation_launcher.location"
 )
 
 

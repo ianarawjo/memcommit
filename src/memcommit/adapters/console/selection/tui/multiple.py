@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-from memcommit.adapters.interfaces.tui.core.theme import (
+from memcommit.adapters.console.tui.core.theme import (
     focused_control_style,
 )
 from memcommit.adapters.console.text import (
     safe_terminal_text,
 )
-from memcommit.adapters.interfaces.tui.core.text_layout import (
+from memcommit.adapters.console.tui.core.text_layout import (
     terminal_cell_width,
     wrap_terminal_text,
 )

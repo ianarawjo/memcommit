@@ -10,7 +10,7 @@ import pytest
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 LEGACY_MODULE = "memcommit.adapters.console.shared.exact_name_dialog"
-CANONICAL_MODULE = "memcommit.adapters.interfaces.tui.components.exact_name_dialog"
+CANONICAL_MODULE = "memcommit.adapters.console.tui.components.exact_name_dialog"
 
 
 @pytest.mark.parametrize("legacy_first", (True, False), ids=("old-first", "new-first"))

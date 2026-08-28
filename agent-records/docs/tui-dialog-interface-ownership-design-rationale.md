@@ -11,7 +11,7 @@ direction inconsistent with the rest of the shared TUI components.
 ## Decision
 
 The existing implementation files move to
-`memcommit.adapters.interfaces.tui.components`. Import's workbench uses those canonical
+`memcommit.adapters.console.tui.components`. Import's workbench uses those canonical
 paths. Each former command module remains as a `sys.modules` alias to the
 interface-owned module, rather than wrapping or copying its public function.
 

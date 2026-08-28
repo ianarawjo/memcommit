@@ -23,7 +23,7 @@ from memcommit.application.retained_history.memory_history_reconstruction.memory
 )
 from memcommit.persistence.store import MemoryStore
 from memcommit.adapters.console.theme import ERROR_HEX
-from memcommit.adapters.interfaces.tui.core.theme import (
+from memcommit.adapters.console.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
 )

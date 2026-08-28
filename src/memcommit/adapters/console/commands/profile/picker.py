@@ -32,17 +32,17 @@ from memcommit.adapters.console.shared.exact_command_review import (
     ExactCommandReview,
     render_exact_command_review,
 )
-from memcommit.adapters.interfaces.tui.components.exact_command_review import (
+from memcommit.adapters.console.tui.components.exact_command_review import (
     bind_exact_command_approval,
 )
 from memcommit.adapters.console.shared.tui_primitives import (
     ExactNameFieldControl,
     ExactNameFieldView,
 )
-from memcommit.adapters.interfaces.tui.core.keybindings import (
+from memcommit.adapters.console.tui.core.keybindings import (
     bind_case_insensitive_key,
 )
-from memcommit.adapters.interfaces.tui.core.theme import MEMCOMMIT_TUI_STYLE
+from memcommit.adapters.console.tui.core.theme import MEMCOMMIT_TUI_STYLE
 from memcommit.adapters.console.text import (
     display_escape_text,
 )

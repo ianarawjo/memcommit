@@ -14,7 +14,7 @@ import memcommit.adapters.interfaces.tui.workbenches.resolution.session_shell.ru
 from memcommit.adapters.console.shared.semantic_detail_renderer import (
     semantic_detail_block_fragments,
 )
-from memcommit.adapters.interfaces.tui.core.theme import (
+from memcommit.adapters.console.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
 )
 from memcommit.adapters.console.shared.resolution_workbench_shell import (

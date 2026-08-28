@@ -25,35 +25,35 @@ from memcommit.adapters.console.commands.ground.shell import (
     GROUND_GOAL_FRAME_HEIGHT,
 )
 from memcommit.adapters.console.shared.session_help import bind_session_help
-from memcommit.adapters.interfaces.tui.components.in_frame_input import (
+from memcommit.adapters.console.tui.components.in_frame_input import (
     InFrameInputManager,
     InFrameInputSection,
     INLINE_AGENT_COMMENT_TITLE,
     build_inline_direct_edit_input,
     classify_inline_edit_submission,
 )
-from memcommit.adapters.interfaces.tui.components.multiline_input import (
+from memcommit.adapters.console.tui.components.multiline_input import (
     build_framed_multiline_input,
 )
-from memcommit.adapters.interfaces.tui.components.background_turn import (
+from memcommit.adapters.console.tui.components.background_turn import (
     BackgroundExecutorTurn,
 )
-from memcommit.adapters.interfaces.tui.components.exact_command_review import (
+from memcommit.adapters.console.tui.components.exact_command_review import (
     bind_exact_command_approval,
 )
-from memcommit.adapters.interfaces.tui.core.theme import (
+from memcommit.adapters.console.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
 )
-from memcommit.adapters.interfaces.tui.components.frame import (
+from memcommit.adapters.console.tui.components.frame import (
     TuiRegion,
     bind_focused_frame_style,
     build_tui_frame,
 )
-from memcommit.adapters.interfaces.tui.core.keybindings import (
+from memcommit.adapters.console.tui.core.keybindings import (
     bind_case_insensitive_key,
     dispatch_tui_back,
 )
-from memcommit.adapters.interfaces.tui.components.scrollable_pane import (
+from memcommit.adapters.console.tui.components.scrollable_pane import (
     build_scrollable_text_pane,
     equal_pane_height,
     scroll_wrapped_page,

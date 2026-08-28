@@ -34,7 +34,7 @@ from memcommit.adapters.console.shared.review import ReviewCancelled
 from memcommit.adapters.console.commands.review.resolution_shell import (
     run_review_resolution_shell as run_review_shell,
 )
-from memcommit.adapters.interfaces.tui.components.operation_launcher.session import (
+from memcommit.adapters.console.tui.components.operation_launcher.session import (
     SessionOpenReceipt,
     SessionPickerEntry,
     choose_session,

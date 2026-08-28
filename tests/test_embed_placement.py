@@ -10,7 +10,7 @@ from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.interfaces.tui.components.direct_item_placement import (
+from memcommit.adapters.console.tui.components.direct_item_placement import (
     DirectItemGap,
     DirectItemGapState,
     direct_item_gap,

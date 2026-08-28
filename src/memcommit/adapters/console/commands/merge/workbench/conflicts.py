@@ -8,10 +8,10 @@ from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
 from memcommit.adapters.console.text import safe_terminal_text
-from memcommit.adapters.interfaces.tui.components.exact_command_review import (
+from memcommit.adapters.console.tui.components.exact_command_review import (
     ExactCommandReview,
 )
-from memcommit.adapters.interfaces.tui.components.plain_text_clipboard import ClipboardWriter
+from memcommit.adapters.console.tui.components.plain_text_clipboard import ClipboardWriter
 from memcommit.adapters.console.commands.merge.workbench.review import (
     merge_plan_exact_command_review,
     project_merge_plan,

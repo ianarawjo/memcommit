@@ -13,7 +13,7 @@ from memcommit.adapters.console.commands.trace.projection import (
     format_compact_trace_report,
     trace_document_fragments,
 )
-from memcommit.adapters.interfaces.tui.components.plain_text_clipboard import (
+from memcommit.adapters.console.tui.components.plain_text_clipboard import (
     plain_text_from_fragments,
 )
 from memcommit.core.context_targeting.report_items import ResolvedMemoryReportTarget

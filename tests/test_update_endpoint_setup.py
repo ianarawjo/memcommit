@@ -12,7 +12,7 @@ import memcommit.adapters.console.commands.update.setup as update_setup_command
 import memcommit.adapters.console.commands.update.command as update_command
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.interfaces.tui.components.endpoint_setup import EndpointSetupMemory
+from memcommit.adapters.console.tui.components.endpoint_setup import EndpointSetupMemory
 from memcommit.adapters.interfaces.tui.operations.update import (
     UpdateEndpointSelection,
     UpdateTuiSetup,

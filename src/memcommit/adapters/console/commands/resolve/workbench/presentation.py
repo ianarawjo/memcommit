@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from memcommit.adapters.console.text import safe_terminal_text
-from memcommit.adapters.interfaces.tui.components.exact_command_review import (
+from memcommit.adapters.console.tui.components.exact_command_review import (
     ExactCommandReview,
 )
 from memcommit.adapters.interfaces.tui.viewers.semantic import (

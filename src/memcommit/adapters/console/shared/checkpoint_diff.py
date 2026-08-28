@@ -14,7 +14,7 @@ from memcommit.adapters.console.shared.history_picker import HistoryDetailView, 
 from memcommit.adapters.console.text import (
     display_escape_text,
 )
-from memcommit.adapters.interfaces.tui.core.theme import semantic_action_style
+from memcommit.adapters.console.tui.core.theme import semantic_action_style
 from memcommit.application.reviewing.memory_diff import MemoryChange, memory_diff_lines
 
 

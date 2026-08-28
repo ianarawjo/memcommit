@@ -42,7 +42,7 @@ from memcommit.adapters.console.theme import (
     memory_object_color_rgb,
     semantic_color_rgb,
 )
-from memcommit.adapters.interfaces.tui.core.theme import semantic_role_style
+from memcommit.adapters.console.tui.core.theme import semantic_role_style
 from memcommit.adapters.interfaces.tui.viewers.semantic import semantic_document_plain_text
 from memcommit.application.reviewing.quality.audit import (
     QUALITY_AUDIT_PREVIOUS_SCHEMA_VERSION,

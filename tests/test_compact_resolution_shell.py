@@ -12,7 +12,7 @@ from memcommit.adapters.interfaces.tui.workbenches.resolution.session_shell impo
     ResolutionGlobalStrategy,
     run_resolution_workbench_shell,
 )
-from memcommit.adapters.interfaces.tui.components.save_location import SaveLocationView
+from memcommit.adapters.console.tui.components.save_location import SaveLocationView
 from memcommit.application.resolution.workbench import (
     ResolutionItem,
     ResolutionOption,

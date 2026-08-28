@@ -8,7 +8,7 @@ from memcommit.adapters.interfaces.tui.viewers.semantic import (
 from memcommit.adapters.console.text import (
     safe_terminal_text,
 )
-from memcommit.adapters.interfaces.tui.core.text_layout import (
+from memcommit.adapters.console.tui.core.text_layout import (
     wrap_terminal_text,
 )
 from memcommit.adapters.console.responses.model import ResponseDraft, ResponseTarget

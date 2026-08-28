@@ -156,7 +156,7 @@ def _invoke(store, argv: list[str]) -> None:
     import memcommit.adapters.console.shared.command_wait as command_wait
     import memcommit.adapters.console.commands.review.command as review_command
     import memcommit.adapters.console.shared.session_help as session_help
-    import memcommit.adapters.interfaces.tui.components.session_help as session_help_component
+    import memcommit.adapters.console.tui.components.session_help as session_help_component
 
     atomize_command.MemoryStore = lambda *args, **kwargs: store
     review_command.MemoryStore = lambda *args, **kwargs: store

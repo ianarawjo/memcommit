@@ -23,7 +23,7 @@ from memcommit.application.operations.operation_catalog.details import (
     ALL_OPERATION_DETAILS,
     DETAILS_BY_OPERATION,
 )
-from memcommit.adapters.interfaces.tui.core.text_layout import terminal_cell_width
+from memcommit.adapters.console.tui.core.text_layout import terminal_cell_width
 from memcommit.adapters.interfaces.tui.operations.help.localization import HELP_LANGUAGES
 
 

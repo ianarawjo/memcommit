@@ -1,7 +1,7 @@
 # Compare shared Endpoint Setup PTY trace
 
 Command under test: Compare's actual `choose_compare_setup` command adapter,
-now backed by `interfaces.tui.components.endpoint_setup`.
+now backed by `console.tui.components.endpoint_setup`.
 
 - PTY: `180` columns × `52` rows, verified in the child process.
 - Color: `TERM=xterm-256color`, `COLORTERM=truecolor`, and

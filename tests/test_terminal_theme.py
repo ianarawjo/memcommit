@@ -8,7 +8,7 @@ from memcommit.adapters.console.theme import (
     semantic_judgment_role,
     semantic_quality_role,
 )
-from memcommit.adapters.interfaces.tui.core.theme import (
+from memcommit.adapters.console.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
     semantic_role_style,

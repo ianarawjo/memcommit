@@ -34,7 +34,7 @@ def history_action_style(command: str) -> str:
     semantic palette.
     """
 
-    from memcommit.adapters.interfaces.tui.core.theme import semantic_action_style
+    from memcommit.adapters.console.tui.core.theme import semantic_action_style
 
     return semantic_action_style(command, fallback="class:report-neutral").removeprefix(
         "class:"

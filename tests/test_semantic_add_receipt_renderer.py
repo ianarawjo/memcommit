@@ -4,7 +4,7 @@ import pytest
 
 from memcommit.adapters.interfaces.cli.semantic_add import applied_memory_preview_lines
 from memcommit.adapters.console.theme import memory_object_color_rgb
-from memcommit.adapters.interfaces.tui.core.theme import SEMANTIC_VIEWER_STYLE
+from memcommit.adapters.console.tui.core.theme import SEMANTIC_VIEWER_STYLE
 
 
 def test_applied_memory_preview_shows_twenty_then_reports_the_remainder() -> None:

@@ -28,7 +28,7 @@ from memcommit.adapters.console.shared.batch_input_source import (
 )
 from memcommit.adapters.console.errors import render_cli_error
 from memcommit.adapters.console.terminal import is_interactive_terminal
-from memcommit.adapters.interfaces.tui.components.paste_input import (
+from memcommit.adapters.console.tui.components.paste_input import (
     PasteCancelled,
     capture_paste,
 )

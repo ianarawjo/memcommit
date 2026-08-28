@@ -1,6 +1,6 @@
 """Compatibility facade for the interface-owned Save Location control."""
 
-from memcommit.adapters.interfaces.tui.components.save_location import (
+from memcommit.adapters.console.tui.components.save_location import (
     SaveLocationEditorState,
     SaveLocationView,
     save_location_card_lines,

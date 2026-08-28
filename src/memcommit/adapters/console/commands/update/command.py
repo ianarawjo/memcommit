@@ -17,7 +17,7 @@ from memcommit.application.authority.access import (
     freeze_granted_context_binding,
     resolve_context_access,
 )
-from memcommit.adapters.interfaces.tui.components.operation_launcher.session import (
+from memcommit.adapters.console.tui.components.operation_launcher.session import (
     SessionNewReceipt,
     SessionOpenReceipt,
     SessionPickerEntry,

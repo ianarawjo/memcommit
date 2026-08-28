@@ -27,31 +27,31 @@ from prompt_toolkit.widgets import Frame
 
 from memcommit.application.review_policy import DecisionFreeBehavior
 from memcommit.application.exact_command_review import ExactCommandReview
-from memcommit.adapters.interfaces.tui.components.exact_name import (
+from memcommit.adapters.console.tui.components.exact_name import (
     ExactNameFieldView,
     ExactNameInputControl,
 )
-from memcommit.adapters.interfaces.tui.components.multiline_input import (
+from memcommit.adapters.console.tui.components.multiline_input import (
     build_framed_multiline_input,
 )
-from memcommit.adapters.interfaces.tui.components.plain_text_clipboard import (
+from memcommit.adapters.console.tui.components.plain_text_clipboard import (
     copy_plain_text,
     plain_text_from_fragments,
 )
-from memcommit.adapters.interfaces.tui.core.theme import (
+from memcommit.adapters.console.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     focused_control_style,
 )
-from memcommit.adapters.interfaces.tui.core.keybindings import (
+from memcommit.adapters.console.tui.core.keybindings import (
     NavigationAccelerator,
     bind_case_insensitive_key,
 )
-from memcommit.adapters.interfaces.tui.components.frame import (
+from memcommit.adapters.console.tui.components.frame import (
     TuiRegion,
     bind_focused_frame_style,
     build_tui_frame,
 )
-from memcommit.adapters.interfaces.tui.components.scrollable_pane import (
+from memcommit.adapters.console.tui.components.scrollable_pane import (
     WrappedScrollbarMargin,
 )
 from memcommit.adapters.console.terminal import (
@@ -60,19 +60,19 @@ from memcommit.adapters.console.terminal import (
 from memcommit.adapters.console.text import (
     safe_terminal_text,
 )
-from memcommit.adapters.interfaces.tui.components.save_location import (
+from memcommit.adapters.console.tui.components.save_location import (
     SaveLocationEditorState,
     save_location_row_fragments,
     save_location_tree_fragments,
 )
-from memcommit.adapters.interfaces.tui.components.session_help import bind_session_help
+from memcommit.adapters.console.tui.components.session_help import bind_session_help
 from memcommit.adapters.interfaces.tui.workbenches.resolution.compact_shell import (
     run_compact_resolution_decisions,
 )
 from memcommit.adapters.interfaces.tui.viewers.semantic import (
     SemanticViewerController,
 )
-from memcommit.adapters.interfaces.tui.components.focus import (
+from memcommit.adapters.console.tui.components.focus import (
     FocusSurface,
     SurfaceActionResult,
     SurfaceFocusController,

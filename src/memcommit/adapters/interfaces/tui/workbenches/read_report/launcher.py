@@ -8,7 +8,7 @@ from datetime import datetime
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.adapters.interfaces.tui.components.operation_launcher import (
+from memcommit.adapters.console.tui.components.operation_launcher import (
     LauncherAction,
     LauncherActionSelection,
     LauncherEntry,

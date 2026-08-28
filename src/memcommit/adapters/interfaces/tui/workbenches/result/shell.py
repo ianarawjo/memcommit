@@ -10,7 +10,7 @@ from __future__ import annotations
 from memcommit.adapters.console.text import (
     safe_terminal_text,
 )
-from memcommit.adapters.interfaces.tui.core.text_layout import (
+from memcommit.adapters.console.tui.core.text_layout import (
     single_line_terminal_text,
 )
 from memcommit.adapters.interfaces.tui.viewers.semantic.detail import (

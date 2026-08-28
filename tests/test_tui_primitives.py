@@ -29,7 +29,7 @@ from memcommit.adapters.console.shared.tui_primitives import (
     ExactNameInputControl,
     anchored_fragments,
 )
-from memcommit.adapters.interfaces.tui.components.in_frame_input import (
+from memcommit.adapters.console.tui.components.in_frame_input import (
     InFrameInputManager,
     InFrameInputSection,
     INLINE_AGENT_COMMENT_TITLE,
@@ -37,31 +37,31 @@ from memcommit.adapters.interfaces.tui.components.in_frame_input import (
     build_inline_direct_edit_input,
     classify_inline_edit_submission,
 )
-from memcommit.adapters.interfaces.tui.components.exact_name import (
+from memcommit.adapters.console.tui.components.exact_name import (
     ExactNameFieldControl as OwnedExactNameFieldControl,
 )
-from memcommit.adapters.interfaces.tui.components.viewport_anchor import (
+from memcommit.adapters.console.tui.components.viewport_anchor import (
     anchored_fragments as owned_anchored_fragments,
 )
-from memcommit.adapters.interfaces.tui.components.multiline_input import (
+from memcommit.adapters.console.tui.components.multiline_input import (
     build_framed_multiline_input,
 )
-from memcommit.adapters.interfaces.tui.core.theme import (
+from memcommit.adapters.console.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     focused_control_style,
 )
-from memcommit.adapters.interfaces.tui.core.keybindings import (
+from memcommit.adapters.console.tui.core.keybindings import (
     NavigationAccelerator,
     bind_case_insensitive_key,
     dispatch_tui_back,
 )
-from memcommit.adapters.interfaces.tui.components.frame import (
+from memcommit.adapters.console.tui.components.frame import (
     TuiRegion,
     bind_focused_frame_style,
     build_tui_frame,
     horizontal_rule,
 )
-from memcommit.adapters.interfaces.tui.components.scrollable_pane import (
+from memcommit.adapters.console.tui.components.scrollable_pane import (
     build_scrollable_formatted_text_pane,
     build_scrollable_text_pane,
     equal_pane_height,

@@ -13,7 +13,7 @@ import pytest
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 LEGACY_NAME = "memcommit.adapters.console.shared.exact_command_review_shell"
-CANONICAL_NAME = "memcommit.adapters.interfaces.tui.components.exact_command_review.shell"
+CANONICAL_NAME = "memcommit.adapters.console.tui.components.exact_command_review.shell"
 
 
 @pytest.mark.parametrize("legacy_first", (True, False), ids=("old-first", "new-first"))
@@ -49,7 +49,7 @@ def test_review_shell_is_exported_by_the_component_package() -> None:
     legacy = importlib.import_module(LEGACY_NAME)
     canonical = importlib.import_module(CANONICAL_NAME)
     package = importlib.import_module(
-        "memcommit.adapters.interfaces.tui.components.exact_command_review"
+        "memcommit.adapters.console.tui.components.exact_command_review"
     )
 
     assert legacy is canonical

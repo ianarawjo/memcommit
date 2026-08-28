@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 import re
 
-from memcommit.adapters.interfaces.tui.components.operation_launcher.session import SessionPickerEntry
+from memcommit.adapters.console.tui.components.operation_launcher.session import SessionPickerEntry
 from memcommit.application.operations.sever.model import SeverSession, sever_record_digest
 from memcommit.application.operations.sever.session_store import SeverSessionStore
 

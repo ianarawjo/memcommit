@@ -58,10 +58,10 @@ def test_legacy_command_paths_preserve_interface_object_identity() -> None:
         semantic_trace_fragments as old_trace,
     )
     from memcommit.adapters.console.shared.session_help import SessionHelpController as old_help
-    from memcommit.adapters.interfaces.tui.components.save_location import (
+    from memcommit.adapters.console.tui.components.save_location import (
         SaveLocationView as new_save,
     )
-    from memcommit.adapters.interfaces.tui.components.session_help import (
+    from memcommit.adapters.console.tui.components.session_help import (
         SessionHelpController as new_help,
     )
     from memcommit.adapters.interfaces.tui.viewers.semantic.detail import (
@@ -73,7 +73,7 @@ def test_legacy_command_paths_preserve_interface_object_identity() -> None:
         "memcommit.adapters.interfaces.tui.operations.help.inventory"
     )
     old_table = importlib.import_module("memcommit.adapters.console.shared.tui_table")
-    new_table = importlib.import_module("memcommit.adapters.interfaces.tui.components.table")
+    new_table = importlib.import_module("memcommit.adapters.console.tui.components.table")
 
     assert old_inventory is new_inventory
     assert old_table is new_table

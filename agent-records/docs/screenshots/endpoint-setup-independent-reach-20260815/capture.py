@@ -49,7 +49,7 @@ def _prepare_store(root: Path):
 
 
 def _run_child(store_root: Path, *, cancel: bool) -> None:
-    from memcommit.adapters.interfaces.tui.components.endpoint_setup import (
+    from memcommit.adapters.console.tui.components.endpoint_setup import (
         EndpointSetupMode,
         EndpointSetupRole,
         EndpointSetupSpec,

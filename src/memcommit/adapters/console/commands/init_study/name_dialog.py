@@ -17,7 +17,7 @@ from memcommit.adapters.console.shared.tui_primitives import (
     ExactNameFieldControl,
     ExactNameFieldView,
 )
-from memcommit.adapters.interfaces.tui.core.theme import (
+from memcommit.adapters.console.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
 )
 from memcommit.adapters.console.text import (

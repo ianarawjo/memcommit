@@ -51,7 +51,7 @@ from memcommit.adapters.console.shared.command_wait import run_command_wait
 from memcommit.adapters.console.commands.compare.setup import choose_compare_setup
 from memcommit.adapters.console.commands.compare.targeting import resolve_compare_cli_targets
 from memcommit.adapters.console.commands.rationale.command import render_rationale
-from memcommit.adapters.interfaces.tui.components.operation_launcher.session import (
+from memcommit.adapters.console.tui.components.operation_launcher.session import (
     SessionNewReceipt,
 )
 from memcommit.adapters.console.text import (

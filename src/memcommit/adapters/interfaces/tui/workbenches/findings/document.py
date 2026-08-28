@@ -8,7 +8,7 @@ from memcommit.adapters.console.theme import (
     SemanticColorRole,
     semantic_quality_role,
 )
-from memcommit.adapters.interfaces.tui.core.theme import semantic_role_style
+from memcommit.adapters.console.tui.core.theme import semantic_role_style
 from memcommit.adapters.interfaces.tui.viewers.semantic import (
     SemanticViewerBlock,
     SemanticViewerDocument,

@@ -12,7 +12,7 @@ from memcommit.application.exact_command_review import ExactCommandReview
 from memcommit.adapters.console.commands.branch.receipt import (
     BranchCreationReceipt,
 )
-from memcommit.adapters.interfaces.tui.components.endpoint_setup import (
+from memcommit.adapters.console.tui.components.endpoint_setup import (
     EndpointSetupDraft,
     EndpointSetupMode,
     EndpointSetupRole,

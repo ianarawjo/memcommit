@@ -68,7 +68,7 @@ from memcommit.adapters.console.commands.atomize.sessions import (
     revalidate_saved_atomize_analysis,
 )
 from memcommit.adapters.console.shared.endpoint_setup_flows import choose_atomize_setup
-from memcommit.adapters.interfaces.tui.components.operation_launcher.session import (
+from memcommit.adapters.console.tui.components.operation_launcher.session import (
     SessionNewReceipt,
 )
 from memcommit.adapters.console.shared.context_operand import (

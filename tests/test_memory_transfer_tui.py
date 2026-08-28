@@ -27,7 +27,7 @@ from memcommit.adapters.console.shared.memory_transfer.workbench import (
     parse_memory_transfer_command_argv,
 )
 from memcommit.core.context import Context, Memory, MemoryRef
-from memcommit.adapters.interfaces.tui.components.direct_item_placement import DirectItemGap
+from memcommit.adapters.console.tui.components.direct_item_placement import DirectItemGap
 from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,

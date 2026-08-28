@@ -15,14 +15,14 @@ from memcommit.core.context_targeting.tui.picker import context_memory_rows
 from memcommit.adapters.console.shared.readable_context_catalog import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.adapters.interfaces.tui.components.endpoint_setup import (
+from memcommit.adapters.console.tui.components.endpoint_setup import (
     EndpointSetupMemory,
     EndpointSetupMode,
     EndpointSetupRole,
     EndpointSetupSpec,
     run_endpoint_setup,
 )
-from memcommit.adapters.interfaces.tui.components.endpoint_setup.memory_focus import (
+from memcommit.adapters.console.tui.components.endpoint_setup.memory_focus import (
     MemoryProjectionLoader,
 )
 from memcommit.persistence.store import MemoryStore

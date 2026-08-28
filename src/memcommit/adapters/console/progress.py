@@ -17,7 +17,7 @@ from types import TracebackType
 from typing import TextIO, TypeVar
 
 from memcommit.adapters.console.text import display_escape_text
-from memcommit.adapters.interfaces.tui.core.activity import (
+from memcommit.adapters.console.tui.core.activity import (
     BUSY_FRAMES as BUSY_FRAMES,
     BUSY_INTERVAL_SECONDS,
     busy_suffix,

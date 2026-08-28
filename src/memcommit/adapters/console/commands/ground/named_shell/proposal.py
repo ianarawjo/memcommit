@@ -18,7 +18,7 @@ from memcommit.adapters.console.shared.exact_command_review import (
 from memcommit.adapters.console.text import (
     safe_terminal_text,
 )
-from memcommit.adapters.interfaces.tui.core.text_layout import (
+from memcommit.adapters.console.tui.core.text_layout import (
     elide_terminal_text,
     single_line_terminal_text,
 )

@@ -1,7 +1,7 @@
 # Update shared Endpoint Setup PTY trace
 
 Command under test: Update's actual `choose_update_setup` command adapter,
-backed by `interfaces.tui.components.endpoint_setup`.
+backed by `console.tui.components.endpoint_setup`.
 
 - PTY: `180` columns × `52` rows, verified in the child process.
 - Color: `TERM=xterm-256color`, `COLORTERM=truecolor`, and

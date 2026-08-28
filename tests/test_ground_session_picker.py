@@ -26,7 +26,7 @@ from memcommit.adapters.console.commands.ground.shell import (
     GroundShellProposal,
     GroundShellResult,
 )
-from memcommit.adapters.interfaces.tui.components.operation_launcher.session import SessionOpenReceipt
+from memcommit.adapters.console.tui.components.operation_launcher.session import SessionOpenReceipt
 from memcommit.application.operations.ground.model import (
     GroundTargetSpec,
     bind_ground_workbench,

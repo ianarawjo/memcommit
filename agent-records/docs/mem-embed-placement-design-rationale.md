@@ -196,11 +196,11 @@ plan. Escape cancels, and Backspace remains ordinary text deletion.
 
 ## Reuse boundary
 
-`memcommit.adapters.interfaces.tui.components.direct_item_placement` owns the
+`memcommit.adapters.console.tui.components.direct_item_placement` owns the
 operation-neutral row projection, gap model, separate hover/selection state,
 and single moving-line renderer. The neighboring exact-command receipt is a
 separate component whose form/draft/editor mechanics are shared under
-`interfaces.tui.components.exact_command_review`; Embed owns the argv grammar
+`console.tui.components.exact_command_review`; Embed owns the argv grammar
 and its all-or-none mapping back to controls. The common
 `ContextSelectorControl` exposes a narrow
 nested-row projection hook so Embed can compose the order under the selected

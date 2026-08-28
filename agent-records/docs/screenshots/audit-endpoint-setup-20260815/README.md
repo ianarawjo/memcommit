@@ -1,7 +1,7 @@
 # Audit endpoint setup PTY trace
 
 Command under test: flagless `mem audit` source setup through
-`interfaces.tui.components.endpoint_setup`.
+`console.tui.components.endpoint_setup`.
 
 - PTY: `180` columns × `52` rows, verified in the child process.
 - Color: `TERM=xterm-256color`, `COLORTERM=truecolor`,

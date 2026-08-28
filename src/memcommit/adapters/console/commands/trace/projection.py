@@ -18,13 +18,13 @@ from memcommit.application.retained_history.display import (
 from memcommit.adapters.console.text import (
     display_escape_text,
 )
-from memcommit.adapters.interfaces.tui.components.plain_text_clipboard import (
+from memcommit.adapters.console.tui.components.plain_text_clipboard import (
     plain_text_from_fragments,
 )
-from memcommit.adapters.interfaces.tui.core.text_layout import (
+from memcommit.adapters.console.tui.core.text_layout import (
     elide_terminal_text,
 )
-from memcommit.adapters.interfaces.tui.core.theme import (
+from memcommit.adapters.console.tui.core.theme import (
     semantic_action_style,
 )
 from memcommit.adapters.interfaces.tui.viewers.read_only import run_read_only_viewer
