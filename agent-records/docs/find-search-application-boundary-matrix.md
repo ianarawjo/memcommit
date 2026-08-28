@@ -138,7 +138,7 @@ path directly; there is no Find-named materialization facade.
 
 ## Verification
 
-`tests/test_find_application.py` proves:
+`tests/test_search_application.py` proves:
 
 - terminal-independent current-readable execution, including queries that
   contain time-oriented words;

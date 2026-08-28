@@ -126,7 +126,7 @@ available as the global close and frozen-scope status line. Both disappear when
 the background turn completes or fails.
 
 Every workbench submission freezes the query, ordered exact checked targets,
-embed choice, and limit into one `FindSearchRequest` with descendant expansion
+embed choice, and limit into one `SearchRequest` with descendant expansion
 disabled. Changes to query, targets, or scope invalidate the visible result set
 and clear its checked set before requiring another Enter; stale rows must never
 appear to describe a new frame. Result checks default to empty and follow the
@@ -200,20 +200,19 @@ remote Grant resource. COPY from a granted source requires `DERIVE`, `EXPORT`,
 `SAVE_ANALYSIS`, and `COMBINE` when multiple authority domains contribute;
 grant identity and permission are revalidated through the write boundary.
 
-The user-facing operation is consistently named `SAVE AS`. The existing
-`find_materialization` checkpoint field and Python compatibility symbols remain
-unchanged so previously written checkpoints and callers retain their exact
-schema; those tokens are implementation history, not terminal language.
+The user-facing operation is consistently named `SAVE AS`. New checkpoints
+use the canonical `search_materialization` field; historical records retain
+their stored spelling and are not rewritten by this naming migration.
 
-The workbench now submits one `FindMaterializationRequest` to the
+The workbench now submits one `SearchMaterializationRequest` to the
 terminal-independent application boundary. That boundary validates the exact
 CURRENT response, checked row set, mode, destination, prepared-plan identity,
 and final receipt shape without importing Store, provider, CLI, or TUI code.
-`MemoryStoreFindMaterializationPort` owns live source resolution, derived-use
+`MemoryStoreSearchMaterializationPort` owns live source resolution, derived-use
 authority, output construction, source locks, require-new publication,
 checkpointing, and rollback. The workbench no longer invokes persistence
-mechanics directly, while `commands.find_materialization` remains a thin
-compatibility facade over the same use case.
+mechanics directly, and the command-owned materialization adapter calls this
+use case without a compatibility facade.
 
 ## Reuse and limitations
 
@@ -242,7 +241,7 @@ roots.
 
 Multiple-target editing may temporarily leave zero rows checked. Clearing the
 last row changes only process-local UI state; pressing Search then fails before
-provider connection because `FindSearchRequest` requires at least one distinct
+provider connection because `SearchRequest` requires at least one distinct
 readable Context. Switching that empty control to SINGLE selects the visible
 tree cursor so single-cardinality state cannot become invalid.
 

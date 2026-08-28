@@ -49,52 +49,52 @@ class _StreamRecorder(io.StringIO):
 
 
 def _evidence():
-    from memcommit.application.operations.search.answer_references import FindAnswerEvidence
+    from memcommit.application.operations.search.answer_references import SearchAnswerEvidence
 
     return (
-        FindAnswerEvidence(
+        SearchAnswerEvidence(
             "m1",
             "task-1/campus-wiki/building-access",
             "memory",
             "11111111-base-access",
             "The main entrance normally closes at 10 p.m.",
         ),
-        FindAnswerEvidence(
+        SearchAnswerEvidence(
             "m2",
             "task-1/participant/construction-updates/building-access",
             "memory",
             "22222222-change-access",
             "During construction, general access ends at 5 p.m.",
         ),
-        FindAnswerEvidence(
+        SearchAnswerEvidence(
             "m3",
             "task-1/campus-wiki/temporary-parking",
             "memory",
             "33333333-base-parking",
             "The underground garage normally accepts general vehicles.",
         ),
-        FindAnswerEvidence(
+        SearchAnswerEvidence(
             "m4",
             "task-1/participant/construction-updates/temporary-parking",
             "memory",
             "44444444-change-parking",
             "During construction, use Outdoor Parking Lot C instead.",
         ),
-        FindAnswerEvidence(
+        SearchAnswerEvidence(
             "m5",
             "task-1/campus-wiki/event-relocations",
             "memory",
             "55555555-base-event",
             "The tenth-floor hall normally remains open during recess.",
         ),
-        FindAnswerEvidence(
+        SearchAnswerEvidence(
             "m6",
             "task-1/participant/construction-updates/event-relocations",
             "memory",
             "66666666-change-event",
             "During construction, viewing and new reservations stop.",
         ),
-        FindAnswerEvidence(
+        SearchAnswerEvidence(
             "m7",
             "task-1/participant",
             "artifact",

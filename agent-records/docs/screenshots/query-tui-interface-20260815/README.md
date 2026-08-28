@@ -38,7 +38,7 @@ failure boundary, and read-only verification.
 | `09-query-copy-failed.png` | Launch failure Query, type question, `Enter`, `y` | Adapter failure stays in Answer as `COPY FAILED` | None |
 | `10-query-failure-verification.png` | `Ctrl-C` | The failed copy changed neither clipboard text nor Query state | None |
 
-The complete copy comes from the typed `FindAnswerReferenceDocument`, not from
+The complete copy comes from the typed `SearchAnswerReferenceDocument`, not from
 reparsing rendered terminal text. It therefore excludes viewport wrapping,
 focus styles, and any mutation-oriented structured clipboard stage.
 Each Reference payload is `[N] content — UID prefix, Context alias`; adjacent

@@ -439,11 +439,11 @@
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.search.provider_policy",
+      "canonical_module": "memcommit.providers.operation_connections",
       "legacy_module": "memcommit.commands.find_query_provider_policy",
-      "owner": "search",
+      "owner": "providers",
       "public_exports": [],
-      "role": "command-owned-support"
+      "role": "infrastructure-support"
     },
     {
       "canonical_module": "memcommit.adapters.console.commands.search.search_workbench",

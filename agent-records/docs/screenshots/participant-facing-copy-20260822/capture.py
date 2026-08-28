@@ -68,24 +68,24 @@ def _run_query_child() -> None:
 
 
 def _run_search_child() -> None:
-    from memcommit.adapters.console.commands.search.search_workbench import run_find_search_workbench
-    from memcommit.application.operations.search.application import FindSearchResponse, FindSearchResult
+    from memcommit.adapters.console.commands.search.search_workbench import run_search_workbench
+    from memcommit.application.operations.search.application import SearchResponse, SearchResult
 
     _verify_pty()
 
     def search(request):
         time.sleep(0.8)
-        return FindSearchResponse(
+        return SearchResponse(
             request=request,
             mode="CURRENT",
             results=(
-                FindSearchResult(
+                SearchResult(
                     context_name="practice/construction",
                     kind="memory",
                     uid="11111111-search-result",
                     content="The north entrance closes at 17:00 during construction.",
                 ),
-                FindSearchResult(
+                SearchResult(
                     context_name="practice",
                     kind="memory",
                     uid="22222222-search-result",
@@ -94,7 +94,7 @@ def _run_search_child() -> None:
             ),
         )
 
-    result = run_find_search_workbench(
+    result = run_search_workbench(
         ("practice", "practice/construction"),
         current="practice",
         initial_target="practice",
@@ -112,15 +112,15 @@ def _run_search_child() -> None:
 
 
 def _run_find_child() -> None:
-    from memcommit.adapters.interfaces.tui.operations.find import (
-        LiteralFindTuiSetup,
-        run_literal_find_tui,
+    from memcommit.adapters.console.commands.find.workbench import (
+        FindTuiSetup,
+        run_find_workbench,
     )
-    from memcommit.application.operations.find.literal_application import (
-        LiteralFindMatch,
-        LiteralFindResult,
-        LiteralFindSourceItem,
-        LiteralFindSpan,
+    from memcommit.application.operations.find.application import (
+        FindMatch,
+        FindResult,
+        FindSourceItem,
+        FindSpan,
     )
 
     _verify_pty()
@@ -128,7 +128,7 @@ def _run_find_child() -> None:
     def find(request):
         content = "Say nihao when greeting a new participant."
         start = content.index("nihao")
-        source = LiteralFindSourceItem(
+        source = FindSourceItem(
             context_name="practice",
             context_uid="practice-context-uid",
             kind="memory",
@@ -136,20 +136,20 @@ def _run_find_child() -> None:
             source_position=1,
             content=content,
         )
-        return LiteralFindResult(
+        return FindResult(
             request=request,
             scanned_item_count=2,
             matches=(
-                LiteralFindMatch(
+                FindMatch(
                     source=source,
-                    spans=(LiteralFindSpan(start, start + 5, "nihao"),),
+                    spans=(FindSpan(start, start + 5, "nihao"),),
                 ),
             ),
         )
 
-    result = run_literal_find_tui(
+    result = run_find_workbench(
         None,
-        setup=LiteralFindTuiSetup(
+        setup=FindTuiSetup(
             names=("practice", "practice/construction"),
             current_name="practice",
             initial_targets=("practice",),

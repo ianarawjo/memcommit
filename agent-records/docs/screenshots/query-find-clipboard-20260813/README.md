@@ -46,7 +46,7 @@ Surface. It also records the shared nonfatal clipboard-failure boundary.
 | `17-find-complete-results-copied.png` | `Y` | Footer confirms the complete two-result ranked set was copied | None |
 | `18-find-read-only-verification.png` | `Ctrl-C` | Focused payloads are distinct, complete payload contains both, and no Context was created | None |
 
-Query's complete copy comes from its typed `FindAnswerReferenceDocument`, not
+Query's complete copy comes from its typed `SearchAnswerReferenceDocument`, not
 from reparsing rendered terminal text. Find's complete copy uses its stable
 grouped renderer over the frozen response. Neither includes viewport wrapping,
 focus styles, checkboxes, or a structured mutation clipboard stage.

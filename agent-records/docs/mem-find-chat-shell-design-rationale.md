@@ -19,7 +19,7 @@ interpretation into command authority.
 
 ## Decision
 
-`find_chat_shell.py` imports only the operation-neutral terminal assets:
+`search_chat_shell.py` imports only the operation-neutral terminal assets:
 
 - vertical TUI regions and frame composition;
 - interactive-terminal validation;
@@ -29,7 +29,7 @@ interpretation into command authority.
 It presents a controller-supplied header, locally validated result rows grouped
 by their owning Context, the transcript, and the input in that visual order.
 Result text comes from typed
-`FindChatResult` values supplied by the local controller, not from generated
+`SearchChatResult` values supplied by the local controller, not from generated
 provider prose. Dialogue and results use separate scrollable panels so a
 growing transcript cannot hide the ranked result set after a follow-up turn.
 Each result also carries host-validated `primary` or `related` relevance. A
@@ -54,7 +54,7 @@ key handler. In a TTY, ordinary `mem find QUERY` performs the validated initial
 search and opens the workbench. Outside a TTY, its established grouped text
 output remains unchanged for scripts, redirection, and tests.
 
-On submit, `run_find_chat_session` freezes the committed `FindChatState` and
+On submit, `run_search_chat_session` freezes the committed `SearchChatState` and
 input, clears and disables the composer, renders the submitted turn with
 `THINKING · RESULTS UNCHANGED`, and schedules one managed background task. The
 task runs the synchronous controller in an executor thread. Only after awaiting
@@ -229,7 +229,7 @@ The current in-process view supplies:
 4. result, dialogue, and input panes in reading order; and
 5. stable widget identity and scroll state across completed follow-up turns.
 
-The committed `FindChatState` changes only after a controller turn completes
+The committed `SearchChatState` changes only after a controller turn completes
 or is converted into a visible failure receipt. `THINKING` and a requested
 close are transient view states. While a turn is in flight, the composer is
 read-only and a second turn cannot be queued against stale state.
@@ -279,10 +279,9 @@ Context headings.
 
 ## Search-result presentation ownership
 
-The operation-neutral grouped text presenter is owned by
-`memcommit.adapters.interfaces.cli.search_results`. Its implementation was moved there
-without changing grouping, ordering, text, escaping, signatures, defaults, or
-exceptions. `memcommit.adapters.console.commands.search.result_present` remains a whole-module
-compatibility alias to the same module object, preserving legacy imports,
-wildcard-visible names, dataclass identity, and monkeypatch behavior while new
-clean consumers import the interface-owned path directly.
+The grouped text presenter is now owned directly by
+`memcommit.adapters.console.commands.search.result_present`. Moving the
+implementation back beside its only consumers changes no grouping, ordering,
+text, escaping, signatures, defaults, or exceptions. The former
+`memcommit.adapters.interfaces.cli.search_results` path is removed rather than
+retained as an inverse compatibility facade.

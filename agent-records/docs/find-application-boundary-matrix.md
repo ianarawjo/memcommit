@@ -85,15 +85,15 @@ loader expansion.
 
 ## Verification
 
-- `tests/test_literal_find_application.py` checks literal, regex, case, span,
+- `tests/test_find_application.py` checks literal, regex, case, span,
   complete-coverage, and zero-width rejection semantics without Store or UI.
-- `tests/test_literal_find_runtime.py` checks readable roots, independent
+- `tests/test_find_runtime.py` checks readable roots, independent
   lexical/embedded reach, MemoryRef provenance, cycles, and unavailable refs.
 - `tests/test_granted_embed.py` checks that List, Show, Find, and semantic
   Search agree on an attached READ projection, preserve direct-scope
   exclusion, reject unsafe mixed recursive copy, and never disclose a nested
   QUERY-only Memory.
-- `tests/test_literal_find_cli.py` checks actual Typer routes, repeated roots,
+- `tests/test_find_cli.py` checks actual Typer routes, repeated roots,
   descendants, literal defaults, regex rejection, non-TTY behavior, short
   inline TTY output, long-result compact-pager routing, bounded `--plain`
   versus `--all-results`, complete clipboard output, and the explicit `--tui`
@@ -101,14 +101,14 @@ loader expansion.
 - `tests/test_paged_result.py` checks the operation-neutral range/total state,
   stable discrete pages, retained row position, result boundaries, and actual
   prompt-toolkit arrow dispatch without an operation model.
-- `tests/test_literal_find_presentation.py` checks shared logical-row grammar,
+- `tests/test_find_presentation.py` checks shared logical-row grammar,
   complete unelided content, hidden human-facing spans, explicit page
   disclosure, distinct empty-scope output, and MemoryRef owner-to-Source
   provenance.
-- `tests/test_literal_find_tui.py` checks explicit execution, cancellation,
+- `tests/test_find_tui.py` checks explicit execution, cancellation,
   visible descendant projection, and focused/whole clipboard contracts.
-- `tests/test_literal_find_public_api.py` and
-  `tests/test_literal_find_agent_adapter.py` check the public Python and
+- `tests/test_find_public_api.py` and
+  `tests/test_find_agent_adapter.py` check the public Python and
   versioned machine contracts, including provider/cache isolation.
 - Registry and MCP projection tests prove the agent tool is exposed through
   the ordinary in-process registry rather than a CLI subprocess.

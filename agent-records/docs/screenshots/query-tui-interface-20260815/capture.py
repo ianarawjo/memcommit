@@ -31,21 +31,21 @@ _BASE.ROWS = ROWS
 
 def _query_document():
     from memcommit.application.operations.search.answer_references import (
-        FindAnswerEvidence,
-        FindAnswerSentence,
-        build_find_answer_reference_document,
+        SearchAnswerEvidence,
+        SearchAnswerSentence,
+        build_search_answer_reference_document,
     )
 
-    return build_find_answer_reference_document(
+    return build_search_answer_reference_document(
         (
-            FindAnswerEvidence(
+            SearchAnswerEvidence(
                 "m1",
                 "task-1/description",
                 "memory",
                 "2db26309-memory",
                 "The Main Building is under construction.",
             ),
-            FindAnswerEvidence(
+            SearchAnswerEvidence(
                 "m2",
                 "task-1/participant/construction-updates",
                 "memory",
@@ -54,9 +54,9 @@ def _query_document():
             ),
         ),
         (
-            FindAnswerSentence("The Main Building is under construction.", ("m1",)),
-            FindAnswerSentence("Visitor parking moves to the east garage.", ("m2",)),
-            FindAnswerSentence("Use the verified updates before editing the wiki.", ("m1", "m2")),
+            SearchAnswerSentence("The Main Building is under construction.", ("m1",)),
+            SearchAnswerSentence("Visitor parking moves to the east garage.", ("m2",)),
+            SearchAnswerSentence("Use the verified updates before editing the wiki.", ("m1", "m2")),
         ),
     )
 

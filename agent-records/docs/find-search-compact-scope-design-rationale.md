@@ -91,9 +91,9 @@ model or one materialization contract.
 
 ## Verification evidence
 
-- `tests/test_literal_find_tui.py` covers compact execution, descendants,
+- `tests/test_find_tui.py` covers compact execution, descendants,
   cancellation, and focused/whole copy.
-- `tests/test_find_search_workbench.py` covers direct exact Context collapse,
+- `tests/test_search_workbench.py` covers direct exact Context collapse,
   transient Browse Profile/multiple selection, empty-range rejection,
   descendant exclusions, Embed independence, background freeze, complete
   result rows, Save As, and writable-input protection.

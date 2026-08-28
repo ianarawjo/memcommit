@@ -80,10 +80,10 @@ case-derived answer contract and its calibration method are recorded in
 distinguishes direct, partial, absent, and observational results without
 weakening this document's host-owned alias and numbering boundary.
 
-Only the row facts and punctuation are shared with literal Find. Query retains
+Only the row facts and punctuation are shared with provider-free Find. Query retains
 first-use citation numbering, evidence alias validation, and used-reference
 selection; Find retains match ordering, exact spans, MemoryRef provenance, and
-its own preview policy. Sharing `FindAnswerEvidence` itself was rejected
+its own preview policy. Sharing `SearchAnswerEvidence` itself was rejected
 because a provider-free exact match has no Query evidence alias or citation
 selection semantics.
 

@@ -20,7 +20,7 @@ The exact pre-relocation failing node IDs were:
 4. `tests/test_context_operand_rollout.py::test_context_catalog_uses_escaped_labels_with_raw_current_identity`
 5. `tests/test_commands.py::TestStatus::test_shows_no_memories_message_when_empty`
 6. `tests/test_context_name_portability.py::test_compatibility_migration_fails_closed_on_frozen_grant_names`
-7. `tests/test_find.py::test_show_result_proposal_runs_exact_read_only_cli_and_preserves_results`
+7. `tests/test_search.py::test_show_result_proposal_runs_exact_read_only_cli_and_preserves_results`
 8. `tests/test_granted_embed.py::test_recursive_find_and_search_open_attached_read_projection`
 9. `tests/test_granted_impact.py::test_temporal_find_rejects_granted_view_without_history_access`
 10. `tests/test_meld.py::test_meld_shell_selects_one_issue_reading_from_the_compact_surface`

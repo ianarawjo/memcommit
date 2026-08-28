@@ -71,6 +71,8 @@ COMPATIBILITY_TARGET_OVERRIDES = {
     "impact_controller": (
         "memcommit.adapters.interfaces.tui.workbenches.impact"
     ),
+    "literal_find_application": "memcommit.application.operations.find.application",
+    "literal_find_runtime": "memcommit.application.operations.find.runtime",
     "review_report": "memcommit.application.reviewing.report",
 }
 

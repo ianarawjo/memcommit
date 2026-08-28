@@ -94,9 +94,9 @@ ENTRY_EXPORTS = {
 }
 
 
-# The public operation names were clarified after the historical flat-module
-# baseline: semantic Find is now `search`, while literal Find is now `find`.
-ENTRY_PACKAGE_TARGETS = {
+ENTRY_TARGETS = {
+    # The former semantic Find entry became Search, while provider-free
+    # Literal Find became the canonical Find command.
     "find": "search",
     "literal_find": "find",
 }
@@ -117,7 +117,6 @@ OWNED_SUPPORT_TARGETS = {
     "duplicate_dedup_handoff": "find_duplicates.dedup_handoff",
     "find_chat_shell": "search.chat_shell",
     "find_materialization": "search.materialization",
-    "find_query_provider_policy": "search.provider_policy",
     "find_search_workbench": "search.search_workbench",
     "forget_setup_workbench": "forget.setup",
     "ground_named_shell": "ground.named_shell",
@@ -151,6 +150,21 @@ OWNED_SUPPORT_TARGETS = {
     "update_checkpoint_history": "update.checkpoint_history",
     "update_render": "update.render",
     "update_setup": "update.setup",
+}
+
+
+INFRASTRUCTURE_SUPPORT_TARGETS = {
+    "find_query_provider_policy": "memcommit.providers.operation_connections",
+}
+
+
+MODULE_TARGET_PATH_OVERRIDES = {
+    "memcommit.adapters.console.commands.ground.named_shell": (
+        "src/memcommit/adapters/console/commands/ground/named_shell/__init__.py"
+    ),
+    "memcommit.adapters.console.commands.ground.shell": (
+        "src/memcommit/adapters/console/commands/ground/shell/__init__.py"
+    ),
 }
 
 
@@ -205,6 +219,9 @@ SHARED_MODULE_TARGETS = {
 
 
 def _target_path(module: str) -> Path:
+    override = MODULE_TARGET_PATH_OVERRIDES.get(module)
+    if override is not None:
+        return REPOSITORY / override
     module_path = REPOSITORY / "src" / module.replace(".", "/")
     module_file = module_path.with_suffix(".py")
     if module_file.is_file():
@@ -240,7 +257,7 @@ def _baseline_modules() -> set[str]:
 def build_plan() -> dict[str, object]:
     entries: list[dict[str, object]] = []
     for stem, exports in sorted(ENTRY_EXPORTS.items()):
-        target = ENTRY_PACKAGE_TARGETS.get(stem, stem)
+        target = ENTRY_TARGETS.get(stem, stem)
         entries.append(
             {
                 "legacy_module": f"{LEGACY_NAMESPACE}.{stem}",
@@ -248,6 +265,16 @@ def build_plan() -> dict[str, object]:
                 "owner": target,
                 "role": "command-entry",
                 "public_exports": list(exports),
+            }
+        )
+    for stem, target in sorted(INFRASTRUCTURE_SUPPORT_TARGETS.items()):
+        entries.append(
+            {
+                "legacy_module": f"{LEGACY_NAMESPACE}.{stem}",
+                "canonical_module": target,
+                "owner": "providers",
+                "role": "infrastructure-support",
+                "public_exports": [],
             }
         )
     for stem, target in sorted(OWNED_SUPPORT_TARGETS.items()):
@@ -449,10 +476,10 @@ def main() -> int:
             if not path.is_file() or path.read_text(encoding="utf-8") != rendered:
                 raise SystemExit(f"stale command package layout artifact: {path}")
         for stem, exports in ENTRY_EXPORTS.items():
-            package = ENTRY_PACKAGE_TARGETS.get(stem, stem)
-            package_init = COMMANDS / package / "__init__.py"
+            target = ENTRY_TARGETS.get(stem, stem)
+            package_init = COMMANDS / target / "__init__.py"
             if package_init.read_text(encoding="utf-8") != render_entry_init(
-                package, exports
+                target, exports
             ):
                 raise SystemExit(f"stale command package boundary: {package_init}")
         verify_layout(plan)
@@ -462,9 +489,9 @@ def main() -> int:
     OUTPUT_JSON.write_text(rendered_json, encoding="utf-8")
     OUTPUT_MARKDOWN.write_text(rendered_markdown, encoding="utf-8")
     for stem, exports in ENTRY_EXPORTS.items():
-        package = ENTRY_PACKAGE_TARGETS.get(stem, stem)
-        (COMMANDS / package / "__init__.py").write_text(
-            render_entry_init(package, exports),
+        target = ENTRY_TARGETS.get(stem, stem)
+        (COMMANDS / target / "__init__.py").write_text(
+            render_entry_init(target, exports),
             encoding="utf-8",
         )
     print(f"wrote {len(plan['modules'])} command module records")

@@ -39,19 +39,19 @@ def _verify_pty() -> None:
 
 
 def _run_child() -> None:
-    from memcommit.adapters.console.commands.search.search_workbench import run_find_search_workbench
-    from memcommit.application.operations.search.application import FindSearchResponse, FindSearchResult
+    from memcommit.adapters.console.commands.search.search_workbench import run_search_workbench
+    from memcommit.application.operations.search.application import SearchResponse, SearchResult
 
     _verify_pty()
 
     def search(request):
         assert request.query == "a is apple during recess"
         time.sleep(0.8)
-        return FindSearchResponse(
+        return SearchResponse(
             request=request,
             mode="CURRENT",
             results=(
-                FindSearchResult(
+                SearchResult(
                     context_name="practice/source",
                     kind="memory",
                     uid="17cd32cc-current-result",
@@ -60,7 +60,7 @@ def _run_child() -> None:
             ),
         )
 
-    result = run_find_search_workbench(
+    result = run_search_workbench(
         ("practice/source",),
         current="practice/source",
         initial_target="practice/source",

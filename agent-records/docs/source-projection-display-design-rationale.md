@@ -102,7 +102,7 @@ mechanics; it never owns Source identity or matching. Query's used-citation
 set, Find's complete span set, `--all-results`, and clipboard scope remain outside both
 shared presentation components.
 
-Reusing Query's `FindAnswerEvidence` directly in literal Find was rejected.
+Reusing Query's `SearchAnswerEvidence` directly in provider-free Find was rejected.
 That would impose Query's alias grammar and evidence kinds on a provider-free
 exact-text operation, and would make a presentation refactor capable of
 changing either operation's semantic result contract.

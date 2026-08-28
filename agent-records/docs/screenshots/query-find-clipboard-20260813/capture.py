@@ -31,21 +31,21 @@ _BASE.ROWS = ROWS
 
 def _query_document():
     from memcommit.application.operations.search.answer_references import (
-        FindAnswerEvidence,
-        FindAnswerSentence,
-        build_find_answer_reference_document,
+        SearchAnswerEvidence,
+        SearchAnswerSentence,
+        build_search_answer_reference_document,
     )
 
-    return build_find_answer_reference_document(
+    return build_search_answer_reference_document(
         (
-            FindAnswerEvidence(
+            SearchAnswerEvidence(
                 "m1",
                 "task-1/description",
                 "memory",
                 "2db26309-memory",
                 "The Main Building is under construction.",
             ),
-            FindAnswerEvidence(
+            SearchAnswerEvidence(
                 "m2",
                 "task-1/participant/construction-updates",
                 "memory",
@@ -54,9 +54,9 @@ def _query_document():
             ),
         ),
         (
-            FindAnswerSentence("The Main Building is under construction.", ("m1",)),
-            FindAnswerSentence("Visitor parking moves to the east garage.", ("m2",)),
-            FindAnswerSentence("Use the verified updates before editing the wiki.", ("m1", "m2")),
+            SearchAnswerSentence("The Main Building is under construction.", ("m1",)),
+            SearchAnswerSentence("Visitor parking moves to the east garage.", ("m2",)),
+            SearchAnswerSentence("Use the verified updates before editing the wiki.", ("m1", "m2")),
         ),
     )
 
@@ -124,25 +124,25 @@ def _run_query_child(*, fail: bool = False) -> None:
 
 def _run_find_child() -> None:
     from memcommit.adapters.console.commands.search.search_workbench import (
-        FindSearchResponse,
-        FindSearchResult,
-        run_find_search_workbench,
+        SearchResponse,
+        SearchResult,
+        run_search_workbench,
     )
 
     writes: list[str] = []
 
     def search(request):
-        return FindSearchResponse(
+        return SearchResponse(
             request,
             "CURRENT",
             (
-                FindSearchResult(
+                SearchResult(
                     context_name="task-1/description",
                     kind="memory",
                     uid="2db26309-memory",
                     content="The Main Building is under construction.",
                 ),
-                FindSearchResult(
+                SearchResult(
                     context_name="task-1/participant/construction-updates",
                     kind="memory",
                     uid="5ab81742-memory",
@@ -155,7 +155,7 @@ def _run_find_child() -> None:
         )
 
     print("PTY", os.get_terminal_size().columns, os.get_terminal_size().lines)
-    result = run_find_search_workbench(
+    result = run_search_workbench(
         (
             "task-1",
             "task-1/description",
