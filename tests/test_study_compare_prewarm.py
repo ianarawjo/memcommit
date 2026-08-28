@@ -1,8 +1,8 @@
 import json
 import uuid
 
-import memcommit.application.ops as ops
-from memcommit.application.authority.access import ContextAccess
+import memcommit.application.capabilities.ops as ops
+from memcommit.application.capabilities.authority.access import ContextAccess
 from memcommit.application.operations.compare.ledger.model import (
     ComparisonAnalysis,
     ComparisonInput,
@@ -11,7 +11,9 @@ from memcommit.application.operations.compare.ledger.model import (
     ComparisonReports,
 )
 from memcommit.core.context import Context
-from memcommit.application.evaluation.study_compare_prewarm import prewarm_pair
+from memcommit.study_scenarios.legacy.prewarm.generation.compare_pair import (
+    prewarm_pair,
+)
 from memcommit.providers.types import CompletionRun, ProviderIdentity
 from memcommit.persistence.store import MemoryStore
 

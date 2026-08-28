@@ -6,30 +6,30 @@ from typing import Annotated, Optional
 
 import typer
 
-import memcommit.application.ops as ops
-from memcommit.adapters.console.shared.context_operand import (
+import memcommit.application.capabilities.ops as ops
+from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
     choose_context_operand,
 )
-from memcommit.application.authority.access import resolve_context_access
-from memcommit.adapters.interfaces.cli.quality_findings import (
+from memcommit.application.capabilities.authority.access import resolve_context_access
+from memcommit.adapters.console.terminal.components.quality_find.rendering import (
     render_cleanup_member,
     render_heading,
 )
-from memcommit.adapters.console.shared.command_progress import CommandProgress
-from memcommit.adapters.console.shared.quality_find_workbench import (
+from memcommit.adapters.console.terminal.components.progress import CommandProgress
+from memcommit.adapters.console.terminal.components.quality_find.workbench import (
     annotate_quality_find_attempt,
 )
-from memcommit.adapters.console.text import (
+from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
-from memcommit.adapters.console.identity import collision_safe_uid_prefixes
+from memcommit.adapters.console.terminal.core.identity import collision_safe_uid_prefixes
 from memcommit.core.context import Memory
 from memcommit.core.context_targeting.presets import (
     ContextScopePreset,
     resolve_scope_preset,
 )
-from memcommit.application.reviewing.quality.findings import DuplicateFinding, DuplicateReport, FindingsError
+from memcommit.application.capabilities.reviewing.quality.findings import DuplicateFinding, DuplicateReport, FindingsError
 from memcommit.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
@@ -51,13 +51,13 @@ from memcommit.application.operations.dedun.scope import (
     freeze_recursive_dedun_scope,
     prepare_recursive_dedun_scope,
 )
-from memcommit.application.reviewing.quality.handoff import (
+from memcommit.application.capabilities.reviewing.quality.handoff import (
     QualityFindingSource,
 )
-from memcommit.application.semantic.redundancy_evidence import (
+from memcommit.application.capabilities.semantic.redundancy_evidence import (
     redundancy_evidence_json,
 )
-from memcommit.application.reviewing.quality.redundancy_scope import (
+from memcommit.application.capabilities.reviewing.quality.redundancy_scope import (
     RedundancyScopeAnalysis,
     analyze_independent_redundancy_scope,
     freeze_redundancy_scope,

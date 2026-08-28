@@ -7,16 +7,16 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.adapters.console.shared.context_operand import (
+from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
 )
-from memcommit.application.authority.access import (
+from memcommit.application.capabilities.authority.access import (
     ContextAccess,
     context_access_display_facts,
     resolve_context_access,
 )
-from memcommit.adapters.console.shared.exact_command_review import (
-    ExactCommandReview,
+from memcommit.adapters.console.coordination.command_review.model import CommandReview
+from memcommit.adapters.console.terminal.components.exact_command_review.rendering import (
     format_exact_command,
 )
 from memcommit.adapters.console.commands.search.chat_shell import (
@@ -37,8 +37,8 @@ from memcommit.application.operations.search.materialization_application import 
 from memcommit.application.operations.search.materialization_runtime import (
     execute_search_materialization,
 )
-from memcommit.adapters.console.shared.command_progress import CommandProgress
-from memcommit.adapters.console.shared.readable_context_catalog import (
+from memcommit.adapters.console.terminal.components.progress import CommandProgress
+from memcommit.core.context_targeting.readable_catalog import (
     ReadableContextCatalog,
     freeze_readable_context_catalog,
     freeze_profile_readable_context_catalog,
@@ -52,8 +52,8 @@ from memcommit.core.context_targeting.presets import (
     resolve_context_traversal,
     resolve_scope_preset,
 )
-from memcommit.application.authority.derived_policy import authorize_combination
-from memcommit.adapters.console.text import (
+from memcommit.application.capabilities.authority.derived_policy import authorize_combination
+from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
     safe_terminal_text,
 )
@@ -147,7 +147,7 @@ class SearchShowProposal:
 
     action: SearchTurnAction
     result: SearchChatResult
-    review: ExactCommandReview
+    review: CommandReview
     submitted_text: str
 
 
@@ -782,7 +782,7 @@ def _show_result_proposal(
     if len(matches) != 1:
         raise SearchError("The requested Search result is missing or ambiguous.")
     selected = matches[0]
-    review = ExactCommandReview(
+    review = CommandReview(
         argv=(
             "mem",
             "show",
@@ -1259,10 +1259,10 @@ def cmd(
             accesses = tuple(
                 all_readable_catalog.access_for(name) for name in target_names
             )
-            # Semantic retrieval combines every frozen contributor in one
-            # provider frame, so READ visibility alone is insufficient for
-            # granted Sources even though provider-free Find needs only READ.
-            authorize_combination(accesses)
+        # Semantic retrieval is derived use even for one selected Context;
+        # multiple ownership domains additionally require COMBINE. Keep this
+        # before provider construction so READ-only Grants remain browse-only.
+        authorize_combination(accesses)
     except (
         FileNotFoundError,
         OSError,

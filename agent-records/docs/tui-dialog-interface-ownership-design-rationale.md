@@ -11,9 +11,9 @@ direction inconsistent with the rest of the shared TUI components.
 ## Decision
 
 The existing implementation files move to
-`memcommit.adapters.console.tui.components`. Import's workbench uses those canonical
-paths. Each former command module remains as a `sys.modules` alias to the
-interface-owned module, rather than wrapping or copying its public function.
+`memcommit.adapters.console.terminal.components`. Import's workbench uses those
+canonical paths. The former shared compatibility modules are removed rather
+than wrapping or copying the public functions.
 
 Context-reach and flat-selection move byte-for-byte. Exact-name changes only
 the import of its already interface-owned exact-name control from the legacy

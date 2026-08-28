@@ -5,7 +5,7 @@ import builtins
 
 import pytest
 
-from memcommit.application import ops
+from memcommit.application.capabilities import ops
 from memcommit.application.operations.ground.context_catalog import (
     GroundContextLocator,
     discover_ground_context_locators,

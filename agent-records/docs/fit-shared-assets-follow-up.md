@@ -28,8 +28,9 @@ reuse EDIT/EMBED/REMOVE action meaning or tint the complete relationship line.
 
 ## Current boundary
 
-- The CLI command owns composition only. Its terminal-safe receipt projection
-  lives under `interfaces.cli` and `interfaces.fit`.
+- The command owns composition and its terminal-safe receipt projection under
+  `adapters.console.commands.fit`; the retired `interfaces.cli` staging package
+  retains no presentation facade.
 - General Fit remains process-local and creates no durable receipt. Stored
   input origins remain typed application data for authority and exact
   revalidation, not a reason to expose the whole frozen frame in a Viewer.

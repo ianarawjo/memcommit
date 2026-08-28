@@ -59,7 +59,7 @@ reclassifying an exception.
 ## Shared agent mechanics and skill boundary
 
 Query and Add share only generic JSON-object validation and bounded error
-envelope construction in `memcommit.adapters.interfaces.agent.contract`. Their routes,
+envelope construction in `memcommit.adapters.agent.contract`. Their routes,
 schemas, result serialization, error categories, and retry rules remain
 operation-owned. In particular, Query may retry one provider failure while Add
 never advertises an automatic retry.
@@ -74,13 +74,12 @@ not included in the Python wheel. The default in-process agent registry binds
 this adapter and schema to a caller-owned public client and obtains Add's
 `use_when` discovery value from canonical Help.
 
-MCP preserves that trigger in both standard description text and namespaced
-metadata. A caller that needs the complete structured `COPY OR LINK` comparison
-calls `memcommit_help` with `kind: describe-detail`, `operation: add`, and
-`detail: copy-or-link`. MCP exposes that stable ID as compact metadata but does
-not flatten the full comparison into Add's input schema. The Skill names the
-same ID and retains only the actionable version needed to avoid choosing the
-wrong tool; it is not another semantic source.
+The frozen registry preserves that trigger and the typed `COPY OR LINK` detail
+reference beside the standard function-tool schema. A caller that needs the
+complete comparison invokes `memcommit_help` with `kind: describe-detail`,
+`operation: add`, and `detail: copy-or-link`. The Skill names the same ID and
+retains only the actionable version needed to avoid choosing the wrong tool;
+it is not another semantic source.
 
 ## Verification and non-goals
 
@@ -90,7 +89,7 @@ stable error categories, no mutation retry, error redaction and bounds,
 dependency direction, and the companion skill contract. Query adapter tests
 also run after extraction of the shared envelope mechanics.
 
-This slice does not add a network endpoint, Codex plugin, authentication layer,
-idempotency key, dry run, status lookup, context creation, or Skill installer.
-The optional MCP stdio server projects the shared registry; it must not broaden
-Add authority or reinterpret an absent receipt as success.
+This slice does not add a wire transport, network endpoint, Codex plugin,
+authentication layer, idempotency key, dry run, status lookup, context creation,
+or Skill installer. An embedding host consumes the shared registry without
+broadening Add authority or reinterpreting an absent receipt as success.

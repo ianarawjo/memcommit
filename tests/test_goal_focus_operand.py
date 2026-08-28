@@ -4,9 +4,9 @@ from __future__ import annotations
 
 import pytest
 
-import memcommit.application.ops as ops
-from memcommit.application.semantic.goal_focus import GoalFocusError
-from memcommit.application.semantic.goal_focus_runtime import (
+import memcommit.application.capabilities.ops as ops
+from memcommit.application.capabilities.semantic.goal_focus import GoalFocusError
+from memcommit.application.capabilities.semantic.goal_focus_runtime import (
     freeze_goal_focus_context,
     freeze_goal_focus_operand,
     revalidate_goal_focus,

@@ -6,9 +6,9 @@ from types import SimpleNamespace
 
 import pytest
 
-import memcommit.adapters.console.shared.diff_browser as diff_browser
-from memcommit.adapters.console.shared.context_picker import ContextSubtreeSelection
-from memcommit.adapters.console.shared.history_picker import HISTORY_BACK
+import memcommit.adapters.console.terminal.components.history.browser as diff_browser
+from memcommit.core.context_targeting.tui.picker import ContextSubtreeSelection
+from memcommit.adapters.console.terminal.components.history.picker import HISTORY_BACK
 
 
 class Store:

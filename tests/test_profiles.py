@@ -16,8 +16,8 @@ import click
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
-import memcommit.application.operations.init_study.publication as init_study_publication_module
+import memcommit.application.capabilities.ops as ops
+import memcommit.application.operations.init_study.profile.publication as init_study_publication_module
 import memcommit.application.operations.profile.model as profiles_module
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.switch.command import (
@@ -32,7 +32,7 @@ from memcommit.providers.policy import (
     STUDY_PROVIDER_POLICY_DIGEST,
     STUDY_PROVIDER_POLICY_VERSION,
 )
-from memcommit.adapters.console.theme import (
+from memcommit.adapters.console.terminal.core.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )

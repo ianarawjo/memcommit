@@ -1,12 +1,12 @@
-"""Versioned agent and MCP-facing semantic Search contract."""
+"""Versioned agent-facing semantic Search contract."""
 
 from __future__ import annotations
 
 import json
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.python_api import MemCommitClient
-from memcommit.adapters.interfaces.agent.search import (
+from memcommit.adapters.agent.search import (
     SEARCH_AGENT_TOOL_NAME,
     SearchAgentAdapter,
     search_agent_tool_schema,

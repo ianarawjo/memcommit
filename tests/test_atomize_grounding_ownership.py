@@ -52,3 +52,17 @@ def test_primary_analysis_and_grounding_keep_separate_contracts() -> None:
     assert "memcommit.application.operations.atomize.application" not in grounding
     assert "memcommit.application.operations.atomize.analysis_application" not in grounding
     assert "memcommit.application.operations.atomize.analysis_runtime" not in grounding
+
+
+def test_grounding_facade_preserves_concept_owned_model_modules() -> None:
+    from memcommit.application.operations.atomize.grounding import (
+        AtomizeGroundingAssessment,
+        AtomizeGroundingBindings,
+        AtomizeGroundingChangeSet,
+        AtomizeGroundingSession,
+    )
+
+    assert AtomizeGroundingBindings.__module__.endswith(".grounding.bindings")
+    assert AtomizeGroundingAssessment.__module__.endswith(".grounding.review")
+    assert AtomizeGroundingChangeSet.__module__.endswith(".grounding.changes")
+    assert AtomizeGroundingSession.__module__.endswith(".grounding.session")

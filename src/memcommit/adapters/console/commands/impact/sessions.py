@@ -4,17 +4,17 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.adapters.console.shared.resolution_workbench_shell import (
+from memcommit.adapters.console.terminal.components.resolution.session_shell import (
     SessionTodoView,
     resolution_report_fragments,
     resolution_seeded_report_fragments,
     run_resolution_workbench_shell,
 )
-from memcommit.adapters.interfaces.tui.workbenches.impact import ImpactController
-from memcommit.application.reviewing.memory_diff import update_operation_change
+from memcommit.adapters.console.terminal.components.impact import ImpactController
+from memcommit.application.capabilities.reviewing.memory_diff import update_operation_change
 from memcommit.application.operations.meld.model import MeldSession
 from memcommit.application.operations.meld.resolution_adapter import MeldResolutionWorkbenchAdapter
-from memcommit.application.resolution.workbench import ResolutionWorkbenchView
+from memcommit.application.capabilities.resolution.workbench import ResolutionWorkbenchView
 from memcommit.application.operations.sever.model import SeverSession
 from memcommit.application.operations.sever.resolution_adapter import (
     SeverResolutionWorkbenchAdapter,

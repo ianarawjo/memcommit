@@ -1,1 +1,0 @@
-"""Shared terminal workbench compositions."""

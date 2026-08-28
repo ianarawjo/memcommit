@@ -1,8 +1,8 @@
 """Checkpoint-to-picker projection contracts."""
 from __future__ import annotations
 
-from memcommit.adapters.console.shared.history_present import checkpoint_picker_entries
-from memcommit.application.retained_history.reconstruction import HistoryState, MemoryTransition, MemoryVersion
+from memcommit.adapters.console.terminal.components.history.presentation import checkpoint_picker_entries
+from memcommit.application.capabilities.retained_history.reconstruction import HistoryState, MemoryTransition, MemoryVersion
 from memcommit.application.operations.log.search import HistorySearchResult
 
 
@@ -107,7 +107,7 @@ def test_semantic_memory_version_projection_keeps_checkpoint_boundary():
         memory_version=version,
     )
 
-    from memcommit.adapters.console.shared.history_present import (
+    from memcommit.adapters.console.terminal.components.history.presentation import (
         history_result_picker_entries,
     )
 
@@ -142,7 +142,7 @@ def test_semantic_checkpoint_projection_distinguishes_active_and_archived():
     active = HistorySearchResult(**common, selectable=True)
     archived = HistorySearchResult(**common, selectable=False)
 
-    from memcommit.adapters.console.shared.history_present import (
+    from memcommit.adapters.console.terminal.components.history.presentation import (
         history_result_picker_entries,
     )
 
@@ -184,7 +184,7 @@ def test_current_memory_version_projection_is_explicitly_uncheckpointed():
         memory_version=version,
     )
 
-    from memcommit.adapters.console.shared.history_present import (
+    from memcommit.adapters.console.terminal.components.history.presentation import (
         history_result_picker_entries,
     )
 
@@ -238,7 +238,7 @@ def test_restored_transition_labels_checkpoint_uid_as_operation_receipt():
         transition=transition,
     )
 
-    from memcommit.adapters.console.shared.history_present import (
+    from memcommit.adapters.console.terminal.components.history.presentation import (
         history_result_picker_entries,
         history_result_recovery_label,
     )

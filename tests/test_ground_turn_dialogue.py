@@ -5,7 +5,7 @@ import json
 
 import pytest
 
-from memcommit.application import ops
+from memcommit.application.capabilities import ops
 from memcommit.application.operations.ground.model import (
     GROUND_PROPOSITION_SCHEMA_VERSION,
     GroundTargetSpec,

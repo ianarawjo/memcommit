@@ -38,9 +38,8 @@ existing PTY evidence are unchanged.
 | `commands.remove.cmd` | compatibility facade | alias dispatch → canonical command composition | none independently | contains no behavior and preserves complete command parity | `VERIFIED` |
 | `api.client.MemCommitClient.remove_item` | public Python facade | exact selector + optional owner → immutable receipt | same checkpointed application mutation | stable typed error and no terminal import | `VERIFIED` |
 | `api.client.MemCommitClient.plan_context_delete` / `apply_context_delete` | public Python facade | Context locator → reviewed plan → lifecycle receipt | read-only plan, then exact permanent Apply | plan is client-bound and tamper-evident; caller chooses when to Apply | `VERIFIED` |
-| `interfaces.agent.delete.DeleteAgentAdapter` | agent adapter | three strict version-1 JSON contracts → bounded envelopes | read-only plan, checkpointed item removal, or permanent Context delete | apply re-freezes the target and requires the exact prior plan digest; no automatic mutation retry | `VERIFIED` |
+| `adapters.agent.delete.DeleteAgentAdapter` | agent adapter | three strict version-1 JSON contracts → bounded envelopes | read-only plan, checkpointed item removal, or permanent Context delete | apply re-freezes the target and requires the exact prior plan digest; no automatic mutation retry | `VERIFIED` |
 | default Agent registry bindings | agent registry | public Help guidance + schema + handler + effect hints → frozen definitions | discovery only | item removal is mutable/non-destructive, plan is read-only, Context Apply is destructive | `VERIFIED` |
-| `McpRegistryProjection` | MCP adapter | frozen definitions → MCP Tools | none during discovery; calls delegate once | standard annotations preserve the three effect classes so the host can approve only the destructive call | `VERIFIED` |
 
 ## Route and effect matrix
 
@@ -52,13 +51,12 @@ existing PTY evidence are unchanged.
 | picker Context in human CLI | CLI prints one exact frozen effect and asks `Continue? [y/N]`, unless `--force` | Context record/history deleted; matching artifacts cleaned; lifecycle event retained | not Undoable; stale plan must be reselected; committed cleanup warning must not be retried as if deletion failed |
 | public Python item | caller invokes `remove_item` | same checkpointed removal | typed `undoable=True` receipt |
 | public Python Context | caller reviews plan object and separately invokes Apply | same exact permanent deletion | typed `undoable=False` lifecycle receipt |
-| agent/MCP item | host normal mutable-tool policy | same checkpointed removal | `destructiveHint=false`; no implicit retry |
-| agent/MCP Context | read-only plan first; host policy approves the separately exposed destructive Apply tool | same exact permanent deletion | `destructiveHint=true`; expected digest prevents approval retargeting |
+| agent item | host normal mutable-tool policy | same checkpointed removal | host-neutral `destructive=false`; no implicit retry |
+| agent Context | read-only plan first; host policy approves the separately exposed destructive Apply tool | same exact permanent deletion | host-neutral `destructive=true`; expected digest prevents approval retargeting |
 
-An MCP server does not read stdin or emit its own y/N prompt. The host decides
-whether to ask the person based on tool annotations and its configured approval
-policy. A host running in full-access or approval-never mode may intentionally
-skip that prompt; the application still enforces exact identity/digest review,
+An embedding host decides whether to ask the person based on the registry's
+effect hints and its configured approval policy. A host may intentionally skip
+that prompt; the application still enforces exact identity/digest review,
 authority, write protection, and Store CAS, but it cannot override the host's
 chosen approval policy.
 

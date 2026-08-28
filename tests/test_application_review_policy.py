@@ -2,7 +2,7 @@
 
 import pytest
 
-from memcommit.application.review_policy import (
+from memcommit.application.capabilities.review_policy import (
     ApplicationReviewPolicy,
     ownership_aware_application_review,
 )

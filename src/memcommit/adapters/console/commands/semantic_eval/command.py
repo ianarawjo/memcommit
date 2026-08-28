@@ -3,7 +3,6 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from dataclasses import dataclass
-import json
 import math
 import os
 from pathlib import Path
@@ -12,9 +11,9 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.adapters.console.shared.command_group import CanonicalCommandGroup
+from memcommit.adapters.console.coordination.command_group import CanonicalCommandGroup
 
-from memcommit.adapters.console.text import (
+from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
 from memcommit.configuration.config import Config
@@ -22,7 +21,7 @@ from memcommit.providers.policy import (
     ProviderPolicyOverride,
     resolve_operation_provider_policy,
 )
-from memcommit.application.evaluation.semantic_campaign import (
+from memcommit.application.capabilities.evaluation.semantic_campaign import (
     CORPUS_CHOICES,
     LEDGER_KIND,
     PIPELINE_CHOICES,
@@ -31,7 +30,7 @@ from memcommit.application.evaluation.semantic_campaign import (
     run_ambiguity_campaign,
     run_duplicate_campaign,
 )
-from memcommit.application.evaluation.operation_gate_campaign import run_operation_gate_campaign
+from memcommit.application.capabilities.evaluation.operation_gate_campaign import run_operation_gate_campaign
 from memcommit.providers.types import (
     CODEX_CHATGPT_PROVIDER,
     CODEX_LUNA_LOW_PRESET,

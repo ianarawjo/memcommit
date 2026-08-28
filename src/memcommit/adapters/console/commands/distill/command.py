@@ -6,15 +6,15 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.application.authority.access import (
+from memcommit.application.capabilities.authority.access import (
     context_access_display_facts,
     resolve_context_access,
 )
 from memcommit.bootstrap import build_distill_console_runner
 from memcommit.adapters.console.clipboard import write_system_clipboard
-from memcommit.adapters.console.shared.command_progress import CommandProgress
-from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
-from memcommit.adapters.console.shared.readable_context_catalog import (
+from memcommit.adapters.console.terminal.components.progress import CommandProgress
+from memcommit.adapters.console.coordination.context_operand import ContextOperandSnapshot
+from memcommit.core.context_targeting.readable_catalog import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.core.context_targeting.presets import (
@@ -26,7 +26,7 @@ from memcommit.core.context_targeting.tui.picker import (
     ContextMemoryRow,
     context_memory_rows,
 )
-from memcommit.application.semantic.goal_focus_runtime import freeze_goal_focus_operand
+from memcommit.application.capabilities.semantic.goal_focus_runtime import freeze_goal_focus_operand
 from memcommit.core.context_targeting.naming import validate_portable_context_name
 from memcommit.application.operations.distill.model import DistillError
 from memcommit.application.operations.distill.application import (
@@ -50,14 +50,16 @@ from memcommit.application.operations.ground.distill import (
 )
 from memcommit.adapters.console.commands.distill.proposal import distill_result_text
 from memcommit.adapters.console.commands.distill.receipt import render_distill_receipt
-from memcommit.adapters.interfaces.cli.semantic_add import render_applied_memory_preview
+from memcommit.adapters.console.terminal.components.applied_memory_preview import (
+    render_applied_memory_preview,
+)
 from memcommit.adapters.console import (
     ConsoleMode,
     ConsoleModeError,
     SystemTerminalCapabilities,
     resolve_console_mode,
 )
-from memcommit.adapters.console.text import display_escape_text
+from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.adapters.console.commands.distill.workbench import DistillTuiSetup
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError

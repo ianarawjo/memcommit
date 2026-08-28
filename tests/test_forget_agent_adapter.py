@@ -9,7 +9,7 @@ import uuid
 
 from memcommit.adapters.python_api import ForgetProviderFailure, MemCommitClient
 from memcommit.core.context import AutoCheckpoint, Context, Memory
-from memcommit.adapters.interfaces.agent.forget import (
+from memcommit.adapters.agent.forget import (
     FORGET_AGENT_TOOL_NAME,
     ForgetAgentAdapter,
     forget_agent_tool_schema,
@@ -323,7 +323,6 @@ def test_agent_adapter_depends_only_on_public_api_and_shared_contract() -> None:
         Path(__file__).parents[1]
         / "src" / "memcommit"
         / "adapters"
-        / "interfaces"
         / "agent"
         / "forget.py"
     )
@@ -336,7 +335,7 @@ def test_agent_adapter_depends_only_on_public_api_and_shared_contract() -> None:
             imported.append(node.module)
 
     assert "memcommit.adapters.python_api" in imported
-    assert "memcommit.adapters.interfaces.agent.contract" in imported
+    assert "memcommit.adapters.agent.contract" in imported
     forbidden = (
         "memcommit.adapters.console.commands",
         "memcommit.application.operations",

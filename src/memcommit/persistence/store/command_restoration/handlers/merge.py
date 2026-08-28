@@ -24,7 +24,7 @@ class _MergeRestorationMixin:
         place. Every member receives the same restoration receipt, so neither
         a partial tree nor an incomplete redo can enter the global stack.
         """
-        from memcommit.application.retained_history.command_history import (
+        from memcommit.application.capabilities.retained_history.command_history import (
             CommandRestoreResult,
             command_restore_metadata,
         )

@@ -8,8 +8,8 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.adapters.console.shared.command_group import CanonicalCommandGroup
-from memcommit.adapters.console.shared.command_progress import CommandProgress
+from memcommit.adapters.console.coordination.command_group import CanonicalCommandGroup
+from memcommit.adapters.console.terminal.components.progress import CommandProgress
 from memcommit.configuration.config import Config
 from memcommit.providers.policy import (
     POLICY_VERSION,

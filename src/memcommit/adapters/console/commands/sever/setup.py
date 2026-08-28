@@ -11,8 +11,10 @@ from prompt_toolkit.output import Output
 
 from memcommit.core.context_targeting.naming import validate_portable_context_name
 from memcommit.core.context_targeting.tui.picker import ContextMemoryRow
-from memcommit.application.interactive_command_review import sever_start_command_review
-from memcommit.adapters.console.tui.components.endpoint_setup import (
+from memcommit.adapters.console.coordination.command_review import (
+    sever as sever_command_review,
+)
+from memcommit.adapters.console.terminal.components.endpoint_setup import (
     EndpointSetupDraft,
     EndpointSetupMemory,
     EndpointSetupMode,
@@ -251,7 +253,7 @@ def choose_sever_endpoint_setup(
         source = draft.value("SOURCE")
         criteria = draft.value("CRITERIA")
         output = draft.value("OUTPUT")
-        return sever_start_command_review(
+        return sever_command_review.build_start_review(
             source_name=source.context_name,
             criteria_name=criteria.context_name,
             output_name=output.context_name,

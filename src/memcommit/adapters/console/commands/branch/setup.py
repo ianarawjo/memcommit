@@ -8,11 +8,11 @@ from collections.abc import Callable, Mapping, Sequence
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.application.exact_command_review import ExactCommandReview
+from memcommit.adapters.console.coordination.command_review.model import CommandReview
 from memcommit.adapters.console.commands.branch.receipt import (
     BranchCreationReceipt,
 )
-from memcommit.adapters.console.tui.components.endpoint_setup import (
+from memcommit.adapters.console.terminal.components.endpoint_setup import (
     EndpointSetupDraft,
     EndpointSetupMode,
     EndpointSetupRole,
@@ -98,7 +98,7 @@ def branch_endpoint_setup_spec(
     )
 
 
-def branch_exact_command_review(draft: EndpointSetupDraft) -> ExactCommandReview:
+def branch_exact_command_review(draft: EndpointSetupDraft) -> CommandReview:
     """Render the exact public Branch command represented by one typed draft."""
 
     source = draft.value("A")
@@ -122,7 +122,7 @@ def branch_exact_command_review(draft: EndpointSetupDraft) -> ExactCommandReview
         if source.include_descendants
         else "the frozen local Source root only"
     )
-    return ExactCommandReview(
+    return CommandReview(
         tuple(argv),
         (
             f"Create the exact new Branch target from {scope}.",

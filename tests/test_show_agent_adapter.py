@@ -1,4 +1,4 @@
-"""Versioned agent and MCP-facing Show inspection contract."""
+"""Versioned agent-facing Show inspection contract."""
 
 from __future__ import annotations
 
@@ -6,9 +6,9 @@ import json
 
 import pytest
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.python_api import MemCommitClient
-from memcommit.adapters.interfaces.agent.show import (
+from memcommit.adapters.agent.show import (
     SHOW_AGENT_TOOL_NAME,
     ShowAgentAdapter,
     show_agent_tool_schema,

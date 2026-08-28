@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from collections.abc import Callable
 
-from memcommit.application.retained_history.context_history import ContextTraceReport
+from memcommit.application.capabilities.retained_history.context_history import ContextTraceReport
 from memcommit.application.operations.rationale.rules import (
     DEFAULT_RATIONALE_PROVENANCE_LIMIT,
     RationaleLimitUnit,
@@ -19,7 +19,7 @@ from memcommit.application.operations.rationale.semantic import (
     parse_rationale_projection,
     rationale_output_schema,
 )
-from memcommit.application.semantic_execution import (
+from memcommit.application.capabilities.semantic_execution import (
     BudgetLimits,
     ExecutionMode,
     ExecutionStrategy,

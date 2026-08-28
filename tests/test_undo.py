@@ -4,11 +4,11 @@ from __future__ import annotations
 
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
-from memcommit.application.retained_history.command_history import CommandHistoryError
+import memcommit.application.capabilities.ops as ops
+from memcommit.application.capabilities.retained_history.command_history import CommandHistoryError
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.retained_history.reconstruction import build_history
-from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
+from memcommit.application.capabilities.retained_history.reconstruction import build_history
+from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_construction import (
     reconstruct_memory_history,
 )
 from memcommit.persistence.store import MemoryStore

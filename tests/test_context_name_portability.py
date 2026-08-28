@@ -12,7 +12,7 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.adapters.console.commands.profile.command as profile_command
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import AutoCheckpoint, Context
 from memcommit.core.context_targeting.naming import (

@@ -9,7 +9,7 @@ import uuid
 
 import pytest
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.core.context import AutoCheckpoint, Context, Memory
 from memcommit.application.operations.forget.application import (
     ForgetAnalysisRequest,
@@ -32,7 +32,7 @@ from memcommit.adapters.console.commands.forget.workbench.presentation import (
     ForgetResolutionWorkbenchAdapter,
 )
 from memcommit.adapters.console.commands.forget.setup import ForgetSetupResult
-from memcommit.application.semantic.changes import ProposedChange
+from memcommit.application.capabilities.semantic.changes import ProposedChange
 from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 
 

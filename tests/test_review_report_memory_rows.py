@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 from memcommit.adapters.console.commands.review.report import render_review_report_snapshot
-from memcommit.application.resolution.workbench import (
+from memcommit.application.capabilities.resolution.workbench import (
     ResolutionDetailBlock,
     ResolutionItem,
     ResolutionMemoryRow,
     ResolutionWorkbenchView,
 )
-from memcommit.application.reviewing.report import ReviewReportController
+from memcommit.application.capabilities.reviewing.report import ReviewReportController
 
 
 def test_review_report_snapshot_renders_typed_memory_rows() -> None:

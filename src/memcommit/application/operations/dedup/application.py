@@ -5,7 +5,7 @@ from __future__ import annotations
 import uuid
 from dataclasses import dataclass
 
-from memcommit.application.authority.access import (
+from memcommit.application.capabilities.authority.access import (
     ContextAccess,
     GrantedReadStore,
     authorized_context_mutation,
@@ -15,7 +15,7 @@ from memcommit.core.context import AutoCheckpoint, Context, Memory, MemoryRef
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.core.context_targeting.readable_catalog import ReadableContextCatalog
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
-from memcommit.application.reviewing.direct_item_duplicates import (
+from memcommit.application.capabilities.reviewing.direct_item_duplicates import (
     ExactDuplicateGroup,
     ExactDuplicateKind,
     find_exact_duplicate_groups,

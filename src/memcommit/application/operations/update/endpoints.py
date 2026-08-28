@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.application.context_locator import resolve_context_locator
+from memcommit.application.capabilities.context_locator import resolve_context_locator
 
 
 @dataclass(frozen=True)

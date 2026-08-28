@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.application.operations.compare.ledger.model import (
     ComparisonInput,
     comparison_analysis_matches_input,

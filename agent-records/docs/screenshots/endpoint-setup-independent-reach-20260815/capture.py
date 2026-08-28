@@ -28,7 +28,7 @@ _BASE.ROWS = ROWS
 
 
 def _prepare_store(root: Path):
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=root)
@@ -49,7 +49,7 @@ def _prepare_store(root: Path):
 
 
 def _run_child(store_root: Path, *, cancel: bool) -> None:
-    from memcommit.adapters.console.tui.components.endpoint_setup import (
+    from memcommit.adapters.console.terminal.components.endpoint_setup import (
         EndpointSetupMode,
         EndpointSetupRole,
         EndpointSetupSpec,

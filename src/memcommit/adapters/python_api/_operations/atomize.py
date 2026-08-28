@@ -61,7 +61,7 @@ from memcommit.application.operations.atomize.workbench import (
     atomize_workbench_response_digest,
     project_atomize_workbench_findings,
 )
-from memcommit.application.context_locator import resolve_context_locator
+from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.providers.subscription import QueryProviderError
 from memcommit.persistence.store import ConcurrentContextUpdateError
 

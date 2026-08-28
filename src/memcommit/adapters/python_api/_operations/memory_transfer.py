@@ -36,7 +36,7 @@ from memcommit.application.operations.memory_transfer.runtime import MemoryStore
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import ConcurrentContextUpdateError
-from memcommit.application.authority.write_protection import WriteProtectionError
+from memcommit.application.capabilities.authority.write_protection import WriteProtectionError
 
 
 def _locators(values: Sequence[str]) -> tuple[str, ...]:

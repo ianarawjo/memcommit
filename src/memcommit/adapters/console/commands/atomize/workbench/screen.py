@@ -21,33 +21,33 @@ from memcommit.application.operations.atomize.workbench import (
     atomize_workbench_issue_projection,
     project_atomize_workbench_findings,
 )
-from memcommit.adapters.console.shared.review import (
+from memcommit.adapters.console.coordination.review import (
     RESPONSE_LABEL,
 )
-from memcommit.application.review_policy import (
+from memcommit.application.capabilities.review_policy import (
     ownership_aware_application_review,
 )
-from memcommit.adapters.interfaces.tui.workbenches.result import (
+from memcommit.adapters.console.terminal.components.result import (
     render_result_workbench_snapshot,
 )
-from memcommit.adapters.console.text import (
+from memcommit.adapters.console.terminal.core.text import (
     safe_terminal_text,
 )
-from memcommit.adapters.console.tui.core.text_layout import (
+from memcommit.adapters.console.terminal.core.text_layout import (
     elide_terminal_text,
     single_line_terminal_text,
 )
-from memcommit.application.resolution.workbench import (
+from memcommit.application.capabilities.resolution.workbench import (
     ResolutionNavigation,
     ResolutionWorkbenchAction,
 )
-from memcommit.application.reviewing.result_workbench import (
+from memcommit.application.capabilities.reviewing.result_workbench import (
     ResultWorkbenchView,
 )
-from memcommit.adapters.console.selection.tui import choice_marker
+from memcommit.adapters.console.terminal.components.selection import choice_marker
 
 if TYPE_CHECKING:
-    from memcommit.adapters.interfaces.tui.workbenches.resolution import ResolutionDestination
+    from memcommit.adapters.console.terminal.components.resolution import ResolutionDestination
 
 _LIST_READING_PREVIEW_LIMIT = 2
 _LIST_READING_LABEL_LIMIT = 160
@@ -390,7 +390,7 @@ def run_atomize_workbench_shell(
     destination: ResolutionDestination | None = None,
 ) -> AtomizeWorkbenchSession | ResolutionWorkbenchAction:
     """Review Atomize findings through the shared resolution workbench."""
-    from memcommit.adapters.interfaces.tui.workbenches.resolution import (
+    from memcommit.adapters.console.terminal.components.resolution import (
         ResolutionGlobalStrategy,
         run_resolution_workbench_shell,
     )

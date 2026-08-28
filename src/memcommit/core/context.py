@@ -519,7 +519,7 @@ class Context:
                 # a Context subclass for read traversal but has its own durable
                 # self-contained record and must be classified before a live
                 # Context placement.
-                from memcommit.application.retained_history.context_snapshot import ContextSnapshotRef
+                from memcommit.application.capabilities.retained_history.context_snapshot import ContextSnapshotRef
 
                 memories[uid] = (
                     info.to_dict()
@@ -632,7 +632,7 @@ class Context:
                 if nested is not None:
                     ctx.add(nested)
             elif item["type"] == "context_snapshot_ref":
-                from memcommit.application.retained_history.context_snapshot import ContextSnapshotRef
+                from memcommit.application.capabilities.retained_history.context_snapshot import ContextSnapshotRef
 
                 ctx.add(ContextSnapshotRef.from_dict(item))
             elif item["type"] == "granted_context_ref":

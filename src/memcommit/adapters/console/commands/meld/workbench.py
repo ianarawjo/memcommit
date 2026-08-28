@@ -8,16 +8,16 @@ from typing import Callable
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.application.review_policy import (
+from memcommit.application.capabilities.review_policy import (
     ownership_aware_application_review,
 )
-from memcommit.adapters.console.terminal import (
+from memcommit.adapters.console.terminal.core.capabilities import (
     require_interactive_terminal,
 )
-from memcommit.adapters.console.text import (
+from memcommit.adapters.console.terminal.core.text import (
     safe_terminal_text,
 )
-from memcommit.adapters.console.tui.core.text_layout import (
+from memcommit.adapters.console.terminal.core.text_layout import (
     elide_terminal_text,
     single_line_terminal_text,
 )
@@ -26,8 +26,10 @@ from memcommit.application.operations.meld.model import (
     MeldSession,
     meld_canonical_digest,
 )
-from memcommit.application.interactive_command_review import meld_turn_command_review
-from memcommit.application.resolution.workbench import ResolutionNavigation
+from memcommit.adapters.console.coordination.command_review import (
+    meld as meld_command_review,
+)
+from memcommit.application.capabilities.resolution.workbench import ResolutionNavigation
 
 
 @dataclass(frozen=True)
@@ -135,14 +137,14 @@ def run_meld_shell(
     draft_saver: Callable[[str, str | None, str], None] | None = None,
 ) -> MeldShellAction | None:
     """Collect one action through the shared dynamic resolution workbench."""
-    from memcommit.adapters.interfaces.tui.workbenches.resolution.session_shell import (
+    from memcommit.adapters.console.terminal.components.resolution.session_shell import (
         ResolutionGlobalStrategy,
         run_resolution_workbench_shell,
     )
     from memcommit.application.operations.meld.resolution_adapter import (
         MeldResolutionWorkbenchAdapter,
     )
-    from memcommit.adapters.interfaces.tui.workbenches.impact import ImpactController
+    from memcommit.adapters.console.terminal.components.impact import ImpactController
     from memcommit.application.operations.review.report_adapters import meld_review_report
 
     snapshot_hint = (
@@ -318,7 +320,7 @@ def run_meld_shell(
                 for index, option in enumerate(issue.options, start=1)
                 if option.uid == action.option_uid
             )
-        return meld_turn_command_review(
+        return meld_command_review.build_turn_review(
             left_name=left_frame.context_name,
             right_name=right_frame.context_name,
             target_name=(

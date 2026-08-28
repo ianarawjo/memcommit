@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-import memcommit.adapters.console.shared.batch_input_source as batch_input_source
+import memcommit.adapters.console.coordination.batch_input_source as batch_input_source
 from memcommit.adapters.console.commands.add.input_records import (
     parse_input_records as parse_add_input_records,
 )
@@ -24,8 +24,11 @@ def test_batch_input_has_one_source_owner_and_command_local_grammars() -> None:
 
     assert not (source / "adapters" / "interfaces" / "cli" / "batch_input.py").exists()
     assert not (source / "adapters" / "console" / "shared" / "batch_input.py").exists()
-    assert (
+    assert not (
         source / "adapters" / "console" / "shared" / "batch_input_source.py"
+    ).exists()
+    assert (
+        source / "adapters" / "console" / "coordination" / "batch_input_source.py"
     ).is_file()
     assert (
         source
@@ -114,7 +117,7 @@ def test_add_and_edit_commands_import_their_exact_owners() -> None:
     )
     for source in (add_source, edit_source):
         assert (
-            "from memcommit.adapters.console.shared.batch_input_source import"
+            "from memcommit.adapters.console.coordination.batch_input_source import"
             in source
         )
         assert "memcommit.adapters.interfaces.cli.batch_input" not in source

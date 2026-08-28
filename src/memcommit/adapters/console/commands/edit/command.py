@@ -2,9 +2,9 @@ from typing import Annotated, Optional
 
 import typer
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
-from memcommit.application.authority.access import (
+from memcommit.application.capabilities.authority.access import (
     authorized_context_mutation,
     grant_checkpoint_args,
     resolve_context_access,
@@ -18,9 +18,9 @@ from memcommit.application.operations.edit.application import (
 )
 from memcommit.application.operations.edit.runtime import MemoryStoreEditPort
 from memcommit.adapters.console.commands.edit.input_records import parse_input_records
-from memcommit.adapters.console.shared.batch_input_source import read_batch_input_text
-from memcommit.adapters.console.terminal import is_interactive_terminal
-from memcommit.adapters.console.text import safe_terminal_text
+from memcommit.adapters.console.coordination.batch_input_source import read_batch_input_text
+from memcommit.adapters.console.terminal.core.capabilities import is_interactive_terminal
+from memcommit.adapters.console.terminal.core.text import safe_terminal_text
 from memcommit.adapters.console.commands.edit.workbench import choose_edit_setup
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError

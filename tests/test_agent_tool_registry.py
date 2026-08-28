@@ -8,40 +8,48 @@ from pathlib import Path
 
 import pytest
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.python_api import MemCommitClient
-from memcommit.adapters.interfaces.agent import (
-    ADD_AGENT_TOOL_NAME,
-    APPLY_CONTEXT_DELETE_AGENT_TOOL_NAME,
-    ATOMIZE_AGENT_TOOL_NAME,
+from memcommit.adapters.agent.add import ADD_AGENT_TOOL_NAME
+from memcommit.adapters.agent.atomize import ATOMIZE_AGENT_TOOL_NAME
+from memcommit.adapters.agent.atomize_grounding import (
     ATOMIZE_GROUNDING_AGENT_TOOL_NAME,
-    COMPARE_AGENT_TOOL_NAME,
-    COPY_MEMORIES_AGENT_TOOL_NAME,
-    DEDUP_AGENT_TOOL_NAME,
-    EMBED_AGENT_TOOL_NAME,
-    MELD_AGENT_TOOL_NAME,
-    MOVE_MEMORIES_AGENT_TOOL_NAME,
-    DISTILL_AGENT_TOOL_NAME,
-    ELABORATE_AGENT_TOOL_NAME,
-    FIT_AGENT_TOOL_NAME,
-    FORGET_AGENT_TOOL_NAME,
-    FIND_AGENT_TOOL_NAME,
-    QUALITY_FIND_AGENT_TOOL_NAME,
-    HELP_AGENT_TOOL_NAME,
+)
+from memcommit.adapters.agent.compare import COMPARE_AGENT_TOOL_NAME
+from memcommit.adapters.agent.dedup import DEDUP_AGENT_TOOL_NAME
+from memcommit.adapters.agent.delete import (
+    APPLY_CONTEXT_DELETE_AGENT_TOOL_NAME,
     PLAN_CONTEXT_DELETE_AGENT_TOOL_NAME,
+    REMOVE_ITEM_AGENT_TOOL_NAME,
+)
+from memcommit.adapters.agent.distill import DISTILL_AGENT_TOOL_NAME
+from memcommit.adapters.agent.elaborate import ELABORATE_AGENT_TOOL_NAME
+from memcommit.adapters.agent.embed import EMBED_AGENT_TOOL_NAME
+from memcommit.adapters.agent.find import FIND_AGENT_TOOL_NAME
+from memcommit.adapters.agent.fit import FIT_AGENT_TOOL_NAME
+from memcommit.adapters.agent.forget import FORGET_AGENT_TOOL_NAME
+from memcommit.adapters.agent.help import HELP_AGENT_TOOL_NAME
+from memcommit.adapters.agent.meld import MELD_AGENT_TOOL_NAME
+from memcommit.adapters.agent.memory_transfer import (
+    COPY_MEMORIES_AGENT_TOOL_NAME,
+    MOVE_MEMORIES_AGENT_TOOL_NAME,
+)
+from memcommit.adapters.agent.quality_find import QUALITY_FIND_AGENT_TOOL_NAME
+from memcommit.adapters.agent.query import (
     QUERY_AGENT_TOOL_NAME,
     QUERY_AGENT_CONTRACT_VERSION,
-    REFERENCE_AGENT_TOOL_NAME,
-    REPLACE_AGENT_TOOL_NAME,
-    REMOVE_ITEM_AGENT_TOOL_NAME,
-    RESOLVE_AGENT_TOOL_NAME,
-    SEARCH_AGENT_TOOL_NAME,
-    SHOW_AGENT_TOOL_NAME,
+)
+from memcommit.adapters.agent.reference import REFERENCE_AGENT_TOOL_NAME
+from memcommit.adapters.agent.registry import (
     AgentToolBinding,
     AgentToolRegistrationError,
     AgentToolRegistry,
     build_default_agent_tool_registry,
 )
+from memcommit.adapters.agent.replace import REPLACE_AGENT_TOOL_NAME
+from memcommit.adapters.agent.resolve import RESOLVE_AGENT_TOOL_NAME
+from memcommit.adapters.agent.search import SEARCH_AGENT_TOOL_NAME
+from memcommit.adapters.agent.show import SHOW_AGENT_TOOL_NAME
 from memcommit.persistence.store import MemoryStore
 
 
@@ -432,7 +440,7 @@ def test_custom_handler_failures_are_redacted_and_nonretryable(handler):
 
 def test_registry_depends_only_on_public_client_and_agent_adapters():
     path = (
-        Path(__file__).parents[1] / "src" / "memcommit" / "adapters" / "interfaces" / "agent" / "registry.py"
+        Path(__file__).parents[1] / "src" / "memcommit" / "adapters" / "agent" / "registry.py"
     )
     tree = ast.parse(path.read_text(encoding="utf-8"))
     imported: list[str] = []
@@ -453,10 +461,10 @@ def test_registry_depends_only_on_public_client_and_agent_adapters():
     )
     assert not any(name.startswith(forbidden) for name in imported)
     assert "memcommit.adapters.python_api" in imported
-    assert "memcommit.adapters.interfaces.agent.add" in imported
-    assert "memcommit.adapters.interfaces.agent.atomize" in imported
-    assert "memcommit.adapters.interfaces.agent.atomize_grounding" in imported
-    assert "memcommit.adapters.interfaces.agent.query" in imported
-    assert "memcommit.adapters.interfaces.agent.forget" in imported
-    assert "memcommit.adapters.interfaces.agent.resolve" in imported
-    assert "memcommit.adapters.interfaces.agent.help" in imported
+    assert "memcommit.adapters.agent.add" in imported
+    assert "memcommit.adapters.agent.atomize" in imported
+    assert "memcommit.adapters.agent.atomize_grounding" in imported
+    assert "memcommit.adapters.agent.query" in imported
+    assert "memcommit.adapters.agent.forget" in imported
+    assert "memcommit.adapters.agent.resolve" in imported
+    assert "memcommit.adapters.agent.help" in imported

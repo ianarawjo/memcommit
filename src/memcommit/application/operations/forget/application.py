@@ -11,8 +11,8 @@ from typing import Literal, Protocol
 from memcommit.core.context import Context, Memory
 from memcommit.application.operations.forget.provider import analyze_forget, revise_forget_analysis
 from memcommit.application.operations.forget.review import ForgetReview, ForgetSelection
-from memcommit.application.semantic.changes import EditChange, ProposedChange, RemoveChange
-from memcommit.application.semantic.selective_curation import CurationAnalysis, CurationDecision
+from memcommit.application.capabilities.semantic.changes import EditChange, ProposedChange, RemoveChange
+from memcommit.application.capabilities.semantic.selective_curation import CurationAnalysis, CurationDecision
 
 
 class ForgetApplicationError(RuntimeError):

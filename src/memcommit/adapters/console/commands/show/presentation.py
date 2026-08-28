@@ -7,8 +7,8 @@ from dataclasses import replace
 
 import typer
 
-from memcommit.adapters.console.text import display_escape_text, safe_terminal_text
-from memcommit.adapters.console.theme import memory_object_color_rgb
+from memcommit.adapters.console.terminal.core.text import display_escape_text, safe_terminal_text
+from memcommit.adapters.console.terminal.core.theme import memory_object_color_rgb
 from memcommit.application.operations.show.application import (
     ShowContextSnapshot,
     ShowEmbeddedContext,

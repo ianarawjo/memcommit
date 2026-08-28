@@ -22,16 +22,16 @@ if str(REPOSITORY_ROOT) not in sys.path:
 def _demo_child() -> None:
     """Run the product Audit wait/review path with deterministic provider replies."""
 
-    from memcommit.application import ops
+    from memcommit.application.capabilities import ops
     from memcommit.adapters.console.commands.audit.command import (
         _run_quality_audit_checks,
         run_quality_audit_review,
     )
     from memcommit.application.operations.conformance.model import CONTEXT_CONFORMANCE_OPERATION
     from memcommit.providers.types import ProviderIdentity
-    from memcommit.application.reviewing.quality.audit import quality_audit_resolution_view
-    from memcommit.application.reviewing.quality.audit_store import QualityAuditStore
-    from memcommit.adapters.console.shared.resolution_workbench_shell import (
+    from memcommit.application.capabilities.reviewing.quality.audit import quality_audit_resolution_view
+    from memcommit.application.capabilities.reviewing.quality.audit_store import QualityAuditStore
+    from memcommit.adapters.console.terminal.components.resolution.session_shell import (
         render_resolution_workbench_snapshot,
     )
     from memcommit.application.operations.review.model import direct_context_digest

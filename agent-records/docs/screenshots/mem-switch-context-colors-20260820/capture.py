@@ -54,7 +54,7 @@ def _store_snapshot(root: Path) -> tuple[int, str]:
 
 
 def _create_profile():
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.application.operations.profile.config import (
         AUTHORING_PROFILE_NAME,
         AUTHORING_PROFILE_UID,

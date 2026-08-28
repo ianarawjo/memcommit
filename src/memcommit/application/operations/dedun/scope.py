@@ -5,7 +5,7 @@ from __future__ import annotations
 import uuid
 from dataclasses import dataclass
 
-from memcommit.application.authority.access import ContextAccess, authorized_context_mutation
+from memcommit.application.capabilities.authority.access import ContextAccess, authorized_context_mutation
 from memcommit.core.context import AutoCheckpoint, Memory, MemoryRef
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.core.context_targeting.readable_catalog import ReadableContextCatalog
@@ -24,9 +24,9 @@ from memcommit.application.operations.dedun.application import (
 )
 from memcommit.application.operations.dedun.runtime import MemoryStoreDedunPort
 from memcommit.application.operations.profile.config import ProfileRegistry
-from memcommit.application.reviewing.quality.workbench import QualityFindSourceFrame
-from memcommit.application.reviewing.quality.handoff import QualityFindingSource
-from memcommit.application.reviewing.quality.redundancy_scope import RedundancyScopeAnalysis
+from memcommit.application.capabilities.reviewing.quality.workbench import QualityFindSourceFrame
+from memcommit.application.capabilities.reviewing.quality.handoff import QualityFindingSource
+from memcommit.application.capabilities.reviewing.quality.redundancy_scope import RedundancyScopeAnalysis
 from memcommit.persistence.store import MemoryStore, context_record_digest
 
 

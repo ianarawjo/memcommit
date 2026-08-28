@@ -10,9 +10,9 @@ from __future__ import annotations
 
 import pytest
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.core.context import Context, GrantedMemorySource, Memory, MemoryRef
-from memcommit.application.retained_history.context_snapshot import ContextSnapshotRef
+from memcommit.application.capabilities.retained_history.context_snapshot import ContextSnapshotRef
 from memcommit.application.operations.embed.application import EmbedRequest, MemoryEmbedRequest
 from memcommit.application.operations.embed.runtime import MemoryStoreEmbedPort, execute_embed
 from memcommit.application.operations.reference.application import ContextReferenceRequest, ReferenceRequest

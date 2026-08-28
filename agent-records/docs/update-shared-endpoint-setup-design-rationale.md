@@ -3,12 +3,15 @@
 ## Status
 
 Update's new-session Source/Target selection now uses
-`memcommit.adapters.console.tui.components.endpoint_setup` through a narrow adapter
-under `interfaces/tui/operations/update`. Explicit noninteractive operands,
-provider planning, cache lookup, persisted sessions, and mutation semantics
-remain owned by the existing Update modules. The later review-to-Apply phase
-order is now composed through the operation-neutral application flow while
-Update retains its own CAS, checkpoints, receipt, Undo, and Redo behavior.
+`memcommit.adapters.console.terminal.components.endpoint_setup` through a narrow
+command-owned workbench under `adapters/console/commands/update`. The former
+`interfaces/tui/operations/update` path is removed without a compatibility
+facade because its models, labels, validation, and exact-command review were
+all Update-specific. Explicit operands, provider planning, cache lookup,
+persisted sessions, and mutation semantics remain owned by the existing Update
+modules. The later review-to-Apply phase order is composed through the
+operation-neutral application flow while Update retains its own CAS,
+checkpoints, receipt, Undo, and Redo behavior.
 
 ## Motivation
 
@@ -29,10 +32,10 @@ The command adapter continues to own the authority-sensitive work:
   effective READ access; and
 - project only direct owned Memories as `EndpointSetupMemory` values.
 
-The operation TUI adapter receives that frozen catalog and projection loader.
-It returns one typed process-local `UpdateEndpointSelection`, validates that A
-and B are distinct, and performs no provider call, session write, cache write,
-or Context mutation. The command adapter maps the selection to the existing
+The Update workbench receives that frozen catalog and projection loader. It
+returns one typed process-local `UpdateEndpointSelection`, validates that A and
+B are distinct, and performs no provider call, session write, cache write, or
+Context mutation. The outer command setup maps the selection to the existing
 Update arguments:
 
 | Shared value | Existing Update input |
@@ -46,7 +49,7 @@ Update arguments:
 
 Only the new-session setup path changes. A typed receipt re-enters the same
 `cmd(...)` boundary as explicit CLI operands, so downstream validation is not
-duplicated in the TUI.
+duplicated in terminal presentation code.
 
 The plain command also exposes the shared `-d/--direct` and `-r/--recursive`
 presets. They map to both role booleans before the same boundary; the existing
@@ -81,7 +84,8 @@ persisted session or Impact cache only when both selected UIDs and the complete
 observed graphs match. It deliberately does not consume a whole-frame
 projected prewarm: that cached plan may act on a sibling Memory that the focused
 request did not authorize. A future focused projection requires an operation-
-aware proof that filters and revalidates every disposition, not a TUI change.
+aware proof that filters and revalidates every disposition, not a workbench
+change.
 
 Update session schema 6 remains the emitted form for unchanged whole-Context
 sessions. Schema 7 is emitted only when at least one focused UID exists, so old
@@ -89,8 +93,8 @@ readers and existing Study receipts retain their prior representation while
 focused identity becomes durable. A CLI inline Source emits schema 8 with the
 exact process-local Memory and deterministic synthetic identity. It creates no
 stored Context; Apply reconstructs that Source and locks only durable target
-Contexts. The setup TUI remains Context-to-Context because introducing inline
-composition there would change its interaction and authority contract.
+Contexts. The setup workbench remains Context-to-Context because introducing
+inline composition there would change its interaction and authority contract.
 
 The command accepts `SOURCE [TARGET]`, `--from SOURCE --to TARGET`, and
 `--memory TEXT --to TARGET`. An unambiguously non-Context Source becomes the

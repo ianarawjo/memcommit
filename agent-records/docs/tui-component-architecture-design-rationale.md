@@ -1,19 +1,20 @@
-# TUI component architecture design rationale
+# Terminal component architecture design rationale
 
 ## Status
 
-Implemented and verified for the shared frame, focus, scrollable-pane,
-plain-text projection, semantic Viewer, read-only Viewer, Context Summary, and
-both Resolution workbench shells. The reusable `core` and `components`
-families now have their physical owner under the console adapter; Viewer and
-Workbench ownership remains a separately reviewed migration.
+Implemented for the complete terminal adapter ownership move. Low-level
+terminal mechanics, reusable controls, Viewer and Workbench compositions,
+selection, and response presentation now have one physical owner under
+`memcommit.adapters.console.terminal`. The former `console.tui`,
+`console.responses`, `console.selection`, and `adapters.interfaces` packages
+are removed rather than retained as compatibility facades.
 
 Last reviewed: 2026-08-28.
 
 ## Motivating problem
 
 The repository already shared substantial terminal behavior, but its lowest
-visual contracts were owned by `memcommit.adapters.console.shared.tui_primitives` and adjacent
+visual contracts were owned by the former `memcommit.adapters.console.shared.tui_primitives` and adjacent
 command modules. Selection, Context targeting, result workbenches, and other
 surfaces therefore imported `commands` even when they did not depend on a
 command. Adding another operation screen would either deepen that reverse
@@ -26,43 +27,50 @@ TUI presentations remain sibling adapters over one typed application result.
 ## Chosen structure
 
 ```text
-memcommit/adapters/console/tui/
-  core/                         terminal text layout, style, buffers, keys
-  components/
-    frame/                      frame model and focused chrome
-    focus/                      cross-surface focus controller
-    scrollable_pane/            model, navigation, scrollbar, component
-    plain_text_clipboard/       projection, writer boundary, result receipt
-
-memcommit/adapters/interfaces/tui/       # later ownership review
-  viewers/
-    semantic/                   typed document, controller, renderer, text, shell
-    read_only/                  generic read-only shell
-  workbenches/
-    context_summary/            Context + reach + semantic result composition
-    resolution/                 deterministic and saved-session compositions
-  operations/
-    summarize/                  picker/reach composition and result projection
+memcommit/adapters/console/
+  entrypoint.py                 Typer assembly boundary
+  router.py                     console dispatch and adapter selection
+  clipboard.py                  operating-system clipboard boundary
+  commands/                     operation-specific console orchestration
+  coordination/                 nonvisual cross-command coordination
+  terminal/
+    core/                       capabilities, palette, text, keys, buffers
+    components/                 controls and composite terminal surfaces
+      selection/                reusable choice state and rendering
+      responses/                reusable response state and rendering
+      semantic_viewer/          typed semantic Viewer composition
+      read_only_viewer/         generic read-only Viewer composition
+      resolution/               Resolution workbench compositions
+      endpoint_setup/           endpoint control and shared setup flows
+      history/                  history picker, browser, and presentation
 ```
 
-The reusable dependency direction starts `console.tui.core ->
-console.tui.components`; command-owned screens and the still-staged Viewers,
-Workbenches, and operation screens consume those components. Core never
-imports components, and components do not acquire operation policy merely
-because they render a control. `memcommit.adapters.interfaces` does not import
-`memcommit.adapters.console.commands`. Existing callers import the narrow
-owning package directly, and the retired
+Dependencies run from command adapters and composite components toward narrow
+components, then toward `terminal.core`. Core never imports components, and
+terminal components never import command adapters. Help connects its
+command-owned inventory to the reusable session component through an explicit
+backend registration instead of reversing that direction. Existing callers
+import the narrow owning package directly, and the retired
 `commands.semantic_viewer`, `commands.surface_focus`,
 `commands.tui_text_layout`, `commands.read_only_viewer`, and
 `commands.understanding_render` modules are removed rather than retained as
 permanent compatibility facades.
 
-The former `interfaces.tui.core` and `interfaces.tui.components` paths are
-removed rather than retained as forwarding packages. This makes
-`adapters/console/tui` a component-library boundary analogous to a UI
-component tree: a small behavior can remain one module, while a richer control
-may group its model, rendering, and interaction behind one package API. It is
-not a second operation or command hierarchy.
+The former `interfaces.tui` and `console.tui` paths are removed rather than
+retained as forwarding packages. `terminal/components` is a component-library
+boundary: a small behavior can remain one module, while a richer control may
+group model, rendering, and interaction behind one package API. Viewer and
+Workbench are component roles, not additional top-level adapter hierarchies.
+`console.coordination` consequently retains only nonvisual command mechanics such as
+operand resolution, review values, command grouping, and transfer arguments.
+The name replaces `console.shared` because reuse is only a relationship, while
+coordination states the package's responsibility at the console-adapter boundary.
+The existing flat layout and its two established concept packages remain intact;
+this rename does not introduce speculative subcategories or change behavior.
+
+`router.py` deliberately remains at the console root. It chooses among console
+adapter routes and therefore sits beside `entrypoint.py`; it is neither a
+terminal capability nor an operation-specific command implementation.
 
 `memcommit.bootstrap` is the only module that knows both the plain Summarize
 presenter and the Summarize TUI presenter. The current Typer command asks that
@@ -160,10 +168,11 @@ application behavior.
   composes the existing Context selector and reach state with the semantic
   Viewer controller; only its screen topology, labels, and Run meaning remain
   operation-owned.
-- **Move every TUI helper at once.** Input controls, tree selectors, and review
-  workbenches have different state and safety contracts. Core and components
-  move first; Viewer and Workbench ownership remains in place until each
-  family has a reviewed semantic boundary.
+- **Keep Viewer, Workbench, or Session as sibling top-level directories.**
+  Those names describe composition roles rather than independent media or
+  adapter boundaries. Keeping them as named composite packages under
+  `terminal.components` preserves their semantic models without adding a
+  second hierarchy.
 
 ## Verification evidence
 
@@ -200,17 +209,19 @@ application behavior.
   Meld, Forget, and Sever. Existing operation captures remain semantically
   unchanged because valid focus, choice, review, and Apply topology did not
   change.
+- The completed physical ownership move passes 250 focused architecture,
+  Help-session, endpoint, history, selection/response, Viewer/Workbench,
+  ownership, and generated-catalog tests. Mechanical gates reject the old
+  `console.tui` and `adapters.interfaces` trees, compatibility facades under
+  `console.shared`, `terminal.core -> components` imports, and
+  `terminal.components -> commands` imports.
 
 ## Remaining boundary
 
-This slice now proves process-local Context-tree selection, a three-way
-range choice, complete dual-result publication, cancellation before execution,
-explicit reruns, scoped/complete plain-text copy, and a read-only result Viewer.
-It does not prove editable text input, review/Apply,
-cache/receipt, or CAS behavior through the new operation-adapter hierarchy. The
-two Resolution workbench semantic models also remain separate until optional
-items, comments, drafts, and provider-turn behavior demonstrate a safe common
-contract. The physical ownership of `viewers/` and `workbenches/` is
-deliberately undecided by the core/component move; moving them later must
-preserve their distinct typed documents and operation safety boundaries. The
-public Python API and machine-readable adapter remain separate gates.
+The two Resolution workbench semantic models remain separate component
+packages until optional items, comments, drafts, and provider-turn behavior
+demonstrate a safe common semantic contract. Physical co-location does not
+authorize merging their typed documents or Apply rules. The public Python API
+and machine-readable adapter remain separate media gates; this migration
+changes import ownership, not their contracts or terminal interaction
+behavior.

@@ -4,7 +4,7 @@ from contextlib import contextmanager
 import json
 
 import memcommit.configuration.config as config_module
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 import memcommit.study_scenarios.legacy.prewarm.summarize as summarize_prewarm_module
 from memcommit.configuration.config import Config
 from memcommit.core.context import Context, Memory
@@ -22,7 +22,7 @@ from memcommit.study_scenarios.legacy.prewarm.summarize import (
 from memcommit.application.operations.summarize.model import collect_summary_frame
 from memcommit.application.operations.summarize.application import SummarizeRequest
 from memcommit.application.operations.summarize.runtime import run_summarize_with_store
-from memcommit.application.semantic.understanding import UnderstandingSummary
+from memcommit.application.capabilities.semantic.understanding import UnderstandingSummary
 
 
 def _configure(tmp_path, monkeypatch) -> None:

@@ -8,12 +8,12 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
-from memcommit.application.retained_history.checkpoint_catalog import (
+from memcommit.application.capabilities.retained_history.checkpoint_catalog import (
     CheckpointCatalogError,
     resolve_checkpoint_unit,
 )
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.shared.history_picker import revert_exact_command_review
+from memcommit.adapters.console.terminal.components.history.picker import revert_exact_command_review
 from memcommit.persistence.store import MemoryStore, context_record_digest
 
 

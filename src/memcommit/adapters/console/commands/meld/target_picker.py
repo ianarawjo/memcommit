@@ -15,20 +15,20 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.styles import Style, merge_styles
 from prompt_toolkit.widgets import Frame
 
-from memcommit.adapters.console.shared.tui_primitives import (
+from memcommit.adapters.console.terminal.components.primitives import (
     ExactNameFieldControl,
     ExactNameFieldView,
 )
-from memcommit.adapters.console.tui.core.theme import (
+from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     MEMCOMMIT_TUI_STYLE,
 )
-from memcommit.adapters.console.tui.core.keybindings import (
+from memcommit.adapters.console.terminal.core.keybindings import (
     bind_case_insensitive_key,
 )
-from memcommit.adapters.console.tui.components.frame import (
+from memcommit.adapters.console.terminal.components.frame import (
     bind_focused_frame_style,
 )
-from memcommit.adapters.console.text import (
+from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
 from memcommit.persistence.store import MemoryStore

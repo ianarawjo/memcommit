@@ -11,10 +11,9 @@ to depend on a command compatibility module.
 ## Decision
 
 The implementation lives in
-`memcommit.adapters.console.tui.components.exact_name_dialog`. It imports the exact
-name field directly from `memcommit.adapters.console.tui.components.exact_name`.
-The former `memcommit.adapters.console.shared.exact_name_dialog` path is a `sys.modules`
-alias to that canonical module.
+`memcommit.adapters.console.terminal.components.exact_name_dialog`. It imports the exact
+name field directly from `memcommit.adapters.console.terminal.components.exact_name`.
+The former `memcommit.adapters.console.coordination.exact_name_dialog` facade is removed.
 
 The alias is intentionally stronger than copied re-exports. Legacy-first and
 canonical-first imports resolve to one module object, so a legacy-path

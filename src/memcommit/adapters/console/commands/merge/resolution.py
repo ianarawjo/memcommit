@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import typer
 
-from memcommit.adapters.console.merge import (
+from memcommit.adapters.console.commands.merge.presentation import (
     merge_conflict_summary_lines,
     merge_plan_summary_lines,
 )

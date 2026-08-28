@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Sequence
 from dataclasses import dataclass
 
-from memcommit.application.authority.access import (
+from memcommit.application.capabilities.authority.access import (
     ContextAccess,
     authorized_context_mutation,
     grant_checkpoint_args,
@@ -31,7 +31,7 @@ from memcommit.application.operations.forget.application import (
 )
 from memcommit.providers.types import SemanticProvider
 from memcommit.providers.semantic import connect_operation_provider
-from memcommit.application.semantic.changes import (
+from memcommit.application.capabilities.semantic.changes import (
     EditChange,
     ProposedChange,
     RemoveChange,

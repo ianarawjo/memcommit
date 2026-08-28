@@ -4,15 +4,15 @@ from __future__ import annotations
 
 import pytest
 
-from memcommit.application.exact_command_review import ExactCommandReview
-from memcommit.adapters.interfaces.tui.viewers.semantic import SemanticViewerDocument
-from memcommit.adapters.interfaces.tui.workbenches.resolution import (
+from memcommit.adapters.console.coordination.command_review.model import CommandReview
+from memcommit.adapters.console.terminal.components.semantic_viewer import SemanticViewerDocument
+from memcommit.adapters.console.terminal.components.resolution import (
     ResolutionChoice,
     ResolutionItem,
     ResolutionOutcome,
     ResolutionWorkbenchSpec,
 )
-from memcommit.application.resolution import (
+from memcommit.application.capabilities.resolution import (
     ResolutionAttempt,
     ResolutionBinding,
     ResolutionCase,
@@ -218,7 +218,7 @@ def _workbench_spec(case: ResolutionCase) -> ResolutionWorkbenchSpec:
             )
             for requirement in case.requirements
         ),
-        exact_review=ExactCommandReview(("mem", "example"), ("Apply once.",)),
+        exact_review=CommandReview(("mem", "example"), ("Apply once.",)),
     )
 
 

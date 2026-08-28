@@ -7,11 +7,6 @@ from collections.abc import Iterator
 from typer.main import get_command
 from typer.testing import CliRunner
 
-try:  # Typer 0.27+ vendors Click; older supported releases do not.
-    from typer import _click as click
-except ImportError:  # pragma: no cover - compatibility with older Typer
-    import click
-
 from memcommit.adapters.console.entrypoint import app
 
 

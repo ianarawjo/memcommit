@@ -56,7 +56,7 @@ contribution.
 
 ## Hidden bundle contract
 
-`memcommit.application.evaluation.study_compare_graph_prewarm` writes a resumable sidecar bundle
+`memcommit.study_scenarios.legacy.prewarm.generation.compare_graph` writes a resumable sidecar bundle
 under `agent-records/outputs/study-compare-graph-prewarm/`. It does not write participant
 Compare sessions, reports, or the production latest-pair slot.
 

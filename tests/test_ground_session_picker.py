@@ -7,8 +7,12 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.adapters.console.commands.ground.command as ground_command
-import memcommit.adapters.console.shared.operation_launcher_location as launcher_location_module
-import memcommit.application.ops as ops
+from memcommit.adapters.console.commands.ground.command.workflow import (
+    create as ground_create_workflow,
+    open as ground_open_workflow,
+)
+import memcommit.adapters.console.terminal.components.operation_launcher.location as launcher_location_module
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.ground.session_picker import (
     ground_session_picker_location,
@@ -16,7 +20,7 @@ from memcommit.adapters.console.commands.ground.session_picker import (
     list_ground_session_entries,
     reload_selected_ground_session,
 )
-from memcommit.adapters.console.commands.ground.workspace_picker import (
+from memcommit.adapters.console.commands.ground.workspace.catalog import (
     list_ground_workspace_draft_catalog,
     list_ground_workspace_catalog,
     reload_selected_ground_workspace_draft,
@@ -26,15 +30,21 @@ from memcommit.adapters.console.commands.ground.shell import (
     GroundShellProposal,
     GroundShellResult,
 )
-from memcommit.adapters.console.tui.components.operation_launcher.session import SessionOpenReceipt
+from memcommit.adapters.console.terminal.components.operation_launcher.session import (
+    SessionOpenReceipt,
+)
 from memcommit.application.operations.ground.model import (
     GroundTargetSpec,
     bind_ground_workbench,
     create_ground_session,
 )
 from memcommit.application.operations.ground.workspace_draft import GroundWorkspaceDraft
-from memcommit.application.operations.ground.workspace_draft_store import GroundWorkspaceDraftStore
-from memcommit.application.operations.ground.workspace_application import CreateGroundWorkspaceRequest
+from memcommit.application.operations.ground.workspace_draft_store import (
+    GroundWorkspaceDraftStore,
+)
+from memcommit.application.operations.ground.workspace_application import (
+    CreateGroundWorkspaceRequest,
+)
 from memcommit.application.operations.ground.workspace_runtime import (
     execute_ground_workspace_creation,
     ground_workspace_exists,
@@ -72,10 +82,7 @@ def test_ground_session_entries_are_read_only_and_carry_exact_reopen_argv(
     newer_path = isolated_store / "ground-sessions" / "newer-ground.json"
     os.utime(older_path, (10, 10))
     os.utime(newer_path, (20, 20))
-    before = {
-        path.name: path.read_bytes()
-        for path in (older_path, newer_path)
-    }
+    before = {path.name: path.read_bytes() for path in (older_path, newer_path)}
 
     entries = list_ground_session_entries(store)
 
@@ -91,10 +98,7 @@ def test_ground_session_entries_are_read_only_and_carry_exact_reopen_argv(
         "ground",
         "newer-ground",
     )
-    assert {
-        path.name: path.read_bytes()
-        for path in (older_path, newer_path)
-    } == before
+    assert {path.name: path.read_bytes() for path in (older_path, newer_path)} == before
 
 
 def test_bound_ground_groups_by_raw_context_and_retains_all_contexts_in_detail(
@@ -176,9 +180,13 @@ def test_physical_ticker_ground_is_listed_and_reopened_without_switching(
         if path.is_file()
     }
     opened = []
-    monkeypatch.setattr(ground_command, "_interactive_terminal", lambda: True)
     monkeypatch.setattr(
-        ground_command,
+        ground_open_workflow,
+        "_interactive_terminal",
+        lambda: True,
+    )
+    monkeypatch.setattr(
+        ground_open_workflow,
         "choose_session",
         lambda *_args, **_kwargs: SessionOpenReceipt(
             kind="ground-workspace",
@@ -187,8 +195,8 @@ def test_physical_ticker_ground_is_listed_and_reopened_without_switching(
         ),
     )
     monkeypatch.setattr(
-        ground_command,
-        "run_ground_workspace_tui",
+        ground_open_workflow,
+        "run_ground_workspace_viewer",
         lambda workspace, **_kwargs: opened.append(workspace),
     )
 
@@ -237,7 +245,7 @@ def test_ground_picker_opens_a_draft_row_without_provider_replay(
     opened = []
 
     monkeypatch.setattr(
-        ground_command,
+        ground_open_workflow,
         "choose_session",
         lambda entries, **_kwargs: SessionOpenReceipt(
             kind="ground-workspace-draft",
@@ -246,7 +254,7 @@ def test_ground_picker_opens_a_draft_row_without_provider_replay(
         ),
     )
     monkeypatch.setattr(
-        ground_command,
+        ground_create_workflow,
         "_run_new_ground_shell",
         lambda *args, **kwargs: opened.append((args, kwargs)) or "CLOSED",
     )
@@ -267,14 +275,12 @@ def test_closing_a_goal_proposal_publishes_only_a_session_list_draft(
         question="Approve this Goal?",
     )
     monkeypatch.setattr(
-        ground_command,
+        ground_create_workflow,
         "run_ground_shell",
         lambda **_kwargs: GroundShellResult(
             status="CANCELLED",
             proposal=proposal,
-            submitted_turns=(
-                "I want to understand real ticker assignment.",
-            ),
+            submitted_turns=("I want to understand real ticker assignment.",),
         ),
     )
 
@@ -297,7 +303,7 @@ def test_relocated_draft_materializes_only_at_exact_apply_and_then_disappears(
     opened = []
 
     monkeypatch.setattr(
-        ground_command,
+        ground_create_workflow,
         "_choose_ground_workspace_save_location",
         lambda _store, **_kwargs: "research/ticker-ground",
     )
@@ -325,11 +331,15 @@ def test_relocated_draft_materializes_only_at_exact_apply_and_then_disappears(
             submitted_turns=kwargs["initial_submitted_turns"],
         )
 
-    monkeypatch.setattr(ground_command, "_apply_new_ground_proposal", apply)
-    monkeypatch.setattr(ground_command, "run_ground_shell", shell)
     monkeypatch.setattr(
-        ground_command,
-        "run_ground_workspace_tui",
+        ground_create_workflow,
+        "_apply_new_ground_proposal",
+        apply,
+    )
+    monkeypatch.setattr(ground_create_workflow, "run_ground_shell", shell)
+    monkeypatch.setattr(
+        ground_create_workflow,
+        "run_ground_workspace_viewer",
         lambda workspace, **_kwargs: opened.append(workspace.name),
     )
 
@@ -359,7 +369,7 @@ def test_empty_ground_catalog_still_opens_launcher_with_new_session_action(
         seen.append((tuple(entries), kwargs))
         return None
 
-    monkeypatch.setattr(ground_command, "choose_session", choose)
+    monkeypatch.setattr(ground_open_workflow, "choose_session", choose)
 
     ground_command._run_ground_session_picker(MemoryStore(create=False))
 
@@ -396,8 +406,12 @@ def test_ground_picker_location_matches_frozen_store_not_live_active_profile(
             ),
         ),
     )
-    monkeypatch.setattr(launcher_location_module.store_module, "STORE_DIR", authoring_root)
-    monkeypatch.setattr(launcher_location_module, "load_profile_registry", lambda: registry)
+    monkeypatch.setattr(
+        launcher_location_module.store_module, "STORE_DIR", authoring_root
+    )
+    monkeypatch.setattr(
+        launcher_location_module, "load_profile_registry", lambda: registry
+    )
     monkeypatch.setattr(
         launcher_location_module,
         "profile_store_dir",
@@ -425,7 +439,9 @@ def test_ground_picker_location_marks_an_isolated_store_unregistered(
             ),
         ),
     )
-    monkeypatch.setattr(launcher_location_module, "load_profile_registry", lambda: registry)
+    monkeypatch.setattr(
+        launcher_location_module, "load_profile_registry", lambda: registry
+    )
     monkeypatch.setattr(
         launcher_location_module,
         "profile_store_dir",

@@ -12,7 +12,7 @@ from pathlib import Path
 
 import typer
 
-from memcommit.adapters.console.text import display_escape_text
+from memcommit.adapters.console.terminal.core.text import display_escape_text
 
 
 STUDY_SHELL_ENV = "MEMCOMMIT_STUDY_SHELL"

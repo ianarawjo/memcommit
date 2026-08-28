@@ -14,14 +14,20 @@ from memcommit.core.context_targeting.tui.picker import (
     choose_context,
     context_memory_rows,
 )
-from memcommit.adapters.console.tui.components.context_reach_dialog import (
+from memcommit.adapters.console.terminal.components.context_reach_dialog import (
     choose_context_reach,
 )
-from memcommit.adapters.console.shared.exact_command_review import ExactCommandReview
-from memcommit.adapters.console.shared.exact_command_review_shell import approve_exact_command
-from memcommit.adapters.console.tui.components.exact_name_dialog import choose_exact_name
-from memcommit.adapters.console.tui.components.flat_selection_dialog import choose_flat_option
-from memcommit.adapters.console.shared.tui_primitives import ExactNameFieldView
+from memcommit.adapters.console.coordination.command_review.model import CommandReview
+from memcommit.adapters.console.terminal.components.exact_command_review.shell import (
+    approve_exact_command,
+)
+from memcommit.adapters.console.terminal.components.exact_name_dialog import (
+    choose_exact_name,
+)
+from memcommit.adapters.console.terminal.components.flat_selection_dialog import (
+    choose_flat_option,
+)
+from memcommit.adapters.console.terminal.components.primitives import ExactNameFieldView
 from memcommit.core.context import Memory, MemoryRef
 from memcommit.core.context_targeting.naming import validate_portable_context_name
 from memcommit.core.context_targeting.tui.name_editor import (
@@ -36,13 +42,13 @@ from memcommit.application.operations.profile.config import (
     validate_profile_name,
 )
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.application.operations.resource_import.model import (
+from memcommit.application.operations.mem_import.context import plan_context_import
+from memcommit.application.operations.mem_import.contracts import (
     ContextImportPlan,
     MemoryImportPlan,
-    plan_context_import,
-    plan_memory_import,
 )
-from memcommit.adapters.console.selection import SelectionOption
+from memcommit.application.operations.mem_import.memory import plan_memory_import
+from memcommit.adapters.console.terminal.components.selection import SelectionOption
 from memcommit.persistence.store import MemoryStore
 
 
@@ -73,7 +79,7 @@ class ImportSetupReceipt:
     kind: ImportKind
     source_profile_name: str
     source_profile_uid: str
-    review: ExactCommandReview
+    review: CommandReview
     target_name: str | None = None
     source_context: str | None = None
     memory_selector: str | None = None
@@ -262,8 +268,8 @@ def _context_target_validator(
 
 def _profile_review(
     source: ImportSourceProfile, target_name: str
-) -> ExactCommandReview:
-    return ExactCommandReview(
+) -> CommandReview:
+    return CommandReview(
         argv=(
             "mem",
             "import",
@@ -280,7 +286,7 @@ def _profile_review(
     )
 
 
-def _context_review(plan: ContextImportPlan, target_name: str) -> ExactCommandReview:
+def _context_review(plan: ContextImportPlan, target_name: str) -> CommandReview:
     argv = [
         "mem",
         "import",
@@ -293,7 +299,7 @@ def _context_review(plan: ContextImportPlan, target_name: str) -> ExactCommandRe
     ]
     if plan.recursive:
         argv.append("--recursive")
-    return ExactCommandReview(
+    return CommandReview(
         argv=tuple(argv),
         effects=(
             f"Create {plan.context_count} new Context(s) in Profile {plan.target_profile!r}.",
@@ -303,8 +309,8 @@ def _context_review(plan: ContextImportPlan, target_name: str) -> ExactCommandRe
     )
 
 
-def _memory_review(plan: MemoryImportPlan) -> ExactCommandReview:
-    return ExactCommandReview(
+def _memory_review(plan: MemoryImportPlan) -> CommandReview:
+    return CommandReview(
         argv=(
             "mem",
             "import",

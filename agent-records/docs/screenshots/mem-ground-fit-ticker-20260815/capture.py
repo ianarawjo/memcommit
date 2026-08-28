@@ -145,7 +145,7 @@ def _add_example(store, session, contexts, company: str, ticker: str):
 
 
 def _prepare_store(root: Path):
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.application.operations.ground.model import (
         GroundTargetSpec,
         bind_ground_workbench,

@@ -13,7 +13,7 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 import memcommit.adapters.console.commands.compare.command as compare_command
 import memcommit.adapters.console.commands.compare.sessions as compare_sessions_module
 from memcommit.adapters.console.entrypoint import app
@@ -39,7 +39,7 @@ from memcommit.adapters.console.commands.compare.sessions import (
     comparison_session_entries,
 )
 from memcommit.core.context import Context, Memory, MemoryRef
-from memcommit.adapters.console.tui.components.operation_launcher.session import (
+from memcommit.adapters.console.terminal.components.operation_launcher.session import (
     SessionNewReceipt,
     SessionOpenReceipt,
 )

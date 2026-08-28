@@ -16,20 +16,20 @@ from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.layout import FormattedTextControl, Layout, Window
 from prompt_toolkit.output import DummyOutput
 
-import memcommit.adapters.console.shared.tui_primitives as legacy_tui_primitives
+import memcommit.adapters.console.terminal.components.primitives as legacy_tui_primitives
 
-from memcommit.adapters.console.shared.exact_command_review import (
-    ExactCommandReview,
+from memcommit.adapters.console.coordination.command_review.model import CommandReview
+from memcommit.adapters.console.terminal.components.exact_command_review.rendering import (
     format_exact_command,
     render_exact_command_review,
 )
-from memcommit.adapters.console.shared.tui_primitives import (
+from memcommit.adapters.console.terminal.components.primitives import (
     ExactNameFieldControl,
     ExactNameFieldView,
     ExactNameInputControl,
     anchored_fragments,
 )
-from memcommit.adapters.console.tui.components.in_frame_input import (
+from memcommit.adapters.console.terminal.components.in_frame_input import (
     InFrameInputManager,
     InFrameInputSection,
     INLINE_AGENT_COMMENT_TITLE,
@@ -37,38 +37,38 @@ from memcommit.adapters.console.tui.components.in_frame_input import (
     build_inline_direct_edit_input,
     classify_inline_edit_submission,
 )
-from memcommit.adapters.console.tui.components.exact_name import (
+from memcommit.adapters.console.terminal.components.exact_name import (
     ExactNameFieldControl as OwnedExactNameFieldControl,
 )
-from memcommit.adapters.console.tui.components.viewport_anchor import (
+from memcommit.adapters.console.terminal.components.viewport_anchor import (
     anchored_fragments as owned_anchored_fragments,
 )
-from memcommit.adapters.console.tui.components.multiline_input import (
+from memcommit.adapters.console.terminal.components.multiline_input import (
     build_framed_multiline_input,
 )
-from memcommit.adapters.console.tui.core.theme import (
+from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     MEMCOMMIT_TUI_STYLE,
     focused_control_style,
 )
-from memcommit.adapters.console.tui.core.keybindings import (
+from memcommit.adapters.console.terminal.core.keybindings import (
     NavigationAccelerator,
     bind_case_insensitive_key,
     dispatch_tui_back,
 )
-from memcommit.adapters.console.tui.components.frame import (
+from memcommit.adapters.console.terminal.components.frame import (
     TuiRegion,
     bind_focused_frame_style,
     build_tui_frame,
     horizontal_rule,
 )
-from memcommit.adapters.console.tui.components.scrollable_pane import (
+from memcommit.adapters.console.terminal.components.scrollable_pane import (
     build_scrollable_formatted_text_pane,
     build_scrollable_text_pane,
     equal_pane_height,
     move_wrapped_read_cursor,
     set_scrollable_pane_text,
 )
-from memcommit.adapters.console.text import (
+from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
     restore_display_escape_text,
     safe_terminal_text,
@@ -323,7 +323,7 @@ def _render_pane_top_row(
 
 
 def test_shared_exact_command_review_preserves_argv_and_effect_boundary():
-    review = ExactCommandReview(
+    review = CommandReview(
         argv=(
             "mem",
             "ground",
@@ -350,7 +350,7 @@ def test_shared_exact_command_review_defensively_freezes_mutable_inputs():
     argv = ["mem", "ground", "fixture"]
     effects = ["Ground: unchanged"]
 
-    review = ExactCommandReview(argv=argv, effects=effects)
+    review = CommandReview(argv=argv, effects=effects)
     argv[-1] = "changed-after-review"
     effects[0] = "Ground: changed"
 
@@ -360,7 +360,7 @@ def test_shared_exact_command_review_defensively_freezes_mutable_inputs():
 
 def test_shared_exact_command_review_rejects_string_as_argv_sequence():
     with pytest.raises(ValueError, match="argv sequences"):
-        ExactCommandReview(
+        CommandReview(
             argv="mem ground fixture",
             effects=("Ground: unchanged",),
         )
@@ -816,7 +816,7 @@ def test_shared_terminal_sanitizer_preserves_layout_but_neutralizes_control():
 
 
 def test_exact_command_receipt_escapes_layout_and_bidi_spoofing():
-    review = ExactCommandReview(
+    review = CommandReview(
         argv=(
             "mem",
             "ground",

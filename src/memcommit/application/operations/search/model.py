@@ -9,7 +9,7 @@ from dataclasses import dataclass, replace
 from typing import Literal, Protocol
 
 from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
-from memcommit.application.semantic_execution import (
+from memcommit.application.capabilities.semantic_execution import (
     BudgetLimits,
     BudgetVector,
     ExecutionMode,
@@ -23,7 +23,7 @@ from memcommit.application.semantic_execution import (
     plan_semantic_execution,
     run_partitioned,
 )
-from memcommit.application.semantic.disclosure import (
+from memcommit.application.capabilities.semantic.disclosure import (
     SemanticDisclosureError,
     require_semantic_disclosure_authority,
 )

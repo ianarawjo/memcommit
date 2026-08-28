@@ -6,7 +6,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.adapters.console.shared.command_progress import CommandProgress
+from memcommit.adapters.console.terminal.components.progress import CommandProgress
 from memcommit.core.context_targeting.resolution import parse_direct_memory_locator
 from memcommit.application.operations.fit.ground_report import FitError, FitReport
 from memcommit.application.operations.fit.application import (
@@ -27,7 +27,7 @@ from memcommit.adapters.console.commands.fit.render import (
     render_fit_plain,
     render_proposition_fit_plain,
 )
-from memcommit.adapters.console.text import display_escape_text
+from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.adapters.console.commands.fit.presentation import fit_result_text
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError

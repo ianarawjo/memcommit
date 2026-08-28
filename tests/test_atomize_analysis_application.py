@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.application.operations.atomize.domain import (
     AtomizeImpactError,
     create_atomize_analysis,

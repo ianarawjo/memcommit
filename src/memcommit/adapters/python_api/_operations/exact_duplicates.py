@@ -16,8 +16,8 @@ from memcommit.adapters.python_api.errors import (
     SemanticInputError,
     SemanticStorageError,
 )
-from memcommit.application.authority.access import resolve_context_access
-from memcommit.application.context_locator import resolve_context_locator
+from memcommit.application.capabilities.authority.access import resolve_context_access
+from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.application.operations.dedup.application import find_exact_duplicate_scope
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError

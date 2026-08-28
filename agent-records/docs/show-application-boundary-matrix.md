@@ -49,7 +49,6 @@ canonical runtime rather than being split across the compatibility path.
 | READ-granted Context | CLI or Profile-backed Python/agent request | effective READ resolution and complete snapshot under one registry generation | Public name, grant facts, readable content, narrower QUERY rows | None | authority-grant CLI/public tests |
 | Python | `MemCommitClient.show` | `_operations.show` → runtime/application | Immutable typed Context/item DTO | None | public and import-boundary tests |
 | Agent | `ShowAgentAdapter.invoke` | exact public client call | Version-1 JSON envelope with `effect: NONE` | None | agent and registry tests |
-| MCP | default registry → MCP projection | exact agent adapter above | Official tool discovery/call envelope | None | MCP projection and installed stdio smoke |
 | Find read follow-up | reviewed exact `mem show` subprocess | normal Show CLI route | Captured plain read result | None | existing Find dialogue/runner tests |
 
 ## Invariants

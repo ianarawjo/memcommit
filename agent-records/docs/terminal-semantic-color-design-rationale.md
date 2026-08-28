@@ -19,7 +19,7 @@ different command flow.
 
 ## Contract
 
-`memcommit.adapters.console.theme` is the sole authored palette and semantic
+`memcommit.adapters.console.terminal.core.theme` is the sole authored palette and semantic
 classification source. It has no Typer or prompt-toolkit dependency. Console
 adapters translate a semantic role to a Click-compatible RGB tuple; TUI themes
 translate the same role to one prompt-toolkit class.

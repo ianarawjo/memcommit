@@ -19,7 +19,7 @@ from memcommit.application.operations.compare.ledger.store import (
     comparison_analyses_dir,
     load_comparison_analysis,
 )
-from memcommit.application.authority.access import ContextAccess
+from memcommit.application.capabilities.authority.access import ContextAccess
 from memcommit.application.operations.compare.ledger.granted_store import (
     granted_artifact_contexts,
     iter_granted_comparison_artifacts,

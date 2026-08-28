@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from memcommit.adapters.console.content_row import render_numbered_content_row
+from memcommit.adapters.console.terminal.components.content_row import render_numbered_content_row
 
 
 def test_numbered_content_row_folds_but_never_shortens_content() -> None:

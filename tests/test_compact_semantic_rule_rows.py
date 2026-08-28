@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.commands.impact.process_local import (
     distill_impact_presentation,
     elaborate_impact_presentation,

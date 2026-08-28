@@ -8,15 +8,15 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.python_api import EmbedAuthorityError, EmbedContextError, MemCommitClient
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Memory, MemoryRef
-from memcommit.application.retained_history.context_snapshot import ContextSnapshotRef
+from memcommit.application.capabilities.retained_history.context_snapshot import ContextSnapshotRef
 from memcommit.application.operations.compare.ledger.store import comparison_analysis_path
 from memcommit.application.operations.embed.application import MemoryEmbedRequest
 from memcommit.application.operations.embed.runtime import MemoryStoreEmbedPort
-from memcommit.adapters.interfaces.agent.embed import EmbedAgentAdapter
+from memcommit.adapters.agent.embed import EmbedAgentAdapter
 from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,

@@ -9,8 +9,8 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from prompt_toolkit.utils import get_cwidth
 
-import memcommit.adapters.console.shared.history_picker as history_picker
-from memcommit.adapters.console.shared.history_picker import (
+import memcommit.adapters.console.terminal.components.history.picker as history_picker
+from memcommit.adapters.console.terminal.components.history.picker import (
     HISTORY_BACK,
     REVERT_COMMAND_FORM,
     HistoryDetailView,
@@ -25,10 +25,10 @@ from memcommit.adapters.console.shared.history_picker import (
     parse_revert_command_argv,
     revert_exact_command_review,
 )
-from memcommit.adapters.console.tui.components.exact_command_review import (
+from memcommit.adapters.console.terminal.components.exact_command_review import (
     format_exact_command,
 )
-from memcommit.application.reviewing.session_navigation import SessionWorkbenchNavigation
+from memcommit.application.capabilities.reviewing.session_navigation import SessionWorkbenchNavigation
 
 
 def entry(
@@ -586,11 +586,11 @@ def test_untrusted_fields_are_display_escaped_in_detail():
 
 def test_picker_requires_tty_when_requested(monkeypatch):
     monkeypatch.setattr(
-        "memcommit.adapters.console.shared.history_picker.sys.stdin",
+        "memcommit.adapters.console.terminal.components.history.picker.sys.stdin",
         io.StringIO(),
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.shared.history_picker.sys.stdout",
+        "memcommit.adapters.console.terminal.components.history.picker.sys.stdout",
         io.StringIO(),
     )
 

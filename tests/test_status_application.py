@@ -5,7 +5,7 @@ from __future__ import annotations
 import ast
 from pathlib import Path
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 import memcommit.application.operations.status.application as status_application
 from memcommit.source_projection.model import SourceDisplayFacts
 from memcommit.application.operations.status.application import (

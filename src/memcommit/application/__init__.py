@@ -1,1 +1,1 @@
-"""Shared application contracts and operation-owned vertical packages."""
+"""Operation-owned vertical slices and cross-operation capabilities."""

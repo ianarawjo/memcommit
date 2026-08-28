@@ -54,11 +54,11 @@ from memcommit.application.operations.atomize.workbench import (
 )
 from memcommit.adapters.console.commands.atomize.grounding import render_grounding_session
 from memcommit.adapters.console.commands.atomize.render import render_atomize_apply_result
-from memcommit.adapters.console.text import display_escape_text
+from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.adapters.console.commands.atomize.workbench.adapter import (
     present_atomize_workbench,
 )
-from memcommit.adapters.console.shared.command_progress import progressing_provider_factory
+from memcommit.adapters.console.terminal.components.progress import progressing_provider_factory
 from memcommit.adapters.console.commands.atomize.sessions import (
     atomize_analysis_was_applied,
     atomize_planned_output_was_applied,
@@ -67,11 +67,11 @@ from memcommit.adapters.console.commands.atomize.sessions import (
     load_saved_atomize_analysis,
     revalidate_saved_atomize_analysis,
 )
-from memcommit.adapters.console.shared.endpoint_setup_flows import choose_atomize_setup
-from memcommit.adapters.console.tui.components.operation_launcher.session import (
+from memcommit.adapters.console.terminal.components.endpoint_setup.flows import choose_atomize_setup
+from memcommit.adapters.console.terminal.components.operation_launcher.session import (
     SessionNewReceipt,
 )
-from memcommit.adapters.console.shared.context_operand import (
+from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
     choose_context_operand,
 )
@@ -1146,7 +1146,7 @@ def cmd(
             and not applying_planned_output
             and not store.context_exists(save_as)
         ):
-            from memcommit.adapters.console.shared.save_location_review import (
+            from memcommit.adapters.console.terminal.components.save_location_review import (
                 review_save_location,
             )
 

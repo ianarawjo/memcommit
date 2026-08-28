@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.python_api import (
     ContextReferenceResult,
     EmbeddedContextResult,
@@ -15,7 +15,7 @@ from memcommit.adapters.python_api import (
     ReferenceContextError,
 )
 from memcommit.core.context import Memory, MemoryRef
-from memcommit.application.retained_history.context_snapshot import ContextSnapshotRef
+from memcommit.application.capabilities.retained_history.context_snapshot import ContextSnapshotRef
 from memcommit.persistence.store import MemoryStore
 
 

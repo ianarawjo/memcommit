@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from memcommit.adapters.console.shared.command_group import CanonicalCommandGroup
+from memcommit.adapters.console.coordination.command_group import CanonicalCommandGroup
 
 
 class ProfileAliasGroup(CanonicalCommandGroup):

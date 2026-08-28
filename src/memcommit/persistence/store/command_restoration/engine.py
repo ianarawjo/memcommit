@@ -32,7 +32,7 @@ class _CommandRestorationEngineMixin:
         atomicity for multi-Context Update commands; as elsewhere in this
         prototype, a machine crash can still interrupt several file replaces.
         """
-        from memcommit.application.retained_history.command_history import (
+        from memcommit.application.capabilities.retained_history.command_history import (
             CommandHistoryError,
             CommandRestoreResult,
             build_command_stacks,

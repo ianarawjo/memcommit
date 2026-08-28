@@ -11,7 +11,7 @@ import pytest
 
 import memcommit
 import memcommit.adapters.python_api._operations.atomize_grounding as grounding_operation
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.python_api import (
     AtomizeGroundingContextError,
     AtomizeGroundingInputError,

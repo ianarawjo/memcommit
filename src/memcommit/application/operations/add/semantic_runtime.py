@@ -5,9 +5,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Iterable
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.core.context import AutoCheckpoint
-from memcommit.application.context_locator import resolve_context_locator
+from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.persistence.store import MemoryStore, context_record_digest
 
 

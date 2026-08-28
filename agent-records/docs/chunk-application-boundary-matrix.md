@@ -14,7 +14,7 @@ checkpoint-producing command unit.
 | Authority revalidation, replacement, checkpoint, save | `memcommit.application.operations.chunk.runtime` | One CREATE+DELETE authorized save or no publication |
 | Operand discovery, preview, receipt | `memcommit.adapters.console.commands.chunk.command` | Typer-only adapter around the operation package |
 | Historical Python import | `memcommit.chunking` | Identity alias to the operation-owned domain |
-| Historical in-memory call | `memcommit.application.ops.chunk` | Thin lazy adapter to the application function |
+| Historical in-memory call | `memcommit.application.capabilities.ops.chunk` | Thin lazy adapter to the application function |
 
 ## Invariants
 

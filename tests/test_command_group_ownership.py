@@ -1,4 +1,4 @@
-"""Ownership contracts for shared Click command-group routing."""
+"""Ownership contracts for coordinated Click command-group routing."""
 
 from __future__ import annotations
 
@@ -12,14 +12,14 @@ from typer.core import TyperGroup
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-OWNER_MODULE = "memcommit.adapters.console.shared.command_group"
+OWNER_MODULE = "memcommit.adapters.console.coordination.command_group"
 OWNER_PATH = (
     REPOSITORY_ROOT
     / "src"
     / "memcommit"
     / "adapters"
     / "console"
-    / "shared"
+    / "coordination"
     / "command_group.py"
 )
 REMOVED_INTERFACE_PATH = (
@@ -40,11 +40,11 @@ CANONICAL_CONSUMERS = (
     "commands/provider/command.py",
     "commands/semantic_eval/command.py",
     "commands/write_protection/command.py",
-    "shared/root_group.py",
+    "coordination/root_group.py",
 )
 
 
-def test_console_shared_command_group_is_the_only_implementation_owner() -> None:
+def test_console_coordination_command_group_is_the_only_implementation_owner() -> None:
     tree = ast.parse(OWNER_PATH.read_text(encoding="utf-8"), filename=str(OWNER_PATH))
 
     assert any(isinstance(node, ast.ClassDef) for node in tree.body)
@@ -96,13 +96,13 @@ def test_command_group_error_contract_keeps_exit_and_suggestion_order() -> None:
     )
 
 
-def test_all_command_groups_import_the_console_shared_owner() -> None:
+def test_all_command_groups_import_the_console_coordination_owner() -> None:
     console = REPOSITORY_ROOT / "src" / "memcommit" / "adapters" / "console"
 
     for filename in CANONICAL_CONSUMERS:
         source = (console / filename).read_text(encoding="utf-8")
         assert (
-            "from memcommit.adapters.console.shared.command_group import "
+            "from memcommit.adapters.console.coordination.command_group import "
             "CanonicalCommandGroup" in source
         )
         assert "memcommit.adapters.interfaces.cli.command_group" not in source

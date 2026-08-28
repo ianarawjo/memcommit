@@ -3,7 +3,7 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.adapters.console.commands.branch.setup import choose_branch_creation
-from memcommit.application.context_locator import resolve_context_locator
+from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.core.context_targeting.presets import (
     ContextScopePreset,
     legacy_root_only_option_alias,
@@ -11,7 +11,7 @@ from memcommit.core.context_targeting.presets import (
     resolve_scope_preset,
 )
 from memcommit.core.context_targeting.tui.name_editor import suggest_fresh_context_name
-from memcommit.adapters.console.text import display_escape_text
+from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.application.operations.branch.application import BranchRequest
 from memcommit.application.operations.branch.runtime import (
     execute_branch,

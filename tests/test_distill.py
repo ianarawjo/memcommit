@@ -9,11 +9,11 @@ from pathlib import Path
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 import memcommit.adapters.console.commands.distill.command as distill_command
 import memcommit.application.operations.distill.application as distill_application
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.help_inventory.command import COMMAND_FORMS
+from memcommit.adapters.console.commands.help.command import COMMAND_FORMS
 from memcommit.core.context import Context, Memory
 from memcommit.application.operations.distill.model import (
     DISTILL_OPERATION,

@@ -58,7 +58,7 @@ def _run_child() -> None:
     from typer.testing import CliRunner
 
     import memcommit.adapters.console.commands.ground.command as ground_command
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.adapters.console.entrypoint import app
     from memcommit.application.operations.ground.dialogue import GroundDialogueProposal
     from memcommit.application.operations.ground.workspace_runtime import load_ground_workspace

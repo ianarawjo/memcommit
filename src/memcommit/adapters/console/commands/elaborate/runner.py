@@ -9,8 +9,8 @@ from memcommit.adapters.console.commands.elaborate.proposal import (
 )
 from memcommit.adapters.console.commands.elaborate.viewer import run_elaborate_tui
 from memcommit.adapters.console.router import ConsoleRunner
-from memcommit.adapters.console.terminal import TerminalCapabilities
-from memcommit.adapters.console.tui.components.plain_text_clipboard import (
+from memcommit.adapters.console.terminal.core.capabilities import TerminalCapabilities
+from memcommit.adapters.console.terminal.components.plain_text_clipboard import (
     ClipboardWriter,
 )
 from memcommit.application.operations.elaborate.application import (

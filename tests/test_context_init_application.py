@@ -25,7 +25,7 @@ from memcommit.adapters.console.commands.init.setup import (
     ContextInitTuiSetup,
     run_context_init_tui,
 )
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 
 

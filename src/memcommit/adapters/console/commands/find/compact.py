@@ -10,11 +10,11 @@ from memcommit.adapters.console.commands.find.presentation import (
     DEFAULT_FIND_PREVIEW_MATCHES,
     find_result_header_lines,
 )
-from memcommit.adapters.console.text import safe_terminal_text
+from memcommit.adapters.console.terminal.core.text import safe_terminal_text
 from memcommit.adapters.console.commands.find.source_row import (
     render_find_reference_row,
 )
-from memcommit.adapters.console.tui.components.paged_result import (
+from memcommit.adapters.console.terminal.components.paged_result import (
     PagedResultRenderer,
     PagedResultState,
     run_paged_result,

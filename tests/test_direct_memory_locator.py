@@ -2,7 +2,7 @@
 
 import pytest
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.core.context import Memory, MemoryRef, QueryContextRef
 from memcommit.core.context_targeting.loading import (
     resolve_local_direct_item_locator,

@@ -8,11 +8,11 @@ from collections.abc import Sequence
 from typing import Protocol
 
 from memcommit.core.context import Context, Memory
-from memcommit.application.reviewing.result_workbench import (
+from memcommit.application.capabilities.reviewing.result_workbench import (
     RESULT_REPORT_SECTION_SOFT_MAX_WORDS,
     RESULT_REPORT_SECTION_TARGET_MIN_WORDS,
 )
-from memcommit.application.semantic_execution import (
+from memcommit.application.capabilities.semantic_execution import (
     BudgetLimits,
     ExecutionMode,
     ExecutionStrategy,
@@ -21,11 +21,11 @@ from memcommit.application.semantic_execution import (
     json_budget,
     plan_semantic_execution,
 )
-from memcommit.application.semantic.disclosure import (
+from memcommit.application.capabilities.semantic.disclosure import (
     SemanticDisclosureError,
     require_semantic_disclosure_authority,
 )
-from memcommit.application.semantic.understanding import (
+from memcommit.application.capabilities.semantic.understanding import (
     UnderstandingError,
     UnderstandingSummary,
     parse_source_linked_understanding,

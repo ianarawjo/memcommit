@@ -6,15 +6,15 @@ import json
 
 import pytest
 
-import memcommit.application.ops as ops
-from memcommit.application.authority.access import resolve_context_access
+import memcommit.application.capabilities.ops as ops
+from memcommit.application.capabilities.authority.access import resolve_context_access
 from memcommit.application.operations.query.ordinary_application import (
     OrdinaryQueryRequest,
 )
 from memcommit.application.operations.query.ordinary_runtime import (
     execute_ordinary_query,
 )
-from memcommit.adapters.console.shared.readable_context_catalog import (
+from memcommit.core.context_targeting.readable_catalog import (
     freeze_readable_context_catalog,
 )
 from memcommit.application.operations.search.answer_references import (

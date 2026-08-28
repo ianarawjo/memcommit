@@ -24,7 +24,7 @@ from memcommit.adapters.python_api.resolve import (
     ResolveIssueResult,
 )
 from memcommit.application.operations.fit.judgment import FitJudgmentError
-from memcommit.application.context_locator import resolve_context_locator
+from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.application.operations.profile.config import (
     ProfileConfigError,
     load_profile_registry,
@@ -42,7 +42,7 @@ from memcommit.application.operations.resolve.application import (
     apply_resolve as apply_core_resolve,
     run_resolve,
 )
-from memcommit.application.reviewing.quality.handoff import (
+from memcommit.application.capabilities.reviewing.quality.handoff import (
     QualityFindingHandoff,
     QualityFindingHandoffError,
     conflict_handoff_to_resolve_request,

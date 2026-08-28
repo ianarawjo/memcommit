@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Callable, Generic, TypeVar
 
-from memcommit.adapters.console.terminal import TerminalCapabilities
+from memcommit.adapters.console.terminal.core.capabilities import TerminalCapabilities
 
 
 RequestT = TypeVar("RequestT")

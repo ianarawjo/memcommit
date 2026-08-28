@@ -8,7 +8,7 @@ import uuid
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.core.context import MemoryRef
 from memcommit.application.operations.embed.application import (
     FrozenMemoryEmbedPlan,
@@ -16,7 +16,7 @@ from memcommit.application.operations.embed.application import (
     run_memory_embed,
 )
 from memcommit.application.operations.embed.runtime import MemoryStoreEmbedPort
-from memcommit.adapters.console.tui.components.direct_item_placement import DirectItemGap
+from memcommit.adapters.console.terminal.components.direct_item_placement import DirectItemGap
 from memcommit.adapters.console.commands.embed.workbench import (
     build_embed_tui_setup,
     choose_embed_setup,

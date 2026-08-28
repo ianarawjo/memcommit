@@ -34,7 +34,7 @@ def _configure_store(store_dir: Path) -> None:
 
 def _prepare_store(store_dir: Path) -> tuple[str, tuple[str, str, str, str]]:
     _configure_store(store_dir)
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.core.context import AutoCheckpoint, Memory
     from memcommit.persistence.store import MemoryStore
 

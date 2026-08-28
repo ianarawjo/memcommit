@@ -7,12 +7,12 @@ import json
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import AutoCheckpoint, Context, Memory
 from memcommit.application.operations.ground.model import create_ground_session
 from memcommit.persistence.store import MemoryStore, context_record_digest
-from memcommit.application.authority.write_protection import (
+from memcommit.application.capabilities.authority.write_protection import (
     WriteProtectionError,
     WriteProtectionState,
 )

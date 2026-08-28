@@ -10,7 +10,7 @@ from pathlib import Path
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 import memcommit.persistence.store as store_module
 from memcommit.application.operations.atomize.domain import (
     ATOMIZE_RULESET_VERSION,
@@ -27,7 +27,7 @@ from memcommit.application.operations.atomize.grounding_provider import (
 from memcommit.application.operations.atomize.workbench import create_atomize_workbench
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import AutoCheckpoint, Memory, MemoryRef
-from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
+from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_construction import (
     reconstruct_memory_history,
 )
 from memcommit.application.operations.rationale.model import build_rationale

@@ -4,7 +4,7 @@ from __future__ import annotations
 import os
 from pathlib import Path
 from memcommit.application.operations.profile.config import resolve_active_store_dir
-from memcommit.application.authority.storage_permissions import (
+from memcommit.application.capabilities.authority.storage_permissions import (
     ensure_private_directory,
 )
 

@@ -8,7 +8,7 @@ import json
 from typing import Protocol
 import uuid
 
-from memcommit.application.semantic_execution import (
+from memcommit.application.capabilities.semantic_execution import (
     BudgetLimits,
     ExecutionMode,
     ExecutionStrategy,
@@ -17,12 +17,12 @@ from memcommit.application.semantic_execution import (
     json_budget,
     plan_semantic_execution,
 )
-from memcommit.application.semantic.prompt_policy import resolve_semantic_prompt_policy
+from memcommit.application.capabilities.semantic.prompt_policy import resolve_semantic_prompt_policy
 from memcommit.application.operations.distill.config import (
     DEFAULT_DISTILL_SEMANTIC_CONFIG,
     DistillSemanticConfig,
 )
-from memcommit.application.semantic.generative_reduction_reference import (
+from memcommit.application.capabilities.semantic.generative_reduction_reference import (
     distill_elaborate_reference_payload,
     render_distill_elaborate_reference_examples,
 )

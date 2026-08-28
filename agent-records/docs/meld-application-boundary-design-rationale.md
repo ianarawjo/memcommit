@@ -51,6 +51,12 @@ were verified. Provenance tests now exercise the runtime-owned checkpoint
 projection directly. A source-level boundary test prevents target or session
 publication primitives from returning to `commands.meld`.
 
+The normal terminal shortcut that conservatively completes an initial
+symmetric assessment follows the same rule: the command may select that
+provider-free behavior, but `run_meld_initial_preservation` clones and validates
+the candidate while its MemoryStore repository publishes the exact session by
+CAS. The adapter never calls a Store session-publication primitive directly.
+
 ## Cache invariants
 
 A reusable Meld resolution branch is profile-local, hidden, immutable, and

@@ -6,8 +6,8 @@ from memcommit.adapters.console.commands.distill.proposal import distill_result_
 from memcommit.adapters.console.commands.distill.workbench.model import (
     DistillClipboardProjection,
 )
-from memcommit.adapters.console.text import safe_terminal_text
-from memcommit.adapters.interfaces.tui.viewers.semantic import (
+from memcommit.adapters.console.terminal.core.text import safe_terminal_text
+from memcommit.adapters.console.terminal.components.semantic_viewer import (
     SemanticViewerBlock,
     SemanticViewerDocument,
     SemanticViewerSection,

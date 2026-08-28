@@ -35,7 +35,7 @@ from memcommit.adapters.console.commands.fit.render import (
     render_fit_plain,
     render_proposition_fit_plain,
 )
-from memcommit.adapters.console.theme import (
+from memcommit.adapters.console.terminal.core.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )

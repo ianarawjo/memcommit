@@ -1,6 +1,6 @@
 # Help application boundary matrix
 
-Last reviewed: 2026-08-25.
+Last reviewed: 2026-08-28.
 
 ## Closure statement
 
@@ -23,6 +23,25 @@ semantic selection plan and validates the provider's exact three-name result;
 provider connection remains outside the package in the terminal adapter.
 Production CLI, Python, agent, and MCP routes import those owners directly.
 
+The Help terminal adapter now has one physical owner under
+`memcommit.adapters.console.commands.help`. `command.py` owns plain output and
+the interactive browser, `command_handoff.py` owns the fixed-operation editor
+and child argv launch, and `study_copy_guard.py` owns the Study-only input
+guard. Reviewed translated operation Summary and
+Best For copy lives beside the canonical English records under
+`memcommit.application.operations.operation_catalog.translations`, with
+language selection in `operation_catalog.localization`. Help-only category,
+concept, locator, and key guidance remains in
+`commands.help.localized_copy`. The former
+`interfaces.tui.operations.help` tree and the inverse `help_inventory` command
+facade are intentionally absent.
+The operation-neutral nested-session handoff remains directly implemented in
+`memcommit.adapters.console.terminal.components.session_help`. The Help command
+registers its inventory builder and selector as a backend after defining them;
+the component therefore does not import a command module. Removing the former
+inverse interface and shared facades keeps dependencies pointed in one
+direction.
+
 The historical `memcommit.help_application` and
 `memcommit.help_lookup_application` paths remain behavior-free module-identity
 aliases. They preserve existing imports, monkeypatch targets, and serialized
@@ -37,7 +56,7 @@ not broaden Help's Store or provider access.
 
 | Route | Entry | Application path | Projection | Effect | Evidence |
 | --- | --- | --- | --- | --- | --- |
-| Plain `mem help` | `interfaces.tui.operations.help.inventory.cmd` in a non-TTY | `command_entries` takes `list_operation_help()` once | Plain alphabetized inventory plus CLI-owned forms, maturity tags, and canonical expanded details | None | `test_help_catalog.py`, `test_help_application.py` |
+| Plain `mem help` | `adapters.console.commands.help.command.cmd` in a non-TTY | `command_entries` takes `list_operation_help()` once | Plain alphabetized inventory plus CLI-owned forms, maturity tags, and canonical expanded details | None | `test_help_catalog.py`, `test_help_application.py` |
 | Interactive `mem help` | Same command in a TTY | Same frozen application snapshot | Grouped/A–Z browser; selected Form then shared exact-command argument editor | The editor closes before a separately recorded child command invocation; cancel has no effect | `test_help_command_handoff.py` and the ordered Help handoff captures |
 | Natural-language `mem help REQUEST` | Same command with one positional request in TTY or non-TTY | `prepare_help_lookup` freezes and preflights the complete catalog before `connect_help_provider`; `execute_help_lookup` requires exactly three distinct exact IDs | Three existing collapsed Help rows in semantic order: `mem NAME`, summary, and `WHEN`; no ordinal, browser, why, confidence, forms, or generated prose | None | `test_help_lookup_application.py`, `test_help_lookup_cli.py`, `test_help_lookup_provider_policy.py` |
 | Selected CLI detail | One `CommandEntry` from the snapshot | Catalog meaning already bound to the entry | Common meaning composed with registered CLI syntax | None | `test_help_catalog.py` |
@@ -45,8 +64,7 @@ not broaden Help's Store or provider access.
 | Python describe | `MemCommitClient.describe_operation(name)` | `_operations.help.describe_operation` → application exact lookup | One `OperationHelpResult` or `HelpInputError` | None | `test_help_public_api.py` |
 | Python detail list/describe | `MemCommitClient.list_operation_details(name)` / `describe_operation_detail(name, id)` | Exact application detail lookup | Compact typed references or one complete comparison, limitation, access boundary, or semantic boundary | None | `test_help_public_api.py` |
 | Agent list/describe/detail | `HelpAgentAdapter.invoke` | The corresponding public client method | Version-1 JSON-safe operation and individually addressable typed details; `effect: NONE` | None | `test_help_agent_adapter.py`, registry tests |
-| MCP discovery/call | Default registry → `McpRegistryProjection` | Exact agent adapter above | Every tool carries compact detail references in `_meta`; only `TOOL_SELECTION` summaries enter the visible description; full content stays behind Help `describe-detail` | None | MCP projection and official-SDK stdio tests |
-| Companion Skill | Installed Skill frontmatter and procedural body | Calls its registered agent/MCP tool; it does not execute Help | Frontmatter carries the trigger; the body may name a stable detail ID instead of copying its full payload | None until the selected tool is called | Add Skill contract and validator |
+| Companion Skill | Installed Skill frontmatter and procedural body | Calls its registered agent tool; it does not execute Help | Frontmatter carries the trigger; the body may name a stable detail ID instead of copying its full payload | None until the selected tool is called | Add Skill contract and validator |
 
 ## Invariants
 

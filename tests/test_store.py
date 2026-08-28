@@ -5,7 +5,7 @@ import uuid
 
 import pytest
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 import memcommit.persistence.store as store_module
 from memcommit.persistence.store import (
     ConcurrentContextUpdateError,
@@ -794,7 +794,7 @@ def test_delete_removes_only_exact_context_atomize_grounding_artifact(
 
 
 def test_delete_preserves_review_bound_to_another_context(isolated_store):
-    from memcommit.application.reviewing.quality.findings import AmbiguityReport
+    from memcommit.application.capabilities.reviewing.quality.findings import AmbiguityReport
     from memcommit.application.operations.review.model import create_ambiguity_review
 
     store = MemoryStore()
@@ -821,7 +821,7 @@ def test_delete_preserves_review_bound_to_another_context(isolated_store):
 def test_delete_removes_uid_retained_atomize_and_review_evidence(isolated_store):
     from memcommit.application.operations.atomize.domain import AtomizeImpactReport, create_atomize_analysis
     from memcommit.application.operations.atomize.workbench import create_atomize_workbench
-    from memcommit.application.reviewing.quality.findings import AmbiguityReport
+    from memcommit.application.capabilities.reviewing.quality.findings import AmbiguityReport
     from memcommit.application.operations.review.model import create_ambiguity_review
 
     store = MemoryStore()

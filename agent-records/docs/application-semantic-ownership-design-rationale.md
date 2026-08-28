@@ -2,7 +2,7 @@
 
 ## Decision
 
-The shared semantic package is owned by `memcommit.application.semantic`.
+The shared semantic package is owned by `memcommit.application.capabilities.semantic`.
 This relocation keeps its existing classification pipelines, provider-facing
 contracts, shared semantic values, prompt policy, and legacy helpers together
 while preserving behavior.
@@ -24,7 +24,7 @@ behavior.
 ## Compatibility boundary
 
 Internal callers, tests, evaluation tooling, study prewarms, and generated
-legacy-module targets use `memcommit.application.semantic` directly. There is
+legacy-module targets use `memcommit.application.capabilities.semantic` directly. There is
 no `memcommit.semantic` compatibility package: retaining a second package path
 would obscure the selected owner and there is no required external consumer
 for the old path.

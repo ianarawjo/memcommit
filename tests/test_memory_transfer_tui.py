@@ -10,7 +10,7 @@ from prompt_toolkit.output import DummyOutput
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.commands.copy import command as copy_command
 from memcommit.adapters.console.commands.copy.setup import (
     build_copy_tui_setup,
@@ -22,12 +22,12 @@ from memcommit.adapters.console.commands.move.setup import (
     choose_move_setup,
 )
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.shared.memory_transfer.workbench import (
+from memcommit.adapters.console.terminal.components.memory_transfer import (
     memory_transfer_exact_command_review,
     parse_memory_transfer_command_argv,
 )
 from memcommit.core.context import Context, Memory, MemoryRef
-from memcommit.adapters.console.tui.components.direct_item_placement import DirectItemGap
+from memcommit.adapters.console.terminal.components.direct_item_placement import DirectItemGap
 from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,

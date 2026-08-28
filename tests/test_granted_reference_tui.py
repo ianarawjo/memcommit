@@ -9,8 +9,8 @@ import pytest
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-import memcommit.application.ops as ops
-from memcommit.adapters.interfaces.tui.operations.reference import (
+import memcommit.application.capabilities.ops as ops
+from memcommit.adapters.console.commands.reference.workbench import (
     ReferenceTuiSetup,
     build_reference_tui_setup,
     choose_reference_setup,

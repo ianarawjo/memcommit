@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.python_api import (
     DeleteInputError,
     MemCommitClient,
@@ -23,13 +23,15 @@ from memcommit.application.operations.delete.application import (
     run_direct_item_delete,
 )
 from memcommit.application.operations.delete.runtime import MemoryStoreDeletePort
-from memcommit.adapters.interfaces.agent import (
+from memcommit.adapters.agent.delete import (
     APPLY_CONTEXT_DELETE_AGENT_TOOL_NAME,
     PLAN_CONTEXT_DELETE_AGENT_TOOL_NAME,
     REMOVE_ITEM_AGENT_TOOL_NAME,
+)
+from memcommit.adapters.agent.registry import (
+    AgentToolEffect,
     build_default_agent_tool_registry,
 )
-from memcommit.adapters.interfaces.mcp import McpRegistryProjection
 from memcommit.persistence.store import MemoryStore
 
 
@@ -161,7 +163,7 @@ def test_public_context_delete_reports_a_committed_cleanup_warning(
     assert not store.context_exists("victim")
 
 
-def test_agent_and_mcp_split_delete_by_effect_and_require_exact_plan(tmp_path):
+def test_agent_registry_splits_delete_by_effect_and_requires_exact_plan(tmp_path):
     root = tmp_path / "store"
     store = MemoryStore(root=root)
     owner = ops.init("owner")
@@ -169,27 +171,26 @@ def test_agent_and_mcp_split_delete_by_effect_and_require_exact_plan(tmp_path):
     store.create_context(owner)
     store.create_context(ops.init("victim"))
     registry = build_default_agent_tool_registry(MemCommitClient(root=root))
-    projection = McpRegistryProjection(registry)
-    tools = {tool.name: tool for tool in projection.list_tools()}
+    tools = {
+        definition.tool_schema["name"]: definition
+        for definition in registry.tool_definitions()
+    }
 
-    assert tools[REMOVE_ITEM_AGENT_TOOL_NAME].to_dict()["annotations"] == {
-        "readOnlyHint": False,
-        "destructiveHint": False,
-        "idempotentHint": False,
-        "openWorldHint": False,
-    }
-    assert tools[PLAN_CONTEXT_DELETE_AGENT_TOOL_NAME].to_dict()["annotations"] == {
-        "readOnlyHint": True,
-        "destructiveHint": False,
-        "idempotentHint": True,
-        "openWorldHint": False,
-    }
-    assert tools[APPLY_CONTEXT_DELETE_AGENT_TOOL_NAME].to_dict()["annotations"] == {
-        "readOnlyHint": False,
-        "destructiveHint": True,
-        "idempotentHint": False,
-        "openWorldHint": False,
-    }
+    assert tools[REMOVE_ITEM_AGENT_TOOL_NAME].effect == AgentToolEffect(
+        read_only=False,
+        destructive=False,
+        idempotent=False,
+    )
+    assert tools[PLAN_CONTEXT_DELETE_AGENT_TOOL_NAME].effect == AgentToolEffect(
+        read_only=True,
+        destructive=False,
+        idempotent=True,
+    )
+    assert tools[APPLY_CONTEXT_DELETE_AGENT_TOOL_NAME].effect == AgentToolEffect(
+        read_only=False,
+        destructive=True,
+        idempotent=False,
+    )
 
     removed = registry.invoke(
         REMOVE_ITEM_AGENT_TOOL_NAME,

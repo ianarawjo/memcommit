@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.application.operations.fit.coherence import (
     FIT_COHERENCE_OPERATION,
     FIT_COHERENCE_PAYLOAD_MARKER,

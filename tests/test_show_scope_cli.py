@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Memory
 from memcommit.persistence.store import MemoryStore
@@ -155,7 +155,7 @@ def test_show_short_uid_prefix_does_not_prefer_a_current_context_match(
     result = runner.invoke(app, ["show", "08df"])
 
     assert result.exit_code == 1
-    assert "Direct-item prefix '08df' has multiple local matches (2)" in result.stderr
+    assert "Report selector '08df' has multiple local matches (2)" in result.stderr
     assert "current:08df1111-1111-4111-8111-111111111111" in result.stderr
     assert "other:08df2222-2222-4222-8222-222222222222" in result.stderr
     assert "CONTEXT:UID" in result.stderr

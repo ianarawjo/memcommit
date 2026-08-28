@@ -7,11 +7,11 @@ from collections.abc import Callable
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.adapters.console.shared.resolution_workbench_shell import (
+from memcommit.adapters.console.terminal.components.resolution.session_shell import (
     run_resolution_workbench_shell,
 )
 from memcommit.core.context import Context, Memory
-from memcommit.application.resolution.workbench import (
+from memcommit.application.capabilities.resolution.workbench import (
     ResolutionContextLocation,
     ResolutionIssueEvidence,
     ResolutionIssuePresentation,
@@ -26,7 +26,7 @@ from memcommit.application.operations.review.model import (
     ReviewError,
     ReviewSession,
 )
-from memcommit.application.reviewing.session_navigation import SessionWorkbenchNavigation
+from memcommit.application.capabilities.reviewing.session_navigation import SessionWorkbenchNavigation
 
 
 def _direct_memories(ctx: Context) -> tuple[Memory, ...]:

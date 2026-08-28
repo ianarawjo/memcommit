@@ -7,13 +7,13 @@ from dataclasses import dataclass
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.adapters.console.tui.components.endpoint_setup import (
+from memcommit.adapters.console.terminal.components.endpoint_setup import (
     EndpointSetupMode,
     EndpointSetupRole,
     EndpointSetupSpec,
     run_endpoint_setup,
 )
-from memcommit.application.authority.access import resolve_context_access
+from memcommit.application.capabilities.authority.access import resolve_context_access
 from memcommit.application.operations.merge.application import MergeReach, MergeRequest
 from memcommit.application.operations.merge.runtime import MemoryStoreMergePort
 from memcommit.core.context_targeting.readable_catalog import (

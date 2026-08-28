@@ -12,10 +12,10 @@ from dataclasses import dataclass
 from typing import Literal
 
 from memcommit.core.context import Context, GrantedMemorySource, MemoryRef
-from memcommit.application.retained_history.memory_history_reconstruction.retained_record_verification import (
+from memcommit.application.capabilities.retained_history.memory_history_reconstruction.retained_record_verification import (
     MemoryHistoryReconstructionError,
 )
-from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
+from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_construction import (
     MemoryHistory,
     reconstruct_memory_history,
 )

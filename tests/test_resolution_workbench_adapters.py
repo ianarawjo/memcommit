@@ -21,7 +21,7 @@ from memcommit.application.operations.atomize.resolution_adapter import (
 )
 from memcommit.application.operations.atomize.workbench import create_atomize_workbench
 from memcommit.core.context import Context, Memory
-from memcommit.adapters.console.shared.resolution_workbench_shell import (
+from memcommit.adapters.console.terminal.components.resolution.session_shell import (
     resolution_viewer_fragments,
     session_review_action_view,
     session_todo_view,
@@ -30,8 +30,8 @@ from memcommit.application.operations.meld.model import MeldAssessment, MeldSess
 from memcommit.application.operations.meld.resolution_adapter import (
     MeldResolutionWorkbenchAdapter,
 )
-from memcommit.application.resolution.workbench import ResolutionNavigation
-from memcommit.adapters.console.responses.resolution import (
+from memcommit.application.capabilities.resolution.workbench import ResolutionNavigation
+from memcommit.adapters.console.terminal.components.responses.resolution import (
     response_draft_from_item,
     response_target_from_item,
 )

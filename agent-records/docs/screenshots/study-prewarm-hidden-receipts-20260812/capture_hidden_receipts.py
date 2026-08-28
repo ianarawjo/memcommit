@@ -231,7 +231,7 @@ def _fixture(home: Path) -> None:
     sys.path.insert(0, str(ROOT / "src"))
 
     import memcommit.configuration.config as config_module
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.application.operations.atomize.domain import create_atomize_analysis, impact_atomize
     from memcommit.adapters.console.commands.atomize.sessions import atomize_session_entries
     from memcommit.configuration.config import Config

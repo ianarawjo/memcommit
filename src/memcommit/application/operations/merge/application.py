@@ -8,7 +8,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Protocol
 
-from memcommit.application.resolution import (
+from memcommit.application.capabilities.resolution import (
     ResolutionAttempt,
     ResolutionBinding,
     ResolutionCase,

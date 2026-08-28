@@ -9,7 +9,7 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.application.operations.pwd.application as current_context_application
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.application.operations.pwd.application import (
     CurrentContextError,

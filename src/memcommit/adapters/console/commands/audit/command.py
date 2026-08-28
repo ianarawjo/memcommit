@@ -10,30 +10,30 @@ from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 import typer
 
-from memcommit.adapters.console.shared.command_progress import BUSY_INTERVAL_SECONDS
-from memcommit.adapters.console.shared.command_wait import (
+from memcommit.adapters.console.terminal.components.progress import BUSY_INTERVAL_SECONDS
+from memcommit.adapters.console.terminal.components.command_wait import (
     CommandWaitProgress,
     run_command_wait,
 )
-from memcommit.adapters.console.shared.context_operand import (
+from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
     choose_context_operand,
 )
-from memcommit.application.authority.access import (
+from memcommit.application.capabilities.authority.access import (
     GrantedReadStore,
     context_access_display_facts,
     resolve_context_access,
 )
-from memcommit.adapters.console.commands.help_inventory.command import CommandEntry
-from memcommit.adapters.console.shared.readable_context_catalog import (
+from memcommit.adapters.console.commands.help.command import CommandEntry
+from memcommit.core.context_targeting.readable_catalog import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.adapters.console.identity import collision_safe_uid_prefixes
-from memcommit.adapters.console.text import (
+from memcommit.adapters.console.terminal.core.identity import collision_safe_uid_prefixes
+from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
     safe_terminal_text,
 )
-from memcommit.adapters.console.theme import (
+from memcommit.adapters.console.terminal.core.theme import (
     memory_object_color_rgb,
     semantic_color_rgb,
     semantic_quality_role,
@@ -45,25 +45,25 @@ from memcommit.adapters.console.commands.audit.setup import choose_audit_setup
 from memcommit.core.context import Context
 from memcommit.application.operations.conformance.model import ConformanceError, check_context_conformance
 from memcommit.application.operations.conformance.runtime import freeze_context_conformance
-from memcommit.application.authority.derived_policy import authorize_analysis_save
-from memcommit.application.reviewing.quality.findings import FindingsError, FindingsProvider
+from memcommit.application.capabilities.authority.derived_policy import authorize_analysis_save
+from memcommit.application.capabilities.reviewing.quality.findings import FindingsError, FindingsProvider
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.application.reviewing.quality.audit import (
+from memcommit.application.capabilities.reviewing.quality.audit import (
     QualityAuditError,
     QualityAuditKind,
     QualityAuditSession,
     create_quality_audit,
     run_quality_audit,
 )
-from memcommit.application.reviewing.quality.audit_store import QualityAuditStore
-from memcommit.application.reviewing.quality.report import (
+from memcommit.application.capabilities.reviewing.quality.audit_store import QualityAuditStore
+from memcommit.application.capabilities.reviewing.quality.report import (
     QualityFindingReportItem,
     quality_find_category_label,
     quality_finding_label_parts,
     quality_find_report_summary_text,
 )
-from memcommit.application.reviewing.quality.workbench import (
+from memcommit.application.capabilities.reviewing.quality.workbench import (
     QualityFindSourceFrame,
     QualityFindWorkbenchSession,
     quality_find_report_view,

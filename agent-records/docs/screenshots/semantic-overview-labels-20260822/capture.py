@@ -52,7 +52,7 @@ def _summary_document(*, both: bool):
     )
     from memcommit.adapters.console.commands.summarize.workbench.model import SummarizeTuiOutcome
     from memcommit.application.operations.summarize.application import SummarizeResult
-    from memcommit.application.semantic.understanding import UnderstandingSummary
+    from memcommit.application.capabilities.semantic.understanding import UnderstandingSummary
 
     direct = SummarizeResult(
         context_name="capture/summary",
@@ -165,7 +165,7 @@ def _elaborate_document():
 
 
 def _resolution_view(kind: str):
-    from memcommit.application.resolution.workbench import (
+    from memcommit.application.capabilities.resolution.workbench import (
         ResolutionContextLocation,
         ResolutionOverviewSection,
         ResolutionWorkbenchView,
@@ -249,10 +249,10 @@ def _resolution_view(kind: str):
 
 
 def _run_case_child(kind: str) -> None:
-    from memcommit.adapters.console.shared.resolution_workbench_shell import (
+    from memcommit.adapters.console.terminal.components.resolution.session_shell import (
         run_resolution_workbench_shell,
     )
-    from memcommit.adapters.interfaces.tui.viewers.semantic import run_semantic_viewer
+    from memcommit.adapters.console.terminal.components.semantic_viewer import run_semantic_viewer
 
     print(f"CAPTURE CASE · {kind}")
     print(f"PTY · {os.get_terminal_size().columns} COLUMNS × {os.get_terminal_size().lines} ROWS", flush=True)

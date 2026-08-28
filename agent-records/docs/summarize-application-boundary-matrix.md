@@ -55,7 +55,7 @@ hierarchy edge. UID de-duplication prevents a Context reached lexically and by
 embed from entering the provider frame twice.
 
 The Store-backed adapter temporarily imports the operation-neutral access
-implementation from `memcommit.application.authority.access`. That module does not
+implementation from `memcommit.application.capabilities.authority.access`. That module does not
 import Typer or prompt-toolkit, but its package location is still a known
 reverse dependency. Moving it is deferred until a second vertical slice proves
 the same owner and lifecycle; this slice must not copy or partially migrate the

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 from click import Group, Option
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
@@ -10,12 +12,12 @@ from typer.main import get_command
 
 import memcommit.adapters.console.commands.update.setup as update_setup_command
 import memcommit.adapters.console.commands.update.command as update_command
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.tui.components.endpoint_setup import EndpointSetupMemory
-from memcommit.adapters.interfaces.tui.operations.update import (
+from memcommit.adapters.console.terminal.components.endpoint_setup import EndpointSetupMemory
+from memcommit.adapters.console.commands.update.workbench import (
     UpdateEndpointSelection,
-    UpdateTuiSetup,
+    UpdateEndpointSetup,
     choose_update_endpoint_setup,
     update_endpoint_setup_spec,
 )
@@ -23,10 +25,11 @@ from memcommit.adapters.interfaces.tui.operations.update import (
 
 SOURCE_UID = "11111111-1111-4111-8111-111111111111"
 TARGET_UID = "22222222-2222-4222-8222-222222222222"
+REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 
 
-def _setup() -> UpdateTuiSetup:
-    return UpdateTuiSetup(
+def _setup() -> UpdateEndpointSetup:
+    return UpdateEndpointSetup(
         names=("source", "target"),
         source_name="source",
         target_name="target",
@@ -43,6 +46,16 @@ def _load(role_uid: str, context_name: str):
             f"{role_uid} exact Memory in {context_name}.",
         ),
     )
+
+
+def test_update_setup_is_command_owned_without_an_interface_facade() -> None:
+    assert UpdateEndpointSetup.__module__ == (
+        "memcommit.adapters.console.commands.update.workbench.model"
+    )
+    former_interface = (
+        REPOSITORY_ROOT / "src/memcommit/adapters/interfaces/tui/operations/update"
+    )
+    assert not tuple(former_interface.glob("*.py"))
 
 
 def test_update_setup_projects_two_independent_shared_endpoint_roles() -> None:
@@ -150,13 +163,13 @@ def test_update_setup_keeps_source_memory_and_target_descendants_independent() -
 
 def test_update_setup_rejects_identical_or_unknown_defaults() -> None:
     with pytest.raises(ValueError, match="distinct available"):
-        UpdateTuiSetup(
+        UpdateEndpointSetup(
             names=("source", "target"),
             source_name="source",
             target_name="source",
         )
     with pytest.raises(ValueError, match="distinct available"):
-        UpdateTuiSetup(
+        UpdateEndpointSetup(
             names=("source", "target"),
             source_name="source",
             target_name="missing",

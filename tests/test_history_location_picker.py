@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-import memcommit.adapters.console.shared.history_location_picker as location_picker
+import memcommit.adapters.console.terminal.components.checkpoint_location as location_picker
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-from memcommit.adapters.console.shared.context_picker import ContextSubtreeSelection
+from memcommit.core.context_targeting.tui.picker import ContextSubtreeSelection
 from memcommit.core.context_targeting.tui.picker import ContextMemoryRow
 
 

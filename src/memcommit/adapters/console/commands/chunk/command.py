@@ -5,13 +5,13 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
-from memcommit.application.authority.access import (
+from memcommit.application.capabilities.authority.access import (
     resolve_context_access,
 )
 from memcommit.application.operations.chunk.application import chunk
 from memcommit.application.operations.chunk.domain import ChunkMethod, chunk_content
 from memcommit.application.operations.chunk.runtime import apply_chunk_proposals
-from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.coordination.context_operand import ContextOperandSnapshot
 from memcommit.core.context import Memory
 from memcommit.core.context_targeting.loading import (
     resolve_local_context_memory_target,
@@ -26,7 +26,7 @@ from memcommit.core.context_targeting.model import (
 from memcommit.core.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
 )
-from memcommit.adapters.console.text import display_escape_text
+from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import MemoryStore

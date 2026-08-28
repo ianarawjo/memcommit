@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.adapters.console.text import display_escape_text
+from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.application.operations.delete.application import FrozenContextDeletePlan
 
 

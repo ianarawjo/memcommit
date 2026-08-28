@@ -8,13 +8,15 @@ import typer
 
 from memcommit.adapters.console.commands.move.receipt import render_move_receipt
 from memcommit.adapters.console.commands.move.setup import choose_move_setup
-from memcommit.adapters.console.errors import render_cli_error
-from memcommit.adapters.console.shared.memory_transfer.arguments import (
+from memcommit.adapters.console.terminal.components.errors import render_cli_error
+from memcommit.adapters.console.coordination.memory_transfer.arguments import (
     selected_memory_locators,
     target_context_option,
 )
-from memcommit.adapters.console.terminal import is_interactive_terminal
-from memcommit.application.authority.write_protection import WriteProtectionError
+from memcommit.adapters.console.terminal.core.capabilities import is_interactive_terminal
+from memcommit.application.capabilities.authority.write_protection import (
+    WriteProtectionError,
+)
 from memcommit.application.operations.memory_transfer.application import (
     MemoryTransferError,
     MoveMemoriesRequest,

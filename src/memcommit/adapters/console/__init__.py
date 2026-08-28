@@ -1,4 +1,4 @@
-"""Console-host routing shared by plain CLI and interactive TUI adapters."""
+"""Terminal-host adapters for the ``mem`` executable."""
 
 from memcommit.adapters.console.router import (
     ConsoleMode,
@@ -6,7 +6,7 @@ from memcommit.adapters.console.router import (
     ConsoleRunner,
     resolve_console_mode,
 )
-from memcommit.adapters.console.terminal import (
+from memcommit.adapters.console.terminal.core.capabilities import (
     SystemTerminalCapabilities,
     TerminalCapabilities,
     is_interactive_terminal,

@@ -10,27 +10,55 @@ import pytest
 
 import memcommit.application.operations.compare.ledger.execution as comparison_execution
 import memcommit.application.operations.meld.assessment_application as meld_assessment_application
+import memcommit.application.operations.meld.provider.contract as meld_provider_contract
+import memcommit.application.operations.meld.provider.decoder as meld_provider_decoder
+import memcommit.application.operations.meld.provider.execution as meld_provider_execution
+import memcommit.application.operations.meld.provider.projection as meld_provider_projection
+import memcommit.application.operations.meld.provider.request as meld_provider_request
 import memcommit.application.operations.meld.restart_application as meld_restart_application
 import memcommit.application.operations.meld.runtime as meld_runtime
+import memcommit.application.operations.meld.runtime.apply as meld_runtime_apply
+import memcommit.application.operations.meld.runtime.session_launch as meld_session_launch
+import memcommit.application.operations.meld.runtime.session_review as meld_session_review
+import memcommit.application.operations.meld.runtime.source_bindings as meld_source_bindings
 import memcommit.application.operations.meld.session_application as meld_session_application
 import memcommit.application.operations.meld.start_application as meld_start_application
-from memcommit.application.authority.access import ContextAccess
+from memcommit.application.capabilities.authority.access import ContextAccess
 from memcommit.core.context import Context, Memory
 from memcommit.application.operations.meld.model import meld_canonical_digest
 from memcommit.application.operations.meld.restart_application import MeldRestartRequest
 
 
 PACKAGE_ROOT = Path(__file__).resolve().parents[1] / "src" / "memcommit"
+MELD_COMMAND_ROOT = (
+    PACKAGE_ROOT / "adapters" / "console" / "commands" / "meld" / "command"
+)
+
+
+def _meld_command_source() -> str:
+    return "\n".join(
+        path.read_text(encoding="utf-8")
+        for path in sorted(MELD_COMMAND_ROOT.rglob("*.py"))
+    )
 
 
 @pytest.mark.parametrize(
     "module",
     (
         meld_assessment_application,
+        meld_provider_contract,
+        meld_provider_projection,
+        meld_provider_request,
+        meld_provider_decoder,
+        meld_provider_execution,
         meld_session_application,
         meld_start_application,
         meld_restart_application,
         meld_runtime,
+        meld_runtime_apply,
+        meld_session_launch,
+        meld_session_review,
+        meld_source_bindings,
         comparison_execution,
     ),
 )
@@ -56,9 +84,23 @@ def test_meld_execution_modules_have_no_terminal_or_command_dependencies(module)
     )
 
 
+def test_meld_runtime_facade_preserves_concept_owned_execution_api():
+    assert meld_runtime.load_meld_source.__module__.endswith(
+        ".runtime.source_bindings"
+    )
+    assert meld_runtime.PreparedMeldExecution.__module__.endswith(
+        ".runtime.session_launch"
+    )
+    assert meld_runtime.MemoryStoreMeldAssessmentPort.__module__.endswith(
+        ".runtime.session_review"
+    )
+    assert meld_runtime.MemoryStoreMeldApplyPort.__module__.endswith(
+        ".runtime.apply"
+    )
+
+
 def test_meld_command_contains_no_target_or_session_publication_primitive():
-    command_path = PACKAGE_ROOT / "commands" / "meld" / "command.py"
-    source = command_path.read_text(encoding="utf-8")
+    source = _meld_command_source()
 
     assert all(
         primitive not in source
@@ -73,8 +115,7 @@ def test_meld_command_contains_no_target_or_session_publication_primitive():
 
 
 def test_meld_command_contains_no_initial_cache_or_provisional_session_logic():
-    command_path = PACKAGE_ROOT / "commands" / "meld" / "command.py"
-    source = command_path.read_text(encoding="utf-8")
+    source = _meld_command_source()
 
     assert all(
         primitive not in source
@@ -91,8 +132,7 @@ def test_meld_command_contains_no_initial_cache_or_provisional_session_logic():
 
 
 def test_meld_command_calls_the_operation_owned_apply_service_directly():
-    command_path = PACKAGE_ROOT / "commands" / "meld" / "command.py"
-    source = command_path.read_text(encoding="utf-8")
+    source = _meld_command_source()
 
     assert "execute_meld_apply(" in source
     assert "run_application_flow" not in source
@@ -117,7 +157,7 @@ def test_meld_provider_timeout_policy_is_runtime_owned(monkeypatch):
         def __init__(self):
             self.timeout = 30
 
-    monkeypatch.setattr(meld_runtime, "CodexChatGPTProvider", Provider)
+    monkeypatch.setattr(meld_session_review, "CodexChatGPTProvider", Provider)
 
     provider = meld_runtime.connect_meld_provider(Provider)
 
@@ -147,7 +187,7 @@ def test_symmetric_saved_compare_reuse_does_not_connect_provider(monkeypatch):
         assert callable(kwargs["analyze"])
         return SimpleNamespace(analysis=saved, origin="SAVED_REUSE")
 
-    monkeypatch.setattr(meld_runtime, "ensure_comparison_analysis", ensure)
+    monkeypatch.setattr(meld_session_launch, "ensure_comparison_analysis", ensure)
 
     result = meld_runtime._start_comparison(
         meld_start_application.MeldStartRequest(
@@ -196,14 +236,14 @@ def test_symmetric_subset_projection_is_resolved_and_recorded_in_runtime(
         prepared_context_names=("prepared/left", "prepared/right"),
     )
     recorded = []
-    monkeypatch.setattr(meld_runtime, "load_profile_registry", lambda: None)
+    monkeypatch.setattr(meld_session_launch, "load_profile_registry", lambda: None)
     monkeypatch.setattr(
-        meld_runtime,
+        meld_session_launch,
         "find_declared_equivalent_compare_analysis",
         lambda **kwargs: None,
     )
     monkeypatch.setattr(
-        meld_runtime,
+        meld_session_launch,
         "find_declared_projected_compare_analysis",
         lambda **kwargs: match,
     )
@@ -211,7 +251,7 @@ def test_symmetric_subset_projection_is_resolved_and_recorded_in_runtime(
     def ensure(**kwargs):
         assert (
             kwargs["equivalent"](
-                meld_runtime.ComparisonInput.from_contexts(left, right)
+                meld_session_launch.ComparisonInput.from_contexts(left, right)
             )
             is projected
         )
@@ -220,9 +260,9 @@ def test_symmetric_subset_projection_is_resolved_and_recorded_in_runtime(
             origin="EQUIVALENT_SCOPE_PREWARM",
         )
 
-    monkeypatch.setattr(meld_runtime, "ensure_comparison_analysis", ensure)
+    monkeypatch.setattr(meld_session_launch, "ensure_comparison_analysis", ensure)
     monkeypatch.setattr(
-        meld_runtime,
+        meld_session_launch,
         "record_projected_compare_prewarm",
         lambda *args, **kwargs: recorded.append((args, kwargs)),
     )
@@ -255,12 +295,12 @@ def test_assessment_freeze_falls_back_to_exact_installed_branch(monkeypatch):
     store = SimpleNamespace(load_meld_resolution_branch=lambda key: None)
     session = SimpleNamespace(current_turn=SimpleNamespace(sequence=1, scope="ALL"))
     monkeypatch.setattr(
-        meld_runtime,
+        meld_session_review,
         "meld_turn_request_digest",
         lambda value: "0" * 64,
     )
     monkeypatch.setattr(
-        meld_runtime,
+        meld_session_review,
         "configured_meld_cache_identity",
         lambda: {
             "provider": "codex-chatgpt",
@@ -269,12 +309,12 @@ def test_assessment_freeze_falls_back_to_exact_installed_branch(monkeypatch):
         },
     )
     monkeypatch.setattr(
-        meld_runtime,
+        meld_session_review,
         "meld_resolution_cache_key",
         lambda request, provider: "1" * 64,
     )
     monkeypatch.setattr(
-        meld_runtime,
+        meld_session_review,
         "find_installed_meld_resolution_branch",
         lambda **kwargs: branch,
     )
@@ -332,28 +372,32 @@ def test_memory_focused_directional_restart_reuses_prewarm_and_cas_replaces_with
         ),
     }
     monkeypatch.setattr(
-        meld_runtime,
+        meld_session_launch,
         "resolve_context_access",
         lambda _store, name, **kwargs: accesses[name],
     )
-    monkeypatch.setattr(meld_runtime, "authorize_combination", lambda values: None)
     monkeypatch.setattr(
-        meld_runtime,
+        meld_session_launch,
+        "authorize_combination",
+        lambda values: None,
+    )
+    monkeypatch.setattr(
+        meld_session_launch,
         "authorize_derived_transfer",
         lambda source, target: None,
     )
     monkeypatch.setattr(
-        meld_runtime,
+        meld_session_launch,
         "analysis_retention",
         lambda values: "LOCAL",
     )
     monkeypatch.setattr(
-        meld_runtime,
+        meld_session_launch,
         "authorize_analysis_save",
         lambda values, **kwargs: None,
     )
     monkeypatch.setattr(
-        meld_runtime,
+        meld_session_launch,
         "load_meld_source",
         lambda access, **kwargs: (
             incoming if access.context_name == incoming.name else baseline
@@ -365,9 +409,9 @@ def test_memory_focused_directional_restart_reuses_prewarm_and_cas_replaces_with
         comparison_calls.append((args, kwargs))
         return None
 
-    monkeypatch.setattr(meld_runtime, "_start_comparison", resolve_comparison)
+    monkeypatch.setattr(meld_session_launch, "_start_comparison", resolve_comparison)
     monkeypatch.setattr(
-        meld_runtime,
+        meld_session_launch,
         "find_installed_directional_meld_prewarm",
         lambda **kwargs: SimpleNamespace(
             session=kwargs["current"],
@@ -375,17 +419,17 @@ def test_memory_focused_directional_restart_reuses_prewarm_and_cas_replaces_with
         ),
     )
     monkeypatch.setattr(
-        meld_runtime,
+        meld_session_launch,
         "load_bound_meld_contexts",
         lambda *args, **kwargs: (incoming, baseline, baseline),
     )
     monkeypatch.setattr(
-        meld_runtime,
+        meld_session_launch,
         "assert_meld_source_bindings",
         lambda *args, **kwargs: None,
     )
     monkeypatch.setattr(
-        meld_runtime,
+        meld_session_launch,
         "assert_unapplied_meld_target",
         lambda *args, **kwargs: None,
     )

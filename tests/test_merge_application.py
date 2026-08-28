@@ -6,7 +6,7 @@ from dataclasses import replace
 
 import pytest
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.core.context import Memory
 from memcommit.application.operations.merge.application import (
     FrozenMergePlan,

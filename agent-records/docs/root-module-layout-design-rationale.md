@@ -81,7 +81,7 @@ entry point directly; this relocation does not move any registered command or
 change command behavior.
 
 On 2026-08-27 the mixed in-memory operation API moved intact from
-`memcommit.ops` to `memcommit.application.ops`. The module still contains
+`memcommit.ops` to `memcommit.application.capabilities.ops`. The module still contains
 structural Context rules, operation wrappers, and the legacy Integrate
 implementation; placing the unchanged mixture under application is an
 intentional staging boundary that avoids making a core package depend upward
@@ -90,7 +90,7 @@ re-export were removed without compatibility aliases. Separating the
 structural rules and Integrate implementation remains later work.
 
 On 2026-08-27 the existing `memcommit.reviewing` package moved intact to
-`memcommit.application.reviewing`. Its dominant responsibility is coordinating
+`memcommit.application.capabilities.reviewing`. Its dominant responsibility is coordinating
 quality analysis, review state, and operation handoff, so application is the
 clearest provisional owner. This is deliberately a physical staging move: it
 does not claim that persistence-backed Audit storage or console navigation and
@@ -102,7 +102,7 @@ intact from `memcommit.context` to `memcommit.core.context`. The stable
 `from memcommit import Context`-style value exports remain part of the package
 surface, but the former submodule path is intentionally unavailable. The
 existing-Context locator moved separately from `memcommit.context_locator` to
-`memcommit.application.context_locator`: it interprets an operand against
+`memcommit.application.capabilities.context_locator`: it interprets an operand against
 captured application state and is shared by console and Python routes, so it
 is neither a core entity rule nor a console-only parser. Consolidating it with
 the broader `core.context_targeting` family remains later work.
@@ -117,14 +117,22 @@ former package path. Later changes may move one reviewed surface at a time into
 adapter owner; this relocation itself changes neither behavior nor interface
 contracts.
 
-Later on 2026-08-27 the reviewed console-common slice crossed that staging
-boundary: `memcommit.adapters.interfaces.console` moved to the existing
-canonical `memcommit.adapters.console` owner without a compatibility facade.
-Reusable route, terminal, text, theme, progress, Response, and selection
-contracts stay outside `commands`, so CLI and TUI consumers do not depend on
-Typer command assembly. The remaining `adapters.interfaces.cli` and
-`adapters.interfaces.tui` trees remain temporary staging surfaces pending
-their own ownership reviews.
+Later on 2026-08-27 the reviewed machine-callable slice crossed that staging
+boundary: `memcommit.adapters.interfaces.agent` moved to the canonical
+`memcommit.adapters.agent` owner without a compatibility facade. The dormant
+MCP projection and stdio server were retired instead of moving with it because
+the repository no longer supports an MCP transport. The agent registry remains
+the host-neutral in-process discovery and invocation boundary.
+
+The reviewed console-common slice then crossed the same staging boundary:
+`memcommit.adapters.interfaces.console` moved to the existing canonical
+`memcommit.adapters.console` owner without a compatibility facade. Reusable
+route, terminal, text, theme, progress, Response, and selection contracts stay
+outside `commands`, so CLI and TUI consumers do not depend on Typer command
+assembly. The emptied `adapters.interfaces.cli` and
+`adapters.interfaces.tui.operations` trees are retired without compatibility
+facades; the remaining `adapters.interfaces.tui` Viewer and Workbench trees
+remain temporary staging surfaces pending their own ownership review.
 
 On 2026-08-27 the provider implementations moved from the generic
 `memcommit.infrastructure` container to the explicit top-level
@@ -153,6 +161,16 @@ configuration, command ledgers, and clipboard assigned to explicit owners, the
 empty `memcommit.infrastructure` package is removed rather than retained as a
 facade. This decomposition changes import ownership only and preserves the
 clipboard payload, digest, locking, and redaction contracts.
+
+On 2026-08-28 the application package gained one explicit scope split:
+operation-owned vertical slices remain under `application.operations`, while
+all other staged application owners moved mechanically beneath
+`application.capabilities`. The move does not endorse broad provisional names
+such as `semantic`, claim evaluation or console-command state as final
+application capabilities, or resolve existing reverse dependencies. The
+focused
+`application-operation-capability-layout-design-rationale.md` record owns that
+staging decision and its next-review boundary.
 
 ## Verification
 

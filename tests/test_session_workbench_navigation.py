@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from memcommit.application.reviewing.session_navigation import (
+from memcommit.application.capabilities.reviewing.session_navigation import (
     SessionWorkbenchNavigation,
     WorkbenchSection,
 )

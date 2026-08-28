@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import typer
 
-from memcommit.adapters.console.text import safe_terminal_text
+from memcommit.adapters.console.terminal.core.text import safe_terminal_text
 from memcommit.application.operations.distill.application import DistillResult
 
 

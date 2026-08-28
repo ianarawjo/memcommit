@@ -33,20 +33,18 @@ The neutral layer contains:
    mount one buffer below a pane's read viewport;
 3. a state-free hierarchical Escape dispatcher that asks operation-owned
    callbacks to retreat one visible layer before delegating final closure;
-4. an immutable `ExactCommandReview` holding only an argv tuple and effect
+4. an immutable `CommandReview` holding only an argv tuple and effect
    lines; and
 5. deterministic rendering of injectively display-escaped arguments with
    `shlex.join`.
 
-`ExactCommandReview` is owned by the interface-neutral
-`memcommit.exact_command_review` module.  The terminal component owns only its
-rendering.  The former `memcommit.adapters.console.shared.exact_command_review` module and the
-component's former `model` module are compatibility imports of that same class,
-not parallel implementations.  This placement matters even though the value is
-small: a review constructed by an application or operation adapter must pass
-the exact same identity check in legacy command shells and newer TUI
-workbenches.  Otherwise two structurally equal receipts can be rejected solely
-because they came through different interfaces.
+`CommandReview` is owned by
+`memcommit.adapters.console.coordination.command_review.model`. The sibling `meld`,
+`update`, and `sever` modules project operation-specific START and TURN state
+to that one value through consistently named builders. The terminal component
+owns only form, rendering, and interaction mechanics. This placement matters
+even though the value is small: every command screen must approve the same
+immutable identity rather than accepting structurally similar ad hoc tuples.
 
 The focused final-review action uses `Enter` as its canonical approval key.
 The shared interaction helper binds that gesture and retains case-insensitive

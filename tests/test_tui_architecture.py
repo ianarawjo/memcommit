@@ -1,4 +1,4 @@
-"""Mechanical gates for the incremental TUI component migration."""
+"""Mechanical gates for the terminal component architecture."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).parents[1]
 PACKAGE = ROOT / "src" / "memcommit"
-CONSOLE_TUI = PACKAGE / "adapters" / "console" / "tui"
+CONSOLE_TERMINAL = PACKAGE / "adapters" / "console" / "terminal"
 ALLOWED_COMMAND_PRESENTATION_IMPORTS = {
     "memcommit.adapters.console.commands.compare.presentation",
 }
@@ -25,15 +25,14 @@ def _imports(path: Path) -> tuple[str, ...]:
     return tuple(modules)
 
 
-def test_core_and_components_have_one_console_tui_owner() -> None:
-    legacy_root = PACKAGE / "adapters" / "interfaces" / "tui"
-
-    assert (CONSOLE_TUI / "core" / "__init__.py").is_file()
-    assert (CONSOLE_TUI / "components" / "__init__.py").is_file()
-    assert not (legacy_root / "core").exists()
-    assert not (legacy_root / "components").exists()
+def test_core_and_components_have_one_terminal_owner() -> None:
+    assert (CONSOLE_TERMINAL / "core" / "__init__.py").is_file()
+    assert (CONSOLE_TERMINAL / "components" / "__init__.py").is_file()
+    assert not (PACKAGE / "adapters" / "console" / "tui").exists()
+    assert not (PACKAGE / "adapters" / "interfaces").exists()
 
     retired = (
+        "memcommit.adapters.console.tui",
         "memcommit.adapters.interfaces.tui.core",
         "memcommit.adapters.interfaces.tui.components",
     )
@@ -49,22 +48,36 @@ def test_core_and_components_have_one_console_tui_owner() -> None:
     assert offenders == []
 
 
-def test_console_tui_core_does_not_reach_up_into_components() -> None:
+def test_operation_specific_terminal_adapters_are_command_owned() -> None:
+    legacy_operations = PACKAGE / "adapters" / "interfaces" / "tui" / "operations"
+
+    assert not legacy_operations.exists()
     offenders = [
         (str(path.relative_to(ROOT)), module)
-        for path in (CONSOLE_TUI / "core").rglob("*.py")
+        for path in PACKAGE.rglob("*.py")
         for module in _imports(path)
-        if module == "memcommit.adapters.console.tui.components"
-        or module.startswith("memcommit.adapters.console.tui.components.")
+        if module.startswith("memcommit.adapters.interfaces.tui.operations")
     ]
 
     assert offenders == []
 
 
-def test_interfaces_never_import_command_adapters() -> None:
+def test_terminal_core_does_not_reach_up_into_components() -> None:
+    offenders = [
+        (str(path.relative_to(ROOT)), module)
+        for path in (CONSOLE_TERMINAL / "core").rglob("*.py")
+        for module in _imports(path)
+        if module == "memcommit.adapters.console.terminal.components"
+        or module.startswith("memcommit.adapters.console.terminal.components.")
+    ]
+
+    assert offenders == []
+
+
+def test_terminal_components_never_import_command_adapters() -> None:
     offenders = [
         str(path.relative_to(ROOT))
-        for path in (PACKAGE / "adapters" / "interfaces").rglob("*.py")
+        for path in (CONSOLE_TERMINAL / "components").rglob("*.py")
         if any(
             module.startswith("memcommit.adapters.console.commands")
             and module not in ALLOWED_COMMAND_PRESENTATION_IMPORTS
@@ -115,7 +128,7 @@ def test_summarize_command_tui_only_composes_shared_workbench() -> None:
 
     assert offenders == []
     assert any(
-        module == "memcommit.adapters.interfaces.tui.workbenches.context_summary"
+        module == "memcommit.adapters.console.terminal.components.context_summary"
         for path in workbench_dir.rglob("*.py")
         for module in _imports(path)
     )
@@ -123,7 +136,7 @@ def test_summarize_command_tui_only_composes_shared_workbench() -> None:
 
 def test_moved_component_symbols_no_longer_live_in_tui_primitives() -> None:
     tree = ast.parse(
-        (PACKAGE / "adapters" / "console" / "shared" / "tui_primitives.py").read_text()
+        (CONSOLE_TERMINAL / "components" / "primitives.py").read_text()
     )
     definitions = {
         node.name
@@ -168,7 +181,7 @@ def test_no_consumer_reaches_moved_input_symbols_through_legacy_primitives() -> 
         for node in ast.walk(tree):
             if not isinstance(node, ast.ImportFrom):
                 continue
-            if node.module != "memcommit.adapters.console.shared.tui_primitives":
+            if node.module != "memcommit.adapters.console.terminal.components.primitives":
                 continue
             offenders.extend(
                 (str(path.relative_to(ROOT)), alias.name)
@@ -194,11 +207,11 @@ def test_add_tui_delegates_common_interaction_mechanics() -> None:
 
     assert {
         "memcommit.core.context_targeting.tui.selector",
-        "memcommit.adapters.console.tui.components.focus",
-        "memcommit.adapters.console.tui.components.frame",
-        "memcommit.adapters.console.tui.components.in_frame_input",
-        "memcommit.adapters.console.tui.components.multiline_input",
-        "memcommit.adapters.console.tui.components.scrollable_pane",
+        "memcommit.adapters.console.terminal.components.focus",
+        "memcommit.adapters.console.terminal.components.frame",
+        "memcommit.adapters.console.terminal.components.in_frame_input",
+        "memcommit.adapters.console.terminal.components.multiline_input",
+        "memcommit.adapters.console.terminal.components.scrollable_pane",
     } <= imports
     assert ".vertical_scroll" not in source
     assert "ScrollbarMargin" not in source
@@ -215,24 +228,16 @@ def test_direct_memory_actions_share_one_selector_composition() -> None:
         "memcommit.core.context_targeting.tui.selector",
     } <= owner_imports
 
-    reference_candidates = (
+    reference_screen = (
         PACKAGE
         / "adapters"
         / "console"
         / "commands"
         / "reference"
         / "workbench"
-        / "screen.py",
-        PACKAGE
-        / "adapters"
-        / "interfaces"
-        / "tui"
-        / "operations"
-        / "reference"
-        / "screen.py",
+        / "screen.py"
     )
-    reference_screens = tuple(path for path in reference_candidates if path.is_file())
-    assert len(reference_screens) == 1
+    assert reference_screen.is_file()
 
     consumers = (
         PACKAGE
@@ -249,7 +254,7 @@ def test_direct_memory_actions_share_one_selector_composition() -> None:
         / "embed"
         / "workbench"
         / "screen.py",
-        reference_screens[0],
+        reference_screen,
     )
     for path in consumers:
         imports = set(_imports(path))

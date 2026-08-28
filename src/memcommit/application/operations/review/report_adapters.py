@@ -11,7 +11,7 @@ from memcommit.application.operations.compare.ledger.model import ComparisonAnal
 from memcommit.adapters.console.commands.compare.presentation import render_comparison
 from memcommit.application.operations.meld.model import MeldSession
 from memcommit.application.operations.meld.resolution_adapter import MeldResolutionWorkbenchAdapter
-from memcommit.application.reviewing.report import ReviewReportController
+from memcommit.application.capabilities.reviewing.report import ReviewReportController
 from memcommit.application.operations.sever.model import SeverSession
 from memcommit.application.operations.sever.resolution_adapter import (
     SeverResolutionWorkbenchAdapter,
@@ -83,7 +83,7 @@ def atomize_review_report(
 ) -> ReviewReportController:
     """Expose Atomize findings and saved clarification responses."""
     from memcommit.application.operations.atomize.result_adapter import AtomizeResultWorkbenchAdapter
-    from memcommit.adapters.interfaces.tui.workbenches.result import (
+    from memcommit.adapters.console.terminal.components.result import (
         render_result_workbench_snapshot,
     )
 

@@ -50,14 +50,14 @@ def _environment() -> dict[str, str]:
 
 def _fixture() -> dict[str, object]:
     return json.loads(
-        (ROOT / "src/memcommit/application/evaluation/fixtures/distill_elaborate.json").read_text(
+        (ROOT / "src/memcommit/application/capabilities/evaluation/fixtures/distill_elaborate.json").read_text(
             encoding="utf-8"
         )
     )
 
 
 def _prepare_store(root: Path, operation: str):
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     import memcommit.persistence.store as store_module
     from memcommit.persistence.store import MemoryStore
 

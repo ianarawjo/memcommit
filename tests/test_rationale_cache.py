@@ -8,7 +8,7 @@ import uuid
 
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 import memcommit.application.operations.rationale.model as rationale_module
 import memcommit.persistence.store as store_module
 from memcommit.adapters.console.entrypoint import app
@@ -75,7 +75,7 @@ def test_cli_is_provenance_only_and_never_reads_or_writes_inference_cache(
 
     assert result.exit_code == 0, result.output
     assert structured.exit_code == 0, structured.output
-    assert "PROVENANCE\n" in result.output
+    assert "PROVENANCE — no retained history" in result.output
     assert "retained" in result.output
     assert "APPARENT PURPOSE" not in result.output
     assert "LEGACY APPARENT" not in result.output

@@ -5,7 +5,7 @@ Last reviewed: 2026-08-16.
 ## Motivation and contract
 
 Forget now has one terminal-independent Analyze, Select, Revise, and Apply
-lifecycle, plus a stable Python facade. An agent or MCP host still needs a
+lifecycle, plus a stable Python facade. An agent host still needs a
 strict machine-readable route that does not duplicate Source loading,
 provider, authority, CAS, or checkpoint policy.
 
@@ -47,8 +47,8 @@ protection, not a durable Forget cache or cross-process idempotency promise.
 - Public authority, provider, stale-Source, storage, and execution failures map
   to bounded typed errors. Provider and internal details are redacted so host
   paths or raw provider bodies do not cross the tool boundary.
-- MCP does not own another Forget handler. The frozen registry projects this
-  same schema and invocation through the common MCP transport.
+- The frozen registry owns discovery and dispatch but no second Forget handler
+  or wire-transport policy.
 
 Durable resume, server-shared reviews, hidden prepared-result caching, and
 automatic mutation retry are intentional non-goals. Any future durable review
@@ -60,6 +60,6 @@ lifecycle, and cross-process concurrency contract.
 Focused tests exercise a real Store and provider fixture across Analyze,
 Select, Revise, Apply, stale versions, process replacement, concurrent Source
 change, all-KEEP no-op, exact Apply replay, bounded error mapping, schema
-freshness, registry discovery, and MCP projection. The adapter has an AST gate
-that permits only the public API and shared agent-contract dependency, with no
-command, TUI, runtime, Store, or MCP import.
+freshness and registry discovery. The adapter has an AST gate that permits only
+the public API and shared agent-contract dependency, with no command, TUI,
+runtime, Store, or wire-transport import.

@@ -7,7 +7,7 @@ import uuid
 from typer.testing import CliRunner
 
 import memcommit.configuration.config as config_module
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.commands.meld import command as meld_command
 from memcommit.adapters.console.entrypoint import app
 from memcommit.application.operations.compare.ledger.model import ComparisonInput

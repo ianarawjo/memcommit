@@ -3,7 +3,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from memcommit.core.context import Context
-from memcommit.application.retained_history.context_lifecycle import (
+from memcommit.application.capabilities.retained_history.context_lifecycle import (
     ContextLifecycleEvent,
 )
 

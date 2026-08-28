@@ -6,15 +6,15 @@ import pytest
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-from memcommit.adapters.console.shared.resolution_workbench_shell import (
+from memcommit.adapters.console.terminal.components.resolution.session_shell import (
     RESOLUTION_WORKBENCH_STYLE,
     _seeded_report_lines,
     resolution_report_fragments,
     run_resolution_workbench_shell,
 )
-from memcommit.adapters.interfaces.tui.workbenches.impact import ImpactController
-from memcommit.application.reviewing.memory_diff import MemoryChange
-from memcommit.application.resolution.workbench import (
+from memcommit.adapters.console.terminal.components.impact import ImpactController
+from memcommit.application.capabilities.reviewing.memory_diff import MemoryChange
+from memcommit.application.capabilities.resolution.workbench import (
     ResolutionResult,
     ResolutionWorkbenchView,
 )

@@ -17,38 +17,38 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 from prompt_toolkit.widgets import Frame
 
-from memcommit.adapters.console.tui.core.theme import (
+from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
 )
-from memcommit.adapters.console.tui.core.keybindings import (
+from memcommit.adapters.console.terminal.core.keybindings import (
     bind_case_insensitive_key,
 )
-from memcommit.adapters.console.tui.components.frame import (
+from memcommit.adapters.console.terminal.components.frame import (
     bind_focused_frame_style,
 )
-from memcommit.adapters.console.text import (
+from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
-from memcommit.application.exact_command_review import ExactCommandReview
-from memcommit.adapters.console.tui.components.exact_command_review import (
+from memcommit.adapters.console.coordination.command_review.model import CommandReview
+from memcommit.adapters.console.terminal.components.exact_command_review import (
     format_exact_command,
 )
-from memcommit.adapters.interfaces.tui.viewers.semantic import (
+from memcommit.adapters.console.terminal.components.semantic_viewer import (
     SemanticViewerBlock,
     SemanticViewerController,
     SemanticViewerDocument,
     SemanticViewerSection,
     semantic_viewer_block_fragments,
 )
-from memcommit.adapters.console.tui.components.focus import (
+from memcommit.adapters.console.terminal.components.focus import (
     FocusSurface,
     SurfaceActionResult,
     SurfaceFocusController,
     SurfaceMoveResult,
     bind_surface_navigation,
 )
-from memcommit.application.reviewing.session_navigation import SessionWorkbenchNavigation
+from memcommit.application.capabilities.reviewing.session_navigation import SessionWorkbenchNavigation
 from memcommit.application.operations.share.model import SharePreview
 
 
@@ -123,7 +123,7 @@ def share_exact_command_text(preview: SharePreview) -> str:
 
     range_flag = "--recursive" if preview.include_descendants else "--direct"
     return format_exact_command(
-        ExactCommandReview(
+        CommandReview(
             argv=(
                 "mem",
                 "share",

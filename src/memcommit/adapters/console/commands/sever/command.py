@@ -7,20 +7,20 @@ from typing import Annotated, Literal, Optional
 
 import typer
 
-from memcommit.application.review_policy import (
+from memcommit.application.capabilities.review_policy import (
     ownership_aware_application_review,
 )
-from memcommit.application.authority.access import (
+from memcommit.application.capabilities.authority.access import (
     GrantedReadStore,
     resolve_context_access,
 )
-from memcommit.adapters.console.tui.components.operation_launcher.session import (
+from memcommit.adapters.console.terminal.components.operation_launcher.session import (
     SessionNewReceipt,
     SessionOpenReceipt,
     choose_session,
 )
-from memcommit.adapters.console.shared.command_wait import run_command_wait
-from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.terminal.components.command_wait import run_command_wait
+from memcommit.adapters.console.coordination.context_operand import ContextOperandSnapshot
 from memcommit.adapters.console.commands.sever.sessions import (
     list_sever_session_catalog,
     reload_selected_sever_session,
@@ -32,7 +32,7 @@ from memcommit.core.context_targeting.tui.picker import context_memory_rows
 from memcommit.adapters.console.commands.sever.setup import (
     choose_sever_setup,
 )
-from memcommit.adapters.console.text import (
+from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
     safe_terminal_text,
 )
@@ -46,13 +46,15 @@ from memcommit.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )
-from memcommit.application.resolution.workbench import ResolutionNavigation
+from memcommit.application.capabilities.resolution.workbench import ResolutionNavigation
 from memcommit.application.operations.sever.model import (
     SeverError,
     SeverSelection,
     SeverSession,
 )
-from memcommit.application.interactive_command_review import sever_turn_command_review
+from memcommit.adapters.console.coordination.command_review import (
+    sever as sever_command_review,
+)
 from memcommit.application.operations.sever.application import (
     SeverAnalysisProgress,
     SeverAnalysisRequest,
@@ -417,11 +419,11 @@ def _run_workbench(
     *,
     allow_apply: bool = True,
 ) -> SeverSession:
-    from memcommit.adapters.console.shared.resolution_workbench_shell import (
+    from memcommit.adapters.console.terminal.components.resolution.session_shell import (
         ResolutionDestination,
         run_resolution_workbench_shell,
     )
-    from memcommit.adapters.interfaces.tui.workbenches.impact import ImpactController
+    from memcommit.adapters.console.terminal.components.impact import ImpactController
     from memcommit.application.operations.review.report_adapters import sever_review_report
 
     snapshot = execute_sever_session_open(session.uid, store=store)
@@ -502,7 +504,7 @@ def _run_workbench(
                 else None
             ),
             turn_command_review=lambda proposed: (
-                sever_turn_command_review(
+                sever_command_review.build_turn_review(
                     session_uid=session.uid,
                     candidate_uid=proposed.item_uid,
                     choice=(

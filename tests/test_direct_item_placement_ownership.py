@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import ast
 import importlib
 from pathlib import Path
 import subprocess
@@ -12,8 +11,8 @@ import pytest
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-LEGACY_NAME = "memcommit.adapters.console.shared.direct_item_placement"
-CANONICAL_NAME = "memcommit.adapters.console.tui.components.direct_item_placement"
+LEGACY_NAME = "memcommit.adapters.console.terminal.components.direct_item_placement"
+CANONICAL_NAME = "memcommit.adapters.console.terminal.components.direct_item_placement"
 
 
 @pytest.mark.parametrize("legacy_first", (True, False), ids=("old-first", "new-first"))
@@ -54,11 +53,6 @@ def test_legacy_placement_path_exposes_canonical_objects() -> None:
         assert getattr(legacy, name) is getattr(canonical, name)
 
 
-def test_legacy_placement_facade_defines_no_behavior() -> None:
-    path = REPOSITORY_ROOT / "src/memcommit/adapters/console/shared/direct_item_placement.py"
-    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
-
-    assert not any(
-        isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
-        for node in ast.walk(tree)
-    )
+def test_retired_placement_facade_is_absent() -> None:
+    path = REPOSITORY_ROOT / "src/memcommit/adapters/console/coordination/direct_item_placement.py"
+    assert not path.exists()

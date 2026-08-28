@@ -10,7 +10,7 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 import memcommit.adapters.console.commands.resolve.command as resolve_command
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.python_api import (
@@ -21,11 +21,11 @@ from memcommit.adapters.python_api import (
     SemanticContextError,
 )
 from memcommit.core.context import Memory, MemoryRef
-from memcommit.adapters.interfaces.agent import (
+from memcommit.adapters.agent.resolve import (
     RESOLVE_AGENT_CONTRACT_VERSION,
     RESOLVE_AGENT_TOOL_NAME,
-    build_default_agent_tool_registry,
 )
+from memcommit.adapters.agent.registry import build_default_agent_tool_registry
 from memcommit.adapters.console.commands.resolve.analysis import render_resolve_plain
 from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,

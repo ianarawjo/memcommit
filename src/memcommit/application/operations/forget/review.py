@@ -7,8 +7,8 @@ from dataclasses import dataclass, replace
 from typing import Literal
 
 from memcommit.core.context import Context, Memory
-from memcommit.application.semantic.selective_curation import CurationAnalysis, CurationDecision, CurationItem
-from memcommit.application.semantic.changes import EditChange, ProposedChange, RemoveChange
+from memcommit.application.capabilities.semantic.selective_curation import CurationAnalysis, CurationDecision, CurationItem
+from memcommit.application.capabilities.semantic.changes import EditChange, ProposedChange, RemoveChange
 
 
 ForgetSelection = Literal["RECOMMENDED", "KEEP", "DELETE", "CUSTOM"]

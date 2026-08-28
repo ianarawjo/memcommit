@@ -5,7 +5,7 @@ import json
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 import memcommit.persistence.store as store_module
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import AutoCheckpoint, Context
@@ -53,7 +53,7 @@ def test_nested_contexts_are_listed_by_full_name(isolated_store):
     result = runner.invoke(app, ["contexts"])
     assert result.exit_code == 0
     assert "  alpha" in result.output
-    assert "* construction-updates" in result.output
+    assert "*        construction-updates" in result.output
     assert "  construction-updates/route-changes" in result.output
 
 

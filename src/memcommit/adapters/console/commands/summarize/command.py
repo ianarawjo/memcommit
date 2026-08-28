@@ -10,16 +10,16 @@ import typer
 from memcommit.bootstrap import build_summarize_console_runner
 from memcommit.adapters.console.clipboard import ClipboardError, write_system_clipboard
 from memcommit.persistence.command_ledger.attempts import annotate_read_report_attempt
-from memcommit.adapters.console.shared.command_progress import CommandProgress
-from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
-from memcommit.adapters.console.tui.components.operation_launcher.location import (
+from memcommit.adapters.console.terminal.components.progress import CommandProgress
+from memcommit.adapters.console.coordination.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.terminal.components.operation_launcher.location import (
     operation_launcher_orientation,
 )
-from memcommit.application.authority.access import (
+from memcommit.application.capabilities.authority.access import (
     context_access_display_facts,
     resolve_context_access,
 )
-from memcommit.adapters.console.shared.readable_context_catalog import (
+from memcommit.core.context_targeting.readable_catalog import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.core.context_targeting.presets import (
@@ -35,11 +35,11 @@ from memcommit.adapters.console import (
     SystemTerminalCapabilities,
     resolve_console_mode,
 )
-from memcommit.adapters.interfaces.tui.workbenches.read_report import (
+from memcommit.adapters.console.terminal.components.read_report import (
     ReadReportSelectTarget,
     choose_read_report_recent,
 )
-from memcommit.adapters.console.text import display_escape_text
+from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.adapters.console.commands.summarize.workbench import (
     SummarizeTuiOutcome,
     SummarizeTuiSetup,
@@ -52,8 +52,8 @@ from memcommit.providers.subscription import (
     connect_codex_chatgpt_provider,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.reviewing.read_report import ReadReportError, ReadReportTarget
-from memcommit.application.reviewing.read_report_recents import (
+from memcommit.application.capabilities.reviewing.read_report import ReadReportError, ReadReportTarget
+from memcommit.application.capabilities.reviewing.read_report_recents import (
     read_report_recents,
     revalidate_read_report_recent,
 )

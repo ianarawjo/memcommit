@@ -8,27 +8,27 @@ import click
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.adapters.console.shared.resolution_workbench_shell import (
+from memcommit.adapters.console.terminal.components.resolution.session_shell import (
     resolution_report_fragments,
     run_resolution_workbench_shell,
 )
-from memcommit.adapters.console.text import (
+from memcommit.adapters.console.terminal.core.text import (
     safe_terminal_text,
 )
-from memcommit.adapters.console.theme import SemanticColorRole, semantic_color_rgb
-from memcommit.adapters.console.tui.core.theme import semantic_role_style
-from memcommit.application.resolution.workbench import (
+from memcommit.adapters.console.terminal.core.theme import SemanticColorRole, semantic_color_rgb
+from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import semantic_role_style
+from memcommit.application.capabilities.resolution.workbench import (
     ResolutionNavigation,
     ResolutionOverviewSection,
     ResolutionWorkbenchAction,
     ResolutionWorkbenchView,
 )
-from memcommit.adapters.console.responses.resolution import (
+from memcommit.adapters.console.terminal.components.responses.resolution import (
     response_draft_from_item,
     response_target_from_item,
 )
-from memcommit.adapters.console.responses.tui import response_snapshot_lines
-from memcommit.application.reviewing.report import (
+from memcommit.adapters.console.terminal.components.responses import response_snapshot_lines
+from memcommit.application.capabilities.reviewing.report import (
     ReviewReport,
     ReviewReportController,
     ReviewTextFragment,

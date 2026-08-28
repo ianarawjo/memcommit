@@ -6,7 +6,7 @@ from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from typing import TypeVar
 
-from memcommit.adapters.console.text import (
+from memcommit.adapters.console.terminal.core.text import (
     safe_terminal_text,
 )
 

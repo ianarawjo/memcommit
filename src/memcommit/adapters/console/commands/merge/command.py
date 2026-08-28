@@ -4,7 +4,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.application.review_policy import (
+from memcommit.application.capabilities.review_policy import (
     ownership_aware_application_review,
 )
 from memcommit.core.context_targeting.operands import choose_endpoint_operand
@@ -23,8 +23,8 @@ from memcommit.adapters.console.commands.merge.workbench.conflicts import (
 from memcommit.adapters.console.commands.merge.workbench.review import (
     run_merge_plan_review,
 )
-from memcommit.adapters.console.terminal import is_interactive_terminal
-from memcommit.adapters.console.text import display_escape_text
+from memcommit.adapters.console.terminal.core.capabilities import is_interactive_terminal
+from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.application.operations.merge.application import (
     MergeDecision,
     MergeError,

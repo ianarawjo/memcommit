@@ -81,7 +81,7 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
     )
     assert not by_operation["summarize"].tui_modules
     assert "query_ordinary" in by_operation["query"].public_methods
-    assert "memcommit.adapters.interfaces.agent.query" in by_operation["query"].agent_modules
+    assert "memcommit.adapters.agent.query" in by_operation["query"].agent_modules
     for operation, public_method in (
         ("copy", "copy_memories"),
         ("move", "move_memories"),
@@ -98,7 +98,7 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
         assert not route.tui_modules
         assert route.public_methods == (public_method,)
         assert route.agent_modules == (
-            "memcommit.adapters.interfaces.agent.memory_transfer",
+            "memcommit.adapters.agent.memory_transfer",
         )
         assert route.curated_state == "CLOSED"
     assert by_operation["query"].curated_state == "CLOSED"
@@ -202,7 +202,7 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
         in by_operation["show"].application_modules
     )
     assert "show" in by_operation["show"].public_methods
-    assert "memcommit.adapters.interfaces.agent.show" in by_operation["show"].agent_modules
+    assert "memcommit.adapters.agent.show" in by_operation["show"].agent_modules
     assert by_operation["show"].curated_state == "CLOSED"
     for operation in ("branch", "chunk", "clear", "contexts", "undo", "redo"):
         assert by_operation[operation].curated_state == "CLOSED"

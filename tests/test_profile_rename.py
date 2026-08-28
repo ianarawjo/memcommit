@@ -12,7 +12,7 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 import memcommit.application.operations.profile.model as profiles_module
 from memcommit.adapters.console.entrypoint import app
 from memcommit.application.operations.profile.config import (

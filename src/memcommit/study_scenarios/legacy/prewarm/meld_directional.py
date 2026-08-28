@@ -13,7 +13,7 @@ from datetime import datetime, timezone
 import json
 from pathlib import Path
 
-from memcommit.application.authority.access import (
+from memcommit.application.capabilities.authority.access import (
     GrantedReadStore,
     freeze_granted_context_binding,
     resolve_context_access,
@@ -28,7 +28,7 @@ from memcommit.providers.policy import (
 )
 from memcommit.core.context import Context
 from memcommit.core.context_targeting.loading import load_context_scope
-from memcommit.application.authority.derived_policy import (
+from memcommit.application.capabilities.authority.derived_policy import (
     analysis_retention,
     authorize_analysis_save,
     authorize_combination,
@@ -42,7 +42,7 @@ from memcommit.application.operations.meld.model import (
     MeldSession,
     directional_comparison_basis_assessment,
 )
-from memcommit.application.operations.meld.provider import (
+from memcommit.application.operations.meld.provider.contract import (
     MELD_DIRECTIONAL_PROVIDER_CONTRACT_VERSION,
 )
 from memcommit.application.operations.compare.ledger.granted_store import (

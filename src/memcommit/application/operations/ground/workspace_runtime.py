@@ -32,7 +32,7 @@ from memcommit.application.operations.ground.workspace_application import (
     remove_ground_workspace_memory,
     replace_ground_workspace_memory,
 )
-from memcommit.application.semantic.goal_focus import FrozenGoalFocus
+from memcommit.application.capabilities.semantic.goal_focus import FrozenGoalFocus
 from memcommit.persistence.store import MemoryStore, context_record_digest, validate_context_name
 
 

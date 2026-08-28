@@ -6,7 +6,7 @@ from dataclasses import dataclass, field, replace
 import hashlib
 from typing import Iterable, Protocol
 
-from memcommit.application.authority.access import (
+from memcommit.application.capabilities.authority.access import (
     ContextAccess,
     GrantedReadStore,
     freeze_granted_context_binding,
@@ -14,7 +14,7 @@ from memcommit.application.authority.access import (
     resolve_context_access,
 )
 from memcommit.core.context import Context, Memory
-from memcommit.application.context_locator import (
+from memcommit.application.capabilities.context_locator import (
     is_relative_context_locator,
     resolve_context_locator,
 )
@@ -35,7 +35,7 @@ from memcommit.core.context_targeting.resolution import (
 from memcommit.core.context_targeting.readable_catalog import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.application.authority.derived_policy import authorize_combination
+from memcommit.application.capabilities.authority.derived_policy import authorize_combination
 from memcommit.application.operations.fit.ground_report import (
     FIT_RULESET_VERSION,
     FIT_SCHEMA_VERSION,

@@ -5,7 +5,7 @@ from __future__ import annotations
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-from memcommit.adapters.interfaces.tui.viewers.read_only import run_read_only_viewer
+from memcommit.adapters.console.terminal.components.read_only_viewer import run_read_only_viewer
 
 
 def test_read_only_viewer_supports_shared_navigation_and_back_close():

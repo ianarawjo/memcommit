@@ -15,13 +15,13 @@ from typing import Callable, Protocol
 import unicodedata
 
 from memcommit.core.context import Context, Memory
-from memcommit.application.retained_history.memory_history_reconstruction.retained_record_verification import (
+from memcommit.application.capabilities.retained_history.memory_history_reconstruction.retained_record_verification import (
     MemoryState,
 )
-from memcommit.application.retained_history.memory_history_reconstruction.memory_history_event_derivation import (
+from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_event_derivation import (
     MemoryHistoryEvent,
 )
-from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
+from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_construction import (
     MemoryHistory,
 )
 from memcommit.providers.subscription import QueryProviderError
@@ -35,7 +35,7 @@ from memcommit.application.operations.review.model import (
     atomize_review_matches_analysis,
     review_matches_context,
 )
-from memcommit.application.semantic_execution import (
+from memcommit.application.capabilities.semantic_execution import (
     BudgetLimits,
     BudgetVector,
     ExecutionMode,

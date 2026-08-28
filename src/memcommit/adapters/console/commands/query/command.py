@@ -4,12 +4,12 @@ from typing import Annotated, Optional
 
 import typer
 
-import memcommit.application.ops as ops
-from memcommit.adapters.console.shared.command_progress import CommandProgress
-from memcommit.adapters.console.shared.context_operand import (
+import memcommit.application.capabilities.ops as ops
+from memcommit.adapters.console.terminal.components.progress import CommandProgress
+from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
 )
-from memcommit.application.authority.access import (
+from memcommit.application.capabilities.authority.access import (
     ContextAccess,
     context_access_display_facts,
     resolve_context_access,
@@ -30,29 +30,29 @@ from memcommit.providers.operation_connections import (
 from memcommit.adapters.console.commands.query.workbench import (
     run_query_workbench,
 )
-from memcommit.adapters.console.shared.session_help import bind_session_help
-from memcommit.adapters.console.shared.readable_context_catalog import (
+from memcommit.adapters.console.terminal.components.session_help import bind_session_help
+from memcommit.core.context_targeting.readable_catalog import (
     freeze_readable_context_catalog,
     freeze_profile_readable_context_catalog,
 )
-from memcommit.adapters.console.text import (
+from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
-from memcommit.adapters.console.terminal import is_interactive_terminal
+from memcommit.adapters.console.terminal.core.capabilities import is_interactive_terminal
 from memcommit.adapters.console.commands.query.presentation import (
     render_granted_query_response,
     render_ordinary_query_response,
     render_query_reference_response,
 )
 from memcommit.core.context import QueryContextRef
-from memcommit.application.context_locator import is_relative_context_locator
+from memcommit.application.capabilities.context_locator import is_relative_context_locator
 from memcommit.core.context_targeting.presets import (
     ContextScopePreset,
     ContextTraversal,
     resolve_context_traversal,
     resolve_scope_preset,
 )
-from memcommit.application.authority.derived_policy import authorize_combination
+from memcommit.application.capabilities.authority.derived_policy import authorize_combination
 from memcommit.application.operations.search.answer_dialogue import (
     SearchAnswerCorpusTooLarge,
 )

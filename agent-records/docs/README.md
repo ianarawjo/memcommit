@@ -59,6 +59,14 @@ The check also rejects missing evidence files, unregistered final boundary
 matrices, broken governed local links, Help coverage drift, duplicate
 classification, and stale generated output.
 
+## Agent adapter and transport boundary
+
+- [`agent-adapter-ownership-and-mcp-retirement-design-rationale.md`](agent-adapter-ownership-and-mcp-retirement-design-rationale.md)
+  records the canonical `memcommit.adapters.agent` owner and the 2026-08-27
+  retirement of the former MCP projection, stdio server, entry point, and
+  optional dependency. Older MCP documents and verification passages are
+  retained as historical evidence rather than current support claims.
+
 ## Console adapter boundary
 
 - [`console-adapter-ownership-design-rationale.md`](console-adapter-ownership-design-rationale.md)

@@ -32,7 +32,7 @@ a second left/right and TextArea grammar. Its deterministic non-TTY projection
 is now command-owned at `commands.review.snapshot`, beside the only production
 caller. The visible response label and normal-cancellation signal are shared by
 Review, Atomize, and Impact, so those operation-neutral terminal values live at
-`adapters.console.shared.review` rather than under either command or a TUI-only
+`adapters.console.coordination.review` rather than under either command or a TUI-only
 namespace. The former `interfaces.cli.review` and
 `interfaces.tui.workbenches.review` paths are removed without facades because
 they were internal owners. This relocation does not alter the saved Review
@@ -617,10 +617,9 @@ its evidence, mutations, and future claims inspectable.
 
 The shared read-only Memory report picker used by `mem trace` and
 `mem rationale` is owned by
-`memcommit.adapters.console.tui.components.memory_report_picker`. The established
-`memcommit.adapters.console.shared.memory_picker` path remains an exact module alias so
-existing imports and legacy-path monkeypatches reach the same implementation
-globals.
+`memcommit.adapters.console.terminal.components.memory_report_picker`. The former
+`memcommit.adapters.console.coordination.memory_picker` facade is removed, so imports
+and monkeypatches reach the canonical implementation globals directly.
 
 This is an ownership-only relocation. The implementation body moved without
 changes; picker state, Context reach, row projection, terminal checks,

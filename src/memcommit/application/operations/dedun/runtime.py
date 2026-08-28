@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.application.authority.access import (
+from memcommit.application.capabilities.authority.access import (
     ContextAccess,
     authorized_context_mutation,
     freeze_granted_context_binding,
@@ -24,7 +24,7 @@ from memcommit.application.operations.dedun.application import (
     dedun_projection_record,
 )
 from memcommit.application.operations.dedun.planning import freeze_dedun_plan
-from memcommit.application.reviewing.direct_item_duplicates import find_exact_duplicate_groups
+from memcommit.application.capabilities.reviewing.direct_item_duplicates import find_exact_duplicate_groups
 from memcommit.application.operations.profile.config import ProfileRegistry
 from memcommit.application.operations.review.model import direct_context_digest
 from memcommit.persistence.store import MemoryStore, context_record_digest

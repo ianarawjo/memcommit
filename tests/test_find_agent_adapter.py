@@ -4,9 +4,9 @@ from __future__ import annotations
 
 import json
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.python_api import MemCommitClient
-from memcommit.adapters.interfaces.agent.find import (
+from memcommit.adapters.agent.find import (
     FIND_AGENT_TOOL_NAME,
     FindAgentAdapter,
     find_agent_tool_schema,

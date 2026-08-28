@@ -2,27 +2,26 @@
 
 from __future__ import annotations
 
-import ast
 import subprocess
 import sys
 from pathlib import Path
 
 import pytest
 
-import memcommit.adapters.console.shared.history_location_picker as legacy_location
-from memcommit.adapters.console.tui.components import checkpoint_location
+import memcommit.adapters.console.terminal.components.checkpoint_location as legacy_location
+from memcommit.adapters.console.terminal.components import checkpoint_location
 
 
 @pytest.mark.parametrize(
     "first, second",
     (
         (
-            "memcommit.adapters.console.shared.history_location_picker",
-            "memcommit.adapters.console.tui.components.checkpoint_location",
+            "memcommit.adapters.console.terminal.components.checkpoint_location",
+            "memcommit.adapters.console.terminal.components.checkpoint_location",
         ),
         (
-            "memcommit.adapters.console.tui.components.checkpoint_location",
-            "memcommit.adapters.console.shared.history_location_picker",
+            "memcommit.adapters.console.terminal.components.checkpoint_location",
+            "memcommit.adapters.console.terminal.components.checkpoint_location",
         ),
     ),
 )
@@ -50,31 +49,14 @@ def test_legacy_path_is_the_canonical_module_object():
     assert legacy_location is checkpoint_location
 
 
-def test_legacy_facade_contains_no_implementation_definitions():
+def test_retired_shared_facade_is_absent():
     facade_path = (
         Path(__file__).resolve().parents[1]
         / "src" / "memcommit" / "adapters" / "console"
         / "shared"
         / "history_location_picker.py"
     )
-    tree = ast.parse(facade_path.read_text(encoding="utf-8"))
-
-    assert not any(
-        isinstance(node, (ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef))
-        for node in ast.walk(tree)
-    )
-    assert any(
-        isinstance(node, ast.Assign)
-        and any(
-            isinstance(target, ast.Subscript)
-            and isinstance(target.value, ast.Attribute)
-            and isinstance(target.value.value, ast.Name)
-            and target.value.value.id == "sys"
-            and target.value.attr == "modules"
-            for target in node.targets
-        )
-        for node in tree.body
-    )
+    assert not facade_path.exists()
 
 
 def test_legacy_monkeypatch_changes_canonical_picker_globals(monkeypatch):

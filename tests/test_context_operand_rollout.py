@@ -7,14 +7,14 @@ from prompt_toolkit.output import DummyOutput
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.impact import command as impact_command
 from memcommit.adapters.console.commands.review import command as review_command
 from memcommit.adapters.console.commands.compare.command import (
     display_escape_text as compare_escape,
 )
-from memcommit.adapters.console.shared.context_picker import (
+from memcommit.core.context_targeting.tui.picker import (
     _build_context_tree,
     _context_ancestors,
     _render_context_options,
@@ -26,11 +26,11 @@ from memcommit.adapters.console.commands.profile.picker import (
     _render_profile_options,
     choose_profile,
 )
-from memcommit.adapters.console.text import (
+from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
 from memcommit.core.context import AutoCheckpoint
-from memcommit.application.reviewing.quality.findings import (
+from memcommit.application.capabilities.reviewing.quality.findings import (
     AmbiguityReport,
     ConflictReport,
     DuplicateReport,
@@ -264,7 +264,7 @@ def test_context_catalog_uses_escaped_labels_with_raw_current_identity(
 
     assert result.exit_code == 0, result.output
     assert raw_name not in result.output
-    assert r"* scope/current\u202e" in result.output
+    assert r"*        scope/current\u202e" in result.output
     assert calls == ["current"]
 
 

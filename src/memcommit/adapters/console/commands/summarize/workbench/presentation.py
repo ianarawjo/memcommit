@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.adapters.console.text import (
+from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
     safe_terminal_text,
 )
@@ -13,7 +13,7 @@ from memcommit.adapters.console.commands.summarize.workbench.model import (
     SummarizeClipboardProjection,
     SummarizeTuiOutcome,
 )
-from memcommit.adapters.interfaces.tui.viewers.semantic import (
+from memcommit.adapters.console.terminal.components.semantic_viewer import (
     SemanticViewerBlock,
     SemanticViewerDocument,
     SemanticViewerSection,

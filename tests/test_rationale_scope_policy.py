@@ -11,7 +11,7 @@ from memcommit.adapters.console.commands.switch.command import _local_picker_ann
 from memcommit.core.context import Memory
 from memcommit.application.operations.profile.config import ProfileEntry, ProfileRegistry
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.authority.study_operation_policy import operation_policy
+from memcommit.application.capabilities.authority.study_operation_policy import operation_policy
 
 
 runner = CliRunner()

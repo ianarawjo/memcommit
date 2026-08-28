@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 from memcommit.application.operations.forget.review import ForgetReview
-from memcommit.application.reviewing.memory_diff import MemoryChange
-from memcommit.application.resolution.workbench import (
+from memcommit.application.capabilities.reviewing.memory_diff import MemoryChange
+from memcommit.application.capabilities.resolution.workbench import (
     ResolutionDetailBlock,
     ResolutionContextLocation,
     ResolutionIssueEvidence,
@@ -17,7 +17,7 @@ from memcommit.application.resolution.workbench import (
     ResolutionResult,
     ResolutionWorkbenchView,
 )
-from memcommit.application.reviewing.result_workbench import ResultRef
+from memcommit.application.capabilities.reviewing.result_workbench import ResultRef
 
 
 def forget_memory_changes(review: ForgetReview) -> tuple[MemoryChange, ...]:

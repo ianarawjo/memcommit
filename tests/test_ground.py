@@ -1,4 +1,5 @@
 """Named common-grounding session and CLI scaffold contracts."""
+
 from __future__ import annotations
 
 import json
@@ -10,9 +11,17 @@ from pathlib import Path
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 import memcommit.persistence.store as store_module
 import memcommit.adapters.console.commands.ground.command as ground_command
+from memcommit.adapters.console.commands.ground.command.workflow import (
+    apply as ground_apply_workflow,
+    create as ground_create_workflow,
+    open as ground_open_workflow,
+)
+from memcommit.adapters.console.commands.ground.command.workflow.session import (
+    dialogue as ground_session_dialogue_workflow,
+)
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.ground.command import (
     render_ground_focus,
@@ -77,17 +86,11 @@ TASK_1_TARGET_REQUIREMENTS = tuple(
     GroundTargetSpec(
         context_name=name,
         description=(
-            "Establish at least one user-approved, traceable seed case "
-            "for this target."
+            "Establish at least one user-approved, traceable seed case for this target."
         ),
-        role=(
-            "PUBLICATION_TARGET"
-            if name == TASK_1_WIKI_NAME
-            else "PLACEMENT_TARGET"
-        ),
+        role=("PUBLICATION_TARGET" if name == TASK_1_WIKI_NAME else "PLACEMENT_TARGET"),
         blocked_reason=(
-            "The provisioned local-fork baseline is absent from this Ground "
-            "fixture."
+            "The provisioned local-fork baseline is absent from this Ground fixture."
             if name == TASK_1_WIKI_NAME
             else (
                 "Concrete event-relocation destinations are absent."
@@ -245,9 +248,7 @@ def test_cli_explicitly_upgrades_one_saved_ground_to_propositions(
     loaded = store.load_ground_session(session.contract_name)
     assert loaded is not None
     assert loaded.schema_version == GROUND_PROPOSITION_SCHEMA_VERSION
-    assert loaded.items_of_kind("CASE")[0].proposition.endswith(
-        "-> Publish one fact."
-    )
+    assert loaded.items_of_kind("CASE")[0].proposition.endswith("-> Publish one fact.")
 
 
 def test_native_examples_allow_observations_before_rules_and_multiple_links(
@@ -305,7 +306,9 @@ def test_native_examples_allow_observations_before_rules_and_multiple_links(
     linked = session.items_of_kind("CASE")[1]
 
     assert linked.related_uids == (rules[0].uid, rules[1].uid)
-    assert all(linked.uid in rule.related_uids for rule in session.items_of_kind("RULE"))
+    assert all(
+        linked.uid in rule.related_uids for rule in session.items_of_kind("RULE")
+    )
 
     refined = review_ground_item(
         session,
@@ -359,12 +362,11 @@ def test_cli_adds_native_examples_one_revision_at_a_time(isolated_store) -> None
     assert after_first is not None and after_second is not None
     assert after_first.revision == session.revision + 1
     assert after_second.revision == session.revision + 2
-    assert tuple(
-        item.proposition for item in after_second.items_of_kind("CASE")
-    ) == (
+    assert tuple(item.proposition for item in after_second.items_of_kind("CASE")) == (
         "Apple Inc. may be represented by AAPL.",
         "Axiom AI Technologies may be represented by AAT.",
     )
+
 
 assert TASK_1_UPSTREAM_NAME not in TASK_1_TARGET_NAMES
 
@@ -379,10 +381,7 @@ def _task_1_workbench(store: MemoryStore):
         raw,
         [
             "The Main Building library-side rear entrance is closed.",
-            *[
-                f"Raw Task 1 evidence {index:02d}."
-                for index in range(2, 52)
-            ],
+            *[f"Raw Task 1 evidence {index:02d}." for index in range(2, 52)],
         ],
     )
     derived = ops.init("temp/task-1-atomized")
@@ -393,18 +392,13 @@ def _task_1_workbench(store: MemoryStore):
                 "The Main Building library-side rear entrance is closed "
                 "during construction."
             ),
-            *[
-                f"Derived Task 1 candidate {index:02d}."
-                for index in range(2, 55)
-            ],
+            *[f"Derived Task 1 candidate {index:02d}." for index in range(2, 55)],
         ],
     )
     targets = tuple(ops.init(name) for name in TASK_1_TARGET_NAMES)
     # Ground's current publication-target adapter binds the writable fork.
     # The query-only organizational origin is intentionally never a frame.
-    assert TASK_1_UPSTREAM_NAME not in {
-        context.name for context in targets
-    }
+    assert TASK_1_UPSTREAM_NAME not in {context.name for context in targets}
 
     for context in (raw, derived, *targets):
         store.save(context)
@@ -443,15 +437,12 @@ def test_empty_ground_session_round_trip_and_method_provenance():
     assert restored.status == "OPEN"
     assert restored.revision == 0
     assert restored.items == ()
-    assert {
-        reference.uid for reference in restored.references
-    } == {
+    assert {reference.uid for reference in restored.references} == {
         "interactive-machine-teaching-ramos-2020",
         "ripple-down-rules-richards-2009",
     }
     assert all(
-        reference.provenance
-        == "AGENT_SUGGESTED_EXTERNAL_PRECEDENT"
+        reference.provenance == "AGENT_SUGGESTED_EXTERNAL_PRECEDENT"
         and reference.reading_status == "UNREAD"
         for reference in restored.references
     )
@@ -573,9 +564,7 @@ def test_store_rejects_a_symbolic_link_grounding_directory(
     )
 
     with pytest.raises(ValueError, match="cannot be a symbolic link"):
-        MemoryStore(create=False).save_ground_session(
-            create_ground_session("linked")
-        )
+        MemoryStore(create=False).save_ground_session(create_ground_session("linked"))
 
 
 def test_cli_creates_resumes_and_snapshots_without_touching_context(
@@ -608,17 +597,10 @@ def test_cli_creates_resumes_and_snapshots_without_touching_context(
 
     assert created.exit_code == 0, created.output
     assert "GROUND · task-1-fixture · OPEN" in created.output
-    assert (
-        "RULES 0 · MEMORIES 0 · UNRESOLVED 0 · DECISIONS 0"
-        in created.output
-    )
+    assert "RULES 0 · MEMORIES 0 · UNRESOLVED 0 · DECISIONS 0" in created.output
     assert "Interactive machine teaching" in created.output
     assert "agent-suggested" in created.output
-    path = (
-        isolated_store
-        / "ground-sessions"
-        / "task-1-fixture.json"
-    )
+    path = isolated_store / "ground-sessions" / "task-1-fixture.json"
     before_resume = path.read_bytes()
     uid = store.load_ground_session("task-1-fixture").uid
 
@@ -739,7 +721,11 @@ def test_cli_ground_tty_picker_reopens_existing_without_creating_state(
     store.save_ground_session(session)
     before = _store_bytes(isolated_store)
     opened = []
-    monkeypatch.setattr(ground_command, "_interactive_terminal", lambda: True)
+    monkeypatch.setattr(
+        ground_open_workflow,
+        "_interactive_terminal",
+        lambda: True,
+    )
     picker_options = []
 
     def choose_saved_ground(*_args, **kwargs):
@@ -750,14 +736,18 @@ def test_cli_ground_tty_picker_reopens_existing_without_creating_state(
             argv=("mem", "ground", "saved-ground"),
         )
 
-    monkeypatch.setattr(ground_command, "choose_session", choose_saved_ground)
     monkeypatch.setattr(
-        ground_command,
+        ground_open_workflow,
+        "choose_session",
+        choose_saved_ground,
+    )
+    monkeypatch.setattr(
+        ground_session_dialogue_workflow,
         "_run_existing_ground_shell",
         lambda value, **_kwargs: opened.append(value),
     )
     monkeypatch.setattr(
-        ground_command,
+        ground_create_workflow,
         "_run_new_ground_shell",
         lambda *_args, **_kwargs: pytest.fail("must not start a new Ground"),
     )
@@ -801,9 +791,13 @@ def test_ground_back_reopens_a_fresh_picker_catalog(
             return "BACK_TO_PICKER"
         return "CLOSED"
 
-    monkeypatch.setattr(ground_command, "choose_session", choose_saved)
     monkeypatch.setattr(
-        ground_command,
+        ground_open_workflow,
+        "choose_session",
+        choose_saved,
+    )
+    monkeypatch.setattr(
+        ground_session_dialogue_workflow,
         "_run_existing_ground_shell",
         open_ground,
     )
@@ -832,14 +826,18 @@ def test_direct_named_ground_back_opens_picker_but_quit_does_not(
         create_ground_session("saved-ground", goal="Resume this Ground.")
     )
     reopened = []
-    monkeypatch.setattr(ground_command, "_interactive_terminal", lambda: True)
     monkeypatch.setattr(
-        ground_command,
+        ground_open_workflow,
+        "_interactive_terminal",
+        lambda: True,
+    )
+    monkeypatch.setattr(
+        ground_session_dialogue_workflow,
         "_run_existing_ground_shell",
         lambda *_args, **_kwargs: shell_outcome,
     )
     monkeypatch.setattr(
-        ground_command,
+        ground_open_workflow,
         "_run_ground_session_picker",
         lambda selected_store, **_kwargs: reopened.append(selected_store),
     )
@@ -857,9 +855,13 @@ def test_cli_ground_tty_picker_new_receipt_keeps_new_flow_explicit(
     store = MemoryStore(create=False)
     store.save_ground_session(create_ground_session("saved-ground"))
     started = []
-    monkeypatch.setattr(ground_command, "_interactive_terminal", lambda: True)
     monkeypatch.setattr(
-        ground_command,
+        ground_open_workflow,
+        "_interactive_terminal",
+        lambda: True,
+    )
+    monkeypatch.setattr(
+        ground_open_workflow,
         "choose_session",
         lambda *_args, **_kwargs: ground_command.SessionNewReceipt(
             kind="ground",
@@ -867,7 +869,7 @@ def test_cli_ground_tty_picker_new_receipt_keeps_new_flow_explicit(
         ),
     )
     monkeypatch.setattr(
-        ground_command,
+        ground_create_workflow,
         "_run_new_ground_shell",
         lambda *_args, **kwargs: started.append(kwargs.get("ground_name")),
     )
@@ -896,8 +898,16 @@ def test_cli_ground_picker_does_not_recreate_a_disappeared_selection(
             argv=("mem", "ground", "vanishing-ground"),
         )
 
-    monkeypatch.setattr(ground_command, "_interactive_terminal", lambda: True)
-    monkeypatch.setattr(ground_command, "choose_session", remove_then_select)
+    monkeypatch.setattr(
+        ground_open_workflow,
+        "_interactive_terminal",
+        lambda: True,
+    )
+    monkeypatch.setattr(
+        ground_open_workflow,
+        "choose_session",
+        remove_then_select,
+    )
 
     result = runner.invoke(app, ["ground", "--sessions"])
 
@@ -956,18 +966,18 @@ def test_cli_ground_without_name_uses_tui_and_applies_one_frozen_command(
             status="APPLIED",
             proposal=proposal,
             actual_output=actual_output,
-                submitted_turns=("Inspect report coverage.",),
-                selected_context_names=("temp/task-1", "campus-wiki"),
-                new_context_name_hint="test/ground/ticker-rule-examples",
+            submitted_turns=("Inspect report coverage.",),
+            selected_context_names=("temp/task-1", "campus-wiki"),
+            new_context_name_hint="test/ground/ticker-rule-examples",
         )
 
     monkeypatch.setattr(
-        ground_command,
+        ground_open_workflow,
         "_interactive_terminal",
         lambda: True,
     )
     monkeypatch.setattr(
-        ground_command,
+        ground_open_workflow,
         "choose_session",
         lambda *_args, **_kwargs: ground_command.SessionNewReceipt(
             kind="ground",
@@ -975,15 +985,16 @@ def test_cli_ground_without_name_uses_tui_and_applies_one_frozen_command(
         ),
     )
     monkeypatch.setattr(
-        ground_command,
+        ground_create_workflow,
         "_choose_ground_workspace_save_location",
         lambda _store, **_kwargs: "task-1-report-coverage",
     )
     monkeypatch.setattr(
-        ground_command,
+        ground_create_workflow,
         "run_ground_shell",
         fake_shell,
     )
+
     def run_in_process(argv):
         # The real subprocess has captured (non-TTY) stdout, so it prints a
         # snapshot instead of opening a nested workspace TUI. Typer's in-
@@ -998,13 +1009,13 @@ def test_cli_ground_without_name_uses_tui_and_applies_one_frozen_command(
         )
 
     monkeypatch.setattr(
-        ground_command,
+        ground_apply_workflow,
         "_run_approved_ground_command",
         run_in_process,
     )
     monkeypatch.setattr(
-        ground_command,
-        "run_ground_workspace_tui",
+        ground_create_workflow,
+        "run_ground_workspace_viewer",
         lambda workspace, **_kwargs: continued.append(workspace),
     )
 
@@ -1016,9 +1027,9 @@ def test_cli_ground_without_name_uses_tui_and_applies_one_frozen_command(
     assert continued[0].name == "task-1-report-coverage"
     [goal] = tuple(continued[0].goals.iter_items())
     assert goal.content == "Determine which Task 1 claims were represented."
-    assert MemoryStore(create=False).load_ground_session(
-        "task-1-report-coverage"
-    ) is None
+    assert (
+        MemoryStore(create=False).load_ground_session("task-1-report-coverage") is None
+    )
     persisted = b"\n".join(_store_bytes(isolated_store).values())
     assert b"temp/task-1" not in persisted
     assert b"campus-wiki" not in persisted
@@ -1073,12 +1084,12 @@ def test_cli_ground_tui_cancel_creates_nothing(
     monkeypatch,
 ):
     monkeypatch.setattr(
-        ground_command,
+        ground_open_workflow,
         "_interactive_terminal",
         lambda: True,
     )
     monkeypatch.setattr(
-        ground_command,
+        ground_open_workflow,
         "choose_session",
         lambda *_args, **_kwargs: ground_command.SessionNewReceipt(
             kind="ground",
@@ -1086,16 +1097,14 @@ def test_cli_ground_tui_cancel_creates_nothing(
         ),
     )
     monkeypatch.setattr(
-        ground_command,
+        ground_create_workflow,
         "_choose_ground_workspace_save_location",
         lambda _store: "cancelled-ground",
     )
     monkeypatch.setattr(
-        ground_command,
+        ground_create_workflow,
         "run_ground_shell",
-        lambda **_kwargs: GroundShellResult(
-            status="CANCELLED"
-        ),
+        lambda **_kwargs: GroundShellResult(status="CANCELLED"),
     )
 
     result = runner.invoke(app, ["ground"])
@@ -1117,12 +1126,12 @@ def test_plain_named_ground_in_a_tty_resumes_the_named_tui(
     store.save_ground_session(session)
     opened = []
     monkeypatch.setattr(
-        ground_command,
+        ground_open_workflow,
         "_interactive_terminal",
         lambda: True,
     )
     monkeypatch.setattr(
-        ground_command,
+        ground_session_dialogue_workflow,
         "_run_existing_ground_shell",
         lambda value, *, initial_receipt="", context_hints=(): opened.append(
             (value, initial_receipt, context_hints)
@@ -1146,11 +1155,7 @@ def test_new_ground_name_collision_is_rejected_before_and_during_apply(
         goal="Preserve this Ground.",
     )
     store.save_ground_session(existing)
-    path = (
-        isolated_store
-        / "ground-sessions"
-        / "already-there.json"
-    )
+    path = isolated_store / "ground-sessions" / "already-there.json"
     before = path.read_bytes()
     dialogue_proposal = GroundDialogueProposal(
         understanding="Create a colliding Ground.",
@@ -1159,7 +1164,7 @@ def test_new_ground_name_collision_is_rejected_before_and_during_apply(
         goal="Overwrite the existing Ground.",
     )
     monkeypatch.setattr(
-        ground_command,
+        ground_create_workflow,
         "interpret_ground_dialogue",
         lambda *_args, **_kwargs: dialogue_proposal,
     )
@@ -1202,7 +1207,7 @@ def test_named_ground_dialogue_applies_bind_rule_review_and_case_one_at_a_time(
         )
 
     monkeypatch.setattr(
-        ground_command,
+        ground_apply_workflow,
         "_run_approved_ground_command",
         run_in_process,
     )
@@ -1304,9 +1309,7 @@ def test_named_ground_dialogue_applies_bind_rule_review_and_case_one_at_a_time(
 
     case = GroundTurnAction(
         kind="PROPOSE_CASE",
-        understanding=(
-            "Use the selected candidate as one fitting Ground Memory."
-        ),
+        understanding=("Use the selected candidate as one fitting Ground Memory."),
         question="Approve recording this proposed Ground Memory?",
         selector="r1",
         source_selector=candidate.uid[:8],
@@ -1322,8 +1325,7 @@ def test_named_ground_dialogue_applies_bind_rule_review_and_case_one_at_a_time(
     rendered_effects = "\n".join(case_proposal.review.effects)
     assert candidate.content in rendered_effects
     assert (
-        "Ground Memories: ADD one traceable PROPOSED Ground Memory"
-        in rendered_effects
+        "Ground Memories: ADD one traceable PROPOSED Ground Memory" in rendered_effects
     )
     assert "Source Context Memory" in rendered_effects
     assert "Contexts and Context Memories: unchanged" in rendered_effects
@@ -1371,10 +1373,7 @@ def test_named_ground_proposition_action_applies_one_reviewed_example(
         target_context_names=(targets[0].name,),
     )
     store.save_ground_session(session)
-    proposition = (
-        f'Applying the ticker Rules to "{candidate.content}" '
-        'produces "RER".'
-    )
+    proposition = f'Applying the ticker Rules to "{candidate.content}" produces "RER".'
 
     def run_in_process(argv):
         invoked = runner.invoke(app, list(argv[1:]))
@@ -1386,7 +1385,7 @@ def test_named_ground_proposition_action_applies_one_reviewed_example(
         )
 
     monkeypatch.setattr(
-        ground_command,
+        ground_apply_workflow,
         "_run_approved_ground_command",
         run_in_process,
     )
@@ -1484,8 +1483,7 @@ def test_ready_rule_draft_reuses_the_guarded_rule_proposal_path(
     assert draft.proposal_rationale in proposal.review.argv
     assert "Rules: ADD one PROPOSED Rule" in proposal.review.effects
     assert any(
-        "proposal is not approval" in effect
-        for effect in proposal.review.effects
+        "proposal is not approval" in effect for effect in proposal.review.effects
     )
 
     with pytest.raises(GroundError, match="Bind this Ground"):
@@ -1655,7 +1653,7 @@ def test_named_ground_child_save_rechecks_state_after_parent_preflight(
         )
 
     monkeypatch.setattr(
-        ground_command,
+        ground_apply_workflow,
         "_run_approved_ground_command",
         race_then_run,
     )
@@ -1706,7 +1704,7 @@ def test_named_ground_binding_rechecks_context_versions_in_child(
         )
 
     monkeypatch.setattr(
-        ground_command,
+        ground_apply_workflow,
         "_run_approved_ground_command",
         change_context_then_run,
     )
@@ -1770,21 +1768,15 @@ def test_named_ground_provider_receives_local_source_alias_not_memory_uid(
         )
 
     monkeypatch.setattr(
-        ground_command,
+        ground_session_dialogue_workflow,
         "interpret_ground_turn",
         fake_interpret,
     )
 
     proposal = ground_command._interpret_named_ground_turn(
         session,
-        (
-            f"On 2026-07-29, use Memory {candidate.uid[:8]} as the "
-            "fitting example."
-        ),
-        (
-            f"On 2026-07-29, use Memory {candidate.uid[:8]} as the "
-            "fitting example."
-        ),
+        (f"On 2026-07-29, use Memory {candidate.uid[:8]} as the fitting example."),
+        (f"On 2026-07-29, use Memory {candidate.uid[:8]} as the fitting example."),
     )
 
     assert len(seen) == 1
@@ -1835,9 +1827,7 @@ def test_ground_drafts_fail_closed_when_source_selector_was_redacted(
         target_contexts=targets,
         target_requirements=TASK_1_TARGET_REQUIREMENTS,
     )
-    submitted = (
-        f"Treat Memory {candidate.uid[:8]} as the required source example."
-    )
+    submitted = f"Treat Memory {candidate.uid[:8]} as the required source example."
 
     def fake_interpret(
         _session,
@@ -1867,7 +1857,7 @@ def test_ground_drafts_fail_closed_when_source_selector_was_redacted(
         )
 
     monkeypatch.setattr(
-        ground_command,
+        ground_session_dialogue_workflow,
         "interpret_ground_turn",
         fake_interpret,
     )
@@ -1924,13 +1914,13 @@ def test_named_ground_apply_rejects_tampered_frozen_version_guards(
         )
     tampered = replace(
         proposal,
-        review=ground_command.ExactCommandReview(
+        review=ground_command.CommandReview(
             argv=tuple(argv),
             effects=proposal.review.effects,
         ),
     )
     monkeypatch.setattr(
-        ground_command,
+        ground_apply_workflow,
         "_run_approved_ground_command",
         lambda _argv: pytest.fail("tampered command must not run"),
     )
@@ -2149,13 +2139,10 @@ def test_task_1_workbench_binds_empty_target_contract_above_51_to_54_frame(
         "direct_memory_count": 54,
         "direct_item_count": 54,
     }
-    assert [
-        frame["context_name"] for frame in target_frames
-    ] == list(TASK_1_TARGET_NAMES)
-    assert all(
-        frame["direct_memory_count"] == 0
-        for frame in target_frames
+    assert [frame["context_name"] for frame in target_frames] == list(
+        TASK_1_TARGET_NAMES
     )
+    assert all(frame["direct_memory_count"] == 0 for frame in target_frames)
 
     snapshot = render_ground_snapshot(bound, (raw, derived, *targets))
     assert "TARGET REQUIREMENTS" in snapshot
@@ -2202,10 +2189,7 @@ def test_target_focus_renders_one_compact_read_only_ground_screen(
     )
     proposed = propose_ground_round(
         bound,
-        rule=(
-            "Use verified construction changes only for supported target "
-            "entries."
-        ),
+        rule=("Use verified construction changes only for supported target entries."),
         case=candidate.content,
         source_context_uid=derived.uid,
         source_memory_uid=candidate.uid,
@@ -2221,29 +2205,20 @@ def test_target_focus_renders_one_compact_read_only_ground_screen(
         contexts,
     )
 
-    assert (
-        "MEM GROUND · task-1-focus · OPEN · FRESH"
-        in rendered
-    )
+    assert "MEM GROUND · task-1-focus · OPEN · FRESH" in rendered
     assert "Revision: 1" in rendered
     assert "FOCUS · campus-wiki" in rendered
     assert "GOAL\n" in rendered
     assert "BOUND MATERIAL" in rendered
     assert "RAW         temp/task-1 · 51 Memories" in rendered
-    assert (
-        "CANDIDATES  temp/task-1-atomized · 54 Memories"
-        in rendered
-    )
+    assert "CANDIDATES  temp/task-1-atomized · 54 Memories" in rendered
     assert "TARGET      campus-wiki · 0 Memories" in rendered
     assert "MEM UNDERSTANDS" in rendered
     assert "[BLOCKED]" in rendered
     assert "SUPPORTED SLICE" in rendered
     assert "FULL TARGET" in rendered
     assert "> 3  BOTH" in rendered
-    assert (
-        "RULES 1 (1 proposed) · MEMORIES 1 (1 proposed) · ACCEPTED 0"
-        in rendered
-    )
+    assert "RULES 1 (1 proposed) · MEMORIES 1 (1 proposed) · ACCEPTED 0" in rendered
     assert "one exact mem command" in rendered
     assert "requires its own approval" in rendered
     assert "METHOD READINGS" not in rendered
@@ -2269,11 +2244,7 @@ def test_cli_focus_target_is_read_only_and_can_render_one_action_result(
         target_requirements=TASK_1_TARGET_REQUIREMENTS,
     )
     store.save_ground_session(session)
-    ground_path = (
-        isolated_store
-        / "ground-sessions"
-        / "task-1-focus-cli.json"
-    )
+    ground_path = isolated_store / "ground-sessions" / "task-1-focus-cli.json"
     ground_before = ground_path.read_bytes()
     non_ground_before = _non_ground_store_bytes(isolated_store)
 
@@ -2327,10 +2298,7 @@ def test_cli_focus_target_is_read_only_and_can_render_one_action_result(
     assert len(restored.items) == 1
     assert restored.items[0].content == "REFINE GOAL"
     assert _non_ground_store_bytes(isolated_store) == non_ground_before
-    assert all(
-        store.list_checkpoints(context.name) == []
-        for context in contexts
-    )
+    assert all(store.list_checkpoints(context.name) == [] for context in contexts)
 
 
 def test_cli_focus_target_rejects_missing_unbound_and_competing_views(
@@ -2444,9 +2412,7 @@ def test_cli_focus_target_rejects_missing_unbound_and_competing_views(
     assert hidden_target_revision.exit_code == 1
     assert "must identify the same target" in hidden_target_revision.output
     assert not (
-        isolated_store
-        / "ground-sessions"
-        / "focus-does-not-exist.json"
+        isolated_store / "ground-sessions" / "focus-does-not-exist.json"
     ).exists()
     assert path.read_bytes() == before
 
@@ -2469,9 +2435,7 @@ def test_target_focus_reports_stale_frames_and_sanitizes_text(
         target_requirements=TASK_1_TARGET_REQUIREMENTS,
     )
     store.save_ground_session(session)
-    campus = next(
-        context for context in targets if context.name == "campus-wiki"
-    )
+    campus = next(context for context in targets if context.name == "campus-wiki")
     campus.add("A changed target Memory.")
     store.save(campus)
     ground_path = isolated_store / "ground-sessions" / "focus-stale.json"
@@ -2539,12 +2503,8 @@ def test_focus_requirement_uid_prefix_is_exact_or_unambiguous(
         target_requirements=TASK_1_TARGET_REQUIREMENTS,
     )
     payload = session.to_dict()
-    payload["requirements"][0]["uid"] = (
-        "aaaaaaaa-0000-4000-8000-000000000001"
-    )
-    payload["requirements"][1]["uid"] = (
-        "aaaaaaaa-0000-4000-8000-000000000002"
-    )
+    payload["requirements"][0]["uid"] = "aaaaaaaa-0000-4000-8000-000000000001"
+    payload["requirements"][1]["uid"] = "aaaaaaaa-0000-4000-8000-000000000002"
     session = GroundSession.from_dict(payload)
     store.save_ground_session(session)
     path = isolated_store / "ground-sessions" / "focus-prefix.json"
@@ -2591,15 +2551,9 @@ def test_focus_requirement_uid_prefix_is_exact_or_unambiguous(
     assert path.read_bytes() == before
 
     overlap_payload = session.to_dict()
-    overlap_payload["requirements"][0]["uid"] = (
-        "aaaaaaaa-0000-4000-8000-000000000001"
-    )
-    overlap_payload["requirements"][1]["uid"] = (
-        "bbbbbbbb-0000-4000-8000-000000000002"
-    )
-    exact_target_uid = overlap_payload["requirements"][1][
-        "target_context_uid"
-    ]
+    overlap_payload["requirements"][0]["uid"] = "aaaaaaaa-0000-4000-8000-000000000001"
+    overlap_payload["requirements"][1]["uid"] = "bbbbbbbb-0000-4000-8000-000000000002"
+    exact_target_uid = overlap_payload["requirements"][1]["target_context_uid"]
     for frame in overlap_payload["frames"]:
         if frame["context_uid"] == exact_target_uid:
             frame["context_name"] = "aaaaaaaa"
@@ -2617,10 +2571,7 @@ def test_one_proposed_ground_round_persists_revision_without_applying_contexts(
 ):
     store = MemoryStore()
     raw, derived, targets, candidate = _task_1_workbench(store)
-    target_before = {
-        context.name: context.to_dict()
-        for context in targets
-    }
+    target_before = {context.name: context.to_dict() for context in targets}
     storage_before = _non_ground_store_bytes(isolated_store)
     session = bind_ground_workbench(
         create_ground_session("task-1-fixture"),
@@ -2669,12 +2620,9 @@ def test_one_proposed_ground_round_persists_revision_without_applying_contexts(
     assert case.source_refs[0].context_uid == derived.uid
     assert case.source_refs[0].memory_uid == candidate.uid
     target_name_by_uid = {
-        frame.context_uid: frame.context_name
-        for frame in revised.frames
+        frame.context_uid: frame.context_name for frame in revised.frames
     }
-    assert tuple(
-        target_name_by_uid[uid] for uid in case.target_context_uids
-    ) == (
+    assert tuple(target_name_by_uid[uid] for uid in case.target_context_uids) == (
         "campus-wiki",
         "participant/construction-updates/building-access",
     )
@@ -2717,19 +2665,11 @@ def test_one_proposed_ground_round_persists_revision_without_applying_contexts(
     assert restored is not None
     assert restored.to_dict() == revised.to_dict()
     assert restored.revision == 1
-    assert [
-        item.kind for item in restored.items
-    ] == ["RULE", "CASE"]
+    assert [item.kind for item in restored.items] == ["RULE", "CASE"]
 
-    assert {
-        context.name: context.to_dict()
-        for context in targets
-    } == target_before
+    assert {context.name: context.to_dict() for context in targets} == target_before
     assert _non_ground_store_bytes(isolated_store) == storage_before
-    assert all(
-        store.list_checkpoints(context.name) == []
-        for context in targets
-    )
+    assert all(store.list_checkpoints(context.name) == [] for context in targets)
 
 
 def test_ground_round_refuses_a_stale_bound_frame_and_preserves_saved_revision(
@@ -2746,16 +2686,9 @@ def test_ground_round_refuses_a_stale_bound_frame_and_preserves_saved_revision(
         target_requirements=TASK_1_TARGET_REQUIREMENTS,
     )
     store.save_ground_session(session)
-    session_path = (
-        isolated_store
-        / "ground-sessions"
-        / "task-1-fixture.json"
-    )
+    session_path = isolated_store / "ground-sessions" / "task-1-fixture.json"
     session_before = session_path.read_bytes()
-    targets_before = {
-        context.name: context.to_dict()
-        for context in targets
-    }
+    targets_before = {context.name: context.to_dict() for context in targets}
 
     derived.replace(
         type(candidate)(
@@ -2786,10 +2719,7 @@ def test_ground_round_refuses_a_stale_bound_frame_and_preserves_saved_revision(
     assert restored is not None
     assert restored.revision == 0
     assert restored.items == ()
-    assert {
-        context.name: context.to_dict()
-        for context in targets
-    } == targets_before
+    assert {context.name: context.to_dict() for context in targets} == targets_before
 
 
 def test_context_frame_digest_covers_identity_order_and_direct_memory_content():
@@ -2868,10 +2798,7 @@ def test_goal_rules_and_cases_converge_bidirectionally_without_applying_targets(
     store = MemoryStore()
     raw, derived, targets, candidate = _task_1_workbench(store)
     contexts = (raw, derived, *targets)
-    target_before = {
-        context.name: context.to_dict()
-        for context in targets
-    }
+    target_before = {context.name: context.to_dict() for context in targets}
     session = bind_ground_workbench(
         create_ground_session(
             "task-1-fixture",
@@ -2889,9 +2816,7 @@ def test_goal_rules_and_cases_converge_bidirectionally_without_applying_targets(
         case=candidate.content,
         source_context_uid=derived.uid,
         source_memory_uid=candidate.uid,
-        target_context_names=(
-            "participant/construction-updates/building-access",
-        ),
+        target_context_names=("participant/construction-updates/building-access",),
         expected="Retain the rear-entrance closure as building access.",
         rationale="The source describes a direct access effect.",
         current_contexts=contexts,
@@ -2909,9 +2834,7 @@ def test_goal_rules_and_cases_converge_bidirectionally_without_applying_targets(
         ),
         current_contexts=contexts,
     )
-    current_rule = next(
-        item for item in refined_rule.items if item.uid == rule.uid
-    )
+    current_rule = next(item for item in refined_rule.items if item.uid == rule.uid)
     assert current_rule.status == "PROPOSED"
     assert current_rule.rule_provenance == "JOINTLY_REVISED"
 
@@ -2946,26 +2869,16 @@ def test_goal_rules_and_cases_converge_bidirectionally_without_applying_targets(
     building_frame = next(
         frame
         for frame in revised_goal.frames
-        if frame.context_name
-        == "participant/construction-updates/building-access"
+        if frame.context_name == "participant/construction-updates/building-access"
     )
     building_requirement = next(
         requirement
         for requirement in revised_goal.requirements
         if requirement.target_context_uid == building_frame.context_uid
     )
-    assert (
-        target_requirement_status(revised_goal, building_requirement)
-        == "COVERED"
-    )
-    assert {
-        context.name: context.to_dict()
-        for context in targets
-    } == target_before
-    assert all(
-        store.list_checkpoints(context.name) == []
-        for context in targets
-    )
+    assert target_requirement_status(revised_goal, building_requirement) == "COVERED"
+    assert {context.name: context.to_dict() for context in targets} == target_before
+    assert all(store.list_checkpoints(context.name) == [] for context in targets)
 
 
 def test_cli_binds_proposes_accepts_and_revises_goal_in_named_workbench(
@@ -3197,9 +3110,7 @@ def test_one_working_rule_can_hold_multiple_fit_and_boundary_cases(
         case=first_candidate.content,
         source_context_uid=derived.uid,
         source_memory_uid=first_candidate.uid,
-        target_context_names=(
-            "participant/construction-updates/building-access",
-        ),
+        target_context_names=("participant/construction-updates/building-access",),
         expected="Retain the supported entrance closure.",
         rationale="This is an ordinary case that fits the rule.",
         current_contexts=contexts,
@@ -3211,9 +3122,7 @@ def test_one_working_rule_can_hold_multiple_fit_and_boundary_cases(
         case=second_candidate.content,
         source_context_uid=derived.uid,
         source_memory_uid=second_candidate.uid,
-        target_context_names=(
-            "participant/construction-updates/building-access",
-        ),
+        target_context_names=("participant/construction-updates/building-access",),
         expected="Keep this candidate unresolved at the boundary.",
         rationale="This case tests where the current rule stops.",
         current_contexts=contexts,
@@ -3252,9 +3161,7 @@ def test_accepted_non_include_case_never_covers_a_target(
         case=candidate.content,
         source_context_uid=derived.uid,
         source_memory_uid=candidate.uid,
-        target_context_names=(
-            "participant/construction-updates/building-access",
-        ),
+        target_context_names=("participant/construction-updates/building-access",),
         expected="",
         rationale="The candidate does not establish an includable placement.",
         current_contexts=contexts,
@@ -3284,10 +3191,13 @@ def test_accepted_non_include_case_never_covers_a_target(
         == "participant/construction-updates/building-access"
     )
 
-    assert accepted_ground_case_count(
-        accepted_case,
-        requirement.target_context_uid,
-    ) == 0
+    assert (
+        accepted_ground_case_count(
+            accepted_case,
+            requirement.target_context_uid,
+        )
+        == 0
+    )
     assert target_requirement_status(accepted_case, requirement) == "EMPTY"
 
 
@@ -3310,9 +3220,7 @@ def test_accepted_case_requires_an_accepted_rule_for_coverage(
         case=candidate.content,
         source_context_uid=derived.uid,
         source_memory_uid=candidate.uid,
-        target_context_names=(
-            "participant/construction-updates/building-access",
-        ),
+        target_context_names=("participant/construction-updates/building-access",),
         expected="Retain the entrance closure.",
         rationale="This candidate is an access effect.",
         current_contexts=contexts,
@@ -3364,9 +3272,7 @@ def test_refining_an_accepted_rule_reopens_it_and_drops_derived_coverage(
         case=candidate.content,
         source_context_uid=derived.uid,
         source_memory_uid=candidate.uid,
-        target_context_names=(
-            "participant/construction-updates/building-access",
-        ),
+        target_context_names=("participant/construction-updates/building-access",),
         expected="Retain the entrance closure.",
         rationale="The candidate is an access effect.",
         current_contexts=contexts,
@@ -3402,9 +3308,7 @@ def test_refining_an_accepted_rule_reopens_it_and_drops_derived_coverage(
         response="Materialize only supported campus-facing access changes.",
         current_contexts=contexts,
     )
-    reopened_rule = next(
-        item for item in reopened.items if item.uid == rule.uid
-    )
+    reopened_rule = next(item for item in reopened.items if item.uid == rule.uid)
     assert reopened_rule.status == "PROPOSED"
     assert reopened_rule.rule_provenance == "JOINTLY_REVISED"
     assert target_requirement_status(reopened, requirement) == "EMPTY"
@@ -3436,9 +3340,7 @@ def test_duplicate_accepted_cases_from_one_source_count_as_one_evidence(
         case=candidate.content,
         source_context_uid=derived.uid,
         source_memory_uid=candidate.uid,
-        target_context_names=(
-            "participant/construction-updates/building-access",
-        ),
+        target_context_names=("participant/construction-updates/building-access",),
         expected="Materialize the supported entrance closure.",
         rationale="This is the first review of the candidate.",
         current_contexts=contexts,
@@ -3449,9 +3351,7 @@ def test_duplicate_accepted_cases_from_one_source_count_as_one_evidence(
         case=candidate.content,
         source_context_uid=derived.uid,
         source_memory_uid=candidate.uid,
-        target_context_names=(
-            "participant/construction-updates/building-access",
-        ),
+        target_context_names=("participant/construction-updates/building-access",),
         expected="Materialize the same supported entrance closure.",
         rationale="This deliberately repeats the same source evidence.",
         current_contexts=contexts,
@@ -3481,17 +3381,23 @@ def test_duplicate_accepted_cases_from_one_source_count_as_one_evidence(
         == "participant/construction-updates/building-access"
     )
 
-    assert len(
-        [
-            case
-            for case in accepted.items_of_kind("CASE")
-            if case.status == "ACCEPTED"
-        ]
-    ) == 2
-    assert accepted_ground_case_count(
-        accepted,
-        requirement.target_context_uid,
-    ) == 1
+    assert (
+        len(
+            [
+                case
+                for case in accepted.items_of_kind("CASE")
+                if case.status == "ACCEPTED"
+            ]
+        )
+        == 2
+    )
+    assert (
+        accepted_ground_case_count(
+            accepted,
+            requirement.target_context_uid,
+        )
+        == 1
+    )
     assert target_requirement_status(accepted, requirement) == "COVERED"
 
 
@@ -3519,9 +3425,7 @@ def test_legacy_representative_case_loads_as_fit(
         current_contexts=(raw, derived, *targets),
     )
     payload = proposed.to_dict()
-    case_payload = next(
-        item for item in payload["items"] if item["kind"] == "CASE"
-    )
+    case_payload = next(item for item in payload["items"] if item["kind"] == "CASE")
     case_payload["case_role"] = "REPRESENTATIVE"
 
     restored = GroundSession.from_dict(payload)
@@ -3620,9 +3524,7 @@ def test_forged_frame_counts_and_nonexistent_cursor_mark_workbench_stale(
     )
     payload = bound.to_dict()
     working_frame = next(
-        frame
-        for frame in payload["frames"]
-        if frame["role"] == "WORKING_CANDIDATES"
+        frame for frame in payload["frames"] if frame["role"] == "WORKING_CANDIDATES"
     )
     real_candidate_count = working_frame["direct_memory_count"]
     working_frame["direct_memory_count"] += 1
@@ -3683,17 +3585,13 @@ def test_grounding_case_cannot_reference_raw_evidence(
         case=candidate.content,
         source_context_uid=derived.uid,
         source_memory_uid=candidate.uid,
-        target_context_names=(
-            "participant/construction-updates/building-access",
-        ),
+        target_context_names=("participant/construction-updates/building-access",),
         expected="Materialize the supported entrance closure.",
         rationale="The initial proposal has valid working-candidate evidence.",
         current_contexts=contexts,
     )
     payload = proposed.to_dict()
-    case_payload = next(
-        item for item in payload["items"] if item["kind"] == "CASE"
-    )
+    case_payload = next(item for item in payload["items"] if item["kind"] == "CASE")
     case_payload["source_refs"][0]["context_uid"] = raw.uid
 
     with pytest.raises(
@@ -3743,17 +3641,15 @@ def test_load_requires_a_user_accept_decision_for_each_accepted_item(
         current_contexts=contexts,
     )
     payload = accepted.to_dict()
-    decision = next(
-        item for item in payload["items"] if item["kind"] == "DECISION"
-    )
+    decision = next(item for item in payload["items"] if item["kind"] == "DECISION")
     decision["origin"] = "AGENT"
     with pytest.raises(GroundError, match="approval decision"):
         GroundSession.from_dict(payload)
 
     unresolved = accepted.to_dict()
-    next(
-        item for item in unresolved["items"] if item["kind"] == "DECISION"
-    )["status"] = "PROPOSED"
+    next(item for item in unresolved["items"] if item["kind"] == "DECISION")[
+        "status"
+    ] = "PROPOSED"
     with pytest.raises(GroundError, match="kind/status"):
         GroundSession.from_dict(unresolved)
 

@@ -123,7 +123,7 @@ class _Provider:
 
 
 def _initialize(store) -> None:
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
 
     if store.context_exists("atomize/direct-current"):
         return
@@ -153,17 +153,15 @@ def _initialize(store) -> None:
 
 def _invoke(store, argv: list[str]) -> None:
     import memcommit.adapters.console.commands.atomize.command as atomize_command
-    import memcommit.adapters.console.shared.command_wait as command_wait
+    import memcommit.adapters.console.terminal.components.command_wait as command_wait
     import memcommit.adapters.console.commands.review.command as review_command
-    import memcommit.adapters.console.shared.session_help as session_help
-    import memcommit.adapters.console.tui.components.session_help as session_help_component
+    import memcommit.adapters.console.terminal.components.session_help as session_help
 
     atomize_command.MemoryStore = lambda *args, **kwargs: store
     review_command.MemoryStore = lambda *args, **kwargs: store
     atomize_command.connect_codex_chatgpt_provider = lambda: _Provider()
     command_wait.current_help_entries = lambda: ()
     session_help.current_help_entries = lambda: ()
-    session_help_component.current_help_entries = lambda: ()
     app = typer.Typer()
 
     @app.callback()

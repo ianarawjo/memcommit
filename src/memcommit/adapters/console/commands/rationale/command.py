@@ -8,32 +8,32 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.application.authority.access import resolve_context_access
+from memcommit.application.capabilities.authority.access import resolve_context_access
 from memcommit.persistence.command_ledger.attempts import annotate_memory_report_attempt
-from memcommit.adapters.console.shared.command_progress import progressing_provider_factory
-from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
-from memcommit.adapters.console.shared.memory_picker import (
+from memcommit.adapters.console.terminal.components.progress import progressing_provider_factory
+from memcommit.adapters.console.coordination.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.terminal.components.memory_report_picker import (
     ScopedMemoryPickerItem,
     choose_memory_report_target,
 )
-from memcommit.adapters.console.shared.memory_report_recents import (
+from memcommit.adapters.console.coordination.memory_report_recents import (
     MemoryReportRecentSelection,
     MemoryReportSelectAction,
     choose_memory_report_recent,
 )
-from memcommit.adapters.console.shared.history_target import resolve_explicit_context_history_target
-from memcommit.adapters.interfaces.tui.viewers.read_only import (
+from memcommit.adapters.console.coordination.history_target import resolve_explicit_context_history_target
+from memcommit.adapters.console.terminal.components.read_only_viewer import (
     interactive_report_terminal,
 )
-from memcommit.adapters.console.text import (
+from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
     safe_terminal_text,
 )
-from memcommit.application.retained_history.granted_provenance import (
+from memcommit.application.capabilities.retained_history.granted_provenance import (
     GrantedMemoryTraceReport,
     build_granted_memory_trace,
 )
-from memcommit.application.retained_history.context_history import (
+from memcommit.application.capabilities.retained_history.context_history import (
     ContextTraceReport,
     build_context_trace,
     current_context_trace,
@@ -47,7 +47,7 @@ from memcommit.core.context_targeting.report_items import (
     resolve_local_memory_report_target,
     resolve_readable_memory_target,
 )
-from memcommit.application.retained_history.memory_history_reconstruction.retained_record_verification import (
+from memcommit.application.capabilities.retained_history.memory_history_reconstruction.retained_record_verification import (
     MemoryHistoryReconstructionError,
 )
 from memcommit.application.operations.reference.provenance import (

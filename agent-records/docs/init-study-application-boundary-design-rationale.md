@@ -2,20 +2,29 @@
 
 ## Selected boundary
 
-`operations/init_study/model.py` owns the result type,
-`composition.py` turns one packaged scenario into participant and authority
-stores, `publication.py` materializes Grants and atomically publishes the pair,
-and `application.py` selects `coffee` or `legacy` and coordinates the workflow.
-The console command owns argument validation, receipts, action-ledger
-presentation, and the post-command handoff into a disposable Study shell.
-The shell is scheduled on root Context close so initialization and its command
-attempt are finalized before the child zsh begins.
+`operations/init_study/model.py` owns the public result type and
+`application.py` selects `coffee` or `legacy` and coordinates the workflow.
+The Profile-building implementation is grouped under `init_study/profile/`:
+`model.py` owns its internal source/package values, `package.py` reads and
+validates packaged inputs, `composition.py` turns a scenario into participant
+and authority stores, and `publication.py` materializes Grants and atomically
+publishes the pair. The console command owns argument validation, receipts,
+action-ledger presentation, and the post-command handoff into a disposable
+Study shell. The shell is scheduled on root Context close so initialization
+and its command attempt are finalized before the child zsh begins.
 
 `operations/profile` remains reusable control-plane infrastructure: Profile
 validation, registry locking and replacement, store inspection, Grant
-materialization, and legacy split-Study administration. It no longer owns a
-Study baseline importer or compatibility facade for initialization. Production
-callers import the `init_study` operation directly.
+resolution, and legacy split-Study administration. Its `model/study.py` keeps
+grouping, migration, rename, archive, and removal, but no longer implements
+init-study package parsing, scenario remapping, store composition, or batch
+publication. Production callers import the `init_study` operation directly.
+
+The former root `init_study/composition.py` and `publication.py` modules and
+former private imports through `profile.model` remain thin compatibility
+exports. They return the canonical objects from `init_study/profile/` and
+contain no implementation, so existing imports do not force two owners for the
+same behavior.
 
 ## Invariants
 
@@ -33,9 +42,14 @@ callers import the `init_study` operation directly.
   run-private `ZDOTDIR` and `HISTFILE`. Exiting returns to the unchanged parent
   shell. Non-interactive and already nested Study invocations remain one-shot.
 
-## Limitation
+## Boundary retained
 
-Composition still calls narrow Profile-owned helpers for the established
-Legacy package and Grant schemas. Moving those reusable primitives into
-smaller Profile modules is separate from removing the public baseline
-lifecycle and was intentionally not combined with this change.
+Init-study still reuses Profile control-plane storage, registry, Grant-scope,
+and legacy Study identity primitives. Those are shared safety and compatibility
+contracts rather than scenario construction. This change deliberately moves
+definitions without changing function bodies, persistence formats, names, or
+transaction order.
+
+The Study shell currently requires zsh and deliberately skips personal startup
+files so a user configuration cannot reconnect ordinary history. Supporting
+another shell requires its own tested isolation adapter.

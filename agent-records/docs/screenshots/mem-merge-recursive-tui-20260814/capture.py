@@ -55,7 +55,7 @@ def _configure_isolated_store(store_root: Path) -> None:
 
 
 def _initialize() -> tuple[str, str]:
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()

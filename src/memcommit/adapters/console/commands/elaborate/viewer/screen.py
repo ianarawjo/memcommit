@@ -6,12 +6,12 @@ from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
 from memcommit.application.operations.elaborate.application import ElaborateResult
-from memcommit.adapters.console.tui.components.plain_text_clipboard import ClipboardWriter
+from memcommit.adapters.console.terminal.components.plain_text_clipboard import ClipboardWriter
 from memcommit.adapters.console.commands.elaborate.viewer.projection import (
     project_elaborate_clipboard,
     project_elaborate_result,
 )
-from memcommit.adapters.interfaces.tui.viewers.semantic import run_semantic_viewer
+from memcommit.adapters.console.terminal.components.semantic_viewer import run_semantic_viewer
 
 
 def run_elaborate_tui(

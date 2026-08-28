@@ -1,1 +1,1 @@
-"""Reserved agent adapter package."""
+"""Host-neutral machine-callable adapters for MemCommit use cases."""

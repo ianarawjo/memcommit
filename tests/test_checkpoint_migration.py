@@ -6,12 +6,12 @@ import json
 
 import pytest
 
-import memcommit.application.ops as ops
-from memcommit.application.retained_history.checkpoint_migration import (
+import memcommit.application.capabilities.ops as ops
+from memcommit.application.capabilities.retained_history.checkpoint_migration import (
     apply_rename_history_repair,
     plan_rename_history_repair,
 )
-from memcommit.application.retained_history.command_history import CommandHistoryError, build_command_stacks
+from memcommit.application.capabilities.retained_history.command_history import CommandHistoryError, build_command_stacks
 from memcommit.core.context import AutoCheckpoint
 from memcommit.persistence.store import MemoryStore
 

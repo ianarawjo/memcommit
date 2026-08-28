@@ -25,37 +25,37 @@ from prompt_toolkit.widgets import Frame, TextArea
 from memcommit.core.context_targeting.tui.compact_scope import (
     CompactReadableScopeControl,
 )
-from memcommit.adapters.console.terminal import require_interactive_terminal
-from memcommit.adapters.console.text import safe_terminal_text
-from memcommit.adapters.console.tui.components.background_turn import BackgroundExecutorTurn
-from memcommit.adapters.console.tui.components.focus import (
+from memcommit.adapters.console.terminal.core.capabilities import require_interactive_terminal
+from memcommit.adapters.console.terminal.core.text import safe_terminal_text
+from memcommit.adapters.console.terminal.components.background_turn import BackgroundExecutorTurn
+from memcommit.adapters.console.terminal.components.focus import (
     FocusSurface,
     SurfaceActionResult,
     SurfaceFocusController,
     SurfaceMoveResult,
     bind_surface_navigation,
 )
-from memcommit.adapters.console.tui.components.frame import (
+from memcommit.adapters.console.terminal.components.frame import (
     TuiRegion,
     bind_focused_frame_style,
     build_tui_frame,
 )
-from memcommit.adapters.console.tui.components.horizontal_choice import (
+from memcommit.adapters.console.terminal.components.horizontal_choice import (
     HorizontalChoiceOption,
     HorizontalChoiceState,
     render_horizontal_choice,
 )
-from memcommit.adapters.console.tui.components.plain_text_clipboard import (
+from memcommit.adapters.console.terminal.components.plain_text_clipboard import (
     PlainTextClipboardReceipt,
     clipboard_failure_receipt,
     copy_plain_text,
 )
-from memcommit.adapters.console.tui.core.activity import busy_suffix
-from memcommit.adapters.console.tui.core.keybindings import (
+from memcommit.adapters.console.terminal.core.activity import busy_suffix
+from memcommit.adapters.console.terminal.core.keybindings import (
     bind_case_insensitive_key,
     dispatch_tui_back,
 )
-from memcommit.adapters.console.tui.core.theme import (
+from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
 )

@@ -12,12 +12,14 @@ from memcommit.application.operations.compare.ledger.provider import (
 from memcommit.application.operations.search.answer_dialogue import (
     _search_answer_execution_policy,
 )
-from memcommit.application.reviewing.quality.findings import _findings_execution_policy
+from memcommit.application.capabilities.reviewing.quality.findings import _findings_execution_policy
 from memcommit.application.operations.log.search import HISTORY_SEARCH_EXECUTION_POLICY
-from memcommit.application.operations.meld.provider import MELD_EXECUTION_POLICY
+from memcommit.application.operations.meld.provider.contract import (
+    MELD_EXECUTION_POLICY,
+)
 from memcommit.application.operations.rationale.model import RATIONALE_EXECUTION_POLICY
 from memcommit.application.operations.search.model import SEARCH_EXECUTION_POLICY
-from memcommit.application.semantic.selective_curation import (
+from memcommit.application.capabilities.semantic.selective_curation import (
     CurationBatch,
     CurationItem,
     CriterionFrame,
@@ -25,7 +27,7 @@ from memcommit.application.semantic.selective_curation import (
     build_provider_frame,
     plan_curation_execution,
 )
-from memcommit.application.semantic_execution import (
+from memcommit.application.capabilities.semantic_execution import (
     ExecutionMode,
     ExecutionStrategy,
     SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT,

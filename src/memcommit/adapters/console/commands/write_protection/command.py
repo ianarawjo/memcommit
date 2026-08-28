@@ -6,15 +6,15 @@ from typing import Annotated, Any, Optional
 
 import typer
 
-import memcommit.application.ops as ops
-from memcommit.adapters.console.shared.command_group import CanonicalCommandGroup
-from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
+import memcommit.application.capabilities.ops as ops
+from memcommit.adapters.console.coordination.command_group import CanonicalCommandGroup
+from memcommit.adapters.console.coordination.context_operand import ContextOperandSnapshot
 from memcommit.core.context_targeting.loading import (
     resolve_local_context_memory_target,
     resolve_local_direct_memory_locator,
 )
 from memcommit.core.context_targeting.model import DirectMemoryTarget
-from memcommit.adapters.console.text import (
+from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
 from memcommit.core.context import Context, Memory

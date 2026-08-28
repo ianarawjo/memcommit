@@ -9,7 +9,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.adapters.console.shared.command_group import CanonicalCommandGroup
+from memcommit.adapters.console.coordination.command_group import CanonicalCommandGroup
 
 from memcommit.application.operations.atomize.domain import (
     AtomizeFrameOrigin,
@@ -32,15 +32,15 @@ from memcommit.adapters.console.commands.atomize.workbench.screen import (
     render_atomize_workbench_snapshot,
     run_atomize_workbench_shell,
 )
-from memcommit.adapters.console.shared.command_progress import (
+from memcommit.adapters.console.terminal.components.progress import (
     CommandProgress,
     progressing_provider_factory,
 )
-from memcommit.adapters.console.shared.context_operand import (
+from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
     choose_context_operand,
 )
-from memcommit.application.authority.access import (
+from memcommit.application.capabilities.authority.access import (
     GrantedReadStore,
     freeze_granted_context_binding,
     resolve_context_access,
@@ -54,13 +54,13 @@ from memcommit.adapters.console.commands.impact.process_local import (
     resolve_cmd as resolve_impact_cmd,
 )
 from memcommit.adapters.console.commands.impact.registry import IMPACT_ROUTES
-from memcommit.adapters.console.shared.review import ReviewCancelled
-from memcommit.adapters.console.tui.components.operation_launcher.session import (
+from memcommit.adapters.console.coordination.review import ReviewCancelled
+from memcommit.adapters.console.terminal.components.operation_launcher.session import (
     SessionOpenReceipt,
     SessionPickerEntry,
     choose_session,
 )
-from memcommit.adapters.console.text import (
+from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
 from memcommit.adapters.console.commands.update.render import (
@@ -88,7 +88,7 @@ from memcommit.core.context_targeting.presets import (
     resolve_descendant_scopes,
     resolve_scope_preset,
 )
-from memcommit.application.authority.derived_policy import authorize_derived_transfer
+from memcommit.application.capabilities.authority.derived_policy import authorize_derived_transfer
 from memcommit.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,

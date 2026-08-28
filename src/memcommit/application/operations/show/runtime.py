@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import replace
 
-from memcommit.application.authority.access import (
+from memcommit.application.capabilities.authority.access import (
     ContextAccess,
     GrantedReadStore,
     context_access_display_facts,
@@ -13,8 +13,8 @@ from memcommit.application.authority.access import (
     top_level_grants,
 )
 from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
-from memcommit.application.retained_history.context_snapshot import ContextSnapshotRef
-from memcommit.application.context_locator import resolve_context_locator
+from memcommit.application.capabilities.retained_history.context_snapshot import ContextSnapshotRef
+from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.core.context_targeting.loading import (
     DirectItemAmbiguityError,
     DirectItemNotFoundError,

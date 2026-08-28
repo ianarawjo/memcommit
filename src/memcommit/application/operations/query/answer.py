@@ -14,7 +14,7 @@ from memcommit.application.operations.search.answer_references import (
     SearchAnswerReferenceDocument,
     NumberedSearchAnswerReference,
 )
-from memcommit.application.semantic_execution import (
+from memcommit.application.capabilities.semantic_execution import (
     BudgetLimits,
     BudgetVector,
     ExecutionMode,
@@ -24,7 +24,7 @@ from memcommit.application.semantic_execution import (
     json_budget,
     plan_semantic_execution,
 )
-from memcommit.application.semantic.prompt_policy import resolve_semantic_prompt_policy
+from memcommit.application.capabilities.semantic.prompt_policy import resolve_semantic_prompt_policy
 
 
 ORDINARY_QUERY_OPERATION = "ordinary query"

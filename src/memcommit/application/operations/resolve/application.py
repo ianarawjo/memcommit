@@ -3,7 +3,7 @@
 Resolution is the semantic condition-to-condition operation: it selects one
 reasonable Issue interpretation and proposes an authorized post-image whose
 complete proposition frame independently Fits.
-The shared :mod:`memcommit.application.resolution` package validates exact choices only;
+The shared :mod:`memcommit.application.capabilities.resolution` package validates exact choices only;
 automatic planning, assumption boundaries, and Apply remain here.
 """
 
@@ -15,7 +15,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Literal, Protocol
 
 from memcommit.application.operations.fit.judgment import FitAssessment
-from memcommit.application.resolution import (
+from memcommit.application.capabilities.resolution import (
     ResolutionAttempt,
     ResolutionBinding,
     ResolutionCase,

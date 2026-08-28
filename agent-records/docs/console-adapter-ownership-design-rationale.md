@@ -1,6 +1,6 @@
 # Console adapter ownership design rationale
 
-Last reviewed: 2026-08-27.
+Last reviewed: 2026-08-28.
 
 ## Decision
 
@@ -21,6 +21,16 @@ The package keeps two explicit levels:
 The package root re-exports only the lightweight route and terminal capability
 contract. Importing `memcommit.adapters.console` must not assemble the Typer
 entry point or command registry.
+
+The generated-Memory completion preview is one concrete shared-console
+component. Distill and Elaborate both publish operation-owned semantic results
+as ordinary Memories, then pass the exact applied UID/content pairs to
+`adapters.console.terminal.components.applied_memory_preview`. The component owns only
+escaping, the twenty-row display bound, remainder disclosure, and Memory
+foreground styling. It does not resolve endpoints, append Memories, create
+checkpoints, or define either operation's receipt. Its former
+`adapters.interfaces.cli.semantic_add` path is removed without a facade because
+the component is neither an Add command nor an independent CLI interface.
 
 ## Motivation
 
@@ -50,9 +60,10 @@ dependency direction explicit without changing their behavior.
   marker, color, or rendered text changes.
 - The old `memcommit.adapters.interfaces.console` path is retired rather than
   retained as a second compatibility owner.
-- Existing `adapters.interfaces.cli` and `adapters.interfaces.tui` packages
-  remain staging surfaces; this focused move does not claim their ownership
-  review is complete.
+- The now-empty `adapters.interfaces.cli` staging package is retired without a
+  compatibility facade. Remaining `adapters.interfaces.tui` Viewer and
+  Workbench packages stay staging surfaces pending their separate ownership
+  review.
 
 ## Alternatives and remaining boundary
 

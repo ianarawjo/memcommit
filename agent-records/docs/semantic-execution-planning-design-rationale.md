@@ -35,7 +35,7 @@ arbitrary prompt is retrieval, an exhaustive relation ledger, a directional
 mutation plan, a holistic summary, or selective curation. Automatic splitting
 inside the provider adapter would therefore change operation meaning.
 
-`memcommit.application.semantic_execution` sits above the provider and below operation
+`memcommit.application.capabilities.semantic_execution` sits above the provider and below operation
 adapters. It owns only operation-neutral mechanics:
 
 - a vector budget;
@@ -53,7 +53,7 @@ prompts and schemas, semantic reconciliation, durable state, and application.
 
 On 2026-08-27 the package implementation moved mechanically from
 `memcommit.semantic_execution` to
-`memcommit.application.semantic_execution`. Semantic execution chooses and
+`memcommit.application.capabilities.semantic_execution`. Semantic execution chooses and
 orchestrates how an already-defined operation may use bounded provider work;
 it is therefore an application capability rather than a provider transport or
 a Memory/Context domain rule. The move changes no budget, strategy, batching,

@@ -47,7 +47,7 @@ class _DelayedFitProvider:
 
 
 def _prepare_store(root: Path):
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.application.operations.ground.model import (
         GroundTargetSpec,
         bind_ground_workbench,

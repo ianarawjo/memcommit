@@ -5,9 +5,9 @@ import pytest
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.commands.forget import command as forget_command
-from memcommit.adapters.console.shared.resolution_workbench_shell import (
+from memcommit.adapters.console.terminal.components.resolution.session_shell import (
     resolution_report_fragments,
     resolution_viewer_fragments,
     run_resolution_workbench_shell,
@@ -20,12 +20,12 @@ from memcommit.adapters.console.commands.forget.workbench.presentation import (
     forget_memory_changes,
 )
 from memcommit.application.operations.forget.review import ForgetReview
-from memcommit.adapters.interfaces.tui.workbenches.impact import ImpactController
+from memcommit.adapters.console.terminal.components.impact import ImpactController
 from memcommit.providers.types import ProviderIdentity
-from memcommit.application.resolution.workbench import ResolutionNavigation, ResolutionWorkbenchAction
-from memcommit.application.semantic.selective_curation import CurationAnalysis, CurationDecision
-from memcommit.application.semantic.changes import EditChange, RemoveChange
-from memcommit.application.reviewing.session_navigation import SessionWorkbenchNavigation
+from memcommit.application.capabilities.resolution.workbench import ResolutionNavigation, ResolutionWorkbenchAction
+from memcommit.application.capabilities.semantic.selective_curation import CurationAnalysis, CurationDecision
+from memcommit.application.capabilities.semantic.changes import EditChange, RemoveChange
+from memcommit.application.capabilities.reviewing.session_navigation import SessionWorkbenchNavigation
 
 
 class BatchForgetLLM:

@@ -10,18 +10,18 @@ from memcommit.adapters.console.commands.trace.projection import (
     DEFAULT_TRACE_OPERATION_LIMIT,
     MAX_TRACE_OPERATION_LIMIT,
 )
-from memcommit.application.retained_history.context_history import (
+from memcommit.application.capabilities.retained_history.context_history import (
     ContextTraceChange,
     ContextTraceEvent,
     ContextTraceReport,
 )
-from memcommit.adapters.console.text import display_escape_text
-from memcommit.adapters.console.tui.components.plain_text_clipboard import (
+from memcommit.adapters.console.terminal.core.text import display_escape_text
+from memcommit.adapters.console.terminal.components.plain_text_clipboard import (
     plain_text_from_fragments,
 )
-from memcommit.adapters.console.tui.core.theme import semantic_action_style
-from memcommit.adapters.interfaces.tui.viewers.read_only import run_read_only_viewer
-from memcommit.application.reviewing.memory_diff import MemoryChange, memory_diff_lines
+from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import semantic_action_style
+from memcommit.adapters.console.terminal.components.read_only_viewer import run_read_only_viewer
+from memcommit.application.capabilities.reviewing.memory_diff import MemoryChange, memory_diff_lines
 
 
 _CONTEXT_TRACE_VIEWER_MIN_HEIGHT = 10

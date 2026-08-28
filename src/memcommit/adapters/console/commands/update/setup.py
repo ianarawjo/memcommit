@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.application.authority.access import (
+from memcommit.application.capabilities.authority.access import (
     ContextAccess,
     context_access_display_facts,
 )
@@ -15,9 +15,9 @@ from memcommit.core.context_targeting.tui.picker import context_memory_rows
 from memcommit.core.context_targeting.readable_catalog import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.adapters.console.tui.components.endpoint_setup import EndpointSetupMemory
-from memcommit.adapters.interfaces.tui.operations.update import (
-    UpdateTuiSetup,
+from memcommit.adapters.console.terminal.components.endpoint_setup import EndpointSetupMemory
+from memcommit.adapters.console.commands.update.workbench import (
+    UpdateEndpointSetup,
     choose_update_endpoint_setup,
 )
 from memcommit.persistence.store import MemoryStore
@@ -81,7 +81,7 @@ def choose_update_setup(
         )
 
     selected = choose_update_endpoint_setup(
-        UpdateTuiSetup(
+        UpdateEndpointSetup(
             names=names,
             source_name=source_name,
             target_name=target_name,

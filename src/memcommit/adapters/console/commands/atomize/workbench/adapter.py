@@ -12,9 +12,9 @@ from memcommit.adapters.console.commands.atomize.workbench.screen import (
     render_atomize_workbench_snapshot,
     run_atomize_workbench_shell,
 )
-from memcommit.adapters.interfaces.tui.workbenches.resolution import ResolutionDestination
-from memcommit.adapters.console.shared.review import ReviewCancelled
-from memcommit.application.resolution.workbench import ResolutionWorkbenchAction
+from memcommit.adapters.console.coordination.review import ReviewCancelled
+from memcommit.adapters.console.terminal.components.resolution import ResolutionDestination
+from memcommit.application.capabilities.resolution.workbench import ResolutionWorkbenchAction
 from memcommit.persistence.store import MemoryStore
 
 

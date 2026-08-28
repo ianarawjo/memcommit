@@ -29,9 +29,9 @@ from memcommit.application.operations.dedun.application import (
     project_dedun,
 )
 from memcommit.application.operations.dedun.planning import freeze_dedun_plan
-from memcommit.application.reviewing.quality.findings import DuplicateFinding, DuplicateReport, find_redundancies
-from memcommit.application.reviewing.quality.workbench import create_quality_find_workbench
-from memcommit.application.reviewing.quality.handoff import quality_finding_handoffs
+from memcommit.application.capabilities.reviewing.quality.findings import DuplicateFinding, DuplicateReport, find_redundancies
+from memcommit.application.capabilities.reviewing.quality.workbench import create_quality_find_workbench
+from memcommit.application.capabilities.reviewing.quality.handoff import quality_finding_handoffs
 from memcommit.application.operations.review.model import direct_context_digest
 from memcommit.persistence.store import context_record_digest
 

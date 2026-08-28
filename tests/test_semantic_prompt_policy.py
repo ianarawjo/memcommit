@@ -5,8 +5,8 @@ import json
 import memcommit.application.operations.atomize.domain as atomize_module
 import memcommit.application.operations.atomize.analysis_runtime as atomize_runtime_module
 import memcommit.application.operations.compare.summary_provider as comparison_summary_module
-import memcommit.application.reviewing.quality.findings as findings_module
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.reviewing.quality.findings as findings_module
+import memcommit.application.capabilities.ops as ops
 import memcommit.application.operations.query.answer as ordinary_query_module
 from memcommit.application.operations.atomize.domain import (
     ATOMIZE_ANALYSIS_SCHEMA_VERSION,
@@ -21,7 +21,7 @@ from memcommit.application.operations.compare.ledger.model import ComparisonInpu
 from memcommit.application.operations.compare.summary_rules import (
     comparison_summary_ruleset_prompt_payload,
 )
-from memcommit.application.semantic.generative_reduction_reference import (
+from memcommit.application.capabilities.semantic.generative_reduction_reference import (
     distill_elaborate_reference_payload,
     render_distill_elaborate_reference_examples,
 )
@@ -34,7 +34,7 @@ from memcommit.application.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,
 )
-from memcommit.application.semantic.prompt_policy import (
+from memcommit.application.capabilities.semantic.prompt_policy import (
     GENERAL_PROMPT_POLICY_ID,
     GENERAL_SEMANTIC_PROMPT_POLICY,
     STUDY_PROMPT_POLICY_ID,

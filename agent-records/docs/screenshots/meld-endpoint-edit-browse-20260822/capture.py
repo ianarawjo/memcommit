@@ -33,7 +33,7 @@ _BASE.ROWS = ROWS
 
 
 def _prepare_store(store_root: Path):
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root)

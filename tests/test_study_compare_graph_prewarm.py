@@ -2,8 +2,8 @@ import json
 from types import SimpleNamespace
 import uuid
 
-import memcommit.application.ops as ops
-import memcommit.application.evaluation.study_compare_graph_prewarm as graph_prewarm
+import memcommit.application.capabilities.ops as ops
+import memcommit.study_scenarios.legacy.prewarm.generation.compare_graph as graph_prewarm
 from memcommit.application.operations.compare.ledger.model import (
     ComparisonAnalysis,
     ComparisonMember,
@@ -11,7 +11,7 @@ from memcommit.application.operations.compare.ledger.model import (
     ComparisonReports,
 )
 from memcommit.core.context import Context
-from memcommit.application.evaluation.study_compare_graph_prewarm import (
+from memcommit.study_scenarios.legacy.prewarm.generation.compare_graph import (
     GraphPair,
     TaskGraphPlan,
     _identity_containment,
@@ -21,7 +21,9 @@ from memcommit.application.evaluation.study_compare_graph_prewarm import (
     project_pair_deletions,
     run_graph_prewarm,
 )
-from memcommit.application.evaluation.study_compare_exact_matrix import declared_exact_plans
+from memcommit.study_scenarios.legacy.prewarm.generation.compare_exact_matrix import (
+    declared_exact_plans,
+)
 from memcommit.providers.types import ProviderIdentity
 
 

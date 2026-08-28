@@ -8,14 +8,14 @@ import json
 from pathlib import Path
 import uuid
 
-from memcommit.application.authority.access import ContextAccess, resolve_context_access
+from memcommit.application.capabilities.authority.access import ContextAccess, resolve_context_access
 from memcommit.configuration.config import Config
 from memcommit.providers.policy import (
     resolve_operation_provider_policy,
 )
 from memcommit.core.context import Context
 from memcommit.core.context_targeting.naming import validate_portable_context_name
-from memcommit.application.authority.derived_policy import (
+from memcommit.application.capabilities.authority.derived_policy import (
     authorize_analysis_save,
     authorize_combination,
     authorize_derived_transfer,
@@ -494,7 +494,7 @@ def install_declared_sever_prewarms(
 def _local_output_access(store: MemoryStore, name: str):
     # Kept local to avoid broadening the public Context locator contract for a
     # require-new output name.
-    from memcommit.application.authority.access import ContextAccess
+    from memcommit.application.capabilities.authority.access import ContextAccess
 
     validate_portable_context_name(name)
     if store.context_exists(name):

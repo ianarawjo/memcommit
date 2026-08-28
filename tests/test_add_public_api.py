@@ -9,7 +9,7 @@ import pytest
 
 import memcommit
 import memcommit.adapters.python_api._operations.add as add_operation
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.python_api import (
     AddAuthorityError,
     AddConflictError,

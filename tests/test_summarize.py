@@ -7,16 +7,16 @@ import json
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.clipboard import ClipboardError
 import memcommit.adapters.console.commands.summarize.command as summarize_command
-from memcommit.adapters.console.commands.help_inventory.command import COMMAND_FORMS
+from memcommit.adapters.console.commands.help.command import COMMAND_FORMS
 from memcommit.adapters.console.entrypoint import app
 from memcommit.application.operations.compare.ledger.model import ComparisonInput
 from memcommit.application.operations.compare.ledger.provider import analyze_comparison
 from memcommit.core.context import Memory
 from memcommit.adapters.console.commands.summarize.workbench import SummarizeTuiOutcome
-from memcommit.application.reviewing.read_report import ReadReportRecent, ReadReportTarget
+from memcommit.application.capabilities.reviewing.read_report import ReadReportRecent, ReadReportTarget
 from memcommit.application.operations.summarize.model import (
     SUMMARIZE_OPERATION,
     SummarizeError,
@@ -24,7 +24,7 @@ from memcommit.application.operations.summarize.model import (
 )
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.summarize.application import SummarizeResult
-from memcommit.application.semantic.understanding import (
+from memcommit.application.capabilities.semantic.understanding import (
     UnderstandingSummary,
     parse_source_linked_understanding,
 )

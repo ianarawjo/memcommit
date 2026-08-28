@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from memcommit.adapters.interfaces.tui.viewers.semantic import (
+from memcommit.adapters.console.terminal.components.semantic_viewer import (
     SemanticViewerBlock,
     SemanticViewerController,
     SemanticViewerDocument,
@@ -10,7 +10,7 @@ from memcommit.adapters.interfaces.tui.viewers.semantic import (
     deactivate_semantic_viewer_fragments,
     semantic_viewer_block_fragments,
 )
-from memcommit.application.reviewing.session_navigation import SessionWorkbenchNavigation
+from memcommit.application.capabilities.reviewing.session_navigation import SessionWorkbenchNavigation
 
 
 def test_focus_styles_only_semantic_identity_and_anchors_complete_block():

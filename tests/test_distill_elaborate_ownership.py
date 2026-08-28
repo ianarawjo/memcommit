@@ -41,7 +41,6 @@ def test_production_consumers_use_operation_owners() -> None:
         "src/memcommit/adapters/console/commands/impact/process_local.py",
         "src/memcommit/application/operations/ground/distill.py",
         "src/memcommit/application/operations/ground/elaborate.py",
-        "src/memcommit/adapters/interfaces/cli/distill.py",
         "src/memcommit/adapters/console/commands/elaborate/proposal.py",
         "src/memcommit/adapters/console/commands/elaborate/runner.py",
         "src/memcommit/adapters/console/commands/elaborate/viewer/projection.py",

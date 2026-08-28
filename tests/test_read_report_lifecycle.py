@@ -15,12 +15,12 @@ from memcommit.persistence.command_ledger.attempts import (
     begin_command_attempt,
     finish_command_attempt,
 )
-from memcommit.adapters.interfaces.tui.workbenches.read_report import (
+from memcommit.adapters.console.terminal.components.read_report import (
     ReadReportSelectTarget,
     choose_read_report_recent,
 )
-from memcommit.application.reviewing.read_report import ReadReportError, ReadReportTarget
-from memcommit.application.reviewing.read_report_recents import (
+from memcommit.application.capabilities.reviewing.read_report import ReadReportError, ReadReportTarget
+from memcommit.application.capabilities.reviewing.read_report_recents import (
     read_report_recents,
     revalidate_read_report_recent,
 )

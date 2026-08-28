@@ -10,7 +10,7 @@ from memcommit.application.operations.atomize.workbench import (
     atomize_workbench_issue_projection,
     project_atomize_workbench_findings,
 )
-from memcommit.application.resolution.workbench import (
+from memcommit.application.capabilities.resolution.workbench import (
     ResolutionDetailBlock,
     ResolutionContextLocation,
     ResolutionIssueEvidence,
@@ -24,7 +24,7 @@ from memcommit.application.resolution.workbench import (
     ResolutionWorkbenchView,
     resolution_overview_text,
 )
-from memcommit.application.reviewing.result_workbench import ResultRef
+from memcommit.application.capabilities.reviewing.result_workbench import ResultRef
 
 
 def _priority_label(finding: AtomizeWorkbenchFinding) -> str:

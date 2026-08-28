@@ -9,7 +9,7 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.adapters.console.commands.compare.command as compare_command
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.application.operations.compare.ledger.model import ComparisonInput
 from memcommit.core.context import MemoryRef

@@ -10,12 +10,18 @@ behavior. Adding a Query-only binding would have repeated the same nested
 Application lifecycle in every later session.
 
 Session Help is therefore one operation-neutral handoff implemented by
-`memcommit.adapters.console.shared.session_help`. It is adopted by Query, Find search and
+`memcommit.adapters.console.terminal.components.session_help`. It is adopted by Query, Find search and
 chat, Compare, Result, the shared Resolution workbench, and both blank and
 named Ground shells. Resolution covers Meld, Sever, Update, Atomize, Forget,
 Impact, and adaptive Review without operation-specific bindings. The common
 command-wait screen now uses the same controller while retaining its special
 result-ready behavior.
+
+That terminal component is the physical implementation, not a facade over an
+operation-shaped `interfaces.tui` module. The Help command registers its
+inventory builder and selector as the component backend after defining them;
+the component itself imports no command module. Reusable primitives therefore
+remain below the command layer while the command retains Help catalog meaning.
 
 SessionPicker, setup screens, Context/Profile/history pickers, exact-name
 dialogs, and paste controls remain outside this rollout. They are launchers or

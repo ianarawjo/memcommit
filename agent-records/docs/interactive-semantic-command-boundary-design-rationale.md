@@ -20,11 +20,20 @@ The final Apply is deliberately not another command line. It consumes the
 already reviewed session snapshot through the operation's existing optimistic
 concurrency and authority checks.
 
-## Authored classification
+## Interaction classification
 
-`memcommit.interactive_command.INTERACTIVE_COMMAND_SURFACES` is the sole code
-catalog for this interactive command policy. Each surface declares a role,
-binding, approval mechanism, and rebuild triggers.
+START, TURN, RECEIPT, and NONE are vocabulary for describing the interaction
+boundary, not a parallel runtime registry. The concrete operation command
+builders and the screens that consume them are the authored implementation.
+Their tests must verify the displayed argv, revision binding, approval path,
+and commandless Apply boundary directly.
+
+The shared console boundary lives at
+`memcommit.adapters.console.coordination.command_review`. Its `model` owns the
+immutable `CommandReview`; the `meld`, `update`, and `sever` modules each
+project their operation-specific START and TURN state through the same
+`build_start_review` and `build_turn_review` names. Rendering and input remain
+presentation mechanics outside those projections.
 
 | Role | Binding | Rebuild rule | Approval |
 | --- | --- | --- | --- |
@@ -114,12 +123,20 @@ identity shown by this TUI stage.
 
 ## Remaining boundaries
 
-The command catalog classifies interaction semantics; it is not an operation
-route-state ledger and does not replace operation evidence. Draft persistence,
-provider batching, response schema, destination changes, authority, cache
-reuse, final materialization, and Undo remain operation-owned. `RECEIPT` is
-available for future already-submitted read actions but is not used to relabel
-final Apply.
+These interaction roles are not an operation route-state ledger and do not
+replace operation evidence. Draft persistence, provider batching, response
+schema, destination changes, authority, cache reuse, final materialization,
+and Undo remain operation-owned. A receipt describes an already-submitted
+action and is not used to relabel final Apply.
+
+## 2026-08-28 disconnected registry retirement
+
+The standalone `interactive_command` registry was removed. No production
+screen or execution route read it, and its tests checked only the registry's
+own declarations, so it could remain green while the concrete builders or
+screens diverged. The role vocabulary above remains useful design language,
+while executable evidence now belongs beside the real operation-specific
+command projection and its consuming interaction surface.
 
 ## 2026-08-20 lifecycle clarification
 

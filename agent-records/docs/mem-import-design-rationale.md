@@ -21,6 +21,24 @@ record, preserves Context and Memory UUIDs, records the local import operation,
 and never establishes synchronization with its source. `branch`, grants, and
 references remain separate lineage or live-access mechanisms.
 
+## Application ownership
+
+The canonical application package is
+`memcommit.application.operations.mem_import`. The name mirrors the public
+`mem import` operation while avoiding Python's reserved `import` keyword.
+Within that package, `contracts.py` owns the immutable preview and result
+types, while `profile.py`, `context.py`, and `memory.py` own the three resource
+flows. `_shared.py` contains only their common source/destination identity
+checks. Dependencies point from each resource flow toward contracts and shared
+checks; one resource module does not reach through another for implementation.
+
+The former `resource_import.model` path remains an implementation-free
+compatibility façade. The former Profile-model baseline names are also lazy
+aliases, but clean baseline selection, digesting, staging, publication, and
+rollback are canonically owned by `mem_import.profile`. This keeps the public
+command's complete Profile flow together and prevents the Study lifecycle from
+owning a general import primitive.
+
 ## Command grammar
 
 The explicit forms are:
@@ -71,7 +89,7 @@ control, then composes the shared Save Location parent browser with direct
 exact-name input. Memory setup selects one directly owned Memory in the source
 tree and one existing ordinary destination Context in the active Profile. A
 Profile import edits one fresh exact Profile name. Every branch ends at an
-`ExactCommandReview`. The completed review uses the repository-wide
+`CommandReview`. The completed review uses the repository-wide
 final-action contract:
 `Enter` approves, while `A` remains a compatibility alias. Because the
 standalone review contains no other focusable action, Enter cannot be confused

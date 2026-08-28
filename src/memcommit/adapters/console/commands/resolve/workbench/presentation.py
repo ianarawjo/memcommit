@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-from memcommit.adapters.console.text import safe_terminal_text
-from memcommit.adapters.console.tui.components.exact_command_review import (
-    ExactCommandReview,
+from memcommit.adapters.console.terminal.core.text import safe_terminal_text
+from memcommit.adapters.console.terminal.components.exact_command_review import (
+    CommandReview,
 )
-from memcommit.adapters.interfaces.tui.viewers.semantic import (
+from memcommit.adapters.console.terminal.components.semantic_viewer import (
     SemanticViewerBlock,
     SemanticViewerDocument,
     SemanticViewerSection,
@@ -15,7 +15,7 @@ from memcommit.application.operations.resolve.application import (
     ResolveAnalysis,
     ResolveCandidate,
 )
-from memcommit.application.resolution.workbench import (
+from memcommit.application.capabilities.resolution.workbench import (
     ResolutionItem,
     ResolutionOption,
     ResolutionWorkbenchView,
@@ -221,7 +221,7 @@ def _candidate_argv(
 def resolve_candidate_exact_review(
     analysis: ResolveAnalysis,
     candidate: ResolveCandidate,
-) -> ExactCommandReview:
+) -> CommandReview:
     """Describe the exact candidate hash, effects, and recovery boundary."""
 
     effect_lines = tuple(
@@ -237,7 +237,7 @@ def resolve_candidate_exact_review(
         )
         for effect in candidate.effects
     )
-    return ExactCommandReview(
+    return CommandReview(
         argv=_candidate_argv(analysis, candidate),
         effects=(
             f"Context revision · {analysis.frame.revision}.",

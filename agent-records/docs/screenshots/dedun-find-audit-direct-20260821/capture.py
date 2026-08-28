@@ -318,7 +318,7 @@ def _run_find_exact_child() -> None:
 
 def _run_audit_child() -> None:
     import memcommit.adapters.console.commands.audit.command as audit_command
-    from memcommit.application.reviewing.quality.audit_store import QualityAuditStore
+    from memcommit.application.capabilities.reviewing.quality.audit_store import QualityAuditStore
     from memcommit.persistence.store import MemoryStore
 
     context_name = "quality/direct-audit"
@@ -515,7 +515,7 @@ def _capture_audit() -> None:
         assert "… 1 more" in receipt
         assert "Review full audit:" in receipt
         assert "mem review audit --session" in receipt
-        from memcommit.adapters.console.theme import (
+        from memcommit.adapters.console.terminal.core.theme import (
             SemanticColorRole,
             memory_object_color_rgb,
             semantic_color_rgb,
@@ -569,7 +569,7 @@ def main() -> None:
     assert "\x1b[32m" in raw
     assert "\x1b[33m" in raw
     sys.path.insert(0, str(ROOT / "src"))
-    from memcommit.adapters.console.theme import (
+    from memcommit.adapters.console.terminal.core.theme import (
         SemanticColorRole,
         semantic_color_rgb,
     )

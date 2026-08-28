@@ -1,5 +1,10 @@
 # MCP stdio server design rationale
 
+Status: RETIRED on 2026-08-27. The `mem-mcp` entry point and optional SDK
+dependency were removed; see
+`agent-adapter-ownership-and-mcp-retirement-design-rationale.md`. The remaining
+content is historical evidence, not a current support claim.
+
 Last verified: 2026-08-15.
 
 ## Motivation

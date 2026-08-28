@@ -7,12 +7,12 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Context, Memory
 from memcommit.core.context_targeting.tui.picker import ContextMemoryRow
 from memcommit.application.operations.edit.application import EditRequest, FrozenEditPlan
-from memcommit.adapters.console.tui.components.exact_command_review import (
+from memcommit.adapters.console.terminal.components.exact_command_review import (
     format_exact_command,
 )
 from memcommit.adapters.console.commands.edit.workbench import (

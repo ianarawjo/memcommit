@@ -11,8 +11,8 @@ from typing import Annotated, Callable, Optional
 import typer
 
 from memcommit.persistence.command_ledger.attempts import current_command_attempt_uid
-from memcommit.adapters.console.shared.command_progress import CommandProgress
-from memcommit.adapters.console.shared.command_group import CanonicalCommandGroup
+from memcommit.adapters.console.terminal.components.progress import CommandProgress
+from memcommit.adapters.console.coordination.command_group import CanonicalCommandGroup
 from memcommit.adapters.console.commands.profile.group import ProfileAliasGroup
 from memcommit.adapters.console.commands.profile.picker import (
     ProfilePickerAction,
@@ -20,10 +20,10 @@ from memcommit.adapters.console.commands.profile.picker import (
     ProfilePickerRefresh,
     choose_profile,
 )
-from memcommit.adapters.console.text import (
+from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
-from memcommit.adapters.console.theme import (
+from memcommit.adapters.console.terminal.core.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )
@@ -1362,7 +1362,7 @@ def migrate_context_cmd(
         if apply_migration:
             _fail(
                 ProfileError(
-                    "Context migration is blocked by cross-Profile Grants that "
+                    "Context migration is blocked by frozen cross-Profile Grants that "
                     "still reference the current name."
                 )
             )

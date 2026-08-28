@@ -29,27 +29,27 @@ from memcommit.adapters.console.commands.find.presentation import (
     project_find_match,
     render_find_result,
 )
-from memcommit.adapters.console.terminal import require_interactive_terminal
-from memcommit.adapters.console.text import safe_terminal_text
+from memcommit.adapters.console.terminal.core.capabilities import require_interactive_terminal
+from memcommit.adapters.console.terminal.core.text import safe_terminal_text
 from memcommit.adapters.console.commands.find.source_row import (
     render_find_reference_row,
 )
-from memcommit.adapters.console.tui.components.focus import (
+from memcommit.adapters.console.terminal.components.focus import (
     FocusSurface,
     SurfaceFocusController,
     bind_surface_navigation,
 )
-from memcommit.adapters.console.tui.components.frame import (
+from memcommit.adapters.console.terminal.components.frame import (
     TuiRegion,
     build_focused_frame,
     build_tui_frame,
 )
-from memcommit.adapters.console.tui.components.horizontal_choice import (
+from memcommit.adapters.console.terminal.components.horizontal_choice import (
     HorizontalChoiceOption,
     HorizontalChoiceState,
     render_horizontal_choice,
 )
-from memcommit.adapters.console.tui.core.theme import (
+from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
     focused_control_style,

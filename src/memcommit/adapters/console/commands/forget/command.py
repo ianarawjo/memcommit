@@ -4,17 +4,17 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
-from memcommit.adapters.console.shared.command_wait import run_command_wait
-from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
-from memcommit.application.authority.access import (
+from memcommit.adapters.console.terminal.components.command_wait import run_command_wait
+from memcommit.adapters.console.coordination.context_operand import ContextOperandSnapshot
+from memcommit.application.capabilities.authority.access import (
     context_access_display_facts,
     resolve_context_access,
 )
-from memcommit.adapters.console.shared.readable_context_catalog import (
+from memcommit.core.context_targeting.readable_catalog import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.adapters.console.commands.forget.receipt import render_forget_change_lines
-from memcommit.adapters.console.text import (
+from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
     safe_terminal_text,
 )
@@ -41,7 +41,7 @@ from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.providers.types import SemanticProvider
 from memcommit.providers.subscription import QueryProviderError
-from memcommit.application.semantic.changes import ProposedChange
+from memcommit.application.capabilities.semantic.changes import ProposedChange
 from memcommit.persistence.store import MemoryStore
 
 

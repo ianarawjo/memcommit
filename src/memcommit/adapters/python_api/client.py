@@ -75,7 +75,7 @@ from memcommit.adapters.python_api.semantic import (
     FitPropositionInput,
 )
 from memcommit.core.context import QueryContextRef
-from memcommit.application.reviewing.quality.handoff import QualityFindingHandoff
+from memcommit.application.capabilities.reviewing.quality.handoff import QualityFindingHandoff
 from memcommit.application.operations.profile.config import (
     ProfileConfigError,
     ProfileEntry,

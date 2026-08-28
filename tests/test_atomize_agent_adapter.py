@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.python_api import (
     AtomizeAnalysisResult,
     AtomizeAppliedItemResult,
@@ -24,13 +24,12 @@ from memcommit.adapters.python_api import (
     AtomizeStructuralApplyResult,
     MemCommitClient,
 )
-from memcommit.adapters.interfaces.agent.atomize import (
+from memcommit.adapters.agent.atomize import (
     ATOMIZE_AGENT_TOOL_NAME,
     AtomizeAgentAdapter,
     atomize_agent_tool_schema,
 )
-from memcommit.adapters.interfaces.agent.registry import build_default_agent_tool_registry
-from memcommit.adapters.interfaces.mcp import McpRegistryProjection
+from memcommit.adapters.agent.registry import build_default_agent_tool_registry
 from memcommit.persistence.store import MemoryStore
 
 
@@ -647,27 +646,31 @@ def test_real_registry_rejects_unknown_revision_without_provider_or_checkpoint(
     assert store.list_checkpoints(context.name) == []
 
 
-def test_default_registry_projects_and_calls_atomize_through_mcp(
+def test_default_registry_discovers_and_calls_atomize(
     tmp_path,
     monkeypatch,
 ):
     client = MemCommitClient(root=tmp_path / "store")
     monkeypatch.setattr(client, "open_atomize_analysis", lambda **kwargs: _proposal())
-    projection = McpRegistryProjection(build_default_agent_tool_registry(client))
+    registry = build_default_agent_tool_registry(client)
 
-    definitions = {tool.name: tool for tool in projection.list_tools()}
-    result = projection.call_tool(
+    definitions = {
+        definition.tool_schema["name"]: definition
+        for definition in registry.tool_definitions()
+    }
+    result = registry.invoke(
         ATOMIZE_AGENT_TOOL_NAME,
         {"version": 1, "kind": "open", "context_name": "task/source"},
     )
 
     assert ATOMIZE_AGENT_TOOL_NAME in definitions
-    assert definitions[ATOMIZE_AGENT_TOOL_NAME].input_schema["oneOf"][0][
-        "properties"
-    ]["kind"] == {"type": "string", "const": "open"}
-    assert result.is_error is False
-    assert result.structured_content["result"]["analysis_uid"] == "analysis-1"
-    assert json.loads(result.content_text) == result.structured_content
+    parameters = definitions[ATOMIZE_AGENT_TOOL_NAME].tool_schema["parameters"]
+    assert parameters["oneOf"][0]["properties"]["kind"] == {
+        "type": "string",
+        "const": "open",
+    }
+    assert result["ok"] is True
+    assert result["result"]["analysis_uid"] == "analysis-1"
 
 
 def test_adapter_imports_only_public_api_and_shared_agent_contract():
@@ -675,7 +678,6 @@ def test_adapter_imports_only_public_api_and_shared_agent_contract():
         Path(__file__).parents[1]
         / "src" / "memcommit"
         / "adapters"
-        / "interfaces"
         / "agent"
         / "atomize.py"
     )
@@ -687,7 +689,7 @@ def test_adapter_imports_only_public_api_and_shared_agent_contract():
     ]
 
     assert "memcommit.adapters.python_api" in imported
-    assert "memcommit.adapters.interfaces.agent.contract" in imported
+    assert "memcommit.adapters.agent.contract" in imported
     assert not any(
         name.startswith(
             (
@@ -696,7 +698,6 @@ def test_adapter_imports_only_public_api_and_shared_agent_contract():
                 "memcommit.atomize_application",
                 "memcommit.application.operations.atomize",
                 "memcommit.store",
-                "memcommit.adapters.interfaces.mcp",
             )
         )
         for name in imported

@@ -8,7 +8,7 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
-from memcommit.adapters.console.text import (
+from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
 from memcommit.application.operations.profile.config import ProfileConfigError
@@ -81,7 +81,7 @@ def cmd(
                 run_share_unavailable_viewer,
                 run_share_viewer,
             )
-            from memcommit.application.reviewing.session_navigation import (
+            from memcommit.application.capabilities.reviewing.session_navigation import (
                 SessionWorkbenchNavigation,
             )
 

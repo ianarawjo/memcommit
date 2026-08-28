@@ -14,7 +14,7 @@ from memcommit.application.operations.search.answer_references import (
     SearchAnswerSentence,
 )
 from memcommit.providers.subscription import QueryProviderError
-from memcommit.application.semantic_execution import (
+from memcommit.application.capabilities.semantic_execution import (
     BudgetLimits,
     BudgetVector,
     ExecutionMode,

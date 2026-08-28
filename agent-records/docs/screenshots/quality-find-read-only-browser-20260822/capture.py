@@ -68,7 +68,7 @@ def _source(kind: str):
 
 
 def _session(kind: str, *, empty: bool = False):
-    from memcommit.application.reviewing.quality.findings import (
+    from memcommit.application.capabilities.reviewing.quality.findings import (
         AmbiguityFinding,
         AmbiguityReport,
         ConflictFinding,
@@ -76,7 +76,7 @@ def _session(kind: str, *, empty: bool = False):
         DuplicateFinding,
         DuplicateReport,
     )
-    from memcommit.application.reviewing.quality.workbench import create_quality_find_workbench
+    from memcommit.application.capabilities.reviewing.quality.workbench import create_quality_find_workbench
 
     context, (first, second, third) = _source(kind)
     if kind == "ambiguities":
@@ -154,8 +154,8 @@ def _session(kind: str, *, empty: bool = False):
 
 
 def _run_child(kind: str) -> None:
-    from memcommit.adapters.interfaces.tui.workbenches.findings import run_quality_find_browser
-    from memcommit.application.reviewing.quality.workbench import quality_find_report_view
+    from memcommit.adapters.console.terminal.components.findings import run_quality_find_browser
+    from memcommit.application.capabilities.reviewing.quality.workbench import quality_find_report_view
 
     empty = kind == "empty"
     report_kind = "ambiguities" if empty else kind

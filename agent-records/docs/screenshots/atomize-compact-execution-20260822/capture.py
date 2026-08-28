@@ -38,7 +38,7 @@ class _StreamRecorder(io.StringIO):
 
 
 def _view():
-    from memcommit.application.resolution.workbench import (
+    from memcommit.application.capabilities.resolution.workbench import (
         ResolutionItem,
         ResolutionOption,
         ResolutionWorkbenchView,
@@ -85,11 +85,11 @@ def _view():
 
 
 def _run_child() -> None:
-    from memcommit.adapters.console.tui.components.save_location import SaveLocationView
-    from memcommit.adapters.interfaces.tui.workbenches.resolution.compact_shell import (
+    from memcommit.adapters.console.terminal.components.save_location import SaveLocationView
+    from memcommit.adapters.console.terminal.components.resolution.compact_shell import (
         run_compact_resolution_decisions,
     )
-    from memcommit.application.resolution.workbench import ResolutionWorkbenchAction
+    from memcommit.application.capabilities.resolution.workbench import ResolutionWorkbenchAction
 
     size = os.get_terminal_size()
     if (size.columns, size.lines) != (COLUMNS, ROWS):

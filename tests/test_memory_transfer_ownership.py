@@ -58,7 +58,7 @@ assert "memcommit.application.operations.memory_transfer.runtime" not in sys.mod
     )
 
 
-def test_copy_and_move_own_commands_while_transfer_mechanics_stay_shared() -> None:
+def test_copy_and_move_own_commands_while_transfer_mechanics_stay_coordinated() -> None:
     console = REPOSITORY_ROOT / "src/memcommit/adapters/console"
     interfaces = REPOSITORY_ROOT / "src/memcommit/adapters/interfaces"
 
@@ -68,14 +68,15 @@ def test_copy_and_move_own_commands_while_transfer_mechanics_stay_shared() -> No
         assert (root / "command.py").is_file()
         assert (root / "setup.py").is_file()
         assert (root / "receipt.py").is_file()
-    shared = console / "shared" / "memory_transfer"
-    assert {path.name for path in shared.glob("*.py")} == {
+    coordination = console / "coordination" / "memory_transfer"
+    assert {path.name for path in coordination.glob("*.py")} == {
         "__init__.py",
         "arguments.py",
         "model.py",
         "receipt.py",
-        "workbench.py",
     }
+    assert (console / "terminal" / "components" / "memory_transfer.py").is_file()
+    assert not (console / "shared").exists()
     assert not (interfaces / "cli" / "memory_transfer.py").exists()
     assert not tuple(
         (interfaces / "tui" / "operations" / "memory_transfer").glob("*.py")

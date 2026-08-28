@@ -46,9 +46,11 @@ def test_production_sever_consumers_use_the_operation_owner() -> None:
         "src/memcommit/application/operations/sever/session_store.py",
         "src/memcommit/application/operations/sever/runtime.py",
         "src/memcommit/application/operations/review/report_adapters.py",
-        "src/memcommit/persistence/store/operation_state.py",
-        "src/memcommit/persistence/store/context_memory.py",
+        "src/memcommit/persistence/store/operation_state",
+        "src/memcommit/persistence/store/context_memory",
         "src/memcommit/persistence/store/record_restore_checkpoint.py",
+        "src/memcommit/persistence/store/checkpoint",
+        "src/memcommit/persistence/store/command_restoration",
     )
     legacy_imports = (
         "from memcommit.sever import",
@@ -60,5 +62,8 @@ def test_production_sever_consumers_use_the_operation_owner() -> None:
     )
 
     for relative_path in relative_paths:
-        source = (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
-        assert not [legacy for legacy in legacy_imports if legacy in source]
+        path = REPOSITORY_ROOT / relative_path
+        paths = tuple(sorted(path.rglob("*.py"))) if path.is_dir() else (path,)
+        for source_path in paths:
+            source = source_path.read_text(encoding="utf-8")
+            assert not [legacy for legacy in legacy_imports if legacy in source]

@@ -18,12 +18,12 @@ from memcommit.core.context import (
     MemoryRef,
     QueryContextRef,
 )
-from memcommit.application.retained_history.context_snapshot import ContextSnapshotRef
+from memcommit.application.capabilities.retained_history.context_snapshot import ContextSnapshotRef
 from memcommit.core.context_targeting.presets import (
     ContextScopePreset,
     resolve_scope_preset,
 )
-from memcommit.application.authority.access import (
+from memcommit.application.capabilities.authority.access import (
     ContextAccess,
     GrantedReadStore,
     attached_grants,
@@ -32,20 +32,20 @@ from memcommit.application.authority.access import (
     resolve_context_access,
     revalidate_granted_context_binding,
 )
-from memcommit.adapters.console.shared.readable_context_catalog import (
+from memcommit.core.context_targeting.readable_catalog import (
     ReadableContextCatalog,
     freeze_profile_readable_context_catalog,
     freeze_readable_context_catalog,
 )
-from memcommit.adapters.console.identity import collision_safe_uid_prefixes
-from memcommit.adapters.console.text import (
+from memcommit.adapters.console.terminal.core.identity import collision_safe_uid_prefixes
+from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
 from memcommit.application.operations.profile.config import AuthorityGrant, ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.update.model import GrantedUpdateTarget
-from memcommit.application.authority.study_operation_policy import analysis_boundary_label
+from memcommit.application.capabilities.authority.study_operation_policy import analysis_boundary_label
 from memcommit.source_projection.model import (
     SourceDisplayFacts,
     SourceForm,

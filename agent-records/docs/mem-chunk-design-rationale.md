@@ -4,7 +4,7 @@ Chunk's implementation owner is now the `memcommit.application.operations.chunk`
 `domain` owns mechanical text splitting, `application` owns direct-Memory
 resolution and replacement construction, and `runtime` owns authorized
 checkpointed publication. The former `memcommit.chunking` path is an identity
-alias and `memcommit.application.ops.chunk` is the same application function, preserving
+alias and `memcommit.application.capabilities.ops.chunk` is the same application function, preserving
 public compatibility through a lazy adapter without retaining a second
 behavior owner. See
 `chunk-application-boundary-matrix.md` for the reviewed dependency boundary.

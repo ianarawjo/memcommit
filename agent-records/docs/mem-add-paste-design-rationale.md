@@ -80,16 +80,16 @@ Escape and Ctrl-C both cancel capture without returning any concealed payload;
 F2 or Ctrl-D remains the only path that returns the batch for Add.
 
 The terminal capture component is owned by
-`memcommit.adapters.console.tui.components.paste_input`. The historical
-`memcommit.adapters.console.shared.paste_input` import remains an identity-preserving
-compatibility alias so existing imports and monkeypatches continue to target
-the same module globals. This is an ownership-only relocation: key bindings,
+`memcommit.adapters.console.terminal.components.paste_input`. The historical
+`memcommit.adapters.console.coordination.paste_input` facade is removed, so imports
+and monkeypatches target the canonical component directly. This is an
+ownership-only relocation: key bindings,
 paste normalization, TTY checks, cancellation and failure behavior, and the
 no-payload-echo boundary are unchanged.
 
 The source contract and record grammars have different owners. The shared
 UTF-8 file/stdin reader lives in
-`memcommit.adapters.console.shared.batch_input_source`; Add's stripped,
+`memcommit.adapters.console.coordination.batch_input_source`; Add's stripped,
 non-empty line grammar lives in `commands.add.input_records`, and Edit's
 first-tab grammar lives in `commands.edit.input_records`. The former
 `interfaces.cli.batch_input` owner and intermediate `console.shared.batch_input`

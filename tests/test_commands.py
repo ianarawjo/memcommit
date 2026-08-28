@@ -14,11 +14,11 @@ from prompt_toolkit.output import DummyOutput
 from typer.main import get_command
 from typer.testing import CliRunner
 
-import memcommit.adapters.console.commands.help_inventory.command as help_inventory
-import memcommit.application.ops as ops
+import memcommit.adapters.console.commands.help.command as help_inventory
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.branch.receipt import BranchCreationReceipt
-from memcommit.adapters.console.commands.help_inventory.command import CommandEntry, run_help_selector
+from memcommit.adapters.console.commands.help.command import CommandEntry, run_help_selector
 from memcommit.persistence.store import MemoryStore
 
 runner = CliRunner(mix_stderr=False)
@@ -2177,9 +2177,9 @@ class TestContexts:
         invoke("switch", "alpha")
         result = invoke("contexts")
         assert result.exit_code == 0
-        # Current context has the * prefix; others don't.
-        assert "* alpha" in result.output
-        assert "* beta" not in result.output
+        # The ownership column stays aligned with GRANT rows, after the marker.
+        assert "*        alpha" in result.output
+        assert "*        beta" not in result.output
 
 
 # ---------------------------------------------------------------------------
@@ -2442,7 +2442,8 @@ class TestStatus:
     def test_shows_no_memories_message_when_empty(self, isolated_store):
         invoke("init", "ctx")
         result = invoke("status")
-        assert "no direct Memories" in result.output
+        assert "Inventory · Checkpoints 1" in result.output
+        assert "Memories " not in result.output
 
     def test_no_current_context_exits_cleanly(self, isolated_store):
         result = invoke("status")
@@ -2467,7 +2468,7 @@ class TestLog:
     def test_no_checkpoints_message_on_fresh_context(self, isolated_store):
         # Bypass the CLI to create a context with no checkpoints.
         from memcommit.persistence.store import MemoryStore
-        import memcommit.application.ops as ops
+        import memcommit.application.capabilities.ops as ops
 
         store = MemoryStore()
         ctx = ops.init("bare")

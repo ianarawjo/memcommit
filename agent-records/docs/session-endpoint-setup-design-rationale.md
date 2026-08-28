@@ -362,7 +362,7 @@ The implementation has three layers:
    remains operation-neutral.
 
 The Endpoint Setup composition lives under
-`memcommit.adapters.console.tui.components.endpoint_setup` and imports the narrow
+`memcommit.adapters.console.terminal.components.endpoint_setup` and imports the narrow
 Context targeting controls it needs. `ContextTreeState` remains the sole owner
 of namespace cursor and expansion mechanics, and `ContextSelectionState`
 remains the checked-value owner. The setup shell composes them rather than

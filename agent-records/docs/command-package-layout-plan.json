@@ -1,7 +1,8 @@
 {
+  "active_module_count": 152,
   "baseline_commit": "f8c54a56",
   "baseline_module_count": 153,
-  "entry_package_count": 64,
+  "entry_package_count": 63,
   "modules": [
     {
       "canonical_module": "memcommit.adapters.console.commands.add.command",
@@ -66,16 +67,16 @@
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.background_turn",
+      "canonical_module": "memcommit.adapters.console.terminal.components.background_turn",
       "legacy_module": "memcommit.commands.background_turn",
-      "owner": "shared",
+      "owner": "terminal",
       "public_exports": [],
-      "role": "shared-command-mechanism"
+      "role": "shared-terminal-component"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.batch_input_source",
+      "canonical_module": "memcommit.adapters.console.coordination.batch_input_source",
       "legacy_module": "memcommit.commands.batch_input",
-      "owner": "shared",
+      "owner": "coordination",
       "public_exports": [],
       "role": "shared-command-mechanism"
     },
@@ -114,11 +115,11 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.checkpoint_diff",
+      "canonical_module": "memcommit.adapters.console.terminal.components.history.checkpoint_diff",
       "legacy_module": "memcommit.commands.checkpoint_diff",
-      "owner": "shared",
+      "owner": "terminal",
       "public_exports": [],
-      "role": "shared-command-mechanism"
+      "role": "shared-terminal-component"
     },
     {
       "canonical_module": "memcommit.adapters.console.commands.chunk.command",
@@ -139,25 +140,25 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.command_group",
+      "canonical_module": "memcommit.adapters.console.coordination.command_group",
       "legacy_module": "memcommit.commands.command_group",
-      "owner": "shared",
+      "owner": "coordination",
       "public_exports": [],
       "role": "shared-command-mechanism"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.command_progress",
+      "canonical_module": "memcommit.adapters.console.terminal.components.progress",
       "legacy_module": "memcommit.commands.command_progress",
-      "owner": "shared",
+      "owner": "terminal",
       "public_exports": [],
-      "role": "shared-command-mechanism"
+      "role": "shared-terminal-component"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.command_wait",
+      "canonical_module": "memcommit.adapters.console.terminal.components.command_wait",
       "legacy_module": "memcommit.commands.command_wait",
-      "owner": "shared",
+      "owner": "terminal",
       "public_exports": [],
-      "role": "shared-command-mechanism"
+      "role": "shared-terminal-component"
     },
     {
       "canonical_module": "memcommit.adapters.console.commands.compare.command",
@@ -222,25 +223,25 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.context_operand",
+      "canonical_module": "memcommit.adapters.console.coordination.context_operand",
       "legacy_module": "memcommit.commands.context_operand",
-      "owner": "shared",
+      "owner": "coordination",
       "public_exports": [],
       "role": "shared-command-mechanism"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.context_picker",
+      "canonical_module": "memcommit.core.context_targeting.tui.picker",
       "legacy_module": "memcommit.commands.context_picker",
-      "owner": "shared",
+      "owner": "context_targeting",
       "public_exports": [],
-      "role": "shared-command-mechanism"
+      "role": "shared-context-targeting"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.context_reach_dialog",
+      "canonical_module": "memcommit.adapters.console.terminal.components.context_reach_dialog",
       "legacy_module": "memcommit.commands.context_reach_dialog",
-      "owner": "shared",
+      "owner": "terminal",
       "public_exports": [],
-      "role": "shared-command-mechanism"
+      "role": "shared-terminal-component"
     },
     {
       "canonical_module": "memcommit.adapters.console.commands.trace.context_projection",
@@ -304,18 +305,18 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.diff_browser",
+      "canonical_module": "memcommit.adapters.console.terminal.components.history.browser",
       "legacy_module": "memcommit.commands.diff_browser",
-      "owner": "shared",
+      "owner": "terminal",
       "public_exports": [],
-      "role": "shared-command-mechanism"
+      "role": "shared-terminal-component"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.direct_item_placement",
+      "canonical_module": "memcommit.adapters.console.terminal.components.direct_item_placement",
       "legacy_module": "memcommit.commands.direct_item_placement",
-      "owner": "shared",
+      "owner": "terminal",
       "public_exports": [],
-      "role": "shared-command-mechanism"
+      "role": "shared-terminal-component"
     },
     {
       "canonical_module": "memcommit.adapters.console.commands.distill.command",
@@ -352,32 +353,32 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.endpoint_setup_flows",
+      "canonical_module": "memcommit.adapters.console.terminal.components.endpoint_setup.flows",
       "legacy_module": "memcommit.commands.endpoint_setup_flows",
-      "owner": "shared",
+      "owner": "terminal",
       "public_exports": [],
-      "role": "shared-command-mechanism"
+      "role": "shared-terminal-component"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.exact_command_review",
+      "canonical_module": "memcommit.adapters.console.coordination.command_review",
       "legacy_module": "memcommit.commands.exact_command_review",
-      "owner": "shared",
+      "owner": "coordination",
       "public_exports": [],
       "role": "shared-command-mechanism"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.exact_command_review_shell",
+      "canonical_module": "memcommit.adapters.console.terminal.components.exact_command_review.shell",
       "legacy_module": "memcommit.commands.exact_command_review_shell",
-      "owner": "shared",
+      "owner": "terminal",
       "public_exports": [],
-      "role": "shared-command-mechanism"
+      "role": "shared-terminal-component"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.exact_name_dialog",
+      "canonical_module": "memcommit.adapters.console.terminal.components.exact_name_dialog",
       "legacy_module": "memcommit.commands.exact_name_dialog",
-      "owner": "shared",
+      "owner": "terminal",
       "public_exports": [],
-      "role": "shared-command-mechanism"
+      "role": "shared-terminal-component"
     },
     {
       "canonical_module": "memcommit.adapters.console.commands.search.command",
@@ -453,11 +454,11 @@
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.findings_render",
+      "canonical_module": "memcommit.adapters.console.terminal.components.quality_find.rendering",
       "legacy_module": "memcommit.commands.findings_render",
-      "owner": "shared",
+      "owner": "terminal",
       "public_exports": [],
-      "role": "shared-command-mechanism"
+      "role": "shared-terminal-component"
     },
     {
       "canonical_module": "memcommit.adapters.console.commands.fit.command",
@@ -469,11 +470,11 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.flat_selection_dialog",
+      "canonical_module": "memcommit.adapters.console.terminal.components.flat_selection_dialog",
       "legacy_module": "memcommit.commands.flat_selection_dialog",
-      "owner": "shared",
+      "owner": "terminal",
       "public_exports": [],
-      "role": "shared-command-mechanism"
+      "role": "shared-terminal-component"
     },
     {
       "canonical_module": "memcommit.adapters.console.commands.forget.command",
@@ -522,55 +523,55 @@
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.ground.workspace_picker",
+      "canonical_module": "memcommit.adapters.console.commands.ground.workspace.catalog",
       "legacy_module": "memcommit.commands.ground_workspace_picker",
       "owner": "ground",
       "public_exports": [],
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.help_inventory.command",
+      "canonical_module": "memcommit.adapters.console.commands.help.command",
       "legacy_module": "memcommit.commands.help_inventory",
-      "owner": "help_inventory",
+      "owner": "help",
       "public_exports": [
         "cmd"
       ],
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.history_location_picker",
+      "canonical_module": "memcommit.adapters.console.terminal.components.checkpoint_location",
       "legacy_module": "memcommit.commands.history_location_picker",
-      "owner": "shared",
+      "owner": "terminal",
       "public_exports": [],
-      "role": "shared-command-mechanism"
+      "role": "shared-terminal-component"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.history_picker",
+      "canonical_module": "memcommit.adapters.console.terminal.components.history.picker",
       "legacy_module": "memcommit.commands.history_picker",
-      "owner": "shared",
+      "owner": "terminal",
       "public_exports": [],
-      "role": "shared-command-mechanism"
+      "role": "shared-terminal-component"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.history_present",
+      "canonical_module": "memcommit.adapters.console.terminal.components.history.presentation",
       "legacy_module": "memcommit.commands.history_present",
-      "owner": "shared",
+      "owner": "terminal",
       "public_exports": [],
-      "role": "shared-command-mechanism"
+      "role": "shared-terminal-component"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.history_target",
+      "canonical_module": "memcommit.adapters.console.coordination.history_target",
       "legacy_module": "memcommit.commands.history_target",
-      "owner": "shared",
+      "owner": "coordination",
       "public_exports": [],
       "role": "shared-command-mechanism"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.horizontal_choice",
+      "canonical_module": "memcommit.adapters.console.terminal.components.horizontal_choice",
       "legacy_module": "memcommit.commands.horizontal_choice",
-      "owner": "shared",
+      "owner": "terminal",
       "public_exports": [],
-      "role": "shared-command-mechanism"
+      "role": "shared-terminal-component"
     },
     {
       "canonical_module": "memcommit.adapters.console.commands.impact.command",
@@ -695,7 +696,7 @@
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.meld.workbench",
+      "canonical_module": "memcommit.adapters.console.commands.meld.command",
       "legacy_module": "memcommit.commands.meld_shell",
       "owner": "meld",
       "public_exports": [],
@@ -709,23 +710,23 @@
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.memory_history",
+      "canonical_module": "memcommit.adapters.console.coordination.memory_history",
       "legacy_module": "memcommit.commands.memory_history",
-      "owner": "shared",
+      "owner": "coordination",
       "public_exports": [],
       "role": "shared-command-mechanism"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.memory_picker",
+      "canonical_module": "memcommit.adapters.console.terminal.components.memory_report_picker",
       "legacy_module": "memcommit.commands.memory_picker",
-      "owner": "shared",
+      "owner": "terminal",
       "public_exports": [],
-      "role": "shared-command-mechanism"
+      "role": "shared-terminal-component"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.memory_report_recents",
+      "canonical_module": "memcommit.adapters.console.coordination.memory_report_recents",
       "legacy_module": "memcommit.commands.memory_report_recents",
-      "owner": "shared",
+      "owner": "coordination",
       "public_exports": [],
       "role": "shared-command-mechanism"
     },
@@ -739,11 +740,11 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.operation_launcher_location",
+      "canonical_module": "memcommit.adapters.console.terminal.components.operation_launcher.location",
       "legacy_module": "memcommit.commands.operation_launcher_location",
-      "owner": "shared",
+      "owner": "terminal",
       "public_exports": [],
-      "role": "shared-command-mechanism"
+      "role": "shared-terminal-component"
     },
     {
       "canonical_module": "memcommit.adapters.console.commands.query.provider_policy",
@@ -753,11 +754,11 @@
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.paste_input",
+      "canonical_module": "memcommit.adapters.console.terminal.components.paste_input",
       "legacy_module": "memcommit.commands.paste_input",
-      "owner": "shared",
+      "owner": "terminal",
       "public_exports": [],
-      "role": "shared-command-mechanism"
+      "role": "shared-terminal-component"
     },
     {
       "canonical_module": "memcommit.adapters.console.commands.profile.command",
@@ -801,11 +802,11 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.quality_find_workbench",
+      "canonical_module": "memcommit.adapters.console.terminal.components.quality_find.workbench",
       "legacy_module": "memcommit.commands.quality_find_workbench",
-      "owner": "shared",
+      "owner": "terminal",
       "public_exports": [],
-      "role": "shared-command-mechanism"
+      "role": "shared-terminal-component"
     },
     {
       "canonical_module": "memcommit.adapters.console.commands.query.command",
@@ -833,11 +834,11 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.readable_context_catalog",
+      "canonical_module": "memcommit.core.context_targeting.readable_catalog",
       "legacy_module": "memcommit.commands.readable_context_catalog",
-      "owner": "shared",
+      "owner": "context_targeting",
       "public_exports": [],
-      "role": "shared-command-mechanism"
+      "role": "shared-context-targeting"
     },
     {
       "canonical_module": "memcommit.adapters.console.commands.redo.command",
@@ -885,11 +886,11 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.resolution_workbench_shell",
+      "canonical_module": "memcommit.adapters.console.terminal.components.resolution.session_shell",
       "legacy_module": "memcommit.commands.resolution_workbench_shell",
-      "owner": "shared",
+      "owner": "terminal",
       "public_exports": [],
-      "role": "shared-command-mechanism"
+      "role": "shared-terminal-component"
     },
     {
       "canonical_module": "memcommit.adapters.console.commands.resolve.command",
@@ -901,11 +902,11 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.restoration_present",
+      "canonical_module": "memcommit.adapters.console.terminal.components.restoration_receipt",
       "legacy_module": "memcommit.commands.restoration_present",
-      "owner": "shared",
+      "owner": "terminal",
       "public_exports": [],
-      "role": "shared-command-mechanism"
+      "role": "shared-terminal-component"
     },
     {
       "canonical_module": "memcommit.adapters.console.commands.revert.command",
@@ -947,25 +948,25 @@
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.root_group",
+      "canonical_module": "memcommit.adapters.console.coordination.root_group",
       "legacy_module": "memcommit.commands.root_group",
-      "owner": "shared",
+      "owner": "coordination",
       "public_exports": [],
       "role": "shared-command-mechanism"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.save_location_control",
+      "canonical_module": "memcommit.adapters.console.terminal.components.save_location",
       "legacy_module": "memcommit.commands.save_location_control",
-      "owner": "shared",
+      "owner": "terminal",
       "public_exports": [],
-      "role": "shared-command-mechanism"
+      "role": "shared-terminal-component"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.save_location_review",
+      "canonical_module": "memcommit.adapters.console.terminal.components.save_location_review",
       "legacy_module": "memcommit.commands.save_location_review",
-      "owner": "shared",
+      "owner": "terminal",
       "public_exports": [],
-      "role": "shared-command-mechanism"
+      "role": "shared-terminal-component"
     },
     {
       "canonical_module": "memcommit.adapters.console.commands.search.result_present",
@@ -975,18 +976,18 @@
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.semantic_clipboard",
+      "canonical_module": "memcommit.adapters.console.terminal.components.plain_text_clipboard",
       "legacy_module": "memcommit.commands.semantic_clipboard",
-      "owner": "shared",
+      "owner": "terminal",
       "public_exports": [],
-      "role": "shared-command-mechanism"
+      "role": "shared-terminal-component"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.semantic_detail_renderer",
+      "canonical_module": "memcommit.adapters.console.terminal.components.semantic_viewer.detail",
       "legacy_module": "memcommit.commands.semantic_detail_renderer",
-      "owner": "shared",
+      "owner": "terminal",
       "public_exports": [],
-      "role": "shared-command-mechanism"
+      "role": "shared-terminal-component"
     },
     {
       "canonical_module": "memcommit.adapters.console.commands.semantic_eval.command",
@@ -998,25 +999,25 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.session_endpoint_setup",
+      "canonical_module": "memcommit.adapters.console.terminal.components.endpoint_setup.session",
       "legacy_module": "memcommit.commands.session_endpoint_setup",
-      "owner": "shared",
+      "owner": "terminal",
       "public_exports": [],
-      "role": "shared-command-mechanism"
+      "role": "shared-terminal-component"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.session_help",
+      "canonical_module": "memcommit.adapters.console.terminal.components.session_help",
       "legacy_module": "memcommit.commands.session_help",
-      "owner": "shared",
+      "owner": "terminal",
       "public_exports": [],
-      "role": "shared-command-mechanism"
+      "role": "shared-terminal-component"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.session_picker",
+      "canonical_module": "memcommit.adapters.console.terminal.components.operation_launcher.session",
       "legacy_module": "memcommit.commands.session_picker",
-      "owner": "shared",
+      "owner": "terminal",
       "public_exports": [],
-      "role": "shared-command-mechanism"
+      "role": "shared-terminal-component"
     },
     {
       "canonical_module": "memcommit.adapters.console.commands.sever.command",
@@ -1133,18 +1134,18 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.tui_primitives",
+      "canonical_module": "memcommit.adapters.console.terminal.components.primitives",
       "legacy_module": "memcommit.commands.tui_primitives",
-      "owner": "shared",
+      "owner": "terminal",
       "public_exports": [],
-      "role": "shared-command-mechanism"
+      "role": "shared-terminal-component"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.tui_table",
+      "canonical_module": "memcommit.adapters.console.terminal.components.table",
       "legacy_module": "memcommit.commands.tui_table",
-      "owner": "shared",
+      "owner": "terminal",
       "public_exports": [],
-      "role": "shared-command-mechanism"
+      "role": "shared-terminal-component"
     },
     {
       "canonical_module": "memcommit.adapters.console.commands.undo.command",
@@ -1165,11 +1166,11 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.update.checkpoint_history",
+      "canonical_module": "memcommit.adapters.console.terminal.components.history.update_checkpoint",
       "legacy_module": "memcommit.commands.update_checkpoint_history",
-      "owner": "update",
+      "owner": "terminal",
       "public_exports": [],
-      "role": "command-owned-support"
+      "role": "shared-terminal-component"
     },
     {
       "canonical_module": "memcommit.adapters.console.commands.update.render",
@@ -1197,6 +1198,9 @@
     }
   ],
   "purpose": "Give every CLI entry a predictable package and place multi-file support beside its owning entry while keeping multi-command console mechanics outside the command-entry tree, without changing behavior.",
+  "retired_legacy_modules": [
+    "memcommit.commands.shell_init"
+  ],
   "schema_version": 1,
-  "shared_module_count": 41
+  "shared_module_count": 42
 }

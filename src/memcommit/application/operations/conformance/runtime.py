@@ -17,7 +17,7 @@ from memcommit.application.operations.conformance.model import (
     check_context_conformance,
 )
 from memcommit.core.context import Context, Memory
-from memcommit.application.context_locator import (
+from memcommit.application.capabilities.context_locator import (
     is_relative_context_locator,
     resolve_context_locator,
 )

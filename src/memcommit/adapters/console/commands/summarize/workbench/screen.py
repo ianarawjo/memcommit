@@ -7,7 +7,7 @@ from collections.abc import Callable
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.adapters.console.terminal import require_interactive_terminal
+from memcommit.adapters.console.terminal.core.capabilities import require_interactive_terminal
 from memcommit.adapters.console.commands.summarize.workbench.presentation import (
     project_summarize_clipboard,
     project_summarize_outcome,
@@ -16,7 +16,7 @@ from memcommit.adapters.console.commands.summarize.workbench.model import (
     SummarizeTuiOutcome,
     SummarizeTuiSetup,
 )
-from memcommit.adapters.interfaces.tui.workbenches.context_summary import (
+from memcommit.adapters.console.terminal.components.context_summary import (
     ContextSummaryWorkbenchView,
     run_context_summary_workbench,
 )

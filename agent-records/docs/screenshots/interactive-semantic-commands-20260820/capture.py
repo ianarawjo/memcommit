@@ -104,7 +104,7 @@ def _sever_start() -> None:
 
 
 def _update_view(*, accept_only: bool = False):
-    from memcommit.application.resolution.workbench import (
+    from memcommit.application.capabilities.resolution.workbench import (
         ResolutionItem,
         ResolutionWorkbenchView,
     )
@@ -148,8 +148,10 @@ def _update_view(*, accept_only: bool = False):
 
 
 def _turn() -> None:
-    from memcommit.application.interactive_command_review import update_turn_command_review
-    from memcommit.adapters.interfaces.tui.workbenches.resolution.session_shell import (
+    from memcommit.adapters.console.coordination.command_review import (
+        update as update_command_review,
+    )
+    from memcommit.adapters.console.terminal.components.resolution.session_shell import (
         ResolutionGlobalStrategy,
         run_resolution_workbench_shell,
     )
@@ -168,7 +170,7 @@ def _turn() -> None:
             ),
         ),
         turn_command_review=lambda proposed: (
-            update_turn_command_review(
+            update_command_review.build_turn_review(
                 source_name="capture/source",
                 target_name="capture/target",
                 source_descendants=False,
@@ -188,7 +190,7 @@ def _turn() -> None:
 
 
 def _apply_review() -> None:
-    from memcommit.adapters.interfaces.tui.workbenches.resolution.session_shell import (
+    from memcommit.adapters.console.terminal.components.resolution.session_shell import (
         run_resolution_workbench_shell,
     )
 
@@ -231,7 +233,7 @@ def _stale_turn() -> None:
 
     with tempfile.TemporaryDirectory(prefix="stale-update-command-") as directory:
         _configure_store(Path(directory) / ".mem")
-        import memcommit.application.ops as ops
+        import memcommit.application.capabilities.ops as ops
         from memcommit.adapters.console.entrypoint import app
         from memcommit.persistence.store import MemoryStore
         from memcommit.application.operations.update.model import plan_update, update_session_record_digest

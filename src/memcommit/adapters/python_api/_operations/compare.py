@@ -22,7 +22,7 @@ from memcommit.adapters.python_api.errors import (
     CompareProviderFailure,
     CompareStorageError,
 )
-from memcommit.application.authority.access import resolve_context_access
+from memcommit.application.capabilities.authority.access import resolve_context_access
 from memcommit.application.operations.compare.ledger.model import (
     ComparisonError,
     comparison_canonical_digest,
@@ -47,7 +47,7 @@ from memcommit.application.operations.compare.ledger.session_application import 
 from memcommit.application.operations.compare.ledger.store import (
     ConcurrentComparisonUpdateError,
 )
-from memcommit.application.context_locator import resolve_context_locator
+from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.application.operations.compare.ledger.granted_store import (
     load_granted_comparison_artifact,
 )

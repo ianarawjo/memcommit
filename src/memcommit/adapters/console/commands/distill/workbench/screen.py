@@ -12,8 +12,8 @@ from memcommit.adapters.console.commands.distill.workbench.presentation import (
     project_distill_clipboard,
     project_distill_result,
 )
-from memcommit.adapters.console.terminal import require_interactive_terminal
-from memcommit.adapters.interfaces.tui.workbenches.context_summary import (
+from memcommit.adapters.console.terminal.core.capabilities import require_interactive_terminal
+from memcommit.adapters.console.terminal.components.context_summary import (
     ContextSummaryWorkbenchView,
     run_context_summary_workbench,
 )

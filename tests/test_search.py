@@ -7,7 +7,7 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.search.command import (
     SEARCH_OUTSIDE_CANCELLATION,
@@ -21,8 +21,8 @@ from memcommit.adapters.console.commands.search.command import (
     _show_result_proposal,
     _supplement_namespace_branch_coverage,
 )
-from memcommit.application.authority.access import resolve_context_access
-from memcommit.adapters.console.shared.readable_context_catalog import (
+from memcommit.application.capabilities.authority.access import resolve_context_access
+from memcommit.core.context_targeting.readable_catalog import (
     freeze_readable_context_catalog,
 )
 from memcommit.adapters.console.commands.search.chat_shell import (

@@ -1,5 +1,10 @@
 # MCP installed-wheel verification
 
+Status: HISTORICAL. MCP distribution support was retired on 2026-08-27; see
+`agent-adapter-ownership-and-mcp-retirement-design-rationale.md`. These runs
+remain evidence for the former transport and do not describe the current
+wheel.
+
 Last verified: 2026-08-16 against the Replace callable-boundary worktree.
 
 ## Current eighteen-tool and import-isolation gate

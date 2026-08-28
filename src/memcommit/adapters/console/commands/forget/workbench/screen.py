@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.application.review_policy import (
+from memcommit.application.capabilities.review_policy import (
     ownership_aware_application_review,
 )
 from memcommit.application.operations.forget.application import (
@@ -11,15 +11,15 @@ from memcommit.application.operations.forget.application import (
     run_forget_selection,
 )
 from memcommit.application.operations.forget.review import ForgetSelection
-from memcommit.adapters.interfaces.tui.workbenches.impact import ImpactController
+from memcommit.adapters.console.terminal.components.impact import ImpactController
 from memcommit.adapters.console.commands.forget.workbench.presentation import (
     ForgetResolutionWorkbenchAdapter,
     forget_memory_changes,
 )
-from memcommit.adapters.interfaces.tui.workbenches.resolution import (
+from memcommit.adapters.console.terminal.components.resolution import (
     run_resolution_workbench_shell,
 )
-from memcommit.application.resolution.workbench import ResolutionNavigation
+from memcommit.application.capabilities.resolution.workbench import ResolutionNavigation
 
 
 def run_forget_review_workbench(

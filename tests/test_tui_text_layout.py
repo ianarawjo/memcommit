@@ -6,7 +6,7 @@ from prompt_toolkit.data_structures import Size
 from prompt_toolkit.output import DummyOutput
 from prompt_toolkit.utils import get_cwidth
 
-from memcommit.adapters.console.tui.core.text_layout import (
+from memcommit.adapters.console.terminal.core.text_layout import (
     AdaptiveColumn,
     allocate_adaptive_columns,
     elide_terminal_text,

@@ -42,7 +42,7 @@ def _environment() -> dict[str, str]:
 
 
 def _prepare_compare_store(root: Path):
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=root)
@@ -107,9 +107,9 @@ def _run_summary_child(_store_root: Path) -> None:
     from memcommit.adapters.console.commands.summarize.workbench.presentation import (
         project_summarize_result,
     )
-    from memcommit.adapters.interfaces.tui.viewers.semantic import run_semantic_viewer
+    from memcommit.adapters.console.terminal.components.semantic_viewer import run_semantic_viewer
     from memcommit.application.operations.summarize.application import SummarizeResult
-    from memcommit.application.semantic.understanding import UnderstandingSummary
+    from memcommit.application.capabilities.semantic.understanding import UnderstandingSummary
 
     result = SummarizeResult(
         context_name="capture/reference",

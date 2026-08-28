@@ -11,8 +11,8 @@ from memcommit.adapters.console.commands.summarize.presentation import (
     render_summarize_plain,
 )
 from memcommit.adapters.console.router import ConsoleRunner
-from memcommit.adapters.console.terminal import TerminalCapabilities
-from memcommit.adapters.console.tui.components.plain_text_clipboard import ClipboardWriter
+from memcommit.adapters.console.terminal.core.capabilities import TerminalCapabilities
+from memcommit.adapters.console.terminal.components.plain_text_clipboard import ClipboardWriter
 from memcommit.adapters.console.commands.distill.workbench import (
     DistillTuiSetup,
     run_distill_tui,

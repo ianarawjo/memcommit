@@ -8,7 +8,7 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 import pytest
 
-from memcommit.adapters.console.shared.context_picker import ContextMemoryRow
+from memcommit.core.context_targeting.tui.picker import ContextMemoryRow
 from memcommit.adapters.console.commands.sever.setup import (
     SeverEndpointSelection,
     SeverSetupReceipt,
@@ -19,7 +19,7 @@ from memcommit.adapters.console.commands.sever.setup import (
     choose_sever_setup,
     sever_endpoint_setup_spec,
 )
-from memcommit.adapters.console.tui.components.endpoint_setup import (
+from memcommit.adapters.console.terminal.components.endpoint_setup import (
     EndpointSetupDraft,
     EndpointSetupValue,
 )

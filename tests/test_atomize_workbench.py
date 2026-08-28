@@ -12,7 +12,7 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 import memcommit.adapters.console.commands.atomize.command as atomize_command
 import memcommit.adapters.console.commands.atomize.sessions as atomize_sessions_module
 from memcommit.application.operations.atomize.domain import (
@@ -50,16 +50,16 @@ from memcommit.adapters.console.commands.atomize.sessions import (
     choose_atomize_session,
     revalidate_saved_atomize_analysis,
 )
-from memcommit.adapters.console.shared.endpoint_setup_flows import AtomizeSetupReceipt
-from memcommit.adapters.console.shared.review import RESPONSE_LABEL
-from memcommit.adapters.interfaces.tui.workbenches.resolution import ResolutionDestination
-from memcommit.adapters.console.tui.components.operation_launcher.session import (
+from memcommit.adapters.console.terminal.components.endpoint_setup.flows import AtomizeSetupReceipt
+from memcommit.adapters.console.coordination.review import RESPONSE_LABEL
+from memcommit.adapters.console.terminal.components.resolution import ResolutionDestination
+from memcommit.adapters.console.terminal.components.operation_launcher.session import (
     SessionNewReceipt,
     SessionOpenReceipt,
     SessionPickerLocation,
 )
 from memcommit.providers.subscription import CodexChatGPTProvider
-from memcommit.application.resolution.workbench import ResolutionWorkbenchAction
+from memcommit.application.capabilities.resolution.workbench import ResolutionWorkbenchAction
 from memcommit.persistence.store import MemoryStore
 
 
@@ -1737,7 +1737,7 @@ def test_applied_atomize_workbench_keeps_comments_but_removes_reapply_actions(
         return ResolutionWorkbenchAction(kind="CLOSE")
 
     monkeypatch.setattr(
-        "memcommit.adapters.interfaces.tui.workbenches.resolution."
+        "memcommit.adapters.console.terminal.components.resolution."
         "run_resolution_workbench_shell",
         inspect_view,
     )
@@ -1776,7 +1776,7 @@ def test_actionable_atomize_auto_accepts_when_no_response_is_required(
         return ResolutionWorkbenchAction(kind="CLOSE")
 
     monkeypatch.setattr(
-        "memcommit.adapters.interfaces.tui.workbenches.resolution."
+        "memcommit.adapters.console.terminal.components.resolution."
         "run_resolution_workbench_shell",
         inspect_view,
     )
@@ -1952,7 +1952,7 @@ def test_atomize_persists_shared_destination_change_before_final_apply(
         lambda: True,
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.shared.save_location_review.review_save_location",
+        "memcommit.adapters.console.terminal.components.save_location_review.review_save_location",
         lambda *_args, **_kwargs: (_ for _ in ()).throw(
             AssertionError(
                 "a planned Output was already reviewed in the shared workbench"

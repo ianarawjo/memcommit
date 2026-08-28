@@ -15,7 +15,7 @@ from memcommit.adapters.console.commands.branch.setup import (
     branch_exact_command_review,
     choose_branch_creation,
 )
-from memcommit.adapters.console.tui.components.endpoint_setup import (
+from memcommit.adapters.console.terminal.components.endpoint_setup import (
     EndpointSetupDraft,
     EndpointSetupValue,
 )

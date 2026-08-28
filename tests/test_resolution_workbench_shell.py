@@ -6,18 +6,18 @@ import pytest
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.layout import to_container
 from prompt_toolkit.output import DummyOutput
-from memcommit.application.exact_command_review import ExactCommandReview
+from memcommit.adapters.console.coordination.command_review.model import CommandReview
 
-import memcommit.adapters.interfaces.tui.workbenches.resolution.session_shell as resolution_shell_package
-import memcommit.adapters.interfaces.tui.workbenches.resolution.session_shell.presentation as resolution_presentation_module
-import memcommit.adapters.interfaces.tui.workbenches.resolution.session_shell.runtime as resolution_runtime_module
-from memcommit.adapters.console.shared.semantic_detail_renderer import (
+import memcommit.adapters.console.terminal.components.resolution.session_shell as resolution_shell_package
+import memcommit.adapters.console.terminal.components.resolution.session_shell.presentation as resolution_presentation_module
+import memcommit.adapters.console.terminal.components.resolution.session_shell.runtime as resolution_runtime_module
+from memcommit.adapters.console.terminal.components.semantic_viewer.detail import (
     semantic_detail_block_fragments,
 )
-from memcommit.adapters.console.tui.core.theme import (
+from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     MEMCOMMIT_TUI_STYLE,
 )
-from memcommit.adapters.console.shared.resolution_workbench_shell import (
+from memcommit.adapters.console.terminal.components.resolution.session_shell import (
     RESOLUTION_WORKBENCH_STYLE,
     ResolutionDestination,
     ResolutionGlobalStrategy,
@@ -34,9 +34,9 @@ from memcommit.adapters.console.shared.resolution_workbench_shell import (
     session_review_action_view,
     session_todo_view,
 )
-from memcommit.adapters.interfaces.tui.workbenches.impact import ImpactController
-from memcommit.application.reviewing.memory_diff import MemoryChange
-from memcommit.application.resolution.workbench import (
+from memcommit.adapters.console.terminal.components.impact import ImpactController
+from memcommit.application.capabilities.reviewing.memory_diff import MemoryChange
+from memcommit.application.capabilities.resolution.workbench import (
     ResolutionContextLocation,
     ResolutionDetailBlock,
     ResolutionIssueEvidence,
@@ -50,9 +50,9 @@ from memcommit.application.resolution.workbench import (
     ResolutionResult,
     ResolutionWorkbenchView,
 )
-from memcommit.application.reviewing.session_navigation import SessionWorkbenchNavigation
-from memcommit.adapters.console.responses.model import ResponseDraft
-from memcommit.application.reviewing.result_workbench import ResultRef
+from memcommit.application.capabilities.reviewing.session_navigation import SessionWorkbenchNavigation
+from memcommit.adapters.console.terminal.components.responses.model import ResponseDraft
+from memcommit.application.capabilities.reviewing.result_workbench import ResultRef
 
 
 def test_session_shell_package_preserves_public_owner_identity():
@@ -1825,7 +1825,7 @@ def test_semantic_turn_command_is_built_for_review_and_rebuilt_at_approval():
 
     def command(action):
         reviewed.append(action)
-        return ExactCommandReview(
+        return CommandReview(
             ("mem", "update", "--comment", action.comment, "--expect-session", "rev-1"),
             ("Replace the staged proposal only.",),
         )

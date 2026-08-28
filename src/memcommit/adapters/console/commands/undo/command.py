@@ -5,8 +5,8 @@ from typing import Annotated
 
 import typer
 
-from memcommit.application.retained_history.command_history import CommandHistoryError
-from memcommit.adapters.console.shared.restoration_present import (
+from memcommit.application.capabilities.retained_history.command_history import CommandHistoryError
+from memcommit.adapters.console.terminal.components.restoration_receipt import (
     render_command_restore_receipt,
 )
 from memcommit.application.operations.undo.runtime import execute_undo

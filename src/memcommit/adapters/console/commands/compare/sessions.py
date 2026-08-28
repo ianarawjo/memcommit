@@ -12,7 +12,7 @@ from memcommit.application.operations.compare.ledger.session_application import 
     load_saved_comparison,
     revalidate_saved_comparison,
 )
-from memcommit.adapters.console.tui.components.operation_launcher.session import (
+from memcommit.adapters.console.terminal.components.operation_launcher.session import (
     SessionNewReceipt,
     SessionOpenReceipt,
     SessionPickerEntry,

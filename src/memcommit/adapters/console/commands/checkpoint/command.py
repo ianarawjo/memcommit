@@ -6,14 +6,14 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.coordination.context_operand import ContextOperandSnapshot
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.core.context_targeting.presets import (
     ContextScopePreset,
     resolve_scope_preset,
 )
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
-from memcommit.adapters.console.text import display_escape_text
+from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.persistence.store import MemoryStore, context_record_digest
 
 

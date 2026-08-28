@@ -24,7 +24,7 @@ from memcommit.application.operations.atomize.application import AtomizeSessionS
 from memcommit.application.operations.atomize.workbench import create_atomize_workbench
 from memcommit.core.context import Context
 from memcommit.providers.subscription import CodexChatGPTProvider
-from memcommit.application.semantic.prompt_policy import resolve_semantic_prompt_policy
+from memcommit.application.capabilities.semantic.prompt_policy import resolve_semantic_prompt_policy
 from memcommit.persistence.store import MemoryStore
 from memcommit.study_scenarios.legacy.prewarm.atomize import (
     find_declared_atomize_prewarm,

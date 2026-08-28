@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 import memcommit.application.operations.add.application as add_application
 from memcommit.application.operations.add.application import (
     AddedMemory,

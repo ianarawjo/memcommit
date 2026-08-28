@@ -69,7 +69,7 @@ class _ContextLoadingMixin:
         def granted_loader(link):
             # Import lazily: authority access depends on MemoryStore, while the
             # Store needs only this runtime reauthorization callback.
-            from memcommit.application.authority.access import load_granted_context_link
+            from memcommit.application.capabilities.authority.access import load_granted_context_link
 
             return load_granted_context_link(
                 link,
@@ -80,7 +80,7 @@ class _ContextLoadingMixin:
         def granted_memory_loader(source):
             # A granted Memory Embed is content-free on disk and must pass the
             # same live Grant reauthorization boundary on every resolved load.
-            from memcommit.application.authority.access import (
+            from memcommit.application.capabilities.authority.access import (
                 load_granted_memory_source,
             )
 

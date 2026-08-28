@@ -519,8 +519,8 @@ secondary presentation flag.
 The list intentionally omits secondary action flags such as comments,
 responses, snapshots, and acceptance controls; `H` retains the complete
 registered syntax reference. A selected Form preserves its bracketed
-placeholders when prefilled as editable shell text by the opt-in zsh
-integration; selection never executes it.
+placeholders in the Help-owned exact command editor; execution remains a
+separate Enter after review.
 
 A deliberately bounded command needs no status annotation when its
 advertised contract is available. For example, `merge` intentionally performs
@@ -611,9 +611,12 @@ canonical English contract in this initial rollout; translating those safety
 and invocation boundaries requires a separate reviewed parity pass rather than
 an unchecked fallback.
 
-All four non-English catalogs are checked in and must cover exactly the same
-65 visible operation names. Runtime provider translation is deliberately not
-used: two participants choosing the same language must see the same copy.
+All four non-English operation catalogs are checked in under
+`application/operations/operation_catalog/translations` and must cover exactly
+the same 65 visible operation names. Help-specific interface guidance remains
+with the console Help adapter and has its own cross-language key coverage.
+Runtime provider translation is deliberately not used: two participants
+choosing the same language must see the same copy.
 `ZH` and `KO` use language rather than country codes; `MN` currently denotes
 Mongolian Cyrillic. The renderer wraps and pads translated prose by terminal
 cells rather than Python character count, because Chinese and Korean glyphs

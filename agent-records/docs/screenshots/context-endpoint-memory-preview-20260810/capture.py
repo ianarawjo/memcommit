@@ -50,7 +50,7 @@ class _StreamRecorder(io.StringIO):
 
 
 def _memory_rows(name: str):
-    from memcommit.adapters.console.shared.context_picker import ContextMemoryRow
+    from memcommit.core.context_targeting.tui.picker import ContextMemoryRow
 
     rows = {
         "alpha": (
@@ -74,7 +74,7 @@ def _memory_rows(name: str):
 
 
 def _run_common_child() -> None:
-    from memcommit.adapters.console.shared.session_endpoint_setup import (
+    from memcommit.adapters.console.terminal.components.endpoint_setup.session import (
         EndpointModeSpec,
         EndpointRoleSpec,
         choose_session_endpoints,

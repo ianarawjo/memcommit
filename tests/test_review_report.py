@@ -11,12 +11,12 @@ from memcommit.adapters.console.commands.review.report import (
     render_review_report_snapshot,
     run_review_report_shell,
 )
-from memcommit.application.resolution.workbench import (
+from memcommit.application.capabilities.resolution.workbench import (
     ResolutionItem,
     ResolutionOption,
     ResolutionWorkbenchView,
 )
-from memcommit.application.reviewing.report import ReviewReportController
+from memcommit.application.capabilities.reviewing.report import ReviewReportController
 from memcommit.application.operations.review.report_adapters import update_review_report
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.update.model import (

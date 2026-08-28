@@ -14,15 +14,17 @@ from memcommit.application.operations.elaborate.model import (
     ElaborateTargetContext,
     normalize_elaborate_inputs,
     normalize_elaborate_number,
-    analyze_elaborate,
     validate_elaborate_analysis,
+)
+from memcommit.application.operations.elaborate.generation import analyze_elaborate
+from memcommit.application.operations.elaborate.provider_contract import (
     validate_elaborate_provider_plan,
 )
 from memcommit.application.operations.elaborate.config import (
     DEFAULT_ELABORATE_SEMANTIC_CONFIG,
     ElaborateSemanticConfig,
 )
-from memcommit.application.semantic.goal_focus import FrozenGoalFocus
+from memcommit.application.capabilities.semantic.goal_focus import FrozenGoalFocus
 
 
 @dataclass(frozen=True)

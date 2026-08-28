@@ -15,10 +15,9 @@ and Store runtime.
 | Request, frozen plan, link evidence, receipt | `memcommit.application.operations.memory_transfer.application` | Nonempty unique Source set, UID preservation, distinct Target, default RETARGET or explicit BREAK policy, compatible typed BLOCK input, typed complete receipt |
 | Complete local graph and Store execution | `memcommit.application.operations.memory_transfer.runtime` | Strict direct graph freeze, inbound live-Embed classification, full-graph revalidation, Target gap, protection, exception-atomic multi-Context publication |
 | Console command | `memcommit.adapters.console.commands.move` | Move alone owns its Typer grammar, local-owner setup, application handoff, cancellation, errors, default live-Embed retarget, compatibility `--retarget-links`, explicit `--break-links`, and mixed-effect receipt |
-| Shared console mechanics | `memcommit.adapters.console.shared.memory_transfer` | Move supplies its local catalogs and freeze callback to the common MULTIPLE direct-Memory, `INTO + POSITION`, editable exact-command, and placement-receipt mechanics; the workbench performs no direct publication |
+| Shared console mechanics | `memcommit.adapters.console.coordination.memory_transfer` | Move supplies its local catalogs and freeze callback to the common MULTIPLE direct-Memory, `INTO + POSITION`, editable exact-command, and placement-receipt mechanics; the workbench performs no direct publication |
 | Public Python | `MemCommitClient.move_memories` | Sequence and mutually exclusive policy validation with operation-specific public errors |
-| Agent | `memcommit.adapters.interfaces.agent.memory_transfer` | Strict version-2 JSON schema, public-client-only execution, typed JSON receipt, no provider |
-| MCP | registry projection | Mechanical projection of the frozen agent schema and handler |
+| Agent | `memcommit.adapters.agent.memory_transfer` | Strict version-2 JSON schema, public-client-only execution, typed JSON receipt, no provider |
 | History | `memcommit.command_history` | Shared Move operation UID plus complete affected membership restore removals, additions, and retargets together |
 
 ## Link and authority boundary

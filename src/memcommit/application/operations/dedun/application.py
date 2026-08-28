@@ -10,12 +10,12 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Protocol
 
-from memcommit.application.reviewing.direct_item_duplicates import ExactDuplicateGroup
-from memcommit.application.reviewing.quality.handoff import (
+from memcommit.application.capabilities.reviewing.direct_item_duplicates import ExactDuplicateGroup
+from memcommit.application.capabilities.reviewing.quality.handoff import (
     QualityFindingHandoff,
     QualityFindingSource,
 )
-from memcommit.application.resolution import (
+from memcommit.application.capabilities.resolution import (
     ResolutionAttempt,
     ResolutionBinding,
     ResolutionCase,

@@ -8,7 +8,7 @@ from typing import Protocol, Sequence
 
 from memcommit.application.operations.help.application import list_operation_help
 from memcommit.application.operations.operation_catalog.model import DetailDiscovery, OperationHelp
-from memcommit.application.semantic_execution import (
+from memcommit.application.capabilities.semantic_execution import (
     BudgetLimits,
     ExecutionMode,
     ExecutionStrategy,

@@ -30,8 +30,8 @@ def test_production_reference_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "src/memcommit/adapters/python_api/_operations/reference.py",
         "src/memcommit/adapters/console/commands/reference/command.py",
-        "src/memcommit/adapters/interfaces/tui/operations/reference/adapter.py",
-        "src/memcommit/adapters/interfaces/tui/operations/reference/screen.py",
+        "src/memcommit/adapters/console/commands/reference/workbench/adapter.py",
+        "src/memcommit/adapters/console/commands/reference/workbench/screen.py",
         "src/memcommit/application/operations/reference/runtime.py",
     )
 

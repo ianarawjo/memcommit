@@ -8,25 +8,27 @@ from dataclasses import dataclass
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.application.authority.access import (
+from memcommit.application.capabilities.authority.access import (
     ContextAccess,
     context_access_display_facts,
 )
-from memcommit.application.interactive_command_review import meld_start_command_review
+from memcommit.adapters.console.coordination.command_review import (
+    meld as meld_command_review,
+)
 from memcommit.core.context_targeting.tui.picker import context_memory_rows
 from memcommit.adapters.console.commands.meld.target_picker import eligible_meld_targets
 from memcommit.core.context_targeting.readable_catalog import (
     ReadableContextCatalog,
     freeze_profile_readable_context_catalog,
 )
-from memcommit.adapters.console.tui.components.endpoint_setup import (
+from memcommit.adapters.console.terminal.components.endpoint_setup import (
     EndpointSetupMemory,
     EndpointSetupMode,
     EndpointSetupRole,
     EndpointSetupSpec,
     run_endpoint_setup,
 )
-from memcommit.adapters.console.tui.components.endpoint_setup.memory_focus import (
+from memcommit.adapters.console.terminal.components.endpoint_setup.memory_focus import (
     MemoryProjectionLoader,
 )
 from memcommit.persistence.store import MemoryStore
@@ -253,7 +255,7 @@ def _meld_start_review(draft):
     left = draft.value("A")
     right = draft.value("B")
     target = draft.value("C") if draft.mode_uid == "SYMMETRIC" else None
-    return meld_start_command_review(
+    return meld_command_review.build_start_review(
         mode=draft.mode_uid,
         left_name=left.context_name,
         right_name=right.context_name,

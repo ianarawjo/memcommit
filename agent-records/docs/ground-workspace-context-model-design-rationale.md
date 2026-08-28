@@ -11,7 +11,7 @@ legacy name; a physical workspace never reads or writes that parallel JSON.
 Existing prototype Ground session JSON is not a migration input for a new
 workspace.
 
-Last reviewed: 2026-08-16.
+Last reviewed: 2026-08-28.
 
 ## Motivating correction
 
@@ -232,14 +232,27 @@ physical-workspace view is deliberately read-only; exact CLI edit actions
 exercise the application boundary while the future conversational editor is
 rebuilt over the same use cases.
 
-Physical workspace and draft launcher projection is owned by
-`interfaces.tui.operations.ground_workspace.picker`. The former
-`commands.ground_workspace_picker` path is a module alias retained for import
-and monkeypatch compatibility; it does not contain a second implementation.
+Ground-specific terminal surfaces are grouped under
+`adapters.console.commands.ground.workspace` by semantic role rather than by
+the generic `interfaces.cli` and `interfaces.tui` transport labels. The
+launcher projection and its stale-selection checks live in `catalog.py`; the
+non-interactive `--snapshot` projection lives in `snapshot.py`; the uncreated
+Save Location contract and chooser live in `location.py`; and the read-only
+interactive surface keeps its state in `viewer/model.py` and prompt-toolkit
+mechanics in `viewer/screen.py`. The command workflow decides which surface to
+invoke, while shared TUI components remain outside Ground.
+
+The former `interfaces.cli.ground_workspace`,
+`interfaces.tui.operations.ground_workspace`, and
+`commands.ground.workspace_picker` paths are removed rather than retained as
+internal compatibility facades. Repository callers and tests use the
+role-owning modules directly. This preserves snapshot text, picker ordering and
+freshness checks, Save Location validation, viewer navigation, mutation
+timing, and global-current behavior; the change is ownership-only.
 
 - `commands.switch.setup` interprets a row as a requested global
   current-Context change.
-- `interfaces.tui.operations.ground` interprets a row as a process-local
+- `commands.ground.workspace.viewer` interprets a row as a process-local
   workspace surface change.
 
 The common component owns navigation mechanics; each operation adapter owns

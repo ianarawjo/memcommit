@@ -1,7 +1,7 @@
 """Editable proposed-command form and identifier display contracts."""
 
-from memcommit.application.exact_command_review import ExactCommandReview
-from memcommit.adapters.console.tui.components.exact_command_review import (
+from memcommit.adapters.console.coordination.command_review.model import CommandReview
+from memcommit.adapters.console.terminal.components.exact_command_review import (
     EditableExactCommandControl,
     ExactCommandDraft,
     ExactCommandForm,
@@ -25,8 +25,8 @@ def _form() -> ExactCommandForm:
 def test_exact_command_draft_round_trips_through_operation_owned_state() -> None:
     state = {"value": "before", "target": "one"}
 
-    def review() -> ExactCommandReview:
-        return ExactCommandReview(
+    def review() -> CommandReview:
+        return CommandReview(
             (
                 "mem",
                 "sample",
@@ -54,7 +54,7 @@ def test_exact_command_draft_round_trips_through_operation_owned_state() -> None
 def test_exact_command_draft_rejects_cross_operation_edits_without_partial_state() -> None:
     applied = []
     draft = ExactCommandDraft(
-        review=lambda: ExactCommandReview(
+        review=lambda: CommandReview(
             ("mem", "sample", "value", "--into", "target"),
             ("No durable action has run.",),
         ),
@@ -71,8 +71,8 @@ def test_exact_command_draft_rejects_cross_operation_edits_without_partial_state
 def test_editable_command_is_always_visible_and_syncs_in_both_directions() -> None:
     state = {"value": "before", "target": "one"}
 
-    def review() -> ExactCommandReview:
-        return ExactCommandReview(
+    def review() -> CommandReview:
+        return CommandReview(
             ("mem", "sample", state["value"], "--into", state["target"]),
             ("No durable action has run.",),
         )
@@ -114,7 +114,7 @@ def test_editable_command_box_turns_red_while_live_input_is_invalid() -> None:
 
     control = EditableExactCommandControl.create(
         ExactCommandDraft(
-            review=lambda: ExactCommandReview(
+            review=lambda: CommandReview(
                 ("mem", "sample", "value", "--into", "target"),
                 ("No durable action has run.",),
             ),

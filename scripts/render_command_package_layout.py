@@ -16,7 +16,7 @@ COMMANDS = CONSOLE / "commands"
 FORMER_COMMANDS = REPOSITORY / "src" / "memcommit" / "commands"
 LEGACY_NAMESPACE = "memcommit.commands"
 CANONICAL_NAMESPACE = "memcommit.adapters.console.commands"
-SHARED_NAMESPACE = "memcommit.adapters.console.shared"
+COORDINATION_NAMESPACE = "memcommit.adapters.console.coordination"
 OUTPUT_JSON = (
     REPOSITORY / "agent-records" / "docs" / "command-package-layout-plan.json"
 )
@@ -81,7 +81,6 @@ ENTRY_EXPORTS = {
     "semantic_eval": ("eval_app",),
     "sever": ("cmd",),
     "share": ("cmd",),
-    "shell_init": ("cmd",),
     "show": ("cmd",),
     "status": ("cmd",),
     "summarize": ("cmd",),
@@ -98,7 +97,16 @@ ENTRY_TARGETS = {
     # The former semantic Find entry became Search, while provider-free
     # Literal Find became the canonical Find command.
     "find": "search",
+    "help_inventory": "help",
     "literal_find": "find",
+}
+
+
+RETIRED_BASELINE_MODULES = {
+    "shell_init": (
+        "retired after Help and init-study took ownership of their distinct "
+        "shell responsibilities"
+    ),
 }
 
 
@@ -122,7 +130,7 @@ OWNED_SUPPORT_TARGETS = {
     "ground_named_shell": "ground.named_shell",
     "ground_session_picker": "ground.session_picker",
     "ground_shell": "ground.shell",
-    "ground_workspace_picker": "ground.workspace_picker",
+    "ground_workspace_picker": "ground.workspace.catalog",
     "impact_catalog": "impact.catalog",
     "impact_process_local": "impact.process_local",
     "impact_registry": "impact.registry",
@@ -130,7 +138,7 @@ OWNED_SUPPORT_TARGETS = {
     "import_workbench": "import_profile.workbench",
     "meld_sessions": "meld.sessions",
     "meld_setup": "meld.setup",
-    "meld_shell": "meld.shell",
+    "meld_shell": "meld.command",
     "meld_target_picker": "meld.target_picker",
     "ordinary_query_provider_policy": "query.provider_policy",
     "profile_group": "profile.group",
@@ -147,7 +155,6 @@ OWNED_SUPPORT_TARGETS = {
     "study_name_dialog": "init_study.name_dialog",
     "context_trace_projection": "trace.context_projection",
     "trace_projection": "trace.projection",
-    "update_checkpoint_history": "update.checkpoint_history",
     "update_render": "update.render",
     "update_setup": "update.setup",
 }
@@ -158,12 +165,24 @@ INFRASTRUCTURE_SUPPORT_TARGETS = {
 }
 
 
+SPECIAL_SUPPORT_TARGETS = {
+    "update_checkpoint_history": (
+        "memcommit.adapters.console.terminal.components.history.update_checkpoint",
+        "terminal",
+        "shared-terminal-component",
+    ),
+}
+
+
 MODULE_TARGET_PATH_OVERRIDES = {
     "memcommit.adapters.console.commands.ground.named_shell": (
         "src/memcommit/adapters/console/commands/ground/named_shell/__init__.py"
     ),
     "memcommit.adapters.console.commands.ground.shell": (
         "src/memcommit/adapters/console/commands/ground/shell/__init__.py"
+    ),
+    "memcommit.adapters.console.commands.meld.command": (
+        "src/memcommit/adapters/console/commands/meld/command/__init__.py"
     ),
 }
 
@@ -215,6 +234,45 @@ SHARED_MODULES = {
 
 SHARED_MODULE_TARGETS = {
     "batch_input": "batch_input_source",
+    "exact_command_review": "command_review",
+    "findings_render": "quality_find_render",
+}
+
+
+RELOCATED_SHARED_TARGETS = {
+    "background_turn": "memcommit.adapters.console.terminal.components.background_turn",
+    "checkpoint_diff": "memcommit.adapters.console.terminal.components.history.checkpoint_diff",
+    "command_progress": "memcommit.adapters.console.terminal.components.progress",
+    "command_wait": "memcommit.adapters.console.terminal.components.command_wait",
+    "context_picker": "memcommit.core.context_targeting.tui.picker",
+    "context_reach_dialog": "memcommit.adapters.console.terminal.components.context_reach_dialog",
+    "diff_browser": "memcommit.adapters.console.terminal.components.history.browser",
+    "direct_item_placement": "memcommit.adapters.console.terminal.components.direct_item_placement",
+    "endpoint_setup_flows": "memcommit.adapters.console.terminal.components.endpoint_setup.flows",
+    "exact_command_review_shell": "memcommit.adapters.console.terminal.components.exact_command_review.shell",
+    "exact_name_dialog": "memcommit.adapters.console.terminal.components.exact_name_dialog",
+    "findings_render": "memcommit.adapters.console.terminal.components.quality_find.rendering",
+    "flat_selection_dialog": "memcommit.adapters.console.terminal.components.flat_selection_dialog",
+    "history_location_picker": "memcommit.adapters.console.terminal.components.checkpoint_location",
+    "history_picker": "memcommit.adapters.console.terminal.components.history.picker",
+    "history_present": "memcommit.adapters.console.terminal.components.history.presentation",
+    "horizontal_choice": "memcommit.adapters.console.terminal.components.horizontal_choice",
+    "memory_picker": "memcommit.adapters.console.terminal.components.memory_report_picker",
+    "operation_launcher_location": "memcommit.adapters.console.terminal.components.operation_launcher.location",
+    "paste_input": "memcommit.adapters.console.terminal.components.paste_input",
+    "quality_find_workbench": "memcommit.adapters.console.terminal.components.quality_find.workbench",
+    "readable_context_catalog": "memcommit.core.context_targeting.readable_catalog",
+    "resolution_workbench_shell": "memcommit.adapters.console.terminal.components.resolution.session_shell",
+    "restoration_present": "memcommit.adapters.console.terminal.components.restoration_receipt",
+    "save_location_control": "memcommit.adapters.console.terminal.components.save_location",
+    "save_location_review": "memcommit.adapters.console.terminal.components.save_location_review",
+    "semantic_clipboard": "memcommit.adapters.console.terminal.components.plain_text_clipboard",
+    "semantic_detail_renderer": "memcommit.adapters.console.terminal.components.semantic_viewer.detail",
+    "session_endpoint_setup": "memcommit.adapters.console.terminal.components.endpoint_setup.session",
+    "session_help": "memcommit.adapters.console.terminal.components.session_help",
+    "session_picker": "memcommit.adapters.console.terminal.components.operation_launcher.session",
+    "tui_primitives": "memcommit.adapters.console.terminal.components.primitives",
+    "tui_table": "memcommit.adapters.console.terminal.components.table",
 }
 
 
@@ -277,6 +335,16 @@ def build_plan() -> dict[str, object]:
                 "public_exports": [],
             }
         )
+    for stem, (target, owner, role) in sorted(SPECIAL_SUPPORT_TARGETS.items()):
+        entries.append(
+            {
+                "legacy_module": f"{LEGACY_NAMESPACE}.{stem}",
+                "canonical_module": target,
+                "owner": owner,
+                "role": role,
+                "public_exports": [],
+            }
+        )
     for stem, target in sorted(OWNED_SUPPORT_TARGETS.items()):
         owner = target.split(".", 1)[0]
         entries.append(
@@ -289,23 +357,37 @@ def build_plan() -> dict[str, object]:
             }
         )
     for stem in sorted(SHARED_MODULES):
+        relocated = RELOCATED_SHARED_TARGETS.get(stem)
         target = SHARED_MODULE_TARGETS.get(stem, stem)
         entries.append(
             {
                 "legacy_module": f"{LEGACY_NAMESPACE}.{stem}",
-                "canonical_module": f"{SHARED_NAMESPACE}.{target}",
-                "owner": "shared",
-                "role": "shared-command-mechanism",
+                "canonical_module": relocated or f"{COORDINATION_NAMESPACE}.{target}",
+                "owner": (
+                    "context_targeting"
+                    if stem in {"context_picker", "readable_context_catalog"}
+                    else "terminal"
+                    if relocated
+                    else "coordination"
+                ),
+                "role": (
+                    "shared-context-targeting"
+                    if stem in {"context_picker", "readable_context_catalog"}
+                    else "shared-terminal-component"
+                    if relocated
+                    else "shared-command-mechanism"
+                ),
                 "public_exports": [],
             }
         )
     legacy = [str(entry["legacy_module"]).rsplit(".", 1)[-1] for entry in entries]
-    if len(entries) != 153 or len(set(legacy)) != 153:
-        raise RuntimeError("command layout must classify 153 unique baseline modules")
+    if len(entries) != 152 or len(set(legacy)) != 152:
+        raise RuntimeError("command layout must map 152 active baseline modules")
     baseline = _baseline_modules()
-    if set(legacy) != baseline:
-        missing = sorted(baseline - set(legacy))
-        extra = sorted(set(legacy) - baseline)
+    classified = set(legacy) | set(RETIRED_BASELINE_MODULES)
+    if classified != baseline:
+        missing = sorted(baseline - classified)
+        extra = sorted(classified - baseline)
         raise RuntimeError(f"command layout mismatch: missing={missing}, extra={extra}")
     return {
         "schema_version": 1,
@@ -315,10 +397,16 @@ def build_plan() -> dict[str, object]:
             "mechanics outside the command-entry tree, without changing behavior."
         ),
         "baseline_commit": BASELINE_COMMIT,
-        "baseline_module_count": len(entries),
+        "baseline_module_count": len(entries) + len(RETIRED_BASELINE_MODULES),
+        "active_module_count": len(entries),
         "entry_package_count": len(ENTRY_EXPORTS),
-        "shared_module_count": len(SHARED_MODULES),
+        "shared_module_count": sum(
+            str(entry["role"]).startswith("shared-") for entry in entries
+        ),
         "modules": sorted(entries, key=lambda entry: str(entry["legacy_module"])),
+        "retired_legacy_modules": [
+            f"{LEGACY_NAMESPACE}.{stem}" for stem in sorted(RETIRED_BASELINE_MODULES)
+        ],
     }
 
 
@@ -329,10 +417,13 @@ def render_markdown(plan: dict[str, object]) -> str:
         "This is the exact path-only classification of the formerly flat",
         "`memcommit.commands` modules. Their canonical implementations now live under",
         "`memcommit.adapters.console.commands` for command-owned code and",
-        "`memcommit.adapters.console.shared` for multi-command console mechanics;",
+        "`memcommit.adapters.console.coordination` for nonvisual multi-command mechanics, and",
+        "`memcommit.adapters.console.terminal.components` for terminal-bound components;",
         "route closure remains solely in the operation evidence ledger.",
         "",
         f"- Baseline modules: {plan['baseline_module_count']}",
+        f"- Active canonical mappings: {plan['active_module_count']}",
+        f"- Retired baseline modules: {len(plan['retired_legacy_modules'])}",
         f"- Command entry packages: {plan['entry_package_count']}",
         f"- Shared command mechanisms: {plan['shared_module_count']}",
         "",
@@ -403,6 +494,9 @@ def verify_layout(plan: dict[str, object]) -> None:
             if not package_init.is_file():
                 failures.append(f"missing command package boundary: {package_init}")
     removed = _removed_command_modules(plan)
+    retired = {
+        str(module) for module in plan.get("retired_legacy_modules", ())
+    }
     for path in (REPOSITORY / "src" / "memcommit").rglob("*.py"):
         try:
             tree = ast.parse(path.read_text(encoding="utf-8"))
@@ -416,7 +510,7 @@ def verify_layout(plan: dict[str, object]) -> None:
             elif isinstance(node, ast.Import):
                 imported.extend(alias.name for alias in node.names)
             for module in imported:
-                if module in removed:
+                if module in removed or module in retired:
                     failures.append(
                         f"internal legacy command import: {path}:{node.lineno}:{module}"
                     )
@@ -424,7 +518,8 @@ def verify_layout(plan: dict[str, object]) -> None:
         raise SystemExit("\n".join(failures))
     print(
         "command package layout is canonical: "
-        f"{len(ENTRY_EXPORTS)} entry packages, {len(removed)} removed command paths, "
+        f"{len(ENTRY_EXPORTS)} entry packages, "
+        f"{len(removed) + len(retired)} removed command paths, "
         f"{len(SHARED_MODULES)} shared console mechanisms"
     )
 
@@ -432,7 +527,12 @@ def verify_layout(plan: dict[str, object]) -> None:
 def verify_removed_imports(plan: dict[str, object]) -> None:
     """Prove that runtime hooks do not restore the former command package."""
 
-    removed = [LEGACY_NAMESPACE, *sorted(_removed_command_modules(plan))]
+    retired = [str(module) for module in plan.get("retired_legacy_modules", ())]
+    removed = [
+        LEGACY_NAMESPACE,
+        *sorted(_removed_command_modules(plan)),
+        *sorted(retired),
+    ]
     code = "\n".join(
         [
             "from importlib import import_module",

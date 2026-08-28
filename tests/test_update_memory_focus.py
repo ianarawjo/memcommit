@@ -7,7 +7,7 @@ import json
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 import memcommit.adapters.console.commands.update.command as update_command
 from memcommit.adapters.console.entrypoint import app
 from memcommit.persistence.store import MemoryStore

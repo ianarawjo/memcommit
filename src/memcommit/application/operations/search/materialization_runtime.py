@@ -7,14 +7,14 @@ from contextlib import ExitStack
 from dataclasses import dataclass
 from typing import Protocol
 
-import memcommit.application.ops as ops
-from memcommit.application.authority.access import (
+import memcommit.application.capabilities.ops as ops
+from memcommit.application.capabilities.authority.access import (
     ContextAccess,
     authorized_context_operation,
 )
 from memcommit.core.context import AutoCheckpoint, Context, Memory
 from memcommit.core.context_targeting.naming import validate_portable_context_name
-from memcommit.application.authority.derived_policy import (
+from memcommit.application.capabilities.authority.derived_policy import (
     authorize_analysis_save,
     authorize_combination,
     authorize_derived_transfer,

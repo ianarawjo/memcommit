@@ -9,33 +9,33 @@ from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 from prompt_toolkit.formatted_text.base import StyleAndTextTuples
 
-from memcommit.application.retained_history.display import (
+from memcommit.application.capabilities.retained_history.display import (
     HistoryDisplayBadge,
     HistoryDisplayRow,
     HistoryRowSegment,
     history_display_row_segments,
 )
-from memcommit.adapters.console.text import (
+from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
-from memcommit.adapters.console.tui.components.plain_text_clipboard import (
+from memcommit.adapters.console.terminal.components.plain_text_clipboard import (
     plain_text_from_fragments,
 )
-from memcommit.adapters.console.tui.core.text_layout import (
+from memcommit.adapters.console.terminal.core.text_layout import (
     elide_terminal_text,
 )
-from memcommit.adapters.console.tui.core.theme import (
+from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     semantic_action_style,
 )
-from memcommit.adapters.interfaces.tui.viewers.read_only import run_read_only_viewer
-from memcommit.application.retained_history.memory_history_reconstruction.retained_record_verification import (
+from memcommit.adapters.console.terminal.components.read_only_viewer import run_read_only_viewer
+from memcommit.application.capabilities.retained_history.memory_history_reconstruction.retained_record_verification import (
     MemoryState,
     MemoryHistoryContextTransition,
 )
-from memcommit.application.retained_history.memory_history_reconstruction.memory_history_event_derivation import (
+from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_event_derivation import (
     MemoryHistoryEvent,
 )
-from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
+from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_construction import (
     MemoryHistory,
 )
 

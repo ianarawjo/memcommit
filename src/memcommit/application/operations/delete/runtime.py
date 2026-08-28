@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-import memcommit.application.ops as ops
-from memcommit.application.authority.access import (
+import memcommit.application.capabilities.ops as ops
+from memcommit.application.capabilities.authority.access import (
     ContextAccess,
     authorized_context_mutation,
     grant_checkpoint_args,
@@ -13,7 +13,7 @@ from memcommit.application.authority.access import (
 )
 from memcommit.core.context import AutoCheckpoint, Context, Information, Memory, MemoryRef
 from memcommit.core.context import QueryContextRef
-from memcommit.application.context_locator import resolve_context_locator
+from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.core.context_targeting.loading import (
     DirectItemNotFoundError,
     resolve_local_direct_item_locator,

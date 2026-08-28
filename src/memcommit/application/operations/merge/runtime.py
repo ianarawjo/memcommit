@@ -5,7 +5,7 @@ from __future__ import annotations
 import uuid
 from dataclasses import dataclass
 
-from memcommit.application.authority.access import (
+from memcommit.application.capabilities.authority.access import (
     ContextAccess,
     GrantedReadStore,
     authorized_context_operation,
@@ -20,7 +20,7 @@ from memcommit.core.context import (
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
 from memcommit.core.context_targeting.catalog import freeze_granted_context_navigation
-from memcommit.application.authority.derived_policy import authorize_derived_transfer
+from memcommit.application.capabilities.authority.derived_policy import authorize_derived_transfer
 from memcommit.application.operations.merge.application import (
     FrozenMergePlan,
     MergeAddition,
@@ -47,7 +47,7 @@ from memcommit.application.operations.merge.tree import (
     project_context_for_tree_merge,
 )
 from memcommit.application.operations.merge.tree_persistence import MergeTreeWrite, commit_merge_tree
-from memcommit.application.retained_history.memory_lineage import (
+from memcommit.application.capabilities.retained_history.memory_lineage import (
     MemoryLineageEdge,
     checkpoint_memory_lineage_edges,
     memory_content_sha256,
@@ -55,7 +55,7 @@ from memcommit.application.retained_history.memory_lineage import (
     resolve_lineage_target_uids,
 )
 from memcommit.persistence.store import MemoryStore, context_record_digest
-from memcommit.application.authority.write_protection import WriteProtectionError
+from memcommit.application.capabilities.authority.write_protection import WriteProtectionError
 
 
 def _memory_only_source(source: Context) -> Context:

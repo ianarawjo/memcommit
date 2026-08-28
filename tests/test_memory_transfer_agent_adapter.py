@@ -2,16 +2,16 @@
 
 from __future__ import annotations
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.python_api import MemCommitClient
-from memcommit.adapters.interfaces.agent import (
+from memcommit.adapters.agent.memory_transfer import (
     COPY_MEMORIES_AGENT_TOOL_NAME,
     MOVE_MEMORIES_AGENT_TOOL_NAME,
     MemoryTransferAgentAdapter,
-    build_default_agent_tool_registry,
     copy_memories_agent_tool_schema,
     move_memories_agent_tool_schema,
 )
+from memcommit.adapters.agent.registry import build_default_agent_tool_registry
 from memcommit.persistence.store import MemoryStore
 
 

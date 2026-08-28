@@ -1,5 +1,9 @@
 # MCP registry projection design rationale
 
+Status: RETIRED on 2026-08-27. MemCommit no longer ships this projection; see
+`agent-adapter-ownership-and-mcp-retirement-design-rationale.md`. The remaining
+content records the historical contract that was removed.
+
 Last verified: 2026-08-16.
 
 ## Motivation

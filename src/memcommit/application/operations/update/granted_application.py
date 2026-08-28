@@ -8,7 +8,7 @@ from dataclasses import dataclass, replace
 from datetime import datetime
 from typing import Literal
 
-from memcommit.application.authority.access import (
+from memcommit.application.capabilities.authority.access import (
     GrantedReadStore,
     freeze_granted_context_binding,
     revalidate_granted_context_binding,
@@ -16,7 +16,7 @@ from memcommit.application.authority.access import (
 )
 from memcommit.core.context import Context, Memory
 from memcommit.core.context_targeting.loading import load_context_scope
-from memcommit.application.retained_history.command_history import CommandRestoreResult
+from memcommit.application.capabilities.retained_history.command_history import CommandRestoreResult
 from memcommit.application.operations.profile.config import ProfileRegistry
 from memcommit.application.operations.profile.model import (
     ProfileError,

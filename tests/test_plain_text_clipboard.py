@@ -1,9 +1,9 @@
 """Shared semantic plain-text projection contracts."""
 
-from memcommit.adapters.console.tui.components.plain_text_clipboard import (
+from memcommit.adapters.console.terminal.components.plain_text_clipboard import (
     plain_text_from_fragments,
 )
-from memcommit.adapters.interfaces.tui.viewers.semantic import (
+from memcommit.adapters.console.terminal.components.semantic_viewer import (
     SemanticViewerBlock,
     SemanticViewerDocument,
     SemanticViewerSection,

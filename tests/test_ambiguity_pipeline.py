@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-from memcommit.application.semantic.classification.ambiguity import (
+from memcommit.application.capabilities.semantic.classification.ambiguity import (
     AMBIGUITY_PIPELINE_V1,
     AMBIGUITY_PIPELINE_V2,
     AMBIGUITY_PIPELINE_V3,
@@ -30,6 +30,7 @@ FIXTURE_PATH = (
     Path(__file__).parents[1]
     / "src" / "memcommit"
     / "application"
+    / "capabilities"
     / "evaluation"
     / "fixtures"
     / "ambiguity.json"

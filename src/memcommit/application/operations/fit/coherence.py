@@ -22,7 +22,7 @@ from memcommit.application.operations.ground.model import (
     is_bound_ground_schema,
 )
 from memcommit.providers.types import CompletionRun, ProviderIdentity
-from memcommit.application.semantic_execution import (
+from memcommit.application.capabilities.semantic_execution import (
     BudgetLimits,
     ExecutionMode,
     ExecutionStrategy,

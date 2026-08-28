@@ -16,7 +16,7 @@ from memcommit.core.context import Context
 from memcommit.core.context_targeting.navigation import (
     record_current_context_transition,
 )
-from memcommit.application.retained_history.context_lifecycle import (
+from memcommit.application.capabilities.retained_history.context_lifecycle import (
     ContextLifecycleEvent,
     PREVIOUS_CHECKPOINT_NONE,
     PREVIOUS_CHECKPOINT_RECORDED,

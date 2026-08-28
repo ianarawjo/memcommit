@@ -9,10 +9,10 @@ from memcommit.application.operations.atomize.domain import (
     AtomizeImpactReport,
     AtomizeItem,
 )
-from memcommit.adapters.console.text import (
+from memcommit.adapters.console.terminal.core.text import (
     safe_terminal_text,
 )
-from memcommit.adapters.console.theme import (
+from memcommit.adapters.console.terminal.core.theme import (
     SemanticColorRole,
     memory_object_color_rgb,
     semantic_color_rgb,

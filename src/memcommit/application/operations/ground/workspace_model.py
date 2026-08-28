@@ -18,7 +18,9 @@ from memcommit.core.context import Context, Memory
 
 
 GROUND_WORKSPACE_SCHEMA_VERSION = 1
-GROUND_WORKSPACE_MANIFEST_KIND = "memcommit.application.operations.ground.model-workspace"
+# This is a persisted schema discriminator, not a Python import path; package
+# relocations must not rewrite existing workspace manifests.
+GROUND_WORKSPACE_MANIFEST_KIND = "memcommit.ground-workspace"
 GroundWorkspaceStatus = Literal["OPEN", "GROUNDED", "DEFERRED"]
 GroundWorkspaceLane = Literal[
     "goals",

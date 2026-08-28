@@ -6,7 +6,7 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.application.operations.conformance.model import (
     CASE_CONFORMANCE_OPERATION,
     CONTEXT_CONFORMANCE_OPERATION,
@@ -32,12 +32,12 @@ from memcommit.application.operations.ground.model import (
 from memcommit.providers.types import ProviderIdentity
 from memcommit.persistence.store import MemoryStore
 from memcommit.adapters.console.commands.audit.command import _run_quality_audit_checks
-from memcommit.application.reviewing.quality.audit import (
+from memcommit.application.capabilities.reviewing.quality.audit import (
     QUALITY_AUDIT_LEGACY_SCHEMA_VERSION,
     QualityAuditSession,
     quality_audit_resolution_view,
 )
-from memcommit.application.reviewing.quality.audit_store import QualityAuditStore
+from memcommit.application.capabilities.reviewing.quality.audit_store import QualityAuditStore
 from memcommit.persistence.store import context_record_digest
 
 

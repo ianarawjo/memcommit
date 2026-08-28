@@ -15,7 +15,7 @@ from memcommit.application.operations.add.application import (
     run_add,
 )
 from memcommit.application.operations.add.runtime import MemoryStoreAddTargetPort
-from memcommit.application.authority.access import (
+from memcommit.application.capabilities.authority.access import (
     context_access_display_facts,
     resolve_context_access,
 )
@@ -23,12 +23,12 @@ from memcommit.core.context_targeting.catalog import freeze_granted_context_navi
 from memcommit.core.context_targeting.operands import choose_endpoint_operand
 from memcommit.adapters.console.commands.add.input_records import parse_input_records
 from memcommit.adapters.console.commands.add.receipt import render_add_receipt
-from memcommit.adapters.console.shared.batch_input_source import (
+from memcommit.adapters.console.coordination.batch_input_source import (
     read_batch_input_text,
 )
-from memcommit.adapters.console.errors import render_cli_error
-from memcommit.adapters.console.terminal import is_interactive_terminal
-from memcommit.adapters.console.tui.components.paste_input import (
+from memcommit.adapters.console.terminal.components.errors import render_cli_error
+from memcommit.adapters.console.terminal.core.capabilities import is_interactive_terminal
+from memcommit.adapters.console.terminal.components.paste_input import (
     PasteCancelled,
     capture_paste,
 )

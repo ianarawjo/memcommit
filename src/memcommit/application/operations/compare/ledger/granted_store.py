@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Iterable
 import uuid
 
-from memcommit.application.authority.access import (
+from memcommit.application.capabilities.authority.access import (
     ContextAccess,
     GrantedReadStore,
     freeze_granted_context_binding,
@@ -25,7 +25,7 @@ from memcommit.application.operations.compare.ledger.evidence import (
     project_comparison_context,
 )
 from memcommit.core.context_targeting.loading import load_context_scope
-from memcommit.application.authority.derived_policy import AnalysisRetention, authorize_analysis_save
+from memcommit.application.capabilities.authority.derived_policy import AnalysisRetention, authorize_analysis_save
 from memcommit.persistence.store import MemoryStore, _write_json_atomic
 from memcommit.application.operations.update.model import GrantedUpdateTarget
 

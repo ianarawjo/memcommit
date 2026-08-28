@@ -19,13 +19,13 @@ from memcommit.adapters.python_api.errors import (
     SemanticStorageError,
 )
 from memcommit.adapters.python_api.search import SearchItemResult, SearchResult
-from memcommit.application.context_locator import resolve_context_locator
+from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.application.operations.search.application import (
     SearchRequest,
     SearchResponse,
 )
 from memcommit.application.operations.search.runtime import execute_search
-from memcommit.application.retained_history.reconstruction import HistoryError
+from memcommit.application.capabilities.retained_history.reconstruction import HistoryError
 from memcommit.application.operations.log.search import HistorySearchError
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError

@@ -9,7 +9,7 @@ import typer
 from typer.testing import CliRunner
 
 import memcommit.adapters.console.commands.impact.process_local as process_local_command
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.impact.process_local import (
     distill_impact_presentation,

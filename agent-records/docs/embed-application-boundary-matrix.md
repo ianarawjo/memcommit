@@ -25,8 +25,8 @@ request, review, application, and visible terminal behavior remain unchanged.
 | Successful human-readable output | `memcommit.adapters.console.commands.embed.receipt` | Context and Memory receipts preserve the established relationship identity, Source/target names, and exact gap description. |
 | Link-type, Source, target/gap, and exact-command review | `memcommit.adapters.console.commands.embed.workbench` | Context mode reuses the readable Context selector; Memory mode composes the readable direct-Memory picker; the Into catalog remains ordinary-local, both modes return a frozen plan without saving a Store themselves, and the shared editor fixes `mem embed` outside its writable argument buffer. |
 | Stable Python projection | `memcommit.adapters.python_api._operations.embed`, `memcommit.adapters.python_api.client` | `embed_memory` and `embed_context` expose different DTOs and never parse terminal text; only an active-Profile client may consult Grants, while an explicitly rooted client remains local-only. |
-| Agent and MCP projection | `memcommit.adapters.interfaces.agent.embed`, registry projection | The versioned `memory`/`context` tag prevents operand-shape inference; MCP mechanically projects the same frozen tool contract. |
-| Live relationship mutation | `memcommit.application.ops` | Domain validation and in-memory insertion stay reusable below the runtime; Memory and Context links remain distinct durable types. |
+| Agent projection | `memcommit.adapters.agent.embed`, default registry | The versioned `memory`/`context` tag prevents operand-shape inference and preserves the frozen tool contract. |
+| Live relationship mutation | `memcommit.application.capabilities.ops` | Domain validation and in-memory insertion stay reusable below the runtime; Memory and Context links remain distinct durable types. |
 
 The focused `memcommit.application.operations.embed` package is the canonical owner of the
 live Context and Memory relationship use case. Production API, CLI, and TUI
@@ -166,7 +166,7 @@ replace the first.
   Embed fails closed.
 
 The shared direct-item placement renderer lives at
-`memcommit.adapters.console.tui.components.direct_item_placement`; the old command
-path is only a module-identity compatibility alias. That presentation
+`memcommit.adapters.console.terminal.components.direct_item_placement`; the old
+shared compatibility path is removed. That presentation
 dependency remains outside the application/runtime boundary and does not
 change the Embed use case.

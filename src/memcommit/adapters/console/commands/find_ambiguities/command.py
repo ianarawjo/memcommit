@@ -6,35 +6,35 @@ from typing import Annotated, Optional
 
 import typer
 
-import memcommit.application.ops as ops
-from memcommit.adapters.console.shared.context_operand import (
+import memcommit.application.capabilities.ops as ops
+from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
     choose_context_operand,
 )
-from memcommit.application.authority.access import GrantedReadStore, resolve_context_access
-from memcommit.adapters.interfaces.cli.quality_findings import (
+from memcommit.application.capabilities.authority.access import GrantedReadStore, resolve_context_access
+from memcommit.adapters.console.terminal.components.quality_find.rendering import (
     render_heading,
     render_memory,
     render_question,
     render_readings,
     render_reason,
 )
-from memcommit.adapters.console.shared.command_progress import CommandProgress
-from memcommit.adapters.console.shared.quality_find_workbench import (
+from memcommit.adapters.console.terminal.components.progress import CommandProgress
+from memcommit.adapters.console.terminal.components.quality_find.workbench import (
     annotate_quality_find_attempt,
     freeze_all_readable_quality_find_source,
     interactive_quality_find_available,
     run_interactive_quality_find,
 )
-from memcommit.adapters.console.text import (
+from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
-from memcommit.adapters.console.identity import collision_safe_uid_prefixes
-from memcommit.adapters.console.theme import (
+from memcommit.adapters.console.terminal.core.identity import collision_safe_uid_prefixes
+from memcommit.adapters.console.terminal.core.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )
-from memcommit.application.reviewing.quality.findings import FindingsError
+from memcommit.application.capabilities.reviewing.quality.findings import FindingsError
 from memcommit.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
@@ -42,7 +42,7 @@ from memcommit.providers.subscription import (
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.application.reviewing.quality.workbench import QualityFindSourceFrame
+from memcommit.application.capabilities.reviewing.quality.workbench import QualityFindSourceFrame
 
 
 def cmd(

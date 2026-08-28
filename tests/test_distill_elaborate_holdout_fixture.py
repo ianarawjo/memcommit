@@ -5,15 +5,14 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from memcommit.application.semantic.generative_reduction_reference import (
+from memcommit.application.capabilities.semantic.generative_reduction_reference import (
     render_distill_elaborate_reference_examples,
 )
 
 
 HOLDOUT_PATH = (
     Path(__file__).parents[1]
-    / "src" / "memcommit"
-    / "eval"
+    / "src" / "memcommit" / "application" / "capabilities" / "evaluation"
     / "fixtures"
     / "distill_elaborate_holdout.json"
 )

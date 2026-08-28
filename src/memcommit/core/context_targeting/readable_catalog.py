@@ -6,14 +6,14 @@ import copy
 from collections.abc import Sequence
 from dataclasses import dataclass
 
-from memcommit.application.authority.access import (
+from memcommit.application.capabilities.authority.access import (
     ContextAccess,
     GrantedReadStore,
     resolve_context_access,
     top_level_grants,
 )
 from memcommit.core.context import Context, QueryContextRef
-from memcommit.application.retained_history.context_snapshot import ContextSnapshotRef
+from memcommit.application.capabilities.retained_history.context_snapshot import ContextSnapshotRef
 from memcommit.core.context_targeting.catalog import (
     GrantedContextNavigation,
     freeze_granted_context_navigation,

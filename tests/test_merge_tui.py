@@ -10,7 +10,7 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 import memcommit.adapters.console.commands.merge.setup as merge_setup
 from memcommit.adapters.console.commands.merge.setup import (
     MergeSetup,
@@ -31,8 +31,8 @@ from memcommit.adapters.console.commands.merge.workbench.review import (
 )
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Memory
-from memcommit.adapters.interfaces.tui.workbenches.resolution import ResolutionOutcome
-from memcommit.adapters.interfaces.tui.workbenches.resolution.inline_shell import (
+from memcommit.adapters.console.terminal.components.resolution import ResolutionOutcome
+from memcommit.adapters.console.terminal.components.resolution.inline_shell import (
     render_inline_resolution_item,
     run_inline_resolution_workbench,
 )
@@ -54,8 +54,8 @@ from memcommit.application.operations.merge.application import (
     run_merge,
 )
 from memcommit.application.operations.merge.runtime import MemoryStoreMergePort
-from memcommit.adapters.console.selection.model import SelectionOption
-from memcommit.adapters.console.selection.state import FlatSelectionState
+from memcommit.adapters.console.terminal.components.selection.model import SelectionOption
+from memcommit.adapters.console.terminal.components.selection.state import FlatSelectionState
 from memcommit.persistence.store import MemoryStore
 
 

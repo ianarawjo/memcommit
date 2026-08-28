@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Sequence
 from dataclasses import replace
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.python_api._runtime import ClientRuntime
 from memcommit.adapters.python_api._support.errors import raise_public
 from memcommit.adapters.python_api._support.semantic import safe_semantic_provider
@@ -18,24 +18,24 @@ from memcommit.adapters.python_api.errors import (
     SemanticStorageError,
 )
 from memcommit.adapters.python_api.quality_find import QualityFindContextResult, QualityFindResult
-from memcommit.application.authority.access import GrantedReadStore, resolve_context_access
-from memcommit.application.context_locator import resolve_context_locator
-from memcommit.application.authority.derived_policy import authorize_combination
-from memcommit.application.reviewing.direct_item_duplicates import find_exact_duplicate_groups
-from memcommit.application.reviewing.quality.findings import ConflictReport, FindingsError
+from memcommit.application.capabilities.authority.access import GrantedReadStore, resolve_context_access
+from memcommit.application.capabilities.context_locator import resolve_context_locator
+from memcommit.application.capabilities.authority.derived_policy import authorize_combination
+from memcommit.application.capabilities.reviewing.direct_item_duplicates import find_exact_duplicate_groups
+from memcommit.application.capabilities.reviewing.quality.findings import ConflictReport, FindingsError
 from memcommit.application.operations.profile.config import (
     ProfileConfigError,
     load_profile_registry,
     profile_store_dir,
 )
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.application.reviewing.quality.workbench import (
+from memcommit.application.capabilities.reviewing.quality.workbench import (
     QualityFindKind,
     QualityFindSourceFrame,
     create_quality_find_workbench,
 )
-from memcommit.application.reviewing.quality.handoff import quality_finding_handoffs
-from memcommit.application.reviewing.quality.redundancy_scope import (
+from memcommit.application.capabilities.reviewing.quality.handoff import quality_finding_handoffs
+from memcommit.application.capabilities.reviewing.quality.redundancy_scope import (
     analyze_independent_redundancy_scope,
     freeze_redundancy_scope,
 )

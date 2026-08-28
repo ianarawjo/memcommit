@@ -18,7 +18,6 @@ dependencies = [
 
 [project.scripts]
 mem = "memcommit.adapters.console.entrypoint:app"
-mem-mcp = "memcommit.adapters.interfaces.mcp.server:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
@@ -28,12 +27,15 @@ where = ["src"]
 include = ["memcommit*"]
 
 [tool.setuptools.package-data]
-"memcommit.application.evaluation" = ["fixtures/*.json"]
+"memcommit.application.capabilities.evaluation" = ["fixtures/*.json"]
 "memcommit.study_scenarios.legacy" = ["data/en/*", "data/ko/*"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0"]
-mcp = ["mcp>=2,<3"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.ruff]
+# Execution captures are immutable research artifacts, not maintained source.
+extend-exclude = ["agent-records/outputs"]

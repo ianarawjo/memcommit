@@ -201,7 +201,7 @@ frame. A same-frame `ANSWER` uses the intent completion and then the separate
 synthesis completion. An other-Context answer pauses between those completions
 for the exact confirmation turn.
 
-The host creates an immutable `ExactCommandReview` only after resolving the
+The host creates an immutable `CommandReview` only after resolving the
 alias locally. Here it is used as an injectively escaped command/effect receipt,
 not as a second approval gate: `mem show` is proven read-only, uses an explicit
 owner Context, does not change the current Context, and was explicitly

@@ -12,14 +12,14 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.python_api import DedunPlanResult, MemCommitClient
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.shared.quality_find_workbench import (
+from memcommit.adapters.console.terminal.components.quality_find.workbench import (
     run_quality_find_resolution_workbench,
 )
 from memcommit.core.context import Context, MemoryRef, QueryContextRef
-from memcommit.application.retained_history.context_snapshot import (
+from memcommit.application.capabilities.retained_history.context_snapshot import (
     CONTEXT_SNAPSHOT_SCHEMA_VERSION,
     ContextSnapshotRef,
     context_snapshot_digest,
@@ -35,13 +35,11 @@ from memcommit.application.operations.dedun.application import (
     recommended_dedun_selections,
 )
 from memcommit.application.operations.dedun.runtime import MemoryStoreDedunPort
-from memcommit.application.reviewing.direct_item_duplicates import find_exact_duplicate_groups
-from memcommit.application.reviewing.quality.findings import DuplicateFinding, DuplicateReport
-from memcommit.adapters.interfaces.agent import (
-    DEDUP_AGENT_TOOL_NAME,
-    build_default_agent_tool_registry,
-)
-from memcommit.adapters.console.theme import (
+from memcommit.application.capabilities.reviewing.direct_item_duplicates import find_exact_duplicate_groups
+from memcommit.application.capabilities.reviewing.quality.findings import DuplicateFinding, DuplicateReport
+from memcommit.adapters.agent.dedup import DEDUP_AGENT_TOOL_NAME
+from memcommit.adapters.agent.registry import build_default_agent_tool_registry
+from memcommit.adapters.console.terminal.core.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )
@@ -50,16 +48,16 @@ from memcommit.adapters.console.commands.dedun.workbench import (
     dedun_resolution_spec,
     run_dedun_workbench,
 )
-from memcommit.adapters.interfaces.tui.workbenches.resolution import ResolutionOutcome
-from memcommit.application.reviewing.quality.workbench import create_quality_find_workbench
-from memcommit.application.reviewing.quality.handoff import (
+from memcommit.adapters.console.terminal.components.resolution import ResolutionOutcome
+from memcommit.application.capabilities.reviewing.quality.workbench import create_quality_find_workbench
+from memcommit.application.capabilities.reviewing.quality.handoff import (
     QualityFindingHandoff,
     QualityFindingHandoffError,
     QualityFindingReviewDraft,
     QualityFindingSource,
     quality_finding_handoffs,
 )
-from memcommit.application.semantic.redundancy_evidence import (
+from memcommit.application.capabilities.semantic.redundancy_evidence import (
     redundancy_evidence_dict,
     redundancy_evidence_from_dict,
     redundancy_evidence_json,

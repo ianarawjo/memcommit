@@ -4,7 +4,7 @@ import click
 from typer.main import get_command
 
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.help_inventory.command import (
+from memcommit.adapters.console.commands.help.command import (
     HELP_CATEGORY_DESCRIPTIONS,
     HELP_CATEGORY_GROUPS,
     _help_group_fragments,
@@ -23,8 +23,10 @@ from memcommit.application.operations.operation_catalog.details import (
     ALL_OPERATION_DETAILS,
     DETAILS_BY_OPERATION,
 )
-from memcommit.adapters.console.tui.core.text_layout import terminal_cell_width
-from memcommit.adapters.interfaces.tui.operations.help.localization import HELP_LANGUAGES
+from memcommit.adapters.console.terminal.core.text_layout import terminal_cell_width
+from memcommit.application.operations.operation_catalog.localization import (
+    OPERATION_CATALOG_LANGUAGES as HELP_LANGUAGES,
+)
 
 
 def _root_context():

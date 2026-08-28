@@ -237,7 +237,7 @@ def _run_ground_projection_child(*, current: bool) -> None:
 
 
 def _prepare_overlap_store(root: Path):
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.persistence.store import MemoryStore, context_record_digest
 
     store = MemoryStore(root=root)
@@ -281,7 +281,7 @@ def _run_overlap_child(store_root: Path) -> None:
 
 def _run_three_operands_child(store_root: Path) -> None:
     import memcommit.adapters.console.commands.fit.command as fit_command
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.application.operations.fit.store import FitStore
     from memcommit.persistence.store import MemoryStore
 
@@ -364,7 +364,7 @@ def _capture(kind: str, store_root: Path, stem: str, *, running=False) -> None:
 
 
 def main() -> None:
-    from memcommit.adapters.console.theme import (
+    from memcommit.adapters.console.terminal.core.theme import (
         SemanticColorRole,
         semantic_color_rgb,
     )

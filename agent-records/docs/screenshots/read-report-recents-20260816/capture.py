@@ -85,10 +85,10 @@ def _context_state(store, name: str) -> tuple[bytes, tuple[str, ...]]:
 
 
 def _run_child(kind: str) -> None:
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.adapters.console.entrypoint import app
-    from memcommit.application.reviewing.quality.findings import DuplicateReport
-    from memcommit.application.reviewing.read_report import ReadReportTarget
+    from memcommit.application.capabilities.reviewing.quality.findings import DuplicateReport
+    from memcommit.application.capabilities.reviewing.read_report import ReadReportTarget
     from memcommit.persistence.store import MemoryStore
 
     fixture_root = OUT / f".fixture-{kind}"

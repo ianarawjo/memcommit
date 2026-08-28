@@ -11,14 +11,14 @@ from dataclasses import dataclass
 from typing import Literal, Protocol
 
 
-from memcommit.adapters.console.shared.exact_command_review import (
-    ExactCommandReview,
+from memcommit.adapters.console.coordination.command_review.model import CommandReview
+from memcommit.adapters.console.terminal.components.exact_command_review.rendering import (
     render_exact_command_blocks,
 )
-from memcommit.adapters.console.text import (
+from memcommit.adapters.console.terminal.core.text import (
     safe_terminal_text,
 )
-from memcommit.adapters.console.tui.core.text_layout import (
+from memcommit.adapters.console.terminal.core.text_layout import (
     elide_terminal_text,
     single_line_terminal_text,
 )
@@ -51,7 +51,7 @@ class GroundCommandProposal:
     kind: str
     understanding: str
     question: str
-    review: ExactCommandReview
+    review: CommandReview
     expected_ground_uid: str
     expected_revision: int
     expected_state_digest: str
@@ -377,7 +377,7 @@ def render_named_ground_proposal_blocks(
             if not effect.startswith("Selected Rule/Ground Memory:")
             and not effect.startswith("One review Decision:")
         )
-    informed_review = ExactCommandReview(
+    informed_review = CommandReview(
         argv=proposal.review.argv,
         effects=(*details, *base_effects),
     )

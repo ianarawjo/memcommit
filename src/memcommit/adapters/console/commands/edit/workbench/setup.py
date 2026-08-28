@@ -5,8 +5,8 @@ from __future__ import annotations
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-import memcommit.application.ops as ops
-from memcommit.application.authority.access import context_access_display_facts
+import memcommit.application.capabilities.ops as ops
+from memcommit.application.capabilities.authority.access import context_access_display_facts
 from memcommit.core.context_targeting.catalog import freeze_granted_context_navigation
 from memcommit.core.context_targeting.model import DirectMemoryTarget
 from memcommit.core.context_targeting.tui.picker import context_memory_rows

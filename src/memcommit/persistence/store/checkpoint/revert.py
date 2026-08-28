@@ -6,7 +6,7 @@ import json
 import uuid
 from datetime import datetime
 from memcommit.core.context import Checkpoint, Context
-from memcommit.application.retained_history.memory_lineage import (
+from memcommit.application.capabilities.retained_history.memory_lineage import (
     checkpoint_memory_lineage_edges,
     remap_restoration_snapshot,
 )
@@ -90,7 +90,7 @@ class _CheckpointRevertMixin:
         Undo/Redo cannot split the recovery unit later.
         """
 
-        from memcommit.application.retained_history.checkpoint_catalog import (
+        from memcommit.application.capabilities.retained_history.checkpoint_catalog import (
             CheckpointUnitRevertMember,
             CheckpointUnitRevertResult,
             ResolvedCheckpointUnit,

@@ -121,7 +121,7 @@ class _UnresolvedInlineProvider:
 
 
 def _initialize_store(store_root: Path):
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root)
@@ -136,16 +136,14 @@ def _initialize_store(store_root: Path):
 
 
 def _patch_meld_command(store, provider_factory) -> None:
-    import memcommit.adapters.console.shared.command_wait as command_wait
+    import memcommit.adapters.console.terminal.components.command_wait as command_wait
     import memcommit.adapters.console.commands.meld.command as meld_command
-    import memcommit.adapters.console.shared.session_help as session_help
-    import memcommit.adapters.console.tui.components.session_help as tui_session_help
+    import memcommit.adapters.console.terminal.components.session_help as session_help
 
     meld_command.MemoryStore = lambda *args, **kwargs: store
     meld_command.connect_codex_chatgpt_provider = provider_factory
     command_wait.current_help_entries = lambda: ()
     session_help.current_help_entries = lambda: ()
-    tui_session_help.current_help_entries = lambda: ()
 
 
 def _run_meld_cli(store, args: list[str]) -> None:

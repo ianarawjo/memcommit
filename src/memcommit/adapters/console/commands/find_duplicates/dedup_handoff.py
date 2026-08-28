@@ -10,7 +10,7 @@ from memcommit.application.operations.dedun.application import (
 )
 from memcommit.application.operations.dedun.runtime import MemoryStoreDedunPort
 from memcommit.adapters.console.commands.dedun.workbench import run_dedun_workbench
-from memcommit.application.reviewing.quality.handoff import QualityFindingHandoff
+from memcommit.application.capabilities.reviewing.quality.handoff import QualityFindingHandoff
 from memcommit.persistence.store import MemoryStore
 
 

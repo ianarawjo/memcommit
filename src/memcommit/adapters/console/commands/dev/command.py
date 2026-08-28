@@ -6,8 +6,8 @@ from typing import Annotated
 import json
 import typer
 
-from memcommit.adapters.console.shared.command_group import CanonicalCommandGroup
-from memcommit.application.context_locator import resolve_context_locator
+from memcommit.adapters.console.coordination.command_group import CanonicalCommandGroup
+from memcommit.application.capabilities.context_locator import resolve_context_locator
 
 app = typer.Typer(
     cls=CanonicalCommandGroup,
@@ -54,7 +54,7 @@ def dev_query_source_install(
     This hidden command simulates query-only access. The source remains
     readable to the local OS user and is not a production security boundary.
     """
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()
@@ -149,9 +149,9 @@ def dev_fake(
         mem dev fake test-user "a software engineer who likes hiking and coffee"
     """
     from memcommit.configuration.config import Config
-    from memcommit.application.semantic.llm import LLMClient, LLMError
+    from memcommit.application.capabilities.semantic.llm import LLMClient, LLMError
     from memcommit.persistence.store import MemoryStore
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
 
     config = Config()
     try:
@@ -254,8 +254,8 @@ def dev_eval(
         )
         raise typer.Exit(1)
 
-    from memcommit.application.semantic.llm import LLMError
-    from memcommit.application.evaluation.runner import run_forget_eval, run_integrate_eval
+    from memcommit.application.capabilities.semantic.llm import LLMError
+    from memcommit.application.capabilities.evaluation.runner import run_forget_eval, run_integrate_eval
 
     try:
         if command == "forget":

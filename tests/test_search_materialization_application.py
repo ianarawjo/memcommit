@@ -9,13 +9,13 @@ import uuid
 
 import pytest
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 import memcommit.adapters.console.commands.search.command as search_command
 import memcommit.application.operations.search.materialization_application as materialization_application
 import memcommit.application.operations.search.materialization_runtime as materialization_runtime
 import memcommit.persistence.store as store_module
-from memcommit.application.authority.access import resolve_context_access
-from memcommit.adapters.console.shared.readable_context_catalog import (
+from memcommit.application.capabilities.authority.access import resolve_context_access
+from memcommit.core.context_targeting.readable_catalog import (
     freeze_readable_context_catalog,
 )
 from memcommit.adapters.console.commands.search.search_workbench import (

@@ -15,7 +15,7 @@ from memcommit.application.operations.ground.workspace_draft import (
     GroundWorkspaceDraftError,
     ground_workspace_draft_digest,
 )
-from memcommit.application.authority.storage_permissions import (
+from memcommit.application.capabilities.authority.storage_permissions import (
     ensure_private_directory,
     open_private_exclusive,
 )

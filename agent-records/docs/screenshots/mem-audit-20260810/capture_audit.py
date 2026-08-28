@@ -189,7 +189,7 @@ def _spawn(environment: dict[str, str], *arguments: str):
 
 
 def _new_audit_uid(before: set[str]) -> str:
-    from memcommit.application.reviewing.quality.audit_store import QualityAuditStore
+    from memcommit.application.capabilities.reviewing.quality.audit_store import QualityAuditStore
     from memcommit.persistence.store import MemoryStore
 
     sessions = [
@@ -205,8 +205,8 @@ def _new_audit_uid(before: set[str]) -> str:
 
 
 def main() -> None:
-    from memcommit.application.reviewing.quality.audit import quality_audit_resolution_view
-    from memcommit.application.reviewing.quality.audit_store import QualityAuditStore
+    from memcommit.application.capabilities.reviewing.quality.audit import quality_audit_resolution_view
+    from memcommit.application.capabilities.reviewing.quality.audit_store import QualityAuditStore
     from memcommit.persistence.store import MemoryStore
 
     environment = dict(os.environ)

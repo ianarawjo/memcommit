@@ -8,7 +8,9 @@ from dataclasses import dataclass
 
 from memcommit.configuration.config import Config
 from memcommit.application.operations.meld.model import MELD_TEXT_LIMIT, MeldSession
-from memcommit.application.operations.meld.provider import MELD_RESPONSE_CHAR_LIMIT
+from memcommit.application.operations.meld.provider.contract import (
+    MELD_RESPONSE_CHAR_LIMIT,
+)
 from memcommit.providers.types import (
     CODEX_CHATGPT_PROVIDER,
     ProviderIdentity,

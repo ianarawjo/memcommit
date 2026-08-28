@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import importlib.util
 import json
-import os
 from pathlib import Path
 import shlex
 import sys
@@ -132,7 +131,7 @@ class _Provider:
 
 
 def _initialize(store):
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
 
     if store.context_exists("sever/source"):
         return
@@ -149,8 +148,8 @@ def _child_apply(store_root: Path) -> None:
     import click
     import typer
 
-    import memcommit.adapters.console.shared.command_wait as command_wait
-    import memcommit.adapters.console.shared.session_help as session_help
+    import memcommit.adapters.console.terminal.components.command_wait as command_wait
+    import memcommit.adapters.console.terminal.components.session_help as session_help
     import memcommit.adapters.console.commands.sever.command as sever_command
     from memcommit.persistence.store import MemoryStore
 
@@ -210,7 +209,7 @@ def _child_verify(store_root: Path) -> None:
 
 
 def _child_restore(store_root: Path, direction: str) -> None:
-    from memcommit.adapters.console.shared.restoration_present import render_command_restore_receipt
+    from memcommit.adapters.console.terminal.components.restoration_receipt import render_command_restore_receipt
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root, create=False)

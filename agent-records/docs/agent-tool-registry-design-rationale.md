@@ -1,24 +1,24 @@
 # Agent tool registry design rationale
 
-Last verified: 2026-08-16.
+Last verified: 2026-08-27.
 
 ## Motivation
 
 Query and Add first supplied strict schemas and adapters, but a host still had
 to assemble them independently. Compare, Update, Meld, structural Atomize,
 Atomize Grounding, Distill, Elaborate, Fit, Forget, and Resolve now use that
-same path rather than introducing operation-specific MCP handlers. The
+same path rather than introducing host-specific operation handlers. The
 integration path covers tool
 discovery, name dispatch, shared client ownership, JSON-safe output, and the
 transition from one durable mutation to a later read through the same process.
 
-`memcommit.adapters.interfaces.agent.registry` is the host-neutral in-process connection
+`memcommit.adapters.agent.registry` is the host-neutral in-process connection
 point. It makes shipped tools discoverable and callable without importing the
 CLI or TUI and without choosing a wire protocol.
 
 ## Frozen host contract
 
-`build_default_agent_tool_registry(client)` binds the twenty currently shipped
+`build_default_agent_tool_registry(client)` binds the twenty-five currently shipped
 tools, from Help and direct inspection through deterministic and semantic
 operations, to one caller-owned `MemCommitClient`. The client has
 already frozen its Store/Profile root and provider configuration; the registry
@@ -67,29 +67,26 @@ operation contract was entered.
 | `invoke` | tool name + decoded payload → JSON object | exactly the selected adapter's effects | unknown names have no effects; every result is JSON-safe |
 | `build_default_agent_tool_registry` | public client → shipped tool registry | none at construction | one shared frozen client; no terminal dependency |
 
-## MCP and transport boundary
+## Host and transport boundary
 
 The shipped function-tool schemas retain the standard `name`, `description`,
 and `parameters` shape. A registry discovery definition pairs that unchanged
-schema with separate `use_when` and `help_details` slots. One-to-one operation
-bindings take both from the public Help facade; composite tools supply one
-reviewed composite trigger and only details they actually own. Registration
-rejects blank guidance, disagreement between a schema factory and its binding,
-untyped detail containers, or duplicate detail IDs; it freezes all three
-values. A concrete MCP adapter projects `parameters` to MCP `inputSchema`,
-selectively exposes the guidance and compact detail references, decodes
-arguments, calls `registry.invoke`, and encodes the returned object.
-Authentication, stdio or HTTP lifecycle, MCP capability negotiation,
-cancellation, and transport error codes belong to that adapter.
+schema with separate `use_when`, `help_details`, and host-neutral `effect`
+slots. One-to-one operation bindings take guidance from the public Help facade;
+composite tools supply one reviewed composite trigger and only details they
+actually own. Registration rejects blank guidance, disagreement between a
+schema factory and its binding, untyped detail containers, duplicate detail
+IDs, and invalid effect hints before the host starts.
 
-Keeping this translation outside the registry means an in-process agent,
-MCP server, test harness, or another tool runtime shares the same frozen
-operation contracts. It also prevents an MCP dependency from becoming a
-requirement for the Python library or CLI.
+MemCommit does not currently ship a wire transport. An in-process agent, test
+harness, or embedding runtime may consume the frozen definitions and call
+`registry.invoke` directly. A future protocol adapter must translate these
+values without moving authentication, lifecycle, cancellation, retries, or
+operation policy into the registry.
 
 ## Verification and limitations
 
-Focused tests verify schema and Help-discovery freezing, fresh discovery,
+Focused tests verify schema and Help-discovery freezing, effect metadata, fresh discovery,
 duplicate and invalid registration rejection, unknown-name zero effects,
 result redaction, JSON safety, and terminal-free imports. The principal
 integration test invokes Add
@@ -98,22 +95,17 @@ and one checkpoint, then invokes ordinary Query through the same registry and
 public client. Query observes both the newly added Memories and the ordinary
 checkpoint evidence while leaving the post-Add Store byte-for-byte unchanged.
 
-Grounding integration tests project all five lifecycle actions, call one
-provider-free real saved dialogue through MCP, and preserve typed issue,
-question, proposal, and Apply receipt data. Separate semantic integration tests
-invoke Distill and Elaborate through the
-same registry and MCP projection, verify typed evidence and verification
-fields, and prove that neither read-only tool creates a Context or accepts a
-proposal.
+Grounding integration tests exercise all five lifecycle actions through the
+registry and preserve typed issue, question, proposal, and Apply receipt data.
+Separate semantic integration tests invoke Distill and Elaborate through the
+same registry, verify typed evidence and verification fields, and prove that
+neither read-only tool creates a Context or accepts a proposal.
 
-The earlier clean-wheel check covered Query/Add discovery and a real Add
-invocation. On 2026-08-16 a fresh current-worktree wheel exposed all fifteen
-then-current tools and executed Help, Show, a real Add, a saved Grounding `open`,
-structural Atomize saved `open`/Apply/retry, and Forget's provider-free
-empty-Source Analyze/no-op Apply/replay through the official stdio client
-outside the checkout. The current registry contains twenty tools; this is a
-source-tree discovery assertion rather than a new installed-wheel claim.
-Provider-backed semantic execution remains in-process evidence. The registry
-is not a plugin, network endpoint, authentication service, Skill installer,
-idempotency service, or dynamic runtime registry. Adding shipped operations
-remains an explicit code and compatibility change.
+The former MCP projection, stdio entry point, optional dependency, and
+installed smoke were retired on 2026-08-27 because they had no current
+repository-owned consumer and duplicated registry guarantees. Their dated
+verification records remain historical evidence only. The registry is not a
+plugin, network endpoint, authentication service, Skill installer, idempotency
+service, protocol compatibility layer, or dynamic runtime registry. Adding
+shipped operations or a future transport remains an explicit compatibility
+decision.

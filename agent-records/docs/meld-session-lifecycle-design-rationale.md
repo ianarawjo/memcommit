@@ -86,6 +86,82 @@ rollback. Interfaces do not compute or interpret versions.
 - The pre-release adapter contract is intentionally forward-only. There is no
   permissive fallback that silently targets the latest session.
 
+## Physical model ownership
+
+The public `memcommit.application.operations.meld.model` import remains a
+compatibility facade, but its implementation is split by responsibility:
+
+- `source_frames.py` freezes source Memories, Context identities, roles,
+  digests, and the strict shared value primitives used by later records;
+- `relation_review.py` owns the relation ledger, issues, proposals,
+  assessments, dialogue turns, and Compare/preservation projections;
+- `changes.py` owns the exact change set and durable Apply/checkpoint receipts;
+- `session.py` composes those records into construction, lifecycle transitions,
+  cross-record validation, and exhaustive source/result accounting.
+
+The dependency direction is `session -> changes -> relation_review ->
+source_frames`. `relation_review` uses a type-only session reference for its
+provider-free preservation projection, so importing the lower-level records
+does not construct the session aggregate. This keeps names tied to Meld's
+actual domain language while preserving existing serialized schemas and import
+paths. The facade explicitly re-exports the former public names, so caller
+imports remain unchanged while implementation classes have narrower physical
+`__module__` paths.
+
+## Physical runtime ownership
+
+The public `memcommit.application.operations.meld.runtime` import remains a
+compatibility facade, but its Store, Grant, provider, and checkpoint adapters
+are split into four Meld-specific owners:
+
+- `source_bindings.py` owns authorized source loading, exact frozen-frame
+  revalidation, target traversal, and the bindings saved in checkpoints;
+- `session_launch.py` owns Compare-basis reuse, prewarm selection, and the
+  provider-free/provider-required preparation of Start and Restart;
+- `session_review.py` owns the provider timeout policy, saved-session
+  repository, preservation and destination ports, assessment caching, and
+  follow-up turns;
+- `apply.py` owns proposal permission checks, checkpoint records, interrupted
+  Apply recovery, post-image verification, locking, rollback, and mutation.
+
+The dependency direction is `session_launch -> session_review -> apply ->
+source_bindings`, with launch and review importing lower owners directly where
+needed. The facade contains re-exports only and preserves the former explicit
+`__all__`; tests patch dependencies at their physical owner rather than
+requiring mutable proxy behavior from the facade.
+
+`apply.py` remains the largest module intentionally. Its local target,
+local-owner subtree, granted-owner subtree, and granted-target paths differ in
+lock ownership, authority revalidation, checkpoint placement, and rollback.
+Keeping those transactions beside their recovery evidence makes partial
+publication review explicit until a genuinely shared transaction abstraction
+exists.
+
+## Physical provider ownership
+
+The provider pipeline is split by the direction in which trusted application
+state crosses the semantic provider boundary:
+
+- `contract.py` owns provider limits, wire-contract versions, the provider
+  protocol, semantic execution policy, and output schemas;
+- `projection.py` assigns stable opaque aliases and projects typed Meld state
+  into the provider-visible payload;
+- `request.py` binds that payload to the exact prompt, schema, budget, and
+  cache/request digest;
+- `decoder.py` strictly parses one complete response and reconstructs a typed
+  `MeldAssessment` without trusting provider-supplied durable identities;
+- `execution.py` owns the bounded initial and repair calls and composes the
+  preceding stages.
+
+Unlike `meld.model` and `meld.runtime`, `meld.provider` intentionally has no
+compatibility facade. Its package initializer imports and exports nothing;
+production consumers use the narrow owning module directly. This is a
+forward-only internal boundary: retaining the old aggregate imports would hide
+ownership and allow new callers to rebuild the same monolith through a
+convenient package root. The split does not change prompts, schemas, aliases,
+request digests, one-shot limits, repair rules, or the number of provider
+calls.
+
 ## Deliberate non-goals
 
 This slice does not create a generic persisted session schema. Atomize, Meld,
@@ -97,6 +173,11 @@ shape without erasing differences such as Meld's reconstructed Apply retry.
 This slice also does not change Meld cache equivalence or projection. Those
 proofs remain under `CACHE-01`; this lifecycle only guarantees that a cache hit
 cannot be published over a different saved revision.
+
+The package split deliberately does not redesign records, session transitions,
+validation rules, or adapter behavior. It is an ownership refactor whose
+compatibility boundary is the existing `meld.model` facade and byte-for-byte
+equivalent `to_dict()`/`from_dict()` contracts.
 
 ## Verification
 
@@ -110,3 +191,6 @@ cannot be published over a different saved revision.
 - the Meld regression set covers Start, Restart, cache/provider assessment,
   provider-free preservation, zero-change Apply, four authority routes,
   interrupted-receipt recovery, Undo/Redo, CLI/TUI resume, and saved catalogs.
+- structural verification compares every original model class, decorator, and
+  method surface with the split package, and import/serialization smoke tests
+  exercise the compatibility facade.

@@ -1,7 +1,7 @@
 """Click-context compatibility for the shared command wait inventory."""
 
-from memcommit.adapters.console.commands.help_inventory.command import CommandEntry
-from memcommit.adapters.console.tui.components import session_help
+from memcommit.adapters.console.commands.help.command import CommandEntry
+from memcommit.adapters.console.terminal.components import session_help
 
 
 def test_help_inventory_uses_the_vendored_click_context_helper(monkeypatch):
@@ -25,7 +25,7 @@ def test_help_inventory_uses_the_vendored_click_context_helper(monkeypatch):
     )
     monkeypatch.setattr(
         session_help,
-        "command_entries",
+        "_entry_builder",
         lambda context: seen.append(context) or expected,
     )
 

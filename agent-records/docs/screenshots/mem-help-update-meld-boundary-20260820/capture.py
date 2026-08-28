@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[3]
 OUT = ROOT / "agent-records/docs/screenshots/mem-help-update-meld-boundary-20260820"
 sys.path.insert(0, str(ROOT / "src"))
 HELP_CATEGORY_GROUPS = importlib.import_module(
-    "memcommit.adapters.console.commands.help_inventory.command"
+    "memcommit.adapters.console.commands.help.command"
 ).HELP_CATEGORY_GROUPS
 
 _BASE_PATH = ROOT / "agent-records/docs/screenshots/mem-help-command-naming-20260813/capture.py"

@@ -15,10 +15,9 @@ the same typed application and Store runtime.
 | Request, frozen plan, placement, receipt | `memcommit.application.operations.memory_transfer.application` | Nonempty unique Source set, typed local-or-granted Source bindings, exact Target binding, store-wide fresh output UID uniqueness, typed durable receipt |
 | Locator, authority, and Store execution | `memcommit.application.operations.memory_transfer.runtime` | One command-start current snapshot, exact direct Source binding, Grant and authority-Source revalidation when applicable, Target CAS, write protection, exception-atomic publication |
 | Console command | `memcommit.adapters.console.commands.copy` | Copy alone owns its Typer grammar, Grant-aware setup, application handoff, cancellation, errors, and fresh-UID receipt; a granted Memory requires an explicit public owner and the removed `--preserve-uids` spelling is rejected |
-| Shared console mechanics | `memcommit.adapters.console.shared.memory_transfer` | Copy supplies its authority-specific catalogs and freeze callback to the common MULTIPLE direct-Memory, `INTO + POSITION`, editable exact-command, and placement-receipt mechanics; the workbench performs no direct publication |
+| Shared console mechanics | `memcommit.adapters.console.coordination.memory_transfer` | Copy supplies its authority-specific catalogs and freeze callback to the common MULTIPLE direct-Memory, `INTO + POSITION`, editable exact-command, and placement-receipt mechanics; the workbench performs no direct publication |
 | Public Python | `MemCommitClient.copy_memories` | Sequence validation and operation-specific public errors over the same application/runtime; active-Profile clients may use explicit Grants while explicitly rooted clients remain local-only |
-| Agent | `memcommit.adapters.interfaces.agent.memory_transfer` | Strict version-2 JSON schema accepts the same local or public Grant Source names without exposing a second authority policy input; public-client-only execution, typed JSON receipt, no provider |
-| MCP | registry projection | Mechanical projection of the frozen agent schema and handler |
+| Agent | `memcommit.adapters.agent.memory_transfer` | Strict version-2 JSON schema accepts the same local or public Grant Source names without exposing a second authority policy input; public-client-only execution, typed JSON receipt, no provider |
 | History | `memcommit.command_history` | Shared Copy operation UID and complete checkpoint membership form one Undo/Redo unit |
 
 ## Authority and effects

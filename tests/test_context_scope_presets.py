@@ -5,7 +5,7 @@ from click import Group, Option
 from typer.main import get_command
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 import memcommit.adapters.console.commands.query.command as query_command
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context_targeting.presets import (

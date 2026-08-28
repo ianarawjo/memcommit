@@ -2,16 +2,16 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
 import shutil
 import uuid
+from datetime import datetime, timezone
 
-from memcommit.application.operations.init_study.composition import (
+from memcommit.application.operations.init_study.model import StudyInitializationResult
+from memcommit.application.operations.init_study.profile.composition import (
     _coffee_study_packages,
     _legacy_study_packages,
 )
-from memcommit.application.operations.init_study.model import StudyInitializationResult
-from memcommit.application.operations.init_study.publication import (
+from memcommit.application.operations.init_study.profile.publication import (
     _publish_study_run_pair,
 )
 from memcommit.application.operations.profile.config import (

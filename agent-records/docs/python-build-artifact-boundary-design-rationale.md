@@ -1,6 +1,6 @@
 # Python build artifact boundary design rationale
 
-Last verified: 2026-08-26.
+Last verified: 2026-08-27.
 
 ## Problem
 
@@ -50,9 +50,12 @@ The focused distribution check must prove all of the following:
    installed environment rather than the checkout.
 3. The installed wheel contains the canonical `GrantedContextLink` definition
    that the earlier stale copy omitted.
-4. The official MCP client can initialize installed `mem-mcp`, discover Query
-   and Add, perform one Add, and verify its single durable checkpoint.
+4. The installed package can construct the host-neutral agent registry,
+   discover Query and Add, perform one Add, and verify its single durable
+   checkpoint without importing the source checkout.
 
-The ordinary archive/wheel/install/MCP check passed without pre-build cleanup.
-The separate Profile-at-import coupling was then addressed independently in
+The former archive/wheel/install/MCP check passed without pre-build cleanup.
+MCP support was later retired; future artifact verification uses the installed
+Python and agent-registry boundaries instead. The separate Profile-at-import
+coupling was addressed independently in
 `store-root-resolution-design-rationale.md`.

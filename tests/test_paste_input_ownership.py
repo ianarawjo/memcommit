@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import ast
 import importlib
 from pathlib import Path
 import subprocess
@@ -13,8 +12,8 @@ import pytest
 
 
 REPOSITORY_ROOT = Path(__file__).parents[1]
-LEGACY_MODULE = "memcommit.adapters.console.shared.paste_input"
-OWNER_MODULE = "memcommit.adapters.console.tui.components.paste_input"
+LEGACY_MODULE = "memcommit.adapters.console.terminal.components.paste_input"
+OWNER_MODULE = "memcommit.adapters.console.terminal.components.paste_input"
 
 
 @pytest.mark.parametrize(
@@ -48,7 +47,7 @@ assert sys.modules[{OWNER_MODULE!r}] is canonical
     )
 
 
-def test_legacy_paste_input_facade_defines_no_behavior() -> None:
+def test_retired_paste_input_facade_is_absent() -> None:
     path = (
         REPOSITORY_ROOT
         / "src"
@@ -58,12 +57,7 @@ def test_legacy_paste_input_facade_defines_no_behavior() -> None:
         / "shared"
         / "paste_input.py"
     )
-    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
-
-    assert not any(
-        isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
-        for node in ast.walk(tree)
-    )
+    assert not path.exists()
 
 
 def test_legacy_monkeypatch_changes_canonical_capture_globals(monkeypatch) -> None:
@@ -95,5 +89,5 @@ def test_add_command_imports_the_interface_owner() -> None:
         / "command.py"
     ).read_text(encoding="utf-8")
 
-    assert "from memcommit.adapters.console.tui.components.paste_input import (" in source
-    assert "from memcommit.adapters.console.shared.paste_input import" not in source
+    assert "from memcommit.adapters.console.terminal.components.paste_input import (" in source
+    assert "from memcommit.adapters.console.coordination.paste_input import" not in source

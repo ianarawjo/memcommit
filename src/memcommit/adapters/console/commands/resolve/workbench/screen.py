@@ -11,16 +11,18 @@ from memcommit.adapters.console.commands.resolve.workbench.presentation import (
     compact_resolve_view,
     project_resolve_analysis,
 )
-from memcommit.adapters.console.tui.components.plain_text_clipboard import ClipboardWriter
-from memcommit.adapters.interfaces.tui.viewers.semantic import run_semantic_viewer
-from memcommit.adapters.interfaces.tui.workbenches.resolution.compact_shell import (
+from memcommit.adapters.console.terminal.components.plain_text_clipboard import ClipboardWriter
+from memcommit.adapters.console.terminal.components.semantic_viewer import run_semantic_viewer
+from memcommit.adapters.console.terminal.components.resolution.compact_shell import (
     run_compact_resolution_decisions,
 )
 from memcommit.application.operations.resolve.application import (
     ResolveAnalysis,
     ResolveReceipt,
 )
-from memcommit.application.resolution.workbench import ResolutionWorkbenchAction
+from memcommit.application.capabilities.resolution.workbench import (
+    ResolutionWorkbenchAction,
+)
 
 
 def run_resolve_tui(

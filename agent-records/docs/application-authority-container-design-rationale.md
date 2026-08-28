@@ -11,7 +11,7 @@ as shared application policy.
 ## Decision
 
 Relocate the complete package mechanically to
-`memcommit.application.authority`. This step changes physical ownership and
+`memcommit.application.capabilities.authority`. This step changes physical ownership and
 canonical imports only; it does not change permission semantics, persisted
 schemas, callable names, or runtime behavior. No `memcommit.authority`
 compatibility facade is retained.
@@ -37,7 +37,7 @@ already free of persistence dependencies.
 
 - Existing Grant, derived-use, retained-analysis, and write-protection
   decisions remain unchanged.
-- Internal callers use `memcommit.application.authority` as the canonical
+- Internal callers use `memcommit.application.capabilities.authority` as the canonical
   package path.
 - The application package initializer remains import-light.
 - Storage and write-protection schemas remain byte-compatible.

@@ -8,7 +8,7 @@ import uuid
 
 import pytest
 
-from memcommit.application.flow import run_application_flow
+from memcommit.application.capabilities.flow import run_application_flow
 from memcommit.application.operations.update.model import (
     EditOperation,
     GrantedUpdateTarget,

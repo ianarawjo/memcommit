@@ -43,7 +43,7 @@ def _store_digest(root: Path) -> str:
 
 
 def _prepare_atomize_store(root: Path):
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.application.operations.atomize.workflow import open_or_create_atomize_workbench
     from memcommit.persistence.store import MemoryStore
     from tests.test_atomize_workbench import AggregateProvider
@@ -74,7 +74,7 @@ def _prepare_atomize_store(root: Path):
 
 
 def _prepare_meld_store(root: Path):
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.application.operations.meld.model import MeldSession, meld_canonical_digest
     from memcommit.persistence.store import MemoryStore
 
@@ -99,7 +99,7 @@ def _prepare_meld_store(root: Path):
 
 
 def _ambiguity_report(context, memory, *, suffix: str):
-    from memcommit.application.reviewing.quality.findings import AmbiguityFinding, AmbiguityReport
+    from memcommit.application.capabilities.reviewing.quality.findings import AmbiguityFinding, AmbiguityReport
 
     return AmbiguityReport(
         memory_count=len(context.memories),
@@ -120,7 +120,7 @@ def _ambiguity_report(context, memory, *, suffix: str):
 
 
 def _prepare_review_store(root: Path):
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.application.operations.review.model import create_ambiguity_review
     from memcommit.persistence.store import MemoryStore
 
@@ -148,11 +148,10 @@ def _prepare_review_store(root: Path):
 
 def _patch_command_stores(store) -> None:
     import memcommit.adapters.console.commands.atomize.command as atomize_command
-    import memcommit.adapters.console.shared.command_wait as command_wait
+    import memcommit.adapters.console.terminal.components.command_wait as command_wait
     import memcommit.adapters.console.commands.meld.command as meld_command
     import memcommit.adapters.console.commands.review.command as review_command
-    import memcommit.adapters.console.shared.session_help as session_help
-    import memcommit.adapters.console.tui.components.session_help as tui_session_help
+    import memcommit.adapters.console.terminal.components.session_help as session_help
 
     atomize_command.MemoryStore = lambda *args, **kwargs: store
     meld_command.MemoryStore = lambda *args, **kwargs: store
@@ -166,7 +165,6 @@ def _patch_command_stores(store) -> None:
     review_command.connect_codex_chatgpt_provider = reject_provider
     command_wait.current_help_entries = lambda: ()
     session_help.current_help_entries = lambda: ()
-    tui_session_help.current_help_entries = lambda: ()
 
 
 def _run_cli(argv: list[str]) -> None:

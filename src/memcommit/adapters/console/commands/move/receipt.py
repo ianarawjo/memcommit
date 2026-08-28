@@ -4,12 +4,12 @@ from __future__ import annotations
 
 import typer
 
-from memcommit.adapters.console.text import display_escape_text
-from memcommit.adapters.console.theme import (
+from memcommit.adapters.console.terminal.core.text import display_escape_text
+from memcommit.adapters.console.terminal.core.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )
-from memcommit.adapters.console.shared.memory_transfer.receipt import placement_text
+from memcommit.adapters.console.coordination.memory_transfer.receipt import placement_text
 from memcommit.application.operations.memory_transfer.application import (
     MoveMemoriesResult,
 )

@@ -945,9 +945,9 @@ cases:
 
 The fixtures are:
 
-- [`ambiguity.json`](../../src/memcommit/application/evaluation/fixtures/ambiguity.json)
-- [`conflict.json`](../../src/memcommit/application/evaluation/fixtures/conflict.json)
-- [`duplicates.json`](../../src/memcommit/application/evaluation/fixtures/duplicates.json)
+- [`ambiguity.json`](../../src/memcommit/application/capabilities/evaluation/fixtures/ambiguity.json)
+- [`conflict.json`](../../src/memcommit/application/capabilities/evaluation/fixtures/conflict.json)
+- [`duplicates.json`](../../src/memcommit/application/capabilities/evaluation/fixtures/duplicates.json)
 
 They serve three purposes:
 

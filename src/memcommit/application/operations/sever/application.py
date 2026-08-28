@@ -6,7 +6,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Literal, Protocol
 
-from memcommit.application.flow import run_application_flow
+from memcommit.application.capabilities.flow import run_application_flow
 from memcommit.application.operations.sever.model import (
     SeverContextBinding,
     SeverSelection,

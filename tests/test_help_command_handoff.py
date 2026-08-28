@@ -8,13 +8,13 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
-import memcommit.adapters.console.commands.help_inventory.command as help_inventory
+import memcommit.adapters.console.commands.help.command as help_inventory
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.interfaces.tui.operations.help.command_handoff import (
+from memcommit.adapters.console.commands.help.command_handoff import (
     edit_help_command,
     run_help_command,
 )
-from memcommit.adapters.interfaces.tui.operations.help.inventory import HelpSelection
+from memcommit.adapters.console.commands.help.command import HelpSelection
 
 
 runner = CliRunner(mix_stderr=False)

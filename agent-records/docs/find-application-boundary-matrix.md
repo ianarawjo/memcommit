@@ -7,7 +7,7 @@ Last reviewed: 2026-08-25.
 `Find` is the provider-free counterpart to semantic `Search`. It locates every
 literal or explicitly requested regular-expression occurrence in one frozen
 readable Context scope. The operation must be equally callable from CLI, TUI,
-Python, agent, and MCP routes without any route constructing a provider,
+Python and agent routes without any route constructing a provider,
 semantic cache, visible session, or mutation plan.
 
 ## Call path
@@ -16,7 +16,7 @@ semantic cache, visible session, or mutation plan.
 mem find PATTERN -------------------\
 interactive Find workbench ----------+--> FindRequest
 MemCommitClient.find ----------------+
-agent/MCP memcommit_find ------------/          |
+agent memcommit_find ----------------/          |
                                                   v
                                       run_find
                                       (application)
@@ -39,7 +39,7 @@ frozen Source frame, span and result contracts, pattern validation, and
 complete non-overlapping matching. `runtime.py` owns readable catalog
 composition, lexical and embedded reach, MemoryRef resolution, and the Store
 adapter that freezes the authorized corpus before matching. CLI, TUI, Python,
-agent, MCP, and presentation adapters import those operation-owned modules
+agent and presentation adapters import those operation-owned modules
 directly.
 
 The human console vertical is co-located under
@@ -76,7 +76,7 @@ non-goals of the ownership-only move.
 | Result | `FindResult` | Complete scanned-item, matched-item, and occurrence counts accompany immutable per-item spans |
 | Durable effect | none | No provider, cache, session, checkpoint, Context write, current switch, or materialization occurs |
 | Presentation | command-owned plain and interactive adapters, neutral Source Reference projection, shared compact Scope, and shared compact pager mechanics | Rows use `N [UID] content, [Context mX]`, where `N` is match order and `mX` is frozen searchable-corpus position; Up to ten matches print inline; a longer supplied-pattern TTY result uses a primary-screen ten-row pager with `SHOWING a–b OF total`, row/page/boundary arrow navigation, wrapped complete rows, and a non-erasing close; `--plain` retains the bounded static projection and `--all-results` prints every row; `-a/--all` instead freezes every readable Context as the exact target set; Find never content-elides a Source row; operand-free `mem find` or explicit `--tui` opens a primary-screen `SCOPE → FIND → RESULTS` form whose direct exact Context input expands to Profile/multiple tree selection only while Browse is open; `y` copies the complete numbered focused row there, while `--copy` and TUI `Y` copy the complete typed result projection |
-| Public adapters | Python and version-1 agent/MCP | Both call the same runtime/application boundary and return typed/JSON projections with `effect: NONE` and `provider_used: false` |
+| Public adapters | Python and version-1 agent | Both call the same runtime/application boundary and return typed/JSON projections with `effect: NONE` and `provider_used: false` |
 
 The shared compact selector projects descendant choices into the exact visible
 checked set before request construction. This deliberately prevents an
@@ -110,7 +110,7 @@ loader expansion.
 - `tests/test_find_public_api.py` and
   `tests/test_find_agent_adapter.py` check the public Python and
   versioned machine contracts, including provider/cache isolation.
-- Registry and MCP projection tests prove the agent tool is exposed through
+- Registry tests prove the agent tool is exposed through
   the ordinary in-process registry rather than a CLI subprocess.
 
 ## Boundaries and non-goals
@@ -120,7 +120,7 @@ loader expansion.
 - Matching is non-overlapping. Overlapping regex enumeration would require a
   different span and Replace cardinality contract.
 - Compact rows do not remove spans from `FindResult`, public Python,
-  agent/MCP projections, or Replace planning. They only omit raw offsets from
+  agent projections, or Replace planning. They only omit raw offsets from
   the default human projection.
 - Compact paging is presentation-only. It receives one frozen complete result,
   does not search again, and cannot broaden scope, change counts, or publish a

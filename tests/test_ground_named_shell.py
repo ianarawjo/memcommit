@@ -11,7 +11,7 @@ from prompt_toolkit.output import DummyOutput
 from prompt_toolkit.utils import get_cwidth
 
 import memcommit.adapters.console.commands.ground.named_shell.runtime as ground_named_shell_module
-from memcommit.adapters.console.shared.exact_command_review import ExactCommandReview
+from memcommit.adapters.console.coordination.command_review.model import CommandReview
 from memcommit.adapters.console.commands.ground.named_shell import (
     GroundCommandProposal,
     _line,
@@ -77,7 +77,7 @@ def proposal(session, text, *, kind="PROPOSE_RULE"):
         kind=kind,
         understanding=f"Understood: {text}",
         question="Approve this exact Ground command?",
-        review=ExactCommandReview(
+        review=CommandReview(
             argv=(
                 "mem",
                 "ground",
@@ -209,7 +209,7 @@ def review_proposal(session, item, *, action, response=""):
         kind="REVIEW_ITEM",
         understanding=f"Review {item.kind}.",
         question="Approve this exact review?",
-        review=ExactCommandReview(
+        review=CommandReview(
             argv=tuple(argv),
             effects=(
                 f"Selected Rule/Ground Memory: {action}",
@@ -429,7 +429,7 @@ def test_named_context_focused_comment_can_prepare_goal_proposal_without_apply()
             kind="REVISE_GOAL",
             understanding="The Context comment changes the Goal boundary.",
             question="Approve this exact Goal revision?",
-            review=ExactCommandReview(
+            review=CommandReview(
                 argv=(
                     "mem",
                     "ground",
@@ -1173,7 +1173,7 @@ def test_named_ground_space_reviews_and_applies_selected_use_toggle(
             kind="SET_EXAMPLE_USE",
             understanding="The selected Example will no longer participate.",
             question="Approve setting USE to EXCLUDE?",
-            review=ExactCommandReview(
+            review=CommandReview(
                 argv=(
                     "mem",
                     "ground",
@@ -1732,7 +1732,7 @@ def test_ground_memory_proposal_effects_name_alias_rule_targets_and_expected():
         kind="PROPOSE_CASE",
         understanding="Add one boundary Ground Memory.",
         question="Approve this exact Ground Memory proposal?",
-        review=ExactCommandReview(
+        review=CommandReview(
             argv=(
                 "mem",
                 "ground",
@@ -1802,7 +1802,7 @@ def test_proposition_memory_proposal_effects_separate_statement_and_projection()
         kind="PROPOSE_CASE",
         understanding="Add one proposition-authoritative Ground Memory.",
         question="Approve this exact Ground Memory proposal?",
-        review=ExactCommandReview(
+        review=CommandReview(
             argv=(
                 "mem",
                 "ground",

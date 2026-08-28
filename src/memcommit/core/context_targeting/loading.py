@@ -6,7 +6,7 @@ import json
 from typing import Protocol
 
 from memcommit.core.context import Context, Information, Memory
-from memcommit.application.context_locator import resolve_context_locator
+from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.core.context_targeting.memory_focus import is_memory_uid_prefix
 from memcommit.core.context_targeting.model import (
     ContextScope,

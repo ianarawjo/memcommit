@@ -6,9 +6,9 @@ import json
 
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.shared.history_picker import HistorySelectionReceipt
+from memcommit.adapters.console.terminal.components.history.picker import HistorySelectionReceipt
 from memcommit.core.context import AutoCheckpoint, Memory
 from memcommit.persistence.store import MemoryStore
 
@@ -58,7 +58,7 @@ def test_bare_revert_uses_picker_and_exact_returned_uid(
     )
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.shared.diff_browser.choose_history_location",
+        "memcommit.adapters.console.terminal.components.history.browser.choose_history_location",
         lambda *args, **kwargs: (_ for _ in ()).throw(
             AssertionError("bare Revert must not open the Profile Context tree")
         ),
@@ -74,7 +74,7 @@ def test_bare_revert_uses_picker_and_exact_returned_uid(
         )
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.shared.diff_browser.choose_history",
+        "memcommit.adapters.console.terminal.components.history.browser.choose_history",
         choose,
     )
 
@@ -134,7 +134,7 @@ def test_bare_revert_keeps_an_empty_current_context_as_its_scope(
         lambda: True,
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.shared.diff_browser.choose_history_location",
+        "memcommit.adapters.console.terminal.components.history.browser.choose_history_location",
         lambda *args, **kwargs: (_ for _ in ()).throw(
             AssertionError("an empty current Context must not broaden Revert")
         ),
@@ -146,7 +146,7 @@ def test_bare_revert_keeps_an_empty_current_context_as_its_scope(
         return None
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.shared.diff_browser.choose_history",
+        "memcommit.adapters.console.terminal.components.history.browser.choose_history",
         choose,
     )
 
@@ -173,7 +173,7 @@ def test_revert_tui_keep_choice_preserves_newer_checkpoint_files(
         lambda: True,
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.shared.diff_browser.choose_history",
+        "memcommit.adapters.console.terminal.components.history.browser.choose_history",
         lambda *args, **kwargs: HistorySelectionReceipt(
             context_name="notes",
             checkpoint_uid=target_uid,
@@ -452,7 +452,7 @@ def test_picker_frame_change_aborts_before_revert(
         )
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.shared.diff_browser.choose_history",
+        "memcommit.adapters.console.terminal.components.history.browser.choose_history",
         choose,
     )
 
@@ -542,7 +542,7 @@ def test_cancelled_picker_does_not_resolve_memory_ref_targets(
         lambda: True,
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.shared.diff_browser.choose_history",
+        "memcommit.adapters.console.terminal.components.history.browser.choose_history",
         lambda *args, **kwargs: None,
     )
 

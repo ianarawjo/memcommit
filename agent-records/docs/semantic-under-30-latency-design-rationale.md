@@ -436,7 +436,7 @@ rather than an item-disposition vector.
 - Existing production semantic behavior remains unchanged while this is an
   experiment design.
 - `provider.complete()` remains one bounded provider-call primitive. Planning
-  and reconciliation belong under `memcommit.application.semantic_execution`.
+  and reconciliation belong under `memcommit.application.capabilities.semantic_execution`.
 - No over-budget frame may be silently truncated.
 - No failed or incomplete batch may publish a partial result.
 - Frozen inputs must be exposed according to the declared strategy, and the
@@ -994,7 +994,7 @@ graph does not split one selected Context across calls. The broadened cache is
 documented separately in
 `agent-records/docs/study-compare-graph-prewarm-design-rationale.md`.
 
-`memcommit.application.evaluation.study_compare_prewarm` resolves the same local or granted
+`memcommit.study_scenarios.legacy.prewarm.generation.compare_pair` resolves the same local or granted
 accesses as production Compare, uses the same recursive source projection and
 atomic execution boundary, and keeps the semantic artifact inside the active
 Profile's authorized store. Its repository receipt is content-free. The first

@@ -49,7 +49,7 @@ def _configure_isolated_store(store_root: Path) -> None:
 
 
 def _initialize_reference() -> None:
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()
@@ -62,7 +62,7 @@ def _initialize_reference() -> None:
 
 
 def _initialize_edit() -> None:
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()
@@ -213,7 +213,7 @@ def _capture_reference() -> None:
 
 
 def _capture_edit() -> None:
-    from memcommit.adapters.console.text import display_escape_text
+    from memcommit.adapters.console.terminal.core.text import display_escape_text
 
     child, recorder = _spawn("edit")
     try:

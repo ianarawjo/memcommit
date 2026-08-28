@@ -5,10 +5,10 @@ from __future__ import annotations
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.adapters.console.text import safe_terminal_text
-from memcommit.adapters.console.theme import semantic_quality_role
-from memcommit.adapters.console.tui.core.theme import semantic_role_style
-from memcommit.adapters.interfaces.tui.viewers.semantic import (
+from memcommit.adapters.console.terminal.core.text import safe_terminal_text
+from memcommit.adapters.console.terminal.core.theme import semantic_quality_role
+from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import semantic_role_style
+from memcommit.adapters.console.terminal.components.semantic_viewer import (
     SemanticViewerBlock,
     SemanticViewerDocument,
     SemanticViewerSection,
@@ -16,16 +16,16 @@ from memcommit.adapters.interfaces.tui.viewers.semantic import (
     run_semantic_viewer,
     semantic_document_plain_text,
 )
-from memcommit.adapters.interfaces.tui.workbenches.findings import (
+from memcommit.adapters.console.terminal.components.findings import (
     quality_finding_compact_fragments,
     quality_find_report_header_text,
 )
-from memcommit.application.reviewing.quality.audit import (
+from memcommit.application.capabilities.reviewing.quality.audit import (
     QualityAuditSession,
     quality_audit_resolution_view,
 )
-from memcommit.application.reviewing.quality.report import quality_find_category_label
-from memcommit.application.reviewing.quality.workbench import (
+from memcommit.application.capabilities.reviewing.quality.report import quality_find_category_label
+from memcommit.application.capabilities.reviewing.quality.workbench import (
     QualityFindSourceFrame,
     QualityFindWorkbenchSession,
     quality_find_report_view,

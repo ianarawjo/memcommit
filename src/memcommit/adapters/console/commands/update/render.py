@@ -7,12 +7,12 @@ from dataclasses import replace
 
 import typer
 
-from memcommit.application.review_policy import (
+from memcommit.application.capabilities.review_policy import (
     ownership_aware_application_review,
 )
-from memcommit.adapters.interfaces.tui.workbenches.impact import ImpactController
-from memcommit.application.reviewing.memory_diff import update_operation_change
-from memcommit.adapters.console.shared.resolution_workbench_shell import (
+from memcommit.adapters.console.terminal.components.impact import ImpactController
+from memcommit.application.capabilities.reviewing.memory_diff import update_operation_change
+from memcommit.adapters.console.terminal.components.resolution.session_shell import (
     ResolutionGlobalStrategy,
     render_resolution_workbench_snapshot,
     run_resolution_workbench_shell,
@@ -23,7 +23,9 @@ from memcommit.application.operations.update.model import (
     required_grant_permissions,
     update_session_record_digest,
 )
-from memcommit.application.interactive_command_review import update_turn_command_review
+from memcommit.adapters.console.coordination.command_review import (
+    update as update_command_review,
+)
 from memcommit.application.operations.update.resolution_adapter import (
     UpdateResolutionWorkbenchAdapter,
 )
@@ -163,7 +165,7 @@ def review_update_application(
                 ),
             ),
             turn_command_review=lambda action: (
-                update_turn_command_review(
+                update_command_review.build_turn_review(
                     source_name=current.source_name,
                     target_name=current.target_name,
                     source_descendants=current.source_include_descendants,

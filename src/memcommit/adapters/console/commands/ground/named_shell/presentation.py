@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 
-from memcommit.adapters.console.text import (
+from memcommit.adapters.console.terminal.core.text import (
     safe_terminal_text,
 )
 from memcommit.application.operations.ground.model import (

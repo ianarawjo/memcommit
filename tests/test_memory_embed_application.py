@@ -7,7 +7,7 @@ from dataclasses import replace
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Memory, MemoryRef
 from memcommit.application.operations.embed.application import (

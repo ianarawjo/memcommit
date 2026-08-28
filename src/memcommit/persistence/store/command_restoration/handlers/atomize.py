@@ -32,7 +32,7 @@ class _AtomizeRestorationMixin:
         from memcommit.application.operations.atomize.workbench import (
             atomize_workbench_record_digest,
         )
-        from memcommit.application.retained_history.command_history import (
+        from memcommit.application.capabilities.retained_history.command_history import (
             CommandRestoreResult,
             command_restore_metadata,
         )

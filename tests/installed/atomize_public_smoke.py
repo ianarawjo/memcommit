@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 
 import memcommit
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit import MemCommitClient
 from memcommit.persistence.store import MemoryStore
 

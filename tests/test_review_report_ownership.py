@@ -8,15 +8,15 @@ import sys
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-CANONICAL_MODULE = "memcommit.application.reviewing.report"
+CANONICAL_MODULE = "memcommit.application.capabilities.reviewing.report"
 
 
 def test_reviewing_package_import_is_lazy() -> None:
     program = """
 import sys
-import memcommit.application.reviewing
+import memcommit.application.capabilities.reviewing
 
-assert "memcommit.application.reviewing.report" not in sys.modules
+assert "memcommit.application.capabilities.reviewing.report" not in sys.modules
 """
     subprocess.run(
         [sys.executable, "-c", program],
@@ -27,7 +27,7 @@ assert "memcommit.application.reviewing.report" not in sys.modules
 
 def test_production_review_report_consumers_use_the_shared_owner() -> None:
     relative_paths = (
-        "src/memcommit/application/retained_history/applied_review.py",
+        "src/memcommit/application/capabilities/retained_history/applied_review.py",
         "src/memcommit/adapters/console/commands/review/report.py",
         "src/memcommit/application/operations/review/report_adapters.py",
     )
@@ -35,7 +35,7 @@ def test_production_review_report_consumers_use_the_shared_owner() -> None:
     for relative_path in relative_paths:
         source = (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         assert "from memcommit.review_report import" not in source
-        assert "from memcommit.application.reviewing.report import" in source
+        assert "from memcommit.application.capabilities.reviewing.report import" in source
 
 
 def test_shared_review_report_does_not_own_operation_adapters() -> None:
@@ -44,6 +44,7 @@ def test_shared_review_report_does_not_own_operation_adapters() -> None:
         / "src"
         / "memcommit"
         / "application"
+        / "capabilities"
         / "reviewing"
         / "report.py"
     ).read_text(encoding="utf-8")

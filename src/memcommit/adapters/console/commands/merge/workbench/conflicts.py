@@ -7,21 +7,21 @@ from collections.abc import Callable
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.adapters.console.text import safe_terminal_text
-from memcommit.adapters.console.tui.components.exact_command_review import (
-    ExactCommandReview,
+from memcommit.adapters.console.terminal.core.text import safe_terminal_text
+from memcommit.adapters.console.terminal.components.exact_command_review import (
+    CommandReview,
 )
-from memcommit.adapters.console.tui.components.plain_text_clipboard import ClipboardWriter
+from memcommit.adapters.console.terminal.components.plain_text_clipboard import ClipboardWriter
 from memcommit.adapters.console.commands.merge.workbench.review import (
     merge_plan_exact_command_review,
     project_merge_plan,
 )
-from memcommit.adapters.interfaces.tui.viewers.semantic import (
+from memcommit.adapters.console.terminal.components.semantic_viewer import (
     SemanticViewerBlock,
     SemanticViewerDocument,
     SemanticViewerSection,
 )
-from memcommit.adapters.interfaces.tui.workbenches.resolution import (
+from memcommit.adapters.console.terminal.components.resolution import (
     ResolutionBulkStrategy,
     ResolutionChoice,
     ResolutionInlineChoice,
@@ -30,7 +30,7 @@ from memcommit.adapters.interfaces.tui.workbenches.resolution import (
     ResolutionWorkbenchSpec,
     run_resolution_workbench,
 )
-from memcommit.application.reviewing.memory_diff import MemoryChange, memory_diff_lines
+from memcommit.application.capabilities.reviewing.memory_diff import MemoryChange, memory_diff_lines
 from memcommit.application.operations.merge.application import (
     FrozenMergePlan,
     MergeConflict,
@@ -156,7 +156,7 @@ def _argv_for(plan: FrozenMergePlan, outcome: ResolutionOutcome) -> tuple[str, .
 def merge_resolution_exact_review(
     plan: FrozenMergePlan,
     outcome: ResolutionOutcome,
-) -> ExactCommandReview:
+) -> CommandReview:
     """Bind the exact frozen conflict decisions to one reviewed command."""
 
     take_count = sum(
@@ -165,7 +165,7 @@ def merge_resolution_exact_review(
     )
     keep_count = len(outcome.decisions) - take_count
     base = merge_plan_exact_command_review(plan)
-    return ExactCommandReview(
+    return CommandReview(
         argv=_argv_for(plan, outcome),
         effects=(
             *base.effects,

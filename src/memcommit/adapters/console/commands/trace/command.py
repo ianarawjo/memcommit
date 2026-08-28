@@ -7,44 +7,44 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.application.authority.access import resolve_context_access
+from memcommit.application.capabilities.authority.access import resolve_context_access
 from memcommit.persistence.command_ledger.attempts import annotate_memory_report_attempt
-from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
-from memcommit.adapters.console.shared.memory_history import (
+from memcommit.adapters.console.coordination.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.coordination.memory_history import (
     build_memory_history,
     load_retained_history_context,
     load_retained_history_scope,
 )
-from memcommit.adapters.console.shared.memory_picker import (
+from memcommit.adapters.console.terminal.components.memory_report_picker import (
     ScopedMemoryPickerItem,
     choose_memory_report_target,
 )
-from memcommit.adapters.console.shared.memory_report_recents import (
+from memcommit.adapters.console.coordination.memory_report_recents import (
     MemoryReportRecentSelection,
     MemoryReportSelectAction,
     choose_memory_report_recent,
 )
-from memcommit.adapters.console.shared.history_target import resolve_explicit_context_history_target
+from memcommit.adapters.console.coordination.history_target import resolve_explicit_context_history_target
 from memcommit.adapters.console.commands.trace.context_projection import (
     format_context_trace_report,
     open_context_trace_viewer,
 )
-from memcommit.adapters.interfaces.tui.viewers.read_only import interactive_report_terminal
+from memcommit.adapters.console.terminal.components.read_only_viewer import interactive_report_terminal
 from memcommit.adapters.console.commands.trace.projection import (
     DEFAULT_TRACE_OPERATION_LIMIT,
     MAX_TRACE_OPERATION_LIMIT,
     format_compact_trace_report,
     open_trace_viewer,
 )
-from memcommit.adapters.console.text import (
+from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
     safe_terminal_text,
 )
-from memcommit.application.retained_history.granted_provenance import (
+from memcommit.application.capabilities.retained_history.granted_provenance import (
     GrantedMemoryTraceReport,
     build_granted_memory_trace,
 )
-from memcommit.application.retained_history.context_history import ContextTraceReport, build_context_trace
+from memcommit.application.capabilities.retained_history.context_history import ContextTraceReport, build_context_trace
 from memcommit.core.context_targeting.model import ContextTarget
 from memcommit.core.context_targeting.report_items import (
     ReadableMemoryTargetNotFoundError,
@@ -53,10 +53,10 @@ from memcommit.core.context_targeting.report_items import (
     resolve_local_memory_report_target,
     resolve_readable_memory_target,
 )
-from memcommit.application.retained_history.memory_history_reconstruction.retained_record_verification import (
+from memcommit.application.capabilities.retained_history.memory_history_reconstruction.retained_record_verification import (
     MemoryHistoryReconstructionError,
 )
-from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
+from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_construction import (
     MemoryHistory,
     collect_memory_history_candidates,
 )

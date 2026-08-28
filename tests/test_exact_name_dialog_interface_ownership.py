@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import ast
 import subprocess
 import sys
 from pathlib import Path
@@ -9,8 +8,8 @@ import pytest
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-LEGACY_MODULE = "memcommit.adapters.console.shared.exact_name_dialog"
-CANONICAL_MODULE = "memcommit.adapters.console.tui.components.exact_name_dialog"
+LEGACY_MODULE = "memcommit.adapters.console.terminal.components.exact_name_dialog"
+CANONICAL_MODULE = "memcommit.adapters.console.terminal.components.exact_name_dialog"
 
 
 @pytest.mark.parametrize("legacy_first", (True, False), ids=("old-first", "new-first"))
@@ -44,14 +43,6 @@ assert sys.modules[{CANONICAL_MODULE!r}] is canonical
     )
 
 
-def test_legacy_exact_name_dialog_defines_no_behavior() -> None:
-    source_path = REPOSITORY_ROOT / "src/memcommit/adapters/console/shared/exact_name_dialog.py"
-    tree = ast.parse(source_path.read_text(encoding="utf-8"))
-
-    definitions = [
-        node
-        for node in ast.walk(tree)
-        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
-    ]
-
-    assert definitions == []
+def test_retired_exact_name_dialog_facade_is_absent() -> None:
+    source_path = REPOSITORY_ROOT / "src/memcommit/adapters/console/coordination/exact_name_dialog.py"
+    assert not source_path.exists()

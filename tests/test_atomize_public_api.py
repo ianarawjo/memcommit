@@ -12,7 +12,7 @@ import sys
 
 import pytest
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit import (
     AtomizeAnalysisResult,
     AtomizeConflictError,

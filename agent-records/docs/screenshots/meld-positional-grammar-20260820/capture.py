@@ -192,7 +192,7 @@ def _pause(label: str) -> None:
 def _run_child(store_root: Path) -> None:
     _set_store_root(store_root)
 
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.adapters.console.entrypoint import app
     from memcommit.adapters.console.commands import meld as meld_command
     from memcommit.persistence.store import MemoryStore

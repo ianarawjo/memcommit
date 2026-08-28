@@ -13,34 +13,34 @@ from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
-from memcommit.adapters.console.terminal import require_interactive_terminal
-from memcommit.adapters.console.text import safe_terminal_text
-from memcommit.adapters.console.tui.components.exact_command_review import (
-    ExactCommandReview,
+from memcommit.adapters.console.terminal.core.capabilities import require_interactive_terminal
+from memcommit.adapters.console.terminal.core.text import safe_terminal_text
+from memcommit.adapters.console.terminal.components.exact_command_review import (
+    CommandReview,
     render_exact_command_review,
 )
-from memcommit.adapters.console.tui.components.focus import (
+from memcommit.adapters.console.terminal.components.focus import (
     FocusSurface,
     SurfaceActionResult,
     SurfaceFocusController,
     SurfaceMoveResult,
     bind_surface_navigation,
 )
-from memcommit.adapters.console.tui.components.frame import (
+from memcommit.adapters.console.terminal.components.frame import (
     TuiRegion,
     build_focused_frame,
     build_tui_frame,
 )
-from memcommit.adapters.console.tui.core.keybindings import (
+from memcommit.adapters.console.terminal.core.keybindings import (
     bind_case_insensitive_key,
     dispatch_tui_back,
 )
-from memcommit.adapters.console.tui.core.theme import (
+from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
     focused_control_style,
 )
-from memcommit.adapters.interfaces.tui.viewers.semantic import (
+from memcommit.adapters.console.terminal.components.semantic_viewer import (
     SemanticViewerBlock,
     SemanticViewerController,
     SemanticViewerDocument,
@@ -53,7 +53,7 @@ from memcommit.application.operations.merge.application import (
     MergeResult,
 )
 from memcommit.application.operations.merge.runtime import merge_summary
-from memcommit.application.reviewing.session_navigation import SessionWorkbenchNavigation
+from memcommit.application.capabilities.reviewing.session_navigation import SessionWorkbenchNavigation
 
 
 def merge_exact_command_review(
@@ -61,7 +61,7 @@ def merge_exact_command_review(
     target_name: str,
     *,
     recursive: bool,
-) -> ExactCommandReview:
+) -> CommandReview:
     """Describe one exact deterministic union and its complete reach boundary."""
 
     scope = (
@@ -75,7 +75,7 @@ def merge_exact_command_review(
         if recursive
         else f"Only direct items in Target Context '{target_name}' may change."
     )
-    return ExactCommandReview(
+    return CommandReview(
         argv=(
             "mem",
             "merge",
@@ -93,7 +93,7 @@ def merge_exact_command_review(
     )
 
 
-def merge_plan_exact_command_review(plan: FrozenMergePlan) -> ExactCommandReview:
+def merge_plan_exact_command_review(plan: FrozenMergePlan) -> CommandReview:
     """Bind the exact command to the already frozen Context plan."""
 
     if not isinstance(plan, FrozenMergePlan):
@@ -104,7 +104,7 @@ def merge_plan_exact_command_review(plan: FrozenMergePlan) -> ExactCommandReview
         recursive=plan.request.reach is MergeReach.DESCENDANTS,
     )
     created = sum(context.target_created for context in plan.contexts)
-    return ExactCommandReview(
+    return CommandReview(
         argv=base.argv,
         effects=(
             f"Apply this {plan.request.reach.value} plan to "

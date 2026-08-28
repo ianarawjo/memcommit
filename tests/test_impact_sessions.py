@@ -10,15 +10,15 @@ from typer.testing import CliRunner
 
 import memcommit.adapters.console.commands.impact.command as impact_command
 import memcommit.adapters.console.commands.update.command as update_command
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.help_inventory.command import COMMAND_FORMS
+from memcommit.adapters.console.commands.help.command import COMMAND_FORMS
 from memcommit.adapters.console.commands.impact.registry import IMPACT_ROUTES, ImpactLifecycle
 from memcommit.adapters.console.commands.impact.sessions import (
     render_impact_session_snapshot,
     update_impact_presentation,
 )
-from memcommit.adapters.console.tui.components.operation_launcher.session import (
+from memcommit.adapters.console.terminal.components.operation_launcher.session import (
     SessionOpenReceipt,
 )
 from memcommit.persistence.store import MemoryStore

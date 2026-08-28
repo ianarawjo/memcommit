@@ -11,35 +11,35 @@ from memcommit.persistence.command_ledger.attempts import (
     current_command_attempt_uid,
     annotate_memory_report_attempt,
 )
-from memcommit.adapters.console.shared.command_progress import CommandProgress
-from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
-from memcommit.adapters.console.shared.history_present import (
+from memcommit.adapters.console.terminal.components.progress import CommandProgress
+from memcommit.adapters.console.coordination.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.terminal.components.history.presentation import (
     history_result_recovery_label,
 )
-from memcommit.adapters.console.shared.memory_history import (
+from memcommit.adapters.console.coordination.memory_history import (
     build_memory_history,
     load_retained_history_context,
 )
 from memcommit.adapters.console.commands.trace.projection import (
     format_compact_trace_report,
 )
-from memcommit.adapters.console.text import (
+from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
     safe_terminal_text,
 )
-from memcommit.adapters.console.theme import (
+from memcommit.adapters.console.terminal.core.theme import (
     MEMORY_HEX,
     SemanticColorRole,
     semantic_action_role,
     semantic_color_rgb,
 )
-from memcommit.application.retained_history.display import (
+from memcommit.application.capabilities.retained_history.display import (
     HistoryDisplayRow,
     HistoryRowSegment,
     history_display_row_segments,
     project_history_display_rows,
 )
-from memcommit.application.retained_history.reconstruction import HistoryError, build_history
+from memcommit.application.capabilities.retained_history.reconstruction import HistoryError, build_history
 from memcommit.application.operations.log.search import (
     HistorySearchError,
     HistorySearchResult,
@@ -49,7 +49,7 @@ from memcommit.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )
-from memcommit.application.retained_history.memory_history_reconstruction.retained_record_verification import (
+from memcommit.application.capabilities.retained_history.memory_history_reconstruction.retained_record_verification import (
     MemoryHistoryReconstructionError,
 )
 from memcommit.application.operations.profile.config import ProfileConfigError

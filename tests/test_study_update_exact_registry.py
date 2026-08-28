@@ -7,7 +7,7 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.configuration.config as config_module
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.commands.update import command as update_command
 from memcommit.adapters.console.entrypoint import app
 from memcommit.configuration.config import Config

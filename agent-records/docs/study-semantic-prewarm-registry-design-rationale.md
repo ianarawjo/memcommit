@@ -61,7 +61,7 @@ while a medium artifact cannot satisfy a high request.
 ## Implemented first slice and measured boundary
 
 `memcommit.study_scenarios.legacy.prewarm` owns the preserved strict,
-versioned, task-local registry. `memcommit.application.evaluation.study_compare_registry`
+versioned, task-local registry. `memcommit.study_scenarios.legacy.prewarm.generation.compare_registry`
 can publish an already retained exact `ComparisonAnalysis` into an explicitly
 selected research fixture without a provider call. The research installer
 validates its artifact digest, task, task-description digest, Context and
@@ -130,7 +130,7 @@ The implemented production transfer order after the Atomize slice was:
 ### Tutorial Atomize exact prewarm
 
 The second production slice moves only the fixed tutorial analysis out of the
-participant turn. `memcommit.application.evaluation.study_atomize_registry` publishes an already
+participant turn. `memcommit.study_scenarios.legacy.prewarm.generation.atomize_registry` publishes an already
 validated `AtomizeAnalysisSession` into the baseline registry. A new Study run
 checks the exact `practice/source` direct-Memory ledger, the complete
 `practice/description` digest, Atomize ruleset and prompt/decoder contract,

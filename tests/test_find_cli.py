@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import memcommit.adapters.console.commands.find.command as find_command
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.core.context import Memory
 from memcommit.application.operations.resolve.application import ResolveError
 from memcommit.application.operations.resolve.targeting import normalize_resolve_cli_targets

@@ -8,10 +8,10 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
-from memcommit.application.authority.access import resolve_context_access
+import memcommit.application.capabilities.ops as ops
+from memcommit.application.capabilities.authority.access import resolve_context_access
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.retained_history.command_history import build_command_stacks
+from memcommit.application.capabilities.retained_history.command_history import build_command_stacks
 from memcommit.core.context import MemoryRef
 from memcommit.application.operations.dedun.scope import (
     apply_recursive_dedun_scope,
@@ -20,8 +20,8 @@ from memcommit.application.operations.dedun.scope import (
 )
 from memcommit.application.operations.dedun.application import DedunConflictError
 from memcommit.application.operations.dedun.runtime import MemoryStoreDedunPort
-from memcommit.application.reviewing.quality.findings import DuplicateReport, FindingsError
-from memcommit.application.reviewing.quality.redundancy_scope import analyze_independent_redundancy_scope
+from memcommit.application.capabilities.reviewing.quality.findings import DuplicateReport, FindingsError
+from memcommit.application.capabilities.reviewing.quality.redundancy_scope import analyze_independent_redundancy_scope
 from memcommit.persistence.store import MemoryStore
 
 

@@ -81,8 +81,8 @@ def _run_child() -> None:
 
     import memcommit.adapters.console.commands.find_duplicates.command as find_command
     from memcommit.adapters.console.entrypoint import app
-    from memcommit.application.reviewing.quality.findings import DuplicateFinding, DuplicateReport
-    from memcommit.application.reviewing.read_report_recents import read_report_recents
+    from memcommit.application.capabilities.reviewing.quality.findings import DuplicateFinding, DuplicateReport
+    from memcommit.application.capabilities.reviewing.read_report_recents import read_report_recents
     from memcommit.persistence.store import MemoryStore
 
     with tempfile.TemporaryDirectory(prefix="dedun-direct-repeat-") as directory:

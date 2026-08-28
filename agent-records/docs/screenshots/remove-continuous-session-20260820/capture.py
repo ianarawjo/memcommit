@@ -45,7 +45,7 @@ def _configure_store(root: Path) -> None:
 
 
 def _seed_store():
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.core.context import Memory
     from memcommit.persistence.store import MemoryStore
 

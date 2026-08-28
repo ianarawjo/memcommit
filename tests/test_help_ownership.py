@@ -29,8 +29,8 @@ assert "memcommit.application.operations.help.lookup_application" not in sys.mod
 def test_production_help_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "src/memcommit/adapters/python_api/_operations/help.py",
-        "src/memcommit/adapters/interfaces/agent/help.py",
-        "src/memcommit/adapters/interfaces/tui/operations/help/inventory.py",
+        "src/memcommit/adapters/agent/help.py",
+        "src/memcommit/adapters/console/commands/help/command.py",
         "src/memcommit/application/operations/help/lookup_application.py",
     )
     legacy_imports = (
@@ -43,12 +43,30 @@ def test_production_help_consumers_use_the_operation_owner() -> None:
         assert not [legacy for legacy in legacy_imports if legacy in source]
 
 
+def test_operation_translations_belong_to_the_catalog() -> None:
+    catalog_localization = (
+        REPOSITORY_ROOT
+        / "src/memcommit/application/operations/operation_catalog/localization.py"
+    ).read_text(encoding="utf-8")
+    help_copy = (
+        REPOSITORY_ROOT
+        / "src/memcommit/adapters/console/commands/help/localized_copy.py"
+    ).read_text(encoding="utf-8")
+
+    assert "memcommit.adapters" not in catalog_localization
+    assert "prompt_toolkit" not in catalog_localization
+    assert "typer" not in catalog_localization
+    assert "OPERATION_TRANSLATIONS" not in help_copy
+    assert "_CATEGORY_DESCRIPTIONS" in help_copy
+
+
 def test_help_owner_preserves_catalog_and_injected_provider_boundaries() -> None:
     application_source = (
         REPOSITORY_ROOT / "src/memcommit/application/operations/help/application.py"
     ).read_text(encoding="utf-8")
     lookup_source = (
-        REPOSITORY_ROOT / "src/memcommit/application/operations/help/lookup_application.py"
+        REPOSITORY_ROOT
+        / "src/memcommit/application/operations/help/lookup_application.py"
     ).read_text(encoding="utf-8")
     combined = application_source + lookup_source
 
@@ -70,7 +88,7 @@ import sys
 from pathlib import Path
 from memcommit.adapters.python_api import MemCommitClient
 
-root = Path({str(tmp_path / 'missing-store')!r})
+root = Path({str(tmp_path / "missing-store")!r})
 result = MemCommitClient(root=root).describe_operation('compare')
 assert result.name == 'compare'
 assert not root.exists()

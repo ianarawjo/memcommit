@@ -10,7 +10,7 @@ import json
 from typing import get_args
 import unicodedata
 
-from memcommit.application.retained_history.memory_history_reconstruction.memory_history_event_derivation import (
+from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_event_derivation import (
     MemoryHistoryEventKind,
 )
 
@@ -263,7 +263,7 @@ def _validate_case(raw: object, *, rule_ids: set[str]) -> str:
 @lru_cache(maxsize=1)
 def _loaded_ruleset() -> dict[str, object]:
     try:
-        resource = resources.files("memcommit.application.evaluation").joinpath(
+        resource = resources.files("memcommit.application.capabilities.evaluation").joinpath(
             "fixtures", RATIONALE_RULESET_FIXTURE
         )
         raw = json.loads(

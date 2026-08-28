@@ -7,18 +7,18 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.application.authority.access import (
+from memcommit.application.capabilities.authority.access import (
     context_access_display_facts,
     resolve_context_access,
 )
-from memcommit.adapters.console.shared.command_progress import CommandProgress
-from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.terminal.components.progress import CommandProgress
+from memcommit.adapters.console.coordination.context_operand import ContextOperandSnapshot
 from memcommit.adapters.console.commands.impact.sessions import (
     ImpactSessionPresentation,
     render_impact_session_snapshot,
     run_impact_session_workbench,
 )
-from memcommit.adapters.console.shared.readable_context_catalog import (
+from memcommit.core.context_targeting.readable_catalog import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.core.context_targeting.presets import (
@@ -36,7 +36,7 @@ from memcommit.application.operations.elaborate.add_runtime import (
 )
 from memcommit.application.operations.elaborate.application import ElaborateRequest, ElaborateResult
 from memcommit.application.operations.fit.judgment import FitJudgmentError
-from memcommit.application.semantic.goal_focus_runtime import freeze_goal_focus_operand
+from memcommit.application.capabilities.semantic.goal_focus_runtime import freeze_goal_focus_operand
 from memcommit.application.operations.forget.application import (
     ForgetAnalysisRequest,
     ForgetAnalysisResult,
@@ -50,13 +50,13 @@ from memcommit.application.operations.forget.runtime import (
     MemoryStoreForgetSourcePort,
     connect_forget_provider,
 )
-from memcommit.adapters.interfaces.tui.workbenches.impact import ImpactController
-from memcommit.adapters.console.text import display_escape_text
+from memcommit.adapters.console.terminal.components.impact import ImpactController
+from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.adapters.console.commands.forget.setup import choose_forget_setup
-from memcommit.application.reviewing.memory_diff import MemoryChange
+from memcommit.application.capabilities.reviewing.memory_diff import MemoryChange
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.application.reviewing.quality.handoff import (
+from memcommit.application.capabilities.reviewing.quality.handoff import (
     QualityFindingHandoffError,
     conflict_handoff_to_resolve_request,
     quality_finding_handoff_from_json,
@@ -75,7 +75,7 @@ from memcommit.application.operations.add.semantic_runtime import (
     resolve_semantic_add_endpoints,
     resolve_semantic_add_target,
 )
-from memcommit.application.resolution.workbench import (
+from memcommit.application.capabilities.resolution.workbench import (
     ResolutionContextLocation,
     ResolutionDetailBlock,
     ResolutionItem,

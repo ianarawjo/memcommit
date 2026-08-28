@@ -11,7 +11,7 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 import memcommit.adapters.console.commands.audit.command as audit_command
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.audit.command import (
@@ -23,12 +23,12 @@ from memcommit.adapters.console.commands.audit.review import (
     run_quality_audit_review,
 )
 from memcommit.adapters.console.commands.audit.sessions import audit_session_entries
-from memcommit.adapters.console.shared.quality_find_workbench import (
+from memcommit.adapters.console.terminal.components.quality_find.workbench import (
     QualityFindSetupReceipt,
     choose_quality_find_setup,
 )
 from memcommit.adapters.console.commands.review.sessions import review_session_entries
-from memcommit.application.reviewing.quality.findings import (
+from memcommit.application.capabilities.reviewing.quality.findings import (
     AmbiguityFinding,
     AmbiguityReport,
     ConflictFinding,
@@ -37,14 +37,14 @@ from memcommit.application.reviewing.quality.findings import (
     DuplicateReport,
 )
 from memcommit.providers.types import CompletionRun, ProviderIdentity
-from memcommit.adapters.console.theme import (
+from memcommit.adapters.console.terminal.core.theme import (
     SemanticColorRole,
     memory_object_color_rgb,
     semantic_color_rgb,
 )
-from memcommit.adapters.console.tui.core.theme import semantic_role_style
-from memcommit.adapters.interfaces.tui.viewers.semantic import semantic_document_plain_text
-from memcommit.application.reviewing.quality.audit import (
+from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import semantic_role_style
+from memcommit.adapters.console.terminal.components.semantic_viewer import semantic_document_plain_text
+from memcommit.application.capabilities.reviewing.quality.audit import (
     QUALITY_AUDIT_PREVIOUS_SCHEMA_VERSION,
     QUALITY_AUDIT_RULESETS,
     QUALITY_AUDIT_SCHEMA_VERSION,
@@ -56,7 +56,7 @@ from memcommit.application.reviewing.quality.audit import (
     quality_audit_resolution_view,
     run_quality_audit,
 )
-from memcommit.application.reviewing.quality.audit_store import QualityAuditStore
+from memcommit.application.capabilities.reviewing.quality.audit_store import QualityAuditStore
 from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 
 

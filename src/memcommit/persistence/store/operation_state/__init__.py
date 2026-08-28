@@ -18,20 +18,20 @@ from pathlib import Path
 from types import ModuleType
 from typing import Callable, Iterable, Iterator, Optional
 
-from memcommit.application.authority.storage_permissions import (
+from memcommit.application.capabilities.authority.storage_permissions import (
     ensure_private_directory,
     open_private_exclusive,
 )
-from memcommit.application.authority.write_protection import (
+from memcommit.application.capabilities.authority.write_protection import (
     WriteProtectionError,
     WriteProtectionRegistry,
     WriteProtectionRegistryError,
     WriteProtectionState,
 )
-from memcommit.application.retained_history.checkpoint_frames import (
+from memcommit.application.capabilities.retained_history.checkpoint_frames import (
     map_restorable_checkpoint_frames,
 )
-from memcommit.application.retained_history.context_lifecycle import (
+from memcommit.application.capabilities.retained_history.context_lifecycle import (
     ContextLifecycleEvent,
 )
 from memcommit.core.context import AutoCheckpoint, Context, Memory, MemoryRef

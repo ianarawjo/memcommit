@@ -11,7 +11,7 @@ activity artifacts, query-view privacy, and the current-state-only contract.
 
 Search and result materialization remain two separate use cases. The
 conversational Search controller, answer synthesis, and broader-scope
-confirmation remain outside both. Public Python and the versioned agent/MCP
+confirmation remain outside both. Public Python and the versioned agent
 adapter now enter the same typed Search application rather than invoking the
 CLI or reconstructing its semantics.
 
@@ -21,7 +21,7 @@ CLI or reconstructing its semantics.
 plain mem search QUERY ----------\
 interactive Search workbench ----+--> SearchRequest
 MemCommitClient.search ----------+
-agent/MCP memcommit_search ------/          |
+agent memcommit_search ----------/          |
                                             v
                               run_search
                               (application)
@@ -77,7 +77,7 @@ analysis owner rather than becoming compatibility-facade behavior.
 | Current execution | `run_search` + `rank_candidates` | Shared semantic TOP_K_RERANK planner | Present typed rows only | One frozen candidate frame; lexical-branch supplementation reuses the same provider and never invents candidates |
 | Result | `SearchResponse` / `SearchResult` | `execute_search` | Plain and TUI projections may differ without rerunning | Response retains the exact request and CURRENT evidence |
 | Durable effect | None | None | Search adapters only present results or construct a separate materialization request | Searching does not create, mutate, switch, copy, or persist a Context |
-| Public projection | `SearchResult` / `SearchItemResult` | `api._operations.search` resolves one frozen client Store/Profile boundary | Python returns immutable DTOs; agent/MCP returns version-1 JSON with `effect: NONE` | Public routes call `execute_search`; they neither import the CLI nor own a second ranking path |
+| Public projection | `SearchResult` / `SearchItemResult` | `api._operations.search` resolves one frozen client Store/Profile boundary | Python returns immutable DTOs; agent returns version-1 JSON with `effect: NONE` | Public routes call `execute_search`; they neither import the CLI nor own a second ranking path |
 
 ## Authority and disclosure matrix
 
@@ -86,7 +86,8 @@ analysis owner rather than becoming compatibility-facade behavior.
 | Exact local Context | Exact readable root | Direct searchable items plus authorized local activity artifacts | CURRENT rows |
 | Lexical descendants | Expanded public-name subtree | Candidates from every selected readable descendant | CURRENT rows with optional sibling-branch coverage check |
 | Embedded Contexts | Resolved readable graph when requested | Resolved searchable items; cycles deduplicated by Context identity | CURRENT rows |
-| READ Grant | Granted public projection | Authorized projected Memories and public query-view names; no active-Profile private artifacts | CURRENT rows |
+| READ + DERIVE Grant | Explicitly selected granted public projection | Authorized projected Memories and public query-view names; no active-Profile private artifacts; multiple ownership domains additionally require COMBINE | CURRENT rows |
+| Attached READ projection | Available to provider-free browsing such as Find | Omitted from the semantic frame because the projected graph carries no independently reviewable provider-disclosure edge | No Search row unless the granted public Context is selected explicitly with derived-use authority |
 | Query-only route | Public route name only | Name and opaque candidate alias; concealed source content is never loaded | QUERY row that remains a hint for a separate authorized Query operation |
 
 Search has no prepared-result cache or durable search receipt in this
@@ -143,6 +144,8 @@ path directly; there is no Find-named materialization facade.
 - terminal-independent current-readable execution, including queries that
   contain time-oriented words;
 - authority/source freezing before provider construction;
+- READ-only Grants fail before provider construction because Search is derived use,
+  while multiple ownership domains additionally require COMBINE;
 - Search never enumerates retained history or changes mode from query wording;
 - `agent-records/docs/screenshots/search-current-only-temporal-20260823/` records the
   corresponding 180×52 color-TTY entry, query, running, current-result,
@@ -166,7 +169,7 @@ path directly; there is no Find-named materialization facade.
 
 Existing Search, Search history, search-workbench, result-materialization,
 source-projection, authority, and Context-operand tests remain the parity gate
-for CLI and TUI adapters. Public-client, agent-registry, and MCP-projection
+for CLI and TUI adapters. Public-client and agent-registry
 tests additionally prove the versioned external route. The earlier combined
 focused run passed 324 tests. An
 expanded run passed 476 tests after excluding one unrelated untracked
@@ -197,6 +200,6 @@ commit self-contained.
 4. Conversational refinement, answer generation, and outside-Context
    confirmation retain their existing controllers and must be extracted as
    separate use cases.
-5. The version-1 agent/MCP contract exposes bounded semantic Search only. It
+5. The version-1 agent contract exposes bounded semantic Search only. It
    does not expose the conversational refinement shell or materialization
    controls; those remain separate reviewed operations.

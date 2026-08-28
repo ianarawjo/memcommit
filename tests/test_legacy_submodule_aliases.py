@@ -54,7 +54,7 @@ import sys
 owners = (
     "memcommit.persistence.store",
     "memcommit.application.operations.atomize.analysis_runtime",
-    "memcommit.application.semantic_execution",
+    "memcommit.application.capabilities.semantic_execution",
 )
 for module in owners:
     import_module(module)

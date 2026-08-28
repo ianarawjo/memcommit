@@ -23,7 +23,7 @@ from memcommit.adapters.console.commands.search.search_workbench import (
     FindSearchResult,
 )
 from memcommit.adapters.console.commands.granted_context import resolve_context_access
-from memcommit.adapters.console.shared.readable_context_catalog import (
+from memcommit.core.context_targeting.readable_catalog import (
     freeze_readable_context_catalog,
 )
 from memcommit.core.context import Memory, MemoryRef

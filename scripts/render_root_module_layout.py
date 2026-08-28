@@ -30,10 +30,10 @@ ROOT_BOUNDARIES = {
 
 
 HISTORICAL_PACKAGE_TARGETS = {
-    "memcommit.semantic_execution": "memcommit.application.semantic_execution",
+    "memcommit.semantic_execution": "memcommit.application.capabilities.semantic_execution",
     **{
         f"memcommit.semantic_execution.{module}": (
-            f"memcommit.application.semantic_execution.{module}"
+            f"memcommit.application.capabilities.semantic_execution.{module}"
         )
         for module in (
             "budgeting",
@@ -52,8 +52,16 @@ HISTORICAL_PACKAGE_TARGETS = {
 # receives a compatibility alias once both its behavior and canonical owner
 # have been deliberately removed.
 RETIRED_ROOT_MODULES = {
+    "console_invocation": (
+        "retired after its isolated routing prototype proved unused by shipped "
+        "console commands"
+    ),
     "flow_placeholder": (
         "retired with the per-Memory Query catalog and its presentation assets"
+    ),
+    "interactive_command": (
+        "retired after its disconnected classification registry was replaced "
+        "by tests of the concrete command builders and interaction surfaces"
     ),
 }
 
@@ -69,16 +77,22 @@ COMPATIBILITY_TARGET_OVERRIDES = {
     # The baseline facade still names the pre-staging interface package; keep
     # its historical key while advancing only the canonical implementation.
     "impact_controller": (
-        "memcommit.adapters.interfaces.tui.workbenches.impact"
+        "memcommit.adapters.console.terminal.components.impact"
     ),
     "literal_find_application": "memcommit.application.operations.find.application",
     "literal_find_runtime": "memcommit.application.operations.find.runtime",
-    "review_report": "memcommit.application.reviewing.report",
+    "review_report": "memcommit.application.capabilities.reviewing.report",
+    "dedup_runtime": "memcommit.application.operations.dedun.runtime",
+    "exact_dedup": "memcommit.application.operations.dedup.application",
+    "exact_dedup_application": "memcommit.application.operations.dedup.application",
 }
 
 
 # A relocated canonical owner may be a package rather than one module file.
 MODULE_TARGET_PATH_OVERRIDES = {
+    "memcommit.adapters.console.coordination.command_review": (
+        "memcommit/adapters/console/coordination/command_review/__init__.py"
+    ),
     "memcommit.persistence.store": "memcommit/persistence/store/__init__.py",
 }
 
@@ -95,7 +109,7 @@ OPERATION_TARGETS = {
     "conformance": "memcommit.application.operations.conformance.model",
     "conformance_runtime": "memcommit.application.operations.conformance.runtime",
     "dedun_scope": "memcommit.application.operations.dedun.scope",
-    "dedup_planning": "memcommit.application.operations.dedup.planning",
+    "dedup_planning": "memcommit.application.operations.dedun.planning",
     "distill": "memcommit.application.operations.distill.model",
     "distill_config": "memcommit.application.operations.distill.config",
     "distill_goal_fit": "memcommit.application.operations.distill.goal_fit",
@@ -163,74 +177,72 @@ OPERATION_TARGETS = {
 
 CONCEPT_TARGETS = {
     "_architecture_catalog": "scripts.callable_catalog.catalog",
-    "ambiguity_pipeline": "memcommit.application.semantic.classification.ambiguity",
-    "application_flow": "memcommit.application.flow",
-    "application_review_policy": "memcommit.application.review_policy",
-    "applied_checkpoint_review": "memcommit.application.retained_history.applied_review",
-    "checkpoint_catalog": "memcommit.application.retained_history.checkpoint_catalog",
-    "checkpoint_frames": "memcommit.application.retained_history.checkpoint_frames",
-    "checkpoint_migration": "memcommit.application.retained_history.checkpoint_migration",
+    "ambiguity_pipeline": "memcommit.application.capabilities.semantic.classification.ambiguity",
+    "application_flow": "memcommit.application.capabilities.flow",
+    "application_review_policy": "memcommit.application.capabilities.review_policy",
+    "applied_checkpoint_review": "memcommit.application.capabilities.retained_history.applied_review",
+    "checkpoint_catalog": "memcommit.application.capabilities.retained_history.checkpoint_catalog",
+    "checkpoint_frames": "memcommit.application.capabilities.retained_history.checkpoint_frames",
+    "checkpoint_migration": "memcommit.application.capabilities.retained_history.checkpoint_migration",
     "cli": "memcommit.adapters.console.entrypoint",
     "clipboard": "memcommit.adapters.console.clipboard",
     "command_attempts": "memcommit.persistence.command_ledger.attempts",
-    "command_history": "memcommit.application.retained_history.command_history",
+    "command_history": "memcommit.application.capabilities.retained_history.command_history",
     "config": "memcommit.configuration.config",
-    "console_invocation": "memcommit.adapters.interfaces.cli.invocation",
     "context": "memcommit.core.context",
     "context_catalog": "memcommit.core.context_targeting.context_catalog",
-    "context_history": "memcommit.application.retained_history.context_history",
-    "context_lifecycle": "memcommit.application.retained_history.context_lifecycle",
-    "context_locator": "memcommit.application.context_locator",
+    "context_history": "memcommit.application.capabilities.retained_history.context_history",
+    "context_lifecycle": "memcommit.application.capabilities.retained_history.context_lifecycle",
+    "context_locator": "memcommit.application.capabilities.context_locator",
     "context_naming": "memcommit.core.context_targeting.naming",
-    "context_snapshot": "memcommit.application.retained_history.context_snapshot",
+    "context_snapshot": "memcommit.application.capabilities.retained_history.context_snapshot",
     "current_context_navigation": "memcommit.core.context_targeting.navigation",
-    "derived_policy": "memcommit.application.authority.derived_policy",
-    "direct_item_duplicates": "memcommit.application.reviewing.direct_item_duplicates",
-    "distill_elaborate_reference": "memcommit.application.semantic.generative_reduction_reference",
-    "duplicate_pipeline": "memcommit.application.semantic.classification.duplicates",
-    "exact_command_review": "memcommit.application.exact_command_review",
-    "findings": "memcommit.application.reviewing.quality.findings",
-    "goal_focus": "memcommit.application.semantic.goal_focus",
-    "goal_focus_runtime": "memcommit.application.semantic.goal_focus_runtime",
-    "granted_provenance": "memcommit.application.retained_history.granted_provenance",
-    "history": "memcommit.application.retained_history.reconstruction",
-    "history_display": "memcommit.application.retained_history.display",
-    "interactive_command": "memcommit.application.interactive_command",
-    "interactive_command_review": "memcommit.application.interactive_command_review",
-    "memory_diff": "memcommit.application.reviewing.memory_diff",
-    "memory_lineage": "memcommit.application.retained_history.memory_lineage",
+    "derived_policy": "memcommit.application.capabilities.authority.derived_policy",
+    "direct_item_duplicates": "memcommit.application.capabilities.reviewing.direct_item_duplicates",
+    "distill_elaborate_reference": "memcommit.application.capabilities.semantic.generative_reduction_reference",
+    "duplicate_pipeline": "memcommit.application.capabilities.semantic.classification.duplicates",
+    "exact_command_review": "memcommit.adapters.console.coordination.command_review.model",
+    "findings": "memcommit.application.capabilities.reviewing.quality.findings",
+    "goal_focus": "memcommit.application.capabilities.semantic.goal_focus",
+    "goal_focus_runtime": "memcommit.application.capabilities.semantic.goal_focus_runtime",
+    "granted_provenance": "memcommit.application.capabilities.retained_history.granted_provenance",
+    "history": "memcommit.application.capabilities.retained_history.reconstruction",
+    "history_display": "memcommit.application.capabilities.retained_history.display",
+    "interactive_command_review": "memcommit.adapters.console.coordination.command_review",
+    "memory_diff": "memcommit.application.capabilities.reviewing.memory_diff",
+    "memory_lineage": "memcommit.application.capabilities.retained_history.memory_lineage",
     "name_suggestions": "memcommit.core.context_targeting.name_suggestions",
-    "ops": "memcommit.application.ops",
-    "operation_gate_pipeline": "memcommit.application.semantic.classification.gates",
+    "ops": "memcommit.application.capabilities.ops",
+    "operation_gate_pipeline": "memcommit.application.capabilities.semantic.classification.gates",
     "profile_config": "memcommit.application.operations.profile.config",
     "profiles": "memcommit.application.operations.profile.model",
-    "provenance": "memcommit.application.retained_history.memory_history_reconstruction",
+    "provenance": "memcommit.application.capabilities.retained_history.memory_history_reconstruction",
     "provider_types": "memcommit.providers.types",
-    "quality_audit": "memcommit.application.reviewing.quality.audit",
-    "quality_audit_store": "memcommit.application.reviewing.quality.audit_store",
-    "quality_find_report": "memcommit.application.reviewing.quality.report",
-    "quality_find_workbench": "memcommit.application.reviewing.quality.workbench",
-    "quality_finding_handoff": "memcommit.application.reviewing.quality.handoff",
+    "quality_audit": "memcommit.application.capabilities.reviewing.quality.audit",
+    "quality_audit_store": "memcommit.application.capabilities.reviewing.quality.audit_store",
+    "quality_find_report": "memcommit.application.capabilities.reviewing.quality.report",
+    "quality_find_workbench": "memcommit.application.capabilities.reviewing.quality.workbench",
+    "quality_finding_handoff": "memcommit.application.capabilities.reviewing.quality.handoff",
     "query_provider": "memcommit.providers.subscription",
-    "read_report": "memcommit.application.reviewing.read_report",
-    "read_report_recents": "memcommit.application.reviewing.read_report_recents",
-    "redundancy_scope": "memcommit.application.reviewing.quality.redundancy_scope",
-    "resolution_workbench": "memcommit.application.resolution.workbench",
-    "result_workbench": "memcommit.application.reviewing.result_workbench",
-    "selective_curation": "memcommit.application.semantic.selective_curation",
-    "semantic_disclosure": "memcommit.application.semantic.disclosure",
-    "semantic_prompt_policy": "memcommit.application.semantic.prompt_policy",
+    "read_report": "memcommit.application.capabilities.reviewing.read_report",
+    "read_report_recents": "memcommit.application.capabilities.reviewing.read_report_recents",
+    "redundancy_scope": "memcommit.application.capabilities.reviewing.quality.redundancy_scope",
+    "resolution_workbench": "memcommit.application.capabilities.resolution.workbench",
+    "result_workbench": "memcommit.application.capabilities.reviewing.result_workbench",
+    "selective_curation": "memcommit.application.capabilities.semantic.selective_curation",
+    "semantic_disclosure": "memcommit.application.capabilities.semantic.disclosure",
+    "semantic_prompt_policy": "memcommit.application.capabilities.semantic.prompt_policy",
     "semantic_provider": "memcommit.providers.semantic",
-    "semantic_redundancy_evidence": "memcommit.application.semantic.redundancy_evidence",
-    "session_workbench_navigation": "memcommit.application.reviewing.session_navigation",
-    "storage_permissions": "memcommit.application.authority.storage_permissions",
+    "semantic_redundancy_evidence": "memcommit.application.capabilities.semantic.redundancy_evidence",
+    "session_workbench_navigation": "memcommit.application.capabilities.reviewing.session_navigation",
+    "storage_permissions": "memcommit.application.capabilities.authority.storage_permissions",
     "study_action_log": "memcommit.persistence.command_ledger.study_actions",
-    "study_operation_policy": "memcommit.application.authority.study_operation_policy",
+    "study_operation_policy": "memcommit.application.capabilities.authority.study_operation_policy",
     "store": "memcommit.persistence.store",
-    "temporal_history": "memcommit.application.retained_history.temporal",
+    "temporal_history": "memcommit.application.capabilities.retained_history.temporal",
     "uid_locator": "memcommit.core.context_targeting.uid_locator",
-    "understanding": "memcommit.application.semantic.understanding",
-    "write_protection": "memcommit.application.authority.write_protection",
+    "understanding": "memcommit.application.capabilities.semantic.understanding",
+    "write_protection": "memcommit.application.capabilities.authority.write_protection",
 }
 
 

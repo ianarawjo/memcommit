@@ -10,13 +10,13 @@ from click.testing import CliRunner as ClickCliRunner
 from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.retained_history.command_history import CommandContextChange, ContextCommandUnit
-from memcommit.adapters.console.shared.restoration_present import (
+from memcommit.application.capabilities.retained_history.command_history import CommandContextChange, ContextCommandUnit
+from memcommit.adapters.console.terminal.components.restoration_receipt import (
     _render_impact,
     _restored_command,
 )
 from memcommit.core.context import AutoCheckpoint, Memory
-from memcommit.adapters.console.theme import (
+from memcommit.adapters.console.terminal.core.theme import (
     SemanticColorRole,
     memory_object_color_rgb,
     semantic_color_rgb,

@@ -6,7 +6,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.application.authority.access import resolve_context_access
+from memcommit.application.capabilities.authority.access import resolve_context_access
 from memcommit.core.context_targeting.loading import (
     resolve_local_context_memory_target,
     resolve_local_direct_memory_locator,
@@ -31,8 +31,8 @@ from memcommit.application.operations.embed.application import (
 from memcommit.application.operations.embed.runtime import MemoryStoreEmbedPort
 from memcommit.adapters.console.commands.embed.receipt import render_embed_plain
 from memcommit.adapters.console.commands.embed.workbench import choose_embed_setup
-from memcommit.adapters.console.terminal import is_interactive_terminal
-from memcommit.adapters.console.text import display_escape_text, safe_terminal_text
+from memcommit.adapters.console.terminal.core.capabilities import is_interactive_terminal
+from memcommit.adapters.console.terminal.core.text import display_escape_text, safe_terminal_text
 from memcommit.persistence.store import MemoryStore
 
 

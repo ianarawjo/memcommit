@@ -58,7 +58,7 @@ def _load_fixture() -> tuple[list[tuple[str, str]], list[str]]:
 
 
 def _prepare_store(root: Path):
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.application.operations.ground.model import (
         GroundTargetSpec,
         bind_ground_workbench,

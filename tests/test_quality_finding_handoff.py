@@ -6,8 +6,8 @@ import json
 
 import pytest
 
-import memcommit.application.ops as ops
-from memcommit.application.reviewing.quality.findings import (
+import memcommit.application.capabilities.ops as ops
+from memcommit.application.capabilities.reviewing.quality.findings import (
     AmbiguityFinding,
     AmbiguityReport,
     ConflictFinding,
@@ -15,11 +15,11 @@ from memcommit.application.reviewing.quality.findings import (
     DuplicateFinding,
     DuplicateReport,
 )
-from memcommit.application.reviewing.quality.workbench import (
+from memcommit.application.capabilities.reviewing.quality.workbench import (
     QualityFindSourceFrame,
     create_quality_find_workbench,
 )
-from memcommit.application.reviewing.quality.handoff import (
+from memcommit.application.capabilities.reviewing.quality.handoff import (
     QualityFindingHandoffError,
     conflict_handoff_to_resolve_request,
     quality_finding_handoff_from_json,

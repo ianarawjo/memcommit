@@ -12,13 +12,10 @@ import sys
 REPOSITORY = Path(__file__).resolve().parents[1]
 CONSOLE = REPOSITORY / "src" / "memcommit" / "adapters" / "console"
 COMMANDS = CONSOLE / "commands"
-SHARED = CONSOLE / "shared"
+COORDINATION = CONSOLE / "coordination"
 PLAN = json.loads(
     (
-        REPOSITORY
-        / "agent-records"
-        / "docs"
-        / "command-package-layout-plan.json"
+        REPOSITORY / "agent-records" / "docs" / "command-package-layout-plan.json"
     ).read_text(encoding="utf-8")
 )
 
@@ -28,7 +25,7 @@ def test_commands_root_contains_only_packages() -> None:
     entry_packages = {
         entry["owner"] for entry in PLAN["modules"] if entry["role"] == "command-entry"
     }
-    assert len(entry_packages) == 63
+    assert len(entry_packages) == PLAN["entry_package_count"]
     command_packages = {
         path.name
         for path in COMMANDS.iterdir()
@@ -38,21 +35,35 @@ def test_commands_root_contains_only_packages() -> None:
     assert command_packages >= entry_packages
     for package in command_packages:
         assert (COMMANDS / package / "__init__.py").is_file()
-        assert (COMMANDS / package / "command.py").is_file()
+        command_module = COMMANDS / package / "command.py"
+        command_package = COMMANDS / package / "command" / "__init__.py"
+        assert command_module.is_file() != command_package.is_file()
 
 
 def test_multi_command_mechanisms_are_console_siblings() -> None:
-    shared_entries = [
-        entry for entry in PLAN["modules"] if entry["role"] == "shared-command-mechanism"
+    multi_command_entries = [
+        entry
+        for entry in PLAN["modules"]
+        if entry["role"]
+        in {
+            "shared-command-mechanism",
+            "shared-context-targeting",
+            "shared-terminal-component",
+        }
     ]
-    assert len(shared_entries) == 41
-    assert (SHARED / "__init__.py").is_file()
-    for entry in shared_entries:
+    assert len(multi_command_entries) == PLAN["shared_module_count"]
+    assert (COORDINATION / "__init__.py").is_file()
+    assert not (CONSOLE / "shared").exists()
+    for entry in multi_command_entries:
         module = entry["canonical_module"]
-        assert module.startswith("memcommit.adapters.console.shared.")
-        assert (
-            REPOSITORY / "src" / (module.replace(".", "/") + ".py")
-        ).is_file()
+        assert module.startswith(
+            (
+                "memcommit.adapters.console.coordination.",
+                "memcommit.adapters.console.terminal.components.",
+                "memcommit.core.context_targeting.",
+            )
+        )
+        assert import_module(module).__name__ == module
 
 
 def test_entry_packages_publish_only_their_declared_cli_surface() -> None:
@@ -67,12 +78,10 @@ def test_entry_packages_publish_only_their_declared_cli_surface() -> None:
 
 
 def test_former_command_imports_are_unavailable() -> None:
-    removed = [
-        entry["legacy_module"]
-        for entry in PLAN["modules"]
-    ]
+    removed = [entry["legacy_module"] for entry in PLAN["modules"]]
+    removed.extend(PLAN["retired_legacy_modules"])
     removed.insert(0, "memcommit.commands")
-    assert len(removed) == 153
+    assert len(removed) == PLAN["baseline_module_count"] + 1
     program = "\n".join(
         [
             "from importlib import import_module",
@@ -97,4 +106,6 @@ def test_former_command_imports_are_unavailable() -> None:
 
 def test_canonical_support_module_remains_importable() -> None:
     module = import_module("memcommit.adapters.console.commands.atomize.sessions")
-    assert module.__spec__.name == "memcommit.adapters.console.commands.atomize.sessions"
+    assert (
+        module.__spec__.name == "memcommit.adapters.console.commands.atomize.sessions"
+    )

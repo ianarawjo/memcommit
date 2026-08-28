@@ -5,7 +5,7 @@ from __future__ import annotations
 from memcommit.adapters.console.commands.find.source_row import (
     render_find_reference_row,
 )
-from memcommit.adapters.console.text import safe_terminal_text
+from memcommit.adapters.console.terminal.core.text import safe_terminal_text
 from memcommit.application.operations.find.application import (
     FindMatch,
     FindResult,

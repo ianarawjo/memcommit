@@ -5,7 +5,7 @@ from collections.abc import Callable
 
 import pytest
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.application.operations.meld.runtime import meld_checkpoint_record
 from memcommit.core.context import AutoCheckpoint, Context, Memory
 from memcommit.application.operations.meld.model import (
@@ -14,7 +14,7 @@ from memcommit.application.operations.meld.model import (
     MeldProposal,
     MeldSession,
 )
-from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
+from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_construction import (
     reconstruct_memory_history,
 )
 from memcommit.persistence.store import MemoryStore

@@ -8,7 +8,7 @@ from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.clipboard import ClipboardError
-from memcommit.adapters.console.shared.context_picker import (
+from memcommit.core.context_targeting.tui.picker import (
     ContextPickerActionReceipt,
     ContextMemorySelection,
     _CONTEXT_NAVIGATION_HINT,

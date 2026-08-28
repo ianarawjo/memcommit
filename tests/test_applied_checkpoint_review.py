@@ -6,8 +6,8 @@ import click
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
-from memcommit.application.retained_history.applied_review import (
+import memcommit.application.capabilities.ops as ops
+from memcommit.application.capabilities.retained_history.applied_review import (
     applied_checkpoint_review_controller,
     list_applied_checkpoint_reviews,
     select_applied_checkpoint_review,
@@ -15,11 +15,11 @@ from memcommit.application.retained_history.applied_review import (
 from memcommit.core.context import AutoCheckpoint
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.review.report import run_review_report_shell
-from memcommit.adapters.console.theme import (
+from memcommit.adapters.console.terminal.core.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )
-from memcommit.application.resolution.workbench import ResolutionWorkbenchAction
+from memcommit.application.capabilities.resolution.workbench import ResolutionWorkbenchAction
 from memcommit.persistence.store import MemoryStore
 
 

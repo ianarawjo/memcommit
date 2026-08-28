@@ -23,27 +23,25 @@ from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import Style, merge_styles
 
-from memcommit.adapters.console.shared.background_turn import BackgroundExecutorTurn
-from memcommit.adapters.console.shared.command_progress import (
+from memcommit.adapters.console.terminal.components.background_turn import BackgroundExecutorTurn
+from memcommit.adapters.console.terminal.components.progress import (
     BUSY_INTERVAL_SECONDS,
     busy_suffix,
 )
-from memcommit.adapters.console.shared.exact_command_review import (
-    ExactCommandReview,
+from memcommit.adapters.console.coordination.command_review.model import CommandReview
+from memcommit.adapters.console.terminal.components.exact_command_review import (
+    bind_exact_command_approval,
     render_exact_command_review,
 )
-from memcommit.adapters.console.tui.components.exact_command_review import (
-    bind_exact_command_approval,
-)
-from memcommit.adapters.console.shared.tui_primitives import (
+from memcommit.adapters.console.terminal.components.primitives import (
     ExactNameFieldControl,
     ExactNameFieldView,
 )
-from memcommit.adapters.console.tui.core.keybindings import (
+from memcommit.adapters.console.terminal.core.keybindings import (
     bind_case_insensitive_key,
 )
-from memcommit.adapters.console.tui.core.theme import MEMCOMMIT_TUI_STYLE
-from memcommit.adapters.console.text import (
+from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import MEMCOMMIT_TUI_STYLE
+from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
 from memcommit.application.operations.profile.config import ProfileConfigError, validate_profile_name
@@ -366,7 +364,7 @@ def _removal_action(
 def _removal_review(
     action: ProfilePickerAction,
     row: _ProfilePickerRow,
-) -> ExactCommandReview:
+) -> CommandReview:
     if action.kind == "REMOVE_STUDY":
         effects = (
             f"Permanently delete all {row.profile_count} Profile stores in "
@@ -391,13 +389,13 @@ def _removal_review(
             )
         effects = tuple(effects_list)
         command = "remove"
-    return ExactCommandReview(
+    return CommandReview(
         argv=("mem", "profile", command, action.name, "--force"),
         effects=effects,
     )
 
 
-def _rename_review(action: ProfilePickerAction) -> ExactCommandReview:
+def _rename_review(action: ProfilePickerAction) -> CommandReview:
     """Render the exact Profile or Study name mutation selected in the picker."""
 
     if action.kind not in {"RENAME_PROFILE", "RENAME_STUDY"} or action.new_name is None:
@@ -408,7 +406,7 @@ def _rename_review(action: ProfilePickerAction) -> ExactCommandReview:
             if action.renames_member_profiles
             else "Keep both member Profile display names unchanged."
         )
-        return ExactCommandReview(
+        return CommandReview(
             argv=("mem", "profile", "rename-study", action.name, action.new_name),
             effects=(
                 f"Change the Study display name from {action.name!r} to "
@@ -418,7 +416,7 @@ def _rename_review(action: ProfilePickerAction) -> ExactCommandReview:
                 "Keep the same active Profile selected.",
             ),
         )
-    return ExactCommandReview(
+    return CommandReview(
         argv=("mem", "profile", "rename", action.name, action.new_name),
         effects=(
             f"Change Profile {action.name!r}'s display name to {action.new_name!r}.",
@@ -428,12 +426,12 @@ def _rename_review(action: ProfilePickerAction) -> ExactCommandReview:
     )
 
 
-def _creation_review(action: ProfilePickerAction) -> ExactCommandReview:
+def _creation_review(action: ProfilePickerAction) -> CommandReview:
     """Render the exact empty-Profile publication selected in the picker."""
 
     if action.kind != "CREATE_PROFILE":
         raise ValueError("Profile creation review requires an exact new name.")
-    return ExactCommandReview(
+    return CommandReview(
         argv=("mem", "profile", "create", action.name),
         effects=(
             f"Create empty managed Profile {action.name!r} with a fresh UID.",
@@ -525,7 +523,7 @@ def choose_profile(
 
     def render_content():
         review = pending["review"]
-        if isinstance(review, ExactCommandReview):
+        if isinstance(review, CommandReview):
             return [("", render_exact_command_review(review))]
         return _render_profile_options(
             options,

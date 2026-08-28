@@ -3,7 +3,7 @@
 ## Neutral launcher ownership
 
 The visual catalog is now owned by
-`memcommit.adapters.console.tui.components.operation_launcher`. Its public model
+`memcommit.adapters.console.terminal.components.operation_launcher`. Its public model
 contains frozen entry identity and display metadata, an optional pinned action,
 orientation rows, and a returned entry/action identity. It deliberately has no
 argv, Store object, session repository, provider, cache handle, or callback.
@@ -75,10 +75,10 @@ zero-based argv elements exposed implementation structure without adding a
 useful recognition or review decision.
 
 Frozen Profile/Store orientation discovery is owned beside that component in
-`memcommit.adapters.console.tui.components.operation_launcher.location`. The former
-`memcommit.adapters.console.shared.operation_launcher_location` path is a module-identity
-compatibility alias, including for callers that patch its Store or profile
-globals. This is an ownership-only relocation: Profile-before-Store row order,
+`memcommit.adapters.console.terminal.components.operation_launcher.location`. The former
+`memcommit.adapters.console.coordination.operation_launcher_location` facade is
+removed; callers patch the canonical Store or profile globals directly. This
+is an ownership-only relocation: Profile-before-Store row order,
 frozen-root matching, registry-unavailable handling, and read-only behavior are
 unchanged.
 

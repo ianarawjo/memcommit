@@ -184,7 +184,7 @@ def _run_diff(store_dir: Path, context_name: str | None) -> None:
 
 
 def _run_large_diff() -> None:
-    from memcommit.adapters.console.commands.update.checkpoint_history import (
+    from memcommit.adapters.console.terminal.components.history.update_checkpoint import (
         choose_update_checkpoint_at_location,
     )
 

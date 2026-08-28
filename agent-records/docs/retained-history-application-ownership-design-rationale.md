@@ -3,7 +3,7 @@
 ## Decision
 
 The retained-history package lives at
-`memcommit.application.retained_history`. Its central responsibility is to
+`memcommit.application.capabilities.retained_history`. Its central responsibility is to
 interpret persisted checkpoints, operation receipts, Context snapshots, and
 lineage evidence in order to reconstruct, validate, and provide usable Memory
 and Context history. That is application behavior: persistence supplies the

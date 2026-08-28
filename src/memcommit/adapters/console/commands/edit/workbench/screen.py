@@ -24,38 +24,38 @@ from memcommit.application.operations.edit.application import (
     edit_target_selector,
     validate_edit_request,
 )
-from memcommit.application.exact_command_review import ExactCommandReview
-from memcommit.adapters.console.terminal import require_interactive_terminal
-from memcommit.adapters.console.text import (
+from memcommit.adapters.console.coordination.command_review.model import CommandReview
+from memcommit.adapters.console.terminal.core.capabilities import require_interactive_terminal
+from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
     restore_display_escape_text,
 )
-from memcommit.adapters.console.tui.components.exact_command_review import (
+from memcommit.adapters.console.terminal.components.exact_command_review import (
     EditableExactCommandControl,
     ExactCommandDraft,
     ExactCommandForm,
     ExactCommandFormField,
     resolve_displayed_command_value,
 )
-from memcommit.adapters.console.tui.components.focus import (
+from memcommit.adapters.console.terminal.components.focus import (
     FocusSurface,
     SurfaceActionResult,
     SurfaceFocusController,
     bind_surface_navigation,
 )
-from memcommit.adapters.console.tui.components.frame import (
+from memcommit.adapters.console.terminal.components.frame import (
     TuiRegion,
     build_focused_frame,
     build_tui_frame,
 )
-from memcommit.adapters.console.tui.components.multiline_input import (
+from memcommit.adapters.console.terminal.components.multiline_input import (
     build_framed_multiline_input,
 )
-from memcommit.adapters.console.tui.core.keybindings import (
+from memcommit.adapters.console.terminal.core.keybindings import (
     bind_tui_interrupt,
     dispatch_tui_back,
 )
-from memcommit.adapters.console.tui.core.theme import (
+from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
 )
@@ -115,11 +115,11 @@ def parse_edit_command_argv(argv: Sequence[str]) -> EditRequest:
     return request
 
 
-def edit_exact_command_review(request: EditRequest) -> ExactCommandReview:
+def edit_exact_command_review(request: EditRequest) -> CommandReview:
     context = request.context_locator
     if context is None:
         raise ValueError("Edit review requires an exact Context.")
-    return ExactCommandReview(
+    return CommandReview(
         argv=(
             "mem",
             "edit",

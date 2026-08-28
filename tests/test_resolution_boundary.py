@@ -36,7 +36,9 @@ def test_resolution_core_imports_no_operation_interface_or_infrastructure():
     )
     offenders = [
         (str(path.relative_to(ROOT)), module)
-        for path in (PACKAGE / "application" / "resolution").glob("*.py")
+        for path in (
+            PACKAGE / "application" / "capabilities" / "resolution"
+        ).glob("*.py")
         for module in _imports(path)
         if any(
             module == prefix or module.startswith(f"{prefix}.") for prefix in forbidden
@@ -90,12 +92,18 @@ def test_meld_resolution_application_does_not_import_runtime_or_interfaces():
 
 def test_meld_interfaces_enter_the_operation_owned_resolution_boundary():
     command_imports = _imports(
-        PACKAGE / "adapters" / "console" / "commands" / "meld" / "command.py"
+        PACKAGE
+        / "adapters"
+        / "console"
+        / "commands"
+        / "meld"
+        / "command"
+        / "workflow.py"
     )
     public_imports = _imports(
         PACKAGE / "adapters" / "python_api" / "_operations" / "meld.py"
     )
-    agent_imports = _imports(PACKAGE / "adapters" / "interfaces" / "agent" / "meld.py")
+    agent_imports = _imports(PACKAGE / "adapters" / "agent" / "meld.py")
 
     assert "memcommit.application.operations.meld.resolution_application" in command_imports
     assert "memcommit.application.operations.meld.resolution_application" in public_imports
@@ -103,14 +111,26 @@ def test_meld_interfaces_enter_the_operation_owned_resolution_boundary():
 
 
 def test_merge_cli_and_tui_depend_on_the_typed_application_contract():
-    cli_imports = _imports(PACKAGE / "adapters" / "interfaces" / "cli" / "merge.py")
+    cli_imports = _imports(
+        PACKAGE / "adapters" / "console" / "commands" / "merge" / "command.py"
+    )
     tui_imports = _imports(
-        PACKAGE / "adapters" / "interfaces" / "tui" / "operations" / "merge" / "resolution.py"
+        PACKAGE
+        / "adapters"
+        / "console"
+        / "commands"
+        / "merge"
+        / "workbench"
+        / "conflicts.py"
     )
 
     assert "memcommit.application.operations.merge.application" in cli_imports
     assert "memcommit.application.operations.merge.application" in tui_imports
-    assert not any(module.startswith("memcommit.adapters.console.commands") for module in tui_imports)
+    assert not any(
+        module.startswith("memcommit.adapters.console.commands")
+        and not module.startswith("memcommit.adapters.console.commands.merge")
+        for module in tui_imports
+    )
 
 
 @pytest.mark.parametrize(
@@ -121,14 +141,14 @@ def test_merge_cli_and_tui_depend_on_the_typed_application_contract():
             PACKAGE / "adapters" / "console" / "commands" / "dedun" / "workbench.py",
             PACKAGE / "adapters" / "console" / "commands" / "dedun" / "presentation.py",
             PACKAGE / "adapters" / "python_api" / "_operations" / "dedun.py",
-            PACKAGE / "adapters" / "interfaces" / "agent" / "dedup.py",
+            PACKAGE / "adapters" / "agent" / "dedup.py",
         ),
         (
             "memcommit.application.operations.resolve.application",
-            PACKAGE / "adapters" / "interfaces" / "tui" / "operations" / "resolve" / "screen.py",
-            PACKAGE / "adapters" / "interfaces" / "cli" / "resolve.py",
+            PACKAGE / "adapters" / "console" / "commands" / "resolve" / "workbench" / "screen.py",
+            PACKAGE / "adapters" / "console" / "commands" / "resolve" / "command.py",
             PACKAGE / "adapters" / "python_api" / "_operations" / "resolve.py",
-            PACKAGE / "adapters" / "interfaces" / "agent" / "resolve.py",
+            PACKAGE / "adapters" / "agent" / "resolve.py",
         ),
     ),
 )
@@ -163,7 +183,14 @@ def test_deterministic_resolution_adapters_keep_one_application_owner(
     assert application_name in tui_imports
     assert application_name in cli_imports
     assert application_name in public_imports
-    assert not any(module.startswith("memcommit.adapters.console.commands") for module in tui_imports)
+    command_owner = application_name.split(".")[-2]
+    assert not any(
+        module.startswith("memcommit.adapters.console.commands")
+        and not module.startswith(
+            f"memcommit.adapters.console.commands.{command_owner}"
+        )
+        for module in tui_imports
+    )
     assert not any(module.startswith("memcommit.adapters.console.commands") for module in public_imports)
     assert "memcommit.adapters.python_api" in agent_imports
     assert application_name not in agent_imports
@@ -176,14 +203,18 @@ def test_deterministic_resolution_adapters_keep_one_application_owner(
 
 def test_read_report_identity_and_launcher_keep_runtime_and_ui_ownership_separate():
     identity_imports = _imports(
-        PACKAGE / "application" / "reviewing" / "read_report.py"
+        PACKAGE
+        / "application"
+        / "capabilities"
+        / "reviewing"
+        / "read_report.py"
     )
     launcher_imports = _imports(
         PACKAGE
         / "adapters"
-        / "interfaces"
-        / "tui"
-        / "workbenches"
+        / "console"
+        / "terminal"
+        / "components"
         / "read_report"
         / "launcher.py"
     )
@@ -195,5 +226,5 @@ def test_read_report_identity_and_launcher_keep_runtime_and_ui_ownership_separat
         or module.startswith("prompt_toolkit.")
         for module in identity_imports
     )
-    assert "memcommit.application.reviewing.read_report" in launcher_imports
+    assert "memcommit.application.capabilities.reviewing.read_report" in launcher_imports
     assert not any(module.startswith("memcommit.adapters.console.commands") for module in launcher_imports)

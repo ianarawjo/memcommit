@@ -7,22 +7,22 @@ from typing import Annotated
 
 import typer
 
-from memcommit.adapters.console.identity import collision_safe_uid_prefixes
-from memcommit.adapters.console.theme import (
+from memcommit.adapters.console.terminal.core.identity import collision_safe_uid_prefixes
+from memcommit.adapters.console.terminal.core.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.update.granted_application import inspect_granted_update
-from memcommit.application.reviewing.memory_diff import (
+from memcommit.application.capabilities.reviewing.memory_diff import (
     MemoryChange,
     memory_diff_lines,
     update_operation_change,
 )
-from memcommit.adapters.console.shared.checkpoint_diff import render_checkpoint_revision_cli
-from memcommit.adapters.console.shared.history_present import checkpoint_picker_entries
+from memcommit.adapters.console.terminal.components.history.checkpoint_diff import render_checkpoint_revision_cli
+from memcommit.adapters.console.terminal.components.history.presentation import checkpoint_picker_entries
 from memcommit.adapters.console.commands.update.render import render_plan
-from memcommit.application.context_locator import resolve_context_locator
+from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.core.context_targeting.checkpoint import (
     resolve_local_checkpoint_target,
     resolve_local_context_checkpoint_target,

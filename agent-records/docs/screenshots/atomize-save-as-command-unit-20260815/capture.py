@@ -113,7 +113,7 @@ class _Provider:
 
 
 def _review(store) -> None:
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.application.operations.atomize.workflow import open_or_create_atomize_workbench
 
     if not store.context_exists("atomize/source"):
@@ -196,7 +196,7 @@ def _child_apply(store_root: Path) -> None:
 
 
 def _child_verify(store_root: Path) -> None:
-    from memcommit.application.retained_history.memory_history_reconstruction import build_trace
+    from memcommit.application.capabilities.retained_history.memory_history_reconstruction import build_trace
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root, create=False)

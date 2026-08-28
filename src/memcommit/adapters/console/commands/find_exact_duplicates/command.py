@@ -6,13 +6,13 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.application.authority.access import resolve_context_access
+from memcommit.application.capabilities.authority.access import resolve_context_access
 from memcommit.persistence.command_ledger.attempts import annotate_read_report_attempt
-from memcommit.adapters.console.shared.context_operand import (
+from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
     choose_context_operand,
 )
-from memcommit.adapters.interfaces.cli.quality_findings import (
+from memcommit.adapters.console.terminal.components.quality_find.rendering import (
     plural,
     render_cleanup_member,
     render_heading,
@@ -25,11 +25,11 @@ from memcommit.application.operations.dedup.application import (
     ExactDuplicateContextReport,
     find_exact_duplicate_scope,
 )
-from memcommit.adapters.console.identity import collision_safe_uid_prefixes
-from memcommit.adapters.console.text import display_escape_text
+from memcommit.adapters.console.terminal.core.identity import collision_safe_uid_prefixes
+from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.application.reviewing.read_report import ReadReportTarget
+from memcommit.application.capabilities.reviewing.read_report import ReadReportTarget
 from memcommit.persistence.store import MemoryStore
 
 

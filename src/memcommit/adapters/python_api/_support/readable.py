@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from memcommit.adapters.python_api._runtime import ClientRuntime
-from memcommit.application.authority.access import ContextAccess, resolve_context_access
+from memcommit.application.capabilities.authority.access import ContextAccess, resolve_context_access
 from memcommit.core.context_targeting.readable_catalog import (
     freeze_profile_readable_context_catalog,
     freeze_readable_context_catalog,

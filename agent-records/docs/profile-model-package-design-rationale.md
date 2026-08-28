@@ -23,10 +23,15 @@ The implementation is grouped as follows:
   publication, deletion staging, and shared failure/result types.
 - `grants.py` owns Authority Grant lifecycle and grant-backed read/share
   resolution.
-- `study.py` owns Study grouping, migration, import, publication, archive, and
-  removal.
+- `study.py` owns Study grouping, migration, archive, rename, and removal.
 - `lifecycle.py` owns ordinary Profile listing, selection, creation, import,
   rename, and removal.
+
+Current Study construction belongs to
+`memcommit.application.operations.init_study.profile`: its model, package,
+composition, and publication modules own the initialization-only data flow.
+The former Profile-model names resolve lazily to those canonical objects for
+compatibility, but Profile lifecycle no longer contains their implementation.
 
 The dependency direction is `_storage` toward no sibling, `grants` toward
 `_storage`, `study` toward `_storage` and the shared Grant scope constructor,
@@ -59,7 +64,9 @@ store primitives; assigning those helpers to one public domain would either
 create a cycle or obscure their shared safety role. `_storage.py` is therefore
 an internal fourth module rather than duplicated code.
 
-`study.py` remains the largest module because Study package validation,
-baseline import, remapping, publication, and lifecycle are still one atomic
-feature family. Further splitting is intentionally deferred until a narrower
-ownership boundary can preserve batch publication and rollback invariants.
+The remaining `study.py` retains the validators and stable task/authority
+identity constants used when reading legacy Study provenance. Init-study
+package parsing imports those narrow compatibility contracts; moving them into
+a third shared schema module would add indirection without separating another
+independent behavior. The transaction bodies themselves now live with the
+init-study operation.

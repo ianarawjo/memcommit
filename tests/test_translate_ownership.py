@@ -42,12 +42,14 @@ def test_production_translate_consumers_use_operation_owners() -> None:
         "src/memcommit/application/operations/translate/application.py",
         "src/memcommit/application/operations/translate/catalog_application.py",
         "src/memcommit/application/operations/translate/materialization.py",
-        "src/memcommit/application/ops.py",
+        "src/memcommit/application/capabilities/ops.py",
         "src/memcommit/application/operations/profile/model",
-        "src/memcommit/application/retained_history/memory_history_reconstruction/memory_history_event_derivation.py",
-        "src/memcommit/persistence/store/operation_state.py",
-        "src/memcommit/persistence/store/context_memory.py",
+        "src/memcommit/application/capabilities/retained_history/memory_history_reconstruction/memory_history_event_derivation.py",
+        "src/memcommit/persistence/store/operation_state",
+        "src/memcommit/persistence/store/context_memory",
         "src/memcommit/persistence/store/record_restore_checkpoint.py",
+        "src/memcommit/persistence/store/checkpoint",
+        "src/memcommit/persistence/store/command_restoration",
     )
     legacy_imports = (
         "from memcommit.translate import",
@@ -57,7 +59,7 @@ def test_production_translate_consumers_use_operation_owners() -> None:
 
     for relative_path in relative_paths:
         path = REPOSITORY_ROOT / relative_path
-        paths = tuple(sorted(path.glob("*.py"))) if path.is_dir() else (path,)
+        paths = tuple(sorted(path.rglob("*.py"))) if path.is_dir() else (path,)
         for source_path in paths:
             source = source_path.read_text(encoding="utf-8")
             assert not [legacy for legacy in legacy_imports if legacy in source]
@@ -121,7 +123,7 @@ def test_translate_command_is_only_an_io_and_presentation_adapter() -> None:
     assert "memcommit.core.context_targeting.loading" not in imports
     assert "memcommit.application.operations.translate.view_store" not in imports
     assert "memcommit.persistence.store" in imports
-    assert "import memcommit.application.ops" not in source
+    assert "import memcommit.application.capabilities.ops" not in source
     assert "AutoCheckpoint" not in source
     assert "save_translation_catalog(" not in source
     assert "load_translation_catalog_for_context(" not in source

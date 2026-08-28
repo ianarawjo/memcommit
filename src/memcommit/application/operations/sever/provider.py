@@ -12,7 +12,7 @@ from memcommit.application.operations.sever.model import (
     SeverError,
     SeverSession,
 )
-from memcommit.application.semantic.selective_curation import (
+from memcommit.application.capabilities.semantic.selective_curation import (
     CriterionFrame,
     CurationBatch,
     CurationItem,
@@ -22,7 +22,7 @@ from memcommit.application.semantic.selective_curation import (
     decode_curation_response,
     plan_curation_execution,
 )
-from memcommit.application.semantic_execution import ExecutionMode
+from memcommit.application.capabilities.semantic_execution import ExecutionMode
 
 
 SEVER_PAYLOAD_MARKER = "SEVER PAYLOAD:\n"

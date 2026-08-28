@@ -30,7 +30,7 @@ _BASE.ROWS = ROWS
 
 
 def _prepare_store(root: Path, *, collision: bool):
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     import memcommit.persistence.store as store_module
     from memcommit.persistence.store import MemoryStore
 

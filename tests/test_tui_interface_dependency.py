@@ -1,4 +1,4 @@
-"""Dependency-direction contract for the shared terminal interface."""
+"""Dependency-direction contract for reusable terminal components."""
 
 from __future__ import annotations
 
@@ -6,7 +6,8 @@ import ast
 from pathlib import Path
 
 
-INTERFACES_ROOT = Path(__file__).parents[1] / "src" / "memcommit" / "adapters" / "interfaces"
+ADAPTERS_ROOT = Path(__file__).parents[1] / "src" / "memcommit" / "adapters"
+TERMINAL_COMPONENTS = ADAPTERS_ROOT / "console" / "terminal" / "components"
 ALLOWED_CONSOLE_PRESENTATION_IMPORTS = {
     "memcommit.adapters.console.commands.compare.presentation",
 }
@@ -32,14 +33,14 @@ def _command_imports(path: Path) -> tuple[str, ...]:
     return tuple(found)
 
 
-def test_interfaces_do_not_import_command_adapters() -> None:
+def test_terminal_components_do_not_import_command_adapters() -> None:
     violations = {
-        str(path.relative_to(INTERFACES_ROOT.parent.parent)): tuple(
+        str(path.relative_to(ADAPTERS_ROOT.parent)): tuple(
             module
             for module in imports
             if module not in ALLOWED_CONSOLE_PRESENTATION_IMPORTS
         )
-        for path in sorted(INTERFACES_ROOT.rglob("*.py"))
+        for path in sorted(TERMINAL_COMPONENTS.rglob("*.py"))
         if (imports := _command_imports(path))
         and any(
             module not in ALLOWED_CONSOLE_PRESENTATION_IMPORTS
@@ -50,33 +51,32 @@ def test_interfaces_do_not_import_command_adapters() -> None:
     assert violations == {}
 
 
-def test_legacy_command_paths_preserve_interface_object_identity() -> None:
+def test_component_imports_resolve_to_their_canonical_objects() -> None:
     import importlib
 
-    from memcommit.adapters.console.shared.save_location_control import SaveLocationView as old_save
-    from memcommit.adapters.console.shared.semantic_detail_renderer import (
+    from memcommit.adapters.console.terminal.components.save_location import SaveLocationView as old_save
+    from memcommit.adapters.console.terminal.components.semantic_viewer.detail import (
         semantic_trace_fragments as old_trace,
     )
-    from memcommit.adapters.console.shared.session_help import SessionHelpController as old_help
-    from memcommit.adapters.console.tui.components.save_location import (
+    from memcommit.adapters.console.terminal.components.save_location import (
         SaveLocationView as new_save,
     )
-    from memcommit.adapters.console.tui.components.session_help import (
-        SessionHelpController as new_help,
-    )
-    from memcommit.adapters.interfaces.tui.viewers.semantic.detail import (
+    from memcommit.adapters.console.terminal.components.semantic_viewer.detail import (
         semantic_trace_fragments as new_trace,
     )
 
-    old_inventory = importlib.import_module("memcommit.adapters.console.commands.help_inventory.command")
-    new_inventory = importlib.import_module(
-        "memcommit.adapters.interfaces.tui.operations.help.inventory"
-    )
-    old_table = importlib.import_module("memcommit.adapters.console.shared.tui_table")
-    new_table = importlib.import_module("memcommit.adapters.console.tui.components.table")
+    old_table = importlib.import_module("memcommit.adapters.console.terminal.components.table")
+    new_table = importlib.import_module("memcommit.adapters.console.terminal.components.table")
 
-    assert old_inventory is new_inventory
     assert old_table is new_table
     assert old_save is new_save
-    assert old_help is new_help
     assert old_trace is new_trace
+
+
+def test_help_terminal_browser_has_one_command_owner() -> None:
+    commands_root = ADAPTERS_ROOT / "console" / "commands"
+
+    assert (commands_root / "help" / "command.py").is_file()
+    assert not tuple((commands_root / "help_inventory").glob("*.py"))
+    assert (TERMINAL_COMPONENTS / "session_help.py").is_file()
+    assert not (ADAPTERS_ROOT / "interfaces").exists()

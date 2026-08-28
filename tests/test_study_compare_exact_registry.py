@@ -9,14 +9,14 @@ from typer.testing import CliRunner
 
 import memcommit.configuration.config as config_module
 import memcommit.adapters.python_api._operations.compare as compare_operation
-import memcommit.application.operations.meld.runtime as meld_runtime
-import memcommit.application.ops as ops
+import memcommit.application.operations.meld.runtime.session_launch as meld_session_launch
+import memcommit.application.capabilities.ops as ops
 import memcommit.persistence.store as store_module
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.python_api import MemCommitClient
 from memcommit.adapters.console.commands.compare.command import render_comparison
 from memcommit.adapters.console.commands.compare.execution import ensure_comparison_analysis
-from memcommit.application.authority.access import ContextAccess
+from memcommit.application.capabilities.authority.access import ContextAccess
 from memcommit.application.operations.compare.ledger.model import (
     ComparisonAnalysis,
     ComparisonInput,
@@ -851,11 +851,11 @@ def test_task3_child_subset_uses_projected_symmetric_compare_without_provider(
         registry_snapshot=registry,
     )
     monkeypatch.setattr(
-        meld_runtime,
+        meld_session_launch,
         "load_profile_registry",
         lambda: registry,
     )
-    analysis = meld_runtime._start_comparison(
+    analysis = meld_session_launch._start_comparison(
         MeldStartRequest(
             mode="SYMMETRIC",
             left_name=child.name,

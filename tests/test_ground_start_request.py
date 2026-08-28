@@ -1,11 +1,16 @@
 """Natural-language entry contracts for an unsaved Ground."""
+
 from __future__ import annotations
 
 import pytest
 from typer.testing import CliRunner
 
 import memcommit.adapters.console.commands.ground.command as ground_command
-from memcommit.application import ops
+from memcommit.adapters.console.commands.ground.command.workflow import (
+    create as ground_create_workflow,
+    open as ground_open_workflow,
+)
+from memcommit.application.capabilities import ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.ground.shell import GroundShellResult
 from memcommit.application.operations.ground.dialogue import (
@@ -13,7 +18,9 @@ from memcommit.application.operations.ground.dialogue import (
     GroundDialogueNewContextSuggestion,
     GroundDialogueProposal,
 )
-from memcommit.application.operations.ground.workspace_runtime import load_ground_workspace
+from memcommit.application.operations.ground.workspace_runtime import (
+    load_ground_workspace,
+)
 from memcommit.persistence.store import MemoryStore
 
 
@@ -23,9 +30,7 @@ runner = CliRunner()
 def test_sentence_positional_prints_seeded_unsaved_frame_without_writing(
     isolated_store,
 ):
-    request = (
-        "지금 Task 1을 위키와 사용자용 Context로 분리하고 싶어"
-    )
+    request = "지금 Task 1을 위키와 사용자용 Context로 분리하고 싶어"
 
     result = runner.invoke(app, ["ground", request])
 
@@ -108,12 +113,12 @@ def test_tty_sentence_passes_exact_working_goal_to_blank_shell(
     request = "Split Task 1 into wiki and user-facing Contexts."
     seen: list[tuple[str, str | None]] = []
     monkeypatch.setattr(
-        ground_command,
+        ground_open_workflow,
         "_interactive_terminal",
         lambda: True,
     )
     monkeypatch.setattr(
-        ground_command,
+        ground_create_workflow,
         "_run_new_ground_shell",
         lambda initial_request="", *, ground_name=None: seen.append(
             (initial_request, ground_name)
@@ -138,7 +143,7 @@ def test_new_ground_shell_keeps_existing_contexts_out_of_the_agent_turn(
     seen: list[tuple[str, tuple[str, ...]]] = []
 
     monkeypatch.setattr(
-        ground_command,
+        ground_create_workflow,
         "_interpret_new_ground_turn",
         lambda text, *, context_names=None: seen.append(
             (text, tuple(context_names or ()))
@@ -152,14 +157,12 @@ def test_new_ground_shell_keeps_existing_contexts_out_of_the_agent_turn(
         return GroundShellResult(status="CANCELLED")
 
     monkeypatch.setattr(
-        ground_command,
+        ground_create_workflow,
         "run_ground_shell",
         fake_shell,
     )
 
-    ground_command._run_new_ground_shell(
-        "Split Task 1 into wiki material."
-    )
+    ground_command._run_new_ground_shell("Split Task 1 into wiki material.")
 
     assert seen == [
         (
@@ -180,7 +183,7 @@ def test_new_ground_shell_without_store_has_no_current_snapshot(
         return GroundShellResult(status="CANCELLED")
 
     monkeypatch.setattr(
-        ground_command,
+        ground_create_workflow,
         "run_ground_shell",
         fake_shell,
     )
@@ -203,7 +206,7 @@ def test_fixed_ground_shell_uses_save_location_without_context_recommendations(
     seen = []
 
     monkeypatch.setattr(
-        ground_command,
+        ground_create_workflow,
         "_interpret_new_ground_turn",
         lambda text, *, context_names=(), ground_name=None: seen.append(
             (text, tuple(context_names), ground_name)
@@ -216,7 +219,7 @@ def test_fixed_ground_shell_uses_save_location_without_context_recommendations(
         kwargs["interpret"]("Find real ticker rules.")
         return GroundShellResult(status="CANCELLED")
 
-    monkeypatch.setattr(ground_command, "run_ground_shell", fake_shell)
+    monkeypatch.setattr(ground_create_workflow, "run_ground_shell", fake_shell)
 
     ground_command._run_new_ground_shell(
         "Find real ticker rules.",
@@ -239,7 +242,7 @@ def test_location_selected_inside_blank_shell_freezes_later_semantic_turns(
     seen = []
 
     monkeypatch.setattr(
-        ground_command,
+        ground_create_workflow,
         "_choose_ground_workspace_save_location",
         lambda _store, **_kwargs: "research/ticker-ground",
     )
@@ -260,8 +263,12 @@ def test_location_selected_inside_blank_shell_freezes_later_semantic_turns(
         assert proposal.ground_name == selected
         return GroundShellResult(status="CANCELLED")
 
-    monkeypatch.setattr(ground_command, "_interpret_new_ground_turn", interpret)
-    monkeypatch.setattr(ground_command, "run_ground_shell", shell)
+    monkeypatch.setattr(
+        ground_create_workflow,
+        "_interpret_new_ground_turn",
+        interpret,
+    )
+    monkeypatch.setattr(ground_create_workflow, "run_ground_shell", shell)
 
     ground_command._run_new_ground_shell()
 
@@ -295,7 +302,7 @@ def test_new_context_suggestion_is_checked_without_creating_or_switching(
         ),
     )
     monkeypatch.setattr(
-        ground_command,
+        ground_create_workflow,
         "interpret_ground_dialogue",
         lambda *_args, **_kwargs: turn,
     )

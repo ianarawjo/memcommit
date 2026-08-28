@@ -12,6 +12,7 @@ ROOT = Path(__file__).parents[1]
 PACKAGE = ROOT / "src" / "memcommit"
 CONSOLE = PACKAGE / "adapters" / "console"
 RETIRED = PACKAGE / "adapters" / "interfaces" / "console"
+RETIRED_CLI = PACKAGE / "adapters" / "interfaces" / "cli"
 
 
 def _imports(path: Path) -> tuple[str, ...]:
@@ -38,6 +39,19 @@ def test_retired_console_staging_package_has_no_source_or_importers() -> None:
     assert offenders == []
 
 
+def test_retired_cli_staging_package_has_no_source_or_importers() -> None:
+    assert not RETIRED_CLI.exists()
+
+    offenders = [
+        (str(path.relative_to(ROOT)), module)
+        for path in PACKAGE.rglob("*.py")
+        for module in _imports(path)
+        if module.startswith("memcommit.adapters.interfaces.cli")
+    ]
+
+    assert offenders == []
+
+
 def test_reusable_console_modules_do_not_import_command_adapters() -> None:
     reusable = [
         *(
@@ -45,8 +59,8 @@ def test_reusable_console_modules_do_not_import_command_adapters() -> None:
             for path in CONSOLE.glob("*.py")
             if path.name != "entrypoint.py"
         ),
-        *(CONSOLE / "responses").rglob("*.py"),
-        *(CONSOLE / "selection").rglob("*.py"),
+        *(CONSOLE / "terminal" / "core").rglob("*.py"),
+        *(CONSOLE / "terminal" / "components").rglob("*.py"),
     ]
     offenders = [
         (str(path.relative_to(ROOT)), module)
@@ -64,10 +78,9 @@ def test_console_package_import_does_not_assemble_commands() -> None:
             sys.executable,
             "-c",
             (
-                "import importlib.util; import sys; "
+                "import sys; "
                 "import memcommit.adapters.console; "
-                "assert importlib.util.find_spec("
-                "'memcommit.adapters.interfaces.console') is None; "
+                "assert 'memcommit.adapters.interfaces' not in sys.modules; "
                 "assert 'memcommit.adapters.console.entrypoint' not in sys.modules; "
                 "assert 'memcommit.adapters.console.commands' not in sys.modules"
             ),

@@ -47,8 +47,8 @@ arrays without dropping issue links. `apply` additionally returns the
 checkpoint UID, change count, and recovery flag from the public receipt.
 
 The adapter calls exactly one matching `MemCommitClient` method. It imports no
-command, TUI, Store, Grounding application, Grounding runtime, provider, or MCP
-module. Public failures become bounded agent errors:
+command, TUI, Store, Grounding application, Grounding runtime, provider, or
+wire-transport module. Public failures become bounded agent errors:
 
 - invalid input and unavailable Context/analysis retain actionable public
   detail;
@@ -57,10 +57,9 @@ module. Public failures become bounded agent errors:
   and non-retryable; and
 - unexpected adapter failures become a generic non-retryable internal error.
 
-The registry performs its existing JSON-safety check after the adapter returns.
-The MCP projection therefore exposes the same frozen schema through
-`tools/list` and preserves the complete response through `tools/call`; it owns
-no Grounding-specific handler.
+The registry performs its existing JSON-safety check after the adapter returns
+and exposes the same frozen schema and complete response to an in-process host;
+it owns no Grounding-specific handler.
 
 ## Invariants and limitations
 
@@ -82,9 +81,6 @@ no Grounding-specific handler.
 
 Focused tests exercise every kind, exact argument forwarding, complete JSON
 projection, apply receipts, strict cross-kind rejection, retry classification,
-error redaction, adapter import direction, registry discovery, and an MCP call.
-The installed-wheel gate discovers the tool through the official MCP stdio
-client outside the checkout and performs a real provider-free `open` against a
-durable review-only dialogue. Source and installed checks therefore cover the
-same `MCP → registry → adapter → public client → application` path without an
-operation-specific MCP implementation.
+error redaction, adapter import direction, registry discovery, and direct
+registry invocation. The former installed-wheel MCP gate remains historical
+evidence for a provider-free `open`; no wire transport is currently shipped.

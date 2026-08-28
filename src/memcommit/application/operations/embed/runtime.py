@@ -5,8 +5,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 import hashlib
 
-import memcommit.application.ops as ops
-from memcommit.application.authority.access import (
+import memcommit.application.capabilities.ops as ops
+from memcommit.application.capabilities.authority.access import (
     ContextAccess,
     authorized_context_operation,
     grant_checkpoint_args,
@@ -15,7 +15,7 @@ from memcommit.application.authority.access import (
     resolve_context_access,
 )
 from memcommit.core.context import AutoCheckpoint, Context, Memory, MemoryRef
-from memcommit.application.context_locator import resolve_context_locator
+from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.application.operations.embed.application import (
     EmbedPlacement,
     EmbedPort,

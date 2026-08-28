@@ -847,7 +847,7 @@ def _operation_routes(
             sorted(
                 module
                 for module in module_names
-                if module.startswith("memcommit.adapters.interfaces.agent.")
+                if module.startswith("memcommit.adapters.agent.")
                 and _module_owner_matches(module, tokens)
                 and module.rsplit(".", 1)[-1] not in {"contract", "registry"}
             )

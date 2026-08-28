@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Callable, Sequence
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from prompt_toolkit.application import Application, get_app
 from prompt_toolkit.filters import Condition
 from prompt_toolkit.input import Input
@@ -20,17 +20,17 @@ from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
-from memcommit.adapters.console.tui.components.direct_item_placement import (
+from memcommit.adapters.console.terminal.components.direct_item_placement import (
     DirectItemGap,
     DirectItemPlacementTreeProjection,
     direct_item_placement_rows,
 )
-from memcommit.adapters.console.tui.components.exact_command_review import (
+from memcommit.adapters.console.terminal.components.exact_command_review import (
     EditableExactCommandControl,
     ExactCommandDraft,
     ExactCommandForm,
     ExactCommandFormField,
-    ExactCommandReview,
+    CommandReview,
     resolve_displayed_command_value,
     shortest_unique_identifier_prefix,
 )
@@ -44,30 +44,30 @@ from memcommit.core.context_targeting.tui.direct_memory_selector import (
 )
 from memcommit.core.context_targeting.tui.picker import ContextMemoryRow
 from memcommit.core.context_targeting.resolution import parse_direct_memory_locator
-from memcommit.adapters.console.terminal import require_interactive_terminal
-from memcommit.adapters.console.text import display_escape_text
-from memcommit.adapters.console.tui.components.focus import (
+from memcommit.adapters.console.terminal.core.capabilities import require_interactive_terminal
+from memcommit.adapters.console.terminal.core.text import display_escape_text
+from memcommit.adapters.console.terminal.components.focus import (
     FocusSurface,
     SurfaceActionResult,
     SurfaceFocusController,
     SurfaceMoveResult,
     bind_surface_navigation,
 )
-from memcommit.adapters.console.tui.components.frame import (
+from memcommit.adapters.console.terminal.components.frame import (
     TuiRegion,
     build_focused_frame,
     build_tui_frame,
 )
-from memcommit.adapters.console.tui.components.horizontal_choice import (
+from memcommit.adapters.console.terminal.components.horizontal_choice import (
     HorizontalChoiceOption,
     HorizontalChoiceState,
     render_horizontal_choice,
 )
-from memcommit.adapters.console.tui.core.keybindings import (
+from memcommit.adapters.console.terminal.core.keybindings import (
     bind_tui_interrupt,
     dispatch_tui_back,
 )
-from memcommit.adapters.console.tui.core.theme import (
+from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
 )
@@ -223,10 +223,10 @@ def embed_exact_command_review(
     *,
     item_count: int,
     placement_selector: str | None = None,
-) -> ExactCommandReview:
+) -> CommandReview:
     """Build the exact command and complete one-Context mutation boundary."""
 
-    return ExactCommandReview(
+    return CommandReview(
         argv=(
             "mem",
             "embed",
@@ -256,7 +256,7 @@ def memory_embed_exact_command_review(
     memory_selector: str | None = None,
     placement_selector: str | None = None,
     qualified_locator: bool = False,
-) -> ExactCommandReview:
+) -> CommandReview:
     """Build the exact live-Memory command and its mutation boundary."""
 
     selector = memory_selector or memory_uid
@@ -265,7 +265,7 @@ def memory_embed_exact_command_review(
         if qualified_locator
         else (selector, "--from", source_name)
     )
-    return ExactCommandReview(
+    return CommandReview(
         argv=(
             "mem",
             "embed",
@@ -440,7 +440,7 @@ def run_embed_tui(
             minimum=7,
         )
 
-    def selected_review() -> ExactCommandReview:
+    def selected_review() -> CommandReview:
         gap = placement.state.selected_gap
         gap_selector = command_gap_selector(gap)
         if mode.selected_uid == "MEMORY":

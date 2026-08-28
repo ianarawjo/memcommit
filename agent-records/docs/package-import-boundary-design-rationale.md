@@ -56,8 +56,8 @@ operation adapters
 ```
 
 The canonical checkout now places that package below `src/memcommit`. The
-distribution name, import name, public exports, and `mem`/`mem-mcp` entry
-points remain `memcommit`; only the repository source location changed. A
+distribution name, import name, public exports, and `mem` entry point remain
+`memcommit`; only the repository source location changed. A
 repository root is deliberately not an import root, so development and CI
 must install the project—normally with an editable install—before running the
 test suite. This makes the installation boundary the ordinary local path
@@ -176,11 +176,11 @@ prove lazy root/API exports, public object identity, Ground-blocked standalone
 imports, operation implementation absence after client import, and selected
 Elaborate loading without Ground, Distill, or Meld assembly. The earlier
 invalid-HOME explicit-root test continues to prove absence of import-time
-Profile resolution. A focused public API, agent registry, and MCP projection
+Profile resolution. A focused public API and agent registry
 run passed 112 tests.
 
-A fresh `0.0.1` wheel was then installed with its MCP extra into a new Python
-3.13.5 environment. From outside the checkout, official MCP 2.0.0 stdio
+A fresh `0.0.1` wheel was then installed with its former MCP extra into a new
+Python 3.13.5 environment. From outside the checkout, official MCP 2.0.0 stdio
 discovered Query, Add, Meld, Distill, Elaborate, and Fit, executed Add, and
 returned the typed unknown-tool failure. A second installed-process check
 proved the same lazy import graph from `site-packages`. This closes the first
@@ -192,7 +192,7 @@ contract and moved all 1,035 tracked package files below `src/memcommit`.
 Only the static catalog's repository scan and two repository-backed Study
 fixture locators required production-code path changes; import spellings and
 entry points did not change. The package/import, generated-catalog, fixture,
-and ownership regression set passed 571 tests, and the MCP projection set
+and ownership regression set passed 571 tests, and the former MCP projection set
 passed 16 tests. All migrated capture and support scripts also passed Python
 compilation and their generated-layout checks.
 

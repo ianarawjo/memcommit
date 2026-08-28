@@ -26,6 +26,30 @@ compatibility. This ownership-only relocation changes no semantic plan,
 preflight, CAS, authority, checkpoint, or zero-operation behavior and requires
 no terminal screenshot refresh.
 
+### Physical model ownership
+
+The historical `memcommit.application.operations.update.model` import remains
+the public compatibility facade, while its implementation follows five Update
+concepts:
+
+- `changes.py` owns source-linked ADD, EDIT, and REMOVE records, their strict
+  parsing, operation digest, and derived Grant permission requirements;
+- `receipts.py` owns frozen Context fingerprints and checkpoint/application
+  receipts;
+- `inputs.py` owns inline Source identity, Grant bindings, Source/Target
+  candidates, focused-Memory selection, and exhaustive input collection;
+- `session.py` owns persisted session serialization, lifecycle transitions,
+  inline reconstruction, and stale/applied input matching;
+- `planning.py` owns the provider contract, semantic budget, prompts, output
+  schema, response validation, initial planning, and reviewed revision.
+
+The dependency direction is `planning -> session -> inputs -> receipts ->
+changes`, with higher layers importing lower concept records directly where
+needed. The split deliberately does not alter serialized schemas, provider
+payloads, cache identity, application behavior, or the operation-owned
+application boundary described above. Explicit facade exports preserve the
+former 40-name public surface while making physical ownership testable.
+
 ## Frozen behavior
 
 | Case | Execution-decision behavior | Durable effect | Recovery |

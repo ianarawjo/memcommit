@@ -8,17 +8,17 @@ import uuid
 from contextlib import ExitStack
 from dataclasses import dataclass
 
-import memcommit.application.ops as ops
-from memcommit.application.authority.access import (
+import memcommit.application.capabilities.ops as ops
+from memcommit.application.capabilities.authority.access import (
     ContextAccess,
     authorized_context_operation,
     freeze_granted_context_binding,
     resolve_context_access,
 )
 from memcommit.core.context import AutoCheckpoint, Context, Memory, MemoryRef
-from memcommit.application.context_locator import resolve_context_locator
+from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.core.context_targeting.resolution import parse_direct_memory_locator
-from memcommit.application.authority.derived_policy import (
+from memcommit.application.capabilities.authority.derived_policy import (
     authorize_analysis_save,
     authorize_combination,
     authorize_derived_transfer,

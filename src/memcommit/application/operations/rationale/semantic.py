@@ -7,13 +7,13 @@ import json
 from typing import Callable, Protocol
 import unicodedata
 
-from memcommit.application.retained_history.memory_history_reconstruction.retained_record_verification import (
+from memcommit.application.capabilities.retained_history.memory_history_reconstruction.retained_record_verification import (
     MemoryState,
 )
-from memcommit.application.retained_history.memory_history_reconstruction.memory_history_event_derivation import (
+from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_event_derivation import (
     MemoryHistoryEvent,
 )
-from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
+from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_construction import (
     MemoryHistory,
 )
 from memcommit.application.operations.rationale.rules import (
@@ -25,7 +25,7 @@ from memcommit.application.operations.rationale.rules import (
     rationale_ruleset_prompt_payload,
     validate_rationale_limit,
 )
-from memcommit.application.semantic_execution import (
+from memcommit.application.capabilities.semantic_execution import (
     BudgetLimits,
     ExecutionMode,
     ExecutionStrategy,
@@ -34,7 +34,7 @@ from memcommit.application.semantic_execution import (
     json_budget,
     plan_semantic_execution,
 )
-from memcommit.application.semantic.prompt_policy import resolve_semantic_prompt_policy
+from memcommit.application.capabilities.semantic.prompt_policy import resolve_semantic_prompt_policy
 
 
 RATIONALE_PROVENANCE_OPERATION = "rationale provenance"

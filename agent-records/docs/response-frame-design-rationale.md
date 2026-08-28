@@ -12,7 +12,7 @@ location for the same answer.
 
 ## Contract
 
-`memcommit.adapters.console.responses` is the service-wide presentation contract.
+`memcommit.adapters.console.terminal.components.responses` is the service-wide presentation contract.
 It lives under the console interface because its state composes console selection
 controls and its renderer owns terminal interaction; this placement does not give
 it provider, persistence, mutation, or application authority:

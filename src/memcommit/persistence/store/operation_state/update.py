@@ -164,8 +164,8 @@ class _UpdateStateStoreMixin:
             prepare_update_application,
         )
         from memcommit.core.context_targeting.loading import load_context_scope
-        from memcommit.application.semantic.goal_focus import GoalFocusError
-        from memcommit.application.semantic.goal_focus_runtime import (
+        from memcommit.application.capabilities.semantic.goal_focus import GoalFocusError
+        from memcommit.application.capabilities.semantic.goal_focus_runtime import (
             revalidate_goal_focus,
         )
 

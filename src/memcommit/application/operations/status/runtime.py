@@ -5,13 +5,13 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import Any
 
-from memcommit.application.authority.access import (
+from memcommit.application.capabilities.authority.access import (
     ContextAccess,
     context_access_display_facts,
     resolve_context_access,
 )
 from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
-from memcommit.application.retained_history.context_snapshot import ContextSnapshotRef
+from memcommit.application.capabilities.retained_history.context_snapshot import ContextSnapshotRef
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.core.context_targeting.readable_catalog import ReadableContextCatalog
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names

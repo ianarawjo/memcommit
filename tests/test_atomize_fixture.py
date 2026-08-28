@@ -9,8 +9,7 @@ from pathlib import Path
 
 FIXTURE_PATH = (
     Path(__file__).resolve().parents[1]
-    / "src" / "memcommit"
-    / "eval"
+    / "src" / "memcommit" / "application" / "capabilities" / "evaluation"
     / "fixtures"
     / "atomize.json"
 )

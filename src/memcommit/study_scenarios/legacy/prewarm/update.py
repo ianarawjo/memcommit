@@ -8,7 +8,7 @@ import json
 from pathlib import Path
 import uuid
 
-from memcommit.application.authority.access import (
+from memcommit.application.capabilities.authority.access import (
     GrantedReadStore,
     freeze_granted_context_binding,
     resolve_context_access,
@@ -19,7 +19,7 @@ from memcommit.providers.policy import (
 )
 from memcommit.core.context import Context
 from memcommit.core.context_targeting.loading import load_context_scope
-from memcommit.application.authority.derived_policy import authorize_derived_transfer
+from memcommit.application.capabilities.authority.derived_policy import authorize_derived_transfer
 from memcommit.application.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,

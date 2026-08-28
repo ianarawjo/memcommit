@@ -37,7 +37,7 @@ def _configure_store(store_dir: Path) -> None:
 
 
 def _prepare_revert_store(store_dir: Path) -> tuple[str, str]:
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.core.context import AutoCheckpoint
     from memcommit.persistence.store import MemoryStore
 
@@ -82,7 +82,7 @@ def _prepare_revert_store(store_dir: Path) -> tuple[str, str]:
 
 
 def _prepare_merge_store(store_dir: Path) -> None:
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_dir)

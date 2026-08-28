@@ -7,8 +7,8 @@ from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from typing import Literal, Protocol
 
-from memcommit.adapters.console.shared.exact_command_review import (
-    ExactCommandReview,
+from memcommit.adapters.console.coordination.command_review.model import CommandReview
+from memcommit.adapters.console.terminal.components.exact_command_review.rendering import (
     format_exact_command,
 )
 from memcommit.application.operations.ground.model import (
@@ -126,7 +126,7 @@ def _proposal_review(
     proposal: GroundShellProposal,
     *,
     has_local_new_context: bool = False,
-) -> ExactCommandReview:
+) -> CommandReview:
     if has_local_new_context:
         new_context_effect = "New Context plan: reviewed with this Ground"
     elif proposal.new_context_suggestions:
@@ -135,7 +135,7 @@ def _proposal_review(
         )
     else:
         new_context_effect = "New Context plan: none"
-    return ExactCommandReview(
+    return CommandReview(
         argv=proposal_argv(proposal),
         effects=(
             f"Ground: CREATE {proposal.ground_name}",

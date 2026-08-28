@@ -118,7 +118,7 @@ implementation.
 ## Why this design
 
 The application selects over frozen typed rows instead of calling
-`memcommit.application.ops.resolve` on mutable `Context` objects. This keeps prefix and
+`memcommit.application.capabilities.ops.resolve` on mutable `Context` objects. This keeps prefix and
 exact-name semantics testable without a Store while allowing infrastructure
 to remain responsible for Context files, embedded/reference loading, Profile
 state, and Grant revalidation.

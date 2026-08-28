@@ -225,7 +225,7 @@ def _run_child(kind: str) -> None:
         store.set_current(context.name)
         resolve_command.connect_semantic_provider = lambda: _Provider(kind=kind)
         if kind == "stale":
-            import memcommit.application.ops as ops
+            import memcommit.application.capabilities.ops as ops
             from memcommit.application.operations.resolve.runtime import MemoryStoreResolvePort
 
             original_apply = MemoryStoreResolvePort.apply

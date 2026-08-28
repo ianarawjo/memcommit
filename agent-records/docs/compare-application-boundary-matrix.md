@@ -31,7 +31,7 @@ not imported by the canonical Summary application or provider.
 
 ## Entry-point matrix
 
-| Use case | Typed owner | Python | Agent / MCP | CLI / TUI |
+| Use case | Typed owner | Python | Agent | CLI / TUI |
 | --- | --- | --- | --- | --- |
 | Default transient summary | `operations.compare.summary_application.run_comparison_summary` | not exposed as the deep public API | not exposed as the deep agent API | default explicit endpoints or endpoint setup |
 | Run or reuse | `comparison_execution.ensure_comparison_analysis` | `compare_contexts` | `kind=run` | explicit endpoints or endpoint setup |

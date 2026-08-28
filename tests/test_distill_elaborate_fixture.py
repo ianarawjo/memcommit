@@ -7,10 +7,10 @@ from pathlib import Path
 import re
 
 import memcommit.application.operations.distill.model as distill_module
-import memcommit.application.operations.elaborate.model as elaborate_module
+import memcommit.application.operations.elaborate.generation as elaborate_generation
 from memcommit.core.context import Context, Memory
 from memcommit.application.operations.distill.model import DISTILL_PAYLOAD_MARKER, analyze_distill
-from memcommit.application.semantic.generative_reduction_reference import (
+from memcommit.application.capabilities.semantic.generative_reduction_reference import (
     REFERENCE_EXAMPLES_MARKER,
     REFERENCE_FAMILY_IDS,
     load_distill_elaborate_reference_families,
@@ -18,7 +18,7 @@ from memcommit.application.semantic.generative_reduction_reference import (
 from memcommit.application.operations.elaborate.model import ELABORATE_PAYLOAD_MARKER
 from memcommit.application.operations.elaborate.application import ElaborateRequest
 from memcommit.application.operations.elaborate.runtime import execute_elaborate
-from memcommit.application.semantic.prompt_policy import GENERAL_SEMANTIC_PROMPT_POLICY
+from memcommit.application.capabilities.semantic.prompt_policy import GENERAL_SEMANTIC_PROMPT_POLICY
 from tests.elaborate_validation_support import (
     passing_elaborate_validation_response,
 )
@@ -29,6 +29,7 @@ FIXTURE_PATH = (
     Path(__file__).parents[1]
     / "src" / "memcommit"
     / "application"
+    / "capabilities"
     / "evaluation"
     / "fixtures"
     / "distill_elaborate.json"
@@ -310,7 +311,7 @@ def test_every_distill_and_elaborate_prompt_quotes_all_reference_families(
         lambda: GENERAL_SEMANTIC_PROMPT_POLICY,
     )
     monkeypatch.setattr(
-        elaborate_module,
+        elaborate_generation,
         "resolve_semantic_prompt_policy",
         lambda: GENERAL_SEMANTIC_PROMPT_POLICY,
     )

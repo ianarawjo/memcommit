@@ -72,6 +72,20 @@ assert 'memcommit.adapters.python_api' not in sys.modules
     assert completed.returncode == 0, completed.stderr
 
 
+def test_one_agent_operation_import_does_not_assemble_registry_or_siblings():
+    completed = _run_fresh(
+        """
+import sys
+import memcommit.adapters.agent.add
+assert 'memcommit.adapters.agent.registry' not in sys.modules
+assert 'memcommit.adapters.agent.query' not in sys.modules
+assert 'memcommit.adapters.agent.atomize' not in sys.modules
+"""
+    )
+
+    assert completed.returncode == 0, completed.stderr
+
+
 def test_public_client_import_does_not_assemble_operation_implementations():
     completed = _run_fresh(
         """
@@ -251,7 +265,7 @@ blocked = (
     'memcommit.application.operations.translate.materialization',
     'memcommit.application.operations.translate.view',
     'memcommit.application.operations.translate.view_store',
-    'memcommit.application.reviewing.report',
+    'memcommit.application.capabilities.reviewing.report',
     'memcommit.reference_application',
     'memcommit.sever_application',
     'memcommit.sever_runtime',
@@ -306,7 +320,7 @@ def test_selected_show_loads_only_its_read_operation_assembly(tmp_path):
 import os
 from pathlib import Path
 import sys
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.python_api import MemCommitClient
 from memcommit.persistence.store import MemoryStore
 

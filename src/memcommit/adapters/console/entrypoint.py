@@ -25,7 +25,6 @@ from memcommit.adapters.console.commands import (
     edit,
     embed,
     find,
-    search,
     find_ambiguities,
     find_conflicts,
     find_duplicates,
@@ -33,7 +32,7 @@ from memcommit.adapters.console.commands import (
     fit,
     forget,
     ground,
-    help_inventory,
+    help,
     impact,
     import_profile,
     init,
@@ -54,6 +53,7 @@ from memcommit.adapters.console.commands import (
     resolve,
     review,
     revert,
+    search,
     share,
     sever,
     status,
@@ -72,7 +72,7 @@ from memcommit.adapters.console.commands.dev.command import app as dev_app
 from memcommit.adapters.console.commands.semantic_eval.command import eval_app
 from memcommit.adapters.console.commands.profile.command import app as profile_app
 from memcommit.adapters.console.commands.provider.command import app as provider_app
-from memcommit.adapters.console.shared.root_group import MemCommandGroup
+from memcommit.adapters.console.coordination.root_group import MemCommandGroup
 from memcommit.application.operations.operation_catalog import operation_summary
 
 _HELP_CONTEXT_SETTINGS = {
@@ -436,7 +436,7 @@ app.add_typer(
 app.command(
     "help",
     help=operation_summary("help"),
-)(help_inventory.cmd)
+)(help.cmd)
 # checkout preserves Git-style navigation syntax across two distinct operations.
 @app.command(
     "checkout",

@@ -127,7 +127,7 @@ class _Provider:
 
 
 def _initialize(store):
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
 
     if store.context_exists("atomize/open-boundary"):
         return
@@ -139,7 +139,7 @@ def _initialize(store):
 
 def _invoke_impact(store, provider_factory, *, refresh: bool = False) -> int:
     import memcommit.adapters.console.commands.impact.command as impact_command
-    import memcommit.adapters.console.shared.session_help as session_help
+    import memcommit.adapters.console.terminal.components.session_help as session_help
 
     impact_command.MemoryStore = lambda *args, **kwargs: store
     impact_command.connect_codex_chatgpt_provider = provider_factory

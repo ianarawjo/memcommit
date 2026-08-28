@@ -104,7 +104,7 @@ def _verify(
     expected_checkpoint_count: int,
 ) -> None:
     _configure_store(store_dir)
-    from memcommit.application.retained_history.display import (
+    from memcommit.application.capabilities.retained_history.display import (
         checkpoint_command_identity,
         checkpoint_inherited_from,
     )

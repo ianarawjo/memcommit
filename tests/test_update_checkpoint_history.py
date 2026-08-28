@@ -5,15 +5,15 @@ from __future__ import annotations
 import json
 from dataclasses import replace
 
-import memcommit.application.ops as ops
-from memcommit.adapters.console.commands.update.checkpoint_history import (
+import memcommit.application.capabilities.ops as ops
+from memcommit.adapters.console.terminal.components.history.update_checkpoint import (
     update_checkpoint_detail_renderer,
     update_checkpoint_entry,
     update_location_annotations,
     update_subtree_checkpoint_entries,
     update_subtree_locations,
 )
-from memcommit.adapters.console.shared.history_picker import HistoryDetailView
+from memcommit.adapters.console.terminal.components.history.picker import HistoryDetailView
 from memcommit.application.operations.update.model import (
     UpdateApplicationReceipt,
     UpdateCheckpointReceipt,

@@ -8,16 +8,16 @@ import click
 import typer
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.forget import command as forget_command
 from memcommit.core.context import AutoCheckpoint
 from memcommit.adapters.console.commands.forget import receipt as forget_cli
-from memcommit.adapters.console.theme import (
+from memcommit.adapters.console.terminal.core.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )
-from memcommit.application.semantic.changes import EditChange, RemoveChange
+from memcommit.application.capabilities.semantic.changes import EditChange, RemoveChange
 from memcommit.persistence.store import MemoryStore
 
 

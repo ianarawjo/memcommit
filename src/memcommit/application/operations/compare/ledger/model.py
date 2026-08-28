@@ -26,7 +26,7 @@ from memcommit.core.context_targeting.memory_focus import (
     resolve_memory_focus,
 )
 from memcommit.persistence.store import context_record_digest
-from memcommit.application.semantic.understanding import (
+from memcommit.application.capabilities.semantic.understanding import (
     UnderstandingSummary,
 )
 

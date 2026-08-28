@@ -14,7 +14,7 @@ from typer.testing import CliRunner
 
 import memcommit.adapters.console.commands.elaborate.command as elaborate_command
 import memcommit.application.operations.elaborate.application as elaborate_application
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.application.operations.conformance.model import CONTEXT_CONFORMANCE_OPERATION
 from memcommit.core.context import Context, Memory

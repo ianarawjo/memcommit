@@ -54,7 +54,7 @@ class _StreamRecorder(io.StringIO):
 
 
 def _prepare_store(root: Path, *, empty: bool):
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=root)
@@ -75,7 +75,7 @@ def _prepare_store(root: Path, *, empty: bool):
 
 
 def _run_focus_child(store_root: Path) -> None:
-    from memcommit.adapters.console.shared.endpoint_setup_flows import choose_atomize_setup
+    from memcommit.adapters.console.terminal.components.endpoint_setup.flows import choose_atomize_setup
 
     store, source, expected_uid = _prepare_store(store_root, empty=False)
     print("$ mem atomize --sessions -> New Atomize", flush=True)
@@ -103,7 +103,7 @@ def _run_focus_child(store_root: Path) -> None:
 
 
 def _run_empty_child(store_root: Path) -> None:
-    from memcommit.adapters.console.shared.endpoint_setup_flows import choose_atomize_setup
+    from memcommit.adapters.console.terminal.components.endpoint_setup.flows import choose_atomize_setup
 
     store, source, _selected_uid = _prepare_store(store_root, empty=True)
     print("$ mem atomize --sessions -> New Atomize (empty Input)", flush=True)

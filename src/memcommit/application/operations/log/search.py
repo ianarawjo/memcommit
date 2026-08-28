@@ -7,14 +7,14 @@ import json
 import unicodedata
 from typing import Literal, Protocol, Sequence
 
-from memcommit.application.retained_history.reconstruction import (
+from memcommit.application.capabilities.retained_history.reconstruction import (
     HistoryCheckpoint,
     HistoryState,
     HistoryTimeline,
     MemoryTransition,
     MemoryVersion,
 )
-from memcommit.application.semantic_execution import (
+from memcommit.application.capabilities.semantic_execution import (
     BudgetLimits,
     ExecutionMode,
     ExecutionStrategy,

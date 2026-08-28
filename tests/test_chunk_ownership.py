@@ -12,7 +12,7 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 
 
 def test_ops_chunk_is_a_thin_operation_compatibility_adapter() -> None:
-    path = REPOSITORY_ROOT / "src/memcommit/application/ops.py"
+    path = REPOSITORY_ROOT / "src/memcommit/application/capabilities/ops.py"
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
     definitions = [
         node

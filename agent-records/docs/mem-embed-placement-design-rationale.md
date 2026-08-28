@@ -196,11 +196,11 @@ plan. Escape cancels, and Backspace remains ordinary text deletion.
 
 ## Reuse boundary
 
-`memcommit.adapters.console.tui.components.direct_item_placement` owns the
+`memcommit.adapters.console.terminal.components.direct_item_placement` owns the
 operation-neutral row projection, gap model, separate hover/selection state,
 and single moving-line renderer. The neighboring exact-command receipt is a
 separate component whose form/draft/editor mechanics are shared under
-`console.tui.components.exact_command_review`; Embed owns the argv grammar
+`console.terminal.components.exact_command_review`; Embed owns the argv grammar
 and its all-or-none mapping back to controls. The common
 `ContextSelectorControl` exposes a narrow
 nested-row projection hook so Embed can compose the order under the selected
@@ -211,9 +211,9 @@ component without inheriting Embed semantics.
 
 The component projects only the target's frozen direct-item sequence. It does
 not import a command adapter or gain storage, authority, or apply behavior.
-The former `memcommit.adapters.console.shared.direct_item_placement` implementation is now a
-module-identity compatibility alias to this owner. The relocation deliberately
-retains the old import path while removing the second implementation and its
+The former `memcommit.adapters.console.coordination.direct_item_placement` facade is
+removed. The relocation deliberately removes the old import path and the
+second implementation while preserving the component's
 independent globals. Older command screens may still have separate review
 helpers: migrating a frozen-plan review requires an operation-owned replan
 contract, and Embed does not reach through those screens or reinterpret their

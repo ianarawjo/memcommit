@@ -8,7 +8,7 @@ import pytest
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-from memcommit.adapters.console.shared.memory_picker import (
+from memcommit.adapters.console.terminal.components.memory_report_picker import (
     MemoryReportTargetSelection,
     ScopedMemoryPickerItem,
     _render_memory_options,
@@ -16,14 +16,14 @@ from memcommit.adapters.console.shared.memory_picker import (
     choose_memory_report_target,
 )
 import memcommit.core.context_targeting.tui.picker as context_picker
-import memcommit.application.ops as ops
-from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
+import memcommit.application.capabilities.ops as ops
+from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_construction import (
     MemoryHistoryCandidate,
     collect_memory_history_candidates,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.adapters.console.theme import ERROR_HEX
-from memcommit.adapters.console.tui.core.theme import (
+from memcommit.adapters.console.terminal.core.theme import ERROR_HEX
+from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
 )
@@ -178,7 +178,7 @@ def test_report_picker_projects_current_and_historical_as_separate_badges(
         return None
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.shared.memory_picker.choose_context",
+        "memcommit.adapters.console.terminal.components.memory_report_picker.choose_context",
         observe_rows,
     )
 
@@ -221,7 +221,7 @@ def test_report_picker_rejects_context_rows_with_a_red_exact_memory_hint(
         return None
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.shared.memory_picker.choose_context",
+        "memcommit.adapters.console.terminal.components.memory_report_picker.choose_context",
         observe_context_rejection,
     )
 
@@ -436,11 +436,11 @@ def test_unrecorded_current_gap_has_zero_recorded_changes(isolated_store):
 
 def test_picker_requires_a_tty_when_requested(monkeypatch):
     monkeypatch.setattr(
-        "memcommit.adapters.console.shared.memory_picker.sys.stdin",
+        "memcommit.adapters.console.terminal.components.memory_report_picker.sys.stdin",
         io.StringIO(),
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.shared.memory_picker.sys.stdout",
+        "memcommit.adapters.console.terminal.components.memory_report_picker.sys.stdout",
         io.StringIO(),
     )
 

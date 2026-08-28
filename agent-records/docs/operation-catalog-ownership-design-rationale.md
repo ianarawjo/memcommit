@@ -25,6 +25,14 @@ application behavior rather than catalog data. The Help operation depends on
 the catalog in one direction; the catalog does not import Help or any console
 adapter.
 
+Reviewed operation `summary` and `best_for` translations follow the same
+ownership. Each non-English catalog lives under
+`operation_catalog/translations/`, and `operation_catalog.localization`
+connects one canonical English record to the requested language. English is
+not duplicated as a translation. Help-only category, concept, locator, and
+keyboard copy remains in the console Help package because those strings
+describe that presentation rather than an operation contract.
+
 ## Boundary and limitation
 
 The catalog is a descriptive contract for operation discovery. Executable
@@ -33,7 +41,8 @@ by each operation's implementation. Tests compare the catalog with exposed
 operations, but the relocation does not make prose an executable source of
 behavior.
 
-This change preserves the current files and metadata values. Renaming the
-internal `catalog.py` module or distributing records beside every operation is
+This change preserves the metadata values. Renaming the internal `catalog.py`
+module or distributing canonical records beside every operation is
 deliberately deferred. No compatibility facade remains at
-`memcommit.help_catalog`.
+`memcommit.help_catalog`, and no facade retains the former
+`application.operations.help.localized_copy` path.

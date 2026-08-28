@@ -10,7 +10,7 @@ from __future__ import annotations
 from dataclasses import replace
 from datetime import datetime
 
-from memcommit.application.retained_history.applied_review import (
+from memcommit.application.capabilities.retained_history.applied_review import (
     CHECKPOINT_REVIEW_OPERATIONS,
     list_applied_checkpoint_reviews,
 )
@@ -18,7 +18,7 @@ from memcommit.adapters.console.commands.atomize.sessions import atomize_session
 from memcommit.adapters.console.commands.compare.sessions import comparison_session_entries
 from memcommit.adapters.console.commands.ground.session_picker import session_picker_location
 from memcommit.adapters.console.commands.meld.sessions import list_meld_session_catalog
-from memcommit.adapters.console.tui.components.operation_launcher.session import (
+from memcommit.adapters.console.terminal.components.operation_launcher.session import (
     SessionOpenReceipt,
     SessionPickerEntry,
     choose_session,
@@ -26,7 +26,7 @@ from memcommit.adapters.console.tui.components.operation_launcher.session import
 from memcommit.adapters.console.commands.audit.sessions import audit_session_entries
 from memcommit.adapters.console.commands.sever.sessions import list_sever_session_catalog
 from memcommit.application.operations.sever.session_store import SeverSessionStore
-from memcommit.application.reviewing.quality.audit_store import QualityAuditStore
+from memcommit.application.capabilities.reviewing.quality.audit_store import QualityAuditStore
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.update.receipt_store import UpdateReceiptStore
 

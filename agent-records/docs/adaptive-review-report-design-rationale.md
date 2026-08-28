@@ -15,7 +15,7 @@ common contract on a report redesign.
 ## Contract
 
 The operation-neutral report values and controller are owned by
-`memcommit.application.reviewing.report`. That shared owner knows how to remove application
+`memcommit.application.capabilities.reviewing.report`. That shared owner knows how to remove application
 capabilities from a frozen Resolution view and how to expose exact report text;
 it does not import Compare, Meld, Sever, Atomize, or Update. Each operation
 continues to own the adapter that supplies its artifact identity, report kind,

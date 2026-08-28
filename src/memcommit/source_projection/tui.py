@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.adapters.console.text import (
+from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
 from memcommit.source_projection.presentation import (

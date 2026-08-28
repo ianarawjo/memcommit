@@ -223,7 +223,7 @@ Grant-aware setup, execution handoff, and fresh-UID receipt live under
 policy, execution handoff, and mixed-effect receipt live under
 `adapters.console.commands.move`. They share only the direct-Memory selection,
 Target-gap placement, editable exact-command, common operand, and placement
-receipt mechanics under `adapters.console.shared.memory_transfer`. The former
+receipt mechanics under `adapters.console.coordination.memory_transfer`. The former
 combined CLI module and operation-specific TUI package are removed without
 facades. This keeps Help operations navigable by their public names without
 duplicating one workbench or splitting the canonical application transaction.

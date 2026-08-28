@@ -11,7 +11,7 @@ from typer.testing import CliRunner
 import memcommit.configuration.config as config_module
 import memcommit.application.operations.atomize.domain as atomize_module
 import memcommit.application.operations.atomize.analysis_runtime as atomize_analysis_runtime_module
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 import memcommit.study_scenarios.legacy.prewarm.atomize as atomize_prewarm_module
 from memcommit.application.operations.atomize.domain import create_atomize_analysis, impact_atomize
 from memcommit.application.operations.atomize.workflow import open_or_create_atomize_workbench
@@ -24,8 +24,8 @@ from memcommit.application.operations.profile.config import (
     STUDY_RUN_PARTICIPANT_SOURCE_KIND,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.semantic.prompt_policy import STUDY_SEMANTIC_PROMPT_POLICY
-from memcommit.application.semantic.prompt_policy import GENERAL_PROMPT_POLICY_ID
+from memcommit.application.capabilities.semantic.prompt_policy import STUDY_SEMANTIC_PROMPT_POLICY
+from memcommit.application.capabilities.semantic.prompt_policy import GENERAL_PROMPT_POLICY_ID
 from memcommit.study_scenarios.legacy.prewarm.atomize import (
     build_atomize_prewarm_artifact,
     find_declared_atomize_prewarm,

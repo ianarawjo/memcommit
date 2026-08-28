@@ -9,7 +9,7 @@ from prompt_toolkit.output import DummyOutput
 
 from memcommit.core.context_targeting.tui.picker import ContextMemoryRow
 from memcommit.application.operations.edit.application import EditRequest, FrozenEditPlan
-from memcommit.adapters.console.tui.components.exact_command_review import (
+from memcommit.adapters.console.terminal.components.exact_command_review import (
     format_exact_command,
 )
 from memcommit.adapters.console.commands.edit.workbench import (
@@ -20,7 +20,7 @@ from memcommit.adapters.console.commands.edit.workbench import (
 from memcommit.adapters.console.commands.edit.workbench.screen import (
     edit_exact_command_review,
 )
-from memcommit.adapters.interfaces.tui.operations.reference import (
+from memcommit.adapters.console.commands.reference.workbench import (
     ReferenceTuiSetup,
     run_reference_tui,
 )

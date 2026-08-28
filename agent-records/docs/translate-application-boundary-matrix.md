@@ -40,5 +40,5 @@ terminal rendering, progress presentation, editor launch, and require-new
 Save Location review. It does not choose catalog provenance, provider reuse,
 curation semantics, import validity, checkpoint contents, or Apply ordering.
 No agent, MCP, or high-level public client Translate adapter is currently
-exposed; the historical `memcommit.application.ops` calls delegate to the same operation
+exposed; the historical `memcommit.application.capabilities.ops` calls delegate to the same operation
 runtime and do not constitute a second route owner.

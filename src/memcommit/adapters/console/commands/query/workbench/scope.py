@@ -23,26 +23,26 @@ from prompt_toolkit.layout import (
 from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.layout.menus import CompletionsMenu
 
-from memcommit.adapters.console.text import safe_terminal_text
-from memcommit.adapters.console.tui.components.exact_name import (
+from memcommit.adapters.console.terminal.core.text import safe_terminal_text
+from memcommit.adapters.console.terminal.components.exact_name import (
     ExactNameFieldView,
     ExactNameInputControl,
 )
-from memcommit.adapters.console.tui.components.focus import (
+from memcommit.adapters.console.terminal.components.focus import (
     FocusSurface,
     SurfaceActionResult,
     SurfaceMoveResult,
 )
-from memcommit.adapters.console.tui.components.horizontal_choice import (
+from memcommit.adapters.console.terminal.components.horizontal_choice import (
     HorizontalChoiceOption,
     HorizontalChoiceState,
     render_horizontal_choice,
 )
-from memcommit.adapters.console.tui.core.theme import focused_control_style
+from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import focused_control_style
 from memcommit.application.operations.query.granted_application import GrantedQueryTarget
-from memcommit.adapters.console.selection.model import SelectionOption
-from memcommit.adapters.console.selection.state import FlatSelectionState
-from memcommit.adapters.console.selection.tui import render_vertical_choice_rows
+from memcommit.adapters.console.terminal.components.selection.model import SelectionOption
+from memcommit.adapters.console.terminal.components.selection.state import FlatSelectionState
+from memcommit.adapters.console.terminal.components.selection import render_vertical_choice_rows
 
 
 ScopeChanged = Callable[[str], None]

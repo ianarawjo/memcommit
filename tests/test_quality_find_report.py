@@ -9,28 +9,28 @@ import pytest
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-import memcommit.application.ops as ops
-from memcommit.adapters.console.shared.quality_find_workbench import (
+import memcommit.application.capabilities.ops as ops
+from memcommit.adapters.console.terminal.components.quality_find.workbench import (
     run_quality_find_resolution_workbench,
 )
-from memcommit.application.reviewing.quality.findings import (
+from memcommit.application.capabilities.reviewing.quality.findings import (
     AmbiguityFinding,
     AmbiguityReport,
     DuplicateFinding,
     DuplicateReport,
 )
-from memcommit.adapters.interfaces.tui.workbenches.findings.document import (
+from memcommit.adapters.console.terminal.components.findings.document import (
     quality_finding_compact_fragments,
     quality_finding_compact_text,
     quality_find_report_header_text,
 )
-from memcommit.adapters.console.theme import SemanticColorRole
-from memcommit.adapters.console.tui.core.theme import semantic_role_style
-from memcommit.application.reviewing.quality.workbench import (
+from memcommit.adapters.console.terminal.core.theme import SemanticColorRole
+from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import semantic_role_style
+from memcommit.application.capabilities.reviewing.quality.workbench import (
     create_quality_find_workbench,
     quality_find_report_view,
 )
-from memcommit.application.reviewing.quality.report import (
+from memcommit.application.capabilities.reviewing.quality.report import (
     QualityFindBrowserReceipt,
     QualityFindReportError,
 )
@@ -256,7 +256,7 @@ def test_negative_duplicate_boundary_cannot_be_rendered_as_redundancy() -> None:
 def test_compact_finding_browser_never_enters_the_alternate_screen() -> None:
     path = (
         Path(__file__).parents[1]
-        / "src/memcommit/adapters/interfaces/tui/workbenches/findings/screen.py"
+        / "src/memcommit/adapters/console/terminal/components/findings/screen.py"
     )
     module = ast.parse(path.read_text(encoding="utf-8"))
     application_calls = [

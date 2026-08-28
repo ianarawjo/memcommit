@@ -6,7 +6,7 @@ import json
 
 import pytest
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.application.operations.compare.ledger.model import ComparisonInput
 from memcommit.application.operations.compare.summary import ComparisonSummaryError
 from memcommit.application.operations.compare.summary_provider import summarize_comparison

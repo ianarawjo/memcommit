@@ -145,7 +145,7 @@ def test_branch_command_delegates_materialization_to_the_operation_runtime() -> 
 
     assert "memcommit.application.operations.branch.application" in imports
     assert "memcommit.application.operations.branch.runtime" in imports
-    assert "memcommit.application.ops" not in imports
+    assert "memcommit.application.capabilities.ops" not in imports
     assert "memcommit.memory_lineage" not in imports
     assert not {
         "ContextBranchBinding",

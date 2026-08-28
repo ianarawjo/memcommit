@@ -24,7 +24,7 @@ from memcommit.adapters.python_api.errors import (
     AddInputError,
     AddStorageError,
 )
-from memcommit.application.context_locator import resolve_context_locator
+from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.application.operations.profile.config import (
     ProfileConfigError,
     load_profile_registry,

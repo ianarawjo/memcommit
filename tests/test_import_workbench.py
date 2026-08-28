@@ -7,15 +7,15 @@ from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.shared.context_reach_dialog import choose_context_reach
-from memcommit.adapters.console.shared.exact_command_review import ExactCommandReview
-from memcommit.adapters.console.shared.exact_command_review_shell import approve_exact_command
-from memcommit.adapters.console.shared.exact_name_dialog import choose_exact_name
-from memcommit.adapters.console.shared.flat_selection_dialog import choose_flat_option
+from memcommit.adapters.console.terminal.components.context_reach_dialog import choose_context_reach
+from memcommit.adapters.console.coordination.command_review.model import CommandReview
+from memcommit.adapters.console.terminal.components.exact_command_review.shell import approve_exact_command
+from memcommit.adapters.console.terminal.components.exact_name_dialog import choose_exact_name
+from memcommit.adapters.console.terminal.components.flat_selection_dialog import choose_flat_option
 from memcommit.adapters.console.commands.import_profile.workbench import freeze_import_source_catalog
-from memcommit.adapters.console.shared.tui_primitives import ExactNameFieldView
+from memcommit.adapters.console.terminal.components.primitives import ExactNameFieldView
 from memcommit.application.operations.profile.config import ProfileEntry, ProfileRegistry
-from memcommit.adapters.console.selection import SelectionOption
+from memcommit.adapters.console.terminal.components.selection import SelectionOption
 
 
 runner = CliRunner(mix_stderr=False)
@@ -91,7 +91,7 @@ def test_context_reach_dialog_uses_shared_exact_subtree_control():
 
 
 def test_exact_command_review_uses_enter_and_retains_a_alias():
-    review = ExactCommandReview(
+    review = CommandReview(
         argv=("mem", "import", "context", "source"),
         effects=("Create one Context.",),
     )

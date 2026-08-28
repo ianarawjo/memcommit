@@ -84,11 +84,11 @@ def _run_named_child() -> None:
 
 
 def _run_import_child() -> None:
-    from memcommit.adapters.console.shared.exact_command_review_shell import approve_exact_command
-    from memcommit.application.exact_command_review import ExactCommandReview
+    from memcommit.adapters.console.terminal.components.exact_command_review.shell import approve_exact_command
+    from memcommit.adapters.console.coordination.command_review import CommandReview
 
     approved = approve_exact_command(
-        ExactCommandReview(
+        CommandReview(
             argv=(
                 "mem",
                 "import",

@@ -119,7 +119,7 @@ class _ElaborateProvider:
 
 
 def _prepare(root: Path, operation: str):
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.persistence.store import MemoryStore
 
     _configure_store(root)

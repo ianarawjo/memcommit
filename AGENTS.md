@@ -105,7 +105,7 @@ material inside an agent record is not such approval.
 
 - When adding or updating a CLI operand whose semantic role is to locate an
   existing ordinary Context, use
-  `memcommit.application.context_locator.resolve_context_locator` instead of adding
+  `memcommit.application.capabilities.context_locator.resolve_context_locator` instead of adding
   command-local `.` or `..` parsing.
 - Capture the active Context name once at command start and resolve every
   relative operand against that same snapshot. Bare names remain canonical
@@ -201,7 +201,7 @@ material inside an agent record is not such approval.
 
 ## Shared semantic execution planning
 
-- Treat `memcommit.application.semantic_execution` as the sole physical and
+- Treat `memcommit.application.capabilities.semantic_execution` as the sole physical and
   canonical owner of shared semantic budgeting, planning, partitioning,
   coverage, execution, and relation scheduling. New production code and tests
   must import that application path directly; do not recreate Python source
@@ -213,7 +213,7 @@ material inside an agent record is not such approval.
   remain.
 - Treat `provider.complete()` as one bounded provider-call primitive, never as
   a generic place to split an arbitrary prompt. Plan aggregate semantic work
-  through `memcommit.application.semantic_execution`, where character, item,
+  through `memcommit.application.capabilities.semantic_execution`, where character, item,
   schema, expected-output, and relation-edge budgets remain independent axes.
 - Every semantic operation must declare its staged meaning with an
   `ExecutionStrategy`. Use group-preserving `TOP_K_RERANK` for retrieval,
@@ -323,7 +323,7 @@ material inside an agent record is not such approval.
 
 ### Shared terminal semantic palette
 
-- Treat `memcommit.adapters.console.theme` as the sole authored source of
+- Treat `memcommit.adapters.console.terminal.core.theme` as the sole authored source of
   semantic terminal colors shared by line-oriented CLI output and
   prompt-toolkit TUI styles. A console or TUI adapter may own escape/style
   mechanics, but must not restate a semantic hex value, RGB tuple, or parallel
@@ -363,7 +363,8 @@ material inside an agent record is not such approval.
 
 - Before adding operation-specific TUI state, rendering, focus traversal,
   scrolling, pointer, or key-navigation code, check the shared components in
-  `memcommit.adapters.console.shared.tui_primitives`, `memcommit.selection`, Context/Memory
+  `memcommit.adapters.console.terminal.components.primitives`,
+  `memcommit.adapters.console.terminal.components.selection`, Context/Memory
   pickers, and the common session workbench shells. Reuse or extend the narrowest
   applicable shared component instead of cloning its behavior into one command.
 - Keep semantic meaning and validation in the calling command, but keep common
@@ -393,7 +394,7 @@ material inside an agent record is not such approval.
   selection color, focused border/color, escaping, and cursor-versus-selection
   meaning must not be redrawn by an operation.
 - For an exact writable one-line name, reuse `ExactNameInputControl` from
-  `memcommit.adapters.console.shared.tui_primitives`; add `ExactNameFieldControl` only when the
+  `memcommit.adapters.console.terminal.components.primitives`; add `ExactNameFieldControl` only when the
   field owns its own focused box. Context placement additionally composes
   `ContextParentLocatorControl` from `memcommit.core.context_targeting.tui`; do not
   make a Save Location, Meld, Sever, Study, or other operation-named editor own

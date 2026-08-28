@@ -1,22 +1,21 @@
-"""Agent and MCP projections over public Distill and Elaborate calls."""
+"""Agent registry coverage over public Distill and Elaborate calls."""
 
 from __future__ import annotations
 
 import json
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.python_api import MemCommitClient
 from memcommit.application.operations.distill.model import DISTILL_PAYLOAD_MARKER
 from memcommit.application.operations.elaborate.model import ELABORATE_PAYLOAD_MARKER
 from memcommit.application.operations.fit.judgment import FIT_JUDGMENT_PAYLOAD_MARKER
-from memcommit.adapters.interfaces.agent import (
-    DISTILL_AGENT_TOOL_NAME,
+from memcommit.adapters.agent.distill import DISTILL_AGENT_TOOL_NAME
+from memcommit.adapters.agent.elaborate import (
     ELABORATE_AGENT_CONTRACT_VERSION,
     ELABORATE_AGENT_TOOL_NAME,
-    FIT_AGENT_TOOL_NAME,
-    build_default_agent_tool_registry,
 )
-from memcommit.adapters.interfaces.mcp import McpRegistryProjection
+from memcommit.adapters.agent.fit import FIT_AGENT_TOOL_NAME
+from memcommit.adapters.agent.registry import build_default_agent_tool_registry
 from memcommit.persistence.store import MemoryStore
 from tests.distill_goal_fit_support import passing_distill_goal_fit_response
 from tests.elaborate_validation_support import (
@@ -114,7 +113,7 @@ class AgentSemanticProvider:
         )
 
 
-def test_default_registry_and_mcp_expose_read_only_semantic_tools(isolated_store):
+def test_default_registry_exposes_read_only_semantic_tools(isolated_store):
     store = MemoryStore()
     context = ops.init("agent/semantic")
     ops.add(context, "The person confirmed before the action.")
@@ -152,7 +151,7 @@ def test_default_registry_and_mcp_expose_read_only_semantic_tools(isolated_store
             ],
         },
     )
-    mcp_names = tuple(tool.name for tool in McpRegistryProjection(registry).list_tools())
+    tool_names = registry.tool_names
 
     assert distill["ok"] is True
     assert distill["result"]["effect"] == "NONE"
@@ -162,9 +161,9 @@ def test_default_registry_and_mcp_expose_read_only_semantic_tools(isolated_store
     assert fit["ok"] is True
     assert fit["result"]["verdict"] == "YES"
     assert fit["result"]["effect"] == "NONE"
-    assert DISTILL_AGENT_TOOL_NAME in mcp_names
-    assert ELABORATE_AGENT_TOOL_NAME in mcp_names
-    assert FIT_AGENT_TOOL_NAME in mcp_names
+    assert DISTILL_AGENT_TOOL_NAME in tool_names
+    assert ELABORATE_AGENT_TOOL_NAME in tool_names
+    assert FIT_AGENT_TOOL_NAME in tool_names
     assert not store.context_exists("agent/rules")
 
 

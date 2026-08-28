@@ -48,11 +48,9 @@ class _SlowProvider:
 
 
 def _patch_shared_wait_help() -> None:
-    import memcommit.adapters.console.shared.session_help as session_help
-    import memcommit.adapters.console.tui.components.session_help as tui_session_help
+    import memcommit.adapters.console.terminal.components.session_help as session_help
 
     session_help.current_help_entries = lambda: ()
-    tui_session_help.current_help_entries = lambda: ()
 
 
 def _run_typer_command(name: str, command, args: list[str]) -> None:
@@ -74,7 +72,7 @@ def _run_typer_command(name: str, command, args: list[str]) -> None:
 
 
 def _initialize_meld_store(root: Path):
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=root)
@@ -119,7 +117,7 @@ def _run_meld_child(store_root: Path) -> None:
 
 
 def _initialize_update_store(root: Path):
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=root)

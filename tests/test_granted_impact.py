@@ -11,7 +11,7 @@ from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 import memcommit.adapters.console.clipboard as clipboard
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 import memcommit.adapters.console.commands.meld.command as meld_command
 import memcommit.adapters.console.commands.meld.setup as meld_setup_command
 from memcommit.adapters.console.entrypoint import app
@@ -21,7 +21,7 @@ from memcommit.application.operations.compare.ledger.provider import (
 from memcommit.application.operations.compare.ledger.store import (
     comparison_analysis_path,
 )
-from memcommit.application.authority.access import (
+from memcommit.application.capabilities.authority.access import (
     freeze_granted_context_binding,
     resolve_context_access,
     revalidate_granted_context_binding,
@@ -30,14 +30,14 @@ from memcommit.adapters.console.commands.compare.sessions import (
     comparison_session_entries,
 )
 from memcommit.adapters.console.commands.compare.setup import choose_compare_setup
-from memcommit.adapters.console.shared.endpoint_setup_flows import (
+from memcommit.adapters.console.terminal.components.endpoint_setup.flows import (
     _readable_endpoint_catalog,
     choose_update_setup,
 )
 from memcommit.adapters.console.commands.meld.setup import MeldSetupReceipt
 from memcommit.core.context import AutoCheckpoint, Context, Memory
 from memcommit.core.context_targeting.readable_catalog import ReadableContextCatalog
-from memcommit.application.authority.derived_policy import (
+from memcommit.application.capabilities.authority.derived_policy import (
     analysis_retention,
     authorize_analysis_save,
 )
@@ -45,7 +45,9 @@ from memcommit.application.operations.compare.ledger.granted_store import (
     granted_comparison_analysis_path,
     load_granted_comparison_artifact,
 )
-from memcommit.application.operations.meld.provider import MELD_PAYLOAD_MARKER
+from memcommit.application.operations.meld.provider.contract import (
+    MELD_PAYLOAD_MARKER,
+)
 from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
@@ -63,7 +65,7 @@ from memcommit.application.operations.profile.model import (
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.summarize.application import SummarizeRequest
 from memcommit.application.operations.summarize.runtime import execute_summarize
-from memcommit.application.semantic.changes import RemoveChange
+from memcommit.application.capabilities.semantic.changes import RemoveChange
 from memcommit.source_projection.model import SourceAccess
 from memcommit.source_projection.presentation import source_display_text
 
@@ -949,7 +951,7 @@ def test_recursive_dedun_rejects_granted_boundaries_before_provider(
     assert "cannot start from a granted Context" in granted_root.stderr
 
 
-def test_temporal_find_rejects_granted_view_without_history_access(
+def test_semantic_search_rejects_read_only_granted_view_before_provider(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -968,7 +970,7 @@ def test_temporal_find_rejects_granted_view_without_history_access(
     result = runner.invoke(app, ["search", "the last updated Memory"])
 
     assert result.exit_code == 1
-    assert "does not expose authority checkpoint history" in result.stderr
+    assert "does not authorize DERIVE" in result.stderr
 
 
 def test_granted_chunk_requires_create_and_delete_before_authority_save(

@@ -5,10 +5,10 @@ from __future__ import annotations
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.adapters.console.shared.memory_transfer.model import (
+from memcommit.adapters.console.coordination.memory_transfer.model import (
     MemoryTransferTuiSetup,
 )
-from memcommit.adapters.console.shared.memory_transfer.workbench import (
+from memcommit.adapters.console.terminal.components.memory_transfer import (
     run_memory_transfer_workbench,
 )
 from memcommit.application.operations.memory_transfer.application import (

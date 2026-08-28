@@ -14,24 +14,24 @@ from memcommit.application.operations.dedun.application import (
     FrozenDedunPlan,
     dedun_resolution_case,
 )
-from memcommit.adapters.console.text import safe_terminal_text
-from memcommit.adapters.console.tui.components.exact_command_review import (
-    ExactCommandReview,
+from memcommit.adapters.console.terminal.core.text import safe_terminal_text
+from memcommit.adapters.console.terminal.components.exact_command_review import (
+    CommandReview,
 )
-from memcommit.adapters.console.tui.components.plain_text_clipboard import ClipboardWriter
-from memcommit.adapters.interfaces.tui.viewers.semantic import (
+from memcommit.adapters.console.terminal.components.plain_text_clipboard import ClipboardWriter
+from memcommit.adapters.console.terminal.components.semantic_viewer import (
     SemanticViewerBlock,
     SemanticViewerDocument,
     SemanticViewerSection,
 )
-from memcommit.adapters.interfaces.tui.workbenches.resolution import (
+from memcommit.adapters.console.terminal.components.resolution import (
     ResolutionChoice,
     ResolutionItem,
     ResolutionOutcome,
     ResolutionWorkbenchSpec,
     run_resolution_workbench,
 )
-from memcommit.application.semantic.redundancy_evidence import (
+from memcommit.application.capabilities.semantic.redundancy_evidence import (
     redundancy_evidence_json,
 )
 
@@ -193,7 +193,7 @@ def _selections(outcome: ResolutionOutcome) -> tuple[DedunSelection, ...]:
 def dedun_exact_review(
     plan: FrozenDedunPlan,
     outcome: ResolutionOutcome,
-) -> ExactCommandReview:
+) -> CommandReview:
     selections = _selections(outcome)
     member_count = sum(len(component.members) for component in plan.components) + sum(
         1 + len(group.absorbed_uids) for group in plan.exact_item_groups
@@ -216,7 +216,7 @@ def dedun_exact_review(
         for member in component.members
         if member.uid not in survivor_uids
     ) + tuple(uid for group in plan.exact_item_groups for uid in group.absorbed_uids)
-    return ExactCommandReview(
+    return CommandReview(
         argv=tuple(argv),
         effects=(
             f"Context revision · {plan.revision}.",

@@ -10,32 +10,32 @@ from typing import Annotated, Any, Optional
 
 import typer
 
-from memcommit.adapters.console.shared.checkpoint_diff import (
+from memcommit.adapters.console.terminal.components.history.checkpoint_diff import (
     checkpoint_revision_detail_renderer,
 )
-from memcommit.adapters.console.shared.command_progress import CommandProgress
-from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
-from memcommit.adapters.console.shared.diff_browser import browse_checkpoint_locations
-from memcommit.adapters.console.shared.history_picker import (
+from memcommit.adapters.console.terminal.components.progress import CommandProgress
+from memcommit.adapters.console.coordination.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.terminal.components.history.browser import browse_checkpoint_locations
+from memcommit.adapters.console.terminal.components.history.picker import (
     HistorySelectionReceipt,
     choose_history,
     revert_exact_command_review,
 )
-from memcommit.adapters.console.shared.history_present import checkpoint_picker_entries
-from memcommit.adapters.console.shared.restoration_present import (
+from memcommit.adapters.console.terminal.components.history.presentation import checkpoint_picker_entries
+from memcommit.adapters.console.terminal.components.restoration_receipt import (
     MemoryRefTargetKey,
     memory_ref_target_key,
     render_checkpoint_unit_revert_receipt,
     render_revert_receipt,
 )
-from memcommit.application.retained_history.checkpoint_catalog import (
+from memcommit.application.capabilities.retained_history.checkpoint_catalog import (
     CheckpointCatalogError,
     CheckpointNotFoundError,
     ResolvedCheckpointUnit,
     freeze_checkpoint_catalog,
 )
 from memcommit.core.context import Memory
-from memcommit.application.retained_history.reconstruction import HistoryError, build_history
+from memcommit.application.capabilities.retained_history.reconstruction import HistoryError, build_history
 from memcommit.application.operations.log.search import HistorySearchError, search_history
 from memcommit.providers.subscription import (
     QueryProviderError,

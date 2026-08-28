@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from pathlib import Path
 import re
 
-from memcommit.application.authority.access import resolve_context_access
+from memcommit.application.capabilities.authority.access import resolve_context_access
 from memcommit.application.operations.compare.ledger.model import (
     COMPARISON_RULESET_VERSION,
     SUPPORTED_COMPARISON_RULESET_VERSIONS,
@@ -21,12 +21,14 @@ from memcommit.configuration.config import Config
 from memcommit.core.context_targeting.readable_catalog import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.application.evaluation.study_compare_exact_matrix import (
+from memcommit.study_scenarios.legacy.prewarm.generation.compare_exact_matrix import (
     _comparison_input,
     plans_from_declared_exact_coordinates,
     run_exact_matrix,
 )
-from memcommit.application.evaluation.study_compare_graph_prewarm import TaskGraphPlan
+from memcommit.study_scenarios.legacy.prewarm.generation.compare_graph import (
+    TaskGraphPlan,
+)
 from memcommit.providers.policy import (
     resolve_operation_provider_policy,
 )

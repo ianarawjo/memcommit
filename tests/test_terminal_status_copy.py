@@ -41,9 +41,13 @@ def test_retired_implementation_status_phrases_do_not_return() -> None:
 
 
 def test_real_creation_and_permission_boundaries_remain_explicit() -> None:
-    ground_source = (
-        PACKAGE_ROOT / "commands" / "ground" / "shell.py"
-    ).read_text(encoding="utf-8")
+    ground_shell = (
+        PACKAGE_ROOT / "adapters" / "console" / "commands" / "ground" / "shell"
+    )
+    ground_source = "\n".join(
+        path.read_text(encoding="utf-8")
+        for path in sorted(ground_shell.rglob("*.py"))
+    )
     source_projection = (
         PACKAGE_ROOT / "source_projection" / "presentation.py"
     ).read_text(encoding="utf-8")

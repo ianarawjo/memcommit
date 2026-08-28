@@ -13,7 +13,9 @@ from typer.testing import CliRunner
 
 import memcommit.application.operations.ground.workspace_application as ground_workspace_application
 from memcommit.core.context import Memory
-from memcommit.application.retained_history.command_history import build_command_stacks
+from memcommit.application.capabilities.retained_history.command_history import (
+    build_command_stacks,
+)
 from memcommit.application.operations.ground.workspace_model import (
     GROUND_WORKSPACE_LANES,
     GroundWorkspaceError,
@@ -22,7 +24,9 @@ from memcommit.application.operations.ground.workspace_model import (
     ground_workspace_context_names,
     load_ground_workspace_records,
 )
-from memcommit.application.operations.ground.workspace_application import CreateGroundWorkspaceRequest
+from memcommit.application.operations.ground.workspace_application import (
+    CreateGroundWorkspaceRequest,
+)
 from memcommit.application.operations.ground.workspace_runtime import (
     execute_ground_workspace_memory_add,
     execute_ground_workspace_creation,
@@ -35,14 +39,20 @@ from memcommit.application.operations.ground.workspace_history import (
     build_ground_workspace_command_stack,
     undo_ground_workspace_command,
 )
-from memcommit.application.operations.ground.workspace_application import AddGroundWorkspaceMemoryRequest
-from memcommit.adapters.interfaces.tui.operations.ground_workspace import (
-    GroundWorkspaceLocationSetup,
-    GroundWorkspaceTuiResult,
-    run_ground_workspace_location_tui,
-    run_ground_workspace_tui,
+from memcommit.application.operations.ground.workspace_application import (
+    AddGroundWorkspaceMemoryRequest,
 )
-import memcommit.application.ops as ops
+from memcommit.adapters.console.commands.ground.workspace.location import (
+    GroundWorkspaceLocationSetup,
+    choose_ground_workspace_location,
+)
+from memcommit.adapters.console.commands.ground.workspace.viewer.model import (
+    GroundWorkspaceViewerResult,
+)
+from memcommit.adapters.console.commands.ground.workspace.viewer.screen import (
+    run_ground_workspace_viewer,
+)
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.persistence.store import MemoryStore
 
@@ -103,10 +113,7 @@ def test_loaded_workspace_rejects_a_missing_or_duplicate_manifest():
     with pytest.raises(GroundWorkspaceError, match="exactly one manifest"):
         load_ground_workspace_records(
             workspace.root,
-            **{
-                lane: getattr(workspace, lane)
-                for lane in GROUND_WORKSPACE_LANES
-            },
+            **{lane: getattr(workspace, lane) for lane in GROUND_WORKSPACE_LANES},
         )
 
 
@@ -120,15 +127,18 @@ def test_application_module_has_no_store_command_typer_or_tui_imports():
         elif isinstance(node, ast.ImportFrom) and node.module is not None:
             imported.append(node.module)
 
-    assert tuple(
-        name
-        for name in imported
-        if name == "typer"
-        or name.startswith("prompt_toolkit")
-        or name.startswith("memcommit.adapters.console.commands")
-        or name.startswith("memcommit.adapters.interfaces")
-        or name == "memcommit.store"
-    ) == ()
+    assert (
+        tuple(
+            name
+            for name in imported
+            if name == "typer"
+            or name.startswith("prompt_toolkit")
+            or name.startswith("memcommit.adapters.console.commands")
+            or name.startswith("memcommit.adapters.interfaces")
+            or name == "memcommit.store"
+        )
+        == ()
+    )
 
 
 def test_runtime_creates_the_complete_workspace_without_switching_current(
@@ -248,7 +258,7 @@ def test_invalid_context_name_fails_before_any_workspace_context_is_created(
     assert store.list_context_names() == []
 
 
-def test_workspace_tui_navigates_real_context_rows_without_store_effects():
+def test_workspace_viewer_navigates_real_context_rows_without_store_effects():
     workspace = create_ground_workspace_records(
         "project111",
         goal="Learn real ticker rules.",
@@ -259,23 +269,23 @@ def test_workspace_tui_navigates_real_context_rows_without_store_effects():
         # Goals begins selected. Move to Rules, open its read-only Memory pane,
         # then close without invoking Switch or any workspace mutation.
         pipe_input.send_text("\x1b[B\rQ")
-        result = run_ground_workspace_tui(
+        result = run_ground_workspace_viewer(
             workspace,
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
         )
 
-    assert result == GroundWorkspaceTuiResult("project111/rules")
+    assert result == GroundWorkspaceViewerResult("project111/rules")
     assert tuple(context.to_dict() for context in workspace.all_contexts) == before
 
 
-def test_workspace_tui_escape_closes_from_the_initial_real_goals_context():
+def test_workspace_viewer_escape_closes_from_the_initial_real_goals_context():
     workspace = create_ground_workspace_records("project111")
 
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("\x1b")
-        result = run_ground_workspace_tui(
+        result = run_ground_workspace_viewer(
             workspace,
             app_input=pipe_input,
             app_output=DummyOutput(),
@@ -294,7 +304,7 @@ def test_workspace_location_adapter_uses_shared_exact_context_name_contract():
         validate_name=lambda value: value,
     )
 
-    result = run_ground_workspace_location_tui(
+    result = choose_ground_workspace_location(
         setup,
         chooser=lambda view: seen.append(view) or view.value,
     )
@@ -390,7 +400,9 @@ def test_cli_ground_goal_materializes_context_or_memory_operand_into_goals_lane(
     )
 
     assert revised.exit_code == 0, revised.output
-    [stored_goal] = tuple(load_ground_workspace(store, "cafe-ground").goals.iter_items())
+    [stored_goal] = tuple(
+        load_ground_workspace(store, "cafe-ground").goals.iter_items()
+    )
     assert stored_goal.content == replacement_goal.content
     latest = store.list_checkpoints("cafe-ground/goals")[0]
     assert latest["args"]["ground_workspace_command"]["goal_focus"]["kind"] == (
@@ -540,9 +552,10 @@ def test_ground_local_undo_restores_only_its_root_and_lane_as_one_unit(
         ),
         store=store,
     )
-    assert [unit.uid for unit in build_ground_workspace_command_stack(
-        store, "project111"
-    ).undo] == [rule.command_uid, example.command_uid]
+    assert [
+        unit.uid
+        for unit in build_ground_workspace_command_stack(store, "project111").undo
+    ] == [rule.command_uid, example.command_uid]
 
     undone = undo_ground_workspace_command(store, "project111")
 
@@ -554,9 +567,10 @@ def test_ground_local_undo_restores_only_its_root_and_lane_as_one_unit(
     [retained_rule] = tuple(workspace.rules.iter_items())
     assert isinstance(retained_rule, Memory)
     assert retained_rule.uid == rule.memory_uid
-    assert [unit.uid for unit in build_ground_workspace_command_stack(
-        store, "project111"
-    ).undo] == [rule.command_uid]
+    assert [
+        unit.uid
+        for unit in build_ground_workspace_command_stack(store, "project111").undo
+    ] == [rule.command_uid]
     assert len(undone.checkpoints) == 2
     assert build_command_stacks(store).undo == ()
 
@@ -601,10 +615,19 @@ def test_ground_local_undo_fails_closed_after_direct_lane_drift(isolated_store):
 def test_cli_physical_ground_edits_and_local_undo_use_revision_guards(
     isolated_store,
 ):
-    assert runner.invoke(
-        app,
-        ["ground", "project111", "--goal", "Learn real ticker rules.", "--snapshot"],
-    ).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            [
+                "ground",
+                "project111",
+                "--goal",
+                "Learn real ticker rules.",
+                "--snapshot",
+            ],
+        ).exit_code
+        == 0
+    )
 
     rule = runner.invoke(
         app,

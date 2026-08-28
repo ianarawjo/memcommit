@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from memcommit.application.semantic_execution import (
+from memcommit.application.capabilities.semantic_execution import (
     BudgetLimits,
     BudgetVector,
     CoverageError,

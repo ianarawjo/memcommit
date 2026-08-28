@@ -16,13 +16,12 @@ from memcommit.adapters.python_api import (
     AtomizeGroundingSessionResult,
     MemCommitClient,
 )
-from memcommit.adapters.interfaces.agent.atomize_grounding import (
+from memcommit.adapters.agent.atomize_grounding import (
     ATOMIZE_GROUNDING_AGENT_TOOL_NAME,
     AtomizeGroundingAgentAdapter,
     atomize_grounding_agent_tool_schema,
 )
-from memcommit.adapters.interfaces.agent.registry import build_default_agent_tool_registry
-from memcommit.adapters.interfaces.mcp import McpRegistryProjection
+from memcommit.adapters.agent.registry import build_default_agent_tool_registry
 
 
 def _client(tmp_path) -> MemCommitClient:
@@ -249,29 +248,33 @@ def test_schema_is_fresh_strict_and_uses_stable_tool_name():
     )
 
 
-def test_default_registry_projects_and_calls_grounding_through_mcp(
+def test_default_registry_discovers_and_calls_grounding(
     tmp_path,
     monkeypatch,
 ):
     client = _client(tmp_path)
     monkeypatch.setattr(client, "open_atomize_grounding", lambda **kwargs: _session())
-    projection = McpRegistryProjection(build_default_agent_tool_registry(client))
+    registry = build_default_agent_tool_registry(client)
 
-    definitions = {tool.name: tool for tool in projection.list_tools()}
-    result = projection.call_tool(
+    definitions = {
+        definition.tool_schema["name"]: definition
+        for definition in registry.tool_definitions()
+    }
+    result = registry.invoke(
         ATOMIZE_GROUNDING_AGENT_TOOL_NAME,
         {"version": 1, "kind": "open", "context_name": "task/source"},
     )
 
     assert ATOMIZE_GROUNDING_AGENT_TOOL_NAME in definitions
-    assert definitions[ATOMIZE_GROUNDING_AGENT_TOOL_NAME].input_schema["oneOf"][0][
-        "properties"
-    ]["kind"] == {"type": "string", "const": "open"}
-    assert result.is_error is False
-    assert result.structured_content["result"]["session"]["issue_uid"] == (
-        "ambiguity:1"
-    )
-    assert json.loads(result.content_text) == result.structured_content
+    parameters = definitions[ATOMIZE_GROUNDING_AGENT_TOOL_NAME].tool_schema[
+        "parameters"
+    ]
+    assert parameters["oneOf"][0]["properties"]["kind"] == {
+        "type": "string",
+        "const": "open",
+    }
+    assert result["ok"] is True
+    assert result["result"]["session"]["issue_uid"] == "ambiguity:1"
 
 
 def test_adapter_imports_only_public_api_and_shared_agent_contract():
@@ -279,7 +282,6 @@ def test_adapter_imports_only_public_api_and_shared_agent_contract():
         Path(__file__).parents[1]
         / "src" / "memcommit"
         / "adapters"
-        / "interfaces"
         / "agent"
         / "atomize_grounding.py"
     )
@@ -291,7 +293,7 @@ def test_adapter_imports_only_public_api_and_shared_agent_contract():
     ]
 
     assert "memcommit.adapters.python_api" in imported
-    assert "memcommit.adapters.interfaces.agent.contract" in imported
+    assert "memcommit.adapters.agent.contract" in imported
     assert not any(
         name.startswith(
             (
@@ -301,7 +303,6 @@ def test_adapter_imports_only_public_api_and_shared_agent_contract():
                 "memcommit.application.operations.atomize.grounding_application",
                 "memcommit.application.operations.atomize.grounding_runtime",
                 "memcommit.store",
-                "memcommit.adapters.interfaces.mcp",
             )
         )
         for name in imported

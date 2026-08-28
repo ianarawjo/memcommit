@@ -14,7 +14,7 @@ from memcommit.application.operations.help.lookup_application import (
     execute_help_lookup,
     prepare_help_lookup,
 )
-from memcommit.application.semantic_execution import ExecutionStrategy
+from memcommit.application.capabilities.semantic_execution import ExecutionStrategy
 
 
 class _Provider:

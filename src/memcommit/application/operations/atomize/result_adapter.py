@@ -16,7 +16,7 @@ from memcommit.application.operations.atomize.domain import (
     AtomizeAnalysisSession,
     AtomizeQualityIssue,
 )
-from memcommit.application.reviewing.result_workbench import (
+from memcommit.application.capabilities.reviewing.result_workbench import (
     ResultCase,
     ResultCaseDetail,
     ResultDetailBlock,
@@ -25,7 +25,7 @@ from memcommit.application.reviewing.result_workbench import (
     ResultSection,
     ResultWorkbenchView,
 )
-from memcommit.application.semantic.understanding import UnderstandingSummary
+from memcommit.application.capabilities.semantic.understanding import UnderstandingSummary
 
 
 _LEGACY_UNDERSTOOD = (

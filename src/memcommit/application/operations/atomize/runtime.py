@@ -7,7 +7,7 @@ import hashlib
 import json
 from typing import Callable
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.application.operations.atomize.domain import (
     AppliedAtomizeItem,
     AtomizeAnalysisSession,

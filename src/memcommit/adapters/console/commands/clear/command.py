@@ -2,8 +2,8 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
-from memcommit.adapters.console.text import display_escape_text
+from memcommit.adapters.console.coordination.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.application.operations.clear.application import ClearRequest
 from memcommit.application.operations.clear.runtime import execute_clear
 from memcommit.application.operations.profile.config import ProfileConfigError

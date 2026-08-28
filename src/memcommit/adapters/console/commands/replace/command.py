@@ -7,7 +7,7 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
-from memcommit.adapters.console.shared.context_operand import (
+from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
 )
 from memcommit.core.context_targeting.presets import (
@@ -24,7 +24,7 @@ from memcommit.adapters.console import (
     SystemTerminalCapabilities,
     resolve_console_mode,
 )
-from memcommit.adapters.console.text import display_escape_text
+from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.adapters.console.commands.replace.workbench import (
     ReplaceTuiSetup,
     run_replace_tui,

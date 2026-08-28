@@ -8,7 +8,7 @@ from typing import Annotated, Optional
 
 import typer
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.application.operations.atomize.domain import (
     AtomizeImpactError,
 )
@@ -18,23 +18,23 @@ from memcommit.application.operations.atomize.workbench import (
     create_atomize_workbench,
     project_atomize_workbench_findings,
 )
-from memcommit.application.retained_history.applied_review import (
+from memcommit.application.capabilities.retained_history.applied_review import (
     CHECKPOINT_REVIEW_OPERATIONS,
     applied_checkpoint_review_controller,
     list_applied_checkpoint_reviews,
     select_applied_checkpoint_review,
 )
-from memcommit.adapters.console.shared.command_progress import CommandProgress
-from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.terminal.components.progress import CommandProgress
+from memcommit.adapters.console.coordination.context_operand import ContextOperandSnapshot
 from memcommit.adapters.console.commands.review.snapshot import (
     render_review_snapshot,
     visible_ordinal_index,
 )
-from memcommit.adapters.console.shared.review import ReviewCancelled
+from memcommit.adapters.console.coordination.review import ReviewCancelled
 from memcommit.adapters.console.commands.review.resolution_shell import (
     run_review_resolution_shell as run_review_shell,
 )
-from memcommit.adapters.console.tui.components.operation_launcher.session import (
+from memcommit.adapters.console.terminal.components.operation_launcher.session import (
     SessionOpenReceipt,
     SessionPickerEntry,
     choose_session,
@@ -43,18 +43,18 @@ from memcommit.adapters.console.commands.review.sessions import (
     SAVED_REVIEW_KIND,
     choose_review_session,
 )
-from memcommit.adapters.console.text import (
+from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
-from memcommit.application.reviewing.quality.findings import FindingsError
+from memcommit.application.capabilities.reviewing.quality.findings import FindingsError
 from memcommit.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )
-from memcommit.application.reviewing.quality.audit import (
+from memcommit.application.capabilities.reviewing.quality.audit import (
     QualityAuditError,
 )
-from memcommit.application.reviewing.quality.audit_store import QualityAuditStore
+from memcommit.application.capabilities.reviewing.quality.audit_store import QualityAuditStore
 from memcommit.application.operations.review.model import (
     ReviewError,
     atomize_review_matches_analysis,
@@ -547,7 +547,7 @@ def _run_atomize_workbench(
         )
         return
     from memcommit.adapters.console.commands.review.report import run_review_report_shell
-    from memcommit.application.resolution.workbench import ResolutionNavigation
+    from memcommit.application.capabilities.resolution.workbench import ResolutionNavigation
     from memcommit.application.operations.review.report_adapters import atomize_review_report
 
     navigation = ResolutionNavigation(selected_item_uid=workbench.cursor_uid)

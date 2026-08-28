@@ -7,6 +7,14 @@ human-reviewable English and Korean Markdown/TSV sources, strict loader, bundle
 builder, and scenario-specific prewarm tooling live together under
 `src/memcommit/study_scenarios/legacy/`.
 
+Fixture review projections live under `legacy.authoring`; explicit research-time
+prewarm producers live under `legacy.prewarm.generation`. The latter consume the
+operation contracts and the scenario-owned prewarm registry, but they are not
+general semantic-evaluation campaigns. Keeping them out of
+`memcommit.application.capabilities.evaluation` prevents the fixed legacy corpus and its
+baseline publication workflow from appearing to be product-wide evaluation
+infrastructure. The default Coffee scenario does not import either package.
+
 The bundle builder still creates a task store and a distinct authority store
 for each task. English is canonical `Memory.content`; Korean is a same-UID
 translation-catalog view. Authority-only and query-only material remains

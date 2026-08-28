@@ -37,7 +37,7 @@ def _configure(store_root: Path) -> None:
 
 
 def _initialize_context() -> None:
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()
@@ -55,7 +55,7 @@ def _initialize_context() -> None:
 
 
 def _initialize_memory() -> None:
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()
@@ -68,7 +68,7 @@ def _initialize_memory() -> None:
 
 
 def _initialize_rejection() -> None:
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()
@@ -101,7 +101,7 @@ def _contents(context) -> tuple[str, ...]:
 def _run_child(kind: str) -> None:
     from memcommit.adapters.console.entrypoint import app
     from memcommit.core.context import MemoryRef
-    from memcommit.application.retained_history.context_snapshot import ContextSnapshotRef
+    from memcommit.application.capabilities.retained_history.context_snapshot import ContextSnapshotRef
     from memcommit.persistence.store import MemoryStore
 
     with tempfile.TemporaryDirectory(prefix="mem-reference-capture-") as directory:

@@ -10,7 +10,7 @@ from memcommit.adapters.python_api import (
     ComparisonResult,
     MemCommitClient,
 )
-from memcommit.adapters.interfaces.agent.compare import (
+from memcommit.adapters.agent.compare import (
     COMPARE_AGENT_TOOL_NAME,
     CompareAgentAdapter,
     compare_agent_tool_schema,

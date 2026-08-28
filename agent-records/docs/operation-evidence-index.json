@@ -7,6 +7,7 @@
     ],
     "atomize": [
       "agent-records/docs/atomize-application-boundary-matrix.md",
+      "agent-records/docs/atomize-domain-package-design-rationale.md",
       "agent-records/docs/context-locator-design-rationale.md",
       "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
       "agent-records/docs/study-semantic-prompt-policy-design-rationale.md",
@@ -94,6 +95,7 @@
     "elaborate": [
       "agent-records/docs/distill-elaborate-generative-reduction-design-rationale.md",
       "agent-records/docs/distill-elaborate-application-boundary-matrix.md",
+      "agent-records/docs/elaborate-model-responsibility-design-rationale.md",
       "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
       "agent-records/docs/fit-general-judgment-design-rationale.md",
       "agent-records/docs/goal-focus-operand-design-rationale.md",
@@ -153,6 +155,7 @@
       "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md"
     ],
     "ground": [
+      "agent-records/docs/command-package-layout-design-rationale.md",
       "agent-records/docs/goal-focus-operand-design-rationale.md",
       "agent-records/docs/ground-workspace-application-boundary-matrix.md",
       "agent-records/docs/ground-workspace-context-model-design-rationale.md"
@@ -165,7 +168,9 @@
     "impact": [
       "agent-records/docs/context-locator-design-rationale.md"
     ],
-    "import": [],
+    "import": [
+      "agent-records/docs/mem-import-design-rationale.md"
+    ],
     "init": [
       "agent-records/docs/context-init-application-boundary-matrix.md",
       "agent-records/docs/context-name-portability-design-rationale.md"

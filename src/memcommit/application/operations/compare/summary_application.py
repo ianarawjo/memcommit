@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 
-from memcommit.application.authority.access import (
+from memcommit.application.capabilities.authority.access import (
     ContextAccess,
     freeze_granted_context_binding,
     resolve_context_access,
@@ -18,7 +18,7 @@ from memcommit.application.operations.compare.summary_provider import (
     summarize_comparison,
 )
 from memcommit.core.context import Context
-from memcommit.application.authority.derived_policy import authorize_combination
+from memcommit.application.capabilities.authority.derived_policy import authorize_combination
 from memcommit.application.operations.profile.model import authority_grant_snapshot_lock
 from memcommit.persistence.store import MemoryStore
 

@@ -14,11 +14,11 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 import memcommit.configuration.config as config_module
 import memcommit.adapters.console.commands.meld.command as meld_command
 from memcommit.adapters.python_api import MemCommitClient
-from memcommit.adapters.console.shared.endpoint_setup_flows import MeldSetupReceipt
+from memcommit.adapters.console.commands.meld.setup import MeldSetupReceipt
 from memcommit.application.operations.atomize.grounding import (
     AtomizeGroundingAnchor,
     AtomizeGroundingBindings,
@@ -52,7 +52,7 @@ from memcommit.adapters.console.commands.meld.workbench import (
     _line,
     run_meld_shell,
 )
-from memcommit.adapters.console.shared.resolution_workbench_shell import (
+from memcommit.adapters.console.terminal.components.resolution.session_shell import (
     _viewer_focus_fragments,
     RESOLUTION_WORKBENCH_STYLE,
     ResolutionGlobalStrategy,
@@ -74,20 +74,24 @@ from memcommit.application.operations.meld.model import (
     meld_canonical_digest,
     meld_accounting,
 )
-from memcommit.application.operations.meld.provider import (
+from memcommit.application.operations.meld.provider.contract import (
     MELD_PAYLOAD_MARKER,
     MeldProviderError,
-    assess_meld_turn,
-    meld_turn_request_digest,
     meld_output_schema,
+)
+from memcommit.application.operations.meld.provider.execution import (
+    assess_meld_turn,
+)
+from memcommit.application.operations.meld.provider.request import (
+    meld_turn_request_digest,
 )
 from memcommit.application.operations.meld.runtime import prepare_meld_start
 from memcommit.application.operations.meld.start_application import MeldStartRequest
 from memcommit.application.operations.update.model import GrantedUpdateTarget
 from memcommit.application.operations.meld.choice_branches import MeldChoiceBranchSet
-from memcommit.adapters.console.responses.model import ResponseDraft
+from memcommit.adapters.console.terminal.components.responses.model import ResponseDraft
 from memcommit.application.operations.meld.resolution_adapter import MeldResolutionWorkbenchAdapter
-from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
+from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_construction import (
     reconstruct_memory_history,
 )
 from memcommit.application.operations.profile.config import (
@@ -95,7 +99,7 @@ from memcommit.application.operations.profile.config import (
     ProfileRegistry,
     STUDY_RUN_PARTICIPANT_SOURCE_KIND,
 )
-from memcommit.application.resolution.workbench import ResolutionNavigation
+from memcommit.application.capabilities.resolution.workbench import ResolutionNavigation
 from memcommit.persistence.store import (
     ConcurrentContextUpdateError,
     MemoryStore,
@@ -5206,8 +5210,9 @@ def test_meld_shell_selects_one_issue_reading_from_the_compact_surface():
     )
 
     with create_pipe_input() as pipe_input:
-        option_count = len(comparison.issues[0].options)
-        pipe_input.send_text("\r" + "\x1b[B" * option_count + "\r")
+        # Enter the first issue from ITEMS, select a supplied RESPONSE choice,
+        # then submit the staged choice through the separate Response box.
+        pipe_input.send_text("\t\x1b[B\r\t\r\x1b[B\x1b[B\r\r")
         action = run_meld_shell(
             session,
             app_input=pipe_input,
@@ -5218,7 +5223,7 @@ def test_meld_shell_selects_one_issue_reading_from_the_compact_surface():
     assert action is not None
     assert action.kind == "COMMENT_ALL"
     assert "Choose this reading:" in action.comment
-    assert comparison.issues[0].options[0].text in action.comment
+    assert comparison.issues[0].options[1].text in action.comment
 
 
 def test_ready_meld_applies_from_the_compact_apply_row():
@@ -5312,8 +5317,9 @@ def test_meld_compact_surface_arrow_and_apply_row_contract():
     )
 
     with create_pipe_input() as pipe_input:
-        option_count = len(session.current_assessment.issues[0].options)
-        pipe_input.send_text("\x1b[B\r" + "\x1b[B" * (option_count - 1) + "\r")
+        # Open the first issue, choose its second RESPONSE, then submit the
+        # staged selection through the separate Response box.
+        pipe_input.send_text("\t\x1b[B\r\t\x1b[B\r\x1b[B\r\r")
         action = run_meld_shell(
             session,
             app_input=pipe_input,

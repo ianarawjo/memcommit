@@ -8,8 +8,8 @@ from pathlib import Path
 from typer.testing import CliRunner
 
 import memcommit.configuration.config as config_module
-import memcommit.application.ops as ops
-import memcommit.application.semantic.llm as llm_module
+import memcommit.application.capabilities.ops as ops
+import memcommit.application.capabilities.semantic.llm as llm_module
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Context, Memory, QueryContextRef
 from memcommit.persistence.store import MemoryStore

@@ -11,12 +11,12 @@ from typing import Literal, Sequence
 import click
 import typer
 
-from memcommit.adapters.console.text import display_escape_text
-from memcommit.adapters.console.theme import (
+from memcommit.adapters.console.terminal.core.text import display_escape_text
+from memcommit.adapters.console.terminal.core.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )
-from memcommit.application.semantic.changes import EditChange, ProposedChange, RemoveChange
+from memcommit.application.capabilities.semantic.changes import EditChange, ProposedChange, RemoveChange
 
 
 _SpanKind = Literal["equal", "remove", "add"]

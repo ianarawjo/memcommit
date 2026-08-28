@@ -22,15 +22,17 @@ from memcommit.adapters.python_api.meld import (
     MeldProposalResult,
     MeldSessionResult,
 )
-from memcommit.application.authority.access import resolve_context_access
-from memcommit.application.context_locator import resolve_context_locator
+from memcommit.application.capabilities.authority.access import resolve_context_access
+from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.application.operations.meld.model import (
     MELD_SCHEMA_VERSION,
     MeldError as CoreMeldError,
     meld_canonical_digest,
 )
 from memcommit.application.operations.meld.application import MeldApplyRequest
-from memcommit.application.operations.meld.provider import MeldProviderError
+from memcommit.application.operations.meld.provider.contract import (
+    MeldProviderError,
+)
 from memcommit.application.operations.meld.resolution_application import (
     MeldResolutionError,
     MeldResolutionTurnRequest,

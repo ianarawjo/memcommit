@@ -82,7 +82,7 @@ def _use_store_root(root: Path) -> None:
 
 
 def _prepare_store(root: Path):
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.persistence.store import MemoryStore, context_record_digest
 
     store = MemoryStore(root=root)

@@ -4,9 +4,9 @@ Last reviewed: 2026-08-15.
 
 ## Motivation and selected contract
 
-An MCP request cannot retain the private Python proposal object used by the
-CLI/TUI. Reconstructing acceptance from public IDs, or implementing review
-logic in the transport, would create a second cache, stale-state, and
+An external machine caller cannot retain the private Python proposal object
+used by the CLI/TUI. Reconstructing acceptance from public IDs, or implementing
+review logic in a host adapter, would create a second cache, stale-state, and
 application policy. `memcommit_atomize` therefore projects the complete
 structural lifecycle through seven strict version-1 actions, each delegating to
 one stable `MemCommitClient` method:
@@ -22,8 +22,8 @@ one stable `MemCommitClient` method:
 | `incorporate_and_apply` | yes | one Source or new-Context checkpoint | perform one explicitly approved compound action |
 
 The adapter does not import commands, TUI code, Store internals, or Atomize
-runtimes. The frozen registry and MCP transport expose the same schema and
-JSON-safe result.
+runtimes. The frozen registry exposes the same schema and JSON-safe result to
+an in-process host.
 
 ## Cache, provider, and effect reporting
 
@@ -94,10 +94,11 @@ focused Memory open, saved/prepared/provider origins, provider-free review
 edits, response clearing, require-new validation, atomic reanalysis under a
 concurrent response edit, in-place and Save As materialization, checkpoint
 lineage, exact retry recovery, stale rejection, and one-public-call adapter
-ownership. The installed-wheel MCP smoke covers saved open, response edit,
-Output planning, in-place Apply, reviewed Save As, both exact recovery paths,
-and independent Store verification without an external provider.
+ownership. The former installed-wheel MCP smoke covered saved open, response
+edit, Output planning, in-place Apply, reviewed Save As, both exact recovery
+paths, and independent Store verification without an external provider; that
+transport is now retired and the run remains historical evidence.
 
-This is local ordinary-Context and local stdio evidence. It does not claim
+This is local ordinary-Context and in-process evidence. It does not claim
 remote authentication, Grant-authorized mutation, provider-backed installed
 execution, native Windows behavior, or automatic Skill installation.

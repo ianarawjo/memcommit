@@ -13,14 +13,14 @@ from prompt_toolkit.layout import Dimension, FormattedTextControl, HSplit, Layou
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import Style, merge_styles
 
-from memcommit.adapters.console.shared.tui_primitives import (
+from memcommit.adapters.console.terminal.components.primitives import (
     ExactNameFieldControl,
     ExactNameFieldView,
 )
-from memcommit.adapters.console.tui.core.theme import (
+from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     MEMCOMMIT_TUI_STYLE,
 )
-from memcommit.adapters.console.text import (
+from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
 from memcommit.application.operations.profile.config import ProfileConfigError, validate_profile_name

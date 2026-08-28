@@ -4,7 +4,7 @@ import json
 
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.search.command import (
     _collect_search_frame_candidates,

@@ -180,6 +180,24 @@ def run_meld_session_defer(
     return saved
 
 
+def run_meld_initial_preservation(
+    snapshot: MeldSessionSnapshot,
+    *,
+    repository: MeldSessionRepository,
+) -> MeldSessionSnapshot:
+    """Publish one conservative initial symmetric result under session CAS."""
+
+    candidate = _clone(snapshot.session)
+    candidate.complete_initial_preservation()
+    saved = repository.replace(
+        candidate,
+        expected_version=snapshot.version_token,
+    )
+    if saved.session.state != "READY_TO_APPLY":
+        raise MeldError("Initial Meld preservation returned an invalid state.")
+    return saved
+
+
 def prepare_meld_preservation_turn(
     snapshot: MeldSessionSnapshot,
     *,
@@ -242,6 +260,7 @@ __all__ = [
     "prepare_meld_preservation_turn",
     "prepare_meld_turn",
     "require_meld_session_version",
+    "run_meld_initial_preservation",
     "run_meld_destination_change",
     "run_meld_preservation",
     "run_meld_session_defer",

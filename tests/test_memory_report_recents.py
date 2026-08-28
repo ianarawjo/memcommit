@@ -13,14 +13,14 @@ from memcommit.persistence.command_ledger.attempts import (
     begin_command_attempt,
     finish_command_attempt,
 )
-from memcommit.adapters.console.shared.memory_report_recents import (
+from memcommit.adapters.console.coordination.memory_report_recents import (
     MemoryReportRecentError,
     MemoryReportRecentSelection,
     MemoryReportSelectAction,
     choose_memory_report_recent,
     memory_report_recents,
 )
-from memcommit.application.reviewing.read_report import ReadReportTarget
+from memcommit.application.capabilities.reviewing.read_report import ReadReportTarget
 from memcommit.persistence.store import MemoryStore
 
 
@@ -109,7 +109,7 @@ def test_empty_launcher_goes_directly_to_common_memory_picker(
     isolated_store, monkeypatch
 ):
     monkeypatch.setattr(
-        "memcommit.adapters.interfaces.tui.workbenches.read_report.launcher.run_operation_launcher",
+        "memcommit.adapters.console.terminal.components.read_report.launcher.run_operation_launcher",
         lambda *args, **kwargs: (_ for _ in ()).throw(
             AssertionError("an empty recent catalog must be skipped")
         ),
@@ -134,7 +134,7 @@ def test_launcher_revalidates_selected_recent(isolated_store, monkeypatch):
         return recents[0].target
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.shared.memory_report_recents.choose_read_report_recent",
+        "memcommit.adapters.console.coordination.memory_report_recents.choose_read_report_recent",
         choose,
     )
 
@@ -178,7 +178,7 @@ def test_launcher_rejects_recent_that_changes_after_selection(
         return recents[0].target
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.shared.memory_report_recents.choose_read_report_recent",
+        "memcommit.adapters.console.coordination.memory_report_recents.choose_read_report_recent",
         choose,
     )
 

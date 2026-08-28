@@ -2,7 +2,7 @@
 
 ## Decision
 
-The evaluation package is owned by `memcommit.application.evaluation`. The
+The evaluation package is owned by `memcommit.application.capabilities.evaluation`. The
 relocation preserves its existing modules, fixtures, command behavior, study
 prewarm integration, and evaluation result contracts without attempting to
 redesign the package internally.
@@ -23,7 +23,7 @@ reorganization mechanical and makes a later split reviewable independently.
 
 There is no `memcommit.eval` compatibility facade. Internal callers, tests,
 packaged-resource lookups, and maintained study scripts use the canonical
-`memcommit.application.evaluation` path directly. Published command behavior
+`memcommit.application.capabilities.evaluation` path directly. Published command behavior
 and fixture contents are unchanged; the Python import path is intentionally
 not retained as a second source of ownership.
 

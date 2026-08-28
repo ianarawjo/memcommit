@@ -8,17 +8,17 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 import memcommit.adapters.console.commands.search.command as find_command
 import memcommit.adapters.console.commands.query.command as query_command
 import memcommit.adapters.console.commands.rationale.command as rationale_command
 from memcommit.adapters.python_api import MemCommitClient, ShowContextResult
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.authority.access import resolve_context_access
-from memcommit.adapters.console.shared.memory_picker import (
+from memcommit.application.capabilities.authority.access import resolve_context_access
+from memcommit.adapters.console.terminal.components.memory_report_picker import (
     MemoryReportTargetSelection,
 )
-from memcommit.adapters.console.shared.readable_context_catalog import (
+from memcommit.core.context_targeting.readable_catalog import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.core.context import Memory

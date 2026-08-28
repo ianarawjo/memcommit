@@ -59,7 +59,7 @@ def _prepare_store(
     retain_update_session: bool = True,
 ) -> tuple[str, tuple[str, ...]]:
     _configure_store(store_dir)
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.core.context import AutoCheckpoint
     from memcommit.application.operations.add.semantic_runtime import (
         append_semantic_memories,

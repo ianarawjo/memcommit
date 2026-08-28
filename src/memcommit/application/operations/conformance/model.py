@@ -10,7 +10,7 @@ import unicodedata
 import uuid
 
 from memcommit.providers.types import CompletionRun, ProviderIdentity
-from memcommit.application.semantic_execution import (
+from memcommit.application.capabilities.semantic_execution import (
     BudgetLimits,
     ExecutionMode,
     ExecutionStrategy,

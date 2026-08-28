@@ -43,7 +43,7 @@ resolution, so command Help renders canonical usage and the root attempt
 ledger records the canonical operation instead of the entered alias.
 
 The shared Click routing implementation is owned by
-`memcommit.adapters.console.shared.command_group`, beside the root command
+`memcommit.adapters.console.coordination.command_group`, beside the root command
 group and the other multi-command console mechanics. Every root or nested
 command group imports that owner directly. The former
 `memcommit.adapters.interfaces.cli.command_group` path is removed without a

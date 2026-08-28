@@ -33,7 +33,7 @@ class _BranchRestorationMixin:
         changed since the original command.
         """
 
-        from memcommit.application.retained_history.command_history import (
+        from memcommit.application.capabilities.retained_history.command_history import (
             CommandHistoryError,
             CommandRestoreResult,
             branch_tree_receipt,

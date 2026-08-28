@@ -8,7 +8,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.adapters.console.text import (
+from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
 from memcommit.core.context_targeting.presets import (
@@ -16,10 +16,15 @@ from memcommit.core.context_targeting.presets import (
     resolve_scope_preset,
 )
 from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import ProfileError, import_baseline_profile
-from memcommit.application.operations.resource_import.model import (
+from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.mem_import.context import (
     import_context_from_profile,
+)
+from memcommit.application.operations.mem_import.memory import (
     import_memory_from_profile,
+)
+from memcommit.application.operations.mem_import.profile import (
+    import_baseline_profile,
     import_profile_from_profile,
 )
 
@@ -121,7 +126,9 @@ def _interactive_terminal() -> bool:
 
 
 def _run_interactive_import() -> None:
-    from memcommit.adapters.console.commands.import_profile.workbench import choose_import_setup
+    from memcommit.adapters.console.commands.import_profile.workbench import (
+        choose_import_setup,
+    )
 
     setup = choose_import_setup()
     if setup is None:

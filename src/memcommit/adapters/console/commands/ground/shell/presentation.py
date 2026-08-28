@@ -5,14 +5,14 @@ from __future__ import annotations
 from collections.abc import Sequence
 from typing import Literal
 
-from memcommit.adapters.console.shared.command_progress import BUSY_FRAMES
-from memcommit.adapters.console.shared.exact_command_review import (
+from memcommit.adapters.console.terminal.components.progress import BUSY_FRAMES
+from memcommit.adapters.console.terminal.components.exact_command_review.rendering import (
     render_exact_command_blocks,
     render_exact_command_review,
 )
-from memcommit.adapters.console.shared.tui_primitives import anchored_fragments
-from memcommit.adapters.console.text import safe_terminal_text
-from memcommit.adapters.console.tui.components.table import (
+from memcommit.adapters.console.terminal.components.primitives import anchored_fragments
+from memcommit.adapters.console.terminal.core.text import safe_terminal_text
+from memcommit.adapters.console.terminal.components.table import (
     RenderedTuiTable,
     TuiTableColumn,
     TuiTableRow,

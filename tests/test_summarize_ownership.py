@@ -32,7 +32,7 @@ def test_production_summarize_consumers_use_the_operation_owner() -> None:
         "src/memcommit/adapters/console/commands/summarize/command.py",
         "src/memcommit/application/operations/distill/application.py",
         "src/memcommit/application/operations/distill/runtime.py",
-        "src/memcommit/application/evaluation/study_summarize_exact_matrix.py",
+        "src/memcommit/study_scenarios/legacy/prewarm/generation/summarize_exact_matrix.py",
         "src/memcommit/application/operations/ground/distill.py",
         "src/memcommit/adapters/console/commands/summarize/scope_label.py",
         "src/memcommit/adapters/console/commands/summarize/presentation.py",

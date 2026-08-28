@@ -14,9 +14,9 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 import memcommit.persistence.store as store_module
-from memcommit.application.retained_history.command_history import build_command_stacks
+from memcommit.application.capabilities.retained_history.command_history import build_command_stacks
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import (
     AutoCheckpoint,

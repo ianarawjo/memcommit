@@ -8,8 +8,8 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
-from memcommit.application.authority.access import resolve_context_access
+import memcommit.application.capabilities.ops as ops
+from memcommit.application.capabilities.authority.access import resolve_context_access
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Context, Memory
 from memcommit.application.operations.merge.application import (

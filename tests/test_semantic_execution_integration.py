@@ -4,14 +4,14 @@ from __future__ import annotations
 
 import json
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 import pytest
 from memcommit.core.context import Memory
 from memcommit.application.operations.search.model import (
     SearchCandidate,
     rank_candidates,
 )
-from memcommit.application.semantic_execution import SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
+from memcommit.application.capabilities.semantic_execution import SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
 from memcommit.application.operations.translate.runtime import plan_translation
 
 

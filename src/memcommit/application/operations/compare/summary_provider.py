@@ -16,7 +16,7 @@ from memcommit.application.operations.compare.summary_rules import (
     comparison_summary_ruleset_prompt_payload,
     measure_comparison_summary_words,
 )
-from memcommit.application.semantic_execution import (
+from memcommit.application.capabilities.semantic_execution import (
     BudgetLimits,
     ExecutionMode,
     ExecutionStrategy,
@@ -25,8 +25,8 @@ from memcommit.application.semantic_execution import (
     json_budget,
     plan_semantic_execution,
 )
-from memcommit.application.semantic.prompt_policy import resolve_semantic_prompt_policy
-from memcommit.application.semantic.understanding import (
+from memcommit.application.capabilities.semantic.prompt_policy import resolve_semantic_prompt_policy
+from memcommit.application.capabilities.semantic.understanding import (
     UnderstandingError,
     UnderstandingSummary,
     normalize_understanding_text,

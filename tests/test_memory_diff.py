@@ -1,6 +1,6 @@
 """Mechanical line and word contracts shared by mem diff and Impact."""
 
-from memcommit.application.reviewing.memory_diff import MemoryChange, memory_diff_lines
+from memcommit.application.capabilities.reviewing.memory_diff import MemoryChange, memory_diff_lines
 
 
 def _change(*, before: str | None, after: str | None) -> MemoryChange:

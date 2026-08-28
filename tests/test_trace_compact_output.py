@@ -13,19 +13,19 @@ from memcommit.adapters.console.commands.trace.projection import (
     format_compact_trace_report,
     trace_document_fragments,
 )
-from memcommit.adapters.console.tui.components.plain_text_clipboard import (
+from memcommit.adapters.console.terminal.components.plain_text_clipboard import (
     plain_text_from_fragments,
 )
 from memcommit.core.context_targeting.report_items import ResolvedMemoryReportTarget
-from memcommit.application.retained_history.memory_history_reconstruction.retained_record_verification import (
+from memcommit.application.capabilities.retained_history.memory_history_reconstruction.retained_record_verification import (
     MemoryHistoryCommandContext,
     MemoryHistoryContextTransition,
     MemoryState,
 )
-from memcommit.application.retained_history.memory_history_reconstruction.memory_history_event_derivation import (
+from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_event_derivation import (
     MemoryHistoryEvent,
 )
-from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
+from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_construction import (
     MemoryHistory,
 )
 

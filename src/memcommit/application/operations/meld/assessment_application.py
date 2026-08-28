@@ -12,7 +12,10 @@ from memcommit.application.operations.meld.model import (
     MeldRepairableAssessmentError,
     MeldSession,
 )
-from memcommit.application.operations.meld.provider import assess_meld_turn, repair_meld_assessment
+from memcommit.application.operations.meld.provider.execution import (
+    assess_meld_turn,
+    repair_meld_assessment,
+)
 
 
 MeldAssessmentStage = Literal[

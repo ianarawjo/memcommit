@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import hashlib
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.application.operations.add.application import (
     AddedMemory,
     AddRequest,
@@ -13,13 +13,13 @@ from memcommit.application.operations.add.application import (
     FrozenAddTarget,
     run_add,
 )
-from memcommit.application.authority.access import (
+from memcommit.application.capabilities.authority.access import (
     authorized_context_mutation,
     grant_checkpoint_args,
     resolve_context_access,
 )
 from memcommit.core.context import AutoCheckpoint
-from memcommit.application.context_locator import resolve_context_locator
+from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.persistence.store import MemoryStore
 from memcommit.persistence.store import ConcurrentContextUpdateError
 

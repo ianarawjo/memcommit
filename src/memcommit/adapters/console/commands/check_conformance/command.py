@@ -6,14 +6,14 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.adapters.console.shared.command_progress import CommandProgress
-from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.terminal.components.progress import CommandProgress
+from memcommit.adapters.console.coordination.context_operand import ContextOperandSnapshot
 from memcommit.application.operations.conformance.model import ConformanceError, ConformanceReport
 from memcommit.application.operations.conformance.runtime import (
     execute_context_conformance_with_rules_operand,
     execute_ground_conformance,
 )
-from memcommit.adapters.console.text import display_escape_text, safe_terminal_text
+from memcommit.adapters.console.terminal.core.text import display_escape_text, safe_terminal_text
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.providers.subscription import QueryProviderError, connect_semantic_provider

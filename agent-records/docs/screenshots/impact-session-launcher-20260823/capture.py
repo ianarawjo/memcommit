@@ -114,7 +114,7 @@ class _UpdateProvider:
 
 
 def _context(store, name: str, content: str):
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
 
     context = ops.init(name)
     ops.add(context, content)

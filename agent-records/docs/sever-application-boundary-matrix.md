@@ -99,7 +99,7 @@ operation-owned model and provider-decoder contracts. It does not import
 terminal or command modules. `memcommit.application.operations.sever.runtime` implements
 Store, Grant, cache, provider-attempt, destination-validation, private-session,
 and checkpoint ports. Grant mechanics temporarily remain under
-`memcommit.application.authority.access`; that transitional dependency is confined to the
+`memcommit.application.capabilities.authority.access`; that transitional dependency is confined to the
 runtime adapter, as it is for the Summarize slice.
 
 The former flat `memcommit.sever`, `memcommit.sever_provider`,
@@ -199,9 +199,10 @@ compensation and interrupted recovery.
 2. This boundary preserves `EXACT`, `EQUIVALENT_SCOPE`, and `PROJECTED` cache
    origins but does not decide when projection is safe. The Study prewarm
    adapter remains authoritative for that separate cache contract.
-3. The setup TUI and Resolution Workbench remain command-hosted adapters. They
-   now reach the complete typed lifecycle, but have not yet moved
-   under a Sever-specific `interfaces.tui.operations` package.
+3. The setup workbench remains command-owned under
+   `adapters.console.commands.sever`, while the operation-neutral Resolution
+   Workbench remains shared. No Sever-specific `interfaces.tui.operations`
+   package or compatibility facade remains.
 4. The production private-session adapter still uses the existing POSIX
    `fcntl` lock. The repository contract is platform-neutral, but a Windows
    lock implementation remains part of the cross-platform infrastructure work.

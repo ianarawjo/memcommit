@@ -26,14 +26,14 @@ from memcommit.adapters.console import (
     SystemTerminalCapabilities,
     resolve_console_mode,
 )
-from memcommit.adapters.console.text import display_escape_text
+from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.adapters.console.commands.dedun.workbench import run_dedun_workbench
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.application.reviewing.quality.handoff import (
+from memcommit.application.capabilities.reviewing.quality.handoff import (
     QualityFindingHandoffError,
 )
-from memcommit.application.semantic.redundancy_evidence import (
+from memcommit.application.capabilities.semantic.redundancy_evidence import (
     redundancy_evidence_from_json,
 )
 from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore

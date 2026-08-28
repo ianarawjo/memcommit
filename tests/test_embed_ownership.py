@@ -29,9 +29,8 @@ assert "memcommit.application.operations.embed.runtime" not in sys.modules
 def test_production_embed_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "src/memcommit/adapters/python_api/_operations/embed.py",
-        "src/memcommit/adapters/interfaces/cli/embed.py",
-        "src/memcommit/adapters/interfaces/tui/operations/embed/adapter.py",
-        "src/memcommit/adapters/interfaces/tui/operations/embed/screen.py",
+        "src/memcommit/adapters/console/commands/embed/command.py",
+        "src/memcommit/adapters/console/commands/embed/workbench/screen.py",
         "src/memcommit/application/operations/embed/runtime.py",
     )
 

@@ -41,7 +41,7 @@ def _configure_store(root: Path) -> None:
 
 
 def _create_store():
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()

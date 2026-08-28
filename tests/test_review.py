@@ -9,21 +9,21 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 import memcommit.adapters.console.commands.review.command as review_command
 import memcommit.adapters.console.commands.review.resolution_shell as review_resolution_shell
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.review.snapshot import (
     render_review_snapshot,
 )
-from memcommit.adapters.console.text import safe_terminal_text
-from memcommit.adapters.console.shared.review import RESPONSE_LABEL
+from memcommit.adapters.console.terminal.core.text import safe_terminal_text
+from memcommit.adapters.console.coordination.review import RESPONSE_LABEL
 from memcommit.adapters.console.commands.review.resolution_shell import (
     review_resolution_view,
     run_review_resolution_shell,
 )
 from memcommit.core.context import Memory
-from memcommit.application.reviewing.quality.findings import (
+from memcommit.application.capabilities.reviewing.quality.findings import (
     AmbiguityFinding,
     AmbiguityReport,
 )

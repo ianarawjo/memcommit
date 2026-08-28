@@ -13,11 +13,14 @@ knowing every naming convention.
 ## Decision
 
 Every Python command entry has one package, including entries that currently
-need only one implementation file. Its executable adapter lives in
-`commands/<entry>/command.py`, and its `__init__.py` publishes only the CLI
-surface used by composition (`cmd`, `app`, or the two write-protection apps).
-That surface loads lazily: importing a sibling such as `find.chat_shell` must
-not initialize `find.command` and create a cycle back through operation code.
+need only one implementation file. Its executable adapter normally lives in
+`commands/<entry>/command.py`; an adapter with independently meaningful CLI
+and workflow responsibilities may instead use a nested
+`commands/<entry>/command/` package. The entry's `__init__.py` publishes only
+the CLI surface used by composition (`cmd`, `app`, or the two write-protection
+apps). That surface loads lazily: importing a sibling such as
+`find.chat_shell` must not initialize `find.command` and create a cycle back
+through operation code.
 Files used by one entry live beside that command and drop the repeated prefix:
 
 ```text
@@ -31,22 +34,24 @@ commands/atomize/
 ```
 
 Command-layer mechanics used by more than one entry live under the sibling
-`adapters/console/shared/` package. This is not a general utility directory: a
+`adapters/console/coordination/` package. This is not a general utility directory: a
 module belongs there only when its console-adapter mechanics genuinely have
 multiple command consumers. Keeping it outside `commands/` makes that tree's
 physical invariant exact: every first-level child is an actual command entry
 package. Application policy remains under `operations/`; operation-owned
 console presentation and interactive setup live beside their command. Shared
-terminal foundations live in the sibling `adapters/console/tui/` component
-tree, while Viewer and Workbench compositions retain their staged owners until
-reviewed separately. Other neutral concepts keep their existing owners.
+terminal foundations and Viewer/Workbench compositions live in the sibling
+`adapters/console/terminal/` core and component tree. Other neutral concepts
+keep their existing owners.
 
 The exact baseline classification is authored mechanically by
 `scripts/render_command_package_layout.py` and rendered in
 `agent-records/docs/command-package-layout-plan.json` and
 `agent-records/docs/command-package-layout-plan.md`. The baseline contains 153 non-package
-modules, classified into 64 entry packages, 48 entry-owned support modules,
-and 41 shared command-support modules.
+modules. Its active mappings comprise 63 entry packages, 47 entry-owned support
+modules, and 42 shared command-support or terminal-component modules;
+`shell_init` is retained only in the retired-baseline inventory after Help and
+init-study took ownership of their distinct shell responsibilities.
 
 On 2026-08-27 the complete, already packaged command tree moved unchanged from
 `memcommit.commands` to `memcommit.adapters.console.commands`. Its dominant
@@ -58,12 +63,51 @@ application policy that may later belong under `memcommit.application` is not
 split during this relocation.
 
 On 2026-08-28 the multi-command `shared/` package moved one level upward from
-`adapters/console/commands/shared/` to `adapters/console/shared/`. The earlier
+`adapters/console/commands/shared/` to `adapters/console/coordination/`. The earlier
 placement correctly identified these modules as console adapters but made
 `commands/` describe both command entries and cross-command infrastructure.
 The sibling placement preserves the same adapter layer and dependency meaning
 while giving the command tree one navigational grammar. No compatibility
 package remains at the former internal path.
+
+Reference's interactive setup likewise lives under
+`adapters/console/commands/reference/workbench/`. It selects the Reference
+unit, Source, Context scope, and local Target and freezes the reviewed exact
+command, so it is command-owned console composition rather than a generic TUI
+operation. The move preserves its model, Store-port composition, screen, and
+application-plan boundary unchanged; shared selectors and focus mechanics
+remain with their existing neutral owners, and no compatibility facade remains
+at the former internal path.
+
+## Ground command adapter split
+
+The later Ground-focused pass replaced its 3,965-line `command.py` with a
+same-named package. `entrypoint.py` owns the unchanged 52-parameter Typer
+surface and reduces it to one frozen `GroundCommandRequest`. The original
+3,666-line `workflow.py` proved to be only a second monolith, so `workflow/`
+now names the stable orchestration boundary while its children name the action
+they own: `command.py` routes the typed request, `create.py` owns the unsaved
+conversation and draft-to-Ground transition, `edit.py` owns physical Ground
+creation and direct edits, `open.py` owns discovery and reopening,
+`inspect.py` owns the entry and public inspection views, and `apply.py` owns
+the approved logical command primitive. Persisted JSON `GroundSession`
+behavior is grouped under `workflow/session/`: `command.py` executes its CLI
+actions, `dialogue.py` interprets and conducts saved dialogue, `review.py`
+owns version guards and reviewed application, and `inspect.py` renders its
+saved state. This grouping records the actual coexistence of physical
+`GroundWorkspace` and JSON `GroundSession` models without labeling the latter
+as disposable legacy behavior.
+
+This remains a responsibility-only split. The command signature, route
+predicates, workflow statements, exact-command review,
+revision/digest/Context-version guards, mutation timing, and rendered output
+remain unchanged. The dependency direction runs from `command.py` toward the
+action modules, from `open.py` toward the concrete creation or saved-session
+conversation, and from saved-session dialogue and command execution toward
+its review and inspection owners. Lower modules do not import the command
+router at runtime. In particular, the entrypoint must never implement an Apply
+path or reproduce a freshness check: it constructs the typed request and
+delegates once to the workflow package.
 
 ## Why single-file entries are packages
 
@@ -82,7 +126,7 @@ Each displayed Help operation now has its own `commands/copy` or
 `commands/move` package containing its grammar, operation-specific setup,
 application handoff, and receipt. Their common direct-Memory selection,
 Target-gap placement, editable exact-command, operand, and placement-receipt
-mechanics live in the sibling `adapters/console/shared/memory_transfer`
+mechanics live in the sibling `adapters/console/coordination/memory_transfer`
 package. A `commands/memory_transfer` package was rejected because it would
 look like a third executable command, while `copy_and_move` would name current
 consumers rather than the shared concept. The application transaction remains
@@ -94,6 +138,13 @@ Within the canonical console tree, every entry package continues to publish its
 intended CLI object. For example, `memcommit.adapters.console.commands.add.cmd` and
 `memcommit.adapters.console.commands.atomize.cmd` remain valid while internal code imports the
 implementation-owning `.command` module directly.
+
+Ground additionally preserves imports from its historical `.command` module
+through the command and workflow package `__init__.py` facades. Helper
+implementations are not copied: lookup returns the object from its canonical
+action or `session/` owner. Tests that replace a workflow dependency patch
+that owning module rather than relying on assignment to either compatibility
+package to rewrite another module's globals.
 
 The 89 former flat support-module paths cannot be represented by both a file
 and the new package tree. They were initially served by a generated lazy alias
@@ -117,7 +168,7 @@ classified command target, shared-console target, and entry package, rejects
 internal imports through all 153 historical command names, and proves
 in an isolated interpreter that neither those names nor `memcommit.commands`
 itself is restored. Package tests
-also verify that all 64 `__init__.py` files expose only their declared CLI
+also verify that all 63 `__init__.py` files expose only their declared CLI
 surface.
 
 ## Alternatives rejected
@@ -135,9 +186,11 @@ surface.
 
 ## Non-goals and remaining boundary
 
-This pass does not split large command modules, rename CLI operations, change
-command behavior, or claim that every current command dependency is correctly
-directed. In particular, the pre-existing Search operation imports of command
-session and chat adapters remain visible reverse dependencies for later
-semantic ownership work. The layout makes those dependencies locatable; it
-does not silently resolve them.
+The original package-layout pass did not split large command modules, rename
+CLI operations, change command behavior, or claim that every current command
+dependency was correctly directed. The later Ground split narrows only that
+command's already visible adapter responsibilities; it does not move Ground
+policy into the console layer or consolidate the blank and named TUI shells.
+The pre-existing Search operation imports of command session and chat adapters
+remain visible reverse dependencies for later semantic ownership work. The
+layout makes those dependencies locatable; it does not silently resolve them.

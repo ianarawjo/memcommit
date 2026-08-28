@@ -4,12 +4,12 @@ from __future__ import annotations
 
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 import memcommit.persistence.store as store_module
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.branch.receipt import BranchCreationReceipt
 from memcommit.core.context import AutoCheckpoint, Context, Memory, MemoryRef
-from memcommit.application.retained_history.memory_history_reconstruction.memory_history_construction import (
+from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_construction import (
     reconstruct_memory_history,
 )
 from memcommit.persistence.store import MemoryStore

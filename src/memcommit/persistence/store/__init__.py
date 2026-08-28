@@ -1,5 +1,7 @@
 """Public persistence boundary assembled from three transitional Store slices."""
 
+# ruff: noqa: F401
+
 import sys
 from types import ModuleType
 

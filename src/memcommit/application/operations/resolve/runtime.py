@@ -6,7 +6,7 @@ import hashlib
 import json
 from dataclasses import dataclass
 
-from memcommit.application.authority.access import (
+from memcommit.application.capabilities.authority.access import (
     ContextAccess,
     GrantedReadStore,
     authorized_context_mutation,
@@ -16,7 +16,7 @@ from memcommit.application.authority.access import (
     resolve_context_access,
 )
 from memcommit.core.context import AutoCheckpoint, Context, Memory, MemoryRef
-from memcommit.application.context_locator import resolve_context_locator
+from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.application.operations.profile.config import ProfileRegistry
 from memcommit.application.operations.resolve.application import (
     RESOLVE_CONTRACT_VERSION,

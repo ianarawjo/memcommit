@@ -14,8 +14,8 @@ ATOMIZE_WORKBENCH_MODULES = (
     / "src/memcommit/adapters/console/commands/atomize/workbench/screen.py",
 )
 SHARED_WORKBENCH_MODULES = (
-    REPOSITORY / "src/memcommit/adapters/interfaces/tui/workbenches/result/shell.py",
-    REPOSITORY / "src/memcommit/adapters/interfaces/tui/workbenches/review/model.py",
+    REPOSITORY
+    / "src/memcommit/adapters/console/terminal/components/result/shell.py",
 )
 
 

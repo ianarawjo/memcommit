@@ -23,7 +23,7 @@ from memcommit.application.operations.atomize.result_adapter import (
     atomize_result_artifact_digest,
     project_atomize_result,
 )
-from memcommit.application.reviewing.result_workbench import ResultWorkbenchView
+from memcommit.application.capabilities.reviewing.result_workbench import ResultWorkbenchView
 
 
 ATOMIC_UID = "memory-atomic"

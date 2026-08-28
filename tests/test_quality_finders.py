@@ -10,10 +10,10 @@ import click
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Memory, MemoryRef, QueryContextRef
-from memcommit.application.reviewing.quality.findings import (
+from memcommit.application.capabilities.reviewing.quality.findings import (
     FindingsError,
     collect_direct_memories,
     enumerate_pairs,
@@ -21,8 +21,8 @@ from memcommit.application.reviewing.quality.findings import (
     find_conflicts,
     find_redundancies as find_duplicates,
 )
-from memcommit.adapters.console.identity import collision_safe_uid_prefixes
-from memcommit.adapters.console.theme import (
+from memcommit.adapters.console.terminal.core.identity import collision_safe_uid_prefixes
+from memcommit.adapters.console.terminal.core.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )
@@ -37,6 +37,7 @@ FIXTURE_DIR = (
     / "src"
     / "memcommit"
     / "application"
+    / "capabilities"
     / "evaluation"
     / "fixtures"
 )
@@ -178,7 +179,7 @@ def test_find_duplicates_scans_representatives_without_pair_targets(
         }
 
     monkeypatch.setattr(
-        "memcommit.application.reviewing.quality.findings.enumerate_pairs",
+        "memcommit.application.capabilities.reviewing.quality.findings.enumerate_pairs",
         lambda candidates: pytest.fail(
             "duplicate discovery must not enumerate pair targets"
         ),
@@ -1012,7 +1013,7 @@ def test_quality_finder_all_aliases_freeze_one_profile_wide_source(
         )
     authorized = []
     monkeypatch.setattr(
-        "memcommit.adapters.console.shared.quality_find_workbench.authorize_combination",
+        "memcommit.adapters.console.terminal.components.quality_find.workbench.authorize_combination",
         lambda accesses: authorized.append(
             tuple(access.display_name for access in accesses)
         ),
@@ -1073,7 +1074,7 @@ def test_quality_finder_all_authority_failure_precedes_provider_connection(
     store.save(context)
     store.set_current(context.name)
     monkeypatch.setattr(
-        "memcommit.adapters.console.shared.quality_find_workbench.authorize_combination",
+        "memcommit.adapters.console.terminal.components.quality_find.workbench.authorize_combination",
         lambda _accesses: (_ for _ in ()).throw(ProfileError("combine denied")),
     )
     monkeypatch.setattr(
@@ -1359,7 +1360,7 @@ def test_duplicate_scan_does_not_allocate_pair_records(monkeypatch):
     for index in range(4):
         ops.add(ctx, str(index))
     monkeypatch.setattr(
-        "memcommit.application.reviewing.quality.findings.MemoryPair",
+        "memcommit.application.capabilities.reviewing.quality.findings.MemoryPair",
         lambda *args, **kwargs: pytest.fail(
             "duplicate discovery allocated a pair record"
         ),

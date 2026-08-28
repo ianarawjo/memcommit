@@ -30,28 +30,28 @@ from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.output import Output
 from prompt_toolkit.widgets import TextArea
 
-from memcommit.adapters.console.tui.components.frame import (
+from memcommit.adapters.console.terminal.components.frame import (
     TuiRegion,
     build_tui_frame,
 )
-from memcommit.adapters.console.tui.core.keybindings import (
+from memcommit.adapters.console.terminal.core.keybindings import (
     bind_case_insensitive_key,
     dispatch_tui_back,
 )
-from memcommit.adapters.console.terminal import (
+from memcommit.adapters.console.terminal.core.capabilities import (
     require_interactive_terminal,
 )
-from memcommit.adapters.console.text import (
+from memcommit.adapters.console.terminal.core.text import (
     safe_terminal_text,
 )
-from memcommit.adapters.console.shared.background_turn import (
+from memcommit.adapters.console.terminal.components.background_turn import (
     BackgroundExecutorTurn,
 )
-from memcommit.adapters.console.shared.command_progress import (
+from memcommit.adapters.console.terminal.components.progress import (
     BUSY_INTERVAL_SECONDS,
     busy_suffix,
 )
-from memcommit.adapters.console.shared.session_help import bind_session_help
+from memcommit.adapters.console.terminal.components.session_help import bind_session_help
 from memcommit.adapters.console.commands.search.result_present import (
     SearchResultViewRow,
     render_grouped_search_results,

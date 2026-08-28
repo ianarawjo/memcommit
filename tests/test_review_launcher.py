@@ -9,9 +9,9 @@ from typer.testing import CliRunner
 
 import memcommit.adapters.console.commands.review.command as review_command
 import memcommit.adapters.console.commands.review.sessions as review_sessions
-import memcommit.application.ops as ops
+import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.tui.components.operation_launcher.session import (
+from memcommit.adapters.console.terminal.components.operation_launcher.session import (
     SessionOpenReceipt,
     SessionPickerEntry,
 )

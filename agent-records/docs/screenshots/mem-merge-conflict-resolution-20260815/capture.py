@@ -52,7 +52,7 @@ def _configure_isolated_store(store_root: Path) -> None:
 
 
 def _initialize(kind: str) -> None:
-    import memcommit.application.ops as ops
+    import memcommit.application.capabilities.ops as ops
     from memcommit.core.context import Context, Memory
     from memcommit.persistence.store import MemoryStore, context_record_digest
 
@@ -142,7 +142,7 @@ def _run_child(kind: str) -> None:
             original_apply = MemoryStoreMergePort.apply
 
             def stale_apply(self, plan, resolutions):
-                import memcommit.application.ops as ops
+                import memcommit.application.capabilities.ops as ops
 
                 source = self.store.load_for_update("source")
                 ops.add(source, "late source mutation")

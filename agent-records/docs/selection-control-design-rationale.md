@@ -11,7 +11,7 @@ The difference was implementation drift rather than a semantic requirement.
 
 ## Common contract
 
-`memcommit.adapters.console.selection` now owns three operation-neutral layers:
+`memcommit.adapters.console.terminal.components.selection` now owns three operation-neutral layers:
 
 1. `SelectionOption` carries a stable UID, one-line label, and optional
    explanatory description.

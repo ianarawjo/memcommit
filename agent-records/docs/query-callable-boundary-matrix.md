@@ -39,8 +39,8 @@ evidence are unchanged.
 | `api.client:MemCommitClient.query_ordinary` | public Python | question + Context scope -> result | one-shot typed answer/citations; no write | public API tests | `VERIFIED` |
 | `api.client:MemCommitClient.query_granted` | public Python | public route + required question -> result | active-Profile authority read; answer only | public API tests | `VERIFIED` |
 | `api.client:MemCommitClient.query_reference` | public Python | reference + question -> result | provider-before-Source one-shot read | public API tests | `VERIFIED` |
-| `interfaces.agent.query:QueryAgentAdapter.invoke` | agent adapter | version-3 tagged JSON -> JSON-safe result/error | exact route mapping; no route guessing, catalog, or transcript result | agent tests | `VERIFIED` |
-| `interfaces.agent.query:query_agent_tool_schema` | schema projection | none -> fresh version-3 schema | grants no authority and carries no Source data | agent tests | `VERIFIED` |
+| `adapters.agent.query:QueryAgentAdapter.invoke` | agent adapter | version-3 tagged JSON -> JSON-safe result/error | exact route mapping; no route guessing, catalog, or transcript result | agent tests | `VERIFIED` |
+| `adapters.agent.query:query_agent_tool_schema` | schema projection | none -> fresh version-3 schema | grants no authority and carries no Source data | agent tests | `VERIFIED` |
 | `commands.query.presentation:render_ordinary_query_response` | CLI | response -> stdout | terminal-safe typed answer projection | CLI tests | `VERIFIED` |
 | `commands.query.presentation:render_granted_query_response` | CLI | response -> stdout | terminal-safe answer only | CLI tests | `VERIFIED` |
 | `commands.query.workbench:run_query_workbench` | TUI | frozen catalogs + runners -> result | process-local state, one provider turn after Enter, optional plain clipboard | workbench tests and 180×52 trace | `VERIFIED` |

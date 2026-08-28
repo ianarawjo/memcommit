@@ -18,12 +18,12 @@ from memcommit.application.operations.compare.ledger.model import (
     ComparisonRelation,
     ComparisonReports,
 )
-from memcommit.application.reviewing.result_workbench import (
+from memcommit.application.capabilities.reviewing.result_workbench import (
     RESULT_REPORT_FRAME_SOFT_MAX_WORDS,
     RESULT_REPORT_SECTION_SOFT_MAX_WORDS,
     RESULT_REPORT_SECTION_TARGET_MIN_WORDS,
 )
-from memcommit.application.semantic_execution import (
+from memcommit.application.capabilities.semantic_execution import (
     BudgetLimits,
     CoverageError,
     ExecutionMode,
@@ -35,7 +35,7 @@ from memcommit.application.semantic_execution import (
     json_budget,
     plan_semantic_execution,
 )
-from memcommit.application.semantic.understanding import understanding_text_schema
+from memcommit.application.capabilities.semantic.understanding import understanding_text_schema
 
 
 COMPARISON_PAYLOAD_MARKER = "COMPARISON PAYLOAD:\n"

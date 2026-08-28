@@ -8,14 +8,14 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.application.ops as ops
-from memcommit.application.authority.access import (
+import memcommit.application.capabilities.ops as ops
+from memcommit.application.capabilities.authority.access import (
     GrantedReadStore,
     resolve_context_access,
 )
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Context, Memory
-from memcommit.application.retained_history.context_snapshot import ContextSnapshotRef
+from memcommit.application.capabilities.retained_history.context_snapshot import ContextSnapshotRef
 from memcommit.application.operations.embed.runtime import MemoryStoreEmbedPort
 from memcommit.adapters.console.commands.embed.workbench import build_embed_tui_setup
 from memcommit.application.operations.profile.config import (
@@ -292,7 +292,7 @@ def test_live_context_embed_does_not_cross_nested_read_only_override(
     ] == [advice.content]
 
 
-def test_recursive_find_and_search_open_attached_read_projection(
+def test_recursive_find_browses_attached_read_but_search_omits_provider_disclosure(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -388,12 +388,12 @@ def test_recursive_find_and_search_open_attached_read_projection(
     assert semantic_recursive.exit_code == 0, (
         semantic_recursive.output + semantic_recursive.stderr
     )
-    assert advice.content in semantic_recursive.output
+    assert advice.content not in semantic_recursive.output
     assert len(provider.payloads) == 2
     direct_payload_text = json.dumps(provider.payloads[0])
     payload_text = json.dumps(provider.payloads[1])
     assert advice.content not in direct_payload_text
-    assert advice.content in payload_text
+    assert advice.content not in payload_text
     assert "Concealed review note." not in payload_text
     assert "Unrelated authority-only review secret." not in payload_text
 
