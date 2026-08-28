@@ -22,7 +22,7 @@ operation evidence ledger.
 | `memcommit.commands.background_turn` | `memcommit.adapters.console.commands.shared.background_turn` | shared-command-mechanism | `shared` |
 | `memcommit.commands.batch_input` | `memcommit.adapters.console.commands.shared.batch_input` | shared-command-mechanism | `shared` |
 | `memcommit.commands.branch` | `memcommit.adapters.console.commands.branch.command` | command-entry | `branch` |
-| `memcommit.commands.branch_dialog` | `memcommit.adapters.console.commands.branch.dialog` | command-owned-support | `branch` |
+| `memcommit.commands.branch_dialog` | `memcommit.adapters.console.commands.branch.setup` | command-owned-support | `branch` |
 | `memcommit.commands.check_conformance` | `memcommit.adapters.console.commands.check_conformance.command` | command-entry | `check_conformance` |
 | `memcommit.commands.checkpoint` | `memcommit.adapters.console.commands.checkpoint.command` | command-entry | `checkpoint` |
 | `memcommit.commands.checkpoint_diff` | `memcommit.adapters.console.commands.shared.checkpoint_diff` | shared-command-mechanism | `shared` |

@@ -89,7 +89,7 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.branch.dialog",
+      "canonical_module": "memcommit.adapters.console.commands.branch.setup",
       "legacy_module": "memcommit.commands.branch_dialog",
       "owner": "branch",
       "public_exports": [],

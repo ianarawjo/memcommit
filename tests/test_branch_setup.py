@@ -1,22 +1,27 @@
-"""Interactive Branch setup contracts."""
+"""Interactive Branch setup and console ownership contracts."""
 
 from __future__ import annotations
+
+from pathlib import Path
 
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-from memcommit.adapters.console.commands.branch.dialog import (
+from memcommit.adapters.console.commands.branch.receipt import (
     BranchCreationReceipt,
+)
+from memcommit.adapters.console.commands.branch.setup import (
+    branch_endpoint_setup_spec,
+    branch_exact_command_review,
     choose_branch_creation,
 )
 from memcommit.adapters.interfaces.tui.components.endpoint_setup import (
     EndpointSetupDraft,
     EndpointSetupValue,
 )
-from memcommit.adapters.interfaces.tui.operations.branch import (
-    branch_endpoint_setup_spec,
-    branch_exact_command_review,
-)
+
+
+REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 
 
 def _choose(keys: str, *, validated: list[str] | None = None):
@@ -153,3 +158,15 @@ def test_branch_exact_review_includes_source_and_scope() -> None:
         "alpha",
         "--source-descendants",
     )
+
+
+def test_branch_console_package_owns_setup_and_receipt_without_facades() -> None:
+    command_root = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/branch"
+    retired_root = (
+        REPOSITORY_ROOT / "src/memcommit/adapters/interfaces/tui/operations/branch"
+    )
+
+    assert (command_root / "setup.py").is_file()
+    assert (command_root / "receipt.py").is_file()
+    assert not (command_root / "dialog.py").exists()
+    assert not tuple(retired_root.glob("*.py"))

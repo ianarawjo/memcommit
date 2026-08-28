@@ -85,12 +85,21 @@ regenerated for this ownership-only change.
 
 ## Compact setup and shared component boundary
 
-Branch's interface adapter lives under
-`memcommit.adapters.interfaces.tui.operations.branch`. It owns the A/B role labels,
-local-only availability, require-new validation, exact command review, and the
-typed `BranchEndpointSelection`. The command-layer `branch_dialog` remains a
-thin compatibility translation to `BranchCreationReceipt`; it no longer owns
-tree rendering or endpoint focus mechanics.
+Branch's console presentation is co-located under
+`memcommit.adapters.console.commands.branch`. `command.py` owns Typer
+orchestration and receipt rendering, `setup.py` owns the A/B role labels,
+local-only availability, require-new validation, exact command review, and
+interactive selection, and `receipt.py` owns the process-local
+`BranchCreationReceipt`. The former interface package and `dialog.py` facade
+are removed. Setup now returns that receipt directly instead of first creating
+the structurally identical `BranchEndpointSelection` and translating it.
+
+This collapse changes neither validation nor terminal behavior. The former
+endpoint-selection value's exact, one-line Context-name checks still run before
+the receipt is returned, and the existing TTY check remains at the setup entry.
+The common Endpoint Setup component continues to own rendering, focus, tree
+navigation, and exact-name mechanics, so it remains under the shared TUI
+component package rather than moving into Branch.
 
 The operation-neutral compact Endpoint Setup now supports a new-only role whose
 Context catalog is a parent locator. Selecting a parent reparents only an

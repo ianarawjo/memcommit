@@ -100,7 +100,7 @@ OWNED_SUPPORT_TARGETS = {
     "atomize_sessions": "atomize.sessions",
     "atomize_workbench_shell": "atomize.workbench.screen",
     "audit_sessions": "audit.sessions",
-    "branch_dialog": "branch.dialog",
+    "branch_dialog": "branch.setup",
     "compare_sessions": "compare.sessions",
     "compare_setup": "compare.setup",
     "compare_targeting": "compare.targeting",

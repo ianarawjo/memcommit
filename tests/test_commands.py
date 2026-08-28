@@ -17,7 +17,7 @@ from typer.testing import CliRunner
 import memcommit.adapters.console.commands.help_inventory.command as help_inventory
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.branch.dialog import BranchCreationReceipt
+from memcommit.adapters.console.commands.branch.receipt import BranchCreationReceipt
 from memcommit.adapters.console.commands.help_inventory.command import CommandEntry, run_help_selector
 from memcommit.persistence.store import MemoryStore
 
